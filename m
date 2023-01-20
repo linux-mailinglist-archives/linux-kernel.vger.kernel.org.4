@@ -2,164 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4468675BF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A26675BEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjATRsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S229710AbjATRsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjATRsV (ORCPT
+        with ESMTP id S229615AbjATRsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:48:21 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4590D4FCCC;
-        Fri, 20 Jan 2023 09:48:15 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A46F43200A47;
-        Fri, 20 Jan 2023 12:48:13 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 20 Jan 2023 12:48:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674236892; x=
-        1674323292; bh=suuEDmGpMK8nFYB774MavCLSlHZ448gfBuVhNRXP7EU=; b=C
-        QcLVRreBsT9rJUB1hoyVgUJ7vWGaM17ha5j9hXxIL5YJmaX14k1LJ4O4SbMkTXy1
-        2EAUuqM8XKqhhvsd2L0aLL8LCrKakXLnOJ4EDxHhkVa6MPdzzhgGAzS1Axale0lx
-        N1IVM8igM6tDyqZOZmxJ0UcEaogD+K5Gtn3M8iTDM6Xrla1DTsc7K+AZSvmdZTPL
-        w5OdBZ4a1MqQlaMaxhUbvAClZJu8DCf+O2DNcIRaFlcAVGz5HXxeqOL7JuTSr2qG
-        PAhUDcC2sN3i2/tW4JwwmiCd6K3AgKYr2tHQy5Sr3ztdwW6Y41NEE6vGiyJR747R
-        1L2RKqasUqUfGfWTOy9Kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674236892; x=
-        1674323292; bh=suuEDmGpMK8nFYB774MavCLSlHZ448gfBuVhNRXP7EU=; b=f
-        3twNx4gypSuyC82LNunQU3SUx3JQT35yk8KkrZhMH/pkfinaI/2/nBN3IKe0IUAW
-        alB/7JBcG4PVMFUFBKYXCEObg7LPiNi4aCB/SXsaTj86L3b/Y+lkKJfyVPTVEzpu
-        SzLhTYw+Iutd7v6MfVE1qr+ptyxCAiAZujfyEDDw4hMaffqHqL/spNpyOZlh/09y
-        ZysYzJftXVhYmx+dZt8OqpVhZJeuHFNw6velxglhJeNRfovB6DRoCpEfdT2ZKLlI
-        YAIiEtRbDevfm3mB9XjVABvjPBXeQmn7VcmkQPDpzrn5hVl1Ie3wBCyRA65RuAZu
-        x3PYw5WILmzUoI62CMlLw==
-X-ME-Sender: <xms:29PKYylELihtzgeq-nZ34-6DjL0SIqRD4R_4F30uCg--gV3OElBSIw>
-    <xme:29PKY533sVhqJAiJoOsQ3iGpDdf-STroR5kv74P7GnBB9ZbiMYYcfZ-xOphlALEPa
-    gWEVXBSfU_IiWK0iRs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
-    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:29PKYwrUWQrbmvHdUIOMnQnqLCxJ4qs4qHotbjlDq5n9mfQJ_dUxqQ>
-    <xmx:29PKY2mw24bxrJtxFLn64x-m-I3rMlad9TkCqttHJDbgr2vk6WDNZw>
-    <xmx:29PKYw03GLe1PEgTMr5ylaXbbr0GTsYQguNOfKBObPa9OmXGcIkO2g>
-    <xmx:3NPKYxLTrWC9SRpdqaGtp_3nNcT-CRaUmTiQ2oKZrQo783C-pCTLtg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B9E9AB60086; Fri, 20 Jan 2023 12:48:11 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <720a7d19-4b7f-4948-b044-c46a539a4b36@app.fastmail.com>
-In-Reply-To: <Y8rMJcX0cqThKj2N@google.com>
-References: <20221226123630.6515-1-pali@kernel.org>
- <db008af4-2918-4458-aa68-2392674475c8@app.fastmail.com>
- <Y8rMJcX0cqThKj2N@google.com>
-Date:   Fri, 20 Jan 2023 18:47:52 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lee Jones" <lee@kernel.org>
-Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>, soc@kernel.org,
-        linux-kernel@vger.kernel.org, "Pavel Machek" <pavel@ucw.cz>,
-        linux-leds@vger.kernel.org,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH RESEND 0/8] Resend LED patches
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 12:48:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAE2F76E;
+        Fri, 20 Jan 2023 09:47:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8681F6203A;
+        Fri, 20 Jan 2023 17:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23C0C433EF;
+        Fri, 20 Jan 2023 17:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674236878;
+        bh=jekznAemlinI9fSN2j3OXrmRYwz4z6tzRDT1A/Ec7X4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gdRX39L91h8uY/H5Xz2dC6fngxZP09+e1GDHj/zldfkoVr8Fvo9zuV+pXP37Fanne
+         i+o1PwulUUzLKJcDmLtHK8gd+8foF+QEi68lmYH2oFLva26UEQh80x5eE0rW0gORyv
+         ujZbyUv3tdGBJ+b7ZQ8nUCGViyB8ZcF1xOV2FPgWhBzGQRiUWOSpqAHdy7Io1Z1dv3
+         2hf/bmXtY3xASngDw20kRmdmE6zE4m36Sim0GtigcPu37bnNF+krn15TVZmAwPRhDN
+         EcdGGH+bi/o9k5L2cA4b4kSPY8rJaM40TdaEfJfg517lklUnHvM1ZhOVevXx6EFF/C
+         pbRtQ7g+VR+vg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B0462405BE; Fri, 20 Jan 2023 14:47:55 -0300 (-03)
+Date:   Fri, 20 Jan 2023 14:47:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Tanmay Jagdale <tanmay@marvell.com>
+Cc:     James Clark <james.clark@arm.com>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        George Cherian <gcherian@marvell.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>
+Subject: Re: [PATCH v3 0/7] perf cs_etm: Basic support for virtual/kernel
+ timestamps
+Message-ID: <Y8rTyzfQaO8S8S/v@kernel.org>
+References: <20230103162042.423694-1-james.clark@arm.com>
+ <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
+ <5acce414-eabb-3d22-4907-da6b64b85a9c@arm.com>
+ <b61039b1-1f64-ff1e-8e6a-7d8ada28656c@arm.com>
+ <PH0PR18MB50178B52ED081276D2404493D6FD9@PH0PR18MB5017.namprd18.prod.outlook.com>
+ <70a94ad3-fe5d-b013-7f6b-dd83d2332e0e@arm.com>
+ <5fc1e764-bafc-34e5-5ff9-8b62af99ac10@arm.com>
+ <PH0PR18MB501732D8907DC909B2ADECDFD6C59@PH0PR18MB5017.namprd18.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR18MB501732D8907DC909B2ADECDFD6C59@PH0PR18MB5017.namprd18.prod.outlook.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023, at 18:15, Lee Jones wrote:
-> On Fri, 20 Jan 2023, Arnd Bergmann wrote:
+Em Fri, Jan 20, 2023 at 05:30:30PM +0000, Tanmay Jagdale escreveu:
+> > On 13/01/2023 11:12, James Clark wrote:
+> > > On 12/01/2023 15:33, Tanmay Jagdale wrote:
+> > I've sent v4 and I don't see any issues now with the files that you
+> > sent. There were a couple of different edge cases that I listed in the
+> > last commit message. Let me know if you find any more, otherwise if you
+> > leave your review or tested-by tag that would be great.
+> I have tested the latest v5 version on our platform with test
+> cases that run with and without filters for kernel/user space.
+> The timestamps look good on all of them.
+> 
+> Thanks for the effort !
 
->> > Marek Beh=C3=BAn (3):
->> >   leds: turris-omnia: support HW controlled mode via private trigger
->> >   leds: turris-omnia: initialize multi-intensity to full
->> >   leds: turris-omnia: change max brightness from 255 to 1
->> >
->> > Pali Roh=C3=A1r (5):
->> >   dt-bindings: leds: register-bit-led: Add active-low property
->> >   leds: syscon: Implement support for active-low property
->> >   powerpc/85xx: DTS: Add CPLD definitions for P1021RDB Combo Board =
-CPL
->> >     Design
->> >   dt-bindings: leds: Add cznic,turris1x-leds.yaml binding
->> >   leds: Add support for Turris 1.x LEDs
->> >
->> >  .../testing/sysfs-class-led-driver-turris1x   |  31 ++
->> >  .../bindings/leds/cznic,turris1x-leds.yaml    | 118 +++++
->> >  .../bindings/leds/register-bit-led.yaml       |   5 +
->> >  arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi    |  92 ++++
->> >  arch/powerpc/boot/dts/fsl/p1020mbg-pc_32b.dts |   6 +-
->> >  arch/powerpc/boot/dts/fsl/p1020mbg-pc_36b.dts |   6 +-
->> >  arch/powerpc/boot/dts/fsl/p1020rdb-pd.dts     |  44 +-
->> >  arch/powerpc/boot/dts/fsl/p1020utm-pc.dtsi    |  37 ++
->> >  arch/powerpc/boot/dts/fsl/p1020utm-pc_32b.dts |   4 +-
->> >  arch/powerpc/boot/dts/fsl/p1020utm-pc_36b.dts |   4 +-
->> >  arch/powerpc/boot/dts/fsl/p1021rdb-pc.dtsi    |  37 ++
->> >  arch/powerpc/boot/dts/fsl/p1021rdb-pc_32b.dts |   5 +-
->> >  arch/powerpc/boot/dts/fsl/p1021rdb-pc_36b.dts |   5 +-
->> >  arch/powerpc/boot/dts/fsl/p2020rdb-pc.dtsi    |  33 +-
->
->> >  drivers/leds/Kconfig                          |  10 +
->> >  drivers/leds/Makefile                         |   1 +
->> >  drivers/leds/leds-syscon.c                    |  14 +-
->> >  drivers/leds/leds-turris-1x.c                 | 474 ++++++++++++++=
-++++
->> >  drivers/leds/leds-turris-omnia.c              |  46 +-
->
-> If everyone is convinced that applying these drivers is the correct
-> thing to do, I'd be happy to (rather) take them via LEDs.
+Can I take that as an:
 
-Ok, thanks. I had not actually looked at the patches until today.
-They were in the soc tree backlog but appeared to be misplaced
-there until I read the  0/10 message text.
+Tested-by: Tanmay Jagdale <tanmay@marvell.com>
 
-Looking at it now, I see:
+For all the patches in this v5 series?
 
-- patches 1 and 2 seem obvious and have been reviewed by
-  others already
-
-- patch 3 is for arch/powerpc and should get merged through
-  there if there are no objections to the binding in patch 4.
-
-- patch 5 is the big driver patch, with a Reviewed-by tag
-  from Marek Beh=C3=BAn, who is the author of the last three patches.
-  An earlier version of this patch was sent in June and got
-  a few Acks and detailed feedback from Andy [1], but he's also
-  not on Cc, and I don't know if his comments are all resolved
-  in this version.
-
-- Patches 6, 7 and 8 all seem simple LED subsystem patches,
-  they just need review from you in order to get applied.
-  These are also missing a Signed-off-by from the submitter
-  in addition to the author in order to be applied.
- =20
-      Arnd
-
-[1] https://lore.kernel.org/all/CAHp75Vcr6o2rm+T6Tr8sS4VXCLVHtmLPWy-njOK=
-AvO4AcZoW=3DA@mail.gmail.com/
+- Arnaldo
