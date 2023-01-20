@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEA7675D4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FB2675D51
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjATTCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S230034AbjATTCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjATTC2 (ORCPT
+        with ESMTP id S229904AbjATTCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:02:28 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B74C4E8A;
-        Fri, 20 Jan 2023 11:02:27 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id p12so3160637ilq.10;
-        Fri, 20 Jan 2023 11:02:27 -0800 (PST)
+        Fri, 20 Jan 2023 14:02:30 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB46385347;
+        Fri, 20 Jan 2023 11:02:29 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id h15so2874824ilh.4;
+        Fri, 20 Jan 2023 11:02:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PT42Zl2MuPs/Wu9jh4sQMK4BVAdg3CNaxRS3csl2Gmk=;
-        b=YgMU1Tm/SWN5kuzg9KE0Cq1L9BqLdj77L+ImuL3FdAEO30CVMjJzhspc7fXWo45AOw
-         fBcRb0NkdP9N3aY+rceOTA7NNYEzQimVr2aq4Nw3ram5kpP0Gs9YNTZnO53nc6VpEmXd
-         Imue2WitnqlW/k6aNpZe0+rU1oesQiKsfdIMrGIf+JvdE4UC4A25Jgndwscx57+MK2iL
-         Aw26dwMqQu/IWcQDok3S8jzIWw+bEknjwhBMIMliCBF2uSJDrarjlKj568SFleWZJ3Um
-         +CKC6EjY0GIs403gJqLiZESoCFY7h7VBwt5KvYAbhH3Hn/54Zr0yhi+j4fVsV7Gi3V//
-         edTQ==
+        bh=5rhB+jCWXlDHeyaWPTfhoKZG0YZcAyGqC3yxhLv7U6w=;
+        b=lknvwgacWgowNZLC4XECbtZKNlv6HqjFRHYejN+rgvjaZ5WNBGQWmWzQGZ+QtDTGRk
+         Ca/IdGy/Fp/yIQEIdXDjKJas19zHXmPUiJgkKEyInmq/R1f/nIo/PkFD1Lwa0AG9NNTd
+         b1jjB77CEuqFd5Z47Rn1DLAuM2pzQ71u/gUwp1bhMiRdLAcWPnNS/NMNBQnEhOtmLsPC
+         2p5Pg0OMGn4IewYGDV9wTo8Sk5SkX02wnx3TlsEkIuEFcSuD2IsTdwI9kXUkq7zWXMq8
+         +ccujkOLxcCK6C8lVneugYs6LpdYvkYuXnazLtwvjRG3osyWhJ6FbpndCJlfIup/+bVy
+         h0MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PT42Zl2MuPs/Wu9jh4sQMK4BVAdg3CNaxRS3csl2Gmk=;
-        b=YOcNjivh2cPE2gJlc5fU5lI2vNHdfoGDu7C+hBm1yo7JU1e5mIuuu4krc1vZHRPCow
-         cn86mq+UPR0F3HVwAsSOZPOQaXxbfVNCJL2dvCy+vKZfNVMRxGhZgf8aGqnTRLp5mhma
-         97c3KxA8R72gr2aPmuDNglBXxzRo8KrQywCFRoOG5quE2EWim3ldb18GlJfDw1AXZcHb
-         v/4akpXYVRVcoz/FFYp5lf4e8xxLLFWT9vy5yra8WVhRW2IovOtHdOC5a/kOKHbgbuF0
-         8YE2RLUV/IUvZbL0zIAwOreiuzkjSpwu6oRxqOMKEPyqBejX20cfbySsa72zRVKddJRh
-         6J6w==
-X-Gm-Message-State: AFqh2kpvzrK2xXaN/xCeiqqLPMWt32el846SvVCe8zWmo2lWlGSFW8cP
-        klmJi9EOMJ80/KDEFkSyh/c=
-X-Google-Smtp-Source: AMrXdXvZu4EKcElFlDs9p4MYW7HJf6M/QTeoUR8FTyxRiUnhim6OBaeJFtX0+Tx5ki+8TU0bfImN6Q==
-X-Received: by 2002:a05:6e02:1ba2:b0:30f:63f0:b215 with SMTP id n2-20020a056e021ba200b0030f63f0b215mr854272ili.26.1674241346839;
-        Fri, 20 Jan 2023 11:02:26 -0800 (PST)
+        bh=5rhB+jCWXlDHeyaWPTfhoKZG0YZcAyGqC3yxhLv7U6w=;
+        b=zA1BYhjYEKBkxMVit2LHGAbxgoNmU0HF7PB16yMo8CDr/2Rjnl55HmoO7SHc2TLmBY
+         9DJjS5bgwtrzeaOeyGzWghPwIX3M9kzDXS7u3dw8MCJcD/TDY2A9m9URB+ntU8ozK0lr
+         dApX2aDjkhn1zd4Y3OX+BF8jcxdpXnOIKodSRb4sX3CuLWOZOf6tIJb/iXqk3PIXQSJU
+         7zMzCXcL3rogkAkNoDYyOGMH+XHOciiVLlDdk/7MM6qp0nJqmU/L6K6O174TnzUAYahe
+         282cs/25Ht05iqo80hIvIi0V4i6KThqtuObr7lLYpJMPKtLsh+Qh3BnN9wDzClaYu6UG
+         HVjw==
+X-Gm-Message-State: AFqh2krOzW+02X/NSBuQ62MvQ6k+Bi6wJN/8HFPvGyZxnA2KvEkZcGdh
+        C3HYM5SMfryptpn8EkZYqH4=
+X-Google-Smtp-Source: AMrXdXv80xjIQ0RsNbyGUUz57F77A94w0EL9s2R0Rrmto+KRjhEpamBGGAuY5ReJGlNNSVACcPF0Ow==
+X-Received: by 2002:a05:6e02:6cc:b0:30c:4846:57c3 with SMTP id p12-20020a056e0206cc00b0030c484657c3mr12050911ils.4.1674241348972;
+        Fri, 20 Jan 2023 11:02:28 -0800 (PST)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y13-20020a37f60d000000b006fa2b1c3c1esm10379806qkj.58.2023.01.20.11.02.24
+        by smtp.gmail.com with ESMTPSA id y13-20020a37f60d000000b006fa2b1c3c1esm10379806qkj.58.2023.01.20.11.02.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 11:02:26 -0800 (PST)
+        Fri, 20 Jan 2023 11:02:28 -0800 (PST)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -62,9 +62,9 @@ Cc:     Brian Norris <computersforpeace@gmail.com>,
         <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH 2/6] rtc: brcmstb-waketimer: non-functional code changes
-Date:   Fri, 20 Jan 2023 11:01:43 -0800
-Message-Id: <20230120190147.718976-3-opendmb@gmail.com>
+Subject: [PATCH 3/6] rtc: brcmstb-waketimer: compensate for lack of wktmr disable
+Date:   Fri, 20 Jan 2023 11:01:44 -0800
+Message-Id: <20230120190147.718976-4-opendmb@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230120190147.718976-1-opendmb@gmail.com>
 References: <20230120190147.718976-1-opendmb@gmail.com>
@@ -80,74 +80,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These changes are not intended to affect functionality, but
-simplify the source code. They are performed here to simplify
-review and reduce confusion with other changes in this set.
+Since the WKTMR hardware block cannot be disabled it is necessary
+for the driver to accommodate for associated timing hazards. This
+commit targets the following possibilities:
 
-Since set_alarm includes the alarm_irq_enable functionality call
-it directly from that function for simplicity (even though it
-does nothing at the moment). The order of the declarations is
-changed to prevent the need for a prototype.
+A possible race between clearing a wktmr event and the alarm expiring
+is made one-sided by setting the alarm to its maximum value before
+clearing the event.
 
-The function device_init_wakeup() is used to replace the
-functions device_set_wakeup_capable() and device_wakeup_enable()
-since it is equivalent.
+Programming alarm values close to the current time may not trigger
+events if the counter advances while the alarm is being programmed.
+After programming an alarm, a check is made to ensure that it is
+either in the future or an expiration event is pending.
 
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- drivers/rtc/rtc-brcmstb-waketimer.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ drivers/rtc/rtc-brcmstb-waketimer.c | 52 +++++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
-index fbeb8be6664b..582c23793550 100644
+index 582c23793550..c791e92532b8 100644
 --- a/drivers/rtc/rtc-brcmstb-waketimer.c
 +++ b/drivers/rtc/rtc-brcmstb-waketimer.c
-@@ -169,6 +169,16 @@ static int brcmstb_waketmr_getalarm(struct device *dev,
+@@ -31,6 +31,8 @@ struct brcmstb_waketmr {
+ 	struct notifier_block reboot_notifier;
+ 	struct clk *clk;
+ 	u32 rate;
++	unsigned long rtc_alarm;
++	bool alarm_en;
+ };
+ 
+ #define BRCMSTB_WKTMR_EVENT		0x00
+@@ -52,6 +54,11 @@ static inline bool brcmstb_waketmr_is_pending(struct brcmstb_waketmr *timer)
+ 
+ static inline void brcmstb_waketmr_clear_alarm(struct brcmstb_waketmr *timer)
+ {
++	u32 reg;
++
++	timer->alarm_en = false;
++	reg = readl_relaxed(timer->base + BRCMSTB_WKTMR_COUNTER);
++	writel_relaxed(reg - 1, timer->base + BRCMSTB_WKTMR_ALARM);
+ 	writel_relaxed(WKTMR_ALARM_EVENT, timer->base + BRCMSTB_WKTMR_EVENT);
+ 	(void)readl_relaxed(timer->base + BRCMSTB_WKTMR_EVENT);
+ }
+@@ -59,12 +66,22 @@ static inline void brcmstb_waketmr_clear_alarm(struct brcmstb_waketmr *timer)
+ static void brcmstb_waketmr_set_alarm(struct brcmstb_waketmr *timer,
+ 				      unsigned int secs)
+ {
++	unsigned int now;
++
+ 	brcmstb_waketmr_clear_alarm(timer);
+ 
+ 	/* Make sure we are actually counting in seconds */
+ 	writel_relaxed(timer->rate, timer->base + BRCMSTB_WKTMR_PRESCALER);
+ 
+-	writel_relaxed(secs + 1, timer->base + BRCMSTB_WKTMR_ALARM);
++	writel_relaxed(secs, timer->base + BRCMSTB_WKTMR_ALARM);
++	now = readl_relaxed(timer->base + BRCMSTB_WKTMR_COUNTER);
++
++	while ((int)(secs - now) <= 0 &&
++		!brcmstb_waketmr_is_pending(timer)) {
++		secs = now + 1;
++		writel_relaxed(secs, timer->base + BRCMSTB_WKTMR_ALARM);
++		now = readl_relaxed(timer->base + BRCMSTB_WKTMR_COUNTER);
++	}
+ }
+ 
+ static irqreturn_t brcmstb_waketmr_irq(int irq, void *data)
+@@ -155,27 +172,30 @@ static int brcmstb_waketmr_getalarm(struct device *dev,
+ 				    struct rtc_wkalrm *alarm)
+ {
+ 	struct brcmstb_waketmr *timer = dev_get_drvdata(dev);
+-	time64_t sec;
+ 
+-	sec = readl_relaxed(timer->base + BRCMSTB_WKTMR_ALARM);
+-	if (sec != 0) {
+-		/* Alarm is enabled */
+-		alarm->enabled = 1;
+-		rtc_time64_to_tm(sec, &alarm->time);
+-	}
++	alarm->enabled = timer->alarm_en;
++	rtc_time64_to_tm(timer->rtc_alarm, &alarm->time);
+ 
+ 	alarm->pending = brcmstb_waketmr_is_pending(timer);
+ 
  	return 0;
  }
  
-+/*
-+ * Does not do much but keep the RTC class happy. We always support
-+ * alarms.
-+ */
-+static int brcmstb_waketmr_alarm_enable(struct device *dev,
-+					unsigned int enabled)
-+{
-+	return 0;
-+}
-+
- static int brcmstb_waketmr_setalarm(struct device *dev,
- 				     struct rtc_wkalrm *alarm)
- {
-@@ -182,17 +192,7 @@ static int brcmstb_waketmr_setalarm(struct device *dev,
- 
- 	brcmstb_waketmr_set_alarm(timer, sec);
- 
--	return 0;
--}
--
 -/*
 - * Does not do much but keep the RTC class happy. We always support
 - * alarms.
 - */
--static int brcmstb_waketmr_alarm_enable(struct device *dev,
--					unsigned int enabled)
--{
--	return 0;
-+	return brcmstb_waketmr_alarm_enable(dev, alarm->enabled);
+ static int brcmstb_waketmr_alarm_enable(struct device *dev,
+ 					unsigned int enabled)
+ {
++	struct brcmstb_waketmr *timer = dev_get_drvdata(dev);
++
++	if (enabled && !timer->alarm_en) {
++		if ((int)(readl_relaxed(timer->base + BRCMSTB_WKTMR_COUNTER) -
++		    readl_relaxed(timer->base + BRCMSTB_WKTMR_ALARM)) >= 0 &&
++		    !brcmstb_waketmr_is_pending(timer))
++			return -EINVAL;
++		timer->alarm_en = true;
++	} else if (!enabled && timer->alarm_en) {
++		timer->alarm_en = false;
++	}
++
+ 	return 0;
  }
  
- static const struct rtc_class_ops brcmstb_waketmr_ops = {
-@@ -228,8 +228,7 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 	 * Set wakeup capability before requesting wakeup interrupt, so we can
- 	 * process boot-time "wakeups" (e.g., from S5 soft-off)
- 	 */
--	device_set_wakeup_capable(dev, true);
--	device_wakeup_enable(dev);
-+	device_init_wakeup(dev, true);
+@@ -183,14 +203,10 @@ static int brcmstb_waketmr_setalarm(struct device *dev,
+ 				     struct rtc_wkalrm *alarm)
+ {
+ 	struct brcmstb_waketmr *timer = dev_get_drvdata(dev);
+-	time64_t sec;
  
- 	timer->irq = platform_get_irq(pdev, 0);
- 	if (timer->irq < 0)
+-	if (alarm->enabled)
+-		sec = rtc_tm_to_time64(&alarm->time);
+-	else
+-		sec = 0;
++	timer->rtc_alarm = rtc_tm_to_time64(&alarm->time);
+ 
+-	brcmstb_waketmr_set_alarm(timer, sec);
++	brcmstb_waketmr_set_alarm(timer, timer->rtc_alarm);
+ 
+ 	return brcmstb_waketmr_alarm_enable(dev, alarm->enabled);
+ }
 -- 
 2.25.1
 
