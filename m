@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5555C675181
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E66A6751A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjATJrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S229500AbjATJw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjATJrp (ORCPT
+        with ESMTP id S229712AbjATJwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:47:45 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D916D69C;
-        Fri, 20 Jan 2023 01:47:43 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z3so3567563pfb.2;
-        Fri, 20 Jan 2023 01:47:43 -0800 (PST)
+        Fri, 20 Jan 2023 04:52:53 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1127244BE5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:52:51 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so5454683wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:52:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9e8deQn8aCi/wHLuVh1da56h/XUNMS4HgNr7EYEaUIA=;
-        b=C0id/+oe6WOmK4icKYjcWQhxJdGr70Xhq1O2WX51Avlp0CyJDSHRTLbA3Ovwjdj892
-         EbzJ5lo8IxRr5bUeWRtWBAbQ4IJQVoXL8YRR+uiPXpQBAXakzjEJ0+/jEJw5vP5yAQR+
-         kKbHAHger7QZOzWLlhNha5UfhP23NRy5B2Q3M1qLSUEKOEp53FSTEAGF0npWvbOjGMrT
-         JeXqUfKICSy4w23ee17wdvm72IPaJvVhAApaVg9q4aeufMn0gGpNNcpYnvlRX5LWoJ9L
-         JYJFzwrodGNadE8jZWoLQ/wcBixnWjhPdnrobxpxtyOQokGJwfwB2YMFLXpc3gLM++vp
-         7ANA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=FnjzLigWTWrmVYT7keQxDKaopp0We8SxlDZVkLkpEYc=;
+        b=CkgI1BIZB/UVM6UII4xu7jq+VyvnfafGgTj6jesx5TVV9fBJwMW6oITwzQhWKtrHyk
+         uy2yPxhzqMa5r4bm+UxhcH+fl6iTXEsXi6GI+HNlK/ao2CKpREvxU5RoR1Bh9t3AeOZX
+         r+TqA9dF/GsFGNrBqh49qpoaqleQHh47gYaf9oAGojQn9bnthXK9GhnF0puo/5+z/HNr
+         wJKhEq1s18AjKsEhqhQS/cuHm1+7IBtLM5pDCBJALqDMP+VPoWrI49Bs3yXwbvPoJd8G
+         GWIYPcbVn1c2/TwM/B3PKALxRz7D7U5NClbZURDa2UXLeAJFG8+7ybjLNe81hJpcBDzC
+         /gMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9e8deQn8aCi/wHLuVh1da56h/XUNMS4HgNr7EYEaUIA=;
-        b=uUWuDpHDN76Xv/GO3SIjpKE4JXe2dMw32dZ9JXaJOb8DdKtvxeTqkBepMXJ7hdE/+F
-         8aZHkeG35MN8VA9O2t8A+Usrg9EH3vkeelJkDEieFMHHtOmHO5E14wh7zNy17cBWWJ0x
-         XNZz1B6hlv7mxSid/fhlORa2yeSIcqDwqGEjm8tLCVDECDwquFhqLfo9XBO7NWrKvkdi
-         v7FKjCE6nxnyQC2PO61BQp8yKXX/HYjmTIW26eiHRjtwjRyZLvHZ674SpugNpckz6p4G
-         /7Q0pVutIg6ZWWVMW5ecify1H72CqWWbmaoF+JD/831Qc313drL3ppFQUwjOIW5ilzQ/
-         OaLQ==
-X-Gm-Message-State: AFqh2kp4xRIYzAiHZpVgSyWycHpmdglZ9jrMocS081rhgCW1wFOfbdfu
-        jb2Fphl8ajijymsovDAHbQM=
-X-Google-Smtp-Source: AMrXdXtZ0HJIGLtteZgSJdbac2bk04c5r+zgaBc8EUD2HvbanHkWYzCrvbvQ/kjNPRI7NAoc5+OQ0g==
-X-Received: by 2002:a62:52c5:0:b0:585:fc75:c544 with SMTP id g188-20020a6252c5000000b00585fc75c544mr15209950pfb.15.1674208063311;
-        Fri, 20 Jan 2023 01:47:43 -0800 (PST)
-Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id u5-20020a626005000000b005815017d348sm19308863pfb.179.2023.01.20.01.47.38
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FnjzLigWTWrmVYT7keQxDKaopp0We8SxlDZVkLkpEYc=;
+        b=DqAWi6ZvqdgMrIznXIN+N8X70w6Q/rbTFU1iPa/zcIIgJESxjJ/ik3ml2i/ltDbe8o
+         N5wOMltWwpvqJcpVy8brwBVmhlk8nOGZJEjWNIumqoMTHjns1Njp8zAOp91voH6fX6kV
+         dcFNj8O4+oZwdkosZbkvMh2yh0cEZ6BDqygzcP2eUIzL226RfR8MIFj8yLO7TMoWFMoJ
+         UvW0C3udXx4j9ea0IeOyP171Yc6y+U5Jnw1Rara7XIii84Ux114atusZ5IrKoQgehhpa
+         SQ2C6mPz8MRpKTWsLqNmuzN9YwW0kMjLtKj7ADEwbsKP/wW6KRpWKnU5S3rjR5g2eecp
+         GBwg==
+X-Gm-Message-State: AFqh2ko6syUi4rmDe39VvJI9I7mO5p7K6+uPlBRRh02NVe7iaAMQwqa8
+        O1gvdE9tB70lfV8fKOMEBOuKJA==
+X-Google-Smtp-Source: AMrXdXup3WUxvn3YSSPPEY8ObOfbzJeR6OV0og1Ivv7BMGJZOj1s6tojl0jM8yq9LLbQWb2eu2d6fQ==
+X-Received: by 2002:a05:600c:3b05:b0:3d6:b691:b80d with SMTP id m5-20020a05600c3b0500b003d6b691b80dmr13511451wms.21.1674208369487;
+        Fri, 20 Jan 2023 01:52:49 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm1923545wmq.28.2023.01.20.01.52.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 01:47:43 -0800 (PST)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 20 Jan 2023 01:52:48 -0800 (PST)
+References: <20230116074214.2326-1-yu.tu@amlogic.com>
+ <20230116074214.2326-4-yu.tu@amlogic.com>
+ <1ja62eybrv.fsf@starbuckisacylon.baylibre.com>
+ <aedb0764-b5cb-7f49-f279-51dbec070e80@amlogic.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Helge Deller <deller@gmx.de>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH v7 2/2] backlight: ktz8866: Add support for Kinetic KTZ8866 backlight
-Date:   Fri, 20 Jan 2023 17:47:28 +0800
-Message-Id: <20230120094728.19967-2-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230120094728.19967-1-lujianhua000@gmail.com>
-References: <20230120094728.19967-1-lujianhua000@gmail.com>
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
+        "qi . duan" <qi.duan@amlogic.com>
+Subject: Re: [PATCH V6 3/3] clk: meson: s4: add support for Amlogic S4 SoC
+ peripheral clock controller
+Date:   Fri, 20 Jan 2023 10:47:31 +0100
+In-reply-to: <aedb0764-b5cb-7f49-f279-51dbec070e80@amlogic.com>
+Message-ID: <1jwn5hwn0w.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,312 +83,303 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Kinetic KTZ8866 backlight, which is used in
-Xiaomi tablet, Mi Pad 5 series. This driver lightly based on
-downstream implementation [1].
-[1] https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/elish-r-oss/drivers/video/backlight/ktz8866.c
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
-Changes in v2:
-  - Add missing staitc modifier to ktz8866_write function.
+On Fri 20 Jan 2023 at 11:33, Yu Tu <yu.tu@amlogic.com> wrote:
 
-Changes in v3:
-  - Add 2022 to Copyright line.
-  - Sort headers.
-  - Remove meaningless comment.
-  - Use definitions instead of hardcoding.
-  - Add missing maintainer info.
+> Hi
+> On 2023/1/19 19:37, Jerome Brunet wrote:
+>> [ EXTERNAL EMAIL ]
+>> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
+>> 
+>>> Add the peripherals clock controller driver in the s4 SoC family.
+>>>
+>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> [...]
+>> 
+>>> +
+>>> +/* Video Clocks */
+>>> +static struct clk_regmap s4_vid_pll_div = {
+>>> +	.data = &(struct meson_vid_pll_div_data){
+>>> +		.val = {
+>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
+>>> +			.shift   = 0,
+>>> +			.width   = 15,
+>>> +		},
+>>> +		.sel = {
+>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
+>>> +			.shift   = 16,
+>>> +			.width   = 2,
+>>> +		},
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "vid_pll_div",
+>>> +		/*
+>>> +		 * The frequency division from the hdmi_pll clock to the vid_pll_div
+>>> +		 * clock is the default value of this register. When designing the
+>>> +		 * video module of the chip, a default value that can meet the
+>>> +		 * requirements of the video module will be solidified according
+>>> +		 * to the usage requirements of the chip, so as to facilitate chip
+>>> +		 * simulation. So this is ro_ops.
+>>> +		 * It is important to note that this clock is not used on this
+>>> +		 * chip and is described only for the integrity of the clock tree.
+>>> +		 */
+>> If it is reset value and will be applicable to all the design, regarless
+>> of the use-case, then yes RO ops is OK
+>> 
+>>>From what I understand here, the value will depend on the use-case requirements.
+>> This is a typical case where the DT prop "assigned-rate" should be used, not RO ops.
+>
+> Check the previous chip history, the actual scene is not used at all,
+> basically is used in simulation. So the previous SOC was "ro_ops" without
+> any problems.  This S4 SOC is not actually useful either.
+>
+> So when you were upstream, you had no problem making "ro_ops". I wonder if
+> I could delete this useless clock, so you don't have to worry about it.
 
-Changes in v4:
-  - Change 2022 to 2023.
-  - Remove useless macro and enum.
-  - Describe settings by devicetree.
-  - Move header file to C file.
+I don't know what to make of this. What is the point of adding a useless
+clock ?
 
-Changes in v5:
-  - Change "2023" to "2022, 2023" in Copyright line.
-  - Set scale property for backlight.
+>
+>> 
+>>> +		.ops = &meson_vid_pll_div_ro_ops,
+>>> +		.parent_data = (const struct clk_parent_data []) {
+>>> +			{ .fw_name = "hdmi_pll", }
+>>> +		},
+>>> +		.num_parents = 1,
+>>> +		.flags = CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+>> 
+>>> +
+>>> +/* VDEC clocks */
+>>> +static const struct clk_parent_data s4_dec_parent_data[] = {
+>>> +	{ .fw_name = "fclk_div2p5", },
+>>> +	{ .fw_name = "fclk_div3", },
+>>> +	{ .fw_name = "fclk_div4", },
+>>> +	{ .fw_name = "fclk_div5", },
+>>> +	{ .fw_name = "fclk_div7", },
+>>> +	{ .fw_name = "hifi_pll", },
+>>> +	{ .fw_name = "gp0_pll", },
+>>> +	{ .fw_name = "xtal", }
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_vdec_p0_mux = {
+>>> +	.data = &(struct clk_regmap_mux_data){
+>>> +		.offset = CLKCTRL_VDEC_CLK_CTRL,
+>>> +		.mask = 0x7,
+>>> +		.shift = 9,
+>>> +		.flags = CLK_MUX_ROUND_CLOSEST,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "vdec_p0_mux",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_dec_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_dec_parent_data),
+>>> +		/*
+>>> +		 * When the driver uses this clock, needs to specify the patent clock
+>>> +		 * he wants in the dts.
+>> s/patent/parent ?
+>> s/he wants/it requires ?
+>
+> Okay.
+>
+>> 
+>>> +		 */
+>>> +		.flags = CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+>> [...]
+>> 
+>>> +static const struct clk_parent_data s4_vpu_clkc_parent_data[] = {
+>>> +	{ .fw_name = "fclk_div4", },
+>>> +	{ .fw_name = "fclk_div3", },
+>>> +	{ .fw_name = "fclk_div5", },
+>>> +	{ .fw_name = "fclk_div7", },
+>>> +	{ .fw_name = "mpll1", },
+>>> +	{ .hw = &s4_vid_pll.hw },
+>>> +	{ .fw_name = "mpll2", },
+>>> +	{ .fw_name = "gp0_pll", },
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_vpu_clkc_p0_mux  = {
+>>> +	.data = &(struct clk_regmap_mux_data){
+>>> +		.offset = CLKCTRL_VPU_CLKC_CTRL,
+>>> +		.mask = 0x7,
+>>> +		.shift = 9,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "vpu_clkc_p0_mux",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_vpu_clkc_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_vpu_clkc_parent_data),
+>>> +		/*
+>>> +		 * When the driver uses this clock, needs to specify the patent clock
+>>> +		 * he wants in the dts.
+>>> +		 */
+>> That's quite a lot of occurences of the same comment.
+>> At the same time, other clocks with the same flag have no comment.
+>> Please make general comment, before the Video/VPU section, explaining
+>> which clocks needs on a use-case basis (through DT) and possibly how it
+>> should be set, what should drive the choices.
+>> 
+>
+> The owner of the corresponding driver module wants to have a fixed clock,
+> but I can't explain every specific reason.
 
-Changes in v6:
-  - Correct devicetree property name.
+Why can't you ?
 
-Changes in v7:
-  - Remove unnecessary sleep statement.
-  - Fix code style.
-  - Add vddpos and vddneg supply devicetree parse.
-  - Add enabel-gpio devicetree parse.
+> So I'm going to change it all
+> to.flags = CLK_SET_RATE_PARENT in the next version. Let CCF choose the
+> appropriate clock as you suggested. If there is a corresponding module you
+> want to change, ask him to give you a specific explanation. Do you think
+> that's all right?
 
- MAINTAINERS                       |   6 +
- drivers/video/backlight/Kconfig   |   8 ++
- drivers/video/backlight/Makefile  |   1 +
- drivers/video/backlight/ktz8866.c | 209 ++++++++++++++++++++++++++++++
- 4 files changed, 224 insertions(+)
- create mode 100644 drivers/video/backlight/ktz8866.c
+If the flag is actually required and there is a reason, no it is not.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 42fc47c6edfd..2084e74e1b58 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11674,6 +11674,12 @@ M:	John Hawley <warthog9@eaglescrag.net>
- S:	Maintained
- F:	tools/testing/ktest
- 
-+KTZ8866 BACKLIGHT DRIVER
-+M:	Jianhua Lu <lujianhua000@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-+F:	drivers/video/backlight/ktz8866.c
-+
- L3MDEV
- M:	David Ahern <dsahern@kernel.org>
- L:	netdev@vger.kernel.org
-diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-index 936ba1e4d35e..f7113ceb264a 100644
---- a/drivers/video/backlight/Kconfig
-+++ b/drivers/video/backlight/Kconfig
-@@ -190,6 +190,14 @@ config BACKLIGHT_KTD253
- 	  which is a 1-wire GPIO-controlled backlight found in some mobile
- 	  phones.
- 
-+config BACKLIGHT_KTZ8866
-+	tristate "Backlight Driver for Kinetic KTZ8866"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+		Say Y to enable the backlight driver for the Kinetic KTZ8866
-+		found in Xiaomi Mi Pad 5 series.
-+
- config BACKLIGHT_LM3533
- 	tristate "Backlight Driver for LM3533"
- 	depends on MFD_LM3533
-diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-index e815f3f1deff..f70a819c304c 100644
---- a/drivers/video/backlight/Makefile
-+++ b/drivers/video/backlight/Makefile
-@@ -36,6 +36,7 @@ obj-$(CONFIG_BACKLIGHT_HP680)		+= hp680_bl.o
- obj-$(CONFIG_BACKLIGHT_HP700)		+= jornada720_bl.o
- obj-$(CONFIG_BACKLIGHT_IPAQ_MICRO)	+= ipaq_micro_bl.o
- obj-$(CONFIG_BACKLIGHT_KTD253)		+= ktd253-backlight.o
-+obj-$(CONFIG_BACKLIGHT_KTZ8866)		+= ktz8866.o
- obj-$(CONFIG_BACKLIGHT_LM3533)		+= lm3533_bl.o
- obj-$(CONFIG_BACKLIGHT_LM3630A)		+= lm3630a_bl.o
- obj-$(CONFIG_BACKLIGHT_LM3639)		+= lm3639_bl.o
-diff --git a/drivers/video/backlight/ktz8866.c b/drivers/video/backlight/ktz8866.c
-new file mode 100644
-index 000000000000..d848345d528f
---- /dev/null
-+++ b/drivers/video/backlight/ktz8866.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Backlight driver for the Kinetic KTZ8866
-+ *
-+ * Copyright (C) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
-+ */
-+
-+#include <linux/backlight.h>
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/regmap.h>
-+
-+#define DEFAULT_BRIGHTNESS 1500
-+#define MAX_BRIGHTNESS 2047
-+#define REG_MAX 0x15
-+
-+/* reg */
-+#define DEVICE_ID 0x01
-+#define BL_CFG1 0x02
-+#define BL_CFG2 0x03
-+#define BL_BRT_LSB 0x04
-+#define BL_BRT_MSB 0x05
-+#define BL_EN 0x08
-+#define LCD_BIAS_CFG1 0x09
-+#define LCD_BIAS_CFG2 0x0A
-+#define LCD_BIAS_CFG3 0x0B
-+#define LCD_BOOST_CFG 0x0C
-+#define OUTP_CFG 0x0D
-+#define OUTN_CFG 0x0E
-+#define FLAG 0x0F
-+#define BL_OPTION1 0x10
-+#define BL_OPTION2 0x11
-+#define PWM2DIG_LSBs 0x12
-+#define PWM2DIG_MSBs 0x13
-+#define BL_DIMMING 0x14
-+#define PWM_RAMP_TIME 0x15
-+
-+/* definition */
-+#define BL_EN_BIT BIT(6)
-+#define LCD_BIAS_EN 0x9F
-+#define PWM_HYST 0x5
-+
-+struct ktz8866 {
-+	struct i2c_client *client;
-+	struct regmap *regmap;
-+	bool led_on;
-+	struct gpio_desc *enable_gpio;
-+};
-+
-+static const struct regmap_config ktz8866_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = REG_MAX,
-+};
-+
-+static int ktz8866_write(struct ktz8866 *ktz, unsigned int reg,
-+			 unsigned int val)
-+{
-+	return regmap_write(ktz->regmap, reg, val);
-+}
-+
-+static int ktz8866_update_bits(struct ktz8866 *ktz, unsigned int reg,
-+			       unsigned int mask, unsigned int val)
-+{
-+	return regmap_update_bits(ktz->regmap, reg, mask, val);
-+}
-+
-+static int ktz8866_backlight_update_status(struct backlight_device *backlight_dev)
-+{
-+	struct ktz8866 *ktz = bl_get_data(backlight_dev);
-+	unsigned int brightness = backlight_get_brightness(backlight_dev);
-+
-+	if (!ktz->led_on && brightness > 0) {
-+		ktz8866_update_bits(ktz, BL_EN, BL_EN_BIT, BL_EN_BIT);
-+		ktz->led_on = true;
-+	} else if (brightness == 0) {
-+		ktz8866_update_bits(ktz, BL_EN, BL_EN_BIT, 0);
-+		ktz->led_on = false;
-+	}
-+
-+	/* Set brightness */
-+	ktz8866_write(ktz, BL_BRT_LSB, brightness & 0x7);
-+	ktz8866_write(ktz, BL_BRT_MSB, (brightness >> 3) & 0xFF);
-+
-+	return 0;
-+}
-+
-+static const struct backlight_ops ktz8866_backlight_ops = {
-+	.options = BL_CORE_SUSPENDRESUME,
-+	.update_status = ktz8866_backlight_update_status,
-+};
-+
-+static void ktz8866_init(struct ktz8866 *ktz)
-+{
-+	unsigned int val = 0;
-+
-+	if (of_property_read_u32(ktz->client->dev.of_node, "current-num-sinks", &val))
-+		ktz8866_write(ktz, BL_EN, BIT(val) - 1);
-+	else
-+		/* Enable all 6 current sinks if the number of current sinks isn't specified. */
-+		ktz8866_write(ktz, BL_EN, BIT(6) - 1);
-+
-+	if (of_property_read_u32(ktz->client->dev.of_node, "current-ramping-time-ms", &val)) {
-+		if (val <= 128)
-+			ktz8866_write(ktz, BL_CFG2, BIT(7) | (ilog2(val) << 3) | PWM_HYST);
-+		else
-+			ktz8866_write(ktz, BL_CFG2, BIT(7) | ((5 + val / 64) << 3) | PWM_HYST);
-+	}
-+
-+	if (of_property_read_u32(ktz->client->dev.of_node, "led-ramping-time-ms", &val)) {
-+		if (val == 0)
-+			ktz8866_write(ktz, BL_DIMMING, 0);
-+		else {
-+			unsigned int ramp_off_time = ilog2(val) + 1;
-+			unsigned int ramp_on_time = ramp_off_time << 4;
-+			ktz8866_write(ktz, BL_DIMMING, ramp_on_time | ramp_off_time);
-+		}
-+	}
-+
-+	if (of_property_read_bool(ktz->client->dev.of_node, "kinetic,enable-lcd-bias"))
-+		ktz8866_write(ktz, LCD_BIAS_CFG1, LCD_BIAS_EN);
-+}
-+
-+static int ktz8866_probe(struct i2c_client *client,
-+			 const struct i2c_device_id *id)
-+{
-+	struct backlight_device *backlight_dev;
-+	struct backlight_properties props;
-+	struct ktz8866 *ktz;
-+	int ret = 0;
-+
-+	ktz = devm_kzalloc(&client->dev, sizeof(*ktz), GFP_KERNEL);
-+	if (!ktz)
-+		return -ENOMEM;
-+
-+	ktz->client = client;
-+	ktz->regmap = devm_regmap_init_i2c(client, &ktz8866_regmap_config);
-+	if (IS_ERR(ktz->regmap))
-+		return dev_err_probe(&client->dev, PTR_ERR(ktz->regmap), "failed to init regmap\n");
-+
-+	ret = devm_regulator_get_enable(&client->dev, "vddpos");
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "get regulator vddpos failed\n");
-+	ret = devm_regulator_get_enable(&client->dev, "vddneg");
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "get regulator vddneg failed\n");
-+
-+	ktz->enable_gpio = devm_gpiod_get_optional(&client->dev, "enable", GPIOD_OUT_HIGH);
-+	if (IS_ERR(ktz->enable_gpio))
-+		return PTR_ERR(ktz->enable_gpio);
-+
-+	memset(&props, 0, sizeof(props));
-+	props.type = BACKLIGHT_RAW;
-+	props.max_brightness = MAX_BRIGHTNESS;
-+	props.brightness = DEFAULT_BRIGHTNESS;
-+	props.scale = BACKLIGHT_SCALE_LINEAR;
-+
-+	backlight_dev = devm_backlight_device_register(&client->dev, "ktz8866-backlight",
-+					&client->dev, ktz, &ktz8866_backlight_ops, &props);
-+	if (IS_ERR(backlight_dev))
-+		return dev_err_probe(&client->dev, PTR_ERR(backlight_dev),
-+				"failed to register backlight device\n");
-+
-+	ktz8866_init(ktz);
-+
-+	i2c_set_clientdata(client, backlight_dev);
-+	backlight_update_status(backlight_dev);
-+
-+	return 0;
-+}
-+
-+static void ktz8866_remove(struct i2c_client *client)
-+{
-+	struct backlight_device *backlight_dev = i2c_get_clientdata(client);
-+	backlight_dev->props.brightness = 0;
-+	backlight_update_status(backlight_dev);
-+}
-+
-+static const struct i2c_device_id ktz8866_ids[] = {
-+	{ "ktz8866", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, ktz8866_ids);
-+
-+static const struct of_device_id ktz8866_match_table[] = {
-+	{
-+		.compatible = "kinetic,ktz8866",
-+	},
-+	{},
-+};
-+
-+static struct i2c_driver ktz8866_driver = {
-+	.driver = {
-+		.name = "ktz8866",
-+		.of_match_table = ktz8866_match_table,
-+	},
-+	.probe = ktz8866_probe,
-+	.remove = ktz8866_remove,
-+	.id_table = ktz8866_ids,
-+};
-+
-+module_i2c_driver(ktz8866_driver);
-+
-+MODULE_DESCRIPTION("Kinetic KTZ8866 Backlight Driver");
-+MODULE_AUTHOR("Jianhua Lu <lujianhua000@gmail.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.39.1
+>
+> I will not reply to you below.
+
+Noted.
+
+>
+>>> +		.flags = CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+>> 
+>>> +
+>>> +/* EMMC/NAND clock */
+>>> +static const struct clk_parent_data s4_sd_emmc_clk0_parent_data[] = {
+>>> +	{ .fw_name = "xtal", },
+>>> +	{ .fw_name = "fclk_div2", },
+>>> +	{ .fw_name = "fclk_div3", },
+>>> +	{ .fw_name = "hifi_pll", },
+>>> +	{ .fw_name = "fclk_div2p5", },
+>>> +	{ .fw_name = "mpll2", },
+>>> +	{ .fw_name = "mpll3", },
+>>> +	{ .fw_name = "gp0_pll", },
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_sd_emmc_c_clk0_sel = {
+>>> +	.data = &(struct clk_regmap_mux_data){
+>>> +		.offset = CLKCTRL_NAND_CLK_CTRL,
+>>> +		.mask = 0x7,
+>>> +		.shift = 9,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "sd_emmc_c_clk0_sel",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_sd_emmc_clk0_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_sd_emmc_clk0_parent_data),
+>>> +		/*
+>>> +		 * When the driver uses this clock, needs to specify the patent clock
+>>> +		 * he wants in the dts.
+>>> +		 */
+>> I'm getting a bit suspicious about the use (and abuse ...) of this flag.
+>> I don't quite get how selecting the base PLL for MMC should be done on
+>> use-case basis and should be up the board DT ...
+>> Other SoC have all used fdiv2 so far. Do you expect this setting to be
+>> part of the dtsi SoC file ?
+>> 
+>>> +		.flags = CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+>> 
+>>> +
+>>> +/* SPICC Clock */
+>>> +static const struct clk_parent_data s4_spicc_parent_data[] = {
+>>> +	{ .fw_name = "xtal", },
+>>> +	{ .hw = &s4_sys_clk.hw },
+>>> +	{ .fw_name = "fclk_div4", },
+>>> +	{ .fw_name = "fclk_div3", },
+>>> +	{ .fw_name = "fclk_div2", },
+>>> +	{ .fw_name = "fclk_div5", },
+>>> +	{ .fw_name = "fclk_div7", },
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_spicc0_mux = {
+>>> +	.data = &(struct clk_regmap_mux_data){
+>>> +		.offset = CLKCTRL_SPICC_CLK_CTRL,
+>>> +		.mask = 0x7,
+>>> +		.shift = 7,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "spicc0_mux",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_spicc_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_spicc_parent_data),
+>>> +		/*
+>>> +		 * When the driver uses this clock, needs to specify the patent clock
+>>> +		 * he wants in the dts.
+>>> +		 */
+>> This is getting too far. All the parent clocks are fixed.
+>> Let CCF do the job of picking the most adequate clock for the job
+>> instead of manually settings things
+>> 
+>>> +		.flags = CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+>> 
+>>> +
+>>> +/* PWM Clock */
+>>> +static const struct clk_parent_data s4_pwm_parent_data[] = {
+>>> +	{ .fw_name = "xtal", },
+>>> +	{ .hw = &s4_vid_pll.hw },
+>>> +	{ .fw_name = "fclk_div4", },
+>>> +	{ .fw_name = "fclk_div3", },
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_pwm_a_mux = {
+>>> +	.data = &(struct clk_regmap_mux_data) {
+>>> +		.offset = CLKCTRL_PWM_CLK_AB_CTRL,
+>>> +		.mask = 0x3,
+>>> +		.shift = 9,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "pwm_a_mux",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_pwm_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_pwm_parent_data),
+>>> +		/*
+>>> +		 * When the driver uses this clock, needs to specify the patent clock
+>>> +		 * he wants in the dts.
+>>> +		 */
+>> Same here ... this is really going to far.
+>> 
+>>> +		.flags = CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+>> 
+>>> +
+>>> +static struct clk_regmap s4_saradc_mux = {
+>>> +	.data = &(struct clk_regmap_mux_data) {
+>>> +		.offset = CLKCTRL_SAR_CLK_CTRL,
+>>> +		.mask = 0x3,
+>>> +		.shift = 9,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "saradc_mux",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = (const struct clk_parent_data []) {
+>>> +			{ .fw_name = "xtal", },
+>>> +			{ .hw = &s4_sys_clk.hw },
+>>> +		},
+>>> +		.num_parents = 2,
+>>> +		/*
+>>> +		 * When the driver uses this clock, needs to specify the patent clock
+>>> +		 * he wants in the dts.
+>>> +		 */
+>> For each clock type, if this flag is going to be used, I'd like a clear
+>> explanation about why it is use-case dependent and why you need manual
+>> control over this. Same applies to all the occurence.
+>> 
+>>> +		.flags = CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>> 
 
