@@ -2,108 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288156747E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CB66747E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjATAQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S229517AbjATATj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjATAQy (ORCPT
+        with ESMTP id S229464AbjATATh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:16:54 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16128A3140
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:16:53 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9so3889192pll.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:16:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DEPCY4FH8o/XwFLi2kB8iQ/8Z4EhiwjsxNkLh5khKbU=;
-        b=qElKliehHax2qwYlhU/Eg8OFlYXDMj6MvsngbY40n7qtZMIH37uziyb1ykEXC54oL4
-         txnnLzrubLgvAZhPaR6ezXkv3xfifO2GSb1XCaip2Q3lEzdHntjrsWbGhampHCUY/MT6
-         NB5JC0kzvkh7DI28KWlVReA2m49sZnCfts10DTFCbWcizgaqXCgmAefAwpLnDFoV3ga/
-         Y61HYbcntH9Ef0EjAqxj9OyHrLjFdl7kWwsEPgCopX1+oTK40DiYPu4N42TKC/9JRF61
-         +gGGlB9ZfMESjO4P3nx/a9ZSwpIe9sgg/XfSLKsRxm1XC0eCBT4LYLIc23kYwQFl93gB
-         fQ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DEPCY4FH8o/XwFLi2kB8iQ/8Z4EhiwjsxNkLh5khKbU=;
-        b=b8m47jGGE6SXaK70PUP0qLm7ugveQxjzapxGwFIoFWvpdqeQQ4rBtW47zKbfYYheiw
-         KPtLQ4wy8CLBbZ8KSk9Tie+G3NNOt3AguNvOnfOv/jP8SKuIVDdE94/dBFm+iQFIYh2g
-         spRL5NiFtmzjGp7yskRwh0mEg0+zYHgu5v/IK8cAfHcKgCVAQXV7lCkSMA+CfTL7Cr/u
-         ME4mahmSPq7bkC2c9pWxlaRgkxsQ7tcyiWONjI3CtCt11+RB9PM6EcQpOCd8idb6zAy4
-         Xsxd1dvNpdIZdJIf1tmujHXMCs574GLUM2chIQ6IxK4J8kgt1t5spPiyW4JSJD7Iylm2
-         AfIA==
-X-Gm-Message-State: AFqh2krGAm1GsBal+qlouW+LxTGX/p8UL2lY9F+uALKK95YndZu8lQiv
-        hRqqfjMxKDK3tCIZjciynzbhxA==
-X-Google-Smtp-Source: AMrXdXtv78b6LJfbGg24aE8Prbqx4UwLFqXFtgEWYv5zThMVaL8f60chW7KYaaUoA7dLlLVuVXsjkQ==
-X-Received: by 2002:a05:6a20:a00f:b0:b9:14e:184b with SMTP id p15-20020a056a20a00f00b000b9014e184bmr43474pzj.3.1674173812407;
-        Thu, 19 Jan 2023 16:16:52 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w9-20020a628209000000b0058a72925687sm18226715pfd.212.2023.01.19.16.16.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 16:16:51 -0800 (PST)
-Date:   Fri, 20 Jan 2023 00:16:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "dmatlack@google.com" <dmatlack@google.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Message-ID: <Y8ndcGHUHQjHfbF9@google.com>
-References: <20230114111621.00001840@gmail.com>
- <Y8bFCb+rs25dKcMY@google.com>
- <20230117214414.00003229@gmail.com>
- <Y8cLcY12zDWqO8nd@google.com>
- <Y8cMnjHFNIFaoX27@google.com>
- <eadc4a4e37ea0b04b8348395244b792bd34a762d.camel@intel.com>
- <Y8ljwsrrBBdh1aYw@google.com>
- <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
- <Y8m34OEVBfL7Q4Ns@google.com>
- <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
+        Thu, 19 Jan 2023 19:19:37 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5959372E;
+        Thu, 19 Jan 2023 16:19:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674173976; x=1705709976;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=jONyRn6cR4kHASyurwDGDzuEiqfb7/5fqZ+5axtpFg8=;
+  b=FNDxFrnjtYLa1TKoOobEY8KiLRbZ4ldWTNTQHjsLHKky02DMdA4JFGb/
+   F9Np03yrxeEU9/fSTMXCYhtNWjkUQwwQv89cUPLaGvIysQbd8ucxC3RAB
+   b0pwzJ1deIUVL1BR18S4UepjqMW5lEXy7e+sEHK+EHXGswTiyd+9MoNFP
+   9shRrWZ6+hXFB6vH091DfA9j4ID0/jiGyX5nw7+GoCNqdaa5d/YQDawnN
+   D9Es6WSuig422Yp13f7kgWnq0mIo46OK4KOS9/H10uOSGcBZh85/jCQfd
+   QtPhzWq/GEdl8GupvQQhk0V3AIfpZZihiF6R7GwC2tlkDvHJwppGsDz4I
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="389987689"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="389987689"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 16:19:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="653595053"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="653595053"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 19 Jan 2023 16:19:35 -0800
+Received: from shashemi-mobl.amr.corp.intel.com (unknown [10.212.255.207])
+        by linux.intel.com (Postfix) with ESMTP id 12D75580AA4;
+        Thu, 19 Jan 2023 16:19:35 -0800 (PST)
+Message-ID: <08efd5bc047bbbdff845207593536f658c6a4981.camel@linux.intel.com>
+Subject: Re: [PATCH V9 2/4] PCI: vmd: Use PCI_VDEVICE in device list
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 19 Jan 2023 16:19:34 -0800
+In-Reply-To: <Y8GJuE9KySv9AcHZ@lpieralisi>
+References: <20221208023942.491721-1-david.e.box@linux.intel.com>
+         <20221208023942.491721-3-david.e.box@linux.intel.com>
+         <4d0d03c0-2880-1b90-ea94-e36d581ca040@linux.intel.com>
+         <Y8GJuE9KySv9AcHZ@lpieralisi>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, Huang, Kai wrote:
-> On Thu, 2023-01-19 at 21:36 +0000, Sean Christopherson wrote:
-> > The least invasive idea I have is expand the TDP MMU's concept of "frozen" SPTEs
-> > and freeze (a.k.a. lock) the SPTE (KVM's mirror) until the corresponding S-EPT
-> > update completes.
-> 
-> This will introduce another "having-to-wait while SPTE is frozen" problem I
-> think, which IIUC means (one way is) you have to do some loop and retry, perhaps
-> similar to yield_safe.
+SGkgTG9yZW56bywKCk9uIEZyaSwgMjAyMy0wMS0xMyBhdCAxNzo0MSArMDEwMCwgTG9yZW56byBQ
+aWVyYWxpc2kgd3JvdGU6Cj4gT24gV2VkLCBEZWMgMDcsIDIwMjIgYXQgMDY6NTY6MzhQTSAtMDgw
+MCwgU2F0aHlhbmFyYXlhbmFuIEt1cHB1c3dhbXkgd3JvdGU6Cj4gPiAKPiA+IAo+ID4gT24gMTIv
+Ny8yMiA2OjM5IFBNLCBEYXZpZCBFLiBCb3ggd3JvdGU6Cj4gPiA+IFJlZmFjdG9yIHRoZSBQQ0kg
+SUQgbGlzdCB0byB1c2UgUENJX1ZERVZJQ0UuCj4gPiAKPiA+IEFkZCBzb21lIGluZm8gYWJvdXQg
+d2h5IGl0IGlzIGRvbmUuCj4gCj4gSSBhbSB3YWl0aW5nIGZvciB0aGUgZHVzdCB0byBzZXR0bGUg
+b24gdGhpcyBzZXJpZXMsIGl0IGlzIHByZXR0eQo+IGNsb3NlIHRvIGNvbXBsZXRpb24gaXQgc2Vl
+bXMsIHBsZWFzZSBsZXQgbWUga25vdyB3aGVuIHlvdSBjb25zaWRlcgo+IGl0IHJlYWR5LgoKSSdt
+IHNlbmRpbmcgYSBWMTAganVzdCB0byBhZGQgdGhlIGNvbW1pdCBtZXNzYWdlIFNhdGh5YSBzdWdn
+ZXN0ZWQuIEJ1dCBvdGhlcgp0aGFuIHRoYXQgaXQgaXMgZG9uZSBmb3IgbWUuCgpEYXZpZAoKPiAK
+PiBMb3JlbnpvCj4gCj4gPiA+IFNpZ25lZC1vZmYtYnk6IERhdmlkIEUuIEJveCA8ZGF2aWQuZS5i
+b3hAbGludXguaW50ZWwuY29tPgo+ID4gPiBSZXZpZXdlZC1ieTogSm9uIERlcnJpY2sgPGpvbmF0
+aGFuLmRlcnJpY2tAbGludXguZGV2Pgo+ID4gPiBSZXZpZXdlZC1ieTogTmlybWFsIFBhdGVsIDxu
+aXJtYWwucGF0ZWxAbGludXguaW50ZWwuY29tPgo+ID4gPiAtLS0KPiA+ID4gwqBWOSAtIE5vIGNo
+YW5nZQo+ID4gPiAKPiA+ID4gwqBWOCAtIE5vIGNoYW5nZQo+ID4gPiAKPiA+ID4gwqBWNyAtIE5l
+dyBQYXRjaC4gU2VwYXJhdGUgcGF0Y2ggc3VnZ2VzdGVkIGJ5IExvcmVuem8KPiA+ID4gCj4gPiA+
+IMKgZHJpdmVycy9wY2kvY29udHJvbGxlci92bWQuYyB8IDE2ICsrKysrKysrLS0tLS0tLS0KPiA+
+ID4gwqAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQo+ID4g
+PiAKPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvdm1kLmMgYi9kcml2
+ZXJzL3BjaS9jb250cm9sbGVyL3ZtZC5jCj4gPiA+IGluZGV4IGUwNmU5ZjRmYzUwZi4uOWRlZGNh
+NzE0YzE4IDEwMDY0NAo+ID4gPiAtLS0gYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL3ZtZC5jCj4g
+PiA+ICsrKyBiL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvdm1kLmMKPiA+ID4gQEAgLTk5NCwzMyAr
+OTk0LDMzIEBAIHN0YXRpYyBpbnQgdm1kX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpCj4gPiA+
+IMKgc3RhdGljIFNJTVBMRV9ERVZfUE1fT1BTKHZtZF9kZXZfcG1fb3BzLCB2bWRfc3VzcGVuZCwg
+dm1kX3Jlc3VtZSk7Cj4gPiA+IMKgCj4gPiA+IMKgc3RhdGljIGNvbnN0IHN0cnVjdCBwY2lfZGV2
+aWNlX2lkIHZtZF9pZHNbXSA9IHsKPiA+ID4gLcKgwqDCoMKgwqDCoMKge1BDSV9ERVZJQ0UoUENJ
+X1ZFTkRPUl9JRF9JTlRFTCwgUENJX0RFVklDRV9JRF9JTlRFTF9WTURfMjAxRCksCj4gPiA+ICvC
+oMKgwqDCoMKgwqDCoHtQQ0lfVkRFVklDRShJTlRFTCwgUENJX0RFVklDRV9JRF9JTlRFTF9WTURf
+MjAxRCksCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlcl9kYXRh
+ID0gVk1EX0ZFQVRfSEFTX01FTUJBUl9TSEFET1dfVlNDQVAsfSwKPiA+ID4gLcKgwqDCoMKgwqDC
+oMKge1BDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgUENJX0RFVklDRV9JRF9JTlRFTF9W
+TURfMjhDMCksCj4gPiA+ICvCoMKgwqDCoMKgwqDCoHtQQ0lfVkRFVklDRShJTlRFTCwgUENJX0RF
+VklDRV9JRF9JTlRFTF9WTURfMjhDMCksCj4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgLmRyaXZlcl9kYXRhID0gVk1EX0ZFQVRfSEFTX01FTUJBUl9TSEFET1cgfAo+ID4gPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgVk1EX0ZFQVRfSEFTX0JVU19SRVNUUklDVElPTlMgfAo+ID4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgVk1EX0ZF
+QVRfQ0FOX0JZUEFTU19NU0lfUkVNQVAsfSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKge1BDSV9ERVZJ
+Q0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHg0NjdmKSwKPiA+ID4gK8KgwqDCoMKgwqDCoMKge1BD
+SV9WREVWSUNFKElOVEVMLCAweDQ2N2YpLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUX0hBU19NRU1CQVJfU0hBRE9XX1ZTQ0FQIHwK
+PiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoFZNRF9GRUFUX0hBU19CVVNfUkVTVFJJQ1RJT05TIHwKPiA+ID4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oFZNRF9GRUFUX09GRlNFVF9GSVJTVF9WRUNUT1IsfSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKge1BD
+SV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHg0YzNkKSwKPiA+ID4gK8KgwqDCoMKgwqDC
+oMKge1BDSV9WREVWSUNFKElOVEVMLCAweDRjM2QpLAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUX0hBU19NRU1CQVJfU0hBRE9XX1ZT
+Q0FQIHwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX0hBU19CVVNfUkVTVFJJQ1RJT05TIHwKPiA+ID4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoFZNRF9GRUFUX09GRlNFVF9GSVJTVF9WRUNUT1IsfSwKPiA+ID4gLcKgwqDCoMKgwqDC
+oMKge1BDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHhhNzdmKSwKPiA+ID4gK8KgwqDC
+oMKgwqDCoMKge1BDSV9WREVWSUNFKElOVEVMLCAweGE3N2YpLAo+ID4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUX0hBU19NRU1CQVJfU0hB
+RE9XX1ZTQ0FQIHwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX0hBU19CVVNfUkVTVFJJQ1RJT05TIHwK
+PiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoFZNRF9GRUFUX09GRlNFVF9GSVJTVF9WRUNUT1IsfSwKPiA+ID4gLcKgwqDC
+oMKgwqDCoMKge1BDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHg3ZDBiKSwKPiA+ID4g
+K8KgwqDCoMKgwqDCoMKge1BDSV9WREVWSUNFKElOVEVMLCAweDdkMGIpLAo+ID4gPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUX0hBU19NRU1C
+QVJfU0hBRE9XX1ZTQ0FQIHwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX0hBU19CVVNfUkVTVFJJQ1RJ
+T05TIHwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX09GRlNFVF9GSVJTVF9WRUNUT1IsfSwKPiA+ID4g
+LcKgwqDCoMKgwqDCoMKge1BDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHhhZDBiKSwK
+PiA+ID4gK8KgwqDCoMKgwqDCoMKge1BDSV9WREVWSUNFKElOVEVMLCAweGFkMGIpLAo+ID4gPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUX0hB
+U19NRU1CQVJfU0hBRE9XX1ZTQ0FQIHwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX0hBU19CVVNfUkVT
+VFJJQ1RJT05TIHwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX09GRlNFVF9GSVJTVF9WRUNUT1IsfSwK
+PiA+ID4gLcKgwqDCoMKgwqDCoMKge1BDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9JTlRFTCwgUENJ
+X0RFVklDRV9JRF9JTlRFTF9WTURfOUEwQiksCj4gPiA+ICvCoMKgwqDCoMKgwqDCoHtQQ0lfVkRF
+VklDRShJTlRFTCwgUENJX0RFVklDRV9JRF9JTlRFTF9WTURfOUEwQiksCj4gPiA+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlcl9kYXRhID0gVk1EX0ZFQVRfSEFTX01FTUJB
+Ul9TSEFET1dfVlNDQVAgfAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgVk1EX0ZFQVRfSEFTX0JVU19SRVNUUklDVElP
+TlMgfAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgVk1EX0ZFQVRfT0ZGU0VUX0ZJUlNUX1ZFQ1RPUix9LAo+ID4gCj4g
+PiAtLSAKPiA+IFNhdGh5YW5hcmF5YW5hbiBLdXBwdXN3YW15Cj4gPiBMaW51eCBLZXJuZWwgRGV2
+ZWxvcGVyCgo=
 
-Yes, but because the TDP MMU already freezes SPTEs (just for a shorter duration),
-I'm 99% sure all of the affected flows already know how to yield/bail when necessary.
-
-The problem with the zero-step mitigation is that it could (theoretically) cause
-a "busy" error on literally any accesses, which makes it infeasible for KVM to have
-sane behavior.  E.g. freezing SPTEs to avoid the ordering issues isn't necessary
-when holding mmu_lock for write, whereas the zero-step madness brings everything
-into play.
