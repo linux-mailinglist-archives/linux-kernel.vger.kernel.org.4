@@ -2,148 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6C8674CAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B327674CA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjATFjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        id S231415AbjATFiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjATFiz (ORCPT
+        with ESMTP id S231562AbjATFiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:38:55 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33CF2D45;
-        Thu, 19 Jan 2023 21:36:49 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id d16so3404056qtw.8;
-        Thu, 19 Jan 2023 21:36:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6NUdW2Emc9lDAF3Vieazkgagq1/SlvkgNZaOSQnTrp0=;
-        b=SPYDYnrf9Yc+YM0aAluct74gSSxEToF/mbdvNIwpxOvGzd76Fl72hp/Gy8PviiwIH8
-         fy3EZlAWXlIOSyqu1el5uItHYMCiGjlHJGz9MWZ1IgHhTQ6+vuFQuasaiEomjb+0M+jY
-         hFJFaw16gGX9Wf5ANpMWZ7pNqNVFBE6o0t7U8NyAGuhK6eNsDvBT2oo67d5k+hJRecBv
-         sxSnCujBmbX8Ln4fnWEH/JKUXeNFQPO3aRSIbHuwH+vIbd4mr7s/4jx/EmJYC4D6cOgd
-         W9I/3DDg1gcxG7a1OoVUx3VoQ5fAbq/7jiRWR8gpCKGLpJHIYQE2br1b3mZdRadWkslX
-         guww==
-X-Gm-Message-State: AFqh2kr1inHrYc3u4f3cI66JIJEFFlrayrVVCMGq8EuG+b7Z8Vyb+dfc
-        VeSfWi/NGUzgf2d+Tv0wpeE=
-X-Google-Smtp-Source: AMrXdXseeG//UzEtobQHWEW3HiGnrL1t2lO5NQR/ZSKrBPr0sOEkRfioVm7M5ONgB5x1KB77JdIFLg==
-X-Received: by 2002:ac8:7511:0:b0:3ae:7b4b:fb32 with SMTP id u17-20020ac87511000000b003ae7b4bfb32mr17588698qtq.48.1674192708625;
-        Thu, 19 Jan 2023 21:31:48 -0800 (PST)
-Received: from maniforge.lan ([2620:10d:c091:480::1:2fc9])
-        by smtp.gmail.com with ESMTPSA id c6-20020ac84e06000000b003a97a71c906sm4939364qtw.78.2023.01.19.21.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 21:31:48 -0800 (PST)
-Date:   Thu, 19 Jan 2023 23:31:51 -0600
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
-Subject: Re: [PATCH bpf-next 3/8] bpf: Disallow NULL PTR_TO_MEM for trusted
- kfuncs
-Message-ID: <Y8onR2T2zmMU6MmH@maniforge.lan>
-References: <20230119235833.2948341-1-void@manifault.com>
- <20230119235833.2948341-4-void@manifault.com>
- <20230120052101.sevhc4jybcm6onu2@apollo>
+        Fri, 20 Jan 2023 00:38:04 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E5072C33;
+        Thu, 19 Jan 2023 21:34:35 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K3o2V9011583;
+        Fri, 20 Jan 2023 05:34:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=5AwsPcgBKb4mMBYPkdjE+yVcpgBpoQQmg99thVzIvtg=;
+ b=MyHtXJEVAZa7E/joLQi+OBc4OirSPbgBGkoVLcfBccf9qGlAqrxRn7GA+Ejdgzu6RZAF
+ AwYXOm8XnO/qe/YnMPZFySntTBPGIy2R/ENhq+4JFUeiMtBuwb7usgLDejPmDmBWWYnD
+ VyLVc0BaS3/sv1ExALTr3LQNeXkeHfYCOXnyjgEMrj0LRvTSaXFSvYyyBAul/F0mk8j4
+ O8k2OcfRcI5UniTBkwQIvPlKM17HPw0sn7Xt66Dr4kS4OSDb7TaCFnWcCZG1Bowb/3IR
+ WGKn93wWWcbZ2kkBAvfOQUB0vwDhAbknMwXeI0r6H3AGxF+bzCBumLE6465dyUjmHaEU BA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6vjbk9x5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 05:34:19 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30K5YI9a014355
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 05:34:18 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 21:34:11 -0800
+Date:   Fri, 20 Jan 2023 11:04:07 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v8 14/28] gunyah: vm_mgr: Add/remove user memory regions
+Message-ID: <20230118090859.GC1737564@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <20221219225850.2397345-15-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20230120052101.sevhc4jybcm6onu2@apollo>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221219225850.2397345-15-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hwDDQ5ftKuDYkmwG8_jwJQaSrm3ey9s7
+X-Proofpoint-GUID: hwDDQ5ftKuDYkmwG8_jwJQaSrm3ey9s7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_02,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 phishscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=812
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301200050
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:51:01AM +0530, Kumar Kartikeya Dwivedi wrote:
-> On Fri, Jan 20, 2023 at 05:28:28AM IST, David Vernet wrote:
-> > KF_TRUSTED_ARGS kfuncs currently have a subtle and insidious bug in
-> > validating pointers to scalars. Say that you have a kfunc like the
-> > following, which takes an array as the first argument:
-> >
-> > bool bpf_cpumask_empty(const struct cpumask *cpumask)
-> > {
-> > 	return cpumask_empty(cpumask);
-> > }
-> >
-> > ...
-> > BTF_ID_FLAGS(func, bpf_cpumask_empty, KF_TRUSTED_ARGS)
-> > ...
-> >
-> 
-> This is known and expected.
+* Elliot Berman <quic_eberman@quicinc.com> [2022-12-19 14:58:35]:
 
-Expected? So kfuncs are expected to always check whether any pointer to
-a scalar is non-NULL? Seems like a poor UX. I like your suggestion below
-to address it so it's opt-in.
+>  static int gh_vm_release(struct inode *inode, struct file *filp)
+>  {
+>  	struct gunyah_vm *ghvm = filp->private_data;
+> +	struct gunyah_vm_memory_mapping *mapping, *tmp;
+>  
+> +	list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
+> +		gh_vm_mem_mapping_reclaim(ghvm, mapping);
 
-> > If a BPF program were to invoke the kfunc with a NULL argument, it would
-> > crash the kernel. The reason is that struct cpumask is defined as a
-> > bitmap, which is itself defined as an array, and is accessed as a memory
-> > address memory by bitmap operations. So when the verifier analyzes the
-> > register, it interprets it as a pointer to a scalar struct, which is an
-> > array of size 8. check_mem_reg() then sees that the register is NULL,
-> > and returns 0, and the kfunc crashes when it passes it down to the
-> > cpumask wrappers.
-> >
-> > To fix this, this patch adds a check for KF_ARG_PTR_TO_MEM which
-> > verifies that the register doesn't contain a NULL pointer if the kfunc
-> > is KF_TRUSTED_ARGS.
-> >
-> > This may or may not be desired behavior. Some kfuncs may want to
-> > allow callers to pass NULL-able pointers. An alternative would be adding
-> > a KF_NOT_NULL flag and leaving KF_TRUSTED_ARGS alone, though given that
-> > a kfunc is saying it wants to "trust" an argument, it seems reasonable
-> > to prevent NULL.
-> >
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> >  kernel/bpf/verifier.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 9fa101420046..28ccb92ebe65 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -9092,6 +9092,11 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
-> >  					i, btf_type_str(ref_t), ref_tname, PTR_ERR(resolve_ret));
-> >  				return -EINVAL;
-> >  			}
-> > +			if (is_kfunc_trusted_args(meta) && register_is_null(reg)) {
-> > +				verbose(env, "NULL pointer passed to trusted arg%d\n", i);
-> > +				return -EACCES;
-> > +			}
-> > +
-> 
-> Current patch looks like a stop gap solution. Just checking for register_is_null
-> is not enough, what about PTR_MAYBE_NULL? That can also be passed. Some
-> arguments can be both PTR_TO_BTF_ID and PTR_TO_MEM, so it will be bypassed in
-> the other case because this check is limited to KF_ARG_PTR_TO_MEM. It would
+kfree(mapping) also?
 
-This wouldn't happen if you had a PTR_TO_BTF_ID, would it? In that case
-you could just rely on PTR_TRUSTED. IMO that really should be the
-default for any pointer argument. If you have KF_ARGS_TRUSTED, the kfunc
-should just be able to assume that the pointers have been verified.
+> +	}
+>  	put_gh_rm(ghvm->rm);
+>  	kfree(ghvm);
+>  	return 0;
 
-Regardless, you're right that this isn't a complete solution because of
-PTR_MAYBE_NULL. I'm fine with adding an __or_null suffix that allows
-NULL, and we disallow NULL or PTR_MAYBE_NULL from any KF_TRUSTED_ARGS
-argument otherwise. Or we just also disallow PTR_MAYBE_NULL and try to
-hold off on adding yet another suffix until we have proper per-arg kfunc
-definitions.
+[snip]
 
-> probably be better to disallow NULL by default and explicitly tag the argument
-> with __or_null to indicate that NULL is accepted. Seems like a much better
-> default to me.
+> +struct gunyah_vm_memory_mapping {
+> +	struct list_head list;
+> +	enum gunyah_vm_mem_share_type share_type;
+> +	struct gh_rm_mem_parcel parcel;
+> +
+> +	__u64 guest_phys_addr;
+> +	__u32 mem_size;
+
+'gh_userspace_memory_region' allows 64-bit mem_size, so perhaps make it 64-bit
+here as well?
+
+> +struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_alloc(struct gunyah_vm *ghvm,
+> +							struct gh_userspace_memory_region *region)
+> +{
+> +	phys_addr_t curr_page, prev_page;
+> +	struct gunyah_vm_memory_mapping *mapping, *tmp_mapping;
+> +	struct gh_rm_mem_entry *mem_entries;
+> +	int i, j, pinned, ret = 0;
+> +	struct gh_rm_mem_parcel *parcel;
+> +
+> +	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
+> +		!PAGE_ALIGNED(region->userspace_addr))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	ret = mutex_lock_interruptible(&ghvm->mm_lock);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +	mapping = __gh_vm_mem_mapping_find(ghvm, region->label);
+> +	if (mapping) {
+> +		ret = -EEXIST;
+> +		goto unlock;
+
+We should avoid kfree(mapping) in this case?
+
+> +	}
+> +
+> +	mapping = kzalloc(sizeof(*mapping), GFP_KERNEL);
+> +	if (!mapping) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	mapping->parcel.label = region->label;
+> +	mapping->guest_phys_addr = region->guest_phys_addr;
+> +	mapping->npages = region->memory_size >> PAGE_SHIFT;
+> +	parcel = &mapping->parcel;
+> +	parcel->mem_handle = GH_MEM_HANDLE_INVAL; /* to be filled later by mem_share/mem_lend */
+> +	parcel->mem_type = GH_RM_MEM_TYPE_NORMAL;
+> +
+> +	/* Check for overlap */
+> +	list_for_each_entry(tmp_mapping, &ghvm->memory_mappings, list) {
+> +		if (!((mapping->guest_phys_addr + (mapping->npages << PAGE_SHIFT) <=
+> +			tmp_mapping->guest_phys_addr) ||
+> +			(mapping->guest_phys_addr >=
+> +			tmp_mapping->guest_phys_addr + (tmp_mapping->npages << PAGE_SHIFT)))) {
+> +			ret = -EEXIST;
+> +			goto unlock;
+> +		}
+> +	}
+> +
+> +	list_add(&mapping->list, &ghvm->memory_mappings);
+
+I think we need to either avoid adding to the list this early (until all steps
+below are successfull) or maintain some additional state in 'mapping' to
+indicate that its work in progress. Consider the race condition for example when
+multiple threads call SET_USER_MEM_REGION ioctl on same label (one with size > 0
+and other with size = 0), which can lead to unpleasant outcome AFAICS.
+
+> +unlock:
+> +	mutex_unlock(&ghvm->mm_lock);
+> +	if (ret)
+> +		goto free_mapping;
+> +
+> +	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL);
+> +	if (!mapping->pages) {
+> +		ret = -ENOMEM;
+> +		goto reclaim;
+
+Can you check this error path? We seem to call unpin_user_page() in this path,
+which is not correct.
+
+> +	}
+> +
+> +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
+> +					FOLL_WRITE | FOLL_LONGTERM, mapping->pages);
+> +	if (pinned < 0) {
+> +		ret = pinned;
+> +		goto reclaim;
+
+Same comment as above
+
+> +	parcel->acl_entries[0].vmid = ghvm->vmid;
+
+cpu_to_le() wrapper missing here and few other places in this function. Pls check.
+
