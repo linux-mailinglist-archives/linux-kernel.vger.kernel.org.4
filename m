@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DABD674EBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38D6674EC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjATH4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 02:56:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S230171AbjATH5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 02:57:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjATH41 (ORCPT
+        with ESMTP id S229550AbjATH45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 02:56:27 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF37442D8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:56:26 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so5230253wml.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:56:26 -0800 (PST)
+        Fri, 20 Jan 2023 02:56:57 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A2587641
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:56:55 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so5265650wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:56:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZyHITZMuEPdmPoqCN4AhJLyjE6UKeJAy3IGmzplgigM=;
-        b=lMTi6LoYMqN5uBJMYG4Aq5YyF3V5s+cXmVk5V8Vfs2AMpnM5xgqgG6wbACtRMc0U/1
-         yroAFwFQAt21yE1jWphMCr0pfuGxrWmjrgHsvqRmOs/HlG75qaJ1CqYjXpJtKcenSGVH
-         5dTQVUAzb01m1O4XtUYzjQsBibOiM4Hw2W2+h5olpvLTUZ/55EP9Qs2Wt5xSUtCQTLbR
-         yyS5p9rDUyWXjTM2qwlm1nQOqZ5bZ2SfGx/j4E+RdiB7t3QT50/WFHRr6D4C9T7bAh7U
-         GlJqKHhw+uv+otz/TMzPTqKqw9+DyPXMSjFzUwpY05f4AFrvulQ+t/XuPPXZ6XERA0Io
-         Ay7A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hmrO048R9niCXK/5eimwZ8B+pWaKXobeemlvwUnYMX0=;
+        b=SPff/Rh67EDcHWGB8DX7eO7X5ZG66F+HNdtyESx2N0PR0fowXMhuL60JHzlKB4lVMj
+         J0vlD2Gw4BklzZhzzm8Pk8qPwlzG0/RJk6hZ/9tL/8d9H5nVSmNob9Ig76DJIXDjgOEw
+         FWYqN9z0iAgj2oU9U/68f7avtRoFDTLFDmZUbmS/GBmTW8I6l8F5tSw8kELZwriniffD
+         qJ/oMiWBuajHSWPDfAomYohzATd91WCGzx+om/haocOV04UMpfKHAV+3EtTR9255a5Jh
+         zDMCAYM+T0zDMSLXYGFhzF6yOH/0tI1JrUl2r/Q54RZynAmfr6H698nd1ZgyC4pG6SjE
+         gIgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZyHITZMuEPdmPoqCN4AhJLyjE6UKeJAy3IGmzplgigM=;
-        b=tlHXdllDSAyoZiZ3YX9GkHpO3RY2mIeN29KY81Ua+VUTK3C1OkEtyTgokQ/Wt4xZX0
-         DvZ29q6+bxnfg3jrAkoF3edFicTi7hBaCrM7Nxr/HzY3ncwuNob176ixAY7bTwhyIHH3
-         P9rGMGG2rGLPxBK+EMVh048otOJvnLFiBgBo0kHFdCMShKeb+lV5j6fihcSt95G2/b7y
-         Vk1xdYIJ7i+1QVaE6coGnn0TyyDRP4kq2W3yWF9+G8tnIFFzZ4a5oSVRT7+TGGPJjydL
-         CsixD03F1+L/Bk4HW2OsOplsLc2xR7PRoxR3IY8KtrZsaiu8wIfeGPtqEEhXYy4PuxNa
-         prhg==
-X-Gm-Message-State: AFqh2kpkqU1whXM+Jilm6o+UUxX7R9VeHr+EckkYfbmQrTq7UwX0Ty1D
-        CPLvcSSc2vkPUJdhGKNnfA+y5bNRQ/vOBxIK
-X-Google-Smtp-Source: AMrXdXtSbV7lOd6Qgv1Bhrf9NWoxCd2EcR06BoREz+wznIpecUatJWh70gG1siNdzKsa3wzsezTDgg==
-X-Received: by 2002:a05:600c:5116:b0:3db:1a8:c041 with SMTP id o22-20020a05600c511600b003db01a8c041mr13160767wms.17.1674201385390;
-        Thu, 19 Jan 2023 23:56:25 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hmrO048R9niCXK/5eimwZ8B+pWaKXobeemlvwUnYMX0=;
+        b=vfzhphm+FK6nH6rKZRXXxCRlDpcFYeFpNhCPKY3bl7+Uzjzvy1cSf2ARtdJR6GLbLp
+         avs0ZnhXCnPlIDJ7CGnNcE8weBYPUWaGLCqAxsDCb0r8VzTojeO6FkGNPUE8iFRMMOrk
+         k1JjsQJ26q7sv8Blu1Ww9HpxJQp2K5SBj7Ztonrdh3he78XLl4nGnmrEt/5hXc7Mp8Fy
+         KZPM7mp52Snu+HDbOKVQwrbKVlr99xrtA8FB/s/Rf3fpWgJNrgSFEFOsW2NfTcYo2kOU
+         PKHnPs6Xor+XE+2wheFurP5bbAX4mnj2dY/OSlNIJzGGQDvvigl/7KHvgCzG8FaDM64v
+         6CdQ==
+X-Gm-Message-State: AFqh2kpr1R2tY8sw3lQLCfDphmqPiHFZ/p/8j5tC/Xh58QCtdgsufVuU
+        B0Hho7lPN03STn/aRFEoj8ccQA==
+X-Google-Smtp-Source: AMrXdXs7qBDLmimxwI0JUiJqdz4L3wkMmnNmwFiMmVN8PAQUL89GSNf1W++Fe+OZ7vV0/3A9Lg+KVw==
+X-Received: by 2002:a05:600c:198e:b0:3db:1d7e:c429 with SMTP id t14-20020a05600c198e00b003db1d7ec429mr5936155wmq.40.1674201414529;
+        Thu, 19 Jan 2023 23:56:54 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d5-20020adfa345000000b002be546f947asm975622wrb.61.2023.01.19.23.56.24
+        by smtp.gmail.com with ESMTPSA id he11-20020a05600c540b00b003d9b89a39b2sm1455840wmb.10.2023.01.19.23.56.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 23:56:25 -0800 (PST)
+        Thu, 19 Jan 2023 23:56:54 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 2/2] dt-bindings: trivial-devices: document SPI dev compatibles
-Date:   Fri, 20 Jan 2023 08:56:18 +0100
-Message-Id: <20230120075618.153664-2-krzysztof.kozlowski@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] spi: spidev: order compatibles alphabetically
+Date:   Fri, 20 Jan 2023 08:56:51 +0100
+Message-Id: <20230120075651.153763-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120075618.153664-1-krzysztof.kozlowski@linaro.org>
-References: <20230120075618.153664-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,60 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document existing SPI dev compatibles.
+Bring some order to reduce possibilities of conflicts.
 
-Cc: Mark Brown <broonie@kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/spi/spidev.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index b13f280f36fa..6d1dc1e2484a 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -65,6 +65,8 @@ properties:
-           - capella,cm3232
-             # CM3323: Ambient Light Sensor
-           - capella,cm3323
-+            # Cisco SPI Petra
-+          - cisco,spi-petra
-             # High-Precision Digital Thermometer
-           - dallas,ds1631
-             # Total-Elapsed-Time Recorder with Alarm
-@@ -169,6 +171,8 @@ properties:
-           - isil,isl29030
-             # Intersil ISL68137 Digital Output Configurable PWM Controller
-           - isil,isl68137
-+            # Linear Technology LTC2488
-+          - lineartechnology,ltc2488
-             # 5 Bit Programmable, Pulse-Width Modulator
-           - maxim,ds1050
-             # 10 kOhm digital potentiometer with I2C interface
-@@ -227,6 +231,8 @@ properties:
-           - memsic,mxc6655
-             # Menlo on-board CPLD trivial SPI device
-           - menlo,m53cpld
-+            # Micron SPI NOR Authenta
-+          - micron,spi-authenta
-             # Microchip differential I2C ADC, 1 Channel, 18 bit
-           - microchip,mcp3421
-             # Microchip differential I2C ADC, 2 Channel, 18 bit
-@@ -305,10 +311,14 @@ properties:
-           - pulsedlight,lidar-lite-v2
-             # Renesas ISL29501 time-of-flight sensor
-           - renesas,isl29501
-+            # Rohm DH2228FV
-+          - rohm,dh2228fv
-             # S524AD0XF1 (128K/256K-bit Serial EEPROM for Low Power)
-           - samsung,24ad0xd1
-             # Samsung Exynos SoC SATA PHY I2C device
-           - samsung,exynos-sataphy-i2c
-+            # Semtech sx1301 baseband processor
-+          - semtech,sx1301
-             # Sensirion low power multi-pixel gas sensor with I2C interface
-           - sensirion,sgpc3
-             # Sensirion multi-pixel gas sensor with I2C interface
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 8143f8ffecb0..f836567c631b 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -733,14 +733,14 @@ static int spidev_of_check(struct device *dev)
+ }
+ 
+ static const struct of_device_id spidev_dt_ids[] = {
+-	{ .compatible = "rohm,dh2228fv", .data = &spidev_of_check },
++	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
++	{ .compatible = "dh,dhcom-board", .data = &spidev_of_check },
+ 	{ .compatible = "lineartechnology,ltc2488", .data = &spidev_of_check },
+-	{ .compatible = "semtech,sx1301", .data = &spidev_of_check },
+ 	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
+-	{ .compatible = "dh,dhcom-board", .data = &spidev_of_check },
+ 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
+-	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
+ 	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
++	{ .compatible = "rohm,dh2228fv", .data = &spidev_of_check },
++	{ .compatible = "semtech,sx1301", .data = &spidev_of_check },
+ 	{ .compatible = "silabs,em3581", .data = &spidev_of_check },
+ 	{ .compatible = "silabs,si3210", .data = &spidev_of_check },
+ 	{},
 -- 
 2.34.1
 
