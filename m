@@ -2,146 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3070E67515C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FA5675160
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjATJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S230029AbjATJla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjATJjN (ORCPT
+        with ESMTP id S229785AbjATJl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:39:13 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D51544BC6;
-        Fri, 20 Jan 2023 01:39:10 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pInrA-0002gP-SZ; Fri, 20 Jan 2023 10:38:44 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Markus Pargmann <mpa@pengutronix.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 2/2] dt-bindings: mmc: correct pwrseq node names
-Date:   Fri, 20 Jan 2023 10:38:43 +0100
-Message-ID: <2138388.Mh6RI2rZIc@diego>
-In-Reply-To: <20230120085722.171965-2-krzysztof.kozlowski@linaro.org>
-References: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
- <20230120085722.171965-2-krzysztof.kozlowski@linaro.org>
+        Fri, 20 Jan 2023 04:41:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0611445205
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:41:28 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pInth-0006vW-Qz; Fri, 20 Jan 2023 10:41:21 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pIntd-00064S-Gh; Fri, 20 Jan 2023 10:41:17 +0100
+Date:   Fri, 20 Jan 2023 10:41:17 +0100
+From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+To:     "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+Cc:     "a1ba.omarov@gmail.com" <a1ba.omarov@gmail.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "hjc@rock-chips.com" <hjc@rock-chips.com>,
+        "michael.riesch@wolfvision.net" <michael.riesch@wolfvision.net>,
+        "macromorgan@hotmail.com" <macromorgan@hotmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "frattaroli.nicolas@gmail.com" <frattaroli.nicolas@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pgwipeout@gmail.com" <pgwipeout@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "frank-w@public-files.de" <frank-w@public-files.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH 1/3] drm/rockchip: lvds: add rk3568 support
+Message-ID: <20230120094117.GM24755@pengutronix.de>
+References: <20230119184807.171132-1-a1ba.omarov@gmail.com>
+ <20230119184807.171132-2-a1ba.omarov@gmail.com>
+ <20230120091641.GL24755@pengutronix.de>
+ <9fe2678da0ae10e6996889971a3137799a68c4b9.camel@siemens.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9fe2678da0ae10e6996889971a3137799a68c4b9.camel@siemens.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 20. Januar 2023, 09:57:22 CET schrieb Krzysztof Kozlowski:
-> Node names should be generic and should not contain underscores.
+On Fri, Jan 20, 2023 at 09:31:43AM +0000, Sverdlin, Alexander wrote:
+> Hello Sascha,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml   | 2 +-
->  Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml | 2 +-
->  Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+> On Fri, 2023-01-20 at 10:16 +0100, Sascha Hauer wrote:
+> > > +       /* Enable LVDS mode */
+> > > +       return regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON2,
+> > > +                                 RK3568_LVDS0_MODE_EN(1),
+> > > +                                 RK3568_LVDS0_MODE_EN(1));
+> > 
+> > Isn't this the same as:
+> > 
+> >         regmap_write(lvds->grf, RK3568_GRF_VO_CON2,
+> > RK3568_LVDS0_MODE_EN(1));
+> > 
+> > Unless I am missing something I find a plain regmap_write() easier to
+> > read.
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
-> index 911a5996e099..588be73168fa 100644
-> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
-> @@ -41,7 +41,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> -    sdhci0_pwrseq {
-> +    pwrseq {
+> the former is setting a bit in a RMW operation, the latter is a plain
+> write, isn't it?
 
-[applicable for all 3 examples]
+That's right from the view what the function itself does. Note the
+registers that are accessed here are a bit special. They effectively
+are 16bit wide, the upper 16bit contain a mask. Only the bits set in the
+mask are actually modified in the lower bits. See the register bit
+definitions:
 
-hmm, power-sequences are not necessarily tied to an address and I guess
-it will be very much a common case to have multiple ones on a system.
+#define HIWORD_UPDATE(v, h, l)  ((GENMASK(h, l) << 16) | ((v) << (l)))
 
-So might it be better to follow other patterns (like leds) to number them
-or suggest a "foo-pwrseq" / "pwrseq-foo"?
+#define   RK3568_LVDS0_SELECT(val)             HIWORD_UPDATE(val,  5, 4)
 
+Sascha
 
-Heiko
-
-
->        compatible = "mmc-pwrseq-emmc";
->        reset-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
->      };
-> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
-> index 3397dbff88c2..b35e00e8c65e 100644
-> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
-> @@ -35,7 +35,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> -    wifi_pwrseq: wifi_pwrseq {
-> +    pwrseq {
->        compatible = "mmc-pwrseq-sd8787";
->        powerdown-gpios = <&twl_gpio 0 GPIO_ACTIVE_LOW>;
->        reset-gpios = <&twl_gpio 1 GPIO_ACTIVE_LOW>;
-> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
-> index 64e3644eefeb..00feaafc1063 100644
-> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
-> @@ -55,7 +55,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> -    sdhci0_pwrseq {
-> +    pwrseq {
->        compatible = "mmc-pwrseq-simple";
->        reset-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
->        clocks = <&clk_32768_ck>;
-> 
-
-
-
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
