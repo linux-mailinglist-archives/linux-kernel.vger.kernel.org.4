@@ -2,207 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AF26749E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187E46749E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjATDPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 22:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S229864AbjATDQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 22:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjATDP3 (ORCPT
+        with ESMTP id S229814AbjATDQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 22:15:29 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155E79F394;
-        Thu, 19 Jan 2023 19:15:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674184528; x=1705720528;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JekCCMDvu3Vw1jKwH0W0YN6B08jNIg7G5QXeYb9gH0g=;
-  b=h8hhQ1OftxcLERppST1vf3fLvS1hs/OmS6/tNR/Nf2BJmjQysCQ7GSRx
-   oUoLd5s5Zn/p+mp8cDppLwvRPN0QcCYa2WBcOd/BpFidedfsOeZeIJOYj
-   GPLuRnc466GoYR4fEbGoQMSTvl3nhpeMe+fSHS5QGaZiBlzTycVDR7fzw
-   Sd+Cu1AM7dtxwSTMdAPJvt4djkWpw4L0iHZhhdEYEvLxnqnB7Bmfj//vW
-   oP7Nx56ByKgI2lAMawDRuPS9LW04SEIDoYK2TZHr+uzBgtDijI8HXAAzU
-   oXTrbVU5s/v64ZOJm3J0KUEqb7gfqZJ6koIhoGEuFM4TCOWtcQ1ch6lqM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="390012704"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="390012704"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 19:15:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="638009323"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="638009323"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jan 2023 19:15:23 -0800
-Received: from debox1-desk4.intel.com (unknown [10.212.255.207])
-        by linux.intel.com (Postfix) with ESMTP id AE58A580C4A;
-        Thu, 19 Jan 2023 19:15:23 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     david.e.box@linux.intel.com, nirmal.patel@linux.intel.com,
-        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V10 4/4] PCI: vmd: Add quirk to configure PCIe ASPM and LTR
-Date:   Thu, 19 Jan 2023 19:15:22 -0800
-Message-Id: <20230120031522.2304439-5-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120031522.2304439-1-david.e.box@linux.intel.com>
-References: <20230120031522.2304439-1-david.e.box@linux.intel.com>
+        Thu, 19 Jan 2023 22:16:00 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5D7B1EDE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:15:39 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id i185so4359699vsc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:15:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=draconx-ca.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Hpc5Ciyxu29gomOTvRt7HRyn5ui+yh0jFZKfccP/3A=;
+        b=6ipErWbF5wYAMGrwowJPn2VP4KJ9ijlP4WCHTjoDjDh9WU2oC66c2szaAh27ljPc/2
+         /qcJlPmhvqZmNOYwkIXjFzWXXYg3MM+iGn+Mv3KFuOdX692Pmq0PW5Z7IcBwlMFLjDpT
+         r2tUwTkUAm9b0oCWn3acyclThA0FWFRKYmWlrcjw+AYHlcXhWfSIgH0tkXNqrWEjeTrQ
+         L6NMCRU0hmCZUWhwYST4V6b6L4P6XUhlyvTw8zLAZZd5CMnYiYGIusHPB8xwEdTVSQGu
+         /Wis04U9Zb5RvqO9FjEV3MuaPyXKgigSsleVPI8wC0SMbslSqQP6AsNmsXpW1ZQaZIha
+         0zuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Hpc5Ciyxu29gomOTvRt7HRyn5ui+yh0jFZKfccP/3A=;
+        b=Zog6c3BSMgLHqps84sFfWei8t74zKVh/d59u1tHeHu6xEAcHYTExfC059vL29IGiqO
+         TEOB7A2jKf9Czg9aEbcDX5rkULBinQ4/Y5e3kqgc7tMTUG3jqvveVkiyxWwiFh8cp42e
+         gcI7cBe8RFcHKMuTumWux1+J5yK53olArCIwzmsHTc2YYzXXbQEsiodArR+Wm5aZJ+Yj
+         Ce9Lenojl7RQSPlNreU36iRC8hagnIjmvKp/CzGqfWkqK4UOGEB8BuwvLkSaImKXS6CN
+         cQG5NxUxKsEck4M8m7mZD0poKCxyFDmy0ow91fxsz9E1YbmP8+ITKfM0zbIGRQr9mbGM
+         JvIw==
+X-Gm-Message-State: AFqh2kqyJD5+b5c2cwKNZ/KhMSaRBnwsAiP7cvWkNrEIO78W5UcBHIdk
+        uBarFGiBm0UkiCZQz2dZjbaIju+lVCqnYXjrn3wC2urUKgFr0VS6Mr4=
+X-Google-Smtp-Source: AMrXdXtjyf+fQ9q4OP75X7YsCp1FrKqaqir0r4nm353FcrUzBifgDBMUDDotUCcoXFmJIxCcDXn5Q2jRa2S9UonXbu0=
+X-Received: by 2002:a05:6102:1510:b0:3d3:e5dc:e359 with SMTP id
+ f16-20020a056102151000b003d3e5dce359mr1785070vsv.61.1674184538020; Thu, 19
+ Jan 2023 19:15:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6130:1015:b0:559:9619:d862 with HTTP; Thu, 19 Jan 2023
+ 19:15:37 -0800 (PST)
+X-Originating-IP: [24.53.241.20]
+In-Reply-To: <CADyTPEwt=ZNams+1bpMB1F9w_vUdPsGCt92DBQxxq_VtaLoTdw@mail.gmail.com>
+References: <CADyTPEwt=ZNams+1bpMB1F9w_vUdPsGCt92DBQxxq_VtaLoTdw@mail.gmail.com>
+From:   Nick Bowler <nbowler@draconx.ca>
+Date:   Thu, 19 Jan 2023 22:15:37 -0500
+Message-ID: <CADyTPEyAidGgBT3f1VJLHb3ouO-r1UyvFp1PcwXxy0NRG94sbw@mail.gmail.com>
+Subject: Re: PROBLEM: Only one CPU active on Ultra 60 since ~4.8 (regression)
+To:     sparclinux@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCIe ports reserved for VMD use are not visible to BIOS and therefore not
-configured to enable PCIe ASPM or LTR values (which BIOS will configure if
-they are not set). Lack of this programming results in high power
-consumption on laptops as reported in bugzilla.  For affected products use
-pci_enable_link_state to set the allowed link states for devices on the
-root ports. Also set the LTR value to the maximum value needed for the SoC.
+Hi,
 
-This is a workaround for products from Rocket Lake through Alder Lake.
-Raptor Lake, the latest product at this time, has already implemented LTR
-configuring in BIOS. Future products will move ASPM configuration back to
-BIOS as well.  As this solution is intended for laptops, support is not
-added for hotplug or for devices downstream of a switch on the root port.
+I'm resending this report CC'd to linux-kernel as there was no response
+on the sparclinux list.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=212355
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215063
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=213717
+I tried 6.2-rc4 and there is no change in behaviour.  Reverting the
+indicated commit still works to fix the problem.
 
-Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-Reviewed-by: Jon Derrick <jonathan.derrick@linux.dev>
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
----
- V10
-  - No change
- V9
-  - Added BIOS quirk flag to VMD_FEATS_CLIENT flag, suggested by Sathya.
- V8
-  - Removed struct vmd_device_data patch. Instead use #define for the LTR
-    value which is the same across all products needing the quirk.
- V7
-  - No change
- V6
-  - Set ASPM first before setting LTR. This is needed because some
-    devices may only have LTR set by BIOS and not ASPM
-  - Skip setting the LTR if the current LTR in non-zero.
- V5
-  - Provide the LTR value as driver data.
-  - Use DWORD for the config space write to avoid PCI WORD access bug.
-  - Set ASPM links firsts, enabling all link states, before setting a
-    default LTR if the capability is present
-  - Add kernel message that VMD is setting the device LTR.
- V4
-  - Refactor vmd_enable_apsm() to exit early, making the lines shorter
-    and more readable. Suggested by Christoph.
- V3
-  - No changes
- V2
-  - Use return status to print pci_info message if ASPM cannot be enabled.
-  - Add missing static declaration, caught by lkp@intel.com
-
- drivers/pci/controller/vmd.c | 55 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 54 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 47fa3e5f2dc5..990630ec57c6 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -66,11 +66,22 @@ enum vmd_features {
- 	 * interrupt handling.
- 	 */
- 	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
-+
-+	/*
-+	 * Enable ASPM on the PCIE root ports and set the default LTR of the
-+	 * storage devices on platforms where these values are not configured by
-+	 * BIOS. This is needed for laptops, which require these settings for
-+	 * proper power management of the SoC.
-+	 */
-+	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
- };
- 
-+#define VMD_BIOS_PM_QUIRK_LTR	0x1003	/* 3145728 ns */
-+
- #define VMD_FEATS_CLIENT	(VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |	\
- 				 VMD_FEAT_HAS_BUS_RESTRICTIONS |	\
--				 VMD_FEAT_OFFSET_FIRST_VECTOR)
-+				 VMD_FEAT_OFFSET_FIRST_VECTOR |		\
-+				 VMD_FEAT_BIOS_PM_QUIRK)
- 
- static DEFINE_IDA(vmd_instance_ida);
- 
-@@ -713,6 +724,46 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
- 	vmd_bridge->native_dpc = root_bridge->native_dpc;
- }
- 
-+/*
-+ * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-+ */
-+static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
-+{
-+	unsigned long features = *(unsigned long *)userdata;
-+	u16 ltr = VMD_BIOS_PM_QUIRK_LTR;
-+	u32 ltr_reg;
-+	int pos;
-+
-+	if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
-+		return 0;
-+
-+	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
-+
-+	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-+	if (!pos)
-+		return 0;
-+
-+	/*
-+	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
-+	 * so the LTR quirk is not needed.
-+	 */
-+	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
-+	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
-+		return 0;
-+
-+	/*
-+	 * Set the default values to the maximum required by the platform to
-+	 * allow the deepest power management savings. Write as a DWORD where
-+	 * the lower word is the max snoop latency and the upper word is the
-+	 * max non-snoop latency.
-+	 */
-+	ltr_reg = (ltr << 16) | ltr;
-+	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
-+	pci_info(pdev, "VMD: Default LTR value set by driver\n");
-+
-+	return 0;
-+}
-+
- static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- {
- 	struct pci_sysdata *sd = &vmd->sysdata;
-@@ -885,6 +936,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 
- 	pci_assign_unassigned_bus_resources(vmd->bus);
- 
-+	pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, &features);
-+
- 	/*
- 	 * VMD root buses are virtual and don't return true on pci_is_pcie()
- 	 * and will fail pcie_bus_configure_settings() early. It can instead be
--- 
-2.34.1
-
+On 2022-07-12, Nick Bowler <nbowler@draconx.ca> wrote:
+> When using newer kernels on my Ultra 60 with dual 450MHz UltraSPARC-II
+> CPUs, I noticed that only CPU 0 comes up, while older kernels (including
+> 4.7) are working fine with both CPUs.
+>
+> I bisected the failure to this commit:
+>
+>   9b2f753ec23710aa32c0d837d2499db92fe9115b is the first bad commit
+>   commit 9b2f753ec23710aa32c0d837d2499db92fe9115b
+>   Author: Atish Patra <atish.patra@oracle.com>
+>   Date:   Thu Sep 15 14:54:40 2016 -0600
+>
+>       sparc64: Fix cpu_possible_mask if nr_cpus is set
+>
+> This is a small change that reverts very easily on top of 5.18: there is
+> just one trivial conflict.  Once reverted, both CPUs work again.
+>
+> Maybe this is related to the fact that the CPUs on this system are
+> numbered CPU0 and CPU2 (there is no CPU1)?
+>
+> Here is /proc/cpuinfo on a working kernel:
+>
+>     % cat /proc/cpuinfo
+>     cpu             : TI UltraSparc II  (BlackBird)
+>     fpu             : UltraSparc II integrated FPU
+>     pmu             : ultra12
+>     prom            : OBP 3.23.1 1999/07/16 12:08
+>     type            : sun4u
+>     ncpus probed    : 2
+>     ncpus active    : 2
+>     D$ parity tl1   : 0
+>     I$ parity tl1   : 0
+>     cpucaps         : flush,stbar,swap,muldiv,v9,mul32,div32,v8plus,vis
+>     Cpu0ClkTck      : 000000001ad31b4f
+>     Cpu2ClkTck      : 000000001ad31b4f
+>     MMU Type        : Spitfire
+>     MMU PGSZs       : 8K,64K,512K,4MB
+>     State:
+>     CPU0:           online
+>     CPU2:           online
+>
+> And on a broken kernel:
+>
+>     % cat /proc/cpuinfo
+>     cpu             : TI UltraSparc II  (BlackBird)
+>     fpu             : UltraSparc II integrated FPU
+>     pmu             : ultra12
+>     prom            : OBP 3.23.1 1999/07/16 12:08
+>     type            : sun4u
+>     ncpus probed    : 2
+>     ncpus active    : 1
+>     D$ parity tl1   : 0
+>     I$ parity tl1   : 0
+>     cpucaps         : flush,stbar,swap,muldiv,v9,mul32,div32,v8plus,vis
+>     Cpu0ClkTck      : 000000001ad31861
+>     MMU Type        : Spitfire
+>     MMU PGSZs       : 8K,64K,512K,4MB
+>     State:
+>     CPU0:           online
+>
+> Let me know if you need any more info.
+>
+> Thanks,
+>   Nick
