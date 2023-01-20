@@ -2,123 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDD06755D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02316755F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjATNcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:32:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        id S229963AbjATNfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjATNco (ORCPT
+        with ESMTP id S229635AbjATNfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:32:44 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F386D38B66
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:32:42 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4d19b2686a9so72133777b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:32:42 -0800 (PST)
+        Fri, 20 Jan 2023 08:35:43 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0503E7AF26;
+        Fri, 20 Jan 2023 05:35:42 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id p188so6679068yba.5;
+        Fri, 20 Jan 2023 05:35:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mtikuj8gXg3ypC8rwxOlgyPtFSBc8FnCeFcbONAIJEg=;
-        b=jc6e/Yw01Ua3nKPTtoE6QdlpYh11OawzC5k2RyRlPs9s5T3StuXm5/LmYIJhLKahv/
-         2pjv5Bceh+02PEqr8zcjaIYGKKODUMHlKdIIGvtfDosXnDoDWKFN/6g13rmyTkbdhE13
-         xPPqGznUq3FWwtM7LeXy7JfhyjA9TBbUky9so=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RJSkw8NYAyR60FvSkjNU+U9CafbrPx1XHmHc0Xx2Dfk=;
+        b=IZFe8TqXyaq8kS/iPsTocv5NR4O4CyrT1UKLy6KhJcPzEyQLP/Ca2LtBF/k7AbJGlZ
+         IC0Aahbncon827NINbjEwyB6ebgAd7x3FlddPn7iORfhK+1vReyo78lHP3N6DQiSpJ5J
+         3hikyBmhk/xul4ezw4HyDi7vGQ5XewwrO7+ed05kbpSzTWMmLB9apv5fdYD8wEDpL3BB
+         vehiMlg8RJY3YkRh+dFPQYQCJ3L5FGNnK0eBeBagr9Yx0ay6mHdUNY0nYOV1aqRqx7Ou
+         swfpm/E6ZtCYwDKsqKH+XY+A6nRCqAoR0pz1G17zaCHBbOyEpnZfWhOBJtIWLBvIXHql
+         JzEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mtikuj8gXg3ypC8rwxOlgyPtFSBc8FnCeFcbONAIJEg=;
-        b=eArPsT0DYtqWqmQQtBhvaU50XHUSHXsU7Vg7oVF6zG9Tunidq8DR9NeSDg8d4+DoND
-         jtrlIJCzovKxIjAe3nA+p45XMQR2KEULVQn8IA0UsvvSjH1a/ntalRTLB6U0ydvQGRps
-         DyeX//l9P1AFWoLE0xSdVVSobBly1za83MVLQwUw3/T7OWIzIihQIdxY+58Nsgb6PooP
-         1QlUpda8azYwfEFMZ/ob5YEUfTeGXfgXyBHu4y8f+avvHRkkxSI5/pPDXi+wO+W56ElK
-         12kHqb1KqJ7DW4UI4MUZEs8rYdpRVgkc02CuqU94znlYF6L7ToAU15H0I+FS8eFy0XIv
-         +Erw==
-X-Gm-Message-State: AFqh2krUVjOvZfLC6rgjSBAw19WNTBeiLPTAKFsy3syKzSde7MJYAiO5
-        ERIzW3sk/8d2WQ1qrCI8y/zrRhARX1Uls7J3
-X-Google-Smtp-Source: AMrXdXucZSgAtWPVbcvFfMkOhri9I2bEIntD9GOazgMIFbdwQ3WbLLOEvmS76n4yl9IAjf/TsM5thA==
-X-Received: by 2002:a0d:f046:0:b0:364:1ba0:a71a with SMTP id z67-20020a0df046000000b003641ba0a71amr10198880ywe.41.1674221562125;
-        Fri, 20 Jan 2023 05:32:42 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006faf76e7c9asm26472941qkl.115.2023.01.20.05.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 05:32:41 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
+        bh=RJSkw8NYAyR60FvSkjNU+U9CafbrPx1XHmHc0Xx2Dfk=;
+        b=3jlj+52lUCvTBo5kDHty+3t8EuzWWPioM90cqD3dGWFH64+OHeM9E5/zRONWS2ORoY
+         nz/Zac+RVPwpOmGpAnmTP5z76/8fx+nkPQtKgPEgUsZf8erwibbY4bPWZoueAg/ss+yL
+         T7cJZMs84TDSJ+/n3Ac1mpEuQ83riIcJArKCttaURl74QHlVWnMR1dvhDOIT0bvI1SPb
+         zJlgO+TTGgLZQ/wLzppuvrCium8YEL4p6+DHX2uQv/2WsrLHSLhyKg9Rn+NbQZeB1uan
+         rmtJyoaYg+n6ZSnx/zgF0S2i0fCWms6qUGZBnSxFHVtcxkH+iGHi2jThnaDGTHzgMcD8
+         wg9Q==
+X-Gm-Message-State: AFqh2kpwW24NlSBRCfgPwcenDfg/6+z1Z95EHnH0XtGPB5OXMdgg7ZO9
+        ZIRTbmxfssMs0dAOwmDw7z6QKatOEVp167pL/Kg=
+X-Google-Smtp-Source: AMrXdXsrXMqKTv94jCj9wJe+SlIDf907GJDK+8bjgEZCJPH22N9zq3zA0wAwfYmKnk+2X3csG8pmY4eI3+q8mU8x4ow=
+X-Received: by 2002:a25:71c3:0:b0:7b2:343d:6b11 with SMTP id
+ m186-20020a2571c3000000b007b2343d6b11mr1987766ybc.75.1674221741028; Fri, 20
+ Jan 2023 05:35:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20230118160220.776302-1-varmavinaym@gmail.com> <MzQKRFS7tVFtse-EaI1QkIlyz1NMk56vSPdOmY0M3sgG4RHsFUMubaEffsPxSDyFG9dKfhJcBxN4pYYf3R95IuAVd1Ne0P2pMqXHC0dOTLw=@protonmail.com>
+In-Reply-To: <MzQKRFS7tVFtse-EaI1QkIlyz1NMk56vSPdOmY0M3sgG4RHsFUMubaEffsPxSDyFG9dKfhJcBxN4pYYf3R95IuAVd1Ne0P2pMqXHC0dOTLw=@protonmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 20 Jan 2023 14:35:30 +0100
+Message-ID: <CANiq72k4cOEOykgUhgqaXPC7xhX2EoC8c4sr1oFEhKMfEdi=wA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: `make rust-analyzer` for out-of-tree modules
+To:     =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Vinay Varma <varmavinaym@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] tick/nohz: Fix cpu_is_hotpluggable() by checking with nohz subsystem
-Date:   Fri, 20 Jan 2023 08:32:30 -0500
-Message-Id: <37171A49-82E9-4008-9B5B-1CEEDC9B653E@joelfernandes.org>
-References: <Y8o9Mh1ktK0jdQy9@kroah.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        rcu <rcu@vger.kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-In-Reply-To: <Y8o9Mh1ktK0jdQy9@kroah.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: iPhone Mail (20B101)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 20, 2023 at 2:17 PM Bj=C3=B6rn Roy Baron
+<bjorn3_gh@protonmail.com> wrote:
+>
+> I tested this with https://github.com/Rust-for-Linux/rust-out-of-tree-mod=
+ule using "make -C ../rust-for-linux M=3D$(pwd) rust-analyzer". It produces=
+ a rust-project.json file, however it misses the actual rust_out_of_tree cr=
+ate. This is due to the fact that generate_rust_analyzer.py only checks Mak=
+efile to find the crate roots, but rust-out-of-tree-module defines it in Kb=
+uild instead.
 
+Thanks for testing it! Indeed, we should support out-of-tree modules
+using the `Kbuild` + `Makefile` approach.
 
-> On Jan 20, 2023, at 2:05 AM, Greg Kroah-Hartman <gregkh@linuxfoundation.or=
-g> wrote:
->=20
-> =EF=BB=BFOn Thu, Jan 19, 2023 at 08:44:35PM +0000, Joel Fernandes (Google)=
- wrote:
->> For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
->> However, cpu_is_hotpluggable() still returns true for those CPUs. This ca=
-uses
->> torture tests that do offlining to end up trying to offline this CPU caus=
-ing
->> test failures. Such failure happens on all architectures.
->>=20
->> Fix it by asking the opinion of the nohz subsystem on whether the CPU can=
+Having said that, I wonder if we should even attempt to perform the
+search for out-of-tree modules. The search loop is a simple hack which
+works fine for in-tree code because we know the structure of the code
+around us, but we cannot for out-of-tree modules. For instance, they
+may be using a different build system, or not mentioning the object
+file, etc.
 
->> be hotplugged.
->>=20
->> [ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down().=
- ]
->>=20
->> Cc: Frederic Weisbecker <frederic@kernel.org>
->> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Marc Zyngier <maz@kernel.org>
->> Cc: rcu <rcu@vger.kernel.org>
->> Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest=
- of the kernel")
->> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->=20
-> Also want to cc: stable on the patch?
+Perhaps we should simply ask them to give us the roots directly as a
+list of arguments to the script or similar.
 
-Oh sure, sorry. For some reason I thought Sasha and your AI scripts were loo=
-king at the Linux-kernel list as well. Or are they, and a Cc to stable is ju=
-st to be doubly sure?
-
-> Anyway, for the driver core portion:
-
-Thanks!
-
- - Joel
-
->=20
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cheers,
+Miguel
