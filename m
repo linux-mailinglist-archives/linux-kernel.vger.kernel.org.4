@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE86674DDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9617674DE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjATHPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 02:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S230073AbjATHRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 02:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjATHPW (ORCPT
+        with ESMTP id S230043AbjATHR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 02:15:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425A84347C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:15:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E45D6B81A74
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:15:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E37C433EF;
-        Fri, 20 Jan 2023 07:15:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674198918;
-        bh=dGwXf0BmH8FB3+W1jC+RE4rVTDz4Q5BheAiK4UorBxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N5/cD8+5/Qo1ZOqM50106fjf6hDtXPzyqTlRT7Fr7HckbdfcicUOztJa/efgae8nu
-         sTND8M5DFHXarP+78nsVn8FvQn+cD0s0mZOtKkfTY8IRoTvsR24i1cNX+RFwHm886+
-         rqlffC+0G3kHaQCIpDod0CZRivBH2YfmpVimDOaA=
-Date:   Fri, 20 Jan 2023 08:15:15 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-Message-ID: <Y8o/g9cDZCxmL6yR@kroah.com>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
- <Y8lfz8C5uvx2w4fC@kroah.com>
- <87ilh2quto.fsf@ubik.fi.intel.com>
- <Y8mSs68JfW6t4mjl@kroah.com>
- <87a62eqo4h.fsf@ubik.fi.intel.com>
+        Fri, 20 Jan 2023 02:17:28 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135177DFB3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:17:23 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id b5so4049712wrn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:17:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bJ5Lz6E4vUSph11X435KYTnTHMIJgrYfJQAxDMT6T8U=;
+        b=WHngMJqZPGXn/kPlo1zd3gMcwvi684yWjm/tP3fkjNJn/mmBWVz601FGhbXcgSV8P9
+         WFXE6BQLxcQgsp4+xjMiIHF+IG13cT/Ex9YQMnah5POEoKLbAGRB0xWWXOqpZfbKrKgg
+         HN6jBeXuiS3SQNRGYj8nynbk1Fi+Fd0z8Bw2xXdqumVtfrmUeUk2BroFfDCD5kQh/1Bw
+         pEUfBSmFIQj6rp1wGtv6VhjGfjfXh4Gamjmqzz5vd/vCbKYxDX78CkHu6O3c4q8z1Ixg
+         Ha3zfhpG6MMlel5mZsKeTdcmD7GGnM76iItUsgh+y1X1w6ICotHPAsouvNgw/5xKG2C2
+         0ANg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bJ5Lz6E4vUSph11X435KYTnTHMIJgrYfJQAxDMT6T8U=;
+        b=rjJkDpgSUCngcXA9hhFeppG1fFGyXQEsGO0Fg6ZaPN38Df3bHZs7gfe0fD7p6FNa8K
+         6bL04MOWr9W6hK+ntJJymaZEth5dj7S9APYlGPjJO3qozWEh9joVrm8G4bsdRzEM+75M
+         nwIJ2V3YoCVIEZCWOy3+3hcYrsmd6tVrzuDTLdhHuDYjTUSaIlhimzgBlSZ7zEud04/d
+         E0Y6x5046Na3raEeJIQhX7Eoq/9lrTqIRnxh9rOJVbD6igtJxtsIqPJ8Ij9BUcfAKWVc
+         FPImjnr63bKWG+VHNYNVEOcmutND3nSWaaTIMIFaMQQhdvOg7/YD3HPUrVoagSgXV3nZ
+         iH2w==
+X-Gm-Message-State: AFqh2kqsoWAzM+P2n2S4Seu6blIwldeaYzJHwaTuY7kOCB3g8OLBpFG2
+        9r3Ga7ju7flAl1X9rc1S9GTQtQ==
+X-Google-Smtp-Source: AMrXdXtz7X+ubzP2smBaBnfC09d8J91mJuS5cHl9Wt0tyKmycfKXtaF96j7XG4YjTy8vNa/n9QF4zw==
+X-Received: by 2002:adf:de04:0:b0:2a9:89e:2b53 with SMTP id b4-20020adfde04000000b002a9089e2b53mr11857780wrm.45.1674199041511;
+        Thu, 19 Jan 2023 23:17:21 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y18-20020a5d6152000000b002425be3c9e2sm34642789wrt.60.2023.01.19.23.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 23:17:20 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] dt-bindings: power: fsl,imx-gpc: document fsl,imx6ul-gpc compatible
+Date:   Fri, 20 Jan 2023 08:17:15 +0100
+Message-Id: <20230120071717.138188-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a62eqo4h.fsf@ubik.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 10:13:18PM +0200, Alexander Shishkin wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> 
-> > Then you need to copy it out once, and then only deal with the local
-> > copy.  Otherwise you have an incomplete snapshot.
-> 
-> Ok, would you be partial to something like this:
-> 
-> >From 1bc9bb84004154376c2a0cf643d53257da6d1cd7 Mon Sep 17 00:00:00 2001
-> From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Date: Thu, 19 Jan 2023 21:59:02 +0200
-> Subject: [PATCH] virtio console: Keep a local copy of the control structure
-> 
-> When handling control messages, instead of peeking at the device memory
-> to obtain bits of the control structure, take a snapshot of it once and
-> use it instead, to prevent it from changing under us. This avoids races
-> between port id validation and control event decoding, which can lead
-> to, for example, a NULL dereference in port removal of a nonexistent
-> port.
-> 
-> The control structure is small enough (8 bytes) that it can be cached
-> directly on the stack.
-> 
-> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Amit Shah <amit@kernel.org>
-> ---
->  drivers/char/virtio_console.c | 29 +++++++++++++++--------------
->  1 file changed, 15 insertions(+), 14 deletions(-)
+Document existing fsl,imx6ul-gpc compatible used with fsl,imx6q-gpc
+fallback:
 
-Yes, this looks much better, thanks!
+  imx6sl-evk.dtb: gpc@20dc000: compatible: ['fsl,imx6sl-gpc', 'fsl,imx6q-gpc'] is too long
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/power/fsl,imx-gpc.yaml    | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml b/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml
+index 777e1d852ddd..85658da3672f 100644
+--- a/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml
++++ b/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml
+@@ -23,11 +23,16 @@ description: |
+ 
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx6q-gpc
+-      - fsl,imx6qp-gpc
+-      - fsl,imx6sl-gpc
+-      - fsl,imx6sx-gpc
++    oneOf:
++      - enum:
++          - fsl,imx6q-gpc
++          - fsl,imx6qp-gpc
++          - fsl,imx6sl-gpc
++          - fsl,imx6sx-gpc
++      - items:
++          - enum:
++              - fsl,imx6ul-gpc
++          - const: fsl,imx6q-gpc
+ 
+   reg:
+     maxItems: 1
+-- 
+2.34.1
+
