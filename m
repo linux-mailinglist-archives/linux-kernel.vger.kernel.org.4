@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F232C67483F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BE7674844
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjATArJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S229769AbjATArr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjATArD (ORCPT
+        with ESMTP id S229782AbjATArh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:47:03 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0CEA5782
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:46:58 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id b17so3958015pld.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:46:58 -0800 (PST)
+        Thu, 19 Jan 2023 19:47:37 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B89A500D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:47:31 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id g23so3929833plq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:47:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayJn/GYBuR/fjLdDFpqtJAjszedzztZoiWdekO0asUc=;
-        b=LKldp5a7K3BsUCsXJfb8c+4bU1Z1rcCPaC6m1IG3+dGP0kcfglcgNPJWU6gHFk57BM
-         ygiHAt3O1+ekCwb5p5hlgI2h7bYQzAca7U8VlDDtO9oyTPawyLWlpYuU/HICfsTWVNiu
-         9XqTBs/GbFlq+lrpUCNHjoePJxihOK9Iw0aYQ=
+        bh=NoHGlUpcw7fwmrYboht8UAM/6l0Jv9+yAkVcgRJe890=;
+        b=gsp+jdex12Kyhunlsx6KsnMN9DliXdvBwclXTMhdcl766WoN7ToqsIgiAnsfGt78Ub
+         4eTBjo9224GAr2S8/McQqfQlGAycLs84gxhcdZVTeYEF+3ALDyJ8eKQEqNIFY/oGth/9
+         bZ6YYEhPM5uvvf7yveQGEoDMbtYqNE6hmmVFksCVS8seD0InWS5eJhhUS9QK9yTWPIjP
+         xZS8PsMt8Z6ZnT7H0Yqro3hQMloPCnMyhHirp28BGxc47cXIocPgGqTbCwv/OpVMirPb
+         ggBaTweZVen23DLAD/Nbp/MCouFHW7uw5KPNzSx4K4ph3NogRNFlU0a7Mk+wljUV+vdM
+         4mdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ayJn/GYBuR/fjLdDFpqtJAjszedzztZoiWdekO0asUc=;
-        b=aKKVWa27Fd6BHNye37eOBnw4+UwfXAAkhH4EP5BeJfRQSgP57C1QNEvQfuPeK2t+o3
-         MGPqlvy77pALehBTaO7hc8qQyZPAO6Pdn47rnvypJI4ix6ThCzuO8NA/IgRU7jGm+q/N
-         Ja3JaF/9njl3/VROeWJ+w27TN4QeWIwpnHzOnML15stdzTJGQb7viltJe1TvtScewibc
-         X2IvYyiZW+yoOZeLWn5ANxDCSaY2V5tPgBFLsnspi9AEJZ3qYNbR33z78XXzm4nn+Umm
-         ZDNs6SGxWsWU7goA25eV+QIBH9NAVAsU8CDQOMFqSU5L2NFdUGJ8Ry44Z+5LNWdtNYXE
-         9Wiw==
-X-Gm-Message-State: AFqh2koR2+9w1u2/1qxzNH+3mKmo6YjU/ufpw7cO3XfDCn1Lu08Ou1Ue
-        Nd1fc0UuhJ3xTqr+83wXSSsDlw==
-X-Google-Smtp-Source: AMrXdXuKfEj0zOvGfr1iA/kr1NdJ/npdryHNpx4REj8VhMm71VRKkoixQ6w2KxNIbipwCihUiBMNPQ==
-X-Received: by 2002:a17:902:cec7:b0:191:2a9c:52a1 with SMTP id d7-20020a170902cec700b001912a9c52a1mr17245912plg.19.1674175618067;
-        Thu, 19 Jan 2023 16:46:58 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170902d48800b001925c3ec34esm2560903plg.196.2023.01.19.16.46.57
+        bh=NoHGlUpcw7fwmrYboht8UAM/6l0Jv9+yAkVcgRJe890=;
+        b=M44Sp0xYlL41jkE8gzApDPrz3sZyEvf5t9LR2CqtyfncXinT0JcODxYJeoH4jnImAw
+         5emQpl2m1B5tbwszZEQAmgz8YyIm1TpvKUXKawbvmGHKb1z7XnfpFih64b7dn3eFjw43
+         6tYaE2sKlOJ2BA2dJAXWqvS6m+WuyYB6dqY55mVnbqVFF93zmjhLgUggHlZaSWxg2zkP
+         SN0VeTH6WnaU6tqR8AXGoQ3JG8sb1MlR58QKmfoFwN1jMRLl7mJyUDMa5/+lJ3UNXSxd
+         zINnaHboLYrV/YxIxpQpD99cvmf3Mc3wfSTXbdap8UBjv0ULDG0KMed/QW1fOUeBXTPu
+         lOkA==
+X-Gm-Message-State: AFqh2kqtgnLTnAbDEohVoq8H+ryEKph0okwaPmL37RsJidrRISaRVCKF
+        n06yru4T2Og1uocUlK9ogEMTRQ==
+X-Google-Smtp-Source: AMrXdXubtDrKN+ncI7zo1u/NAMPyHAa+Ul1Xi4orVbBGs2KXU+j3fEWJYwsOcVzmBGmBcH/6eckoWg==
+X-Received: by 2002:a17:902:bc84:b0:194:6d3c:38a5 with SMTP id bb4-20020a170902bc8400b001946d3c38a5mr884plb.1.1674175651253;
+        Thu, 19 Jan 2023 16:47:31 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id jg20-20020a17090326d400b00194799b084esm11429626plb.10.2023.01.19.16.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 16:46:57 -0800 (PST)
-Date:   Thu, 19 Jan 2023 16:46:56 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v5 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-Message-ID: <202301191646.BE63FEC@keescook>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-6-rick.p.edgecombe@intel.com>
+        Thu, 19 Jan 2023 16:47:30 -0800 (PST)
+Date:   Fri, 20 Jan 2023 00:47:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Disable guest PEBS on hybird cpu
+ due to heterogeneity
+Message-ID: <Y8nknyxfKl4p/0GY@google.com>
+References: <20221109082802.27543-1-likexu@tencent.com>
+ <20221109082802.27543-2-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119212317.8324-6-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221109082802.27543-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:22:43PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On Wed, Nov 09, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Shadow stack register state can be managed with XSAVE. The registers
-> can logically be separated into two groups:
->         * Registers controlling user-mode operation
->         * Registers controlling kernel-mode operation
+> From vPMU enabling perspective, KVM does not have proper support for
+> hybird x86 core. The reported perf_capabilities value (e.g. the format
+> of pebs record) depends on the type of cpu the kvm-intel module is init.
+> When a vcpu of one pebs format migrates to a vcpu of another pebs format,
+> the incorrect parsing of pebs records by guest can make profiling data
+> analysis extremely problematic.
 > 
-> The architecture has two new XSAVE state components: one for each group
-> of those groups of registers. This lets an OS manage them separately if
-> it chooses. Future patches for host userspace and KVM guests will only
-> utilize the user-mode registers, so only configure XSAVE to save
-> user-mode registers. This state will add 16 bytes to the xsave buffer
-> size.
+> The safe way to fix this is to disable this part of the support until the
+> guest recognizes that it is running on the hybird cpu, which is appropriate
+> at the moment given that x86 hybrid architectures are not heavily touted
+> in the data center market.
 > 
-> Future patches will use the user-mode XSAVE area to save guest user-mode
-> CET state. However, VMCS includes new fields for guest CET supervisor
-> states. KVM can use these to save and restore guest supervisor state, so
-> host supervisor XSAVE support is not required.
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/vmx/capabilities.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Adding this exacerbates the already unwieldy if statement in
-> check_xstate_against_struct() that handles warning about un-implemented
-> xfeatures. So refactor these check's by having XCHECK_SZ() set a bool when
-> it actually check's the xfeature. This ends up exceeding 80 chars, but was
-> better on balance than other options explored. Pass the bool as pointer to
-> make it clear that XCHECK_SZ() can change the variable.
-> 
-> While configuring user-mode XSAVE, clarify kernel-mode registers are not
-> managed by XSAVE by defining the xfeature in
-> XFEATURE_MASK_SUPERVISOR_UNSUPPORTED, like is done for XFEATURE_MASK_PT.
-> This serves more of a documentation as code purpose, and functionally,
-> only enables a few safety checks.
-> 
-> Both XSAVE state components are supervisor states, even the state
-> controlling user-mode operation. This is a departure from earlier features
-> like protection keys where the PKRU state is a normal user
-> (non-supervisor) state. Having the user state be supervisor-managed
-> ensures there is no direct, unprivileged access to it, making it harder
-> for an attacker to subvert CET.
-> 
-> To facilitate this privileged access, define the two user-mode CET MSRs,
-> and the bits defined in those MSRs relevant to future shadow stack
-> enablement patches.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> index cd2ac9536c99..ea0498684048 100644
+> --- a/arch/x86/kvm/vmx/capabilities.h
+> +++ b/arch/x86/kvm/vmx/capabilities.h
+> @@ -392,7 +392,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
+>  
+>  static inline bool vmx_pebs_supported(void)
+>  {
+> -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
+> +	return boot_cpu_has(X86_FEATURE_PEBS) &&
+> +	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
+> +	       kvm_pmu_cap.pebs_ept;
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I assume the patch I just posted[*] to disable the vPMU entirely is sufficient, or
+do we need this as well in order to hide X86_FEATURE_DS and X86_FEATURE_DTES64?
 
--- 
-Kees Cook
+[*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
