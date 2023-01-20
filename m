@@ -2,160 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C60675C23
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D47675C36
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjATRxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S230448AbjATR4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjATRxT (ORCPT
+        with ESMTP id S229786AbjATR4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:53:19 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D44C16D;
-        Fri, 20 Jan 2023 09:52:56 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2C66C33795;
-        Fri, 20 Jan 2023 17:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674237175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UNyEsjm7hTRHmPW+XmOpTTJAr6gba2jkZnI10liz/yE=;
-        b=GjbiRjgqTWyXCgMsFjtKYs9AvuDkHg49it+0qX0XS2aTMfPj7Mw2LGq4NMAoFYcaj9PVej
-        vMAyYMvPMBYBuZ3p8DCAt5IgRAcn/Lj3Sm6fk2rJ/G7ZgTQRF8kz1VRmIiI7Mso2WhAkiI
-        qH5MslyqTpbp47xkbnG2yy0C43RDIu8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674237175;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UNyEsjm7hTRHmPW+XmOpTTJAr6gba2jkZnI10liz/yE=;
-        b=JKFUMRfVDlOz7Gei5bw7WnRU5/xBTxCqxl9tiG+nANWfa+RRqPUrsxile+0ykUzlS10JwM
-        oHseEXEeJdaFmKAQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 20 Jan 2023 12:56:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F773366A3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:56:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674237367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L1vbMszv9II0pr/36LhZgm3t0G5zZlJBs1R5Ur/EGww=;
+        b=CKfWbxXeBa7aMnhtztYh99aPfvRIcOhvdqrCfjg0FBMuxF4NoHiQ0ImhAy9oLVAnBgTXdw
+        ShViXthNEi/hVZ/dSDOUSe7T9McLhTI43VXoeJyfhuW8+y++PYgxCHoKga9ru0YFPnPoce
+        t+4NjGvp/IjAcl4q416U0101aPkjRsE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-160-JeBkd2PCM0urfNQeCIc4vA-1; Fri, 20 Jan 2023 12:56:04 -0500
+X-MC-Unique: JeBkd2PCM0urfNQeCIc4vA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F157F2C141;
-        Fri, 20 Jan 2023 17:52:54 +0000 (UTC)
-Date:   Fri, 20 Jan 2023 18:52:53 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     "Erhard F." <erhard_f@mailbox.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
- disaply code
-Message-ID: <20230120175253.GW16547@kitsune.suse.cz>
-References: <20230118215045.5551-1-msuchanek@suse.de>
- <20230119095323.4659-1-msuchanek@suse.de>
- <CAL_JsqKo+mdjA485KDb1ZauJcbOU-FR1G-Z2sYYNu7+Zn32wSA@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8474B802C1D;
+        Fri, 20 Jan 2023 17:56:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 31E7253AA;
+        Fri, 20 Jan 2023 17:56:01 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/8] iov_iter: Improve page extraction (ref, pin or just list)
+Date:   Fri, 20 Jan 2023 17:55:48 +0000
+Message-Id: <20230120175556.3556978-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKo+mdjA485KDb1ZauJcbOU-FR1G-Z2sYYNu7+Zn32wSA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Al, Christoph,
 
-On Fri, Jan 20, 2023 at 11:23:39AM -0600, Rob Herring wrote:
-> On Thu, Jan 19, 2023 at 3:53 AM Michal Suchanek <msuchanek@suse.de> wrote:
-> >
-> > The commit 2d681d6a23a1 ("of: Make of framebuffer devices unique")
-> > breaks build because of wrong argument to snprintf. That certainly
-> > avoids the runtime error but is not the intended outcome.
-> >
-> > Also use standard device name format of-display.N for all created
-> > devices.
-> >
-> > Fixes: 2d681d6a23a1 ("of: Make of framebuffer devices unique")
-> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > ---
-> > v2: Update the device name format
-> > ---
-> >  drivers/of/platform.c | 12 ++++++++----
-> >  1 file changed, 8 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > index f2a5d679a324..8c1b1de22036 100644
-> > --- a/drivers/of/platform.c
-> > +++ b/drivers/of/platform.c
-> > @@ -525,7 +525,9 @@ static int __init of_platform_default_populate_init(void)
-> >         if (IS_ENABLED(CONFIG_PPC)) {
-> >                 struct device_node *boot_display = NULL;
-> >                 struct platform_device *dev;
-> > -               int display_number = 1;
-> > +               int display_number = 0;
-> > +               char buf[14];
-> > +               char *of_display_format = "of-display.%d";
-> 
-> static const as suggested and can we just move on please...
-Only const, static could be dodgy
+Here are patches to provide support for extracting pages from an iov_iter
+and a patch to use the primary extraction function in the block layer bio
+code.
 
-> >                 int ret;
-> >
-> >                 /* Check if we have a MacOS display without a node spec */
-> > @@ -556,7 +558,10 @@ static int __init of_platform_default_populate_init(void)
-> >                         if (!of_get_property(node, "linux,opened", NULL) ||
-> >                             !of_get_property(node, "linux,boot-display", NULL))
-> >                                 continue;
-> > -                       dev = of_platform_device_create(node, "of-display", NULL);
-> > +                       ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
-> 
-> The boot display is always "of-display.0". Just use the fixed string
-> here. Then we can get rid of the whole debate around static const.
+The patches make the following changes:
 
-I prefer to use the same format string when the names should be
-consistent. Also it would resurrect the starting from 1 debate.
+ (1) Add a function, iov_iter_extract_pages() to replace
+     iov_iter_get_pages*() that gets refs, pins or just lists the pages as
+     appropriate to the iterator type and the I/O direction.
 
-But if you really want to have two strings I do not care all that much.
+     Add a function, iov_iter_extract_mode() that will indicate from the
+     iterator type and the I/O direction how the cleanup is to be
+     performed, returning FOLL_GET, FOLL_PIN or 0.
 
-> 
-> > +                       if (ret >= sizeof(buf))
-> > +                               continue;
-> 
-> This only happens if display_number becomes too big. Why continue on?
-> The next iteration will fail too.
+ (2) Add a function, folio_put_unpin(), and a wrapper, page_put_unpin(),
+     that take a page and the return from iov_iter_extract_mode() and do
+     the right thing to clean up the page.
 
-Yes, there is no need to continue with the loop.
+ (3) Make the bio struct carry a pair of flags to indicate the cleanup
+     mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (equivalent to
+     FOLL_GET) and BIO_PAGE_PINNED (equivalent to BIO_PAGE_PINNED) is
+     added.
 
-Thanks
+ (4) Add a function, bio_release_page(), to release a page appropriately to
+     the cleanup mode indicated by the BIO_PAGE_* flags.
 
-Michal
+ (5) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
+     pages appropriately and clean them up later.
 
-> 
-> > +                       dev = of_platform_device_create(node, buf, NULL);
-> >                         if (WARN_ON(!dev))
-> >                                 return -ENOMEM;
-> >                         boot_display = node;
-> > @@ -564,10 +569,9 @@ static int __init of_platform_default_populate_init(void)
-> >                 }
-> >
-> >                 for_each_node_by_type(node, "display") {
-> > -                       char *buf[14];
-> >                         if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
-> >                                 continue;
-> > -                       ret = snprintf(buf, "of-display-%d", display_number++);
-> > +                       ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
-> >                         if (ret >= sizeof(buf))
-> >                                 continue;
-> 
-> Here too in the original change.
-> 
-> >                         of_platform_device_create(node, buf, NULL);
-> > --
-> > 2.35.3
-> >
+ (6) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
+
+ (7) Renumber FOLL_GET and FOLL_PIN down so that they're at bits 0 and 1
+     and coincident with BIO_PAGE_REFFED and BIO_PAGE_PINNED.  The compiler
+     can then optimise on that.  Also, it's probably going to be necessary
+     to embed these in the page pointer in sk_buff fragments.  This patch
+     can go independently through the mm tree.
+
+Changes:
+========
+ver #7)
+ - For now, drop the parts to pass the I/O direction to iov_iter_*pages*()
+   as it turned out to be a lot more complicated, with places not setting
+   IOCB_WRITE when they should, for example.
+ - Drop all the patches that changed things other then the block layer's
+   bio handling.  The netfslib and cifs changes can go into a separate
+   patchset.
+ - Add support for extracting pages from KVEC-type iterators.
+ - When extracting from BVEC/KVEC, skip over empty vecs at the front.
+
+ver #6)
+ - Fix write() syscall and co. not setting IOCB_WRITE.
+ - Added iocb_is_read() and iocb_is_write() to check IOCB_WRITE.
+ - Use op_is_write() in bio_copy_user_iov().
+ - Drop the iterator direction checks from smbd_recv().
+ - Define FOLL_SOURCE_BUF and FOLL_DEST_BUF and pass them in as part of
+   gup_flags to iov_iter_get/extract_pages*().
+ - Replace iov_iter_get_pages*2() with iov_iter_get_pages*() and remove.
+ - Add back the function to indicate the cleanup mode.
+ - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+ - Provide a helper to clean up a page.
+ - Renumbered FOLL_GET and FOLL_PIN and made BIO_PAGE_REFFED/PINNED have
+   the same numerical values, enforced with an assertion.
+ - Converted AF_ALG, SCSI vhost, generic DIO, FUSE, splice to pipe, 9P and
+   NFS.
+ - Added in the patches to make CIFS do top-to-bottom iterators and use
+   various of the added extraction functions.
+ - Added a pair of work-in-progess patches to make sk_buff fragments store
+   FOLL_GET and FOLL_PIN.
+
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+I've pushed the patches (excluding the two WIP networking patches) here
+also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+
+David
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk/ # v5
+Link: https://lore.kernel.org/r/167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk/ # v6
+
+David Howells (8):
+  iov_iter: Define flags to qualify page extraction.
+  iov_iter: Add a function to extract a page list from an iterator
+  mm: Provide a helper to drop a pin/ref on a page
+  block: Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED and invert the
+    meaning
+  block: Add BIO_PAGE_PINNED
+  block: Make bio structs pin pages rather than ref'ing if appropriate
+  block: Fix bio_flagged() so that gcc can better optimise it
+  mm: Renumber FOLL_GET and FOLL_PIN down
+
+ block/bio.c               |  43 ++--
+ block/blk-map.c           |  26 +--
+ block/blk.h               |  29 +++
+ fs/iomap/direct-io.c      |   1 -
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/mm.h        |  17 +-
+ include/linux/uio.h       |  35 ++-
+ lib/iov_iter.c            | 438 +++++++++++++++++++++++++++++++++++++-
+ mm/gup.c                  |  22 ++
+ 10 files changed, 571 insertions(+), 48 deletions(-)
+
