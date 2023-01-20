@@ -2,147 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A7B674D67
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA6B674D69
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjATGfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S229454AbjATGgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjATGfd (ORCPT
+        with ESMTP id S229982AbjATGgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:35:33 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1548654C3;
-        Thu, 19 Jan 2023 22:35:31 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K4nqTE027742;
-        Fri, 20 Jan 2023 06:35:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=h1Nt0Kj3EVYuq6Lt/Hu4JFG+2Y6oufddlZ8+ev7cjw4=;
- b=KH/FWy7U7f9eTex69kpwce5747rgKGafmlQPDDsKhI1bLEvvwxjUnGRNeUfHMUfaklaE
- JrzXMQTUjNmH/lL5qGCBwbf4vi1NvQ0KSjXV2QepI7Uv+J9+W+zLmkNCcLMTdQPmH2p7
- Uj5i476iLRSXu67Qbv+iDV2c4OWmxLoDCUdtEmtEuI4tfGoUa7EKilFxfG6driiHH+zC
- SjA/4xcrENpOl3X/bY30al789F6NMYUEBJxQVOtvp7FQuH/iAQ9ophFrCMkj194VVQrC
- 41+dE+fm4E0IffwTnjOHUjSlFoBl7s6b/5XMtzxZ2u+H9bwnRIiOu7nsS5IOAVijhBPW 5A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n70eyk0sq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 06:35:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30K6ZI9x003832
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 06:35:18 GMT
-Received: from [10.216.43.228] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
- 2023 22:35:12 -0800
-Message-ID: <3299b57b-7260-0189-ba6f-824db391d81c@quicinc.com>
-Date:   Fri, 20 Jan 2023 12:05:09 +0530
+        Fri, 20 Jan 2023 01:36:12 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DFC798FE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:36:04 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id i188so4674269vsi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:36:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gCnqSV2/jhgO1bXWht92BDT4xhwMLz90Jf6Hrx/eTho=;
+        b=NX+Di0Rnu+CjEf+0fj/O6b5KnuLqFqwXHCRm4uJktZGDQmbVJpitD0YMRKSZCEOKi3
+         9R8s7+lkWre7bbXIZb23ZAOip8Dsgm84PvowZZFLs/M2Xc92TYs92Dgo8zVAejstTymR
+         W8JNUP/b0Yuhdas3jupXcH31jQGRcRzlth0NM0T0UuLneVjV4NLE2+SwtFN7/o4Fz5eE
+         XJFe+iI9BOImFn3acKtfuNgXJmFEVxWL4f5e4aNGSLnN0nWH93nF6hi0Kru4Qomc8rqK
+         WZYnk9+FQcCpPq6nuauWT5QmQDtb+qYAfMMYZErnM4bLMhmKCU1/0zB0bj9s27vPZKcP
+         A8tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gCnqSV2/jhgO1bXWht92BDT4xhwMLz90Jf6Hrx/eTho=;
+        b=vgCZ5LlHf2VlfzIsmRwHE9+oZJAjFmKcXJrYLOHnsmGzHp0VEOaAJKL9Ld5EN+43jk
+         cCSq8iTEaBAOvc4E//26XaUXWwaZpqaS9CfqEVLC7X3OROb+T2csCncrIKnIjRaTZO/p
+         7/ijpdU335z8l1JdCewq0I/vWDkt8oWhTGWl514W5EvNq++10ImVGyxFHu4fvXCMeWac
+         Sd9g3HnnW1CaYg4Y9aKslRIa55AwEOT+oAph/ImXYNVRUcHBeewZ+ILW3i3yrOP37KGk
+         e2dVgSF5ApRhUuxziC7h5tfjgTtNA+eW4yrrF09cpFzZ6t5ryfG9EPYio38xaehv32/2
+         wiGg==
+X-Gm-Message-State: AFqh2kqwXwBQIxo4Cb/sD7S2u87FC9Fhe5lMmRQOuUrudtcOfDPQAZdG
+        CA0zJ0YuEY0E/VBZyeI3zuyqW6uMKr2FVUw/6W+BEQ==
+X-Google-Smtp-Source: AMrXdXvjSeaQUrsDI/wO8qCs8/GgwXFzMxE0oFHyVynypIpjETKCEgLlZZot1a6rPy5p9zsFNN++VkiPNSsKCmq2id4=
+X-Received: by 2002:a05:6102:316f:b0:3d2:30a3:70d1 with SMTP id
+ l15-20020a056102316f00b003d230a370d1mr1947808vsm.38.1674196563825; Thu, 19
+ Jan 2023 22:36:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 4/7] arm64: dts: qcom: sc7280: Update VA/RX/TX macro
- clock nodes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <vkoul@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_rohkumar@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <alsa-devel@alsa-project.org>, <quic_rjendra@quicinc.com>,
-        <konrad.dybcio@somainline.org>, <mka@chromium.org>
-References: <1674131227-26456-1-git-send-email-quic_srivasam@quicinc.com>
- <1674131227-26456-5-git-send-email-quic_srivasam@quicinc.com>
- <17b895c0-3985-a012-9b02-94d5ebb11ff9@linaro.org>
- <9ae3b1b0-e9d6-6370-667b-88af5d0efa2e@quicinc.com>
- <7d874a5d-5a26-1ae1-58bc-dd819774190d@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <7d874a5d-5a26-1ae1-58bc-dd819774190d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YLHaY3gEPYW0Su-PDUOw78pG_YygqKMn
-X-Proofpoint-GUID: YLHaY3gEPYW0Su-PDUOw78pG_YygqKMn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_03,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- phishscore=0 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200060
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118074219.3921-1-apantykhin@gmail.com>
+In-Reply-To: <20230118074219.3921-1-apantykhin@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 20 Jan 2023 14:35:51 +0800
+Message-ID: <CABVgOSn9ULgwDNTz3V=n+OM088jS7NsJ1mrfcQv-mYVy6zNbVg@mail.gmail.com>
+Subject: Re: [PATCH V2] tools/testing/kunit/kunit.py: remove redundant double check
+To:     Alexander Pantyukhin <apantykhin@gmail.com>
+Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000007ca4a805f2ac43a0"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000007ca4a805f2ac43a0
+Content-Type: text/plain; charset="UTF-8"
 
-On 1/20/2023 11:54 AM, Krzysztof Kozlowski wrote:
-Thanks for your valuable suggestion Krzysztof!!!
-> On 20/01/2023 05:47, Srinivasa Rao Mandadapu wrote:
->> On 1/19/2023 7:01 PM, Krzysztof Kozlowski wrote:
->> Thanks for your time Krzysztof!!!
->>> On 19/01/2023 13:27, Srinivasa Rao Mandadapu wrote:
->>>> Update VA, RX and TX macro and lpass_tlmm clock properties and
->>>> enable them.
->>> Everything is an update and this does not explain what exactly you are
->>> updating in the nodes and why.
->>>
->>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
->>>> ---
->>>>    .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi  | 59 ++++++++++++++++++++++
->>>>    1 file changed, 59 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
->>>> index 81e0f3a..674b01a 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
->>>> @@ -8,8 +8,67 @@
->>>>    
->>>>    #include <dt-bindings/sound/qcom,q6afe.h>
->>>>    
->>>> +/delete-node/ &lpass_rx_macro;
->>> Why?
->> Actually in SoC dtsi (sc7280.dtsi) power domains property used.
->>
->> Which is not required for ADSP based solution. As there is no way to delete
->>
->> individual property, deleting node and recreating it here.
->>
-> You can delete property - delete-property. However why in AudioReach
-> device comes without power domains? What does it mean "power domains
-> property is not required"? DTS describes the hardware and the rx macro
-> is powered, isn't it?
-
-Actually in case ADSP bypass solution power domains are handled in HLOS 
-clock driver.
-
-Whereas in ADSP based solution they are handled in ADSP firmware, and 
-from HLOS
-
-voted as clocks.
-
-Below is the reference commit.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9e3d83c52844f955aa2975f78cee48bf9f72f5e1
-
+On Wed, 18 Jan 2023 at 15:42, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
 >
-> Best regards,
-> Krzysztof
+> The build_tests function contained double checking for not success
+> result. It is fixed in the current patch. Additional small
+> simplifications of code like using ternary if were applied (avoid using
+> the same operation by calculation times differ in two places).
 >
+> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
+> ---
+
+Looks good, thanks!
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit.py | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 43fbe96318fe..0e3e08cc0204 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -77,11 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+>         config_start = time.time()
+>         success = linux.build_reconfig(request.build_dir, request.make_options)
+>         config_end = time.time()
+> -       if not success:
+> -               return KunitResult(KunitStatus.CONFIG_FAILURE,
+> -                                  config_end - config_start)
+> -       return KunitResult(KunitStatus.SUCCESS,
+> -                          config_end - config_start)
+> +       status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
+> +       return KunitResult(status, config_end - config_start)
+>
+>  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                 request: KunitBuildRequest) -> KunitResult:
+> @@ -92,14 +89,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                                      request.build_dir,
+>                                      request.make_options)
+>         build_end = time.time()
+> -       if not success:
+> -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  build_end - build_start)
+> -       if not success:
+> -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  build_end - build_start)
+> -       return KunitResult(KunitStatus.SUCCESS,
+> -                          build_end - build_start)
+> +       status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
+> +       return KunitResult(status, build_end - build_start)
+>
+>  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                            request: KunitBuildRequest) -> KunitResult:
+> @@ -145,7 +136,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                 tests = _list_tests(linux, request)
+>                 if request.run_isolated == 'test':
+>                         filter_globs = tests
+> -               if request.run_isolated == 'suite':
+> +               elif request.run_isolated == 'suite':
+>                         filter_globs = _suites_from_test_list(tests)
+>                         # Apply the test-part of the user's glob, if present.
+>                         if '.' in request.filter_glob:
+> --
+> 2.25.1
+>
+
+--0000000000007ca4a805f2ac43a0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBc
+Hee2zGQkbKY++RPOkOwGHwW2Zo6Gzl9RuGezlAHKVjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjAwNjM2MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAg30BpaJZJKfObeSMb/5W
+C2xKu7zwz+66LYk/e0mXJVXBEXpwJEcby751gFFNv5bkYlq4UvhdMncAh9l8vThQfY3+Wv02IVNL
+8L2UOVgzoJ0NkcV+vT+8zequQJ2k/sGlUo6kk3yJNx8avJa0njvXr4RNdNm4RgUg5gzs6+WuKtz1
+MhipZeHdGTpl5QMOcT7uYfrSwFnn92RBL12dHYd8Ni64A+VlwLQFr0ohTeLT9PRUk0chJ97g2qpA
+sP5K1to6u7TJNW/K1wgi5IvTSvUhMtfVmsERkNNtevy6Zn+3q+4QE5hmomdtS6xS2DZmaO5zjI7E
+fhpa8/GbYRR7PRC1LQ==
+--0000000000007ca4a805f2ac43a0--
