@@ -2,184 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537FA675339
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3D2675347
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjATLOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S229741AbjATLPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjATLOD (ORCPT
+        with ESMTP id S229575AbjATLP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:14:03 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68344F36C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:13:36 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NyxVk0bH2z9v7Zh
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 19:05:34 +0800 (CST)
-Received: from [10.48.133.21] (unknown [10.48.133.21])
-        by APP1 (Coremail) with SMTP id LxC2BwD3fQk1d8pjwwSxAA--.5799S2;
-        Fri, 20 Jan 2023 12:13:05 +0100 (CET)
-Message-ID: <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
-Date:   Fri, 20 Jan 2023 12:12:50 +0100
+        Fri, 20 Jan 2023 06:15:27 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4D83584;
+        Fri, 20 Jan 2023 03:15:26 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CD80A660230B;
+        Fri, 20 Jan 2023 11:15:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674213324;
+        bh=CASdzRtoHYplP6yd6/mt/6hm04+ftfOht/MoW2dAnK8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YaLvVsczluXVfnE14rTAqsOFML8ibEN1/3WdsV84rBmyv56rm0yhbjdLUhD+eXUI3
+         yKn2Ye+ICWEX+swXtC8nTyojSyi5j8aVZuPYvhCHx1sWbnW1CWR4J/WG6G5TcHOWq+
+         13fRRh3EqjgwoQo7KnaqPqj0ur/D2OH2xexc1gB7gf/Hlbt7rT5ZQgwX6J3xN0YQdo
+         SrTxkQ28Dw8AuQNXaTwK75BGopNLRf82Lq2KW9Jw2yZz9otY2jWkfw+0AnSgNmiMk3
+         /A+CAQqcuPdlo4xosz+MWz7duPvfGPQgBCRsPxfwYxeslWq4G5I77YLn6dGajAqHo7
+         NKDsK9qZMT2Aw==
+Message-ID: <1e924d3b-1283-b9f9-d2a0-0e42db656d4e@collabora.com>
+Date:   Fri, 20 Jan 2023 12:15:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
- <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
- <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
- <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
- <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 3/3] drm: Convert users of drm_of_component_match_add
+ to component_match_add_of
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, Jyri Sarha <jyri.sarha@iki.fi>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        John Stultz <jstultz@google.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Samuel Holland <samuel@sholland.org>,
+        Sean Paul <sean@poorly.run>, Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        etnaviv@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20230119191040.1637739-1-sean.anderson@seco.com>
+ <20230119191040.1637739-4-sean.anderson@seco.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230119191040.1637739-4-sean.anderson@seco.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3fQk1d8pjwwSxAA--.5799S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar1fWr4DKF43Jr43WF4Uurg_yoW7Kr47pF
-        WrKan7Kw4qyr1v9wnFyws5Xr1Iyw4rJryrJrn8Gr1rA398W3sF9r1rtr45uF9rCrs2yayY
-        vrWrZasxZrn8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUFDGOUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 19/01/23 20:10, Sean Anderson ha scritto:
+> Every user of this function either uses component_compare_of or
+> something equivalent. Most of them immediately put the device node as
+> well. Convert these users to component_match_add_of and remove
+> drm_of_component_match_add.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> Acked-by: Jyri Sarha <jyri.sarhaı@iki.fi>
+> Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
 
+For MediaTek mtk_drm_drv:
 
-On 1/19/2023 9:06 PM, Alan Stern wrote:
-> On Thu, Jan 19, 2023 at 04:05:38PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/19/2023 4:13 AM, Alan Stern wrote:
->>> On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
->>>> On 1/18/2023 8:52 PM, Alan Stern wrote:
->>>>> On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
->>>>>> -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
->>>>>> -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
->>>>>> -		fencerel(After-unlock-lock) ; [M])
->>>>>> +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
->>>>> Shouldn't the po case of (co | po) remain intact here?
->>>> You can leave it here, but it is already covered by two other parts: the
->>>> ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
->>>> ppo, and the ordering given through pb is covered by its inclusion in
->>>> strong-order.
->>> What about the ordering given through
->>> A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
->>> superseded by pb as well,
->> Indeed, in fact all of A-cumul(strong-fence) is already covered through pb.
->>> but it seems odd not to have it in hb.
->>> In general, the idea in the memory model is that hb ordering relies on
->>> the non-strong properties of fences, whereas pb relies on the properties
->>> of strong fences, and rb relies on the properties of the RCU fences.
->> I agree in the sense that all strong-ordering operations are A-cumulative
->> and not including them in A-cumul is weird.
->
->> On the other side  the model becomes a tiny bit smaller and simpler when all
->> ordering of prop;strong-ordering goes through a single place (pb).
->>
->> If you want, you could think of the A-cumulativity of strong ordering
->> operations as being a consequence of their strong properties. Mathematically
-> That's backward logic.  Being strong isn't the reason the fences are
-> A-cumulative.  Indeed, the model could have been written not to assume
-> that strong fences are A-cumulative.
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-It's not just the model, it's also how strong fences are introduced in 
-the documentation.
-I agree though that you could decouple the notion of strong from 
-A-cumulativity.
-But would anyone want a strong fence that is not A-cumulative?
-It's a bit like asking in C11 for a barrier that has the sequential 
-consistency guarantee of appearing in the global order S, but doesn't 
-have release or acquire semantics. Yes you could define that, but would 
-it really make sense?
-
-
->>>>>> @@ -91,8 +89,12 @@ acyclic hb as happens-before
->>>>>>     (* Write and fence propagation ordering *)
->>>>>>     (****************************************)
->>>>>> -(* Propagation: Each non-rf link needs a strong fence. *)
->>>>>> -let pb = prop ; strong-fence ; hb* ; [Marked]
->>>>>> +(* Strong ordering operations *)
->>>>>> +let strong-order = strong-fence | ([M] ; po-unlock-lock-po ;
->>>>>> +		[After-unlock-lock] ; po ; [M])
->>>>> This is not the same as the definition removed above.  In particular,
->>>>> po-unlock-lock-po only allows one step along the locking chain -- it has
->>>>> rf where the definition above has co.
->>>> Indeed it is not, but the subsequent lock-unlock sequences are in hb*. For
->>>> this reason it can be simplified to just consider the directly following
->>>> unlock().
->>> I'm not sure that argument is right.  The smp_mb__after_unlock_lock
->>> needs to go after the _last_ lock in the sequence, not after the first.
->>> So you don't have to worry about subsequent lock-unlock sequences; you
->>> have to worry about preceding lock-unlock sequences.
->> I formalized a proof of equivalence in Coq a few months ago, but I was
->> recalling the argument incorrectly from memory.
->> I think the correct argument is that the previous po-unlock-lock-po form a
->> cumul-fence*;rfe;po sequence that starts with a po-rel.
->> so any
->>      prop; .... ; co ; ... ; this fence ;...
->> can be rewritten to
->>      prop; cumul_fence* ; po-unlock-lock-po ; this fence ;...
->> and because the the first cumul-fence here needs to start with po-release,
->> the prop ;cumul-fence* can be merged into a larger prop, leaving
->>      prop; po-unlock-lock-po ; this fence ;...
-> This may be so, but I would like to point out that the memory model was
-> not particularly designed to be as short or as simple as possible, but
-> more to reflect transparently the intuitions that kernel programmers
-> have about the ways ordering should work in the kernel.  It may very
-> well include redundancies as a result.  I don't think that's a bad
-> point.
-
-I agree that sometimes redundancies have value. But I think having, 
-where possible, a kind of minimal responsibility principle where each 
-fence appears in as few relations as possible also has value.
-I've seen that when I try to help people in my team learn to use LKMM: 
-they see a specific type of fence and get stuck for a while chasing one 
-of its uses. For example, they may chase a long prop link using the only 
-strong fence in the example somewhere in the middle, which will then 
-later turn out to be a dead-end because what they need to use is pb.
-
-For someone who doesn't know that we never need to rely on that use to 
-get ordering, it basically doubles the amount of time spent looking at 
-the graph and chasing definitions. And for very good reasons there 
-already are alot of definitions even when redundancies are eliminated.
-
-Perhaps I would say that including these redundancies is good for 
-understanding why the formalization makes sense, but excluding them is 
-better for actually using the formalization.
-This includes both when looking at code while having a printout of the 
-model next to you, but also when trying to reason about LKMM itself 
-(e.g., what one might do when changes are made to LKMM and one wants to 
-check that they interact well with the existing parts of LKMM).
-
-I think in the long term, increasing the usability is more important 
-than the obvious correctness. But maybe I'm biased because I'm mostly on 
-the user side of LKMM :D
 
