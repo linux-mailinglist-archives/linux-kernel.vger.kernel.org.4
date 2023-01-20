@@ -2,70 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F421674BFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E37674BFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjATFSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:18:38 -0500
+        id S231365AbjATFTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:19:03 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjATFSV (ORCPT
+        with ESMTP id S231221AbjATFSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:18:21 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5BCDF957;
-        Thu, 19 Jan 2023 21:07:32 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o17-20020a05600c511100b003db021ef437so2812082wms.4;
-        Thu, 19 Jan 2023 21:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HhMPVNs8pc5Gcf/TDLS+cJfOurg6Vice8ut9+SSmMY8=;
-        b=lPBcCni7LAwqOkrg3tNCH8jOSMnkyLgfAXhdSPuWk9jqGAy9XkKAhwTW8VXN/9cXFV
-         /EN0DPv42as4B6vtPxwtHVBwWplBaFE/xI5qQE1NXH2AxyMx+9gxLM6ptWd4KJEHRmzb
-         PWErnbqiYuGQMwvJmYfqM0L2mhGwa+odHughUHnkGdEyq6xKmjaDieso4h0auyn1xV0/
-         lBCEyQlbbCtZSbCcG8TVIhyA7/s3F7B1TPz8ZVSzu0Eb+ilsNuvhPuFTvNLaf5EP+9e8
-         SOaQlWzjm95h2IVLfV4LSD8eAOj5Q8/S5SKJDdPTZEuZbGPPrCSjmErCocWV6VcxF625
-         40sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HhMPVNs8pc5Gcf/TDLS+cJfOurg6Vice8ut9+SSmMY8=;
-        b=aCsddHc2ydYxmY8WAPB7NdvGA8XCFIBJveipTumBJ6rzR9qoozt9dQ7k1IJHk7vn2j
-         9tnu1HUxV8W4/xY89Y4pFiTemdLQlRpSGU7/Q0I8sSPzSl20ZV9CLXSfhtTPPUcjbhRB
-         Q5koJG+d+kSt3M+rZCiHy/yC2X+4ZiYj3fy7HrzdtfUUAPYkN3iNWRvB5eLj551aAzId
-         9WzFaaJl2m1qzWuOGG3t3oFY0EBh7XqIqeU65VwllOvk2xVPb1R5E4nKRqqkdFiomRX3
-         slzHWcSR2IMCktAd/zict30VP4EBBCbt6N6M1zdAoO7L41Vy5z9idvK6ADSFeHHGrw3/
-         c0lg==
-X-Gm-Message-State: AFqh2koPFMCfXugtjvPuTLSSBEw2dP8n0x4lXLtgC9HeGxqIB6znShS1
-        wzQXP+bubcKz3r07xfX2mwxGJqTAiZbUTw==
-X-Google-Smtp-Source: AMrXdXuIRvrqtfIdcYDBTulA2LssPIlvNF6wzU/SosHvPjy1IlAsQclQWt+6yA36sTmWOi1wqynaYg==
-X-Received: by 2002:a05:600c:3412:b0:3da:f678:1d47 with SMTP id y18-20020a05600c341200b003daf6781d47mr12556081wmp.14.1674191250364;
-        Thu, 19 Jan 2023 21:07:30 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x15-20020a05600c188f00b003db122d5ac2sm1036738wmp.15.2023.01.19.21.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 21:07:29 -0800 (PST)
-Date:   Fri, 20 Jan 2023 08:07:26 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     gregkh@linuxfoundation.org, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Gaurav Pathak <gauravpathak129@gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: Fix some endian problems
-Message-ID: <Y8ohjkgNjyQPD+Dd@kadam>
-References: <20230119191219.12080-1-Larry.Finger@lwfinger.net>
+        Fri, 20 Jan 2023 00:18:36 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AF185360;
+        Thu, 19 Jan 2023 21:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=g/TYi0LB0LucaQ9Jt/Zfn/ruUAjCWhwXHm/cIx9iKKI=; b=MA/iuuf4iMjeYtuAHKwoM2MYx9
+        7PcVfgg/wTBfnv68t3jrBAZfi2WWE3wARYXliZxVXkh+4+LEf0AhmW+E9BsP2hNLVN+gQHmKjATGr
+        O2ZlcE2H9MV6PYHu5oWKo0TGQdfL83CfZtpki0QjrYT7W8jpq50t5DiFvZZWU38C/pKuPjVmwtgX9
+        D1vzxHMw70EYzvNynDowQsCR3OkEy4BH5fpvEGA5iWSQ0hJbjMXC/QG6eq6BMoQ3eEwFOspbfYt3V
+        cPELBST0kyhHzzpjrPHY9LCJpNMEOAiJJh5G6KgvExA2I5tEVIz3FIj9Dt3v5sWFzwdbCM/ilkxY3
+        cATIMMuQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pIjcy-002vbe-0X;
+        Fri, 20 Jan 2023 05:07:48 +0000
+Date:   Fri, 20 Jan 2023 05:07:48 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v3 4/4] fs/sysv: Replace kmap() with kmap_local_page()
+Message-ID: <Y8ohpDtqI8bPAgRn@ZenIV>
+References: <20230119153232.29750-1-fmdefrancesco@gmail.com>
+ <20230119153232.29750-5-fmdefrancesco@gmail.com>
+ <Y8oWsiNWSXlDNn5i@ZenIV>
+ <Y8oYXEjunDDAzSbe@casper.infradead.org>
+ <Y8ocXbztTPbxu3bq@ZenIV>
+ <Y8oem+z9SN487MIm@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119191219.12080-1-Larry.Finger@lwfinger.net>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y8oem+z9SN487MIm@casper.infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:12:19PM -0600, Larry Finger wrote:
-> Sparse lists the following warnings:
-> 
->   CHECK   drivers/staging/r8188eu/core/rtw_mlme.c
-> drivers/staging/r8188eu/core/rtw_mlme.c:1197:49: warning: incorrect type in
-> 					 argument 2 (different base types)
-> drivers/staging/r8188eu/core/rtw_mlme.c:1197:49:    expected restricted
-> 					 __le16 [usertype] mstatus_rpt
-> drivers/staging/r8188eu/core/rtw_mlme.c:1197:49:    got unsigned short
-> 					 [assigned] [usertype] media_status_rpt
-> drivers/staging/r8188eu/core/rtw_mlme.c:1275:57: warning: incorrect type in
-> 					 argument 2 (different base types)
-> drivers/staging/r8188eu/core/rtw_mlme.c:1275:57:    expected restricted
-> 					 __le16 [usertype] mstatus_rpt
-> drivers/staging/r8188eu/core/rtw_mlme.c:1275:57:    got unsigned short
-> 					 [assigned] [usertype] media_status
->   CHECK   drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58: warning: incorrect type
-> 					 in argument 2 (different base types)
-> drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58:    expected restricted
-> 					 __le16 [usertype] mstatus_rpt
-> drivers/staging/r8188eu/core/rtw_mlme_ext.c:6842:58:    got unsigned short
-> 					 [assigned] [usertype] media_status
-> 
-> The second argument of rtl8188e_set_FwMediaStatus_cmd() needs to be in CPU
-> order, not little-endian; however, when it uses that value to call
-> FillH2CCmd_88E() the parameter must be in little-endian order as that
-> value will be sent to the firmware. Note that the conversion from LE to CPU
-> order was le16_to_cpu() rather than the correct cpu_to_le16.
-> 
-> The definition of FillH2CCmd_88E() is revised, and the proper conversion
-> routine is used.
-> 
-> Note that the original code performed one byte swap on the secong argument
-> of FillH2CCmd_88E(), and got the correct answer even though the semantics
-> were very wrong.
-> 
-> Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
-> Reportewd-by: Gaurav Pathak <gauravpathak129@gmail.com>
-         ^
-Extra 'w'.
+On Fri, Jan 20, 2023 at 04:54:51AM +0000, Matthew Wilcox wrote:
 
-Reviewed-by: Dan Carpenter <error27@gmail.com>
+> > Sure, but... there's also this:
+> > 
+> > static inline void __kunmap_local(const void *addr)
+> > {
+> > #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+> >         kunmap_flush_on_unmap(addr);
+> > #endif
+> > }
+> > 
+> > Are you sure that the guts of that thing will be happy with address that is not
+> > page-aligned?  I've looked there at some point, got scared of parisc (IIRC)
+> > MMU details and decided not to rely upon that...
+> 
+> Ugh, PA-RISC (the only implementor) definitely will flush the wrong
+> addresses.  I think we should do this, as having bugs that only manifest
+> on one not-well-tested architecture seems Bad.
+> 
+>  static inline void __kunmap_local(const void *addr)
+>  {
+>  #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+> -       kunmap_flush_on_unmap(addr);
+> +       kunmap_flush_on_unmap(PAGE_ALIGN_DOWN(addr));
+>  #endif
+>  }
 
-regards,
-dan carpenter
-
+PTR_ALIGN_DOWN(addr, PAGE_SIZE), perhaps?
