@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F0D6748F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4A96748FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjATBkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S229623AbjATBmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:42:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjATBkV (ORCPT
+        with ESMTP id S229449AbjATBmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:40:21 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CB79EE24
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:40:19 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id lp10so804465pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:40:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lg0CzDuQy4V1JV2pIlemk74MHa85PjPJTHngrqfHjrE=;
-        b=ImZO6fhqVqvCqs7rXFaCOuWNTnnC9RvQXYi9jvRLJEucdXDUti7JkfHu8O7Jl0o1GR
-         +2I8c9hfOjkyjtdGDJYnmeqRq+CZCntKqF/JgZKW3QCMWkTkodvRvyA6NehFi/fNR3JR
-         q5vS5fZwKy7YcH0ChMeMVdcGr2HFhMgWJGSw7hGGFEgmghvWJ4WYsqA5bnIfUDAJCoDP
-         FwTqdndfEXhPnjjsPP00SboMIZGbc8abyDGrB7OwQri1BMYBF6e1DCtOrs+y4cyJKnkf
-         g7z3MLrTGb9cTVHMZQkXmHC6qF610iMQCpr0zmjZ3iQ16ASnhWUzl5F9fg94FHRmVKaR
-         DpJA==
+        Thu, 19 Jan 2023 20:42:49 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A857241D9;
+        Thu, 19 Jan 2023 17:42:48 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-15ebfdf69adso4812101fac.0;
+        Thu, 19 Jan 2023 17:42:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lg0CzDuQy4V1JV2pIlemk74MHa85PjPJTHngrqfHjrE=;
-        b=i1NQ+PISgEvjH9xXutcmL6w2s0wJnPW/vZ3GSmyY0og3pWIwPxnxDksyHLOWWPxxq2
-         KXx//JGdtDurAxtXVpiPHRAKlJruIgpRiR3IZUvSRe9w+dF/zVu/9K664sR54n0OTC0i
-         WeDqBaLPbgrV3j8VNsILbQQYDDYkEIrf5j4RSdS404UQAv2c5EycjtyZfczNgN7q/YTd
-         tzdc5kS1qJYOXON/uPqRNdcD3tXSizDKekgyQR/qhW/43mqSRI3X9AFDlXdfgNHL0Wav
-         ZLoTBid2ng7lyT6OIpo70BuS8aeyoiW90X8ZJJZey+x7bn4lbD4bPFHpx67OP0ckz18Z
-         bEsg==
-X-Gm-Message-State: AFqh2kpM/4VqLcB19rRwAyOMzsOQEWfT5dTj3jMxzm1oaWO5NQTuc4tU
-        vr5c6obvf5pZQ0GkFLyCrxIg8g==
-X-Google-Smtp-Source: AMrXdXvcVM2ifx1QliZxHIX+7OmGHQVLmRwBNhn73tk9W4ClFQY0b1V9fyA2FC+YR1J/ddz+yLlbqQ==
-X-Received: by 2002:a17:902:eb45:b0:189:6624:58c0 with SMTP id i5-20020a170902eb4500b00189662458c0mr10964pli.3.1674178818663;
-        Thu, 19 Jan 2023 17:40:18 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 35-20020a631563000000b0044ed37dbca8sm21340893pgv.2.2023.01.19.17.40.18
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=as+rQjD2NZ3DjEqEhhTfL/YL43Qzpn7OODvQ14Hgoao=;
+        b=TabqGPJ0CZi/7pXLhLTdnkMBbulK/PTU2Y+AAw8TlmqkuSE26YN0Raq0hwdjOCTw8w
+         14rGBSkidmeGaw6UEocsxyeunawrj74CPOFHrs0qkXmnh8/+xHX32c7KRHDqa7XBuHgG
+         7JPAEnoX4AkuQfuZ7v0QmerNwctoDY79iTVDGdWHxM5r52C5zype6BhrdbfvtkJWJPj5
+         BW74b7IZ8qusDanuBx5xKMYz5v0e4T2PXltI7lDtg7tkO/7bn4nKgzVWt0ofngFMXwXi
+         a63QLX/lLlNIVX6cqcfBJi2XsJcEQ7U5LS9ArMuXjJVPdg4k5s0MesK/2XdurhZqYspk
+         XOHQ==
+X-Gm-Message-State: AFqh2kq02Qtr6PjwfNnh25CkNQXzQBSg8WkoN1cj/HauBzZk0OvBzehZ
+        nA52Gs9ht+LBR9dC/iq1sw==
+X-Google-Smtp-Source: AMrXdXsM9AZbNsCKYgA8AuWsupP+79dgYDwWdAfNytrMN/0DIevmyZ0n7VR7h55OmNZ593idK0tMFQ==
+X-Received: by 2002:a05:6870:1690:b0:15f:c9d7:a974 with SMTP id j16-20020a056870169000b0015fc9d7a974mr144156oae.13.1674178967351;
+        Thu, 19 Jan 2023 17:42:47 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v11-20020a056870310b00b00144e6ffe9e5sm4568117oaa.47.2023.01.19.17.42.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 17:40:18 -0800 (PST)
-Date:   Fri, 20 Jan 2023 01:40:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/7] x86/cpu, kvm: Support AMD Automatic IBRS
-Message-ID: <Y8nw/XLTpKhKbbdX@google.com>
-References: <20230116230159.1511393-1-kim.phillips@amd.com>
- <Y8aMiH74WFmVM5Rk@zn.tnic>
+        Thu, 19 Jan 2023 17:42:46 -0800 (PST)
+Received: (nullmailer pid 3131597 invoked by uid 1000);
+        Fri, 20 Jan 2023 01:42:43 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8aMiH74WFmVM5Rk@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     robh+dt@kernel.org, alistair@popple.id.au,
+        krzysztof.kozlowski+dt@linaro.org, jk@ozlabs.org,
+        linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, joel@jms.id.au
+In-Reply-To: <20230119174714.1486042-2-eajames@linux.ibm.com>
+References: <20230119174714.1486042-1-eajames@linux.ibm.com>
+ <20230119174714.1486042-2-eajames@linux.ibm.com>
+Message-Id: <167417887833.3129440.15631417350339748655.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: fsi: Document the IBM I2C Responder
+ virtual FSI master
+Date:   Thu, 19 Jan 2023 19:42:43 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023, Borislav Petkov wrote:
-> On Mon, Jan 16, 2023 at 05:01:52PM -0600, Kim Phillips wrote:
-> 
-> > Kim Phillips (7):
-> >   x86/cpu, kvm: Add support for cpuid leaf 80000021/EAX (FeatureExt2Eax)
-> >   x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
-> >   x86/cpu, kvm: Move the LFENCE_RDTSC / LFENCE always serializing
-> >     feature
-> >   x86/cpu, kvm: Add the Null Selector Clears Base feature
-> >   x86/cpu, kvm: Add the SMM_CTL MSR not present feature
-> >   x86/cpu: Support AMD Automatic IBRS
-> >   x86/cpu, kvm: Propagate the AMD Automatic IBRS feature to the guest
-> > 
-> >  Documentation/admin-guide/hw-vuln/spectre.rst |  6 ++--
-> >  .../admin-guide/kernel-parameters.txt         |  6 ++--
-> >  arch/x86/include/asm/cpufeature.h             |  7 +++--
-> >  arch/x86/include/asm/cpufeatures.h            | 11 +++++--
-> >  arch/x86/include/asm/disabled-features.h      |  3 +-
-> >  arch/x86/include/asm/msr-index.h              |  2 ++
-> >  arch/x86/include/asm/required-features.h      |  3 +-
-> >  arch/x86/kernel/cpu/amd.c                     |  2 +-
-> >  arch/x86/kernel/cpu/bugs.c                    | 20 ++++++++-----
-> >  arch/x86/kernel/cpu/common.c                  | 22 +++++++++-----
-> >  arch/x86/kvm/cpuid.c                          | 30 +++++++------------
-> >  arch/x86/kvm/reverse_cpuid.h                  |  1 +
-> >  arch/x86/kvm/svm/svm.c                        |  3 ++
-> >  arch/x86/kvm/x86.c                            |  3 ++
-> >  14 files changed, 71 insertions(+), 48 deletions(-)
-> 
-> KVM folks,
-> 
-> I'm going to route this through the tip tree, along with the KVM bits.
-> 
-> Holler if we should do something else to avoid any potential conflicts.
 
-Sorry, completely missed this.
+On Thu, 19 Jan 2023 11:47:13 -0600, Eddie James wrote:
+> The I2C Responder translates I2C commands to CFAM or SCOM operations,
+> effectively implementing an FSI master.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  .../devicetree/bindings/fsi/ibm,i2cr.yaml     | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml
+> 
 
-There will be a minor conflict in KVM's reverse_cpuid, but it's trivial to resolve.
-I don't anticipate any other conflicts, so taking this through tip does seem like
-the best option.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-If possible, a new version to fix the bisection issues in patches 2 and 3 would
-be nice, but again it's not a big deal.  The breakage is very, very minor.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:23:4: [error] syntax error: expected <block end>, but found '<block mapping start>' (syntax)
+./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:24:5: [warning] wrong indentation: expected 5 but found 4 (indentation)
+./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:33:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
+
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/fsi/ibm,i2cr.example.dts'
+Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:23:4: did not find expected key
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/fsi/ibm,i2cr.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml:23:4: did not find expected key
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/fsi/ibm,i2cr.yaml: ignoring, error parsing file
+make: *** [Makefile:1508: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230119174714.1486042-2-eajames@linux.ibm.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
