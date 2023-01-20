@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E05E675BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30482675BE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjATRpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S230337AbjATRp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjATRpX (ORCPT
+        with ESMTP id S230017AbjATRpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:45:23 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D42E58645
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:45:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674236715; x=1705772715;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DSu0aN1TgXR0l0onAvsmRPT0y3KxHhLoPrGtqtOamOo=;
-  b=GOcXV+ZvwHxNWJW7OWaiROKInXIgcn1+yLcESvAJnLKnl7eHCoRKPKDD
-   dXHbYLEdvygqsg7fDvWIwq3KZO3vto6V+sNy9JYHz8P/rwoM2SvsV2lZh
-   ozNk921s3pMh+n+xL1/+0KV9EJa8G+9E19mMfzTCLU2FLu9b3af7umnNa
-   6mlu9ZAM54Wi1Syqbte4rbAzpj30N2Lz/LB5dAaTCg29PJPyrP47n0jBb
-   A9Ezxg8u8SsS/TCDzHJU+N4tP83N8DrkW1xP+ZE/ug+EGRtnFDkZ3a0P/
-   h5h6Y4ED0u//d3rVifEGRTVUehtppHeJc5Bl2twpkvnIYsdoM+g1Fkqiq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="411872609"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="411872609"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 09:45:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="729186851"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="729186851"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Jan 2023 09:45:13 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIvRw-0002l8-3A;
-        Fri, 20 Jan 2023 17:45:12 +0000
-Date:   Sat, 21 Jan 2023 01:45:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miles Chen <miles.chen@mediatek.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/sparse.c:347:27: warning: unused function 'pgdat_to_phys'
-Message-ID: <202301210155.1E5zABb5-lkp@intel.com>
+        Fri, 20 Jan 2023 12:45:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B18564BA;
+        Fri, 20 Jan 2023 09:45:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBD80B829B0;
+        Fri, 20 Jan 2023 17:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62276C433D2;
+        Fri, 20 Jan 2023 17:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674236718;
+        bh=e6PleI4womWUZ/YrAl55kcVrHbcX4H86kmzJS3pQ0GI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=hV1RRoO6H7wPJdSLm7fL6s+B8oQkamq0JC/ItVIdhQFZOZl1C3bPStEqrgDDDyZSM
+         aW3mSFqX5Au9v40YCDf+ntMCNOxiw/WK0WPiosPPbe7Rb5vJbjKa72PZpFUxoBYek5
+         YUhwi8l6XgJHrhE9ZoG/S49ZBSikof0c1ykC0kholtLO0amUG4/7YN1OlOIk4nGF3s
+         lBDiN4ui70j2/7AJHNiXHRVmRuuFayjdxzbQMsWyQY9gk7IFMHnvgmFHVhZtfPodtW
+         VVir9i91Wdms3b3ylSdJL1x/wxu7xYctgtljwdzUCaHZnKpTFtZxZM4ellsm77QzBV
+         JCUuCufD7F7TQ==
+Date:   Fri, 20 Jan 2023 18:45:19 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Takahiro Fujii <fujii@xaxxi.net>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: elecom: add support for TrackBall 056E:011C
+In-Reply-To: <20230119183002.352852-1-fujii@xaxxi.net>
+Message-ID: <nycvar.YFH.7.76.2301201844460.1734@cbobk.fhfr.pm>
+References: <20230119183002.352852-1-fujii@xaxxi.net>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d368967cb1039b5c4cccb62b5a4b9468c50cd143
-commit: ccbd6283a9b640c8d5c2b44db318fd72a63338ff mm/sparse: fix check_usemap_section_nr warnings
-date:   1 year, 7 months ago
-config: x86_64-randconfig-a003-20230116 (https://download.01.org/0day-ci/archive/20230121/202301210155.1E5zABb5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccbd6283a9b640c8d5c2b44db318fd72a63338ff
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ccbd6283a9b640c8d5c2b44db318fd72a63338ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri, 20 Jan 2023, Takahiro Fujii wrote:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> Make function buttons on ELECOM M-HT1DRBK trackball mouse work. This model
+> has two devices with different device IDs (010D and 011C). Both of
+> them misreports the number of buttons as 5 in the report descriptor, even
+> though they have 8 buttons. hid-elecom overwrites the report to fix them,
+> but supports only on 010D and does not work on 011C. This patch fixes
+> 011C in the similar way but with specialized position parameters.
+> In fact, it is sufficient to rewrite only 17th byte (05 -> 08). However I
+> followed the existing way.
 
-All warnings (new ones prefixed by >>):
+Applied, thanks.
 
->> mm/sparse.c:347:27: warning: unused function 'pgdat_to_phys' [-Wunused-function]
-   static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
-                             ^
-   1 warning generated.
+> Signed-off-by: Takahiro Fujii <fujii@xaxxi.net>
+> ---
+>  drivers/hid/hid-elecom.c | 16 ++++++++++++++--
+>  drivers/hid/hid-ids.h    |  3 ++-
+>  drivers/hid/hid-quirks.c |  3 ++-
+>  3 files changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-elecom.c b/drivers/hid/hid-elecom.c
+> index e59e9911fc37..4fa45ee77503 100644
+> --- a/drivers/hid/hid-elecom.c
+> +++ b/drivers/hid/hid-elecom.c
+> @@ -12,6 +12,7 @@
+>   *  Copyright (c) 2017 Alex Manoussakis <amanou@gnu.org>
+>   *  Copyright (c) 2017 Tomasz Kramkowski <tk@the-tk.com>
+>   *  Copyright (c) 2020 YOSHIOKA Takuma <lo48576@hard-wi.red>
+> + *  Copyright (c) 2022 Takahiro Fujii <fujii@xaxxi.net>
 
-
-vim +/pgdat_to_phys +347 mm/sparse.c
-
-   346	
- > 347	static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
-   348	{
-   349	#ifndef CONFIG_NEED_MULTIPLE_NODES
-   350		return __pa_symbol(pgdat);
-   351	#else
-   352		return __pa(pgdat);
-   353	#endif
-   354	}
-   355	
+A minor nit: next time please consider not adding copyright notice just 
+for device ID additions, we usually don't do that.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Jiri Kosina
+SUSE Labs
+
