@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DF3675C72
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E97675C75
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjATSI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S229620AbjATSKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjATSIZ (ORCPT
+        with ESMTP id S229524AbjATSKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:08:25 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87CB7B2DB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:08:23 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d14so1883264wrr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AYDLNXJWoiyDdXocdBDY3OI8vBR4rf1NLXYkAgc4tGo=;
-        b=c1FbpnPnGM7Xh3+EWEej3EnCU5G7+FyDKOQNB0HVGgm5J1F1a69x4YNugpan6qB52Y
-         eyUCebH67DjGaZnr1QiVRLiI8so9Dah2zqUR8eNk+rLAQB70S0Vv0aBxOP8CGUuM9wA0
-         uAKX4aNykJp4hb6DIVZC71uvGpWLSF6opNlbVuwa1ApVHK2UNmnM8H8c1vKfvM7OCLJu
-         coCCNZ32T9hZQPHB33Cw6i5D72IqGqnHlNNKmxm7fL9GG+RctqlFsGsRu6VYMOpZmAM+
-         +48zzMS+IqxjULEB+EaMbvZ9QJWnF7pzTFr/X7Wk5APiEf8NxbbiV0iwwBw80DMqJLrn
-         FAqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AYDLNXJWoiyDdXocdBDY3OI8vBR4rf1NLXYkAgc4tGo=;
-        b=qvdQ1+nY7VQ20GQGpVH3cNqOhj5t3Cu7cH7JrJhktJSmsMKWgifjjPBQce4wVhTcF0
-         Q+iyjljMii/UdW8KJJNelJNIQKIq6/hVL16jZTKT7X12Y0IPb6JJGgMoHFdem+1kyfkU
-         4EgQ4Lup+vcZGAn+YBX7LqLiAqZYSxCZDpFkq3/M+oMpB3tyc+uKhFUCJBU7BKeDV3oe
-         N7AI3ypgsWaNXWiCI2v+z1OZc+rZatCtU4NKd+usgFi7f9CpI4GYygD/HNEvuyZgC3Ej
-         KpHne1qW9CffxRHix5VrsGmA3i7uq1b3mfXJ1s0YQzgcdH3Xgj5WI3BkI6ny28ZkVTKe
-         HiYQ==
-X-Gm-Message-State: AFqh2koLvtDZboHN8GDCnsZK/UdjzH/oSjNEHaD2HzLojINsrY8q53pz
-        q73/YksRR5z1KjX5IkKSKOoEMA==
-X-Google-Smtp-Source: AMrXdXu5jlctrHfweOx4hVb1gm1jhsRmqdCjdEkgYjXhBx2MefSTOm5niiAzO/T6tIevf/LTpEkv2w==
-X-Received: by 2002:a5d:6a86:0:b0:2bb:e805:c1ef with SMTP id s6-20020a5d6a86000000b002bbe805c1efmr13602174wru.52.1674238102394;
-        Fri, 20 Jan 2023 10:08:22 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id r11-20020adff70b000000b002bdf290efdasm13809413wrp.58.2023.01.20.10.08.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 10:08:21 -0800 (PST)
-Message-ID: <e4468710-1336-847e-89e4-51c745a0a79b@linaro.org>
-Date:   Fri, 20 Jan 2023 19:08:20 +0100
+        Fri, 20 Jan 2023 13:10:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6A97B2D9;
+        Fri, 20 Jan 2023 10:10:03 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C8FCB5FBEC;
+        Fri, 20 Jan 2023 18:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674238201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hkN6PpdG4Lfy4P3q90hNQcwHa4prP8EZfXIbP4VPT1k=;
+        b=0kWIhRlhN7HnSu+SxpjJGtYLQu4XcH6zs4to/NIdHtBXBculzP4PLNMAV5+yc4d71dJUaG
+        oadi+rIkwbUZxynl0J1hzyIy902XaC9+Ri33hyLzl6K3hX/R36Pv7Q5Mvm2wRfdy2Y3xE+
+        w77XGUvo5bAgyWquH5lxT++OBk4wtBQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674238201;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hkN6PpdG4Lfy4P3q90hNQcwHa4prP8EZfXIbP4VPT1k=;
+        b=pMQoSUb2TTGqCwG6jJMv4mpI6i869ypvc5S+cATJNQF48NGzaXKIy5cpIl8JIQWeK4xXo0
+        FcS8/7i4aLHJ0eCA==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 9E25A2C141;
+        Fri, 20 Jan 2023 18:10:01 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        "Erhard F." <erhard_f@mailbox.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v3] of: Make of framebuffer devices unique
+Date:   Fri, 20 Jan 2023 19:09:57 +0100
+Message-Id: <20230120180958.30798-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <CAL_JsqKo+mdjA485KDb1ZauJcbOU-FR1G-Z2sYYNu7+Zn32wSA@mail.gmail.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 1/3] thermal/acpi: Add ACPI trip point routines
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
- <20230113180235.1604526-2-daniel.lezcano@linaro.org>
- <CAJZ5v0jDF9qrQAQM1AhT-Q4A3Nzyht9XxZoZyS1afoAPt1h_=A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jDF9qrQAQM1AhT-Q4A3Nzyht9XxZoZyS1afoAPt1h_=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Since Linux 5.19 this error is observed:
 
-Hi Rafael,
+sysfs: cannot create duplicate filename '/devices/platform/of-display'
 
+This is because multiple devices with the same name 'of-display' are
+created on the same bus.
 
-On 19/01/2023 14:15, Rafael J. Wysocki wrote:
+Update the code to create numbered device names for the non-boot
+disaplay.
 
-[ ... ]
+cc: linuxppc-dev@lists.ozlabs.org
+References: https://bugzilla.kernel.org/show_bug.cgi?id=216095
+Fixes: 52b1b46c39ae ("of: Create platform devices for OF framebuffers")
+Reported-by: Erhard F. <erhard_f@mailbox.org>
+Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+v3:
+- merge fix into original patch
+- Update the device name format
+- add missing const
+- do not continue with iterating display devices when formatting device
+  name fails
+---
+ drivers/of/platform.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
->> +static int thermal_acpi_get_temperature_object(struct acpi_device *adev,
->> +                                              char *object, int *temperature)
-> 
-> So this would become thermal_acpi_get_temp_object(). or even
-> thermal_acpi_get_temp() because it really returns the temperature
-> value.
-> 
-> I also don't particularly like returning values via pointers, which is
-> entirely avoidable here, because the temperature value obtained from
-> the ACPI control methods must be a positive number.
-> 
-> So I would make it
-> 
-> static int thermal_acpi_get_temp(struct acpi_device *adev, char *object_name)
-> {
-
-We are converting decikelvin -> millicelsius. Even it is very unlikely, 
-the result could be less than zero (eg. -1°C). We won't be able to 
-differentiate -ENODATA with a negative value, no ?
-
-In the future, it is possible we will have to deal with cold trip points 
-in order to warm a board. May be we should don't care for now ?
-
-
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 81c8c227ab6b..4d3a4d9f79f2 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -525,6 +525,9 @@ static int __init of_platform_default_populate_init(void)
+ 	if (IS_ENABLED(CONFIG_PPC)) {
+ 		struct device_node *boot_display = NULL;
+ 		struct platform_device *dev;
++		int display_number = 0;
++		char buf[14];
++		const char *of_display_format = "of-display.%d";
+ 		int ret;
+ 
+ 		/* Check if we have a MacOS display without a node spec */
+@@ -555,7 +558,10 @@ static int __init of_platform_default_populate_init(void)
+ 			if (!of_get_property(node, "linux,opened", NULL) ||
+ 			    !of_get_property(node, "linux,boot-display", NULL))
+ 				continue;
+-			dev = of_platform_device_create(node, "of-display", NULL);
++			ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
++			if (ret >= sizeof(buf))
++				return -EOVERFLOW;
++			dev = of_platform_device_create(node, buf, NULL);
+ 			if (WARN_ON(!dev))
+ 				return -ENOMEM;
+ 			boot_display = node;
+@@ -564,7 +570,10 @@ static int __init of_platform_default_populate_init(void)
+ 		for_each_node_by_type(node, "display") {
+ 			if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
+ 				continue;
+-			of_platform_device_create(node, "of-display", NULL);
++			ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
++			if (ret >= sizeof(buf))
++				break;
++			of_platform_device_create(node, buf, NULL);
+ 		}
+ 
+ 	} else {
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.35.3
 
