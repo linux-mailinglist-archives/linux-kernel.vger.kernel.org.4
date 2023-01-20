@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B47675157
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3070E67515C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjATJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S229999AbjATJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjATJiU (ORCPT
+        with ESMTP id S229657AbjATJjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:38:20 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A4B46701;
-        Fri, 20 Jan 2023 01:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674207491; x=1705743491;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=CrCPdp7DU2SR8H3wVBv22zVG9Do/L77hwFPlJuPD8FM=;
-  b=vo6pkY3W6yeu/JTrWVNIxX4nAPEi2Yv2Zl9MKaKYmPOAFIpfdXMzkwzw
-   V42jqvibhxwon5T/467luv8WK9nnpCQ2qysVGH8OXOROrhd25UNvfzcaI
-   OEqK18Nx33gspjPfXsP+67TZjCE7vJiuLTKklI95C4XtF8vlloziZJHJV
-   GRamAwbK9xMjB6+3Vqwm2j5dj3YvSq8sznKCovHRSocnHVVuZtpD1wBh8
-   b+Zz4usOXreNwevME6qR0skZlv0ome9VzELPNUkU4DElh9EIRqKJ5K4pI
-   kgRAw1b3esiFgsH47N58YQ0K796cbNjjjrY9MuX1b8H6G8BvsBPyYzNEA
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,231,1669100400"; 
-   d="scan'208";a="197602287"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 02:38:10 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 20 Jan 2023 02:38:09 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 02:38:06 -0700
-Message-ID: <878fd32f9315f587f34da544a67c9a2fb27e0f44.camel@microchip.com>
-Subject: Re: [PATCH net-next 7/8] net: microchip: sparx5: Add support for
- IS0 VCAP ethernet protocol types
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Dan Carpenter <error27@gmail.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Daniel Machon" <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Fri, 20 Jan 2023 04:39:13 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D51544BC6;
+        Fri, 20 Jan 2023 01:39:10 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pInrA-0002gP-SZ; Fri, 20 Jan 2023 10:38:44 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Date:   Fri, 20 Jan 2023 10:38:05 +0100
-In-Reply-To: <Y8pcyOn2tgscwO/A@kadam>
-References: <20230120090831.20032-1-steen.hegelund@microchip.com>
-         <20230120090831.20032-8-steen.hegelund@microchip.com>
-         <Y8pcyOn2tgscwO/A@kadam>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Markus Pargmann <mpa@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 2/2] dt-bindings: mmc: correct pwrseq node names
+Date:   Fri, 20 Jan 2023 10:38:43 +0100
+Message-ID: <2138388.Mh6RI2rZIc@diego>
+In-Reply-To: <20230120085722.171965-2-krzysztof.kozlowski@linaro.org>
+References: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
+ <20230120085722.171965-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRGFuLAoKT24gRnJpLCAyMDIzLTAxLTIwIGF0IDEyOjIwICswMzAwLCBEYW4gQ2FycGVudGVy
-IHdyb3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRh
-Y2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlCj4gY29udGVudCBpcyBzYWZlCj4gCj4gT24gRnJp
-LCBKYW4gMjAsIDIwMjMgYXQgMTA6MDg6MzBBTSArMDEwMCwgU3RlZW4gSGVnZWx1bmQgd3JvdGU6
-Cj4gPiArYm9vbCBzcGFyeDVfdmNhcF9pc19rbm93bl9ldHlwZShzdHJ1Y3QgdmNhcF9hZG1pbiAq
-YWRtaW4sIHUxNiBldHlwZSkKPiA+ICt7Cj4gPiArwqDCoMKgwqAgY29uc3QgdTE2ICprbm93bl9l
-dHlwZXM7Cj4gPiArwqDCoMKgwqAgaW50IHNpemUsIGlkeDsKPiA+ICsKPiA+ICvCoMKgwqDCoCBz
-d2l0Y2ggKGFkbWluLT52dHlwZSkgewo+ID4gK8KgwqDCoMKgIGNhc2UgVkNBUF9UWVBFX0lTMDoK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAga25vd25fZXR5cGVzID0gc3Bhcng1X3ZjYXBf
-aXMwX2tub3duX2V0eXBlczsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2l6ZSA9IEFS
-UkFZX1NJWkUoc3Bhcng1X3ZjYXBfaXMwX2tub3duX2V0eXBlcyk7Cj4gPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDCoMKgIGNhc2UgVkNBUF9UWVBFX0lTMjoKPiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAga25vd25fZXR5cGVzID0gc3Bhcng1X3ZjYXBfaXMy
-X2tub3duX2V0eXBlczsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2l6ZSA9IEFSUkFZ
-X1NJWkUoc3Bhcng1X3ZjYXBfaXMyX2tub3duX2V0eXBlcyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDCoMKgIGRlZmF1bHQ6Cj4gPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGJyZWFrOwo+IAo+IHJldHVybiBmYWxzZTsgdG8gYXZvaWQgYW4gdW5pbml0
-aWFsaXplZCAic2l6ZSIuCgpHb29kIGNhdGNoLiAgSSB3aWxsIHVwZGF0ZSB0aGF0Lgo+IAo+ID4g
-K8KgwqDCoMKgIH0KPiA+ICvCoMKgwqDCoCBmb3IgKGlkeCA9IDA7IGlkeCA8IHNpemU7ICsraWR4
-KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoa25vd25fZXR5cGVzW2lkeF0gPT0g
-ZXR5cGUpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1
-cm4gdHJ1ZTsKPiA+ICvCoMKgwqDCoCByZXR1cm4gZmFsc2U7Cj4gPiArfQo+IAo+IHJlZ2FyZHMs
-Cj4gZGFuIGNhcnBlbnRlcgoKVGhhbmtzIGZvciB0aGUgcmV2aWV3LgoKQlIKU3RlZW4KCgo=
+Am Freitag, 20. Januar 2023, 09:57:22 CET schrieb Krzysztof Kozlowski:
+> Node names should be generic and should not contain underscores.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml   | 2 +-
+>  Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml | 2 +-
+>  Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
+> index 911a5996e099..588be73168fa 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml
+> @@ -41,7 +41,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> -    sdhci0_pwrseq {
+> +    pwrseq {
+
+[applicable for all 3 examples]
+
+hmm, power-sequences are not necessarily tied to an address and I guess
+it will be very much a common case to have multiple ones on a system.
+
+So might it be better to follow other patterns (like leds) to number them
+or suggest a "foo-pwrseq" / "pwrseq-foo"?
+
+
+Heiko
+
+
+>        compatible = "mmc-pwrseq-emmc";
+>        reset-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
+> index 3397dbff88c2..b35e00e8c65e 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml
+> @@ -35,7 +35,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> -    wifi_pwrseq: wifi_pwrseq {
+> +    pwrseq {
+>        compatible = "mmc-pwrseq-sd8787";
+>        powerdown-gpios = <&twl_gpio 0 GPIO_ACTIVE_LOW>;
+>        reset-gpios = <&twl_gpio 1 GPIO_ACTIVE_LOW>;
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+> index 64e3644eefeb..00feaafc1063 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+> @@ -55,7 +55,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> -    sdhci0_pwrseq {
+> +    pwrseq {
+>        compatible = "mmc-pwrseq-simple";
+>        reset-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+>        clocks = <&clk_32768_ck>;
+> 
+
+
+
 
