@@ -2,154 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270BB674F4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7862D674F4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjATIT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S231146AbjATIVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjATITy (ORCPT
+        with ESMTP id S229529AbjATIVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:19:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6677778ABD;
-        Fri, 20 Jan 2023 00:19:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0346D61E58;
-        Fri, 20 Jan 2023 08:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653D1C433D2;
-        Fri, 20 Jan 2023 08:19:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674202792;
-        bh=wqlS1SJUUlepuHMf3N2ubc3zP0Vjh0qA869+ERCCBto=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IaaPCKvezrZDaVvtC8oyYhxbjTop/0pLYqePgwAYDu5PnJFDjcbnSHNXfjIyqFG5c
-         dWac5Sx1xfrFv9UOHTgsq0ytxNJGkaKPcuDcKWB8HusEG+65WTrx2bgjBBKf9rJvG8
-         neKyTbyCnBUxUmiz8Pgn3IQdluAhkEejWe+QVr+0/xgaMsM16YclUMdmQWNBxTC/F9
-         9v0pGaZZfAnPl1z8+zDXmZZo6M39AKDgSwDMsyrAP1WYMwuGEfSt6gi1gyUgNytey6
-         7mdSpW1daq+q+O7g/tcoaJ48crkUYy+Belvp/S4u2vjoae9rzvXcWFzQ5uNLvR3ONw
-         uNFQEQP1gwTSg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pImdJ-0007bc-QM; Fri, 20 Jan 2023 09:20:22 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] efi: drop obsolete efivars sysfs documentation
-Date:   Fri, 20 Jan 2023 09:19:33 +0100
-Message-Id: <20230120081933.29142-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.38.2
+        Fri, 20 Jan 2023 03:21:00 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFB14CE7C;
+        Fri, 20 Jan 2023 00:20:59 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id b10so4920061pjo.1;
+        Fri, 20 Jan 2023 00:20:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TWumMt67h30adlz6lQSPu1lCC0nb5fEUVVbRzQpjcvo=;
+        b=XBjIbyJ7l70xuIKKldJeINNaWQ8MoXJ2Y/IACHV3SKahghX1ofznCaFuqGW1pcNIrS
+         /mQX+uH0K7q9Z85U4Zg0+Nhfh9kvQVske4+pMpxH4+noV2FZqhlur1tMARaScb7+swgL
+         HP+ymXJohkaaOYNcvpqPxkFjADs7X2By3yuHk3nFAMRciZQP25ZKFHIi79Nzc8Q+sVN7
+         /Q2vJvKvy3qgGoi5RquanqEymtWxjCpnToEuU0rIlItKIRSRrLnwjoceRgGbiPKtyY8h
+         e7/hrk2T+i2IJfhBSHY1R++kGn+FX0Bhttu1kx/RuUDEPTse+DyMk6Fq8qa6EQC39VoW
+         Fz5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TWumMt67h30adlz6lQSPu1lCC0nb5fEUVVbRzQpjcvo=;
+        b=16IbEA985ZfSmQjjOgZPKBuqSU55VIRIQdfpSMB/ePNNZqvSp8dhEpjbFGFWo0QscB
+         Uy21xyFpBSkXOKGGc37KZ0ZPmEnfRIoJkLHIqisMCYb+AUAXXxnJ4pSZ401wbLh38Qw5
+         ViftVBWsbJBHVwH9QCbIW+UsNQysSjGTAL4BKv9oi0U/HEKBGL6L0ZKpA7rh65bwF4yu
+         tVuapYdYNR81ym/liLb7zNRZvabdVVlNPp4axRuJ87Op4KKH0vv+241XhNYWDPjT6/bx
+         OhEJ1cL1GALggJVUC3xecEwj/iG+N3nOkjY1maSbhfx3td29dKDqSzuRbs8qR/xB2KBZ
+         pSvA==
+X-Gm-Message-State: AFqh2kooVOl+r7auWUwhksPxWrZ9BoPLTjjFvHfyutZG8DwPrVAQaLQD
+        kwl7YEj7d3UkT6WI9cofd21+skbrHBQwgQ==
+X-Google-Smtp-Source: AMrXdXti1lKiCaXlNSRE2JW5nczFpDOhKStlFPEZ4CPRBcdvSua4WfixHLy18+8Z4IvbaX1P92mffA==
+X-Received: by 2002:a17:902:ba8b:b0:194:7227:84db with SMTP id k11-20020a170902ba8b00b00194722784dbmr14540982pls.37.1674202858751;
+        Fri, 20 Jan 2023 00:20:58 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-14.three.co.id. [180.214.232.14])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170903230800b001948107490csm11422906plh.19.2023.01.20.00.20.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 00:20:58 -0800 (PST)
+Message-ID: <2c19bec4-c4e7-7ac4-d612-27e531b1a022@gmail.com>
+Date:   Fri, 20 Jan 2023 15:20:51 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] docs: cgroup-v1: wrap charge moving deprecation in
+ warning block
+Content-Language: en-US
+To:     Linux CGroups <cgroups@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shakeel Butt <shakeelb@google.com>
+References: <20230106034836.23708-1-bagasdotme@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230106034836.23708-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The efivars sysfs interface was removed by commit 0f5b2c69a4cb ("efi:
-vars: Remove deprecated 'efivars' sysfs interface").
+On 1/6/23 10:48, Bagas Sanjaya wrote:
+> Commit 4ddb1a2aa1a3c4 ("docs: cgroup-v1: wrap remaining admonitions in
+> admonition blocks") in cgroups tree states that it also wraps charge
+> moving deprecation notice in admonition block (specifically warning).
+> However, the notice isn't in cgroups tree when the v2 of formatting
+> improv series [1] is submitted (and then applied), but rather in mm tree
+> instead.
+> 
+> Wrap the notice to fulfill the intention of referred commit.
+> 
 
-Remove also the corresponding sysfs ABI documentation.
+Ping?
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- .../ABI/stable/sysfs-firmware-efi-vars        | 79 -------------------
- 1 file changed, 79 deletions(-)
- delete mode 100644 Documentation/ABI/stable/sysfs-firmware-efi-vars
-
-diff --git a/Documentation/ABI/stable/sysfs-firmware-efi-vars b/Documentation/ABI/stable/sysfs-firmware-efi-vars
-deleted file mode 100644
-index 46ccd233e359..000000000000
---- a/Documentation/ABI/stable/sysfs-firmware-efi-vars
-+++ /dev/null
-@@ -1,79 +0,0 @@
--What:		/sys/firmware/efi/vars
--Date:		April 2004
--Contact:	Matt Domsch <Matt_Domsch@dell.com>
--Description:
--		This directory exposes interfaces for interactive with
--		EFI variables.  For more information on EFI variables,
--		see 'Variable Services' in the UEFI specification
--		(section 7.2 in specification version 2.3 Errata D).
--
--		In summary, EFI variables are named, and are classified
--		into separate namespaces through the use of a vendor
--		GUID.  They also have an arbitrary binary value
--		associated with them.
--
--		The efivars module enumerates these variables and
--		creates a separate directory for each one found.  Each
--		directory has a name of the form "<key>-<vendor guid>"
--		and contains the following files:
--
--		=============== ========================================
--		attributes:	A read-only text file enumerating the
--				EFI variable flags.  Potential values
--				include:
--
--				EFI_VARIABLE_NON_VOLATILE
--				EFI_VARIABLE_BOOTSERVICE_ACCESS
--				EFI_VARIABLE_RUNTIME_ACCESS
--				EFI_VARIABLE_HARDWARE_ERROR_RECORD
--				EFI_VARIABLE_AUTHENTICATED_WRITE_ACCESS
--
--				See the EFI documentation for an
--				explanation of each of these variables.
--
--		data:		A read-only binary file that can be read
--				to attain the value of the EFI variable
--
--		guid:		The vendor GUID of the variable.  This
--				should always match the GUID in the
--				variable's name.
--
--		raw_var:	A binary file that can be read to obtain
--				a structure that contains everything
--				there is to know about the variable.
--				For structure definition see "struct
--				efi_variable" in the kernel sources.
--
--				This file can also be written to in
--				order to update the value of a variable.
--				For this to work however, all fields of
--				the "struct efi_variable" passed must
--				match byte for byte with the structure
--				read out of the file, save for the value
--				portion.
--
--				**Note** the efi_variable structure
--				read/written with this file contains a
--				'long' type that may change widths
--				depending on your underlying
--				architecture.
--
--		size:		As ASCII representation of the size of
--				the variable's value.
--		=============== ========================================
--
--
--		In addition, two other magic binary files are provided
--		in the top-level directory and are used for adding and
--		removing variables:
--
--		=============== ========================================
--		new_var:	Takes a "struct efi_variable" and
--				instructs the EFI firmware to create a
--				new variable.
--
--		del_var:	Takes a "struct efi_variable" and
--				instructs the EFI firmware to remove any
--				variable that has a matching vendor GUID
--				and variable key name.
--		=============== ========================================
 -- 
-2.38.2
+An old man doll... just what I always wanted! - Clara
 
