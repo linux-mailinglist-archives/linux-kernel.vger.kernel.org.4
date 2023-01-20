@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F73F67511E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CDE675129
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjATJaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
+        id S230384AbjATJcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjATJaV (ORCPT
+        with ESMTP id S229924AbjATJb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:30:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E109A316C;
-        Fri, 20 Jan 2023 01:29:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 44980CE26E0;
-        Fri, 20 Jan 2023 09:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F75C433EF;
-        Fri, 20 Jan 2023 09:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674206955;
-        bh=brDlj3Fbi7upMkdhiJd32zzx8QN9gAkdfZZv5Lf1Gjo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W8j4vr4NyGHU0KDJCAMomXPRTzRsjAiZTqQWD6Pg/q4KJtPMNiiHpkTK+jnoLpOkN
-         RSuOb4UKU0XMvTOBt9Y3e0k3Xzr6Ulmuu/QGAyRY5tO/J/BWT3pC8ogKmyyiA9t0t7
-         93Ejw+NCYdBFUZcQZR8ublOTOx6Ok46g1ejvIP41mRxyAdRz392B6uQfrLS2RLa91d
-         GMkrM7DuGoSoB9qgNpnU1gxWIiU2HbY4KcvyzmZtBcK1GFT5wdmcYRR4Q3z+Vpxd32
-         aFhcLft3d+09gntu8uqh8Dkk0Bmir6ZVgLnCd8oJeWXO201CvuGPyOruleKDefPJir
-         SsiFlCMoPqc/g==
-Date:   Fri, 20 Jan 2023 10:29:12 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     brendan.higgins@linux.dev, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: aspeed: Use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y8pe6PWZQ4TVHlqi@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
-        brendan.higgins@linux.dev, benh@kernel.crashing.org, joel@jms.id.au,
-        andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <202301191715319948743@zte.com.cn>
+        Fri, 20 Jan 2023 04:31:58 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E88DA19B8;
+        Fri, 20 Jan 2023 01:31:31 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pInik-0002bV-EQ; Fri, 20 Jan 2023 10:30:02 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Markus Pargmann <mpa@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: mmc: drop unneeded quotes
+Date:   Fri, 20 Jan 2023 10:30:00 +0100
+Message-ID: <1844731.CQOukoFCf9@diego>
+In-Reply-To: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
+References: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7B4quZu9JV9hqI/T"
-Content-Disposition: inline
-In-Reply-To: <202301191715319948743@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Freitag, 20. Januar 2023, 09:57:21 CET schrieb Krzysztof Kozlowski:
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
+> No functional impact except adjusting to preferred coding style.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---7B4quZu9JV9hqI/T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> diff --git a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+> index c7e14b7dba9e..67d7223f74da 100644
+> --- a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
+> @@ -14,7 +14,7 @@ description:
+>    file and the Rockchip specific extensions.
+>  
+>  allOf:
+> -  - $ref: "synopsys-dw-mshc-common.yaml#"
+> +  - $ref: synopsys-dw-mshc-common.yaml#
+>  
+>  maintainers:
+>    - Heiko Stuebner <heiko@sntech.de>
 
-On Thu, Jan 19, 2023 at 05:15:31PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-
-Applied to for-next, thanks!
+For the Rockchip part
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
 
---7B4quZu9JV9hqI/T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKXugACgkQFA3kzBSg
-KbbyJw//XiPV3HIZdzP6F3LPYW27GANPJVSQz0jiB9jz7JrumN/9nsWScOx8T15z
-RtNzubE0tYP2sq8HxytaRfnjrw7g0paQQqm82vXGlqpCbMRduiZK3RDY3GCuMEuD
-tgGMYR1wcY6gv7vYUcfR4eegbRaCaDG327a60lNI7ec2pgBT2sEWbwrmoDlXn9FL
-putgoKAGFCoVXq3FgiyKcfNwb78K7EBRcWuIowhMMI1Jv/ZS0PWuWcSFa1UTLnoL
-q41vgTgsCNJJBMIkp/ewXUK4r8DXdXN73nR7Ld8El6+su4RcRGSwEOJUiWjq6sxV
-w9dy8E2Wrp3jgNvQV4jXFi17XKmos3ueH289nvUKRodwa7GWZLoGl1X+DQa8Ctg+
-mqGcsDSs6VAnMHO34tVGHE1rZr2VogxXPO8PI2AddNRUO1Drko5reMPxezzM+LUN
-u6oT5v/Siml9Nl4b6mzgGQF02BCuZT7sJp1xaA27a6mqPXqT6NaG8bNz6bZqWd4k
-D6KbIRgO7oRgLY3HMXzmXHn/TQfAoEcMcCMjxCsNnCD2YnOzJLOOiJR8AjL0mH2H
-IXAKFDh51pBhDPXWjSbzGpr0osZAPoF0jRgFa3NoFQtBu8eFTVkTctPKY4OUDM/7
-wR56ThbF3BhDp5L0SuuZGO5vFK8fMQu9IxLX9D+uuzf7SZq15X0=
-=AWQ7
------END PGP SIGNATURE-----
-
---7B4quZu9JV9hqI/T--
