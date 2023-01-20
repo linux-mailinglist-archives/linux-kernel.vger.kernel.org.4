@@ -2,152 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4086C676126
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2F66760CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjATXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S230040AbjATW4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATXBC (ORCPT
+        with ESMTP id S229695AbjATW4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:01:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7DC138;
-        Fri, 20 Jan 2023 15:01:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 20 Jan 2023 17:56:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21394DA8F6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674255275;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KSMfGcmcVhk0Uo6IE79LVhhz/BJL/6En61IwKDiYOrM=;
+        b=ElSYG5Q1lBhd9UwimrfWDE86e4+dF+KxWcWDMI+l9wAA1zKlMx8ISNzLPBBGbqYawfiiC5
+        1lAQdJ5XTlqHWEkn5ogIVYBq8bhLXx9SiJ74UQ2jHrF4CBt5PnF3gp1IykjodV5B7Z7QrQ
+        vhB1SGsT+v5le3J67/jXV3hDgG4S/PI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-313-fbEc8iaaObGToB-glIOzXg-1; Fri, 20 Jan 2023 17:54:29 -0500
+X-MC-Unique: fbEc8iaaObGToB-glIOzXg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 288A4620DA;
-        Fri, 20 Jan 2023 22:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13245C4339B;
-        Fri, 20 Jan 2023 22:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674255039;
-        bh=MEdkFA0CPMoJscWoRwMiBqN7i9caRkJzCfAwCleyJBM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Cri+LDWeo4rXCVffkOhl0j+sWK07Fp2yQcqaMuEawSDbifPcfQUJZuVEQWJLwa1HD
-         c424ZkNCraz6HaYhRNELpNgqjlXO55voAttvTzJ3pUB3I8WZiB5QEl+YiqgHGMHRq7
-         tzbemNT+uETzFml8ak36pciA7JA1Arzq9ku0HJ5qlauwJ9q3rSe8VnLOq+dqXYneRR
-         fNSEuNUopH8Py9GqYLW+crM1AboGkbO3eTrJDdrjPv6mb3QejrYQzOgaFNICoKwdXj
-         kwmolb2aWC5kgblDsSfi1k4a3g2qMD1NYFGeauvNsp7tSGj/rp5CW2scUwxWvSvZh3
-         jv019LHBM3XTw==
-Date:   Fri, 20 Jan 2023 16:50:36 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
-Message-ID: <20230120225036.GA675763@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34B95101A521;
+        Fri, 20 Jan 2023 22:54:29 +0000 (UTC)
+Received: from [10.22.17.220] (unknown [10.22.17.220])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EEF961121318;
+        Fri, 20 Jan 2023 22:54:28 +0000 (UTC)
+Message-ID: <55978b11-5e7e-4b10-dff1-398275ec68b3@redhat.com>
+Date:   Fri, 20 Jan 2023 17:54:28 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113171409.30470-25-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RESEND PATCH v2 2/2] mm/kmemleak: Fix UAF bug in kmemleak_scan()
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20230119040111.350923-1-longman@redhat.com>
+ <20230119040111.350923-3-longman@redhat.com> <Y8ro6DxR1v0XlDs3@arm.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y8ro6DxR1v0XlDs3@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 08:14:06PM +0300, Serge Semin wrote:
-> Since the DW PCIe RP/EP driver is about to be updated to register the DW
-> eDMA-based DMA-engine the drivers build modes must be synchronized.
-> Currently the DW PCIe RP/EP driver is always built as a builtin module.
-> Meanwhile the DW eDMA driver can be built as a loadable module. Thus in
-> the later case the kernel with DW PCIe controllers support will fail to be
-> linked due to lacking the DW eDMA probe/remove symbols. At the same time
-> forcibly selecting the DW eDMA driver from the DW PCIe RP/EP kconfig will
-> effectively eliminate the tristate type of the former driver fixing it to
-> just the builtin kernel module.
-> 
-> Seeing the DW eDMA engine isn't that often met built into the DW PCIe
-> Root-ports and End-points let's convert the DW eDMA driver config to being
-> more flexible instead of just forcibly selecting the DW eDMA kconfig. In
-> order to do that first the DW eDMA PCIe driver config should be converted
-> to being depended from the DW eDMA core config instead of selecting the
-> one. Second the DW eDMA probe and remove symbols should be referenced only
-> if they are reachable by the caller. Thus the user will be able to build
-> the DW eDMA core driver with any type, meanwhile the dependent code will
-> be either restricted to the same build type (e.g. DW eDMA PCIe driver if
-> DW eDMA driver is built as a loadable module) or just won't be able to use
-> the eDMA engine registration/de-registration functionality (e.g. DW PCIe
-> RP/EP driver if DW eDMA driver is built as a loadable module).
 
-I'm trying to write the merge commit log, and I understand the linking
-issue, but I'm having a hard time figuring out what the user-visible
-scenarios are here.
+On 1/20/23 14:18, Catalin Marinas wrote:
+> Hi Waiman,
+>
+> Thanks for your effort on trying to fix this.
+>
+> On Wed, Jan 18, 2023 at 11:01:11PM -0500, Waiman Long wrote:
+>> @@ -567,7 +574,9 @@ static void __remove_object(struct kmemleak_object *object)
+>>   	rb_erase(&object->rb_node, object->flags & OBJECT_PHYS ?
+>>   				   &object_phys_tree_root :
+>>   				   &object_tree_root);
+>> -	list_del_rcu(&object->object_list);
+>> +	if (!(object->del_state & DELSTATE_NO_DELETE))
+>> +		list_del_rcu(&object->object_list);
+>> +	object->del_state |= DELSTATE_REMOVED;
+>>   }
+> So IIUC, this prevents the current object being scanned from being
+> removed from the list during the kmemleak_cond_resched() call.
 
-I assume there's something that works when CONFIG_PCIE_DW=y and
-CONFIG_DW_EDMA_PCIE=y but does *not* work when CONFIG_PCIE_DW=y and
-CONFIG_DW_EDMA_PCIE=m?
+Yes, that is the point.
 
-If both scenarios worked the same, I would think the existing
-dw_edma_pcie_probe() would be enough, and you wouldn't need to call
-dw_pcie_edma_detect() from dw_pcie_host_init() and dw_pcie_ep_init().
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v8:
-> - This is a new patch added on v8 stage of the series in order to fix
->   the tbot-reported build issues. (@tbot)
-> ---
->  drivers/dma/dw-edma/Kconfig | 5 ++++-
->  include/linux/dma/edma.h    | 2 +-
->  2 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/Kconfig b/drivers/dma/dw-edma/Kconfig
-> index 7ff17b2db6a1..2b6f2679508d 100644
-> --- a/drivers/dma/dw-edma/Kconfig
-> +++ b/drivers/dma/dw-edma/Kconfig
-> @@ -9,11 +9,14 @@ config DW_EDMA
->  	  Support the Synopsys DesignWare eDMA controller, normally
->  	  implemented on endpoints SoCs.
->  
-> +if DW_EDMA
-> +
->  config DW_EDMA_PCIE
->  	tristate "Synopsys DesignWare eDMA PCIe driver"
->  	depends on PCI && PCI_MSI
-> -	select DW_EDMA
->  	help
->  	  Provides a glue-logic between the Synopsys DesignWare
->  	  eDMA controller and an endpoint PCIe device. This also serves
->  	  as a reference design to whom desires to use this IP.
-> +
-> +endif # DW_EDMA
-> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> index 08833f12b386..c062c8db472c 100644
-> --- a/include/linux/dma/edma.h
-> +++ b/include/linux/dma/edma.h
-> @@ -101,7 +101,7 @@ struct dw_edma_chip {
->  };
->  
->  /* Export to the platform drivers */
-> -#if IS_ENABLED(CONFIG_DW_EDMA)
-> +#if IS_REACHABLE(CONFIG_DW_EDMA)
->  int dw_edma_probe(struct dw_edma_chip *chip);
->  int dw_edma_remove(struct dw_edma_chip *chip);
->  #else
-> -- 
-> 2.39.0
-> 
-> 
+>
+>>   /*
+>> @@ -633,6 +642,7 @@ static void __create_object(unsigned long ptr, size_t size,
+>>   	object->count = 0;			/* white color initially */
+>>   	object->jiffies = jiffies;
+>>   	object->checksum = 0;
+>> +	object->del_state = 0;
+>>   
+>>   	/* task information */
+>>   	if (in_hardirq()) {
+>> @@ -1470,9 +1480,22 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
+>>   	if (!get_object(object))
+>>   		return;	/* Try next object */
+>>   
+>> +	raw_spin_lock_irq(&kmemleak_lock);
+>> +	if (object->del_state & DELSTATE_REMOVED)
+>> +		goto unlock_put;	/* Object removed */
+>> +	object->del_state |= DELSTATE_NO_DELETE;
+>> +	raw_spin_unlock_irq(&kmemleak_lock);
+>> +
+>>   	rcu_read_unlock();
+>>   	cond_resched();
+>>   	rcu_read_lock();
+>> +
+>> +	raw_spin_lock_irq(&kmemleak_lock);
+>> +	if (object->del_state & DELSTATE_REMOVED)
+>> +		list_del_rcu(&object->object_list);
+>> +	object->del_state &= ~DELSTATE_NO_DELETE;
+>> +unlock_put:
+>> +	raw_spin_unlock_irq(&kmemleak_lock);
+>>   	put_object(object);
+>>   }
+> I'm not sure this was the only problem. We do have the problem that the
+> current object may be removed from the list, solved above, but another
+> scenario I had in mind is the next object being released during this
+> brief resched period. The RCU relies on object->next->next being valid
+> but, with a brief rcu_read_unlock(), the object->next could be freed,
+> reallocated, so object->next->next invalid.
+
+Looking at the following scenario,
+
+object->next => A (removed)
+A->next => B (removed)
+
+As object->next is pointing to A, A must still be allocated and not 
+freed yet. Now if B is also removed, there are 2 possible case.
+
+1) B is removed from the list after the removal of A. In that case, it 
+is not possible that A is allocated, but B is freed.
+
+2) B is removed before A. A->next can't pointed to B when it is being 
+removed. Due to weak memory ordering, it is possible that another cpu 
+can see A->next still pointing to B. In that case, I believe that it is 
+still within the grace period where neither A or B is freed.
+
+In fact, it is no different from a regular scanning of the object list 
+without ever called cond_resched().
+
+Cheers,
+Longman
+
