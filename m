@@ -2,126 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0227675AEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF69675B07
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjATRQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S229957AbjATRSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjATRQA (ORCPT
+        with ESMTP id S229940AbjATRSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:16:00 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2047.outbound.protection.outlook.com [40.107.101.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D726E411;
-        Fri, 20 Jan 2023 09:15:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d0yTtEaumMqVN6rfTBeMdOYgzm6uPYVxizeyS9pv71rPiri+twT7deXLP4gRzn45U8rJDj2rnrcjzX4akAPtBo5/d/yqsCSw7Vb1nN2++vl7uqVMxeq9G6EGsAuHYbdfD5RyyB0w5b5L2p9v5g17Bjy06zD0Vpu9yIbWLKyKdutYU1vKVvOoMXG9xCOwk7nVQEQYPR4CGrQn37aPK6iLXgbqtLy8tEzsQrwS/bfH6+SO1F5E+OhQwCfhiWf+O0/HgFLUp13RKd5MF9Pk9g2iwwNuxW1EXO0ruwURtmZNY9hCFp/3a7PfhiFN8Lt1YFE1Zk8C6P4BFX6ojaLHBIUlhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gDQGUover6l5wdOuwh76GjgYxm9N29J582/L1r/j0Eg=;
- b=YTXsM5IGSCIWexsDTXus1CChA/ejftHrTniTU4zcMhyD6IMbPQm/5pRrmznMZYsuj2HmcGS6U2knVjZC4eHyXIDXdBb/xmMafG6B1n7cwWWCNIH3Sot++tpd+K8619BCgEOR6SyWkaAZJ6tfinxIhEtfVQ6JEF6XgMbSuJM1pmrqum0gDZB5JkNWIBEBJKC4oanOwXRe14h8ykh/J3/DzZfpbbXpJC38fTC7gs5MTTS8hHAquwN6WRemrxVg0uop4d/5P7P/xA4l7smJB86ENFCpWPRcvcZpTm3UDamjYPK7cqtlR7hbFAzJqyHVggTNzBc+A7kFZLGsSagbCtK5Yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gDQGUover6l5wdOuwh76GjgYxm9N29J582/L1r/j0Eg=;
- b=0C17GLMsBWYTR80IEXDvgMzReeochXLLzJUC4Ts3goDXcEf8a0370X1iVNtoCkgd37CMTr6akKD3lTgfBtjGE5WqHIPCQKarh8rFvwjr1TsoRpkShP2bZdzWVePwqAK0Ou88Ap2y7nAPCVgL2iDBz4O2z1MAx/mmSuED/gsaVmA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by CH0PR12MB5188.namprd12.prod.outlook.com (2603:10b6:610:bb::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Fri, 20 Jan
- 2023 17:15:50 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7%3]) with mapi id 15.20.6002.013; Fri, 20 Jan 2023
- 17:15:50 +0000
-Message-ID: <61e64ce5-df76-f34a-1dc8-a0f1a856e2e5@amd.com>
-Date:   Fri, 20 Jan 2023 11:15:48 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/2] kvm: sev: If ccp is busy, report throttled to
- guest
-To:     Dionna Glaze <dionnaglaze@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>
-References: <20230119213426.379312-1-dionnaglaze@google.com>
- <20230119213426.379312-3-dionnaglaze@google.com>
-Content-Language: en-US
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230119213426.379312-3-dionnaglaze@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0501CA0027.namprd05.prod.outlook.com
- (2603:10b6:803:40::40) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Fri, 20 Jan 2023 12:18:23 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A83AC9248
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:17:59 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-501c3a414acso17398087b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:17:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Npkik/bsBJT0k1KE6YTUYiQllKRxNUJ2F3qqLyW5WrU=;
+        b=Sr1dLPymrIvYBGAmoThyqiqqD5ocsi35buZBFr9hs7vTfAgxiHzqszuY12+CvtOfKu
+         RJozfuGS24MHU6L9FOm9qbs+5eNGaCPaqITAVOLQslx4X+R9mY3nN2LalRXUVDbxy8Qt
+         J0dvh7x5wJbEWiEnHQ0ITZKNuMN2D/TgYFGRPWf+q3EXoZpFDqfnQ+Mkat/aDVHQKqpB
+         cqxocq04+BBfQ0/ds8KL+yA5/1PUe2g+ppo5H30MJafeEtK8f7/S2hO7gwVKY83Duzzu
+         YNYro9pYQlzwKdPyPpEqyu60+5EMY6rQU4naHlm8+dyKKFtmt29OruHUXTQcgMIcHHtZ
+         IoHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Npkik/bsBJT0k1KE6YTUYiQllKRxNUJ2F3qqLyW5WrU=;
+        b=YRJVT5LsWEueJ4KRStRyCd49p0nieZEeI4YTguV+tzb8ZqYBduJHvZgxtdYljvL+O6
+         qQIeJqXhmrOg6+cc+BItJIrVYfZ9Cl5hgfuZEoXw6agEXW9yEpSqCXDW4sybO7zaeHOh
+         lHO8gpNJyJUUnKEbPDDOYUEOnF195gIYfI5/zD1H0AH1zpTane+Hz8admHBNaFGV38Gi
+         ljl3GgQo4AJKVh0RYQv9Dtqb4a5Mikyn0bPcHeRWK8seceW+iFFdNusPNS5UDReLQnnd
+         Mt+42qa/pZqa4umLA7Dc0UAfOZFBDX2qisBtjLwdZplHju9LMQKtRxAsHYRxT5yLlSpq
+         +PwA==
+X-Gm-Message-State: AFqh2korBmduVHvXIk8Ny6wQOP9S8SnUu06IxMuFpuK4Yvv/oM1J5c+N
+        6UWE1BkpcUXvx5cjRO6HU0aoeF93oVPbeyZ6g1Hg/w==
+X-Google-Smtp-Source: AMrXdXv6gnQX0OoKozB0/sGre8TJXsUy1C/jK2O3QAelgSf12NvRgViAwg71ot7Dw3BX9FmmaJQOxKyffqTOfBzTcKs=
+X-Received: by 2002:a81:1b8b:0:b0:4ff:774b:7ffb with SMTP id
+ b133-20020a811b8b000000b004ff774b7ffbmr406683ywb.218.1674235078155; Fri, 20
+ Jan 2023 09:17:58 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CH0PR12MB5188:EE_
-X-MS-Office365-Filtering-Correlation-Id: 965d10a3-a21e-4753-bde1-08dafb09fa85
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4qyNArWW3PuKJHUz8Iv+uAK5Fg88DQ1C5zQVSsUsrVpOSRqHurDSXTNBhuLPX49kHxtxc/uufgdU3ZtHGlr6sVi02hwzqFEmW8ZVpXY6oKPQCXqftsK3lYOd81YBWUyFATK8+RyOph8hqD5FT2yKbgcUwGs9dnu4GJlK+Lt91YB17+Ah+nuLARuOYOqP2GXPyPnseyYrYBPX1Bc92p8NE8d2PhPYIAnu94YvxWVrbLAywRhU/6KBaLaqmfi908fH0Cp3mTPk44AEgDqfRHhPRujN6xUZtoMbGMb5eFgddvCqo/c7LzrLAjxDh1dUE7S1NcI/7PwIk8YcvX5m3fEYwbsFIXaCsHmN2Xn17h9JGCq39VYVGiEbblY7mZj5x1VOfZdpAcYCXzHbrzQlJenyzN4/wUW/szQsFr/cewqxNFMfPT7OFzvkuMQJdf+XTjKSgU4a7PTDDlAOKJW1KDEpmZsNZgsSFGG9gp7pkvKVN6tiF7PGX4EEaaKNg1M8NcI9D3HxaQ8PD/IOcMdiFEwsnRFXpI7A5xxQN1FTuPKAkNF+tzEdIFlkn8kQvTX6/ThMXRoFI2sZDwSk8fZEwxkXIxlM2NbhiO8ABph235GehiFrazS6pC3NLlt6p9mIQJj+zCd5AbIBTNlFd4caeSdTEo0QZ+s3TelQoA7T5vBAoB0Ae4D6avMZ1BVhciKq/ophRvOcYtC0o9+yOqb6nGZAZI54BSELlrEA69ldd5BRzCM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(366004)(451199015)(6506007)(478600001)(6636002)(54906003)(53546011)(6486002)(31686004)(110136005)(66476007)(66556008)(66946007)(186003)(316002)(26005)(6512007)(4326008)(8936002)(41300700001)(2616005)(36756003)(5660300002)(2906002)(83380400001)(31696002)(86362001)(38100700002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHArbnU4MmFISUhnSnc0NTF1bXZaN3cyb1hCSGFHWmxHNFUvZDZwczI2d2I3?=
- =?utf-8?B?RCtZaVBRdU1ucDNkaHFKSWJaNUNTSmw0MUZIOGhZaWYrRmk5YnE2SVhzYi9w?=
- =?utf-8?B?Q0MrY09ZVDNDa2V0YmhTNjFzM1dKZGdtTkFxd2l2YXVSVE5RU25zRjM3c29U?=
- =?utf-8?B?eGk1Qm82K2N5anE2aENHZkFzbmx5a1VHZm5sdlNPdng0ZjNjNjlYeVBQaHh5?=
- =?utf-8?B?VktHNVVHb0dzdG84eUY5OXlRRzhNUXU5NEVJTmdGSE1zR0c5ME9qeUUydlBl?=
- =?utf-8?B?cldRLzlDNjFObDFFaytaUlRDWnA0amEvbTlUUTNqQVdOZDAwOSsyWmZuMkl2?=
- =?utf-8?B?QklNdDRsdXRhUGFZNTF2bGlrbXJiTFVDRjNhei9WYktVVFVTTmE2a1hJSnpq?=
- =?utf-8?B?M2JMdVFweHMwMlZnYkE3K2pnN1lBRS9yVTJMUVBVMDN4ZGlvMVAxajhrN1Y2?=
- =?utf-8?B?OWhaNmtHRWtFTTFIK3ptUTVyR0s3T0tEYVpFS011RDZpTXR1RitUWkYrWHB6?=
- =?utf-8?B?bVRIQWtEaXlncEQxTldGdFBKUUsrNVpHUzludmFXTFM4ZmpYNkUxWS8zdlhV?=
- =?utf-8?B?OHl3THRQS0RUTzVhZXpNd1BjdG9MQmJHZis3anN3eDJ0KzVON3pUdVFCTmNP?=
- =?utf-8?B?MmljaXMxL3NGY1I1b2d3U2dsQlhOdlpWSmxQKzA0ZW1Mc0pPcmdXU0VkQzNN?=
- =?utf-8?B?K09tc0UwQXhsUFhzTlJoZXpTL0NIdmVBZXVPL2VnYXpaV2d4VVNqaDgxcWNC?=
- =?utf-8?B?bU4vUTM2bmpldmFaZ1VoWjBPanlwSVJJQjZwa2NWdXFlOHFLbUxOVTZTS0R0?=
- =?utf-8?B?OUNuN2hVeFdqR2dlclp0UitheTd1Y0dXNENkQzVNTkVGUmFpSndRQ3hvaERO?=
- =?utf-8?B?c3JES0grWHE2TXBWanJCaGNKdmV1RmlNaWQ5c0IwWTRhTXhTRXpjYzJrUTNR?=
- =?utf-8?B?K2Rtbzlmd3VpMU5Wd2FOekxBd0RYTXJPajQyZVZnQkhZekhIWjhwRklJNW14?=
- =?utf-8?B?VVZrVGhvNFhqZWxkVUhKNHR3anBuSHRxM3pIZTZLYWUvQnRadmh0SDFmRUFp?=
- =?utf-8?B?YlBIQS9KSk1WcE9WYWZNanUvK0pkYytPQXM2UFcvSW53ZHl2MThDb2JmNUNG?=
- =?utf-8?B?UzJWVGFEcWRLU3lxZlN1WVgzWVZOREUwdmJ4ZmxPYUFraXR3Rnd4Mno5TjY2?=
- =?utf-8?B?NU5IQ0ExekZDUnpkNUVCT2hwUHlsRmhLKzdHczhzblE1amYyMzZ0V1Z4MVVn?=
- =?utf-8?B?L2R0Sm1CWW9LaWxYMmNrbS9Qc09KazRpamFUS2ZjZCtEeXVDcWJranhrWDNW?=
- =?utf-8?B?NzEzbFNQSldPd1JabExYZWhnNFFsdTVGdnU5U1RQTkZGSEVZS1VSdWRPSUhC?=
- =?utf-8?B?SEw3dXM4TVVGWk1sdHR1eitHOWpaUTRyam9kUHRiWEFQZEtTalVURW94a2h3?=
- =?utf-8?B?L3JMUUV3aTU1NzQ5TnY1VDJMdGNSenFpaW5heWc4YVBWc29kc3pOT29jaEVK?=
- =?utf-8?B?dEhGV25ZWEpnNUZxcm1heWFBcG1yQ3QvV1FpaVp0ckFqdlhiWmtyT0Vscm5T?=
- =?utf-8?B?UEVadjFvdE52aGVDRWxCSU96NTZIdlEvWHNmb0g2RGFXSGVFRFhWRWx3YVIr?=
- =?utf-8?B?RnBINDFzUzFuaHcxTVpkTEhOM1l2dndYOXFGQU41RG5ST0xoNnVqRG5KenpM?=
- =?utf-8?B?cE01ZzNGK3Npai9CNEo1MGUrbFp6ZzlzTEVYTHF3aktydFhCUUVDZTFXaUNq?=
- =?utf-8?B?SERNTUhRYnhhNjBMMkN0TUFzT3libGN2MS9uaTVOQzNadVVCakNJSjNENVB6?=
- =?utf-8?B?b0VqMFpZbWUwbjRaeEtHT094bmJSQVpBRTh3TFNqd015dWg2NU9PeXVOTXl4?=
- =?utf-8?B?cy9HcitxeUlwYTVXU2kyMS8vTGdMYkpiR3h6Y0dvZ1dIUTVnWVFCai81eGV4?=
- =?utf-8?B?R3I3RERBSHROTFV2d2tRclJBNkVvNDM4MWlFS0d5Z2pSdkhYOUgrMG5SQ2pS?=
- =?utf-8?B?TzQwMmxoeDVHTytiWkk4OEJ6MG9ySDdJcTZIdEJUR25BZXZaZ2xGWW4rdmd5?=
- =?utf-8?B?VVBNWm1mTXRUTE9sMm15bXZ5QUVQYktSWnFTQ1lCQS9rYlZ2eXZXcWhxcG9r?=
- =?utf-8?Q?MiFn4ORfQQw0L9xJh8YZ3t1m9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 965d10a3-a21e-4753-bde1-08dafb09fa85
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 17:15:50.4879
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cN6PufOqXoSzJ4f2U5Q2lHXXT5WQBs/9JDmld8W4fMgj42ImsheygiwXuwWDBDnbqK0iuSuJyXs9B8nKRNTItQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5188
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
+ <Y8k+syJu7elWAjRj@dhcp22.suse.cz> <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+ <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz> <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+ <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
+ <Y8rGJq8LvX2C+Cr7@casper.infradead.org> <20230120170815.yuylbs27r6xcjpq5@revolver>
+In-Reply-To: <20230120170815.yuylbs27r6xcjpq5@revolver>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 20 Jan 2023 09:17:46 -0800
+Message-ID: <CAJuCfpH4o-iCmzdUcYD9bKieJ6-k-MZYLuHFhH+bN9yE07sibw@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,80 +88,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 15:34, Dionna Glaze wrote:
+On Fri, Jan 20, 2023 at 9:08 AM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+>
+> * Matthew Wilcox <willy@infradead.org> [230120 11:50]:
+> > On Fri, Jan 20, 2023 at 08:45:21AM -0800, Suren Baghdasaryan wrote:
+> > > On Fri, Jan 20, 2023 at 8:20 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > >
+> > > > On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > >
+> > > > > On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
+> > > > > > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > > >
+> > > > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > > > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > > > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > > > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
+> > > > > > > > a list and free them in groups using one call_rcu() call per group.
+> > > > > > >
+> > > > > > > After some more clarification I can understand how call_rcu might not be
+> > > > > > > super happy about thousands of callbacks to be invoked and I do agree
+> > > > > > > that this is not really optimal.
+> > > > > > >
+> > > > > > > On the other hand I do not like this solution much either.
+> > > > > > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
+> > > > > > > much with processes with a huge number of vmas either. It would still be
+> > > > > > > in housands of callbacks to be scheduled without a good reason.
+> > > > > > >
+> > > > > > > Instead, are there any other cases than remove_vma that need this
+> > > > > > > batching? We could easily just link all the vmas into linked list and
+> > > > > > > use a single call_rcu instead, no? This would both simplify the
+> > > > > > > implementation, remove the scaling issue as well and we do not have to
+> > > > > > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
+> > > > > >
+> > > > > > Yes, I agree the solution is not stellar. I wanted something simple
+> > > > > > but this is probably too simple. OTOH keeping all dead vm_area_structs
+> > > > > > on the list without hooking up a shrinker (additional complexity) does
+> > > > > > not sound too appealing either.
+> > > > >
+> > > > > I suspect you have missed my idea. I do not really want to keep the list
+> > > > > around or any shrinker. It is dead simple. Collect all vmas in
+> > > > > remove_vma and then call_rcu the whole list at once after the whole list
+> > > > > (be it from exit_mmap or remove_mt). See?
+> > > >
+> > > > Yes, I understood your idea but keeping dead objects until the process
+> > > > exits even when the system is low on memory (no shrinkers attached)
+> > > > seems too wasteful. If we do this I would advocate for attaching a
+> > > > shrinker.
+> > >
+> > > Maybe even simpler, since we are hit with this VMA freeing flood
+> > > during exit_mmap (when all VMAs are destroyed), we pass a hint to
+> > > vm_area_free to batch the destruction and all other cases call
+> > > call_rcu()? I don't think there will be other cases of VMA destruction
+> > > floods.
+> >
+> > ... or have two different call_rcu functions; one for munmap() and
+> > one for exit.  It'd be nice to use kmem_cache_free_bulk().
+>
+> Do we even need a call_rcu on exit?  At the point of freeing the VMAs we
+> have set the MMF_OOM_SKIP bit and unmapped the vmas under the read lock.
+> Once we have obtained the write lock again, I think it's safe to say we
+> can just go ahead and free the VMAs directly.
 
-Since you're building on SNP hypervisor patches, please keep @Ashish on 
-direct copy.
+I think that would be still racy if the page fault handler found that
+VMA under read-RCU protection but did not lock it yet (no locks are
+held yet). If it's preempted, the VMA can be freed and destroyed from
+under it without RCU grace period.
 
-> The ccp driver can be overloaded even with 1 HZ throttling. The return
-> value of -EBUSY means that there is no firmware error to report back to
-> user space, so the guest VM would see this as exitinfo2 = 0. The false
-> success can trick the guest to update its the message sequence number
-> when it shouldn't have.
-> 
-> Instead, when ccp returns -EBUSY, that is reported to userspace as the
-> throttling return value.
-
-Except the CCP driver doesn't return -EBUSY because it is overloaded. It 
-will simply try to acquire the mutex and continue once it has it.
-
-There are a couple of places that return -EBUSY in the driver for other 
-reasons, as well as other -E* values. It looks like these need to be 
-handled properly by the SNP hypervisor patches so that a "success" isn't 
-reported back.
-
-So this patch isn't necessary, but any -E* return value without having 
-actually called the firmware needs to be handled properly. @Ashish, please 
-work with Dionna on this.
-
-Thanks,
-Tom
-
-> 
-> Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: Peter Gonda <pgonda@google.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> 
-> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-> ---
->   arch/x86/kvm/svm/sev.c | 18 ++++++++++++++++--
->   1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index cd9372ce6fc2..7da1cc300d7b 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -3642,7 +3642,14 @@ static void snp_handle_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gpa_t
->   		goto unlock;
->   
->   	rc = sev_issue_cmd(kvm, SEV_CMD_SNP_GUEST_REQUEST, &data, &err);
-> -	if (rc)
-> +
-> +	/*
-> +	 * The ccp driver can return -EBUSY if the PSP is overloaded, so signal
-> +	 * the request has been throttled.
-> +	 */
-> +	if (rc == -EBUSY)
-> +		rc = SNP_GUEST_REQ_THROTTLED;
-> +	else if (rc)
->   		/* use the firmware error code */
->   		rc = err;
->   
-> @@ -3713,7 +3720,14 @@ static void snp_handle_ext_guest_request(struct vcpu_svm *svm, gpa_t req_gpa, gp
->   	if (sev->snp_certs_len)
->   		data_npages = sev->snp_certs_len >> PAGE_SHIFT;
->   
-> -	if (rc) {
-> +	/*
-> +	 * The ccp driver can return -EBUSY if the PSP is overloaded, so signal
-> +	 * the request has been throttled.
-> +	 */
-> +	if (rc == -EBUSY) {
-> +		rc = SNP_GUEST_REQ_THROTTLED;
-> +		goto cleanup;
-> +	} else if (rc) {
->   		/*
->   		 * If buffer length is small then return the expected
->   		 * length in rbx.
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
