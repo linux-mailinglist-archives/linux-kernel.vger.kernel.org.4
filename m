@@ -2,143 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EECD67561E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4C6675621
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjATNr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
+        id S229595AbjATNvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATNry (ORCPT
+        with ESMTP id S229459AbjATNvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:47:54 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA4F7A8C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:47:53 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id v81so2557994vkv.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:47:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kye/Ut1Af/DbDESgWkByHpPzhP9KtOWgHWRLp79CaMg=;
-        b=MRkI2/Dx9mm2J6vT5Hg22AfzFL7N+TE+SQhwFk2tbG4T6KKy3QTRPoc9yVACHPT384
-         WXcv3HtvfUfG4sDUGSyOU3m56jrLNfBQbpdp1g25hyGLahPKHZ53aX8uLHVbPjCvCd7e
-         lUxysAqfatVQjzfjINvd5a2dlZ3qjx093y2ag=
+        Fri, 20 Jan 2023 08:51:45 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4417A8C;
+        Fri, 20 Jan 2023 05:51:44 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id v10so6823769edi.8;
+        Fri, 20 Jan 2023 05:51:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kye/Ut1Af/DbDESgWkByHpPzhP9KtOWgHWRLp79CaMg=;
-        b=1cb0Y5bCmuLYDPKx4/PbxIBrwensYJ112IL2rJCXoeAe1BTTa/cobLKYnV8G5rnGjQ
-         gia+eaSFwkmPZqZ0NXtNw5033WLaaNmc+Iqor4lT/m3xLRdJTUNJtOl6FWbbo1ahNezR
-         +rVZ90X0d0dOiNJ13cP3lnOeWmgDVQtaLwqqdWKprEGxH1ZVF4xbgByLUVBatvgGBOpt
-         SFaRuKLsR7cPFiXvejimxdzFWvPlaBZeP/hzujyFhSlUOasKw6WXLRg2FYNHSJmM12BG
-         76HQdVIFVuGY50qZU1K9Eb6TRR6xZrzbiLUExurvBlxEM++jZ3apY9NoH966r3yAfbEH
-         wIaA==
-X-Gm-Message-State: AFqh2kqb38JYG0r4dFJYgXbj/r4LtW3m8lAIE9ocZOzO4wNCON/ulXQw
-        9U0tCALh4Yhra+TV4eHxCgE2UQ==
-X-Google-Smtp-Source: AMrXdXs8Y5gViIyRRKBt8ClzRsd/iQKpRfC4ln1Z24rMG92kmNuCCQcKsRTbE4Ahoi9DAaoJNHTkLw==
-X-Received: by 2002:ac5:cd42:0:b0:3da:6212:69b2 with SMTP id n2-20020ac5cd42000000b003da621269b2mr9615177vkm.14.1674222472644;
-        Fri, 20 Jan 2023 05:47:52 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id bl8-20020a05620a1a8800b006fa9d101775sm1443187qkb.33.2023.01.20.05.47.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 05:47:51 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] tick/nohz: Fix cpu_is_hotpluggable() by checking with nohz subsystem
-Date:   Fri, 20 Jan 2023 08:47:41 -0500
-Message-Id: <6D3E70AC-8D01-41C7-9FDE-6693E9706425@joelfernandes.org>
-References: <Y8qazpmqk4dmw37F@kroah.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L7z4p3bE6yeWZf9K6gd38mjPF+wHICd+ZDjndpXq4sU=;
+        b=c96DBGE6Quo+ZfjDWh8cXxNdpzAdwX0tGEbrwallV7zrrCb8PEGFnyMcu8kPCPgnPM
+         mei2a2ktFzKU6Kph7uUYQRLtx2JHXmxwm8waPchbkNL8Y/MxeJXt4638eYQLIuYEKM4O
+         7PaHRWwHcmo3YwtDhEoq9+9mpZSgyltQnvk8fPiKgSfEBBVppjhV6DdUNWdTXBExHtRJ
+         wYA6uXvdncoEbrrojBGINBF+RjGzHe76KtkB3UsIR/Bf76wUgOflyI3ATm1imOAwk22M
+         K9EYXaVuocEa/s42Yi7hgT+mPV5n3sSX3s0bKwGoqbg/gNL0YO/Vhtbe7FpU65nAtAr3
+         4mDQ==
+X-Gm-Message-State: AFqh2kpF9wcQEOZL4P5YC2gORnu0ZZtLvhC799o1c/bA6JZOuoCSEJdD
+        xiem4qQE2nmYKSAp27Ysdbf8R0quz+jQoAMd908=
+X-Google-Smtp-Source: AMrXdXtP5nWZeqdv/HtGkPdXqIpj/Oe+I/LVjm8KHGxKctawzLe1A7TwcW/LT4cmqKELB6jq+ny40EGxkgAkcMgX2XU=
+X-Received: by 2002:a05:6402:28a4:b0:485:2bdf:ca28 with SMTP id
+ eg36-20020a05640228a400b004852bdfca28mr2195464edb.251.1674222703011; Fri, 20
+ Jan 2023 05:51:43 -0800 (PST)
+MIME-Version: 1.0
+References: <20230103032840.12265-1-rdunlap@infradead.org>
+In-Reply-To: <20230103032840.12265-1-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Jan 2023 14:51:31 +0100
+Message-ID: <CAJZ5v0hmwtYDYKP5BsDfynTyw+LvL5qpcXmbiWSZV7MpTTtrcA@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: swap: don't use /** for non-kernel-doc comments
+To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        rcu <rcu@vger.kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-In-Reply-To: <Y8qazpmqk4dmw37F@kroah.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 3, 2023 at 4:28 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> kernel-doc complains about multiple occurrences of "/**" being used
+> for something that is not a kernel-doc comment, so change all of these
+> to just use "/*" comment style.
+>
+> The warning message for all of these is:
+>
+> FILE:LINE: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>
+> kernel/power/swap.c:585: warning: ...
+> Structure used for CRC32.
+> kernel/power/swap.c:600: warning: ...
+>  * CRC32 update function that runs in its own thread.
+> kernel/power/swap.c:627: warning: ...
+>  * Structure used for LZO data compression.
+> kernel/power/swap.c:644: warning: ...
+>  * Compression function that runs in its own thread.
+> kernel/power/swap.c:952: warning: ...
+>  *      The following functions allow us to read data using a swap map
+> kernel/power/swap.c:1111: warning: ...
+>  * Structure used for LZO data decompression.
+> kernel/power/swap.c:1127: warning: ...
+>  * Decompression function that runs in its own thread.
+>
+> Also correct one spello/typo.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> ---
+>  kernel/power/swap.c |   16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff -- a/kernel/power/swap.c b/kernel/power/swap.c
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -581,7 +581,7 @@ static int save_image(struct swap_map_ha
+>         return ret;
+>  }
+>
+> -/**
+> +/*
+>   * Structure used for CRC32.
+>   */
+>  struct crc_data {
+> @@ -596,7 +596,7 @@ struct crc_data {
+>         unsigned char *unc[LZO_THREADS];          /* uncompressed data */
+>  };
+>
+> -/**
+> +/*
+>   * CRC32 update function that runs in its own thread.
+>   */
+>  static int crc32_threadfn(void *data)
+> @@ -623,7 +623,7 @@ static int crc32_threadfn(void *data)
+>         }
+>         return 0;
+>  }
+> -/**
+> +/*
+>   * Structure used for LZO data compression.
+>   */
+>  struct cmp_data {
+> @@ -640,7 +640,7 @@ struct cmp_data {
+>         unsigned char wrk[LZO1X_1_MEM_COMPRESS];  /* compression workspace */
+>  };
+>
+> -/**
+> +/*
+>   * Compression function that runs in its own thread.
+>   */
+>  static int lzo_compress_threadfn(void *data)
+> @@ -948,9 +948,9 @@ out_finish:
+>         return error;
+>  }
+>
+> -/**
+> +/*
+>   *     The following functions allow us to read data using a swap map
+> - *     in a file-alike way
+> + *     in a file-like way.
+>   */
+>
+>  static void release_swap_reader(struct swap_map_handle *handle)
+> @@ -1107,7 +1107,7 @@ static int load_image(struct swap_map_ha
+>         return ret;
+>  }
+>
+> -/**
+> +/*
+>   * Structure used for LZO data decompression.
+>   */
+>  struct dec_data {
+> @@ -1123,7 +1123,7 @@ struct dec_data {
+>         unsigned char cmp[LZO_CMP_SIZE];          /* compressed buffer */
+>  };
+>
+> -/**
+> +/*
+>   * Decompression function that runs in its own thread.
+>   */
+>  static int lzo_decompress_threadfn(void *data)
 
-> On Jan 20, 2023, at 8:44 AM, Greg Kroah-Hartman <gregkh@linuxfoundation.or=
-g> wrote:
->=20
-> =EF=BB=BFOn Fri, Jan 20, 2023 at 08:32:30AM -0500, Joel Fernandes wrote:
->>=20
->>=20
->>>> On Jan 20, 2023, at 2:05 AM, Greg Kroah-Hartman <gregkh@linuxfoundation=
-.org> wrote:
->>>=20
->>> =EF=BB=BFOn Thu, Jan 19, 2023 at 08:44:35PM +0000, Joel Fernandes (Googl=
-e) wrote:
->>>> For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined=
-.
->>>> However, cpu_is_hotpluggable() still returns true for those CPUs. This c=
-auses
->>>> torture tests that do offlining to end up trying to offline this CPU ca=
-using
->>>> test failures. Such failure happens on all architectures.
->>>>=20
->>>> Fix it by asking the opinion of the nohz subsystem on whether the CPU c=
-an
->>>> be hotplugged.
->>>>=20
->>>> [ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(=
-). ]
->>>>=20
->>>> Cc: Frederic Weisbecker <frederic@kernel.org>
->>>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->>>> Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
->>>> Cc: Will Deacon <will@kernel.org>
->>>> Cc: Marc Zyngier <maz@kernel.org>
->>>> Cc: rcu <rcu@vger.kernel.org>
->>>> Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the re=
-st of the kernel")
->>>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>>=20
->>> Also want to cc: stable on the patch?
->>=20
->> Oh sure, sorry. For some reason I thought Sasha and your AI scripts
->> were looking at the Linux-kernel list as well. Or are they, and a Cc
->> to stable is just to be doubly sure?
->=20
-> As per the rules we have had for the last 15+ years, always add a cc:
-> stable to be sure that the patch will be considered for stable releases.
-> If not, you are on you own and sometimes we might notice it, others not.
->=20
-> See:
->    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html=
-
-> for the details.
-
-Ah my bad, I did read that already but somehow assumed anything merged with a=
- Fixes tag was already considered for stable. I will always Cc stable hencef=
-orth if I want something in stable.
-
-Thank you!
-
- - Joel
-
-
->=20
-> thanks,
->=20
-> greg k-h
+Applied as 6.3 material, thanks!
