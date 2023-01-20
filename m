@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25ACC67619F
+	by mail.lfdr.de (Postfix) with ESMTP id 713B66761A0
 	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjATXek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S229643AbjATXej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjATXei (ORCPT
+        with ESMTP id S229460AbjATXeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:34:38 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01957ED56;
+        Fri, 20 Jan 2023 18:34:37 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9559B7DFAA;
         Fri, 20 Jan 2023 15:34:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1674257676; x=1705793676;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ekt4X4xR1TAIasVRR9OHuNebiCvC80dSkNaTSp9S32E=;
-  b=IoU/V4IstOBvaGOyFLypl4QDQQFUbP40evXobSfbwhpZtLHaZ2nWy3So
-   nJu7KgVJkf9wxsta14ilICcns+YHwYFFjVaziSrgBaRokqB+T0nUIYTEY
-   moNh8AFYTrn1zNngLL5/ZW7Lb52OJj5Kae28KqI8VQaWuzSfHm4RS9FRN
-   KNToyq6NduMoRw7YBNkujDuFoIb0akTjUJ46/2yLOSyIMzs8cmd5cPxHS
-   2ZiO2K5e2t+9g/Vm2Sj3NnTZz+Shd581tjeGqNCc+uLB5NAVN/Im13FyV
-   AbM5Q16d731eihZHP/gVymqAoJr1UU5SYUDy/7K7YbFslSpxbnLiUz2pd
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="313613673"
+  bh=E2gxb0L3/toBnbFs7DTv3zXEuUw4WpxcDWK6bM6N05A=;
+  b=geVKXPR7aHD14Bf8Kypx5+hDQa+yWWid38u26UTuHmrEmB/ubR+UGl58
+   MA0amb6IzQljeGoSTYNYY/v7Ld/DSd0hLBGR1JlAzwtmqLQtcVCHIWvjb
+   BfzC83cDIS7noyALdOeRHxz+gC+n4bI7woaYTvQ+EfacuIvm07VEtf+wd
+   91UA6bjS8bz5QJc7EmiTqSQTBvj0SFkvjwP83xayo0NT6c4QM7IV0A04C
+   Z9qvs3qZyOKul3l+3CH+6VjPH53MIZ/UtBaDBh7tbz7Cdz96pRb+RjGsF
+   IPmSk2nd7qLbSxdqAx6ITmKjwLA+qNVt2aTYZePQZXy35SEL9pFBCjFjR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="352979728"
 X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="313613673"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 15:34:35 -0800
+   d="scan'208";a="352979728"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 15:34:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="749525893"
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="662708195"
 X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="749525893"
+   d="scan'208";a="662708195"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2023 15:34:32 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jan 2023 15:34:32 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pJ0tz-00036K-2C;
+        id 1pJ0tz-00036I-20;
         Fri, 20 Jan 2023 23:34:31 +0000
 Date:   Sat, 21 Jan 2023 07:34:12 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, jk@ozlabs.org, joel@jms.id.au,
-        alistair@popple.id.au, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH 2/2] fsi: Add IBM I2C Responder virtual FSI master
-Message-ID: <202301210758.mY8JSNOf-lkp@intel.com>
-References: <20230119174714.1486042-3-eajames@linux.ibm.com>
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>
+Cc:     oe-kbuild-all@lists.linux.dev, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [PATCH] mt7530 don't make the CPU port a VLAN user port
+Message-ID: <202301210746.xjCzhDc3-lkp@intel.com>
+References: <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119174714.1486042-3-eajames@linux.ibm.com>
+In-Reply-To: <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -68,59 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eddie,
+Hi Vladimir,
 
-I love your patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.2-rc4 next-20230120]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc4 next-20230120]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/dt-bindings-fsi-Document-the-IBM-I2C-Responder-virtual-FSI-master/20230120-014831
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230119174714.1486042-3-eajames%40linux.ibm.com
-patch subject: [PATCH 2/2] fsi: Add IBM I2C Responder virtual FSI master
-config: arm-randconfig-c002-20230120 (https://download.01.org/0day-ci/archive/20230121/202301210758.mY8JSNOf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Oltean/mt7530-don-t-make-the-CPU-port-a-VLAN-user-port/20230121-012326
+patch link:    https://lore.kernel.org/r/20230120172132.rfo3kf4fmkxtw4cl%40skbuf
+patch subject: [PATCH] mt7530 don't make the CPU port a VLAN user port
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20230121/202301210746.xjCzhDc3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/1312ba80b81ef02457d213ee6bc6ee80739c3e01
+        # https://github.com/intel-lab-lkp/linux/commit/563aaac5703ee8530858faf04f93f30785d74cf6
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eddie-James/dt-bindings-fsi-Document-the-IBM-I2C-Responder-virtual-FSI-master/20230120-014831
-        git checkout 1312ba80b81ef02457d213ee6bc6ee80739c3e01
+        git fetch --no-tags linux-review Vladimir-Oltean/mt7530-don-t-make-the-CPU-port-a-VLAN-user-port/20230121-012326
+        git checkout 563aaac5703ee8530858faf04f93f30785d74cf6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/fsi/
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/fsi/fsi-master-i2cr.c:214:12: error: incompatible function pointer types initializing 'void (*)(struct i2c_client *)' with an expression of type 'int (struct i2c_client *)' [-Wincompatible-function-pointer-types]
-           .remove = i2cr_remove,
-                     ^~~~~~~~~~~
-   1 error generated.
+   drivers/net/dsa/mt7530.c: In function 'mt7530_port_vlan_filtering':
+>> drivers/net/dsa/mt7530.c:1525:26: warning: unused variable 'cpu_dp' [-Wunused-variable]
+    1525 |         struct dsa_port *cpu_dp = dp->cpu_dp;
+         |                          ^~~~~~
 
 
-vim +214 drivers/fsi/fsi-master-i2cr.c
+vim +/cpu_dp +1525 drivers/net/dsa/mt7530.c
 
-   211	
-   212	static struct i2c_driver i2cr_driver = {
-   213		.probe_new = i2cr_probe,
- > 214		.remove = i2cr_remove,
-   215		.driver = {
-   216			.name = "i2cr",
-   217			.of_match_table = i2cr_i2c_ids,
-   218		},
-   219	};
-   220	
+83163f7dca5684 Sean Wang        2017-12-15  1519  
+83163f7dca5684 Sean Wang        2017-12-15  1520  static int
+89153ed6ebc148 Vladimir Oltean  2021-02-13  1521  mt7530_port_vlan_filtering(struct dsa_switch *ds, int port, bool vlan_filtering,
+89153ed6ebc148 Vladimir Oltean  2021-02-13  1522  			   struct netlink_ext_ack *extack)
+83163f7dca5684 Sean Wang        2017-12-15  1523  {
+1f9a6abecf538c Frank Wunderlich 2022-06-10  1524  	struct dsa_port *dp = dsa_to_port(ds, port);
+1f9a6abecf538c Frank Wunderlich 2022-06-10 @1525  	struct dsa_port *cpu_dp = dp->cpu_dp;
+1f9a6abecf538c Frank Wunderlich 2022-06-10  1526  
+83163f7dca5684 Sean Wang        2017-12-15  1527  	if (vlan_filtering) {
+83163f7dca5684 Sean Wang        2017-12-15  1528  		/* The port is being kept as VLAN-unaware port when bridge is
+83163f7dca5684 Sean Wang        2017-12-15  1529  		 * set up with vlan_filtering not being set, Otherwise, the
+83163f7dca5684 Sean Wang        2017-12-15  1530  		 * port and the corresponding CPU port is required the setup
+83163f7dca5684 Sean Wang        2017-12-15  1531  		 * for becoming a VLAN-aware port.
+83163f7dca5684 Sean Wang        2017-12-15  1532  		 */
+83163f7dca5684 Sean Wang        2017-12-15  1533  		mt7530_port_set_vlan_aware(ds, port);
+563aaac5703ee8 Vladimir Oltean  2023-01-20  1534  //		mt7530_port_set_vlan_aware(ds, cpu_dp->index);
+e3ee07d14fac20 Vladimir Oltean  2019-04-28  1535  	} else {
+e3ee07d14fac20 Vladimir Oltean  2019-04-28  1536  		mt7530_port_set_vlan_unaware(ds, port);
+83163f7dca5684 Sean Wang        2017-12-15  1537  	}
+83163f7dca5684 Sean Wang        2017-12-15  1538  
+83163f7dca5684 Sean Wang        2017-12-15  1539  	return 0;
+83163f7dca5684 Sean Wang        2017-12-15  1540  }
+83163f7dca5684 Sean Wang        2017-12-15  1541  
 
 -- 
 0-DAY CI Kernel Test Service
