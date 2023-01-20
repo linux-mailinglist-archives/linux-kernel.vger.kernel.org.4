@@ -2,110 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEEC676051
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932E367603A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjATWnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S229684AbjATWia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjATWni (ORCPT
+        with ESMTP id S229682AbjATWi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:43:38 -0500
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFEA13DF7;
-        Fri, 20 Jan 2023 14:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1674254604; bh=SmK4fdjCc+5+gIx3b4Eq/5hJTyyAOSXxn2Irl+5x9sQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=rbWwDpsoaA9989HeUv8NI0B38u35ZqWZEbTUE4jON1fFxqsrYsLMMVEg8KSBgNGUs
-         wNisqI2vHvqdS/FCYk70XhjPKc0emCd3spjJ+lMu5Xvzu6JSyWWSxmTmAqNTzo5lRl
-         +h3os2BZAa35HBTcYX6M9LoHZvobIagXrZQOVmyIBd5J9APkN9cugULTa8nf9PCVUE
-         kqCcgtzmEXMNjInMMrMqqFlf3hk64jlOG0N/NJbBkxljgLpPbOrHO4LpsIAImycW4V
-         hMsPI1nMsqDDuZx/WMuRMPjKNDyxN/sQbIcAvbTcqUGP9uj92Ej6fScpCuYCgvZoKx
-         Ub4sPEQyJ493Q==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from luka-spectre.fritz.box ([77.182.131.156]) by smtp.web.de
- (mrweb106 [213.165.67.124]) with ESMTPSA (Nemesis) id
- 1N8n4G-1ogAU42qsY-015sFO; Fri, 20 Jan 2023 23:38:14 +0100
-From:   Luka Guzenko <l.guzenko@web.de>
-To:     jikos@kernel.org
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luka Guzenko <l.guzenko@web.de>
-Subject: [PATCH] HID: Ignore battery for ELAN touchscreen 29DF on HP 
-Date:   Fri, 20 Jan 2023 23:37:41 +0100
-Message-Id: <20230120223741.3007-1-l.guzenko@web.de>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XHSDTG/Z83oXdh/P7+KCto1i2A1FPHqUwt4R7sQRZr9zP6M0smE
- +duC7xldbCGIZLf4H4hBvG3SPFrO0XsYblTc08kw+ytZylUrVTTrJ3fVvfHZvPUGXv+dFM+
- tT2hAfAAmfUz3aiD1sZ2hHZZXwLlJP7AXfPa0lBtc936SmMYICzrCHIrj9rSkvLVH/pZn+s
- Ra8XW82cxWbpwXmxoDKkg==
-UI-OutboundReport: notjunk:1;M01:P0:7OmScQ0ZIoI=;qa+lcBfvBh2BVktoVTfJTom3f5l
- /kTUcjmDjm/EkVgjfD/ZOI+7xuTPp9WmBn48ASEbA76ZmObSLCiFilL042Jt1kncMU3TqV3of
- iEZ1ySA/rHvPEJrR3fPu8ZZrfszS076b7bjRLQFftoFbIg0tzfK/VxeFpCxsrOxa2TDcRZJ/a
- HKx4J+GY6zrTBehOwLH2iIWSUzI5NXmjAAk6EDjzwU6dqj3bSU+vxEIN2J85TCgi2o2nUPCTI
- tP2gLMyjrA7zhH7CoiWN1TikNK3Z7/QiZJN2niH4vTqkoTEc9F4mvVJXUfH/iX53i/MfIITAA
- 6zD9Z+ot+3o1qwxh5GkZvSawC6TbbLRHJnsw3L/hAhccBDYejx701326e/ctozUEmU0YZKd3V
- xSvzHkxof0zt6RQm/g8LIcGnXzfncaAs5+10dF3Hhn0cahJi2xm3jGzWh4ZR2hzQmKj0J64D2
- UgGLaRuuexvB3PVTfwA8traXAeVAAk3koC35Tp5Xl8VoyaEv1BuDnafJBL6LUv4qKHZJ1md9+
- ZKe0fI+a2mFi+KT4waCvDSa2W4/msCa3frcPjTOAuhad7sWgRYS+vMI6IOlpUXworrxd+Iypi
- heFChKTG8geItuG/KzzZc2MxX5nb4WlXuQwB/wWBh4YicT43eMt4SBD9zY/OZFUDAUG6F3b1K
- pQ7dU44iw7fS13984Esq5nIm5GyN4n5FQ8bWKd9QF3eiZxB5045bxd6CteUtlFSjRwCo9z4sn
- plqNagVry9bjKUsHCV6aUlf8h/RxqDbBIU8y1u6+NHHPedHps1LUcieu4iX43KU6/utWW16RW
- wy1rlzeyNeTGGC1iKcAPdTWNZCK9/i0O9ZDFOLbgIBEvN+dWpJxSI3BfWgRGrnUqNDB3Yqijp
- t0f2FgUKIWTiFW4Eeh8f+BVa2PByUR/fSywIDYTkJgqF5Z2/lzGEcrSIAoH5E9i4NAJqqsZdu
- v5ugP8k0bYu19Gr3IpbCg7VyD8c=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 17:38:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D69762ED;
+        Fri, 20 Jan 2023 14:38:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACDD4620BE;
+        Fri, 20 Jan 2023 22:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DF11C433EF;
+        Fri, 20 Jan 2023 22:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674254306;
+        bh=MpEGY6/xksiGVYiHlhYRcbm1YXpcd5WDLzFdFfPXiJo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=EZ3N+68xWx3DdO0W73vblDoNXoC1oWAgsr4tmOdjkZjj5GQQuiuU2G7cIzLYZaP6z
+         icBSrGHNf5rYxYAl/o2hc7abOJ2XulRhdl6vLL2smBAuEHTuB1sj2miXMnbcsqfCnI
+         DK38LQ59OpVLDtB2Nl7sQit01I2wRrXGIGJVs/blNFYv8knwlqsC5URBtNBnbW086n
+         Ts6mNER/R6gTrkx4WLTrkujZuu/O4mBREk0hFuL4303sL82b3hpjoxC8mWQrQMrc2b
+         DM4TgvsteXxqDE399sxeu3SKZEg0Hfzu7BkxHHHsjDBwjrkTiuvEgMq5fMS1bXuruV
+         hOINf+QWPIzxg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0AAE1C04E32;
+        Fri, 20 Jan 2023 22:38:26 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y8sD+xH7fohazCtu@nvidia.com>
+References: <Y8sD+xH7fohazCtu@nvidia.com>
+X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y8sD+xH7fohazCtu@nvidia.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+X-PR-Tracked-Commit-Id: 0f097f08c9b3c1fdb6cc9f2dd423abc17d13f1a2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8974efaa3385959e7ea1019a4b63acff28631e6d
+Message-Id: <167425430603.2096.15873709089812714863.pr-tracker-bot@kernel.org>
+Date:   Fri, 20 Jan 2023 22:38:26 +0000
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The touchscreen reports a battery status of 0% and jumps to 1% when a
-stylus is used. The device ID was added and the battery ignore quirk was
-enabled for it.
+The pull request you sent on Fri, 20 Jan 2023 17:13:31 -0400:
 
-Signed-off-by: Luka Guzenko <l.guzenko@web.de>
-=2D--
- drivers/hid/hid-ids.h   | 1 +
- drivers/hid/hid-input.c | 2 ++
- 2 files changed, 3 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 82713ef3aaa6..78f4846e5711 100644
-=2D-- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -414,6 +414,7 @@
- #define I2C_DEVICE_ID_HP_ENVY_X360_15T_DR100	0x29CF
- #define I2C_DEVICE_ID_HP_ENVY_X360_EU0009NV	0x2CF9
- #define I2C_DEVICE_ID_HP_SPECTRE_X360_15	0x2817
-+#define I2C_DEVICE_ID_HP_SPECTRE_X360_13_AW0020NG  0x29DF
- #define USB_DEVICE_ID_ASUS_UX550VE_TOUCHSCREEN	0x2544
- #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN	0x2706
- #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN	0x261A
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 9b59e436df0a..27f17fafce58 100644
-=2D-- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -384,6 +384,8 @@ static const struct hid_device_id hid_battery_quirks[]=
- =3D {
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_HP_SPECTRE_X360_15),
- 	  HID_BATTERY_QUIRK_IGNORE },
-+	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_HP_SPECTRE_X360_13_AW=
-0020NG),
-+	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREE=
-N),
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCRE=
-EN),
-=2D-
-2.39.1
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8974efaa3385959e7ea1019a4b63acff28631e6d
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
