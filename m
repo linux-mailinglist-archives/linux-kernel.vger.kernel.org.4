@@ -2,179 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA74675F77
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F8B675F7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjATVMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S229447AbjATVN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjATVMN (ORCPT
+        with ESMTP id S229487AbjATVN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:12:13 -0500
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A0D891F5;
-        Fri, 20 Jan 2023 13:12:12 -0800 (PST)
-Received: by mail-pg1-f169.google.com with SMTP id b12so5083000pgj.6;
-        Fri, 20 Jan 2023 13:12:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWERe0yn9/AI89G8p3N0eQK3PGKu0XJFyAh8xZoq6E0=;
-        b=X/uyD9rwyPPxhk+abszMBVfjDGHGD0922zuWZC5KHnOrPioANuKpCKFwXUvyH+bZiu
-         x3hmjICiVzNT6WQOMdfBEwoAlAvPSAodbaVaYEpKFmEnZ3EPLp1NjDjV/LL7KyYRnoST
-         bRXEeN+PLZwn31b7PS2dNa46Z6orWE4JuP0mjQjuuJ9jhBgGQKOXQ3kBTX/g0oM8Oq14
-         1u8rWePndlaSEwexJUbrdsqb84XOkbYUPAmNgW5uiC6qyE80xeNTj1dIm8L5v3br0jG3
-         MkHix6TbN2PjRkuVVATwLGpMXb0VEXeDhZBGIQfHo04KMnXVQMlK35NSI5ar+F7Ib8+2
-         Yz/g==
-X-Gm-Message-State: AFqh2koOsdZIe9meBZJjT7R9ElNBDWOCIyFRxtFzEuOMux2kve0ocJxn
-        tC9Z49Hf3o6+b/A0tOet09I=
-X-Google-Smtp-Source: AMrXdXuYGRlxjz4gBxaOCK8e/yF9OY3LqXaKknGVtettqZjH9a46t2ycs1LButfG05UeGaY+uUfVzQ==
-X-Received: by 2002:aa7:946b:0:b0:58b:c873:54e1 with SMTP id t11-20020aa7946b000000b0058bc87354e1mr20707653pfq.24.1674249131802;
-        Fri, 20 Jan 2023 13:12:11 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:3a65:5ceb:1d3:9e21? ([2620:15c:211:201:3a65:5ceb:1d3:9e21])
-        by smtp.gmail.com with ESMTPSA id h124-20020a628382000000b0058bb2f12080sm14119594pfe.48.2023.01.20.13.12.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 13:12:10 -0800 (PST)
-Message-ID: <9330ae10-de30-89be-cf53-f50db9610532@acm.org>
-Date:   Fri, 20 Jan 2023 13:12:08 -0800
+        Fri, 20 Jan 2023 16:13:28 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B9D8A4C;
+        Fri, 20 Jan 2023 13:13:26 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KKhonO019470;
+        Fri, 20 Jan 2023 21:13:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zq62gIvYUOYZp0PNrvkd+owZCAJA9jgIYgDD39UMtkg=;
+ b=Sjjr6Q44OLoaSU9CxyMV9AtrdiUa+4/D5a8CVr+zC0E31T7mbKc/IGl2LnaKFAKgFBYO
+ 4ympxxfXOYUCR8+jZ0uh3lAtOaJMo9b6r866FxSXlIZaTPs25RMwDOEzdA6hAIxUy3Fn
+ /n69ojdC1JN7/DxtiZ5bG0NNDRYSedmkye3uLKNmQDd6nZxpvK06AN5GjZ6EkbzNGLZs
+ d7YGc2gO40q0dC45Wblarin0f+gbe4tMxFexRMvxq0tUFYiLNsPusX8fTiBI3ezbSboE
+ ymMQZGL4pyUgWLbzDNEs9VY4hksRDC6YPtDlmTMUWyVWFGpDpQOloks/dFFoh4B2EjL6 ZQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7yc60cga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 21:13:17 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KLDHJ0009059
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 21:13:17 GMT
+Received: from [10.110.31.254] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
+ 2023 13:13:16 -0800
+Message-ID: <f709f410-f21b-b2e7-4e76-04b15fb2001a@quicinc.com>
+Date:   Fri, 20 Jan 2023 13:13:16 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH v3 0/1] scsi: ufs: Add hibernation callbacks
-To:     Anjana Hari <quic_ahari@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        konrad.dybcio@linaro.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_narepall@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_rampraka@quicinc.com
-References: <20230120113321.30433-1-quic_ahari@quicinc.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v6 0/2] Add base device tree files for QDU1000/QRU1000
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230112210722.6234-1-quic_molvera@quicinc.com>
 Content-Language: en-US
-In-Reply-To: <20230120113321.30433-1-quic_ahari@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <20230112210722.6234-1-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oms45SBvs9RnGgrpTBNy5zskWvfLaBrE
+X-Proofpoint-ORIG-GUID: oms45SBvs9RnGgrpTBNy5zskWvfLaBrE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_11,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0 clxscore=1015
+ mlxlogscore=751 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301200202
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 03:33, Anjana Hari wrote:
->   - Note to Bart: Regrading the comment to pass "restore" as an
->   argument instead of adding a new member to ufs_hba structure, adding
->   new function argument in core file (ufshcd.c) is forcing us to make
->   changes to other vendor files to fix the compilation errors. Hence
->   we have retained our original change. Please let us know your inputs
->   on this. 
-Storing state information in a structure member that can be passed as a
-function argument makes code harder to read and to maintain than
-necessary. Please address my request before this patch goes upstream. I'm
-concerned if someone would try to address my request after this patch went
-upstream that there would be no motivation from your side to help with
-testing the refactoring patch.
+Can someone review these patches please?
 
-I think the patch below shows that it is easy to eliminate the new 'restore'
-member variable. Please note that the patch below has not been tested in any
-way.
+Thanks,
+Melody
 
----
-  drivers/ufs/core/ufshcd.c | 48 +++++++++++++++++++--------------------
-  include/ufs/ufshcd.h      |  3 ---
-  2 files changed, 23 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 19608f3a38f9..b5cfbc1fccc6 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -9801,34 +9801,11 @@ static int ufshcd_resume(struct ufs_hba *hba)
-  	/* enable the host irq as host controller would be active soon */
-  	ufshcd_enable_irq(hba);
-
--	if (hba->restore) {
--		/* Configure UTRL and UTMRL base address registers */
--		ufshcd_writel(hba, lower_32_bits(hba->utrdl_dma_addr),
--			      REG_UTP_TRANSFER_REQ_LIST_BASE_L);
--		ufshcd_writel(hba, upper_32_bits(hba->utrdl_dma_addr),
--			      REG_UTP_TRANSFER_REQ_LIST_BASE_H);
--		ufshcd_writel(hba, lower_32_bits(hba->utmrdl_dma_addr),
--			      REG_UTP_TASK_REQ_LIST_BASE_L);
--		ufshcd_writel(hba, upper_32_bits(hba->utmrdl_dma_addr),
--			      REG_UTP_TASK_REQ_LIST_BASE_H);
--		/* Make sure that UTRL and UTMRL base address registers
--		 * are updated with the latest queue addresses. Only after
--		 * updating these addresses, we can queue the new commands.
--		 */
--		mb();
--	}
--
--	/* Resuming from hibernate, assume that link was OFF */
--	if (hba->restore)
--		ufshcd_set_link_off(hba);
--
-  	goto out;
-
-  disable_vreg:
-  	ufshcd_vreg_set_lpm(hba);
-  out:
--	if (hba->restore)
--		hba->restore = false;
-
-  	if (ret)
-  		ufshcd_update_evt_hist(hba, UFS_EVT_RESUME_ERR, (u32)ret);
-@@ -10012,10 +9989,31 @@ int ufshcd_system_restore(struct device *dev)
-  {
-
-  	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	int ret;
-
--	hba->restore = true;
--	return ufshcd_system_resume(dev);
-+	ret = ufshcd_system_resume(dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Configure UTRL and UTMRL base address registers */
-+	ufshcd_writel(hba, lower_32_bits(hba->utrdl_dma_addr),
-+		      REG_UTP_TRANSFER_REQ_LIST_BASE_L);
-+	ufshcd_writel(hba, upper_32_bits(hba->utrdl_dma_addr),
-+		      REG_UTP_TRANSFER_REQ_LIST_BASE_H);
-+	ufshcd_writel(hba, lower_32_bits(hba->utmrdl_dma_addr),
-+		      REG_UTP_TASK_REQ_LIST_BASE_L);
-+	ufshcd_writel(hba, upper_32_bits(hba->utmrdl_dma_addr),
-+		      REG_UTP_TASK_REQ_LIST_BASE_H);
-+	/* Make sure that UTRL and UTMRL base address registers
-+	 * are updated with the latest queue addresses. Only after
-+	 * updating these addresses, we can queue the new commands.
-+	 */
-+	mb();
-
-+	/* Resuming from hibernate, assume that link was OFF */
-+	ufshcd_set_link_off(hba);
-+
-+	return 0;
-  }
-  EXPORT_SYMBOL_GPL(ufshcd_system_restore);
-
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 6f50390ca262..1d6dd13e1651 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1071,9 +1071,6 @@ struct ufs_hba {
-  	struct ufs_hw_queue *uhq;
-  	struct ufs_hw_queue *dev_cmd_queue;
-  	struct ufshcd_mcq_opr_info_t mcq_opr[OPR_MAX];
--
--	/* Distinguish between resume and restore */
--	bool restore;
-  };
-
-  /**
+On 1/12/2023 1:07 PM, Melody Olvera wrote:
+> This series adds the base device tree files and DTS support for the
+> Qualcomm QDU1000 and QRU1000 IDP SoCs, including the clocks, tlmm, smmu,
+> regulators, mmc, interconnects, cpufreq, and qup. 
+>
+> This patchset requires the dt-bindings changes from [1-3].
+>
+> The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+> 1000 are new SoCs meant for enabling Open RAN solutions. See more at
+> https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
+>
+> [1] https://lore.kernel.org/all/20221216231426.24760-1-quic_molvera@quicinc.com/
+> [2] https://lore.kernel.org/all/20230112204446.30236-1-quic_molvera@quicinc.com/
+> [3] https://lore.kernel.org/all/20230112203653.23139-1-quic_molvera@quicinc.com/
+>
+> Changes from v5:
+> - Moved XYZ-names fields under XYZ fields
+> - Removed irrelevant comments
+> - Updated ordering of some fields
+> - Removed unneeded fields
+> - Revised style on clocks and interrupts
+>
+> Changes from v4:
+> - Added chassis-type
+> - Added missing regulator voltages
+> - Sorted includes
+> - Remaned memory nodes
+> - Reorganized nodes to start with compatible/reg
+> - Removed unnecessary clocks
+> - Switched to deleting nodes by label
+> - Moved pin biases and drive strengths to dts files
+>
+> Changes from v3:
+> - added PCIE and USB clocks
+> - added missing qdu1000 compats
+>
+> Changes from v2:
+> - Revised device nodes to match updated dt-bindings
+> - Revised rpmh-rsc bindings to allow for generic regulator nodes
+> - Updated soc ordering
+> - Moved clock node to DTS files
+> - Updated regulator nodes to be generic
+> - Removed some unnecessary whitespace
+>
+> Melody Olvera (2):
+>   arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
+>   arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
+>
+>  arch/arm64/boot/dts/qcom/Makefile        |    2 +
+>  arch/arm64/boot/dts/qcom/qdu1000-idp.dts |  453 ++++++++
+>  arch/arm64/boot/dts/qcom/qdu1000.dtsi    | 1333 ++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/qru1000-idp.dts |  453 ++++++++
+>  arch/arm64/boot/dts/qcom/qru1000.dtsi    |   26 +
+>  5 files changed, 2267 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
+>
+>
+> base-commit: 0a093b2893c711d82622a9ab27da4f1172821336
+> prerequisite-patch-id: d439ef85a730c7b736ed8c63162e24c7ae661b60
+> prerequisite-patch-id: c55ff1a38fed5356caa8f40a85ef0b8ebc4d1fa4
+> prerequisite-patch-id: 984e8570d2464f4027dc59294c10f47e7ae29a84
 
