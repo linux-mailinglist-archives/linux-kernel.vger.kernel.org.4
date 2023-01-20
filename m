@@ -2,141 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187E46749E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC076749EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 04:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjATDQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 22:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S229531AbjATDRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 22:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjATDQA (ORCPT
+        with ESMTP id S229462AbjATDRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 22:16:00 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5D7B1EDE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:15:39 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id i185so4359699vsc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:15:39 -0800 (PST)
+        Thu, 19 Jan 2023 22:17:31 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B613A83B9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:17:14 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id y25so6124971lfa.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 19:17:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Hpc5Ciyxu29gomOTvRt7HRyn5ui+yh0jFZKfccP/3A=;
-        b=6ipErWbF5wYAMGrwowJPn2VP4KJ9ijlP4WCHTjoDjDh9WU2oC66c2szaAh27ljPc/2
-         /qcJlPmhvqZmNOYwkIXjFzWXXYg3MM+iGn+Mv3KFuOdX692Pmq0PW5Z7IcBwlMFLjDpT
-         r2tUwTkUAm9b0oCWn3acyclThA0FWFRKYmWlrcjw+AYHlcXhWfSIgH0tkXNqrWEjeTrQ
-         L6NMCRU0hmCZUWhwYST4V6b6L4P6XUhlyvTw8zLAZZd5CMnYiYGIusHPB8xwEdTVSQGu
-         /Wis04U9Zb5RvqO9FjEV3MuaPyXKgigSsleVPI8wC0SMbslSqQP6AsNmsXpW1ZQaZIha
-         0zuA==
+        bh=kqRsGV1hLKEL4T2IM0trJmyGv/h6of60RLenPHHF3Ik=;
+        b=NPdVT/5TG8Cg1V/NBoiJyjXFh+GKRcfLnySBsiE33eddp14XzN3Yt28Zx3V1qYGhik
+         S3t6Us2p6fDNvC0cxbZBlIyxhZNVC8de0Vz/MZfoCIZWuG2S8bXtAMn2gjqr82holuzQ
+         w/KSnrfa+LsuaQUZkOlgSL69bxy3p0Z71Q0/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Hpc5Ciyxu29gomOTvRt7HRyn5ui+yh0jFZKfccP/3A=;
-        b=Zog6c3BSMgLHqps84sFfWei8t74zKVh/d59u1tHeHu6xEAcHYTExfC059vL29IGiqO
-         TEOB7A2jKf9Czg9aEbcDX5rkULBinQ4/Y5e3kqgc7tMTUG3jqvveVkiyxWwiFh8cp42e
-         gcI7cBe8RFcHKMuTumWux1+J5yK53olArCIwzmsHTc2YYzXXbQEsiodArR+Wm5aZJ+Yj
-         Ce9Lenojl7RQSPlNreU36iRC8hagnIjmvKp/CzGqfWkqK4UOGEB8BuwvLkSaImKXS6CN
-         cQG5NxUxKsEck4M8m7mZD0poKCxyFDmy0ow91fxsz9E1YbmP8+ITKfM0zbIGRQr9mbGM
-         JvIw==
-X-Gm-Message-State: AFqh2kqyJD5+b5c2cwKNZ/KhMSaRBnwsAiP7cvWkNrEIO78W5UcBHIdk
-        uBarFGiBm0UkiCZQz2dZjbaIju+lVCqnYXjrn3wC2urUKgFr0VS6Mr4=
-X-Google-Smtp-Source: AMrXdXtjyf+fQ9q4OP75X7YsCp1FrKqaqir0r4nm353FcrUzBifgDBMUDDotUCcoXFmJIxCcDXn5Q2jRa2S9UonXbu0=
-X-Received: by 2002:a05:6102:1510:b0:3d3:e5dc:e359 with SMTP id
- f16-20020a056102151000b003d3e5dce359mr1785070vsv.61.1674184538020; Thu, 19
- Jan 2023 19:15:38 -0800 (PST)
+        bh=kqRsGV1hLKEL4T2IM0trJmyGv/h6of60RLenPHHF3Ik=;
+        b=6ydCNge9SQP5ODpc2TeSDNvMY30i5UED4Iu+ZglOc4k07aIYudkExBot+yQfSGZL45
+         5SYyl8aLeoNdDkAYDRVPPrKFzryvLWIqVjDfwlttEJPppj9elISsBsU6QCu36TKcQzID
+         yCbjgupvQ7IGd0eTWDQu9OKPrYgboyJsSCgFstIwXXskfz88F27+5KRK67fQPSFCfoyq
+         /b1RP0Zaztrxj1K9BHlzDO0zpa+Ta7yjK0SMhcrjMU2wilFUy3yoHLdD11IWeMSrGclc
+         uU3gH60x5Rv+gJw27ri5/TrwcV1mN72qp77CTjNUwvIUpFcGuYEYVXtQe1yXK0HX9VPC
+         w/KQ==
+X-Gm-Message-State: AFqh2kqOf170A40t45WHbBdUJgH8T/QL0V6O84+2mUbvIQgBBN3RHuzo
+        V91QjEeyp5CQB4bnThNo+7FlTQFGL2zK7nebn2T9cz7Dz8Bczw==
+X-Google-Smtp-Source: AMrXdXuuACt/lA0GUYLJvhp+7C4AD8/P/VjBxiXTznvTjyVcTLFTOJm5SG/DHJ05n/8izLTdYkACXpXSZLUYqJvDaZk=
+X-Received: by 2002:ac2:5ec4:0:b0:4cb:3b:846e with SMTP id d4-20020ac25ec4000000b004cb003b846emr601857lfq.128.1674184632329;
+ Thu, 19 Jan 2023 19:17:12 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6130:1015:b0:559:9619:d862 with HTTP; Thu, 19 Jan 2023
- 19:15:37 -0800 (PST)
-X-Originating-IP: [24.53.241.20]
-In-Reply-To: <CADyTPEwt=ZNams+1bpMB1F9w_vUdPsGCt92DBQxxq_VtaLoTdw@mail.gmail.com>
-References: <CADyTPEwt=ZNams+1bpMB1F9w_vUdPsGCt92DBQxxq_VtaLoTdw@mail.gmail.com>
-From:   Nick Bowler <nbowler@draconx.ca>
-Date:   Thu, 19 Jan 2023 22:15:37 -0500
-Message-ID: <CADyTPEyAidGgBT3f1VJLHb3ouO-r1UyvFp1PcwXxy0NRG94sbw@mail.gmail.com>
-Subject: Re: PROBLEM: Only one CPU active on Ultra 60 since ~4.8 (regression)
-To:     sparclinux@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
+References: <20230118073014.2020743-1-qiang1.zhang@intel.com>
+ <20230118180714.GD2948950@paulmck-ThinkPad-P17-Gen-1> <Y8oHL0uuSEef5aiI@google.com>
+In-Reply-To: <Y8oHL0uuSEef5aiI@google.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 20 Jan 2023 03:17:00 +0000
+Message-ID: <CAEXW_YRiiEh_PTm0c7aa-DXUVdHGO77_ohxws_Lpcu_8fvSi_A@mail.gmail.com>
+Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action
+ from rcu_report_qs_rdp()
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jan 20, 2023 at 3:14 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Wed, Jan 18, 2023 at 10:07:14AM -0800, Paul E. McKenney wrote:
+> > On Wed, Jan 18, 2023 at 03:30:14PM +0800, Zqiang wrote:
+> > > When inovke rcu_report_qs_rdp(), if current CPU's rcu_data structure's ->
+> > > grpmask has not been cleared from the corresponding rcu_node structure's
+> > > ->qsmask, after that will clear and report quiescent state, but in this
+> > > time, this also means that current grace period is not end, the current
+> > > grace period is ongoing, because the rcu_gp_in_progress() currently return
+> > > true, so for non-offloaded rdp, invoke rcu_accelerate_cbs() is impossible
+> > > to return true.
+> > >
+> > > This commit therefore remove impossible rcu_gp_kthread_wake() calling.
+> > >
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > > Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> >
+> > Queued (wordsmithed as shown below, as always, please check) for further
+> > testing and review, thank you both!
+> >
+> >                                                       Thanx, Paul
+> >
+> > ------------------------------------------------------------------------
+> >
+> > commit fbe3e300ec8b3edd2b8f84dab4dc98947cf71eb8
+> > Author: Zqiang <qiang1.zhang@intel.com>
+> > Date:   Wed Jan 18 15:30:14 2023 +0800
+> >
+> >     rcu: Remove never-set needwake assignment from rcu_report_qs_rdp()
+> >
+> >     The rcu_accelerate_cbs() function is invoked by rcu_report_qs_rdp()
+> >     only if there is a grace period in progress that is still blocked
+> >     by at least one CPU on this rcu_node structure.  This means that
+> >     rcu_accelerate_cbs() should never return the value true, and thus that
+> >     this function should never set the needwake variable and in turn never
+> >     invoke rcu_gp_kthread_wake().
+> >
+> >     This commit therefore removes the needwake variable and the invocation
+> >     of rcu_gp_kthread_wake() in favor of a WARN_ON_ONCE() on the call to
+> >     rcu_accelerate_cbs().  The purpose of this new WARN_ON_ONCE() is to
+> >     detect situations where the system's opinion differs from ours.
+> >
+> >     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> >     Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> >
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index b2c2045294780..7a3085ad0a7df 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -1956,7 +1956,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> >  {
+> >       unsigned long flags;
+> >       unsigned long mask;
+> > -     bool needwake = false;
+> >       bool needacc = false;
+> >       struct rcu_node *rnp;
+> >
+> > @@ -1988,7 +1987,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> >                * NOCB kthreads have their own way to deal with that...
+> >                */
+> >               if (!rcu_rdp_is_offloaded(rdp)) {
+> > -                     needwake = rcu_accelerate_cbs(rnp, rdp);
+> > +                     /*
+> > +                      * The current GP has not yet ended, so it
+> > +                      * should not be possible for rcu_accelerate_cbs()
+> > +                      * to return true.  So complain, but don't awaken.
+> > +                      */
+> > +                     WARN_ON_ONCE(rcu_accelerate_cbs(rnp, rdp));
+> >               } else if (!rcu_segcblist_completely_offloaded(&rdp->cblist)) {
+> >                       /*
+> >                        * ...but NOCB kthreads may miss or delay callbacks acceleration
+> > @@ -2000,8 +2004,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> >               rcu_disable_urgency_upon_qs(rdp);
+> >               rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+> >               /* ^^^ Released rnp->lock */
+> > -             if (needwake)
+> > -                     rcu_gp_kthread_wake();
+>
+> AFAICS, there is almost no compiler benefit of doing this, and zero runtime
+> benefit of doing this. The WARN_ON_ONCE() also involves a runtime condition
+> check of the return value of rcu_accelerate_cbs(), so you still have a
+> branch. Yes, maybe slightly smaller code without the wake call, but I'm not
+> sure that is worth it.
+>
+> And, if the opinion of system differs, its a bug anyway, so more added risk.
+>
+>
+> >
+> >               if (needacc) {
+> >                       rcu_nocb_lock_irqsave(rdp, flags);
+>
+> And when needacc = true, rcu_accelerate_cbs_unlocked() tries to do a wake up
+> anyway, so it is consistent with nocb vs !nocb.
 
-I'm resending this report CC'd to linux-kernel as there was no response
-on the sparclinux list.
+Sorry, I mean "inconsistent".
 
-I tried 6.2-rc4 and there is no change in behaviour.  Reverting the
-indicated commit still works to fix the problem.
+Thanks,
 
-On 2022-07-12, Nick Bowler <nbowler@draconx.ca> wrote:
-> When using newer kernels on my Ultra 60 with dual 450MHz UltraSPARC-II
-> CPUs, I noticed that only CPU 0 comes up, while older kernels (including
-> 4.7) are working fine with both CPUs.
->
-> I bisected the failure to this commit:
->
->   9b2f753ec23710aa32c0d837d2499db92fe9115b is the first bad commit
->   commit 9b2f753ec23710aa32c0d837d2499db92fe9115b
->   Author: Atish Patra <atish.patra@oracle.com>
->   Date:   Thu Sep 15 14:54:40 2016 -0600
->
->       sparc64: Fix cpu_possible_mask if nr_cpus is set
->
-> This is a small change that reverts very easily on top of 5.18: there is
-> just one trivial conflict.  Once reverted, both CPUs work again.
->
-> Maybe this is related to the fact that the CPUs on this system are
-> numbered CPU0 and CPU2 (there is no CPU1)?
->
-> Here is /proc/cpuinfo on a working kernel:
->
->     % cat /proc/cpuinfo
->     cpu             : TI UltraSparc II  (BlackBird)
->     fpu             : UltraSparc II integrated FPU
->     pmu             : ultra12
->     prom            : OBP 3.23.1 1999/07/16 12:08
->     type            : sun4u
->     ncpus probed    : 2
->     ncpus active    : 2
->     D$ parity tl1   : 0
->     I$ parity tl1   : 0
->     cpucaps         : flush,stbar,swap,muldiv,v9,mul32,div32,v8plus,vis
->     Cpu0ClkTck      : 000000001ad31b4f
->     Cpu2ClkTck      : 000000001ad31b4f
->     MMU Type        : Spitfire
->     MMU PGSZs       : 8K,64K,512K,4MB
->     State:
->     CPU0:           online
->     CPU2:           online
->
-> And on a broken kernel:
->
->     % cat /proc/cpuinfo
->     cpu             : TI UltraSparc II  (BlackBird)
->     fpu             : UltraSparc II integrated FPU
->     pmu             : ultra12
->     prom            : OBP 3.23.1 1999/07/16 12:08
->     type            : sun4u
->     ncpus probed    : 2
->     ncpus active    : 1
->     D$ parity tl1   : 0
->     I$ parity tl1   : 0
->     cpucaps         : flush,stbar,swap,muldiv,v9,mul32,div32,v8plus,vis
->     Cpu0ClkTck      : 000000001ad31861
->     MMU Type        : Spitfire
->     MMU PGSZs       : 8K,64K,512K,4MB
->     State:
->     CPU0:           online
->
-> Let me know if you need any more info.
->
-> Thanks,
->   Nick
+ - Joel
