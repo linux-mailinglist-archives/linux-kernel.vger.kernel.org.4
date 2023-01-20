@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B15767502D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5AC675039
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjATJGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S229720AbjATJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjATJGL (ORCPT
+        with ESMTP id S229496AbjATJIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:06:11 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A0479EAD;
-        Fri, 20 Jan 2023 01:06:09 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9251B514;
-        Fri, 20 Jan 2023 10:06:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674205567;
-        bh=dkcK/6yZ0ycAlVNr0Xcy9gfSiOR/v9Xdq0blfTKBQiI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PkPBotcuY5/bSscD764kb7YXOac9X19Rr82TFUpMhv5FqKqUslBswCH+IqPq25aLD
-         lNEpesPT2ZYcVY+GL0Yig6CPMn7kMAvpJOfbn38LNJAy81n0h7L1tXNWO8rconZjY7
-         BKFSPh37WIME1WFsX8ROo2ekF0/V32dVp5gJtn+k=
-Date:   Fri, 20 Jan 2023 11:06:04 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v7 6/7] media: i2c: add DS90UB913 driver
-Message-ID: <Y8pZfCqiuU+HFs+v@pendragon.ideasonboard.com>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-7-tomi.valkeinen@ideasonboard.com>
- <Y8naOd/CmmlYBw2x@pendragon.ideasonboard.com>
- <076ede2c-f682-54cd-95bf-60170e2444a2@ideasonboard.com>
+        Fri, 20 Jan 2023 04:08:43 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED57526C;
+        Fri, 20 Jan 2023 01:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674205721; x=1705741721;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FYB5GHXd7qMXK5pW/4qFeibiAIi0jeycEJNE6wVIobo=;
+  b=zDSz1ACQUzV7govsQSP9DwvK+2ljm8SreQaYYwIugVLAg1mrm3wISfWj
+   BH/vFDgjOWftM0zvVhAzvknVU4xajeKaCQ4Wz2Z8p8mAZkItscN6Gny2y
+   wNaozoURKkb0iPdAuPeXZSIsHP507texZ1WZ1foakrXEh9WAokXJt+KEU
+   Sv/p4QEdH4LzbdXKcCtJ9j/2gBZeSXqMcqgVITBdbq9Rq89APHYKe0aMQ
+   DdvssC/GejI7eoQsxj3g+73XJjyUd3JeRL1x+IkJG/B3XYtoLM4dm9FSM
+   IJZZ4ADsMD2PPsfgbopBe8IgjW4J0f2V4JMce9dvhopmV6UhMLUGP++TE
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,231,1669100400"; 
+   d="scan'208";a="197598466"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 02:08:40 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 20 Jan 2023 02:08:39 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 02:08:36 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next 0/8] Adding Sparx5 IS0 VCAP support
+Date:   Fri, 20 Jan 2023 10:08:23 +0100
+Message-ID: <20230120090831.20032-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <076ede2c-f682-54cd-95bf-60170e2444a2@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+This provides the Ingress Stage 0 (IS0) VCAP (Versatile Content-Aware
+Processor) support for the Sparx5 platform.
 
-On Fri, Jan 20, 2023 at 09:04:39AM +0200, Tomi Valkeinen wrote:
-> On 20/01/2023 02:03, Laurent Pinchart wrote:
-> > On Wed, Jan 18, 2023 at 02:40:30PM +0200, Tomi Valkeinen wrote:
-> >> Add driver for TI DS90UB913 FPD-Link III Serializer.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> ---
-> >>   drivers/media/i2c/Kconfig     |  13 +
-> >>   drivers/media/i2c/Makefile    |   1 +
-> >>   drivers/media/i2c/ds90ub913.c | 848 ++++++++++++++++++++++++++++++++++
-> >>   3 files changed, 862 insertions(+)
-> >>   create mode 100644 drivers/media/i2c/ds90ub913.c
+The IS0 VCAP (also known in the datasheet as CLM) is a classifier VCAP that
+mainly extracts frame information to metadata that follows the frame in the
+Sparx5 processing flow all the way to the egress port.
 
-[snip]
+The IS0 VCAP has 4 lookups and they are accessible with a TC chain id:
 
-> >> diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
-> >> new file mode 100644
-> >> index 000000000000..befa78128a9a
-> >> --- /dev/null
-> >> +++ b/drivers/media/i2c/ds90ub913.c
-> >> @@ -0,0 +1,848 @@
+- chain 1000000: IS0 Lookup 0
+- chain 1100000: IS0 Lookup 1
+- chain 1200000: IS0 Lookup 2
+- chain 1300000: IS0 Lookup 3
+- chain 1400000: IS0 Lookup 4
+- chain 1500000: IS0 Lookup 5
 
-[snip]
+Each of these lookups have their own port keyset configuration that decides
+which keys will be used for matching on which traffic type.
 
-> >> +static int ub913_gpio_direction_out(struct gpio_chip *gc, unsigned int offset,
-> >> +				    int value)
-> >> +{
-> >> +	struct ub913_data *priv = gpiochip_get_data(gc);
-> >> +	unsigned int reg_idx = offset / 2;
-> >> +	unsigned int field_idx = offset % 2;
-> >> +
-> >> +	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
-> >> +				  UB913_REG_GPIO_CFG_MASK(field_idx),
-> >> +				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
-> >> +					  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) :
-> >> +						   0));
-> > 
-> > I find the indentation weird, I would have written
-> > 
-> > 	return regmap_update_bits(priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
-> > 				  UB913_REG_GPIO_CFG_MASK(field_idx),
-> > 				  UB913_REG_GPIO_CFG_ENABLE(field_idx) |
-> > 				  (value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) : 0));
-> > 
-> > Your call.
-> 
-> It's clang-format. I still haven't found out how to make it indent as 
-> I'd like. Actually, with kernel's clang-format settings this ends up as:
-> 
-> return regmap_update_bits(
-> 	priv->regmap, UB913_REG_GPIO_CFG(reg_idx),
-> 	UB913_REG_GPIO_CFG_MASK(field_idx),
-> 	UB913_REG_GPIO_CFG_ENABLE(field_idx) |
-> 		(value ? UB913_REG_GPIO_CFG_OUT_VAL(field_idx) : 0));
+The IS0 VCAP has these traffic classifications:
 
-That's horrible indeed.
+- IPv4 frames
+- IPv6 frames
+- Unicast MPLS frames (ethertype = 0x8847)
+- Multicast MPLS frames (ethertype = 0x8847)
+- Other frame types than MPLS, IPv4 and IPv6
 
-> But checkpatch complains about line ending with (. Adjusting the 
-> settings a bit I got it to indent as it is currently.
+The IS0 VCAP has an action that allows setting the value of a PAG (Policy
+Association Group) key field in the frame metadata, and this can be used
+for matching in an IS2 VCAP rule.
 
-It's lovely when tools work together as expected, right ? :-)
+This allow rules in the IS0 VCAP to be linked to rules in the IS2 VCAP.
 
-> The indent after the line ending with | make sense, I think, but I don't 
-> mind your formatting either.
+The linking is exposed by using the TC "goto chain" action with an offset
+from the IS2 chain ids.
 
-I don't think I've seen that style before. If you prefer it, your code,
-your style :-) Just be consistent through the driver in that case.
+As an example a "goto chain 8000001" will use a PAG value of 1 to chain to
+a rule in IS2 Lookup 0.
 
-> >> +}
 
-[snip]
+Steen Hegelund (8):
+  net: microchip: sparx5: Add IS0 VCAP model and updated KUNIT VCAP
+    model
+  net: microchip: sparx5: Add IS0 VCAP keyset configuration for Sparx5
+  net: microchip: sparx5: Add actionset type id information to rule
+  net: microchip: sparx5: Add TC support for IS0 VCAP
+  net: microchip: sparx5: Add TC filter chaining support for IS0 and IS2
+    VCAPs
+  net: microchip: sparx5: Add automatic selection of VCAP rule actionset
+  net: microchip: sparx5: Add support for IS0 VCAP ethernet protocol
+    types
+  net: microchip: sparx5: Add support for IS0 VCAP CVLAN TC keys
+
+ .../microchip/sparx5/sparx5_main_regs.h       |   64 +-
+ .../microchip/sparx5/sparx5_tc_flower.c       |  227 +-
+ .../microchip/sparx5/sparx5_vcap_ag_api.c     | 1110 ++++++++-
+ .../microchip/sparx5/sparx5_vcap_debugfs.c    |  131 +-
+ .../microchip/sparx5/sparx5_vcap_impl.c       |  401 +++-
+ .../microchip/sparx5/sparx5_vcap_impl.h       |   61 +
+ .../net/ethernet/microchip/vcap/vcap_ag_api.h |  336 +--
+ .../net/ethernet/microchip/vcap/vcap_api.c    |  184 +-
+ .../net/ethernet/microchip/vcap/vcap_api.h    |    7 +
+ .../ethernet/microchip/vcap/vcap_api_client.h |    2 +
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  |    2 +-
+ .../microchip/vcap/vcap_model_kunit.c         | 1994 ++---------------
+ 12 files changed, 2360 insertions(+), 2159 deletions(-)
 
 -- 
-Regards,
+2.39.1
 
-Laurent Pinchart
