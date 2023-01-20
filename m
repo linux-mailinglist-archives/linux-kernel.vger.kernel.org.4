@@ -2,273 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F3D675085
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA5A675095
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjATJRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S230092AbjATJTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjATJR3 (ORCPT
+        with ESMTP id S230090AbjATJTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:17:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8D4C14C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:17:01 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pInVs-00022D-Ic; Fri, 20 Jan 2023 10:16:44 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pInVp-0004z4-60; Fri, 20 Jan 2023 10:16:41 +0100
-Date:   Fri, 20 Jan 2023 10:16:41 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Alibek Omarov <a1ba.omarov@gmail.com>
-Cc:     alexander.sverdlin@siemens.com, macromorgan@hotmail.com,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko =?iso-8859-15?Q?St=FCbner?= <heiko@sntech.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] drm/rockchip: lvds: add rk3568 support
-Message-ID: <20230120091641.GL24755@pengutronix.de>
-References: <20230119184807.171132-1-a1ba.omarov@gmail.com>
- <20230119184807.171132-2-a1ba.omarov@gmail.com>
+        Fri, 20 Jan 2023 04:19:07 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AB54234;
+        Fri, 20 Jan 2023 01:19:00 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id q21so2255735vka.3;
+        Fri, 20 Jan 2023 01:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TrvMULsU18Bu3BY2RUS8Z8PS61YAToCk0gnu/tBfqKU=;
+        b=JDSa4MbFBLFrbjWGX07pR8bRrM6Smgyo+MW0T0GKQNKSaDsVBevDCJg3XYQm4OG8lS
+         EmCiDicO1DaEW2XLnuMe7uCbw9/yyvlRYN+c1oK9IBB82t10ekQTtNPDLOKVkig6c4te
+         g5hIvNt5BdQYaGZApuNOw9UQMmMDiM6dq8h+Xwi3xqYU6p+uGWz3geC6n26ZM3Gw3/hl
+         tjNTML8Oq49orUqyXtlqfRdPqbu7XoEGW+ewmZWRMQLjwD4D3ju1QleebKFYRaQwjUS8
+         F0J9KkVZyQDj2IQSo9Aqfod+TbWCD55X03SEXoMwLqgiKZ92ZkfWqE/1dvQxUZ7N0Mvv
+         53rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TrvMULsU18Bu3BY2RUS8Z8PS61YAToCk0gnu/tBfqKU=;
+        b=iXShKut45syr3x+nTC4xGNvzQF2rXIp/XYwgkdStl32LGoMJkGpUItkOtixDDCCnep
+         hMxF+BB35fyWW+/ZKdUxYyki70iJis2TWU6PKfTFK/Jm39++uKPNVyMsxqfu/8AQckwg
+         LqsjqAAAL52XudZKXsoJTGUiE6B+uhhxqo4i0HC2n7Q4RqUhfvQvNXZmRvQiqyl8MxrB
+         n10dXb50wHq344QkDST6Iv39px1WH2pdujou1wfdn291GRTR3geRy9Scx4Fr6LHrA7Oa
+         TfLlyAjUqzBp8WGvRYuvGtwgeeHyZb11IEdeyAa4EID2LITbAMHuExZSvhwxyKDC38ED
+         qOEQ==
+X-Gm-Message-State: AFqh2koex1eLmNROjin7TxmPaSNuUd7cu/q0Kgs2ds8j91Re6Qywi05R
+        ukaWaG2HZpcfw+O7ucjFscaZ8ra4r6LE9RVd5k/eCfdhd8ZM9KQN
+X-Google-Smtp-Source: AMrXdXtKloAl6sin5GFcLRJ0IANFLHRQ9RU1HfNrza2nDdEx82Yvt43ehV8TBm7nngOwimBp+cp88qqxWXus6383538=
+X-Received: by 2002:a05:6122:924:b0:3d5:5f93:53f with SMTP id
+ j36-20020a056122092400b003d55f93053fmr1881746vka.7.1674206339845; Fri, 20 Jan
+ 2023 01:18:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119184807.171132-2-a1ba.omarov@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221220112927.440506-1-alistair@alistair23.me>
+ <20221220112927.440506-4-alistair@alistair23.me> <20221220131715.femjybikqcnm4lyg@pengutronix.de>
+ <CAKmqyKO-Qw3AihUnF7np7_6kr6-ODnXU3aBwph-_9=xSbXRx-Q@mail.gmail.com> <CANhJrGOtZZEG0mdVeQTQ=HDB3bUT2kkGbMxbqcvZc_gb_aNETA@mail.gmail.com>
+In-Reply-To: <CANhJrGOtZZEG0mdVeQTQ=HDB3bUT2kkGbMxbqcvZc_gb_aNETA@mail.gmail.com>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Fri, 20 Jan 2023 19:17:00 +1000
+Message-ID: <CAKmqyKMvSYr6WiVrvQWCWeiYF3R-VJmfuwxXczyE9j4QnYB_KA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        s.hauer@pengutronix.de, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        arnd@arndb.de, linux@armlinux.org.uk, jernej.skrabec@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:48:03PM +0300, Alibek Omarov wrote:
-> One of the ports of RK3568 can be configured as LVDS, re-using the DSI DPHY
-> 
-> Signed-off-by: Alibek Omarov <a1ba.omarov@gmail.com>
-> ---
->  drivers/gpu/drm/rockchip/rockchip_lvds.c | 144 +++++++++++++++++++++--
->  drivers/gpu/drm/rockchip/rockchip_lvds.h |  10 ++
->  2 files changed, 147 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_lvds.c b/drivers/gpu/drm/rockchip/rockchip_lvds.c
-> index 68f6ebb33460..83c60240af85 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_lvds.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_lvds.c
-> @@ -433,6 +433,90 @@ static void px30_lvds_encoder_disable(struct drm_encoder *encoder)
->  	drm_panel_unprepare(lvds->panel);
->  }
->  
-> +static int rk3568_lvds_poweron(struct rockchip_lvds *lvds)
-> +{
-> +	int ret;
-> +
-> +	ret = clk_enable(lvds->pclk);
-> +	if (ret < 0) {
-> +		DRM_DEV_ERROR(lvds->dev, "failed to enable lvds pclk %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = pm_runtime_get_sync(lvds->dev);
-> +	if (ret < 0) {
-> +		DRM_DEV_ERROR(lvds->dev, "failed to get pm runtime: %d\n", ret);
-> +		clk_disable(lvds->pclk);
-> +		return ret;
-> +	}
-> +
-> +	/* Enable LVDS mode */
-> +	return regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON2,
-> +				  RK3568_LVDS0_MODE_EN(1),
-> +				  RK3568_LVDS0_MODE_EN(1));
+On Tue, Jan 10, 2023 at 5:13 AM Matti Vaittinen
+<mazziesaccount@gmail.com> wrote:
+>
+> ma 9. tammik. 2023 klo 14.32 Alistair Francis (alistair23@gmail.com) kirjoitti:
+> >
+> > On Tue, Dec 20, 2022 at 11:17 PM Marco Felsch <m.felsch@pengutronix.de> wrote:
+> > >
+> > > Hi Alistair,
+> > >
+> > > thanks for your patch, please see below.
+> > >
+> > > On 22-12-20, Alistair Francis wrote:
+> > > > Add support for the rohm,bd71815 power controller controller for the
+> > > > reMarkable 2.
+> > > >
+> > > > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > > > ---
+> > > >  arch/arm/boot/dts/imx7d-remarkable2.dts | 159 ++++++++++++++++++++++++
+> > > >  1 file changed, 159 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > > > index a138b292ec6a..4387d30d6180 100644
+> > > > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > > > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > > > @@ -92,6 +92,10 @@ wifi_pwrseq: wifi_pwrseq {
+> > > >       };
+> > > >  };
+> > > >
+> > > > +&cpu0 {
+> > > > +     cpu-supply = <&buck1_reg>;
+> > > > +};
+> > > > +
+> > > >  &clks {
+> > > >       assigned-clocks = <&clks IMX7D_CLKO2_ROOT_SRC>,
+> > > >                         <&clks IMX7D_CLKO2_ROOT_DIV>;
+> > > > @@ -119,6 +123,148 @@ wacom_digitizer: digitizer@9 {
+> > > >       };
+> > > >  };
+> > > >
+> > > > +&i2c2 {
+> > > > +     clock-frequency = <100000>;
+> > >
+> > > We can set this now to 400kHz since the driver can handle quirks now
+> > > internal.
+> >
+> > After a discussion on the first patch I'm going to leave this as is.
+> > Let me know if you do want me to change it.
+> >
+> > >
+> > > > +     pinctrl-names = "default", "sleep";
+> > > > +     pinctrl-0 = <&pinctrl_i2c2>;
+> > > > +     pinctrl-1 = <&pinctrl_i2c2>;
+> > >
+> > > Do we need a "sleep" config here since this will be the same
+> > > configuration as the "default" one.
+> >
+> > Nope, dropped.
+> >
+> > >
+> > > > +     status = "okay";
+> > > > +
+> > > > +     bd71815: pmic@4b {
+> > > > +             compatible = "rohm,bd71815";
+> > > > +             reg = <0x4b>;
+> > > > +             pinctrl-names = "default";
+> > > > +             pinctrl-0 = <&pinctrl_bd71815>;
+> > > > +             interrupt-parent = <&gpio6>; /* PMIC_INT_B GPIO6_IO16 */
+> > > > +             interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
+> > > > +             gpio-controller;
+> > > > +             clocks = <&clks IMX7D_CLKO2_ROOT_SRC>;
+> > > > +             clock-output-names = "bd71815-32k-out";
+> > > > +             #clock-cells = <0>;
+> > > > +             #gpio-cells = <1>;
+> > > > +
+> > > > +             regulators {
+> > > > +                     #address-cells = <1>;
+> > > > +                     #size-cells = <0>;
+> > > > +
+> > > > +                     buck1_reg: regulator@0 {
+> > > > +                             reg = <0>;
+> > > > +                             regulator-compatible = "buck1";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <2000000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                             regulator-ramp-delay = <1250>;
+> > > > +                     };
+> > > > +
+> > > > +                     buck2_reg: regulator@1 {
+> > > > +                             reg = <1>;
+> > > > +                             regulator-compatible = "buck2";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <2000000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                             regulator-ramp-delay = <1250>;
+> > > > +                     };
+> > > > +
+> > > > +                     buck3_reg: regulator@2 {
+> > > > +                             reg = <2>;
+> > > > +                             regulator-compatible = "buck3";
+> > > > +                             regulator-min-microvolt = <1200000>;
+> > > > +                             regulator-max-microvolt = <2700000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     buck4_reg: regulator@3 {
+> > > > +                             reg = <3>;
+> > > > +                             regulator-compatible = "buck4";
+> > > > +                             regulator-min-microvolt = <1100000>;
+> > > > +                             regulator-max-microvolt = <1850000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     buck5_reg: regulator@4 {
+> > > > +                             reg = <4>;
+> > > > +                             regulator-compatible = "buck5";
+> > > > +                             regulator-min-microvolt = <1800000>;
+> > > > +                             regulator-max-microvolt = <3300000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     ldo1_reg: regulator@5 {
+> > > > +                             reg = <5>;
+> > > > +                             regulator-compatible = "ldo1";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <3300000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     ldo2_reg: regulator@6 {
+> > > > +                             reg = <6>;
+> > > > +                             regulator-compatible = "ldo2";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <3300000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     ldo3_reg: regulator@7 {
+> > > > +                             reg = <7>;
+> > > > +                             regulator-compatible = "ldo3";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <3300000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     ldo4_reg: regulator@8 {
+> > > > +                             reg = <8>;
+> > > > +                             regulator-compatible = "ldo4";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <3300000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     ldo5_reg: regulator@9 {
+> > > > +                             reg = <9>;
+> > > > +                             regulator-compatible = "ldo5";
+> > > > +                             regulator-min-microvolt = <800000>;
+> > > > +                             regulator-max-microvolt = <3300000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     dvref_reg: regulator@a {
+> > > > +                             reg = <0xa>;
+> > > > +                             regulator-compatible = "dvref";
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     lpsr_reg: regulator@b {
+> > > > +                             reg = <0xb>;
+> > > > +                             regulator-compatible = "lpsr";
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > > > +
+> > > > +                     wled_reg: regulator@c {
+> > > > +                             reg = <0xc>;
+> > > > +                             regulator-compatible = "wled";
+> > > > +                             regulator-min-microamp = <10>;
+> > > > +                             regulator-max-microamp = <25000>;
+> > > > +                             regulator-boot-on;
+> > > > +                             regulator-always-on;
+> > > > +                     };
+> > >
+> > > Note: You have marked all regulators as always on, this is rather
+> > > suboptimal due to power consumption.
+> >
+> > Good point. The power consumption is already pretty bad, as mainline
+> > doesn't support the i.MX deep sleep. As I know this works I'd like to
+> > keep it as is. I'll test to see if removing them doesn't break
+> > anything and then send a follow up patch.
+>
+> I'd like to suggest also seeing what removing the "regulator-boot-on"
+> causes. As far as I understand, the "regulator-boot-on" mainly (only?)
+> intended to be used in situations where the regulator state can not be
+> reliably read from the hardware at the boot-up. AFAIR, unlike the
+> BD71837 and BD71847,
+> the BD71815 does not have this limitation. (This is just my
+> understanding - which is based on some age-old discussions with Mark
+> Brown - hence this comment is just a suggestion to try this while
+> testing, not a comment intended to be demanding for a change)
 
-Isn't this the same as:
+I have tried removing both "regulator-boot-on" and "regulator-always-on".
 
-	regmap_write(lvds->grf, RK3568_GRF_VO_CON2, RK3568_LVDS0_MODE_EN(1));
+After one boot to userspace (where the display didn't work correctly)
+the device now seems to not power up at all. Even u-boot is failing to
+start. I'm not sure if the regulators are now in some strange state or
+if something is fried.
 
-Unless I am missing something I find a plain regmap_write() easier to
-read.
+I'm currently waiting for the battery to discharge to see if that helps.
 
-> +}
-> +
-> +static void rk3568_lvds_poweroff(struct rockchip_lvds *lvds)
-> +{
-> +	regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON2,
-> +			   RK3568_LVDS0_MODE_EN(1) | RK3568_LVDS0_P2S_EN(1),
-> +			   RK3568_LVDS0_MODE_EN(0) | RK3568_LVDS0_P2S_EN(0));
+Alistair
 
-Same here:
-
-	regmap_write(lvds->grf, RK3568_GRF_VO_CON2,
-		     RK3568_LVDS0_MODE_EN(0) | RK3568_LVDS0_P2S_EN(0));
-
-What about the RK3568_LVDS0_P2S_EN bit? This is set in probe() and
-cleared here. For symmetry reasons shouldn't it be set in
-rk3568_lvds_poweron() instead?
-
-> +
-> +	pm_runtime_put(lvds->dev);
-> +	clk_disable(lvds->pclk);
-> +}
-> +
-> +static int rk3568_lvds_grf_config(struct drm_encoder *encoder,
-> +				struct drm_display_mode *mode)
-> +{
-> +	struct rockchip_lvds *lvds = encoder_to_lvds(encoder);
-> +
-> +	if (lvds->output != DISPLAY_OUTPUT_LVDS) {
-> +		DRM_DEV_ERROR(lvds->dev, "Unsupported display output %d\n",
-> +			      lvds->output);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Set format */
-> +	return regmap_update_bits(lvds->grf, RK3568_GRF_VO_CON0,
-> +				  RK3568_LVDS0_SELECT(3),
-> +				  RK3568_LVDS0_SELECT(lvds->format));
-
-It seems lvds->format does not match what the register expects. We
-have:
-
-#define LVDS_VESA_24                            0
-#define LVDS_JEIDA_24                           1
-#define LVDS_VESA_18                            2
-#define LVDS_JEIDA_18                           3
-
-According to the reference manual the register expects:
-
-lvdsformat_lvds0_select
- 2'b00: VESA 24bit
- 2'b01: JEIDA 24bit
- 2'b10: JEIDA 18bit
- 2'b11: VESA 18bit
-
-I only have the RK3568 manual but no PX30 or RK3288 manual, so I can't say if
-they changed the register mapping between the SoCs or if it's wrong on
-the other SoCs as well.
-
-BTW you correctly set the mask to RK3568_LVDS0_SELECT(3), but for the
-PX30 it looks wrong:
-
-	return regmap_update_bits(lvds->grf, PX30_LVDS_GRF_PD_VO_CON1,
-				  PX30_LVDS_FORMAT(lvds->format),
-				  PX30_LVDS_FORMAT(lvds->format));
-
-I really think regmap_write() would be better to use here to avoid such
-things.
-
-> +
-> +static void rk3568_lvds_encoder_enable(struct drm_encoder *encoder)
-> +{
-> +	struct rockchip_lvds *lvds = encoder_to_lvds(encoder);
-> +	struct drm_display_mode *mode = &encoder->crtc->state->adjusted_mode;
-
-'mode' is unused.
-
-> +	int ret;
-> +
-> +	drm_panel_prepare(lvds->panel);
-> +
-> +	ret = rk3568_lvds_poweron(lvds);
-> +	if (ret) {
-> +		DRM_DEV_ERROR(lvds->dev, "failed to power on LVDS: %d\n", ret);
-> +		drm_panel_unprepare(lvds->panel);
-> +		return;
-> +	}
-> +
-> +	ret = rk3568_lvds_grf_config(encoder, mode);
-> +	if (ret) {
-> +		DRM_DEV_ERROR(lvds->dev, "failed to configure LVDS: %d\n", ret);
-> +		drm_panel_unprepare(lvds->panel);
-> +		return;
-> +	}
-> +
-> +	drm_panel_enable(lvds->panel);
-> +}
-> +
-> +static void rk3568_lvds_encoder_disable(struct drm_encoder *encoder)
-> +{
-> +	struct rockchip_lvds *lvds = encoder_to_lvds(encoder);
-> +
-> +	drm_panel_disable(lvds->panel);
-> +	rk3568_lvds_poweroff(lvds);
-> +	drm_panel_unprepare(lvds->panel);
-> +}
-> +
->  static const
->  struct drm_encoder_helper_funcs rk3288_lvds_encoder_helper_funcs = {
->  	.enable = rk3288_lvds_encoder_enable,
-> @@ -447,6 +531,13 @@ struct drm_encoder_helper_funcs px30_lvds_encoder_helper_funcs = {
->  	.atomic_check = rockchip_lvds_encoder_atomic_check,
->  };
->  
-> +static const
-> +struct drm_encoder_helper_funcs rk3568_lvds_encoder_helper_funcs = {
-> +	.enable = rk3568_lvds_encoder_enable,
-> +	.disable = rk3568_lvds_encoder_disable,
-> +	.atomic_check = rockchip_lvds_encoder_atomic_check,
-> +};
-> +
->  static int rk3288_lvds_probe(struct platform_device *pdev,
->  			     struct rockchip_lvds *lvds)
->  {
-> @@ -491,6 +582,26 @@ static int rk3288_lvds_probe(struct platform_device *pdev,
->  	return 0;
->  }
->  
-> +static int rockchip_lvds_phy_probe(struct platform_device *pdev,
-> +				   struct rockchip_lvds *lvds)
-> +{
-> +	int ret;
-> +
-> +	lvds->dphy = devm_phy_get(&pdev->dev, "dphy");
-> +	if (IS_ERR(lvds->dphy))
-> +		return PTR_ERR(lvds->dphy);
-> +
-> +	ret = phy_init(lvds->dphy);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = phy_set_mode(lvds->dphy, PHY_MODE_LVDS);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return phy_power_on(lvds->dphy);
-> +}
-
-You factor out the steps done for px30 to a separate function in order
-to reuse it on rk3568. You could make a separate patch from this to
-make it easier to understand and to verify that there is no functional
-change involved for the px30.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>
+> Yours
+>     Matti
+>
+> --
+>
+> Matti Vaittinen
+> Linux kernel developer at ROHM Semiconductors
+> Oulu Finland
+>
+> ~~ When things go utterly wrong vim users can always type :help! ~~
+>
+> Discuss - Estimate - Plan - Report and finally accomplish this:
+> void do_work(int time) __attribute__ ((const));
