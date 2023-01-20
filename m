@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30482675BE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DDD675BE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjATRp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S230412AbjATRp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjATRpY (ORCPT
+        with ESMTP id S230369AbjATRpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:45:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B18564BA;
-        Fri, 20 Jan 2023 09:45:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBD80B829B0;
-        Fri, 20 Jan 2023 17:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62276C433D2;
-        Fri, 20 Jan 2023 17:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674236718;
-        bh=e6PleI4womWUZ/YrAl55kcVrHbcX4H86kmzJS3pQ0GI=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=hV1RRoO6H7wPJdSLm7fL6s+B8oQkamq0JC/ItVIdhQFZOZl1C3bPStEqrgDDDyZSM
-         aW3mSFqX5Au9v40YCDf+ntMCNOxiw/WK0WPiosPPbe7Rb5vJbjKa72PZpFUxoBYek5
-         YUhwi8l6XgJHrhE9ZoG/S49ZBSikof0c1ykC0kholtLO0amUG4/7YN1OlOIk4nGF3s
-         lBDiN4ui70j2/7AJHNiXHRVmRuuFayjdxzbQMsWyQY9gk7IFMHnvgmFHVhZtfPodtW
-         VVir9i91Wdms3b3ylSdJL1x/wxu7xYctgtljwdzUCaHZnKpTFtZxZM4ellsm77QzBV
-         JCUuCufD7F7TQ==
-Date:   Fri, 20 Jan 2023 18:45:19 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Takahiro Fujii <fujii@xaxxi.net>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: elecom: add support for TrackBall 056E:011C
-In-Reply-To: <20230119183002.352852-1-fujii@xaxxi.net>
-Message-ID: <nycvar.YFH.7.76.2301201844460.1734@cbobk.fhfr.pm>
-References: <20230119183002.352852-1-fujii@xaxxi.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 20 Jan 2023 12:45:54 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8948460C8C
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:45:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674236750; x=1705772750;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SCZuOG9Rzb5F2pmy8moxyJlPCOLcAapt3jFx7fPUAHA=;
+  b=bH9Lq0f35KsH+3P+aFdZrtCmy3RzEa1WemhYby6ztDylcEmD3arwVo/T
+   H1if/S/lbN2aIzlfUnylsJ2V3gyVxh0yxGePScOD/2hGAiDliQEVLdCAz
+   kKvNQ/Jgc9/FbKO2sCg2A3HUg3+y7TpdJ9uBfZJW97KUIeAjQULaphPHH
+   73pLfBdSZW4x7A+NxeibyBQ6ZpMMuxll6VT3FMK0ZbCCkLIMFh95eY+B9
+   ofQDx4Tt79WCagrOaZ/E0eeL1B5J0jE9r3PDeLQtDVl08BnrN6xgvkKUh
+   XECUO9W1WwSBdEvueyd3LN/xXvvHpB2iGiZMxn5keyvM7L61KoQixnSv5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="390147060"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="390147060"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 09:45:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="662609587"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="662609587"
+Received: from rray-mobl.amr.corp.intel.com (HELO [10.209.69.101]) ([10.209.69.101])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 09:45:26 -0800
+Message-ID: <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com>
+Date:   Fri, 20 Jan 2023 09:45:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: the x86 sysret_rip test fails on the Intel FRED architecture
+Content-Language: en-US
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "H.Peter Anvin" <hpa@zytor.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023, Takahiro Fujii wrote:
-
-> Make function buttons on ELECOM M-HT1DRBK trackball mouse work. This model
-> has two devices with different device IDs (010D and 011C). Both of
-> them misreports the number of buttons as 5 in the report descriptor, even
-> though they have 8 buttons. hid-elecom overwrites the report to fix them,
-> but supports only on 010D and does not work on 011C. This patch fixes
-> 011C in the similar way but with specialized position parameters.
-> In fact, it is sufficient to rewrite only 17th byte (05 -> 08). However I
-> followed the existing way.
-
-Applied, thanks.
-
-> Signed-off-by: Takahiro Fujii <fujii@xaxxi.net>
-> ---
->  drivers/hid/hid-elecom.c | 16 ++++++++++++++--
->  drivers/hid/hid-ids.h    |  3 ++-
->  drivers/hid/hid-quirks.c |  3 ++-
->  3 files changed, 18 insertions(+), 4 deletions(-)
+On 1/19/23 23:49, Li, Xin3 wrote:
+> The x86 sysret_rip test has the following assertion:
 > 
-> diff --git a/drivers/hid/hid-elecom.c b/drivers/hid/hid-elecom.c
-> index e59e9911fc37..4fa45ee77503 100644
-> --- a/drivers/hid/hid-elecom.c
-> +++ b/drivers/hid/hid-elecom.c
-> @@ -12,6 +12,7 @@
->   *  Copyright (c) 2017 Alex Manoussakis <amanou@gnu.org>
->   *  Copyright (c) 2017 Tomasz Kramkowski <tk@the-tk.com>
->   *  Copyright (c) 2020 YOSHIOKA Takuma <lo48576@hard-wi.red>
-> + *  Copyright (c) 2022 Takahiro Fujii <fujii@xaxxi.net>
+>         /* R11 and EFLAGS should already match. */
+>         assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+>                ctx->uc_mcontext.gregs[REG_R11]);
+> 
+> This is being tested to avoid kernel state leak due to sysret vs iret,
+> but that on FRED r11 is *always* preserved, and the test just fails.
 
-A minor nit: next time please consider not adding copyright notice just 
-for device ID additions, we usually don't do that.
+Let's figure out the reason that FRED acts differently, first.  Right
+now, the SDM says:
 
--- 
-Jiri Kosina
-SUSE Labs
+	SYSCALL also saves RFLAGS into R11
 
+so that behavior of SYSCALL _looks_ architectural to me.  Was this
+change in SYSCALL behavior with FRED intentional?
+
+If not intentional, it might be something that can still be fixed.  If
+it is intentional and is going to be with us for a while we have a few
+options.  If userspace is _really_ depending on this behavior, we could
+just clobber r11 ourselves in the FRED entry path.  If not, we can
+remove the assertion in the selftest.
