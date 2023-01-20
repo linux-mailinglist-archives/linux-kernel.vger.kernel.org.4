@@ -2,157 +2,448 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5FA674D78
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EA3674D80
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjATGmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S229629AbjATGrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjATGmU (ORCPT
+        with ESMTP id S229496AbjATGrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:42:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C5442D8;
-        Thu, 19 Jan 2023 22:42:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1E7C61E33;
-        Fri, 20 Jan 2023 06:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA584C433D2;
-        Fri, 20 Jan 2023 06:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674196938;
-        bh=wwJVcJQUv8XiC8YzqdgOk3HZ74a4rucKStR7XI3+h44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yl/sFBrH/7b0jehlOlZsG1/AQDxQoNoOJJpgscX+CjP9CpwCGPkeCmRiKw9b3iK11
-         Wp/YzIIdhI8qEPJd4Eyvc2ttlukHAABbJ4PMqxCb73GqeIFdsHW/o5Rq20OD70IEhN
-         X/vYfqypuazJ5tv5Z5VwZfkkJ00qKIb8Mcr65CLGSl01I5iDhK1+PNvJlRHlN/oZTH
-         lSoqjA5YKvCokrLKiAXquwcj/srOEQ75cunKxXsRd/qX0tdyssWrJKfCqV9my9cKT9
-         gtqB+jR/V5fr7gcAWLR5k1gZO3YFP2mWWxf9zQqKaVuUAFhunJE3exOagi2bcgMkY7
-         93E9iSGiSeSpA==
-Date:   Thu, 19 Jan 2023 22:42:15 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, joe.lawrence@redhat.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20230120064215.cdyfbjlas5noxam6@treble>
-References: <20230118204728.1876249-1-song@kernel.org>
- <20230118220812.dvztwhlmliypefha@treble>
- <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+        Fri, 20 Jan 2023 01:47:31 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1989F3C283
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:47:29 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id k16so3250815wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kj70Oi456AeT83mbD6n6j58lwOKWTxzRHXa2j71b6ag=;
+        b=ofqEY9W8Q78xpTz2/JaIcifeRd55GdYkOKiHq9Vd7i20zEefB/k0ToT47mqpJ61dDa
+         2CLtJGxI1fcMYK2CbDoFWBAzswtDEvKORRMU3dU6zWSJeH4vEt7yaD1i1ZjDuB1HvuCO
+         IKfewDId6bMii4b3BKj8+AtnMZ4ib0JRO0xDMWXUcJXAFSXRMq1rzSNn16h1a5J7SQN+
+         Zj80eLa5c4wmkybplnpv09ttkw0/qs5dSpy9NaIm496yrkWWJ8CAikXn+SPBNQDdY4v3
+         0czgi+eQku/jqfeIPatrF0QLwRK4TPUiKAmD6PaN5Pkv3UE2ljWOYbyc+JXM0OqcA1vg
+         XHYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kj70Oi456AeT83mbD6n6j58lwOKWTxzRHXa2j71b6ag=;
+        b=sEu2ydP1fZSEPhk+yCTgMRvldZfrT/9OFkEcf6cyNHZfpvBjAcTh2nC0nhcF+qV+nS
+         xq/xqL1Q9NVCZwwum9iZ/VL8pliMQZtDXWKMs4zal1BQvBGIUoUVleZSSnPibcO3qfnG
+         JOJjC+FI/eO//mVNXXoyyLoPzpB3NdSsvF6s9S101zU1XmjQu9BZdzVoEr048fKBtcXm
+         QCeRiqS26gHAuuvFCfrDVBj4v7VJ1h2XtAgmiCHj1DiKj5a3nEXNsDxUDEBoyLxq6pCF
+         yUd7LI2N8cSQj6BKrONBl+VSgjmZRzvZjgIoQRqrT34RzMbJVevvKeF3ioxfH2e7IHxD
+         4kRg==
+X-Gm-Message-State: AFqh2kpIhIDBb11/KgI4KAD1sxLe79q34OUJOUmWOtMmAvQBkJwo1b0s
+        n22M24UcVBUCBrF2HQqtq7xrc6OkhNxn4wKm
+X-Google-Smtp-Source: AMrXdXvFV1iMrvlHkQfVzfVgo+1OuS7pBr1VVRZ7uvgDtQoP+BC9fU3iWCYGwAUbJhMGe8mKpgDQZA==
+X-Received: by 2002:a05:600c:538e:b0:3da:516:19ed with SMTP id hg14-20020a05600c538e00b003da051619edmr12839779wmb.29.1674197247621;
+        Thu, 19 Jan 2023 22:47:27 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f6-20020adffcc6000000b002bbdcd15e44sm31209991wrs.37.2023.01.19.22.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 22:47:27 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: exynos: align OPP table names with DT schema
+Date:   Fri, 20 Jan 2023 07:47:24 +0100
+Message-Id: <20230120064724.40621-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
-> On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> >
-> > On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
-> > > From: Miroslav Benes <mbenes@suse.cz>
-> > >
-> > > Josh reported a bug:
-> > >
-> > >   When the object to be patched is a module, and that module is
-> > >   rmmod'ed and reloaded, it fails to load with:
-> > >
-> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > >
-> > >   The livepatch module has a relocation which references a symbol
-> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > >   tries to replace the old relocation with a new one, it sees that
-> > >   the previous one is nonzero and it errors out.
-> > >
-> > >   On ppc64le, we have a similar issue:
-> > >
-> > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> > Shouldn't there also be a fix for this powerpc issue?
-> 
-> There was a working version, but it was not very clean. We couldn't agree
-> on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
-> s390?) first [1].
+DT schema expects names of operating points tables to match certain
+pattern:
 
-Sorry for coming in late, I was on leave so I missed a lot of the
-discussions on previous versions.  The decision to leave powerpc broken
-wasn't clear from reading the commit message.  The bug is mentioned, and
-the fix is implied, but surprisingly there's no fix.
+  exynos5422-odroidxu3-lite.dtb: opp-table0: $nodename:0: 'opp-table0' does not match '^opp-table(-[a-z0-9]+)?$'
 
-I agree that the powerpc fix should be in a separate patch, but I still
-don't feel comfortable merging the x86 fix without the corresponding
-powerpc fix.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/boot/dts/exynos3250.dtsi             | 10 +++---
+ arch/arm/boot/dts/exynos4210.dtsi             | 12 +++----
+ arch/arm/boot/dts/exynos4412.dtsi             | 14 ++++----
+ arch/arm/boot/dts/exynos5250.dtsi             |  2 +-
+ arch/arm/boot/dts/exynos5420.dtsi             |  4 +--
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi | 32 +++++++++----------
+ 6 files changed, 37 insertions(+), 37 deletions(-)
 
-powerpc is a major arch and not a second-class citizen.  If we don't fix
-it now then it'll probably never get fixed until it blows up in the real
-world.
-
-For powerpc, instead of clearing, how about just "fixing" the warning
-site, something like so (untested)?
-
-
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index 1096d6b3a62c..1a12463ba674 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
+index a2d6ee7fff08..9b25449d5311 100644
+--- a/arch/arm/boot/dts/exynos3250.dtsi
++++ b/arch/arm/boot/dts/exynos3250.dtsi
+@@ -780,7 +780,7 @@ bus_dmc: bus-dmc {
+ 			status = "disabled";
+ 		};
  
- /* We expect a noop next: if it is, replace it with instruction to
-    restore r2. */
--static int restore_r2(const char *name, u32 *instruction, struct module *me)
-+static int restore_r2(const char *name, u32 *instruction, struct module *me,
-+		      bool klp_sym)
- {
- 	u32 *prev_insn = instruction - 1;
-+	u32 insn_val = *instruction;
+-		bus_dmc_opp_table: opp-table1 {
++		bus_dmc_opp_table: opp-table-1 {
+ 			compatible = "operating-points-v2";
  
- 	if (is_mprofile_ftrace_call(name))
- 		return 1;
-@@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
- 	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
- 		return 1;
+ 			opp-50000000 {
+@@ -869,7 +869,7 @@ bus_mfc: bus-mfc {
+ 			status = "disabled";
+ 		};
  
--	if (*instruction != PPC_RAW_NOP()) {
-+	/*
-+	 * For a livepatch relocation, the restore r2 instruction might have
-+	 * been previously written if the relocation references a symbol in a
-+	 * module which was unloaded and is now being reloaded.  In that case,
-+	 * skip the warning and instruction write.
-+	 */
-+	if (klp_sym && insn_val == PPC_INST_LD_TOC)
-+		return 0;
-+
-+	if (insn_val != PPC_RAW_NOP()) {
- 		pr_err("%s: Expected nop after call, got %08x at %pS\n",
--			me->name, *instruction, instruction);
-+			me->name, insn_val, instruction);
- 		return 0;
- 	}
+-		bus_leftbus_opp_table: opp-table2 {
++		bus_leftbus_opp_table: opp-table-2 {
+ 			compatible = "operating-points-v2";
  
-@@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 				if (!value)
- 					return -ENOENT;
- 				if (!restore_r2(strtab + sym->st_name,
--							(u32 *)location + 1, me))
-+						(u32 *)location + 1, me,
-+						sym->st_shndx == SHN_LIVEPATCH))
- 					return -ENOEXEC;
- 			} else
- 				value += local_entry_offset(sym);
+ 			opp-50000000 {
+@@ -894,7 +894,7 @@ opp-200000000 {
+ 			};
+ 		};
+ 
+-		bus_mcuisp_opp_table: opp-table3 {
++		bus_mcuisp_opp_table: opp-table-3 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-50000000 {
+@@ -914,7 +914,7 @@ opp-400000000 {
+ 			};
+ 		};
+ 
+-		bus_isp_opp_table: opp-table4 {
++		bus_isp_opp_table: opp-table-4 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-50000000 {
+@@ -934,7 +934,7 @@ opp-300000000 {
+ 			};
+ 		};
+ 
+-		bus_peril_opp_table: opp-table5 {
++		bus_peril_opp_table: opp-table-5 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-50000000 {
+diff --git a/arch/arm/boot/dts/exynos4210.dtsi b/arch/arm/boot/dts/exynos4210.dtsi
+index 2c25cc37934e..d11cbe03770d 100644
+--- a/arch/arm/boot/dts/exynos4210.dtsi
++++ b/arch/arm/boot/dts/exynos4210.dtsi
+@@ -287,7 +287,7 @@ bus_mfc: bus-mfc {
+ 			status = "disabled";
+ 		};
+ 
+-		bus_dmc_opp_table: opp-table1 {
++		bus_dmc_opp_table: opp-table-1 {
+ 			compatible = "operating-points-v2";
+ 			opp-shared;
+ 
+@@ -306,7 +306,7 @@ opp-400000000 {
+ 			};
+ 		};
+ 
+-		bus_acp_opp_table: opp-table2 {
++		bus_acp_opp_table: opp-table-2 {
+ 			compatible = "operating-points-v2";
+ 			opp-shared;
+ 
+@@ -321,7 +321,7 @@ opp-200000000 {
+ 			};
+ 		};
+ 
+-		bus_peri_opp_table: opp-table3 {
++		bus_peri_opp_table: opp-table-3 {
+ 			compatible = "operating-points-v2";
+ 			opp-shared;
+ 
+@@ -333,7 +333,7 @@ opp-100000000 {
+ 			};
+ 		};
+ 
+-		bus_fsys_opp_table: opp-table4 {
++		bus_fsys_opp_table: opp-table-4 {
+ 			compatible = "operating-points-v2";
+ 			opp-shared;
+ 
+@@ -345,7 +345,7 @@ opp-134000000 {
+ 			};
+ 		};
+ 
+-		bus_display_opp_table: opp-table5 {
++		bus_display_opp_table: opp-table-5 {
+ 			compatible = "operating-points-v2";
+ 			opp-shared;
+ 
+@@ -360,7 +360,7 @@ opp-160000000 {
+ 			};
+ 		};
+ 
+-		bus_leftbus_opp_table: opp-table6 {
++		bus_leftbus_opp_table: opp-table-6 {
+ 			compatible = "operating-points-v2";
+ 			opp-shared;
+ 
+diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
+index aa0b61b59970..c02865ff0761 100644
+--- a/arch/arm/boot/dts/exynos4412.dtsi
++++ b/arch/arm/boot/dts/exynos4412.dtsi
+@@ -93,7 +93,7 @@ cpu3: cpu@a03 {
+ 		};
+ 	};
+ 
+-	cpu0_opp_table: opp-table0 {
++	cpu0_opp_table: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+@@ -420,7 +420,7 @@ bus_c2c: bus-c2c {
+ 			status = "disabled";
+ 		};
+ 
+-		bus_dmc_opp_table: opp-table1 {
++		bus_dmc_opp_table: opp-table-1 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-100000000 {
+@@ -446,7 +446,7 @@ opp-400000000 {
+ 			};
+ 		};
+ 
+-		bus_acp_opp_table: opp-table2 {
++		bus_acp_opp_table: opp-table-2 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-100000000 {
+@@ -515,7 +515,7 @@ bus_mfc: bus-mfc {
+ 			status = "disabled";
+ 		};
+ 
+-		bus_leftbus_opp_table: opp-table3 {
++		bus_leftbus_opp_table: opp-table-3 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-100000000 {
+@@ -537,7 +537,7 @@ opp-200000000 {
+ 			};
+ 		};
+ 
+-		bus_display_opp_table: opp-table4 {
++		bus_display_opp_table: opp-table-4 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-160000000 {
+@@ -548,7 +548,7 @@ opp-200000000 {
+ 			};
+ 		};
+ 
+-		bus_fsys_opp_table: opp-table5 {
++		bus_fsys_opp_table: opp-table-5 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-100000000 {
+@@ -559,7 +559,7 @@ opp-134000000 {
+ 			};
+ 		};
+ 
+-		bus_peri_opp_table: opp-table6 {
++		bus_peri_opp_table: opp-table-6 {
+ 			compatible = "operating-points-v2";
+ 
+ 			opp-50000000 {
+diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
+index 4708dcd575a7..f82f82fc803f 100644
+--- a/arch/arm/boot/dts/exynos5250.dtsi
++++ b/arch/arm/boot/dts/exynos5250.dtsi
+@@ -81,7 +81,7 @@ cpu1: cpu@1 {
+ 		};
+ 	};
+ 
+-	cpu0_opp_table: opp-table0 {
++	cpu0_opp_table: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+index 9f2523a873d9..12168f3fa732 100644
+--- a/arch/arm/boot/dts/exynos5420.dtsi
++++ b/arch/arm/boot/dts/exynos5420.dtsi
+@@ -42,7 +42,7 @@ aliases {
+ 	 * by exynos5420-cpus.dtsi or exynos5422-cpus.dtsi.
+ 	 */
+ 
+-	cluster_a15_opp_table: opp-table0 {
++	cluster_a15_opp_table: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+@@ -108,7 +108,7 @@ opp-700000000 {
+ 		};
+ 	};
+ 
+-	cluster_a7_opp_table: opp-table1 {
++	cluster_a7_opp_table: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+index 35818c4cd852..06103dd37265 100644
+--- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
++++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+@@ -35,7 +35,7 @@ oscclk {
+ 		};
+ 	};
+ 
+-	bus_wcore_opp_table: opp-table2 {
++	bus_wcore_opp_table: opp-table-2 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 532MHz MPLL */
+@@ -61,7 +61,7 @@ opp04 {
+ 		};
+ 	};
+ 
+-	bus_noc_opp_table: opp-table3 {
++	bus_noc_opp_table: opp-table-3 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -79,7 +79,7 @@ opp03 {
+ 		};
+ 	};
+ 
+-	bus_fsys_apb_opp_table: opp-table4 {
++	bus_fsys_apb_opp_table: opp-table-4 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -91,7 +91,7 @@ opp01 {
+ 		};
+ 	};
+ 
+-	bus_fsys2_opp_table: opp-table5 {
++	bus_fsys2_opp_table: opp-table-5 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 600MHz DPLL */
+@@ -106,7 +106,7 @@ opp02 {
+ 		};
+ 	};
+ 
+-	bus_mfc_opp_table: opp-table6 {
++	bus_mfc_opp_table: opp-table-6 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -127,7 +127,7 @@ opp04 {
+ 		};
+ 	};
+ 
+-	bus_gen_opp_table: opp-table7 {
++	bus_gen_opp_table: opp-table-7 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 532MHz MPLL */
+@@ -145,7 +145,7 @@ opp03 {
+ 		};
+ 	};
+ 
+-	bus_peri_opp_table: opp-table8 {
++	bus_peri_opp_table: opp-table-8 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -154,7 +154,7 @@ opp00 {
+ 		};
+ 	};
+ 
+-	bus_g2d_opp_table: opp-table9 {
++	bus_g2d_opp_table: opp-table-9 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -175,7 +175,7 @@ opp04 {
+ 		};
+ 	};
+ 
+-	bus_g2d_acp_opp_table: opp-table10 {
++	bus_g2d_acp_opp_table: opp-table-10 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 532MHz MPLL */
+@@ -193,7 +193,7 @@ opp03 {
+ 		};
+ 	};
+ 
+-	bus_jpeg_opp_table: opp-table11 {
++	bus_jpeg_opp_table: opp-table-11 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 600MHz DPLL */
+@@ -211,7 +211,7 @@ opp03 {
+ 		};
+ 	};
+ 
+-	bus_jpeg_apb_opp_table: opp-table12 {
++	bus_jpeg_apb_opp_table: opp-table-12 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -229,7 +229,7 @@ opp03 {
+ 		};
+ 	};
+ 
+-	bus_disp1_fimd_opp_table: opp-table13 {
++	bus_disp1_fimd_opp_table: opp-table-13 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 600MHz DPLL */
+@@ -241,7 +241,7 @@ opp01 {
+ 		};
+ 	};
+ 
+-	bus_disp1_opp_table: opp-table14 {
++	bus_disp1_opp_table: opp-table-14 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 600MHz DPLL */
+@@ -256,7 +256,7 @@ opp02 {
+ 		};
+ 	};
+ 
+-	bus_gscl_opp_table: opp-table15 {
++	bus_gscl_opp_table: opp-table-15 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 600MHz DPLL */
+@@ -271,7 +271,7 @@ opp02 {
+ 		};
+ 	};
+ 
+-	bus_mscl_opp_table: opp-table16 {
++	bus_mscl_opp_table: opp-table-16 {
+ 		compatible = "operating-points-v2";
+ 
+ 		/* derived from 666MHz CPLL */
+@@ -292,7 +292,7 @@ opp04 {
+ 		};
+ 	};
+ 
+-	dmc_opp_table: opp-table17 {
++	dmc_opp_table: opp-table-17 {
+ 		compatible = "operating-points-v2";
+ 
+ 		opp00 {
+-- 
+2.34.1
+
