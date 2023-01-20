@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3930675C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F5E675C6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjATSFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S229906AbjATSFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjATSE4 (ORCPT
+        with ESMTP id S229602AbjATSFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:04:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BEF66011;
-        Fri, 20 Jan 2023 10:04:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D364B829C1;
-        Fri, 20 Jan 2023 18:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF51C4339B;
-        Fri, 20 Jan 2023 18:04:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674237891;
-        bh=rE5bdPR8ydsuy1WViMrPoNGn/hFuJl8sylozRghEyoo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Lj/6zQ5MxRH/hOESWSHh5g5QS/tTNHMAcjOZmqjFTfF+099zWY9yV17IHls0aLEIF
-         8TA77beAM1ZUV52pYO2lxRa8iI3P6Yix12zlEA2HgNBnCfWZa6f5tkKPbRyXJABFSG
-         CsUGcSiPvwqAIcVnh4jYDFH8Afala4/afQEcgiXEZSYDwPwKR5kkVQ6pzKN5k84cpc
-         y76XLaav3hI3mV3DCvYyi3XGldoH7DwayZn7KSZ+tl7AiVCIflzkyp1HUj6AOHz44j
-         ZVCtG+8yVcCdqNM2FhmSzwkp6MNOBolD6ocurBfVNzSl87CNyw8YPJRZtR5714yhXC
-         uxtS5kscOJh8Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 63C045C17DC; Fri, 20 Jan 2023 10:04:51 -0800 (PST)
-Date:   Fri, 20 Jan 2023 10:04:51 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
-        sfr@canb.auug.org.au
-Subject: Re: [PATCH rcu v2 16/20] kernel/power: Remove "select SRCU"
-Message-ID: <20230120180451.GP2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
- <20230113001132.3375334-16-paulmck@kernel.org>
- <CAJZ5v0gNbp4ZgPRDfLV6kmieUo7zcQSEGjdsB=G8Zr4W=HAHoQ@mail.gmail.com>
+        Fri, 20 Jan 2023 13:05:41 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07147521E2;
+        Fri, 20 Jan 2023 10:05:38 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id x36so7654710ede.13;
+        Fri, 20 Jan 2023 10:05:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NErkDfG9x21+FSuWLa23pYCGfCNK2geI8tfV1Iu02uI=;
+        b=rjcuae9YXhxMnxrnOL6Clos1e8iN57XvbhWG/nY8jGvJZ5iyuEY2qsnPkYsuCYFjL9
+         enbQdfgAGwQXvwbhehYwVEcHejVD28qW5VVIM79hSqOy1H5JoaAh5XdILCfgREkNXVoD
+         t294+t4TZCOGJcG0ndn3g0SPOrxhLcnejaLu71KPYDdrkcXL+CFEx5yxiw8vxRfDL8uj
+         Njy86u7ccAvBbl7wOzEq8At2KWjReJKkKN76EApEkHzBdyB5In9qLMDgLgS4G7jTrOAK
+         aPo5sR6IyPv9EY6WcdOgcsxUFXAk/zmcYdtlmFMGhJjFy02+0sGFRN7OqxYpws65ymPO
+         mlAA==
+X-Gm-Message-State: AFqh2kqnJ/t0wPcsqe867f8NdWvSorq054v746XCQ87GLNT9C+2RO6Bq
+        6Wg9XiamAxnaaEY1mqEWWONW14B9moM6mhHLa5RfbXn8VTo=
+X-Google-Smtp-Source: AMrXdXu5tZWjbhyhg80YIaSghGZFoML7EUsr1ePnt7FHHgJuDOxJlQewGpPaDRQu5ux/kNCXfhnCe9/vVKjPSV9a2Ok=
+X-Received: by 2002:aa7:cd47:0:b0:49d:f700:b1ee with SMTP id
+ v7-20020aa7cd47000000b0049df700b1eemr1825007edw.49.1674237936651; Fri, 20 Jan
+ 2023 10:05:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gNbp4ZgPRDfLV6kmieUo7zcQSEGjdsB=G8Zr4W=HAHoQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Jan 2023 19:05:25 +0100
+Message-ID: <CAJZ5v0hh=K6rAhhRn+tg-mJaY-Fm_ysJLZDhVnYc+D1B1FnzuA@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fixes for v6.2-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 05:55:04PM +0100, Rafael J. Wysocki wrote:
-> On Fri, Jan 13, 2023 at 1:11 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > Now that the SRCU Kconfig option is unconditionally selected, there is
-> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> > Kconfig statements.
-> >
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: <linux-pm@vger.kernel.org>
-> > Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Reviewed-by: John Ogness <john.ogness@linutronix.de>
-> > ---
-> >  kernel/power/Kconfig | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> > index 60a1d3051cc79..4b31629c5be4b 100644
-> > --- a/kernel/power/Kconfig
-> > +++ b/kernel/power/Kconfig
-> > @@ -118,7 +118,6 @@ config PM_SLEEP
-> >         def_bool y
-> >         depends on SUSPEND || HIBERNATE_CALLBACKS
-> >         select PM
-> > -       select SRCU
-> >
-> >  config PM_SLEEP_SMP
-> >         def_bool y
-> > --
-> 
-> Applied as 6.3 material, thanks!
+Hi Linus,
 
-Thank you, and I will drop this from my tree on my next rebase.
+Please pull from the tag
 
-							Thanx, Paul
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.2-rc5
+
+with top-most commit 6c54b7bc8a31ce0f7cc7f8deef05067df414f1d8
+
+ thermal: core: call put_device() only after device_register() fails
+
+on top of commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+
+ Linux 6.2-rc4
+
+to receive a thermal control fix for 6.2-rc5.
+
+Modify __thermal_cooling_device_register() to make it call
+put_device() after invoking device_register() and fix up a few
+error paths calling thermal_cooling_device_destroy_sysfs()
+unnecessarily (Viresh Kumar).
+
+Thanks!
+
+
+---------------
+
+Viresh Kumar (1):
+      thermal: core: call put_device() only after device_register() fails
+
+---------------
+
+ drivers/thermal/thermal_core.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
