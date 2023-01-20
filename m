@@ -2,205 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1044674903
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8817267490C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjATBrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S229724AbjATBwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjATBrU (ORCPT
+        with ESMTP id S229506AbjATBwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:47:20 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1628A9D2A3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:47:19 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id e8so3163846qts.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyQbDs7HBixw8EukE3w9IBEC2xEjoX+NR7SoW/oXAGU=;
-        b=K+b24l2HVndz0EyvMYAjay5yVALhz1Uft+YM2lg2Edz2+qN36ESe4PWhA68/w93wZp
-         BNgDLzk41hB373N7WdDwPcjKH8t5OOgFUFYFiAvDV2h66FgZ+jRm62UNCGu0eBtI145L
-         /6551RJlUmyIIe6OE0wfYeRC72ZMqOuEwD2Nw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OyQbDs7HBixw8EukE3w9IBEC2xEjoX+NR7SoW/oXAGU=;
-        b=YKmq2NkGl/DKK9uDm4gSjsdAxt2KTweuMCUrm41VAKS8q4+9B/CpeK2eH0ZHC5z4my
-         6FjgzSpv04MNVUkXht4MFkAUuprQ1dytnTEJJjL2HNE6cuAEndOmZXX0WjKTz/xBiL3s
-         6CsMmWK/r4TajyPiqsJH7ytcH7q35ii4u4T9nsZHAOREVCNDXpMA25WRXs+kZlbdpIBM
-         NsshQGoM3JAX0LHtxFecZcDxxKSQlXyRD7divAJ+SzGF/Stv1UDiDCxqe36Q5M4PD+4s
-         zZ/I6s3Ny8GoGXeSrJjm+vjrHau9gUYphxkLyBJF/NTM7PC9C0pIejBNm2kiIyAwnsnp
-         SgnQ==
-X-Gm-Message-State: AFqh2krOsqQzOSD1Yza6PkY0pAZmPiWOkFoqcbyd8TaGexs2SyaFJNrF
-        uGW9WIV8eS9gHqlSo+FOrsKvjA==
-X-Google-Smtp-Source: AMrXdXvi1nG1kiSvrD1IzqiCTywY2pJQ5RTLVG7BHlyu2RujlizVTf64VYsUFdd4syrV8re6MbvGGw==
-X-Received: by 2002:ac8:534b:0:b0:3a9:6b48:a13c with SMTP id d11-20020ac8534b000000b003a96b48a13cmr17687316qto.51.1674179238125;
-        Thu, 19 Jan 2023 17:47:18 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id hg20-20020a05622a611400b003a81eef14efsm19714182qtb.45.2023.01.19.17.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 17:47:17 -0800 (PST)
-Date:   Fri, 20 Jan 2023 01:47:16 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        quic_neeraju@quicinc.com, Uladzislau Rezki <urezki@gmail.com>
-Subject: Re: [PATCH] rcu: Further comment and explain the state space of GP
- sequences
-Message-ID: <Y8nypBG5k+D3YXHO@google.com>
-References: <20230119141134.686626-1-frederic@kernel.org>
- <Y8lQjKKDd0G2zt3F@lothringen>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8lQjKKDd0G2zt3F@lothringen>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 19 Jan 2023 20:52:04 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D669DA3171
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:52:01 -0800 (PST)
+Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
+        by 156.147.23.53 with ESMTP; 20 Jan 2023 10:51:58 +0900
+X-Original-SENDERIP: 156.147.1.126
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
+        by 156.147.1.126 with ESMTP; 20 Jan 2023 10:51:58 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org, will@kernel.org,
+        tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
+        gwan-gyeong.mun@intel.com, max.byungchul.park@gmail.com,
+        longman@redhat.com
+Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
+Date:   Fri, 20 Jan 2023 10:51:45 +0900
+Message-Id: <1674179505-26987-1-git-send-email-byungchul.park@lge.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <Y8mZHKJV4FH17vGn@boqun-archlinux>
+References: <Y8mZHKJV4FH17vGn@boqun-archlinux>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 03:15:40PM +0100, Frederic Weisbecker wrote:
-> On Thu, Jan 19, 2023 at 03:11:35PM +0100, Frederic Weisbecker wrote:
-> > The state space of the GP sequence number isn't documented and the
-> > definitions of its special values are scattered. Try to gather some
-> > common knowledge near the GP seq headers.
+Boqun wrote:
+> On Thu, Jan 19, 2023 at 01:33:58PM +0000, Matthew Wilcox wrote:
+> > On Thu, Jan 19, 2023 at 03:23:08PM +0900, Byungchul Park wrote:
+> > > Boqun wrote:
+> > > > *Looks like the DEPT dependency graph doesn't handle the
+> > > > fair/unfair readers as lockdep current does. Which bring the
+> > > > next question.
+> > > 
+> > > No. DEPT works better for unfair read. It works based on wait/event. So
+> > > read_lock() is considered a potential wait waiting on write_unlock()
+> > > while write_lock() is considered a potential wait waiting on either
+> > > write_unlock() or read_unlock(). DEPT is working perfect for it.
+> > > 
+> > > For fair read (maybe you meant queued read lock), I think the case
+> > > should be handled in the same way as normal lock. I might get it wrong.
+> > > Please let me know if I miss something.
 > > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > ---
-> >  kernel/rcu/rcu.h | 33 +++++++++++++++++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
+> > From the lockdep/DEPT point of view, the question is whether:
 > > 
-> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> > index 115616ac3bfa..fb95de039596 100644
-> > --- a/kernel/rcu/rcu.h
-> > +++ b/kernel/rcu/rcu.h
-> > @@ -14,6 +14,39 @@
-> >  
-> >  /*
-> >   * Grace-period counter management.
-> > + *
-> > + * The two lowest significant bits gather the control flags.
-> > + * The higher bits form the RCU sequence counter.
-> > + *
-> > + * About the control flags, a common value of 0 means that no GP is in progress.
-> > + * A value of 1 means that a grace period has started and is in progress. When
-> > + * the grace period completes, the control flags are reset to 0 and the sequence
-> > + * counter is incremented.
-> > + *
-> > + * However some specific RCU usages make use of custom values.
-> > + *
-> > + * SRCU special control values:
-> > + *
-> > + * 	SRCU_SNP_INIT_SEQ	:	Invalid/init value set when SRCU node
-> > + * 							is initialized.
-> > + *
-> > + * 	SRCU_STATE_IDLE		:	No SRCU gp is in progress
-> > + *
-> > + * 	SRCU_STATE_SCAN1	:	State set by rcu_seq_start(). Indicates
-> > + *								we are scanning the inactive readers
-> > + *								index.
-> > + *
-> > + *		SRCU_STATE_SCAN2	:	State set manually via rcu_seq_set_state()
-> > + *								Indicates we are flipping the readers
-> > + *								index and then scanning the newly inactive
-> > + *								readers index.
-> > + *
-> > + * RCU polled GP special control value:
-> > + *
-> > + *	RCU_GET_STATE_COMPLETED :	State value indicating that a polled GP
-> > + *								has completed. It's an absolute value
-> > + *								covering both the state and the counter of
-> > + *								the GP sequence.
-> >   */
-> >  
-> >  #define RCU_SEQ_CTR_SHIFT	2
-> > -- 
-> > 2.34.1
+> >	read_lock(A)
+> >	read_lock(A)
+> > 
+> > can deadlock if a writer comes in between the two acquisitions and
+> > sleeps waiting on A to be released.  A fair lock will block new
+> > readers when a writer is waiting, while an unfair lock will allow
+> > new readers even while a writer is waiting.
 > > 
 > 
-> Ok perhaps this one got the tabs right:
+> To be more accurate, a fair reader will wait if there is a writer
+> waiting for other reader (fair or not) to unlock, and an unfair reader
+> won't.
+
+What a kind guys, both of you! Thanks.
+
+I asked to check if there are other subtle things than this. Fortunately,
+I already understand what you guys shared.
+
+> In kernel there are read/write locks that can have both fair and unfair
+> readers (e.g. queued rwlock). Regarding deadlocks,
 > 
-> ---
-> From: Frederic Weisbecker <frederic@kernel.org>
-> Date: Thu, 19 Jan 2023 14:29:34 +0100
-> Subject: [PATCH v2] rcu: Further comment and explain the state space of GP
->  sequences
+> 	T0		T1		T2
+> 	--		--		--
+> 	fair_read_lock(A);
+> 			write_lock(B);
+> 					write_lock(A);
+> 	write_lock(B);
+> 			unfair_read_lock(A);
+
+With the DEPT's point of view (let me re-write the scenario):
+
+	T0		T1		T2
+	--		--		--
+	fair_read_lock(A);
+			write_lock(B);
+					write_lock(A);
+	write_lock(B);
+			unfair_read_lock(A);
+	write_unlock(B);
+	read_unlock(A);
+			read_unlock(A);
+			write_unlock(B);
+					write_unlock(A);
+
+T0: read_unlock(A) cannot happen if write_lock(B) is stuck by a B owner
+    not doing either write_unlock(B) or read_unlock(B). In other words:
+
+      1. read_unlock(A) happening depends on write_unlock(B) happening.
+      2. read_unlock(A) happening depends on read_unlock(B) happening.
+
+T1: write_unlock(B) cannot happen if unfair_read_lock(A) is stuck by a A
+    owner not doing write_unlock(A). In other words:
+
+      3. write_unlock(B) happening depends on write_unlock(A) happening.
+
+1, 2 and 3 give the following dependencies:
+
+    1. read_unlock(A) -> write_unlock(B)
+    2. read_unlock(A) -> read_unlock(B)
+    3. write_unlock(B) -> write_unlock(A)
+
+There's no circular dependency so it's safe. DEPT doesn't report this.
+
+> the above is not a deadlock, since T1's unfair reader can "steal" the
+> lock. However the following is a deadlock:
 > 
-> The state space of the GP sequence number isn't documented and the
-> definitions of its special values are scattered. Try to gather some
-> common knowledge near the GP seq headers.
+> 	T0		T1		T2
+> 	--		--		--
+> 	unfair_read_lock(A);
+> 			write_lock(B);
+> 					write_lock(A);
+> 	write_lock(B);
+> 			fair_read_lock(A);
 > 
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> ---
->  kernel/rcu/rcu.h | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+> , since T'1 fair reader will wait.
+
+With the DEPT's point of view (let me re-write the scenario):
+
+	T0		T1		T2
+	--		--		--
+	unfair_read_lock(A);
+			write_lock(B);
+					write_lock(A);
+	write_lock(B);
+			fair_read_lock(A);
+	write_unlock(B);
+	read_unlock(A);
+			read_unlock(A);
+			write_unlock(B);
+					write_unlock(A);
+
+T0: read_unlock(A) cannot happen if write_lock(B) is stuck by a B owner
+    not doing either write_unlock(B) or read_unlock(B). In other words:
+
+      1. read_unlock(A) happening depends on write_unlock(B) happening.
+      2. read_unlock(A) happening depends on read_unlock(B) happening.
+
+T1: write_unlock(B) cannot happen if fair_read_lock(A) is stuck by a A
+    owner not doing either write_unlock(A) or read_unlock(A). In other
+    words:
+
+      3. write_unlock(B) happening depends on write_unlock(A) happening.
+      4. write_unlock(B) happening depends on read_unlock(A) happening.
+
+1, 2, 3 and 4 give the following dependencies:
+
+    1. read_unlock(A) -> write_unlock(B)
+    2. read_unlock(A) -> read_unlock(B)
+    3. write_unlock(B) -> write_unlock(A)
+    4. write_unlock(B) -> read_unlock(A)
+
+With 1 and 4, there's a circular dependency so DEPT definitely report
+this as a problem.
+
+REMIND: DEPT focuses on waits and events.
+
+> FWIW, lockdep is able to catch this (figuring out which is deadlock and
+> which is not) since two years ago, plus other trivial deadlock detection
+> for read/write locks. Needless to say, if lib/lock-selftests.c was given
+> a try, one could find it out on one's own.
 > 
-> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> index 115616ac3bfa..fb95de039596 100644
-> --- a/kernel/rcu/rcu.h
-> +++ b/kernel/rcu/rcu.h
-> @@ -14,6 +14,39 @@
->  
->  /*
->   * Grace-period counter management.
-> + *
-> + * The two lowest significant bits gather the control flags.
-> + * The higher bits form the RCU sequence counter.
-> + *
-> + * About the control flags, a common value of 0 means that no GP is in progress.
-> + * A value of 1 means that a grace period has started and is in progress. When
-> + * the grace period completes, the control flags are reset to 0 and the sequence
-> + * counter is incremented.
-> + *
-> + * However some specific RCU usages make use of custom values.
-> + *
-> + * SRCU special control values:
-> + *
-> + * 	SRCU_SNP_INIT_SEQ	:	Invalid/init value set when SRCU node
-> + * 					is initialized.
-> + *
-> + * 	SRCU_STATE_IDLE		:	No SRCU gp is in progress
-> + *
-> + *	SRCU_STATE_SCAN1	:	State set by rcu_seq_start(). Indicates
-> + *					we are scanning the inactive readers
-> + *					index.
-> + *
-> + *	SRCU_STATE_SCAN2	:	State set manually via rcu_seq_set_state()
-> + *					Indicates we are flipping the readers
-> + *					index and then scanning the newly inactive
-> + *					readers index.
-> + *
-> + * RCU polled GP special control value:
-> + *
-> + *	RCU_GET_STATE_COMPLETED :	State value indicating that a polled GP
-> + *					has completed. It's an absolute value
-> + *					covering both the state and the counter of
-> + *					the GP sequence.
->   */
-
-Other than the minor comments in the other thread:
-
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
-thanks,
-
- - Joel
-
-
->  
->  #define RCU_SEQ_CTR_SHIFT	2
-> -- 
-> 2.34.1
+> Regards,
+> Boqun
 > 
