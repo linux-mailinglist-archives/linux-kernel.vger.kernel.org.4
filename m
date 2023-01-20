@@ -2,448 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3707D674D53
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 292DF674D54
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjATGYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S229742AbjATGYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjATGYS (ORCPT
+        with ESMTP id S229712AbjATGYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:24:18 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3C285371;
-        Thu, 19 Jan 2023 22:23:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674195822; x=1705731822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KCemd+gR6Sk0uJqxe5gyusCcMC7HCWG8y/CVYzAwrTw=;
-  b=b8KIr2f5QToaB+H53BYySkwCEc6JnBOFprKyroceWth9QotAQUbWJDhC
-   /CttzeDuSNDZO9/s9yjE8ZwxXCOg8UV+fCa0jkNft5t23tkM8dpF4Ocxi
-   nUowvefu54eUs2ec2md2kPmA0i+OHTEs8z2Clyw+CcmY4O+9sIExnRwDu
-   lEuQoDZ05wic2Zqobw/BjfWw5XNS7E10M0Nal7S6IQnocm2X57SUTn3HP
-   o+Rh97yrf6CxaLZvUQkudbx0Csm6nyvIBQ8qB85fjWWmFOStkJatHvj+s
-   xSRKnm4V+QwkvfRumszI6FLaiUygqLbdkOblPucd9IHRZHOW5igGGeokS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="411745950"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="411745950"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 22:22:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="690943125"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="690943125"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2023 22:22:43 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIknS-0002Gr-2m;
-        Fri, 20 Jan 2023 06:22:42 +0000
-Date:   Fri, 20 Jan 2023 14:22:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, tj@kernel.org
-Subject: Re: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used
- as kptrs
-Message-ID: <202301201454.hTFU2jPK-lkp@intel.com>
-References: <20230119235833.2948341-5-void@manifault.com>
+        Fri, 20 Jan 2023 01:24:33 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5A77CCCA;
+        Thu, 19 Jan 2023 22:24:02 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id x7so3438452qtv.13;
+        Thu, 19 Jan 2023 22:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m/MI+VcYhdwx96fyONVt/5n6r1oLpaMorbRp8iU9Y1A=;
+        b=TctN8tdVzAAQVuXr7I+CkW7I1UpND2PNCiWNO+Uu98aJd0TyUEtqaOTghrptdHqQyz
+         lfuJPlHOPG2uvNa31M5fVV2IhUQupLxNXESjDsk2sO/7MBSsQQKJfHhBuhmhiVvjW36U
+         jwjd/Frt8o9nSBbeTpJsls834H4VqHOfnde0LaGIWcXsQAggQ+OYAjb4irf02Nwr6WLw
+         A83cPqT5CSOq1ZtClGj036m+mwSNE5gPcgUoB/NYmeg0pEJV8FcFKrYGfZwSHBUPPJOf
+         vHOoeXNYrhiIaW2j6g/v9/da2U5+fUPnya9op/u9CHvYk0YR5ZEBdJNJG63cope9ThgU
+         pLzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m/MI+VcYhdwx96fyONVt/5n6r1oLpaMorbRp8iU9Y1A=;
+        b=g/PDHu6+I5MoOOg76QGjMQksSCS4uipL9YDGmbnzZUMWvxl9nOIBJL96aLyXFLusNK
+         SzpaZmEMYcXMqFXfkgZ0WEXSN+uqk9jOiB3/Za7plpegYAEkhDYI1fO14PFyC6UZFIUp
+         RtPPMzY4CrEZ5DcWwXLzBERL9UXYCFrwMSAPcePtB4kskMr69TCw0e2mNzk6G8wK2CBm
+         mPWCatQmrdzQYsHKFsCPmtU76wwMNld6xK3e4PENEOswgjbq7FCKnx8hUvC1G8C4EdaT
+         DqXk6EyiTpvmhR3GdIIGnDH5tK6CcQWZEYJUXUBX0x971Ih6YCthrL7e5o22m6v7bv7H
+         uXKw==
+X-Gm-Message-State: AFqh2koSPpA1HttiWXiYRhCGunqwxmdCE4qi/IeYheDpT7aQ2a3vkF5h
+        LvTjPhSiV2lzY3oR0J14i6e0qpsbP28=
+X-Google-Smtp-Source: AMrXdXsTu1G6XKc4SEt3rUe0C4Zh2bIgrN8+qw3b/6w8jJ/5IQ/qnKEogMDIEL4Tfd9WUj3LjOcDBQ==
+X-Received: by 2002:ac8:7a93:0:b0:3b1:c538:7026 with SMTP id x19-20020ac87a93000000b003b1c5387026mr18699715qtr.42.1674195840824;
+        Thu, 19 Jan 2023 22:24:00 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id q30-20020a37f71e000000b006ec62032d3dsm13983436qkj.30.2023.01.19.22.23.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 22:24:00 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id C783D27C0054;
+        Fri, 20 Jan 2023 01:23:59 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 20 Jan 2023 01:23:59 -0500
+X-ME-Sender: <xms:fzPKYzgftebfWomkY8PRPI9Zq5r06zh08YLK7zyEU7-dcKs5bvn40Q>
+    <xme:fzPKYwC3wJQ6O7ZiI3h7QEq_l63dQqI2VfOe2sM_1ntfpEnHNlWsBBmI5lpR6v565
+    Zfm1xTtxv_HR6wMpA>
+X-ME-Received: <xmr:fzPKYzFD2CXfb05-NoKx_hkE1XEoG1FE2PrFnmt_o4f-GITmoZfkVlKZPy32CSJ0On3dCuJk3nn4FTZ1MPYyNMd61wBgj0mgbKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddgleejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:fzPKYwQOgh3CgJ9b7Ou8vlN1-wkJmSAGfIzI93afgyQ6pll5ofDkvw>
+    <xmx:fzPKYwxU6wgcLZiapPvqNjGRG5foc0J8n4MLc6mPCIikesb3lan4bA>
+    <xmx:fzPKY24trJ3ht2lxIt39ow0YhTui_y5hLwyP5bK_9x0tJTGWb6IuKw>
+    <xmx:fzPKY3nCCM8Vk9DhpXKuMN67zwB3bc93w52_36OhF8VbGa_4PX8z7w>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Jan 2023 01:23:58 -0500 (EST)
+Date:   Thu, 19 Jan 2023 22:23:56 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] rust: types: introduce `ScopeGuard`
+Message-ID: <Y8ozfNAYhuOPgL/7@Boquns-Mac-mini.local>
+References: <20230119174036.64046-1-wedsonaf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119235833.2948341-5-void@manifault.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119174036.64046-1-wedsonaf@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Thu, Jan 19, 2023 at 02:40:32PM -0300, Wedson Almeida Filho wrote:
+> This allows us to run some code when the guard is dropped (e.g.,
+> implicitly when it goes out of scope). We can also prevent the
+> guard from running by calling its `dismiss()` method.
+> 
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> ---
+>  rust/kernel/types.rs | 127 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 126 insertions(+), 1 deletion(-)
+> 
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index e84e51ec9716..f0ad4472292d 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -2,7 +2,132 @@
+>  
+>  //! Kernel types.
+>  
+> -use core::{cell::UnsafeCell, mem::MaybeUninit};
+> +use alloc::boxed::Box;
+> +use core::{
+> +    cell::UnsafeCell,
+> +    mem::MaybeUninit,
+> +    ops::{Deref, DerefMut},
+> +};
+> +
+> +/// Runs a cleanup function/closure when dropped.
+> +///
+> +/// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
+> +///
+> +/// # Examples
+> +///
+> +/// In the example below, we have multiple exit paths and we want to log regardless of which one is
+> +/// taken:
+> +/// ```
+> +/// # use kernel::ScopeGuard;
+> +/// fn example1(arg: bool) {
+> +///     let _log = ScopeGuard::new(|| pr_info!("example1 completed\n"));
+> +///
+> +///     if arg {
+> +///         return;
+> +///     }
+> +///
+> +///     pr_info!("Do something...\n");
+> +/// }
+> +///
+> +/// # example1(false);
+> +/// # example1(true);
+> +/// ```
+> +///
+> +/// In the example below, we want to log the same message on all early exits but a different one on
+> +/// the main exit path:
+> +/// ```
+> +/// # use kernel::ScopeGuard;
+> +/// fn example2(arg: bool) {
+> +///     let log = ScopeGuard::new(|| pr_info!("example2 returned early\n"));
+> +///
+> +///     if arg {
+> +///         return;
+> +///     }
+> +///
+> +///     // (Other early returns...)
+> +///
+> +///     log.dismiss();
+> +///     pr_info!("example2 no early return\n");
+> +/// }
+> +///
+> +/// # example2(false);
+> +/// # example2(true);
+> +/// ```
+> +///
+> +/// In the example below, we need a mutable object (the vector) to be accessible within the log
+> +/// function, so we wrap it in the [`ScopeGuard`]:
+> +/// ```
+> +/// # use kernel::ScopeGuard;
+> +/// fn example3(arg: bool) -> Result {
+> +///     let mut vec =
+> +///         ScopeGuard::new_with_data(Vec::new(), |v| pr_info!("vec had {} elements\n", v.len()));
+> +///
+> +///     vec.try_push(10u8)?;
+> +///     if arg {
+> +///         return Ok(());
+> +///     }
+> +///     vec.try_push(20u8)?;
+> +///     Ok(())
+> +/// }
+> +///
+> +/// # assert_eq!(example3(false), Ok(()));
+> +/// # assert_eq!(example3(true), Ok(()));
+> +/// ```
+> +///
+> +/// # Invariants
+> +///
+> +/// The value stored in the struct is nearly always `Some(_)`, except between
+> +/// [`ScopeGuard::dismiss`] and [`ScopeGuard::drop`]: in this case, it will be `None` as the value
+> +/// will have been returned to the caller. Since  [`ScopeGuard::dismiss`] consumes the guard,
+> +/// callers won't be able to use it anymore.
+> +pub struct ScopeGuard<T, F: FnOnce(T)>(Option<(T, F)>);
+> +
+> +impl<T, F: FnOnce(T)> ScopeGuard<T, F> {
+> +    /// Creates a new guarded object wrapping the given data and with the given cleanup function.
+> +    pub fn new_with_data(data: T, cleanup_func: F) -> Self {
+> +        // INVARIANT: The struct is being initialised with `Some(_)`.
+> +        Self(Some((data, cleanup_func)))
+> +    }
+> +
+> +    /// Prevents the cleanup function from running and returns the guarded data.
+> +    pub fn dismiss(mut self) -> T {
+> +        // INVARIANT: This is the exception case in the invariant; it is not visible to callers
+> +        // because this function consumes `self`.
+> +        self.0.take().unwrap().0
+> +    }
+> +}
+> +
+> +impl ScopeGuard<(), Box<dyn FnOnce(())>> {
 
-Thank you for the patch! Perhaps something to improve:
+How about `fn(())` here as a placeholder? I.e
 
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230119235833.2948341-5-void%40manifault.com
-patch subject: [PATCH bpf-next 4/8] bpf: Enable cpumasks to be queried and used as kptrs
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230120/202301201454.hTFU2jPK-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/11541205c58f2226e5ffbc5967317469d65efac6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
-        git checkout 11541205c58f2226e5ffbc5967317469d65efac6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/cpumask.c:38:21: warning: no previous prototype for function 'bpf_cpumask_create' [-Wmissing-prototypes]
-   struct bpf_cpumask *bpf_cpumask_create(void)
-                       ^
-   kernel/bpf/cpumask.c:38:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct bpf_cpumask *bpf_cpumask_create(void)
-   ^
-   static 
->> kernel/bpf/cpumask.c:52:21: warning: no previous prototype for function 'bpf_cpumask_acquire' [-Wmissing-prototypes]
-   struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
-                       ^
-   kernel/bpf/cpumask.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:58:21: warning: no previous prototype for function 'bpf_cpumask_kptr_get' [-Wmissing-prototypes]
-   struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
-                       ^
-   kernel/bpf/cpumask.c:58:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
-   ^
-   static 
->> kernel/bpf/cpumask.c:76:6: warning: no previous prototype for function 'bpf_cpumask_release' [-Wmissing-prototypes]
-   void bpf_cpumask_release(struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_release(struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:88:5: warning: no previous prototype for function 'bpf_cpumask_first' [-Wmissing-prototypes]
-   u32 bpf_cpumask_first(const struct cpumask *cpumask)
-       ^
-   kernel/bpf/cpumask.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u32 bpf_cpumask_first(const struct cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:93:5: warning: no previous prototype for function 'bpf_cpumask_first_zero' [-Wmissing-prototypes]
-   u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
-       ^
-   kernel/bpf/cpumask.c:93:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:98:6: warning: no previous prototype for function 'bpf_cpumask_set_cpu' [-Wmissing-prototypes]
-   void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:98:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:106:6: warning: no previous prototype for function 'bpf_cpumask_clear_cpu' [-Wmissing-prototypes]
-   void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:114:6: warning: no previous prototype for function 'bpf_cpumask_test_cpu' [-Wmissing-prototypes]
-   bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:114:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:122:6: warning: no previous prototype for function 'bpf_cpumask_test_and_set_cpu' [-Wmissing-prototypes]
-   bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:130:6: warning: no previous prototype for function 'bpf_cpumask_test_and_clear_cpu' [-Wmissing-prototypes]
-   bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:130:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:138:6: warning: no previous prototype for function 'bpf_cpumask_setall' [-Wmissing-prototypes]
-   void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:138:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:143:6: warning: no previous prototype for function 'bpf_cpumask_clear' [-Wmissing-prototypes]
-   void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:143:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
-   ^
-   static 
->> kernel/bpf/cpumask.c:148:6: warning: no previous prototype for function 'bpf_cpumask_and' [-Wmissing-prototypes]
-   bool bpf_cpumask_and(struct bpf_cpumask *dst,
-        ^
-   kernel/bpf/cpumask.c:148:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_and(struct bpf_cpumask *dst,
-   ^
-   static 
->> kernel/bpf/cpumask.c:155:6: warning: no previous prototype for function 'bpf_cpumask_or' [-Wmissing-prototypes]
-   void bpf_cpumask_or(struct bpf_cpumask *dst,
-        ^
-   kernel/bpf/cpumask.c:155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_or(struct bpf_cpumask *dst,
-   ^
-   static 
->> kernel/bpf/cpumask.c:162:6: warning: no previous prototype for function 'bpf_cpumask_xor' [-Wmissing-prototypes]
-   void bpf_cpumask_xor(struct bpf_cpumask *dst,
-        ^
-   kernel/bpf/cpumask.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_xor(struct bpf_cpumask *dst,
-   ^
-   static 
->> kernel/bpf/cpumask.c:169:6: warning: no previous prototype for function 'bpf_cpumask_equal' [-Wmissing-prototypes]
-   bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
-        ^
-   kernel/bpf/cpumask.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
-   ^
-   static 
->> kernel/bpf/cpumask.c:174:6: warning: no previous prototype for function 'bpf_cpumask_intersects' [-Wmissing-prototypes]
-   bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
-        ^
-   kernel/bpf/cpumask.c:174:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
-   ^
-   static 
->> kernel/bpf/cpumask.c:179:6: warning: no previous prototype for function 'bpf_cpumask_subset' [-Wmissing-prototypes]
-   bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
-        ^
-   kernel/bpf/cpumask.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
-   ^
-   static 
->> kernel/bpf/cpumask.c:184:6: warning: no previous prototype for function 'bpf_cpumask_empty' [-Wmissing-prototypes]
-   bool bpf_cpumask_empty(const struct cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_empty(const struct cpumask *cpumask)
-   ^
-   static 
-   kernel/bpf/cpumask.c:189:6: warning: no previous prototype for function 'bpf_cpumask_full' [-Wmissing-prototypes]
-   bool bpf_cpumask_full(const struct cpumask *cpumask)
-        ^
-   kernel/bpf/cpumask.c:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool bpf_cpumask_full(const struct cpumask *cpumask)
-   ^
-   static 
-   kernel/bpf/cpumask.c:194:6: warning: no previous prototype for function 'bpf_cpumask_copy' [-Wmissing-prototypes]
-   void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
-        ^
-   kernel/bpf/cpumask.c:194:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
-   ^
-   static 
-   kernel/bpf/cpumask.c:199:5: warning: no previous prototype for function 'bpf_cpumask_any' [-Wmissing-prototypes]
-   u32 bpf_cpumask_any(const struct cpumask *cpumask)
-       ^
-   kernel/bpf/cpumask.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u32 bpf_cpumask_any(const struct cpumask *cpumask)
-   ^
-   static 
-   kernel/bpf/cpumask.c:204:5: warning: no previous prototype for function 'bpf_cpumask_any_and' [-Wmissing-prototypes]
-   u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
-       ^
-   kernel/bpf/cpumask.c:204:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
-   ^
-   static 
-   24 warnings generated.
+	impl ScopeGuard<(), fn(())>
 
 
-vim +/bpf_cpumask_create +38 kernel/bpf/cpumask.c
+Regards,
+Boqun
 
-    37	
-  > 38	struct bpf_cpumask *bpf_cpumask_create(void)
-    39	{
-    40		struct bpf_cpumask *cpumask;
-    41	
-    42		cpumask = bpf_mem_alloc(&bpf_cpumask_ma, sizeof(*cpumask));
-    43		if (!cpumask)
-    44			return NULL;
-    45	
-    46		memset(cpumask, 0, sizeof(*cpumask));
-    47		refcount_set(&cpumask->usage, 1);
-    48	
-    49		return cpumask;
-    50	}
-    51	
-  > 52	struct bpf_cpumask *bpf_cpumask_acquire(struct bpf_cpumask *cpumask)
-    53	{
-    54		refcount_inc(&cpumask->usage);
-    55		return cpumask;
-    56	}
-    57	
-  > 58	struct bpf_cpumask *bpf_cpumask_kptr_get(struct bpf_cpumask **cpumaskp)
-    59	{
-    60		struct bpf_cpumask *cpumask;
-    61	
-    62		/* The BPF memory allocator frees memory backing its caches in an RCU
-    63		 * callback. Thus, we can safely use RCU to ensure that the cpumask is
-    64		 * safe to read.
-    65		 */
-    66		rcu_read_lock();
-    67	
-    68		cpumask = READ_ONCE(*cpumaskp);
-    69		if (cpumask && !refcount_inc_not_zero(&cpumask->usage))
-    70			cpumask = NULL;
-    71	
-    72		rcu_read_unlock();
-    73		return cpumask;
-    74	}
-    75	
-  > 76	void bpf_cpumask_release(struct bpf_cpumask *cpumask)
-    77	{
-    78		if (!cpumask)
-    79			return;
-    80	
-    81		if (refcount_dec_and_test(&cpumask->usage)) {
-    82			migrate_disable();
-    83			bpf_mem_free(&bpf_cpumask_ma, cpumask);
-    84			migrate_enable();
-    85		}
-    86	}
-    87	
-  > 88	u32 bpf_cpumask_first(const struct cpumask *cpumask)
-    89	{
-    90		return cpumask_first(cpumask);
-    91	}
-    92	
-  > 93	u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
-    94	{
-    95		return cpumask_first_zero(cpumask);
-    96	}
-    97	
-  > 98	void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-    99	{
-   100		if (!cpu_valid(cpu))
-   101			return;
-   102	
-   103		cpumask_set_cpu(cpu, (struct cpumask *)cpumask);
-   104	}
-   105	
- > 106	void bpf_cpumask_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   107	{
-   108		if (!cpu_valid(cpu))
-   109			return;
-   110	
-   111		cpumask_clear_cpu(cpu, (struct cpumask *)cpumask);
-   112	}
-   113	
- > 114	bool bpf_cpumask_test_cpu(u32 cpu, const struct cpumask *cpumask)
-   115	{
-   116		if (!cpu_valid(cpu))
-   117			return false;
-   118	
-   119		return cpumask_test_cpu(cpu, (struct cpumask *)cpumask);
-   120	}
-   121	
- > 122	bool bpf_cpumask_test_and_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   123	{
-   124		if (!cpu_valid(cpu))
-   125			return false;
-   126	
-   127		return cpumask_test_and_set_cpu(cpu, (struct cpumask *)cpumask);
-   128	}
-   129	
- > 130	bool bpf_cpumask_test_and_clear_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-   131	{
-   132		if (!cpu_valid(cpu))
-   133			return false;
-   134	
-   135		return cpumask_test_and_clear_cpu(cpu, (struct cpumask *)cpumask);
-   136	}
-   137	
- > 138	void bpf_cpumask_setall(struct bpf_cpumask *cpumask)
-   139	{
-   140		cpumask_setall((struct cpumask *)cpumask);
-   141	}
-   142	
- > 143	void bpf_cpumask_clear(struct bpf_cpumask *cpumask)
-   144	{
-   145		cpumask_clear((struct cpumask *)cpumask);
-   146	}
-   147	
- > 148	bool bpf_cpumask_and(struct bpf_cpumask *dst,
-   149			     const struct cpumask *src1,
-   150			     const struct cpumask *src2)
-   151	{
-   152		return cpumask_and((struct cpumask *)dst, src1, src2);
-   153	}
-   154	
- > 155	void bpf_cpumask_or(struct bpf_cpumask *dst,
-   156			    const struct cpumask *src1,
-   157			    const struct cpumask *src2)
-   158	{
-   159		cpumask_or((struct cpumask *)dst, src1, src2);
-   160	}
-   161	
- > 162	void bpf_cpumask_xor(struct bpf_cpumask *dst,
-   163			     const struct cpumask *src1,
-   164			     const struct cpumask *src2)
-   165	{
-   166		cpumask_xor((struct cpumask *)dst, src1, src2);
-   167	}
-   168	
- > 169	bool bpf_cpumask_equal(const struct cpumask *src1, const struct cpumask *src2)
-   170	{
-   171		return cpumask_equal(src1, src2);
-   172	}
-   173	
- > 174	bool bpf_cpumask_intersects(const struct cpumask *src1, const struct cpumask *src2)
-   175	{
-   176		return cpumask_intersects(src1, src2);
-   177	}
-   178	
- > 179	bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
-   180	{
-   181		return cpumask_subset(src1, src2);
-   182	}
-   183	
- > 184	bool bpf_cpumask_empty(const struct cpumask *cpumask)
-   185	{
-   186		return cpumask_empty(cpumask);
-   187	}
-   188	
- > 189	bool bpf_cpumask_full(const struct cpumask *cpumask)
-   190	{
-   191		return cpumask_full(cpumask);
-   192	}
-   193	
- > 194	void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src)
-   195	{
-   196		cpumask_copy((struct cpumask *)dst, src);
-   197	}
-   198	
- > 199	u32 bpf_cpumask_any(const struct cpumask *cpumask)
-   200	{
-   201		return cpumask_any(cpumask);
-   202	}
-   203	
- > 204	u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
-   205	{
-   206		return cpumask_any_and(src1, src2);
-   207	}
-   208	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +    /// Creates a new guarded object with the given cleanup function.
+> +    pub fn new(cleanup: impl FnOnce()) -> ScopeGuard<(), impl FnOnce(())> {
+> +        ScopeGuard::new_with_data((), move |_| cleanup())
+> +    }
+> +}
+> +
+> +impl<T, F: FnOnce(T)> Deref for ScopeGuard<T, F> {
+> +    type Target = T;
+> +
+> +    fn deref(&self) -> &T {
+> +        // The type invariants guarantee that `unwrap` will succeed.
+> +        &self.0.as_ref().unwrap().0
+> +    }
+> +}
+> +
+> +impl<T, F: FnOnce(T)> DerefMut for ScopeGuard<T, F> {
+> +    fn deref_mut(&mut self) -> &mut T {
+> +        // The type invariants guarantee that `unwrap` will succeed.
+> +        &mut self.0.as_mut().unwrap().0
+> +    }
+> +}
+> +
+> +impl<T, F: FnOnce(T)> Drop for ScopeGuard<T, F> {
+> +    fn drop(&mut self) {
+> +        // Run the cleanup function if one is still present.
+> +        if let Some((data, cleanup)) = self.0.take() {
+> +            cleanup(data)
+> +        }
+> +    }
+> +}
+>  
+>  /// Stores an opaque value.
+>  ///
+> -- 
+> 2.34.1
+> 
