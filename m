@@ -2,142 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFD1675648
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBE467564A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjATOCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S230072AbjATOCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjATOCJ (ORCPT
+        with ESMTP id S230061AbjATOCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:02:09 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0B4C13F5;
-        Fri, 20 Jan 2023 06:02:08 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KDrTo0021023;
-        Fri, 20 Jan 2023 14:02:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MHYEeb1An0ddYguIQpgCo9rwIVDQ/HwjjdWBu/m9Rf4=;
- b=j0G6Sl2b5Fs/xSn0s5vfPmWQ6IrZeO4ejxGaOav/Dlc5dODf/69b927lUshyL2nsbXBv
- YVJn3U1treC9VtYU/ezVkD4vc5PZDSO9ymgMJ2HbxU8z82IfHGIIm9ueRFlNyKLcVI+W
- PY4l09q4LY8ZYx3qk3sxGoSVzyVUXlDoFdFYgNupQ2oIMjKYZK7khvPdnZJFQW1DWoD8
- +vdcqQ74w45Q9P3vw5HG81yfkFbCnfyny+avd496Z8FnrSejhLQq6Sdn8JeaYLuOtEql
- gW1rdV3X0+P2BejgDqbqEfUihh47guq6rIhGOItBh6wK7V+6CGNRIXqO7x37pC17KY5E 8Q== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7v85r613-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 14:02:07 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30KDQKRX006166;
-        Fri, 20 Jan 2023 14:02:06 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3n3m185235-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 14:02:06 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30KE25m535455350
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Jan 2023 14:02:05 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7B2285805C;
-        Fri, 20 Jan 2023 14:02:05 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABD325805F;
-        Fri, 20 Jan 2023 14:02:04 +0000 (GMT)
-Received: from [9.160.36.55] (unknown [9.160.36.55])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 20 Jan 2023 14:02:04 +0000 (GMT)
-Message-ID: <e51d751f-54c1-b292-7c86-e0b077f138c4@linux.ibm.com>
-Date:   Fri, 20 Jan 2023 09:02:04 -0500
+        Fri, 20 Jan 2023 09:02:17 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAE3C459D;
+        Fri, 20 Jan 2023 06:02:16 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C545332007E8;
+        Fri, 20 Jan 2023 09:02:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 09:02:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674223334; x=1674309734; bh=bQ9pm+mBpB
+        l5Sw4+mLHdw4/LhiTKozGr7tRAm3ulMBw=; b=jfWtK1/DtpEe2YmkTVXbg0xKqw
+        sNivVbVU9DqXhWzBSAPPo3ua6IePXct6Dk+gQRcS2eAkAR/98H7znP72jbrJV8Nm
+        MulQ2pUubrw7RC8zSZqTWEROqYYDlHiPFu9mYi8fzNWRQ6VAyTdlE/pLsojl02b2
+        m60NIcopTzAiKD3McLcUHMZUqgw+nvOZqCBzMc19jWvBkVhBJ7G9BOsxZR+sqXZ6
+        FL6D3JraRhQEi4OK2OCT8+aJMH9lcEjuUysKh1aDIo6c/ahnva/uPaAkGUIGPkD5
+        lRMhsc6UMajgZQXccaUUAynvjGtMrs9S5tiGzACcVDin1+WLxosRwv+/vvUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674223334; x=1674309734; bh=bQ9pm+mBpBl5Sw4+mLHdw4/LhiTK
+        ozGr7tRAm3ulMBw=; b=N73LA3YmczIJv1ovZVcLu1E6t1sGMHGK/n3REBrWdz3f
+        Wsztx9uy9KA96L3IOyuE7aFCtgLZpGueKnJX+bx3sTopfhLR6yZihVKhYRahgVK7
+        eJGgDCMKfsj1BcmbGHH8vhdCf8wuSq9bu/DJlxWiQLRPW0l0ZXGZBAYL89Sw3mIR
+        U2Z4lpE20olV8fCTJceymyki9XSaZrXy8tr2eOSg8NAWWtb0m5qj9WMy1eKEoIRm
+        pw16ZkG+ahVfdk4nXjAGpnJH222aL6I+Of2Z1OAEdMJODLltlv/076bul94ZMbob
+        viKHB5C/3fHeiH5l1UlqSZ7ncg/6fAYzb9dIHXsMyQ==
+X-ME-Sender: <xms:5Z7KY1UahBWRTJYL_YLwTo2yVRsbyo-Emm-Y653O8hwK7Todc7GG8A>
+    <xme:5Z7KY1mwOR3uKZygcQHOwc10kb-CpyspZpJpjx3-ypPv0ih9CnErBcOmVeHV_ljPd
+    fqxE9y8jfMlFw>
+X-ME-Received: <xmr:5Z7KYxZkbP109MeMm2jVKD-A-E2SaKFVsKjkvrIa9-opeRUIZOIj3o_uYkN_sht94kHtheWQkiejAywVKm-AS7vjfwQOr00E_QkXJw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:5Z7KY4XNPeYC83KS9yCA4JPbDOgAryn_r4LQ5oCR2BueGdmvV6hAcg>
+    <xmx:5Z7KY_nD1ZcY5UVb0Udom-nZsb1Fk2C46M-MmxE9owEKVqlZHI_zuQ>
+    <xmx:5Z7KY1fDiMzNG9XPyZhArhUnU0MfQrgtnhAuHXcomW4u9HE-k1f0aA>
+    <xmx:5p7KYx1O1Xm4ZSHQDBbraiPMU9ZJx_-OA1RUdAEZs2MwRnpcajea8Q>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Jan 2023 09:02:12 -0500 (EST)
+Date:   Fri, 20 Jan 2023 15:02:10 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the phy-next tree
+Message-ID: <Y8qe4hd52B3ltXH8@kroah.com>
+References: <20230119153145.598885cf@canb.auug.org.au>
+ <Y8jfW2TTnHd3J7R1@matsya>
+ <Y8jpFw5mfvyRLX/C@kroah.com>
+ <Y8lJiJHHcUO7MXQY@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 0/6] improve AP queue reset processing
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, freude@linux.ibm.com, pasic@linux.ibm.com,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-References: <20230118203111.529766-1-akrowiak@linux.ibm.com>
- <d8fe5146-def7-262d-15cb-0bb965102f3c@de.ibm.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <d8fe5146-def7-262d-15cb-0bb965102f3c@de.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: k9FIqbtfj3DyL-buoeHvnG3a-BaNZEWi
-X-Proofpoint-ORIG-GUID: k9FIqbtfj3DyL-buoeHvnG3a-BaNZEWi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_08,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 mlxscore=0 clxscore=1015 suspectscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=857 impostorscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200133
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8lJiJHHcUO7MXQY@orome>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 02:45:44PM +0100, Thierry Reding wrote:
+> On Thu, Jan 19, 2023 at 07:54:15AM +0100, Greg KH wrote:
+> > On Thu, Jan 19, 2023 at 11:42:43AM +0530, Vinod Koul wrote:
+> > > On 19-01-23, 15:31, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > The following commits are also in the usb tree as different commits
+> > > > (but the same patches):
+> > > > 
+> > > >   5c7f94f8bad8 ("phy: tegra: xusb: Add Tegra234 support")
+> > > >   e5f9124404d0 ("phy: tegra: xusb: Disable trk clk when not in use")
+> > > > 
+> > > > they are commits
+> > > > 
+> > > >   d8163a32ca95 ("phy: tegra: xusb: Add Tegra234 support")
+> > > >   71d9e899584e ("phy: tegra: xusb: Disable trk clk when not in use")
+> > > 
+> > > Ah, ideally these should go thru phy tree!
+> > 
+> > Yeah, but they were submitted as a larger set of patches with USB
+> > changes to me, so I took the whole series (it's hard to pick and choose
+> > from a series).
+> 
+> This has been a recurring theme, so I'm trying to get a better
+> understanding of what people expect here. Some maintainers want to see
+> a whole series for a single feature (in this case it was Tegra234 USB
+> support) even if it crosses multiple subsystems/trees. This has the
+> advantage that patches can be arranged such that all dependencies are
+> resolved. Other maintainers like things to be split up so that patches
+> are easier to pick up.
+> 
+> Submitters can spell out in the cover letter how they think things
+> should be picked up, but they're not always aware of what else is going
+> on in the respective trees, so they may get it wrong.
+> 
+> I personally prefer to pick up DT bindings into the platform tree since
+> we're getting into a place where device trees can be properly validated
+> and keeping bindings and DTS files in the same tree helps with that.
+> 
+> But I know that DT maintainers prefer bindings to go through subsystem
+> trees because it can help reduce conflicts and that outweighs the DT
+> validation benefits, which some platforms may still be far away from
+> being able to use.
+> 
+> DTS changes on the other hand are a different thing. In my opinion it is
+> much better for them to be applied through platform trees because of the
+> greater potential for conflicts. In any given cycle there are often
+> multiple patches touching the same DTS files and currently a lot of
+> clean up is going on for validation.
+> 
+> So I wonder if we should just move away from the current process of how
+> we submit series. Maybe a less confusing way would be to strictly
+> separate driver and DTS changes into two series. That way maintainers
+> would better understand what patches to pick. It also has its own set of
+> disadvantages (can't validate DTS changes against DT bindings, and it
+> may not even be clear where certain DTS changes are documented).
 
-On 1/20/23 5:25 AM, Christian Borntraeger wrote:
-> Am 18.01.23 um 21:31 schrieb Tony Krowiak:
->> This series introduces several improvements to the function that 
->> performs
->> AP queue resets:
->>
->> * Breaks up reset processing into multiple smaller, more concise 
->> functions.
->>
->> * Use TAPQ to verify completion of a reset in progress rather than 
->> mulitple
->>    invocations of ZAPQ.
->>
->> * Check TAPQ response codes when verifying successful completion of 
->> ZAPQ.
->>
->> * Fix erroneous handling of some error response codes.
->>
->> * Increase the maximum amount of time to wait for successful 
->> completion of
->>    ZAPQ.
->>   Change log v1 => v2:
->> -------------------
->> Remove patch 7/7 to restore original behavior since we don't know 
->> whether
->> interrupts are disabled when an unexpected response code is returned 
->> from
->> ZAPQ. (Halil)
->>
->> Tony Krowiak (6):
->>    s390/vfio-ap: verify reset complete in separate function
->>    s390/vfio_ap: check TAPQ response code when waiting for queue reset
->>    s390/vfio_ap: use TAPQ to verify reset in progress completes
->>    s390/vfio_ap: verify ZAPQ completion after return of response code
->>      zero
->>    s390/vfio_ap: fix handling of error response codes
->>    s390/vfio_ap: increase max wait time for reset verification
->>
->>   drivers/s390/crypto/vfio_ap_ops.c | 104 +++++++++++++++++++++---------
->>   1 file changed, 72 insertions(+), 32 deletions(-)
->>
->
-> Thanks applied and queued for CI and regression runs. Will likely go 
-> via s390 tree.
+I don't like splitting them up, so keeping them all together is good.
+Make it simple for developers to do, and also simple for maintainers.
+If we end up with duplicates at times, what's the harm?
 
+thanks,
 
-Got it, thanks.
-
-
+greg k-h
