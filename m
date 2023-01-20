@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E72675BA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500CD675BAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjATReu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S229861AbjATRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjATRes (ORCPT
+        with ESMTP id S229624AbjATRgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:34:48 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CC9D0D9A;
-        Fri, 20 Jan 2023 09:34:26 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id dw9so6252974pjb.5;
-        Fri, 20 Jan 2023 09:34:26 -0800 (PST)
+        Fri, 20 Jan 2023 12:36:24 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CA9DBE9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:36:22 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so6361887wma.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:36:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3Qce6k9mwqU5NepWopiJstouIyBahOLCg81PX5JZd30=;
-        b=ZPDBONsa4pvvRK5jyivblqdBW+xQdjUEPbjs7JXsNwiVlHcJ3tL3gbywzoJJ/O2uhw
-         i7pvVM7hGn+zQTy+0Fg48O1bikjvnNmGGPPn1RDkyBVKC4Q/6wv1kof5efl2WbbMhM2x
-         BomDsKoFMuyEsQiOb8Ws0hcri0T0tTPSopg0O1fqjkxrP8U3IbxRrRM3me8hO79pvo8t
-         7zMn5NCYQHfnHr1wx8IMdptfIc8zS1IDj1RpRICWKPoLIzA2mOS4vqnezJZXc2EXynhv
-         STzsCf+UthobniN2ZlbBOjzy/n6XUq/SqdvgzemVPeAdcMh2LFgVSFfObLmG+5v8u/VI
-         TspQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T/fkQZoxq2LVgdlP6o8ISAl67meRTQs6k6eGFoQcXV0=;
+        b=uCouVft/678PMSeYh72dZ/cmQ3539Q08cQjJm8WroYp5AYxoK6xmyZqRQtw45k+W/u
+         p7DriRVdL5+iW+h8R+Efz19EaHAQw3bx4FMZhk7hQX+nCYhus2AoNhdXi1ksfKRw7eiw
+         9VT2bugfXsp/wXAu5h1gKUMc+F/X/oFgqYT3zSSVm2X5AeJ5SurJoSe6u4weoPtM3N4b
+         7ygZ53czOGsCIEJ7DBvXPY7UdnDYutz6QLJLTpB+x2E3K0HEpN6QX17BBUN+mI1C0dvk
+         QG5ywTxIG9eet9FsuMCqmb/m8LcrVOtj8eKYRS1slfReD6SB2JPK2jMWyAkSX+cq5Z7A
+         eIcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Qce6k9mwqU5NepWopiJstouIyBahOLCg81PX5JZd30=;
-        b=Z+ILxifTY458eVv93bNXsha0SlinyUPTaXMin8Z+gXTGW6xkBnSARvMwygLBa51vem
-         +tTXqzrFiIEdIXbJocPSzc5LYqE05f/lPlBFjlall41eEDHT0LFVNUZ4AsGmV96/YVPs
-         K9/pbP4wtqGDQIdsWlrLDfHRmHw8CNVcUBVbthmH46Ka9jFFw/GySY+tgVp/hXQZGapn
-         Ef+7JSVXQwAZw8wVVO8OeFzfm1lZB6oRGib94+Qbm9T2nhDhwpeENulw0AwD0BCkLncR
-         0UxRiktx3qGU1ewSavMus0YCyI9VIXfJpRv2vWWN4NgwxuLZTC5Q9qTGK9v1M1ki/O5j
-         DCRQ==
-X-Gm-Message-State: AFqh2krMf+0PL6kNixDjhkFBILKkfQRpQWpQyngJ7qruKldKYni8mjwc
-        ot0e03ywli9BiGkze7teq/s=
-X-Google-Smtp-Source: AMrXdXsH7iofW0AYixH1DqxtihjqFnYzTUw4bqjfk+uyoNypBz1JULxrgW1Gn+t76PeQxZdIovQLZw==
-X-Received: by 2002:a17:90b:1652:b0:22b:b6b0:788f with SMTP id il18-20020a17090b165200b0022bb6b0788fmr1964438pjb.14.1674236063174;
-        Fri, 20 Jan 2023 09:34:23 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:3bfe:a22:9187:ed3b])
-        by smtp.gmail.com with ESMTPSA id z17-20020a17090abd9100b00219752c8ea5sm1760839pjr.37.2023.01.20.09.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 09:34:22 -0800 (PST)
-Date:   Fri, 20 Jan 2023 09:34:19 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     =?utf-8?B?am9ld3Uo5ZCz5Luy5oyvKQ==?= <joewu@msi.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
-        Benson Leung <bleung@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Derek Huang <derekhuang@google.com>,
-        "Dustin L . Howett" <dustin@howett.net>,
-        Furquan Shaikh <furquan@chromium.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [PATCH v2] cros_ec_keyb: Add 3 buttons for monitor function
-Message-ID: <Y8rQmxpmf47v7pyS@google.com>
-References: <e23628e2cb464d238eb1c33a9e1e516b@msi.com>
+        bh=T/fkQZoxq2LVgdlP6o8ISAl67meRTQs6k6eGFoQcXV0=;
+        b=2T25szBp4nDPCbdc82nfOU7ZxJWNamT6WsYCAkg6TSLRaVF/JjG29+WIHS9hOgo+Yo
+         pGa6TBvSlvEF6JeRMwoc6thC7WY1DH97bTnuECigOfJ2sFhGQE23HX+ZjI2Qg/M0Iizp
+         V1ajK7raHvNxg/G/aBhm5fNqhxp+6g3zy/IyVQOROYER5xt1834Bi48W9Z6xFbLQySiN
+         mkSWXKD2PP093DtUGe81Rh/wqO/3JvkoG5RlreNrXS0ZY6vkmPnYd6pcfbDkUtcrDVQu
+         cFYObFd4shW/wIpRI7Sndy5nuScjmzVzOE+Yy4waDteEGTld8mOAA456jgtxAg6ffUQb
+         6AEw==
+X-Gm-Message-State: AFqh2krp0FZLB/YHC/LvbyWHWyXqH5Cb6+WHT6vlui1GAjMUPIpGPfyI
+        6U6Ei4825vzJ5d58HCS/3kSp5Q==
+X-Google-Smtp-Source: AMrXdXsFwzzGIEstO3SnHULQxXF4eMZtD91tPjdYdhdv27AoHRcOCQEwd+woViZIHj7JJnRNA8pmRg==
+X-Received: by 2002:a05:600c:22c6:b0:3da:fc30:bfc5 with SMTP id 6-20020a05600c22c600b003dafc30bfc5mr15185468wmg.13.1674236181384;
+        Fri, 20 Jan 2023 09:36:21 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y18-20020a5d6152000000b002425be3c9e2sm35660830wrt.60.2023.01.20.09.36.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 09:36:20 -0800 (PST)
+Message-ID: <c643747e-accb-c7af-a4f9-5cf8feb2075a@linaro.org>
+Date:   Fri, 20 Jan 2023 18:36:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e23628e2cb464d238eb1c33a9e1e516b@msi.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2] dt-bindings: pinctrl: qcom,pmic-mpp: Rename "mpp"
+ child node names to "-pins$"
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230120165103.1278852-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230120165103.1278852-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 07:18:06AM +0000, joewu(吳仲振) wrote:
-> Add 3 extra buttons: 'brightness up', 'brightness down'
-> and 'screen lock' to support monitor manipulating function.
+On 20/01/2023 17:51, Rob Herring wrote:
+> Just 'mpp' is a bit ambiguous for a pattern as it allows any prefix or
+> suffix. Change the node name pattern to "-pins$" to align with other
+> Qualcomm pinctrl bindings.
 > 
-> Signed-off-by: Joe Wu <joewu@msi.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2:
+>  - Use "-pins$" for pattern instead
+> ---
 
-Applied, thank you.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Dmitry
+Best regards,
+Krzysztof
+
