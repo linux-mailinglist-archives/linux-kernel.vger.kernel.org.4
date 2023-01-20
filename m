@@ -2,155 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3896755F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDB06755FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjATNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S229496AbjATNik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATNiJ (ORCPT
+        with ESMTP id S229459AbjATNii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:38:09 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A0249037;
-        Fri, 20 Jan 2023 05:38:05 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id kt14so14059008ejc.3;
-        Fri, 20 Jan 2023 05:38:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BncwWmxqW+84mqxgyYf9Sxyq1qQG5dqQ2KZ6PEmYiwo=;
-        b=fMThkOaZ7BNLx9zzo/D1ogmbTSqYuSXmB0UIR7KBxsWrdbZNkesrbC0YeSlkBHC9LE
-         AqOKS/0IBT0VPcO2bzEyaP96+DSWp5BCIvUPSif72smrKa5tl7jRLg3Opl+9lPtYhr27
-         3ircReqRQnJRH5pJIGjnqaxcT/AWXJ/fJhbxUvoltzt6W8YaYEx9z1XOnYshrds3XZ7p
-         2zUC2zjsndN0kLVt37ZQipxmzbIGZy87hG8/w7DZLITQreC1u1bJyB+zYadBDhWlxhHJ
-         G1vSq1rCJVnCHyJ2Lk+owq6QkifIcayXjWbzMUI3irD+6kTKIhBS+C3KI1yRQ7Sy1MRX
-         LGeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BncwWmxqW+84mqxgyYf9Sxyq1qQG5dqQ2KZ6PEmYiwo=;
-        b=cpC1iOD5kkTOPmt4AoIWU5I9ej2KEoHlWCiRLUIWvAAxz2KqhCOeosLNJZWyVecYHI
-         xk8U8/Lou1DnswzUuPKUxpEo6MiHGj1tPrDB1cgO//Byd5Em7Wo4pIKC4VVxNfmgdbGL
-         22oLg704FGtM99pe3xGAVZI7btaJgfjUwnNdNqCzI457Vr1TnTzRh3YFZtLtH2wA8SJ0
-         4Ho5VmLmazcagVy0kX6fnF0Ve8J6HZS3exIKm/gcyW2aIamqve9w9gO7P6Nd6SCjbK5L
-         yoWP51T0/+XaZFGbMSUo9Fhl6MKUlr2KgU7g7FFnNZruJcap7PVncAsAv1mhSfmcEqPz
-         nfLQ==
-X-Gm-Message-State: AFqh2kr+4wgGzXMQPJ+Np8W6w38P5WPbAtSjpLr0vUVfWgGF1gTLzHkU
-        ejdr1uiml3nM2LlMn+zlUZ8=
-X-Google-Smtp-Source: AMrXdXvTVZ/k33W79E84WnQBi+PCetHQA1n9Hu9bUQwW9inGYovef+t+N1t7rg6haeK8hxb2gjyc5g==
-X-Received: by 2002:a17:907:6294:b0:86a:1afa:6dd8 with SMTP id nd20-20020a170907629400b0086a1afa6dd8mr41487837ejc.69.1674221884302;
-        Fri, 20 Jan 2023 05:38:04 -0800 (PST)
-Received: from localhost (tor-exit-16.zbau.f3netze.de. [185.220.100.243])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b0087276f66c6asm5779377ejf.115.2023.01.20.05.38.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 05:38:03 -0800 (PST)
-Date:   Fri, 20 Jan 2023 15:37:58 +0200
-From:   Maxim Mikityanskiy <maxtram95@gmail.com>
-To:     Hariprasad Kelam <hkelam@marvell.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geethasowjanya Akula <gakula@marvell.com>,
-        Jerin Jacob Kollanukkaran <jerinj@marvell.com>,
-        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "tariqt@nvidia.com" <tariqt@nvidia.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "hariprasad.netdev@gmail.com" <hariprasad.netdev@gmail.com>
-Subject: Re: [net-next Patch v2 4/5] octeontx2-pf: Add devlink support to
- configure TL1 RR_PRIO
-Message-ID: <Y8qZNhUgsdOMavC4@mail.gmail.com>
-References: <20230118105107.9516-1-hkelam@marvell.com>
- <20230118105107.9516-5-hkelam@marvell.com>
- <Y8hYlYk/7FfGdfy8@mail.gmail.com>
- <PH0PR18MB4474FCEAC4FA5907CAC17011DEC59@PH0PR18MB4474.namprd18.prod.outlook.com>
+        Fri, 20 Jan 2023 08:38:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372035421A;
+        Fri, 20 Jan 2023 05:38:30 -0800 (PST)
+Date:   Fri, 20 Jan 2023 14:38:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674221908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NsKNz+h7l7zK73sE5jHBFOsX4kUSjPMG5HGuXT67KNU=;
+        b=hMVb0C/qwtLknqlm9ZTWsZp8gViVTHq3936ul8+F/rjZ2C/sgt5+DFrbylMt7YcpAHU3oH
+        s5YRhw0mbmU5xAOUw11TSsuYNR6BabwKiK0BUZH6EnHXFtJrzjrfU7+jk9sLeRQFhl52bM
+        noYQvDhJmie3ohgf6vlqG25yiFWOsAwo294gs5CU+91q19gh2Ous1s4W2gLWSXf4hfFq5g
+        N/SSCNdKYGIkOYGevx1ji2XNC15o/itV2b+YKslr31hccta4mAL/107ExcW87kQo7dXxix
+        HZ6fc5RqejZNFrSOnc60iWEfw7mR8Tr5XafJoL8j51qB5CsHiSldM4D/A+x0Yw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674221908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NsKNz+h7l7zK73sE5jHBFOsX4kUSjPMG5HGuXT67KNU=;
+        b=1/EOPOv6QyXT4fegGzYXsWuax92mLA9Ez2GeK/k4fouB6Yl9u7shmtVu/E/cx6Mcn5/W6Z
+        NQC1tgrEqUl2cjDA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
+Message-ID: <Y8qZU33Cvbc7p7DE@linutronix.de>
+References: <Y8avJm1FQI9vB9cv@linutronix.de>
+ <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
+ <Y8gPhTGkfCbGwoUu@linutronix.de>
+ <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
+ <Y8j+lENBWNWgt4mf@linutronix.de>
+ <20230119110220.kphftcehehhi5l5u@techsingularity.net>
+ <Y8lvwKHmmnikVDgk@linutronix.de>
+ <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
+ <Y8pP3CD1PQ4KWhXF@linutronix.de>
+ <20230120132441.4jjke47rnpikiuf5@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH0PR18MB4474FCEAC4FA5907CAC17011DEC59@PH0PR18MB4474.namprd18.prod.outlook.com>
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20230120132441.4jjke47rnpikiuf5@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 08:50:16AM +0000, Hariprasad Kelam wrote:
-> 
-> On Wed, Jan 18, 2023 at 04:21:06PM +0530, Hariprasad Kelam wrote:
-> > All VFs and PF netdev shares same TL1 schedular, each interface PF or 
-> > VF will have different TL2 schedulars having same parent TL1. The TL1 
-> > RR_PRIO value is static and PF/VFs use the same value to configure its 
-> > TL2 node priority in case of DWRR children.
-> > 
-> > This patch adds support to configure TL1 RR_PRIO value using devlink.
-> > The TL1 RR_PRIO can be configured for each PF. The VFs are not allowed 
-> > to configure TL1 RR_PRIO value. The VFs can get the RR_PRIO value from 
-> > the mailbox NIX_TXSCH_ALLOC response parameter aggr_lvl_rr_prio.
-> 
-> I asked this question under v1, but didn't get an answer, could you shed some light?
-> 
-> "Could you please elaborate how these priorities of Transmit Levels are related to HTB priorities? I don't seem to understand why something has to be configured with devlink in addition to HTB.
-> 
-> SMQ (send meta-descriptor queue) and MDQ (meta-descriptor queue) are the first transmit levels.
-> Each send queue is mapped with SMQ.
+On 2023-01-20 13:24:41 [+0000], Mel Gorman wrote:
+> --- a/kernel/locking/rwbase_rt.c
+> +++ b/kernel/locking/rwbase_rt.c
+> @@ -264,12 +291,17 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
+>  		if (__rwbase_write_trylock(rwb))
+>  			break;
 >  
-> As mentioned in cover letter, each egress packet needs to traverse all transmit levels starting from TL5 to TL1.
+> +		/* Record timeout when reader bias is ignored. */
+> +		rwb->waiter_timeout = jiffies + RWBASE_RT_WAIT_TIMEOUT;
+		rwb->waiter_timeout = (jiffies + RWBASE_RT_WAIT_TIMEOUT) | 1;
 
-Yeah, I saw that, just some details about your hardware which might be
-obvious to you aren't so clear to me...
+There is the unlikely case that (jiffies + RWBASE_RT_WAIT_TIMEOUT) = 0
+on 32bit where it is not jiffies64.
 
-Do these transmit levels map to "layers" of HTB hierarchy? Does it look
-like this, or is my understanding completely wrong?
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-TL1                 [HTB root node]
-                   /               \
-TL2          [HTB node]         [HTB node]
-            /          \             |
-TL3    [HTB node]  [HTB node]   [HTB node]
-...                       ...
-
-
-> This applies to non-QOS Send queues as well.
+> +
+>  		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
+>  		rwbase_schedule();
+>  		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
 >  
->                        SMQ/MDQ --> TL4 -->TL3 -->TL2 -->TL1
-> 
-> By default non QOS queues use a default hierarchy  with round robin priority. 
-> To avoid conflict with QOS tree priorities, with devlink user can choose round-robin priority before Qos tree formation.
+>  		set_current_state(state);
+>  	}
+> +
+> +	rwb->waiter_timeout = 0;
+>  	rwbase_restore_current_state();
+>  	trace_contention_end(rwb, 0);
 
-So, this priority that you set with devlink is basically a weight of
-unclassified (default) traffic for round robin between unclassified and
-classified traffic, right? I.e. you have two hierarchies (one for HTB,
-another for non-QoS queue), and you do DWRR between them, according to
-this priority?
-
-> BTW, why did you remove the paragraphs with an example and a limitation?
-> I think they are pretty useful.
-> 
-> Ok , removed them accidentally will correct in the next version.
-> 
-> Another question unanswered under v1 was:
-> 
-> "Is there any technical difficulty or hardware limitation preventing from implementing modifications?" (TC_HTB_NODE_MODIFY)
-> 
-> There is no hardware limitation, we are currently implementing it.  once it's implemented we will submit for review.
-
-Great, that's nice to hear, looking forward to it.
+Sebastian
