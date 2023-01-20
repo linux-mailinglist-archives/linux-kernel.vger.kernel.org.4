@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8AC674930
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFCF674932
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjATCHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S229568AbjATCJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjATCHb (ORCPT
+        with ESMTP id S229473AbjATCJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:07:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E5FA5780;
-        Thu, 19 Jan 2023 18:07:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 Jan 2023 21:09:31 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079CA1A0;
+        Thu, 19 Jan 2023 18:09:30 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7067E61DD6;
-        Fri, 20 Jan 2023 02:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFE0C433EF;
-        Fri, 20 Jan 2023 02:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674180449;
-        bh=OHBGrZDS9hYZ63xAQOgXs0txuOMdKJTNhNwlzli36zY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YTPbThVNWK36wc5fhugZEj3dN20uYbPQj7oqWbo6/3N4Wh9OTpkOzpwwagGM5hhqT
-         y1jpadu4XfDN6XdaT32gg2VOfKiGc72rVYCs/Dnm/Cn/xQXAWQvf+Vzk21kjNJap2S
-         9S2DtiE6g+su/ecIxt3OTgJ4uyf33uSugwspf4LnqLM3YZ3BAftC/nQKyQQwhBoKaX
-         b8i3BvbW2Fxv5yx8LyH9aETnnM+qjFOdEyh8niCknK0sH6Oh+GqEKaHTUpQGpb4GWb
-         bVXlsfQilxFgQFsuRvRuLZ4ICfxPb4myQ0vCEXmQCJSA0XP1PjwFTb0Zg4IDvziXTn
-         2hOBDN5P980OA==
-Date:   Thu, 19 Jan 2023 18:07:27 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Li Lingfeng <lilingfeng3@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        tj@kernel.org, axboe@kernel.dk, akpm@linux-foundation.org,
-        jack@suse.cz, bingjingc@synology.com, james.smart@broadcom.com,
-        houtao1@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH-next v3] lib: parser: optimize match_NUMER apis to use
- local array
-Message-ID: <Y8n3Xxh+Rqo9vWHx@sol.localdomain>
-References: <20230120021304.5773-1-lilingfeng3@huawei.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nyjc8529xz4xHV;
+        Fri, 20 Jan 2023 13:09:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674180568;
+        bh=5v66ofCrkJZhwu8nWLQSSFBEbMU/Ef/xua4Jd/IYozU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GUlnd2i0/UDXOKkvMic9LJSxurdPNnj6woxMoy1vYh9kTU42wL9zabD14EEiBWsd9
+         6l/mJyui9s+zpLPUGQ7iQgpp4uDx8S0Aywqhqy3y7jJsuFK6i/9CykMpqA2/wLp8Ga
+         A7HAQBpgMd5QoVePUmMckxEULjZhi1pFq6s9G+darZSfITfLe9x7ypUardyOZrRrpT
+         Am0diNuHOI8uCvVg1GQaGik1PYjAZcMfJzaN/ma2DhWg8qfrmdXiU0xgQgkv2xe8G8
+         4Nvh8jY1NK6S9fMdyLel/Tue/xekjFJ3wfvZD/y4L12Rv2DD4uUM2Dc/Vln0tyuKF0
+         3HGVJ8p1/kH/Q==
+Date:   Fri, 20 Jan 2023 13:09:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Aaron Lewis <aaronlewis@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kvm-x86 tree
+Message-ID: <20230120130927.3100f935@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120021304.5773-1-lilingfeng3@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YV=vQxprrYLgPCGt08wsGHK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:13:04AM +0800, Li Lingfeng wrote:
-> [PATCH-next v3] lib: parser: optimize match_NUMER apis to use
+--Sig_/YV=vQxprrYLgPCGt08wsGHK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-NUMER => NUMBER
+Hi all,
 
-> Memory will be allocated to store substring_t in match_strdup(), which means
-> the caller of match_strdup() may need to be scheduled out to wait for reclaiming
-> memory.
+After merging the kvm-x86 tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Text in commit messages should be wrapped at 72 columns.
+Documentation/virt/kvm/api.rst:5070: ERROR: Unexpected indentation.
 
-> @@ -163,18 +169,16 @@ static int match_number(substring_t *s, int *result, int base)
->   */
->  static int match_u64int(substring_t *s, u64 *result, int base)
->  {
-> -	char *buf;
-> +	char buf[NUMBER_BUF_LEN];
->  	int ret;
->  	u64 val;
->  
-> -	buf = match_strdup(s);
-> -	if (!buf)
-> -		return -ENOMEM;
-> -
-> +	if ((s->to - s->from) >= NUMBER_BUF_LEN)
-> +		return -ERANGE;
-> +	match_strlcpy(buf, s, NUMBER_BUF_LEN);
+Introduced by commit
 
-As I requested on v2, the return value of match_strlcpy() should be used instead
-of checking '((s->to - s->from) >= NUMBER_BUF_LEN'.
+  651daa44b11c ("kvm: x86/pmu: Introduce masked events to the pmu event fil=
+ter")
 
-- Eric
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YV=vQxprrYLgPCGt08wsGHK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJ99cACgkQAVBC80lX
+0Gx50wf+LdJPiMjod6rmkLzOIVM4tYSgp13RXJnEs2OT58qEC8IWyekiGk4Udh5c
+XQlXbK0nzeRoQNLzj43ZKENGBUsepwKvSr2M4Q26905nv6GnpkyB+nXI732XCfkH
+GMDHkhJG4G6Awb8bIPsaALAoc3D0C8w//zfmXkEW9kP1UZhb7uo7SCmvdMAaob5m
+GRiS63Q+FsHDgpzBY2D75Bc06lxmcnMIivvv6a97sJAm+0Oqzjmc0P1/lJT1MWdl
+H+//hMKjs9PautjEBtSJl9mKr1miGU/m+mGiKRE1JPJtOTPGLjZSy20RQl3/o1Al
+HIG9uiQBe+WQXL6oBXqA71tccXnrzw==
+=Gkut
+-----END PGP SIGNATURE-----
+
+--Sig_/YV=vQxprrYLgPCGt08wsGHK--
