@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2641675524
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD627675528
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjATNA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S229622AbjATNBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjATNA0 (ORCPT
+        with ESMTP id S229534AbjATNBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:00:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C3ABD14E;
-        Fri, 20 Jan 2023 05:00:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF1661F5E;
-        Fri, 20 Jan 2023 13:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50706C433EF;
-        Fri, 20 Jan 2023 13:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674219616;
-        bh=UjqzhzJnuZIASVLLfX3u8vog0XhHHfK3vpedFw4EEas=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fRQrq4e0BgLZP3dW2YcTcLR+Oau9TPNo+5caD/tQubalA+Nt83K/wE3Ged5VJqfrT
-         mf6RU/2+ekkhK5Obnm5Z/mEyhv2URISUZPxQDjABg0Ff0cJSiW3MPjRyESplPCh4hb
-         5PR8izxXku/euNiurNsr25ngBuvWUOOelacx04kRAYKcOiDcSvJGc7u2aTF/XTn/jE
-         sAZgeCXWDy7OJkMQTP+5+QKc0i8PiRyhgRfsj7DfrJ6zEqTNaC16Au9J72RIe9sd3p
-         A9ZhJ2m0/hiamVEsKfwdI2Pt1/3BrieedWCth8iiyHEvSzY+VqNeCorNXp76EQeeCP
-         LekK+dmU8W0ow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34C47C395DC;
-        Fri, 20 Jan 2023 13:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 20 Jan 2023 08:01:15 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1021FA57A6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:01:14 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id m15so3997565wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TcM8XhDKOPbBsFGO0+W5tGL9iLdvv5/DvMQLA7ZA1gw=;
+        b=IrxCUmhLzvaQmFPa0wmZropX0S4nPCOToD2CgGQ/h5wz9kdpXybcdLemwOlLsgdFmY
+         33dumliNcnI+hpx7/aMUEAnKeilUU1/ipb1T68ufo1+8TMsYgs/ffDWB4UeBEo1TmkgX
+         kBl9D6zmAt5vMPtK9Ow4Awf4kT3k1WY3i9CCzYma2+jmlCfvrJTa0rwfN2FJkYJ1xRJC
+         DIW5/6NsmHVHQjsMauS/J3MP5BTKdkEsMlFpFVDCIfdib8/mJn1NnQxgLURMOKlQjGUL
+         0of13CoeBYEFytIqLIUeQzm+/GLbj5d9Ifyx9QwWOdaWawv2sah1SoyUSW7SGQffj1g6
+         zaHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TcM8XhDKOPbBsFGO0+W5tGL9iLdvv5/DvMQLA7ZA1gw=;
+        b=fSi2JO+AA00O7O64XmhvGnh3rqpWq8oJ/MDWz6pjAvDv1VnfQrV+Q1pwori39uhlox
+         q8R2BUJ3KcGxV8KQCC3TTxnife/Ih2zzbPiJR16/wYqrKUSCqW6tmDEB9q86O+f6zc2V
+         bMDAIFbgPcmH/nwPgg7PF7GOPYWzJ7Y8ymAwqzaPl/+DmAstyCoF2H6WtQTT1emQK1+z
+         I4OOmCpVtr9puU6Ng85ZBs+aKL0rNvw9E3zvTM790Unm6aJ+oDnQmAe8VvaE8YyCu7vb
+         35/czrPHM7sQanTJPzkDxnfExcc2Y3O6HUYm4hAoE2G1ob4VyGeUAALYdUBba4IPe7Z2
+         6j4g==
+X-Gm-Message-State: AFqh2kqazbF0QzHofhteKzFoDoSr5Eg1b1CM1BostXfxN1mIp8k/v3VK
+        wWten6f/V9qdPMt7z9mrvA5N5g==
+X-Google-Smtp-Source: AMrXdXvpbA/Ou+cnHvZNOOu0VIf5TFaLA2b9bSfYKs6ZNohSp2Px51Y30p44NWNMw0wcC4XbIeETBw==
+X-Received: by 2002:a7b:cd11:0:b0:3d9:6c7d:c9ee with SMTP id f17-20020a7bcd11000000b003d96c7dc9eemr22435915wmj.25.1674219672635;
+        Fri, 20 Jan 2023 05:01:12 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003db2b81660esm2275631wmo.21.2023.01.20.05.01.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 05:01:12 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: exynos: drop unsupported UFS properties in ExynosAutov9 SADK
+Date:   Fri, 20 Jan 2023 14:01:08 +0100
+Message-Id: <20230120130108.278851-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bnxt: Do not read past the end of test names
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167421961621.3650.4752984358502459675.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 Jan 2023 13:00:16 +0000
-References: <20230118203457.never.612-kees@kernel.org>
-In-Reply-To: <20230118203457.never.612-kees@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     michael.chan@broadcom.com, Niklas.Cassel@wdc.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,29 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+There is no vcc-fixed-regulator property for UFS nodes:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+  exynosautov9-sadk.dtb: ufs@17e00000: Unevaluated properties are not allowed ('vcc-fixed-regulator' was unexpected)
 
-On Wed, 18 Jan 2023 12:35:01 -0800 you wrote:
-> Test names were being concatenated based on a offset beyond the end of
-> the first name, which tripped the buffer overflow detection logic:
-> 
->  detected buffer overflow in strnlen
->  [...]
->  Call Trace:
->  bnxt_ethtool_init.cold+0x18/0x18
-> 
-> [...]
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts | 2 --
+ 1 file changed, 2 deletions(-)
 
-Here is the summary with links:
-  - bnxt: Do not read past the end of test names
-    https://git.kernel.org/netdev/net/c/d3e599c090fc
-
-You are awesome, thank you!
+diff --git a/arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts b/arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts
+index eec3192c0631..101f51bf565a 100644
+--- a/arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts
++++ b/arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts
+@@ -65,13 +65,11 @@ &ufs_1_phy {
+ &ufs_0 {
+ 	status = "okay";
+ 	vcc-supply = <&ufs_0_fixed_vcc_reg>;
+-	vcc-fixed-regulator;
+ };
+ 
+ &ufs_1 {
+ 	status = "okay";
+ 	vcc-supply = <&ufs_1_fixed_vcc_reg>;
+-	vcc-fixed-regulator;
+ };
+ 
+ &usi_0 {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
