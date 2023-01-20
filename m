@@ -2,143 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4046759EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12B4675A13
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjATQ31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S230338AbjATQfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjATQ3Y (ORCPT
+        with ESMTP id S229683AbjATQfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:29:24 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B075FF0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:28:44 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 188so7337071ybi.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:28:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UsgwD1M2WCaGKZ28mz2lre3YTN/XGgKTUhmzvANIwrs=;
-        b=UWgCAbzsC3BkBkDEqEdU8jLnBSczGtgp4NjRW6kn+6R2j3opMeudfAuaqqqMFkgHMN
-         Z9P5B9yuyMwdGPkgRNgnz/TOfWo4Wt5uUNjhZ9I83OZjL9gygtUTM8AtpJylYaZz4T75
-         llL+lsUaE67/CZ536Vs50o4WQOxUgeiSOOc2utQEH0qXqFdF+cnrQO8WfbOxo72M94IP
-         EpLffVj4j9OiAUW1gjBCCgOnTUNBiCRg+9C5Ji2JKF0CUrBWHcpBBMDgAm5WTkUeKzl5
-         8Iq3R9Gt3UyVNdl2fwcUJN8gE7Zx9keZ2uWloUQNxAYituoqb67QgwmozacBZS8hJrOt
-         R4pA==
+        Fri, 20 Jan 2023 11:35:32 -0500
+Received: from mail-il1-x145.google.com (mail-il1-x145.google.com [IPv6:2607:f8b0:4864:20::145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC8CB1ED2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:34:57 -0800 (PST)
+Received: by mail-il1-x145.google.com with SMTP id j11-20020a056e02218b00b0030f3e7a27a8so3645489ila.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:34:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UsgwD1M2WCaGKZ28mz2lre3YTN/XGgKTUhmzvANIwrs=;
-        b=2kK643k51JHi5aqDQnL1meAILSR/aqZIDsafq1NZZwevhlcWIkcSHW+LRcF3PZQ4mT
-         Zf2u5Ibgy0hDbLm/wjG+ZJFikj1Nn3/w95HMl0VXGZIXoJo4UyRiFa4o1dev4Q5PtCU9
-         MBqT1BXN+2nnl/tYTe2b6fJDEltd0Luid/JPZoReofaYufrR8zQLI9b+elvrjhhjdV05
-         J8h5vlpyIGPQSo/+0PpyC7yTJ8OlqcKnXYH1+vaHAw1pNi8oBOPlgyM99t70CGaz16k3
-         pTq2SmfJ4hwFVayc58CjyLG5oTInYDfNtYMLQptM0jOZEunDIWDJfI0YwsNXPzrv8BI6
-         IIqw==
-X-Gm-Message-State: AFqh2kr5o1HyQjtqPG5vBpeRyIH+bWyWsWOSHgCWI8BS2ErHOGfRDTQC
-        +1FDTZD+XScOUPWjdmQXWyLJbB36lJ77Eed2stqWzA==
-X-Google-Smtp-Source: AMrXdXsoVM0i9/+nWuevD8gu1lstoic8Y7elrHX1HRwzV169/ExhmAVo5mtJCbkcuPTncHwqD6EZnANKYQfFrTvFbjI=
-X-Received: by 2002:a25:ceca:0:b0:7e4:115c:9cf6 with SMTP id
- x193-20020a25ceca000000b007e4115c9cf6mr1790830ybe.316.1674232116013; Fri, 20
- Jan 2023 08:28:36 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B2p7MpVUpBtVLJmXNTd9D6MvB8cOHwIRNVQLP6X0jY4=;
+        b=R0EJsIcrcv/I1Trz+4IcAXUD3+FYefkH5cMEPRDRF+0Pz+wG+9ADsZQdHxH/V1yFEH
+         mKwwi8jPOCKJ6XRW3GdzBOwcAIIdYEnuNWLuaxaQbpK59LnmGs0RaSWiO7PcGrHfaS+s
+         /aG2SD+qTUh81RcWJOM5wgHr2i00DdhGDf5m4LQ7QwaPB96jHYN86CY4Y3jd+mdUobiF
+         W34EPWguxdOgE9n5VLE0UT27lHpFVY8BFi31wRGK3SBc2LaOS/BwfMYFHAFD63lsm8WY
+         L6cFdGlXo2r5aqSlQAEd+YNzjjJGEHvCI14dshPu9J1U9nO+HGS2wN4uP8L0nnq/OmhY
+         5guQ==
+X-Gm-Message-State: AFqh2kpMKjcnk6KCMr/PJu45CUTf+Kj1KWjz6UUJ528rjyQl9kMiny08
+        f4uGdtVH4J0tA71W9ioXWK/c28KdgT1ozurEn12AWADaiBLo
+X-Google-Smtp-Source: AMrXdXuncck+O7UwU3Iv++5VzRnleVcmh0QYc7PQCcg8c92S15JORDT8nQ21WGjCcAmTFVe3bry6eiHDFHd2rA9zJV6V/b3gUFL6
 MIME-Version: 1.0
-References: <CAJuCfpEMEsSYcKakFiDK=QV+apW-2baLcUcw7uRyrmKkWVnR8A@mail.gmail.com>
- <20230113022555.2467724-1-kamatam@amazon.com> <CAJuCfpEH7kC=S8S_SRLW-X483kpaL4xdn5b35Ou08V7b56QdJA@mail.gmail.com>
- <CAJuCfpHV2-pnHd6U3paA1fO2gaYP1RTqAJwp_5QC7C2YR3JG5g@mail.gmail.com>
- <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
- <20230120013055.3628-1-hdanton@sina.com> <CAJuCfpF9tCx4mjYFyX+p7qO9qt+rm=UMSdBt-uzaOqE0ThG04g@mail.gmail.com>
- <20230120090001.3807-1-hdanton@sina.com>
-In-Reply-To: <20230120090001.3807-1-hdanton@sina.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 20 Jan 2023 08:28:25 -0800
-Message-ID: <CAJuCfpFShuXs_CcfXR6PjYyXemapbuHPG0oZQJb_Y9ZpCUGZXg@mail.gmail.com>
-Subject: Re: another use-after-free in ep_remove_wait_queue()
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Munehisa Kamata <kamatam@amazon.com>, Tejun Heo <tj@kernel.org>,
-        ebiggers@kernel.org, hannes@cmpxchg.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mengcc@amazon.com
+X-Received: by 2002:a05:6e02:1d99:b0:30f:11bc:cc6e with SMTP id
+ h25-20020a056e021d9900b0030f11bccc6emr1524212ila.87.1674232130203; Fri, 20
+ Jan 2023 08:28:50 -0800 (PST)
+Date:   Fri, 20 Jan 2023 08:28:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006477b305f2b48b58@google.com>
+Subject: [syzbot] possible deadlock in rfcomm_dlc_exists
+From:   syzbot <syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, yangyingliang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 1:00 AM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Thu, 19 Jan 2023 17:37:11 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > On Thu, Jan 19, 2023 at 5:31 PM Hillf Danton <hdanton@sina.com> wrote:
-> > > On Thu, 19 Jan 2023 13:01:42 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > Hi Folks,
-> > > > I spent some more time digging into the details and this is what's
-> > > > happening. When we call rmdir to delete the cgroup with the pressure
-> > > > file being epoll'ed, roughly the following call chain happens in the
-> > > > context of the shell process:
-> > > >
-> > > > do_rmdir
-> > > >   cgroup_rmdir
-> > > >     kernfs_drain_open_files
-> > > >       cgroup_file_release
-> > > >         cgroup_pressure_release
-> > > >           psi_trigger_destroy
-> > > >
-> > > > Later on in the context of our reproducer, the last fput() is called
-> > > > causing wait queue removal:
-> > > >
-> > > > fput
-> > > >   ep_eventpoll_release
-> > > >     ep_free
-> > > >       ep_remove_wait_queue
-> > > >         remove_wait_queue
-> > > >
-> > > > By this time psi_trigger_destroy() already destroyed the trigger's
-> > > > waitqueue head and we hit UAF.
-> > > > I think the conceptual problem here (or maybe that's by design?) is
-> > > > that cgroup_file_release() is not really tied to the file's real
-> > > > lifetime (when the last fput() is issued). Otherwise fput() would call
-> > > > eventpoll_release() before f_op->release() and the order would be fine
-> > > > (we would remove the wait queue first in eventpoll_release() and then
-> > > > f_op->release() would cause trigger's destruction).
-> > >
-> > >   eventpoll_release
-> > >     eventpoll_release_file
-> > >       ep_remove
-> > >         ep_unregister_pollwait
-> > >           ep_remove_wait_queue
-> > >
-> >
-> > Yes but fput() calls eventpoll_release() *before* f_op->release(), so
-> > waitqueue_head would be removed before trigger destruction.
->
-> Then check if file is polled before destroying trigger.
->
-> +++ b/kernel/sched/psi.c
-> @@ -1529,6 +1529,7 @@ static int psi_fop_release(struct inode
->  {
->         struct seq_file *seq = file->private_data;
->
-> +       eventpoll_release_file(file);
+Hello,
 
-Be careful here and see the comment in
-https://elixir.bootlin.com/linux/latest/source/fs/eventpoll.c#L912.
-eventpoll_release_file() assumes that the last fput() was called and
-nobody other than ep_free() will race with us. So, this will not be
-that simple. Besides if we really need to fix the order here, the fix
-should be somewhere at the level of cgroup_file_release() or even
-kernfs to work for other similar situations.
+syzbot found the following issue on:
 
->         psi_trigger_destroy(seq->private);
->         return single_release(inode, file);
->  }
->
+HEAD commit:    c12e2e5b76b2 Add linux-next specific files for 20230116
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=154e0046480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ef6b6ac6c6c96c0e
+dashboard link: https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4fb49204daa9/disk-c12e2e5b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7b02ca8eacc0/vmlinux-c12e2e5b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/94539232cf54/bzImage-c12e2e5b.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b69a625d06e8ece26415@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.2.0-rc4-next-20230116-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.2/27510 is trying to acquire lock:
+ffffffff8e322188 (rfcomm_mutex){+.+.}-{3:3}, at: rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:542
+
+but task is already holding lock:
+ffffffff8e3270c8 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+ffffffff8e3270c8 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (rfcomm_ioctl_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+       rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1194
+       sock_ioctl+0x1f8/0x680 net/socket.c:1311
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #2 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
+       lock_sock_nested+0x3a/0xf0 net/core/sock.c:3470
+       lock_sock include/net/sock.h:1725 [inline]
+       rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
+       __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:489
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
+       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
+       __sock_release+0xcd/0x280 net/socket.c:651
+       sock_close+0x1c/0x20 net/socket.c:1390
+       __fput+0x27c/0xa90 fs/file_table.c:321
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       get_signal+0x1c7/0x24f0 kernel/signal.c:2635
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (&d->lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:487
+       rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
+       __rfcomm_sock_close+0x17a/0x2f0 net/bluetooth/rfcomm/sock.c:220
+       rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:912
+       rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:933
+       __sock_release+0xcd/0x280 net/socket.c:651
+       sock_close+0x1c/0x20 net/socket.c:1390
+       __fput+0x27c/0xa90 fs/file_table.c:321
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       get_signal+0x1c7/0x24f0 kernel/signal.c:2635
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (rfcomm_mutex){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3107 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3226 [inline]
+       validate_chain kernel/locking/lockdep.c:3841 [inline]
+       __lock_acquire+0x2a9d/0x5780 kernel/locking/lockdep.c:5073
+       lock_acquire.part.0+0x11c/0x350 kernel/locking/lockdep.c:5690
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:542
+       __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
+       rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
+       rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
+       rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1194
+       sock_ioctl+0x1f8/0x680 net/socket.c:1311
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  rfcomm_mutex --> sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM --> rfcomm_ioctl_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(rfcomm_ioctl_mutex);
+                               lock(sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM);
+                               lock(rfcomm_ioctl_mutex);
+  lock(rfcomm_mutex);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.2/27510:
+ #0: ffff88804d0ad130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1725 [inline]
+ #0: ffff88804d0ad130 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}, at: rfcomm_sock_ioctl+0xaa/0xe0 net/bluetooth/rfcomm/sock.c:879
+ #1: ffffffff8e3270c8 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_create_dev net/bluetooth/rfcomm/tty.c:484 [inline]
+ #1: ffffffff8e3270c8 (rfcomm_ioctl_mutex){+.+.}-{3:3}, at: rfcomm_dev_ioctl+0x8a2/0x1c00 net/bluetooth/rfcomm/tty.c:587
+
+stack backtrace:
+CPU: 1 PID: 27510 Comm: syz-executor.2 Not tainted 6.2.0-rc4-next-20230116-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2187
+ check_prev_add kernel/locking/lockdep.c:3107 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3226 [inline]
+ validate_chain kernel/locking/lockdep.c:3841 [inline]
+ __lock_acquire+0x2a9d/0x5780 kernel/locking/lockdep.c:5073
+ lock_acquire.part.0+0x11c/0x350 kernel/locking/lockdep.c:5690
+ __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+ __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+ rfcomm_dlc_exists+0x58/0x190 net/bluetooth/rfcomm/core.c:542
+ __rfcomm_create_dev net/bluetooth/rfcomm/tty.c:414 [inline]
+ rfcomm_create_dev net/bluetooth/rfcomm/tty.c:485 [inline]
+ rfcomm_dev_ioctl+0x966/0x1c00 net/bluetooth/rfcomm/tty.c:587
+ rfcomm_sock_ioctl+0xb7/0xe0 net/bluetooth/rfcomm/sock.c:880
+ sock_do_ioctl+0xcc/0x230 net/socket.c:1194
+ sock_ioctl+0x1f8/0x680 net/socket.c:1311
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7efe0208c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007efe02d1a168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007efe021ac120 RCX: 00007efe0208c0c9
+RDX: 0000000020000100 RSI: 00000000400452c8 RDI: 0000000000000008
+RBP: 00007efe020e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe7923c9af R14: 00007efe02d1a300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
