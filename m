@@ -2,158 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC76675A83
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5CF675A88
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjATQxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
+        id S230364AbjATQyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjATQxO (ORCPT
+        with ESMTP id S229448AbjATQys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:53:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E449431;
-        Fri, 20 Jan 2023 08:53:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF46662007;
-        Fri, 20 Jan 2023 16:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF236C433D2;
-        Fri, 20 Jan 2023 16:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674233587;
-        bh=ZJyKB5JqJ60CNEaKuQaIeFoM3hgqcsDrG9XWlZAjUt4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=vR0h1Abc+jBzC0ip7zBVdbnFn2dTYZ7Q281OK6+S9U3aX8HHGl3YP1eBbIRCWET4s
-         nEkjhCI5yN/BUuhdRrr6G7oRlkDL6IY7vN5UVO0f/mShmK0rnj4yYYbrOcto2Nsd+A
-         UeEFa/GjUuAkgKZmuEv/QCvellWKsXReR5D2gnWq+5hoFtvcheDr9av9HVr+aF+N5n
-         qQoCiEjqMJRbk73E/ihYsAwnqyqgpz6o442dhrNj7eb3p0Ads745GsyIdzxEBujOYc
-         qErMnZkWoemovVdk0CEl2c4GtY4walkCZi5InpXIZQfBjST1DJgW7r14KmQNeOQolw
-         HIXvKDi5Gef3Q==
-Date:   Fri, 20 Jan 2023 10:53:05 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     jiantao zhang <water.zhangjiantao@huawei.com>
-Cc:     "zhangjianrong (E)" <zhangjianrong5@huawei.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: Exit restore process when device is still powerdown
-Message-ID: <20230120165305.GA622765@bhelgaas>
+        Fri, 20 Jan 2023 11:54:48 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F123C17B
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674233687; x=1705769687;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L5adZLDfpzZ5TjZGsFBthPz0tUNZi5rcH/sfXtmD1yM=;
+  b=hYA7VPUA1y9CRRnkVIWkKCbIv/iV0toie257e9npwPOMWWWx0GYN2oTO
+   N+o+LS2vkoYRea1hux526d8+ZY79oLBJ9dg35hnevFWFkvRWULWQp0V/R
+   +575lonNBJhEQWiMKCrk4XwO5LtxoJBNUPlaQ1D4/bSalPdzHPDP4Z3QU
+   B2bv3myJp+kr44yJIhB+NsdpT5XB/Bqo8Pj6z4IvKkhoChOrgP8EP6D+1
+   +mzR5sCbXd6s8DnPIESUpCxyovcc1ZOfIbKWHxqyrO1GDkuWxhOVFXZG6
+   dj30I2w/wZMAWvdj6UBRJIr9DxTfcY4OEZksGh5x4pU278wFGhDyMpQAB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="324315174"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="324315174"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:54:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="638207825"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="638207825"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 08:54:45 -0800
+From:   kan.liang@linux.intel.com
+To:     joro@8bytes.org, will@kernel.org, baolu.lu@linux.intel.com,
+        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     yu-cheng.yu@intel.com, Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V3 0/7] iommu/vt-d: Support performance monitoring for IOMMU
+Date:   Fri, 20 Jan 2023 08:54:01 -0800
+Message-Id: <20230120165408.500511-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <42dc3ab2-8129-7186-c777-07848ee01f66@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 02:18:24PM +0800, jiantao zhang wrote:
-> 在 2023/1/13 6:13, Bjorn Helgaas 写道:
-> > On Thu, Dec 22, 2022 at 12:41:04PM +0000, Jiantao Zhang wrote:
-> > > We get this stack when the rp doesn't power up in resume noirq:
-> > >      dump_backtrace.cfi_jt+0x0/0x4
-> > >      dump_stack_lvl+0xb4/0x10c
-> > >      show_regs_before_dump_stack+0x1c/0x30
-> > >      arm64_serror_panic+0x110/0x1a8
-> > >      do_serror+0x16c/0x1cc
-> > >      el1_error+0x8c/0x10c
-> > >      do_raw_spin_unlock+0x74/0xdc
-> > >      pci_bus_read_config_word+0xdc/0x1dc
-> > >      pci_restore_msi_state+0x2f4/0x36c
-> > >      pci_restore_state+0x13f0/0x1444
-> > >      pci_pm_resume_noirq+0x158/0x318
-> > >      dpm_run_callback+0x178/0x5e8
-> > >      device_resume_noirq+0x250/0x264
-> > >      async_resume_noirq+0x20/0xf8
-> > >      async_run_entry_fn+0xfc/0x364
-> > >      process_one_work+0x37c/0x7f4
-> > >      worker_thread+0x3e8/0x754
-> > >      kthread+0x168/0x204
-> > >      ret_from_fork+0x10/0x18
-> > > The ep device uses msix, the restore process will write bar space
-> > > in __pci_msix_desc_mask_irq, which will result in accessing the
-> > > powerdown area when the rp doesn't power on.
-> > 
-> > > It makes sense we should do nothing when the device is still powerdown.
-> > > 
-> > > Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
-> > > Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-> > > ---
-> > >   drivers/pci/pci.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > index fba95486caaf..279f6e8c5a00 100644
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -1764,7 +1764,7 @@ static void pci_restore_rebar_state(struct pci_dev *pdev)
-> > >    */
-> > >   void pci_restore_state(struct pci_dev *dev)
-> > >   {
-> > > -	if (!dev->state_saved)
-> > > +	if (!dev->state_saved || dev->current_state == PCI_UNKNOWN)
-> > >   		return;
-> > 
-> > This doesn't seem right to me because it seems like we're covering up
-> > a problem elsewhere.
-> > 
-> > If we need access to the endpoint to restore state, shouldn't we
-> > ensure that the endpoint is powered up before we try to access it?
-> > 
-> > We depend on the state being restored, so if we skip the restore here,
-> > where *will* it happen?
->
-> As the call stack shows the serror happens in pci_pm_resume_noirq(),
-> which belongs to pci pm framework. The resume process related to pci
-> devices goes like this:
-> 
-> stage noirq:
-> Root Port's call stack: device_resume_noirq() --> pci_pm_resume_noirq() -->
-> resume_noirq callback
-> endpoint's call stack: device_resume_noirq() --> pci_pm_resume_noirq() -->
-> resume_noirq callback
-> 
-> stage early:
-> Root Port's call stack: device_resume_early() --> pci_pm_resume_early() -->
-> device resume_early callback
-> endpoint's call stack: device_resume_early() --> pci_pm_resume_early() -->
-> device resume_early callback
-> 
-> stage normal:
-> Root Port's call stack: device_resume() --> pci_pm_resume() --> device
-> resume callback
-> endpoint's call stack: device_resume() --> pci_pm_resume() --> device resume
-> callback
-> 
-> The problem is we don't power up the controller in Root Port's
-> resume_noirq callback (actually we don't even register resume_noirq
-> callback for some reason), so the serror happens because of
-> accessing powerdown area when endpoint's pci_pm_resume_noirq() calls
-> pci_restore_state() which will call pci_restore_msi_state() to
-> restore MSI-X state.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Yes.  So when is the MSI-X state restored?
+Changes since V2:
+- Move ecmd_submit_sync() to iommu.c to avoid #ifdef CONFIG_INTEL_IOMMU
 
-If I understand correctly, your patch just skips pci_restore_state()
-when the device power state is PCI_UNKNOWN.  But I assume we still
-need to restore the MSI-X and other state *somewhere*.
+Changes since V1:
+- The cap and ecap registers are always in the first page. It's not
+  necessary to use the reg size in dmar_validate_one_drhd(). (Patch 1)
+- Move reg_size up and pair it with reg_base_addr in struct
+  dmar_drhd_unit (Patch 1)
+- Update the year of Copyright (Patch 2)
+- Return 0 if PMS is not supported (Patch 2)
+- Refine the comments and add a pr_warn for per-counter capabilities
+  check (Patch 2)
+- Remove unnecessary iommu_pmu->num_cntr = i (Patch 2)
+- Remove has_ob of ecmd_submit_sync() (Patch 3)
+- Remove the helpers from non-INTEL_IOMMU. (Patch 3)
+- Still keep #ifdef CONFIG_INTEL_IOMMU for ecmd_submit_sync() to
+  avoid compile warning with non-INTEL_IOMMU config.
+- Use pr_warn_once() to replace WARN_ONCE() (Patch 4 & 6)
+- Free iommu PMU if it fails to be registered. (Patch 4)
+- Remove unnecessary 'handled' variable. (Patch 6)
 
-Your patch changes the generic code that *all* platforms use, but I
-have not heard of this problem on other hardware, so I assume there's
-something different about power management on your platform.  That
-makes me think the solution would be a platform-specific change, not
-this generic code change.
+A performance monitoring infrastructure, perfmon, is introduced with
+the VT-d Spec 4.0. The purpose of perfmon is to support collection of
+information about key events occurring during operation of the remapping
+hardware, to aid performance tuning and debug. The patch series is to
+support the perfmon for IOMMU.
 
-> So we wonder if there is strong restriction that we must poweron in
-> Root Port's resume_noirq callback.  The pci_restore_state() can't
-> restore anything when the device is still at PCI_UNKNOWN state, and
-> if the device is accessible it can't be at PCI_UNKNOWN state, so the
-> patch doesn't make any difference for original process.
+To facilitate the perfmon support, the patch series also supports two
+new generic features of VT-d Spec 4.0.
+- Support the 'size' field to retrieve the accurate size of the register
+  set for each dmar device from DRHD. (Patch 1)
+- Support the new Enhanced Command Interface. (Patch 3)
+
+With the patch series, users can collect the performance data of IOMMU
+via Linux perf tool. For example,
+
+ $ perf stat -e dmar0/iommu_requests,filter_ats=0/ -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+              2135      dmar0/iommu_requests,filter_ats=0/
+
+       1.001087695 seconds time elapsed
+
+The IOMMU PMUs can be found under /sys/bus/event_source/devices/dmar*
+
+The available filters and event format can be found at the format folder
+ $ ls /sys/bus/event_source/devices/dmar0/format/
+event  event_group  filter_ats  filter_page_table
+
+The supported events can be found at the events folder
+
+ $ ls /sys/bus/event_source/devices/dmar0/events/
+ats_blocked        int_cache_hit_nonposted  iommu_mrds
+pasid_cache_lookup
+ctxt_cache_hit     int_cache_hit_posted     iommu_requests
+pg_req_posted
+ctxt_cache_lookup  int_cache_lookup         iotlb_hit
+pw_occupancy
+fs_nonleaf_hit     iommu_clocks             iotlb_lookup
+ss_nonleaf_hit
+fs_nonleaf_lookup  iommu_mem_blocked        pasid_cache_hit
+ss_nonleaf_lookup
+
+Kan Liang (7):
+  iommu/vt-d: Support size of the register set in DRHD
+  iommu/vt-d: Retrieve IOMMU perfmon capability information
+  iommu/vt-d: Support Enhanced Command Interface
+  iommu/vt-d: Add IOMMU perfmon support
+  iommu/vt-d: Support cpumask for IOMMU perfmon
+  iommu/vt-d: Add IOMMU perfmon overflow handler support
+  iommu/vt-d: Enable IOMMU perfmon support
+
+ .../sysfs-bus-event_source-devices-iommu      |  32 +
+ drivers/iommu/intel/Kconfig                   |   9 +
+ drivers/iommu/intel/Makefile                  |   1 +
+ drivers/iommu/intel/dmar.c                    |  33 +-
+ drivers/iommu/intel/iommu.c                   |  59 ++
+ drivers/iommu/intel/iommu.h                   | 101 +-
+ drivers/iommu/intel/perfmon.c                 | 860 ++++++++++++++++++
+ drivers/iommu/intel/perfmon.h                 |  65 ++
+ drivers/iommu/intel/svm.c                     |   2 +-
+ include/acpi/actbl1.h                         |   2 +-
+ include/linux/cpuhotplug.h                    |   1 +
+ include/linux/dmar.h                          |   1 +
+ 12 files changed, 1159 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-iommu
+ create mode 100644 drivers/iommu/intel/perfmon.c
+ create mode 100644 drivers/iommu/intel/perfmon.h
+
+-- 
+2.35.1
+
