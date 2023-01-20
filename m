@@ -2,84 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0FC675D0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE63D675D0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjATSuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S230030AbjATSvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATSuT (ORCPT
+        with ESMTP id S229379AbjATSu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:50:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF64272E
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:50:18 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9584E1EC0682;
-        Fri, 20 Jan 2023 19:50:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674240616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=mlAaFJkX/4xLCktmWlDerlFUb03AZz3swLHDsNYfVmA=;
-        b=Ha6TA7GZGdbps8Ssbo+m3AuDad72/fidXdtXhrPl23YC6+U1LvqLt2F8PFrhGKPyKO7Dnb
-        9Fe4h/ZtwPG0SPhm85n6HIecBr0j/QGxqTO/wWpMbSlBSAYE5qx6HU45OFOOWRYxwdtSrN
-        fNY8kY0tRjiWZiGTmZI6Nxv/PH1Ys5w=
-Date:   Fri, 20 Jan 2023 19:50:12 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Subject: Re: [PATCH v11 2/7] x86/sev: Change snp_guest_issue_request's fw_err
-Message-ID: <Y8riZEg+4rZ/65+T@zn.tnic>
-References: <20230111194001.1947849-1-dionnaglaze@google.com>
- <20230111194001.1947849-3-dionnaglaze@google.com>
- <Y8qgjgPCmnPR4tQL@zn.tnic>
- <CAAH4kHbDk8d1sqsNaJmGLkpjyXyHBH=9BWSh8XOZCAKu8vvFAQ@mail.gmail.com>
+        Fri, 20 Jan 2023 13:50:59 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0A75421A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:50:58 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i65so4697065pfc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:50:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gM0RsfTuHckuor3p1wTydYsMS7aWIixLNSsGgZZKJcI=;
+        b=RvC9LKPrewaHEB4mXhWw5HrT0pd9A85zqjbzTTDS2FlcDk5UBhjFjfWTKzyI6c7WC9
+         GdHzuStMSR7RJM3rV/X8/C3hqA7EflZWdB08ngv1tN39gXPfPRrjZmSiQhorlAWbm/oO
+         DHi1fLdZuCQDbrQjJwSBf4y5D/LvFfd3aGeu2kVudVYXL8uH7UoyUt0yFIxgsMe2oq7M
+         rg/bYnbqJx26UjtHURTVXj5Zv1yCnPKH2XCYVCBb5msCX2RvCj5rFYoQmhIvLcv/5qRf
+         xeTG5m5SwI51IuLRNZnUvYrJ+qRRjxxGY+AtzDBKB2oTAFo3UOzvAr95zhzQqASl3pa0
+         OcgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gM0RsfTuHckuor3p1wTydYsMS7aWIixLNSsGgZZKJcI=;
+        b=Q//GU75Z2cr6Lb9nfrDH6IwhhV9BzCnMU5Jni+i11hQ791Qs2jh24GbsB1RASRFDV1
+         b4rrJxhWNv8+nTiTKS2I6hThQQ8zxIzlC79l31687pz2YUXV1sr+gwNJEERatDWP8BLl
+         UKHSE+sUmX+ND/QLyT7s65Sr4U5bOoFqdw4RQloQ0TI2bOLK0/Agtnfh+WoFVYi817cY
+         7MesRjeRMaU9SwTmR0GnRn7pJTLqsVCooZyBjODt4WM1xxU/ndvgmEXePLGwJg+uuL2h
+         IQtWepGAMD9jmw4PHU+k3UnW1+w+dwGUv6Q6/W0+fFulXs/0DNCwfIRTHk7n4tHHBTPM
+         6vaQ==
+X-Gm-Message-State: AFqh2kpbAMpUztgDI0AI0DkASNztCumX00RreCTQrgzxXPJGMR0yXV6z
+        aQ8MbJNnFkTrKrTUpbwXpSOU1g==
+X-Google-Smtp-Source: AMrXdXuci1ryQcAp1fGQy5qxEJbH7tBxHv5qkbFfxY7kSWv2Okz0AC9wEQnvzJvLW0/xnnmEJ2t3IQ==
+X-Received: by 2002:aa7:8692:0:b0:582:13b5:d735 with SMTP id d18-20020aa78692000000b0058213b5d735mr287483pfo.0.1674240657900;
+        Fri, 20 Jan 2023 10:50:57 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:67ba:96c6:d11f:daaa])
+        by smtp.gmail.com with ESMTPSA id a7-20020aa795a7000000b0058da56f8b95sm10043637pfk.115.2023.01.20.10.50.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 10:50:56 -0800 (PST)
+Date:   Fri, 20 Jan 2023 10:50:51 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org
+Subject: Re: [PATCH] platform/chrome: cros_typec_vdm: Fix VDO copy
+Message-ID: <Y8rii5gRTsi5jEP9@google.com>
+References: <20230113182626.1149539-1-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OAoGfFgmeh+HrIz6"
 Content-Disposition: inline
-In-Reply-To: <CAAH4kHbDk8d1sqsNaJmGLkpjyXyHBH=9BWSh8XOZCAKu8vvFAQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113182626.1149539-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:03:33AM -0800, Dionna Amalie Glaze wrote:
-> I was operating under the assumption that kvm: sev: patches should
-> only touch kvm, and virt: coco: sev-guest should only touch sev-guest.
 
-No, we pretty-much never do that. If a patch touches multiple subsystems, the
-relevant maintainers agree on its path upstream.
+--OAoGfFgmeh+HrIz6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> If you're okay with a patch that changes both areas at the same time,
-> then I could do that.
+Hi Prashant,
 
-Yes pls.
 
-Thx.
+On Fri, Jan 13, 2023 at 06:26:26PM +0000, Prashant Malani wrote:
+> The usage of memcpy() affects the representation of the VDOs as they are
+> copied to the EC Host Command buffer. Specifically, all higher order
+> bits get dropped (for example: a VDO of 0x406 just gets copied as 0x6).
+>=20
+> Avoid this by explicitly copying each VDO in the array. The number of
+> VDOs generated by alternate mode drivers in their VDMs is almost always
+> just 1 (apart from the header) so this doesn't affect performance in a
+> meaningful way).
+>=20
+> Fixes: 40a9b13a09ef ("platform/chrome: cros_typec_vdm: Add VDM send suppo=
+rt")
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
--- 
-Regards/Gruss,
-    Boris.
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+> ---
+>  drivers/platform/chrome/cros_typec_vdm.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/platform/chrome/cros_typec_vdm.c b/drivers/platform/=
+chrome/cros_typec_vdm.c
+> index aca9d337118e..06f4a55999c5 100644
+> --- a/drivers/platform/chrome/cros_typec_vdm.c
+> +++ b/drivers/platform/chrome/cros_typec_vdm.c
+> @@ -86,10 +86,12 @@ static int cros_typec_port_amode_vdm(struct typec_alt=
+mode *amode, const u32 hdr,
+>  		.command =3D TYPEC_CONTROL_COMMAND_SEND_VDM_REQ,
+>  	};
+>  	struct typec_vdm_req vdm_req =3D {};
+> +	int i;
+> =20
+>  	vdm_req.vdm_data[0] =3D hdr;
+>  	vdm_req.vdm_data_objects =3D cnt;
+> -	memcpy(&vdm_req.vdm_data[1], vdo, cnt - 1);
+> +	for (i =3D 1; i < cnt; i++)
+> +		vdm_req.vdm_data[i] =3D vdo[i-1];
+>  	vdm_req.partner_type =3D TYPEC_PARTNER_SOP;
+>  	req.vdm_req_params =3D vdm_req;
+> =20
+> --=20
+> 2.39.0.314.g84b9a713c41-goog
+>=20
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--OAoGfFgmeh+HrIz6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY8riiwAKCRBzbaomhzOw
+wuSDAQDrAanTBr12LLmQByxqlHex86Ytxgmmh88UxOsHHk7ErQD+N+tIc7j/HkyR
+SOclTL6OB8jx/nYJB82XlIY21rPARgo=
+=AmzF
+-----END PGP SIGNATURE-----
+
+--OAoGfFgmeh+HrIz6--
