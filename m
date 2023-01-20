@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F956752F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7806752FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjATLEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S230100AbjATLFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjATLEj (ORCPT
+        with ESMTP id S229471AbjATLFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:04:39 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272326589;
-        Fri, 20 Jan 2023 03:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674212667; bh=pFcAewn2quaVufqt8MmtsTzaNaBvytUqO76gWo5SNjg=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Cbb6j9H2bD7Z7FDGGrPST7s+1kdY9TCjD4K3FrcuhfnGD+4tZZvWgNsTN90ih9UdU
-         EpQ5VNhgs0wbFFIIKpp6oX+tTWm4CljmBXK/uz6lgzg1gaobzDbEp1HY40oT/qGeYy
-         fXqqx0CgRBPtsicPkkdPDLBSCZFq/R40B3Etysx8=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 20 Jan 2023 12:04:26 +0100 (CET)
-X-EA-Auth: 0ot/tZiiKTi0F/QTRJLyBwwxTY3M0aSyzIriddrSvkKfXh3ZFiTX2FktA6AgT6MOmBjuSX2ydcws6gMFGL5Br+buUxxSQm4+
-Date:   Fri, 20 Jan 2023 16:34:21 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH] drm/tegra: sor: Remove redundant error logging
-Message-ID: <Y8p1NbUH16avUefO@ubun2204.myguest.virtualbox.org>
-References: <Y5a4z0TZSqUPfRkr@qemulion>
- <Y6DQTkTMhEefCkBL@qemulion>
+        Fri, 20 Jan 2023 06:05:46 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B6BB1ECB;
+        Fri, 20 Jan 2023 03:05:44 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5771A1EC0373;
+        Fri, 20 Jan 2023 12:05:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674212743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=DMz1hMX9bIi702U1qUGeKb6wgRmvVReg19Kv4qlT7fk=;
+        b=ViXFRD98djm5tkg3Cd5Expr9eruzSxHLAM0zo29yMexB6w4nmR2/NqT+8hNVHA4eekMbeZ
+        P1zX7DBYHX+EAz/LhT9dgSgT0mqSTvfZxv+WBLVuH/G9ltPvilfioqb3bbq/82E1XZIJ7K
+        l07ploxyyfzfejxRKVYaGZPThp3R5rk=
+Date:   Fri, 20 Jan 2023 12:05:38 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/7] x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
+Message-ID: <Y8p1ghpErykiCYjr@zn.tnic>
+References: <20230110224643.452273-1-kim.phillips@amd.com>
+ <20230110224643.452273-4-kim.phillips@amd.com>
+ <Y8nvXj0//cImdTJQ@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y6DQTkTMhEefCkBL@qemulion>
+In-Reply-To: <Y8nvXj0//cImdTJQ@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -53,68 +67,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 02:27:50AM +0530, Deepak R Varma wrote:
-> On Mon, Dec 12, 2022 at 10:44:55AM +0530, Deepak R Varma wrote:
-> 
-> Hello,
-> May I please request a review and feedback on this patch proposal?
-> 
-> Also, I was able to build the changes for ARM arch verified using modinfo
-> tegr-drm.ko command.
+On Fri, Jan 20, 2023 at 01:33:18AM +0000, Sean Christopherson wrote:
+> Is it too late to back this out?  Not a huge deal, but it seems easy enough to
+> clean up.
 
-Hello,
-I am waiting on a feedback on this patch proposal. Do I need to resend it to get
-maintainer attention? Please advise.
+No, not at all. Lemme zap them from the lineup.
 
-Thank you,
-./drv
+Kim, please send a new set like Sean suggests.
 
-> 
-> 
-> Thank you,
-> ./drv
-> 
-> 
-> > A call to platform_get_irq() already prints an error on failure within
-> > its own implementation. So printing another error based on its return
-> > value in the caller is redundant and should be removed. The clean up
-> > also makes if condition block braces unnecessary. Remove that as well.
-> >
-> > Issue identified using platform_get_irq.cocci coccicheck script.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> > Please note: I was not able to build this driver since I did not find the
-> > DRM_TEGRA option in menu config. All dependencies listed in the KConfig are
-> > enabled, however, I was still not able to find the DRM_TEGRA module in the
-> > Graphics-Drivers list. Since the proposed change is known, minor and obvious, I
-> > am sending in this patch without build testing.
-> >
-> > Any advise on how to enable the DRM_TEGRA module in menuconfig selection list
-> > will be helpful. Thank you.
-> >
-> >
-> >  drivers/gpu/drm/tegra/sor.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/tegra/sor.c b/drivers/gpu/drm/tegra/sor.c
-> > index 8af632740673..ceaebd33408d 100644
-> > --- a/drivers/gpu/drm/tegra/sor.c
-> > +++ b/drivers/gpu/drm/tegra/sor.c
-> > @@ -3799,10 +3799,8 @@ static int tegra_sor_probe(struct platform_device *pdev)
-> >  	}
-> >
-> >  	err = platform_get_irq(pdev, 0);
-> > -	if (err < 0) {
-> > -		dev_err(&pdev->dev, "failed to get IRQ: %d\n", err);
-> > +	if (err < 0)
-> >  		goto remove;
-> > -	}
-> >
-> >  	sor->irq = err;
-> >
-> > --
-> > 2.34.1
-> >
+Thx.
 
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
