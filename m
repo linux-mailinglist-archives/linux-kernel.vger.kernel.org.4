@@ -2,262 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292DF674D54
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2A6674D55
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjATGYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S229750AbjATGZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjATGYd (ORCPT
+        with ESMTP id S229437AbjATGZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:24:33 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5A77CCCA;
-        Thu, 19 Jan 2023 22:24:02 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id x7so3438452qtv.13;
-        Thu, 19 Jan 2023 22:24:02 -0800 (PST)
+        Fri, 20 Jan 2023 01:25:36 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF26C872AD
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:25:05 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r9so3918341wrw.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:25:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m/MI+VcYhdwx96fyONVt/5n6r1oLpaMorbRp8iU9Y1A=;
-        b=TctN8tdVzAAQVuXr7I+CkW7I1UpND2PNCiWNO+Uu98aJd0TyUEtqaOTghrptdHqQyz
-         lfuJPlHOPG2uvNa31M5fVV2IhUQupLxNXESjDsk2sO/7MBSsQQKJfHhBuhmhiVvjW36U
-         jwjd/Frt8o9nSBbeTpJsls834H4VqHOfnde0LaGIWcXsQAggQ+OYAjb4irf02Nwr6WLw
-         A83cPqT5CSOq1ZtClGj036m+mwSNE5gPcgUoB/NYmeg0pEJV8FcFKrYGfZwSHBUPPJOf
-         vHOoeXNYrhiIaW2j6g/v9/da2U5+fUPnya9op/u9CHvYk0YR5ZEBdJNJG63cope9ThgU
-         pLzQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GxQNp79R+XdyUWCcN7g4amNp/JsJi1+bDNVRhs+DKVA=;
+        b=h3pmmoknuqFY6LkSoG2b9m1G2fI4oTQfwpfOF95O/vXYQjSnq8iQQ/krogHPVyRWyN
+         xNLeAejsudG4WdJdsnB8sy7HyrM/t543hv+RfpXbAIr5dUUdiR8ADZF6Al+U/48543jE
+         Ui8r4P8Bj0m7P0NvCpQn5HtRMSbkwEainVtT387LOU6xThDpgBHjjjP9Ztk559I9Tik5
+         hRYYj2D/Xdtxk6/zQ8MJ27CZq0rfL6e1Pb642osulf1H7uN7ZgaznUexQlkH1GBNw27g
+         luSZS/wL1qgHkINXetuFpv5NPWJw7i1yu1JM0raKod437FGd0duOog7rzTHGzFBQvnCY
+         P1kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m/MI+VcYhdwx96fyONVt/5n6r1oLpaMorbRp8iU9Y1A=;
-        b=g/PDHu6+I5MoOOg76QGjMQksSCS4uipL9YDGmbnzZUMWvxl9nOIBJL96aLyXFLusNK
-         SzpaZmEMYcXMqFXfkgZ0WEXSN+uqk9jOiB3/Za7plpegYAEkhDYI1fO14PFyC6UZFIUp
-         RtPPMzY4CrEZ5DcWwXLzBERL9UXYCFrwMSAPcePtB4kskMr69TCw0e2mNzk6G8wK2CBm
-         mPWCatQmrdzQYsHKFsCPmtU76wwMNld6xK3e4PENEOswgjbq7FCKnx8hUvC1G8C4EdaT
-         DqXk6EyiTpvmhR3GdIIGnDH5tK6CcQWZEYJUXUBX0x971Ih6YCthrL7e5o22m6v7bv7H
-         uXKw==
-X-Gm-Message-State: AFqh2koSPpA1HttiWXiYRhCGunqwxmdCE4qi/IeYheDpT7aQ2a3vkF5h
-        LvTjPhSiV2lzY3oR0J14i6e0qpsbP28=
-X-Google-Smtp-Source: AMrXdXsTu1G6XKc4SEt3rUe0C4Zh2bIgrN8+qw3b/6w8jJ/5IQ/qnKEogMDIEL4Tfd9WUj3LjOcDBQ==
-X-Received: by 2002:ac8:7a93:0:b0:3b1:c538:7026 with SMTP id x19-20020ac87a93000000b003b1c5387026mr18699715qtr.42.1674195840824;
-        Thu, 19 Jan 2023 22:24:00 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id q30-20020a37f71e000000b006ec62032d3dsm13983436qkj.30.2023.01.19.22.23.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 22:24:00 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C783D27C0054;
-        Fri, 20 Jan 2023 01:23:59 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 20 Jan 2023 01:23:59 -0500
-X-ME-Sender: <xms:fzPKYzgftebfWomkY8PRPI9Zq5r06zh08YLK7zyEU7-dcKs5bvn40Q>
-    <xme:fzPKYwC3wJQ6O7ZiI3h7QEq_l63dQqI2VfOe2sM_1ntfpEnHNlWsBBmI5lpR6v565
-    Zfm1xTtxv_HR6wMpA>
-X-ME-Received: <xmr:fzPKYzFD2CXfb05-NoKx_hkE1XEoG1FE2PrFnmt_o4f-GITmoZfkVlKZPy32CSJ0On3dCuJk3nn4FTZ1MPYyNMd61wBgj0mgbKA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:fzPKYwQOgh3CgJ9b7Ou8vlN1-wkJmSAGfIzI93afgyQ6pll5ofDkvw>
-    <xmx:fzPKYwxU6wgcLZiapPvqNjGRG5foc0J8n4MLc6mPCIikesb3lan4bA>
-    <xmx:fzPKY24trJ3ht2lxIt39ow0YhTui_y5hLwyP5bK_9x0tJTGWb6IuKw>
-    <xmx:fzPKY3nCCM8Vk9DhpXKuMN67zwB3bc93w52_36OhF8VbGa_4PX8z7w>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 20 Jan 2023 01:23:58 -0500 (EST)
-Date:   Thu, 19 Jan 2023 22:23:56 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] rust: types: introduce `ScopeGuard`
-Message-ID: <Y8ozfNAYhuOPgL/7@Boquns-Mac-mini.local>
-References: <20230119174036.64046-1-wedsonaf@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxQNp79R+XdyUWCcN7g4amNp/JsJi1+bDNVRhs+DKVA=;
+        b=iRrBh4vgDP4XgjXXXzP/Q8RVCo696m3iVJQkhEqS5lre3DmEbw3I33Pp/Q+3zxET0f
+         Rgk4KjoStE//LWkj4nGEpDZ9Ot4+mz5qSGTWLFeOW8Y52NUTxUPPFyvPHDw/WGOH1SCo
+         pKCP+4tuD7eHhxg4uxs/mwFeYQKZt0GWdqSx4McNV9qurNrahVIs5g7Xqkw+4noU5hZk
+         Men96kHJiJPKMDZk1lxR0p4Jgc4aVZ8kFU9SWkM1M3YK0H4QckxuB/ZN1dbeFEpU/SVm
+         JaUN56OiVt2Oho1374Lir72xfMA5H655n/meV2lpJduHfPKPTF14H4DDrp3unqK59Pyp
+         rKjg==
+X-Gm-Message-State: AFqh2kpHpbCvCRm+GLaXlROnrdy3HdWi7PM60neIPWJcK9isSQLJMPeM
+        S7EKkWvyx/+WY44GRbwG/fJ4dw==
+X-Google-Smtp-Source: AMrXdXuDBWLKar3I9BvLZ2J3NTR0GEVbcT550ZY+Iw5aK49ZYMf4i+OxkxUx3eLGCWxD+LNNCzf1sg==
+X-Received: by 2002:a05:6000:1049:b0:2bb:ee8a:4282 with SMTP id c9-20020a056000104900b002bbee8a4282mr11173469wrx.34.1674195902101;
+        Thu, 19 Jan 2023 22:25:02 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z12-20020adfd0cc000000b002bdff778d87sm12335144wrh.34.2023.01.19.22.25.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 22:25:01 -0800 (PST)
+Message-ID: <7d874a5d-5a26-1ae1-58bc-dd819774190d@linaro.org>
+Date:   Fri, 20 Jan 2023 07:24:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119174036.64046-1-wedsonaf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 4/7] arm64: dts: qcom: sc7280: Update VA/RX/TX macro
+ clock nodes
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org
+References: <1674131227-26456-1-git-send-email-quic_srivasam@quicinc.com>
+ <1674131227-26456-5-git-send-email-quic_srivasam@quicinc.com>
+ <17b895c0-3985-a012-9b02-94d5ebb11ff9@linaro.org>
+ <9ae3b1b0-e9d6-6370-667b-88af5d0efa2e@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9ae3b1b0-e9d6-6370-667b-88af5d0efa2e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 02:40:32PM -0300, Wedson Almeida Filho wrote:
-> This allows us to run some code when the guard is dropped (e.g.,
-> implicitly when it goes out of scope). We can also prevent the
-> guard from running by calling its `dismiss()` method.
+On 20/01/2023 05:47, Srinivasa Rao Mandadapu wrote:
 > 
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> ---
->  rust/kernel/types.rs | 127 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 126 insertions(+), 1 deletion(-)
+> On 1/19/2023 7:01 PM, Krzysztof Kozlowski wrote:
+> Thanks for your time Krzysztof!!!
+>> On 19/01/2023 13:27, Srinivasa Rao Mandadapu wrote:
+>>> Update VA, RX and TX macro and lpass_tlmm clock properties and
+>>> enable them.
+>> Everything is an update and this does not explain what exactly you are
+>> updating in the nodes and why.
+>>
+>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+>>> ---
+>>>   .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi  | 59 ++++++++++++++++++++++
+>>>   1 file changed, 59 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+>>> index 81e0f3a..674b01a 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+>>> @@ -8,8 +8,67 @@
+>>>   
+>>>   #include <dt-bindings/sound/qcom,q6afe.h>
+>>>   
+>>> +/delete-node/ &lpass_rx_macro;
+>> Why?
 > 
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index e84e51ec9716..f0ad4472292d 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -2,7 +2,132 @@
->  
->  //! Kernel types.
->  
-> -use core::{cell::UnsafeCell, mem::MaybeUninit};
-> +use alloc::boxed::Box;
-> +use core::{
-> +    cell::UnsafeCell,
-> +    mem::MaybeUninit,
-> +    ops::{Deref, DerefMut},
-> +};
-> +
-> +/// Runs a cleanup function/closure when dropped.
-> +///
-> +/// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
-> +///
-> +/// # Examples
-> +///
-> +/// In the example below, we have multiple exit paths and we want to log regardless of which one is
-> +/// taken:
-> +/// ```
-> +/// # use kernel::ScopeGuard;
-> +/// fn example1(arg: bool) {
-> +///     let _log = ScopeGuard::new(|| pr_info!("example1 completed\n"));
-> +///
-> +///     if arg {
-> +///         return;
-> +///     }
-> +///
-> +///     pr_info!("Do something...\n");
-> +/// }
-> +///
-> +/// # example1(false);
-> +/// # example1(true);
-> +/// ```
-> +///
-> +/// In the example below, we want to log the same message on all early exits but a different one on
-> +/// the main exit path:
-> +/// ```
-> +/// # use kernel::ScopeGuard;
-> +/// fn example2(arg: bool) {
-> +///     let log = ScopeGuard::new(|| pr_info!("example2 returned early\n"));
-> +///
-> +///     if arg {
-> +///         return;
-> +///     }
-> +///
-> +///     // (Other early returns...)
-> +///
-> +///     log.dismiss();
-> +///     pr_info!("example2 no early return\n");
-> +/// }
-> +///
-> +/// # example2(false);
-> +/// # example2(true);
-> +/// ```
-> +///
-> +/// In the example below, we need a mutable object (the vector) to be accessible within the log
-> +/// function, so we wrap it in the [`ScopeGuard`]:
-> +/// ```
-> +/// # use kernel::ScopeGuard;
-> +/// fn example3(arg: bool) -> Result {
-> +///     let mut vec =
-> +///         ScopeGuard::new_with_data(Vec::new(), |v| pr_info!("vec had {} elements\n", v.len()));
-> +///
-> +///     vec.try_push(10u8)?;
-> +///     if arg {
-> +///         return Ok(());
-> +///     }
-> +///     vec.try_push(20u8)?;
-> +///     Ok(())
-> +/// }
-> +///
-> +/// # assert_eq!(example3(false), Ok(()));
-> +/// # assert_eq!(example3(true), Ok(()));
-> +/// ```
-> +///
-> +/// # Invariants
-> +///
-> +/// The value stored in the struct is nearly always `Some(_)`, except between
-> +/// [`ScopeGuard::dismiss`] and [`ScopeGuard::drop`]: in this case, it will be `None` as the value
-> +/// will have been returned to the caller. Since  [`ScopeGuard::dismiss`] consumes the guard,
-> +/// callers won't be able to use it anymore.
-> +pub struct ScopeGuard<T, F: FnOnce(T)>(Option<(T, F)>);
-> +
-> +impl<T, F: FnOnce(T)> ScopeGuard<T, F> {
-> +    /// Creates a new guarded object wrapping the given data and with the given cleanup function.
-> +    pub fn new_with_data(data: T, cleanup_func: F) -> Self {
-> +        // INVARIANT: The struct is being initialised with `Some(_)`.
-> +        Self(Some((data, cleanup_func)))
-> +    }
-> +
-> +    /// Prevents the cleanup function from running and returns the guarded data.
-> +    pub fn dismiss(mut self) -> T {
-> +        // INVARIANT: This is the exception case in the invariant; it is not visible to callers
-> +        // because this function consumes `self`.
-> +        self.0.take().unwrap().0
-> +    }
-> +}
-> +
-> +impl ScopeGuard<(), Box<dyn FnOnce(())>> {
-
-How about `fn(())` here as a placeholder? I.e
-
-	impl ScopeGuard<(), fn(())>
-
-
-Regards,
-Boqun
-
-> +    /// Creates a new guarded object with the given cleanup function.
-> +    pub fn new(cleanup: impl FnOnce()) -> ScopeGuard<(), impl FnOnce(())> {
-> +        ScopeGuard::new_with_data((), move |_| cleanup())
-> +    }
-> +}
-> +
-> +impl<T, F: FnOnce(T)> Deref for ScopeGuard<T, F> {
-> +    type Target = T;
-> +
-> +    fn deref(&self) -> &T {
-> +        // The type invariants guarantee that `unwrap` will succeed.
-> +        &self.0.as_ref().unwrap().0
-> +    }
-> +}
-> +
-> +impl<T, F: FnOnce(T)> DerefMut for ScopeGuard<T, F> {
-> +    fn deref_mut(&mut self) -> &mut T {
-> +        // The type invariants guarantee that `unwrap` will succeed.
-> +        &mut self.0.as_mut().unwrap().0
-> +    }
-> +}
-> +
-> +impl<T, F: FnOnce(T)> Drop for ScopeGuard<T, F> {
-> +    fn drop(&mut self) {
-> +        // Run the cleanup function if one is still present.
-> +        if let Some((data, cleanup)) = self.0.take() {
-> +            cleanup(data)
-> +        }
-> +    }
-> +}
->  
->  /// Stores an opaque value.
->  ///
-> -- 
-> 2.34.1
+> Actually in SoC dtsi (sc7280.dtsi) power domains property used.
 > 
+> Which is not required for ADSP based solution. As there is no way to delete
+> 
+> individual property, deleting node and recreating it here.
+> 
+
+You can delete property - delete-property. However why in AudioReach
+device comes without power domains? What does it mean "power domains
+property is not required"? DTS describes the hardware and the rx macro
+is powered, isn't it?
+
+Best regards,
+Krzysztof
+
