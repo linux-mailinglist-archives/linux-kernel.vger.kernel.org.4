@@ -2,166 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4C6675621
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FF7675625
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjATNvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S229754AbjATNz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATNvp (ORCPT
+        with ESMTP id S229459AbjATNz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:51:45 -0500
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4417A8C;
-        Fri, 20 Jan 2023 05:51:44 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id v10so6823769edi.8;
-        Fri, 20 Jan 2023 05:51:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L7z4p3bE6yeWZf9K6gd38mjPF+wHICd+ZDjndpXq4sU=;
-        b=c96DBGE6Quo+ZfjDWh8cXxNdpzAdwX0tGEbrwallV7zrrCb8PEGFnyMcu8kPCPgnPM
-         mei2a2ktFzKU6Kph7uUYQRLtx2JHXmxwm8waPchbkNL8Y/MxeJXt4638eYQLIuYEKM4O
-         7PaHRWwHcmo3YwtDhEoq9+9mpZSgyltQnvk8fPiKgSfEBBVppjhV6DdUNWdTXBExHtRJ
-         wYA6uXvdncoEbrrojBGINBF+RjGzHe76KtkB3UsIR/Bf76wUgOflyI3ATm1imOAwk22M
-         K9EYXaVuocEa/s42Yi7hgT+mPV5n3sSX3s0bKwGoqbg/gNL0YO/Vhtbe7FpU65nAtAr3
-         4mDQ==
-X-Gm-Message-State: AFqh2kpF9wcQEOZL4P5YC2gORnu0ZZtLvhC799o1c/bA6JZOuoCSEJdD
-        xiem4qQE2nmYKSAp27Ysdbf8R0quz+jQoAMd908=
-X-Google-Smtp-Source: AMrXdXtP5nWZeqdv/HtGkPdXqIpj/Oe+I/LVjm8KHGxKctawzLe1A7TwcW/LT4cmqKELB6jq+ny40EGxkgAkcMgX2XU=
-X-Received: by 2002:a05:6402:28a4:b0:485:2bdf:ca28 with SMTP id
- eg36-20020a05640228a400b004852bdfca28mr2195464edb.251.1674222703011; Fri, 20
- Jan 2023 05:51:43 -0800 (PST)
+        Fri, 20 Jan 2023 08:55:27 -0500
+Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6ABF8AF;
+        Fri, 20 Jan 2023 05:55:25 -0800 (PST)
+Received: from [198.134.98.50] (helo=srivatsab3MD6R.vmware.com)
+        by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <srivatsa@csail.mit.edu>)
+        id 1pIrrV-00Fo3V-LQ;
+        Fri, 20 Jan 2023 08:55:21 -0500
+Subject: Re: [PATCH v2] x86/hotplug: Do not put offline vCPUs in mwait idle
+ state
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Igor Mammedov <imammedo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, amakhalov@vmware.com,
+        ganb@vmware.com, ankitja@vmware.com, bordoloih@vmware.com,
+        keerthanak@vmware.com, blamoreaux@vmware.com, namit@vmware.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Lewis Caroll <lewis.carroll@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Juergen Gross <jgross@suse.com>, x86@kernel.org,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20230116060134.80259-1-srivatsa@csail.mit.edu>
+ <20230116155526.05d37ff9@imammedo.users.ipa.redhat.com> <87bkmui5z4.ffs@tglx>
+From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+Message-ID: <ecb9a22e-fd6e-67f0-d916-ad16033fc13c@csail.mit.edu>
+Date:   Fri, 20 Jan 2023 05:55:11 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20230103032840.12265-1-rdunlap@infradead.org>
-In-Reply-To: <20230103032840.12265-1-rdunlap@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 14:51:31 +0100
-Message-ID: <CAJZ5v0hmwtYDYKP5BsDfynTyw+LvL5qpcXmbiWSZV7MpTTtrcA@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: swap: don't use /** for non-kernel-doc comments
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87bkmui5z4.ffs@tglx>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 4:28 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> kernel-doc complains about multiple occurrences of "/**" being used
-> for something that is not a kernel-doc comment, so change all of these
-> to just use "/*" comment style.
->
-> The warning message for all of these is:
->
-> FILE:LINE: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->
-> kernel/power/swap.c:585: warning: ...
-> Structure used for CRC32.
-> kernel/power/swap.c:600: warning: ...
->  * CRC32 update function that runs in its own thread.
-> kernel/power/swap.c:627: warning: ...
->  * Structure used for LZO data compression.
-> kernel/power/swap.c:644: warning: ...
->  * Compression function that runs in its own thread.
-> kernel/power/swap.c:952: warning: ...
->  *      The following functions allow us to read data using a swap map
-> kernel/power/swap.c:1111: warning: ...
->  * Structure used for LZO data decompression.
-> kernel/power/swap.c:1127: warning: ...
->  * Decompression function that runs in its own thread.
->
-> Also correct one spello/typo.
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  kernel/power/swap.c |   16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff -- a/kernel/power/swap.c b/kernel/power/swap.c
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -581,7 +581,7 @@ static int save_image(struct swap_map_ha
->         return ret;
->  }
->
-> -/**
-> +/*
->   * Structure used for CRC32.
->   */
->  struct crc_data {
-> @@ -596,7 +596,7 @@ struct crc_data {
->         unsigned char *unc[LZO_THREADS];          /* uncompressed data */
->  };
->
-> -/**
-> +/*
->   * CRC32 update function that runs in its own thread.
->   */
->  static int crc32_threadfn(void *data)
-> @@ -623,7 +623,7 @@ static int crc32_threadfn(void *data)
->         }
->         return 0;
->  }
-> -/**
-> +/*
->   * Structure used for LZO data compression.
->   */
->  struct cmp_data {
-> @@ -640,7 +640,7 @@ struct cmp_data {
->         unsigned char wrk[LZO1X_1_MEM_COMPRESS];  /* compression workspace */
->  };
->
-> -/**
-> +/*
->   * Compression function that runs in its own thread.
->   */
->  static int lzo_compress_threadfn(void *data)
-> @@ -948,9 +948,9 @@ out_finish:
->         return error;
->  }
->
-> -/**
-> +/*
->   *     The following functions allow us to read data using a swap map
-> - *     in a file-alike way
-> + *     in a file-like way.
->   */
->
->  static void release_swap_reader(struct swap_map_handle *handle)
-> @@ -1107,7 +1107,7 @@ static int load_image(struct swap_map_ha
->         return ret;
->  }
->
-> -/**
-> +/*
->   * Structure used for LZO data decompression.
->   */
->  struct dec_data {
-> @@ -1123,7 +1123,7 @@ struct dec_data {
->         unsigned char cmp[LZO_CMP_SIZE];          /* compressed buffer */
->  };
->
-> -/**
-> +/*
->   * Decompression function that runs in its own thread.
->   */
->  static int lzo_decompress_threadfn(void *data)
 
-Applied as 6.3 material, thanks!
+Hi Igor and Thomas,
+
+Thank you for your review!
+
+On 1/19/23 1:12 PM, Thomas Gleixner wrote:
+> On Mon, Jan 16 2023 at 15:55, Igor Mammedov wrote:
+>> "Srivatsa S. Bhat" <srivatsa@csail.mit.edu> wrote:
+>>> Fix this by preventing the use of mwait idle state in the vCPU offline
+>>> play_dead() path for any hypervisor, even if mwait support is
+>>> available.
+>>
+>> if mwait is enabled, it's very likely guest to have cpuidle
+>> enabled and using the same mwait as well. So exiting early from
+>>  mwait_play_dead(), might just punt workflow down:
+>>   native_play_dead()
+>>         ...
+>>         mwait_play_dead();
+>>         if (cpuidle_play_dead())   <- possible mwait here                                              
+>>                 hlt_play_dead(); 
+>>
+>> and it will end up in mwait again and only if that fails
+>> it will go HLT route and maybe transition to VMM.
+> 
+> Good point.
+> 
+>> Instead of workaround on guest side,
+>> shouldn't hypervisor force VMEXIT on being uplugged vCPU when it's
+>> actually hot-unplugging vCPU? (ex: QEMU kicks vCPU out from guest
+>> context when it is removing vCPU, among other things)
+> 
+> For a pure guest side CPU unplug operation:
+> 
+>     guest$ echo 0 >/sys/devices/system/cpu/cpu$N/online
+> 
+> the hypervisor is not involved at all. The vCPU is not removed in that
+> case.
+> 
+
+Agreed, and this is indeed the scenario I was targeting with this patch,
+as opposed to vCPU removal from the host side. I'll add this clarification
+to the commit message.
+
+> So to ensure that this ends up in HLT something like the below is
+> required.
+> 
+> Note, the removal of the comment after mwait_play_dead() is intentional
+> because the comment is completely bogus. Not having MWAIT is not a
+> failure. But that wants to be a seperate patch.
+> 
+
+Sounds good, will do and post a new version.
+
+Thank you!
+
+Regards,
+Srivatsa
+VMware Photon OS
+
+
+> Thanks,
+> 
+>         tglx
+> ---        
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 55cad72715d9..3f1f20f71ec5 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -1833,7 +1833,10 @@ void native_play_dead(void)
+>  	play_dead_common();
+>  	tboot_shutdown(TB_SHUTDOWN_WFS);
+>  
+> -	mwait_play_dead();	/* Only returns on failure */
+> +	if (this_cpu_has(X86_FEATURE_HYPERVISOR))
+> +		hlt_play_dead();
+> +
+> +	mwait_play_dead();
+>  	if (cpuidle_play_dead())
+>  		hlt_play_dead();
+>  }
+> 
+> 
+>   
+> 
