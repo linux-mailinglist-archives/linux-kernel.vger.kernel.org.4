@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D7674D5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F171674D63
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjATG1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S230030AbjATGen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjATG1s (ORCPT
+        with ESMTP id S229437AbjATGem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:27:48 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A7ECA3A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:27:45 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso587893wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:27:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G+Tk9C+q5ul7HvkddDemsyL3qMNqs61Qh9C/G8R7Spg=;
-        b=kXM01cTPdkqoNmA1Ih8ur44KRT2KTmKp2876rTMbOzTyhgpnt6yrrLkq3Uk1tuOcjq
-         yUjf4BLGRx4cmOKa0YBXtA8/EFBNxLWBpwgOspGYiSsCR3LoeLa6XLHE1nL3wBDZ3vXY
-         b0t5Yl27SwyGUxbyiTQl4KMG8lDoUqH4rM4fCeg4Ltrfc7KDyAA3VHTIoTg8lYsDDK4F
-         QhJolxqMqsJ8d/vpvglrDXUyWa5uPGCd7aObG29XzrUYyWmNckziagGteqbjxSTuzILk
-         2HyQmFjeZjz0KfFq9E3jZKT9mj7o9w4AS+CQhzMyfRh+/NjIX3eEbwsmH4Bcv6uCKRSR
-         Tilg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+Tk9C+q5ul7HvkddDemsyL3qMNqs61Qh9C/G8R7Spg=;
-        b=4fateoSwdNhsd+LHwokIsxUPtcZM2/BVj3RIYPO/QvUyNK+kIg0J/aWz58qQkNrFZQ
-         WYLyLYktkk7Od3BH7nLv5dRL+Idm6BIsFSugENru8dGPdQtzt+I3GtJEcU6q/6Jwjkch
-         lX+FL8RQiH+gmT52xxTKyyu1iRU0JKlGUN44gBKsBYNG5ZMsRDznJNqtprkIb3tn9zBw
-         4fjU7riZmGjMOI6T3tnjxhAYJeGvoQEF7abgr65I0taZP4IumDxPCx9AT96Crs2qZbFc
-         pKD93r3g9zj6byfJLqyhMGi5xrwnHT+PpTTyS8dSOU80RLkd+xNYLDK+PXfASuR/TbYL
-         CZuA==
-X-Gm-Message-State: AFqh2krB+4ldSkQjmkHx7+3+umwycAzUBvHeKXzug1LQIYvui3Md9bT6
-        +GdnSOHZrQqxCWENcfY0lkFpBg==
-X-Google-Smtp-Source: AMrXdXtsDceSjwYxpV4w5uyzI6qYJM5e2w8ikYCnGdd5smpRRAv9JHkND9z6YVaWaRyQ9HmwbDwZzg==
-X-Received: by 2002:a05:600c:b8a:b0:3d9:f806:2f89 with SMTP id fl10-20020a05600c0b8a00b003d9f8062f89mr12750002wmb.41.1674196063851;
-        Thu, 19 Jan 2023 22:27:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k16-20020a05600c0b5000b003db0a08694bsm1262291wmr.8.2023.01.19.22.27.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 22:27:43 -0800 (PST)
-Message-ID: <9adec806-5529-f98a-949a-630edf3e1d0a@linaro.org>
-Date:   Fri, 20 Jan 2023 07:27:41 +0100
+        Fri, 20 Jan 2023 01:34:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E8A654C3;
+        Thu, 19 Jan 2023 22:34:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04910B81B1C;
+        Fri, 20 Jan 2023 06:34:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50181C433EF;
+        Fri, 20 Jan 2023 06:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674196478;
+        bh=BTZ5ynW9dFHI8pgU+nM0G7IYtTLPvBGRXUKA8tahUxE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P08vpsyuerHT57RhU3qAy42QsR7AGWBzh05St7h44YqpzP2+pEfgfTpZIEy8wiN3w
+         hhuGBPJCzask6xjzaG9sAfn86lJZQXItSnXUHSxgVK3Q/HZuTrlMBC+gqyj0LshIYs
+         1A3wN0RZncbFREnLe/Zn4LuEq+cS6obwqLIQCK2kAFigK8IekqnbClQaN/ZlDPn5S1
+         9xZaxqV9ss/yz5uVlt63mMu56+ZfhvI+ZPJwzJw/kGo51I4/tchyq2RejLVsX9ItDH
+         eEmK61VFjcCT5VuxnGtCNlfWC676WfVD68FY2gKLaw30DD0IKfqSN272FBFfbLtynn
+         OHzNi+bfu3I5Q==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH] MIPS: remove CONFIG_MIPS_LD_CAN_LINK_VDSO
+Date:   Fri, 20 Jan 2023 15:33:51 +0900
+Message-Id: <20230120063351.433502-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 2/2] dt-bindings: opp: constrain required-opps
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
- <20230119130028.106817-2-krzysztof.kozlowski@linaro.org>
- <20230120043834.txkg4tockxcjqs2g@vireshk-i7>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120043834.txkg4tockxcjqs2g@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 05:38, Viresh Kumar wrote:
-> On 19-01-23, 14:00, Krzysztof Kozlowski wrote:
->> Be specific how many required-opps are allowed.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> This change is independent, although logically is connected with my
->> dtschema pull:
->> https://github.com/devicetree-org/dt-schema/pull/95
->> ---
->>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml     | 1 +
->>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 3 ++-
->>  2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->> index 47e6f36b7637..9b141a409191 100644
->> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->> @@ -202,6 +202,7 @@ patternProperties:
->>            for the functioning of the current device at the current OPP (where
->>            this property is present).
->>          $ref: /schemas/types.yaml#/definitions/phandle-array
->> +        maxItems: 1
-> 
-> I may not under this property very well. What exactly does this line
-> say ? Asking as required-properties can have an array of phandles as
-> well.
-> 
+Given commit e4412739472b ("Documentation: raise minimum supported
+version of binutils to 2.25"), CONFIG_MIPS_LD_CAN_LINK_VDSO is always
+'y'.
 
-It says we can have maximum one item in "required-opps" in "opp" node
-and you are right that we could have here more. I'll fix it.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Best regards,
-Krzysztof
+ arch/mips/vdso/Kconfig  | 14 +-------------
+ arch/mips/vdso/Makefile |  3 ---
+ 2 files changed, 1 insertion(+), 16 deletions(-)
+
+diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
+index a665f6108cb5..70140248da72 100644
+--- a/arch/mips/vdso/Kconfig
++++ b/arch/mips/vdso/Kconfig
+@@ -1,18 +1,6 @@
+-# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
+-# the base address of VDSO, the linker will emit a R_MIPS_PC32
+-# relocation in binutils > 2.25 but it will fail with older versions
+-# because that relocation is not supported for that symbol. As a result
+-# of which we are forced to disable the VDSO symbols when building
+-# with < 2.25 binutils on pre-R6 kernels. For more references on why we
+-# can't use other methods to get the base address of VDSO please refer to
+-# the comments on that file.
+-#
+ # GCC (at least up to version 9.2) appears to emit function calls that make use
+ # of the GOT when targeting microMIPS, which we can't use in the VDSO due to
+ # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
+ 
+-config MIPS_LD_CAN_LINK_VDSO
+-	def_bool LD_VERSION >= 22500 || LD_IS_LLD
+-
+ config MIPS_DISABLE_VDSO
+-	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
++	def_bool CPU_MICROMIPS
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index 1f7d5c6c10b0..18af9474ed0e 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -52,9 +52,6 @@ endif
+ CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
+ 
+ ifdef CONFIG_MIPS_DISABLE_VDSO
+-  ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
+-    $(warning MIPS VDSO requires binutils >= 2.25)
+-  endif
+   obj-vdso-y := $(filter-out vgettimeofday.o, $(obj-vdso-y))
+ endif
+ 
+-- 
+2.34.1
 
