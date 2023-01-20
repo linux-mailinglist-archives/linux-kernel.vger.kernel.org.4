@@ -2,212 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02327675ABF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4842675AD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjATRFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S230396AbjATRKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATRFE (ORCPT
+        with ESMTP id S230021AbjATRKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:05:04 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E94D7495C;
-        Fri, 20 Jan 2023 09:05:03 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 5D3D33200A46;
-        Fri, 20 Jan 2023 12:05:01 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 20 Jan 2023 12:05:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674234300; x=
-        1674320700; bh=YXir1cBKVSIl8ncpYdIhv313q6EHddedfJlIGmxdQ48=; b=j
-        0K/SidyWGRubZXkXPnrsLz5CVySWPQULowlDXUz6HY1MaFN/D4LsuOcGTMy6oAOy
-        9pUHEBw4fLHSEJP3rwO4DFW80gEVGwvGsFf4R1Oo+Ny8/D2ySBhbXJK89Fu89kPg
-        2oJZKpmjpghLVS3RQP4p0IZqG5FGtcRXtJdFc5AvqIJIOZELmbDiQp8zohlOf3wH
-        BQpy2ZcIg/NRxqJiaEjDsck0mwp6xbq4mGb7YeGnvMcDTI8+byRSDyh0aFQfkrC5
-        MFwTmadSGVVhJYOpxLEUxwpXDi0gVBJaZzusUpGn6r2flXD9fcaZrdFaBWuwMzPV
-        PAStBxMywbMPUrSi8F2kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674234300; x=
-        1674320700; bh=YXir1cBKVSIl8ncpYdIhv313q6EHddedfJlIGmxdQ48=; b=C
-        MknTjwegB1X/8av4QkyxN7bM1FGuYJSuE/HQruTFttXJzE1w4SBCy3HDpkYolOGs
-        iE4FZjdZGMinnYysNs+5GRdq0b79kZ7k95UavTuRRVbknHLqyXjEE+97ZnxN4+Nm
-        Kzt62o7tq+a65P9Non0UZfyHxDGs94Ye+Y+l4QK+Ard1sd1Wrp4T/QF+v8Ke2jsZ
-        MuAZEL4o1beL80y3H8zaj5UbjX5Eo/fb89aYQH57tgOccVzrUno0y5Dbf17x3cyW
-        /Tsis+X6GJsl35eXxyc8nwUzbgG11zPmYkVrMCptR83Sy8d3fBNZWMiAVJ2hVsYJ
-        Sxz3eZWy/qup6wBeV1ugg==
-X-ME-Sender: <xms:usnKY9DDWOO1TbiUwWKN4wMlTkIgSymB87bFgcCOJx-25CwJzyvdUA>
-    <xme:usnKY7hbbrgWzWEtEanTgoBG1iRKRFjHfYoubEqGdQPmCIRGC8UjGT458pXS0yh7y
-    -ZIsH2HmHtJXuYbmoo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:usnKY4m1ZMIO0sagwSwcUAnazWKJB8-UJkAL4nxKYLIun1aaYF0Pyw>
-    <xmx:usnKY3zNKa0SBYpjno7jpxY2VsRH-Q5qqvFhn5p1vjjSw9KoYJ6fpA>
-    <xmx:usnKYySq_XvVHO2CFShTw8eXQd0-jbHe_iwRcO8MmLfdV0M9twZDUw>
-    <xmx:vMnKY7RFLwGz9Au1jewjf4t8UD_4RhNXA7Haog3YJU4lFiwLen8sRQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AC226B60086; Fri, 20 Jan 2023 12:04:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <ea4cb121-97e9-4365-861a-b3635fd34721@app.fastmail.com>
-In-Reply-To: <20230113054807.GA23179@lst.de>
-References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com>
- <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com>
- <9017adf0-acd4-4c43-8aea-3579b214b477@app.fastmail.com>
- <CA+V-a8u6jvR=EDeE3mAbDr6-06NoBJ7mwmi_Y9qVyHT+aC-9rg@mail.gmail.com>
- <45d6eb0c-cbe3-4a83-aa12-3483638473ae@app.fastmail.com>
- <20230110070144.GG10289@lst.de>
- <02988e70-b099-46fd-b260-2d537c50543a@app.fastmail.com>
- <20230113054807.GA23179@lst.de>
-Date:   Fri, 20 Jan 2023 18:04:37 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christoph Hellwig" <hch@lst.de>
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        guoren <guoren@kernel.org>,
-        "Andrew Jones" <ajones@ventanamicro.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Philipp Tomsich" <philipp.tomsich@vrull.eu>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Atish Patra" <atishp@rivosinc.com>,
-        "Anup Patel" <apatel@ventanamicro.com>,
-        "Tsukasa OI" <research_trasio@irq.a4lg.com>,
-        "Jisheng Zhang" <jszhang@kernel.org>,
-        "Mayuresh Chitale" <mchitale@ventanamicro.com>,
-        "Will Deacon" <will@kernel.org>
-Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using function
- pointers for cache management
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Fri, 20 Jan 2023 12:10:04 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853C35E51D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:10:01 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KGDxll015101;
+        Fri, 20 Jan 2023 17:08:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=hIAjDCJIkyV7Xvx6jxUm7df3QS3DzaAMMvkrTMRP9E0=;
+ b=rHkFr5mWohPtiZwdWxgKLUvCds1A8XK6sQfpniP1GvrQyRbe8EfvPW8JKXCe2sPpiNJS
+ HqXsHT8vwtnOCN+awpYHEDivkgDP8FzcQsLX/G2e14iIw0wzriyKClEcztya9ewzT6I3
+ hmSt3MW4AGy7YzoShxFNW87Tx/jweaSACodrQaEfhYbfZqeLjnmCko9Xg3WXDn2si4FY
+ HUEBqnT0OxCacQffA8i4vvkDb3wt9Js3zMiScir+z5Bcd23VJ5eRUC4MxDHROg68vPsb
+ M/ilNB6KGUVL3HrDg25f1I7Ji9piAINJNJIqsYZBRW5+7a7BkR3bgUJiORbVmBwlWFhU QA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3mxtd5kd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 Jan 2023 17:08:44 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30KGZ4gA027915;
+        Fri, 20 Jan 2023 17:08:38 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n6qudar7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 Jan 2023 17:08:37 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g+qTdvTnTQeSwo1SQKBuBwiRKXH2CiKx+K7celNHud21CcngcX2oOTk9BMbPvRppmGqqXT42B5eQAMqoE70stvGYLlseYF5BvZgo5IaAb6gXF3RkaJPfWyRKPhhlgHaeS6ywoqHF9d4gFfQ7887WRkYgQ6yxfDoWMAAUwxBO88f6AqV5J+tm8N1ZVK1B9LW2crNBpYp0r+CspO4xdChPAhgBtiQSCf3RpsWPvDnGDrDqUbhiYTIjMyAzm25MF1hSv01kGvu9IOUFa8BPZm/PHeaVfSJ46SypST66l/+gGEUKM1qVpOxay3BCq5GKMgpvJUfjabAbkasDASsjcXL/OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hIAjDCJIkyV7Xvx6jxUm7df3QS3DzaAMMvkrTMRP9E0=;
+ b=VcBFtF7dOHA/MNSZ7RIeYJHUHyf5lZgsNdFpXKNnXX3x6b4JAsGzxSzSL2ZIQxT1DNFF/7Iy8Jr7rKEpK8hlvh6j8g5JWp3fWgSM1c9tnzAK5qbth0WZTAL2Na43JLHe6WDbZZ4xw6g7N0wtBHbvupQjBvRtDlymje1yF9/vtxRTvYMnYv4Yxf0TM/YDeWGK5zpkXZuK/fEFoPaSh77xVvpPNh6q+6/Zl+MYmx73HidEukJhUfpLkG3Rgqbok/lYMlHJ5XxckPOofF2xlZS3I5IOm7RJDEVPcrtSJMUosblM6ZPNlHkm9yLd5LHpNGaASBFRFh7w13OMFgasfncoTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hIAjDCJIkyV7Xvx6jxUm7df3QS3DzaAMMvkrTMRP9E0=;
+ b=NsvoNw61uNv9zG8cUNKUm6LZnxq33GDIeDzPg33Mlyi14VT7r39+Xgb/5HGQAgA2izFwfrDWnpU8d1M5Ao5jqIcKl/daL0ez67i2uc8RGHimOOABqYpVLBFADK7KyMBcMyq06LfOjkIxaGmzpU5CPw3n2cLkemspKA7Ek3Xc/tk=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by MN0PR10MB6005.namprd10.prod.outlook.com (2603:10b6:208:3cb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.9; Fri, 20 Jan
+ 2023 17:08:34 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::7306:828b:8091:9674]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::7306:828b:8091:9674%5]) with mapi id 15.20.6043.005; Fri, 20 Jan 2023
+ 17:08:34 +0000
+Date:   Fri, 20 Jan 2023 12:08:15 -0500
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <20230120170815.yuylbs27r6xcjpq5@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-40-surenb@google.com>
+ <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
+ <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+ <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
+ <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+ <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
+ <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: SCYP215CA0003.LAMP215.PROD.OUTLOOK.COM
+ (2603:10d6:300:31::18) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|MN0PR10MB6005:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c5c1bdf-8826-4e51-a397-08dafb08f68d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vf/5NgiBLcpRS9D2pd0KpESYJXFapWWfU0j1AAMoFdrWd2zX0E2IV+ODjPb5bVQ7/Wr/1tersvN0botO4FHzMhADDnO4gupE7JyoXf6acEgPcqALqwKNIuQ5aODpzVFZxN5a0/hD+pvrgDwlkwPPsPYLO+Y1rkkfOo4zXQZt+YMXumw23L0SETmyof2Zpr+aoQ4aidw9GwiaKrBdkqdHiYW/OKo0gC/8PlFpoi1Svym/z6YYkxh6ZDQAU8X4BqmpHsjLtKdZdL+Gocz0ld49yw/Afb/TMsxKwuwSEV0ssoqBrCh43nkIqS37M6lobCSdPL7SkD/aRoM2sL+QG3NP7yfk4QzPTEjss0IEQubUKqdr/wH8yGOMWmoWnB8TUHP4n8vkgU2Jf4odOgPo7+N5316/72WrYgGLLmW/dBISfTj+EbDTpi9siiprvZaCYGq6PzjManws142Zs7YZJ1oLtBqTFingE+LsVG2Hi2GJxk/nzfR8lCq5NsDFGHGq9tqlmt1BeT3Qvq8YSRA4+g8tptGltuX2MiGVt+Mzmyv7dFvdDU20cLL/mbBjNLOPSyFR3lVJvKl1/+OJochb7sEm1NP2cuiecxS94c5MhM2arfRKN3iCLmPjvF7XhU2MEQyAUFXK4qBDDZipu4MXagdqiw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199015)(6916009)(41300700001)(8936002)(83380400001)(66556008)(66946007)(66476007)(1076003)(316002)(8676002)(4326008)(54906003)(38100700002)(33716001)(86362001)(53546011)(7416002)(5660300002)(2906002)(7406005)(9686003)(26005)(186003)(6666004)(478600001)(6512007)(6486002)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kaXRpA8ciJSLTcnT8FlPEbxU5t3FKre0MruHvV+S+v/t8xe/WDKfXrSg3YtY?=
+ =?us-ascii?Q?D1tRgsrR6oY25x8gLSlaNRYXErnkyyk0RkqoXcZpsxwrStHgw9+qsrap3QSf?=
+ =?us-ascii?Q?CJBSERjy1XStkcvnhAs3qU/DLAeFudNFWqzpG6DoICQu73XFCFijVArZOwnE?=
+ =?us-ascii?Q?eSTjnBdPG6jUOzeN8EJiJO4Dq1aVD2M+lMyr9Qc8YGfaddXoZRStUrWRZKlZ?=
+ =?us-ascii?Q?RmmVzmmqOde7hnsdMynlLfLpfugeE+UNSmxseqFFvZ9qRyts5Oq1rj1DBNA9?=
+ =?us-ascii?Q?itWMCupnH1p8c/Z6Qf6JCDgsXpN8Pl9AINI+yAhVcm+ewKOZv6iN4Kih1B/m?=
+ =?us-ascii?Q?A3TpQr2h762mmHtfc/y8yGe+IvnTus2AJ5Ovq1UPJg33qKUYh70R4YGezZc0?=
+ =?us-ascii?Q?jy7LeBInG3NV4pwnvHPaHPEYYcDK1kjkaKqfmkaOYQwJUrqAZlI7JFYL7tui?=
+ =?us-ascii?Q?E6i69QcrnvyOsaOB7+CHkcWVWlaxO9Zs5ohi1dKdf9oi1bZP+3x8HuTVWh4j?=
+ =?us-ascii?Q?AfYt2+qlzIORJFb4t/atPDG30nWiB8pZnRvPuMyKlRMb74uAkvCK6xRDtZW/?=
+ =?us-ascii?Q?D5SjWXjeNCFIKHseKdCJYfovzzqOyvMHAolTiczCrxhEIYYeOUjZtvtBKfHB?=
+ =?us-ascii?Q?MH0X+NcunhiTB0i3x/4RUWjLpewv9sI62oFfw5xxrMzNux0HLeLNJ1xPtb/6?=
+ =?us-ascii?Q?qarNUR4vjdMFssPJegz3gpht92/xAsNSom49VVkbEcAziMeE/Zn10qKnIkxW?=
+ =?us-ascii?Q?wGSCA+95zaTA/MdUtgpngwtrx6s/AJRMKX2b5zyeog9EUz1sMzBbf6Y40lmL?=
+ =?us-ascii?Q?AAsqfqso+Cf7zulD8DJgmIQYu0lo+DgEPhMdoAGZ1xG8fCYt8BujAoqIc3Mg?=
+ =?us-ascii?Q?19wmbWSm3ZkDsqADc4fP31Kup6xylCEeR9HkFIG52QvYf58l6u4Ah6SAbYlA?=
+ =?us-ascii?Q?Knnda56FKgXKxFiB9+a3qgFNWVjMUD6DAoCoa/6/3o2HkF88RI6Lu+2BRV0i?=
+ =?us-ascii?Q?u4NVkStMoXLblTSGWimyY+z32eILQMnhQXxWP6O0LAh7iNs5JhCPsjkqFbS+?=
+ =?us-ascii?Q?ulC1LHfUpMwDIX3Kf2RW+taBQ+h+lQyam2nN+gsfa3qag1T98v8+Q1IgeeHI?=
+ =?us-ascii?Q?p7XElYAou3UOAi/+2Qz0oPBsGNP3wkrpOv1p2tnwZfcoaxUVFPta6d/keB2Q?=
+ =?us-ascii?Q?OSDlfiKiMGw7EoWl839tzPfJB0xgnXtXJ1GPai2o1LKLUF3Ovpwa6dbcEnk1?=
+ =?us-ascii?Q?jeU3CKhRfH5lCsZdCTsZQlOw30TzLe9vKtqfxfSS95ckCgoMDr1I3Alu72j5?=
+ =?us-ascii?Q?4C7FBJqznEQSjkr3m8JOy02RrKIGME6iCWjib+SmdMTcX/UIIKNxYW8q2CIN?=
+ =?us-ascii?Q?aucaAJZIoisqCtJIVnPxxXW2PoeMCJPiiC25Y2GmcKX6/6zRxINuwOfSH6yK?=
+ =?us-ascii?Q?KPfJ/gsFEPB4DwZ/sA9QdPs7YOu8EQDmU2OwsJp5vEQUD0SJ2UiLcuF+SslF?=
+ =?us-ascii?Q?jEGmtP0hLMGtyrUTIB3QkAyOG/jyvoT2m8l9Fm51BlBhl09T6luO3Ph65KqE?=
+ =?us-ascii?Q?57JpWZ3xxp9Bcj5txbG/l6CAC8WgEgzeu9B0KNSqTHqP/fbSOReqdlR/ZPUW?=
+ =?us-ascii?Q?vA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?ynL1LT2h30mNXy3xHndWdX/TvQkQsT2SpZzg5u7nUUggVeWeZxTkCRS1uGlR?=
+ =?us-ascii?Q?nx2r5HaFdJb4dcajrKjXSlSqeXRFqaPkkGJ2MX9L5aw+UsgquGGVyf6ctb51?=
+ =?us-ascii?Q?HrDiNp7SaomN9I2VCPmZ6dT3L0TgHdyuqwxEf7SviuxXzU4pwBSIiMc4Z9tE?=
+ =?us-ascii?Q?s8SxgcQhrHrtnrcGbhvx6eMJWW+r1dc3C+7pr8yX2x9Xin1fnPybWxms9dx8?=
+ =?us-ascii?Q?Wt18KAUxPM5Gi50alB6/qtJRt/X+znRJffoqFYIva5WiBaRs9u9sAJcoOATz?=
+ =?us-ascii?Q?IZztzrBtM8koNbYq2LqEinALJQPQIMFh3Fd84Q224SFJTQ9XnQgrIbqoJ/77?=
+ =?us-ascii?Q?7XmYk558kiM3SsUhZcjfrYR+iFxqq+EHaHyUDxxfKAnZBZG4pCXnS+k67q6E?=
+ =?us-ascii?Q?SBUohaoW/Dwhc/Myl+L58eUFHAKx/JN0YRpURnDdQlplvzwjSkhsm0G/3cnB?=
+ =?us-ascii?Q?4vw7huwZ5CQ5LjF0eSvuOb/EprH+NpuBOu1HxtjoTrbWAgx3EIyOIX+dFA0o?=
+ =?us-ascii?Q?q0NhP9uHLvZBImDUZGKT/iTIC1R5177yVtVvG0vyMDPRnPJzFnsY2NHsX1gU?=
+ =?us-ascii?Q?r6m78cRxbyp2BuF9BPWN0ubg2hzoCzEHEM97ZNXU/jDj8gJH9CBvoDz/pNLY?=
+ =?us-ascii?Q?KpX3PhdJLEEdLk1aEBnhyoZ2W9I571LzfSNf1mKpkEq0yVS/YmoIDxj/Dogs?=
+ =?us-ascii?Q?wTemqlgjgl5SYXXbw3pYyxAvQYmWK64I8wt72D59Aip29Ut3zH59j4zaZwZz?=
+ =?us-ascii?Q?0PAe3WAK2n7LSJdpELRr1TBRTDMST4mmYa0rdkrWaxfjGRfmpHyGudavfaJr?=
+ =?us-ascii?Q?1y7Nf8nnPVriy2qG6WUZSBLbIAepZ+tu4MjhS7z7wXCf4v8+F/tLDNBRyr3H?=
+ =?us-ascii?Q?BL9AtBj5zzqdOxPG4l1bA/mk+P5/e3QeuW19BbrUmNJb1bvhnUqorbDVJg5Q?=
+ =?us-ascii?Q?SuZ9p6svaotTWpR8UH8ozVbbq2T9FDnkQM4xw9sV9JbEPkkHX6kvagr+ZWdY?=
+ =?us-ascii?Q?Xa7/RTFlygNxS3D7FsF5ivaA4SHB8Q8WukV4pGxuYUdH1+4QEbCJR3AQ62Q7?=
+ =?us-ascii?Q?ZOw0egh4Mpn7EOGrWfXcmVm/BGj1ktxWVq0dmU+VjMX0I1Xqh5ltPOf2V9ZO?=
+ =?us-ascii?Q?JzAsIKqTkFw0N0q6bzMNcGj9UA+xVdZrNdlTPi4AgrqgpNT1ESB8UJUxgCTa?=
+ =?us-ascii?Q?mMY38RSb4x0Le0zLzbcCcU0juGjET0HFmA5qYEXO+6GHLINnSCpwFgtatqq4?=
+ =?us-ascii?Q?sNpLGLLOm4eclGwj6d3im8zey9QxD4/D9qPwClybjjhnmEA8DJZTqhI+YTXp?=
+ =?us-ascii?Q?AmZWBj6+3QB4onACsfSgiYzQb6IPtSkumS2/E5crCG2L1HJdS1JoHtSJnvR8?=
+ =?us-ascii?Q?a0V+srVQwi3ykhgKTTZU0HUgi1lnOlGgvTg5GyD+nf0mzumK29ILXZ9v7B3I?=
+ =?us-ascii?Q?dDuFThhKYlKjJgU3d+BC4coYOcfERM4TTxoXDpJv86sykJjiIm2W6U+gpDXn?=
+ =?us-ascii?Q?x2mMiFfswaD6iZ0+nmmfeKU0j+6xONQVmib7?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c5c1bdf-8826-4e51-a397-08dafb08f68d
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 17:08:34.3946
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dQZXM//pXjgDcHWrgZYGRzqLZ/+UCybXd/TW/Jcwh8lehOWQCuuLX3uiIuPyI/Ib/9AjaFDq/puVeMX3W734iA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB6005
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_09,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
+ spamscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301200164
+X-Proofpoint-GUID: UG1YrPNHsYVTSLOF9E4iOvTDWHilwB-8
+X-Proofpoint-ORIG-GUID: UG1YrPNHsYVTSLOF9E4iOvTDWHilwB-8
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023, at 06:48, Christoph Hellwig wrote:
-> On Tue, Jan 10, 2023 at 04:03:06PM +0100, Arnd Bergmann wrote:
->> I looked at all the implementations now and put them in a table[1]
->> to see what the differences are. The only bit that I think needs
->> discussion is the dma_sync_single_for_device(DMA_FROM_DEVICE) op
->> that I mentioned above. I see that arm64, csky, powerpc, riscv
->> and parisc all write out at least partical cache lines first to
->> avoid losing dirty data in the part that is not written by the
->> device[2][3], while the other ones don't[4].=20
->
-> I'm tempted to declare [4] buggy until proof of the inverse.
+* Matthew Wilcox <willy@infradead.org> [230120 11:50]:
+> On Fri, Jan 20, 2023 at 08:45:21AM -0800, Suren Baghdasaryan wrote:
+> > On Fri, Jan 20, 2023 at 8:20 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
+> > > > > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > >
+> > > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
+> > > > > > > call_rcu() can take a long time when callback offloading is enabled.
+> > > > > > > Its use in the vm_area_free can cause regressions in the exit path when
+> > > > > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
+> > > > > > > a list and free them in groups using one call_rcu() call per group.
+> > > > > >
+> > > > > > After some more clarification I can understand how call_rcu might not be
+> > > > > > super happy about thousands of callbacks to be invoked and I do agree
+> > > > > > that this is not really optimal.
+> > > > > >
+> > > > > > On the other hand I do not like this solution much either.
+> > > > > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
+> > > > > > much with processes with a huge number of vmas either. It would still be
+> > > > > > in housands of callbacks to be scheduled without a good reason.
+> > > > > >
+> > > > > > Instead, are there any other cases than remove_vma that need this
+> > > > > > batching? We could easily just link all the vmas into linked list and
+> > > > > > use a single call_rcu instead, no? This would both simplify the
+> > > > > > implementation, remove the scaling issue as well and we do not have to
+> > > > > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
+> > > > >
+> > > > > Yes, I agree the solution is not stellar. I wanted something simple
+> > > > > but this is probably too simple. OTOH keeping all dead vm_area_structs
+> > > > > on the list without hooking up a shrinker (additional complexity) does
+> > > > > not sound too appealing either.
+> > > >
+> > > > I suspect you have missed my idea. I do not really want to keep the list
+> > > > around or any shrinker. It is dead simple. Collect all vmas in
+> > > > remove_vma and then call_rcu the whole list at once after the whole list
+> > > > (be it from exit_mmap or remove_mt). See?
+> > >
+> > > Yes, I understood your idea but keeping dead objects until the process
+> > > exits even when the system is low on memory (no shrinkers attached)
+> > > seems too wasteful. If we do this I would advocate for attaching a
+> > > shrinker.
+> > 
+> > Maybe even simpler, since we are hit with this VMA freeing flood
+> > during exit_mmap (when all VMAs are destroyed), we pass a hint to
+> > vm_area_free to batch the destruction and all other cases call
+> > call_rcu()? I don't think there will be other cases of VMA destruction
+> > floods.
+> 
+> ... or have two different call_rcu functions; one for munmap() and
+> one for exit.  It'd be nice to use kmem_cache_free_bulk().
 
-Having looked at this some more, I see that the powerpc
-version is a bit problematic here as well: this one
-flushes the partial cache lines before and after the
-DMA transfer, while only invalidating the full
-cache lines. If a partical cache line gets written
-to by the CPU while the buffer is owned by the device,
-this means that the received data from the device is
-immediately overwritten by the second flush.
+Do we even need a call_rcu on exit?  At the point of freeing the VMAs we
+have set the MMF_OOM_SKIP bit and unmapped the vmas under the read lock.
+Once we have obtained the write lock again, I think it's safe to say we
+can just go ahead and free the VMAs directly.
 
-The arm64 and riscv behavior of doing a flush before
-and an invalidate after the DMA seems a bit more
-appropriate, as that ends up keeping the DMA
-data but discarding anything written by the CPU.
-
-Obviously there is no winning either way if the same
-cache line gets written by both CPU and device, I'm
-just trying to figure out what behavior we actually
-want here.
-
-The best I can think of so far is:
-
-- flush the partial cache lines before the DMA,
-  as powerpc does, and just invalidate the full
-  cache lines
-
-- only invalidate but not clean/flush after the
-  DMA. This is the arm64 behavior
-
-- warn when flushing partial cache lines
-  if dma_debug is enabled.
-
->> I also see that at least arc, arm, mips and riscv all want
->> CPU specific cache management operations to be registered
->> at boot time. While Russell had some concerns about your
->> suggestion to generalize the arm version, we could start
->> by moving the abstracted riscv version into
->> kernel/dma/direct.c and make sure it can be shared with
->> at least mips and arc, provided that we can agree on the
->> DMA_FROM_DEVICE behavior.
->
-> Yes, I'd really like to start out with a common version and then
-> move bits over.  There's also some interesting bits about handling
-> highmem for architectures that needs virtual addresss for flushing
-> that might be worth sharing, too.
->
-> Th=D1=96s should be a new file in kernel/dma/ as it's not only used by
-> dma-direct but also by dma-iommu, and to keep the code nicely
-> separated.
->
-> Can you give it a go?
-
-I started this at the beginning of the week but couldn't
-finish it at all, but still plan to get back to it
-next week.
-
-Aside from the question for how to handle flush vs invalidate
-on DMA_FROM_DEVICE, I'm still trying to figure out how to
-best handle highmem with architecture specific cache management
-operations. The easy approach would be to leave that up
-to the architecture, passing only a physical address to
-the flush function. A nicer interface might be to move the
-loop over highmem pages out into common code, flush
-lowmem pages by virtual addresss, and have a separate
-callback for highmem pages that takes a page pointer,
-like
-
-struct dma_cache_ops {
-        void (*dma_cache_wback_inv)(void *start, unsigned long sz);
-        void (*dma_cache_inv)(void *start, unsigned long sz);
-        void (*dma_cache_wback)(void *start, unsigned long sz);
-#ifdef CONFIG_HIGHMEM
-        void (*dma_cache_wback_inv_high_page)(struct page *, size_t star=
-t, unsigned long sz);
-        void (*dma_cache_inv_high_page)(struct page *, size_t start, uns=
-igned long sz);
-        void (*dma_cache_wback_high_page)(struct page *, size_t start, u=
-nsigned long sz);
-#endif
-};
-
-Let me know if you have a preference here, before I spend
-too much time on something we don't want in the end.
-
-     Arnd
