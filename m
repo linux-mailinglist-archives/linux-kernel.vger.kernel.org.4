@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080C9675D3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D667E675D39
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjATS6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjATS6l (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229659AbjATS6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 20 Jan 2023 13:58:41 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD1E743BD
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:58:39 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id d21-20020a25add5000000b007ff8112e8b8so4781181ybe.17
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:58:39 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229458AbjATS6h (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 20 Jan 2023 13:58:37 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0433743B7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:58:34 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id mp20so16259766ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:58:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=68orcaC6zz4yh42URgC/a9ocEH5eMY9g7tAnmpuRu0U=;
-        b=WNTK3yTY8uIAwslAVYOxaLgjPBSTBNADsLlJcs4wVM2i+mwdBi98fG+N9/9iPIS0yc
-         LJKYipiY96DE871/jJLOP3SwwmvmFPqp84J33MN2EAZ2qeN5YfjPCXEi0gULzYbSNTY6
-         /4ORT31UDpsWZRnmMmw7Wfzmv2BH/cokhri/PMFTqukUo5fIH14Kof+5ijzON08bA9b6
-         fA6z2ycBL+DUd8C+Ik8O5Pk2AOda7/XOQOSs4XUn4LISrg8FbEm3KIU+wyHPvgr69tE2
-         cz1zFUYSB8UJkHgr4t78a9r/DSw3tqQvC5q0My+SN8T+3IfpHpcJ7qiXgIpzlURBul2p
-         p1OA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yBS2NFopPHzfJYrxlHmgujPz1HoeR8ijao605ezME18=;
+        b=tEy5zxWMaQki5bCipulkcyrZGhmVLLcl9dq0NUqIqT7PXVAzUHQvLD2PrEtbFAtm5v
+         o78K3nm+rG3+WPfayuMIsuI7nmMaZCjJ3RBFx+lcZtQSKYk2zR6586d3zL1pOXgI7RkX
+         V8BN+T1Rm0h9T95Om/laAs5XMoWHIx64IvzBBnCF2I+0fpgpZZO+9ZUyNB4dysNX3txC
+         YlZFE8jmBhy22lk5du5xp54/1eilTHUFoVYzRptnk3j/7W7AmiGbU++BTMDxEahtI3mr
+         eedI318ROB5n/fzQHuG3DSyPz3nZpy2aFzmHZQIUZ5AOkyBVT28Gfasbdmv9+IA5YjNU
+         7UpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=68orcaC6zz4yh42URgC/a9ocEH5eMY9g7tAnmpuRu0U=;
-        b=T/iC234L0AVi6rUCcsuc6jjEiz1aHdzjGPsZNMhxp0ZkQVuKkPcf/mH6r7/vYI353g
-         Z+VDYg049nOBPxevb7Aj09MCSnH0PQGWZWWsMH5FuGmkEsM8zhdf+2DfzMj/z+wEfssa
-         PEfHXqkTVe3jwtP3U0Of7eqRgst/dln6bbv3j9n7158R0qb5D3dXF19x9Q32aRu6AzQz
-         aDwiprdtg9ipYZYAgKi5fPkzwPBEJvydDYFUHhsVjkV0ailwAkXDiMOMqgw8tkQpRpwF
-         waG6mCU+8qZtQmB9U5dvS4fAI2t3hhvuJMlq94ufe/kfC3nDVulGYKnsabycryh2DtUf
-         Q2fg==
-X-Gm-Message-State: AFqh2krJO1I3bUlGM7GLaFUiQ1hkjwf8zkfV2AxsXVvv5pWKGFtzQuTj
-        hKm2O5Sx2bzML2mCOXvRdnA2YMe6X9Wu
-X-Google-Smtp-Source: AMrXdXuR0UGEvg0tmZsuCJFjqwMeNjP70VdhJX4rPI/yED1obovEegVXuTIVRHcRLI9m8lPABvuYksRokxPA
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a736:5d8d:4ad8:4e50])
- (user=irogers job=sendgmr) by 2002:a05:690c:887:b0:500:ac2c:80fb with SMTP id
- cd7-20020a05690c088700b00500ac2c80fbmr278306ywb.90.1674241119207; Fri, 20 Jan
- 2023 10:58:39 -0800 (PST)
-Date:   Fri, 20 Jan 2023 10:58:28 -0800
-Message-Id: <20230120185828.43231-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Subject: [PATCH v2] perf buildid: Avoid copy of uninitialized memory
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Stephane Eranian <eranian@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yBS2NFopPHzfJYrxlHmgujPz1HoeR8ijao605ezME18=;
+        b=M6+rnpEKdGFkr0WPk/ttse4unF0pbPY89CI0eFJYxYKUv4HiA7RtwsohNtL4tJyOnw
+         7lihXj7uDS+b6QVlhnr+1YhAvvLoUWS+vV/U00eqZhu9K0A2cG6CpMDQiFd/c5BLlP69
+         86aszSnm+hVlZimbO0xXJ/fwJTwKzEGmry4j05gZx6dJy4KHP49rHFwfo9XxPR7TuoWW
+         NmI+e7NQ7GSMGCghQJjKuMU0eX+lX3UzdRyz4uCq0uJf/TzP/Hs73T5Gd+Eaoxf9jkDi
+         OjpxPp74I0apnOd/IlAr4guY6CP10foAvc1PQq6iylsUHukABRl4ScPlvDnEPUSfa/ed
+         4j/A==
+X-Gm-Message-State: AFqh2koh7AWtnt4pLnlIZ5M0R/ruvD0f0bx9iuc44h09smLCf7yRelbC
+        IbkEg3tmfNPVSOB3RJo1r+LLzg==
+X-Google-Smtp-Source: AMrXdXuyZ0HONVpsPKfKSyqCULU7fXja/Lktvf/niubfVJPS3eXqPcbuMmePQW7ZCblB/WmcojGQrg==
+X-Received: by 2002:a17:907:760e:b0:86e:fccc:bc19 with SMTP id jx14-20020a170907760e00b0086efcccbc19mr16440510ejc.43.1674241113525;
+        Fri, 20 Jan 2023 10:58:33 -0800 (PST)
+Received: from [192.168.1.101] (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
+        by smtp.gmail.com with ESMTPSA id tk22-20020a170907c29600b00870d3fdceb9sm7462526ejc.89.2023.01.20.10.58.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 10:58:33 -0800 (PST)
+Message-ID: <9821623b-fcca-2a3a-1cd6-9e95c480b1a4@linaro.org>
+Date:   Fri, 20 Jan 2023 19:58:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] ARM: dts: qcom: apq8060-dragonboard: align MPP pin node
+ names with DT schema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230120174036.351937-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230120174036.351937-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-build_id__init only copies the buildid data up to size leaving the
-rest of the data array uninitialized. Copying the full array during
-synthesis means the written event contains uninitialized
-memory. Ensure the size is less that the buffer size and only copy the
-bytes that were initialized. This was detected by the Clang/LLVM
-memory sanitizer.
 
-Suggested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
 
-v2. Avoids the potential for copying too much as suggested by Arnaldo.
----
- tools/perf/util/synthetic-events.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 20.01.2023 18:40, Krzysztof Kozlowski wrote:
+> DT schema expects nodes ending with "pins:
+> 
+>   qcom-apq8060-dragonboard.dtb: mpps@50: cm3605-mpps-state: 'oneOf' conditional failed, one must be fixed:
+>     'mpp5' does not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 3ab6a92b1a6d..9ab9308ee80c 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -2219,8 +2219,8 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
- 
- 	len = pos->long_name_len + 1;
- 	len = PERF_ALIGN(len, NAME_ALIGN);
--	memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
--	ev.build_id.size = pos->bid.size;
-+	ev.build_id.size = min(pos->bid.size, sizeof(pos->bid.data));
-+	memcpy(&ev.build_id.build_id, pos->bid.data, ev.build_id.size);
- 	ev.build_id.header.type = PERF_RECORD_HEADER_BUILD_ID;
- 	ev.build_id.header.misc = misc | PERF_RECORD_MISC_BUILD_ID_SIZE;
- 	ev.build_id.pid = machine->pid;
--- 
-2.39.0.246.g2a6d74b583-goog
-
+Konrad
+> 
+> Warning visible after:
+> https://lore.kernel.org/r/20230120165103.1278852-1-robh@kernel.org
+> ---
+>  arch/arm/boot/dts/qcom-apq8060-dragonboard.dts | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
+> index 7a4c59e04af6..8e4b61e4d4b1 100644
+> --- a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
+> +++ b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
+> @@ -435,15 +435,13 @@ &pm8058_led133 {
+>  
+>  &pm8058_mpps {
+>  	dragon_cm3605_mpps: cm3605-mpps-state {
+> -		mpp5 {
+> -			pins = "mpp5";
+> -			function = "analog";
+> -			input-enable;
+> -			bias-high-impedance;
+> -			/* Let's use channel 5 */
+> -			qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
+> -			power-source = <PM8058_GPIO_S3>;
+> -		};
+> +		pins = "mpp5";
+> +		function = "analog";
+> +		input-enable;
+> +		bias-high-impedance;
+> +		/* Let's use channel 5 */
+> +		qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
+> +		power-source = <PM8058_GPIO_S3>;
+>  	};
+>  };
+>  
