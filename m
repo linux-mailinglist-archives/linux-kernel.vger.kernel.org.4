@@ -2,173 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061B6675914
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FCC67590C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjATPua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S231501AbjATPto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjATPu2 (ORCPT
+        with ESMTP id S229550AbjATPtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:50:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA929975A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674229778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aavit6jM1lC6qQPOxTCnu44ZFH15mB1QS8MkjGvi8Yk=;
-        b=FzioGuLfDcqO84fcjy1n7N2RheG21iX4NV3oHFLpPp5IiDMEInlYJNZqnxp7rGe+JQ7UsG
-        WUyBkWrhzKkcjgYpZ/W6133zw8dQstnne5jndqh155yUuXynB5akamZeiPL4YKsWVBOYW3
-        3qNvoswjvaLstV3JuaJ+a3IO4V38NMU=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-619-Yj8CTgtlMP67qm46Ef-6tg-1; Fri, 20 Jan 2023 10:49:37 -0500
-X-MC-Unique: Yj8CTgtlMP67qm46Ef-6tg-1
-Received: by mail-io1-f71.google.com with SMTP id d8-20020a6bcd08000000b00707712b91f9so2951099iog.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:49:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aavit6jM1lC6qQPOxTCnu44ZFH15mB1QS8MkjGvi8Yk=;
-        b=QP4vx5rMZXqdV4DRNUmcKQ9TpM7CG+spP0FFcEh3Ha9NMOaeJVRaUZncPBZ52C9uU6
-         FehHVr3KQ4ssoAyO9CACb5iZHgWxxUWSZlSPAP4tfpJtYjP7tSDCqQlpzdBehyElJaUv
-         qPO7BXRFwrVbyD884YkY34KBj5ofkK2x6+OtagaNIIrHqUj7zifzd2JDqO1HOJUFPQlf
-         6iOVcvsS21Aryj5Sfry6vj4zXf5zcYVucpCPnrfKe4GE0IwTzVkShubmPp2LivCO/8ts
-         LBrf3pkh+SK1galtD3CfaXJkruGpnHheTklBPEDETvrBl8kX8WsbGetoakFdayzXIEV4
-         XDQg==
-X-Gm-Message-State: AFqh2kq7ath6HMF9XLlTQ4DgY4JLqu8h53gzuijbCbrbxB8EaFZKjiql
-        PJB1HEU85OoOggVdLZqPwrdgBJJGp5raPKmC4v1/vzkl7sMY0MeWcnBPTXY0TpTlYWSPo9B7s/v
-        oYYrz+pbK9/NYXfdKEEBet4Ji
-X-Received: by 2002:a05:6e02:cc6:b0:30f:3dfe:c670 with SMTP id c6-20020a056e020cc600b0030f3dfec670mr4626060ilj.25.1674229776952;
-        Fri, 20 Jan 2023 07:49:36 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsF7uAHGgInj7PstAuuh+H1lLdGiBCat5fhmmcQKX6OvgOleEUrY91pvtEjqx5EjFLwygLnnw==
-X-Received: by 2002:a05:6e02:cc6:b0:30f:3dfe:c670 with SMTP id c6-20020a056e020cc600b0030f3dfec670mr4626033ilj.25.1674229776663;
-        Fri, 20 Jan 2023 07:49:36 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id z18-20020a92d192000000b0030c0217dde6sm851618ilz.0.2023.01.20.07.49.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 07:49:36 -0800 (PST)
-Date:   Fri, 20 Jan 2023 08:49:33 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Christopherson, , Sean" <seanjc@google.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kvm/vfio: Fix potential deadlock on vfio group_lock
-Message-ID: <20230120084933.40f59c89.alex.williamson@redhat.com>
-In-Reply-To: <6eff63d8-d825-aecd-12b5-e8dbf55f4372@linux.ibm.com>
-References: <20230120150528.471752-1-yi.l.liu@intel.com>
-        <DS0PR11MB7529B08476DF1764F1B6C007C3C59@DS0PR11MB7529.namprd11.prod.outlook.com>
-        <6eff63d8-d825-aecd-12b5-e8dbf55f4372@linux.ibm.com>
-Organization: Red Hat
+        Fri, 20 Jan 2023 10:49:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5559754
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:49:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BE4FB82866
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:49:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5CDC433D2;
+        Fri, 20 Jan 2023 15:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674229776;
+        bh=6845bVsAtbRue0sz+/lpKrQPW1JJoCygvCbZDqXm1Vw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Q6yO7vujOBbOgdmqT95LnvBsD1BqXE3D+6NPT7tcNTVeFEsa39AK0niTzJUrFgIiB
+         G30lHCsD+WKyI6CSj7olS824xKi5/4qsiT4yv9cjOe75npyHQBTjXlC1IBrqz725uz
+         yYcuQm0fIkt1Qb46CJFuiC6xpusebCHMxGQeuwPPr3pSCXvGHEKdk+F/x24Ff0/i7R
+         bbEbIf1iR8zIRPQgiM3iG+UgOa8n4j+sYdONquePFTmcDztCdXw0MW/W6rGrAuhkC2
+         t9mtHGppWMS8rkg437ialTC9m8QpV6ZrIuemRd6OWQIBTscLcICurR64iWbDBY2TBL
+         9+ZEmqSH1f/GA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E64315C0DFC; Fri, 20 Jan 2023 07:49:35 -0800 (PST)
+Date:   Fri, 20 Jan 2023 07:49:35 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:slownmi.2023.01.19a] BUILD REGRESSION
+ 06901681acde9854a9a9a337cebbf3ab537f4543
+Message-ID: <20230120154935.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <63caa325.8m2/A3WoZ768xRxh%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63caa325.8m2/A3WoZ768xRxh%lkp@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 10:45:40 -0500
-Matthew Rosato <mjrosato@linux.ibm.com> wrote:
-
-> On 1/20/23 10:08 AM, Liu, Yi L wrote:
-> >> From: Liu, Yi L <yi.l.liu@intel.com>
-> >> Sent: Friday, January 20, 2023 11:05 PM
-> >>
-> >> Currently it is possible that the final put of a KVM reference comes from
-> >> vfio during its device close operation.  This occurs while the vfio group
-> >> lock is held; however, if the vfio device is still in the kvm device list,
-> >> then the following call chain could result in a deadlock:
-> >>
-> >> VFIO holds group->group_lock/group_rwsem  
-> >>   -> kvm_put_kvm
-> >>    -> kvm_destroy_vm
-> >>     -> kvm_destroy_devices
-> >>      -> kvm_vfio_destroy
-> >>       -> kvm_vfio_file_set_kvm
-> >>        -> vfio_file_set_kvm
-> >>         -> try to hold group->group_lock/group_rwsem  
-> >>
-> >> The key function is the kvm_destroy_devices() which triggers destroy cb
-> >> of kvm_device_ops. It calls back to vfio and try to hold group_lock. So
-> >> if this path doesn't call back to vfio, this dead lock would be fixed.
-> >> Actually, there is a way for it. KVM provides another point to free the
-> >> kvm-vfio device which is the point when the device file descriptor is
-> >> closed. This can be achieved by providing the release cb instead of the
-> >> destroy cb. Also rename kvm_vfio_destroy() to be kvm_vfio_release().
-> >>
-> >> 	/*
-> >> 	 * Destroy is responsible for freeing dev.
-> >> 	 *
-> >> 	 * Destroy may be called before or after destructors are called
-> >> 	 * on emulated I/O regions, depending on whether a reference is
-> >> 	 * held by a vcpu or other kvm component that gets destroyed
-> >> 	 * after the emulated I/O.
-> >> 	 */
-> >> 	void (*destroy)(struct kvm_device *dev);
-> >>
-> >> 	/*
-> >> 	 * Release is an alternative method to free the device. It is
-> >> 	 * called when the device file descriptor is closed. Once
-> >> 	 * release is called, the destroy method will not be called
-> >> 	 * anymore as the device is removed from the device list of
-> >> 	 * the VM. kvm->lock is held.
-> >> 	 */
-> >> 	void (*release)(struct kvm_device *dev);
-> >>
-> >> Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
-> >> Reported-by: Alex Williamson <alex.williamson@redhat.com>
-> >> Suggested-by: Kevin Tian <kevin.tian@intel.com>
-> >> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> >> Signed-off-by: Yi Liu <yi.l.liu@intel.com>  
-> > 
-> > More background can be found in Mathew's work.
-> > https://lore.kernel.org/kvm/20230114000351.115444-1-mjrosato@linux.ibm.com/T/#u
-> >   
+On Fri, Jan 20, 2023 at 10:20:21PM +0800, kernel test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git slownmi.2023.01.19a
+> branch HEAD: 06901681acde9854a9a9a337cebbf3ab537f4543  x86/nmi: Test commit for delayed NMI handlers
 > 
-> Thanks Yi.
+> Error/Warning reports:
 > 
-> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> https://lore.kernel.org/oe-kbuild-all/202301201335.5rpVzsvW-lkp@intel.com
 > 
-> One small nit:  There is a comment at the very end of
-> kvm_vfio_release on the kfree(dev) that still references .destroy,
-> this should be updated to .release
+> Error/Warning: (recently discovered and may have been fixed)
+> 
+> ERROR: modpost: "dump_cpu_task" [kernel/rcu/rcutorture.ko] undefined!
 
-I've fixed this locally, s/destroy/release/ in that comment.  Thanks,
+Good catch as always, but this is a testing-only commit not destined
+for mainline.  Except that now that you mention it, the next stage of
+testing requires modules.
 
-Alex
+Will fix, and thank you!
 
+							Thanx, Paul
+
+> Error/Warning ids grouped by kconfigs:
+> 
+> gcc_recent_errors
+> |-- i386-randconfig-a001
+> |   `-- ERROR:dump_cpu_task-kernel-rcu-rcutorture.ko-undefined
+> `-- s390-allmodconfig
+>     `-- ERROR:dump_cpu_task-kernel-rcu-rcutorture.ko-undefined
+> 
+> elapsed time: 793m
+> 
+> configs tested: 66
+> configs skipped: 2
+> 
+> gcc tested configs:
+> x86_64                            allnoconfig
+> um                             i386_defconfig
+> um                           x86_64_defconfig
+> x86_64                              defconfig
+> x86_64                               rhel-8.3
+> x86_64                           allyesconfig
+> x86_64                           rhel-8.3-syz
+> x86_64                           rhel-8.3-kvm
+> x86_64                           rhel-8.3-bpf
+> x86_64                         rhel-8.3-kunit
+> x86_64                    rhel-8.3-kselftests
+> x86_64                          rhel-8.3-func
+> ia64                             allmodconfig
+> arc                                 defconfig
+> i386                          randconfig-a001
+> s390                             allmodconfig
+> arm                                 defconfig
+> i386                          randconfig-a003
+> alpha                               defconfig
+> arm64                            allyesconfig
+> i386                          randconfig-a005
+> i386                                defconfig
+> x86_64                        randconfig-a004
+> arm                  randconfig-r046-20230119
+> x86_64                        randconfig-a002
+> s390                                defconfig
+> arc                  randconfig-r043-20230119
+> x86_64                        randconfig-a006
+> m68k                             allmodconfig
+> arm                              allyesconfig
+> m68k                             allyesconfig
+> alpha                            allyesconfig
+> arc                              allyesconfig
+> s390                             allyesconfig
+> powerpc                           allnoconfig
+> powerpc                          allmodconfig
+> mips                             allyesconfig
+> sh                               allmodconfig
+> x86_64                        randconfig-a013
+> x86_64                        randconfig-a011
+> i386                          randconfig-a014
+> x86_64                        randconfig-a015
+> i386                          randconfig-a012
+> i386                          randconfig-a016
+> i386                             allyesconfig
+> powerpc                  storcenter_defconfig
+> sh                           se7722_defconfig
+> riscv                               defconfig
+> 
+> clang tested configs:
+> x86_64                          rhel-8.3-rust
+> i386                          randconfig-a002
+> i386                          randconfig-a004
+> hexagon              randconfig-r041-20230119
+> i386                          randconfig-a006
+> x86_64                        randconfig-a001
+> x86_64                        randconfig-a003
+> hexagon              randconfig-r045-20230119
+> x86_64                        randconfig-a005
+> riscv                randconfig-r042-20230119
+> s390                 randconfig-r044-20230119
+> i386                          randconfig-a013
+> x86_64                        randconfig-a012
+> x86_64                        randconfig-a014
+> x86_64                        randconfig-a016
+> i386                          randconfig-a011
+> i386                          randconfig-a015
+> mips                      pic32mzda_defconfig
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
