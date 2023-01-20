@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD03F674BD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F406674BD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjATFJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S231270AbjATFLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjATFIy (ORCPT
+        with ESMTP id S231172AbjATFKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:08:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A06080B90;
-        Thu, 19 Jan 2023 20:56:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AgSRB+mgoCTnHm8pcHJStBFI1tbB4PFeuxr32dF+q1I=; b=m/LXF6aDW8XnPkVzayqKAoi9G5
-        MFuhM+DkNyUv7XxxxNEKIkZgCiuXOylKdcJOC87wvTEUItyPUr43o5SgA1zTs9VTiSruEjSjxlz4H
-        ytf34ZfHN5dz8+ggf0UzcFIh4XD8qwkvLUkGRUdvKkkcxGudCX66iL9KCR8d1mknRZYrZ1dhXQ+aS
-        WIkftehBCvolqC0Hf0BZWBcEcFRXm7W+g2g+3XAynoTzMLFpKXcD1zRE+jW6ufWlkHE7+Xa1aEjXG
-        XqN3PbRKsgxXgGPQtIhchhs9SW5ZOEadjtk+xe6iCf3AzxavZVpQj6kod5nDXTgtgJU1sf9iK4KCl
-        N7mIS0eg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIjQR-001fc3-QV; Fri, 20 Jan 2023 04:54:51 +0000
-Date:   Fri, 20 Jan 2023 04:54:51 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH v3 4/4] fs/sysv: Replace kmap() with kmap_local_page()
-Message-ID: <Y8oem+z9SN487MIm@casper.infradead.org>
-References: <20230119153232.29750-1-fmdefrancesco@gmail.com>
- <20230119153232.29750-5-fmdefrancesco@gmail.com>
- <Y8oWsiNWSXlDNn5i@ZenIV>
- <Y8oYXEjunDDAzSbe@casper.infradead.org>
- <Y8ocXbztTPbxu3bq@ZenIV>
+        Fri, 20 Jan 2023 00:10:46 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5636A80BA4;
+        Thu, 19 Jan 2023 20:58:37 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id 7so3281413pga.1;
+        Thu, 19 Jan 2023 20:58:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HzzXUnHTmpWWQPG59F1wwVsrnIyCIw61BupAxQyJSRI=;
+        b=XlMVGlWmbXFC4EGyZYr6w/6gn9tiEHouHtEfFMYEblbEPz8mfgM98o82W6rUe9xFIE
+         NMW/o4YkPyD8QuswSHA7Jo43STK+AdpjSkFBIkV88zCEuEit53fiKj7lAUp0W/3fZcd9
+         ClCL685nyt2y6O0WOPH+EgOqT+qVlAC6W5WgcpTxXnNYDNGWw+ztTXzmyklzvycsi+mO
+         B2hydSgfIRIHv+lO/fTS0ghOkCPF8y5auQiDTvnNnqss34GwQ9ZGvurRMkkgB07BxiBY
+         7/g9FzQ5HCWtiWY4JogyyOeu9cTLm/5cpWt3J83PR/DmXgU9xurpMXqclee9GCsRpk0z
+         5MVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HzzXUnHTmpWWQPG59F1wwVsrnIyCIw61BupAxQyJSRI=;
+        b=6gWZjl2qwpwUP+a/a+iK3vB1Id4RoWYTO4Sy5aGG3eBMg7s9edVZpisg1359lSHCZ1
+         f1pWlL+Hqd3OLYRpKibyJN0Vimiyk4o1ouPkKyX3cxmFgHFvkvo+d9g06Grb2ONPmuZO
+         NlYMpnM5dP4YxdGdj+VzOgu7DEbdNeaPrhtMpIcueaCWmelOhsft10CJCtrEFg6+jy1o
+         hbabsTHQVi43IoVj3y8BQMzBn3sYIpdDWfsDeJP5+ubaKpb3mHc/uiqdB0JJVWkM+TO3
+         mXOxxnu/bqTq9uLXiPwgeL9vZ8U+7ekB1R6RFCvzTRLC1L1ifYM1JH4Mtd+lMYcnZg/R
+         kO2g==
+X-Gm-Message-State: AFqh2kpImfjogIjMgdsgkIQTExo0K+Nm+MVp3S1AExGvFEMavdUHTAbZ
+        nuTzZLzZ2MH9NE/ZNWUyzWo=
+X-Google-Smtp-Source: AMrXdXuE0pUroe2ay/b/UQIYy0GzKBtrp0BNmCQllpLGRlB9bmI60JSEGPaDdhzvul10S8MMAVDmsQ==
+X-Received: by 2002:a05:6a00:44cc:b0:58a:fdc8:92bf with SMTP id cv12-20020a056a0044cc00b0058afdc892bfmr13731244pfb.2.1674190699429;
+        Thu, 19 Jan 2023 20:58:19 -0800 (PST)
+Received: from localhost ([2405:201:6014:dae3:7dbb:8857:7c39:bb2a])
+        by smtp.gmail.com with ESMTPSA id k18-20020a628412000000b0058103f45d9esm21717738pfd.82.2023.01.19.20.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 20:58:19 -0800 (PST)
+Date:   Fri, 20 Jan 2023 10:28:15 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 2/8] bpf: Allow trusted args to walk struct when
+ checking BTF IDs
+Message-ID: <20230120045815.4b7dc6obdt4uzy6a@apollo>
+References: <20230119235833.2948341-1-void@manifault.com>
+ <20230119235833.2948341-3-void@manifault.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8ocXbztTPbxu3bq@ZenIV>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119235833.2948341-3-void@manifault.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 04:45:17AM +0000, Al Viro wrote:
-> On Fri, Jan 20, 2023 at 04:28:12AM +0000, Matthew Wilcox wrote:
-> > On Fri, Jan 20, 2023 at 04:21:06AM +0000, Al Viro wrote:
-> > > On Thu, Jan 19, 2023 at 04:32:32PM +0100, Fabio M. De Francesco wrote:
-> > > 
-> > > > -inline void dir_put_page(struct page *page)
-> > > > +inline void dir_put_page(struct page *page, void *page_addr)
-> > > >  {
-> > > > -	kunmap(page);
-> > > > +	kunmap_local(page_addr);
-> > > 
-> > > ... and that needed to be fixed - at some point "round down to beginning of
-> > > page" got lost in rebasing...
-> > 
-> > You don't need to round down in kunmap().  See:
-> > 
-> > void kunmap_local_indexed(const void *vaddr)
-> > {
-> >         unsigned long addr = (unsigned long) vaddr & PAGE_MASK;
-> > 
-> 
-> Sure, but... there's also this:
-> 
-> static inline void __kunmap_local(const void *addr)
-> {
-> #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
->         kunmap_flush_on_unmap(addr);
-> #endif
-> }
-> 
-> Are you sure that the guts of that thing will be happy with address that is not
-> page-aligned?  I've looked there at some point, got scared of parisc (IIRC)
-> MMU details and decided not to rely upon that...
+On Fri, Jan 20, 2023 at 05:28:27AM IST, David Vernet wrote:
+> When validating BTF types for KF_TRUSTED_ARGS kfuncs, the verifier
+> currently enforces that the top-level type must match when calling
+> the kfunc. In other words, the verifier does not allow the BPF program
+> to pass a bitwise equivalent struct, despite it being functionally safe.
+> For example, if you have the following type:
+>
+> struct  nf_conn___init {
+> 	struct nf_conn ct;
+> };
+>
+> It would be safe to pass a struct nf_conn___init to a kfunc expecting a
+> struct nf_conn.
 
-Ugh, PA-RISC (the only implementor) definitely will flush the wrong
-addresses.  I think we should do this, as having bugs that only manifest
-on one not-well-tested architecture seems Bad.
+Just running bpf_nf selftest would have shown this is false.
 
- static inline void __kunmap_local(const void *addr)
- {
- #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
--       kunmap_flush_on_unmap(addr);
-+       kunmap_flush_on_unmap(PAGE_ALIGN_DOWN(addr));
- #endif
- }
+> Being able to do this will be useful for certain types
+> of kfunc / kptrs enabled by BPF. For example, in a follow-on patch, a
+> series of kfuncs will be added which allow programs to do bitwise
+> queries on cpumasks that are either allocated by the program (in which
+> case they'll be a 'struct bpf_cpumask' type that wraps a cpumask_t as
+> its first element), or a cpumask that was allocated by the main kernel
+> (in which case it will just be a straight cpumask_t, as in
+>  task->cpus_ptr).
+>
+> Having the two types of cpumasks allows us to distinguish between the
+> two for when a cpumask is read-only vs. mutatable. A struct bpf_cpumask
+> can be mutated by e.g. bpf_cpumask_clear(), whereas a regular cpumask_t
+> cannot be. On the other hand, a struct bpf_cpumask can of course be
+> queried in the exact same manner as a cpumask_t, with e.g.
+> bpf_cpumask_test_cpu().
+>
+> If we were to enforce that top level types match, then a user that's
+> passing a struct bpf_cpumask to a read-only cpumask_t argument would
+> have to cast with something like bpf_cast_to_kern_ctx() (which itself
+> would need to be updated to expect the alias, and currently it only
+> accommodates a single alias per prog type). Additionally, not specifying
+> KF_TRUSTED_ARGS is not an option, as some kfuncs take one argument as a
+> struct bpf_cpumask *, and another as a struct cpumask *
+> (i.e. cpumask_t).
+>
+> In order to enable this, this patch relaxes the constraint that a
+> KF_TRUSTED_ARGS kfunc must have strict type matching. In order to
+> try and be conservative and match existing behavior / expectations, this
+> patch also enforces strict type checking for acquire kfuncs. We were
+> already enforcing it for release kfuncs, so this should also improve the
+> consistency of the semantics for kfuncs.
+>
 
-Thoughts?
+What you want is to simply follow type at off = 0 (but still enforce the off = 0
+requirement). This is something which is currently done for bpf_sk_release (for
+struct sk_common) in check_reg_type, but it is not safe in general to just open
+this up for all cases. I suggest encoding this particular requirement in the
+argument, and simply using triple underscore variant of the type for the special
+'read_only' requirement. This will allow you to use same type in your BPF C
+program, while allowing verifier to see them as two different types in kfunc
+parameters. Then just relax type following for the particular argument so that
+one can pass cpumask_t___ro to kfunc expecting cpumask_t (but only at off = 0,
+it just visits first member after failing match on top level type). off = 0
+check is still necessary.
+
+So offset checks still need to be according to OBJ_RELEASE but you can relax
+strict_type_match bool for the particular arg when calling btf_struct_ids_match.
+
+All code in your tests will then deal with a cpumask_t type only, including in
+kfunc declarations. Same as bpf_nf selftests which don't cast from/to
+nf_conn___init and only deal with nf_conn pointers even though semantics differ
+depending on how it is used and passed around. Overall more convenient and
+simple to use.
