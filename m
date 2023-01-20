@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20266752E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D126752D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjATLBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S229852AbjATKzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjATLBI (ORCPT
+        with ESMTP id S229456AbjATKzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:01:08 -0500
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CE7F81994;
-        Fri, 20 Jan 2023 03:01:01 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 30KArkBe026992;
-        Fri, 20 Jan 2023 04:53:46 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 30KArgxi026991;
-        Fri, 20 Jan 2023 04:53:42 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 20 Jan 2023 04:53:41 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Rob Landley <rob@landley.net>
-Cc:     "Michael.Karcher" <Michael.Karcher@fu-berlin.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: Calculating array sizes in C - was: Re: Build regressions/improvements in v6.2-rc1
-Message-ID: <20230120105341.GI25951@gate.crashing.org>
-References: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg> <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de> <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com> <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de> <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com> <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de> <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com> <0d238f02-4d78-6f14-1b1b-f53f0317a910@physik.fu-berlin.de> <1732342f-49fe-c20e-b877-bc0a340e1a50@fu-berlin.de> <0f51dac4-836b-0ff2-38c6-5521745c1c88@landley.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Fri, 20 Jan 2023 05:55:10 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7F693E8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:55:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674212109; x=1705748109;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WirNdjXcNBVyodVjqhh0h3CpV44jofuXffWJE1a0G6w=;
+  b=RGkHXoA1MbkIKwl9Vper4gszUUUpSKAasxAOVa7S2Or5Ud12Q/w1qa1G
+   X1FYf2zWEhrmkPDIBpFIK5+wSyzG2RGzOnrlW9IfTfs+KGcmwGChW3dbc
+   qN8EpCPV9X9Yb6PyJIpoKl5PUu36nxjAzFIwo7JnToomM3mOrd8RlDBn2
+   yxsDzryZJkBfYn6afkrcbsU3AbutTVNraSEVGhnLQVgHBz9uEHrQtjW1g
+   oOfoyRRIqdkUXUlBioWPVUlmLRYxiIHRndwTEpDltXN3ZELZkqkjTt1Wi
+   3X9Q0qN+QhHtOlZ2HXctS6kNq8uC/onkNAcXK6UDXjevvlJ1ZYYF4363h
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325589525"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="325589525"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 02:55:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784473649"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="784473649"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2023 02:55:02 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIp2u-0002UI-0C;
+        Fri, 20 Jan 2023 10:54:56 +0000
+Date:   Fri, 20 Jan 2023 18:54:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin Krastev <krastevm@vmware.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Zack Rusin <zackr@vmware.com>
+Subject: drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:713:21: warning: unused function
+ 'mksstat_init_record'
+Message-ID: <202301201858.yiiu0sKz-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f51dac4-836b-0ff2-38c6-5521745c1c88@landley.net>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:31:21PM -0600, Rob Landley wrote:
-> On 1/19/23 16:11, Michael.Karcher wrote:
-> > I don't see a clear bug at this point. We are talking about the C expression
-> > 
-> >    __same_type((void*)0, (void*)0)? 0 : sizeof((void*)0)/sizeof(*((void*0))
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d368967cb1039b5c4cccb62b5a4b9468c50cd143
+commit: 7a7a933edd6c3a6d5d64e08093f2d564104cefcd drm/vmwgfx: Introduce VMware mks-guest-stats
+date:   1 year, 7 months ago
+config: x86_64-randconfig-a001-20230116 (https://download.01.org/0day-ci/archive/20230120/202301201858.yiiu0sKz-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a7a933edd6c3a6d5d64e08093f2d564104cefcd
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7a7a933edd6c3a6d5d64e08093f2d564104cefcd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/gma500/ drivers/gpu/drm/vmwgfx/
 
-(__same_type is a kernel macro, it expands to something with
-__builtin_compatible_type()).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> *(void*) is type "void" which does not have a size.
+All warnings (new ones prefixed by >>):
 
-It has size 1, in GCC, so that you can do arithmetic on pointers to
-void.  This is a long-standing and very widely used GCC extension.
-
-"""
-6.24 Arithmetic on 'void'- and Function-Pointers
-================================================
-
-In GNU C, addition and subtraction operations are supported on pointers
-to 'void' and on pointers to functions.  This is done by treating the
-size of a 'void' or of a function as 1.
-
- A consequence of this is that 'sizeof' is also allowed on 'void' and on
-function types, and returns 1.
-
- The option '-Wpointer-arith' requests a warning if these extensions are
-used.
-"""
-
-> The problem is gcc "optimizing out" an earlier type check, the same way it
-> "optimizes out" checks for signed integer math overflowing, or "optimizes out" a
-> comparison to pointers from two different local variables from different
-> function calls trying to calculate the amount of stack used, or "optimizes out"
-
-Are you saying something in the kernel code here is invalid code?
-Because your other examples are.
-
-> using char *x = (char *)1; as a flag value and then doing "if (!(x-1)) because
-> it can "never happen"...
-
-Like here.  And no, this is not allowed by -fno-strict-aliasing.
-
-> > I suggest to file a bug against gcc complaining about a "spurious 
-> > warning", and using "-Werror -Wno-error-sizeof-pointer-div" until gcc is 
-> > adapted to not emit the warning about the pointer division if the result 
-> > is not used.
-
-Yeah.  If the first operand of a conditional operator is non-zero, the
-second operand is not evaluated, and if the first is zero, the third
-operand is not evaluated.  It is better if we do not warn about
-something we do not evaluate.  In cases like here where it is clear at
-compile time which branch is taken, that shouldn't be too hard.
-
-Can someone please file a GCC PR?  With reduced testcase preferably.
+>> drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:713:21: warning: unused function 'mksstat_init_record' [-Wunused-function]
+   static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
+                       ^
+   1 warning generated.
 
 
-Segher
+vim +/mksstat_init_record +713 drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+
+   701	
+   702	/**
+   703	 * mksstat_init_record: Initializes an MKSGuestStatCounter-based record
+   704	 * for the respective mksGuestStat index.
+   705	 *
+   706	 * @stat_idx: Index of the MKSGuestStatCounter-based mksGuestStat record.
+   707	 * @pstat: Pointer to array of MKSGuestStatCounterTime.
+   708	 * @pinfo: Pointer to array of MKSGuestStatInfoEntry.
+   709	 * @pstrs: Pointer to current end of the name/description sequence.
+   710	 * Return: Pointer to the new end of the names/description sequence.
+   711	 */
+   712	
+ > 713	static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
+   714		MKSGuestStatCounterTime *pstat, MKSGuestStatInfoEntry *pinfo, char *pstrs)
+   715	{
+   716		char *const pstrd = pstrs + strlen(mksstat_kern_name_desc[stat_idx][0]) + 1;
+   717		strcpy(pstrs, mksstat_kern_name_desc[stat_idx][0]);
+   718		strcpy(pstrd, mksstat_kern_name_desc[stat_idx][1]);
+   719	
+   720		pinfo[stat_idx].name.s = pstrs;
+   721		pinfo[stat_idx].description.s = pstrd;
+   722		pinfo[stat_idx].flags = MKS_GUEST_STAT_FLAG_NONE;
+   723		pinfo[stat_idx].stat.counter = (MKSGuestStatCounter *)&pstat[stat_idx];
+   724	
+   725		return pstrd + strlen(mksstat_kern_name_desc[stat_idx][1]) + 1;
+   726	}
+   727	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
