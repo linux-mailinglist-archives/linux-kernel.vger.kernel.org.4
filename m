@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491C367530D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61FA675310
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjATLID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S229788AbjATLJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjATLIA (ORCPT
+        with ESMTP id S229613AbjATLJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:08:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3DA39297;
-        Fri, 20 Jan 2023 03:07:58 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2CFAF1EC0606;
-        Fri, 20 Jan 2023 12:07:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674212877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=40oh1pHNa5pWx4jGamed6IL3y7gkerp1r2pzkAMoq2Q=;
-        b=r00y4jQUVtDshG4tDAS91vdI7QjPCLD7pFdU+iVAYMASoniRY2/rbP59M/S67L5qjGNx+5
-        1oOm3QQe/ipoBGU/6w8M0v5QtR2qq+nofQdVTsS1CeNYs10T2YYI3wFxzN+7Wr6ZteKYFA
-        DKDwJ6NJ6CbtiorKDRcZkyYI6+RO4Eg=
-Date:   Fri, 20 Jan 2023 12:07:57 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Kim Phillips <kim.phillips@amd.com>, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, linux-doc@vger.kernel.org,
+        Fri, 20 Jan 2023 06:09:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98748C160
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:09:56 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1pIpHA-0003LV-Nf; Fri, 20 Jan 2023 12:09:40 +0100
+Received: from [2a0a:edc0:0:1101:1d::54] (helo=dude05.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1pIpH8-007MGq-Qe; Fri, 20 Jan 2023 12:09:38 +0100
+Received: from afa by dude05.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1pIpH8-004peO-59; Fri, 20 Jan 2023 12:09:38 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     kernel@pengutronix.de, ore@pengutronix.de,
+        Arun.Ramadoss@microchip.com,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/7] x86/cpu, kvm: Support AMD Automatic IBRS
-Message-ID: <Y8p2DUtzoC409HYY@zn.tnic>
-References: <20230116230159.1511393-1-kim.phillips@amd.com>
- <Y8aMiH74WFmVM5Rk@zn.tnic>
- <Y8nw/XLTpKhKbbdX@google.com>
+Subject: [PATCH net v2] net: dsa: microchip: fix probe of I2C-connected KSZ8563
+Date:   Fri, 20 Jan 2023 12:09:32 +0100
+Message-Id: <20230120110933.1151054-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y8nw/XLTpKhKbbdX@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 01:40:13AM +0000, Sean Christopherson wrote:
-> Sorry, completely missed this.
+Starting with commit eee16b147121 ("net: dsa: microchip: perform the
+compatibility check for dev probed"), the KSZ switch driver now bails
+out if it thinks the DT compatible doesn't match the actual chip ID
+read back from the hardware:
 
-Nothing to be sorry for - can't notice everything in the flood. :)
+  ksz9477-switch 1-005f: Device tree specifies chip KSZ9893 but found
+  KSZ8563, please fix it!
 
-> There will be a minor conflict in KVM's reverse_cpuid, but it's trivial to resolve.
-> I don't anticipate any other conflicts, so taking this through tip does seem like
-> the best option.
+For the KSZ8563, which used ksz_switch_chips[KSZ9893], this was fine
+at first, because it indeed shares the same chip id as the KSZ9893.
 
-Ok, thx.
+Commit b44908095612 ("net: dsa: microchip: add separate struct
+ksz_chip_data for KSZ8563 chip") started differentiating KSZ9893
+compatible chips by consulting the 0x1F register. The resulting breakage
+was fixed for the SPI driver in the same commit by introducing the
+appropriate ksz_switch_chips[KSZ8563], but not for the I2C driver.
 
-> If possible, a new version to fix the bisection issues in patches 2 and 3 would
-> be nice, but again it's not a big deal.  The breakage is very, very minor.
+Fix this for I2C-connected KSZ8563 now to get it probing again.
 
-Yap, I've zapped them and their removal will take a bit to propagate to
-linux-next.
+Fixes: b44908095612 ("net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563 chip").
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+v1 -> v2:
+  - rewrote commit message and Fixes: to point at correct
+    culprit commit introducing regression (Arun)
+  - included Andrew's Reviewed-by
+---
+ drivers/net/dsa/microchip/ksz9477_i2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thx.
-
+diff --git a/drivers/net/dsa/microchip/ksz9477_i2c.c b/drivers/net/dsa/microchip/ksz9477_i2c.c
+index c1a633ca1e6d..e315f669ec06 100644
+--- a/drivers/net/dsa/microchip/ksz9477_i2c.c
++++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
+@@ -104,7 +104,7 @@ static const struct of_device_id ksz9477_dt_ids[] = {
+ 	},
+ 	{
+ 		.compatible = "microchip,ksz8563",
+-		.data = &ksz_switch_chips[KSZ9893]
++		.data = &ksz_switch_chips[KSZ8563]
+ 	},
+ 	{
+ 		.compatible = "microchip,ksz9567",
 -- 
-Regards/Gruss,
-    Boris.
+2.30.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
