@@ -2,220 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA6B674D69
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E19674D6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjATGgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S229816AbjATGij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjATGgM (ORCPT
+        with ESMTP id S229517AbjATGih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:36:12 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DFC798FE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:36:04 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id i188so4674269vsi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:36:04 -0800 (PST)
+        Fri, 20 Jan 2023 01:38:37 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2326E45221
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:38:33 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id z5so3933584wrt.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:38:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCnqSV2/jhgO1bXWht92BDT4xhwMLz90Jf6Hrx/eTho=;
-        b=NX+Di0Rnu+CjEf+0fj/O6b5KnuLqFqwXHCRm4uJktZGDQmbVJpitD0YMRKSZCEOKi3
-         9R8s7+lkWre7bbXIZb23ZAOip8Dsgm84PvowZZFLs/M2Xc92TYs92Dgo8zVAejstTymR
-         W8JNUP/b0Yuhdas3jupXcH31jQGRcRzlth0NM0T0UuLneVjV4NLE2+SwtFN7/o4Fz5eE
-         XJFe+iI9BOImFn3acKtfuNgXJmFEVxWL4f5e4aNGSLnN0nWH93nF6hi0Kru4Qomc8rqK
-         WZYnk9+FQcCpPq6nuauWT5QmQDtb+qYAfMMYZErnM4bLMhmKCU1/0zB0bj9s27vPZKcP
-         A8tg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FZtRmIZ42UnRz6LhmwOmoeKPNBphQysUvengJAatuzk=;
+        b=mvvDxCz9s11Ai4vmLdV2UGQGcAUuhBixOGiaz6B4OVJeBVYVI1L9jdcvkR4bFlyDa1
+         icigmZn+zStDeV+NBmQ6eNHRQ2Z9xP/ZkVG9GdmrM5HMpmzrmO5vzMUJKtB3I7VIwKYb
+         EU9eaxgYoN30V790SKqF7Sb7q0Vy0tjtkxPMCgSDraGFaPouF1QmTr+b9AOXgfdm5vqp
+         wrHi1M9UqFYEwz/yy7eKK5dNbzsh/E5b8YZIYpjAGLFc2Cd+6QPuGT8j+imJhqPZG4Gs
+         M5yqCkI9aISsSuSNk9U+zaN3kJCe9S6v/VINIr6pvNaTac/4GVIeGvxETigsBPrrc6qs
+         WTog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gCnqSV2/jhgO1bXWht92BDT4xhwMLz90Jf6Hrx/eTho=;
-        b=vgCZ5LlHf2VlfzIsmRwHE9+oZJAjFmKcXJrYLOHnsmGzHp0VEOaAJKL9Ld5EN+43jk
-         cCSq8iTEaBAOvc4E//26XaUXWwaZpqaS9CfqEVLC7X3OROb+T2csCncrIKnIjRaTZO/p
-         7/ijpdU335z8l1JdCewq0I/vWDkt8oWhTGWl514W5EvNq++10ImVGyxFHu4fvXCMeWac
-         Sd9g3HnnW1CaYg4Y9aKslRIa55AwEOT+oAph/ImXYNVRUcHBeewZ+ILW3i3yrOP37KGk
-         e2dVgSF5ApRhUuxziC7h5tfjgTtNA+eW4yrrF09cpFzZ6t5ryfG9EPYio38xaehv32/2
-         wiGg==
-X-Gm-Message-State: AFqh2kqwXwBQIxo4Cb/sD7S2u87FC9Fhe5lMmRQOuUrudtcOfDPQAZdG
-        CA0zJ0YuEY0E/VBZyeI3zuyqW6uMKr2FVUw/6W+BEQ==
-X-Google-Smtp-Source: AMrXdXvjSeaQUrsDI/wO8qCs8/GgwXFzMxE0oFHyVynypIpjETKCEgLlZZot1a6rPy5p9zsFNN++VkiPNSsKCmq2id4=
-X-Received: by 2002:a05:6102:316f:b0:3d2:30a3:70d1 with SMTP id
- l15-20020a056102316f00b003d230a370d1mr1947808vsm.38.1674196563825; Thu, 19
- Jan 2023 22:36:03 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZtRmIZ42UnRz6LhmwOmoeKPNBphQysUvengJAatuzk=;
+        b=tCo1Zq5LO/TlTIl7xjrvcCPFWSffSzhZ6BEV7fouINgYTWpDmI9LL8cu/96/OtqAqR
+         Vta3Ce0wV4nE+kgDengElD0Y1nNdEyF1iuDRtZZ3THzWGPgN8Tp8PCSGZBBUr4mOJTlQ
+         WWLHJun2/1gwWKA6pNHZS03KRJFVnF6U3cTQTgkZYR/Qsd+iff4xW33Bos3EvBRxv+/w
+         nfbXnsxalDBkO3xPZA+Fj4Fo0HqvhE6Am1OFi2cUEXWs4UcPv14UZ2IL78zkXHk8K5Aq
+         2VzHavNN7DX3j3al3s0qmlOXTBKFQMBFgZAg2ZxX2HpT16YkJYLJSva/S6s9kCqdwHAi
+         +cqw==
+X-Gm-Message-State: AFqh2krcH8L70QTaDjo59GWAZE2MnRWzIy9/GrTJ7/godhFO3rF2mJp4
+        zkhpBpbtyxJ5POOXeYmDpl+61g==
+X-Google-Smtp-Source: AMrXdXvbEWmQ4JIEHt3Bob7S2yKY4TRYoAhRrOVQAmt28VEcaD3Z8/z4hIYoA8+WaOnqoC20RwPBQg==
+X-Received: by 2002:a5d:5e84:0:b0:2bd:dd44:8b13 with SMTP id ck4-20020a5d5e84000000b002bddd448b13mr14220222wrb.60.1674196711684;
+        Thu, 19 Jan 2023 22:38:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b11-20020a05600018ab00b002be2279f100sm9846759wri.96.2023.01.19.22.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 22:38:31 -0800 (PST)
+Message-ID: <3aa54a61-8a42-6ddf-d524-c20dc03111fa@linaro.org>
+Date:   Fri, 20 Jan 2023 07:38:28 +0100
 MIME-Version: 1.0
-References: <20230118074219.3921-1-apantykhin@gmail.com>
-In-Reply-To: <20230118074219.3921-1-apantykhin@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 20 Jan 2023 14:35:51 +0800
-Message-ID: <CABVgOSn9ULgwDNTz3V=n+OM088jS7NsJ1mrfcQv-mYVy6zNbVg@mail.gmail.com>
-Subject: Re: [PATCH V2] tools/testing/kunit/kunit.py: remove redundant double check
-To:     Alexander Pantyukhin <apantykhin@gmail.com>
-Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007ca4a805f2ac43a0"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: Restrict 'mpp' child
+ node name pattern
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230120020600.3232001-1-robh@kernel.org>
+ <20230120042905.d2pdrzyv3e3airdj@builder.lan>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230120042905.d2pdrzyv3e3airdj@builder.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007ca4a805f2ac43a0
-Content-Type: text/plain; charset="UTF-8"
+On 20/01/2023 05:29, Bjorn Andersson wrote:
+> On Thu, Jan 19, 2023 at 08:06:00PM -0600, Rob Herring wrote:
+>> Just 'mpp' is a bit ambiguous for a pattern. It allows any prefix or
+>> suffix. I couldn't find any actual users, so update the pattern to match
+>> the example.
+>>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> ---
+>>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+>> index 72cce38bc1ce..891a7385d7cb 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+>> @@ -74,7 +74,7 @@ patternProperties:
+>>      oneOf:
+>>        - $ref: "#/$defs/qcom-pmic-mpp-state"
+>>        - patternProperties:
+>> -          "mpp":
+>> +          "-mpp$":
+> 
+> How about aligning it with the other Qualcomm pinctrl bindings and make
+> it "-pins$" instead?
+> 
+> If my grep is correct we have one "mpp5" and two "-pins$" currently in
+> the sources, so this should be beneficial as well.
 
-On Wed, 18 Jan 2023 at 15:42, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
->
-> The build_tests function contained double checking for not success
-> result. It is fixed in the current patch. Additional small
-> simplifications of code like using ternary if were applied (avoid using
-> the same operation by calculation times differ in two places).
->
-> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
-> ---
+Let's align it with other Qualcomm pinctrl bindings, so:
+	"-pins$":
 
-Looks good, thanks!
+I can also fix the DTS to match it.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Best regards,
+Krzysztof
 
-Cheers,
--- David
-
->  tools/testing/kunit/kunit.py | 19 +++++--------------
->  1 file changed, 5 insertions(+), 14 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 43fbe96318fe..0e3e08cc0204 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -77,11 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
->         config_start = time.time()
->         success = linux.build_reconfig(request.build_dir, request.make_options)
->         config_end = time.time()
-> -       if not success:
-> -               return KunitResult(KunitStatus.CONFIG_FAILURE,
-> -                                  config_end - config_start)
-> -       return KunitResult(KunitStatus.SUCCESS,
-> -                          config_end - config_start)
-> +       status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
-> +       return KunitResult(status, config_end - config_start)
->
->  def build_tests(linux: kunit_kernel.LinuxSourceTree,
->                 request: KunitBuildRequest) -> KunitResult:
-> @@ -92,14 +89,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
->                                      request.build_dir,
->                                      request.make_options)
->         build_end = time.time()
-> -       if not success:
-> -               return KunitResult(KunitStatus.BUILD_FAILURE,
-> -                                  build_end - build_start)
-> -       if not success:
-> -               return KunitResult(KunitStatus.BUILD_FAILURE,
-> -                                  build_end - build_start)
-> -       return KunitResult(KunitStatus.SUCCESS,
-> -                          build_end - build_start)
-> +       status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
-> +       return KunitResult(status, build_end - build_start)
->
->  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
->                            request: KunitBuildRequest) -> KunitResult:
-> @@ -145,7 +136,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
->                 tests = _list_tests(linux, request)
->                 if request.run_isolated == 'test':
->                         filter_globs = tests
-> -               if request.run_isolated == 'suite':
-> +               elif request.run_isolated == 'suite':
->                         filter_globs = _suites_from_test_list(tests)
->                         # Apply the test-part of the user's glob, if present.
->                         if '.' in request.filter_glob:
-> --
-> 2.25.1
->
-
---0000000000007ca4a805f2ac43a0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBc
-Hee2zGQkbKY++RPOkOwGHwW2Zo6Gzl9RuGezlAHKVjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjAwNjM2MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAg30BpaJZJKfObeSMb/5W
-C2xKu7zwz+66LYk/e0mXJVXBEXpwJEcby751gFFNv5bkYlq4UvhdMncAh9l8vThQfY3+Wv02IVNL
-8L2UOVgzoJ0NkcV+vT+8zequQJ2k/sGlUo6kk3yJNx8avJa0njvXr4RNdNm4RgUg5gzs6+WuKtz1
-MhipZeHdGTpl5QMOcT7uYfrSwFnn92RBL12dHYd8Ni64A+VlwLQFr0ohTeLT9PRUk0chJ97g2qpA
-sP5K1to6u7TJNW/K1wgi5IvTSvUhMtfVmsERkNNtevy6Zn+3q+4QE5hmomdtS6xS2DZmaO5zjI7E
-fhpa8/GbYRR7PRC1LQ==
---0000000000007ca4a805f2ac43a0--
