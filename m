@@ -2,124 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4771675CB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 061CA675CB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjATS0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S230026AbjATS12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjATS0k (ORCPT
+        with ESMTP id S229739AbjATS1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:26:40 -0500
-Received: from MTA-12-4.privateemail.com (mta-12-4.privateemail.com [198.54.127.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEA378ABC;
-        Fri, 20 Jan 2023 10:26:39 -0800 (PST)
-Received: from mta-12.privateemail.com (localhost [127.0.0.1])
-        by mta-12.privateemail.com (Postfix) with ESMTP id 3B6EB18000AE;
-        Fri, 20 Jan 2023 13:26:38 -0500 (EST)
-Received: from bpappas-XPS-13-9310.. (rrcs-24-173-168-34.se.biz.rr.com [24.173.168.34])
-        by mta-12.privateemail.com (Postfix) with ESMTPA id BE92018000B1;
-        Fri, 20 Jan 2023 13:26:29 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
-        s=default; t=1674239198;
-        bh=254NmRTKKpoPDDbLe8JkEKobrM4zw72lP3QGnoDEAjA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=D8RTm9mcholnkiKBj+Nepe6m4W+9L8jfvSJmEtJ+XlCZIyPNzKmup55Iua8wD/LVf
-         tEs9v3nLPKGjuPputi28LHngKkiQ+EhMrx1mel4A1sLat38J332en/kXtNrpPTwLQN
-         csGcOM7UP8X6EHy5V3JEE1N+JYEcBTeBPZs2HDRk7W+Zp58QW9E1o48hsOBUWsLNS2
-         hMO/zkYf1DwJRnhuEBA3vmIr0/36vkPzFc0rSNdiUd/nz7w8+OwJofv+zr7z0973Hw
-         91JxTA7mljja5Q/NyLLInwbX3btYABuqkiW6rNsOHFFzGs6TxakIe9Gd3QukmiDXGs
-         tDq5ZxeTAl00Q==
-From:   Brent Pappas <bpappas@pappasbrent.com>
-To:     hdegoede@redhat.com
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brent Pappas <bpappas@pappasbrent.com>
-Subject: [PATCH] media: atomisp: pci: hive_isp_css_common: host: vmem: Replace SUBWORD macros with functions
-Date:   Fri, 20 Jan 2023 13:26:25 -0500
-Message-Id: <20230120182625.23227-1-bpappas@pappasbrent.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 20 Jan 2023 13:27:25 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD8DBCD;
+        Fri, 20 Jan 2023 10:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674239244; x=1705775244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bK/QfWInN9l3kz5q4PkVtOoQHNxxsyUB2TiL2Yk9kJ0=;
+  b=Mynev58HmCORXXQrQT3HXldnpkbjF9MfcY2znqOkxX9BpCD7J7WAjfYm
+   jZ0TbHbfh+AIjuN+aO1lfRdLjCOiNvyIlF6LYn1jA9SeZjQ6vwDsFgHIM
+   +1GunRZuh4z0gD2CC/XLZupeLtSgWh7CnDwIrhaqoVvgMzPKIWCAKtGmy
+   +VboH/3RY+4Kj7fl+z7xd2v9JleaH9iEDXmbQorAolSMXdSbiwpR4cxkM
+   h11AXAD3JHHF3HLnE1kC7p9jU03N9JlQarPjYnFIFa5CZ0eBpMTyVi8Bx
+   4NmsOXTGnaMakkBRihge97gH9M1H1AeUDmjTf1CcEEx/VW8oh6Ldjm1hD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="305325484"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="305325484"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 10:27:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="691145006"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="691145006"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jan 2023 10:27:21 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIw6d-0002o3-2q;
+        Fri, 20 Jan 2023 18:27:15 +0000
+Date:   Sat, 21 Jan 2023 02:26:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com,
+        linux@roeck-us.net
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        XU pengfei <xupengfei@nfschina.com>
+Subject: Re: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*)
+ conversions
+Message-ID: <202301210219.P2QHV5eM-lkp@intel.com>
+References: <20230111043729.3792-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111043729.3792-1-xupengfei@nfschina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the macros SUBWORD() and INV_SUBWORD() with functions to comply
-with Linux coding style standards.
+Hi XU,
 
-Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
----
-I am not sure if it would better to inline SUBWORD() or turn it into
-a function.
-On the one hand, SUBWORD() is only invoked once, so it may be better to
-to inline it.
-On the other hand, the macro defined beside it, INV_SUBWORD() should be
-turned into to a function because it is invoked multiple times, so it
-may make sense to turn SUBWORD() into a function as well.
-I have opted to turn SUBWORD() into a function.
+Thank you for the patch! Yet something to improve:
 
- .../pci/hive_isp_css_common/host/vmem.c       | 21 +++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.2-rc4 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
-index 6620f091442f..316abfb72a83 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
-@@ -28,10 +28,19 @@ typedef hive_uedge *hive_wide;
- /* Copied from SDK: sim_semantics.c */
- 
- /* subword bits move like this:         MSB[____xxxx____]LSB -> MSB[00000000xxxx]LSB */
--#define SUBWORD(w, start, end)     (((w) & (((1ULL << ((end) - 1)) - 1) << 1 | 1)) >> (start))
-+static inline hive_uedge
-+subword(hive_uedge w, unsigned int start, unsigned int end)
-+{
-+	return (w & (((1ULL << (end - 1)) - 1) << 1 | 1)) >> start;
-+}
- 
- /* inverse subword bits move like this: MSB[xxxx____xxxx]LSB -> MSB[xxxx0000xxxx]LSB */
--#define INV_SUBWORD(w, start, end) ((w) & (~(((1ULL << ((end) - 1)) - 1) << 1 | 1) | ((1ULL << (start)) - 1)))
-+static inline hive_uedge
-+inv_subword(hive_uedge w, unsigned int start, unsigned int end)
-+{
-+	return w & (~(((1ULL << (end - 1)) - 1) << 1 | 1) |
-+		    ((1ULL << start) - 1));
-+}
- 
- #define uedge_bits (8 * sizeof(hive_uedge))
- #define move_lower_bits(target, target_bit, src, src_bit) move_subword(target, target_bit, src, 0, src_bit)
-@@ -50,18 +59,18 @@ move_subword(
- 	unsigned int start_bit  = target_bit % uedge_bits;
- 	unsigned int subword_width = src_end - src_start;
- 
--	hive_uedge src_subword = SUBWORD(src, src_start, src_end);
-+	hive_uedge src_subword = subword(src, src_start, src_end);
- 
- 	if (subword_width + start_bit > uedge_bits) { /* overlap */
- 		hive_uedge old_val1;
--		hive_uedge old_val0 = INV_SUBWORD(target[start_elem], start_bit, uedge_bits);
-+		hive_uedge old_val0 = inv_subword(target[start_elem], start_bit, uedge_bits);
- 
- 		target[start_elem] = old_val0 | (src_subword << start_bit);
--		old_val1 = INV_SUBWORD(target[start_elem + 1], 0,
-+		old_val1 = inv_subword(target[start_elem + 1], 0,
- 				       subword_width + start_bit - uedge_bits);
- 		target[start_elem + 1] = old_val1 | (src_subword >> (uedge_bits - start_bit));
- 	} else {
--		hive_uedge old_val = INV_SUBWORD(target[start_elem], start_bit,
-+		hive_uedge old_val = inv_subword(target[start_elem], start_bit,
- 						 start_bit + subword_width);
- 
- 		target[start_elem] = old_val | (src_subword << start_bit);
+url:    https://github.com/intel-lab-lkp/linux/commits/XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230111043729.3792-1-xupengfei%40nfschina.com
+patch subject: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*) conversions
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230121/202301210219.P2QHV5eM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2eb252eb3b198f857b200cd1b3aee679a7129baa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+        git checkout 2eb252eb3b198f857b200cd1b3aee679a7129baa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/powr1220.c:177:24: error: initializing 'struct powr1220_data *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           struct powr1220_data *chip_data = data;
+                                 ^           ~~~~
+   1 error generated.
+
+
+vim +177 drivers/hwmon/powr1220.c
+
+   172	
+   173	static umode_t
+   174	powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+   175			    attr, int channel)
+   176	{
+ > 177		struct powr1220_data *chip_data = data;
+   178	
+   179		if (channel >= chip_data->max_channels)
+   180			return 0;
+   181	
+   182		switch (type) {
+   183		case hwmon_in:
+   184			switch (attr) {
+   185			case hwmon_in_input:
+   186			case hwmon_in_highest:
+   187			case hwmon_in_label:
+   188				return 0444;
+   189			default:
+   190				break;
+   191			}
+   192			break;
+   193		default:
+   194			break;
+   195		}
+   196	
+   197		return 0;
+   198	}
+   199	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
