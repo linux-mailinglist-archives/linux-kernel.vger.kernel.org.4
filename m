@@ -2,83 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE60676182
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9739D676194
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjATX27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S230104AbjATX32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjATX2z (ORCPT
+        with ESMTP id S229760AbjATX30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:28:55 -0500
+        Fri, 20 Jan 2023 18:29:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD2F53FB1;
-        Fri, 20 Jan 2023 15:28:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEC7762E0;
+        Fri, 20 Jan 2023 15:29:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6030620E5;
-        Fri, 20 Jan 2023 23:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A1FC433EF;
-        Fri, 20 Jan 2023 23:28:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ABAA620DD;
+        Fri, 20 Jan 2023 23:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A9DC4339C;
+        Fri, 20 Jan 2023 23:29:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674257333;
-        bh=r2edRcFMISYKtEmPEu1cLKZR7c8iF9zsqqnoWv9hU3I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i8fMoEgfPYzBd+WPDibH/BLuqUwipoWJwcOyYpJ/Y0H3Rdml9thP589lRa96A/WAP
-         uJE5kWD2JscX/Sdjpw0CyzXtfG/LxhSegqHv1fuSmC0iMrjiQf/55jY7QZ7uEHsAoF
-         E8dMpHJh4CZNfldG+E9O6D3tHhc/7iue722H30CAwBzz6fKqrWs1mObgaZM6G6vx0B
-         6CxilOppA+Ky31fjHsYwZe3m5vUlfrsP8m1+9pPun5WaqAcNvIxLws8pDATrUwg9mj
-         ui7nzJ6cNZIPoyAp1NyeZPWJcbL3gGUtyqacFP7P3DAAb/PThvmhPJwGbNBhCwd+HW
-         B5OlWz8gR2uWg==
-Date:   Fri, 20 Jan 2023 23:28:50 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y8sjsvIJONydWpyQ@kernel.org>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <Y7azFdnnGAdGPqmv@kernel.org>
- <20230106094000.GA2297836@chaop.bj.intel.com>
- <Y7xrtf9FCuYRYm1q@google.com>
+        s=k20201202; t=1674257362;
+        bh=OzMy1pibNfoV7yhVZ0QHEUMQPHCPIA6G8Bauyor+91I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BerBuk9proGIBBa8RkZ4pRzMSZMugrs7axcI6QMTSwpLPqFMCfGYl+h8Bko5U31Z/
+         pXNPJEdrVjuE7LXtm6Lr0HlLCF/Cy3ris3Hun6Xc7DBDA7dZV/YAN9BnAi3ehgXCs2
+         cG/VhX8tk/eOL2TzZVYpnEL65ptomOkAsFc+KMgGnxqBLvIv9T5Vyh2IG7DU67TNfP
+         iV9oXCVvthFy8NfyWbjT8gvL494BUjfUlYuGt1B5i+m3akC2itTGYEPIfl014U1Upm
+         MH0gHDjKBmVCmrl8/Ln0iFfv/xulykbAl+/73cgaZYsaigNEV3mStA+xo7Y5zdJkuF
+         1Vlg5/M4NuJpw==
+Date:   Fri, 20 Jan 2023 17:29:20 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 08/27] dmaengine: dw-edma: Add PCIe bus address getter
+ to the remote EP glue-driver
+Message-ID: <20230120232920.GA681120@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7xrtf9FCuYRYm1q@google.com>
+In-Reply-To: <20230113171409.30470-9-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -88,59 +67,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 07:32:05PM +0000, Sean Christopherson wrote:
-> On Fri, Jan 06, 2023, Chao Peng wrote:
-> > On Thu, Jan 05, 2023 at 11:23:01AM +0000, Jarkko Sakkinen wrote:
-> > > On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
-> > > > To make future maintenance easy, internally use a binary compatible
-> > > > alias struct kvm_user_mem_region to handle both the normal and the
-> > > > '_ext' variants.
-> > > 
-> > > Feels bit hacky IMHO, and more like a completely new feature than
-> > > an extension.
-> > > 
-> > > Why not just add a new ioctl? The commit message does not address
-> > > the most essential design here.
-> > 
-> > Yes, people can always choose to add a new ioctl for this kind of change
-> > and the balance point here is we want to also avoid 'too many ioctls' if
-> > the functionalities are similar.  The '_ext' variant reuses all the
-> > existing fields in the 'normal' variant and most importantly KVM
-> > internally can reuse most of the code. I certainly can add some words in
-> > the commit message to explain this design choice.
+On Fri, Jan 13, 2023 at 08:13:50PM +0300, Serge Semin wrote:
+> In general the Synopsys PCIe EndPoint IP prototype kit can be attached to
+> a PCIe bus with any PCIe Host controller including to the one with
+> distinctive from CPU address space. Due to that we need to make sure that
+> the source and destination addresses of the DMA-slave devices are properly
+> converted to the PCIe bus address space, otherwise the DMA transaction
+> will not only work as expected, but may cause the memory corruption with
+> subsequent system crash. Let's do that by introducing a new
+> dw_edma_pcie_address() method defined in the dw-edma-pcie.c, which will
+> perform the denoted translation by using the pcibios_resource_to_bus()
+> method.
 > 
-> After seeing the userspace side of this, I agree with Jarkko; overloading
-> KVM_SET_USER_MEMORY_REGION is a hack.  E.g. the size validation ends up being
-> bogus, and userspace ends up abusing unions or implementing kvm_user_mem_region
-> itself.
+> Fixes: 41aaff2a2ac0 ("dmaengine: Add Synopsys eDMA IP PCIe glue-logic")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Acked-by: Vinod Koul <vkoul@kernel.org>
 > 
-> It feels absolutely ridiculous, but I think the best option is to do:
+> ---
 > 
-> #define KVM_SET_USER_MEMORY_REGION2 _IOW(KVMIO, 0x49, \
-> 					 struct kvm_userspace_memory_region2)
+> Note this patch depends on the patch "dmaengine: dw-edma: Add CPU to PCIe
+> bus address translation" from this series.
+> ---
+>  drivers/dma/dw-edma/dw-edma-pcie.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> /* for KVM_SET_USER_MEMORY_REGION2 */
-> struct kvm_user_mem_region2 {
-> 	__u32 slot;
-> 	__u32 flags;
-> 	__u64 guest_phys_addr;
-> 	__u64 memory_size;
-> 	__u64 userspace_addr;
-> 	__u64 restricted_offset;
-> 	__u32 restricted_fd;
-> 	__u32 pad1;
-> 	__u64 pad2[14];
-> }
-> 
-> And it's consistent with other KVM ioctls(), e.g. KVM_SET_CPUID2.
-> 
-> Regarding the userspace side of things, please include Vishal's selftests in v11,
-> it's impossible to properly review the uAPI changes without seeing the userspace
-> side of things.  I'm in the process of reviewing Vishal's v2[*], I'll try to
-> massage it into a set of patches that you can incorporate into your series.
-> 
-> [*] https://lore.kernel.org/all/20221205232341.4131240-1-vannapurve@google.com
+> diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
+> index 04c95cba1244..f530bacfd716 100644
+> --- a/drivers/dma/dw-edma/dw-edma-pcie.c
+> +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
+> @@ -95,8 +95,23 @@ static int dw_edma_pcie_irq_vector(struct device *dev, unsigned int nr)
+>  	return pci_irq_vector(to_pci_dev(dev), nr);
+>  }
+>  
+> +static u64 dw_edma_pcie_address(struct device *dev, phys_addr_t cpu_addr)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	struct pci_bus_region region;
+> +	struct resource res = {
+> +		.flags = IORESOURCE_MEM,
+> +		.start = cpu_addr,
+> +		.end = cpu_addr,
+> +	};
+> +
+> +	pcibios_resource_to_bus(pdev->bus, &region, &res);
+> +	return region.start;
+> +}
 
-+1
+This doesn't look DW-specific.  Do you expect other implementations
+that are specific, or could this be a generic function that shares
+some implementation with pci_bus_address()?
 
-BR, Jarkko
+>  static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
+>  	.irq_vector = dw_edma_pcie_irq_vector,
+> +	.pci_address = dw_edma_pcie_address,
+>  };
+>  
+>  static void dw_edma_pcie_get_vsec_dma_data(struct pci_dev *pdev,
+> -- 
+> 2.39.0
+> 
+> 
