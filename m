@@ -2,83 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E53F67534D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B55675352
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjATLQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
+        id S229810AbjATLRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjATLQh (ORCPT
+        with ESMTP id S229703AbjATLRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:16:37 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9613584
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=42EMRJMW6nNuF6BXb3kFW7xC22CWnWGpsMibscJgfIk=; b=cdMqF0a+Pi72ZepiPeVSSHAQP6
-        NEia3ZpFUj4JypIWo2PdIQjirddJY5YthAro07qBI2xpm7uA/7ZDcDmnwt9L0w90tNp0yjNxX5VHy
-        YAJdC7LYQV5sx8ysTpTcb2g9cgEbAIdZbWd22zwrhMcrXcZwAuXyfoct5c+iesfXsgSG1XQkAh9PP
-        PCaenUf5Qem1S6JS2Yr2VILgevYYS5RWqdqglKpQFpzpwqk9H1ZVKT0gRJJHVyqixBhfkWZ5lOmZR
-        NtzOi+wvJdWoReOtrfSBf7poIscO4pPWdc54wzfMpjSq9aOm0Cnu9XmPiuTJUHRpwIJW7r/3AbrkK
-        1GbJinFw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIpNk-001tNv-1Z; Fri, 20 Jan 2023 11:16:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F12D530036B;
-        Fri, 20 Jan 2023 12:16:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D66B72009E43D; Fri, 20 Jan 2023 12:16:26 +0100 (CET)
-Date:   Fri, 20 Jan 2023 12:16:26 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     "Erhard F." <erhard_f@mailbox.org>, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>
-Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at
- "Loading Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
-Message-ID: <Y8p4CnJU6T7+17Sw@hirez.programming.kicks-ass.net>
-References: <20230119022303.177052e4@yea>
- <Y8lL95T93g5xK+mu@hirez.programming.kicks-ass.net>
- <Y8lfStnaUFNRxgYu@hirez.programming.kicks-ass.net>
- <178000f1-1464-03cb-2335-a01b77e70692@amd.com>
+        Fri, 20 Jan 2023 06:17:41 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7406512586
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:17:39 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso4102343wmn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:17:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fUigsRmkXItA6bUlKwYNj2lqkTiqf/I1oCA6A0jR9ew=;
+        b=HOYUi5u8nNi6mfzhsiaQo4s/O6EAuoDO7t8cZHJB5e64BXNrnptRP56upnmwhc/rCh
+         3jZwWoss2pnA7D6QJPCu3+2ba2I0NqjU1uMO5N1vjgLozGKsBPBrdRmeU7wiQzSkQ4kX
+         ottKKbrkunQsBa1SS7z0Vxcg+VefpGjqSicMx+o9pmOXVpGmmKML7FaBjV2eFzNfJA6R
+         M977axLvmi40HdEHzIlycK0UPoSVwSI52oIUtuAncV6mQsqm4+6tmFedNrez5VnMdmCA
+         wUEbZWEH0JS/9RMCO6g19INkouC2zyuofjqTMmfjc/ymP9sUo97cO5/nyE6siGUuvl26
+         ev/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fUigsRmkXItA6bUlKwYNj2lqkTiqf/I1oCA6A0jR9ew=;
+        b=35AKVfqJ/P5LFB7FRUc1RMIoUYzVr7EzCNwkiKBdPHNROJ7g4zxc/0tGFt8wbcd6Sj
+         0TGWtBVTuj2PmYyNmJU/Av5IIBROh/mk1j0qrehmZlD9we9We+f5Icd05UVB6SPYMj1e
+         aDRWp7YRMeJ3QLy+l/806V2kZik89IY5QbHylpC6sFXWqognh4gYoDCJXXqyQ5QZUZQO
+         nOM4tpnYzWmMpgZpg7lcGZvy6TMRHeF5g5JK2zxClCEbu4ug4/8qSv6g4QvlM6O/Sd2i
+         hAD5O4BK52PIiK1u57UoK9n/7r3B2uaPHFM8Xasa+kgUsc1CNYce8j9R/8LNmGuS2Ijj
+         /tXg==
+X-Gm-Message-State: AFqh2ko8seQ9n88chpe6fH/YG153kqixh4oYtqI4b8oU2XCYeLKiY59K
+        Ag/FAN0FUIxCM0fEJmp7H/VwRA==
+X-Google-Smtp-Source: AMrXdXv1GyW15lzWgOsJbli/Sm2gt987OIIchyWtf68r8s7aNtwe7bTFmb2cPTgluncvv68Cno2jug==
+X-Received: by 2002:a05:600c:3b1e:b0:3cf:497c:c4f5 with SMTP id m30-20020a05600c3b1e00b003cf497cc4f5mr14014830wms.13.1674213458038;
+        Fri, 20 Jan 2023 03:17:38 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u3-20020a7bc043000000b003d1d5a83b2esm1949560wmc.35.2023.01.20.03.17.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 03:17:37 -0800 (PST)
+Message-ID: <7a4ab7df-5790-bdde-388d-8a848d2ebeea@linaro.org>
+Date:   Fri, 20 Jan 2023 12:17:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <178000f1-1464-03cb-2335-a01b77e70692@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 1/4] dt-bindings: i2c: qcom-cci: Document SM6350
+ compatible
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221213-sm6350-cci-v1-0-e5d0c36e0c4f@fairphone.com>
+ <20221213-sm6350-cci-v1-1-e5d0c36e0c4f@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213-sm6350-cci-v1-1-e5d0c36e0c4f@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 11:20:53AM +0530, Sandipan Das wrote:
+On 20/01/2023 12:11, Luca Weiss wrote:
+> Document the compatible for the CCI block found on SM6350 SoC.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
 
-> With the combination of defconfig+kvm_guest.config+localyesconfig, the only
-> thing that made a difference was the compiler optimization choice. The kernel
-> boots up with CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y but not with
-> CONFIG_CC_OPTIMIZE_FOR_SIZE=y. Both Clang 15 and 16 kernel builds are affected.
 
-*groan*..
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-0000000000000350 <amd_pmu_add_event>:
-350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
-355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
-35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
-363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
+Best regards,
+Krzysztof
 
-and static_call() can't deal with Jcc, I wonder why we've not seen that
-before -- this isn't totally idiotic code-gen and esp. clang is known to
-do this (see the retpoline thing).
-
-Let me see if I can do something about that.
