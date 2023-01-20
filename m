@@ -2,74 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F2767514B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6F067514E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjATJgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
+        id S229825AbjATJg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjATJgY (ORCPT
+        with ESMTP id S229794AbjATJg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:36:24 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D2C940EA;
-        Fri, 20 Jan 2023 01:36:23 -0800 (PST)
-Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id A827D262AAF;
-        Fri, 20 Jan 2023 10:36:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1674207381;
-        bh=E27B5P92vamwc0WgGeMPoDYf0t5y2F4XmTYYeL00rZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=7wgFBMnyfil5Ub6uuA3bZ1Cb6XNhWuaz4uatZCFKatC8jTWgGw68EmRMKxrCn7vBP
-         9Es1c2D7sA4pg+Rza5dsGnDW6Y97UgWLWwOF+OBdK1k1CkKu9HhdsCPdRY8a3sHtCg
-         Q1t3w7lRYtJ340kn9XB8/nI1q0mz7D/I9AXXhlTNIvNtnlaq6Ot5RycICBRaYRLZ7a
-         Uqkyfknre+kYfNgRTd7uDVtIeLGFohhYzAywWzBdHVauvD6s8UMgvWPjPlBOlquBtX
-         frT5CwJ1RGsEkMc8LVXhuj+NLmHPwCOwu8MdSOlu04XbbDebn2bRewVqfFV7FnikOa
-         hdp1iXe66ESwQ==
-Date:   Fri, 20 Jan 2023 10:36:20 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Janne Grunau <j@jannau.net>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] iommu: dart: Apple t8110 DART support
-Message-ID: <Y8pglA0vvtZmKKnx@8bytes.org>
-References: <20230113105029.26654-1-marcan@marcan.st>
+        Fri, 20 Jan 2023 04:36:56 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3810D3C14;
+        Fri, 20 Jan 2023 01:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674207416; x=1705743416;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=ej2ql3BCd24o4epXI8BXM37w0JnlC2KIwMbHEs3WT7A=;
+  b=d7LTrP5PRezXTNxqjpfQ23O5E+7t3wyeE/l40+u2y8M5EF0WlHskEG3y
+   H8YKN2iPmFU+8vTwsuuM/r1CqdTew/QakNe0zI7uPvka41rfTKv4qcMBN
+   adWsGrb7k7gD8vrp8J92cBv+FJ8d1C68NcdxAPGF3Me/ShvsG/Wa9FkC2
+   ObZUF82YBZWw705sGyjUxFAzyo9A54NRyu1VJQ3BOC6U5XwgjG/FjsErm
+   pB7hA0KWX1qSIaNnp/LHtdEAUA9afcswXz3czk5LILMKmZU3th+TwBlvy
+   9SrK+PY7c72cS7XwEj1PmkYSID7g4Hl5PvcsBVqKbQ7kD8GMD7tU4WIhh
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,231,1669100400"; 
+   d="scan'208";a="193125478"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 02:36:55 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 20 Jan 2023 02:36:52 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 02:36:49 -0700
+Message-ID: <ef0fb089409e1bacecbd2f6d00e09d85253e2637.camel@microchip.com>
+Subject: Re: [PATCH net-next 4/8] net: microchip: sparx5: Add TC support for
+ IS0 VCAP
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Dan Carpenter <error27@gmail.com>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Michael Walle <michael@walle.cc>
+Date:   Fri, 20 Jan 2023 10:36:48 +0100
+In-Reply-To: <Y8pbHvJpvuIuCXws@kadam>
+References: <20230120090831.20032-1-steen.hegelund@microchip.com>
+         <20230120090831.20032-5-steen.hegelund@microchip.com>
+         <Y8pbHvJpvuIuCXws@kadam>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113105029.26654-1-marcan@marcan.st>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 07:50:23PM +0900, Hector Martin wrote:
-> Hector Martin (7):
->   dt-bindings: iommu: dart: add t8110 compatible
->   iommu: dart: Add suspend/resume support
->   iommu: dart: Support >64 stream IDs
->   iommu: dart: Support a variable number of TTBRs per stream
->   iommu: dart: Fix DART_PARAMS1/2 bit define names
->   iommu: dart: Support different variants with different registers
->   iommu: dart: Add t8110 DART support
-> 
->  .../devicetree/bindings/iommu/apple,dart.yaml |   1 +
->  drivers/iommu/apple-dart.c                    | 557 ++++++++++++++----
->  2 files changed, 448 insertions(+), 110 deletions(-)
+SGkgRGFuLAoKT24gRnJpLCAyMDIzLTAxLTIwIGF0IDEyOjEzICswMzAwLCBEYW4gQ2FycGVudGVy
+IHdyb3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRh
+Y2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlCj4gY29udGVudCBpcyBzYWZlCj4gCj4gT24gRnJp
+LCBKYW4gMjAsIDIwMjMgYXQgMTA6MDg6MjdBTSArMDEwMCwgU3RlZW4gSGVnZWx1bmQgd3JvdGU6
+Cj4gPiAtLyogQWRkIGEgcnVsZSBjb3VudGVyIGFjdGlvbiAtIG9ubHkgSVMyIGlzIGNvbnNpZGVy
+ZWQgZm9yIG5vdyAqLwo+ID4gKy8qIEFkZCBhIHJ1bGUgY291bnRlciBhY3Rpb24gKi8KPiA+IMKg
+c3RhdGljIGludCBzcGFyeDVfdGNfYWRkX3J1bGVfY291bnRlcihzdHJ1Y3QgdmNhcF9hZG1pbiAq
+YWRtaW4sCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCB2Y2FwX3J1bGUgKnZydWxlKQo+ID4gwqB7
+Cj4gPiAtwqDCoMKgwqAgaW50IGVycjsKPiA+ICvCoMKgwqDCoCBpbnQgZXJyID0gMDsKPiAKPiBE
+b24ndCBpbml0aWFsaXplLgoKWWVwLiBObyBuZWVkIGZvciB0aGF0LgoKPiAKPiA+IAo+ID4gLcKg
+wqDCoMKgIGVyciA9IHZjYXBfcnVsZV9tb2RfYWN0aW9uX3UzMih2cnVsZSwgVkNBUF9BRl9DTlRf
+SUQsIHZydWxlLT5pZCk7Cj4gPiAtwqDCoMKgwqAgaWYgKGVycikKPiA+IC3CoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgcmV0dXJuIGVycjsKPiA+ICvCoMKgwqDCoCBpZiAoYWRtaW4tPnZ0eXBlID09
+IFZDQVBfVFlQRV9JUzIpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXJyID0gdmNh
+cF9ydWxlX21vZF9hY3Rpb25fdTMyKHZydWxlLCBWQ0FQX0FGX0NOVF9JRCwKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB2cnVsZS0+aWQpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBpZiAoZXJyKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgcmV0dXJuIGVycjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdmNhcF9ydWxl
+X3NldF9jb3VudGVyX2lkKHZydWxlLCB2cnVsZS0+aWQpOwo+ID4gK8KgwqDCoMKgIH0KPiA+IAo+
+ID4gLcKgwqDCoMKgIHZjYXBfcnVsZV9zZXRfY291bnRlcl9pZCh2cnVsZSwgdnJ1bGUtPmlkKTsK
+PiA+IMKgwqDCoMKgwqAgcmV0dXJuIGVycjsKPiAKPiByZXR1cm4gMDsKCkkgd2lsbCB1cGRhdGUg
+dGhhdC4KPiAKPiA+IMKgfQo+IAo+IHJlZ2FyZHMsCj4gZGFuIGNhcnBlbnRlcgoKVGhhbmtzIGZv
+ciB0aGUgcmV2aWV3LgoKQlIKU3RlZW4K
 
-Applied, thanks Hector.
