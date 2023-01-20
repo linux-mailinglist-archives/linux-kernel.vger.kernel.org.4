@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45CC675B13
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A63675B14
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjATRVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S229568AbjATRWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjATRVn (ORCPT
+        with ESMTP id S229491AbjATRWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:21:43 -0500
+        Fri, 20 Jan 2023 12:22:07 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E06475726
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:21:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EA2AA7F5;
+        Fri, 20 Jan 2023 09:22:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D26462022
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 17:21:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F22C433A1;
-        Fri, 20 Jan 2023 17:21:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBF8361FD0;
+        Fri, 20 Jan 2023 17:21:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6FDCC433D2;
+        Fri, 20 Jan 2023 17:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674235301;
-        bh=I1qTWw2OMTpCQGNS0oCnz+DeLugW7m0MkCxFsFb/Dak=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Kfdej4NjVMobPhJ3rE/PMAzza8oADmNlkGqiZYGqRvTSIUQdTHKRd6NHGGwNKg8g4
-         Wv67aWSm+XPbi1RBoo3IcSzQxQNxls+vkqagf4zovgJuG5e5YtyX6zoONtyfcnsHr/
-         MmszMAR/PoZVZaQ2ZUmMiK+VbMH8Nxupenpd4yEa4t3V07RSClxZbnlZ9l7Bxy/Eha
-         7l4dxYe+UKqgg6a7G6pQcoxZWuDHr9mOJgi4qoCp2cwXyt1YcH92lwoAsO8udPKTIu
-         N9GMcWwfBWm9lgbgj4KzGHOF1wWRo+bYyHu/V0BAlDo1pzAH3QCCu2hHfcUhjy3Azr
-         AmgM+CiHvme9Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8BB745C17DC; Fri, 20 Jan 2023 09:21:40 -0800 (PST)
-Date:   Fri, 20 Jan 2023 09:21:40 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <20230120172140.GL2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-40-surenb@google.com>
- <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
- <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
- <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
- <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
- <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
- <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+        s=k20201202; t=1674235319;
+        bh=aOWrIzoVktGpfYehvAOwo66W8UYD3v3uShD7W+37SkQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fl1M6r+8nm7kVpvmvlLo7D52eAx8jv03B0opPD4vqI6RfrKiz8qcDi1MX0RaQr2ce
+         Y1rcXTlUvgj00/rIIeWsrRkKA4JKAOXcn3yD2cRU2qy+W+VRySek0WRD6/PGtevzty
+         ZpviaUbdn6Vibc/MulAbYQbFcTfTths5/hiAC/+7Q+p0DBLMgGVcCR9eO3iSy5Insg
+         1AHoVlpeYY89Q7hVKrpIC/dOdSa50SJCBTDgFRAnZy84uCQt6EAT1WWBGp8FRkg1oP
+         cm8iNK0hO7+79xtUYZyXSdGOC4H8LkNB5jVAIAuJkVAMSH4v+d0Y4erTKeY7fI9i8B
+         4qEtiSzEjilXw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7F06B405BE; Fri, 20 Jan 2023 14:21:56 -0300 (-03)
+Date:   Fri, 20 Jan 2023 14:21:56 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        leo.yan@linaro.org, mike.leach@linaro.org, sgoutham@marvell.com,
+        gcherian@marvell.com, lcherian@marvell.com, bbhushan2@marvell.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/8] perf: Use perf_pmu__open_file() and
+ perf_pmu__scan_file()
+Message-ID: <Y8rNtO5HNcPJDpQ2@kernel.org>
+References: <20230120143702.4035046-1-james.clark@arm.com>
+ <20230120143702.4035046-3-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+In-Reply-To: <20230120143702.4035046-3-james.clark@arm.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -80,65 +70,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 04:49:42PM +0000, Matthew Wilcox wrote:
-> On Fri, Jan 20, 2023 at 08:45:21AM -0800, Suren Baghdasaryan wrote:
-> > On Fri, Jan 20, 2023 at 8:20 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
-> > > > > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > >
-> > > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
-> > > > > > > call_rcu() can take a long time when callback offloading is enabled.
-> > > > > > > Its use in the vm_area_free can cause regressions in the exit path when
-> > > > > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
-> > > > > > > a list and free them in groups using one call_rcu() call per group.
-> > > > > >
-> > > > > > After some more clarification I can understand how call_rcu might not be
-> > > > > > super happy about thousands of callbacks to be invoked and I do agree
-> > > > > > that this is not really optimal.
-> > > > > >
-> > > > > > On the other hand I do not like this solution much either.
-> > > > > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
-> > > > > > much with processes with a huge number of vmas either. It would still be
-> > > > > > in housands of callbacks to be scheduled without a good reason.
-> > > > > >
-> > > > > > Instead, are there any other cases than remove_vma that need this
-> > > > > > batching? We could easily just link all the vmas into linked list and
-> > > > > > use a single call_rcu instead, no? This would both simplify the
-> > > > > > implementation, remove the scaling issue as well and we do not have to
-> > > > > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
-> > > > >
-> > > > > Yes, I agree the solution is not stellar. I wanted something simple
-> > > > > but this is probably too simple. OTOH keeping all dead vm_area_structs
-> > > > > on the list without hooking up a shrinker (additional complexity) does
-> > > > > not sound too appealing either.
-> > > >
-> > > > I suspect you have missed my idea. I do not really want to keep the list
-> > > > around or any shrinker. It is dead simple. Collect all vmas in
-> > > > remove_vma and then call_rcu the whole list at once after the whole list
-> > > > (be it from exit_mmap or remove_mt). See?
-> > >
-> > > Yes, I understood your idea but keeping dead objects until the process
-> > > exits even when the system is low on memory (no shrinkers attached)
-> > > seems too wasteful. If we do this I would advocate for attaching a
-> > > shrinker.
-> > 
-> > Maybe even simpler, since we are hit with this VMA freeing flood
-> > during exit_mmap (when all VMAs are destroyed), we pass a hint to
-> > vm_area_free to batch the destruction and all other cases call
-> > call_rcu()? I don't think there will be other cases of VMA destruction
-> > floods.
+Em Fri, Jan 20, 2023 at 02:36:55PM +0000, James Clark escreveu:
+> Remove some code that duplicates existing methods. Copy strings where
+> const strings are required.
 > 
-> ... or have two different call_rcu functions; one for munmap() and
-> one for exit.  It'd be nice to use kmem_cache_free_bulk().
+> No functional changes.
 
-Good point, kfree_rcu(p, r) where "r" is the name of the rcu_head
-structure's field, is much more cache-efficient.
 
-The penalty is that there is no callback function to do any cleanup.
-There is just a kfree()/kvfree (bulk version where applicable),
-nothing else.
+Have you used 'perf test'?
 
-							Thanx, Paul
+[acme@quaco perf]$ perf test -v python
+Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
+ 19: 'import perf' in python                                         :
+--- start ---
+test child forked, pid 232379
+python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf/python'); import perf" | '/usr/bin/python3' "
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ImportError: /tmp/build/perf/python/perf.cpython-310-x86_64-linux-gnu.so: undefined symbol: perf_pmu__scan_file
+test child finished with -1
+---- end ----
+'import perf' in python: FAILED!
+[acme@quaco perf]$
+ 
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  tools/perf/util/cputopo.c    |  9 +-------
+>  tools/perf/util/pmu-hybrid.c | 27 +++++-------------------
+>  tools/perf/util/pmu.c        | 40 +++++++++++-------------------------
+>  tools/perf/util/pmu.h        |  3 ++-
+>  4 files changed, 20 insertions(+), 59 deletions(-)
+> 
+> diff --git a/tools/perf/util/cputopo.c b/tools/perf/util/cputopo.c
+> index 1a3ff6449158..e08797c3cdbc 100644
+> --- a/tools/perf/util/cputopo.c
+> +++ b/tools/perf/util/cputopo.c
+> @@ -422,8 +422,6 @@ void numa_topology__delete(struct numa_topology *tp)
+>  static int load_hybrid_node(struct hybrid_topology_node *node,
+>  			    struct perf_pmu *pmu)
+>  {
+> -	const char *sysfs;
+> -	char path[PATH_MAX];
+>  	char *buf = NULL, *p;
+>  	FILE *fp;
+>  	size_t len = 0;
+> @@ -432,12 +430,7 @@ static int load_hybrid_node(struct hybrid_topology_node *node,
+>  	if (!node->pmu_name)
+>  		return -1;
+>  
+> -	sysfs = sysfs__mountpoint();
+> -	if (!sysfs)
+> -		goto err;
+> -
+> -	snprintf(path, PATH_MAX, CPUS_TEMPLATE_CPU, sysfs, pmu->name);
+> -	fp = fopen(path, "r");
+> +	fp = perf_pmu__open_file(pmu, "cpus");
+>  	if (!fp)
+>  		goto err;
+>  
+> diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
+> index f51ccaac60ee..38628805a952 100644
+> --- a/tools/perf/util/pmu-hybrid.c
+> +++ b/tools/perf/util/pmu-hybrid.c
+> @@ -20,32 +20,15 @@ LIST_HEAD(perf_pmu__hybrid_pmus);
+>  
+>  bool perf_pmu__hybrid_mounted(const char *name)
+>  {
+> -	char path[PATH_MAX];
+> -	const char *sysfs;
+> -	FILE *file;
+> -	int n, cpu;
+> +	int cpu;
+> +	char pmu_name[PATH_MAX];
+> +	struct perf_pmu pmu = {.name = pmu_name};
+>  
+>  	if (strncmp(name, "cpu_", 4))
+>  		return false;
+>  
+> -	sysfs = sysfs__mountpoint();
+> -	if (!sysfs)
+> -		return false;
+> -
+> -	snprintf(path, PATH_MAX, CPUS_TEMPLATE_CPU, sysfs, name);
+> -	if (!file_available(path))
+> -		return false;
+> -
+> -	file = fopen(path, "r");
+> -	if (!file)
+> -		return false;
+> -
+> -	n = fscanf(file, "%u", &cpu);
+> -	fclose(file);
+> -	if (n <= 0)
+> -		return false;
+> -
+> -	return true;
+> +	strlcpy(pmu_name, name, sizeof(pmu_name));
+> +	return perf_pmu__scan_file(&pmu, "cpus", "%u", &cpu) > 0;
+>  }
+>  
+>  struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 1edbb714ff32..a771a5972fc5 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -571,45 +571,31 @@ static void pmu_read_sysfs(void)
+>  	closedir(dir);
+>  }
+>  
+> -static struct perf_cpu_map *__pmu_cpumask(const char *path)
+> -{
+> -	FILE *file;
+> -	struct perf_cpu_map *cpus;
+> -
+> -	file = fopen(path, "r");
+> -	if (!file)
+> -		return NULL;
+> -
+> -	cpus = perf_cpu_map__read(file);
+> -	fclose(file);
+> -	return cpus;
+> -}
+> -
+>  /*
+>   * Uncore PMUs have a "cpumask" file under sysfs. CPU PMUs (e.g. on arm/arm64)
+>   * may have a "cpus" file.
+>   */
+>  #define SYS_TEMPLATE_ID	"./bus/event_source/devices/%s/identifier"
+> -#define CPUS_TEMPLATE_UNCORE	"%s/bus/event_source/devices/%s/cpumask"
+>  
+>  static struct perf_cpu_map *pmu_cpumask(const char *name)
+>  {
+> -	char path[PATH_MAX];
+>  	struct perf_cpu_map *cpus;
+> -	const char *sysfs = sysfs__mountpoint();
+>  	const char *templates[] = {
+> -		CPUS_TEMPLATE_UNCORE,
+> -		CPUS_TEMPLATE_CPU,
+> +		"cpumask",
+> +		"cpus",
+>  		NULL
+>  	};
+>  	const char **template;
+> +	char pmu_name[PATH_MAX];
+> +	struct perf_pmu pmu = {.name = pmu_name};
+> +	FILE *file;
+>  
+> -	if (!sysfs)
+> -		return NULL;
+> -
+> +	strlcpy(pmu_name, name, sizeof(pmu_name));
+>  	for (template = templates; *template; template++) {
+> -		snprintf(path, PATH_MAX, *template, sysfs, name);
+> -		cpus = __pmu_cpumask(path);
+> +		file = perf_pmu__open_file(&pmu, *template);
+> +		if (!file)
+> +			continue;
+> +		cpus = perf_cpu_map__read(file);
+>  		if (cpus)
+>  			return cpus;
+>  	}
+> @@ -620,13 +606,11 @@ static struct perf_cpu_map *pmu_cpumask(const char *name)
+>  static bool pmu_is_uncore(const char *name)
+>  {
+>  	char path[PATH_MAX];
+> -	const char *sysfs;
+>  
+>  	if (perf_pmu__hybrid_mounted(name))
+>  		return false;
+>  
+> -	sysfs = sysfs__mountpoint();
+> -	snprintf(path, PATH_MAX, CPUS_TEMPLATE_UNCORE, sysfs, name);
+> +	perf_pmu__pathname_scnprintf(path, sizeof(path), name, "cpumask");
+>  	return file_available(path);
+>  }
+>  
+> @@ -1737,7 +1721,7 @@ bool pmu_have_event(const char *pname, const char *name)
+>  	return false;
+>  }
+>  
+> -static FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name)
+> +FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name)
+>  {
+>  	char path[PATH_MAX];
+>  
+> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> index 96d030c8b3b3..742d4db319a0 100644
+> --- a/tools/perf/util/pmu.h
+> +++ b/tools/perf/util/pmu.h
+> @@ -7,6 +7,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/list.h>
+>  #include <stdbool.h>
+> +#include <stdio.h>
+>  #include "parse-events.h"
+>  #include "pmu-events/pmu-events.h"
+>  
+> @@ -22,7 +23,6 @@ enum {
+>  };
+>  
+>  #define PERF_PMU_FORMAT_BITS 64
+> -#define CPUS_TEMPLATE_CPU	"%s/bus/event_source/devices/%s/cpus"
+>  #define MAX_PMU_NAME_LEN 128
+>  
+>  struct perf_event_attr;
+> @@ -262,5 +262,6 @@ double perf_pmu__cpu_slots_per_cycle(void);
+>  int perf_pmu__event_source_devices_scnprintf(char *pathname, size_t size);
+>  int perf_pmu__pathname_scnprintf(char *buf, size_t size,
+>  				 const char *pmu_name, const char *filename);
+> +FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name);
+>  
+>  #endif /* __PMU_H */
+> -- 
+> 2.25.1
+> 
+
+-- 
+
+- Arnaldo
