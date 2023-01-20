@@ -2,117 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFB1674F9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB85D674FA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjATImZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S229560AbjATIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjATImY (ORCPT
+        with ESMTP id S229523AbjATIoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:42:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C710D8534B;
-        Fri, 20 Jan 2023 00:42:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6219F61E62;
-        Fri, 20 Jan 2023 08:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63366C4339B;
-        Fri, 20 Jan 2023 08:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674204142;
-        bh=tB0MmybYo3CIQd+gytr6S3Y+F0W3ehGkmi3+XA96szM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AMV02sHEMtZDjobYL/T669czLEGSbDoQX6as42+vgygCGbcY+YD7ZUieJA7g8W5jn
-         /B08jybxOVX+tZ3rgjLqVemGoktwZd1kraYFLy8zTFxuFZeHf7AI/iT+yqGe4mi4M9
-         CU8QD1EFJ8RbnLM64LKZzBMuLPYgqPB3gENwjRjoOaQzza6CihZie+DgOgEixn3qDK
-         oTeV3Kpz9bAIS6EUlzq3QATDPZPvQ19ScreBoX0em2WLMOFwT8SzfA56PfwISRs61x
-         R4Y1X+uUjzJUO1IZFzN3mRmOdCZd7PgHdvVex4bPonMy7HTtrCPurvNlOBqe/1wafO
-         XH0vZ22MYvTsQ==
-Date:   Fri, 20 Jan 2023 09:42:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: i2c-mt65xx: add binding for
- MT8365 SoC
-Message-ID: <Y8pT6dhe8xcDEz9k@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Qii Wang <qii.wang@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>, Rob Herring <robh@kernel.org>,
-        linux-i2c@vger.kernel.org,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org
-References: <20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com>
- <20221122-mt8365-i2c-support-v2-1-e4c7c514e781@baylibre.com>
+        Fri, 20 Jan 2023 03:44:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1297CCC3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:43:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674204215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ieVgb0wdTbUDgdUwiBcUCrz7AjasaHhJqwRtTkIp84=;
+        b=ViGyrr9r9RuIq3OK2pb8ZkVSoTmzKFGBFv7Brluoaq/8+C8aKF4XoOEAJB5NEJYqOzP2y1
+        0/f2Q9IHbHbyQrJIotWwMfNLvWdIvuSsRpNVsPigjA0f+oYOwkzpmayM/7L6rWDLU2tho1
+        p0OB4rq3Mbfpk4wf5eMu4mdJSeXoKa0=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-413-_2y19hoYM36dLV07yf79ag-1; Fri, 20 Jan 2023 03:43:33 -0500
+X-MC-Unique: _2y19hoYM36dLV07yf79ag-1
+Received: by mail-il1-f197.google.com with SMTP id y5-20020a056e021be500b0030bc4f23f0aso3354810ilv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:43:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ieVgb0wdTbUDgdUwiBcUCrz7AjasaHhJqwRtTkIp84=;
+        b=VRLQqgoc6otOImPssLq9Tkz+reuPtI2LmWHrwrQLPH0V5Lz9A3pLgA+0qFAI/K05TN
+         vtnV6i6YISLn/ygFeAztgVQU7oMRk8nt8syNqeK/yresYQGnzrMC74YG8E4HR5NkX78G
+         odmDW2N6XNxgpliUFrdYRgyUOhiYfGAnqYaq3nJwolIWBdbCY6bTYEU3OCTelEWV3MrN
+         CPsk7Ru/wRj/+CbW5Co3qN7pSIZBLv6EnO1M3yiOM+KAIau+90o2E6CNXOB4yz05p1v0
+         8kDDqN//yszDTW+EcUkr7ic9CdXw03+bR/UPF5WUrsIz+77dv4wVZ8J7pHSQ0FUfoQMH
+         YfTw==
+X-Gm-Message-State: AFqh2kqP8gVhb8YP3v8dG8/imIbf5x1kGH5Ed1ykCgJU48hJSeCFbcFz
+        1ilHiMm9rP5ycus2YDwCr+pUGxWgy9NubO3HzLS0duYZ/ir4tLdk5Z8yiZvvl8DEyprwuWvG2RP
+        H6+Vna84rEP433X4VEcxsFOQD3GE8YbmwdMT7NDCW
+X-Received: by 2002:a5d:884b:0:b0:704:d851:64ba with SMTP id t11-20020a5d884b000000b00704d85164bamr818293ios.135.1674204212930;
+        Fri, 20 Jan 2023 00:43:32 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuqWj7kT7WAI3DeIVj9rztUM3R8UUxuRsEPXeV6XWDqUb5Yxgs99M9gWUoAq8V02mWEWfIaFyr9o0FeQ5PeRM0=
+X-Received: by 2002:a5d:884b:0:b0:704:d851:64ba with SMTP id
+ t11-20020a5d884b000000b00704d85164bamr818292ios.135.1674204212712; Fri, 20
+ Jan 2023 00:43:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FHiaATq8WsrcHDfa"
-Content-Disposition: inline
-In-Reply-To: <20221122-mt8365-i2c-support-v2-1-e4c7c514e781@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230119211455.498968-1-echanude@redhat.com> <20230119211455.498968-2-echanude@redhat.com>
+ <Y8m/ljQUJOefsD6O@ZenIV>
+In-Reply-To: <Y8m/ljQUJOefsD6O@ZenIV>
+From:   Alexander Larsson <alexl@redhat.com>
+Date:   Fri, 20 Jan 2023 09:43:21 +0100
+Message-ID: <CAL7ro1EESqanEQnGnLqd_WvoxL0ybn0XJwtMAFxap=w-a=-Vig@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 1/1] fs/namespace: defer free_mount from namespace_unlock
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Eric Chanudet <echanude@redhat.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Andrew Halaney <ahalaney@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 11:09 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Thu, Jan 19, 2023 at 04:14:55PM -0500, Eric Chanudet wrote:
+> > From: Alexander Larsson <alexl@redhat.com>
+> >
+> > Use call_rcu to defer releasing the umount'ed or detached filesystem
+> > when calling namepsace_unlock().
+> >
+> > Calling synchronize_rcu_expedited() has a significant cost on RT kernel
+> > that default to rcupdate.rcu_normal_after_boot=1.
+> >
+> > For example, on a 6.2-rt1 kernel:
+> > perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
+> >            0.07464 +- 0.00396 seconds time elapsed  ( +-  5.31% )
+> >
+> > With this change applied:
+> > perf stat -r 10 --null --pre 'mount -t tmpfs tmpfs mnt' -- umount mnt
+> >         0.00162604 +- 0.00000637 seconds time elapsed  ( +-  0.39% )
+> >
+> > Waiting for the grace period before completing the syscall does not seem
+> > mandatory. The struct mount umount'ed are queued up for release in a
+> > separate list and no longer accessible to following syscalls.
+>
+> Again, NAK.  If a filesystem is expected to be shut down by umount(2),
+> userland expects it to have been already shut down by the time the
+> syscall returns.
+>
+> It's not just visibility in namespace; it's "can I pull the disk out?".
+> Or "can the shutdown get to taking the network down?", for that matter.
 
---FHiaATq8WsrcHDfa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 19, 2023 at 06:08:52PM +0100, Alexandre Mergnat wrote:
-> From: Fabien Parent <fparent@baylibre.com>
->=20
-> Add binding documentation for the MT8365 I2C controllers.
->=20
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-
-Applied to for-next, thanks!
+In the usecase we're worrying about, all the unmounts are lazy (i.e.
+MNT_DETACH). What about delaying the destroy in that case? That seems
+in line with the expected behaviour of lazy shutdown. I.e. you can't
+rely on it to be settled anyway.
 
 
---FHiaATq8WsrcHDfa
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ Alexander Larsson                                Red Hat, Inc
+       alexl@redhat.com         alexander.larsson@gmail.com
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKU+UACgkQFA3kzBSg
-KbbYAg/+NvPont0Ra5ivgZMy0aWdgYNhPXjOIwbtl0vtaaU1ZeUbGnHll9skN77k
-w2FSH9BR8dZiTgwgw1PGaVNhvFTU6BOkIrnN9TXAsTdUAj82JxHhQKer4kIM/uVf
-cCjwDN+9rrapuUCBJbMqAhEWvWvm1ylodAs1lF5tik0WxBX/qPpiZn6MFkl3qCfm
-Kr0zsZ3MRjj0A1eA9F3ptxL1Y7yvPBfFEDWjyaFxIQgkAkIlfOXi+Sv8QyUD4Ncs
-o8Uy5Q0EZsTG2CElvnlPW6h0TSIc6uJbMzW/vuXH+3G1IUoYAHFxkNxyDbBoH6Dk
-9BIeCj9VdQBSDYwvRrCvB5+eGrCB3NE94eI6ArUFiYA+ZNMIw74bFsIKYnJv/6Dr
-VoPG0eOOkJEeWA4vKgPPJzWadCj/WvHlZp5mJ2JeY2zchRf4IuYhUiJiZW+gOhGr
-Lp4eXYNxblarSF+9DwYZ+GK/oNVRE7M7JjD2j02eRTunVkkAOIBCzCt+egKq/gbW
-53SnS5rSQRhHT+TixOtqdsY8li2pLdpF2Uj9k1eaIoLX1CaPSqo6UE5oijt+8Yi1
-+jwAfNQ7Tdcw+PadlhCylVCUw/TLSZ1WTrJTPuLZ2dkWAoem1eLsLedyRiuu4DVV
-G2qyr4BM86T+5gNypaj/uufkz2aB5BxwNFU/tJ+X9EjkRf/1m/s=
-=mGx/
------END PGP SIGNATURE-----
-
---FHiaATq8WsrcHDfa--
