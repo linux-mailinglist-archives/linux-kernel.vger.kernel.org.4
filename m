@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AABD67525C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8396D67525D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjATK0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S229958AbjATK0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjATK0K (ORCPT
+        with ESMTP id S229598AbjATK0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:26:10 -0500
+        Fri, 20 Jan 2023 05:26:11 -0500
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2558E9F3AA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703079D287
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1674210369;
-  x=1705746369;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1674210370;
+  x=1705746370;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/WXW21EG+pqy+W42CXni76Bfh0YGb++llEepThhlRRc=;
-  b=IKW7nFv+LKDHnO2nGa+XolXARk8MsIrLWPKINcm5X9iW6Ha6IFy88gOg
-   RNonyCEfi2zx4FgcpNF0EjJBLJ6JIvTiliIZQCVgbZy0nsMqAPZL8Q3Lg
-   1nH5wtQGGQC8zSNCoIFHWhuYfS63X4JVWT6QP/j9U/r/WmtSXNcMTMroV
-   5Aas294uor/+6iJldludXwqB2CuQy/5mYVXnpnFRiL2ZNQ3EBr+KZl9zr
-   zzO22sTJJaQ2S1iiKgNKMkfoyq/kdQbAlSC3myqDyKRoy0QdJZHh+yQgQ
-   Rf80EJ8LmNK06yr4OtnLgTRnhy9UfnpGQxY69vVQvpZnZhdmMAAaRhMFG
-   g==;
+  bh=vpu9tETurwEUff35qr7E5xH/0FKUrT9IUn9FLfI3fJw=;
+  b=KhiBi/UDzsjpe11KThqbHkPTj0K7x1gJonTZrRKQpbrC9Ok389NXyhRH
+   DtGmutBiadvBzCW8Jrq/VrBJzFYNu8J8Ar01VlyCgzvFz/N6a901VXfqh
+   hAHYXFrCT/gRiMJhfYlTMR7CX6aGr3xFkhg9OOqxOJARDBJqdxK3ZT9f9
+   gVSklChgBNVecTHamI1VJbDY1PqVihqO4BnfCi2scUXLx8Sl3lK6NsDmU
+   8N/4sS0MiTJrS5T0XuUU7V6lR+CzTVuFS2ISh+ElX3kVQIUiqn2jZpsC+
+   oymCPVr20fw1z/I5/F4COGSb+c7sefDM0TKUTSz1om3pFonhQhuPqaoAW
+   w==;
 From:   Astrid Rost <astrid.rost@axis.com>
 To:     Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -35,9 +35,9 @@ To:     Mark Brown <broonie@kernel.org>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 CC:     <kernel@axis.com>, <alsa-devel@alsa-project.org>,
         <linux-kernel@vger.kernel.org>, Astrid Rost <astrid.rost@axis.com>
-Subject: [PATCH v2 1/4] ASoC: soc-component: add get_jack_type
-Date:   Fri, 20 Jan 2023 11:25:51 +0100
-Message-ID: <20230120102555.1523394-2-astrid.rost@axis.com>
+Subject: [PATCH v2 2/4] ASoC: simple-card-utils: create jack inputs for aux_devs
+Date:   Fri, 20 Jan 2023 11:25:52 +0100
+Message-ID: <20230120102555.1523394-3-astrid.rost@axis.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230120102555.1523394-1-astrid.rost@axis.com>
 References: <20230120102555.1523394-1-astrid.rost@axis.com>
@@ -53,67 +53,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add function to return the jack type of snd_jack_types.
-This allows a generic card driver to add a jack with the specified
-type.
+Add a generic way to create jack inputs for auxiliary jack detection
+drivers (e.g. via i2c, spi), which are not part of any real codec.
+The simple-card can be used as combining card driver to add the jacks,
+no new one is required.
+
+Create a jack (for input-events) for jack devices in the auxiliary
+device list (aux_devs). A device which returns a valid value on
+get_jack_type counts as jack device; set_jack is required
+to add the jack to the device.
 
 Signed-off-by: Astrid Rost <astrid.rost@axis.com>
 ---
- include/sound/soc-component.h |  2 ++
- sound/soc/soc-component.c     | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+)
+ include/sound/simple_card_utils.h     |  3 ++
+ sound/soc/generic/simple-card-utils.c | 49 +++++++++++++++++++++++++++
+ sound/soc/generic/simple-card.c       |  4 +++
+ 3 files changed, 56 insertions(+)
 
-diff --git a/include/sound/soc-component.h b/include/sound/soc-component.h
-index c26ffb033777..3203d35bc8c1 100644
---- a/include/sound/soc-component.h
-+++ b/include/sound/soc-component.h
-@@ -98,6 +98,7 @@ struct snd_soc_component_driver {
- 		       int source, unsigned int freq_in, unsigned int freq_out);
- 	int (*set_jack)(struct snd_soc_component *component,
- 			struct snd_soc_jack *jack,  void *data);
-+	int (*get_jack_type)(struct snd_soc_component *component);
- 
- 	/* DT */
- 	int (*of_xlate_dai_name)(struct snd_soc_component *component,
-@@ -384,6 +385,7 @@ int snd_soc_component_set_pll(struct snd_soc_component *component, int pll_id,
- 			      unsigned int freq_out);
- int snd_soc_component_set_jack(struct snd_soc_component *component,
- 			       struct snd_soc_jack *jack, void *data);
-+int snd_soc_component_get_jack_type(struct snd_soc_component *component);
- 
- void snd_soc_component_seq_notifier(struct snd_soc_component *component,
- 				    enum snd_soc_dapm_type type, int subseq);
-diff --git a/sound/soc/soc-component.c b/sound/soc/soc-component.c
-index e12f8244242b..3cd6952212e1 100644
---- a/sound/soc/soc-component.c
-+++ b/sound/soc/soc-component.c
-@@ -256,6 +256,26 @@ int snd_soc_component_set_jack(struct snd_soc_component *component,
+diff --git a/include/sound/simple_card_utils.h b/include/sound/simple_card_utils.h
+index 38590f1ae9ee..a3f3f3aa9e6e 100644
+--- a/include/sound/simple_card_utils.h
++++ b/include/sound/simple_card_utils.h
+@@ -69,6 +69,7 @@ struct asoc_simple_priv {
+ 	} *dai_props;
+ 	struct asoc_simple_jack hp_jack;
+ 	struct asoc_simple_jack mic_jack;
++	struct snd_soc_jack *aux_jacks;
+ 	struct snd_soc_dai_link *dai_link;
+ 	struct asoc_simple_dai *dais;
+ 	struct snd_soc_dai_link_component *dlcs;
+@@ -187,6 +188,8 @@ int asoc_simple_parse_pin_switches(struct snd_soc_card *card,
+ int asoc_simple_init_jack(struct snd_soc_card *card,
+ 			       struct asoc_simple_jack *sjack,
+ 			       int is_hp, char *prefix, char *pin);
++int asoc_simple_init_aux_jacks(struct asoc_simple_priv *priv,
++				char *prefix);
+ int asoc_simple_init_priv(struct asoc_simple_priv *priv,
+ 			       struct link_info *li);
+ int asoc_simple_remove(struct platform_device *pdev);
+diff --git a/sound/soc/generic/simple-card-utils.c b/sound/soc/generic/simple-card-utils.c
+index e35becce9635..56552a616f21 100644
+--- a/sound/soc/generic/simple-card-utils.c
++++ b/sound/soc/generic/simple-card-utils.c
+@@ -786,6 +786,55 @@ int asoc_simple_init_jack(struct snd_soc_card *card,
  }
- EXPORT_SYMBOL_GPL(snd_soc_component_set_jack);
+ EXPORT_SYMBOL_GPL(asoc_simple_init_jack);
  
-+/**
-+ * snd_soc_component_get_jack_type
-+ * @component: COMPONENTs
-+ *
-+ * Returns the jack type of the component
-+ * This can either be the supported type or one read from
-+ * devicetree with the property: jack-type.
-+ */
-+int snd_soc_component_get_jack_type(
-+	struct snd_soc_component *component)
++int asoc_simple_init_aux_jacks(struct asoc_simple_priv *priv, char *prefix)
 +{
-+	int ret = -ENOTSUPP;
++	struct snd_soc_card *card = simple_priv_to_card(priv);
++	struct snd_soc_component *component;
++	int found_jack_index = 0;
++	int type = 0;
++	int num = 0;
++	int ret;
 +
-+	if (component->driver->get_jack_type)
-+		ret = component->driver->get_jack_type(component);
++	if (priv->aux_jacks)
++		return 0;
 +
-+	return soc_component_ret(component, ret);
++	for_each_card_auxs(card, component) {
++		type = snd_soc_component_get_jack_type(component);
++		if (type > 0)
++			num++;
++	}
++	if (num < 1)
++		return 0;
++
++	priv->aux_jacks = devm_kcalloc(card->dev, num,
++				       sizeof(struct snd_soc_jack), GFP_KERNEL);
++	if (!priv->aux_jacks)
++		return -ENOMEM;
++
++	for_each_card_auxs(card, component) {
++		char id[128];
++		struct snd_soc_jack *jack;
++
++		if (found_jack_index >= num)
++			break;
++
++		type = snd_soc_component_get_jack_type(component);
++		if (type <= 0)
++			continue;
++
++		/* create jack */
++		jack = &(priv->aux_jacks[found_jack_index++]);
++		snprintf(id, sizeof(id), "%s-jack", component->name);
++		ret = snd_soc_card_jack_new(card, id, type, jack);
++		if (ret)
++			continue;
++
++		(void)snd_soc_component_set_jack(component, jack, NULL);
++	}
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(snd_soc_component_get_jack_type);
++EXPORT_SYMBOL_GPL(asoc_simple_init_aux_jacks);
 +
- int snd_soc_component_module_get(struct snd_soc_component *component,
- 				 void *mark, int upon_open)
+ int asoc_simple_init_priv(struct asoc_simple_priv *priv,
+ 			  struct link_info *li)
  {
+diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
+index feb55b66239b..e98932c16754 100644
+--- a/sound/soc/generic/simple-card.c
++++ b/sound/soc/generic/simple-card.c
+@@ -623,6 +623,10 @@ static int simple_soc_probe(struct snd_soc_card *card)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = asoc_simple_init_aux_jacks(priv, PREFIX);
++	if (ret < 0)
++		return ret;
++
+ 	return 0;
+ }
+ 
 -- 
 2.30.2
 
