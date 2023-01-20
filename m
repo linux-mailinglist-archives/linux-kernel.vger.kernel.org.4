@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC9567596E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CB0675969
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjATQBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjATQBJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229983AbjATQBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 20 Jan 2023 11:01:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AE5457F2;
-        Fri, 20 Jan 2023 08:01:04 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BCC39514;
-        Fri, 20 Jan 2023 17:01:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674230463;
-        bh=dCrbUtIysS0XtsI7KvoCttFCbXL8nRcxzGx23S0+PbA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IRCKfrm9rY+7rQDZSOdmDMcXslFWoPjaU1FleNjwutSytLkMmzUOgW2i6EWVN/sUz
-         Gs8FOlmrD/0CCl/NMCH4uQpFFrPky57j2QRo8cGu4bkIrD6c9XJpUJ44beZo/vXqzE
-         fqx2lCOYm6KyA88MxCoYLOQGVfIw3e3G11NVMazo=
-Message-ID: <430b7f94-fb54-c4dc-8b11-a1d5c27edee0@ideasonboard.com>
-Date:   Fri, 20 Jan 2023 18:00:58 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229461AbjATQBI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 20 Jan 2023 11:01:08 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id ABF01707C4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:01:04 -0800 (PST)
+Received: (qmail 37304 invoked by uid 1000); 20 Jan 2023 11:01:03 -0500
+Date:   Fri, 20 Jan 2023 11:01:03 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y8q6v3BZ8dlyoTxo@rowland.harvard.edu>
+References: <Y8aKlNY4Z0z2Yqs0@andrea>
+ <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
+ <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
+ <20230118035041.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
+ <20230118200601.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8hclxuhpGm+krkz@rowland.harvard.edu>
+ <20230119000214.GM2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 1/7] i2c: add I2C Address Translator (ATR) support
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-2-tomi.valkeinen@ideasonboard.com>
- <Y8gA+cz9m7PaEhfP@smile.fi.intel.com>
- <31562353-0794-8ad4-d609-3c117dd28d46@ideasonboard.com>
- <Y8q6JsDD7c0QCOq5@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y8q6JsDD7c0QCOq5@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119000214.GM2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 17:58, Andy Shevchenko wrote:
-> On Thu, Jan 19, 2023 at 12:01:33PM +0200, Tomi Valkeinen wrote:
->> On 18/01/2023 16:23, Andy Shevchenko wrote:
->>> On Wed, Jan 18, 2023 at 02:40:25PM +0200, Tomi Valkeinen wrote:
+On Wed, Jan 18, 2023 at 04:02:14PM -0800, Paul E. McKenney wrote:
+> There are pairs of per-CPU counters.  One pair (->srcu_lock_count[])
+> counts the number of srcu_down_read() operations that took place on
+> that CPU and another pair (->srcu_unlock_count[]) counts the number
+> of srcu_down_read() operations that took place on that CPU.  There is
+> an ->srcu_idx that selects which of the ->srcu_lock_count[] elements
+> should be incremented by srcu_down_read().  Of course, srcu_down_read()
+> returns the value of ->srcu_idx that it used so that the matching
+> srcu_up_read() will use that same index when incrementing its CPU's
+> ->srcu_unlock_count[].
 > 
-> ...
+> Grace periods go something like this:
 > 
->>>> +	/* Ensure we have enough room to save the original addresses */
->>>> +	if (unlikely(chan->orig_addrs_size < num)) {
->>>> +		u16 *new_buf;
->>>> +
->>>> +		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
->>>
->>> I remember that I asked why we don't use krealloc_array() here... Perhaps
->>> that we don't need to copy the old mapping table? Can we put a short comment
->>> to clarify this in the code?
->>
->> Yes, we don't care about the old data, we just require the buffer to be
->> large enough.
->>
->> I'm not sure what kind of comment you want here. Isn't this a common idiom,
->> where you have a buffer for temporary data, but you might need to resize at
->> some point if you need a larger one?
+> 1.	Sum up the ->srcu_unlock_count[!ssp->srcu_idx] counters.
 > 
-> Then why not krealloc_array()? That's the question I want to see the answer for
-> in the comments:
+> 2.	smp_mb().
 > 
-> 	/* We don't care about old data, hence no realloc() */
+> 3.	Sum up the ->srcu_unlock_count[!ssp->srcu_idx] counters.
 
-Ok, I'll add that.
+Presumably you meant to write "lock" here, not "unlock".
 
-  Tomi
+> 
+> 4.	If the sums are not equal, retry from #1.
+> 
+> 5.	smp_mb().
+> 
+> 6.	WRITE_ONCE(ssp->srcu_idx, !ssp->srcu_idx);
+> 
+> 7.	smp_mb().
+> 
+> 8.	Same loop as #1-4.
+> 
+> So similar to r/w semaphores, but with two separate distributed counts.
+> This means that the number of readers need not go to zero at any given
+> point in time, consistent with the need to wait only on old readers.
 
+Reasoning from first principles, I deduce the following:
+
+You didn't describe exactly how srcu_down_read() and srcu_up_read() 
+work.  Evidently the unlock increment in srcu_up_read() should have 
+release semantics, to prevent accesses from escaping out the end of the 
+critical section.  But the lock increment in srcu_down_read() has to be 
+stronger than an acquire; to prevent accesses in the critical section 
+escaping out the start, the increment has to be followed by smp_mb().
+
+The smp_mb() fences in steps 5 and 7 appear to be completely 
+unnecessary.
+
+Provided an smp_mb() is added at the very start and end of the grace 
+period, the memory barrier in step 2 and its copy in step 8 can be 
+demoted to smp_rmb().
+
+These changes would be small optimizations at best, and you may consider 
+them unimportant in view of the fact that grace periods often last quite 
+a long time.
+
+Alan
