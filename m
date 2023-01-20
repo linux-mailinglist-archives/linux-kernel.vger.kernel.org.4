@@ -2,151 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D21674826
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A914A67482A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjATAlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S229644AbjATAmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjATAlH (ORCPT
+        with ESMTP id S229630AbjATAmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:41:07 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C86FA57A9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:41:00 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id c2-20020a25a2c2000000b008016611ca77so221409ybn.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:41:00 -0800 (PST)
+        Thu, 19 Jan 2023 19:42:08 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933F77E4B8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:42:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id b5so3540923wrn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:42:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RChfojZSEu0VpWRA0QiZt+0hmKVb1/N9i6LB2MMx+/U=;
-        b=TMRgq1lYspF4qjU1PoMZ91855bnDMMbB5ZvqtNh8zuBj9om107AphBBPpPmTuXiMQT
-         KQdgVkt13M3F8MTGeCyc39U9jpNKozdRkpMT+fzuCrJ9TmkJu+F22zR4ys2tx5zyEDnA
-         uv02szvjoHhVrdjZs9AeaNb9J5J0b/mDNQsSgGYcxmIgEFdVucpejAzv5YRqxOHy3Tsn
-         FW85FW089TjyGzTSk6SIlVWwpr+FFzGJbJkkx07EwGDJjliVmtcK1wHLpezjrMF7aeLB
-         pnZUCK7Qt8rlfz5dJaceTuKUlr0VVGLxD7S8zg/ctKMU4FlSg8aSIViy5BpLBwzBcVD4
-         Nrfg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=weljRA7BwO6FXmcpTYUo9jyIREoLOwef98aMlzObdfs=;
+        b=MlegrDNSv7+cGm1r+ndiOYQNt94mHEk8jy/ywxEj+Ditl22/oIBgk5egjgCDpQqSFR
+         41L//fY6PrDFnu4eL6fei0zHwRLxJa6/P5Yv+VpxyuK8NUJJ7Gu+TgMTTAhumoGJHGeD
+         FMVFQA2zfwJDLxhi+wYJx5Y7wMuRjXqN+zdiNCQP5FmiC0Dr75KsEW/2KpocvOE88L20
+         v9NSsg9h+MstptICc2Nricqv7ognjjlR5zzCrvzmIgty6Pj8NAQx45bDgFneZL7PQVY8
+         aVuLQIURSn19zoNlq/+g8Xr3dvezhC5ngv3Gt1GSQa0jz5Dhy0UXxiGyNx49tN8LN6z0
+         K0qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RChfojZSEu0VpWRA0QiZt+0hmKVb1/N9i6LB2MMx+/U=;
-        b=OmA4Kv8MgconZTZRRMORu2judOnHMZKQcdRq9/QgrEMr6+fyuHJiqjLs1kcsLFNDQ1
-         BcF1p1cvY+MUmWFXuU5HmF6vL/7FVVT5Mlo5DYWzYnBAxU+sDgOP0aaLOcjndcu7AnHX
-         5yanzVDU/RrvI/wv55vEdwB2F2mOTw6xprYJjOGyB1XxfruBIrW8KIeSPH4ni6T5Ceb+
-         P7/7YDhrAhX1UkAgqBRIqrOQAN30QGIF/glDplmTTsXbLFUTzHfBbTb5g3gNL7ixfUSo
-         1cuQ3vtipR6o4iLzdgkPkGYdM5COkvsh4opBTAEW9WZkx1jqgiICWIwOCaGFVUFPjPU4
-         JDJg==
-X-Gm-Message-State: AFqh2ko8X6cxAi7+thR8rD2++9B64PFdxT6QCcLZzXC9Z7ompX6vW3r8
-        Sm6KkpkbInkgwGa+LJmqXc7HIOVi7gM=
-X-Google-Smtp-Source: AMrXdXs8FPNxBgA8z++xqECNoji6FVdv680vuxSLnYRNwmObaC4pEURTyKB1wY4wlC+eCeKQvFXrFGDfP9Q=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:990a:0:b0:4b6:dce2:93 with SMTP id
- q10-20020a81990a000000b004b6dce20093mr1600405ywg.164.1674175260087; Thu, 19
- Jan 2023 16:41:00 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 20 Jan 2023 00:40:51 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230120004051.2043777-1-seanjc@google.com>
-Subject: [PATCH] perf/x86: KVM: Disable vPMU support on hybrid CPUs (host PMUs)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=weljRA7BwO6FXmcpTYUo9jyIREoLOwef98aMlzObdfs=;
+        b=aBgpMdpLdEAHtNMgeUNWr+ZkZkMTt5BjsfdU3v55h9rbpl+LonvDgUufSwCxFWx3P4
+         L60Vmx9bQkeLlW4RH8bi1BrAG3VaKXbYbc5H6AvVVNFjAhKZaGPXmsV3mMFssVzco0Ec
+         iGitUtpzMLoRg/dicgad1A7XdMw+EMTOrLVLGud6VxtVhgg5no8TbzSZHHe0uWKd1bkT
+         HK5+ntu4+xb8z9KX/l0ToKAna7E6mVMgNMeUm8Pmp/RpPDGq3Xzhtp8u5VQQWKoChrih
+         XVbnONlwu3OuSOffOJ1SREy712hdfU5ChPGJzXWZqTVX7KaEmdMqkj8MSeDcFXL9pmbn
+         s/JA==
+X-Gm-Message-State: AFqh2kpDpW6AlZPjwSI/xX4NRQKomayJVFL2Tohw5kR7EGQQMgeE8YBJ
+        cBTEtlAE4xHtgcYUtT0UyMRM5g==
+X-Google-Smtp-Source: AMrXdXsS0WNlrFfYfTOegkpyna6zRye3TTLep1NMgpHygm8ESwh6HXyQ4zIZrJ/K7+WYQhgGFjTXFg==
+X-Received: by 2002:adf:fa88:0:b0:2bd:feb5:fb7b with SMTP id h8-20020adffa88000000b002bdfeb5fb7bmr10175838wrr.33.1674175324069;
+        Thu, 19 Jan 2023 16:42:04 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d4bc6000000b0027323b19ecesm34517945wrt.16.2023.01.19.16.42.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 16:42:03 -0800 (PST)
+Message-ID: <ab1c316e-b018-9fa6-0ebf-5c0b47c397a4@linaro.org>
+Date:   Fri, 20 Jan 2023 00:42:02 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+ <20230117205800.cqexxwxmtupapy7e@builder.lan>
+ <58ec79b0-1b58-48c8-6eea-d6675f34192d@linaro.org>
+In-Reply-To: <58ec79b0-1b58-48c8-6eea-d6675f34192d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable KVM support for virtualizing PMUs on hosts with hybrid PMUs until
-KVM gains a sane way to enumeration the hybrid vPMU to userspace and/or
-gains a mechanism to let userspace opt-in to the dangers of exposing a
-hybrid vPMU to KVM guests.
+On 20/01/2023 00:40, Bryan O'Donoghue wrote:
+> 
+> pronto: wcnss@a204000 {
+>          compatible = "qcom,pronto-v2-pd-pil", "qcom,pronto";
+>          reg = <0x0a204000 0x2000>, <0x0a202000 0x1000>, <0x0a21b000 
+> 0x3000>;
+> 
+>          power-domains = <&rpmpd MSM8939_VDDCX>,
+>                          <&rpmpd MSM8939_VDDMX_AO>;
+>          power-domain-names = "vddcx", "vddmx";
+> };
+> 
+> ---
+> bod
 
-Virtualizing a hybrid PMU, or at least part of a hybrid PMU, is possible,
-but it requires userspace to pin vCPUs to pCPUs to prevent migrating a
-vCPU between a big core and a little core, requires the VMM to accurately
-enumerate the topology to the guest (if exposing a hybrid CPU to the
-guest), and also requires the VMM to accurately enumerate the vPMU
-capabilities to the guest.
+Doh.
 
-The last point is especially problematic, as KVM doesn't control which
-pCPU it runs on when enumerating KVM's vPMU capabilities to userspace.
-For now, simply disable vPMU support on hybrid CPUs to avoid inducing
-seemingly random #GPs in guests.
+I opened the 4.19 kernel ... not 3.18
 
-Reported-by: Jianfeng Gao <jianfeng.gao@intel.com>
-Cc: stable@vger.kernel.org
-Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Link: https://lore.kernel.org/all/20220818181530.2355034-1-kan.liang@linux.intel.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
-
-Lightly tested as I don't have hybrid hardware.  For the record, I'm not
-against supporting hybrid vPMUs in KVM, but it needs to be a dedicated
-effort and not implicitly rely on userspace to do the right thing (or get
-lucky).
-
- arch/x86/events/core.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 85a63a41c471..a67667c41cc8 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -2974,17 +2974,18 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
- 
- void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
- {
--	if (!x86_pmu_initialized()) {
-+	/*
-+	 * Hybrid PMUs don't play nice with virtualization unless userspace
-+	 * pins vCPUs _and_ can enumerate accurate information to the guest.
-+	 * Disable vPMU support for hybrid PMUs until KVM gains a way to let
-+	 * userspace opt into the dangers of hybrid vPMUs.
-+	 */
-+	if (!x86_pmu_initialized() || is_hybrid()) {
- 		memset(cap, 0, sizeof(*cap));
- 		return;
- 	}
- 
- 	cap->version		= x86_pmu.version;
--	/*
--	 * KVM doesn't support the hybrid PMU yet.
--	 * Return the common value in global x86_pmu,
--	 * which available for all cores.
--	 */
- 	cap->num_counters_gp	= x86_pmu.num_counters;
- 	cap->num_counters_fixed	= x86_pmu.num_counters_fixed;
- 	cap->bit_width_gp	= x86_pmu.cntval_bits;
-
-base-commit: de60733246ff4545a0483140c1f21426b8d7cb7f
--- 
-2.39.0.246.g2a6d74b583-goog
-
+*facepalm*
