@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B41D675F36
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7057B675F3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjATVAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S229808AbjATVBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjATVAG (ORCPT
+        with ESMTP id S229608AbjATVBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:00:06 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239538BA9F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:00:05 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so9335472pjq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:00:05 -0800 (PST)
+        Fri, 20 Jan 2023 16:01:16 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0DC8BA8F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:01:14 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id mg12so17003117ejc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:01:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oi0gtjhsP7zp5xSW3Z3RoqoJbUiEEOmd4JoTvK9TkE0=;
-        b=fg/1GeHrMIY8TGrldd/OZ4ISLqmrvplDrY+W9latQq+0WVyUBB+O194ZQd3Pgdap5J
-         P6TdL322sMvyymyQwP8qddbMEe1ZtmHrlAsvz8vO8NFPTYRDvlhfo8irRWvYrGKgF/UN
-         wUVmkk3yfKmCsADg/cisRcGkI2gAVDaslIdKw=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9zrT9/RXPPXhnEVoW0aJsCVkHusFjlZ161d+oX04STE=;
+        b=VhpZPNA/QWJFVRprlhHEdvq+/+4H7v3FVGVD04GyVD/EUEJFdD8RyMe84kgUEPUhWd
+         CSPM+LH1fCURhYgTQa64yUSi3WnWL6zjKgNrnJwZnLqsAmscVxGSMUxPpNSJBAWPLAR6
+         lUsuDtnasVrrYyhkGq9VB/ZHvxzTw2o3nc/q6OBvDQRT+WN28CE+7zlbdJTO/DrtdM9P
+         kAx4wx9IGN1sWaBT2h3CHNexWt7VBNhIZ3a/7+uxHYWSNjz8Z+AJSA1c4l4/oVMG9q+R
+         ZHPNZRWukpuWZCcns72TNlvqN2y/UGD3CjG94LU1GCQloe+M1+8iPwj7GTWVCD3mPjBg
+         2frA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oi0gtjhsP7zp5xSW3Z3RoqoJbUiEEOmd4JoTvK9TkE0=;
-        b=RwCxd959hcMpJG2b/RIedj+55AfRAo2D9BC9bxcgqJgQD7h9CHy2WEO3N9z862/CBr
-         K5ZHtogVEJp1SEcUf+SwU1TsHZPvSx4N0phW20mYUTlaIDCkTXLdc8Ctq/jV7vx5IidW
-         64p6sPnuLns3BgYVNY/pq3RkQAhbeRooj2MKbODiDhsX0puVHjpjI28JnzZXYbXKNlnh
-         f0lrGl47AscOM6TyWgZiArUeir2HfW05RwBBiRNjGvKqlb2EFxDHO5oSstJ1Fzdf7s1+
-         +EF3djmAkbGcPxi6aOOWIpeHv4HP8dDWYCEi9Q9Gk6/pvOgWLf9TQTMSk8HLHIszDcLh
-         IIdQ==
-X-Gm-Message-State: AFqh2ko8wVQZj7gQk2LR1GHMbCh7ACbu9gv93dRDCjrnY/Mt4mrJATnS
-        tv2S1Ln94Z4bailJDNlKkUFy2LxooWubDyQJ
-X-Google-Smtp-Source: AMrXdXsEiftQhUUKdZowWRfYE7CzV0G4etW5wYZ1PTNLMA0OOLMxzhhYiEHcknDcmuT6G9xFRzdPog==
-X-Received: by 2002:a17:902:720a:b0:193:25b6:71bc with SMTP id ba10-20020a170902720a00b0019325b671bcmr18561161plb.25.1674248404393;
-        Fri, 20 Jan 2023 13:00:04 -0800 (PST)
-Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170902e54b00b0018c7a5e052asm27248336plf.225.2023.01.20.13.00.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9zrT9/RXPPXhnEVoW0aJsCVkHusFjlZ161d+oX04STE=;
+        b=7DWliJsvjCzzEGTxRPCWoI94cVb8mgmpC6c7se/4rRozzslTtYYvqOJrrD8JAvjm/n
+         +BoZJukxK9/IQommxGg1ySa/Pz37T3hnhrjw3p9OX8I2XbGKux/hmh2nuS0rmwPHBCIR
+         oxzsajesxzT64azDPgWESy3lNuBfmWOXLVnRpe3UoD/2lffxvAYm3A1EbFj0q+/1ZJmk
+         uSqO6dcSX0qY2dXNGcxPL6PjyueCHy9d9vbGuW+KitjOkmfoAN8dUO3MttPsas5WsI4+
+         1uFV2XMJCnjDaF0FB+s1iszA+3gtbMWpD0G1uIY2IdzPsQwDcSTIct9w+PbJzb7+Cu9O
+         UbNA==
+X-Gm-Message-State: AFqh2koaO5dvEB3tHm+sUtK81tPVgKSlkWQ+qHGJf9Wa2Tf8LgxWcTwz
+        Vbc6MIFuG44e0Ozk+j8l20e2iQ==
+X-Google-Smtp-Source: AMrXdXuKJBPk9bfYe2DX44R2Ihfk454JoHlIi3euiHm+P/rLKqXOFKfrzF2JNOubZZ/RoJp5TRlvPg==
+X-Received: by 2002:a17:906:3741:b0:861:eb6e:8019 with SMTP id e1-20020a170906374100b00861eb6e8019mr14749113ejc.69.1674248472796;
+        Fri, 20 Jan 2023 13:01:12 -0800 (PST)
+Received: from localhost.localdomain (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906595600b0087221268e49sm6581229ejr.186.2023.01.20.13.01.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 13:00:04 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, Prashant Malani <pmalani@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 2/2] usb: typec: tcpm: Remove altmode active state updates
-Date:   Fri, 20 Jan 2023 20:58:28 +0000
-Message-Id: <20230120205827.740900-2-pmalani@chromium.org>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-In-Reply-To: <20230120205827.740900-1-pmalani@chromium.org>
-References: <20230120205827.740900-1-pmalani@chromium.org>
+        Fri, 20 Jan 2023 13:01:12 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Douglas Anderson <dianders@chromium.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/8] drm/msm/dsi: Allow 2 CTRLs on v2.5.0
+Date:   Fri, 20 Jan 2023 22:00:53 +0100
+Message-Id: <20230120210101.2146852-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the "active" state for partner altmodes is now being taken care of
-by the altmode driver itself (specifically, DisplayPort altmode), we
-no longer need to do so from the port driver. So remove the calls to
-typec_altmode_update_active() from TCPM.
+v2.5.0 support was originally added for SC7280, but this hw is also
+present on SM8350, which has one more DSI host. Bump up the dsi count
+and fill in the register of the secondary host to allow it to probe.
 
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
+This should not have any adverse effects on SC7280, as the secondary
+CTRL will only be touched if it's defined, anyway.
+
+Fixes: 65c391b31994 ("drm/msm/dsi: Add DSI support for SC7280")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
+ drivers/gpu/drm/msm/dsi/dsi_cfg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes since v1:
-- Patch first introduced in v2.
-
- drivers/usb/typec/tcpm/tcpm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 904c7b4ce2f0..0f5a9d4db105 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 			}
- 			break;
- 		case CMD_ENTER_MODE:
--			if (adev && pdev) {
--				typec_altmode_update_active(pdev, true);
-+			if (adev && pdev)
- 				*adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
--			}
- 			return 0;
- 		case CMD_EXIT_MODE:
- 			if (adev && pdev) {
--				typec_altmode_update_active(pdev, false);
- 				/* Back to USB Operation */
- 				*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
- 				return 0;
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
+index 33884ebd2f86..6d21f0b33411 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
+@@ -223,8 +223,8 @@ static const struct msm_dsi_config sc7280_dsi_cfg = {
+ 	.num_regulators = ARRAY_SIZE(sc7280_dsi_regulators),
+ 	.bus_clk_names = dsi_sc7280_bus_clk_names,
+ 	.num_bus_clks = ARRAY_SIZE(dsi_sc7280_bus_clk_names),
+-	.io_start = { 0xae94000 },
+-	.num_dsi = 1,
++	.io_start = { 0xae94000, 0xae96000 },
++	.num_dsi = 2,
+ };
+ 
+ static const char * const dsi_qcm2290_bus_clk_names[] = {
 -- 
-2.39.0.246.g2a6d74b583-goog
+2.39.1
 
