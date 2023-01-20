@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC29467496A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACBF674948
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjATClW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S229631AbjATCVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjATClU (ORCPT
+        with ESMTP id S229447AbjATCVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:41:20 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DC4A254
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 18:41:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674182480; x=1705718480;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=xrL5fnmNBnIXgqAfypEkNdzoxAHEnUF6zyRBUREec7I=;
-  b=aclFXqlsmRGzN1lNog70/96FEAfvP6IsG/QPS1XVfWjHBxrXNIqJ6uuX
-   HQWKBhH9C6hFG0xQy5ZfLAbgjY4SeqW54P0yegcdzqtQkNVNCrmlX8xep
-   0Az8cRTtvZQ660qGD7VaCND+LqdvQgGTnCSD2iDITpjGuzPQzPLbofBkt
-   /qMX8bg+nb87SNMWA5Boe7nYHrBIZ47fRlQXyENr/NZvUeDQgm+ftkF/3
-   UcmRCIdeYrefziIBFBMNDQIa08WR74dW8QFl0esea8WIVD5CZNp3RGRo1
-   cDXySwg/lj4Lr5IucZ8hBoq1/LiL/68WvcI1tVOMsrE8/B4k9dySvPOyM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="352748257"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="asc'?scan'208";a="352748257"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 18:41:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="690897048"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="asc'?scan'208";a="690897048"
-Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jan 2023 18:41:16 -0800
-Date:   Fri, 20 Jan 2023 10:20:17 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Deepak R Varma <drv@mailo.com>, David Airlie <airlied@gmail.com>,
-        intel-gfx@lists.freedesktop.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH 2/2] drm/i915/gvt: Avoid full proxy f_ops for
- vgpu_status debug attributes
-Message-ID: <Y8n6YWMjRpT812B+@zhen-hp.sh.intel.com>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <cover.1673375066.git.drv@mailo.com>
- <188df08e0feba0cda2c92145f513dd4e57c6e6cf.1673375066.git.drv@mailo.com>
- <Y72zVXYLVHXuyK05@intel.com>
- <Y8TkTi+/GQwhiMvO@zhen-hp.sh.intel.com>
- <Y8b3IRhx976Ke99X@intel.com>
- <Y8d6CwD3dHLKOUZ5@ubun2204.myguest.virtualbox.org>
- <Y8giB988U5cqsGdd@intel.com>
- <Y8icPEqkdF+7mg7E@zhen-hp.sh.intel.com>
- <Y8m+xBhGCa3kgcO2@intel.com>
+        Thu, 19 Jan 2023 21:21:19 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D896F9F3AA;
+        Thu, 19 Jan 2023 18:21:18 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nyjsn3wtcz4xHV;
+        Fri, 20 Jan 2023 13:21:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674181277;
+        bh=VykjlNEISzH9ES6EM1HIYkl9QZ/VOb+Ao4NZyhFP3RU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VvFEEIzNZnBnzRku0jtd2i+oV7GL40GChNbG/CfSMHZj8yoveQeW6uiX4z9ltgNcV
+         PtdWcHXtsXlYg3WyglQTx5fO+9VXYKbDhBflYc7B4OEADkBQpSn2l6Yrvv8OPKC1fO
+         rns4ABWjf0ZhVvCF20u+yHtL2m1ED7pxvq6gTtEA2JMh48dcaOexOj8oYvMfTIiNQ0
+         c2M7/WexWg0s2QHeF+9BeaUh8aj+Hl92CbEHu+zZYr2CfFBvd2KUjC0yzk3A6RFWrK
+         k+IYeqo85FdVlweD5DSVET2Njw+NFrEJkOJsiAk/IquWrP+S4Ckojn/FVzH9sGKD04
+         EwMS1pVM/TJYg==
+Date:   Fri, 20 Jan 2023 13:21:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the accel tree
+Message-ID: <20230120132116.21de1104@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="m1aJLFosZhJsVcOI"
-Content-Disposition: inline
-In-Reply-To: <Y8m+xBhGCa3kgcO2@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/IJXco6piQnmevsk4ONz=1yC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---m1aJLFosZhJsVcOI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/IJXco6piQnmevsk4ONz=1yC
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On 2023.01.19 17:05:56 -0500, Rodrigo Vivi wrote:
->=20
-> It still doesn't apply in drm-intel-next.
-> Could you please take it through your branch?
->=20
+Hi all,
 
-sure, I'll pick it.
+After merging the accel tree, today's linux-next build (htmldocs)
+produced this warning:
 
---m1aJLFosZhJsVcOI
-Content-Type: application/pgp-signature; name="signature.asc"
+Documentation/accel/introduction.rst:72: WARNING: Inline emphasis start-str=
+ing without end-string.
+
+Introduced by commit
+
+  f65c5dac2073 ("docs: accel: Fix debugfs path")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/IJXco6piQnmevsk4ONz=1yC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCY8n6WwAKCRCxBBozTXgY
-J5SvAJ9C8g+BYbyVNlEdPG78ayrJ8RcOigCeJUNQO9mDJImWIsvnkOvowvuLr/A=
-=KrnD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJ+pwACgkQAVBC80lX
+0GwBdAgAg8IOgZk3/ABJEEmChvKFKqqO8BtF494vtH6QccZo0X1NCvuqaU0bcjIs
+FHkaHGaMqinmM9CEe27sAryiy4zLGsvvMUXEG8jFop8uFMc/TU2rMEr9yz3G2nUN
+DLunzxnwnyPxaup0ZdM3gXfKy97xYHwuu2u2Mlaa7KSvPF0BbLOeHYzUzmhFIbaC
+f/6NN2SeCa/m0mT6wWwfopwSURGr3uXAyQ6QYEPFZ5n8kANoJa7OVAVqmtITX84d
+hHVooOtT7kl+T8NCRYMsiIS8w54rZ3w6aZGaAtTR++BKxEYfTS1D0RksoauS6gBq
+zV+ldVyLTM6UU3lEKwEPbVcKx9ZBpA==
+=U3cu
 -----END PGP SIGNATURE-----
 
---m1aJLFosZhJsVcOI--
+--Sig_/IJXco6piQnmevsk4ONz=1yC--
