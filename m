@@ -2,90 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C391B6748AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576816748B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 02:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjATBNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 20:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S229690AbjATBOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 20:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjATBNl (ORCPT
+        with ESMTP id S229490AbjATBOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:13:41 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952D2A101D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:13:40 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id bj3so4240240pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 17:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=54Q/TlzbS+DFwNiz661U1uDBhYOWMskoME6kXhL4Rqs=;
-        b=HLXf297OXlmCinyIsALB6Gl5jSu9aSLUcLlqBBsQ+Yosm7cWWS3QTFqHqRsM7VRhNx
-         VlZE1a4yxahq2EeVVG8m0U0BmXEfx0sjbQ9W1xoiOffhHuWz9YdaoVerfYqYBvjKhqQG
-         pc8bbcriyiWhtvqxwaGPgKk3KHYmi5krB1WraueVzNSTMbqvAU2FaSmgwYzFw8F0pqU9
-         9/T8LKYBfX0ZIooNoDAWAMC5V+CfeIGZ2XfGLuyyLISBsbnKXF9bIaQpIeUBwb+8xvsK
-         r+RRECqQ7EPjL7QJ3qB49f2zigxwwey9Qj0So/uCGbNU6Zs8n26H5LqLc0Wa0eVczYAW
-         fdew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=54Q/TlzbS+DFwNiz661U1uDBhYOWMskoME6kXhL4Rqs=;
-        b=N3vafm4dzRqKFByJzBQHLxsEm9FGboAPwXAw0NKnhgJv0EZmTSw4wWmSvlrBSsDCOr
-         0aEvTsLl6pRJdi44P5vV+pWriUgOeEjna/c8MUJV2kfBcyREb7DlXr0UDXxwBVMdvW4V
-         e7CuklrDgJcpPiM13qfH04FzzuCDXKHSGOe9O09/7xDIxV/+ALlMAHXXhulYLhrU9zls
-         F7d6SccnTTwNd0A2y7adDdGvCMTy5fV4pqEChYuGYL0BSV4bTyjPxJhBKo+3ExEs6kak
-         S8Dc0wg5i4q/xYLzj+fy0QVYlHE6/B8COJJE0wFh+wZq28ktjtT8h4Y0PjkBxtGc9Fx3
-         RVQQ==
-X-Gm-Message-State: AFqh2kpCjZT4SGvfpWmfIL+SO72d/rLxEPYwGzuECe+lr7bhNJm6ns9e
-        OpGtlXEspCVDYUPhTRrjG3T7rQ==
-X-Google-Smtp-Source: AMrXdXtBmKBoO8bveVA2cTRXrVxI82YkPJo/ltKfaMri16u76lDIMUNYKkiKDLzuUC/IwLzTgxJD+g==
-X-Received: by 2002:a17:903:304b:b0:194:d5ff:3ae3 with SMTP id u11-20020a170903304b00b00194d5ff3ae3mr4716pla.2.1674177219960;
-        Thu, 19 Jan 2023 17:13:39 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q3-20020a17090311c300b0018c990ce7fesm25677780plh.239.2023.01.19.17.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 17:13:39 -0800 (PST)
-Date:   Fri, 20 Jan 2023 01:13:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/8] KVM: x86: Add AMD Guest PerfMonV2 PMU support
-Message-ID: <Y8nqv9K/WUqhaBub@google.com>
-References: <20221111102645.82001-1-likexu@tencent.com>
+        Thu, 19 Jan 2023 20:14:37 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701319F3B5;
+        Thu, 19 Jan 2023 17:14:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674177276; x=1705713276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5y9wsfR82nKhpSG8Hoxflc8ORWgomjjfcjKYDRm1mqc=;
+  b=kU+pE0HJTg2eI7nFZbzJFgpqTlh3LPV6jw/BQAnsIF9H3fcQnS3NqePi
+   Zbwuj0sP3ls1nYykiKBbEN3gqKRDzc2hzygD3co2v9AFdcCeH8O+VzDcr
+   da0c7cDE9wUWA+24VOygKk3YUDfK7jljoGhY/G6NasROfqydyowNvqt+J
+   1mG/gEGQQUPK0HyX0SkWmdIvjJX4N7m12e4Z+hCAmVb0X5quWkK3QV5xz
+   zPSQShonoRvh+nZ0Gxy6hYZh2FLgTWI359SjxXoEP2lQPfUKsaw2Pd5rf
+   51EV6yrq8UhB83Fj2SHhH+kCVnntcjhhUluvS3kPkPdtAVHWcJfBCqm6D
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305847206"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="305847206"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 17:14:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="723789273"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="723789273"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jan 2023 17:14:31 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIfzD-00022V-03;
+        Fri, 20 Jan 2023 01:14:31 +0000
+Date:   Fri, 20 Jan 2023 09:14:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested
+ pointers
+Message-ID: <202301200957.At49rpzu-lkp@intel.com>
+References: <20230119235833.2948341-2-void@manifault.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111102645.82001-1-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230119235833.2948341-2-void@manifault.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022, Like Xu wrote:
-> Starting with Zen4, core PMU on AMD platforms such as Genoa and
-> Ryzen-7000 will support PerfMonV2, and it is also compatible with
-> legacy PERFCTR_CORE behavior and msr addresses.
-> 
-> If you don't have access to the hardware specification, the commits
-> d6d0c7f681fd..7685665c390d for host perf can also bring a quick
-> overview. Its main change is the addition of three msr's equivalent
-> to Intel V2, namely global_ctrl, global_status, global_status_clear.
-> 
-> It is worth noting that this feature is very attractive for reducing the
-> overhead of PMU virtualization, since multiple msr accesses to multiple
-> counters will be replaced by a single access to the global register,
-> plus more accuracy gain when multiple guest counters are used.
+Hi David,
 
-Some minor nits, though I haven't looked at the meat of the series yet.  I'll
-give this a thorough review early next week (unless I'm extra ambitious tomorrow).
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230119235833.2948341-2-void%40manifault.com
+patch subject: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested pointers
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230120/202301200957.At49rpzu-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8f6df14342b1be3516f8e21037edf771df851427
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+        git checkout 8f6df14342b1be3516f8e21037edf771df851427
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash kernel/bpf/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/btf.c:533:5: warning: no previous prototype for 'bpf_find_btf_id' [-Wmissing-prototypes]
+     533 | s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+         |     ^~~~~~~~~~~~~~~
+   kernel/bpf/btf.c: In function 'btf_seq_show':
+   kernel/bpf/btf.c:6977:29: warning: function 'btf_seq_show' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    6977 |         seq_vprintf((struct seq_file *)show->target, fmt, args);
+         |                             ^~~~~~~~
+   kernel/bpf/btf.c: In function 'btf_snprintf_show':
+   kernel/bpf/btf.c:7014:9: warning: function 'btf_snprintf_show' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    7014 |         len = vsnprintf(show->target, ssnprintf->len_left, fmt, args);
+         |         ^~~
+
+
+vim +/bpf_find_btf_id +533 kernel/bpf/btf.c
+
+   532	
+ > 533	s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+   534	{
+   535		struct btf *btf;
+   536		s32 ret;
+   537		int id;
+   538	
+   539		btf = bpf_get_btf_vmlinux();
+   540		if (IS_ERR(btf))
+   541			return PTR_ERR(btf);
+   542		if (!btf)
+   543			return -EINVAL;
+   544	
+   545		ret = btf_find_by_name_kind(btf, name, kind);
+   546		/* ret is never zero, since btf_find_by_name_kind returns
+   547		 * positive btf_id or negative error.
+   548		 */
+   549		if (ret > 0) {
+   550			btf_get(btf);
+   551			*btf_p = btf;
+   552			return ret;
+   553		}
+   554	
+   555		/* If name is not found in vmlinux's BTF then search in module's BTFs */
+   556		spin_lock_bh(&btf_idr_lock);
+   557		idr_for_each_entry(&btf_idr, btf, id) {
+   558			if (!btf_is_module(btf))
+   559				continue;
+   560			/* linear search could be slow hence unlock/lock
+   561			 * the IDR to avoiding holding it for too long
+   562			 */
+   563			btf_get(btf);
+   564			spin_unlock_bh(&btf_idr_lock);
+   565			ret = btf_find_by_name_kind(btf, name, kind);
+   566			if (ret > 0) {
+   567				*btf_p = btf;
+   568				return ret;
+   569			}
+   570			spin_lock_bh(&btf_idr_lock);
+   571			btf_put(btf);
+   572		}
+   573		spin_unlock_bh(&btf_idr_lock);
+   574		return ret;
+   575	}
+   576	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
