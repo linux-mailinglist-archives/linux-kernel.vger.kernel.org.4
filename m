@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8690B675265
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AB6675233
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjATK1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S229585AbjATKSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjATK1R (ORCPT
+        with ESMTP id S229493AbjATKSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:27:17 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01277BAF1F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:50 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k16so3637685wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:26:50 -0800 (PST)
+        Fri, 20 Jan 2023 05:18:33 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31D054B16;
+        Fri, 20 Jan 2023 02:18:31 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g11so661765eda.12;
+        Fri, 20 Jan 2023 02:18:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4mt5lGPeAiHXoegntNYO5GB6SA6d9P+daV7EOX7KxE=;
-        b=fUjHtccIWB0vyjuM9shK7iOBnKRcjVRyDKG0+xnJ/+VnAf+laV6pKo7tbZ3ksh8PvH
-         DTpqVBt9YxlTy9n6MPUwHXfZ17dkV9yIPWutuUoJu1xJKHVVNMqdVkVp71GC8ya2gIrM
-         eKdkevkw7tLtIFyHILfqruPo7R105xSjIPdWcI+57E+FGKb1pzNud70c4jQxXTrpbH5g
-         0MuACQyEH65XIdgQYsrV8x7ILK0SztEBKHhA8qS4PiGT/5AJcMjRPWZSU7O7U19qxeM6
-         AqiHyd94dI/VIZPCUrv69g6vEPxL73eyTPX7/XkYMkKowY3ofeEkr6zxH/d9UwiJo5pd
-         XOnA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rR32aF5dMNy5OTYW2VxFtFAU0sP/66FsLov7Vfqs2hY=;
+        b=Hgew4VzGej9rtF/iZTq5D3HHQK7gxPEUGElkj4yOTxr1krKZTM4MSOdyqYdzoc9ZmM
+         RX5Bn9viHd3HEJYuh6MpqVTitSxfQKZzqnRnqqRYndc2G63eObImsAEtH3ludWk9BySS
+         jgzLr741gnEK3ac30Drht+zdCOqdZtsbQjCrPDLoZhBKFQYUS8sV91cDFpnjNgqDFpDq
+         xkx1LiE16FOOt8RExS+G+tAisq+C1IxA7x3Q1XT5e5Ji34QLYlY19ckRWKO+30eeXpaT
+         qXEM442v9AUn2CKpJrKwDpR10FcwHuuM8Hpc+By9OOwRzFe8r6QEJsfQQ+48lxNdqnU7
+         +JKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e4mt5lGPeAiHXoegntNYO5GB6SA6d9P+daV7EOX7KxE=;
-        b=Zb2mDe2kbDy1H/gcMn2IUyBb2qMvFDeE7g8iTjVHmvX/LwL1i6UpU5PzKefcGnp5ap
-         MY0kFO0AGEFZfJqH4t5wd+D5W2Pb9O+1mW64u73hixC0XIsW5P8BImAscVS3myZRalpU
-         wZ4asXRFdk5UwfL1FozajGaoiEi4Hi6VFggY88ycDG4ibiKifCAJGC019iu2VONtXRGE
-         23Wb0lV/jFL8YMyRPOtq6sfX78/AceK8VlWnLFjIUzpFdAFd8EEyH2vPJ6jC4KBzKap8
-         2Eo0RgS7F3ypGJIwf43f1J63zE27Jre31PXGGjPy+j52j5rzpPzSDzJ5MXcTcee2gDru
-         D7zw==
-X-Gm-Message-State: AFqh2kpxs9d2HIcmmBmqBrmSW8fdUzCnA8ow/FuPt98yG6B88jnDWsYE
-        Wxrlf3/wc6Fu3yWzp1rvBCXGgQ==
-X-Google-Smtp-Source: AMrXdXurHyG2XSMT/oqWAcqCqisVjbAkEuwYynC+zJ20Z/Wc3RoAgIV4gZyyioyzciWoE/Yk0mgjTg==
-X-Received: by 2002:a05:600c:3ac8:b0:3da:f67c:aca6 with SMTP id d8-20020a05600c3ac800b003daf67caca6mr13518984wms.34.1674210407420;
-        Fri, 20 Jan 2023 02:26:47 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id z4-20020a05600c0a0400b003db01178b62sm2095567wmp.40.2023.01.20.02.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 02:26:46 -0800 (PST)
-References: <20230116091637.272923-1-jbrunet@baylibre.com>
- <20230116091637.272923-3-jbrunet@baylibre.com> <Y8dhUwIMb4tTeqWN@lunn.ch>
- <1jmt6eye1m.fsf@starbuckisacylon.baylibre.com> <Y8l7Rc9Vde9J45ij@lunn.ch>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] net: mdio: add amlogic gxl mdio mux support
-Date:   Fri, 20 Jan 2023 11:16:20 +0100
-In-reply-to: <Y8l7Rc9Vde9J45ij@lunn.ch>
-Message-ID: <1jcz79wlgc.fsf@starbuckisacylon.baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rR32aF5dMNy5OTYW2VxFtFAU0sP/66FsLov7Vfqs2hY=;
+        b=QLzBAfyXZex4le+WhHqfGOKGU9ztxLItdlhgx5Z7iIHtWM/Rw88kLvzK6+bq0zDCxw
+         ibZhcnB9AVnHr9DPcxlJvvMPANuwJDzPd1jA1cR+lWl7HZ8r0A9nrzhj/QuMN9fLvCDX
+         w5WUF+ONL9wJWG6bxqOEa6vD9r6K8vhf1dSd2xOVoM9jfJSbFUu17eJxTfAn9pVYSLJG
+         jdEUQ4dnrdwdwOdYjL6EGEKbVipuscrftoiuDE+f6tL8YrhLR6UYqnBbt1qE9lsmA5DS
+         FyeK9zZTiCaNJJIWqiqA8P781sh3iWCHu60MM1YO4vs8Npwj7Os8gUZJDYTX51tBJByo
+         ri/A==
+X-Gm-Message-State: AFqh2krsiKgyCICmFQUAgLmJv+Eq1U3GW94dY+3GJ2pujWKBe6FY5m1k
+        Zw98/fOL9F4CZIf/T/tY088tn9vphYPy4jLQrxs=
+X-Google-Smtp-Source: AMrXdXvYe+pjGu0wyX9DlmjVT6oQIgSjdCVKh7rgzNN+vR5ZksCyFZhUyWxq21N+q83Pa8FY4/ZZx3loxQLq8MEpUbQ=
+X-Received: by 2002:aa7:dd5a:0:b0:49c:eba3:5bf8 with SMTP id
+ o26-20020aa7dd5a000000b0049ceba35bf8mr1567696edw.117.1674209910237; Fri, 20
+ Jan 2023 02:18:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230119173940.21143-1-iuliana.prodan@oss.nxp.com>
+In-Reply-To: <20230119173940.21143-1-iuliana.prodan@oss.nxp.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Fri, 20 Jan 2023 12:18:18 +0200
+Message-ID: <CAEnQRZBs9JB616qUK4R00vhgDUqXx_czXi=Q3N59S1OLaBw=DA@mail.gmail.com>
+Subject: Re: [PATCH v4] remoteproc: imx_dsp_rproc: add module parameter to
+ ignore ready flag from remote processor
+To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,101 +77,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu 19 Jan 2023 at 18:17, Andrew Lunn <andrew@lunn.ch> wrote:
-
->> >> +
->> >> +	/* Set the internal phy id */
->> >> +	writel_relaxed(FIELD_PREP(REG2_PHYID, 0x110181),
->> >> +		       priv->regs + ETH_REG2);
->> >
->> > So how does this play with what Heiner has been reporting recently?
->> 
->> What Heiner reported recently is related to the g12 family, not the gxl
->> which this driver address.
->> 
->> That being said, the g12 does things in a similar way - the glue
->> is just a bit different:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/mdio/mdio-mux-meson-g12a.c?h=v6.2-rc4#n165
->> 
->> > What is the reset default? Who determined this value?
->> 
->> It's the problem, the reset value is 0. That is why GXL does work with the
->> internal PHY if the bootloader has not initialized it before the kernel
->> comes up ... and there is no guarantee that it will.
->> 
->> The phy id value is arbitrary, same as the address. They match what AML
->> is using internally.
+On Thu, Jan 19, 2023 at 7:42 PM Iuliana Prodan (OSS)
+<iuliana.prodan@oss.nxp.com> wrote:
 >
-> Please document where these values have come from. In the future we
-> might need to point a finger when it all goes horribly wrong.
+> From: Iuliana Prodan <iuliana.prodan@nxp.com>
 >
-
-OK
-
->> They have been kept to avoid making a mess if a vendor bootloader is
->> used with the mainline kernel, I guess.
->> 
->> I suppose any value could be used here, as long as it matches the value
->> in the PHY driver:
->> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/meson-gxl.c?h=v6.2-rc4#n253
+> There are cases when we want to test a simple "hello world"
+> application on the DSP and we don't have IPC between the cores.
+> Therefore, do not wait for a confirmation from the remote processor
+> at start.
 >
-> Some Marvell Ethernet switches with integrated PHYs have IDs with the
-> vendor part set to Marvell, but the lower part is 0. The date sheet
-> even says this is deliberate, you need to look at some other register
-> in the switches address space to determine what the part is. That
-> works O.K in the vendor crap monolithic driver, but not for Linux
-> which separates the drivers up. So we have to intercept the reads and
-> fill in the lower part. And we have no real knowledge if the PHYs are
-> all the same, or there are differences. So we put in the switch ID,
-> and the PHY driver then has an entry per switch. That gives us some
-> future wiggle room if we find the PHYs are actually different.
+> Added "ignore_dsp_ready" flag while inserting the module to ignore
+> remote processor reply after start.
+> By default, this is off - do not ignore reply from rproc.
 >
-> Is there any indication in the datasheets that the PHY is the exact
-> same one as in the g12? Are we really safe to reuse this value between
-> different SoCs?
+> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
 
-There is zero information about the PHY in the datasheet.
-The gxl and g12 don't use the same ID values.
-The PHY ip is very similar but slightly different between the 2.
-(see https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/meson-gxl.c)
-
-My guess is the g12 as another version of the IP, with some bug fixed.
-The integration (clocking scheme mostly) is also different, which is why
-the mux/glue is different.
-
->
-> I actually find it an odd feature. Does the datasheet say anything
-> about Why you can set the ID in software? The ID describes the
-> hardware, and software configuration should not be able to change the
-> hardware in any meaningful way.
-
-Again, zero information. 
-It is a bought IP (similar to the Rockchip judging by the PHY driver).
-I'm not surprised the provider of the IP would make the ID
-easy to configure. AML chose to keep that configurable through the glue,
-instead of fixing it. This is how it is.
-
->
->> >> +	/* Enable the internal phy */
->> >> +	val |= REG3_PHYEN;
->> >> +	writel_relaxed(val, priv->regs + ETH_REG3);
->> >> +	writel_relaxed(0, priv->regs + ETH_REG4);
->> >> +
->> >> +	/* The phy needs a bit of time to come up */
->> >> +	mdelay(10);
->> >
->> > What do you mean by 'come up'? Not link up i assume. But maybe it will
->> > not respond to MDIO requests?
->> 
->> Yes this MDIO multiplexer is also the glue that provides power and
->> clocks to the internal PHY. Once the internal PHY is selected, it needs
->> a bit a of time before it is usuable. 
->
-> O.K, please reword it to indicate power up, not link up.
->
-
-Sure
-
->      Andrew
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
