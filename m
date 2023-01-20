@@ -2,87 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C639675B62
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820F8675B61
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjATRai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S230086AbjATRae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjATRaf (ORCPT
+        with ESMTP id S230022AbjATRad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:30:35 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7DFDBCC
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:30:30 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id q125so6483896vsb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:30:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PwZXs6K2a6IO3sOCpDdgAJceFEm2RB4apdmb8kQpbx4=;
-        b=UygCEQw1sNdw6KDAK8Wc8jwv9kTrpdaJXi1VB0GAYtAaOEdRXr7Ws25t3NUivaeRWR
-         rOJLsa9Tl8Q5oZBeAoBNZUBFMuQR6xiX/AzGdzWBMqgadk3zhdxsOxtXW28u4jihafN1
-         8oY/CwiNnCMHyUYN9cLIlZ6oVwjw6TFQYCdKc=
+        Fri, 20 Jan 2023 12:30:33 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA001DBCE;
+        Fri, 20 Jan 2023 09:30:27 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id ss4so15668643ejb.11;
+        Fri, 20 Jan 2023 09:30:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PwZXs6K2a6IO3sOCpDdgAJceFEm2RB4apdmb8kQpbx4=;
-        b=1bAwClDo0hohKQY09LfDddbrQNEXv0RC/LKruQLsIegskTd+cyG1Hu6lH6CV982fR8
-         DieASqekMCTpTWgkBo/yJXw6lEHT/fNwg6+oS5WmfK7i98T3uPxhEb2yPFrp/snOUzGU
-         K6evg8TAQsz1So7qBqZsLhHLUscxSSUJMnW+lpxKrv6jln+VhdSUlIx+B6BaMQwC4xm5
-         Yfssr47NmloSM0RUBr7fvu/Ldk5ajhCm3OcORpSlOwNVtGuCj2BKePJjUjzTQqYC2KkV
-         kYH4RaETYjbyhJz8n+9bCriG2KfDvwcDdLqgukA3RmjPZUNkY7jRBUe8WK7t8e6cYtNK
-         Xubw==
-X-Gm-Message-State: AFqh2ko8qbWCKpduIKwRN3B4bBec9YEjkEwGXsoZNFDkk7QQFG/16Ft+
-        meSUeEn77/O7plxN4XI1U6ln/PmZsCQwdx45
-X-Google-Smtp-Source: AMrXdXvk3zZoWrP4CIQIW2jnNczFBKzASLoOPX62s3IMdvyXxiIcO3h5+OUNfwGE57fyr88meg5U5w==
-X-Received: by 2002:a05:6102:1497:b0:3c8:eae:37a1 with SMTP id d23-20020a056102149700b003c80eae37a1mr12583982vsv.24.1674235829720;
-        Fri, 20 Jan 2023 09:30:29 -0800 (PST)
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com. [209.85.222.169])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05620a294f00b0070383f1b6f1sm26968695qkp.31.2023.01.20.09.30.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 09:30:29 -0800 (PST)
-Received: by mail-qk1-f169.google.com with SMTP id s19so3253142qkg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:30:29 -0800 (PST)
-X-Received: by 2002:a37:45d3:0:b0:706:96dd:8d4a with SMTP id
- s202-20020a3745d3000000b0070696dd8d4amr761386qka.336.1674235828818; Fri, 20
- Jan 2023 09:30:28 -0800 (PST)
+        bh=sN0PSQag0tcwUzY5X+frwcic7C4pJSMJyVbEv7noVTE=;
+        b=s7Dv9mDd7KEdxxv82Zz1d+u1HHnll+Gb1XKVHiNaJYvf2Nyr2h6kBtR3sAoMpX0bEM
+         4RitrscbrVnmEwlkWt3iFUOMvVLsWnQHYAG9dZJN2CNlM6HQtCU3DhGxbX1ntLdswgbP
+         FtPwECfi1RQDjSAWtSCrprv0SNUbC+qJEwMr1F9Dgx3cb1LLUhVNYzIiFYnV9woh8gJY
+         VlzSVqLrLmjevXVwR//j3ecF6Nk3o6GV2vORtkOSwmIFyRaq3UatDUSO7JCRvPI/+dQh
+         uwrOkXGHiF/sPpjKLe5uiTv7OpEciPp4lSxyen3xJ+sbCrrTF/MbJcULRwTP9b9fFMdL
+         f+/A==
+X-Gm-Message-State: AFqh2krUNXvFEDO/3+NBLkmv/hf2Udv5ncqeIgRd5wghHlJiHKJ6gHZM
+        54RsIedEbhMX3JfxwoSIweFvno2VcHNKvkI/Vxk=
+X-Google-Smtp-Source: AMrXdXu5puPtkKEsmzys+RRoxegVJqcv1U+3h3RwvTcHcZmZSffWb6JjdxqdLw7RkRwMK/bh/5aqTDGl6i4Un3xN61A=
+X-Received: by 2002:a17:906:940c:b0:86f:d628:e184 with SMTP id
+ q12-20020a170906940c00b0086fd628e184mr1947206ejx.96.1674235826481; Fri, 20
+ Jan 2023 09:30:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119185300.517048-1-kuba@kernel.org> <20230120085114.6c30d514@kernel.org>
-In-Reply-To: <20230120085114.6c30d514@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 20 Jan 2023 09:30:12 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgsKaO7qxOso_PrmsBEfpN-Wot=V0fUAy3oKOSFuAQxVw@mail.gmail.com>
-Message-ID: <CAHk-=wgsKaO7qxOso_PrmsBEfpN-Wot=V0fUAy3oKOSFuAQxVw@mail.gmail.com>
-Subject: Re: [PULL] Networking for v6.2-rc5
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
+References: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Jan 2023 18:30:15 +0100
+Message-ID: <CAJZ5v0gnx4R0M86O5+Eth4kEoxk1-=Ym7Wrs0-DzRUsvAvR-KA@mail.gmail.com>
+Subject: Re: [PATCH] thermal/idle_inject: Support 100% idle injection
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 8:51 AM Jakub Kicinski <kuba@kernel.org> wrote:
+It's powercap/idle_inject.
+
+On Tue, Jan 17, 2023 at 7:23 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> v2 coming, in case you haven't pulled yet. Extra stuff went into the
-> tree overnight, insufficient communication between netdev maintainers,
-> IDK..
+> The users of idle injection framework allow 100% idle injection. For
+> example: thermal/cpuidle_cooling.c driver. When the ratio set to 100%,
+> the runtime_duration becomes zero.
+>
+> In the function idle_inject_set_duration() in idle injection framework
+> run_duration_us == 0 is silently ignored, without any error (it is a
+> void function). So, the caller will assume that everything is fine and
+> 100% idle is effective. But in reality the idle inject will be whatever
+> set before.
+>
+> There are two options:
+> - The caller change their max state to 99% instead of 100% and
+> document that 100% is not supported by idle inject framework
+> - Support 100% idle support in idle inject framework
+>
+> Since there are other protections via RT throttling, this framework can
+> allow 100% idle. The RT throttling will be activated at 95% idle by
+> default. The caller disabling RT throttling and injecting 100% idle,
+> should be aware that CPU can't be used at all.
+>
+> The idle inject timer is started for (run_duration_us + idle_duration_us)
+> duration. Hence replace (run_duration_us && idle_duration_us) with
+> (run_duration_us + idle_duration_us) in the function
+> idle_inject_set_duration(). Also check for !(run_duration_us +
+> idle_duration_us) to return -EINVAL in the function idle_inject_start().
 
-I had actually pulled it yesterday, but apparently I then forgot to
-push that out.
+And I have edited the changelog somewhat.
 
-So I undid my pull and will do your v2,
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> Change log:
+> Compared to RFC/RFT
+> - Add a pr_debug for 100% idle
+>
+>  drivers/powercap/idle_inject.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index c57b40477246..3ac81086d71f 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -170,10 +170,12 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+>                               unsigned int run_duration_us,
+>                               unsigned int idle_duration_us)
+>  {
+> -       if (run_duration_us && idle_duration_us) {
+> +       if (run_duration_us + idle_duration_us) {
+>                 WRITE_ONCE(ii_dev->run_duration_us, run_duration_us);
+>                 WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
+>         }
+> +       if (!run_duration_us)
+> +               pr_debug("CPU is forced to 100 percent idle\n");
+>  }
+>  EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
+>
+> @@ -219,7 +221,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
+>         unsigned int idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+>         unsigned int run_duration_us = READ_ONCE(ii_dev->run_duration_us);
+>
+> -       if (!idle_duration_us || !run_duration_us)
+> +       if (!(idle_duration_us + run_duration_us))
+>                 return -EINVAL;
+>
+>         pr_debug("Starting injecting idle cycles on CPUs '%*pbl'\n",
+> --
 
-               Linus
+Applied as 6.3 material, thanks!
