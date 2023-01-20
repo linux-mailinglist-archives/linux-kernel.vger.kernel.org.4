@@ -2,191 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DB5674DCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CEE674DD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 08:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjATHIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 02:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S229949AbjATHLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 02:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjATHIb (ORCPT
+        with ESMTP id S229790AbjATHLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 02:08:31 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF585343;
-        Thu, 19 Jan 2023 23:08:17 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30K77jXY017605;
-        Fri, 20 Jan 2023 01:07:45 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674198465;
-        bh=5AaIzrK2iHJl+VUcxrbjBsvQz7bjxJtmkGokZ/+lc94=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=sVDN3SAeaO7+sOiLD1Nfv3KFjU/z0vahZaJEiGsQpIKjotidNjAzsChE3yAKaNEGW
-         SRBd1tYlNRo6L993UGvWTxzHRC97SGHQ/tObl2Yw301etehfyUB+vwhH4mUYdDkBBU
-         rTvjmA53rGevhIoDrAgLfL1DvrhdaFa+1bK9bL6w=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30K77jW3014895
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Jan 2023 01:07:45 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 20
- Jan 2023 01:07:44 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 20 Jan 2023 01:07:44 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30K77VSr074203;
-        Fri, 20 Jan 2023 01:07:41 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>,
-        <leon@kernel.org>
-CC:     <leonro@nvidia.com>, <anthony.l.nguyen@intel.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <s-vadapalli@ti.com>
-Subject: [PATCH net-next v5 2/2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS release action
-Date:   Fri, 20 Jan 2023 12:37:31 +0530
-Message-ID: <20230120070731.383729-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230120070731.383729-1-s-vadapalli@ti.com>
-References: <20230120070731.383729-1-s-vadapalli@ti.com>
+        Fri, 20 Jan 2023 02:11:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF38530D7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 23:11:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7037D61E2A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104FEC433D2;
+        Fri, 20 Jan 2023 07:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674198675;
+        bh=ruN1axoeesLkwpizVlQSezOYj0g97Z2CA0toTiAowkg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s4Nc3EDdT9+NsuR0dqwZmho96bwdIryMHGcPgkzRX8rIixs38DtpJk4qpO6NjNKQO
+         AlCLw/1l8gFrahmjqQuMn8LM4NptHXP73DYwSfmWEiV5QhCKclRsShybPQ8qOE4JiM
+         fT5x/wntGrk7AF3XD7hPLjKBqvi889HsIe1OwLu77/yrdpnD7T4FaD1R77gKiSoAIU
+         iWS4fmY9DVjnqoi5oWzqW+MUPlGf4jPAw948oLkU0EzI0mAOQWXmmAW1Vn1u9im/BR
+         nAFgFhKf3EkNE+vBF+vHXkzl1lgnMgVauTKYt1cbCca5GRoKZZiyGtKNpmO8BCUuox
+         TQ9WCCRWN1VJQ==
+Date:   Fri, 20 Jan 2023 12:41:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: Return NULL if the PHY is optional (part two)
+Message-ID: <Y8o+j8lyyANpFSvz@matsya>
+References: <663dfcec9f703c41759dcd4cd824d00caa2dd5fb.1674036031.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <663dfcec9f703c41759dcd4cd824d00caa2dd5fb.1674036031.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The am65_cpts_release() function is registered as a devm_action in the
-am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
-invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
-actions associated with the am65-cpsw driver's device.
+On 18-01-23, 11:02, Geert Uytterhoeven wrote:
+> If we're trying to get a handle to an optional PHY, then the PHY
+> framework being disabled shouldn't return a hard error.
+> 
+> Instead, return NULL just like phy_optional_get() does when there's no
+> PHY provided in the DT.
+> 
+> Based on commit 11a6e41c0ee503ff ("phy: Return NULL if the phy is
+> optional"), which did the same thing for devm_phy_optional_get().
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> It seems there were never any in-tree users of this function since its
+> introduction in 788a4d56ff378bff ("drivers: phy: Add support for
+> optional phys") in v3.14.
+> Perhaps it should be removed?
 
-In the event of probe failure or probe deferral, the platform_drv_probe()
-function invokes dev_pm_domain_detach() which powers off the CPSW and the
-CPSW's CPTS hardware, both of which share the same power domain. Since the
-am65_cpts_disable() function invoked by the am65_cpts_release() function
-attempts to reset the CPTS hardware by writing to its registers, the CPTS
-hardware is assumed to be powered on at this point. However, the hardware
-is powered off before the devm actions are executed.
+Ack, devm_phy_optional_get() is used by bunch of folks, but not this
+one, so lets retire this
 
-Fix this by getting rid of the devm action for am65_cpts_release() and
-invoking it directly on the cleanup and exit paths.
+> ---
+>  include/linux/phy/phy.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index b1413757fcc3b89b..559c3da515073697 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -429,7 +429,7 @@ static inline struct phy *phy_get(struct device *dev, const char *string)
+>  static inline struct phy *phy_optional_get(struct device *dev,
+>  					   const char *string)
+>  {
+> -	return ERR_PTR(-ENOSYS);
+> +	return NULL;
+>  }
+>  
+>  static inline struct phy *devm_phy_get(struct device *dev, const char *string)
+> -- 
+> 2.34.1
 
-Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Reviewed-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c |  2 ++
- drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
- drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
- 3 files changed, 12 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index fde4800cf81a..b23027874cc4 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -2914,6 +2914,7 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
- 
- err_free_phylink:
- 	am65_cpsw_nuss_phylink_cleanup(common);
-+	am65_cpts_release(common->cpts);
- err_of_clear:
- 	of_platform_device_destroy(common->mdio_dev, NULL);
- err_pm_clear:
-@@ -2942,6 +2943,7 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
- 	 */
- 	am65_cpsw_nuss_cleanup_ndev(common);
- 	am65_cpsw_nuss_phylink_cleanup(common);
-+	am65_cpts_release(common->cpts);
- 	am65_cpsw_disable_serdes_phy(common);
- 
- 	of_platform_device_destroy(common->mdio_dev, NULL);
-diff --git a/drivers/net/ethernet/ti/am65-cpts.c b/drivers/net/ethernet/ti/am65-cpts.c
-index bf0f74b20ba6..16ee9c29cb35 100644
---- a/drivers/net/ethernet/ti/am65-cpts.c
-+++ b/drivers/net/ethernet/ti/am65-cpts.c
-@@ -1052,14 +1052,13 @@ static int am65_cpts_of_parse(struct am65_cpts *cpts, struct device_node *node)
- 	return cpts_of_mux_clk_setup(cpts, node);
- }
- 
--static void am65_cpts_release(void *data)
-+void am65_cpts_release(struct am65_cpts *cpts)
- {
--	struct am65_cpts *cpts = data;
--
- 	ptp_clock_unregister(cpts->ptp_clock);
- 	am65_cpts_disable(cpts);
- 	clk_disable_unprepare(cpts->refclk);
- }
-+EXPORT_SYMBOL_GPL(am65_cpts_release);
- 
- struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 				   struct device_node *node)
-@@ -1139,18 +1138,12 @@ struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 	}
- 	cpts->phc_index = ptp_clock_index(cpts->ptp_clock);
- 
--	ret = devm_add_action_or_reset(dev, am65_cpts_release, cpts);
--	if (ret) {
--		dev_err(dev, "failed to add ptpclk reset action %d", ret);
--		return ERR_PTR(ret);
--	}
--
- 	ret = devm_request_threaded_irq(dev, cpts->irq, NULL,
- 					am65_cpts_interrupt,
- 					IRQF_ONESHOT, dev_name(dev), cpts);
- 	if (ret < 0) {
- 		dev_err(cpts->dev, "error attaching irq %d\n", ret);
--		return ERR_PTR(ret);
-+		goto reset_ptpclk;
- 	}
- 
- 	dev_info(dev, "CPTS ver 0x%08x, freq:%u, add_val:%u pps:%d\n",
-@@ -1159,6 +1152,8 @@ struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 
- 	return cpts;
- 
-+reset_ptpclk:
-+	am65_cpts_release(cpts);
- refclk_disable:
- 	clk_disable_unprepare(cpts->refclk);
- 	return ERR_PTR(ret);
-diff --git a/drivers/net/ethernet/ti/am65-cpts.h b/drivers/net/ethernet/ti/am65-cpts.h
-index bd08f4b2edd2..6e14df0be113 100644
---- a/drivers/net/ethernet/ti/am65-cpts.h
-+++ b/drivers/net/ethernet/ti/am65-cpts.h
-@@ -18,6 +18,7 @@ struct am65_cpts_estf_cfg {
- };
- 
- #if IS_ENABLED(CONFIG_TI_K3_AM65_CPTS)
-+void am65_cpts_release(struct am65_cpts *cpts);
- struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 				   struct device_node *node);
- int am65_cpts_phc_index(struct am65_cpts *cpts);
-@@ -31,6 +32,10 @@ void am65_cpts_estf_disable(struct am65_cpts *cpts, int idx);
- void am65_cpts_suspend(struct am65_cpts *cpts);
- void am65_cpts_resume(struct am65_cpts *cpts);
- #else
-+static inline void am65_cpts_release(struct am65_cpts *cpts)
-+{
-+}
-+
- static inline struct am65_cpts *am65_cpts_create(struct device *dev,
- 						 void __iomem *regs,
- 						 struct device_node *node)
 -- 
-2.25.1
-
+~Vinod
