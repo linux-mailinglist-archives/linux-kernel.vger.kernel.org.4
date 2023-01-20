@@ -2,91 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE24367597A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E127675980
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjATQEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:04:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S230415AbjATQGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjATQEa (ORCPT
+        with ESMTP id S229942AbjATQGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:04:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4294737F29;
-        Fri, 20 Jan 2023 08:04:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFCE461FD8;
-        Fri, 20 Jan 2023 16:04:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B2DC433D2;
-        Fri, 20 Jan 2023 16:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674230669;
-        bh=Ec4H1FXPr6bovVxs4vc810kRh1msVN4iB85TbOfb4ec=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rEoxzo6adt5Ed6rCJIuoSySpq1ZPl7v5+teYwR3RfNP/H7oyumltXJUdDjvJia+m0
-         G4DTKete4ggG3ww2DJ5vcFJDTO+TfYdcX/3iybFNBuVkOg+FcIX/lM32qmwd1HZtMB
-         o4BV1i2VJOAUkzB+n62e5zfYY92PX9ZY+fNjwuoxWujAVyBsWlY7wt8slGtJ15kz37
-         5xVBfgXNpKR3CUT8Egin490uUkm2luvme5s3oEUg4vkuyZXjEpy6bADaCpe/7GIBc1
-         TuiR9dB3uVGDEgEzTd7Jgr4HqAcdgRS11fH9amLTjabQP/MXwAbecIVJk4Abv1EHMC
-         BHIhzYlMokYLQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pItsx-0008Ih-TV; Fri, 20 Jan 2023 17:04:59 +0100
-Date:   Fri, 20 Jan 2023 17:04:59 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Peter Jones <pjones@redhat.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] efivarfs: always register filesystem
-Message-ID: <Y8q7qz29QMfeNdMV@hovoldconsulting.com>
-References: <20230119164255.28091-1-johan+linaro@kernel.org>
- <20230119164255.28091-3-johan+linaro@kernel.org>
- <CAMj1kXEOOh8MrAt=L7aBt9wX5Pcmh4irnDuKqsDF7pB5-xnmog@mail.gmail.com>
+        Fri, 20 Jan 2023 11:06:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8A33B3D0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:05:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674230728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t2Ykr4AjAONNT7kvDNwi4NL3fIdbk4VvZOuGIqx3cB4=;
+        b=hge9e3Q/2n6NAXPR5yZQl6Ak6Ae7VNn+ywGk/e25HCvshNil0pOXyho+GMgm7t7xgblJmu
+        arENv17c8dXVnojW93O9S448wOrLe5+kA29TT3o/T3kk7Prg3ygpBvExg4uOeCg+hZ7fA4
+        BYbySwSFHbKuz/fa6A4EMe4JFEkge4g=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-159-O4Z-hXYUPnCHqQZcNaR1Xg-1; Fri, 20 Jan 2023 11:05:27 -0500
+X-MC-Unique: O4Z-hXYUPnCHqQZcNaR1Xg-1
+Received: by mail-io1-f72.google.com with SMTP id g1-20020a5ec741000000b00704c92572b1so3098408iop.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:05:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t2Ykr4AjAONNT7kvDNwi4NL3fIdbk4VvZOuGIqx3cB4=;
+        b=IRVvjX4Q3OvJW4hYRXpQbxyo5OZYxrkZtbqahJD+cXg1Mu1Pe7KpPr5btBiqAaypMJ
+         99R8hb4Y9eUGBxrImI93gT+O6NM+yhYUgsjHCWj8i6Frm23UDpltPAMpdzTQBazLWCgK
+         GIE0VSLfkvzUlSedR2GDbb1KWDGnQYtoeXCDdZbVV1wedwIDR5icIwOBtgB5EXOC6MRN
+         FRAhLXjjwRGSFwiYTQ83X4gW6XWDgF9OMrCL0Id372HjeWCvsyqdBeQWsKiMNc/28lBn
+         e9IakTAQNL3DpiTri4T4ihMgPhPhg0PfmPv/qT2ulK8oP1k51hTrxFeW2cyV9sE4VQeE
+         pNKQ==
+X-Gm-Message-State: AFqh2kr9QDHTkMI7eFYXpDpnRA6qUy763xVtHnXB9Y0K/EaeVLdkyIlq
+        V4owdaJTk5V16hQ+DaU2Gi+7zVjLl05L4SyNFw3chJo89kHdm5KDWi42+s1/645U+s+GKfPTx2D
+        bUAm1qNtUTcRKhdILmPTaSFQr
+X-Received: by 2002:a92:d489:0:b0:30d:bc94:7da6 with SMTP id p9-20020a92d489000000b0030dbc947da6mr11598281ilg.19.1674230726459;
+        Fri, 20 Jan 2023 08:05:26 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuAKBQccJ8QiFH48BvXOtBLQDew3xVVxws4W+b3F41bojnj94kXcOj3OcDy2eJ5mkQjNmmCvg==
+X-Received: by 2002:a92:d489:0:b0:30d:bc94:7da6 with SMTP id p9-20020a92d489000000b0030dbc947da6mr11598256ilg.19.1674230726228;
+        Fri, 20 Jan 2023 08:05:26 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id n1-20020a056638120100b0039e8e0ecbcbsm10363097jas.64.2023.01.20.08.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 08:05:25 -0800 (PST)
+Date:   Fri, 20 Jan 2023 11:05:23 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
+        bristot@redhat.com, ebiederm@xmission.com, brauner@kernel.org,
+        cyphar@cyphar.com, viro@zeniv.linux.org.uk, alexl@redhat.com,
+        peterz@infradead.org
+Subject: Re: [PATCH v3 2/2] selftests: add tests for prctl(SET_HIDE_SELF_EXE)
+Message-ID: <Y8q7w7VXpijqWILs@x1>
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+ <20230120102512.3195094-2-gscrivan@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXEOOh8MrAt=L7aBt9wX5Pcmh4irnDuKqsDF7pB5-xnmog@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120102512.3195094-2-gscrivan@redhat.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:23:18AM +0100, Ard Biesheuvel wrote:
-> (cc Peter, Heinrich)
-> 
-> On Thu, 19 Jan 2023 at 17:45, Johan Hovold <johan+linaro@kernel.org> wrote:
-> >
-> > The efivar ops are typically registered at subsys init time so that
-> > they are available when efivarfs is registered at module init time.
-> >
-> > Other efivars implementations, such as Google SMI, exists and can
-> > currently be build as modules which means that efivar may not be
-> > available when efivarfs is initialised.
-> >
-> > Move the efivar availability check from module init to when the
-> > filesystem is mounted to allow late registration of efivars.
-> >
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> I think this change is fine in principle, but I 'm not sure if there
-> is user space code that the distros are carrying that might get
-> confused by this: beforehand, efivarfs would not exist in
-> /proc/filesystems and now, it will but trying to mount it might fail.
+On Fri, Jan 20, 2023 at 11:25:12AM +0100, Giuseppe Scrivano wrote:
+> Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
 
-User space must already handle mount failing since commit 483028edacab
-("efivars: respect EFI_UNSUPPORTED return from firmware") so that should
-not be an issue.
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
-Johan
+The other patch looks reasonable to me. I'm not familiar with this part
+of the kernel so I'm not going to leave a R-b tag on it.
+
+> --- /dev/null
+> +++ b/tools/testing/selftests/prctl/hide-self-exe.c
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Tests for prctl(PR_GET_HIDE_SELF_EXE, ...) / prctl(PR_SET_HIDE_SELF_EXE, ...)
+> + *
+> + */
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <signal.h>
+> +#include <inttypes.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <sys/wait.h>
+> +
+> +#include <sys/prctl.h>
+> +#include <linux/prctl.h>
+
+Just a minor nit if you need to post a v4: Sort the includes by name.
+
+Brian
+
