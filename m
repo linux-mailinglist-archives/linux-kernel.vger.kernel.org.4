@@ -2,102 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83D267617B
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE60676182
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjATX2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S230175AbjATX27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjATX2A (ORCPT
+        with ESMTP id S229487AbjATX2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:28:00 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475C853FB1;
-        Fri, 20 Jan 2023 15:27:59 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 20 Jan 2023 18:28:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD2F53FB1;
+        Fri, 20 Jan 2023 15:28:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id A1E8B128F;
-        Sat, 21 Jan 2023 00:27:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1674257277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=15naqOmKfHXhG56iuiMa9Jonm/FKerdElAQyJk+4o7E=;
-        b=X04kko57AJnLGQ0aZxDV7+voq161LQxQ+FKMbLSsSEsg3rUOXdxXW0cJ5W0zfypOCIbutM
-        quBbeiSnvzenoXQphqIZIb+Il9NgAZHZxTDKvneYpzVMwz/GiVBdPxeMA7nsxM+DOe5jLm
-        RaTJ/w/qOWT8UmhlYdrTohSIm2JI4EaJodDEPmLhE+3zN6vLHmOBlsKg4rfypdjqb5u6De
-        +UMF75eHqBUxy3LfZ8SthqWfLeHepCHZeTywxKMEfkpMDqidDshWqZnOStakLH3hB7snne
-        k1DZiOWYtUxz+tY8rXsF2EGZry77F40TCbzkFU0IbnYWsEkDb5CGNcTpEW/NqQ==
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6030620E5;
+        Fri, 20 Jan 2023 23:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A1FC433EF;
+        Fri, 20 Jan 2023 23:28:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674257333;
+        bh=r2edRcFMISYKtEmPEu1cLKZR7c8iF9zsqqnoWv9hU3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i8fMoEgfPYzBd+WPDibH/BLuqUwipoWJwcOyYpJ/Y0H3Rdml9thP589lRa96A/WAP
+         uJE5kWD2JscX/Sdjpw0CyzXtfG/LxhSegqHv1fuSmC0iMrjiQf/55jY7QZ7uEHsAoF
+         E8dMpHJh4CZNfldG+E9O6D3tHhc/7iue722H30CAwBzz6fKqrWs1mObgaZM6G6vx0B
+         6CxilOppA+Ky31fjHsYwZe3m5vUlfrsP8m1+9pPun5WaqAcNvIxLws8pDATrUwg9mj
+         ui7nzJ6cNZIPoyAp1NyeZPWJcbL3gGUtyqacFP7P3DAAb/PThvmhPJwGbNBhCwd+HW
+         B5OlWz8gR2uWg==
+Date:   Fri, 20 Jan 2023 23:28:50 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Y8sjsvIJONydWpyQ@kernel.org>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+ <Y7azFdnnGAdGPqmv@kernel.org>
+ <20230106094000.GA2297836@chaop.bj.intel.com>
+ <Y7xrtf9FCuYRYm1q@google.com>
 MIME-Version: 1.0
-Date:   Sat, 21 Jan 2023 00:27:57 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 4/5] phy: net: introduce phy_promote_to_c45()
-In-Reply-To: <Y8shrgmEoznYsol7@shell.armlinux.org.uk>
-References: <20230120224011.796097-1-michael@walle.cc>
- <20230120224011.796097-5-michael@walle.cc>
- <Y8shrgmEoznYsol7@shell.armlinux.org.uk>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <de7f4c8b26fb0e9da7480548cf510906@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7xrtf9FCuYRYm1q@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-01-21 00:20, schrieb Russell King (Oracle):
-> On Fri, Jan 20, 2023 at 11:40:10PM +0100, Michael Walle wrote:
->> If not explitly asked to be probed as a C45 PHY, on a bus which is
->> capable of doing both C22 and C45 transfers, C45 PHYs are first tried 
->> to
->> be probed as C22 PHYs. To be able to promote the PHY to be a C45 one,
->> the driver can call phy_promote_to_c45() in its probe function.
->> 
->> This was already done in the mxl-gpy driver by the following snippet:
->> 
->>    if (!phydev->has_c45) {
->>            ret = phy_get_c45_ids(phydev);
->>            if (ret < 0)
->>                    return ret;
->>    }
->> 
->> Move that code into the core by creating a new function
->> phy_promote_to_c45(). If a PHY is promoted, C45-over-C22 access is 
->> used,
->> regardless if the bus supports C45 or not. That is because there might
->> be C22 PHYs on the bus which gets confused by C45 accesses.
+On Mon, Jan 09, 2023 at 07:32:05PM +0000, Sean Christopherson wrote:
+> On Fri, Jan 06, 2023, Chao Peng wrote:
+> > On Thu, Jan 05, 2023 at 11:23:01AM +0000, Jarkko Sakkinen wrote:
+> > > On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
+> > > > To make future maintenance easy, internally use a binary compatible
+> > > > alias struct kvm_user_mem_region to handle both the normal and the
+> > > > '_ext' variants.
+> > > 
+> > > Feels bit hacky IMHO, and more like a completely new feature than
+> > > an extension.
+> > > 
+> > > Why not just add a new ioctl? The commit message does not address
+> > > the most essential design here.
+> > 
+> > Yes, people can always choose to add a new ioctl for this kind of change
+> > and the balance point here is we want to also avoid 'too many ioctls' if
+> > the functionalities are similar.  The '_ext' variant reuses all the
+> > existing fields in the 'normal' variant and most importantly KVM
+> > internally can reuse most of the code. I certainly can add some words in
+> > the commit message to explain this design choice.
 > 
-> It is my understanding that C45 PHYs do not have to respond to C22
-> accesses. So, wouldn't this lead to some C45 PHYs not being detected?
+> After seeing the userspace side of this, I agree with Jarkko; overloading
+> KVM_SET_USER_MEMORY_REGION is a hack.  E.g. the size validation ends up being
+> bogus, and userspace ends up abusing unions or implementing kvm_user_mem_region
+> itself.
+> 
+> It feels absolutely ridiculous, but I think the best option is to do:
+> 
+> #define KVM_SET_USER_MEMORY_REGION2 _IOW(KVMIO, 0x49, \
+> 					 struct kvm_userspace_memory_region2)
+> 
+> /* for KVM_SET_USER_MEMORY_REGION2 */
+> struct kvm_user_mem_region2 {
+> 	__u32 slot;
+> 	__u32 flags;
+> 	__u64 guest_phys_addr;
+> 	__u64 memory_size;
+> 	__u64 userspace_addr;
+> 	__u64 restricted_offset;
+> 	__u32 restricted_fd;
+> 	__u32 pad1;
+> 	__u64 pad2[14];
+> }
+> 
+> And it's consistent with other KVM ioctls(), e.g. KVM_SET_CPUID2.
+> 
+> Regarding the userspace side of things, please include Vishal's selftests in v11,
+> it's impossible to properly review the uAPI changes without seeing the userspace
+> side of things.  I'm in the process of reviewing Vishal's v2[*], I'll try to
+> massage it into a set of patches that you can incorporate into your series.
+> 
+> [*] https://lore.kernel.org/all/20221205232341.4131240-1-vannapurve@google.com
 
-In that case, the PHY already has to be a C45 PHY, correct? Because
-no access to c22 means, it can't be probed as a c22 phy; therefore,
-it has the has_c45 set to true. Then phy_promote_to_c45() is a noop and
-c45-over-c22 wont be set.
++1
 
--michael
+BR, Jarkko
