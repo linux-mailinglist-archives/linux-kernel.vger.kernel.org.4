@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F7B675C78
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64E6675C7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjATSLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S230022AbjATSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjATSLF (ORCPT
+        with ESMTP id S229882AbjATSMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:11:05 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A957B2DF;
-        Fri, 20 Jan 2023 10:11:04 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id x10so7706044edd.10;
-        Fri, 20 Jan 2023 10:11:04 -0800 (PST)
+        Fri, 20 Jan 2023 13:12:05 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABF07B2E3;
+        Fri, 20 Jan 2023 10:12:04 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso1289138pjp.3;
+        Fri, 20 Jan 2023 10:12:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hho9/wgvGQ9svaK/5fZQfZ+rSQtb/lCF12NvQ5zzsS0=;
+        b=Ci2qTDtkaTtOdztcEnTlSnK7FyOpejqRXsgG953VY1gsKf192FjDyBsnul1w7orrx2
+         ZBjF9qXbWWUHxRaf+vrkQ4hk8YveJegcrAMHKNtV1+ZH3JScv5usjTDrrmqqe8c24mok
+         V729t2P/luJkKM66jGu5FyDICaS+ZnsJasJeTtQmwSmZ3t8ePUBrC/UwYloez/+qwQvZ
+         3McF4X0btfg6MWNHuQDp8FK7bbJ7BM+59WFKPbE8UD+s/xNbtnzvcJUl3X0ZtZ+8MZzG
+         lso5jsYQQx6FdzegCY3GXg6oOrJ1a3kmuY5PR09d42YterpHIygeYe/X52iqdGe9SsYW
+         0pzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5t9C2zVNrqE3Ky7/satHgNnh/Bdqj/w8iXbeyqpGIXo=;
-        b=IegcUXzbTQW5KRKrykx/Y5drHcLtIkTUvY+Eg8g1KWIlPT4beVJU8QKkRQgfahijgs
-         j3OcDjiZ9OOz2KXTDI+KekRlGtK8svp+lazJFLqtWfsHJBGHNEuutgU56xBHVCe7j+ol
-         zWl+ANEKLHQWRHvIHAs9IqfwMC+lygQ2mTPvlVtikXcv6ZvNnNxu3xX7EMphQc/N73m2
-         82wDX/rP0Opn6BCWXFzhqeZN62yH1o+KVSUIjO4H2hqXnc+LudK/RA1WO52HudbcaCyn
-         MxR09Y+6RS4W+41gCOHAvLr7xYH/fq6PeFUTun7YG9uaZoNLCk5jiypBYSHRU2ax2Fv7
-         zy3w==
-X-Gm-Message-State: AFqh2kpM35edOs4vHkOmwCAwDnVYqutfOjoOdMmM2UPZ7I5fEI4kLezW
-        +Ss7oYSKr+6a5CiOsXmoUxsUC0flaMpnFjLPUBU=
-X-Google-Smtp-Source: AMrXdXsWe7JvMho9i9DVptno02FIGXKQMDST+FTnEgxoDexs6Xr1ZIRoEeUF1oCHMo3NcEREY8GYnm9Pv5NamONUt2A=
-X-Received: by 2002:a05:6402:1c1d:b0:48c:93ce:2b15 with SMTP id
- ck29-20020a0564021c1d00b0048c93ce2b15mr1624666edb.110.1674238263321; Fri, 20
- Jan 2023 10:11:03 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hho9/wgvGQ9svaK/5fZQfZ+rSQtb/lCF12NvQ5zzsS0=;
+        b=ZLqtcayZfBAgHhxf6Q13hMWfdL1msOSlDIJPjiBbjvKf+sp4f7Whm7w3iFwRQzwDxu
+         lm0CAWzaQatvRYg+jIq03qhOJA8zqKuciXc8wv5VZ3nqui2WCVCXEZcJKhsd2+tnqBOH
+         EKzclevQ2cbymFZIHNXicivakfx7SSyCUOn7uFclnyBrn9LKWlhUoeuvhMZ5VTj+vRo7
+         QGYGA4MeP+yJ8XJ3RoS1OVNZwjTZ4KTEpfroo+qFvLkB4f8DVElGZKdTW6hn+FlR8l8x
+         I+lr+YWfRn0gpVd/12JIBgxKjatoXacSrADnPwYZ2ntrAkVYBTTtR4fJKoBX/5cvrJ1R
+         yHFA==
+X-Gm-Message-State: AFqh2krmPPsmTUrl3bh1cPUFFjt1uvJHi4kNpyYj6voVlHqTa09r2NPq
+        TfMZeEwGDC/JLnc1Kqi0AtnOdECBrTE=
+X-Google-Smtp-Source: AMrXdXtdjHdvlLSUZbANAKsuDLgY0blFVWOcMjh+bJq9QL5NDAGyVQXQ90n/4iXxhXI3eWKlxEKezQ==
+X-Received: by 2002:a17:902:aa05:b0:193:335a:989e with SMTP id be5-20020a170902aa0500b00193335a989emr16471296plb.25.1674238323685;
+        Fri, 20 Jan 2023 10:12:03 -0800 (PST)
+Received: from [10.14.5.12] ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id w3-20020a170902e88300b0019311ec702asm5588617plg.36.2023.01.20.10.12.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 10:12:03 -0800 (PST)
+Message-ID: <8c43b018-8979-e93b-cc19-76de6f8b60d1@gmail.com>
+Date:   Fri, 20 Jan 2023 10:12:01 -0800
 MIME-Version: 1.0
-References: <20221118181538.never.225-kees@kernel.org> <202301151037.20CC3F0@keescook>
-In-Reply-To: <202301151037.20CC3F0@keescook>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 19:10:52 +0100
-Message-ID: <CAJZ5v0hvoAD1WLXzpMobTRSasBqy5dypHTysBU3=ionGgWR6nQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPICA: Replace fake flexible arrays with flexible array members
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH net v2] net: dsa: microchip: fix probe of I2C-connected
+ KSZ8563
+Content-Language: en-US
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     kernel@pengutronix.de, ore@pengutronix.de,
+        Arun.Ramadoss@microchip.com, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230120110933.1151054-1-a.fatoum@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230120110933.1151054-1-a.fatoum@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 7:38 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Nov 18, 2022 at 10:15:51AM -0800, Kees Cook wrote:
-> > Functionally identical to ACPICA upstream pull request 813:
-> > https://github.com/acpica/acpica/pull/813
->
-> Any update on this? Upstream is currently unbuildable since October.
->
-> > One-element arrays (and multi-element arrays being treated as
-> > dynamically sized) are deprecated[1] and are being replaced with
-> > flexible array members in support of the ongoing efforts to tighten the
-> > FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> > with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
-> >
-> > Replace one-element array with flexible-array member in struct
-> > acpi_resource_extended_irq. Replace 4-byte fixed-size array with 4-byte
-> > padding in a union with a flexible-array member in struct
-> > acpi_pci_routing_table.
-> >
-> > This results in no differences in binary output.
->
-> In the meantime, can you take this patch for Linux, and we can wait for
-> ACPICA to catch up?
 
-Applied now (as 6.3 material), sorry for the delay.
 
-Thanks!
+On 1/20/2023 3:09 AM, Ahmad Fatoum wrote:
+> Starting with commit eee16b147121 ("net: dsa: microchip: perform the
+> compatibility check for dev probed"), the KSZ switch driver now bails
+> out if it thinks the DT compatible doesn't match the actual chip ID
+> read back from the hardware:
+> 
+>    ksz9477-switch 1-005f: Device tree specifies chip KSZ9893 but found
+>    KSZ8563, please fix it!
+> 
+> For the KSZ8563, which used ksz_switch_chips[KSZ9893], this was fine
+> at first, because it indeed shares the same chip id as the KSZ9893.
+> 
+> Commit b44908095612 ("net: dsa: microchip: add separate struct
+> ksz_chip_data for KSZ8563 chip") started differentiating KSZ9893
+> compatible chips by consulting the 0x1F register. The resulting breakage
+> was fixed for the SPI driver in the same commit by introducing the
+> appropriate ksz_switch_chips[KSZ8563], but not for the I2C driver.
+> 
+> Fix this for I2C-connected KSZ8563 now to get it probing again.
+> 
+> Fixes: b44908095612 ("net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563 chip").
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-> >
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Len Brown <lenb@kernel.org>
-> > Cc: Robert Moore <robert.moore@intel.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: linux-acpi@vger.kernel.org
-> > Cc: devel@acpica.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  include/acpi/acrestyp.h | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/acpi/acrestyp.h b/include/acpi/acrestyp.h
-> > index a7fb8ddb3dc6..ee945084d46e 100644
-> > --- a/include/acpi/acrestyp.h
-> > +++ b/include/acpi/acrestyp.h
-> > @@ -332,7 +332,7 @@ struct acpi_resource_extended_irq {
-> >       u8 wake_capable;
-> >       u8 interrupt_count;
-> >       struct acpi_resource_source resource_source;
-> > -     u32 interrupts[1];
-> > +     u32 interrupts[];
-> >  };
-> >
-> >  struct acpi_resource_generic_register {
-> > @@ -679,7 +679,10 @@ struct acpi_pci_routing_table {
-> >       u32 pin;
-> >       u64 address;            /* here for 64-bit alignment */
-> >       u32 source_index;
-> > -     char source[4];         /* pad to 64 bits so sizeof() works in all cases */
-> > +     union {
-> > +             char pad[4];    /* pad to 64 bits so sizeof() works in all cases */
-> > +             DECLARE_FLEX_ARRAY(char, source);
-> > +     };
-> >  };
-> >
-> >  #endif                               /* __ACRESTYP_H__ */
-> > --
-> > 2.34.1
-> >
->
-> --
-> Kees Cook
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
