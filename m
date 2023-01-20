@@ -2,159 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FDC675BBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78516675BC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjATRjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S230117AbjATRkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjATRjW (ORCPT
+        with ESMTP id S229919AbjATRkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:39:22 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2857C564B7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:39:12 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id j9so4714316qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:39:12 -0800 (PST)
+        Fri, 20 Jan 2023 12:40:42 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F15DBC3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:40:41 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id g10so4674763wmo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:40:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nUwcPnODL6tkDv1+EEZooXCQzQNc6RaXSg0BM7X5yck=;
-        b=HiwKJ0B8Tq/Czmzvwwj3WFQLpQg4XyD1sycR56XD6gZQIrpV2B/W0G3/bD7G+kPeN/
-         fUNUt7l8O6BDKRneUBI0nTIYBN3P90cZCv567eleh4T/6U0V8UadYf1YT2M39pM9Bzsk
-         X/UD8ELxspxIMH00oddsGsis4zD8Y2Q2vA0nJvVDXg88j1qdaMxX/oweh8tuO9jKbRrq
-         pe5NRKabG8x5L6MsyTdHb2dPurmwlUL5TxtwzK+LwO1PcPdIWkk2ZlfYLEEp1rHhOmLC
-         Cy+FwEYdm7Gp4+Zoz/kyrpwZdTSffy/MGvB6+XbhQjHwTKH80gLMoYSIIf9tP+xwlXFu
-         UMgg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPLPvg2uT7xNYWk0DfZ111zSBkmikQxIwUT5J/mgO2c=;
+        b=RVt/425eYeb1svgpsQcsE7Egizut7s4oCVOkqu3iBbdq2A3Yvo2+JwNybc6UMo3tvE
+         ej4o6wHa6E7stF2mTCv2BBpaxeT/x/jG50PKDqjY7NFzS9sQDkNUW2WMgqPsor5qOSHC
+         UeOG5ltZy0y1MdFqIljy82w/YbkIxBEt2TQlnDHKrw06Ehee+FwAdvagjEJTsRisNc+Z
+         D6inwzhfGwhu/uGXxDTlWk1FDi7hyBpLUKixFSHU6VGQ7zWqb9t1bPlNsMnyrFd9h6hl
+         Xk6TXmzNOmuKMJnBFNaZU55GSPrk2QMWkCa3isthkzyiiKE3R++yfjqB7KHgwBJ9sEfR
+         0zUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUwcPnODL6tkDv1+EEZooXCQzQNc6RaXSg0BM7X5yck=;
-        b=gE48ieRBwytUDKy5rLTeQIwJ8ftU6b03iu9IC1vUgXl3JBeTQ8iJDg6qoa3purqJkA
-         zrg75IgYhYaiirjO8F02IimLNXG/KOQf1bu4GdRk2JGVUxkolmsvWdnCqjUQJiiEtvka
-         8F5qFfRbSXJHf4rOLxIXNQyeW7KA2bNN1v4YYPbmJDKxa6+vglBSdvPTtemOJ43mbp++
-         IvQ/g/PveKdHgvLJCwQckE6vseL1WIkiLMm3rvQBF8w0B5AFYOp1FvV09eg09SxMDyAt
-         MW9AhP67AoB68yLpVcJaEMtR/D/Up5FOB02IWRvuLs6hFEU4L2IghmZiVsNJIw33qCzs
-         cxqw==
-X-Gm-Message-State: AFqh2krEGDHpNPt0kSCG/e5yWOU8GvNw1y6YTtXIhkty1uS8fN9gurOM
-        UPRd26biiutoK73SAPSzgh4=
-X-Google-Smtp-Source: AMrXdXut8qn33mbyBanIQct87VFtSEsClB7xkNdQJFYnrNKxxe8k6Ic9jvSF+Utibg/3+zmxkSdVJw==
-X-Received: by 2002:ac8:6650:0:b0:3b6:2ce9:baef with SMTP id j16-20020ac86650000000b003b62ce9baefmr20448474qtp.59.1674236351179;
-        Fri, 20 Jan 2023 09:39:11 -0800 (PST)
-Received: from [10.4.10.38] (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id fp26-20020a05622a509a00b003a70a675066sm615724qtb.79.2023.01.20.09.39.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 09:39:09 -0800 (PST)
-Message-ID: <056f0d30-d340-fdc4-3744-1cdedd8b4048@gmail.com>
-Date:   Fri, 20 Jan 2023 12:39:06 -0500
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sPLPvg2uT7xNYWk0DfZ111zSBkmikQxIwUT5J/mgO2c=;
+        b=ip96dqJRbNWxpYbhvPLALJBTM68P0gQJOaxxnxf0PPwvwe9SFhun25kdYFcUboD8ms
+         6oNiVQX6GC9NA5SsF5tvfYeLbw87qe02Fg1rQx9XADDU15fYZHx7hyGxZ95S96f9TKJO
+         MEtRIowDInCnB16q3Q1MqPD99sJkrr+1a4j1QdcYE0jCCj/gKFqLTAZN37hK7gFmgauT
+         qDXfu5nt71pqLnPFWDKHSELww6/sav1jbrL13RS7Z8pZnuLEFeYKtcAbERXEd4kOblX2
+         3sI5PWegdOe1cxaFmalLVHeU3d/yPiBQrdZPvzfCBnmXnI2pRnB2LBC6u4j01eEAf4+3
+         JCWQ==
+X-Gm-Message-State: AFqh2koxGPgfaWzTr+ozBi+kE7Uo89xmMH8KhUS8vETam9iDseU+XM4L
+        pWJ+3cfOBSVq0WhDvJ5A7fdvjX2yknn/saBM
+X-Google-Smtp-Source: AMrXdXuOlPk+5uf/TXLUtIfdayDgrrFEdR/JC8sDpjol9StC6mUzODgxz8QP9mpVRIPgHzuB+NF7aw==
+X-Received: by 2002:a05:600c:3514:b0:3c6:c6c9:d75e with SMTP id h20-20020a05600c351400b003c6c6c9d75emr15856181wmq.0.1674236439587;
+        Fri, 20 Jan 2023 09:40:39 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k10-20020a05600c1c8a00b003db2dbbd710sm3467855wms.25.2023.01.20.09.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 09:40:39 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: qcom: apq8060-dragonboard: align MPP pin node names with DT schema
+Date:   Fri, 20 Jan 2023 18:40:36 +0100
+Message-Id: <20230120174036.351937-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/2] riscv: Kconfig: Allow RV32 to build with no MMU
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yimin Gu <ustcymgu@gmail.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
- <20230119052642.1112171-2-Mr.Bossman075@gmail.com> <Y8pJ4y7FyBDQPqIT@wendy>
-From:   Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <Y8pJ4y7FyBDQPqIT@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+DT schema expects nodes ending with "pins:
 
+  qcom-apq8060-dragonboard.dtb: mpps@50: cm3605-mpps-state: 'oneOf' conditional failed, one must be fixed:
+    'mpp5' does not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
 
-On 1/20/23 02:59, Conor Dooley wrote:
-> Hello!
-> 
-> Since you'll have to re-submit, making sure that allowing !MMU on rv32
-> doesn't break the build due to canaan k210 drivers being enabled despite
-> relying on 64-bit divisions, I've got some nits for you.
-Not sure what driver needs 64bit, but sense !MMU was only selected by 
-64BIT. This should work.
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index 69774bb362d6..b9835b8ede86 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -43,7 +43,7 @@ config SOC_VIRT
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  config SOC_CANAAN
-         bool "Canaan Kendryte K210 SoC"
--       depends on !MMU
-+       depends on !MMU && 64BIT
-         select CLINT_TIMER if RISCV_M_MODE
-         select SERIAL_SIFIVE if TTY
-         select SERIAL_SIFIVE_CONSOLE if TTY
+---
 
-> On Thu, Jan 19, 2023 at 12:26:41AM -0500, Jesse Taube wrote:
->> From: Yimin Gu <ustcymgu@gmail.com>
->>
->> Some RISC-V 32bit ores do not have an MMU, and the kernel should be
-> 
->   s/ores/cores
-OH thanks sorry for the spelling mistakes.
+Warning visible after:
+https://lore.kernel.org/r/20230120165103.1278852-1-robh@kernel.org
+---
+ arch/arm/boot/dts/qcom-apq8060-dragonboard.dts | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-Thanks,
-Jesse Taube
->> able to build for them. This patch enables the RV32 to be built with
->> no MMU support.
->>
->> Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
->> CC: Jesse Taube <Mr.Bossman075@gmail.com>
->> Tested-By: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> And the automation complains that this tag is not "Tested-by:"
-> 
-> Thanks,
-> Conor.
-> 
->> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->> ---
->>   arch/riscv/Kconfig | 5 ++---
->>   1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 59d18881f35b..49759dbe6a8f 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -163,8 +163,8 @@ config MMU
->>   
->>   config PAGE_OFFSET
->>   	hex
->> -	default 0xC0000000 if 32BIT
->> -	default 0x80000000 if 64BIT && !MMU
->> +	default 0xC0000000 if 32BIT && MMU
->> +	default 0x80000000 if !MMU
->>   	default 0xff60000000000000 if 64BIT
->>   
->>   config KASAN_SHADOW_OFFSET
->> @@ -262,7 +262,6 @@ config ARCH_RV32I
->>   	select GENERIC_LIB_ASHRDI3
->>   	select GENERIC_LIB_LSHRDI3
->>   	select GENERIC_LIB_UCMPDI2
->> -	select MMU
->>   
->>   config ARCH_RV64I
->>   	bool "RV64I"
->> -- 
->> 2.39.0
->>
->>
+diff --git a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
+index 7a4c59e04af6..8e4b61e4d4b1 100644
+--- a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
++++ b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
+@@ -435,15 +435,13 @@ &pm8058_led133 {
+ 
+ &pm8058_mpps {
+ 	dragon_cm3605_mpps: cm3605-mpps-state {
+-		mpp5 {
+-			pins = "mpp5";
+-			function = "analog";
+-			input-enable;
+-			bias-high-impedance;
+-			/* Let's use channel 5 */
+-			qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
+-			power-source = <PM8058_GPIO_S3>;
+-		};
++		pins = "mpp5";
++		function = "analog";
++		input-enable;
++		bias-high-impedance;
++		/* Let's use channel 5 */
++		qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
++		power-source = <PM8058_GPIO_S3>;
+ 	};
+ };
+ 
+-- 
+2.34.1
+
