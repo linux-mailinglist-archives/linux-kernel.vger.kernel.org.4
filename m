@@ -2,212 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68DF6759C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFFA6759C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjATQT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S229897AbjATQVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjATQTo (ORCPT
+        with ESMTP id S229529AbjATQVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:19:44 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAB180B87
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674231583; x=1705767583;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RmFvrxtGvudD8BSky4Jryf7VIRfahN5fZ4oy4yAxnsg=;
-  b=kDE/UU29btbBxTiGzPbRTZLoPKyvtbKLIIE/JfoEOnCUTEGkBIVqaGn9
-   thW2cz6vsSu55SBjreCyrLGWFa5cHbkahox+Wko5HwYTcdnKKkFuO33wu
-   N2glBBojIMMJ4RQ7euxCuEWZi69AlyYzsCKHlsYKq6jtMiDhm0+3H7H/O
-   aweUWNjx2z5HDLXPfrEyvFxCp4w1DTJtNB6dRDLrmKBPBcjDZU9os2oWG
-   jZROOh7czVA1GRm7A7s0OSKYnLLUZ/V4a0QYappxx4pbg8GR5RPUSLtcH
-   BPuJu+hVKOZBEot+OgWZNwvVPmH+fIL9cTwvoXtw40JNpZHyVmegalypS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="411846591"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="411846591"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:19:39 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="653836377"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="653836377"
-Received: from araj-ucode.jf.intel.com ([10.23.0.19])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 08:19:37 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Boris Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Subject: [Patch v5 5/5] x86/microcode/intel: Print old and new rev during early boot
-Date:   Fri, 20 Jan 2023 08:19:23 -0800
-Message-Id: <20230120161923.118882-6-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120161923.118882-1-ashok.raj@intel.com>
-References: <20230120161923.118882-1-ashok.raj@intel.com>
+        Fri, 20 Jan 2023 11:21:07 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60C44B483;
+        Fri, 20 Jan 2023 08:20:40 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so8869646lfv.2;
+        Fri, 20 Jan 2023 08:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PIyD0F5Y9Z3DpMXzhOW/VfaSYPRIBHl6F02SOb8HbsU=;
+        b=HciAGZ4tVEY9GjcwAvtBl/e6tp2r0tPckvrJyjobHizCob8HpFH8a7NoL43/wANiOh
+         pVsp/Qjc9ZVA2RnTBAjiNzwDezratqNU3WJAxmB/BxDKWb9jD4Le/uYhZ1b45pi1sa5a
+         aE0CKhURBnbHaW23T0vg/VDQbMUN5mqHrI3t+Zt2AU0r8BLSUQriq0w89QoavBvU3HIa
+         QPJU8G2fkLXuBDPQU+her73SxZ9tZ7Qu4B0PW7ANDy/1y1EXI92ETk+AEkwfhl9v3TN3
+         eEWHT1XuEjhv1w5bwvfnq2rJQ3vW/6KkWmQjII1/QDgIPN6cjSmXxfaUWiJOQtIuNMCa
+         yAfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PIyD0F5Y9Z3DpMXzhOW/VfaSYPRIBHl6F02SOb8HbsU=;
+        b=cjAKBqNoDGw7W0ID5lCfkrAl/oJr7c4VHn4LipZzDrRfCHzxaFyZb6O6WwFdpfCeoY
+         HTv5s0RmtcAPz1g0jgt5lH7sdSmJUULH3YhgXUTO5uoDoszAtibUyHfCmkuE/NgyztYA
+         IWbFmbNj3LXggVweQD2ml7b2Z4yt6XUk7lCDiCjoPXyS0qitdFPxpVOa7aaTzQrkTC5H
+         aoWZ2qWzltcc9foWREAlkTaLbI0g10xIRkMeR0m8Rw43zUSHgKlNqEVJzDMY6zIxlCDr
+         9yi9kgCUc5WXhtJ3gImc+lRBmRauSOFpSH63XIFZ5Bk749Wf1rOt1faE9Eb1VLHfMirr
+         HKHg==
+X-Gm-Message-State: AFqh2kpdqYy8SQ904ZJLxp1tG6CVw5ixZXQt0mDTA5lwbfjfCXgCGzHi
+        vzkdsEpxT3yn0G5CTZEMXzeFcuATO+s03cGO5p8=
+X-Google-Smtp-Source: AMrXdXvxyAbJ/Kt/Wt6XKbtre4dYgzO2D0CHmJSOcGbGowbfv2Df5ZxmABPtWktJGYFR7INpFmUsJRRur+zphKlst1k=
+X-Received: by 2002:ac2:55bb:0:b0:4cc:73ff:6d3f with SMTP id
+ y27-20020ac255bb000000b004cc73ff6d3fmr1247500lfg.35.1674231638576; Fri, 20
+ Jan 2023 08:20:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <Y8pcIjGsikDeGqoU@amd.com>
+ <CA+icZUWP_uYr5B6d_xms5gpCRmNCx46KwukmZyuuTdEPawKUyA@mail.gmail.com> <0a1ae8e9-ab0e-038a-084f-240f73489010@linuxfoundation.org>
+In-Reply-To: <0a1ae8e9-ab0e-038a-084f-240f73489010@linuxfoundation.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 20 Jan 2023 17:20:01 +0100
+Message-ID: <CA+icZUVgt422h2nOfhjyahMF2yX_Eon613Ep7=gJ5XRWDAMkmw@mail.gmail.com>
+Subject: Re: [PATCH] selftests: amd-pstate: Don't delete source files via Makefile
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Huang Rui <ray.huang@amd.com>, Doug Smythies <dsmythies@telus.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make early loading message to match late loading messages. Print
-both old and new revisions.
+On Fri, Jan 20, 2023 at 5:15 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 1/20/23 09:11, Sedat Dilek wrote:
+> > On Fri, Jan 20, 2023 at 10:17 AM Huang Rui <ray.huang@amd.com> wrote:
+> >>
+> >> On Fri, Jan 20, 2023 at 01:54:01PM +0800, Doug Smythies wrote:
+> >>> Revert the portion of a recent Makefile change that incorrectly
+> >>> deletes source files when doing "make clean".
+>
+> Ooo. That is bad.
+>
+> >>>
+> >>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+> >>> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> >>> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> >>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> >>
+> >> (+ Shuah and linux-kselftest mailing list)
+> >>
+> >> Thanks for fix!
+> >>
+> >> Acked-by: Huang Rui <ray.huang@amd.com>
+> >>
+> >
+> > [ I already replied - but with these important CCs ]
+> >
+> > Hi Doug,
+> >
+> > Thanks for the patch!
+> >
+> > Small nit, I saw this with:
+>
+> What did you see and should that be fixed as well.
+>
+> >
+> > $ make -C tools/ clean
+> >
+> > Otherwise:
+> >
+> > Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+> >
+>
+> Send me the revised patch with all the right CCs and I will pull
+> this right away.
+>
 
-This is helpful to know what the BIOS loaded revision is before an early
-update.
+Hi Shuah,
 
-New dmesg log is shown below.
+that was my original posting...
 
-microcode: early update: 0x2b000041 -> 0x2b000070 date = 2000-01-01
+Subject: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
+https://lore.kernel.org/all/CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com/
 
-Cache the early BIOS revision before the microcode update and change the
-print_ucode_info() so it prints both the old and new revision in the same
-format as microcode_reload_late().
+...and should contain all CCs I got with scripts/get_maintainer.pl.
 
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: LKML <linux-kernel@vger.kernel.org>
-Cc: x86 <x86@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Alison Schofield <alison.schofield@intel.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Thomas Gleixner (Intel) <tglx@linutronix.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Stefan Talpalaru <stefantalpalaru@yahoo.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Peter Zilstra (Intel) <peterz@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
----
-Updates since V1:
+Is that OK?
 
-Thomas: Commit log updates as suggested.
----
- arch/x86/kernel/cpu/microcode/intel.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 146a60a9449a..4471d418f28a 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -310,10 +310,10 @@ static bool load_builtin_intel_microcode(struct cpio_data *cp)
- /*
-  * Print ucode update info.
-  */
--static void print_ucode_info(unsigned int new_rev, unsigned int date)
-+static void print_ucode_info(int old_rev, int new_rev, unsigned int date)
- {
--	pr_info_once("microcode updated early to revision 0x%x, date = %04x-%02x-%02x\n",
--		     new_rev, date & 0xffff, date >> 24,
-+	pr_info_once("early update: 0x%x -> 0x%x, date = %04x-%02x-%02x\n",
-+		     old_rev, new_rev, date & 0xffff, date >> 24,
- 		     (date >> 16) & 0xff);
- }
- 
-@@ -321,6 +321,7 @@ static void print_ucode_info(unsigned int new_rev, unsigned int date)
- 
- static int delay_ucode_info;
- static int current_mc_date;
-+static int early_old_rev;
- 
- /*
-  * Print early updated ucode info after printk works. This is delayed info dump.
-@@ -331,7 +332,7 @@ void show_ucode_info_early(void)
- 
- 	if (delay_ucode_info) {
- 		intel_cpu_collect_info(&uci);
--		print_ucode_info(uci.cpu_sig.rev, current_mc_date);
-+		print_ucode_info(early_old_rev, uci.cpu_sig.rev, current_mc_date);
- 		delay_ucode_info = 0;
- 	}
- }
-@@ -340,29 +341,32 @@ void show_ucode_info_early(void)
-  * At this point, we can not call printk() yet. Delay printing microcode info in
-  * show_ucode_info_early() until printk() works.
-  */
--static void print_ucode(int new_rev, int date)
-+static void print_ucode(int old_rev, int new_rev, int date)
- {
- 	int *delay_ucode_info_p;
- 	int *current_mc_date_p;
-+	int *early_old_rev_p;
- 
- 	delay_ucode_info_p = (int *)__pa_nodebug(&delay_ucode_info);
- 	current_mc_date_p = (int *)__pa_nodebug(&current_mc_date);
-+	early_old_rev_p = (int *)__pa_nodebug(&early_old_rev);
- 
- 	*delay_ucode_info_p = 1;
- 	*current_mc_date_p = date;
-+	*early_old_rev_p = old_rev;
- }
- #else
- 
--static inline void print_ucode(int new_rev, int date)
-+static inline void print_ucode(int old_rev, int new_rev, int date)
- {
--	print_ucode_info(new_rev, date);
-+	print_ucode_info(old_rev, new_rev, date);
- }
- #endif
- 
- static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- {
- 	struct microcode_intel *mc;
--	u32 rev;
-+	u32 rev, old_rev;
- 
- 	mc = uci->mc;
- 	if (!mc)
-@@ -388,6 +392,7 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- 	/* write microcode via MSR 0x79 */
- 	native_wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
- 
-+	old_rev = rev;
- 	rev = intel_get_microcode_revision();
- 	if (rev != mc->hdr.rev)
- 		return -1;
-@@ -395,9 +400,9 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- 	uci->cpu_sig.rev = rev;
- 
- 	if (early)
--		print_ucode(uci->cpu_sig.rev, mc->hdr.date);
-+		print_ucode(old_rev, uci->cpu_sig.rev, mc->hdr.date);
- 	else
--		print_ucode_info(uci->cpu_sig.rev, mc->hdr.date);
-+		print_ucode_info(old_rev, uci->cpu_sig.rev, mc->hdr.date);
- 
- 	return 0;
- }
--- 
-2.34.1
-
+BR,
+-Sedat-
