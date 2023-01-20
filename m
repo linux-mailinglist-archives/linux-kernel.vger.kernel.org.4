@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDE367591B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCDD67591D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjATPvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        id S231522AbjATPwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjATPvs (ORCPT
+        with ESMTP id S230392AbjATPwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:51:48 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552F59742
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674229907; x=1705765907;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=gYG8bbRbt/rhKlaJNI3iosDqiCy4zA84p3RRJ32SU9w=;
-  b=biA9YJbwlK/ZyihFA4QUahiDphJ9RJ8roK6cW3CjZ/SZEC7zp1Hxc7+5
-   3664eiCOotZylo/fek3DcRAwvw+5UbnFusSAY7NE42d/rB7xr/j/BdtfM
-   0yZYSXpzv4qaDxtMJGxAPO/nfMiAsR7AXgkmWrtTo/3hJ/UA0+9BZQ87Y
-   EXtAmp2x7xFog0ILZe6J59sSWMp2zTbMRJqY6L79pHFRCtKuO2dbQWhCE
-   505bO2KQYGQxAjQp4mSNhZgkXtUv3Xrxsng6svU/EghYSBgI7zdDJV0tk
-   gHvKgsQqcDReVbXPnFE126elwxMh0pqHJaztVzaXj+idlFI3FHhSb2wtn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309181132"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="309181132"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 07:51:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="638190229"
-X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
-   d="scan'208";a="638190229"
-Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 07:51:43 -0800
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        alexander.shishkin@linux.intel.com
-Subject: Re: [PATCH v1 1/6] virtio console: Harden multiport against invalid
- host input
-In-Reply-To: <20230120080130-mutt-send-email-mst@kernel.org>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-2-alexander.shishkin@linux.intel.com>
- <20230120080130-mutt-send-email-mst@kernel.org>
-Date:   Fri, 20 Jan 2023 17:51:42 +0200
-Message-ID: <874jslqk4x.fsf@ubik.fi.intel.com>
-MIME-Version: 1.0
+        Fri, 20 Jan 2023 10:52:38 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F355210F;
+        Fri, 20 Jan 2023 07:52:37 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2260F320046E;
+        Fri, 20 Jan 2023 10:52:36 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 10:52:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674229955; x=1674316355; bh=DtS8Jq+YGT
+        i7yWho9Vbrof/W6pjerVKNtmOz7aKe06M=; b=f9QLexsh11uF9/M6aGmdhI0kpB
+        nRraiDm12gpr3t6SEDmgzAq6/AF4tVnhkWo0eIvW4nneSVHy6ktQ1qHDQzZ+Mo3Y
+        rbxIkjPwy4jKk3kCAWARnHCKCxCDufVfxSPwkZCjMq0tEkvKmTrYq1LKej+wRYzF
+        ZL35/6wLDAWSHvwPhMHFGr+WxskwTgtuAG6BAcJ+sGjdnLuXxFN81fv84KfcIin+
+        WdTOvxd17WGCPyrnQJJ/mZ2rRtwTFBTNSK2LpTPQDLgDKpOoizR00T42Z9IIkyVC
+        zftTzmLperGx4AaESwK9UhAhHyC4IxTP0gkMMjVfjqcOQnsuu8yg9K4SvYLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674229955; x=1674316355; bh=DtS8Jq+YGTi7yWho9Vbrof/W6pje
+        rVKNtmOz7aKe06M=; b=UzU8ZWqTPmgqDpZs1evTS+43RxhGDhYR+SorIEftHO+0
+        MCgXWJsaTaB5QikmF7ShLiJHaBDom66BgZBVLZ6YFl3pUcPBorF8yirKuHVtnpAL
+        hR81fGcelNiOl08voW3pvjFRjQ+XWzIkyzqEZBIOXzpu8srxIKzyXVPxoxvdcwY9
+        YBooj6aXBE+4hs3XSoJZQ2JypeycREXUXzYj00R7BHU4e2J7Y2OOjBk5bWQfDej9
+        9CX+5E8kP2ECE+A5MqRR2v0tX4JOVvaiGtI+4yXyMNrWk/6Zpe+XYHQT9rSmVsvo
+        M3Up3Cj4eJAA6X4zqFF/IF3rAPyaXx6WfK6cH3fLXw==
+X-ME-Sender: <xms:w7jKY3mOZvfvkCkkr6TxND2vTQY_gMwTUI6D8BF0OiVjkufmsTPurA>
+    <xme:w7jKY617LQjosI9Gr26lMzEYyVcaqFQWYr59CDfyLzWAbyCVfyYcqDK_Y9gAPehsD
+    7lqWG3uzQd0fDNdluk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:w7jKY9puV1miYR_CcqRkbhP8MIL6BBpGcjqyST-zdLmphyGx36fyZA>
+    <xmx:w7jKY_l6rRn739AkVf7pxeyU46G9c3kVybqesI6FYDcTYqqFpuxEkw>
+    <xmx:w7jKY13WKFPdWf1iyVN7BLaolZeGVI8jMovIX6pMRmbHNwei5qPWJA>
+    <xmx:w7jKYwTHf-s13xzhMyXHZa5SSfXjTuahwzPPtuSlmWKMAnRQK9njGA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3553DB60086; Fri, 20 Jan 2023 10:52:35 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <91b81295-868f-4272-ba16-25862346ddec@app.fastmail.com>
+In-Reply-To: <20230113121308.5e86479f@canb.auug.org.au>
+References: <20230113121308.5e86479f@canb.auug.org.au>
+Date:   Fri, 20 Jan 2023 16:52:13 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Olof Johansson" <olof@lixom.net>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the sound-asoc tree
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Michael S. Tsirkin" <mst@redhat.com> writes:
-
-> Weird.  Don't we already check for that?
+On Fri, Jan 13, 2023, at 02:13, Stephen Rothwell wrote:
+> Hi all,
 >
->         /* Don't test MULTIPORT at all if we're rproc: not a valid feature! */
->         if (!is_rproc_serial(vdev) &&
->             virtio_cread_feature(vdev, VIRTIO_CONSOLE_F_MULTIPORT,
->                                  struct virtio_console_config, max_nr_ports,
->                                  &portdev->max_nr_ports) == 0) {
->                 if (portdev->max_nr_ports == 0 ||
->                     portdev->max_nr_ports > VIRTCONS_MAX_PORTS) {
->                         dev_err(&vdev->dev,
->                                 "Invalidate max_nr_ports %d",
->                                 portdev->max_nr_ports);
->                         err = -EINVAL;
->                         goto free;
->                 }
->                 multiport = true;
->         }
+> The following commit is also in the arm-soc tree as a different commit
+> (but the same patch):
+>
+>   5eab9265759e ("ASoC: PXA: make SND_PXA2XX_SOC_AC97 user-selectable")
+>
+> (commit 350a6eb412d3 in the arm-soc tree)
 
-Yes, I missed this earlier. I'll drop this patch.
+I dropped it from my tree now, as I had to rebase this branch
+for hopefully the last time.
 
-Thanks,
---
-Alex
+     Arnd
