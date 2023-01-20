@@ -2,99 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FB56758EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E48B6758F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjATPlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S230034AbjATPoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjATPlQ (ORCPT
+        with ESMTP id S229683AbjATPoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:41:16 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3703DD0DB6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:41:05 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id p12so2867155ilq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:41:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=75d/J3khF4Dbn5fzcg9rN+6VjL8Dp9ov4rvyfMDhcrA=;
-        b=d0ImBQUcvTZTl3HjI5diPzn7jbqkwmc3vqXckaGORUu5tvc7yjV+m9rM/VwD7qHNNC
-         x2RtXoPZ4eQNDe+qK5E64wQxWuTvEMJW2JzdihOZMQXCTv7dfi8po7hZ9QSfZ8qkld3r
-         McFuj7fZdPKHnfFWyx1ZLGCygyyrqw8DBo/T6lL9Gdy7yw7G2OExUaMVozQmRvKe00hS
-         lyxPO5bCHwUAClFaQjzAc34hpaR+3De1IELIEZhc1krmX+3N3q3T5sKgesLgbkhNHmCW
-         XzL2H8tm86Bsk80LTqCnZgO4OEOLilC/ctj2eBt+f1sLY3JvLnczzg8spDj7C+ZTXWVH
-         AB3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=75d/J3khF4Dbn5fzcg9rN+6VjL8Dp9ov4rvyfMDhcrA=;
-        b=ypqM4jgO7yTvHBKgfLF3PbdlwSLpCf89utG7ZhC/t7TylrWL8eZe1ZnUjZ7Ng6GNnj
-         GWrTROWjDg2zFKPu98K5xosnazn9VB/4djU+4xalS4W5oYCgwv4cHOGq3L/jtsKl1VKs
-         spfS4eCF4PGNPerz9XUCKzCE7pA2noxKpz/IA5tJAwHqYE0PdTDGxq3jHmsmo9Cr8fEB
-         NxQsY72ZKHW6NPralI1nwBBgsf5RSAPFsQAQbf8ythiciulRiEA5oyl8Mq4RPUnvI2Tb
-         Qc6/7kvcD86yLVYfetCtKM0LuxH8O1ZYxIDP0KVLy84q0ecgEKRzFElBDovccaalgi9V
-         UI2w==
-X-Gm-Message-State: AFqh2kr07/s6fIP74cxFbiZejgqdkNk2pmnKCDYggqmIqdEl3SywbwwB
-        +JcVrjFPxNYwf5QJ2/U/xPspUA==
-X-Google-Smtp-Source: AMrXdXsFAniWNJYHa0I4E+Li9JxU/x4AKyLut7pnBhtNvWpyJboraEoqFVg9HDjCLUwDIhX6MwrJLQ==
-X-Received: by 2002:a92:c5d1:0:b0:30d:9eea:e51 with SMTP id s17-20020a92c5d1000000b0030d9eea0e51mr2273296ilt.1.1674229264495;
-        Fri, 20 Jan 2023 07:41:04 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id l14-20020a92700e000000b0030c27c9eea4sm11664570ilc.33.2023.01.20.07.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 07:41:04 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        Breno Leitao <leitao@debian.org>
-Cc:     kasan-dev@googlegroups.com, leit@fb.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230118155630.2762921-1-leitao@debian.org>
-References: <20230118155630.2762921-1-leitao@debian.org>
-Subject: Re: [PATCH] io_uring: Enable KASAN for request cache
-Message-Id: <167422926391.670047.2726157847923072257.b4-ty@kernel.dk>
-Date:   Fri, 20 Jan 2023 08:41:03 -0700
+        Fri, 20 Jan 2023 10:44:08 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D5559264;
+        Fri, 20 Jan 2023 07:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674229447; x=1705765447;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oBVSJGdmqluJ+m0kpxYQdXUIQZYypRK6F57krHn+9Cs=;
+  b=LVhdOo43ck4HjZ8K7sa6VjjR/sf/qeAD5nK1IOTcOqW741LcPgsuztJP
+   4s7RuWtrC4gt9D5C4D+QfGhV6Ct42fCaQNIacOWYcfpEgwT/8jj4K7YGV
+   FNPpJVSACLKedwMxEFmzCXNbMUTtZGCPzxJGmneGha+Rz21qVqdwT3sF7
+   pSCb4m+m79DKHAb3PmuRvMerA6vuXIEAfyOD4aSppGXO6oWZVHfnGffeg
+   lo/tPDQgGjAALOroCFGb2i4gNLY+ApMoQK90vEHPC+bxTaRYiz03w7O02
+   mWt4OrJRmk1CcRajMzYfFd6+7LF/NFJ9Iw4nvxLs5tJ+cynfiFhsqTAHS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="390114958"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="390114958"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 07:44:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="989427700"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="989427700"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Jan 2023 07:44:04 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E7A85368; Fri, 20 Jan 2023 17:44:39 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/5] usb: fotg210-hcd: use sysfs_emit() to instead of scnprintf()
+Date:   Fri, 20 Jan 2023 17:44:33 +0200
+Message-Id: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-78c63
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-On Wed, 18 Jan 2023 07:56:30 -0800, Breno Leitao wrote:
-> Every io_uring request is represented by struct io_kiocb, which is
-> cached locally by io_uring (not SLAB/SLUB) in the list called
-> submit_state.freelist. This patch simply enabled KASAN for this free
-> list.
-> 
-> This list is initially created by KMEM_CACHE, but later, managed by
-> io_uring. This patch basically poisons the objects that are not used
-> (i.e., they are the free list), and unpoisons it when the object is
-> allocated/removed from the list.
-> 
-> [...]
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/fotg210/fotg210-hcd.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Applied, thanks!
-
-[1/1] io_uring: Enable KASAN for request cache
-      commit: 9f61fe5e410444ccecb429e69536ecd981c73c08
-
-Best regards,
+diff --git a/drivers/usb/fotg210/fotg210-hcd.c b/drivers/usb/fotg210/fotg210-hcd.c
+index 7bd1e8f3080d..46752a75c428 100644
+--- a/drivers/usb/fotg210/fotg210-hcd.c
++++ b/drivers/usb/fotg210/fotg210-hcd.c
+@@ -4686,14 +4686,11 @@ static ssize_t uframe_periodic_max_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+ 	struct fotg210_hcd *fotg210;
+-	int n;
+ 
+ 	fotg210 = hcd_to_fotg210(bus_to_hcd(dev_get_drvdata(dev)));
+-	n = scnprintf(buf, PAGE_SIZE, "%d\n", fotg210->uframe_periodic_max);
+-	return n;
++	return sysfs_emit(buf, "%d\n", fotg210->uframe_periodic_max);
+ }
+ 
+-
+ static ssize_t uframe_periodic_max_store(struct device *dev,
+ 		struct device_attribute *attr, const char *buf, size_t count)
+ {
 -- 
-Jens Axboe
-
-
+2.39.0
 
