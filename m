@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D29675983
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A995675985
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjATQH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S231168AbjATQH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjATQHY (ORCPT
+        with ESMTP id S230222AbjATQH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:07:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0393929A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:06:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674230801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h34pQaaNc3Py6uCbKcESZyQQ/4GYsCvU9GfSkH8JUgE=;
-        b=AMGLwJ2z+tVg2+ulenhbIY/Diaw/VmbtRyx+YzU3xSf370fWI4s8ta7Q8Niu8GsDEeMdy7
-        qW6wFNQv5ylGp5cOH7ON9VH0nW2Okahqj6kqokFtm26VmMrxut6FwCx7FFGwFMkJK8MUGQ
-        VDPVbaSVsroqZ0WoSTDTBtWnqx2FTOY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-107-7y_Iflm6NJGEHzm2ve_kwA-1; Fri, 20 Jan 2023 11:06:38 -0500
-X-MC-Unique: 7y_Iflm6NJGEHzm2ve_kwA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7144B3C1834F;
-        Fri, 20 Jan 2023 16:06:37 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.9.201])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 08558C15BAE;
-        Fri, 20 Jan 2023 16:06:36 +0000 (UTC)
-Date:   Fri, 20 Jan 2023 11:06:35 -0500
-From:   Phil Auld <pauld@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        mingo@redhat.com, vishalc@linux.vnet.ibm.com, peterz@infradead.org,
-        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
-        vincent.guittot@linaro.org, ritesh.list@gmail.com
-Subject: Re: [RESEND PATCH] sched/debug: Put sched/domains files under the
- verbose flag
-Message-ID: <Y8q8Cz6B5NpAt0NW@lorien.usersys.redhat.com>
-References: <20230119150758.880189-1-pauld@redhat.com>
- <xhsmh1qnpi4o8.mognet@vschneid.remote.csb>
+        Fri, 20 Jan 2023 11:07:26 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCF43A5B0;
+        Fri, 20 Jan 2023 08:07:24 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id y18so5943827ljk.11;
+        Fri, 20 Jan 2023 08:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=31/1A9dhqHwbHkaUB6c82meJOceUdfVoWN5PLNgf4Dw=;
+        b=nFbO/Yxjt207GzVx0yZACuPxvSjmLDh8YvAFoupxTNQTEmyiDcPazHCupQYuqYv7sp
+         KHbDjKCvGrxTxDowMAfCJ1jY3sc9ziwhElOeQkWjQXS3Dp/auoKMrlQQBOXMIL6IFPqi
+         5l9v/7YlqXXX1D1eLC0YKIO00rQTKzDVdKsrr9ZV1PpPFgfCylIqfJ1T4q88OE//EcW0
+         E2EwoJnNwqC3s4DSvAvFQeOrM26YunzQi9hBfutsekf51UG1bpgw9jcXyz6pgnJfE1xd
+         Kbho3/jZMFoPr0xkj5OL5w8MIX839zcW9JIq2jHjoqFwpkuoWcWKoboFje9RYH7fSV+S
+         6asA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=31/1A9dhqHwbHkaUB6c82meJOceUdfVoWN5PLNgf4Dw=;
+        b=CA2aqX+BeqytJbpp8jWbBNlTiVJu5mwrqaJFXQVNQGUXDDYl0RFusOkV24e+xod/Sv
+         l//6vgGChhiLaQ4Hbl13Uuc0iEO7th8jnwgNFbtJn28jfi09y2B0z5W9IxZSXtwrNE+L
+         iMJzTpwa4qGCYi2XE2nwURGCm4fqyocmUYjmoplUVdWC+uAylI5vSBO9pWYmIHeLhbO2
+         +LzC7ropz/bgzy9/j1QruPITXJslxKun7phaB2xC33yp6PTkrFCf7N1+IcxW0zgHxPF6
+         x+BDGeJqGDfj6JvFUIwEJxCtm9dL5k1fUMrE/ezjJj3xo8YBTebkKFsYZYLGphk7Tg5h
+         Ig9g==
+X-Gm-Message-State: AFqh2kqtKcEqjJOkJPWcMSoLkeQxmBLuq0iOfm32TJMMmDQ1ZDdGDLeR
+        G2JOy7ktYgOnmM5pTdRidz5Kv4IG0IJK06o3nCk=
+X-Google-Smtp-Source: AMrXdXvdkC0X15+gNjWIs4uevtutCXYsTvMFQuxtje0h4v/nisC86J1d49XlBttjxY0o7xfX5tTZiwgM3OMpd4lk7/c=
+X-Received: by 2002:a2e:9dda:0:b0:28b:6e91:de25 with SMTP id
+ x26-20020a2e9dda000000b0028b6e91de25mr768001ljj.204.1674230842957; Fri, 20
+ Jan 2023 08:07:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmh1qnpi4o8.mognet@vschneid.remote.csb>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+In-Reply-To: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 20 Jan 2023 17:06:45 +0100
+Message-ID: <CA+icZUX-JEPR0obhwNgvRM6u=ifn4KZHaEFVdwRL8WffGe8hAQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: amd-pstate: Don't delete source files via Makefile
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>, li.meng@amd.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,82 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 03:52:55PM +0000 Valentin Schneider wrote:
-> On 19/01/23 10:07, Phil Auld wrote:
-> > The debug files under sched/domains can take a long time to regenerate,
-> > especially when updates are done one at a time. Move these files under
-> > the sched verbose debug flag. Allow changes to verbose to trigger
-> > generation of the files. This lets a user batch the updates but still
-> > have the information available.  The detailed topology printk messages
-> > are also under verbose.
-> >
-> > Discussion that lead to this approach can be found in the link below.
-> >
-> > Simplified code to maintain use of debugfs bool routines suggested by
-> > Michael Ellerman <mpe@ellerman.id.au>.
-> >
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
-> 
-> Small nits below, other than that:
-> 
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-> 
-> > @@ -402,15 +440,23 @@ void update_sched_domain_debugfs(void)
-> >       if (!debugfs_sched)
-> >               return;
-> >
-> > +	if (!sched_debug_verbose)
-> > +		return;
-> > +
-> >       if (!cpumask_available(sd_sysctl_cpus)) {
-> >               if (!alloc_cpumask_var(&sd_sysctl_cpus, GFP_KERNEL))
-> >                       return;
-> >               cpumask_copy(sd_sysctl_cpus, cpu_possible_mask);
-> >       }
-> >
-> > -	if (!sd_dentry)
-> > +	if (!sd_dentry) {
-> >               sd_dentry = debugfs_create_dir("domains", debugfs_sched);
-> >
-> > +		/* rebuild sd_sysclt_cpus if empty since it gets cleared below */
->                            ^^^^^^^^^^^^^^
-> Nit: sd_sysctl_cpus
-> 
-> > +		if (cpumask_first(sd_sysctl_cpus) >=  nr_cpu_ids)
-> 
-> Use cpumask_empty() instead?
+On Fri, Jan 20, 2023 at 6:54 AM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> Revert the portion of a recent Makefile change that incorrectly
+> deletes source files when doing "make clean".
+>
+> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
 
-Heh, I didn't find that when I looked somehow :)  Yes, that's what this check
-is doing. I'll fix these in a quick v2.
+Hi Doug,
 
+Thanks for the patch!
 
-Thanks!
+Small nit, I saw this with:
 
+$ make -C tools/ clean
 
-Cheers,
-Phil
+Otherwise:
 
+Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
 
+BR,
+-Sedat-
 
-> 
-> > +			cpumask_copy(sd_sysctl_cpus, cpu_online_mask);
-> > +	}
-> > +
-> >       for_each_cpu(cpu, sd_sysctl_cpus) {
-> >               struct sched_domain *sd;
-> >               struct dentry *d_cpu;
-> > --
-> > 2.31.1
-> 
-
--- 
-
+> ---
+>  tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 5f195ee756d6..5fd1424db37d 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -7,11 +7,6 @@ all:
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>
+> -ifeq (x86,$(ARCH))
+> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> -endif
+> -
+>  TEST_PROGS := run.sh
+>  TEST_FILES := basic.sh tbench.sh gitsource.sh
+>
+> --
+> 2.25.1
+>
+>
