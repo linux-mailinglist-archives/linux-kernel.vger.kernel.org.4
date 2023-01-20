@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3831B675EB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A0E675EB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjATUL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S230053AbjATULh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjATUL1 (ORCPT
+        with ESMTP id S229944AbjATULd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:11:27 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B9BD163;
-        Fri, 20 Jan 2023 12:11:24 -0800 (PST)
+        Fri, 20 Jan 2023 15:11:33 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A75BC8A3;
+        Fri, 20 Jan 2023 12:11:29 -0800 (PST)
 Received: from umang.jainideasonboard.com (unknown [103.251.226.6])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DB36558;
-        Fri, 20 Jan 2023 21:11:16 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E0C23104C;
+        Fri, 20 Jan 2023 21:11:22 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674245482;
-        bh=k77WTxAn/feFnTF+zmqDuZWd/SZKbGH7e+gY4VOai8Q=;
+        s=mail; t=1674245487;
+        bh=Zngsaz8GwwntFvLzEgh5Y8P+7IVbo+ADRxKcwraGzEY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iOxKrguMlsRMJkNG6dE2FkEIoYWJSd5w/ONgleoVLQnA4Rp0+B5o6W3actR1vyBL+
-         KAhzlrQECQ8P1+9qyuZYDV7Ec5xu1s3JX1HkWaS891ZpmVUfoj8U/Q7wB69jr3Rz6v
-         xvjquxNJSpMVQKH7UW5/0NU1xpcDpo4pgIw6YKVo=
+        b=v/8dn6xJI/Mzj+iQlZxdBMqv4b3EKDKQ1Y1zkq6G00D0eDkmyAZy9LaTX8wHhPLA6
+         DZ188CMIyxxRKruhcSHQplKjYu11VHSquypetOGeNQVXbyAfAaqowfS/93AJ27RH6N
+         nwUUQhrxeypcnK4EROcEBvLdrYKNNJ/UfBCJEdCA=
 From:   Umang Jain <umang.jain@ideasonboard.com>
 To:     linux-staging@lists.linux.dev,
         linux-rpi-kernel@lists.infradead.org,
@@ -40,9 +40,9 @@ Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH v6 1/6] staging: vc04_services: Drop __VCCOREVER__ remnants
-Date:   Sat, 21 Jan 2023 01:40:59 +0530
-Message-Id: <20230120201104.606876-2-umang.jain@ideasonboard.com>
+Subject: [PATCH v6 2/6] staging: vc04_services: bcm2835-audio: Drop include Makefile directive
+Date:   Sat, 21 Jan 2023 01:41:00 +0530
+Message-Id: <20230120201104.606876-3-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230120201104.606876-1-umang.jain@ideasonboard.com>
 References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
@@ -57,50 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 8ba5f91bab63 ("staging: vc04_services: remove __VCCOREVER__")
-was meant to remove all of __VCCOREVER__ definitions but missed to
-remove a few. Hence, drop them now.
+Drop the include directive. They can break the build, when one only
+wants to build a subdirectory. Replace with "../" for the includes,
+in the bcm2835.h instead.
 
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/vc04_services/bcm2835-audio/Makefile  | 2 +-
- drivers/staging/vc04_services/bcm2835-camera/Makefile | 3 +--
- drivers/staging/vc04_services/vchiq-mmal/Makefile     | 3 +--
- 3 files changed, 3 insertions(+), 5 deletions(-)
+ drivers/staging/vc04_services/bcm2835-audio/Makefile  | 2 --
+ drivers/staging/vc04_services/bcm2835-audio/bcm2835.h | 3 ++-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/staging/vc04_services/bcm2835-audio/Makefile b/drivers/staging/vc04_services/bcm2835-audio/Makefile
-index d59fe4dde615..fc7ac6112a3e 100644
+index fc7ac6112a3e..01ceebdf88e7 100644
 --- a/drivers/staging/vc04_services/bcm2835-audio/Makefile
 +++ b/drivers/staging/vc04_services/bcm2835-audio/Makefile
-@@ -2,4 +2,4 @@
+@@ -1,5 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
  obj-$(CONFIG_SND_BCM2835)	+= snd-bcm2835.o
  snd-bcm2835-objs		:= bcm2835.o bcm2835-ctl.o bcm2835-pcm.o bcm2835-vchiq.o
+-
+-ccflags-y += -I $(srctree)/$(src)/../include
+diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
+index 38b7451d77b2..0a81383c475a 100644
+--- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
++++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.h
+@@ -6,11 +6,12 @@
  
--ccflags-y += -I $(srctree)/$(src)/../include -D__VCCOREVER__=0x04000000
-+ccflags-y += -I $(srctree)/$(src)/../include
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/Makefile b/drivers/staging/vc04_services/bcm2835-camera/Makefile
-index 3a76d6ade428..3494c82b271a 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/Makefile
-+++ b/drivers/staging/vc04_services/bcm2835-camera/Makefile
-@@ -7,5 +7,4 @@ obj-$(CONFIG_VIDEO_BCM2835) += bcm2835-v4l2.o
+ #include <linux/device.h>
+ #include <linux/wait.h>
+-#include <linux/raspberrypi/vchiq.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+ #include <sound/pcm-indirect.h>
  
- ccflags-y += \
- 	-I $(srctree)/$(src)/.. \
--	-I $(srctree)/$(src)/../vchiq-mmal/ \
--	-D__VCCOREVER__=0x04000000
-+	-I $(srctree)/$(src)/../vchiq-mmal/
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/Makefile b/drivers/staging/vc04_services/vchiq-mmal/Makefile
-index b2a830f48acc..c7d3b06e17ce 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/Makefile
-+++ b/drivers/staging/vc04_services/vchiq-mmal/Makefile
-@@ -5,5 +5,4 @@ obj-$(CONFIG_BCM2835_VCHIQ_MMAL) += bcm2835-mmal-vchiq.o
++#include "../include/linux/raspberrypi/vchiq.h"
++
+ #define MAX_SUBSTREAMS   (8)
+ #define AVAIL_SUBSTREAMS_MASK  (0xff)
  
- ccflags-y += \
- 	-I$(srctree)/$(src)/.. \
--	-I$(srctree)/$(src)/../include \
--	-D__VCCOREVER__=0x04000000
-+	-I$(srctree)/$(src)/../include
 -- 
 2.39.0
 
