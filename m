@@ -2,152 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B35D67587C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C264675888
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjATPZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S231406AbjATP0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbjATPYw (ORCPT
+        with ESMTP id S229941AbjATP0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:24:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2CBDA127
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674228239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M9kcFm4bZIrWxqb92kaZI81madTzRGEizfXuC8UiNAg=;
-        b=FEiZuFbRK8ptJmmJI4EGINeo3zSRMF8AAFbx3kyX1KiZH8HeZN+ZxTZeq6wpq//XW2Hdhv
-        4GQmuN/mfX3deZJCPnGEg2b1AD5n75wb9DMWkxjBUAbV6XkFAv0tPVd7p+FpBKWXa/yntw
-        2SjjnsBMMUbghwHE5aV4uE7vdexTIVg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-647-h8K_wuihOz-N6GP2AeTkQA-1; Fri, 20 Jan 2023 10:23:58 -0500
-X-MC-Unique: h8K_wuihOz-N6GP2AeTkQA-1
-Received: by mail-ej1-f71.google.com with SMTP id wz4-20020a170906fe4400b0084c7e7eb6d0so3999615ejb.19
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:23:57 -0800 (PST)
+        Fri, 20 Jan 2023 10:26:44 -0500
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C49CD501;
+        Fri, 20 Jan 2023 07:26:23 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id p1so6010097vsr.5;
+        Fri, 20 Jan 2023 07:26:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M9kcFm4bZIrWxqb92kaZI81madTzRGEizfXuC8UiNAg=;
-        b=E8N4wygG05/CY7hqO+ye15uwDvukUSa4wCtpZL4uyjS6FTiKnfZ1eJ5qixx/jZVvec
-         qSBC/UyURlzTnIfedArSAQNpKZFR14SFigUTUwn7RFPTELHbilSzdZGnldAm3xbL/gFM
-         nzRz7F7VHrUMb7v+RUjNXBZUJzO1o2/LsaH6JRBcB+6gAhO3x96DGvVEtIm6rB8DYJc5
-         QCKPaTtl78Pi3j6iY3TyApMuejf/1F40nPG+df6sbmAs9wSdKTaDL9wzN/SrRfoRExsg
-         q5v9pHzeiTKjfcHKNtRQtmbX+1cQPaJ/M1PcB08R7tdUm56oo1pZkNxcwidxTasoGkV5
-         jGlQ==
-X-Gm-Message-State: AFqh2kpGsORg76srOrvc9WwSQy7TKo0ACzYY5xhcitQlm83ogvE6OVb8
-        rddxfbpxZKd1wxZudQESD1uuM/K9/1ITkJTyR5jQcqQTfUL+U87CaGe+Fjo5so+2wtiQMGOV5Cu
-        dJKLx899nP8F+8BpceHBeuR0c
-X-Received: by 2002:a17:907:8e8c:b0:86f:fbcf:f30a with SMTP id tx12-20020a1709078e8c00b0086ffbcff30amr17256937ejc.58.1674228236684;
-        Fri, 20 Jan 2023 07:23:56 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu9qkCLMflGLnlHw4DtZmrXLGQEq54VRSN4Eh5U4Z+xTENpAmtCMu5VVcOv2DCIdzj6GA3G8Q==
-X-Received: by 2002:a17:907:8e8c:b0:86f:fbcf:f30a with SMTP id tx12-20020a1709078e8c00b0086ffbcff30amr17256918ejc.58.1674228236482;
-        Fri, 20 Jan 2023 07:23:56 -0800 (PST)
-Received: from localhost.localdomain (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
-        by smtp.googlemail.com with ESMTPSA id s16-20020a1709067b9000b00872eb47f46dsm5706976ejo.19.2023.01.20.07.23.54
+        bh=LHCY4mL/EcA5eqCxZGkg0juV8XwTjSJS4YU5zJqXqHg=;
+        b=MkFCmnurndlWBqeDlFmaDdXS1Fj8DI8yhFx0L0ZIoNkFXng564Ps/4/Wsv1Gmf5tZ6
+         uLzDmLSgnizE9I9a4BTqGG378RR1FX2xo2IEFwjF9Nnp2FWQpkDEba+cHxaj0P4A8t/L
+         UKI2eFvFTGW0mvP8Gf0MlIAB3snDdsR1i8CmXX2wbfQctMD84whh+16PVA132ULJsDix
+         L42IwTuZzILeT3FJk3QHvmLzMBn9wuNuqHRifcIZU2zSva9VQmQbwAVUFqgaeZkhMHfL
+         4bI5APtkIb0LFtq5ISQS8cHI0/v94Ca+r+XjOm7saX4tkBk+y3bptDFPunGLJFTwku+f
+         /I5w==
+X-Gm-Message-State: AFqh2kpwKVc+xdmuzUkhcV35Xv/DdNGbhUcb4dLudp1O1OGU+/4QjfVg
+        PMthI9r2/mRakcaRS8TtZoc=
+X-Google-Smtp-Source: AMrXdXto9umr2qymfvMTYy/kytmz+PEAgBS9qsJJskS9p6hgQzlXaGIA6LglQNK04vyYqMUOuyrYlg==
+X-Received: by 2002:a05:6102:274a:b0:3d3:c424:4e68 with SMTP id p10-20020a056102274a00b003d3c4244e68mr10782339vsu.0.1674228382060;
+        Fri, 20 Jan 2023 07:26:22 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:2fc9])
+        by smtp.gmail.com with ESMTPSA id c4-20020a05620a268400b006fefa5f7fcesm21656593qkp.10.2023.01.20.07.26.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 07:23:55 -0800 (PST)
-From:   Alexander Larsson <alexl@redhat.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, gscrivan@redhat.com,
-        david@fromorbit.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Alexander Larsson <alexl@redhat.com>
-Subject: [PATCH v3 6/6] composefs: Add kconfig and build support
-Date:   Fri, 20 Jan 2023 16:23:34 +0100
-Message-Id: <44514e018d5fa27ace5c97c6c30e95a9cca89032.1674227308.git.alexl@redhat.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1674227308.git.alexl@redhat.com>
-References: <cover.1674227308.git.alexl@redhat.com>
+        Fri, 20 Jan 2023 07:26:21 -0800 (PST)
+Date:   Fri, 20 Jan 2023 09:26:26 -0600
+From:   David Vernet <void@manifault.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 2/8] bpf: Allow trusted args to walk struct when
+ checking BTF IDs
+Message-ID: <Y8qyovnr2bkEpldc@maniforge.lan>
+References: <20230119235833.2948341-1-void@manifault.com>
+ <20230119235833.2948341-3-void@manifault.com>
+ <20230120045815.4b7dc6obdt4uzy6a@apollo>
+ <Y8olRi9SjcyNtam0@maniforge.lan>
+ <20230120054027.wcj3jxqkx2s2zsxo@MacBook-Pro-6.local.dhcp.thefacebook.com>
+ <CAP01T76aNAn2ish+jwFQuMrCk+11Rb_ZmteGe8RsE7ZMy1t4RA@mail.gmail.com>
+ <20230120061441.3gifklagiugmkrtd@MacBook-Pro-6.local.dhcp.thefacebook.com>
+ <Y8qrt7pdWCS6Gef8@maniforge.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8qrt7pdWCS6Gef8@maniforge.lan>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds Makefile and Kconfig for composefs, and
-updates Makefile and Kconfig files in the fs directory
+On Fri, Jan 20, 2023 at 08:56:55AM -0600, David Vernet wrote:
+> On Thu, Jan 19, 2023 at 10:14:41PM -0800, Alexei Starovoitov wrote:
+> > On Fri, Jan 20, 2023 at 11:26:37AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > > On Fri, 20 Jan 2023 at 11:10, Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Thu, Jan 19, 2023 at 11:23:18PM -0600, David Vernet wrote:
+> > > > > On Fri, Jan 20, 2023 at 10:28:15AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > > > > > On Fri, Jan 20, 2023 at 05:28:27AM IST, David Vernet wrote:
+> > > > > > > When validating BTF types for KF_TRUSTED_ARGS kfuncs, the verifier
+> > > > > > > currently enforces that the top-level type must match when calling
+> > > > > > > the kfunc. In other words, the verifier does not allow the BPF program
+> > > > > > > to pass a bitwise equivalent struct, despite it being functionally safe.
+> > > > > > > For example, if you have the following type:
+> > > > > > >
+> > > > > > > struct  nf_conn___init {
+> > > > > > >   struct nf_conn ct;
+> > > > > > > };
+> > > > > > >
+> > > > > > > It would be safe to pass a struct nf_conn___init to a kfunc expecting a
+> > > > > > > struct nf_conn.
+> > > > > >
+> > > > > > Just running bpf_nf selftest would have shown this is false.
+> > > > >
+> > > > > And I feel silly, because I did run them, and could have sworn they
+> > > > > passed...looking now at the change_status_after_alloc testcase I see
+> > > > > you're of course correct. Very poor example, thank you for pointing it
+> > > > > out.
+> > > > >
+> > > > > >
+> > > > > > > Being able to do this will be useful for certain types
+> > > > > > > of kfunc / kptrs enabled by BPF. For example, in a follow-on patch, a
+> > > > > > > series of kfuncs will be added which allow programs to do bitwise
+> > > > > > > queries on cpumasks that are either allocated by the program (in which
+> > > > > > > case they'll be a 'struct bpf_cpumask' type that wraps a cpumask_t as
+> > > > > > > its first element), or a cpumask that was allocated by the main kernel
+> > > > > > > (in which case it will just be a straight cpumask_t, as in
+> > > > > > >  task->cpus_ptr).
+> > > > > > >
+> > > > > > > Having the two types of cpumasks allows us to distinguish between the
+> > > > > > > two for when a cpumask is read-only vs. mutatable. A struct bpf_cpumask
+> > > > > > > can be mutated by e.g. bpf_cpumask_clear(), whereas a regular cpumask_t
+> > > > > > > cannot be. On the other hand, a struct bpf_cpumask can of course be
+> > > > > > > queried in the exact same manner as a cpumask_t, with e.g.
+> > > > > > > bpf_cpumask_test_cpu().
+> > > > > > >
+> > > > > > > If we were to enforce that top level types match, then a user that's
+> > > > > > > passing a struct bpf_cpumask to a read-only cpumask_t argument would
+> > > > > > > have to cast with something like bpf_cast_to_kern_ctx() (which itself
+> > > > > > > would need to be updated to expect the alias, and currently it only
+> > > > > > > accommodates a single alias per prog type). Additionally, not specifying
+> > > > > > > KF_TRUSTED_ARGS is not an option, as some kfuncs take one argument as a
+> > > > > > > struct bpf_cpumask *, and another as a struct cpumask *
+> > > > > > > (i.e. cpumask_t).
+> > > > > > >
+> > > > > > > In order to enable this, this patch relaxes the constraint that a
+> > > > > > > KF_TRUSTED_ARGS kfunc must have strict type matching. In order to
+> > > > > > > try and be conservative and match existing behavior / expectations, this
+> > > > > > > patch also enforces strict type checking for acquire kfuncs. We were
+> > > > > > > already enforcing it for release kfuncs, so this should also improve the
+> > > > > > > consistency of the semantics for kfuncs.
+> > > > > > >
+> > > > > >
+> > > > > > What you want is to simply follow type at off = 0 (but still enforce the off = 0
+> > > > > > requirement). This is something which is currently done for bpf_sk_release (for
+> > > > > > struct sk_common) in check_reg_type, but it is not safe in general to just open
+> > > > > > this up for all cases. I suggest encoding this particular requirement in the
+> > > > > > argument, and simply using triple underscore variant of the type for the special
+> > > > > > 'read_only' requirement. This will allow you to use same type in your BPF C
+> > > > > > program, while allowing verifier to see them as two different types in kfunc
+> > > > > > parameters. Then just relax type following for the particular argument so that
+> > > > > > one can pass cpumask_t___ro to kfunc expecting cpumask_t (but only at off = 0,
+> > > > > > it just visits first member after failing match on top level type). off = 0
+> > > > > > check is still necessary.
+> > > > >
+> > > > > Sigh, yeah, another ___ workaround but I agree it's probably the best we
+> > > > > can do for now, and in general seems pretty useful. Obviously preferable
+> > > > > to this patch which just doesn't work. Alexei, are you OK with this? If
+> > > > > so, I'll take this approach for v2.
+> > > >
+> > > > We decided to rely on strict type match when we introduced 'struct nf_conn___init',
+> > > > but with that we twisted the C standard to, what looks to be, a wrong direction.
+> > > >
+> > > > For definition:
+> > > > struct nf_conn___init {
+> > > >    struct nf_conn ct;
+> > > > };
+> > > > if a kfunc accepts a pointer to nf_conn it should always accept a pointer to nf_conn__init
+> > > > for both read and write, because in C that's valid and safe type cast.
+> > > >
+> > > 
+> > > The intention of this nf_conn___init was to be invisible to the user.
+> > > In selftests there is no trace of nf_conn___init. It is only for
+> > > enforcing semantics by virtue of type safety in the verifier.
+> > > 
+> > > Allocated but not inserted nf_conn -> nf_conn___init
+> > > Inserted/looked up nf_conn -> nf_conn
+> > > 
+> > > We can't pass e.g. nf_conn___init * to a function expecting nf_conn *.
+> > > The allocated nf_conn may not yet be fully initialized. It is only
+> > > after bpf_ct_insert_entry takes the nf_conn___init * and returns
+> > > inserted nf_conn * should it be allowed.
+> > 
+> > Yes. I know and agree with all of the above.
+> > 
+> > > But for the user in BPF C it will be the same nf_conn. The verifier
+> > > can enforce different semantics on the underlying type's usage in
+> > > kfuncs etc, while the user performs normal direct access to the
+> > > nf_conn.
+> > > 
+> > > It will be the same case here, except you also introduce the case of
+> > > kfuncs that are 'polymorphic' and can take both. Relaxing
+> > > 'strict_type_match' for that arg and placing the type of member you
+> > > wish to convert the pointer to gives you such polymorphism. But it's
+> > > not correct to do for nf_conn___init to nf_conn, at least not by
+> > > default.
+> > 
+> > Yes. Agree. I used unfortunate example in the previous reply with nf_conn___init.
+> > I meant to say:
+> > 
+> >  For definition:
+> >  struct nf_conn_init {
+> >     struct nf_conn ct;
+> >  };
+> >  if a kfunc accepts a pointer to nf_conn it should always accept a pointer to nf_conn_init
+> >  for both read and write, because in C that's valid and safe type cast.
+> > 
+> > Meainng that C rules apply.
+> > Our triple underscore is special, because it's the "same type".
+> > In the 2nd part of my reply I'm proposing to use the whole suffix "___init" to indicate that.
+> > I think you're arguing that just "___" part is enough to enforce strict match.
+> > Matching foo___flavor with foo should not be allowed.
+> > While passing struct foo_flavor {struct foo;} into a kfunc that accepts 'struct foo'
+> > is safe.
+> > If so, I'm fine with such approach.
+> 
+> Alright, I'll spin v2 to treat any type with name___.* as a disallowed
+> alias, and update the documentation to mention it. I was originally
+> going to push back and say that we should just use a single alias like
+> __nocast to keep things simple, but it doesn't feel generalizable
+> enough.
 
-Signed-off-by: Alexander Larsson <alexl@redhat.com>
----
- fs/Kconfig            |  1 +
- fs/Makefile           |  1 +
- fs/composefs/Kconfig  | 18 ++++++++++++++++++
- fs/composefs/Makefile |  5 +++++
- 4 files changed, 25 insertions(+)
- create mode 100644 fs/composefs/Kconfig
- create mode 100644 fs/composefs/Makefile
-
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 2685a4d0d353..de8493fc2b1e 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -127,6 +127,7 @@ source "fs/quota/Kconfig"
- source "fs/autofs/Kconfig"
- source "fs/fuse/Kconfig"
- source "fs/overlayfs/Kconfig"
-+source "fs/composefs/Kconfig"
- 
- menu "Caches"
- 
-diff --git a/fs/Makefile b/fs/Makefile
-index 4dea17840761..d16974e02468 100644
---- a/fs/Makefile
-+++ b/fs/Makefile
-@@ -137,3 +137,4 @@ obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
- obj-$(CONFIG_EROFS_FS)		+= erofs/
- obj-$(CONFIG_VBOXSF_FS)		+= vboxsf/
- obj-$(CONFIG_ZONEFS_FS)		+= zonefs/
-+obj-$(CONFIG_COMPOSEFS_FS)	+= composefs/
-diff --git a/fs/composefs/Kconfig b/fs/composefs/Kconfig
-new file mode 100644
-index 000000000000..88c5b55380e6
---- /dev/null
-+++ b/fs/composefs/Kconfig
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config COMPOSEFS_FS
-+	tristate "Composefs filesystem support"
-+	select EXPORTFS
-+	help
-+	  Composefs is a filesystem that allows combining file content from
-+	  existing regular files with a metadata directory structure from
-+	  a separate binary file. This is useful to share file content between
-+	  many different directory trees, such as in a local container image store.
-+
-+	  Composefs also allows using fs-verity to validate the content of the
-+	  content-files as well as the metadata file which allows dm-verity
-+	  like validation with the flexibility of regular files.
-+
-+	  For more information see Documentation/filesystems/composefs.rst
-+
-+	  If unsure, say N.
-diff --git a/fs/composefs/Makefile b/fs/composefs/Makefile
-new file mode 100644
-index 000000000000..eac8445e7d25
---- /dev/null
-+++ b/fs/composefs/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_COMPOSEFS_FS) += composefs.o
-+
-+composefs-objs += cfs-reader.o cfs.o
--- 
-2.39.0
-
+On second thought, unless you guys feel strongly, I'll just check
+___init. The resulting code is going to be a lot of tricky string
+manipulation / math otherwise. Not _terrible_, but I'd prefer to avoid
+adding it until we have a concrete use-case. And I expect this could be
+implemented much simpler using something like tags, once gcc has support
+for it.
