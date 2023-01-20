@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4276A67612C
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FC367612D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjATXEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S230007AbjATXFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjATXEA (ORCPT
+        with ESMTP id S229484AbjATXE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:04:00 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D0E5E504;
-        Fri, 20 Jan 2023 15:03:58 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso1828524wmb.0;
-        Fri, 20 Jan 2023 15:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ro+oitckYt5jOp5YL0JaN8ca7x/Tmhj4QZYlwgIUjjg=;
-        b=TA574iROHDwnAQyIpCPDXhFkXwnEk3PrKDpsSdLsxcIPn10qZL78YMa+snrKP81osF
-         VYgniwcQVhhtDiNCJYF3hkw2KsZKNY/V/GqlXaruNJ7WQ4nXhiVulkWr9Ne3wf7B6ne8
-         lJn0vWySVt62yauhmQfJAa9KpDY2otYlFm+lIeFL6tqhyk4ir2MQil2MkbNT8SAjTbxa
-         M8U5Le1X21EYNee5Z1z8JewpKigRRF9VwqMvnIQlRMbJed+IGSMxP6TmBeXnZNC5ysUO
-         RzewRq5QYM4GnibJa/4RTpj9VHBcOU8O1lP0OZUncjVnXSabJikLzLsS9X9fal2Y8Ts5
-         +RTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ro+oitckYt5jOp5YL0JaN8ca7x/Tmhj4QZYlwgIUjjg=;
-        b=ZtjOuCFmo+l0am4XH78ql5V11bwRMhHvr9zpyTz7SFu8QSfLr00s7RSd0dX7criPEA
-         +4Zpvs6gJCOYVOJBLimoKirZdbEnGO8afV2xlbcVUIj4Vf2lhveHqhbGeNJEQxw5M+8J
-         cCPirQ74xteWgf4ULXpA9s+oOyddg4T9gxmT1yy3dWAo9bl/NsO77uUftySj+gmTUeBF
-         g/mVtwOKzxtXHi1gWnIR7Eu48Yi04xfA5imF4xnmVGc2QyC2CrjOOWuPWG4E13bcnSoK
-         4u1G+7VUPgwYUNL2dWUwf+CDYR4yJLSi7+h9kOG+fdKgN8yoLAFPcyDMs54pkyfAm5zv
-         5gbQ==
-X-Gm-Message-State: AFqh2krOaSup+gWnFEe4p/xZqzpJARcAgeaFnyuJJqfTIGfgiJ+5/Rkc
-        W6EbN/LL2LHFvvMoyvReSfQ=
-X-Google-Smtp-Source: AMrXdXttVeE6FPW+yMTsmK7Qn5ozmICGfKY9IDpm0+Mn54uDJtKKw+x/Sfj3DjLcf/SonD1Mjs4YoA==
-X-Received: by 2002:a05:600c:4fcb:b0:3db:1919:41b5 with SMTP id o11-20020a05600c4fcb00b003db191941b5mr10079707wmq.21.1674255836625;
-        Fri, 20 Jan 2023 15:03:56 -0800 (PST)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id bg24-20020a05600c3c9800b003d9ed40a512sm5218413wmb.45.2023.01.20.15.03.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 15:03:55 -0800 (PST)
-Subject: Re: [net-next v3] ipv6: Document that max_size sysctl is depreciated
-To:     Jon Maxwell <jmaxwell37@gmail.com>, davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, martin.lau@kernel.org,
-        joel@joelfernandes.org, paulmck@kernel.org, eyal.birger@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrea.mayer@uniroma2.it
-References: <20230119224049.1187142-1-jmaxwell37@gmail.com>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <5429676d-13b3-3f9e-b76d-8f794add0fc4@gmail.com>
-Date:   Fri, 20 Jan 2023 23:03:55 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 20 Jan 2023 18:04:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DD45E509;
+        Fri, 20 Jan 2023 15:04:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A4C6620DB;
+        Fri, 20 Jan 2023 23:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268A6C433D2;
+        Fri, 20 Jan 2023 23:04:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674255895;
+        bh=LMsw88cgBpVjJxCIhi0DRVqJ1kShBhfQt3V1Vb3MHh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gyz6TzB30132BD9VGssYLbtPt5kemf/ipUDNgihtydIFj/1FnEJXALQJ88a0XyrSk
+         dJmRWzDvUCVW1p3+OpQkIa0repD0fkfF6hmT/KMuCsGaeC/Dci//ZzdwOwH5piUZwg
+         CK/mSpidoF6EVlvkUzdJZCem7apBbXqpqFEjD8Agkl+p0BpB8RoKTtoiLVfCO5IOCz
+         fk3rIf/f0+zV17AUl+2oi+DZiW6zZsnkC/SYf2amAURCENspdLNOjj2hKSRLni9rin
+         l95fmgFGp6J4RAt7tS1AhCj23mPLdomYGuKAPtdE6uIuqmBhxGYIxtm8dUv497aBDV
+         YEcjkN/BwIh9Q==
+Date:   Sat, 21 Jan 2023 00:04:51 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action
+ from rcu_report_qs_rdp()
+Message-ID: <Y8seE8Tr1w0UWf+m@lothringen>
+References: <PH0PR11MB5880A16045A842AB80A25C4BDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <B3E458A6-9279-4716-B242-873C77EC1E3A@joelfernandes.org>
 MIME-Version: 1.0
-In-Reply-To: <20230119224049.1187142-1-jmaxwell37@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <B3E458A6-9279-4716-B242-873C77EC1E3A@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 22:40, Jon Maxwell wrote:
-> v3: Change kernel version from 6.2 to 6.3. Add "commit" in front of hash.
+On Fri, Jan 20, 2023 at 08:27:03AM -0500, Joel Fernandes wrote:
 > 
-> Document that max_size is depreciated due to:
+> Sure, I know what the code currently does, I am asking why and it feels wrong.
+> 
+> I suggest you slightly change your approach to not assuming the code should be bonafide correct and then fixing it (which is ok once in a while), and asking higher level questions to why things are the way they are in the first place (that is just my suggestion and I am not in a place to provide advice, far from it, but I am just telling you my approach — I care more about the code than increasing my patch count :P).
+> 
+> If you are in an intermediate state, part way to a !nocb state — you may have
+> missed a nocb-related accel and wake, correct? Why does that matter? Once we
+> transition to a !nocb state, we do not do a post-qs-report accel+wake anyway
+> as we clearly know from the discussion.
 
-typo: deprecated (also in Subject line).
+I'm confused. We are doing that acceleration on qs report for !nocb CPU, right?
 
-> 
-> commit af6d10345ca7 ("ipv6: remove max_size check inline with ipv4")
-> 
-> Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
-> ---
->  Documentation/networking/ip-sysctl.rst | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 7fbd060d6047..4cc2fab58dea 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -156,6 +156,9 @@ route/max_size - INTEGER
->  	From linux kernel 3.6 onwards, this is deprecated for ipv4
->  	as route cache is no longer used.
->  
-> +	From linux kernel 6.3 onwards, this is deprecated for ipv6
-> +	as garbage collection manages cached route entries.
-> +
->  neigh/default/gc_thresh1 - INTEGER
->  	Minimum number of entries to keep.  Garbage collector will not
->  	purge entries if there are fewer than this number.
-> 
+> So why do we need to do it if we
+> missed it for the intermediate stage? So, I am not fully sure yet what that
+> needac is doing and why it is needed.
 
+To summarize:
+
+* If the CPU is NOCB, all the callbacks advance and acceleration is performed
+  by the rcuo/rcuog kthreads.
+
+* If the CPU is not NOCB, all the callbacks acceleration is performed by the
+  CPU, such as in the case of rcu_report_qs_rdp().
+
+* If the CPU is transitionning from NOCB to !NOCB or from !NOCB to NOCB, the
+  kthreads may not be available to do the advance/acceleration, so we must do
+  it locally. That's the needacc path.
+
+What am I missing?
+
+Thanks.
