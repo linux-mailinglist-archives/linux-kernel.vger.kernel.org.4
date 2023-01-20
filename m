@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061EF675EED
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F194675EEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjATUb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S229799AbjATUcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjATUb1 (ORCPT
+        with ESMTP id S229509AbjATUcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:31:27 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D14E8535A;
-        Fri, 20 Jan 2023 12:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674246686; x=1705782686;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P7Qo7pDtBTeT6nusdsJikwF6Hz1XK2b6WUGvSCudE2U=;
-  b=X01ro+YCSy2zt1GIg++RaXdcXAmAihvVroiLEWzFUoF5alUtyHucwQBr
-   6Fi0JsUS1uh2OieeG1d7s7rdctVsmXa06HP89Q03Ompb+RB4KWhnDKspy
-   +77frr7OUN4WZj5ClonrQWFbNhon0kk3++Pci8HebMGBM+SVqlf00Wt4+
-   PsjLwkP6yVaMJR3GT3/0d8UfHuXaVpi8PQE90FyOtBZd6uEeyJPQc1xdB
-   /Os8lTZXk1EJRh2+Bc/y3woOR2mirEc68SFWi/klx2dV3Nz+lXgnTFrMG
-   Bxmd28ikYYPUm3qzI2yH56bhGgna72GS8y525z5tGVvJmtu/63glbDGXe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="390196116"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="390196116"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 12:31:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="989524455"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="989524455"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Jan 2023 12:31:22 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIy2j-0002uO-23;
-        Fri, 20 Jan 2023 20:31:21 +0000
-Date:   Sat, 21 Jan 2023 04:30:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
-Message-ID: <202301210451.KgHMjz0A-lkp@intel.com>
-References: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
+        Fri, 20 Jan 2023 15:32:19 -0500
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD29872A0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:32:18 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 2DA83240703
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 21:32:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1674246737; bh=3U0QnUhsNTtPLMBnBxIw39Ig6pLG0EYmIgcK+IN7/kA=;
+        h=Date:Subject:To:Cc:From:From;
+        b=EPkwnkvLqv2AwwBtomWlVDCBZGFP2N0pdw/aQtJQ7lxEmPYP1KybdCWd9mlTthko2
+         pDohf4+15VO9UVdf12rpvMTgW9m9dEe1K/HT3cwAFCURlggWvEBL7Cjd8wY+ZAwOU7
+         qCCTYe5v3noiuXY0zBAb8plviBLs20OlMbT032Bh9uqAFIbxabG5njA0LSYGEB2yNL
+         iRrWpvA9wud2jXTPL7MIYT70rWgCI7tNFnaAR006Cox7KLTxBG5Y6HPNNIYfj3vPVv
+         CEtItMqrRmk/61gt/qITb3ChgrCGOXdgdgxGTZL7rCKOHP/hUn2ijhIYFZ4L2nWYbQ
+         EFoY6l7qutVug==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4NzB4Y0LxQz9rxL;
+        Fri, 20 Jan 2023 21:32:13 +0100 (CET)
+Message-ID: <5de61071-6b22-440c-d095-1360512fbccd@posteo.de>
+Date:   Fri, 20 Jan 2023 20:32:12 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards
+ support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Denis Pauk <pauk.denis@gmail.com>
+Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
+        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
+        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
+        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
+        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, me@rebtoor.com,
+        metalcaedes@gmail.com, michael@theoddone.net,
+        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
+        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
+        renedis@hotmail.com, robert@swiecki.net,
+        sahan.h.fernando@gmail.com, sst@poczta.fm, to.eivind@gmail.com,
+        torvic9@mailbox.org
+References: <20230111212241.7456-1-pauk.denis@gmail.com>
+ <20230111212241.7456-2-pauk.denis@gmail.com>
+ <20230115161224.GA1246527@roeck-us.net>
+ <6fd769f9-da0e-c4a8-dc0e-a1e464c2d9fc@posteo.de>
+ <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
+Content-Language: de-DE
+From:   Sebastian Arnhold <sebastian.arnhold@posteo.de>
+In-Reply-To: <a6906293-634f-a7b0-8fde-92816192130f@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Sorry, I didn't want to annoy you! Just wondered why it didn't work and 
+whether I made a mistake, or if it really wasn't included in linux-next.
 
-I love your patch! Yet something to improve:
+Thanks for all your amazing work in making this chip function properly 
+and bringing fan control to many of the latest AM5 boards! :)
 
-[auto build test ERROR on broonie-regulator/for-next]
-[also build test ERROR on robh/for-next broonie-sound/for-next linus/master v6.2-rc4]
-[cannot apply to next-20230120]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Kind regards,
+Sebastian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-patch link:    https://lore.kernel.org/r/20230119214749.4048933-5-quic_bjorande%40quicinc.com
-patch subject: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
-config: arm64-randconfig-r012-20230119 (https://download.01.org/0day-ci/archive/20230121/202301210451.KgHMjz0A-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
-        git checkout 75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/qcom/sa8295p-adp.dts:502.1-16 Label or path pmm8540a_gpios not found
->> FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Am 20.01.23 um 21:28 schrieb Guenter Roeck:
+> On 1/20/23 11:50, Sebastian Arnhold wrote:
+>> Is it just me, or is the support for my mainboard "TUF GAMING 
+>> X670E-PLUS WIFI" now implemented into the latest "linux-next" kernel 
+>> (I verified this by looking at the source code at 
+>> /drivers/hwmon/nct6775-core.c), but the actual patch that contains 
+>> the NCT6799D driver is still missing?
+>>
+>> I had to patch my linux-next kernel with the patch from 
+>> https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/ 
+>> to get it working.
+>>
+>
+> Well, yes, I do have day-to-day work that I am getting paid for,
+> and I did not have time to resubmit the patch adding support for
+> NCT6799.
+>
+> Guenter
+>
