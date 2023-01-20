@@ -2,307 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD80675ACB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCD2675AEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjATRJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S229853AbjATRP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjATRJe (ORCPT
+        with ESMTP id S229810AbjATRPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:09:34 -0500
-Received: from out-205.mta0.migadu.com (out-205.mta0.migadu.com [IPv6:2001:41d0:1004:224b::cd])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672025E513
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:09:32 -0800 (PST)
-Message-ID: <77aea6a7-8a83-b748-5443-a5303f17ff51@ansari.sh>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
-        t=1674234570;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9PQlRQJRFcCkFdYbq/AOrVsh5vPJ6/jx9IWzOtP6f+I=;
-        b=N3XO1OZfljoBTBWT2R/DjvKTfmXdWkqZlYTc2jifvDyNg8JXbpOKKe3yA+MEm/k35OpNXe
-        BirWdBR1A1Dd1G76gf4S06nAM7IhAlBBX/rY5eF+AQjAS+KwaHY/c60k/3L2+8qkfje2I0
-        mXmOqhXNmob4YPktaVmmiMAzGozXovE=
-Date:   Fri, 20 Jan 2023 17:09:29 +0000
+        Fri, 20 Jan 2023 12:15:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9595028D1C;
+        Fri, 20 Jan 2023 09:15:17 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3A76122C64;
+        Fri, 20 Jan 2023 17:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674234916; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=MFJCoGeSrihfzrkCuQjN/qpy9mLOBCjJnrpNLhgD4Lg=;
+        b=jxbLdOZdQCnhWstLnBGQQX60A7hITEXelnnm24CPb+MYHl+MrG3vxfuHOn1q654eduLQBG
+        2TcAfNdw2Ri5qKiqJfFWMXB9kXw8F7TvVPQirxRbFhN/DjlGP6RBsJVKULvXPiE8TNKNdn
+        kxhL5fKkdfP5/1g6JCnW0hjuEN8NvRU=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 313282C141;
+        Fri, 20 Jan 2023 17:15:16 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 9E4A8DA7DE; Fri, 20 Jan 2023 18:09:37 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.2-rc5, part 2
+Date:   Fri, 20 Jan 2023 18:09:36 +0100
+Message-Id: <cover.1674232757.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH] drm/simpledrm: Allow physical width and height
- configuration via DT
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>, asahi@lists.linux.dev
-References: <20230118184817.608551-1-rayyan@ansari.sh>
- <9acf95f1-0bce-62c7-b524-4eac408b4207@suse.de>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Rayyan Ansari <rayyan@ansari.sh>
-In-Reply-To: <9acf95f1-0bce-62c7-b524-4eac408b4207@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 10:44, Thomas Zimmermann wrote:
-> (cc: devicetree@vger.kernel.org, asahi@lists.linux.dev)
-> 
-> Hi,
-> 
-> thanks for the patch. I already wondered if the DPI value should be 
-> configurable in some way.
-> 
-> Am 18.01.23 um 19:48 schrieb Rayyan Ansari:
->> Hello,
->> The following draft patch adds support for configuring the
->> height-mm and width-mm DRM properties in the simpledrm driver
->> via devicetree.
->> This is useful to get proper scaling in UIs such as Phosh.
->> An example of using this property is this, taken from my local tree:
->>
->>         framebuffer0: framebuffer@3200000 {
->>             compatible = "simple-framebuffer";
->>             reg = <0x3200000 0x800000>;
->>             format = "a8r8g8b8";
->>             width = <720>;
->>             height = <1280>;
->>             stride = <(720 * 4)>;
->>             width-mm = /bits/ 16 <58>;
->>             height-mm = /bits/ 16 <103>;
->>
->>             clocks = <&mmcc MDSS_AHB_CLK>,
->>                  <&mmcc MDSS_AXI_CLK>,
->>                  <&mmcc MDSS_BYTE0_CLK>,
->>                  <&mmcc MDSS_MDP_CLK>,
->>                  <&mmcc MDSS_PCLK0_CLK>,
->>                  <&mmcc MDSS_VSYNC_CLK>;
->>             power-domains = <&mmcc MDSS_GDSC>;
->>         };
->>
->> I have tested this on my Lumia 735, and it does indeed
->> allow Phosh to scale correctly on the screen.
-> 
-> Is this something that is already supported by some device, or just a 
-> pet project of yours?
-> 
+Hi,
 
-Phosh is a mobile environment, developed for use on the Librem 5 phone, 
-but it's also packaged by mobile-focused distros such as postmarketOS 
-and used on other phones.
-https://puri.sm/posts/phosh-overview/
+there are two more fixes and an update that's not a fix but replaces use
+of write_one_page which is going to be removed (similar updates to other
+filesystems go via other trees).
 
-This is my Lumia running Phosh with Firefox open: 
-https://wiki.postmarketos.org/images/c/c3/Lumia_735_Phosh.png
+Please pull, thanks.
 
->>
->> However, I would like to get some feedback before I write the
->> documentation.
->> - What data type should be used?
->>     The width_mm and height_mm properties of the drm_display_mode
->>     struct are defined as u16. I have also made the devicetree
->>     properties as the u16 type, but this requires specifying
->>     "/bits/ 16" before the value. Should u32 be used instead to get
->>     rid of this? If so, how could the conversion from u32->u16 be
->>     handled?
-> 
-> I'd use 32 bits in the DT, just like the other properties.
-> 
+- fix potential out-of-bounds access to leaf data when seeking in an
+  inline file
 
-Noted.
+- fix potential crash in quota when rescan races with disable
 
->> - Style?
->>     I have split the arguments to the DRM_MODE_INIT macro across
->>     multiple lines to increase readability. I'm not sure if this
->>     is the correct style though.
->> - Anything else?
->>     This is my first time writing code for a Linux driver, so I
->>     would be grateful if you have any suggestions for improvements.
->> Thanks,
->> Rayyan.
->> ---
->>   drivers/gpu/drm/tiny/simpledrm.c | 49 +++++++++++++++++++++++++++-----
->>   1 file changed, 42 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/tiny/simpledrm.c 
->> b/drivers/gpu/drm/tiny/simpledrm.c
->> index 162eb44dcba8..92109f870b35 100644
->> --- a/drivers/gpu/drm/tiny/simpledrm.c
->> +++ b/drivers/gpu/drm/tiny/simpledrm.c
->> @@ -116,6 +116,15 @@ simplefb_get_format_pd(struct drm_device *dev,
->>       return simplefb_get_validated_format(dev, pd->format);
->>   }
->> +static void
->> +simplefb_read_u16_of_optional(struct drm_device *dev, struct 
->> device_node *of_node,
-> 
-> Maybe call it simplefb_read_u16_of_opt()
-> 
->> +             const char *name, u16 *value)
-> 
-> The alignment looks off.
-> 
->> +{
->> +    int ret = of_property_read_u16(of_node, name, value);
->> +    if (ret)
->> +        value = 0;
-> 
-> You mean *value = 0 ?
-> 
-> I think we should be stricter here. Look at the docs at [1]. A result of 
-> 0 means success and -EINVAL means that the property does not exist. We 
-> should still report errors for the other errno codes.
-> 
-> Something like
-> 
->    ret = of_property_read_u16()
-> 
->    if (ret) {
->      if(ret == -EINVAL) {
->          *value = 0;
->      ret= 0;
->      } else {
->          drm_err(dev, "simplefb: cannot parse framebuffer %s:
->              "error %d\n", name, ret);
->      }
->    }
-> 
->    return ret;
-> 
-> [1] https://elixir.bootlin.com/linux/latest/source/include/linux/of.h#L1202
-> 
+- reimplement super block signature scratching by marking page/folio
+  dirty and syncing block device, allow removing write_one_page
 
-Will change, thanks for the example and reference.
+----------------------------------------------------------------
+The following changes since commit 09e44868f1e03c7825ca4283256abedc95e249a3:
 
->> +}
->> +
->>   static int
->>   simplefb_read_u32_of(struct drm_device *dev, struct device_node 
->> *of_node,
->>                const char *name, u32 *value)
->> @@ -184,6 +193,21 @@ simplefb_get_format_of(struct drm_device *dev, 
->> struct device_node *of_node)
->>       return simplefb_get_validated_format(dev, format);
->>   }
->> +static u16
->> +simplefb_get_width_mm_of(struct drm_device *dev, struct device_node 
->> *of_node)
->> +{
->> +    u16 width_mm;
->> +    simplefb_read_u16_of_optional(dev, of_node, "width-mm", &width_mm);
->> +    return width_mm;
->> +}
->> +
->> +static u16
->> +simplefb_get_height_mm_of(struct drm_device *dev, struct device_node 
->> *of_node)
->> +{
->> +    u16 height_mm;
->> +    simplefb_read_u16_of_optional(dev, of_node, "height-mm", 
->> &height_mm);
->> +    return height_mm;
->> +}
->>   /*
->>    * Simple Framebuffer device
->>    */
->> @@ -599,16 +623,24 @@ static const struct drm_mode_config_funcs 
->> simpledrm_mode_config_funcs = {
->>    */
->>   static struct drm_display_mode simpledrm_mode(unsigned int width,
->> -                          unsigned int height)
->> +                          unsigned int height,
->> +                          u16 width_mm,
->> +                          u16 height_mm)
->>   {
->>       /*
->> -     * Assume a monitor resolution of 96 dpi to
->> -     * get a somewhat reasonable screen size.
->> +     * Assume a monitor resolution of 96 dpi if physical
->> +     * dimensions are not specified to get a somewhat reasonable
-> 
-> Please move 'dimensions' to the previous line to make it more pleasant 
-> to the eyes.
-> 
->> +     * screen size.
->>        */
->> +
->>       const struct drm_display_mode mode = {
->> -        DRM_MODE_INIT(60, width, height,
->> -                  DRM_MODE_RES_MM(width, 96ul),
->> -                  DRM_MODE_RES_MM(height, 96ul))
->> +        DRM_MODE_INIT(
->> +            60,
->> +            width,
->> +            height,
->> +            (width_mm ? width_mm : DRM_MODE_RES_MM(width, 96ul)),
->> +            (height_mm ? height_mm : DRM_MODE_RES_MM(height, 96ul))
->> +            )
-> 
-> The coding style is awkward and the ?: doesn't belong here. Please see 
-> further below.
-> 
->>       };
->>       return mode;
->> @@ -622,6 +654,7 @@ static struct simpledrm_device 
->> *simpledrm_device_create(struct drm_driver *drv,
->>       struct simpledrm_device *sdev;
->>       struct drm_device *dev;
->>       int width, height, stride;
->> +    u16 width_mm, height_mm;
-> 
-> Init those two variables to zero.
-> 
->>       const struct drm_format_info *format;
->>       struct resource *res, *mem;
->>       void __iomem *screen_base;
->> @@ -676,6 +709,8 @@ static struct simpledrm_device 
->> *simpledrm_device_create(struct drm_driver *drv,
->>           format = simplefb_get_format_of(dev, of_node);
->>           if (IS_ERR(format))
->>               return ERR_CAST(format);
->> +        width_mm = simplefb_get_width_mm_of(dev, of_node);
->> +        height_mm = simplefb_get_height_mm_of(dev, of_node);
->>       } else {
->>           drm_err(dev, "no simplefb configuration found\n");
->>           return ERR_PTR(-ENODEV);
->> @@ -686,7 +721,7 @@ static struct simpledrm_device 
->> *simpledrm_device_create(struct drm_driver *drv,
->>               return ERR_PTR(-EINVAL);
->>       }
-> 
-> Just like with the framebuffer stride, here's the place to detect 
-> default values. So at this point, do something like
-> 
->       if (!width_mm)
->          width_mm = DRM_MODE_RES_MM(width, 96ul);
->       if (!height_mm)
->          height_mm = DRM_MODE_RES_MM(height, 96ul);
-> 
-> And pass the initialized physical dimensions to simpldrm_mode(). You can 
-> move the comment in simpledrm_mode() before the branches.
-> 
-> Best regards
-> Thomas
-> 
->> -    sdev->mode = simpledrm_mode(width, height);
->> +    sdev->mode = simpledrm_mode(width, height, width_mm, height_mm);
->>       sdev->format = format;
->>       sdev->pitch = stride;
-> 
+  btrfs: do not abort transaction on failure to update log root (2023-01-12 15:43:31 +0100)
 
-Thanks for the feedback! I'll improve on this patch and write 
-documentation to hopefully make this mainline-ready.
+are available in the Git repository at:
 
--- 
-Rayyan Ansari
-https://ansari.sh
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc4-tag
 
+for you to fetch changes up to b7adbf9ada3513d2092362c8eac5cddc5b651f5c:
+
+  btrfs: fix race between quota rescan and disable leading to NULL pointer deref (2023-01-16 19:46:54 +0100)
+
+----------------------------------------------------------------
+Christoph Hellwig (2):
+      btrfs: factor out scratching of one regular super block
+      btrfs: stop using write_one_page in btrfs_scratch_superblock
+
+Filipe Manana (2):
+      btrfs: fix invalid leaf access due to inline extent during lseek
+      btrfs: fix race between quota rescan and disable leading to NULL pointer deref
+
+ fs/btrfs/file.c    | 13 ++++++++++---
+ fs/btrfs/qgroup.c  | 25 +++++++++++++++++--------
+ fs/btrfs/volumes.c | 50 +++++++++++++++++++++++++-------------------------
+ 3 files changed, 52 insertions(+), 36 deletions(-)
