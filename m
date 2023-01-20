@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD366758D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358D66758D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjATPh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S231126AbjATPiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjATPhy (ORCPT
+        with ESMTP id S230403AbjATPiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:37:54 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4768C9256;
-        Fri, 20 Jan 2023 07:37:07 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 60867514;
-        Fri, 20 Jan 2023 16:37:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674229024;
-        bh=2HCZlX0ybfHa9FB4nm34wAFz2riqSXuY7G4fB/sY36w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BPfwtKyww49ztjQbKIqzhHCRqj0FhUUPBqs1NvD9soczmnsyKLL/b61xhHxHIOHgM
-         KYgO8y9wBFz0HXwCmCBcS3f7zKZUZXfhtf+Nxa7Fi8LfdeRalar44iue//75DycCXH
-         DXPdPk1mttSUJ5ueILgsGLZNE7sj7Pbj/kYWMXy0=
-Message-ID: <64a970f9-3339-3841-4b82-1cb4155630ad@ideasonboard.com>
-Date:   Fri, 20 Jan 2023 17:37:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v8 0/7] i2c-atr and FPDLink
-Content-Language: en-US
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-References: <20230120153417.1156207-1-tomi.valkeinen@ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230120153417.1156207-1-tomi.valkeinen@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 10:38:00 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6772BC79EB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:37:11 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id b7so5205442wrt.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cftWnAmLp1SAzK+LEC+VkfIJXP3yn4XV5OF+VxxmSEI=;
+        b=kehQTJmy06GF73Jk4gupKe+iWEBSAOLIlh+im1CqYyRHgwYZcbshJUPBfo72NL2LAd
+         SLtSL0YWsl7BzjCrReChO3QJdVuU+6VCQP2yXD+UC2XIgu4L2cfaSb00D4h26H7FjZ1R
+         ShBO5E9s4ISWQZzZYOx93qA1eVZPYMQTfLrMk3WozQqhIO0ZwTZiBsKePs9hL6qWo5LD
+         WsaOhLeRTc2YqX6diZLb59zkH3S+py+QjDuizqXsGKvCv9cFAQyf1l9tQMJmlHCtTzNu
+         ienzRpqA5wUeZ/1B2roxwgRvvX8PZrY/fWWZ01bC4YdTC9stVMa7pZ+uZhVPAnc15d8j
+         J95Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cftWnAmLp1SAzK+LEC+VkfIJXP3yn4XV5OF+VxxmSEI=;
+        b=hVpm3yyr8m4MgSlkRaVIuPNsDU2+/b6sGJr8UgRN1QtuSyxkE4J+FFcozsD+DiYdT7
+         zLiG27tlsL1MGdu/BVpADV11mGd8ozRm0npO0FMXCcMo04fVWo/pFJga8gnzGwNmGf54
+         fecHTLwwQl1LI1KpFGRGLKUj23mbGmZWZ+np7a1n+BOXF8rLaCcUm526uWcNJOE1whLf
+         Q+DUe0SQq4FjpaFUdkYqmvp6mGJWjaR1gqwZtCiQB+nC2MsChcHV1OUxGa1IsKYub4dz
+         /oI7giR6r0Hbq9pwwQmxiWAcnWdM5YuXoQAa3Fyt7xvyDXISpSbifycTT/Ew6IDcHOov
+         tyqA==
+X-Gm-Message-State: AFqh2kobmI8D70acPMXZ7k9iFhfxbRzk/yQyX5AQ63mrmI+6aLdU3hdK
+        miRTPCc67dGO0bcfL1imIBUUnArmtN/VYT63
+X-Google-Smtp-Source: AMrXdXt5CVI6en+fALH4TA94NWNVBKOXDQkJFNKnLrn1CAOecTTxtMpPgS5gk3DiOQ5A4gVDQE6s4Q==
+X-Received: by 2002:adf:a485:0:b0:2bf:81eb:dc26 with SMTP id g5-20020adfa485000000b002bf81ebdc26mr1311316wrb.37.1674229029690;
+        Fri, 20 Jan 2023 07:37:09 -0800 (PST)
+Received: from linaro.org ([2a00:23c5:6809:2201:a9b1:8068:4297:73be])
+        by smtp.gmail.com with ESMTPSA id b16-20020adff910000000b002bdf8dd6a8bsm14212460wrr.80.2023.01.20.07.37.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 07:37:08 -0800 (PST)
+From:   Mike Leach <mike.leach@linaro.org>
+To:     linux-perf-users@vger.kernel.org
+Cc:     acme@kernel.org, linux-arm-kernel@lists.infradead.org,
+        coresight@lists.linaro.org, leo.yan@linaro.org,
+        mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, Mike Leach <mike.leach@linaro.org>
+Subject: [PATCH] perf: cs-etm: Update decoder code for OpenCSD version 1.4
+Date:   Fri, 20 Jan 2023 15:37:06 +0000
+Message-Id: <20230120153706.20388-1-mike.leach@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 17:34, Tomi Valkeinen wrote:
-> Hi,
-> 
-> You can find v7 from:
-> 
-> https://lore.kernel.org/all/20230118124031.788940-1-tomi.valkeinen@ideasonboard.com/
-> 
-> Diff to v7 included below.
-> 
-> Main changes in v8:
-> - Added missing 'link-frequencies' to ti,ds90ub960.yaml
-> - Dropped ATR select/deselect ops
-> - Don't use devm_kzalloc() in i2c_atr_new()
-> - Fixed the reported error handling paths (mainly adding
->    fwnode_handle_puts)
-> - Dropped all WARNs
-> - Plenty of cosmetic/style changes
-> 
-> I saw the suggestion to change the i2c_atr to be embedded in the main
-> driver's private data struct. That change has not been done in this
-> version.
+OpenCSD version 1.4 is released with support for FEAT_ITE.
+This adds a new packet type, with associated output element ID in
+the packet type enum - OCSD_GEN_TRC_ELEM_INSTRUMENTATION.
 
-Ah, and just now I realized I did not pick the documentation changes 
-from Luca.
+As we just ignore this packet in perf, add to the switch statement
+to avoid the "enum not handled in switch error", but conditionally
+so as not to break the perf build for older OpenCSD installations.
 
-  Tomi
+Signed-off-by: Mike Leach <mike.leach@linaro.org>
+---
+ tools/perf/util/cs-etm-decoder/cs-etm-decoder.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+index fa3aa9c0fb2e..48e7121880a9 100644
+--- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
++++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+@@ -604,6 +604,9 @@ static ocsd_datapath_resp_t cs_etm_decoder__gen_trace_elem_printer(
+ 	case OCSD_GEN_TRC_ELEM_CUSTOM:
+ 	case OCSD_GEN_TRC_ELEM_SYNC_MARKER:
+ 	case OCSD_GEN_TRC_ELEM_MEMTRANS:
++#if (OCSD_VER_NUM >= 0x010400)
++	case OCSD_GEN_TRC_ELEM_INSTRUMENTATION:
++#endif
+ 	default:
+ 		break;
+ 	}
+-- 
+2.17.1
 
