@@ -2,108 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423BC675865
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4A1675868
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjATPUm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 Jan 2023 10:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S231346AbjATPVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjATPUh (ORCPT
+        with ESMTP id S230506AbjATPVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:20:37 -0500
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097B3DA135
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:20:31 -0800 (PST)
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id 436D040EA0;
-        Fri, 20 Jan 2023 15:20:30 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id EC03580012;
-        Fri, 20 Jan 2023 15:20:27 +0000 (UTC)
-Message-ID: <a3278d71ff653fc4560004041e88b85aa6c317d0.camel@perches.com>
-Subject: Re: [PATCH v4 0/3] checkpatch.pl: warn about discouraged tags and
- missing Link: tags
-From:   Joe Perches <joe@perches.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 20 Jan 2023 07:20:26 -0800
-In-Reply-To: <cover.1674217480.git.linux@leemhuis.info>
-References: <cover.1670152844.git.kai@dev.carbon-project.org>
-         <cover.1674217480.git.linux@leemhuis.info>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 20 Jan 2023 10:21:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38502DA127
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:21:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tWhqBqeds6M5kvB9paMMJ8Ql2m2pownIzTjbJavhOlc=; b=f7Fu/nIjdc8hxAhFw2solrt8I4
+        cxb2BlesCm92jZX8/skmtcYPAJgKRS7qV9Fq4J9ox2jmXXsHvmlh7fHvBkScs9JdxLHxIgCDpnvyp
+        doTZIkfLt5VyQ8gIIg/ccb+96ilZaVzjy1ENd7+KcN9px1YdPfd9GGRN7hmgbDX+wTj6sp7Iv1PPb
+        vJ96ZJ1mZDfSAZyUsvN3Ly39bNAK1JM6KVCN5WwRAuhmMkeab0DjmC1gHTuLpm2bgC88xvjVkgNRD
+        TZtYtGnzrp8y6Jw3PrdvktW/FfUlvtZbc6LAMjujpsbPZmDkIF59f7LEMjLWc2kymzMruB8k7k9tC
+        7CjWPHfQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pItCT-002446-OT; Fri, 20 Jan 2023 15:21:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 11C28300033;
+        Fri, 20 Jan 2023 16:21:03 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 35C962016471C; Fri, 20 Jan 2023 16:21:03 +0100 (CET)
+Date:   Fri, 20 Jan 2023 16:21:03 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: [PATCH] exit: Detect and fix irq disabled state in oops
+Message-ID: <Y8qxX4iZUZYOaCD0@hirez.programming.kicks-ass.net>
+References: <20230120011820.2664120-1-npiggin@gmail.com>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: EC03580012
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Rspamd-Server: rspamout03
-X-Stat-Signature: mq45ssaa1wyt6wzwy3si8sioxcdijxum
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+InloTelwLFOCX7E3izLiKAlfPYfGM9Zs=
-X-HE-Tag: 1674228027-382225
-X-HE-Meta: U2FsdGVkX1/XdT+PMeAPR0BitOZi+Yc1azXnLLWH6Oz1GZEs+Y2/cnA2Pbn7Z/DJwFkWAbhJslfEO5ItZ9vfCg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120011820.2664120-1-npiggin@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-20 at 13:35 +0100, Thorsten Leemhuis wrote:
-> Hi, please consider the following checkpatch.pl patches for review.
+On Fri, Jan 20, 2023 at 11:18:20AM +1000, Nicholas Piggin wrote:
+> If a task oopses with irqs disabled, this can cause various cascading
+> problems in the oops path such as sleep-from-invalid warnings, and
+> potentially worse.
 > 
-> The first two changes make checkpatch.pl check for a few mistakes wrt to
-> links to bug reports Linus recently complained about a few times.
-> Avoiding those is also important for my regression tracking efforts a
-> lot, as the automated tracking performed by regzbot relies on the proper
-> usage of the Link: tag.
+> Since commit 0258b5fd7c712 ("coredump: Limit coredumps to a single
+> thread group"), the unconditional irq enable in coredump_task_exit()
+> will "fix" the irq state to be enabled early in do_exit(), so currently
+> this may not be triggerable, but that is coincidental and fragile.
 > 
-> The third patch fixes a few small oddities noticed in existing code
-> during review of the two changes.
-
-Hey Andrew.  Please forward this patch series upstream.
-
-Thanks, Joe
-
+> Detect and fix the irqs_disabled() condition in the oops path before
+> calling do_exit(), similarly to the way in_atomic() is handled.
 > 
-> Ciao, Thorsten
+> Link: https://lore.kernel.org/lkml/20221004094401.708299-1-npiggin@gmail.com/
+> Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+> Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 > ---
-> v3->v4:
-> - address review feedback from Joe (do not allow leading spaces in
-> matches, check if Link: is actually followed by a URL in one go,
-> and use m{} for matching https://)  (Thorsten)
-> - catch Reported-and-tested-by as well (Thorsten)
+> Hi Peter,
 > 
-> v2->v3:
-> - address review feedback from Joe (grammer fixes, use of $herecurr, use
-> of --no-merges in commit log quote) (Thorsten)
-> - warn when people try to add version information to the commit log
-> using code suggested by Joe (Thorsten)
-> - add a patch to make existing code in a nearby area use $herecurr where
-> it should, which Joe noticed during review
-> 
-> v1->v2:
-> - add commit messages explaining the reasoning (Thorsten)
-> - approach the usage of wrong tags with an allow list as suggested by
-> Joe (Thorsten)
-> 
-> Kai Wasserbäch (2):
->   checkpatch: warn when unknown tags are used for links
->   checkpatch: warn when Reported-by: is not followed by Link:
-> 
-> Thorsten Leemhuis (1):
->   checkpatch: use proper way for show problematic line
-> 
->  scripts/checkpatch.pl | 34 +++++++++++++++++++++++++++++-----
->  1 file changed, 29 insertions(+), 5 deletions(-)
-> 
-> 
-> base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+> Would you consider taking this through the sched tree?
 
+Yep, can do, let me go queue it.
