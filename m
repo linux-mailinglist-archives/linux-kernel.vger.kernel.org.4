@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF19B675F5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314BE675F5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjATVBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S230017AbjATVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjATVBd (ORCPT
+        with ESMTP id S229555AbjATVBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:01:33 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2B7CD23C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:01:28 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id u19so16964007ejm.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:01:27 -0800 (PST)
+        Fri, 20 Jan 2023 16:01:44 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7BBD0DA9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:01:30 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id v6so17006899ejg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:01:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vMsCj9RG25O4A3HEOR6OR/jKZMnByaByNeXu250+UU0=;
-        b=UblonUr+s3jct0bytTz09CEi/dhtVtIrCOEUydaKUCV/nj16FhVjCmy54wjNSZm3+J
-         ilMkrDQHn9ekTI+QHM7HysK9lmccuS18P7DqbuUnIAHp1vxkoiUdP8jTxlyGqBHOrApL
-         95czCWtwnx3dVgFJ9x6Qa6L4CdiFEUuTlrff5BsWS0WB/XvshTs+WnF2fvlcveY2+bRd
-         8Gs6f4pmBQx6Jytc3dBfH7Ia0NZ8yYgBcDQ463zYzUpU0VtJwUodwawbWHH76FuenpAv
-         180PMagFbFmzpRk2XcLSTA5IVHgWiciW8XotlLwTP+US0JryCSTsCwqy99RK2ANUZMjK
-         +OZA==
+        bh=cplHg6mmZO77Jj4HjyqBizHDxHYMI91dvrCE+XRo9rU=;
+        b=pyRBjQVaxGEuZeJXBEpUNUgHxD9Z3JgDHkxja3xv85n7MIQizfzpRmIhWtSLcKVsv6
+         iGYQFUwZI//O/otLG9lQuAt1TAoUpqzw08rUfl50jZHBjljox+1s/hxc5umAE5SnxaXa
+         uHJ2c6+dg/u5IPYb2Uks5dQ0BZNKfUo7jO+XBeUD13tQZ3yRFm4IzQRz8dhhvJVosxTu
+         yrdRgGkZqkqZBUi0Ti7vGNGeyxN0xxUO03WgtrRFXGXS1vzNl62xuahhRFyrGG96JcTO
+         QCKAxNUcKP6xhwWaTMC5oyaKEVYdDOTQ4oft3361FdqmpUmy8RSM6loxW6HJWB5iLPjx
+         75+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vMsCj9RG25O4A3HEOR6OR/jKZMnByaByNeXu250+UU0=;
-        b=sd873v3qAglWfIWl2KJVzJgYS97PIfzk+8TStO1TTNYw4JVHRBL/hdZk7s51Wm41Js
-         6cPzIneXISQkmJD1h8aHU20n5CnvwP7DnXHgtNQoU2FcaakwT3LOiSHt8yE9cJwaYvBR
-         sv6iisyVDGDByb/9pkvdldgBqVqvVquyEJZxhmJ+Lcs5ALlSVbcEp/XMIh5lyrYQd04h
-         IDIZvfQO0edMn9PyJ/GufruJz7wGUQvjHJrAItwIVDtzCeWL//jJ9xb8vf+7wBiYEwHP
-         7mJyYSRLMZIIE7CZj2qIjIGzZrLgNR1qPMTSpIqzM8AcSJ0oSY5qG23AkiNBuSU6inpk
-         9ztg==
-X-Gm-Message-State: AFqh2kr+XLAAZtfCt2N5QBaDqwSZd6tviUH56zhOQe5ofW2Z5c4Kxe+u
-        j2QXTmjvLwHWESw/KXJrIqI3iQ==
-X-Google-Smtp-Source: AMrXdXsnKTMnn8pBggT8wypvx4ly24qXZso6gSXtYC3gBFgndudQ2tx35A3eKs1c9jb4wVpBxKIXeg==
-X-Received: by 2002:a17:906:3610:b0:7c1:8ba7:3182 with SMTP id q16-20020a170906361000b007c18ba73182mr17143993ejb.69.1674248486565;
-        Fri, 20 Jan 2023 13:01:26 -0800 (PST)
+        bh=cplHg6mmZO77Jj4HjyqBizHDxHYMI91dvrCE+XRo9rU=;
+        b=FzZ3isXsIbRskJjo4lHg0+gswCJaa68POTcIi4T4puUfPw4pFJkqKrDUK7luQOMXJg
+         AtvjkttpS8owWkmmY/CCrjTQLhx1ngFtGBnBezPjYc8oLR/JkLqAvdvMhefaoGKfDFcC
+         QTa8y8gSn23bo+IKtrm8yFEQpl9eLqFvoH0EqFzM3UmXX/0OtmolO6REgX5uGtINrGdr
+         fgj9paUQNdqGqRlWs93MTDNv9+Ku1ck4nAveaaKKzPyFIS2ixGB23xkGJ/NZq7lBQMtH
+         4RSB21XgQ08t4qPZxcmFeg2eWDpEpjlgnfGMINLcdIoX6vAdGmjI0oPG6QbFGxB0rmhx
+         GvVw==
+X-Gm-Message-State: AFqh2koj0GfnZiRRqHCCISyLNd9IZF7JlrvSzLl3ATpyELCT64qhGLrz
+        KKaJ5Yhb9kDipOHPjiitQ2XONg==
+X-Google-Smtp-Source: AMrXdXvhQI54/4nyNC2unGCcARW/ouKy70qQqZ5Werikg+NU9C96Tk/aCyOTWsXVvSMVhDpZ2CTH0A==
+X-Received: by 2002:a17:906:a88c:b0:7c1:5098:907a with SMTP id ha12-20020a170906a88c00b007c15098907amr16687692ejb.35.1674248489093;
+        Fri, 20 Jan 2023 13:01:29 -0800 (PST)
 Received: from localhost.localdomain (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
-        by smtp.gmail.com with ESMTPSA id g22-20020a170906595600b0087221268e49sm6581229ejr.186.2023.01.20.13.01.24
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906595600b0087221268e49sm6581229ejr.186.2023.01.20.13.01.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 13:01:26 -0800 (PST)
+        Fri, 20 Jan 2023 13:01:28 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -68,10 +68,10 @@ Cc:     marijn.suijten@somainline.org,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH 6/8] arm64: dts: qcom: sm8350: Fix DSI PLL size
-Date:   Fri, 20 Jan 2023 22:00:58 +0100
-Message-Id: <20230120210101.2146852-6-konrad.dybcio@linaro.org>
+        devicetree@vger.kernel.org
+Subject: [PATCH 7/8] arm64: dts: qcom: sm8350: Add mdss_ prefix to DSIn out labels
+Date:   Fri, 20 Jan 2023 22:00:59 +0100
+Message-Id: <20230120210101.2146852-7-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230120210101.2146852-1-konrad.dybcio@linaro.org>
 References: <20230120210101.2146852-1-konrad.dybcio@linaro.org>
@@ -87,37 +87,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As downstream indicates, DSI PLL is actually 0x27c and not 0x260-
-wide. Fix that to reserve the correct registers.
+Add the mdss_ prefix to DSIn labels, so that the hardware blocks can
+be organized near each other while retaining the alphabetical order
+in device DTs when referencing by label.
 
-Fixes: d4a4410583ed ("arm64: dts: qcom: sm8350: Add display system nodes")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts |  2 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi    | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+index 5a4c4ea4d122..df841230d1b7 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+@@ -309,7 +309,7 @@ port@0 {
+ 				reg = <0>;
+ 
+ 				lt9611_a: endpoint {
+-					remote-endpoint = <&dsi0_out>;
++					remote-endpoint = <&mdss_dsi0_out>;
+ 				};
+ 			};
+ 
 diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 22bf6239c757..b09eb8880376 100644
+index b09eb8880376..0f9427f3319f 100644
 --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -3041,7 +3041,7 @@ mdss_dsi0_phy: phy@ae94400 {
- 				compatible = "qcom,sm8350-dsi-phy-5nm";
- 				reg = <0 0x0ae94400 0 0x200>,
- 				      <0 0x0ae94600 0 0x280>,
--				      <0 0x0ae94900 0 0x260>;
-+				      <0 0x0ae94900 0 0x27c>;
- 				reg-names = "dsi_phy",
- 					    "dsi_phy_lane",
- 					    "dsi_pll";
-@@ -3138,7 +3138,7 @@ mdss_dsi1_phy: phy@ae96400 {
- 				compatible = "qcom,sm8350-dsi-phy-5nm";
- 				reg = <0 0x0ae96400 0 0x200>,
- 				      <0 0x0ae96600 0 0x280>,
--				      <0 0x0ae96900 0 0x260>;
-+				      <0 0x0ae96900 0 0x27c>;
- 				reg-names = "dsi_phy",
- 					    "dsi_phy_lane",
- 					    "dsi_pll";
+@@ -2952,7 +2952,7 @@ ports {
+ 					port@0 {
+ 						reg = <0>;
+ 						dpu_intf1_out: endpoint {
+-							remote-endpoint = <&dsi0_in>;
++							remote-endpoint = <&mdss_dsi0_in>;
+ 						};
+ 					};
+ 				};
+@@ -3024,14 +3024,14 @@ ports {
+ 
+ 					port@0 {
+ 						reg = <0>;
+-						dsi0_in: endpoint {
++						mdss_dsi0_in: endpoint {
+ 							remote-endpoint = <&dpu_intf1_out>;
+ 						};
+ 					};
+ 
+ 					port@1 {
+ 						reg = <1>;
+-						dsi0_out: endpoint {
++						mdss_dsi0_out: endpoint {
+ 						};
+ 					};
+ 				};
+@@ -3122,13 +3122,13 @@ ports {
+ 
+ 					port@0 {
+ 						reg = <0>;
+-						dsi1_in: endpoint {
++						mdss_dsi1_in: endpoint {
+ 						};
+ 					};
+ 
+ 					port@1 {
+ 						reg = <1>;
+-						dsi1_out: endpoint {
++						mdss_dsi1_out: endpoint {
+ 						};
+ 					};
+ 				};
 -- 
 2.39.1
 
