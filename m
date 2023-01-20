@@ -2,82 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DF667554C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE49675573
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjATNO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S230509AbjATNSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbjATNO2 (ORCPT
+        with ESMTP id S230508AbjATNSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:14:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E507BD157;
-        Fri, 20 Jan 2023 05:14:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEF4EB8280B;
-        Fri, 20 Jan 2023 13:14:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D73C433EF;
-        Fri, 20 Jan 2023 13:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674220461;
-        bh=y2nkbcWRr5qEayC6d21noEl5u93nkRPbcNffzPJrZBk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jjERjDD1RN3nq7qoHcU1vnBiVA/xlhinOqGkNB7IoWM/sMqZ6s85DrxZdNuIlvXaE
-         N46d2uGkWvk9OldOpX2tbdZfv3Ujc0dkA1YLZ3BAWy/EzM3Z1RfU4FEPwYYmF2sDey
-         Z24irxIinp8683wMjX0y9GNkQn9perV1SikxAdrTvO/FLZu7WdTADNlDf2GjWpJtUM
-         sqsYXKy9mVOlss0WOwVvpWtV0+OG7VUkGHoMEq38rUl6wOVi0uGCEkPAO2/u0eatve
-         ARLZrIoIur/x5zrFvCzJFbUNqblfBzQlG4pzs8G5jTHuQ9Aq5IGEs1nXSgGZ76k6nR
-         6cRzghdjaIkRg==
-Date:   Fri, 20 Jan 2023 07:14:19 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH 2/9] e1000e: Remove redundant
- pci_enable_pcie_error_reporting()
-Message-ID: <20230120131419.GA622602@bhelgaas>
+        Fri, 20 Jan 2023 08:18:35 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EC6C41D1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:14:52 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso4327043wmn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AfFIuRH2b9FfD0CydIJ5oSJmwUczAEd83CzMQhgLMzM=;
+        b=V0vHFo7ysajexa+NmYC+hGR0na69vwSKGypzgdxWvgYKSvjzxKe352iDiDda+iA3mx
+         yV1M86QhpEfjVSIfxLh7krDmwkDhF1x6zb78M3srZw5LGqDLW3bKJYIhANFA63HuYH2k
+         PtsSQbuSmNOD2lKTl5e8lILbSdv3Sr8Xv/lVYIgFsuYJ0V9nnw6tfT4DGjAtY5B8TwcW
+         vJUB3A04EV0j2x4NJa8OvGtYMo+UKu+CEKXa08aQrgEpwxxi7U9hdaA968AwQ1mykVlM
+         qR/gfFLCDu2i0Pb0UeHyyhPK/KzcJe33g2to4tX1G50G4DtKjFJLXPzIVkKMhWELCs0o
+         TCGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AfFIuRH2b9FfD0CydIJ5oSJmwUczAEd83CzMQhgLMzM=;
+        b=jaaTpqa2ThhPGCxuR+3cRBEcAoJVxMaLxbqUsoriwqgCYKR5KBFqlhADae9zrTSpOd
+         fBc091QpF5yveOYuhjKNhFkmlmAdTg4m2qT+1OCky5dhKqo1xc5bLvBT1gWCebqRRTp6
+         9yDNnbIJPWGGD9PbM64T0xPm1YVh6xxM3A06KBEeK0HFUtN+Eb6v9qyUZkIYC9FJxpXf
+         yK2GiSKgooZ2RFd24CANpk16hl670K6fUtayce8v7f7Pf5cRYpkbqg5if3Rxu+ongLwM
+         3hy4jzQWU/OFHVdszpiyLZInr5oKjSAG/cEjnIfFcgt0bmnsVdkYPriiBFn0fsANHF0E
+         EUNg==
+X-Gm-Message-State: AFqh2krHKtOif5x2vHuAQzEWe0oy1eJsdrDhoAYZ+fYNrQPBtyRiYUR3
+        XgGAukXZrt4Fy7TC1elhlQJCEQ==
+X-Google-Smtp-Source: AMrXdXvP3mf/U+3R2kQJkj9RTHm/6Qvd9bJpocAhTuHbHTW4xJISAGMZj4sGLykeOAtsY+vu4wFQ6Q==
+X-Received: by 2002:a05:600c:a29e:b0:3d9:ee01:ae5b with SMTP id hu30-20020a05600ca29e00b003d9ee01ae5bmr14064047wmb.12.1674220491033;
+        Fri, 20 Jan 2023 05:14:51 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q18-20020adfdfd2000000b002bdc129c8f6sm24518977wrn.43.2023.01.20.05.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 05:14:50 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: [PATCH] regulator: dt-bindings: samsung,s2mps14: add lost samsung,ext-control-gpios
+Date:   Fri, 20 Jan 2023 14:14:47 +0100
+Message-Id: <20230120131447.289702-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119191735.4bc11fd2@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 07:17:35PM -0800, Jakub Kicinski wrote:
-> On Wed, 18 Jan 2023 17:46:05 -0600 Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > pci_enable_pcie_error_reporting() enables the device to send ERR_*
-> > Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
-> > native"), the PCI core does this for all devices during enumeration.
-> > 
-> > Remove the redundant pci_enable_pcie_error_reporting() call from the
-> > driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
-> > from the driver .remove() path.
-> > 
-> > Note that this doesn't control interrupt generation by the Root Port; that
-> > is controlled by the AER Root Error Command register, which is managed by
-> > the AER service driver.
-> > 
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> How would you like to route these? Looks like there's no dependency 
-> so we can pick them up?
+The samsung,ext-control-gpios property was lost during conversion to DT
+schema:
 
-Right, no dependencies, so you can pick them up.  Sounds like you and
-Tony have it worked out.  Thanks!
+  exynos3250-artik5-eval.dtb: pmic@66: regulators:LDO11: Unevaluated properties are not allowed ('samsung,ext-control-gpios' was unexpected)
 
-Bjorn
+Fixes: ea98b9eba05c ("regulator: dt-bindings: samsung,s2m: convert to dtschema")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/regulator/samsung,s2mps14.yaml   | 21 +++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
+index 01f9d4e236e9..a7feb497eb89 100644
+--- a/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
++++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
+@@ -19,8 +19,8 @@ description: |
+   additional information and example.
+ 
+ patternProperties:
+-  # 25 LDOs
+-  "^LDO([1-9]|[1][0-9]|2[0-5])$":
++  # 25 LDOs, without LDO10-12
++  "^LDO([1-9]|1[3-9]|2[0-5])$":
+     type: object
+     $ref: regulator.yaml#
+     unevaluatedProperties: false
+@@ -30,6 +30,23 @@ patternProperties:
+     required:
+       - regulator-name
+ 
++  "^LDO(1[0-2])$":
++    type: object
++    $ref: regulator.yaml#
++    unevaluatedProperties: false
++    description:
++      Properties for single LDO regulator.
++
++    properties:
++      samsung,ext-control-gpios:
++        maxItems: 1
++        description:
++          LDO10, LDO11 and LDO12 can be configured to external control over
++          GPIO.
++
++    required:
++      - regulator-name
++
+   # 5 bucks
+   "^BUCK[1-5]$":
+     type: object
+-- 
+2.34.1
+
