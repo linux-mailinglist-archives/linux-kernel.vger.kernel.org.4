@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F85B675FC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1E0675FC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjATVwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S229778AbjATVwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjATVwJ (ORCPT
+        with ESMTP id S229744AbjATVwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:52:09 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1119380BB1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:08 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id f22-20020a056a00239600b0058d956679f5so2979194pfc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:08 -0800 (PST)
+        Fri, 20 Jan 2023 16:52:11 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD6280BB0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:09 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id q130-20020a632a88000000b004a03cfb3ac6so3134095pgq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:52:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kSxrMzG1Hv7pdQ1Ytw036hc1FJB6QyL44T06ZBbgDu4=;
-        b=DGNmPG5xe76kN+gBDq5mU0YsgJej+WFDU/Tvr3GYRdJ5GgTvQ+csWUH6fEI6DSEp7T
-         rT7NXuhVTAUCsGI5hm6oy8KY3yBz3Qyx0R3PtD08QCfq6iBmHRqhPPj8Ly4jfV8j7gZp
-         2hlnw1qCkBdZDlMYRHXcaDmlQy+PX9wGTSKrM7F+l+DP62zubLRIDXVMGlmGhXggtOPT
-         YbXWRp+CKmbd0glr2I9mleU9HE0JuQPVts+BWfaLhQw3oxFpjM2XdiprknUIJK296KFt
-         sytBP0DCk+F+yp98jBnfto7x1qF3yuxWQ1Fj2bvxLilOJ4FzHCS5C2Z0LreUpipW+o/b
-         /IAA==
+        bh=vZLGH6GKpprsZryglGGsmlbnC99kz7Hmw/lP8KSRAIA=;
+        b=H4S6MZ3Pu39FsRTnCqJAOdecUr98F5KodOtdYhzSnskQsZxaVRchBP/S8QXaAyCyeF
+         pzl8QHq3Cognwhb+VTsm0Pw8X7dRVoRHokVU6LlRnsUPaOvRwyr597df0RFYLSkM2ly+
+         MedNBuHyilOTTmDHZhqHeeH8hlSY9NvEH/zY2aPHkup/8sYOY53czXUT34wRZ/HRcCJC
+         oYV4ecWyZejeGKtPvnJOmbgeWf/JyvZu+5qRDPkb4ayJyYiHwgdLKuCAPoSv7Uxit5sJ
+         NoUYagoBzw2wc4y3EeEPrJlYVV13qRKbX/SeUDZwqdbDnzS5HetwWWSJznTvh3/XokSY
+         fKgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kSxrMzG1Hv7pdQ1Ytw036hc1FJB6QyL44T06ZBbgDu4=;
-        b=R2NKs4O/Bqj9UfArbESpSEA2A27V93yZEMfofL/2JMPgRXyyGL4t/jyF0pYZOX3DmW
-         88PCIbU+MyJxw7iQZZUKh4eHfFhB2uz1A6zkGfvbiHQvXde3RZSyMHSjryOFiNzKjzq9
-         RNZsK4xrYtYoolSnIhWs/0HQsSQALmTZHvuxoHiU3CGFG6VG6Fx1Cz352SzZmzC2Q0NN
-         rZZWAMIjzo3UalKxroB0mF61BCw7NeKMg9NKjZllCslMPkqwpRVXoZTWh3xRUhhUZ/Y4
-         ycjbK7I9ZSv/lvRC+41ryG5Wj91jpZdDo+kfUnujNCEa47e3rr/o0ZMLTY+uw2b8rYEq
-         Yp9A==
-X-Gm-Message-State: AFqh2kp9Fes8IQnbclQpi6NLb8ZV83OrG+Fmp5OITEAoSizldpTY/YXl
-        Khk9MV2YtUZ2tsKiDZb9mX5EPKVRzvz5TEEFJA==
-X-Google-Smtp-Source: AMrXdXvRQYSwAtryjO3/9NuhUBXCtmfhNrGdDeWz28VwYmz1ZWFq5gSbOxfizxdka/O+/85ZxAhGpIIv7A0KjtrMHw==
+        bh=vZLGH6GKpprsZryglGGsmlbnC99kz7Hmw/lP8KSRAIA=;
+        b=o+B4/KlkzcrqUjrad3hBRhYckySDmstTwbuHvyNMImU0+jnUCqGbxUkHbXUAeCUoeN
+         494lGnCsF7SlJqnr/3XUMazfQIhDcGSJ8tR2qpQdWJCokfiyHIjPtRFr99jGpx/vuCDs
+         vWh136En+Cm2jUGhEXsYquExE1UqSvMQNPC9c1aIjYqSEvWgMzxBmIhd3eLOKWTkSNRS
+         T7Zv4HNlw45ukWj3BJu1jWjoC7tP3/adNDi1HBRFMRIA1BXL2Z6dmkA1WhnN0R47JLh9
+         kRWOwNGMmlgCOuYvvoJBwkMT2nVUI0J23IerBU7QTGY88Q0pdXJaYjB9DQtl7COk8/qQ
+         RkFQ==
+X-Gm-Message-State: AFqh2krKaPoOXhhrui8PSzEBqW7mIc6zrMUNdaV/p5b1BtRf1ZpLv+FY
+        sQiqSvXFfLIv8YeYe2yZIGBAq6xvt0bh/kZF8A==
+X-Google-Smtp-Source: AMrXdXvgnhUOxHnbYYU2gTk3XLNC4wEojLvl5cRHswvnKmIzlXmAibhm7cHfTYwECk4VrKSdyiTFkWrg5f4UKbDgpw==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:902:8694:b0:189:6889:c30a with
- SMTP id g20-20020a170902869400b001896889c30amr1672842plo.6.1674251527474;
- Fri, 20 Jan 2023 13:52:07 -0800 (PST)
-Date:   Fri, 20 Jan 2023 21:48:54 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a63:455a:0:b0:49f:5dc6:caf8 with SMTP
+ id u26-20020a63455a000000b0049f5dc6caf8mr1692899pgk.41.1674251528854; Fri, 20
+ Jan 2023 13:52:08 -0800 (PST)
+Date:   Fri, 20 Jan 2023 21:48:55 +0000
 In-Reply-To: <20230120214857.835931-1-dionnaglaze@google.com>
 Mime-Version: 1.0
 References: <20230120214857.835931-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230120214857.835931-2-dionnaglaze@google.com>
-Subject: [PATCH v12 1/3] crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
+Message-ID: <20230120214857.835931-3-dionnaglaze@google.com>
+Subject: [PATCH v12 2/3] x86/sev: Change snp_guest_issue_request's fw_err
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
         Borislav Petkov <Borislav.Petkov@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michael Sterritt <sterritt@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -76,118 +80,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+The GHCB specification declares that the firmware error value for a
+guest request will be stored in the lower 32 bits of EXIT_INFO_2.
+The upper 32 bits are for the VMM's own error code. The fw_err argument
+is thus a misnomer, and callers will need access to all 64 bits.
 
-The PSP can return a "firmware error" code of -1 in circumstances where
-the PSP is not actually called. To make this protocol unambiguous, the
-value is named SEV_RET_NO_FW_CALL.
+The type of unsigned long also causes problems, since sw_exit_info2 is
+u64 (unsigned long long) vs the argument's unsigned long*. This type
+is changed for issuing the guest request. The ioctl command struct's
+error field is passed directly instead of a local variable, since an
+incomplete guest request may not set the error code, and uninitialized
+stack memory would be written back to user space.
 
-Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
+The firmware might not even be called, so the call is bookended with
+the no firmware call error and clearing the error.
+
+Since the "fw_err" field is really exitinfo2 split into the upper bits'
+vmm error code and lower bits' firmware error code, sev-guest.h is
+updated to represent the 64 bit value as a union.
+
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Andy Lutomirsky <luto@kernel.org>
-Cc: John Allen <john.allen@amd.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Borislav Petkov <Borislav.Petkov@amd.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Venu Busireddy <venu.busireddy@oracle.com>
+Cc: Michael Roth <michael.roth@amd.com>
+Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc: Michael Sterritt <sterritt@google.com>
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
+Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
+Reviewed-by: Tom Lendacky <Thomas.Lendacky@amd.com>
+Reviewed-by: Borislav Petkov <Borislav.Petkov@amd.com>
+Reviewed-by: Peter Gonda <pgonda@google.com>
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 ---
- Documentation/virt/coco/sev-guest.rst |  2 +-
- drivers/crypto/ccp/sev-dev.c          | 22 ++++++++++++++--------
- include/uapi/linux/psp-sev.h          |  7 +++++++
- 3 files changed, 22 insertions(+), 9 deletions(-)
+ arch/x86/include/asm/sev-common.h       |  3 --
+ arch/x86/include/asm/sev.h              |  4 +--
+ arch/x86/kernel/sev.c                   | 13 ++++---
+ drivers/virt/coco/sev-guest/sev-guest.c | 46 ++++++++++++-------------
+ include/uapi/linux/sev-guest.h          | 18 ++++++++--
+ 5 files changed, 48 insertions(+), 36 deletions(-)
 
-diff --git a/Documentation/virt/coco/sev-guest.rst b/Documentation/virt/coco/sev-guest.rst
-index bf593e88cfd9..e76393e389eb 100644
---- a/Documentation/virt/coco/sev-guest.rst
-+++ b/Documentation/virt/coco/sev-guest.rst
-@@ -41,7 +41,7 @@ The guest ioctl should be issued on a file descriptor of the /dev/sev-guest devi
- The ioctl accepts struct snp_user_guest_request. The input and output structure is
- specified through the req_data and resp_data field respectively. If the ioctl fails
- to execute due to a firmware error, then fw_err code will be set otherwise the
--fw_err will be set to 0x00000000000000ff.
-+fw_err will be set to 0x00000000ffffffff, i.e., the lower 32-bits are -1.
+diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
+index b8357d6ecd47..0759af9b1acf 100644
+--- a/arch/x86/include/asm/sev-common.h
++++ b/arch/x86/include/asm/sev-common.h
+@@ -128,9 +128,6 @@ struct snp_psc_desc {
+ 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
+ } __packed;
  
- The firmware checks that the message sequence counter is one greater than
- the guests message sequence counter. If guest driver fails to increment message
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 06fc7156c04f..ac205f78a595 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -440,12 +440,19 @@ static int __sev_init_ex_locked(int *error)
- 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
+-/* Guest message request error code */
+-#define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
+-
+ #define GHCB_MSR_TERM_REQ		0x100
+ #define GHCB_MSR_TERM_REASON_SET_POS	12
+ #define GHCB_MSR_TERM_REASON_SET_MASK	0xf
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index ebc271bb6d8e..05de34d10d89 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
+ void snp_set_wakeup_secondary_cpu(void);
+ bool snp_init(struct boot_params *bp);
+ void __init __noreturn snp_abort(void);
+-int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
++int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
+ #else
+ static inline void sev_es_ist_enter(struct pt_regs *regs) { }
+ static inline void sev_es_ist_exit(void) { }
+@@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
+ static inline bool snp_init(struct boot_params *bp) { return false; }
+ static inline void snp_abort(void) { }
+ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
+-					  unsigned long *fw_err)
++					  u64 *exitinfo2)
+ {
+ 	return -ENOTTY;
+ }
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 679026a640ef..82aa81fafb71 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -22,6 +22,8 @@
+ #include <linux/efi.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/psp-sev.h>
++#include <uapi/linux/sev-guest.h>
+ 
+ #include <asm/cpu_entry_area.h>
+ #include <asm/stacktrace.h>
+@@ -2175,7 +2177,7 @@ static int __init init_sev_config(char *str)
+ }
+ __setup("sev=", init_sev_config);
+ 
+-int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
++int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2)
+ {
+ 	struct ghcb_state state;
+ 	struct es_em_ctxt ctxt;
+@@ -2186,9 +2188,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+ 		return -ENODEV;
+ 
+-	if (!fw_err)
++	if (!exitinfo2)
+ 		return -EINVAL;
+ 
++	*exitinfo2 = SEV_RET_NO_FW_CALL;
++
+ 	/*
+ 	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
+ 	 * a per-CPU GHCB.
+@@ -2212,14 +2216,13 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 	if (ret)
+ 		goto e_put;
+ 
++	*exitinfo2 = ghcb->save.sw_exit_info_2;
+ 	if (ghcb->save.sw_exit_info_2) {
+ 		/* Number of expected pages are returned in RBX */
+ 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
+-		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
++			ghcb->save.sw_exit_info_2 == SNP_GUEST_VMM_ERR(SNP_GUEST_VMM_ERR_INVALID_LEN))
+ 			input->data_npages = ghcb_get_rbx(ghcb);
+ 
+-		*fw_err = ghcb->save.sw_exit_info_2;
+-
+ 		ret = -EIO;
+ 	}
+ 
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index 4ec4174e05a3..ed6fc14f6b00 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -318,11 +318,11 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
+ 	return __enc_payload(snp_dev, req, payload, sz);
  }
  
-+static inline int __sev_do_init_locked(int *psp_ret)
-+{
-+	if (sev_init_ex_buffer)
-+		return __sev_init_ex_locked(psp_ret);
-+	else
-+		return __sev_init_locked(psp_ret);
-+}
-+
- static int __sev_platform_init_locked(int *error)
+-static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
+-				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+-				u32 resp_sz, __u64 *fw_err)
++static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
++				struct snp_guest_request_ioctl *arg,
++				u8 type, void *req_buf, size_t req_sz,
++				void *resp_buf, u32 resp_sz)
  {
- 	struct psp_device *psp = psp_master;
- 	struct sev_device *sev;
--	int rc = 0, psp_ret = -1;
--	int (*init_function)(int *error);
-+	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
+-	unsigned long err;
+ 	u64 seqno;
+ 	int rc;
  
- 	if (!psp || !psp->sev_data)
- 		return -ENODEV;
-@@ -456,15 +463,12 @@ static int __sev_platform_init_locked(int *error)
- 		return 0;
+@@ -334,7 +334,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
  
- 	if (sev_init_ex_buffer) {
--		init_function = __sev_init_ex_locked;
- 		rc = sev_read_init_ex_file();
- 		if (rc)
- 			return rc;
--	} else {
--		init_function = __sev_init_locked;
- 	}
+ 	/* Encrypt the userspace provided payload */
+-	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
++	rc = enc_payload(snp_dev, seqno, arg->msg_version, type, req_buf, req_sz);
+ 	if (rc)
+ 		return rc;
  
--	rc = init_function(&psp_ret);
-+	rc = __sev_do_init_locked(&psp_ret);
- 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
- 		/*
- 		 * Initialization command returned an integrity check failure
-@@ -473,9 +477,11 @@ static int __sev_platform_init_locked(int *error)
- 		 * initialization function should succeed by replacing the state
- 		 * with a reset state.
+@@ -344,7 +344,8 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	 * sequence number must be incremented or the VMPCK must be deleted to
+ 	 * prevent reuse of the IV.
+ 	 */
+-	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
++	rc = snp_issue_guest_request(exit_code, &snp_dev->input,
++				     &arg->exitinfo2);
+ 
+ 	/*
+ 	 * If the extended guest request fails due to having too small of a
+@@ -353,7 +354,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	 * and thus avoid IV reuse.
+ 	 */
+ 	if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
+-	    err == SNP_GUEST_REQ_INVALID_LEN) {
++	    arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
+ 		const unsigned int certs_npages = snp_dev->input.data_npages;
+ 
+ 		exit_code = SVM_VMGEXIT_GUEST_REQUEST;
+@@ -366,24 +367,22 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 		 * of the VMPCK and the error code being propagated back to the
+ 		 * user as an ioctl() return code.
  		 */
--		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
--		rc = init_function(&psp_ret);
-+		dev_err(sev->dev,
-+"SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
-+		rc = __sev_do_init_locked(&psp_ret);
- 	}
-+
- 	if (error)
- 		*error = psp_ret;
+-		rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
++		rc = snp_issue_guest_request(exit_code, &snp_dev->input,
++					     &arg->exitinfo2);
  
-diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
-index 91b4c63d5cbf..e8cfb8bde0d7 100644
---- a/include/uapi/linux/psp-sev.h
-+++ b/include/uapi/linux/psp-sev.h
-@@ -36,6 +36,13 @@ enum {
-  * SEV Firmware status code
-  */
- typedef enum {
-+	/*
-+	 * This error code is not in the SEV spec but is added to convey that
-+	 * there was an error that prevented the SEV Firmware from being called.
-+	 * The SEV API error codes are 16 bits, so the -1 value will not overlap
-+	 * with possible values from the specification.
-+	 */
-+	SEV_RET_NO_FW_CALL = -1,
- 	SEV_RET_SUCCESS = 0,
- 	SEV_RET_INVALID_PLATFORM_STATE,
- 	SEV_RET_INVALID_GUEST_STATE,
+ 		/*
+ 		 * Override the error to inform callers the given extended
+ 		 * request buffer size was too small and give the caller the
+ 		 * required buffer size.
+ 		 */
+-		err = SNP_GUEST_REQ_INVALID_LEN;
++		arg->vmm_error = SNP_GUEST_VMM_ERR_INVALID_LEN;
+ 		snp_dev->input.data_npages = certs_npages;
+ 	}
+ 
+-	if (fw_err)
+-		*fw_err = err;
+-
+ 	if (rc) {
+ 		dev_alert(snp_dev->dev,
+-			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
+-			  rc, *fw_err);
++			  "Detected error from ASP request. rc: %d, exitinfo2: %llu\n",
++			  rc, arg->exitinfo2);
+ 		goto disable_vmpck;
+ 	}
+ 
+@@ -430,9 +429,9 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
+ 	if (!resp)
+ 		return -ENOMEM;
+ 
+-	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
++	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg,
+ 				  SNP_MSG_REPORT_REQ, &req, sizeof(req), resp->data,
+-				  resp_len, &arg->fw_err);
++				  resp_len);
+ 	if (rc)
+ 		goto e_free;
+ 
+@@ -470,9 +469,8 @@ static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_reque
+ 	if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
+ 		return -EFAULT;
+ 
+-	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
+-				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
+-				  &arg->fw_err);
++	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg,
++				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len);
+ 	if (rc)
+ 		return rc;
+ 
+@@ -532,12 +530,12 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+ 		return -ENOMEM;
+ 
+ 	snp_dev->input.data_npages = npages;
+-	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
++	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg,
+ 				   SNP_MSG_REPORT_REQ, &req.data,
+-				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
++				   sizeof(req.data), resp->data, resp_len);
+ 
+ 	/* If certs length is invalid then copy the returned length */
+-	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
++	if (arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
+ 		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
+ 
+ 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
+@@ -572,7 +570,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
+ 	if (copy_from_user(&input, argp, sizeof(input)))
+ 		return -EFAULT;
+ 
+-	input.fw_err = 0xff;
++	input.exitinfo2 = 0xff;
+ 
+ 	/* Message version must be non-zero */
+ 	if (!input.msg_version)
+@@ -603,7 +601,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
+ 
+ 	mutex_unlock(&snp_cmd_mutex);
+ 
+-	if (input.fw_err && copy_to_user(argp, &input, sizeof(input)))
++	if (input.exitinfo2 && copy_to_user(argp, &input, sizeof(input)))
+ 		return -EFAULT;
+ 
+ 	return ret;
+diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
+index 256aaeff7e65..2aa39112cf8d 100644
+--- a/include/uapi/linux/sev-guest.h
++++ b/include/uapi/linux/sev-guest.h
+@@ -52,8 +52,14 @@ struct snp_guest_request_ioctl {
+ 	__u64 req_data;
+ 	__u64 resp_data;
+ 
+-	/* firmware error code on failure (see psp-sev.h) */
+-	__u64 fw_err;
++	/* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
++	union {
++		__u64 exitinfo2;
++		struct {
++			__u32 fw_error;
++			__u32 vmm_error;
++		};
++	};
+ };
+ 
+ struct snp_ext_report_req {
+@@ -77,4 +83,12 @@ struct snp_ext_report_req {
+ /* Get SNP extended report as defined in the GHCB specification version 2. */
+ #define SNP_GET_EXT_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x2, struct snp_guest_request_ioctl)
+ 
++/* Guest message request EXIT_INFO_2 constants */
++#define SNP_GUEST_FW_ERR_MASK		GENMASK_ULL(31, 0)
++#define SNP_GUEST_VMM_ERR_SHIFT		32
++#define SNP_GUEST_VMM_ERR(x)		(((u64)x) << SNP_GUEST_VMM_ERR_SHIFT)
++
++#define SNP_GUEST_VMM_ERR_INVALID_LEN	1
++#define SNP_GUEST_VMM_ERR_BUSY		2
++
+ #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
 -- 
 2.39.0.246.g2a6d74b583-goog
 
