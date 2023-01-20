@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC9E674A9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E4C674AA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjATEaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
+        id S229740AbjATEcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjATEaM (ORCPT
+        with ESMTP id S230090AbjATEbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:30:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C4BB2E53;
-        Thu, 19 Jan 2023 20:29:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1584B8233A;
-        Fri, 20 Jan 2023 04:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15DEC433D2;
-        Fri, 20 Jan 2023 04:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674188947;
-        bh=yAmXPbBSRLpimCnR9Yp98v03bNqg5mhYa1PIGrqybE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h1oD0dWc221H9Cyh/yAl36/+UwLkYWa3tnWGrZJFYeV5x3tMGa3a4ishT3dAK1Yn8
-         WIDVlbRvVDqMQtI8TVqackFlQEo+LmvveiMiwU6qDBsNtd3YraLyLz4BhtZsZqdX6T
-         tAp71V5qU9ieW4VXoWff8ul+RCunsSVOQG93eBd8nExyuMQQz2dc9ZYDSZ7iRk5hII
-         XqEYlJCZNzujkgD3nrCesSyJf7raO7ZOpmy+KfpAGQT+r3xiIZwDQcLjsCLthRIxvU
-         p37L5813Qs81P6HUXDy9GUGo1H8jgcnVyopbJQdfqeFymadKRl5R3xTOLQ/YLXGneE
-         WFpOMYJJPhoQA==
-Date:   Thu, 19 Jan 2023 22:29:05 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: Restrict 'mpp'
- child node name pattern
-Message-ID: <20230120042905.d2pdrzyv3e3airdj@builder.lan>
-References: <20230120020600.3232001-1-robh@kernel.org>
+        Thu, 19 Jan 2023 23:31:45 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553FFB2E4B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:31:16 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30K4UDN0117944;
+        Thu, 19 Jan 2023 22:30:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674189013;
+        bh=iezSynNH5W1oFTWX7VE7fYRtxIVPYwi3S16nlZLNrIc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=p9/6wEPY16TKS1V4cFMywOK3klEnssGDfRunmqGvKUXBQImQaleB986h94DZ13CYR
+         h1PPsT1URYRc2/FZC2XEco1Q3APXhHjIdgKTtH0KU0Eor4JUlQ0XzTQL0U75bUz0FU
+         +WzvjJDPYc0FwFYXoY2WNHviv1DJvbdEkWXghdBM=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30K4UDOE094394
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 19 Jan 2023 22:30:13 -0600
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 19
+ Jan 2023 22:30:13 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 19 Jan 2023 22:30:13 -0600
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30K4UAwc026047;
+        Thu, 19 Jan 2023 22:30:10 -0600
+Message-ID: <6a5f3395-8f1f-5bc3-29ce-205686ff704a@ti.com>
+Date:   Fri, 20 Jan 2023 10:00:09 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120020600.3232001-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] mtd: spinand: macronix: use scratch buffer for DMA
+ operation
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Mason Yang <masonccyang@mxic.com.tw>,
+        Jianhui Zhao <zhaojh329@gmail.com>
+References: <Y8i85zM0u4XdM46z@makrotopia.org>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <Y8i85zM0u4XdM46z@makrotopia.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 08:06:00PM -0600, Rob Herring wrote:
-> Just 'mpp' is a bit ambiguous for a pattern. It allows any prefix or
-> suffix. I couldn't find any actual users, so update the pattern to match
-> the example.
+Hi Daniel,
+
+On 19/01/23 09:15, Daniel Golle wrote:
+> The mx35lf1ge4ab_get_eccsr() function uses an SPI DMA operation to
+> read the eccsr, hence the buffer should not be on stack. Since commit
+> 380583227c0c7f ("spi: spi-mem: Add extra sanity checks on the op param")
+> the kernel emmits a warning and blocks such operations.
+
+Good catch!
+
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Use the scratch buffer to get eccsr instead of trying to directly read
+> into a stack-allocated variable.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 > ---
->  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
+>   drivers/mtd/nand/spi/macronix.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> index 72cce38bc1ce..891a7385d7cb 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
-> @@ -74,7 +74,7 @@ patternProperties:
->      oneOf:
->        - $ref: "#/$defs/qcom-pmic-mpp-state"
->        - patternProperties:
-> -          "mpp":
-> +          "-mpp$":
+> diff --git a/drivers/mtd/nand/spi/macronix.c b/drivers/mtd/nand/spi/macronix.c
+> index dce835132a1e2..722a9738ba370 100644
+> --- a/drivers/mtd/nand/spi/macronix.c
+> +++ b/drivers/mtd/nand/spi/macronix.c
+> @@ -83,9 +83,10 @@ static int mx35lf1ge4ab_ecc_get_status(struct spinand_device *spinand,
+>   		 * in order to avoid forcing the wear-leveling layer to move
+>   		 * data around if it's not necessary.
+>   		 */
+> -		if (mx35lf1ge4ab_get_eccsr(spinand, &eccsr))
+> +		if (mx35lf1ge4ab_get_eccsr(spinand, spinand->scratchbuf))
+>   			return nanddev_get_ecc_conf(nand)->strength;
+>   
+> +		eccsr = *spinand->scratchbuf;
+>   		if (WARN_ON(eccsr > nanddev_get_ecc_conf(nand)->strength ||
+>   			    !eccsr))
+>   			return nanddev_get_ecc_conf(nand)->strength;
 
-How about aligning it with the other Qualcomm pinctrl bindings and make
-it "-pins$" instead?
-
-If my grep is correct we have one "mpp5" and two "-pins$" currently in
-the sources, so this should be beneficial as well.
-
-Regards,
-Bjorn
-
->              $ref: "#/$defs/qcom-pmic-mpp-state"
->          additionalProperties: false
->  
-> -- 
-> 2.39.0
-> 
+-- 
+Thanks and Regards,
+Dhruva Gole
