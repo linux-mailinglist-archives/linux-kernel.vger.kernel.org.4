@@ -2,171 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69653675C02
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F0A675C03
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjATRu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S230381AbjATRuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjATRuZ (ORCPT
+        with ESMTP id S229595AbjATRuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:50:25 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CB928D0F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:50:13 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4c24993965eso82770507b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:50:13 -0800 (PST)
+        Fri, 20 Jan 2023 12:50:32 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D7E88746
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:50:28 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id t2so2899007vkk.9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:50:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aVyoBoXVncV7XEl3t2voVw28ML7SaYV5Dgtuf6b40FA=;
-        b=ANRlWfvxGTpJVPhZIEDmerA7RYCecNGYC3i5Nr9zZ8q28FPyljMpMTIhlgQZfHFTVP
-         Ee92UzH2d4DuxfxktT1DA3smDF0ji/BkS3gfkTDonTSF7HQup1SefrYmZjTyJW0Bg9tK
-         BJRGr+0GxhGYoL1k3OnQbi/pfLLvgxCoDu8z4/kaWzhjUtNPMmPTcuBjMAYHCLMuH4mY
-         fgKJAXrZ5MsNM0RpCYDGi6IbNIrrwup5btcvBTsiaC5aEA9EihfFW59n9S+gxvYQms2F
-         NRJL4C6RLSnaLwLC/V6yhn1nTzQyRvm8lUqVp3AclCOntYxy8GEUOjQZqRDLkC2dw8ZE
-         UNeA==
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5pTLkkWdxz2TuSidslY63LQA+pUSk+xfh9K8bmwLCbw=;
+        b=OtaNHK/aRm4AsgU7KyBwK2LgLEszXKKsEpgKGpD7iDgrAG3HJJhAqnYBmd0Rs6DnLR
+         Yfl1aolgDZgmSFtytcBJngDHkoT9UdqxdC+MVZ8laJG3e6c7bd/wGD7NFdXgFZPHxxYw
+         AMvBiHT+bHMmVRCzKBgQw7RB4w/3V31ni2plxVkNaSm/bnsOLIstA0K+Fzh1hMovO8wh
+         FuAOX0gHEDPZFVCvYyIBxRg2UzrtlUWCCRNlkFp7g2PlTBUUgN8IcNpiGDZwym8Fb2Mg
+         0Rhw15OBpzzoPzzBkv0Srq091z174d8XOS/sCU6qIX0lAb/uLkSnh9ytTY4u0wFmX6bH
+         UNhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aVyoBoXVncV7XEl3t2voVw28ML7SaYV5Dgtuf6b40FA=;
-        b=5tbah2DTA0rPmsilJLiLQ+3bXY5/opD/ArtQstqrHTWDN2XwVP0CCLfDBgFo38oxDO
-         dmUnzBkXgb67eAV8J46VUvu2Ou9KFc3N9uMu32fvamOpPQxsRrLYCdgl2eBpPsCqLEFr
-         qO7X3Ref0K7wOAuG+ALIKIe0rTlaweihZvT3XXgbFO470pbtJJ9TTt6yM+5zKAXX5/JI
-         3i34a8gyrCcQtkGQV5QIHbhpEkzy6sk19b3pEDp7fn8bq/JZ07holvCEXZuHrzSPIQsc
-         vgt66GtvCtsxrPYVaj59cQoAP6629ttuBluxRPWDs7wrQjamIq5xF4iVNIVnav/z2meR
-         CMkA==
-X-Gm-Message-State: AFqh2koeJKR4lH3KmQY876JDISmJt96nP5v4vMe+ZG/6rx+mVXt/fr9Z
-        hUGr2foJUdGBKbBtQyuOJZbdESDvEIIirWCP5kA0sQ==
-X-Google-Smtp-Source: AMrXdXvMiPI/AGYcURx7BpXFo8CgDd1daSskgeMlewm7uoKhNJ8L/DxZm49IfvACqDRKjvLcYNle2ICQOI0LbOIpu2s=
-X-Received: by 2002:a81:6d8d:0:b0:490:89c3:21b0 with SMTP id
- i135-20020a816d8d000000b0049089c321b0mr2028934ywc.132.1674237012869; Fri, 20
- Jan 2023 09:50:12 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5pTLkkWdxz2TuSidslY63LQA+pUSk+xfh9K8bmwLCbw=;
+        b=pVcfPEy7YZBoccTPmWk0uZeiqIUrHKZX1NzKwrJqTLGdc+SEmVomZQWeEBYMwVZWd4
+         r7NsEQsPy1k9VvlOwzZg2xswxo9S92qF1cPzei8WLXcZmiLChwSg2SVlrn9UvprW8ZL9
+         hyyIEjAP9hgeS3p2LagLYTIW0p/D8BiGiOjxmPFb/tQv245MJIl4tz3oOhvLkI4Qxqp9
+         sYJZ/yHNNbIeHJyDN31S5LwJQzGG/eegCqPrt7NTsbQ9yB3Xcy9vjHs73lO8lvJmeOVu
+         8q+S6bA09jkOkXBeH/5RrjuSKCTgZvVj8aHDEYlptEv/D/Vl6eyilTwcasKD7Tl7G9Uj
+         Ip7w==
+X-Gm-Message-State: AFqh2kr9x1pixJMSMR7QeRjd+b6AGtFadhRtcsU8oHPi7QYj6o5yBpI7
+        /dGIV/rhPyE9Mz0Bu1O88F+NVw==
+X-Google-Smtp-Source: AMrXdXsK2UV8ggdawPljqg1YdQGkuBmiReYfSrTK4e2ygR2LCcXuQjc3MenxIkbktc09gC17u/LzUg==
+X-Received: by 2002:a05:6122:11a8:b0:3da:7734:2e9 with SMTP id y8-20020a05612211a800b003da773402e9mr9890123vkn.16.1674237027193;
+        Fri, 20 Jan 2023 09:50:27 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-167-59-176.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.59.176])
+        by smtp.gmail.com with ESMTPSA id r8-20020a05620a298800b006bb29d932e1sm26816788qkp.105.2023.01.20.09.50.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 09:50:26 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pIvWz-00ElKv-VS;
+        Fri, 20 Jan 2023 13:50:25 -0400
+Date:   Fri, 20 Jan 2023 13:50:25 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        joro@8bytes.org, robin.murphy@arm.com, thomas.lendacky@amd.com,
+        vasant.hegde@amd.com, jon.grimm@amd.com
+Subject: Re: [PATCH 1/4] iommu/amd: Introduce Protection-domain flag VFIO
+Message-ID: <Y8rUYTjVhksAu+i9@ziepe.ca>
+References: <20230110143137.54517-1-suravee.suthikulpanit@amd.com>
+ <20230110143137.54517-2-suravee.suthikulpanit@amd.com>
+ <Y8F53dzdebKLTlOy@ziepe.ca>
+ <90762dee-1559-58ac-220d-a13635d5032e@amd.com>
+ <Y8mBczFH/Hw6xot0@ziepe.ca>
+ <c3fbec52-1281-eb1c-40f8-588438146c14@amd.com>
+ <Y8q9ocj2IZB2r6Np@ziepe.ca>
+ <1ba09b11-8a07-24dd-a99f-eeacb2f5c96c@amd.com>
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-40-surenb@google.com>
- <Y8k+syJu7elWAjRj@dhcp22.suse.cz> <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
- <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz> <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
- <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
- <Y8rGJq8LvX2C+Cr7@casper.infradead.org> <20230120170815.yuylbs27r6xcjpq5@revolver>
- <CAJuCfpH4o-iCmzdUcYD9bKieJ6-k-MZYLuHFhH+bN9yE07sibw@mail.gmail.com> <Y8rQNj5dVyuxRBOf@casper.infradead.org>
-In-Reply-To: <Y8rQNj5dVyuxRBOf@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 20 Jan 2023 09:50:01 -0800
-Message-ID: <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        peterz@infradead.org, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ba09b11-8a07-24dd-a99f-eeacb2f5c96c@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 9:32 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Jan 20, 2023 at 09:17:46AM -0800, Suren Baghdasaryan wrote:
-> > On Fri, Jan 20, 2023 at 9:08 AM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
-> > >
-> > > * Matthew Wilcox <willy@infradead.org> [230120 11:50]:
-> > > > On Fri, Jan 20, 2023 at 08:45:21AM -0800, Suren Baghdasaryan wrote:
-> > > > > On Fri, Jan 20, 2023 at 8:20 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > >
-> > > > > > On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > > >
-> > > > > > > On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
-> > > > > > > > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
-> > > > > > > > > > call_rcu() can take a long time when callback offloading is enabled.
-> > > > > > > > > > Its use in the vm_area_free can cause regressions in the exit path when
-> > > > > > > > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
-> > > > > > > > > > a list and free them in groups using one call_rcu() call per group.
-> > > > > > > > >
-> > > > > > > > > After some more clarification I can understand how call_rcu might not be
-> > > > > > > > > super happy about thousands of callbacks to be invoked and I do agree
-> > > > > > > > > that this is not really optimal.
-> > > > > > > > >
-> > > > > > > > > On the other hand I do not like this solution much either.
-> > > > > > > > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
-> > > > > > > > > much with processes with a huge number of vmas either. It would still be
-> > > > > > > > > in housands of callbacks to be scheduled without a good reason.
-> > > > > > > > >
-> > > > > > > > > Instead, are there any other cases than remove_vma that need this
-> > > > > > > > > batching? We could easily just link all the vmas into linked list and
-> > > > > > > > > use a single call_rcu instead, no? This would both simplify the
-> > > > > > > > > implementation, remove the scaling issue as well and we do not have to
-> > > > > > > > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
-> > > > > > > >
-> > > > > > > > Yes, I agree the solution is not stellar. I wanted something simple
-> > > > > > > > but this is probably too simple. OTOH keeping all dead vm_area_structs
-> > > > > > > > on the list without hooking up a shrinker (additional complexity) does
-> > > > > > > > not sound too appealing either.
-> > > > > > >
-> > > > > > > I suspect you have missed my idea. I do not really want to keep the list
-> > > > > > > around or any shrinker. It is dead simple. Collect all vmas in
-> > > > > > > remove_vma and then call_rcu the whole list at once after the whole list
-> > > > > > > (be it from exit_mmap or remove_mt). See?
-> > > > > >
-> > > > > > Yes, I understood your idea but keeping dead objects until the process
-> > > > > > exits even when the system is low on memory (no shrinkers attached)
-> > > > > > seems too wasteful. If we do this I would advocate for attaching a
-> > > > > > shrinker.
-> > > > >
-> > > > > Maybe even simpler, since we are hit with this VMA freeing flood
-> > > > > during exit_mmap (when all VMAs are destroyed), we pass a hint to
-> > > > > vm_area_free to batch the destruction and all other cases call
-> > > > > call_rcu()? I don't think there will be other cases of VMA destruction
-> > > > > floods.
-> > > >
-> > > > ... or have two different call_rcu functions; one for munmap() and
-> > > > one for exit.  It'd be nice to use kmem_cache_free_bulk().
-> > >
-> > > Do we even need a call_rcu on exit?  At the point of freeing the VMAs we
-> > > have set the MMF_OOM_SKIP bit and unmapped the vmas under the read lock.
-> > > Once we have obtained the write lock again, I think it's safe to say we
-> > > can just go ahead and free the VMAs directly.
-> >
-> > I think that would be still racy if the page fault handler found that
-> > VMA under read-RCU protection but did not lock it yet (no locks are
-> > held yet). If it's preempted, the VMA can be freed and destroyed from
-> > under it without RCU grace period.
->
-> The page fault handler (or whatever other reader -- ptrace, proc, etc)
-> should have a refcount on the mm_struct, so we can't be in this path
-> trying to free VMAs.  Right?
+On Fri, Jan 20, 2023 at 11:01:21AM -0600, Kalra, Ashish wrote:
 
-Hmm. That sounds right. I checked process_mrelease() as well, which
-operated on mm with only mmgrab()+mmap_read_lock() but it only unmaps
-VMAs without freeing them, so we are still good. Michal, do you agree
-this is ok?
+> We basically get the RMP #PF from the IOMMU because there is a page size
+> mismatch between the RMP table and the IOMMU page table. The RMP table's
+> large page entry has been smashed to 4K PTEs to handle page state change to
+> shared on 4K mappings, so this change has to be synced up with the IOMMU
+> page table, otherwise there is now a page size mismatch between RMP table
+> and IOMMU page table which causes the RMP #PF.
 
-lock_vma_under_rcu() receives mm as a parameter, so I guess it's
-implied that the caller should either mmget() it or operate on
-current->mm, so no need to document this requirement?
+I understand that, you haven't answered my question:
+
+Why is the IOMMU being programmed with pages it cannot access in the
+first place?
+
+Don't do that is the obvious solution there, and preserves huge page
+IO performance.
+
+Jason
