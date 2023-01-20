@@ -2,127 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE49675573
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C47675586
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbjATNSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S229852AbjATNTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjATNSf (ORCPT
+        with ESMTP id S231138AbjATNSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 20 Jan 2023 08:18:35 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EC6C41D1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:14:52 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso4327043wmn.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:14:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AfFIuRH2b9FfD0CydIJ5oSJmwUczAEd83CzMQhgLMzM=;
-        b=V0vHFo7ysajexa+NmYC+hGR0na69vwSKGypzgdxWvgYKSvjzxKe352iDiDda+iA3mx
-         yV1M86QhpEfjVSIfxLh7krDmwkDhF1x6zb78M3srZw5LGqDLW3bKJYIhANFA63HuYH2k
-         PtsSQbuSmNOD2lKTl5e8lILbSdv3Sr8Xv/lVYIgFsuYJ0V9nnw6tfT4DGjAtY5B8TwcW
-         vJUB3A04EV0j2x4NJa8OvGtYMo+UKu+CEKXa08aQrgEpwxxi7U9hdaA968AwQ1mykVlM
-         qR/gfFLCDu2i0Pb0UeHyyhPK/KzcJe33g2to4tX1G50G4DtKjFJLXPzIVkKMhWELCs0o
-         TCGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AfFIuRH2b9FfD0CydIJ5oSJmwUczAEd83CzMQhgLMzM=;
-        b=jaaTpqa2ThhPGCxuR+3cRBEcAoJVxMaLxbqUsoriwqgCYKR5KBFqlhADae9zrTSpOd
-         fBc091QpF5yveOYuhjKNhFkmlmAdTg4m2qT+1OCky5dhKqo1xc5bLvBT1gWCebqRRTp6
-         9yDNnbIJPWGGD9PbM64T0xPm1YVh6xxM3A06KBEeK0HFUtN+Eb6v9qyUZkIYC9FJxpXf
-         yK2GiSKgooZ2RFd24CANpk16hl670K6fUtayce8v7f7Pf5cRYpkbqg5if3Rxu+ongLwM
-         3hy4jzQWU/OFHVdszpiyLZInr5oKjSAG/cEjnIfFcgt0bmnsVdkYPriiBFn0fsANHF0E
-         EUNg==
-X-Gm-Message-State: AFqh2krHKtOif5x2vHuAQzEWe0oy1eJsdrDhoAYZ+fYNrQPBtyRiYUR3
-        XgGAukXZrt4Fy7TC1elhlQJCEQ==
-X-Google-Smtp-Source: AMrXdXvP3mf/U+3R2kQJkj9RTHm/6Qvd9bJpocAhTuHbHTW4xJISAGMZj4sGLykeOAtsY+vu4wFQ6Q==
-X-Received: by 2002:a05:600c:a29e:b0:3d9:ee01:ae5b with SMTP id hu30-20020a05600ca29e00b003d9ee01ae5bmr14064047wmb.12.1674220491033;
-        Fri, 20 Jan 2023 05:14:51 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q18-20020adfdfd2000000b002bdc129c8f6sm24518977wrn.43.2023.01.20.05.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 05:14:50 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: [PATCH] regulator: dt-bindings: samsung,s2mps14: add lost samsung,ext-control-gpios
-Date:   Fri, 20 Jan 2023 14:14:47 +0100
-Message-Id: <20230120131447.289702-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72E5C41E7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:14:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 82AE1CE285B
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F275C433B3;
+        Fri, 20 Jan 2023 13:14:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674220490;
+        bh=l377cVSCj6UHp5jGDRUigM1l/sWippbUo+6Sc1sWSvM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LQHKiHy5wsM0n5EUwROjHeL+qz8bSnTdd8qdv0H+zwJLOOKk75i1BJvpzVyP8/lcx
+         BEo1NCP7pIu55J3FNR67skt6txWVcokT/NmCgXAU7yl2hM4SluLRuH0AVWj0k+pTf0
+         0XYNSjv/CJ0FK5HvCkECFfCS/cXxKzQieKVkjhJs=
+Date:   Fri, 20 Jan 2023 14:14:48 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, david@redhat.com,
+        osalvador@suse.de, rafael@kernel.org, shan.gavin@gmail.com
+Subject: Re: [PATCH 2/2] drivers/base/memory: Use array to show memory block
+ state
+Message-ID: <Y8qTyEgc8ih6M+DW@kroah.com>
+References: <20230120055727.355483-1-gshan@redhat.com>
+ <20230120055727.355483-3-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120055727.355483-3-gshan@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The samsung,ext-control-gpios property was lost during conversion to DT
-schema:
+On Fri, Jan 20, 2023 at 01:57:27PM +0800, Gavin Shan wrote:
+> Use an array to show memory block state from '/sys/devices/system/
+> memory/memoryX/state', to simplify the code.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> ---
+>  drivers/base/memory.c | 25 ++++++-------------------
+>  1 file changed, 6 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+> index b456ac213610..9474f25c452c 100644
+> --- a/drivers/base/memory.c
+> +++ b/drivers/base/memory.c
+> @@ -141,28 +141,15 @@ static ssize_t state_show(struct device *dev, struct device_attribute *attr,
+>  			  char *buf)
+>  {
+>  	struct memory_block *mem = to_memory_block(dev);
+> -	const char *output;
+> +	static const char *const mem_state_str[] = {
+> +		NULL, "online", "going-offline", NULL, "offline",
+> +	};
+>  
+> -	/*
+> -	 * We can probably put these states in a nice little array
+> -	 * so that they're not open-coded
+> -	 */
+> -	switch (mem->state) {
+> -	case MEM_ONLINE:
+> -		output = "online";
+> -		break;
+> -	case MEM_OFFLINE:
+> -		output = "offline";
+> -		break;
+> -	case MEM_GOING_OFFLINE:
+> -		output = "going-offline";
+> -		break;
+> -	default:
+> -		WARN_ON(1);
+> +	if (WARN_ON(mem->state >= ARRAY_SIZE(mem_state_str) ||
+> +		    !mem_state_str[mem->state]))
 
-  exynos3250-artik5-eval.dtb: pmic@66: regulators:LDO11: Unevaluated properties are not allowed ('samsung,ext-control-gpios' was unexpected)
+Ick, the whole WARN_ON() should just be removed please.  We don't want
+to reboot any systems if this changed incorrectly.
 
-Fixes: ea98b9eba05c ("regulator: dt-bindings: samsung,s2m: convert to dtschema")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/regulator/samsung,s2mps14.yaml   | 21 +++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Please fix this up to properly handle this and keep going on, don't mess
+with WARN_ON() anymore in code that can recover properly.
 
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
-index 01f9d4e236e9..a7feb497eb89 100644
---- a/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
-+++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
-@@ -19,8 +19,8 @@ description: |
-   additional information and example.
- 
- patternProperties:
--  # 25 LDOs
--  "^LDO([1-9]|[1][0-9]|2[0-5])$":
-+  # 25 LDOs, without LDO10-12
-+  "^LDO([1-9]|1[3-9]|2[0-5])$":
-     type: object
-     $ref: regulator.yaml#
-     unevaluatedProperties: false
-@@ -30,6 +30,23 @@ patternProperties:
-     required:
-       - regulator-name
- 
-+  "^LDO(1[0-2])$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single LDO regulator.
-+
-+    properties:
-+      samsung,ext-control-gpios:
-+        maxItems: 1
-+        description:
-+          LDO10, LDO11 and LDO12 can be configured to external control over
-+          GPIO.
-+
-+    required:
-+      - regulator-name
-+
-   # 5 bucks
-   "^BUCK[1-5]$":
-     type: object
--- 
-2.34.1
+thanks,
 
+greg k-h
