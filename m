@@ -2,166 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B34675443
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0067F675446
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjATMSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
+        id S229961AbjATMTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjATMSE (ORCPT
+        with ESMTP id S229524AbjATMTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:18:04 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8AF8B303;
-        Fri, 20 Jan 2023 04:18:01 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3CC9D5F95D;
-        Fri, 20 Jan 2023 12:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674217080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u+/VJGuYhUCQQXXN+d6ccIA04nnHUmUtUbhkDUXZRqw=;
-        b=PpqPzCoOTaZf5Gv37q9XfZTCESdFBMJxW+AWqsbS6oz/br2HAYNZHmV26UlTcpR/UMDXOI
-        F835RkQ5RxqWJ4oH84hW3WOxIC/nxcuKOGiRddfVK8XcXTs52HGy9td+Vley7xbY4CoYnz
-        b9YH7rRTPVlf98Vx1gHWw4LZleaks7Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674217080;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u+/VJGuYhUCQQXXN+d6ccIA04nnHUmUtUbhkDUXZRqw=;
-        b=rScskB1xbeSRFdWOgOlom2v6xIKguv6B2CCswdkubVq6xHJkQz5M3a7O9wMeSIlEjEB4Nw
-        1VneLLX5RhH4HcDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0AA161390C;
-        Fri, 20 Jan 2023 12:18:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kniRAXiGymMIFAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 20 Jan 2023 12:18:00 +0000
-Message-ID: <cb48988f-a08b-72a6-fd61-b699cb47178b@suse.de>
-Date:   Fri, 20 Jan 2023 13:17:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] fbdev: Remove unused struct fb_deferred_io .first_io
- field
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Fri, 20 Jan 2023 07:19:36 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30C238B303
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 04:19:35 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8363C14BF;
+        Fri, 20 Jan 2023 04:20:16 -0800 (PST)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D379E3F71A;
+        Fri, 20 Jan 2023 04:19:33 -0800 (PST)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Jaya Kumar <jayalk@intworks.biz>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-References: <20230120120822.2536032-1-javierm@redhat.com>
- <20230120120822.2536032-2-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230120120822.2536032-2-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------WiBJJqCEHhufjvr78bYXfsH9"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+        ALKML <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Pierre Gondois <pierre.gondois@arm.com>
+Subject: [GIT PULL]  cacheinfo/arch_topology: Updates for v6.3
+Date:   Fri, 20 Jan 2023 12:18:56 +0000
+Message-Id: <20230120121856.1407369-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------WiBJJqCEHhufjvr78bYXfsH9
-Content-Type: multipart/mixed; boundary="------------qnsZINDCEcl9MHDtmleRMUyX";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Maxime Ripard <mripard@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
- Helge Deller <deller@gmx.de>, Jaya Kumar <jayalk@intworks.biz>,
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Message-ID: <cb48988f-a08b-72a6-fd61-b699cb47178b@suse.de>
-Subject: Re: [PATCH 1/3] fbdev: Remove unused struct fb_deferred_io .first_io
- field
-References: <20230120120822.2536032-1-javierm@redhat.com>
- <20230120120822.2536032-2-javierm@redhat.com>
-In-Reply-To: <20230120120822.2536032-2-javierm@redhat.com>
+Hi Greg,
 
---------------qnsZINDCEcl9MHDtmleRMUyX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Please pull !
 
-DQoNCkFtIDIwLjAxLjIzIHVtIDEzOjA4IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGlzIG9wdGlvbmFsIGNhbGxiYWNrIHdhcyBhZGRlZCBpbiB0aGUgY29tbWl0
-IDFmNDVmOWRiYjM5MiAoImZiX2RlZmlvOg0KPiBhZGQgZmlyc3RfaW8gY2FsbGJhY2siKSBi
-dXQgaXQgd2FzIG5ldmVyIHVzZWQgYnkgYSBkcml2ZXIuIExldCdzIHJlbW92ZQ0KPiBpdCBz
-aW5jZSBpdCdzIHVubGlrZWx5IHRoYXQgd2lsbCBiZSB1c2VkIGFmdGVyIGEgZGVjYWRlIHRo
-YXQgd2FzIGFkZGVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENh
-bmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNCkkgdmFndWVseSByZW1lbWJlciB0aGF0
-IHRoaXMgd2FzIGltcG9ydGFudCBhdCBzb21lIHBvaW50LiBNYXliZSBiZWZvcmUgDQp0aGUg
-YmlnIHJld29yayBvZiB0aGUgcGFnZWxpc3Q/IERvbid0IGtub3c7IGl0J3MgdW51c2VkIG5v
-dy4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNl
-LmRlPg0KDQo+IC0tLQ0KPiANCj4gICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJfZGVm
-aW8uYyB8IDQgLS0tLQ0KPiAgIGluY2x1ZGUvbGludXgvZmIuaCAgICAgICAgICAgICAgICAg
-IHwgMSAtDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCA1IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYl9kZWZpby5jIGIvZHJpdmVy
-cy92aWRlby9mYmRldi9jb3JlL2ZiX2RlZmlvLmMNCj4gaW5kZXggYzczMDI1M2FiODVjLi4x
-YjY4MDc0MmI3ZjMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9m
-Yl9kZWZpby5jDQo+ICsrKyBiL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYl9kZWZpby5j
-DQo+IEBAIC0xNTcsMTAgKzE1Nyw2IEBAIHN0YXRpYyB2bV9mYXVsdF90IGZiX2RlZmVycmVk
-X2lvX3RyYWNrX3BhZ2Uoc3RydWN0IGZiX2luZm8gKmluZm8sIHVuc2lnbmVkIGxvbmcNCj4g
-ICAJLyogcHJvdGVjdCBhZ2FpbnN0IHRoZSB3b3JrcXVldWUgY2hhbmdpbmcgdGhlIHBhZ2Ug
-bGlzdCAqLw0KPiAgIAltdXRleF9sb2NrKCZmYmRlZmlvLT5sb2NrKTsNCj4gICANCj4gLQkv
-KiBmaXJzdCB3cml0ZSBpbiB0aGlzIGN5Y2xlLCBub3RpZnkgdGhlIGRyaXZlciAqLw0KPiAt
-CWlmIChmYmRlZmlvLT5maXJzdF9pbyAmJiBsaXN0X2VtcHR5KCZmYmRlZmlvLT5wYWdlcmVm
-bGlzdCkpDQo+IC0JCWZiZGVmaW8tPmZpcnN0X2lvKGluZm8pOw0KPiAtDQo+ICAgCXBhZ2Vy
-ZWYgPSBmYl9kZWZlcnJlZF9pb19wYWdlcmVmX2dldChpbmZvLCBvZmZzZXQsIHBhZ2UpOw0K
-PiAgIAlpZiAoV0FSTl9PTl9PTkNFKCFwYWdlcmVmKSkgew0KPiAgIAkJcmV0ID0gVk1fRkFV
-TFRfT09NOw0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9mYi5oIGIvaW5jbHVkZS9s
-aW51eC9mYi5oDQo+IGluZGV4IDMwMTgzZmQyNTlhZS4uZGFmMzM2Mzg1NjEzIDEwMDY0NA0K
-PiAtLS0gYS9pbmNsdWRlL2xpbnV4L2ZiLmgNCj4gKysrIGIvaW5jbHVkZS9saW51eC9mYi5o
-DQo+IEBAIC0yMTUsNyArMjE1LDYgQEAgc3RydWN0IGZiX2RlZmVycmVkX2lvIHsNCj4gICAJ
-c3RydWN0IG11dGV4IGxvY2s7IC8qIG11dGV4IHRoYXQgcHJvdGVjdHMgdGhlIHBhZ2VyZWYg
-bGlzdCAqLw0KPiAgIAlzdHJ1Y3QgbGlzdF9oZWFkIHBhZ2VyZWZsaXN0OyAvKiBsaXN0IG9m
-IHBhZ2VyZWZzIGZvciB0b3VjaGVkIHBhZ2VzICovDQo+ICAgCS8qIGNhbGxiYWNrICovDQo+
-IC0Jdm9pZCAoKmZpcnN0X2lvKShzdHJ1Y3QgZmJfaW5mbyAqaW5mbyk7DQo+ICAgCXZvaWQg
-KCpkZWZlcnJlZF9pbykoc3RydWN0IGZiX2luZm8gKmluZm8sIHN0cnVjdCBsaXN0X2hlYWQg
-KnBhZ2VsaXN0KTsNCj4gICB9Ow0KPiAgICNlbmRpZg0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
-eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
-b3Rldg0K
+It has been tested on RISC-V which is the main users outside of arm64.
+The ACPI the RISC-V parts are acked-by the respective maintainers. All
+the changes are in the -next for sometime and no issues reported at this
+time.
 
---------------qnsZINDCEcl9MHDtmleRMUyX--
+Regards,
+Sudeep
 
---------------WiBJJqCEHhufjvr78bYXfsH9
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+-->8
 
------BEGIN PGP SIGNATURE-----
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPKhncFAwAAAAAACgkQlh/E3EQov+Aa
-vA//fuhnEoAEcWGWMQnHwx0j4rnc/dnQY1+Nys5OJX8tDMPx3vQGfdvx5CcCCwIshV0nWY4z2add
-xDkOox0VbhgWfrfeqSwQlSxIgsYp/aDJb0aDg59Qo+tMnGoRwK8w7enOqguEB7Szr77OhgR/WA4R
-bumztgrsK0HZag0dKZmwlsC1MD6moregjFjdhcMxjWBeZ2hJZAuASzQh4b7/3ZcVEi6SOAAZldim
-0vKtP+/6qHCM7sgYCHngmBUi22Xph6fJ9jpdIEtbB1E3sqvzNOWtxbJQH36L2ZjkSpWhPgUR6GvT
-IGeoPE8pQ7cQ0XZ4iSh7/0XsPra20/ar+nlFMCLr79iNoqM+48+4jGDHB0wZWEMh2EN+6wqn7/nQ
-n78M2W+aRqO18BSuH713rArVc3UyxgtiZTUiftdrSsGtw9twRrxcDKuJR3t+U43zBQAizCGGGqx/
-GgnFI/54lErdDmNqQ2AId6K8SmOQ/YE2dhugV2SP/BpARQjwZrejqpxXiomkTer+haos8sE5HbVu
-wrAVRnBmFWM0vQSdUNTj84j9PCthoAQUMH5xW2Iz3EXy1wrhkjzkd5/XQfRJWcP6UncCXAs2s+Ae
-L84B7rmoeNlVhr1I4xBpBJMQEqI1qspHQ0DmYWDM9o0IJ2xo2SJWf9ibufFlvsrHqXPLLtFfDSGQ
-zGE=
-=5o0V
------END PGP SIGNATURE-----
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
---------------WiBJJqCEHhufjvr78bYXfsH9--
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/archtopo-cacheinfo-updates-6.3
+
+for you to fetch changes up to 198102c9103fc78d8478495971947af77edb05c1:
+
+  cacheinfo: Fix shared_cpu_map to handle shared caches at different levels (2023-01-18 09:58:40 +0000)
+
+----------------------------------------------------------------
+cacheinfo and arch_topology updates for v6.3
+
+The main change is to build the cache topology information for all
+the CPUs from the primary CPU. Currently the cacheinfo for secondary CPUs
+is created during the early boot on the respective CPU itself. Preemption
+and interrupts are disabled at this stage. On PREEMPT_RT kernels, allocating
+memory and even parsing the PPTT table for ACPI based systems triggers a:
+  'BUG: sleeping function called from invalid context'
+
+To prevent this bug, the cacheinfo is now allocated from the primary CPU
+when preemption and interrupts are enabled and before booting secondary
+CPUs. The cache levels/leaves are computed from DT/ACPI PPTT information
+only, without relying on any architecture specific mechanism if done so
+early.
+
+The other minor change included here is to handle shared caches at
+different levels when not all the CPUs on the system have the same
+cache hierarchy.
+
+----------------------------------------------------------------
+Pierre Gondois (6):
+      cacheinfo: Use RISC-V's init_cache_level() as generic OF implementation
+      cacheinfo: Return error code in init_of_cache_level()
+      cacheinfo: Check 'cache-unified' property to count cache leaves
+      ACPI: PPTT: Remove acpi_find_cache_levels()
+      ACPI: PPTT: Update acpi_find_last_cache_level() to acpi_get_cache_info()
+      arch_topology: Build cacheinfo from primary CPU
+
+Yong-Xuan Wang (1):
+      cacheinfo: Fix shared_cpu_map to handle shared caches at different levels
+
+ arch/arm64/kernel/cacheinfo.c |  11 +--
+ arch/riscv/kernel/cacheinfo.c |  42 -----------
+ drivers/acpi/pptt.c           |  93 ++++++++++++++----------
+ drivers/base/arch_topology.c  |  12 +++-
+ drivers/base/cacheinfo.c      | 161 +++++++++++++++++++++++++++++++++++-------
+ include/linux/cacheinfo.h     |  11 ++-
+ 6 files changed, 213 insertions(+), 117 deletions(-)
