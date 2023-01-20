@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B364675FFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8C675FF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 23:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjATWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 17:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S229992AbjATWMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 17:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjATWM6 (ORCPT
+        with ESMTP id S229926AbjATWMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:12:58 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F40BF5DB;
-        Fri, 20 Jan 2023 14:12:45 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d3so6501702plr.10;
-        Fri, 20 Jan 2023 14:12:45 -0800 (PST)
+        Fri, 20 Jan 2023 17:12:36 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759E436448
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:12:34 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id n85so3099347iod.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 14:12:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/BLx/kBvpw86ToAVtcXNE5Xz+7HViCTk2DMghDTHwhY=;
-        b=C5YnR9WsRnY6mJENGiO5RCQWH8CMb+20BAZpcKt0iX+4NXcCEmWdQRF1BJEwu4U+8E
-         QQEFyoZNwHDu8HvF3N5loRanY5euTKANIG0mA0l/lUt1s9OuhHNhv+QnzPEe340xQ1os
-         vAXeeNAsdwSwVYK22lNhgllwMpPV+7D5AQhDiVGDaYUYke5mOapwfilb9s72L5bQLv8Z
-         YmTJVjeUEgxA2dT0R8w1gFjvdw5PApx8xvyAtahmdfrQ/BpG67A86CmNaUgD69fMkwKc
-         SwyV3LXOVZytWnnN45NWcdyBvkPZ7Q8cLzKsiVoBp1qiNle6H87NANQwEI+a3YeIyqbl
-         61+A==
+        d=digitalocean.com; s=google;
+        h=cc:to:message-id:date:content-transfer-encoding:mime-version
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U1Ao9NXaWgBOUiK+rj9v9X8Q1xZNi+V9uTD46WKKtdw=;
+        b=CP69oNJLnjiVV4tB0rYNSmBoYhq8zTAf5aeWGwBovXoy78p1YHNttTfFLpgUdkZt5y
+         CF6BkjRK5BXmetvzcOipE6ZWALHWD4fDKhxrzQDRZETLKzd8lYiiMlj8HPAiBZDkBq+1
+         Fjdww4iDsWbfzKLRwjC85+Yo6BGDTWL5y5Tv4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:date:content-transfer-encoding:mime-version
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/BLx/kBvpw86ToAVtcXNE5Xz+7HViCTk2DMghDTHwhY=;
-        b=29X0skF1yDRSxjOTsZPN8qxR+W1wc0DklRpnri2WGV4Xws/UwGEPayjiMt4Cye8HKD
-         K53gPvHzo9m+9KD/cZtpN3hO6MO/srUaWnBRlyqHLvRhafs/XIBJj9tXgWEf26OXFIAS
-         IxihedrSTnz1R3fIVH1xU9cQf65B1bLy60Q9vG0IU61AUU5oPGTBfWzEvYAIBikuQpBd
-         Dv3BfG8YNuhWiBBfvMWqHx/bqmIaC7KT2pnR115jxEySZmXJHLbsq3DYHxCOBXM9DGk6
-         BpRsKG0tKtu8cKLpxdGTqsUcfPYakK7joOQM6DrgRchp7zJITHIFLvkIYLcmcUQh+gXN
-         FXcA==
-X-Gm-Message-State: AFqh2kqQ8HDU92U3pHYx3cgdF/swuMcSqUX+JtJonxualPUvxOSepO98
-        LvyZ2VXEeCXTGXVcfn8ih04=
-X-Google-Smtp-Source: AMrXdXuc9iwnf7M8bmW7c4GcJqL6ToFHY3K4xMDpJCVJM4CjPjEFyGGj3Q5UlUCS65jU1P9SVrjVGg==
-X-Received: by 2002:a17:90a:fe0c:b0:227:1b37:50c9 with SMTP id ck12-20020a17090afe0c00b002271b3750c9mr16487534pjb.5.1674252764404;
-        Fri, 20 Jan 2023 14:12:44 -0800 (PST)
-Received: from rishit-OMEN-Laptop-15-en0xxx ([171.76.81.196])
-        by smtp.gmail.com with ESMTPSA id y13-20020a63e24d000000b00478eb777d18sm23237202pgj.72.2023.01.20.14.12.42
+        bh=U1Ao9NXaWgBOUiK+rj9v9X8Q1xZNi+V9uTD46WKKtdw=;
+        b=VPA/fvvKTAcunVVDILBRFF9BQ6q37Gl1rsV+6JQPJDUCwqJTOEEJOxf1oPnDjPr3Jq
+         u9E70WwtLInTpb0HzWKObuOlU8rhAzo3e6Xc9e2A5hw9JP0kIawQh9aDuK7RW/cWm7ja
+         h6JgU1tbStzFX5388zZlU3NBlLdrk2qJEczhAicor4dk7x2CbJZxfOYe78aCZyPhiWT6
+         36AjpTO3Cc2S9xRIOzXvsdtZOwdQ12zrBsqb8PAJhf8vjmyXX58Mn8pyx4kiimqbR+nI
+         qdzEDLXme6vWfT72MZkwXvzv0WpJ3Qx4do5b6ROn+Kr621DoOoky5AZXqMlaCR1ShNzO
+         t8XA==
+X-Gm-Message-State: AFqh2kqEgPHCWLhMjwXEnUxMz5Ws0apNZRMsmV22j4JUbfPMCmApS4Pa
+        P73JHjGvkpPxqnXdKAdjukl/ow==
+X-Google-Smtp-Source: AMrXdXum9CTPzdCUTloBWrH1lZInZCJwTTZUYqpFqr+e9Y/2n3mTCcLg6hp+gsZAesCShxp7/GqsWA==
+X-Received: by 2002:a6b:500a:0:b0:705:5e1e:eb6e with SMTP id e10-20020a6b500a000000b007055e1eeb6emr9205488iob.11.1674252753715;
+        Fri, 20 Jan 2023 14:12:33 -0800 (PST)
+Received: from localhost ([136.37.131.79])
+        by smtp.gmail.com with ESMTPSA id cs8-20020a056638470800b003a7cadffda7sm1519487jab.2.2023.01.20.14.12.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 14:12:43 -0800 (PST)
-From:   Rishit Bansal <rishitbansal0@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rishit Bansal <rishitbansal0@gmail.com>
-Subject: [PATCH v2] platform/x86: hp-wmi: Handle Omen Key event
-Date:   Sat, 21 Jan 2023 03:42:14 +0530
-Message-Id: <20230120221214.24426-1-rishitbansal0@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 20 Jan 2023 14:12:33 -0800 (PST)
+From:   "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>
+X-Google-Original-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Subject: [PATCH 0/2] vhost: improve livepatch switching for heavily loaded vhost worker kthreads
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIAMQRy2MC/w3LOw6AIAwA0KuYzjZBWNTbFGykkVRD/QzGu8v4hveCcRU2mLsXKt9ismvD0HeQMu
+ nKKEszeOeDG7zDO+924lYOtEfOlEVXjDRRIA5jHAnajGSMsZKm3K5epXzfD5ena69qAAAA
+Date:   Fri, 20 Jan 2023 16:12:20 -0600
+Message-Id: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>,
+        netdev@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2416; i=sforshee@kernel.org;
+ h=from:subject:message-id; bh=EZbjAIdznm3Oej+eWIGyRgmoqSdbR0GomfdbWyUvWuE=;
+ b=owEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBjyxHK47dK5XiK+U7PMs1DUY+EH512EmtrWsinE62O
+ st1NWfiJATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxyQUCY8sRygAKCRBTA5mu5fQxySm3B/
+ 9RzhyLuYXteP+GKtAYPSH91mkV9to22qctt0HVI4O7jF/xfnsSaW4H0H02HzXQL4C8vk9TICOgCpWM
+ pXpuuKMmpauwn5I88hvtmnChrAtfuwXV9F/UZOx/bcGLSB0XyBo6ZeZhGFtiBSptCzz8vAjY181OnP
+ DAN50d3RjfNYScU+jrA3MfX9R0/PfKs71zuNpV02R961kdFFUwIS/tPPHJHkElpqV/jm9BLIkCYle/
+ Bwg0bcI2xNiyjrSUqq5rr8jayRwWFBpLFlz3HgMSaIugOyfVtjr2ZTXwNjwmvhBPu7+KsrMWT/MUWO
+ 5AS2iykCZxhYrlFLHs79+KNjXkreR5
+X-Developer-Key: i=sforshee@kernel.org; a=openpgp;
+ fpr=2ABCA7498D83E1D32D51D3B5AB4800A62DB9F73A
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to map the "HP Omen Key" to KEY_PROG2. Laptops in the HP
-Omen Series open the HP Omen Command Center application on windows. But,
-on linux it fails with the following message from the hp-wmi driver:
+We've fairly regularaly seen liveptches which cannot transition within kpatch's
+timeout period due to busy vhost worker kthreads. In looking for a solution the
+only answer I found was to call klp_update_patch_state() from a safe location.
+I tried adding this call to vhost_worker(), and it works, but this creates the
+potential for problems if a livepatch attempted to patch vhost_worker().
+Without a call to klp_update_patch_state() fully loaded vhost kthreads can
+never switch because vhost_worker() will always appear on the stack, but with
+the call these kthreads can switch but will still be running the old version of
+vhost_worker().
 
-[ 5143.415714] hp_wmi: Unknown event_id - 29 - 0x21a5
+To avoid this situation I've added a new function, klp_switch_current(), which
+switches the current task only if its stack does not include any function being
+patched. This allows kthreads to safely attempt switching themselves if a patch
+is pending. There is at least one downside, however. Since there's no way for
+the kthread to track whether it has already tried to switch for a pending patch
+it can end up calling klp_switch_current() repeatedly when it can never be
+safely switched.
 
-Also adds support to map Fn+Esc to KEY_FN_ESC. This currently throws the
-following message on the hp-wmi driver:
+I don't know whether this is the right solution, and I'm happy to try out other
+suggestions. But in my testing these patches proved effective in consistently
+switching heavily loaded vhost kthreads almost immediately.
 
-[ 6082.143785] hp_wmi: Unknown key code - 0x21a7
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>
+To: Miroslav Benes <mbenes@suse.cz>
+To: Petr Mladek <pmladek@suse.com>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+To: Jason Wang <jasowang@redhat.com>
+Cc: live-patching@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: virtualization@lists.linux-foundation.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
 
-There is also a "Win-Lock" key on HP Omen Laptops which supports
-Enabling and Disabling the Windows key, which trigger commands 0x21a4
-and 0x121a4 respectively, but I wasn't able to find any KEY in input.h
-to map this to.
-
-Signed-off-by: Rishit Bansal <rishitbansal0@gmail.com>
 ---
-Changes since v1:
- - Add support for FN+Esc Key
----
- drivers/platform/x86/hp/hp-wmi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Seth Forshee (DigitalOcean) (2):
+      livepatch: add an interface for safely switching kthreads
+      vhost: check for pending livepatches from vhost worker kthreads
 
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 0a99058be813..ab858db551fb 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -91,6 +91,7 @@ enum hp_wmi_event_ids {
- 	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
- 	HPWMI_SANITIZATION_MODE		= 0x17,
- 	HPWMI_SMART_EXPERIENCE_APP	= 0x21,
-+	HPWMI_OMEN_KEY				= 0x1D,
- };
- 
- /*
-@@ -219,6 +220,8 @@ static const struct key_entry hp_wmi_keymap[] = {
- 	{ KE_KEY, 0x21a9,  { KEY_TOUCHPAD_OFF } },
- 	{ KE_KEY, 0x121a9, { KEY_TOUCHPAD_ON } },
- 	{ KE_KEY, 0x231b,  { KEY_HELP } },
-+	{ KE_KEY, 0x21a5,  { KEY_PROG2 }}, /* HP Omen Key */
-+	{ KE_KEY, 0x21a7, { KEY_FN_ESC }},
- 	{ KE_END, 0 }
- };
- 
-@@ -810,6 +813,7 @@ static void hp_wmi_notify(u32 value, void *context)
- 	case HPWMI_SMART_ADAPTER:
- 		break;
- 	case HPWMI_BEZEL_BUTTON:
-+	case HPWMI_OMEN_KEY:
- 		key_code = hp_wmi_read_int(HPWMI_HOTKEY_QUERY);
- 		if (key_code < 0)
- 			break;
+ drivers/vhost/vhost.c         |  4 ++++
+ include/linux/livepatch.h     |  2 ++
+ kernel/livepatch/transition.c | 11 +++++++++++
+ 3 files changed, 17 insertions(+)
+---
+base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+change-id: 20230120-vhost-klp-switching-ba9a3ae38b8a
+
+Best regards,
 -- 
-2.37.2
-
+Seth Forshee (DigitalOcean) <sforshee@kernel.org>
