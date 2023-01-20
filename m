@@ -2,153 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96226674998
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF8967499A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjATCxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S229672AbjATCxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjATCxI (ORCPT
+        with ESMTP id S229708AbjATCxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:53:08 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17D29B132
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 18:53:07 -0800 (PST)
+        Thu, 19 Jan 2023 21:53:17 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E24A8381
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 18:53:13 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id rl14so7347934ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 18:53:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1674183188; x=1705719188;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UmpmDQi7bJR8lLmmf/naNO35e+8Lm9tQqbSe2Rv16PQ=;
-  b=RDVj8rITLGmUIM2uu63zJEFzJ2vqt659ENiyy4mzx5AiWWe5gYI+RpjJ
-   5X52iKdIDPWtJ6niTm5M5Aa+ElFtWgy4xPEySGVAvXEpPllq1eZzWbkXJ
-   hH2F8vcOOS/cKPN7kCdkVt1BrQlcAMD9rX8eKNVOMGDB4gYpdL0Ik20zl
-   k=;
-X-IronPort-AV: E=Sophos;i="5.97,230,1669075200"; 
-   d="scan'208";a="173026157"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-f05d30a1.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 02:53:07 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-f05d30a1.us-east-1.amazon.com (Postfix) with ESMTPS id 53DE281DF1;
-        Fri, 20 Jan 2023 02:53:04 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Fri, 20 Jan 2023 02:53:03 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.162.56) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.7; Fri, 20 Jan 2023 02:53:03 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <surenb@google.com>
-CC:     <ebiggers@kernel.org>, <hannes@cmpxchg.org>, <hdanton@sina.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <mengcc@amazon.com>, <kamatam@amazon.com>, <tj@kernel.org>
-Subject: Re: another use-after-free in ep_remove_wait_queue()
-Date:   Thu, 19 Jan 2023 18:52:53 -0800
-Message-ID: <20230120025253.843079-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230120024613.840905-1-kamatam@amazon.com>
-References: <20230120024613.840905-1-kamatam@amazon.com>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwyZYeNCL1hF3Rz9/fqQMn25Wa4u8woxGDcpYr3p8ic=;
+        b=U+Ttc4HScyps/Mxvk6wFlWGgpDCfOvthtEug9p5XWbYBSB17HngzTsFn+TEHuWHivr
+         SMlTVRoVMEybUzSqek6BNYf/7UYmspLimKWUAnmbe4P9Tkqw+o9hAmBEMqz4JcnnbOb3
+         N+JxQmgXiyKMrvOetCDQpcICHOy6vN6A+g6TyPg5s+y0aYM9+qPSPx64AATRHc43oyg1
+         eUb2O8OgSYpk60iF4+74+IidcmfZhEeMeZw1mICrBR4/IghknFmfUJ4RdZ5br0BzIi7s
+         WZLSxqhYQEbB/YCvpLTm6OKqVkTXpvOfUaeukWVlep4D6bGpgs2jSX1c8CZCvy618gHk
+         0JcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QwyZYeNCL1hF3Rz9/fqQMn25Wa4u8woxGDcpYr3p8ic=;
+        b=XJP9r0x2dTSikUVLXopJiqezBT0n49Nq482jiGV30A6d3++P30w5n2hDM6GBtJh3rZ
+         /rlRgY7d82mnE/6Z/Dyh85MRohHqPmoApvIvyQPRCdxwKpV4Cy80TQpMLeM9xoOTSfua
+         NZZJC5f1q1oOnKTDf/VEVBxiErIuaAZrcK/YgY1snp3YeZraP+iIvUO16qSqxTa6z7X5
+         2u0lWH23SmR1MllpP6nO00q/cVsVVsrwgR+oXKEhXFW5ww4qtVreyFS72DQvKDYKOeZY
+         fSRpQ7mwdyvfpzSb2FqLTmqkIAGhkyhP5nOO1g3yOfE0yoSPtRcD2ZJKjWnwiaxfkDW5
+         tPiA==
+X-Gm-Message-State: AFqh2kr4migNIhYSMlDg601GY2JF/2llGwEUzBnlVabJZxTBFPsoYpCt
+        9GK6+kMtaayD/t50ydj5PtncMS45xREOaeReQ57E3qc9EiA=
+X-Google-Smtp-Source: AMrXdXv56QiMUAIgGHW8YiI95eYqT4IqZREQs4w3kTUeR5JkiTM6DdoK9/lD5z9+l8Yc3AEvtq7NO9fZS2NGC3/X8z0=
+X-Received: by 2002:a17:906:468b:b0:867:887d:67a9 with SMTP id
+ a11-20020a170906468b00b00867887d67a9mr1157209ejr.561.1674183191621; Thu, 19
+ Jan 2023 18:53:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D38UWB001.ant.amazon.com (10.43.161.10) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 20 Jan 2023 12:52:59 +1000
+Message-ID: <CAPM=9tyh=fnWEUfE_Y5mMVwxgHEUCpev6pXyOQsxG+NpeEVQgA@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.2-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-20 02:46:13 +0000, Munehisa Kamata <kamatam@amazon.com> wrote:
->
-> On Fri, 2023-01-20 01:37:11 +0000, Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > On Thu, Jan 19, 2023 at 5:31 PM Hillf Danton <hdanton@sina.com> wrote:
-> > >
-> > > On Thu, 19 Jan 2023 13:01:42 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > Hi Folks,
-> > > > I spent some more time digging into the details and this is what's
-> > > > happening. When we call rmdir to delete the cgroup with the pressure
-> > > > file being epoll'ed, roughly the following call chain happens in the
-> > > > context of the shell process:
-> > > >
-> > > > do_rmdir
-> > > >   cgroup_rmdir
-> > > >     kernfs_drain_open_files
-> > > >       cgroup_file_release
-> > > >         cgroup_pressure_release
-> > > >           psi_trigger_destroy
-> > > >
-> > > > Later on in the context of our reproducer, the last fput() is called
-> > > > causing wait queue removal:
-> > > >
-> > > > fput
-> > > >   ep_eventpoll_release
-> > > >     ep_free
-> > > >       ep_remove_wait_queue
-> > > >         remove_wait_queue
-> > > >
-> > > > By this time psi_trigger_destroy() already destroyed the trigger's
-> > > > waitqueue head and we hit UAF.
-> > > > I think the conceptual problem here (or maybe that's by design?) is
-> > > > that cgroup_file_release() is not really tied to the file's real
-> > > > lifetime (when the last fput() is issued). Otherwise fput() would call
-> > > > eventpoll_release() before f_op->release() and the order would be fine
-> > > > (we would remove the wait queue first in eventpoll_release() and then
-> > > > f_op->release() would cause trigger's destruction).
-> > >
-> > >   eventpoll_release
-> > >     eventpoll_release_file
-> > >       ep_remove
-> > >         ep_unregister_pollwait
-> > >           ep_remove_wait_queue
-> > >
-> > 
-> > Yes but fput() calls eventpoll_release() *before* f_op->release(), so
-> > waitqueue_head would be removed before trigger destruction.
->  
-> But pwq->whead is still pointing the freed head, then we just hit the same
-> issue earlier?
- 
-Ah nevermind, that was just a hypothetical case if cgroup_file_release()
-was tied to file's lifetime and assuming trigger destruction that frees    
-the queue and clears pwq->whead would happen later in f_op->release();     
-there is no such an implementation today.                                  
-                                                                           
-Sorry for noise.
+Hi Linus,
 
-> > > Different roads run into the same Roma city.
-> > 
-> > You butchered the phrase :)
-> > 
-> > >
-> > > > Considering these findings, I think we can use the wake_up_pollfree()
-> > > > without contradicting the comment at
-> > > > https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h#L253
-> > > > because indeed, cgroup_file_release() and therefore
-> > > > psi_trigger_destroy() are not tied to the file's lifetime.
-> > > >
-> > > > I'm CC'ing Tejun to check if this makes sense to him and
-> > > > cgroup_file_release() is working as expected in this case.
-> > > >
-> > > > Munehisha, if Tejun confirms this is all valid, could you please post
-> > > > a patch replacing wake_up_interruptible() with wake_up_pollfree()? We
-> > > > don't need to worry about wake_up_all() because we have a limitation
-> > > > of one trigger per file descriptor:
-> > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L1419,
-> > > > so there can be only one waiter.
-> > > > Thanks,
-> > > > Suren.
-> > >
-> > 
-> > 
-> 
-> 
+Just a pretty regular week for this stage of things, amdgpu and i915,
+along with some msm and misc others.
+
+Dave.
+
+drm-fixes-2023-01-20:
+drm fixes for 6.2-rc5
+
+fb-helper:
+- switcheroo fix
+
+msm:
+- kexec shutdown fix
+- fix potential double free
+
+i915:
+- Reject display plane with height =3D=3D 0
+- re-disable RC6p on Sandy Bridge
+- Fix hugepages' selftest
+- DG2 hw workarounds
+- switcheroo fix
+
+vc4:
+- fix a memory leak
+
+panfrost:
+- Kconfig fix
+
+amdgpu:
+- Fix display scaling
+- Fix RN/CZN power reporting on some firmware versions
+- Colorspace fixes
+- Fix resource freeing in error case in CS IOCTL
+- Fix warning on driver unload
+- GC11 fixes
+- DCN 3.1.4/5 S/G display workarounds
+The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4=
+:
+
+  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-20
+
+for you to fetch changes up to 3f30a6e67ce49c0068f8058893326db46b6db11f:
+
+  Merge tag 'amd-drm-fixes-6.2-2023-01-19' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2023-01-20
+11:21:20 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.2-rc5
+
+fb-helper:
+- switcheroo fix
+
+msm:
+- kexec shutdown fix
+- fix potential double free
+
+i915:
+- Reject display plane with height =3D=3D 0
+- re-disable RC6p on Sandy Bridge
+- Fix hugepages' selftest
+- DG2 hw workarounds
+- switcheroo fix
+
+vc4:
+- fix a memory leak
+
+panfrost:
+- Kconfig fix
+
+amdgpu:
+- Fix display scaling
+- Fix RN/CZN power reporting on some firmware versions
+- Colorspace fixes
+- Fix resource freeing in error case in CS IOCTL
+- Fix warning on driver unload
+- GC11 fixes
+- DCN 3.1.4/5 S/G display workarounds
+
+----------------------------------------------------------------
+Alex Deucher (2):
+      drm/amd/display: disable S/G display on DCN 3.1.5
+      drm/amd/display: disable S/G display on DCN 3.1.4
+
+Arnd Bergmann (1):
+      drm/panfrost: fix GENERIC_ATOMIC64 dependency
+
+Chris Wilson (1):
+      drm/i915/selftests: Unwind hugepages to drop wakeref on error
+
+Christian K=C3=B6nig (2):
+      drm/amdgpu: fix cleaning up reserved VMID on release
+      drm/amdgpu: fix amdgpu_job_free_resources v2
+
+Dave Airlie (4):
+      Merge tag 'drm-msm-fixes-2023-01-16' of
+https://gitlab.freedesktop.org/drm/msm into drm-fixes
+      Merge tag 'drm-intel-fixes-2023-01-19' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'drm-misc-fixes-2023-01-19' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'amd-drm-fixes-6.2-2023-01-19' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+
+Drew Davenport (1):
+      drm/i915/display: Check source height is > 0
+
+Hamza Mahfooz (1):
+      drm/amd/display: fix issues with driver unload
+
+Joel Fernandes (Google) (1):
+      adreno: Shutdown the GPU properly
+
+Joshua Ashton (2):
+      drm/amd/display: Calculate output_color_space after pixel
+encoding adjustment
+      drm/amd/display: Fix COLOR_SPACE_YCBCR2020_TYPE matrix
+
+Lang Yu (2):
+      drm/amdgpu: correct MEC number for gfx11 APUs
+      drm/amdgpu: allow multipipe policy on ASICs with one MEC
+
+Matt Atwood (2):
+      drm/i915/dg2: Introduce Wa_18018764978
+      drm/i915/dg2: Introduce Wa_18019271663
+
+Maxime Ripard (2):
+      drm/vc4: bo: Fix drmm_mutex_init memory hog
+      drm/vc4: bo: Fix unused variable warning
+
+Nirmoy Das (1):
+      drm/i915: Remove unused variable
+
+Rob Clark (1):
+      drm/msm/gpu: Fix potential double-free
+
+Sasa Dragic (1):
+      drm/i915: re-disable RC6p on Sandy Bridge
+
+Thomas Zimmermann (2):
+      drm/i915: Allow switching away via vga-switcheroo if uninitialized
+      drm/fb-helper: Set framebuffer for vga-switcheroo clients
+
+hongao (1):
+      drm/amd/display: Fix set scaling doesn's work
+
+jie1zhan (1):
+      drm/amdgpu: Correct the power calcultion for Renior/Cezanne.
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c                    |  3 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c                    |  1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_job.c                    | 10 ++++++++--
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c                     | 11 +++++++++-=
+-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c          | 14 ++++------=
+----
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c    |  1 -
+ drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c      |  4 ++--
+ drivers/gpu/drm/amd/pm/swsmu/smu12/renoir_ppt.c            |  7 ++++++-
+ drivers/gpu/drm/drm_fb_helper.c                            |  7 +++++++
+ drivers/gpu/drm/i915/display/skl_universal_plane.c         |  2 +-
+ drivers/gpu/drm/i915/gem/selftests/huge_pages.c            |  8 ++++----
+ drivers/gpu/drm/i915/gt/intel_gt_regs.h                    | 10 +++++++---
+ drivers/gpu/drm/i915/gt/intel_workarounds.c                | 10 +++++++++-
+ drivers/gpu/drm/i915/i915_driver.c                         |  5 +----
+ drivers/gpu/drm/i915/i915_pci.c                            |  3 ++-
+ drivers/gpu/drm/i915/i915_switcheroo.c                     |  6 +++++-
+ drivers/gpu/drm/msm/adreno/adreno_device.c                 |  5 +++--
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c                    |  4 ++++
+ drivers/gpu/drm/msm/msm_gpu.c                              |  2 ++
+ drivers/gpu/drm/msm/msm_gpu.h                              | 12 ++++++++++=
+--
+ drivers/gpu/drm/panfrost/Kconfig                           |  3 ++-
+ drivers/gpu/drm/vc4/vc4_bo.c                               |  6 ++----
+ 22 files changed, 92 insertions(+), 42 deletions(-)
