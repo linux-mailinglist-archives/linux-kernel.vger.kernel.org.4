@@ -2,221 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D246752C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366D86752C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjATKuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S229794AbjATKu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjATKuA (ORCPT
+        with ESMTP id S229574AbjATKu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:50:00 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F9DB46C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1674211799; x=1705747799;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yDfXRh62CXOhxwkokMUICkJH6hx8gFfOCEE7kFzoojM=;
-  b=OgMd2ZR5iVoFR1ipqAz9A6+DlzQu03Du/apZcGYvGZudahNsiF76ZxvK
-   +R5K48YKAjSl6d2GC/n94ChIPakb6QcyGeBaIJtMSgiqQLOodwIDgQOmx
-   RJrPDI1AijW8aiaRt1z2TMMHBvXeLUww7w6i+UHCIT7y6AwNcyG1GnQbB
-   LLLyW9Jf0UhQg6Yj3MCs55VA6O0+og/4ML96AzQH3kIx0cv15nFYrsnpX
-   HDgcxumQaEGCGGGPQDhKKownhS6p3M2X6Y5gNPPWVodbVEop5eAbUpiuq
-   ZM5pk8p0GjbSpxr+U7dat5BgnSh8lTFX9gWsykPTPMdRqy7czD+LT1aKL
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669046400"; 
-   d="scan'208";a="219701725"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Jan 2023 18:49:57 +0800
-IronPort-SDR: GawBP7ujqcIdgVswA9iFeO3Q17e6slMkMVSTmLNIqMsVN+tLHjaKsK3AlD+tmqQkSBorbkypLe
- Rv1IcTxfVy0q98cN3mif7WaKZaRjGPyhSJhTX73YHdWpiMQVvkfD2cs/Zs712MLHe5zC9TaxVh
- +idvXQM2/WIO4NQyLYo5Jh6HPMTaE++9xUJ0d5RQ36D2IbH46vKdPLWaBVHH4GLzwO4cnmcRbr
- VVZYf/0CWMq6lx7G7QR4UdQl5x9mfFfkmBZWQ2n4mxLNR4LhKJ93Lx9PKIaPEFuSixotShkCnv
- DSs=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jan 2023 02:01:50 -0800
-IronPort-SDR: IpUml5K9cJhCcMDJi6WTAYl21Q2GZjZNyoDde4RYlyGIktaGCOZC33hxzJo3lLepy21XaziT2G
- OeGNXH3HYZm/V1pKOmc+5LwMsFq8TVJtYuZzUJf4YlyaAnhTBvwLzzakRG0vd8bNok/QQxmOQy
- YaLoRkxjYlvB2/apE+H+WgpSl6KTfqkqSWjyHd/uOXDHCHjVMTQ/1n7eE0vb4gtXa3Ew9QcX1X
- py9qfuOLONicHrJ1R8ihE3bzG+Y4Y6SJLym6K6cnH7LmqlyYyfNEX26NK7IScpRrUrREpisVKd
- uKo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jan 2023 02:49:58 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Nyx8j1zY7z1Rwrq
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 02:49:57 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1674211795; x=1676803796; bh=yDfXRh62CXOhxwkokMUICkJH6hx8gFfOCEE
-        7kFzoojM=; b=IKIlu8sKhW69D9kmzWqNRa5wDX/WdgQiojQQf/8grzSmBWVsoK1
-        5III3ooowvXfG04nsLri3yaRhGHrDvgq4ZoxNZKR4KNFdPaLZZb4Oa9EbfVrNDIO
-        CqQ6+MFx4cyY5E3H0YpdPcvzvndxVSxJFgy4P5nDoU66e/ShAlBZLzaWpyKlhRpl
-        rOQlD8GIYj9b3HI+mLR6qpbv8zMoYPheOxSWdCKlvVoWrKERIoI2ibqqNxm96Dqf
-        IPxZ1NbREKyaTJQ4K5TK/AN0wytLoRVuIUiKg+x/Kx+s8WxlDFoUWMvGuyVIZz72
-        5wh9dvs6nAFwb0pLdLQHKQULZPRK2CZXR8g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id pNW7I31QbnRG for <linux-kernel@vger.kernel.org>;
-        Fri, 20 Jan 2023 02:49:55 -0800 (PST)
-Received: from [10.225.163.44] (unknown [10.225.163.44])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Nyx8d0FFgz1RvLy;
-        Fri, 20 Jan 2023 02:49:52 -0800 (PST)
-Message-ID: <a324b292-8e3f-686e-ee6f-846fd7678192@opensource.wdc.com>
-Date:   Fri, 20 Jan 2023 19:49:51 +0900
+        Fri, 20 Jan 2023 05:50:28 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C6B775;
+        Fri, 20 Jan 2023 02:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674211827; x=1705747827;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HVxjOlrNxTX4w4hEmxDKY12/recHY5kWHUzbvS7si4c=;
+  b=wfMMvOzJXucKqcH0vviLsZE6ylZZfsydaHfu1zT8Gg2bixdw6jTWBwKo
+   t+zEfxqi63UakcvR1dtgn8FLHkvFBp0+U2jqIcw2VZBiriIsx4SnGzPZH
+   kFG+eqz4bglDa8zUiRJUP1R5ER7XkYDz/2ugRZfK5tGQcsGrumjZnmPO5
+   UuJe5AOdxu440HV5JVI+9cTChgrh4uFhHe+8AhQ/w+uhReB920QzX+S2U
+   Slsk7RaEI6/FimLgQhlWh3Jj/ZOzZfGVHDKo6lJjKH8EBLWGPBxORH6rI
+   sKXKJoVYV4t6zHI7rZWnwHjtLwi8eAC90ODhSHjIfWkHmlt1FxOR/kIGW
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669100400"; 
+   d="asc'?scan'208";a="196679949"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 03:50:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 20 Jan 2023 03:50:25 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Fri, 20 Jan 2023 03:50:24 -0700
+Date:   Fri, 20 Jan 2023 10:50:01 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     shravan kumar <shravan.chippa@microchip.com>
+CC:     <green.wan@sifive.com>, <vkoul@kernel.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <dmaengine@vger.kernel.org>
+Subject: Re: [PATCH v1] dmaengine: sf-pdma: pdma_desc memory leak fix
+Message-ID: <Y8px2Qky3GZ5wazl@wendy>
+References: <20230120100623.3530634-1-shravan.chippa@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall User
- Dispatch Suspension
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Gregory Price <gourry.memverge@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        oleg@redhat.com, ebiederm@xmission.com, akpm@linux-foundation.org,
-        adobriyan@gmail.com, corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-References: <20230118201055.147228-1-gregory.price@memverge.com>
- <20230118201055.147228-2-gregory.price@memverge.com>
- <Y8prnDT0YUhEzI8+@hirez.programming.kicks-ass.net>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <Y8prnDT0YUhEzI8+@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OF1t+SvYHzumvf3V"
+Content-Disposition: inline
+In-Reply-To: <20230120100623.3530634-1-shravan.chippa@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 19:23, Peter Zijlstra wrote:
-> On Wed, Jan 18, 2023 at 03:10:53PM -0500, Gregory Price wrote:
->> Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
->> modify Syscall User Dispatch to suspend interception when enabled.
->>
->> This is modeled after the SUSPEND_SECCOMP feature, which suspends
->> SECCOMP interposition.  Without doing this, software like CRIU will
->> inject system calls into a process and be intercepted by Syscall
->> User Dispatch, either causing a crash (due to blocked signals) or
->> the delivery of those signals to a ptracer (not the intended behavior).
->>
->> Since Syscall User Dispatch is not a privileged feature, a check
->> for permissions is not required, however attempting to set this
->> option when CONFIG_CHECKPOINT_RESTORE it not supported should be
->> disallowed, as its intended use is checkpoint/resume.
->>
->> Signed-off-by: Gregory Price <gregory.price@memverge.com>
-> 
-> One small nit -- see below, otherwise:
-> 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> 
->> ---
->>  include/linux/ptrace.h               | 2 ++
->>  include/uapi/linux/ptrace.h          | 6 +++++-
->>  kernel/entry/syscall_user_dispatch.c | 5 +++++
->>  kernel/ptrace.c                      | 5 +++++
->>  4 files changed, 17 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
->> index eaaef3ffec22..461ae5c99d57 100644
->> --- a/include/linux/ptrace.h
->> +++ b/include/linux/ptrace.h
->> @@ -45,6 +45,8 @@ extern int ptrace_access_vm(struct task_struct *tsk, unsigned long addr,
->>  
->>  #define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
->>  #define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
->> +#define PT_SUSPEND_SYSCALL_USER_DISPATCH \
->> +	(PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH << PT_OPT_FLAG_SHIFT)
->>  
->>  extern long arch_ptrace(struct task_struct *child, long request,
->>  			unsigned long addr, unsigned long data);
->> diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
->> index 195ae64a8c87..ba9e3f19a22c 100644
->> --- a/include/uapi/linux/ptrace.h
->> +++ b/include/uapi/linux/ptrace.h
->> @@ -146,9 +146,13 @@ struct ptrace_rseq_configuration {
->>  /* eventless options */
->>  #define PTRACE_O_EXITKILL		(1 << 20)
->>  #define PTRACE_O_SUSPEND_SECCOMP	(1 << 21)
->> +#define PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH	(1 << 22)
->>  
->>  #define PTRACE_O_MASK		(\
->> -	0x000000ff | PTRACE_O_EXITKILL | PTRACE_O_SUSPEND_SECCOMP)
->> +	0x000000ff | \
->> +	PTRACE_O_EXITKILL | \
->> +	PTRACE_O_SUSPEND_SECCOMP | \
->> +	PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)
->>  
->>  #include <asm/ptrace.h>
->>  
->> diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
->> index 0b6379adff6b..7607f4598dd8 100644
->> --- a/kernel/entry/syscall_user_dispatch.c
->> +++ b/kernel/entry/syscall_user_dispatch.c
->> @@ -8,6 +8,7 @@
->>  #include <linux/uaccess.h>
->>  #include <linux/signal.h>
->>  #include <linux/elf.h>
->> +#include <linux/ptrace.h>
->>  
->>  #include <linux/sched/signal.h>
->>  #include <linux/sched/task_stack.h>
->> @@ -36,6 +37,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
->>  	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
->>  	char state;
->>  
->> +	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
->> +		unlikely(current->ptrace & PT_SUSPEND_SYSCALL_USER_DISPATCH))
-> 
-> Align with the '(' pleaase.
-> 
->> +		return false;
->> +
->>  	if (likely(instruction_pointer(regs) - sd->offset < sd->len))
->>  		return false;
->>  
->> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
->> index 54482193e1ed..a6ad815bd4be 100644
->> --- a/kernel/ptrace.c
->> +++ b/kernel/ptrace.c
->> @@ -370,6 +370,11 @@ static int check_ptrace_options(unsigned long data)
->>  	if (data & ~(unsigned long)PTRACE_O_MASK)
->>  		return -EINVAL;
->>  
->> +	if (unlikely(data & PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)) {
->> +		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTART))
+--OF1t+SvYHzumvf3V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Why not one if with a && ?
+Hey Shravan,
 
->> +			return -EINVAL;
->> +	}
->> +
->>  	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
->>  		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
->>  		    !IS_ENABLED(CONFIG_SECCOMP))
->> -- 
->> 2.39.0
->>
+On Fri, Jan 20, 2023 at 03:36:23PM +0530, shravan kumar wrote:
+> From: Shravan Chippa <shravan.chippa@microchip.com>
+>=20
+> Commit b2cc5c465c2c ("dmaengine: sf-pdma: Add multithread support for a
+> DMA channel") changed sf_pdma_prep_dma_memcpy() to unconditionally
+> allocate a new sf_pdma_desc each time it is called.
+>=20
+> The driver previously recycled descs, by checking the in_use flag, only
+> allocating additional descs if the existing one was in use. This logic
+> was removed in commit b2cc5c465c2c ("dmaengine: sf-pdma: Add multithread
+> support for a DMA channel"), but sf_pdma_free_desc() was not changed to
+> handle the new behaviour.
+>=20
+> As a result, each time sf_pdma_prep_dma_memcpy() is called, the previous
+> descriptor is leaked, over time leading to memory starvation:
+>=20
+>   unreferenced object 0xffffffe008447300 (size 192):
+>   comm "irq/39-mchp_dsc", pid 343, jiffies 4294906910 (age 981.200s)
+>   hex dump (first 32 bytes):
+>     00 00 00 ff 00 00 00 00 b8 c1 00 00 00 00 00 00  ................
+>     00 00 70 08 10 00 00 00 00 00 00 c0 00 00 00 00  ..p.............
+>   backtrace:
+>     [<00000000064a04f4>] kmemleak_alloc+0x1e/0x28
+>     [<00000000018927a7>] kmem_cache_alloc+0x11e/0x178
+>     [<000000002aea8d16>] sf_pdma_prep_dma_memcpy+0x40/0x112
+>=20
+> Add the missing kfree() to sf_pdma_free_desc(), and remove the redundant
+> in_use flag.
+>=20
+> Fixes: b2cc5c465c2c ("dmaengine: sf-pdma: Add multithread support for a D=
+MA channel")
+> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
 
--- 
-Damien Le Moal
-Western Digital Research
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
+
+
+--OF1t+SvYHzumvf3V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8pxygAKCRB4tDGHoIJi
+0qXaAQDZziGG9P3c05/6Z1kseB+iYCmBwoVXkIs3fvUu4pMVbAEAuy3QU4BuPBtT
+yRzTBRue4wpLPBr8+CnJMHfbDl0n4wM=
+=S7BN
+-----END PGP SIGNATURE-----
+
+--OF1t+SvYHzumvf3V--
