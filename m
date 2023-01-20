@@ -2,119 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6564675BB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245C5675BB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjATRhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S229904AbjATRiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjATRhe (ORCPT
+        with ESMTP id S229523AbjATRiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:37:34 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2586FD22
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:37:32 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso4250073wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:37:32 -0800 (PST)
+        Fri, 20 Jan 2023 12:38:16 -0500
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BBC5FDD;
+        Fri, 20 Jan 2023 09:38:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SLhm7/7TseEHDfOfttc2V5ZV0VgqyhPbXgwM+DaFJ5Y=;
-        b=svrAMkrGeg8zT3qMBUc2PhbH588n3RDzEdlVohuPV2YfPjLxXbuxlJ48iMLmnDrSRe
-         +Njsx+V++rWSsONZOglQjrrOCjk4LPV7JhJnhrlGEPx8Etd4rFUYqMuvt5DFlOPO+X11
-         97z+SB1pa8jPyH3kH89RgaNp8tmDfXSREyUcYy9b9VcaCcz/mmDO+M42vIh909mXTzkH
-         xJjMv1QjFLLYd76D6D2z/tXfcZ+8WyTLWly+JeB4jUKAghWGFVNu1/lqvQAlqiAfaIpJ
-         oziN0j3+iHxFQ2YbJR8KDohwP4ZIrOh+7TatknRT1EyP6ZaoWQxLNCypFJiyPCaPdsma
-         5VaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SLhm7/7TseEHDfOfttc2V5ZV0VgqyhPbXgwM+DaFJ5Y=;
-        b=62yS6yDo3OYtAf9q6sLuyD23VOBirbwfrz1us4q7I6qvTdb4p2dWOMLylRqO5Y2kfY
-         NldENlUUKnmXUDAY5RNBFlv3D8N5y7kMBfl8sr8uU6ODKrSZeCSPZdg+gYTCzRJv2bnn
-         lB2GP2yw1QcxoitImrgz7WPoEnqSSXoIl1IBJp/xvbZGdUVKhsmAzD2HdXZ1tBAwwIID
-         nLmSGrUTCMFH1Tys++mRk5Omgu32KuPoxDxXBoU2MnMS0dkIsm2xHJcPotmvLHFidfpq
-         f6fUZFDiAYqBmwgO/kikiJwyoegrDes8bFLbmCdQKlDWGvaMhBbeCwnOzM5Fs8lKj46k
-         M0aA==
-X-Gm-Message-State: AFqh2kqq0lH4cmoKc4lBzvGoNmC+Z0Q8ZoL5CWF9qkPohaGDuqnl7WAn
-        RUr0Wx3OiIfKZq8tg+uJxfLiNg==
-X-Google-Smtp-Source: AMrXdXtLwTrvhfFWX7gv20qxmyVqizkawsPeG5oWnNh3fi0K5uxsTk6CRk4yUMFSb6jnp9mMRvx+lQ==
-X-Received: by 2002:a05:600c:a690:b0:3d5:64bf:ccb8 with SMTP id ip16-20020a05600ca69000b003d564bfccb8mr14801898wmb.12.1674236251402;
-        Fri, 20 Jan 2023 09:37:31 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id o28-20020a05600c511c00b003dab40f9eafsm3256738wms.35.2023.01.20.09.37.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 09:37:30 -0800 (PST)
-Message-ID: <e9a83c52-67df-e448-2005-32fd735eceb1@linaro.org>
-Date:   Fri, 20 Jan 2023 17:37:29 +0000
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1674236296; x=1705772296;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=VjofiAXhO5C80JdyAXswdYDTLZEOnLHRkk1uSsByVus=;
+  b=ND3GaapqjA4uSB6dtlYJfJmFmceYssSqm5jcJHXZt1eH71iv2vi/xPpM
+   RO8D855D5JnSBMMnSQSvS0CoI1pxz7HLpL6gvYw4zvoAaasKJ98hH2X0u
+   LF9jzec5lGLBpXDfbMKFKrshW5ef2JKNBXgPcTQZPE3tBVUQ5m7QPbMlJ
+   M=;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669075200"; 
+   d="scan'208";a="302491059"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 17:38:10 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com (Postfix) with ESMTPS id 473B7E5D3C;
+        Fri, 20 Jan 2023 17:38:06 +0000 (UTC)
+Received: from EX19D001UEB002.ant.amazon.com (10.252.135.17) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Fri, 20 Jan 2023 17:38:06 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D001UEB002.ant.amazon.com (10.252.135.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
+ Fri, 20 Jan 2023 17:38:06 +0000
+Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
+ by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP Server id
+ 15.0.1497.45 via Frontend Transport; Fri, 20 Jan 2023 17:38:06 +0000
+Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
+        id 2B9BB20D16; Fri, 20 Jan 2023 18:38:05 +0100 (CET)
+From:   Pratyush Yadav <ptyadav@amazon.de>
+To:     Rob Herring <robh@kernel.org>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: mtd: partitions: Fix partition node name
+ pattern
+References: <20230120020454.3225796-1-robh@kernel.org>
+Date:   Fri, 20 Jan 2023 18:38:05 +0100
+In-Reply-To: <20230120020454.3225796-1-robh@kernel.org> (Rob Herring's message
+        of "Thu, 19 Jan 2023 20:04:53 -0600")
+Message-ID: <mafs03585cdj6.fsf@amazon.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V2] nvmem: core: fix nvmem_layout_get_match_data()
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230110204345.7266-1-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230110204345.7266-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19 2023, Rob Herring wrote:
+
+> The 'partition' node name pattern is missing start and end anchors, so
+> anything is allowed before or after the regex pattern. There's no in tree
+> users needing that, so add anchors to the pattern.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Pratyush Yadav <ptyadav@amazon.de>
+
+-- 
+Regards,
+Pratyush Yadav
 
 
-On 10/01/2023 20:43, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> This function was trying to match wrong OF node (parent device's)
-> against an of_match_table. It was always returning NULL.
-> 
-> Make it match layout's OF node against layout's of_match_table.
-> 
-> Note: __maybe_unused is needed to avoid:
-> warning: variable 'layout_np' set but not used [-Wunused-but-set-variable]
-> (of_match_node() is no-op without CONFIG_OF).
-> 
-> Fixes: f5709a684a0a ("nvmem: core: introduce NVMEM layouts")
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> Reviewed-by: Michael Walle <michael@walle.cc>
 
-Applied thanks,
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
 
---srini
-> ---
->   drivers/nvmem/core.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index d112bb1328c1..d3be50ed2d0b 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -824,9 +824,11 @@ EXPORT_SYMBOL_GPL(of_nvmem_layout_get_container);
->   const void *nvmem_layout_get_match_data(struct nvmem_device *nvmem,
->   					struct nvmem_layout *layout)
->   {
-> +	struct device_node __maybe_unused *layout_np;
->   	const struct of_device_id *match;
->   
-> -	match = of_match_node(layout->of_match_table, nvmem->dev.of_node);
-> +	layout_np = of_nvmem_layout_get_container(nvmem);
-> +	match = of_match_node(layout->of_match_table, layout_np);
->   
->   	return match ? match->data : NULL;
->   }
+
+
