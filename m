@@ -2,132 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F14C674D74
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5FA674D78
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 07:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjATGl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 01:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S229864AbjATGmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 01:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjATGlY (ORCPT
+        with ESMTP id S229475AbjATGmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:41:24 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386C3442D8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:41:22 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h16so3914225wrz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 22:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=slGPI6crOMYVC8sg2UdbToHUlfJe2Yt2u0BePxW+DE8=;
-        b=syu8BvlihPitmOdzTlCvAKZdU0CYUPdiFZAMMB324wLdZi6aBGYiVdeFs0mVcpo5rL
-         L3mtJQa3rFwuMK3Iu1x58Mgpb0AuR8ATuRu+AwSMRNFqMmlElKbaBaohxDf7Y+Ypk3SA
-         7birmWEI2+Atf+CuDiCl+P9U8xLS4glBIg1yfgmytNVN2bCzA5u7zGI31eI1rU2fqj84
-         E7qOIkcVnkqvgrVCAkQ1sdSKW5RW1MHETFpxOC0U2C3tGpSX3ih5uLiWT29s9WBXn+Jf
-         /MQ5cGEbvgFXOswsuFR3v0oFZw9K8VtgV7f6DKyWltLjOHZfrglD8EP8RHSFlz/cDp8Z
-         6AKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=slGPI6crOMYVC8sg2UdbToHUlfJe2Yt2u0BePxW+DE8=;
-        b=clrj5HoJvi1JRt9OnfIskXv7dRikj1ahMl7TA2W5HrXT2uAond+SHYynxEbvNprARH
-         ZE2Z6JznAbTJHRfQXHClj+Szq72uV+1SLk9qCHbi+lSjLKkB4ecZYGoqPsgYRZq1uaCk
-         CBiP5NY9/TI1/1cLK1HeSVIebCXFe0JVIAtrLBh3Fjlec8Zpb2V9PHycB9AO7bWCGdnh
-         mJE5jqn21Cn9vSyuZx2oAKfH2/HCgaOzocYBYxkQL2orIZPQqqYS0eiAXaM2Wpt8LOLi
-         naZklAChtTcPiI/5eZG+BOmH3d0KLk2F/CF48QadAw3J8Pu59EblWExGpL5sD/w8syYd
-         F5+w==
-X-Gm-Message-State: AFqh2kqMXKQcH9wumfw1F7HoYvN558evBbi3kN3MOiteeJIus+0OAi3D
-        Nwp+KX7bGQErAfxrikUe315cdQ==
-X-Google-Smtp-Source: AMrXdXsEQJpb4J+80as5QAfc8VdtlHuSYRcxkbLulhlLE4kmrEIl6O1WXICsnLmy9n/UBpwLCIu6Jg==
-X-Received: by 2002:a5d:6b0e:0:b0:2be:d03:287 with SMTP id v14-20020a5d6b0e000000b002be0d030287mr11554212wrw.44.1674196880688;
-        Thu, 19 Jan 2023 22:41:20 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v14-20020adff68e000000b002365730eae8sm35429959wrp.55.2023.01.19.22.41.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 22:41:20 -0800 (PST)
-Message-ID: <e8b6034e-f163-6f6b-2f02-f2eda808950f@linaro.org>
-Date:   Fri, 20 Jan 2023 07:41:18 +0100
+        Fri, 20 Jan 2023 01:42:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C5442D8;
+        Thu, 19 Jan 2023 22:42:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1E7C61E33;
+        Fri, 20 Jan 2023 06:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA584C433D2;
+        Fri, 20 Jan 2023 06:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674196938;
+        bh=wwJVcJQUv8XiC8YzqdgOk3HZ74a4rucKStR7XI3+h44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yl/sFBrH/7b0jehlOlZsG1/AQDxQoNoOJJpgscX+CjP9CpwCGPkeCmRiKw9b3iK11
+         Wp/YzIIdhI8qEPJd4Eyvc2ttlukHAABbJ4PMqxCb73GqeIFdsHW/o5Rq20OD70IEhN
+         X/vYfqypuazJ5tv5Z5VwZfkkJ00qKIb8Mcr65CLGSl01I5iDhK1+PNvJlRHlN/oZTH
+         lSoqjA5YKvCokrLKiAXquwcj/srOEQ75cunKxXsRd/qX0tdyssWrJKfCqV9my9cKT9
+         gtqB+jR/V5fr7gcAWLR5k1gZO3YFP2mWWxf9zQqKaVuUAFhunJE3exOagi2bcgMkY7
+         93E9iSGiSeSpA==
+Date:   Thu, 19 Jan 2023 22:42:15 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, joe.lawrence@redhat.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <20230120064215.cdyfbjlas5noxam6@treble>
+References: <20230118204728.1876249-1-song@kernel.org>
+ <20230118220812.dvztwhlmliypefha@treble>
+ <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 2/2] dt-bindings: opp: constrain required-opps
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
- <20230119130028.106817-2-krzysztof.kozlowski@linaro.org>
- <20230120043834.txkg4tockxcjqs2g@vireshk-i7>
- <9adec806-5529-f98a-949a-630edf3e1d0a@linaro.org>
-In-Reply-To: <9adec806-5529-f98a-949a-630edf3e1d0a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 07:27, Krzysztof Kozlowski wrote:
-> On 20/01/2023 05:38, Viresh Kumar wrote:
->> On 19-01-23, 14:00, Krzysztof Kozlowski wrote:
->>> Be specific how many required-opps are allowed.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>>
->>> This change is independent, although logically is connected with my
->>> dtschema pull:
->>> https://github.com/devicetree-org/dt-schema/pull/95
->>> ---
->>>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml     | 1 +
->>>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 3 ++-
->>>  2 files changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->>> index 47e6f36b7637..9b141a409191 100644
->>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->>> @@ -202,6 +202,7 @@ patternProperties:
->>>            for the functioning of the current device at the current OPP (where
->>>            this property is present).
->>>          $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +        maxItems: 1
->>
->> I may not under this property very well. What exactly does this line
->> say ? Asking as required-properties can have an array of phandles as
->> well.
->>
+On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
+> On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> >
+> > On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
+> > > From: Miroslav Benes <mbenes@suse.cz>
+> > >
+> > > Josh reported a bug:
+> > >
+> > >   When the object to be patched is a module, and that module is
+> > >   rmmod'ed and reloaded, it fails to load with:
+> > >
+> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > >
+> > >   The livepatch module has a relocation which references a symbol
+> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> > >   tries to replace the old relocation with a new one, it sees that
+> > >   the previous one is nonzero and it errors out.
+> > >
+> > >   On ppc64le, we have a similar issue:
+> > >
+> > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> >
+> > Shouldn't there also be a fix for this powerpc issue?
 > 
-> It says we can have maximum one item in "required-opps" in "opp" node
-> and you are right that we could have here more. I'll fix it.
+> There was a working version, but it was not very clean. We couldn't agree
+> on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
+> s390?) first [1].
 
-OK, this patch can be actually dropped. The dtschema will bring
-constraints of 1-8 number of items here, which should cover all cases
-for both opps - v2 and v2-kryo-cpu.
+Sorry for coming in late, I was on leave so I missed a lot of the
+discussions on previous versions.  The decision to leave powerpc broken
+wasn't clear from reading the commit message.  The bug is mentioned, and
+the fix is implied, but surprisingly there's no fix.
 
-Best regards,
-Krzysztof
+I agree that the powerpc fix should be in a separate patch, but I still
+don't feel comfortable merging the x86 fix without the corresponding
+powerpc fix.
 
+powerpc is a major arch and not a second-class citizen.  If we don't fix
+it now then it'll probably never get fixed until it blows up in the real
+world.
+
+For powerpc, instead of clearing, how about just "fixing" the warning
+site, something like so (untested)?
+
+
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index 1096d6b3a62c..1a12463ba674 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+ 
+ /* We expect a noop next: if it is, replace it with instruction to
+    restore r2. */
+-static int restore_r2(const char *name, u32 *instruction, struct module *me)
++static int restore_r2(const char *name, u32 *instruction, struct module *me,
++		      bool klp_sym)
+ {
+ 	u32 *prev_insn = instruction - 1;
++	u32 insn_val = *instruction;
+ 
+ 	if (is_mprofile_ftrace_call(name))
+ 		return 1;
+@@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+ 	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
+ 		return 1;
+ 
+-	if (*instruction != PPC_RAW_NOP()) {
++	/*
++	 * For a livepatch relocation, the restore r2 instruction might have
++	 * been previously written if the relocation references a symbol in a
++	 * module which was unloaded and is now being reloaded.  In that case,
++	 * skip the warning and instruction write.
++	 */
++	if (klp_sym && insn_val == PPC_INST_LD_TOC)
++		return 0;
++
++	if (insn_val != PPC_RAW_NOP()) {
+ 		pr_err("%s: Expected nop after call, got %08x at %pS\n",
+-			me->name, *instruction, instruction);
++			me->name, insn_val, instruction);
+ 		return 0;
+ 	}
+ 
+@@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 				if (!value)
+ 					return -ENOENT;
+ 				if (!restore_r2(strtab + sym->st_name,
+-							(u32 *)location + 1, me))
++						(u32 *)location + 1, me,
++						sym->st_shndx == SHN_LIVEPATCH))
+ 					return -ENOEXEC;
+ 			} else
+ 				value += local_entry_offset(sym);
