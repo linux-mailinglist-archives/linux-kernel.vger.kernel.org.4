@@ -2,291 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC0C675B37
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A9F675B3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjATRYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S229617AbjATRYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjATRYj (ORCPT
+        with ESMTP id S230140AbjATRYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:24:39 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD4ABAF1A;
-        Fri, 20 Jan 2023 09:24:19 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pIv7h-00055Z-0E;
-        Fri, 20 Jan 2023 18:24:17 +0100
-Date:   Fri, 20 Jan 2023 17:24:10 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>
-Subject: [PATCH v3 2/3] dt-bindings: clock: mediatek: add mt7981 clock IDs
-Message-ID: <367c21c111458abf35170b37d51d023a04a04510.1674233728.git.daniel@makrotopia.org>
-References: <cover.1674233728.git.daniel@makrotopia.org>
+        Fri, 20 Jan 2023 12:24:45 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FBDC4EAA;
+        Fri, 20 Jan 2023 09:24:24 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id z20so3933356plc.2;
+        Fri, 20 Jan 2023 09:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lXHFUqYMA81z5/4QWzsBDmmfnfiAGwft9ib/dJiqERE=;
+        b=Q6KlvDHcgN8LTA6RPXCIlBvXcsrxe8XHEyB7D4zJb1fuySw35C3PC+7cC07gL2DDpE
+         ztum/4dfo2nFbVBbhcIUGGDKWpHv+8Y6tEPrKp56E1jOC1z5yFA+3n1lXxvp+I5R7OIF
+         m93LLV4A38DJglYnRYeCYG2J3b0xV+I2S4tW7/oLyaWrmqZRttuEkmQjr5EnaCEEY9iH
+         B9BOAqxsUy47OUOdZ9F9ts61W0WLCstD3a67/bi8ScuH5/1JDS+ilKGCBkoivSpQPQlu
+         OyfqB8DG+fBqg6CpeLG7PaOPJf/W/wfVlNWSK/cvYv/tIqEPMn6FsA73HVcWHpoveeVp
+         jFqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lXHFUqYMA81z5/4QWzsBDmmfnfiAGwft9ib/dJiqERE=;
+        b=0X1f2eTFB0BbD9/1o2pDpZLhOdpfSGMnj/BPIgPasri21E1yNe9Z7dCT/dnrQKBIkN
+         7f+fKfn1mMYjeJhKE1YwJ/5L6v18PbP6AAhqRvfGttbX1+i7JZMpcvniUbKiEDphSgCt
+         Z5sWWRYW4IIYc8yVxG7QV9v0Qs/DIWk2IPtAb+s6DLT/848Z4VU+esWvTMF7LRr6fAPY
+         Fcle4s9P1ncvTNge4C+aCAtdNT4wTN7flngppH3bvB4HjyoFnjg5+j8ZHBkE54zNbKxQ
+         jimQPmmN8zlUUI+yPdNFZ3O8lnsj6QwVysPR6olMHELbNU2XSMlsQGqbD7hV1EgDXMjJ
+         /FPg==
+X-Gm-Message-State: AFqh2krKW5guhZ5sHnJuDIzUVInwc04GKXGwHQvsCCBPD9PBS0IkIVOw
+        hI6tax+PC6WC2cuVDPm+Nl0=
+X-Google-Smtp-Source: AMrXdXsnPAfV/Va8Ok5ZiLV8eE3SVtsOmVIwYH5OdnJv7qLEIq/eyq1QteagJINpb0N8yv3z+FkX6w==
+X-Received: by 2002:a17:903:1c6:b0:195:e590:c7c6 with SMTP id e6-20020a17090301c600b00195e590c7c6mr4003519plh.22.1674235463163;
+        Fri, 20 Jan 2023 09:24:23 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:3bfe:a22:9187:ed3b])
+        by smtp.gmail.com with ESMTPSA id m11-20020a170902db0b00b00186a2274382sm27330649plx.76.2023.01.20.09.24.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 09:24:22 -0800 (PST)
+Date:   Fri, 20 Jan 2023 09:24:18 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Joe Wu <joewu@msi.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Derek Huang <derekhuang@google.com>,
+        "Dustin L . Howett" <dustin@howett.net>, Joe Wu <joewu@msi.com>,
+        Furquan Shaikh <furquan@chromium.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: Re: [PATCH] cros_ec_keyb: Add 3 buttons for monitor function
+Message-ID: <Y8rOQqhWcVAv8gmN@google.com>
+References: <20221222063950.26018-1-joewu@msi.com>
+ <Y8p6THz2jjKEoMrJ@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <cover.1674233728.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8p6THz2jjKEoMrJ@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MT7981 clock dt-bindings, include topckgen, apmixedsys,
-infracfg, and ethernet subsystem clocks.
+On Fri, Jan 20, 2023 at 12:26:04PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Dec 22, 2022 at 02:39:50PM +0800, Joe Wu wrote:
+> > Add 3 extra buttons: 'brightness up', 'brightness down'
+> > and 'screen lock' to support monitor manipulating function.
+> > 
+> > Signed-off-by: Joe Wu <joewu@msi.com>
+> 
+> From: line does not match the signed-off-by (and is an invalid email
+> address...)
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- .../dt-bindings/clock/mediatek,mt7981-clk.h   | 215 ++++++++++++++++++
- 1 file changed, 215 insertions(+)
- create mode 100644 include/dt-bindings/clock/mediatek,mt7981-clk.h
+What do you mean "it's an invalid email address"? You can definitely
+send emails there... I prefer people not to use Google partner domain
+accounts in the hope that their employment might outlast their
+involvement in Google projects, but that is it.
 
-diff --git a/include/dt-bindings/clock/mediatek,mt7981-clk.h b/include/dt-bindings/clock/mediatek,mt7981-clk.h
-new file mode 100644
-index 0000000000000..192f8cefb589f
---- /dev/null
-+++ b/include/dt-bindings/clock/mediatek,mt7981-clk.h
-@@ -0,0 +1,215 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (c) 2021 MediaTek Inc.
-+ * Author: Wenzhen.Yu <wenzhen.yu@mediatek.com>
-+ * Author: Jianhui Zhao <zhaojh329@gmail.com>
-+ * Author: Daniel Golle <daniel@makrotopia.org>
-+ */
-+
-+#ifndef _DT_BINDINGS_CLK_MT7981_H
-+#define _DT_BINDINGS_CLK_MT7981_H
-+
-+/* TOPCKGEN */
-+#define CLK_TOP_CB_CKSQ_40M		0
-+#define CLK_TOP_CB_M_416M		1
-+#define CLK_TOP_CB_M_D2			2
-+#define CLK_TOP_CB_M_D3			3
-+#define CLK_TOP_M_D3_D2			4
-+#define CLK_TOP_CB_M_D4			5
-+#define CLK_TOP_CB_M_D8			6
-+#define CLK_TOP_M_D8_D2			7
-+#define CLK_TOP_CB_MM_720M		8
-+#define CLK_TOP_CB_MM_D2		9
-+#define CLK_TOP_CB_MM_D3		10
-+#define CLK_TOP_CB_MM_D3_D5		11
-+#define CLK_TOP_CB_MM_D4		12
-+#define CLK_TOP_CB_MM_D6		13
-+#define CLK_TOP_MM_D6_D2		14
-+#define CLK_TOP_CB_MM_D8		15
-+#define CLK_TOP_CB_APLL2_196M		16
-+#define CLK_TOP_APLL2_D2		17
-+#define CLK_TOP_APLL2_D4		18
-+#define CLK_TOP_NET1_2500M		19
-+#define CLK_TOP_CB_NET1_D4		20
-+#define CLK_TOP_CB_NET1_D5		21
-+#define CLK_TOP_NET1_D5_D2		22
-+#define CLK_TOP_NET1_D5_D4		23
-+#define CLK_TOP_CB_NET1_D8		24
-+#define CLK_TOP_NET1_D8_D2		25
-+#define CLK_TOP_NET1_D8_D4		26
-+#define CLK_TOP_CB_NET2_800M		27
-+#define CLK_TOP_CB_NET2_D2		28
-+#define CLK_TOP_CB_NET2_D4		29
-+#define CLK_TOP_NET2_D4_D2		30
-+#define CLK_TOP_NET2_D4_D4		31
-+#define CLK_TOP_CB_NET2_D6		32
-+#define CLK_TOP_CB_WEDMCU_208M		33
-+#define CLK_TOP_CB_SGM_325M		34
-+#define CLK_TOP_CKSQ_40M_D2		35
-+#define CLK_TOP_CB_RTC_32K		36
-+#define CLK_TOP_CB_RTC_32P7K		37
-+#define CLK_TOP_USB_TX250M		38
-+#define CLK_TOP_FAUD			39
-+#define CLK_TOP_NFI1X			40
-+#define CLK_TOP_USB_EQ_RX250M		41
-+#define CLK_TOP_USB_CDR_CK		42
-+#define CLK_TOP_USB_LN0_CK		43
-+#define CLK_TOP_SPINFI_BCK		44
-+#define CLK_TOP_SPI			45
-+#define CLK_TOP_SPIM_MST		46
-+#define CLK_TOP_UART_BCK		47
-+#define CLK_TOP_PWM_BCK			48
-+#define CLK_TOP_I2C_BCK			49
-+#define CLK_TOP_PEXTP_TL		50
-+#define CLK_TOP_EMMC_208M		51
-+#define CLK_TOP_EMMC_400M		52
-+#define CLK_TOP_DRAMC_REF		53
-+#define CLK_TOP_DRAMC_MD32		54
-+#define CLK_TOP_SYSAXI			55
-+#define CLK_TOP_SYSAPB			56
-+#define CLK_TOP_ARM_DB_MAIN		57
-+#define CLK_TOP_AP2CNN_HOST		58
-+#define CLK_TOP_NETSYS			59
-+#define CLK_TOP_NETSYS_500M		60
-+#define CLK_TOP_NETSYS_WED_MCU		61
-+#define CLK_TOP_NETSYS_2X		62
-+#define CLK_TOP_SGM_325M		63
-+#define CLK_TOP_SGM_REG			64
-+#define CLK_TOP_F26M			65
-+#define CLK_TOP_EIP97B			66
-+#define CLK_TOP_USB3_PHY		67
-+#define CLK_TOP_AUD			68
-+#define CLK_TOP_A1SYS			69
-+#define CLK_TOP_AUD_L			70
-+#define CLK_TOP_A_TUNER			71
-+#define CLK_TOP_U2U3_REF		72
-+#define CLK_TOP_U2U3_SYS		73
-+#define CLK_TOP_U2U3_XHCI		74
-+#define CLK_TOP_USB_FRMCNT		75
-+#define CLK_TOP_NFI1X_SEL		76
-+#define CLK_TOP_SPINFI_SEL		77
-+#define CLK_TOP_SPI_SEL			78
-+#define CLK_TOP_SPIM_MST_SEL		79
-+#define CLK_TOP_UART_SEL		80
-+#define CLK_TOP_PWM_SEL			81
-+#define CLK_TOP_I2C_SEL			82
-+#define CLK_TOP_PEXTP_TL_SEL		83
-+#define CLK_TOP_EMMC_208M_SEL		84
-+#define CLK_TOP_EMMC_400M_SEL		85
-+#define CLK_TOP_F26M_SEL		86
-+#define CLK_TOP_DRAMC_SEL		87
-+#define CLK_TOP_DRAMC_MD32_SEL		88
-+#define CLK_TOP_SYSAXI_SEL		89
-+#define CLK_TOP_SYSAPB_SEL		90
-+#define CLK_TOP_ARM_DB_MAIN_SEL		91
-+#define CLK_TOP_AP2CNN_HOST_SEL		92
-+#define CLK_TOP_NETSYS_SEL		93
-+#define CLK_TOP_NETSYS_500M_SEL		94
-+#define CLK_TOP_NETSYS_MCU_SEL		95
-+#define CLK_TOP_NETSYS_2X_SEL		96
-+#define CLK_TOP_SGM_325M_SEL		97
-+#define CLK_TOP_SGM_REG_SEL		98
-+#define CLK_TOP_EIP97B_SEL		99
-+#define CLK_TOP_USB3_PHY_SEL		100
-+#define CLK_TOP_AUD_SEL			101
-+#define CLK_TOP_A1SYS_SEL		102
-+#define CLK_TOP_AUD_L_SEL		103
-+#define CLK_TOP_A_TUNER_SEL		104
-+#define CLK_TOP_U2U3_SEL		105
-+#define CLK_TOP_U2U3_SYS_SEL		106
-+#define CLK_TOP_U2U3_XHCI_SEL		107
-+#define CLK_TOP_USB_FRMCNT_SEL		108
-+#define CLK_TOP_AUD_I2S_M		109
-+
-+/* INFRACFG */
-+#define CLK_INFRA_66M_MCK		0
-+#define CLK_INFRA_UART0_SEL		1
-+#define CLK_INFRA_UART1_SEL		2
-+#define CLK_INFRA_UART2_SEL		3
-+#define CLK_INFRA_SPI0_SEL		4
-+#define CLK_INFRA_SPI1_SEL		5
-+#define CLK_INFRA_SPI2_SEL		6
-+#define CLK_INFRA_PWM1_SEL		7
-+#define CLK_INFRA_PWM2_SEL		8
-+#define CLK_INFRA_PWM3_SEL		9
-+#define CLK_INFRA_PWM_BSEL		10
-+#define CLK_INFRA_PCIE_SEL		11
-+#define CLK_INFRA_GPT_STA		12
-+#define CLK_INFRA_PWM_HCK		13
-+#define CLK_INFRA_PWM_STA		14
-+#define CLK_INFRA_PWM1_CK		15
-+#define CLK_INFRA_PWM2_CK		16
-+#define CLK_INFRA_PWM3_CK		17
-+#define CLK_INFRA_CQ_DMA_CK		18
-+#define CLK_INFRA_AUD_BUS_CK		19
-+#define CLK_INFRA_AUD_26M_CK		20
-+#define CLK_INFRA_AUD_L_CK		21
-+#define CLK_INFRA_AUD_AUD_CK		22
-+#define CLK_INFRA_AUD_EG2_CK		23
-+#define CLK_INFRA_DRAMC_26M_CK		24
-+#define CLK_INFRA_DBG_CK		25
-+#define CLK_INFRA_AP_DMA_CK		26
-+#define CLK_INFRA_SEJ_CK		27
-+#define CLK_INFRA_SEJ_13M_CK		28
-+#define CLK_INFRA_THERM_CK		29
-+#define CLK_INFRA_I2C0_CK		30
-+#define CLK_INFRA_UART0_CK		31
-+#define CLK_INFRA_UART1_CK		32
-+#define CLK_INFRA_UART2_CK		33
-+#define CLK_INFRA_SPI2_CK		34
-+#define CLK_INFRA_SPI2_HCK_CK		35
-+#define CLK_INFRA_NFI1_CK		36
-+#define CLK_INFRA_SPINFI1_CK		37
-+#define CLK_INFRA_NFI_HCK_CK		38
-+#define CLK_INFRA_SPI0_CK		39
-+#define CLK_INFRA_SPI1_CK		40
-+#define CLK_INFRA_SPI0_HCK_CK		41
-+#define CLK_INFRA_SPI1_HCK_CK		42
-+#define CLK_INFRA_FRTC_CK		43
-+#define CLK_INFRA_MSDC_CK		44
-+#define CLK_INFRA_MSDC_HCK_CK		45
-+#define CLK_INFRA_MSDC_133M_CK		46
-+#define CLK_INFRA_MSDC_66M_CK		47
-+#define CLK_INFRA_ADC_26M_CK		48
-+#define CLK_INFRA_ADC_FRC_CK		49
-+#define CLK_INFRA_FBIST2FPC_CK		50
-+#define CLK_INFRA_I2C_MCK_CK		51
-+#define CLK_INFRA_I2C_PCK_CK		52
-+#define CLK_INFRA_IUSB_133_CK		53
-+#define CLK_INFRA_IUSB_66M_CK		54
-+#define CLK_INFRA_IUSB_SYS_CK		55
-+#define CLK_INFRA_IUSB_CK		56
-+#define CLK_INFRA_IPCIE_CK		57
-+#define CLK_INFRA_IPCIE_PIPE_CK		58
-+#define CLK_INFRA_IPCIER_CK		59
-+#define CLK_INFRA_IPCIEB_CK		60
-+
-+/* APMIXEDSYS */
-+#define CLK_APMIXED_ARMPLL		0
-+#define CLK_APMIXED_NET2PLL		1
-+#define CLK_APMIXED_MMPLL		2
-+#define CLK_APMIXED_SGMPLL		3
-+#define CLK_APMIXED_WEDMCUPLL		4
-+#define CLK_APMIXED_NET1PLL		5
-+#define CLK_APMIXED_MPLL		6
-+#define CLK_APMIXED_APLL2		7
-+
-+/* SGMIISYS_0 */
-+#define CLK_SGM0_TX_EN			0
-+#define CLK_SGM0_RX_EN			1
-+#define CLK_SGM0_CK0_EN			2
-+#define CLK_SGM0_CDR_CK0_EN		3
-+
-+/* SGMIISYS_1 */
-+#define CLK_SGM1_TX_EN			0
-+#define CLK_SGM1_RX_EN			1
-+#define CLK_SGM1_CK1_EN			2
-+#define CLK_SGM1_CDR_CK1_EN		3
-+
-+/* ETHSYS */
-+#define CLK_ETH_FE_EN			0
-+#define CLK_ETH_GP2_EN			1
-+#define CLK_ETH_GP1_EN			2
-+#define CLK_ETH_WOCPU0_EN		3
-+
-+#endif /* _DT_BINDINGS_CLK_MT7981_H */
+I think if we ask people to stick "From: <whatever the company address
+is" in the body of the patch we can ignore the difference between sender
+address and from/signed-off-by when they use partner domain accounts. If
+anything, such accounts have better vetting than a random gmail or other
+free email service account some vendors have to create to be able to
+send a plain-text emails that we require. I mean, we have
+"Signed-off-by: George Spelvin <lkml@sdf.org>" present in our git
+history and nobody bats an eye...
+
+Thanks.
+
 -- 
-2.39.1
-
+Dmitry
