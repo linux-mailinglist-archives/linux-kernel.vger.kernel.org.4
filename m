@@ -2,111 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B582C674FD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFDD674FDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjATIxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S229690AbjATIxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjATIxI (ORCPT
+        with ESMTP id S229562AbjATIxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:53:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835E8458B8;
-        Fri, 20 Jan 2023 00:53:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 20 Jan 2023 03:53:45 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E0E8B30C;
+        Fri, 20 Jan 2023 00:53:25 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2ED50B8205C;
-        Fri, 20 Jan 2023 08:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80481C433EF;
-        Fri, 20 Jan 2023 08:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674204782;
-        bh=U6X28i62ui2V9lEmzG7D8h5vunsSgjjoPEqlBRcAaqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y9VqKWIvqbaYaPXymE4NJ0nvMEBrAj/UVpalxngKwh7fzcGc645m5RgcAqyx7QYhI
-         pDUtTxFcJsB48kE6v9qeqFhzHkWRXGjgUl/4bCd5P/PmdQr4Zpe78/vRg14xepz6Cw
-         Jv5Cqca9kvxQWY7DBLsRSGTCgIf/PYnH1drxOXkjJC8GATRTvrXPHAGks7x7NMg0Nk
-         y8ECZNn8ircJ1o7J5xEEoQQcfK9mXCAyAvh3CYx0XBU7YhTS8ung32ij8qdvsJS5VT
-         u6Unj7yDn033yQ8qbCBoeyFB7ZzjHzzrgDQnzbvG637e0Lji47fm28FYeLjsRHU+Ou
-         XOHrHJ+WQlX4Q==
-Date:   Fri, 20 Jan 2023 09:53:00 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Hanna Hawa <hhhawa@amazon.com>
-Cc:     andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
-Subject: Re: [PATCH v5 2/2] i2c: Set i2c pinctrl recovery info from it's
- device pinctrl
-Message-ID: <Y8pWbP8+FJaccUuf@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hanna Hawa <hhhawa@amazon.com>, andriy.shevchenko@linux.intel.com,
-        linus.walleij@linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
-        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
-        farbere@amazon.com, itamark@amazon.com
-References: <20221228164813.67964-1-hhhawa@amazon.com>
- <20221228164813.67964-3-hhhawa@amazon.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 53BE6660087F;
+        Fri, 20 Jan 2023 08:53:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674204804;
+        bh=SSwbJApT+7gQSGJQ/b+H3IPkK4hbO5OL73lIyx5BgMc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kcehd1Jq0FFH+HQ+lMBOMtNqdZL8spAJ9jdGNO+emTS4Z8FfWmjNxzsZ6z91dBcRS
+         sk3QV21MV/sGyRubA2G1w7oKJC2Wiv3Ztqb+bmMgMgWnR7x5+1xolzymlS+lPXV3Yi
+         EQUliJay9oJaIGofsVKJ+pWgYMgCZd3H9U3y/49ZpACz27d8LMhAjMGusTCQulCyuh
+         c0nwhN2QoVqEshjdLoLyjdovy1IQsGbm6n4p3Wm4kCPq3RTeaNYw+tSV9BypiEZqFo
+         lGlCzin0xwqbTBqu1r4SgWoyzV/GT4sjdJf9ggFebVJpoHNdy4ZsSjmtMB/Fs4nvuH
+         Wj+8EvBtTSqLQ==
+Message-ID: <23691243-303b-5f0a-df59-f272137e083b@collabora.com>
+Date:   Fri, 20 Jan 2023 09:53:20 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HzdZc+7RhMqTyDKr"
-Content-Disposition: inline
-In-Reply-To: <20221228164813.67964-3-hhhawa@amazon.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 2/2] thermal: mediatek: add support for MT7986 and
+ MT7981
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>
+References: <cover.1674055882.git.daniel@makrotopia.org>
+ <2d341fc45266217249586eb4bd3be3ac4ca83a12.1674055882.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <2d341fc45266217249586eb4bd3be3ac4ca83a12.1674055882.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 18/01/23 16:40, Daniel Golle ha scritto:
+> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+> Brings code to assign values from efuse as well as new function to
+> convert raw temperature to millidegree celsius, as found in MediaTek's
+> SDK sources (but cleaned up and de-duplicated)
+> 
+> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
---HzdZc+7RhMqTyDKr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Dec 28, 2022 at 04:48:13PM +0000, Hanna Hawa wrote:
-> Currently the i2c subsystem rely on the controller device tree to
-> initialize the pinctrl recovery information, part of the drivers does
-> not set this field (rinfo->pinctrl), for example i2c DesignWare driver.
->=20
-> The pins information is saved part of the device structure before probe
-> and it's done on pinctrl_bind_pins().
->=20
-> Make the i2c init recovery to get the device pins if it's not
-> initialized by the driver from the device pins.
->=20
-> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Applied to for-next, thanks!
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
---HzdZc+7RhMqTyDKr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKVmsACgkQFA3kzBSg
-KbbYgw/+Om9otkkRA4TXfNH4680VSI9d+chQHh/zE+p4kKq2kJeSjSjzSKYqj9iC
-MJb1zbQ6TyFv7h2Zyvj3lwYvobsnzA48q/L2DXdxzRIHuNciWXHrgkT8nNVRUtVj
-xuy3qDWP5nsqMZ/gQSzEwTGVgxfY5NceFfJ8fQnvCxOn8dRXBPKVLZ7iVp+HSRFh
-d8YO2/CJM1Vv07TYf46EZZawvp4t58/OIQHc5IbkcvxukNXt80bzl+G/mrn7XG+7
-HCVV2jThjzRKkeMsfzn3gB7a0jpOHMb/yEqO8a2+Egd0KyHJ3N5v42wKSXrIHN6t
-mvaL6hN/13IfgZLemszwvF8bRzv9iV/eOToD99ytI5yiEJo6YvqKIEqmqNGd4rv3
-K0Fwjzdwh8xUjAhiV8MW5v/a4PGaNgcCzGmvSsHBj6Sb3FtalHtgcuN9RgvoZuw/
-MLCNApNOaQe50fJjAQTIuR224nf7zO3ANc/TlMtCoxInubmf9wkop6iEa0eyhsIZ
-KyueWPCVSi9H5kSertYSKGFAYCS/y8osbxaErpH7MrNGO5Og69P7AVWPYQzdtV26
-DsLDoWmNjHgDCu2mbtGF9CrIabXlTxd4Aqz35E5Na+EIdInsZaJV4hJ5cLm8T2UY
-GfKXXzCqECvc5N3RhVfBxihSW2MpTtYLkpGCSrmoRbfny/dGSGY=
-=ekZg
------END PGP SIGNATURE-----
-
---HzdZc+7RhMqTyDKr--
