@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64E6675C7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B308675C83
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjATSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
+        id S230113AbjATSPk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 Jan 2023 13:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjATSMF (ORCPT
+        with ESMTP id S229454AbjATSPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:12:05 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABF07B2E3;
-        Fri, 20 Jan 2023 10:12:04 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso1289138pjp.3;
-        Fri, 20 Jan 2023 10:12:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hho9/wgvGQ9svaK/5fZQfZ+rSQtb/lCF12NvQ5zzsS0=;
-        b=Ci2qTDtkaTtOdztcEnTlSnK7FyOpejqRXsgG953VY1gsKf192FjDyBsnul1w7orrx2
-         ZBjF9qXbWWUHxRaf+vrkQ4hk8YveJegcrAMHKNtV1+ZH3JScv5usjTDrrmqqe8c24mok
-         V729t2P/luJkKM66jGu5FyDICaS+ZnsJasJeTtQmwSmZ3t8ePUBrC/UwYloez/+qwQvZ
-         3McF4X0btfg6MWNHuQDp8FK7bbJ7BM+59WFKPbE8UD+s/xNbtnzvcJUl3X0ZtZ+8MZzG
-         lso5jsYQQx6FdzegCY3GXg6oOrJ1a3kmuY5PR09d42YterpHIygeYe/X52iqdGe9SsYW
-         0pzQ==
+        Fri, 20 Jan 2023 13:15:39 -0500
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30DDBE4;
+        Fri, 20 Jan 2023 10:15:35 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id mg12so16046954ejc.5;
+        Fri, 20 Jan 2023 10:15:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hho9/wgvGQ9svaK/5fZQfZ+rSQtb/lCF12NvQ5zzsS0=;
-        b=ZLqtcayZfBAgHhxf6Q13hMWfdL1msOSlDIJPjiBbjvKf+sp4f7Whm7w3iFwRQzwDxu
-         lm0CAWzaQatvRYg+jIq03qhOJA8zqKuciXc8wv5VZ3nqui2WCVCXEZcJKhsd2+tnqBOH
-         EKzclevQ2cbymFZIHNXicivakfx7SSyCUOn7uFclnyBrn9LKWlhUoeuvhMZ5VTj+vRo7
-         QGYGA4MeP+yJ8XJ3RoS1OVNZwjTZ4KTEpfroo+qFvLkB4f8DVElGZKdTW6hn+FlR8l8x
-         I+lr+YWfRn0gpVd/12JIBgxKjatoXacSrADnPwYZ2ntrAkVYBTTtR4fJKoBX/5cvrJ1R
-         yHFA==
-X-Gm-Message-State: AFqh2krmPPsmTUrl3bh1cPUFFjt1uvJHi4kNpyYj6voVlHqTa09r2NPq
-        TfMZeEwGDC/JLnc1Kqi0AtnOdECBrTE=
-X-Google-Smtp-Source: AMrXdXtdjHdvlLSUZbANAKsuDLgY0blFVWOcMjh+bJq9QL5NDAGyVQXQ90n/4iXxhXI3eWKlxEKezQ==
-X-Received: by 2002:a17:902:aa05:b0:193:335a:989e with SMTP id be5-20020a170902aa0500b00193335a989emr16471296plb.25.1674238323685;
-        Fri, 20 Jan 2023 10:12:03 -0800 (PST)
-Received: from [10.14.5.12] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902e88300b0019311ec702asm5588617plg.36.2023.01.20.10.12.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 10:12:03 -0800 (PST)
-Message-ID: <8c43b018-8979-e93b-cc19-76de6f8b60d1@gmail.com>
-Date:   Fri, 20 Jan 2023 10:12:01 -0800
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yqP17bCoNp80WwoAZTjADKbunc1QO+WYV+s3nQtpawA=;
+        b=43cTmRBsjOC6hSZW8wCzc5K/Ota7t6j0LPoAC7hjrSAVIYUE0LHEuEfRvLQyzRZExm
+         KudCe99UE3B2kr0IGFR8HfH5Yh3gskW8Ho+dLdZfV36Y/1BPVUo/yySQ3Z1Xr2OGFFEz
+         nrynEDcMqy1oPajq6KtxGejNFESk4TqzEhh3J1GUNFoBjPiIvB538/7D/H851gL7PERh
+         Trhja1FikGUUZvl4xC3ZCBv4A+JT7sv01jA1hEEpA1NnOU84DKKyCR0PG9U/rVhDWEyi
+         kZY3ArvBP5WICAxtzbwGGkVtygl1hKBimjKEJI4U27DhHLktxOkChMPQfKB+G4xbJ2Em
+         zfiQ==
+X-Gm-Message-State: AFqh2krVF9YJ5SqrC89sDh32B10XlpOIQhIO2rxEGG3+SnJAwX2QsBel
+        Fu0LNElHv5v1tAFecPxzVHfWhSH5ZFKiiy8xR64uUrmX
+X-Google-Smtp-Source: AMrXdXu5El6FR00TLRDD4xJXFPd1YsK3IG0zI4SInsKlGRR1rort+cbJ665y693HIOQ/Pf3MKjXmbIPvf+v+qVcaX3w=
+X-Received: by 2002:a17:906:2c4b:b0:870:3557:160e with SMTP id
+ f11-20020a1709062c4b00b008703557160emr1242549ejh.78.1674238534348; Fri, 20
+ Jan 2023 10:15:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH net v2] net: dsa: microchip: fix probe of I2C-connected
- KSZ8563
-Content-Language: en-US
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Cc:     kernel@pengutronix.de, ore@pengutronix.de,
-        Arun.Ramadoss@microchip.com, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230120110933.1151054-1-a.fatoum@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230120110933.1151054-1-a.fatoum@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+ <20230113180235.1604526-2-daniel.lezcano@linaro.org> <CAJZ5v0jDF9qrQAQM1AhT-Q4A3Nzyht9XxZoZyS1afoAPt1h_=A@mail.gmail.com>
+ <e4468710-1336-847e-89e4-51c745a0a79b@linaro.org>
+In-Reply-To: <e4468710-1336-847e-89e4-51c745a0a79b@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Jan 2023 19:15:22 +0100
+Message-ID: <CAJZ5v0gdXJuNr9jUm6rPdPCuBjc8jwgcZQwtyxurd-jr50btLw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] thermal/acpi: Add ACPI trip point routines
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 20, 2023 at 7:08 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+>
+> On 19/01/2023 14:15, Rafael J. Wysocki wrote:
+>
+> [ ... ]
+>
+> >> +static int thermal_acpi_get_temperature_object(struct acpi_device *adev,
+> >> +                                              char *object, int *temperature)
+> >
+> > So this would become thermal_acpi_get_temp_object(). or even
+> > thermal_acpi_get_temp() because it really returns the temperature
+> > value.
+> >
+> > I also don't particularly like returning values via pointers, which is
+> > entirely avoidable here, because the temperature value obtained from
+> > the ACPI control methods must be a positive number.
+> >
+> > So I would make it
+> >
+> > static int thermal_acpi_get_temp(struct acpi_device *adev, char *object_name)
+> > {
+>
+> We are converting decikelvin -> millicelsius. Even it is very unlikely,
+> the result could be less than zero (eg. -1°C). We won't be able to
+> differentiate -ENODATA with a negative value, no ?
+>
+> In the future, it is possible we will have to deal with cold trip points
+> in order to warm a board. May be we should don't care for now ?
 
-
-On 1/20/2023 3:09 AM, Ahmad Fatoum wrote:
-> Starting with commit eee16b147121 ("net: dsa: microchip: perform the
-> compatibility check for dev probed"), the KSZ switch driver now bails
-> out if it thinks the DT compatible doesn't match the actual chip ID
-> read back from the hardware:
-> 
->    ksz9477-switch 1-005f: Device tree specifies chip KSZ9893 but found
->    KSZ8563, please fix it!
-> 
-> For the KSZ8563, which used ksz_switch_chips[KSZ9893], this was fine
-> at first, because it indeed shares the same chip id as the KSZ9893.
-> 
-> Commit b44908095612 ("net: dsa: microchip: add separate struct
-> ksz_chip_data for KSZ8563 chip") started differentiating KSZ9893
-> compatible chips by consulting the 0x1F register. The resulting breakage
-> was fixed for the SPI driver in the same commit by introducing the
-> appropriate ksz_switch_chips[KSZ8563], but not for the I2C driver.
-> 
-> Fix this for I2C-connected KSZ8563 now to get it probing again.
-> 
-> Fixes: b44908095612 ("net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563 chip").
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+My point is that the ACPI specification mandates that the return
+values be in deciK and so always non-negative.
