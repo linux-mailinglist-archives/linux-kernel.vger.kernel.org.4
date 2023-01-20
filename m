@@ -2,348 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F90674A7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91579674A80
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 05:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjATEGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 23:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S229851AbjATEMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 23:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjATEGb (ORCPT
+        with ESMTP id S229525AbjATEMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:06:31 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED6E9AAA0;
-        Thu, 19 Jan 2023 20:06:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674187589; x=1705723589;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ReGGwbFUJozPaTpdlEkLIALT/8KbWIcvzAKT2+WJ4o4=;
-  b=Wa4gRCRuLLb0ITZCXb/qsjYYmAO8wwyNUM5sA+DY+KP5vImpuZeDgCXj
-   fP68IBVd5h+ChvVuSZH584XtbVw+Ul7Dqizz7nxhO9geepxFCo8dBH5VI
-   1dbnbTZagck2qKBP/KLzrseQ1WDLPwtkKA5Pa4naZ2TVhJfyZ7JFErjM5
-   2032Lfl+kugtqnhAp4qW5GHqgM/FTWWobpd41qk7HRSIcSpxU1WUehflW
-   5FHmMUCuzbMBtfldFVXHI+EBEMe1jtP70hSxSUKE67msl3PBWKIoCz+kh
-   hUsO69m/6n6rTLHQvjTNAL3Qu5+s+pGmIMTCUFHjakTEhQzSbrIHd+59z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="327593278"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="327593278"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 20:06:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="662410921"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="662410921"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Jan 2023 20:06:24 -0800
-Date:   Fri, 20 Jan 2023 11:55:57 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 09/11] fpga: m10bmc-sec: Make rsu status type specific
-Message-ID: <Y8oQzao7eIcSmiVd@yilunxu-OptiPlex-7050>
-References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
- <20230116100845.6153-10-ilpo.jarvinen@linux.intel.com>
+        Thu, 19 Jan 2023 23:12:46 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB70787288
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:12:44 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id z4-20020a17090a170400b00226d331390cso3744877pjd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 20:12:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZBnQ7FD+GLFKN6GXmu4W2t9vwDu0xXnpxWvY6mSeA4s=;
+        b=GsnOqDuuuICAhwmSxLZkEbc4GIABzMFjiDPuIH/bQ5WMoHXo5BbbWqMazvzHnikncc
+         muE1u2CXH3woyNa48//09jrS1p9/TqHtkja+aBAwh10zUZeb+NOCOJRt3DrCDUqGN7Rw
+         FjV/QyOL6/wQJuaWdwJZbXcUA6mpIrzYAcc+v85Rv9Ji7mb3aPF5NIniOyw+Sd/YLOg2
+         gm4ZJfU2Jy0n4zFYXiSmbdQloItyFzojQ0c1guiYnDUbugXPtJcHP9BKkPXQ5/Xkd2uh
+         UsQTdDU/o6nfnLHJUTKWaYMwwJFl2d+I6xcc486TozAPPll4m7AWo8OTkcEbCNCeOzzG
+         t4JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZBnQ7FD+GLFKN6GXmu4W2t9vwDu0xXnpxWvY6mSeA4s=;
+        b=vtG6ykfvWCT4g0T4bleQT1178N1pX9Xv34dxGUsHVBJvj6hW7Y+RFC43MEAgzAJGp5
+         MoUXzkE67FyxGkCi3NNwUPTg7g+RrZHaRlLcTMDQMk1RylaWIvUwbc17VfGCS3jNsyTA
+         3TqFl5Z97VGa+2IdwkdN3H3Gr/4gSRnNZyOYcOoqBr4xmFAzgsAxaY5UtnBgw+kjWK3a
+         xs+RD2c8NH39VDpbShYinwtDZBWMgE7KGrmoRg5NyvNmr/MC6bdAOQ5g4jLOFHnWnvOq
+         N3OUwdLD7MDZOItX6hA4pZB0s/VaoGSXh5n4F/yf3VZbZVILmwSfhKGgbry4Y++KKaHq
+         DFAw==
+X-Gm-Message-State: AFqh2krMNvYMgtuax/ft73NAzuT3H0CxsibFQG/JNy6KtLvXuZaPmH0u
+        LhjzdVpleWtO9zf6CiYLI/SN6w==
+X-Google-Smtp-Source: AMrXdXvGWwocmW2GztUyCgO7sw8uqS9q9xXK8/YoSzrW+R1YNdEW6fp+dQE3czlRWd87oRr9t0SKUA==
+X-Received: by 2002:a05:6a21:6daa:b0:b8:5c45:a6dd with SMTP id wl42-20020a056a216daa00b000b85c45a6ddmr4383320pzb.3.1674187964164;
+        Thu, 19 Jan 2023 20:12:44 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id x16-20020a634a10000000b004812f798a37sm19532884pga.60.2023.01.19.20.12.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 20:12:43 -0800 (PST)
+Message-ID: <af6f6d3d-b6ea-be46-d907-73fa4aea7b80@kernel.dk>
+Date:   Thu, 19 Jan 2023 21:12:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230116100845.6153-10-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Phoronix pts fio io_uring test regression report on upstream v6.1
+ and v5.15
+Content-Language: en-US
+To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>,
+        io-uring@vger.kernel.org
+Cc:     asml.silence@gmail.com, linux-kernel@vger.kernel.org
+References: <20230119213655.2528828-1-saeed.mirzamohammadi@oracle.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230119213655.2528828-1-saeed.mirzamohammadi@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-16 at 12:08:43 +0200, Ilpo Järvinen wrote:
-> The rsu status field moves from the doorbell register to the auth
-> result register in the PMCI implementation of the MAX10 BMC. In order
-> to prepare for that, refactor the sec update driver code to have a type
-> specific ops that provides ->rsu_status().
+On 1/19/23 2:36?PM, Saeed Mirzamohammadi wrote:
+> Hello,
+>  
+> I'm reporting a performance regression after the commit below on
+> phoronix pts/fio test and with the config that is added in the end of
+> this email:
 > 
-> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Link: https://lore.kernel.org/all/20210913131123.597544850@linuxfoundation.org/
+> 
+> commit 7b3188e7ed54102a5dcc73d07727f41fb528f7c8
+> Author: Jens Axboe axboe@kernel.dk
+> Date:   Mon Aug 30 19:37:41 2021 -0600
+>  
+>     io_uring: IORING_OP_WRITE needs hash_reg_file set
+>  
+> We observed regression on the latest v6.1.y and v5.15.y upstream
+> kernels (Haven't tested other stable kernels). We noticed that
+> performance regression improved 45% after the revert of the commit
+> above.
+>  
+> All of the benchmarks below have experienced around ~45% regression.
+> phoronix-pts-fio-1.15.0-RandomWrite-EngineIO_uring-BufferedNo-DirectYes-BlockSize4KB-MB-s_xfs
+> phoronix-pts-fio-1.15.0-SequentialWrite-EngineIO_uring-BufferedNo-DirectYes-BlockSize4KB-MB-s_xfs
+> phoronix-pts-fio-1.15.0-SequentialWrite-EngineIO_uring-BufferedYes-DirectNo-BlockSize4KB-MB-s_xfs
+>  
+> We tend to see this regression on 4KB BlockSize tests.
+>  
+> We tried out changing force_async but that has no effect on the
+> result. Also, backported a modified version of the patch mentioned
+> here (https://lkml.org/lkml/2022/7/20/854) but that didn't affect
+> performance.
+>  
+> Do you have any suggestions on any fixes or what else we can try to
+> narrow down the issue?
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+This is really mostly by design - the previous approach of not hashing
+buffered writes on regular files would cause a lot of inode lock
+contention due to lots of threads hammering on that.
 
-> ---
->  drivers/fpga/intel-m10-bmc-sec-update.c | 109 +++++++++++++++++-------
->  include/linux/mfd/intel-m10-bmc.h       |   1 -
->  2 files changed, 78 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> index 6e58a463619c..47c0d5c6a4a3 100644
-> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> @@ -14,6 +14,12 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  
-> +struct m10bmc_sec;
-> +
-> +struct m10bmc_sec_ops {
-> +	int (*rsu_status)(struct m10bmc_sec *sec);
-> +};
-> +
->  struct m10bmc_sec {
->  	struct device *dev;
->  	struct intel_m10bmc *m10bmc;
-> @@ -21,6 +27,7 @@ struct m10bmc_sec {
->  	char *fw_name;
->  	u32 fw_name_id;
->  	bool cancel_request;
-> +	const struct m10bmc_sec_ops *ops;
->  };
->  
->  static DEFINE_XARRAY_ALLOC(fw_upload_xa);
-> @@ -251,12 +258,25 @@ static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
->  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
->  	u32 auth_result;
->  
-> -	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> +	dev_err(sec->dev, "Doorbell: 0x%08x\n", doorbell);
->  
->  	if (!m10bmc_sys_read(sec->m10bmc, csr_map->auth_result, &auth_result))
->  		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
->  }
->  
-> +static int m10bmc_sec_n3000_rsu_status(struct m10bmc_sec *sec)
-> +{
-> +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, &doorbell);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return FIELD_GET(DRBL_RSU_STATUS, doorbell);
-> +}
-> +
->  static bool rsu_status_ok(u32 status)
->  {
->  	return (status == RSU_STAT_NORMAL ||
-> @@ -279,6 +299,26 @@ static bool rsu_progress_busy(u32 progress)
->  		progress == RSU_PROG_PROGRAM_KEY_HASH);
->  }
->  
-> +static int m10bmc_sec_progress_status(struct m10bmc_sec *sec, u32 *doorbell_reg,
-> +				      u32 *progress, u32 *status)
-> +{
-> +	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell_reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sec->ops->rsu_status(sec);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*status = ret;
-> +	*progress = rsu_prog(*doorbell_reg);
-> +
-> +	return 0;
-> +}
-> +
->  static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
->  {
->  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> @@ -297,18 +337,14 @@ static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
->  	return FW_UPLOAD_ERR_NONE;
->  }
->  
-> -static inline bool rsu_start_done(u32 doorbell)
-> +static inline bool rsu_start_done(u32 doorbell_reg, u32 progress, u32 status)
->  {
-> -	u32 status, progress;
-> -
-> -	if (doorbell & DRBL_RSU_REQUEST)
-> +	if (doorbell_reg & DRBL_RSU_REQUEST)
->  		return false;
->  
-> -	status = rsu_stat(doorbell);
->  	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
->  		return true;
->  
-> -	progress = rsu_prog(doorbell);
->  	if (!rsu_progress_done(progress))
->  		return true;
->  
-> @@ -318,8 +354,8 @@ static inline bool rsu_start_done(u32 doorbell)
->  static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
->  {
->  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> -	u32 doorbell, status;
-> -	int ret;
-> +	u32 doorbell_reg, progress, status;
-> +	int ret, err;
->  
->  	ret = regmap_update_bits(sec->m10bmc->regmap,
->  				 csr_map->base + csr_map->doorbell,
-> @@ -330,26 +366,25 @@ static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
->  	if (ret)
->  		return FW_UPLOAD_ERR_RW_ERROR;
->  
-> -	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> -				       csr_map->base + csr_map->doorbell,
-> -				       doorbell,
-> -				       rsu_start_done(doorbell),
-> -				       NIOS_HANDSHAKE_INTERVAL_US,
-> -				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +	ret = read_poll_timeout(m10bmc_sec_progress_status, err,
-> +				err < 0 || rsu_start_done(doorbell_reg, progress, status),
-> +				NIOS_HANDSHAKE_INTERVAL_US,
-> +				NIOS_HANDSHAKE_TIMEOUT_US,
-> +				false,
-> +				sec, &doorbell_reg, &progress, &status);
->  
->  	if (ret == -ETIMEDOUT) {
-> -		log_error_regs(sec, doorbell);
-> +		log_error_regs(sec, doorbell_reg);
->  		return FW_UPLOAD_ERR_TIMEOUT;
-> -	} else if (ret) {
-> +	} else if (err) {
->  		return FW_UPLOAD_ERR_RW_ERROR;
->  	}
->  
-> -	status = rsu_stat(doorbell);
->  	if (status == RSU_STAT_WEAROUT) {
->  		dev_warn(sec->dev, "Excessive flash update count detected\n");
->  		return FW_UPLOAD_ERR_WEAROUT;
->  	} else if (status == RSU_STAT_ERASE_FAIL) {
-> -		log_error_regs(sec, doorbell);
-> +		log_error_regs(sec, doorbell_reg);
->  		return FW_UPLOAD_ERR_HW_ERROR;
->  	}
->  
-> @@ -393,7 +428,7 @@ static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
->  static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
->  {
->  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> -	u32 doorbell;
-> +	u32 doorbell_reg, status;
->  	int ret;
->  
->  	ret = regmap_update_bits(sec->m10bmc->regmap,
-> @@ -406,40 +441,45 @@ static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
->  
->  	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
->  				       csr_map->base + csr_map->doorbell,
-> -				       doorbell,
-> -				       rsu_prog(doorbell) != RSU_PROG_READY,
-> +				       doorbell_reg,
-> +				       rsu_prog(doorbell_reg) != RSU_PROG_READY,
->  				       NIOS_HANDSHAKE_INTERVAL_US,
->  				       NIOS_HANDSHAKE_TIMEOUT_US);
->  
->  	if (ret == -ETIMEDOUT) {
-> -		log_error_regs(sec, doorbell);
-> +		log_error_regs(sec, doorbell_reg);
->  		return FW_UPLOAD_ERR_TIMEOUT;
->  	} else if (ret) {
->  		return FW_UPLOAD_ERR_RW_ERROR;
->  	}
->  
-> -	if (!rsu_status_ok(rsu_stat(doorbell))) {
-> -		log_error_regs(sec, doorbell);
-> +	ret = sec->ops->rsu_status(sec);
-> +	if (ret < 0)
-> +		return ret;
-> +	status = ret;
-> +
-> +	if (!rsu_status_ok(status)) {
-> +		log_error_regs(sec, doorbell_reg);
->  		return FW_UPLOAD_ERR_HW_ERROR;
->  	}
->  
->  	return FW_UPLOAD_ERR_NONE;
->  }
->  
-> -static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell_reg)
->  {
-> -	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> +	u32 progress, status;
->  
-> -	if (m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, doorbell))
-> +	if (m10bmc_sec_progress_status(sec, doorbell_reg, &progress, &status))
->  		return -EIO;
->  
-> -	if (!rsu_status_ok(rsu_stat(*doorbell)))
-> +	if (!rsu_status_ok(status))
->  		return -EINVAL;
->  
-> -	if (rsu_progress_done(rsu_prog(*doorbell)))
-> +	if (rsu_progress_done(progress))
->  		return 0;
->  
-> -	if (rsu_progress_busy(rsu_prog(*doorbell)))
-> +	if (rsu_progress_busy(progress))
->  		return -EAGAIN;
->  
->  	return -EINVAL;
-> @@ -592,6 +632,10 @@ static const struct fw_upload_ops m10bmc_ops = {
->  	.cleanup = m10bmc_sec_cleanup,
->  };
->  
-> +static const struct m10bmc_sec_ops m10sec_n3000_ops = {
-> +	.rsu_status = m10bmc_sec_n3000_rsu_status,
-> +};
-> +
->  #define SEC_UPDATE_LEN_MAX 32
->  static int m10bmc_sec_probe(struct platform_device *pdev)
->  {
-> @@ -607,6 +651,7 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
->  
->  	sec->dev = &pdev->dev;
->  	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
-> +	sec->ops = (struct m10bmc_sec_ops *)platform_get_device_id(pdev)->driver_data;
->  	dev_set_drvdata(&pdev->dev, sec);
->  
->  	ret = xa_alloc(&fw_upload_xa, &sec->fw_name_id, sec,
-> @@ -654,9 +699,11 @@ static int m10bmc_sec_remove(struct platform_device *pdev)
->  static const struct platform_device_id intel_m10bmc_sec_ids[] = {
->  	{
->  		.name = "n3000bmc-sec-update",
-> +		.driver_data = (kernel_ulong_t)&m10sec_n3000_ops,
->  	},
->  	{
->  		.name = "d5005bmc-sec-update",
-> +		.driver_data = (kernel_ulong_t)&m10sec_n3000_ops,
->  	},
->  	{ }
->  };
-> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> index 470dc3773c01..1f75b33240ad 100644
-> --- a/include/linux/mfd/intel-m10-bmc.h
-> +++ b/include/linux/mfd/intel-m10-bmc.h
-> @@ -91,7 +91,6 @@
->  #define HOST_STATUS_ABORT_RSU		0x2
->  
->  #define rsu_prog(doorbell)	FIELD_GET(DRBL_RSU_PROGRESS, doorbell)
-> -#define rsu_stat(doorbell)	FIELD_GET(DRBL_RSU_STATUS, doorbell)
->  
->  /* interval 100ms and timeout 5s */
->  #define NIOS_HANDSHAKE_INTERVAL_US	(100 * 1000)
-> -- 
-> 2.30.2
-> 
+That said, for XFS, we don't need to serialize on O_DIRECT writes. Don't
+think we currently have a way to detect this as it isn't really
+advertised. Something like the below might work, with the caveat that
+this is totally untested.
+
+
+diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
+index 595a5bcf46b9..85fdc6f2efa4 100644
+--- a/fs/xfs/xfs_file.c
++++ b/fs/xfs/xfs_file.c
+@@ -1171,7 +1171,8 @@ xfs_file_open(
+ {
+ 	if (xfs_is_shutdown(XFS_M(inode->i_sb)))
+ 		return -EIO;
+-	file->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
++	file->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC |
++			FMODE_ODIRECT_PARALLEL;
+ 	return generic_file_open(inode, file);
+ }
+ 
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index c1769a2c5d70..8541b9e53c2d 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -166,6 +166,9 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t offset,
+ /* File supports DIRECT IO */
+ #define	FMODE_CAN_ODIRECT	((__force fmode_t)0x400000)
+ 
++/* File supports parallel O_DIRECT writes */
++#define	FMODE_ODIRECT_PARALLEL	((__force fmode_t)0x800000)
++
+ /* File was opened by fanotify and shouldn't generate fanotify events */
+ #define FMODE_NONOTIFY		((__force fmode_t)0x4000000)
+ 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index e680685e8a00..1409f6f69b13 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -424,7 +424,12 @@ static void io_prep_async_work(struct io_kiocb *req)
+ 		req->flags |= io_file_get_flags(req->file) << REQ_F_SUPPORT_NOWAIT_BIT;
+ 
+ 	if (req->flags & REQ_F_ISREG) {
+-		if (def->hash_reg_file || (ctx->flags & IORING_SETUP_IOPOLL))
++		bool should_hash = def->hash_reg_file;
++
++		if (should_hash && (req->file->f_flags & O_DIRECT) &&
++		    (req->file->f_mode & FMODE_ODIRECT_PARALLEL))
++			should_hash = false;
++		if (should_hash || (ctx->flags & IORING_SETUP_IOPOLL))
+ 			io_wq_hash_work(&req->work, file_inode(req->file));
+ 	} else if (!req->file || !S_ISBLK(file_inode(req->file)->i_mode)) {
+ 		if (def->unbound_nonreg_file)
+
+-- 
+Jens Axboe
+
