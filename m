@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D667E675D39
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3397C675D3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 19:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjATS6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 13:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S229808AbjATS7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 13:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjATS6h (ORCPT
+        with ESMTP id S229518AbjATS7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 13:58:37 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0433743B7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:58:34 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id mp20so16259766ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:58:34 -0800 (PST)
+        Fri, 20 Jan 2023 13:59:10 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD80B743BC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:59:04 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o13so6493684pjg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 10:59:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yBS2NFopPHzfJYrxlHmgujPz1HoeR8ijao605ezME18=;
-        b=tEy5zxWMaQki5bCipulkcyrZGhmVLLcl9dq0NUqIqT7PXVAzUHQvLD2PrEtbFAtm5v
-         o78K3nm+rG3+WPfayuMIsuI7nmMaZCjJ3RBFx+lcZtQSKYk2zR6586d3zL1pOXgI7RkX
-         V8BN+T1Rm0h9T95Om/laAs5XMoWHIx64IvzBBnCF2I+0fpgpZZO+9ZUyNB4dysNX3txC
-         YlZFE8jmBhy22lk5du5xp54/1eilTHUFoVYzRptnk3j/7W7AmiGbU++BTMDxEahtI3mr
-         eedI318ROB5n/fzQHuG3DSyPz3nZpy2aFzmHZQIUZ5AOkyBVT28Gfasbdmv9+IA5YjNU
-         7UpQ==
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGi7Fd7MCMNA1QbBTQeJ0YgM+KM/Q0j6YdyrOcqHQyg=;
+        b=ViH4SFAYoJcKC3JvCi+t/v1dJudaXxAaoV4xT+2F3ReKac3Fodcu0WsiO+d9lZtKIe
+         onk0aFZu1AFUSjl+23eZPaneXHe64JzGmdkMFTTeDRf9KxthsIfCuO8QjlFH5q/uCk5L
+         yGtzcFS+r+aIAmhbwTd5BfN0RWA1DGpjYj2U7cZGuwcUTpeAqWUTnLu/q0JR6M+eiQzV
+         b/lX+eYxUV4af4KjioSy+LP1p82H6LZm8H2pmOc/we5nMxEYgZHmDAgRZD+Jrc3WymfY
+         98ZzUGR7AQRCtRXBYU17T2XS2JrWFaUZszT8lqs3b4VuMRB15uNaYUClbyEnSVqcvfLw
+         oaZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yBS2NFopPHzfJYrxlHmgujPz1HoeR8ijao605ezME18=;
-        b=M6+rnpEKdGFkr0WPk/ttse4unF0pbPY89CI0eFJYxYKUv4HiA7RtwsohNtL4tJyOnw
-         7lihXj7uDS+b6QVlhnr+1YhAvvLoUWS+vV/U00eqZhu9K0A2cG6CpMDQiFd/c5BLlP69
-         86aszSnm+hVlZimbO0xXJ/fwJTwKzEGmry4j05gZx6dJy4KHP49rHFwfo9XxPR7TuoWW
-         NmI+e7NQ7GSMGCghQJjKuMU0eX+lX3UzdRyz4uCq0uJf/TzP/Hs73T5Gd+Eaoxf9jkDi
-         OjpxPp74I0apnOd/IlAr4guY6CP10foAvc1PQq6iylsUHukABRl4ScPlvDnEPUSfa/ed
-         4j/A==
-X-Gm-Message-State: AFqh2koh7AWtnt4pLnlIZ5M0R/ruvD0f0bx9iuc44h09smLCf7yRelbC
-        IbkEg3tmfNPVSOB3RJo1r+LLzg==
-X-Google-Smtp-Source: AMrXdXuyZ0HONVpsPKfKSyqCULU7fXja/Lktvf/niubfVJPS3eXqPcbuMmePQW7ZCblB/WmcojGQrg==
-X-Received: by 2002:a17:907:760e:b0:86e:fccc:bc19 with SMTP id jx14-20020a170907760e00b0086efcccbc19mr16440510ejc.43.1674241113525;
-        Fri, 20 Jan 2023 10:58:33 -0800 (PST)
-Received: from [192.168.1.101] (abyk37.neoplus.adsl.tpnet.pl. [83.9.30.37])
-        by smtp.gmail.com with ESMTPSA id tk22-20020a170907c29600b00870d3fdceb9sm7462526ejc.89.2023.01.20.10.58.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 10:58:33 -0800 (PST)
-Message-ID: <9821623b-fcca-2a3a-1cd6-9e95c480b1a4@linaro.org>
-Date:   Fri, 20 Jan 2023 19:58:31 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vGi7Fd7MCMNA1QbBTQeJ0YgM+KM/Q0j6YdyrOcqHQyg=;
+        b=DO3zfDafrP7Rj91wAv7KEjPUYAM0RiC3ys1cT5Ge4CjGQnOnTzj0hv/atZzPQbpEos
+         rGXrlu1Yj58eEYAS6asBhB46lLqGb2E9LeRvqvNLaSzhbEpduYEpG1a8k7LRLrPyphRl
+         5GdbU4KeZjpxOtrtbJNRuM4WURN+hUC2ThcyelYKKoiSAPJ10/zqK4tnxsDZ3Hy20yWD
+         FdxajMUD1OkIy0zf1XqAF8Y1+/Xrb+zIyakfoPGZu7DVEgRJmLjbBYzFWdiF+EwF0nqc
+         ySaNOiYw9Lhvr4dGsOaA7kuMJeFlDMePc31qYuS2Ds7a9Cu8bcWWwVIGzlkHxMJ5wdB/
+         gNyA==
+X-Gm-Message-State: AFqh2krSVKLz5UETYxrWgTH7fFFitmXkOvcuVSjDIIcT+aEOQmQz6Abs
+        qSQGclVZBvmgR0AxSE+CLFVmxQfL8TU2UHfjrzEd
+X-Google-Smtp-Source: AMrXdXv1EvsSKj6cBEZSgfojuR+NDh6GI91jSVXXXVvUq1XUrgEqDaNqOzBTs/FIVGle64jfvZ5hUS6q9GmG9EWAy7I=
+X-Received: by 2002:a17:90a:c784:b0:227:202b:8eaa with SMTP id
+ gn4-20020a17090ac78400b00227202b8eaamr1704350pjb.147.1674241144111; Fri, 20
+ Jan 2023 10:59:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ARM: dts: qcom: apq8060-dragonboard: align MPP pin node
- names with DT schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230120174036.351937-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230120174036.351937-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <cover.1673989212.git.rgb@redhat.com> <82aba376bfbb9927ab7146e8e2dee8d844a31dc2.1673989212.git.rgb@redhat.com>
+In-Reply-To: <82aba376bfbb9927ab7146e8e2dee8d844a31dc2.1673989212.git.rgb@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 20 Jan 2023 13:58:53 -0500
+Message-ID: <CAHC9VhTgesdmF3-+oP-EYuNZ-8LKXGPYuSffVst_Wca5Oj0EAQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] fanotify,audit: Allow audit to use the full
+ permission event response
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +71,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20.01.2023 18:40, Krzysztof Kozlowski wrote:
-> DT schema expects nodes ending with "pins:
-> 
->   qcom-apq8060-dragonboard.dtb: mpps@50: cm3605-mpps-state: 'oneOf' conditional failed, one must be fixed:
->     'mpp5' does not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+On Tue, Jan 17, 2023 at 4:14 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>
+> This patch passes the full response so that the audit function can use all
+> of it. The audit function was updated to log the additional information in
+> the AUDIT_FANOTIFY record.
+>
+> Currently the only type of fanotify info that is defined is an audit
+> rule number, but convert it to hex encoding to future-proof the field.
+> Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
+>
+> The {subj,obj}_trust values are {0,1,2}, corresponding to no, yes, unknown.
+>
+> Sample records:
+>   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3137 subj_trust=3 obj_trust=5
+>   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2 obj_trust=2
+>
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>  fs/notify/fanotify/fanotify.c |  3 ++-
+>  include/linux/audit.h         |  9 +++++----
+>  kernel/auditsc.c              | 16 +++++++++++++---
+>  3 files changed, 20 insertions(+), 8 deletions(-)
 
-Konrad
-> 
-> Warning visible after:
-> https://lore.kernel.org/r/20230120165103.1278852-1-robh@kernel.org
-> ---
->  arch/arm/boot/dts/qcom-apq8060-dragonboard.dts | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
-> index 7a4c59e04af6..8e4b61e4d4b1 100644
-> --- a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
-> @@ -435,15 +435,13 @@ &pm8058_led133 {
->  
->  &pm8058_mpps {
->  	dragon_cm3605_mpps: cm3605-mpps-state {
-> -		mpp5 {
-> -			pins = "mpp5";
-> -			function = "analog";
-> -			input-enable;
-> -			bias-high-impedance;
-> -			/* Let's use channel 5 */
-> -			qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
-> -			power-source = <PM8058_GPIO_S3>;
-> -		};
-> +		pins = "mpp5";
-> +		function = "analog";
-> +		input-enable;
-> +		bias-high-impedance;
-> +		/* Let's use channel 5 */
-> +		qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH5>;
-> +		power-source = <PM8058_GPIO_S3>;
->  	};
->  };
->  
+...
+
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index d1fb821de104..3133c4175c15 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2877,10 +2878,19 @@ void __audit_log_kern_module(char *name)
+>         context->type = AUDIT_KERN_MODULE;
+>  }
+>
+> -void __audit_fanotify(u32 response)
+> +void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+>  {
+> -       audit_log(audit_context(), GFP_KERNEL,
+> -               AUDIT_FANOTIFY, "resp=%u", response);
+> +       /* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
+> +       if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
+> +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> +                         "resp=%u fan_type=%u fan_info=3F subj_trust=2 obj_trust=2",
+> +                         response, FAN_RESPONSE_INFO_NONE);
+> +               return;
+> +       }
+> +       audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> +                 "resp=%u fan_type=%u fan_info=%X subj_trust=%u obj_trust=%u",
+> +                 response, friar->hdr.type, friar->rule_number,
+> +                 friar->subj_trust, friar->obj_trust);
+>  }
+
+The only thing that comes to mind might be to convert the if-return
+into a switch statement to make it a bit cleaner and easier to patch
+in the future, but that is soooo far removed from any real concern
+that I debated even mentioning it.  I only bring it up in case the
+"3F" discussion results in a respin, and even then I'm not going to
+hold my ACK over something as silly as a if-return vs switch.
+
+For clarity, this is what I was thinking:
+
+void __audit_fanontify(...)
+{
+  switch (type) {
+  case FAN_RESPONSE_INFO_NONE:
+    audit_log(...);
+    break;
+  default:
+    audit_log(...);
+  }
+}
+
+-- 
+paul-moore.com
