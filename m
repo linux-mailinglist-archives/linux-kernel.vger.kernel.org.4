@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F41675ED9
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DD6675EDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjATUSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S230318AbjATUSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjATUS3 (ORCPT
+        with ESMTP id S230297AbjATUSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:18:29 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6397135B
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:18:23 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so6641764wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:18:23 -0800 (PST)
+        Fri, 20 Jan 2023 15:18:37 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7159C79EB5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:18:30 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id y1so1330452wru.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uiygPQ43h/TyrnBCK1EPAnMPnfYQRYi9ihjA+N7LKWY=;
-        b=qwAu39Da47bxut80nQTtpUUoYBrQQ9MJzqE01elmxTr8gWBx5gjJVcBR/sJ13pdigo
-         yjODR4EgK9UzG9LShkfKFoiAifSKwHjDLvPse3hd7R1FFit+ICidg0FHixWh/R7tdg9x
-         53T/lPbeYRGmt4JAJ7lLTholZ1jL3tUTGQbMx9UMgmNglSXed1WcDE1LtGpd44y0YPUg
-         8lGjSY/F3xznmNQ9Mq3hbG+wUYryTN9hCVDY1qy+Nvc+oPdAv/y0ewwOZ4PFmyAijQ7r
-         ZxDQ0ChjjwyvJLlqIVfzdkLzuWXyrYQmjZRzxYimHODSys+sd6bZsCrGnfTQnS+S/6rY
-         td/A==
+        bh=M5PEEpYbd9JR0sOvYfHmr/vW+Rpo6V/62Q72U9s8gzY=;
+        b=DbUQV68qiUmqYwTvudP7uOeZobN81AfWmNWt0Nh3auBFSBNVx+O3ch4S55njTe4jBn
+         X44UQKRcWOggjFtlTVeAxFqaRafmwdKlcU1PBvd8v3zF6wubTdyz/QgnC+zZcclCoi5F
+         3UOBcTONrozvF6Uy4xJ4WKuBTCReitgoOaJSPO+FVp/xJnEZilXZIGw6HiIC6qcvjD3v
+         I8W8FuLxeuY/h6iNKFoSqlb9OqJSe44VMU0PfNTzp6W6bWXVtRGZ0UcQNbnEYQGZ3Ly2
+         11BgQDZT71InEewOUFTD56aLyLEACYqSifYr3BW+Dq52B9aPkFZxdWRenY0ULlOVAZk7
+         GodA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uiygPQ43h/TyrnBCK1EPAnMPnfYQRYi9ihjA+N7LKWY=;
-        b=HFgi0B5aPnXfwg4Y8cX6iEGTKF5CFuAdmguRYH+64oQvYvORPttRYr9iKEN56Ia9nx
-         3SeH2M11aSzewvqiAZWcHcIcArsl+sJhYUjPnCL9YknoFH8bLY3Z/pxoD0lHOp98fnJz
-         vpsWK4+kYE13kMhXLd9OVAMF4beq6yPWu2OYMFznDc86TKR6CzsxvV91iSr+MoRNwxz9
-         eP4j3hCM+FoiPikGppQHWiYF4BxNwCA+8fdTy6mQeI+tcGeJHj3UYDYkF90A7LwnMUVm
-         dvtayl8PIuV/l/fHy0P1SlbCQ/5kFnf2pZs3tn3NiVhAO3j8Aeo9whzX5/MXXZM1CxEa
-         GQMg==
-X-Gm-Message-State: AFqh2kqONCA7LxUBjmtCPR/fDNyi/ChGo87VBpNyKwWvx2fatgim5HEM
-        5cGfHm+Eqk6sOZYxnlBLuITbB5EluCA=
-X-Google-Smtp-Source: AMrXdXv48gBvnjsBa3XXFkAgQH+M6piUHkXjo2/aUtj/gWWxMn7P8yQxRxOIe1tqUJFaBy1/ulivhQ==
-X-Received: by 2002:a05:600c:1e22:b0:3db:2063:425e with SMTP id ay34-20020a05600c1e2200b003db2063425emr1959885wmb.1.1674245901642;
-        Fri, 20 Jan 2023 12:18:21 -0800 (PST)
+        bh=M5PEEpYbd9JR0sOvYfHmr/vW+Rpo6V/62Q72U9s8gzY=;
+        b=dMJkX9M/y4CC1fzy4Qo6k4oUBTnV3Ppu4zZYjisYg5yV9QmBK5FoMU/M1c3uKarNLd
+         w8FTooGhiDZUkdtydPiBX5Nd1guDhS89DbWqgmsQc7OJG4HDiMNQOpugcp7a69PJ4dLu
+         opCxwyqWjkPC59IeKUOGVV+5F7EGcRAFwP9Rzk2FRrcmVjdgtl//ggX6uDlWbmmPCSkw
+         rIycQU80hW797DOc0XpU3EAtcjLMacPCH6UtrWEmGpVB6mEIjNxirmgNNfXx/ywlTQqD
+         yVEPz5nyCP8DzZy1o86Wh2Vk7j2XTgdYXUhEg0ZKOo9/dSlw9Y5BRTM0eLHC7LHSrirj
+         gPow==
+X-Gm-Message-State: AFqh2kqJK/EwXThlnU9o5JWwuoOqeJaE8qN/oHrjkXzb9NqQShYYTgyL
+        /3DouE74U5V4yv857oyfLlg=
+X-Google-Smtp-Source: AMrXdXuNKBtCSjWeKMf84yR1Y+Ktlm218N/xzFttX8ZwRtQc6uvcg3ZxwI4TuuOPDdBCdIO/LTHXvA==
+X-Received: by 2002:adf:f992:0:b0:2bb:62bf:f5cb with SMTP id f18-20020adff992000000b002bb62bff5cbmr2670640wrr.4.1674245909015;
+        Fri, 20 Jan 2023 12:18:29 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
-        by smtp.gmail.com with ESMTPSA id p19-20020a1c5453000000b003db09692364sm3203653wmi.11.2023.01.20.12.18.20
+        by smtp.gmail.com with ESMTPSA id m5-20020a056000024500b00267bcb1bbe5sm37671154wrz.56.2023.01.20.12.18.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 12:18:21 -0800 (PST)
-Date:   Fri, 20 Jan 2023 21:18:19 +0100
+        Fri, 20 Jan 2023 12:18:28 -0800 (PST)
+Date:   Fri, 20 Jan 2023 21:18:26 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] staging: rtl8192e: Remove ant_pwr_diff which is always
- zero
-Message-ID: <a550004dcdeb9e0b716f69033a541457c1f12c86.1674244819.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 5/6] staging: rtl8192e: Remove u4RegValue which is always zero
+Message-ID: <2aa104c0f7a5cede7eea289fe92390295592b0e9.1674244819.git.philipp.g.hortmann@gmail.com>
 References: <cover.1674244819.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,41 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ant_pwr_diff is set to zero and then masked which will always result in
-zero. Remove ant_pwr_diff and use zero direct as it is just useless
-code.
+As the array antenna_tx_pwr_diff is always zero, u4RegValue is always set
+to zero. Replace u4RegValue to avoid CamelCase which is not accepted by
+checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 33e3435b50b2..c969c40c3979 100644
+index c969c40c3979..d56c58ecc19f 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 @@ -586,7 +586,6 @@ void rtl92e_set_tx_power(struct net_device *dev, u8 channel)
  {
  	struct r8192_priv *priv = rtllib_priv(dev);
  	u8	powerlevel = 0, powerlevelOFDM24G = 0;
--	s8	ant_pwr_diff;
- 	u32	u4RegValue;
+-	u32	u4RegValue;
  
  	if (priv->epromtype == EEPROM_93C46) {
-@@ -600,12 +599,8 @@ void rtl92e_set_tx_power(struct net_device *dev, u8 channel)
- 			powerlevel = 0;
- 			powerlevelOFDM24G = 0;
- 
--			ant_pwr_diff = 0;
--
--			ant_pwr_diff &= 0xf;
--
- 			priv->antenna_tx_pwr_diff[2] = 0;
--			priv->antenna_tx_pwr_diff[1] = (u8)(ant_pwr_diff);
-+			priv->antenna_tx_pwr_diff[1] = 0;
+ 		powerlevel = priv->tx_pwr_level_cck[channel - 1];
+@@ -603,13 +602,8 @@ void rtl92e_set_tx_power(struct net_device *dev, u8 channel)
+ 			priv->antenna_tx_pwr_diff[1] = 0;
  			priv->antenna_tx_pwr_diff[0] = 0;
  
- 			u4RegValue = priv->antenna_tx_pwr_diff[2] << 8 |
+-			u4RegValue = priv->antenna_tx_pwr_diff[2] << 8 |
+-				      priv->antenna_tx_pwr_diff[1] << 4 |
+-				      priv->antenna_tx_pwr_diff[0];
+-
+ 			rtl92e_set_bb_reg(dev, rFPGA0_TxGainStage,
+-					  (bXBTxAGC|bXCTxAGC|bXDTxAGC),
+-					  u4RegValue);
++					  (bXBTxAGC | bXCTxAGC | bXDTxAGC), 0);
+ 		}
+ 	}
+ 	switch (priv->rf_chip) {
 -- 
 2.39.0
 
