@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E69674862
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95479674869
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjATA5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S229456AbjATA7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjATA51 (ORCPT
+        with ESMTP id S229816AbjATA7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:57:27 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A779F075
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:57:25 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id s13-20020a17090a6e4d00b0022900843652so7613770pjm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:57:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lEHXslOior1iC36oZl8rvCBEJjihHqep9sJwUDMqsEg=;
-        b=f3y4Qq2kjIJ57POmydv+v0X2WmxwQwjCJNO+IzVXLoV2114lAMl6Ch00VZy9aIEyBd
-         oilRLW1fxHa2Ex9xwuimXDFKNwIjlloI72Kl1kNyAIT+zMOSEFmfLcV8/zKlxRqJ+YKW
-         3Z+JnxVbm1Lhnb6pdZm0/iDTmL4b2OBJDWeY0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lEHXslOior1iC36oZl8rvCBEJjihHqep9sJwUDMqsEg=;
-        b=4xWwaO1lgLuVIsnkYGg98PwNBKqJW1TtLV4BmLFCdnQn9OP14qbg78nhaMX3bs4s9B
-         KUSxvlrAruwmp+FDEpfR1ltDb6Vh+KUezWgFI7E7ow5/GxttW+n5jllcmoaPrKMTNeuz
-         8Dg12kuE0iYZCwDT+x8RMTpz5AoyeZ+eM4FTUMgeRoexfK28dzamU+zKTbnLJpyeL72p
-         /1/P2bNhNDRqLYc+Ay6wNVMnEfXuPsiOjGnYxXHEsYIWgtIbcgv9G+tvE5z/zh+3eQih
-         YefmiiCTRO/m8Aoj/lZeJq1Y8W5z5qKGrxvCq3oolvryau8/ONSULLXTnD6obnv2J+i5
-         yFfg==
-X-Gm-Message-State: AFqh2krwNsQTEluXzIY7o83H7uBXyO4Sk0rT/qEA9DoajMNjfObTXIZf
-        gkRsHg3ljE7g7eA78daPobgDWA==
-X-Google-Smtp-Source: AMrXdXuzvSuvcNQXbjmD67x6eCKVyFgfIP6jDqIDZgYrd6B5X7omXzC+CDMYarBYrLg2yENuyJffyg==
-X-Received: by 2002:a05:6a21:151a:b0:b8:927a:6a9d with SMTP id nq26-20020a056a21151a00b000b8927a6a9dmr14012280pzb.9.1674176245077;
-        Thu, 19 Jan 2023 16:57:25 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u11-20020a6540cb000000b0046ff3634a78sm21576083pgp.71.2023.01.19.16.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 16:57:24 -0800 (PST)
-Date:   Thu, 19 Jan 2023 16:57:23 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v5 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Message-ID: <202301191657.3B81D1C589@keescook>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-12-rick.p.edgecombe@intel.com>
+        Thu, 19 Jan 2023 19:59:00 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5D6A1028;
+        Thu, 19 Jan 2023 16:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=O0jjZ5OmxPI6bfuCs0idbFiSez3jFaKnyKag6lKe1K0=; b=Il0ksPuIMLNEnUqapwwrniFIOs
+        NsghiibFEhrl4DK0aWija5Yo3kWmNPhTX57hHybQHeS75WdYOlEA52cAEO53vbIDtcbyctXB0Wj6U
+        8Rswx63LxU+IcmZB8KMl8h7OsqgeXrhAJRTdrlyM/lrkQ9exCIMoi8CoN9QuSt5hc5NbUjDLpv/b1
+        5/e4lroUY67x+YNyWSI7X9m7eYxiWKeqFMRYZxvFjxJpX9jXCXHAmIWlLJpcV8YNc+jZd8189xl/2
+        RnQuJppOkC6z4LwiTPWY+0ntxJ2yc1WNWyHngM58IRBgCEqBbXlNWre1yrpsLXbP0HU3de9zycgJd
+        h2mCyieg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIfk5-007qLY-43; Fri, 20 Jan 2023 00:58:53 +0000
+Date:   Thu, 19 Jan 2023 16:58:53 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+ <Y8ll+eP+fb0TzFUh@alley>
+ <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119212317.8324-12-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:22:49PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
+> On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
+> > Yes, the -EINVAL error is strange. It is returned also in
+> > kernel/module/main.c on few locations. But neither of them
+> > looks like a good candidate.
 > 
-> The Write=0,Dirty=1 PTE has been used to indicate copy-on-write pages.
-> However, newer x86 processors also regard a Write=0,Dirty=1 PTE as a
-> shadow stack page. In order to separate the two, the software-defined
-> _PAGE_DIRTY is changed to _PAGE_COW for the copy-on-write case, and
-> pte_*() are updated to do this.
+> OK I updated to next-20230119 and I don't see the issue now.
+> Odd. It could have been an issue with next-20221207 which I was
+> on before.
 > 
-> pte_modify() takes a "raw" pgprot_t which was not necessarily created
-> with any of the existing PTE bit helpers. That means that it can return a
-> pte_t with Write=0,Dirty=1, a shadow stack PTE, when it did not intend to
-> create one.
-> 
-> However pte_modify() changes a PTE to 'newprot', but it doesn't use the
-> pte_*(). Modify it to also move _PAGE_DIRTY to _PAGE_COW. Do this by
-> using the pte_mkdirty() helper. Since pte_mkdirty() also sets the soft
-> dirty bit, extract a helper that optionally doesn't set
-> _PAGE_SOFT_DIRTY. This helper will allow future logic for deciding when to
-> move _PAGE_DIRTY to _PAGE_COW can live in one place.
-> 
-> Apply the same changes to pmd_modify().
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> I'll run some more test and if nothing fails I'll send the fix
+> to Linux for rc5.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Jeesh it just occured to me the difference, which I'll have to
+test next, for next-20221207 I had enabled module compression
+on kdevops with zstd.
 
--- 
-Kees Cook
+You can see the issues on kdevops git log with that... and I finally
+disabled it and the kmod test issue is gone. So it could be that
+but I just am ending my day so will check tomorrow if that was it.
+But if someone else beats me then great.
+
+With kdevops it should be a matter of just enabling zstd as I
+just bumped support for next-20230119 and that has module decompression
+disabled.
+
+  Luis
