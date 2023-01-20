@@ -2,160 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501A6675E74
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D50675E7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 20:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjATTzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 14:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S230138AbjATT5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 14:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjATTzo (ORCPT
+        with ESMTP id S230123AbjATT5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 14:55:44 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2041.outbound.protection.outlook.com [40.107.96.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6E0BB96
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:55:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HSL/g176LmGC0ysLLgEK/MzzzHlv93vIMcK9P2f2K+tTsqcIwHoURL0mLzrFzMGYBciU7FbhQJ2jmvQnm1LmSfFuZmUSDI6oXjdA9HJyN6G4OnGzGvatOORVpqDz+LRYZrg0GPbcyKCsxVFuoOYlYc7jqrCaAG8CoNZB+5aj+5ruyfUrNB82Nm5VKuq3PzAATqeMzBM03lgrrJN3esrSJS0v/uGFil/7hUScuclNxZXGc60hEvcHGKCET77Xv0GAAy+/8fKWm6e1LFqihtJo644cosbDbh+M3Av+3BwpCMDVlZLMZaXEWflqvSu8qvNpffrKk4hgeECp4BK63Mz6sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vqw0VLpPJ2+HNIt/go5j60c2bL2EU3ULlLAoBIcSQSM=;
- b=TqBJl+bOiFGQegYQ3D/rl3rEsx2gjrQA92Jp9EowScx18uNo6znlgFd3PDO4JUFl8xvX8WX3Z19Ttezd+/6jIXKjTGIYGQSXfvptAs13f+bz7G0KHEzCfI2vOs4x2sANqzMRgPZ+PB9CnhAx07hHoGBrNZQ9yIoi1w40rOln6+MflqDrWd7p75J23ZMEirJYogx71nKgCUBQcn4trthCUpA0Y3P5KsYBJC7i5T4yHfBIa/gphd/sWDzaeEP80KxSnWpdDu7Dpha/YNT6cKerinFSW6ws+mUsika/TTx/wXrWsUNdGTWPoH1t/Whb5q1czYHwC+sKJc28IdLCP58XGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqw0VLpPJ2+HNIt/go5j60c2bL2EU3ULlLAoBIcSQSM=;
- b=f7F2xFc6AENDcCjnAS/4uhFBRHbtL/9jrbnUBHN0zX49DjhVKrzuvaKVEtNMxoBRWNwMhGal2FIiSkqHxOxROaaON03wswQEq1552aBuTSfCX613zdB43oLC4kZ3U2c2ahQMEYUJ0ILmWQj7ucVy4tkW5iXVG23cOjWwWQ5Ydn0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by CY8PR12MB7732.namprd12.prod.outlook.com (2603:10b6:930:87::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Fri, 20 Jan
- 2023 19:55:41 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::5317:fa3f:5cbe:45e9]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::5317:fa3f:5cbe:45e9%3]) with mapi id 15.20.5986.023; Fri, 20 Jan 2023
- 19:55:41 +0000
-Message-ID: <da56ae0c-8f72-b39f-95b8-8870ec9fb336@amd.com>
-Date:   Fri, 20 Jan 2023 13:55:38 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH 1/4] iommu/amd: Introduce Protection-domain flag VFIO
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        joro@8bytes.org, robin.murphy@arm.com, thomas.lendacky@amd.com,
-        vasant.hegde@amd.com, jon.grimm@amd.com
-References: <20230110143137.54517-1-suravee.suthikulpanit@amd.com>
- <20230110143137.54517-2-suravee.suthikulpanit@amd.com>
- <Y8F53dzdebKLTlOy@ziepe.ca> <90762dee-1559-58ac-220d-a13635d5032e@amd.com>
- <Y8mBczFH/Hw6xot0@ziepe.ca> <c3fbec52-1281-eb1c-40f8-588438146c14@amd.com>
- <Y8q9ocj2IZB2r6Np@ziepe.ca> <1ba09b11-8a07-24dd-a99f-eeacb2f5c96c@amd.com>
- <Y8rUYTjVhksAu+i9@ziepe.ca>
-From:   "Kalra, Ashish" <ashish.kalra@amd.com>
-In-Reply-To: <Y8rUYTjVhksAu+i9@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR19CA0005.namprd19.prod.outlook.com
- (2603:10b6:610:4d::15) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
+        Fri, 20 Jan 2023 14:57:12 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80393704;
+        Fri, 20 Jan 2023 11:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674244630; x=1705780630;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iC9Sku/1FS8bS0BEe/bVvaJpcv483oSNkneLcUSbwA8=;
+  b=NdZHn/owOOY8y8tkwmNblDm2KmeTDNPkAXg8J3j76nvtsnQTIUX7sh1E
+   ISdkrh48GstWv66LMGYyV/ILXpBax840af5LaSSTEfXezy6DkFwQMHcXw
+   CGDP4sKFX3E5v+mx7Fl32ax/Jc7lqoyax+ca0SxJsahU11BauOMqMiTEI
+   xeGK2p746Xguv1b+ukrRE67EnhnYPcviXXTG5Ju1hbaa4uCaC/9jk9syn
+   WIh6Axe6gCCDoOyNOo0J05ceZ8M6WdnB9MAgGfus0Sz3s08Mlm9c1dIh5
+   Ohao1gPVyaut+0FF5/dh7BTTgc8EhvrdYl2EHTl7c5Pauxou0zRFBI0jM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309250650"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="309250650"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 11:55:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="638267527"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="638267527"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 11:55:58 -0800
+Received: from [10.212.214.233] (kliang2-mobl1.ccr.corp.intel.com [10.212.214.233])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id ABCB9580AA4;
+        Fri, 20 Jan 2023 11:55:56 -0800 (PST)
+Message-ID: <50e840ea-ce9c-9290-2187-d3ff0d9a6709@linux.intel.com>
+Date:   Fri, 20 Jan 2023 14:55:55 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|CY8PR12MB7732:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6265bb23-7a98-437c-dcb0-08dafb204ef4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tXyweqaBl0eiTJw6O3bRII5wVTHo/+PhYWSi82ypy/Spj1Bw5RT0eGLLz3kGIPJZfp8VVLvozbnd9kNqsaf3mm96rU3PuHYBzZGe3UnIiqfnqdcLxkjuCtFi0OpntiJBdlGt1qhaYz0/1BAo+qyEjb6ItIZ4XbHFhQyYG0HwJFFOvtjwLL7BU4NTFI8/op8cCP9OKXJ5EC4agoM/WLVHpsKlvIbKORhIdzSQ4Y5oIjWYx6FmvdxWax9SUiOi1DcS1sTw3HyDVuCp/JPcq968vB2Zt7UuSbA7K7UbYp/fq3JGHD0cFW+7hwgl30YULfc43Y6h5r90n4R1R8Kx/7CsJZWmpRbJRsKUaYxSEygxf8QKcjI3bbzm6q0m5RmVcugyhiqRd2rI/ZjlZv82482LWfOC7vTCYjZorwr/vQhUqfGK1zP9nurqJRJ47NNTLZb50GxBEb8fI9RDNZhdahd32Zu9MqyvxI1X/FMB3n65fGeGzl2SNygVm9OsfHj4GTw8p3FulOsKdgbwyvFrPc5P0Ds2h0uZ4JDnAcfzb9ergMfg8xotY0ymEzmGFtH3duJKjbXGyelu7U39gf2Bf+uOkrnfJGmb0rFDmTgxOT+Ya69CDgt0q/fbSbaATDleTA2gEwDpI4Ea5EDBKKkbBxk02EfLYrJnrPupJqJs2o9dLec+pK4ToszkP8mM0NrUfb57zfDEyCPvItBOJ3q1D4d+J8gTlo2NJB4dz0KncQe7vIU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(39860400002)(376002)(396003)(451199015)(31686004)(38100700002)(2906002)(31696002)(36756003)(8676002)(316002)(2616005)(86362001)(66556008)(66946007)(6916009)(6506007)(5660300002)(83380400001)(478600001)(8936002)(66476007)(26005)(4326008)(41300700001)(53546011)(6666004)(186003)(6512007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDNvY1VXZytOdC9qd292bDFWTHhaT05aT3NLUElxWXpjams1eTBWWW8xZkVU?=
- =?utf-8?B?bDNZY1VvZUp6bWJKeEhzMldDLzBaaThXcUtUcERBb0ZFVXBBdFY1b3lPRVQz?=
- =?utf-8?B?RFZHL1l3Qlk2ek91K3hWNXpIQ0taK053VWlvVWdoZW1ZNi9kK1ZYdlJlRU5E?=
- =?utf-8?B?OXMva3ZTb3pUQXRaYi9KSjZXUUpzajFiYXRDUThSaE9ValFWbHhXSE1CcEdT?=
- =?utf-8?B?aU90NUlsNGFJdEJyeXcxZEZrbEo2UElTVEd5K0JnQUErR0gvQ3ppZWdsdE1j?=
- =?utf-8?B?Z0xFdS9YNHkrUXZBVEdtZWFCYjZoL1NkdnRpYW90ZE1LanpWdFpDNmtkSC9r?=
- =?utf-8?B?cXluckl5VlpWdlNyazhzSitGckZ4RlhJNFBMY0RRVVgvTjQ3Z1lON3M1QkVo?=
- =?utf-8?B?QUVOVjhRU2FyV0VjZGFzaVN2NTFHaDdCR1U2UUpITVpXMUo2MjRLZ1NRNUww?=
- =?utf-8?B?SjVqWG9yTEVXWjhrdkNYQjRBWjJLL3ZmdXFuVkxQREVpNUQxM2tUTlJJT241?=
- =?utf-8?B?Mmthbm5tSXNVTVBoaHBWbWxWZmZIcmgrb0RMTk1USG01UkkvS1ZodFBmdFRm?=
- =?utf-8?B?OTF2TDNIeU9aYytGeEpTZENRUnpOSmFPUTFkVzhyMGRVcEIwL25DTVAvcTg5?=
- =?utf-8?B?UEVGK2s5VmdRUjJqUzh2c2VnYzduN2tCTENaa3JvNkFSSHNpYk9LYlo0VnlI?=
- =?utf-8?B?RnlsSHlWV1lYa3Nqbm4wZFRodFVaMVljdTJZTThBZEtVTEErLzR2elJTMmVh?=
- =?utf-8?B?V2h1ZTh3M2JqOEpWUk92bS9pT3phdGhzM0ZuVGpRTDRRY2loQU0yeVBjcjBv?=
- =?utf-8?B?ZTcvemMrbHVmWTU3NHhOMGQ4ZjBnTlUvQXNWUHVmNU9UTzd6LytFRXhZUldq?=
- =?utf-8?B?d2hLTXBEaDZwMWtWZkV5S1pRTTB1NWdrWVBIYU50UDdwTDVXVEkvSE9wM1dh?=
- =?utf-8?B?MTNOVlVjbVErUFJvWlFoQ0cwb3VWZGVNVFRuOFI4MmNOb1ZXT0owYVBWSjM2?=
- =?utf-8?B?elg4V3FwQ21haWVaUVdRTHRVOGtTbCs1bXdPVEhON1pET3NtUlNOZndjUm1J?=
- =?utf-8?B?S2phZStMeU1SSGRPanRJOGdPdTQ5WWN6NFdySi92MSs5bVNqVmhOanBERzZo?=
- =?utf-8?B?QkFLT1pYeUYxVmhMZ1hYdmdTSFd1c3B4Z2JFZWZ3eTRBM1E3SDdDQ0dPZGtM?=
- =?utf-8?B?MDRPNEtxS1YrT3JmYTlTUVpNRUw0Qy9Ub1hxdnUrVUM0VVprc3dsZkpQeVZX?=
- =?utf-8?B?ZWxkZFlVTERhcnIraExENVdLWDVWckFpU1I1SWJMbERLdmlKR1RjUmpOeHdq?=
- =?utf-8?B?aThUMTdVNHNDNjQzQ0E2c29NT0VISUhoUWdsZGZkQmpVR2tKRGFQa254Nkli?=
- =?utf-8?B?YmhoZldZelFBb2UrUGszaWRtWk5abTRsYWpRUVZxZXcxRDVWSXFncGo2TWdQ?=
- =?utf-8?B?aGRndWV3Y2xPbVM5NzJJa2FQL0NkSVlqZUd2WTBXeTJLS1BJQldSaG5kT3Er?=
- =?utf-8?B?dXJlTHRQSTFTUWlVWXpkRmdDR2x3bWF0T1dhWGMvNCt6dkE2dU9EQjRwaHZO?=
- =?utf-8?B?T0l4QjNoaGMvRzRYV0hFQmg3dEYwMWZVY05mMG1XWjZqc1JCeXNNczY1TDVw?=
- =?utf-8?B?ZkloVjN3RVQyaDA1cXZUWXoyVEhkendNMWRLc1E4OHFCcThZY245cjZVUTEx?=
- =?utf-8?B?YklkWDFDVllaaG9FaVFmTzB3M0xSK21Qa1BrYUplS0M1YUZzN3hjRHBXazBl?=
- =?utf-8?B?VnZleWwwZXAyZjlpLzNlalJTMWdaRWwxK3pWQkUxRGVtcE8xQWNyY21HV0JS?=
- =?utf-8?B?RFB4MjRsTmJHT3BOdHA4Sk5SM3JMSm5vcWRIcEpVRWptWWhPSzZhRlUwVjZm?=
- =?utf-8?B?OFZxeFpXRVNHNlloMUlVNFBJOTY4MWlWMG4zWGJ6YnlqUU5CUEtpZHN6QWM5?=
- =?utf-8?B?UzFCQUh3UE1nQi91NHdITXFJMExqL2ovTnZkRDBlWGV4SXYxZkV2NTJvZWFq?=
- =?utf-8?B?NFBUSHlsSEpMNnFaNm12cjlXR3AxM2VwTnFPSE1rY1lRNllhbnZHK1NRRVl3?=
- =?utf-8?B?RVUrVVFMTTZYaWRSMXdjc1U0TkRIR0daTjBwT2NmRVZwT3ErRTIrN2JRN2Fp?=
- =?utf-8?Q?iqiEgmoMqJj7rkRGpAjKd+Hx5?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6265bb23-7a98-437c-dcb0-08dafb204ef4
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 19:55:41.2447
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 39+CWl5xtNYvvVajrVFpUyVOWIxOeigYEocmQDZ3ANsJx5aJs4B231p0JC1wcCou9ADqrjfyeSBfBW/EFRXYQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7732
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/x86: KVM: Disable vPMU support on hybrid CPUs (host
+ PMUs)
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Andi Kleen <ak@linux.intel.com>
+References: <20230120004051.2043777-1-seanjc@google.com>
+ <1dec071d-c010-cd89-9e58-d643e71e775c@linux.intel.com>
+ <Y8rQJf3ki8a1aRjW@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <Y8rQJf3ki8a1aRjW@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/2023 11:50 AM, Jason Gunthorpe wrote:
-> On Fri, Jan 20, 2023 at 11:01:21AM -0600, Kalra, Ashish wrote:
-> 
->> We basically get the RMP #PF from the IOMMU because there is a page size
->> mismatch between the RMP table and the IOMMU page table. The RMP table's
->> large page entry has been smashed to 4K PTEs to handle page state change to
->> shared on 4K mappings, so this change has to be synced up with the IOMMU
->> page table, otherwise there is now a page size mismatch between RMP table
->> and IOMMU page table which causes the RMP #PF.
-> 
-> I understand that, you haven't answered my question:
-> 
-> Why is the IOMMU being programmed with pages it cannot access in the
-> first place?
->
 
-I believe the IOMMU page tables are setup as part of device pass-through 
-to be able to do DMA to all of the guest memory, but i am not an IOMMU 
-expert, so i will let Suravee elaborate on this.
+
+On 2023-01-20 12:32 p.m., Sean Christopherson wrote:
+> On Fri, Jan 20, 2023, Liang, Kan wrote:
+>>
+>> On 2023-01-19 7:40 p.m., Sean Christopherson wrote:
+>>> Disable KVM support for virtualizing PMUs on hosts with hybrid PMUs until
+>>> KVM gains a sane way to enumeration the hybrid vPMU to userspace and/or
+>>> gains a mechanism to let userspace opt-in to the dangers of exposing a
+>>> hybrid vPMU to KVM guests.
+>>>
+>>> Virtualizing a hybrid PMU, or at least part of a hybrid PMU, is possible,
+>>> but it requires userspace to pin vCPUs to pCPUs to prevent migrating a
+>>> vCPU between a big core and a little core, requires the VMM to accurately
+>>> enumerate the topology to the guest (if exposing a hybrid CPU to the
+>>> guest), and also requires the VMM to accurately enumerate the vPMU
+>>> capabilities to the guest.
+>>
+>> Current kernel only return the common counters to KVM, which is
+>> available on both e-core and p-core. In theory, there should be no
+>> problem with the migration between cores. You don't have to pin vCPU.
+>> The only problem is that you probably can only use the architecture events.
+> 
+> And how exactly is KVM supposed to tell the guest that it can only use
+> architectural events?  I see CPUID bits that enumerate which architectural events
+> are supported, but I'm not seeing anything that says _only_ architectural events
+> are supported.
+
+I think we have to use a white list in KVM. For the unsupported event,
+KVM will not create the event.
+
+> 
+>> There is nothing wrong for the information provided by the kernel. I
+>> think it should be a KVM issue (my guess is the CPUID enumeration.) we
+>> should fix rather than simply disable the PMU for entire hybrid machines.
+> 
+> I'm not arguing this isn't KVM's problem, and I'm all for proper enabling in KVM,
+> but I'm not seeing any patches being posted.  In the meantime, we've got bug reports
+> coming in about KVM guests having PMU problems on hybrid hosts, and a pile of
+> evidence that strongly suggests this isn't going to be fixed by a one-line patch.
+> 
+> Again, I'm not against enabling vPMU on hybrid CPUs, but AFAICT the enabling is
+> non-trivial and may require new uAPI to provide the necessary information to
+> userspace.  As a short term fix, and something that can be backported to stable
+> trees, I don't see a better alternative than disabling vPMU support.
+
+I just did some tests with the latest kernel on a RPL machine, and
+observed the below error in the guest.
+
+[    0.118214] unchecked MSR access error: WRMSR to 0x38f (tried to
+write 0x00011000f0000003f) at rIP: 0xffffffff83082124
+(native_write_msr+0x4/0x30)
+[    0.118949] Call Trace:
+[    0.119092]  <TASK>
+[    0.119215]  ? __intel_pmu_enable_all.constprop.0+0x88/0xe0
+[    0.119533]  intel_pmu_enable_all+0x15/0x20
+[    0.119778]  x86_pmu_enable+0x17c/0x320
+
+
+The error is caused by the access to an unsupported bit (bit 48).
+The bit is to enable the Perf Metrics feature, which is a p-core only
+feature.
+
+KVM doesn't support the feature, so the corresponding bit of
+PERF_CAPABILITIES MSR is not exposed to the guest. For a non-hybrid
+platform, guest checks the bit. Everything works well.
+
+However, the current implementation in perf kernel for ADL and RPL
+doesn't check the bit. Because the bit is not reliable on ADL and RPL.
+Perf assumes that the p-core hardware always has the feature enabled.
+There is no problem for the bare metal, but seems bring troubles on KVM.
+
+There is no such issue for the later platforms anymore, e.g., MTL, since
+we enhance the PMU features enumeration for the hybrid platforms.
+Please find the enhancement in Chapter 10 NEXT GENERATION PERFORMANCE
+MONITORING UNIT (PMU)
+https://cdrdv2-public.intel.com/671368/architecture-instruction-set-extensions-programming-reference.pdf
+
+I think, for a short term fix, we should fix the issue in the perf
+kernel for ADL and RPL, rather than disable the entire vPMU on a hybrid
+platform.
+
+How about the below patch?
+
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index dfd2c124cdf8..d667e8b79286 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -6459,7 +6459,13 @@ __init int intel_pmu_init(void)
+ 					__EVENT_CONSTRAINT(0, (1ULL << pmu->num_counters) - 1,
+ 							   0, pmu->num_counters, 0, 0);
+ 		pmu->intel_cap.capabilities = x86_pmu.intel_cap.capabilities;
+-		pmu->intel_cap.perf_metrics = 1;
++		/*
++		 * The perf metrics bit is not reliable on ADL and RPL. For bare
++		 * metal, it's safe to assume that the feature is always enabled
++		 * on p-core, but we cannot do the same assumption for KVM.
++		 */
++		if (!boot_cpu_has(X86_FEATURE_HYPERVISOR))
++			pmu->intel_cap.perf_metrics = 1;
+ 		pmu->intel_cap.pebs_output_pt_available = 0;
+
+ 		memcpy(pmu->hw_cache_event_ids, spr_hw_cache_event_ids,
+sizeof(pmu->hw_cache_event_ids));
+
 
 Thanks,
-Ashish
-
-> Don't do that is the obvious solution there, and preserves huge page
-> IO performance.
-> 
-> Jason
-> 
+Kan
