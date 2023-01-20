@@ -2,51 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3756759A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F976759AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjATQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S229825AbjATQRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATQPl (ORCPT
+        with ESMTP id S229487AbjATQRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:15:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD714CFD26
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:15:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF68261FEE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF27C433EF;
-        Fri, 20 Jan 2023 16:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674231332;
-        bh=xXhXTMxKo1OimWhu5kAmuS7msRdZk/rgYF7+cW7gPUo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PyNdK4+sMXqBpM+1o3ehi3YOjmG+iE6TzHr9++A47JmF7uCy6h6CeC3i8EMb9a8bM
-         aTrwxgvx+5Ilz7h+x+K9TcfZ9VPOOL7AN+weUn/rv/N8igGfP2JcmajFeyy4rNCbxe
-         h/hdBlYPi6cXKrZD2qwYuEP+VcdLZ6HMFb8jERwGLi8ndxWnVicz7lEWszOXgDZWE2
-         N3rJin88Ic6noDJuF39OMct0JpQxBdrb5/+cj97DlrH3ZY/WN2zLVC8I2ffcLmkpze
-         jtys26uLJfLaLi5ASygftfDE7IKTsqZQkjN+f64tIyQ0xKvIDOOGCjjBycxviI41lD
-         cs4bOj5/eBE/A==
-Date:   Fri, 20 Jan 2023 16:15:27 +0000
-From:   Will Deacon <will@kernel.org>
-To:     joro@8bytes.org
-Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        kernel-team@android.com
-Subject: [GIT PULL] iommu/arm-smmu: Updates for 6.3
-Message-ID: <20230120161527.GA22266@willie-the-truck>
+        Fri, 20 Jan 2023 11:17:14 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2106.outbound.protection.outlook.com [40.107.255.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AFDD88C2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:17:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=URElY5bQB98tco8pTiPkdBQdCR+SxOQBV7R0ggPWCzISblNCpo91+PXrZdf6iFbK4UHNNDHzoVuhK+22IjDpqvxZaehlvX/jafVYyD/+hImLSCIcI/FWpgPGLN0EvCWMg7Wr44boA9yqvh2kELiO8Wv1zD73gxDkDRmsvpCqF0+DkvEKt1PKk7VjSnCTNpY7fEpGs1pMoLDhDjWo6vcE7Tzwrz60pC9jsaqpRSCLO2+KzVfrVpYqYCEKPPOdk9VyS7Z+LyqsvWQ9enrXOe0bF1TlBZ/zMTlBnrsDnfVD2g88Xpc44iXZJuryK+lTsaHHueOAPsNMbL5MhvQy4cH3og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8lJ3yJrB3A8rLWx2XBIG7df0s87Jz6khg7Z8UDThGoo=;
+ b=SCcczmWk5v0nsMD4PGe3Qc18HHc+y5dnL7Y0W9nzErgwwbWKfxc67yJJMFma0m4utvFZJRp/rL9qD/FHKB9Rt+e3eRZL8IbSfd78QpM2EghwKrmfpaXa4UWudMxZ0Ic+OL1iJ5ehOv1TteVZJgHWzE4ZdAwOnPiti2/Jz4lF1e8hPnrga7RQskC2oHJY7n8W3vJZEKw1V2b2wDgkJZAIPLdxpXRCDuW9QSBCoF6iQ1eVNZVdyEU/+iKQ4QwhTok5p3MWGUE3fEd4+ftyXh0+bCAWCsp6YRgyeRp3HZy+R4Dx5Zheic8mCQonUUEak7NEZbsVpYvpsFjSV4f+YBXBmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8lJ3yJrB3A8rLWx2XBIG7df0s87Jz6khg7Z8UDThGoo=;
+ b=TsywWlnvbDW7nb5J3CRIuZ2CDkGRDgOaUNcLGhIhExu6y6Nr8ikT5V+WUptKOVqa6MiXjLtCiIRCxL88MrPZzI0Gbe49raZ8qi4wdE5WvIFX7f1o25sfhWHZTLS8Yms4Ure94+4MQZ3Vk69bvU/Xr6Ybt7UeL7jBQMBWg/BH0RS7noyvFD0LyiXEq4/Pmp7wwtZ49SYIlJBd9rqdoXt4G/YzMs3V9m3/KnaAdoxnma4MlWh4m4YnKpsm6wI8LmtANwNrISSf2Bm8EF76MAsCY9LEsnBLvivamKy6gRjeZBHge9cmsa+dpC8jXzUGWtEQetLNe/GrI2+u8iL/JnUlNg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR06MB6233.apcprd06.prod.outlook.com (2603:1096:820:d8::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.5; Fri, 20 Jan
+ 2023 16:17:06 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Fri, 20 Jan 2023
+ 16:17:06 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH v3 1/2] f2fs: fix to avoid potential memory corruption in __update_iostat_latency()
+Date:   Sat, 21 Jan 2023 00:16:55 +0800
+Message-Id: <20230120161656.70308-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0041.apcprd02.prod.outlook.com
+ (2603:1096:4:196::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR06MB6233:EE_
+X-MS-Office365-Filtering-Correlation-Id: 607ef2a7-b2db-4734-7847-08dafb01c623
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2OHeEkaJ4KaNAXkuyCzGVt6LEG+H3Imyc16iHSiQx9ETlNc//FS4SGwwegWl8uKYha0x9UjEf9xaPUjMPhttaDicISvrCyLk99eCyZFl/Jce3FPG1PRzePiVZ2TfWFJCM8v7VPjPY3E7qNBZLg3tKXTEAYb+iCerscllwa/Csv6sGn/3CzeCF6lQfdf7AzUY/EjuBVAULAWJCByLObRNH9VZ8bl+frAw11amWjYONH+9VJiHEA6vEWv+ECif1Yyvros/YIZq4keVlUUf5q6f5mNYC9mEg3yExUGch0NRJQiPJpAze/yLsgFUpEXU3fP46ekRMgl7qIV6sPB8BGgYPJmorl43pfEBDVqc4FhWoMT6gDLduKJQEMvRAKbajXoux45bnqDWdV6MTRHtkFlDEoxsIwtdNlccvgJptHYCTNE5m3el3LhEB3i2IG1zx3MYEmOQd8nejMGzd8cv89+xaWo+cXOeZIZKxwZSgcqWokZkIICU9gYCFTLBkcWW16zy+q2WaVfbbIVQXCJJHVJ1turgX8zo+40lVAxDc+4CmQgJY7Qd43Yihf/XSLIfL3Nw5nByFvNUdaUxb7T+pc095CoLRPDEtcML1dS7+OtnFUS5730Qpa8eUl2w0WG2EYVNFUHrZYolj7I7YrfFuOgFyHlUYKtjSUQvcEBTkziKltHnAxlYElHVxybPMdxf2tt8Fgg5YTMCdwNMy0dqIdb+0A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(451199015)(6486002)(5660300002)(41300700001)(8676002)(54906003)(66476007)(66556008)(316002)(66946007)(2906002)(478600001)(1076003)(26005)(6666004)(52116002)(36756003)(186003)(6512007)(6506007)(2616005)(8936002)(4326008)(83380400001)(86362001)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mJT2oE7+ENvW68Ki7r6LEBUFcTmIBnoqGYO+bHgMikq2NXvZjZ4YS85UdsCa?=
+ =?us-ascii?Q?pKleo3CBPxbWd2dM71kifd3eX0muQoLnT8fAWg/a7VjdbRH0BZimnMIAer74?=
+ =?us-ascii?Q?mU/Sm/eQfBgewmEHS5MOB75m0xZj8vr3A4CuCyoMw8jvFytmmA8eGz24fbq2?=
+ =?us-ascii?Q?dB+bJgqZhgLSyMu9fgVlRqx5toUkaPaMyvZ7N7lVqtqT/9g3kfSE+t0G8T/+?=
+ =?us-ascii?Q?STA5Pqjg3HnI0HQY8+VfSehRjvlYeo0CCu2r4pfi4xUx2rbhVL9ra0i6Y8M8?=
+ =?us-ascii?Q?7QDY3tLL7GHlrGQidzOTdpANp+oTkazpBtvBFw9TWgIxxntdI/5l3ObGFLhx?=
+ =?us-ascii?Q?4CzI+dmUiGHocX+4caz5+5BfgPNNMWZNSYBNjaQARJif9o+pnqWgn8njUme1?=
+ =?us-ascii?Q?6T6H37Uo5AiRviYXYZYKBbQ+zzk/8jxQ2NQ8pLXlBkXM6lJ2nlQZUSRfiNrs?=
+ =?us-ascii?Q?vP7w2Eq4LYD8v3TYj+E42fnqebzo1yGtnmHIKDQC0DC03G8v1UNQjqkKkaSL?=
+ =?us-ascii?Q?SfifbjZ5ICH3K9F4fEjkTml08FFK7pu7isU5/9GWDU5Z7/kbpc6BX+2TxNzN?=
+ =?us-ascii?Q?tkSkcdE2p6WjLw01xWSeLvyfYCVsJ8HyDaez7pE7seB3o8R8r8Vwm9zp3bgc?=
+ =?us-ascii?Q?oc3sEVA3Mau4JjHcz1+zHkYG/rmW7f3Vqu9/B0Axs9uErI4SB0lRRYERVgJs?=
+ =?us-ascii?Q?KzSh5OTZ6wgq/cu31AbvPmjIwE05rhqScXJOAWnUyG6JaT1/nTOe0UYe3Xzr?=
+ =?us-ascii?Q?vLkdoyPEGLTiYV6x59IAArXz7SnZak1GVW7Ho22qYjRkSxJjd020MS5pgL6u?=
+ =?us-ascii?Q?qCUnIGfXsAWbcwWNKGCZ0yuFfx4+J4NxEwIyzSIdPsvybGyjx2bOphXPUiAa?=
+ =?us-ascii?Q?6viacEfSUiQYDG8bG1haALUhwvNO3d9oH8BkD9yTeA5iUGjvzk6i3Tgh9YaU?=
+ =?us-ascii?Q?GzxYlYsLHiwGtuJIgTRbkwikwVmw8Kb+6ko8kqGy7ElspjFzhx3vqjPL4LTI?=
+ =?us-ascii?Q?RhK0jAatwnM8LxDyjo3GBnyEjpIa2MGeAACTH2rnJOsG3pHL/O4UvDsgyc4W?=
+ =?us-ascii?Q?1menBJfOdXe7mgDJkT8uXQh6hHp8CG6YyESGERSG20E/c/EVdm/NJm/75olc?=
+ =?us-ascii?Q?TKVFAf2X6B6juLR0I2YKZ3LuEpkxE4RLTf8x/1jpnyS4uYyjDuFkx9jbroW+?=
+ =?us-ascii?Q?ZGrkrTPseAsf9hKkykGVFsi7BG56fov/BvGxRykgc4naDH6LKUKLxq9MgHj1?=
+ =?us-ascii?Q?/n2TOBnES892X7sdIDoKj+dnKwkugnu6XdQmald+2UyJyl8sxe+WFzUxUnyp?=
+ =?us-ascii?Q?fV8+8xiO5Y3Ro5B8+uaDjkYgdorbCOzxKXfFaGilKtPjEovvaRtJCmUdwRGC?=
+ =?us-ascii?Q?HlV2Lso52DD7EWampQAkwLvEmHcS0y4SJU76p+kJpJp9E48OU7Q6hyIqZcqX?=
+ =?us-ascii?Q?xbT8e9oc8obklvse+5cOSm1HZaCTbgi7duh0ZCQBCDiRYsBDUtx2hbihzYfQ?=
+ =?us-ascii?Q?B4VXZ5Br7wuJk3rJvtp5UHBRf4JsFsWFbY+SHyujzmjKeBF5cQuINaN9e3fY?=
+ =?us-ascii?Q?fqalXUOk5mUdvFn84abb533GEPtnzG2bZIkflBj9?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 607ef2a7-b2db-4734-7847-08dafb01c623
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 16:17:06.5504
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UJLCCWrPkiFlpDUO0N3+9TAPX1O9KBzmKBEVm8QQgj3TFHFANwNjUpqXRFfqqt6Re3hAFAVIqy9ktURRWsVWFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6233
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,91 +113,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joerg,
+Add iotype sanity check to avoid potential memory corruption.
+This is to fix the compile error below:
 
-Please pull these arm-smmu updates for 6.3. The only changes relate to
-device-tree bindings and their use within the driver -- summary in the
-tag.
+fs/f2fs/iostat.c:231 __update_iostat_latency() error: buffer overflow
+'io_lat->peak_lat[type]' 3 <= 3
 
-!! NOTE !!
-To avoid conflicts with the fixes I sent previously [1], I based this
-branch on top of the fixes tag. However, when I did a test pull I
-noticed that you seem to have cherry-picked the changes from my earlier
-fixes tag rather than pulling them in directly, so if you pull this one
-as-is then we'll get duplicate commits in the tree. How would you like
-to resolve this?
+vim +228 fs/f2fs/iostat.c
 
-If you decide to go ahead and cherry-pick things again, then a linearised
-history (since I've got a merge) is:
+  211  static inline void __update_iostat_latency(struct bio_iostat_ctx
+	*iostat_ctx,
+  212					enum iostat_lat_type type)
+  213  {
+  214		unsigned long ts_diff;
+  215		unsigned int page_type = iostat_ctx->type;
+  216		struct f2fs_sb_info *sbi = iostat_ctx->sbi;
+  217		struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
+  218		unsigned long flags;
+  219
+  220		if (!sbi->iostat_enable)
+  221			return;
+  222
+  223		ts_diff = jiffies - iostat_ctx->submit_ts;
+  224		if (page_type >= META_FLUSH)
+                                 ^^^^^^^^^^
 
-1d6316e50572 iommu/arm-smmu-qcom: Select identity domain for sc8280xp MDSS
-4fef70ad65f6 iommu/arm-smmu-qcom: Add SM8150 DPU compatible
-c940c8787929 dt-bindings: arm-smmu: Document smmu-500 binding for SM6125
-7caf324fac0b dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
-3a3f20bae0ce dt-bindings: arm-smmu: disallow clocks when not used
-e3fed6861d86 dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
-58499c0fd22c dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
-5cc1842372bf dt-bindings: arm-smmu: Allow 3 power domains on SM6375 MMU500
+  225			page_type = META;
+  226
+  227		spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
+ @228		io_lat->sum_lat[type][page_type] += ts_diff;
+                                      ^^^^^^^^^
+Mixup between META_FLUSH and NR_PAGE_TYPE leads to memory corruption.
 
-Please let me know if you need a hand with any of this.
+Fixes: a4b6817625e7 ("f2fs: introduce periodic iostat io latency traces")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Suggested-by: Chao Yu <chao@kernel.org>
+Suggested-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+v3:
+-convert to warn
+ fs/f2fs/iostat.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Cheers,
+diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+index ed8176939aa5..96637756eae8 100644
+--- a/fs/f2fs/iostat.c
++++ b/fs/f2fs/iostat.c
+@@ -223,8 +223,12 @@ static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
+ 		return;
+ 
+ 	ts_diff = jiffies - iostat_ctx->submit_ts;
+-	if (iotype >= META_FLUSH)
++	if (iotype == META_FLUSH) {
+ 		iotype = META;
++	} else if (iotype >= NR_PAGE_TYPE) {
++		f2fs_warn(sbi, "%s: %d over NR_PAGE_TYPE", __func__, iotype);
++		return;
++	}
+ 
+ 	if (rw == 0) {
+ 		idx = READ_IO;
+-- 
+2.25.1
 
-Will
-
-[1] https://lore.kernel.org/linux-iommu/20230113110318.GA12771@willie-the-truck/
-
---->8
-
-The following changes since commit f1ba05a70f7df4e2e4d2d7fed2d4e63a1e700660:
-
-  iommu/arm-smmu-v3: Don't unregister on shutdown (2023-01-11 12:20:00 +0000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-updates
-
-for you to fetch changes up to c9911d6c9bd03655e6c100d7465546d89799e960:
-
-  Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates (2023-01-20 15:14:36 +0000)
-
-----------------------------------------------------------------
-Arm SMMU updates for 6.3
-
-- Device-tree binding updates:
-  * Cater for three power domains on SM6375
-  * Document existing compatible strings for Qualcomm SoCs
-  * Tighten up clocks description for platform-specific compatible strings
-
-- Enable Qualcomm workarounds for some additional platforms that need them
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
-
-Bjorn Andersson (1):
-      iommu/arm-smmu-qcom: Select identity domain for sc8280xp MDSS
-
-Konrad Dybcio (1):
-      dt-bindings: arm-smmu: Allow 3 power domains on SM6375 MMU500
-
-Krzysztof Kozlowski (1):
-      dt-bindings: arm-smmu: disallow clocks when not used
-
-Luca Weiss (1):
-      dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
-
-Marijn Suijten (2):
-      dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
-      iommu/arm-smmu-qcom: Add SM8150 DPU compatible
-
-Martin Botka (1):
-      dt-bindings: arm-smmu: Document smmu-500 binding for SM6125
-
-Will Deacon (1):
-      Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates
-
- .../devicetree/bindings/iommu/arm,smmu.yaml        | 56 +++++++++++++++++++++-
- .../devicetree/bindings/iommu/qcom,iommu.txt       |  1 +
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |  2 +
- 3 files changed, 58 insertions(+), 1 deletion(-)
