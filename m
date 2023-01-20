@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E1B674CE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AD6674CEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 06:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjATF61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 00:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S230458AbjATF7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 00:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjATF6Z (ORCPT
+        with ESMTP id S229530AbjATF7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:58:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33DA619D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 21:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674194267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KjmOoqTkye3UNXuCyk++rWgNtMqygxPkyWDL4dhhiqM=;
-        b=iMVqJj+02lXfv5RHo8ITaqNl3vJtZIDsS0HQW5E3j7vlri5kIHJ/c/tdgCy53iYLFW2YP4
-        ezwTgicL3YBY/ST0Ddm+enwzG8BJHMpJPx6OPtoNCMIn+Hiw8gKgXzQqbBWr+6Nc4enKat
-        7+5CkxP77jX7zSyD6xvP90K2+EAJcPA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-98-kgi0r40PNt-4Eh0V51Y9Ag-1; Fri, 20 Jan 2023 00:57:41 -0500
-X-MC-Unique: kgi0r40PNt-4Eh0V51Y9Ag-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66E4F2A5954E;
-        Fri, 20 Jan 2023 05:57:41 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BE79640C6EC4;
-        Fri, 20 Jan 2023 05:57:38 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, david@redhat.com, osalvador@suse.de,
-        gregkh@linuxfoundation.org, rafael@kernel.org, shan.gavin@gmail.com
-Subject: [PATCH 2/2] drivers/base/memory: Use array to show memory block state
-Date:   Fri, 20 Jan 2023 13:57:27 +0800
-Message-Id: <20230120055727.355483-3-gshan@redhat.com>
-In-Reply-To: <20230120055727.355483-1-gshan@redhat.com>
-References: <20230120055727.355483-1-gshan@redhat.com>
+        Fri, 20 Jan 2023 00:59:13 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8C0EF8F;
+        Thu, 19 Jan 2023 21:59:12 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id v23so4486118plo.1;
+        Thu, 19 Jan 2023 21:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KtnXlmTpuc06EMMN7aGW2IlZGwG+DgNxDWRhTtH1Re8=;
+        b=kgpNi+jm296fYI3NfSQzo8YYhvoSww5NhWWGEc2nKkXV4x9aqG9sh8RAk6TnBKwGEt
+         Uq1SjlFfVAUxh6XKQZDUlqksnDk2EELfLO+cQ9IpI6sbfng0rUX9BWu0zFq02N+PMfiP
+         dVpWeuzMwLJoKmAqw5BK1f8EYetZo4biRnSPCyIaHGtXBIIjBVcv5CCGPsQs0ogMH4IL
+         ZOCcs1hQpH3wjPBbUAtH/sPPOLSYYi052WHj9auNJWFiVth2IQYeebvV+zDKnA40Et97
+         EJQ3PA7KNKK6yCqX9mymtRmq/p0+wgFv1GiX+e+fPjQxRIo4cy1lXXeNmS6kZ9AYAxn1
+         cs1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KtnXlmTpuc06EMMN7aGW2IlZGwG+DgNxDWRhTtH1Re8=;
+        b=jav/p9HbGa2BP9fYRFt/BOcJV4vDbbsCCcebnZKBUgL/lnHoVlf5tRXeWU0MM0X45/
+         3OZHfmyeYRZzPbsi2DKpdHx/rpo/PcNhv71smRauQBp/9wZI+yKTMLRhL8wyzIAXgkWG
+         yBB67s64+qxJPttVQGLhzwNVsdf0NO88edlUeOLNzbQWOq/ecOhVJAD28x5MSaR1Lb/V
+         lVY2tR0lwZcuBoo8Cy7RTLehuhwSvWr/rFhJPgE7OlDnbha1C3XUc9HuV6BaBrgNv251
+         GWplN9EXkrfJv2CboQzV9bCz2c7G+0nFVIzMlUunZ/cgGlbNenLgjKdUgvwxuA7VNf1F
+         jMGQ==
+X-Gm-Message-State: AFqh2kqwoPLIbwewvx73vrrbCNY1r7D1PcdT6lS+1elDKHkTuUlBEPQ/
+        RKXrn5btD666ubMs4FmXeKo=
+X-Google-Smtp-Source: AMrXdXt9Av6xCBCR93tx05BLDhKhEv4i8QUv6LxNawaF18SnmrH3JHXQLeFWRQoUUjL2GbdPxn+72w==
+X-Received: by 2002:a17:902:9002:b0:194:9c02:7619 with SMTP id a2-20020a170902900200b001949c027619mr14595690plp.29.1674194350123;
+        Thu, 19 Jan 2023 21:59:10 -0800 (PST)
+Received: from MacBook-Pro-6.local.dhcp.thefacebook.com ([2620:10d:c090:400::5:186c])
+        by smtp.gmail.com with ESMTPSA id y22-20020a17090264d600b001708c4ebbaesm12757237pli.309.2023.01.19.21.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 21:59:09 -0800 (PST)
+Date:   Thu, 19 Jan 2023 21:59:06 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 7/8] bpf/docs: Document cpumask kfuncs in a new
+ file
+Message-ID: <20230120055906.m4pkchwawfxhj6ze@MacBook-Pro-6.local.dhcp.thefacebook.com>
+References: <20230119235833.2948341-1-void@manifault.com>
+ <20230119235833.2948341-8-void@manifault.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119235833.2948341-8-void@manifault.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,55 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use an array to show memory block state from '/sys/devices/system/
-memory/memoryX/state', to simplify the code.
+On Thu, Jan 19, 2023 at 05:58:32PM -0600, David Vernet wrote:
+> +
+> +For example:
+> +
+> +.. code-block:: c
+> +
+> +	/**
+> +	 * A trivial example tracepoint program that shows how to
+> +	 * acquire and release a struct bpf_cpumask *.
+> +	 */
+> +	SEC("tp_btf/task_newtask")
+> +	int BPF_PROG(task_acquire_release_example, struct task_struct *task, u64 clone_flags)
+> +	{
+> +		struct bpf_cpumask *cpumask, *acquired;
+> +
+> +		cpumask = bpf_cpumask_create();
+> +		if (!cpumask)
+> +			return 1;
+> +
+> +		acquired = bpf_cpumask_acquire(cpumask);
+> +		bpf_cpumask_release(cpumask);
+> +		bpf_cpumask_acquire(acquired);
+> +
+> +		return 0;
+> +	}
 
-No functional change intended.
-
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
- drivers/base/memory.c | 25 ++++++-------------------
- 1 file changed, 6 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-index b456ac213610..9474f25c452c 100644
---- a/drivers/base/memory.c
-+++ b/drivers/base/memory.c
-@@ -141,28 +141,15 @@ static ssize_t state_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
- 	struct memory_block *mem = to_memory_block(dev);
--	const char *output;
-+	static const char *const mem_state_str[] = {
-+		NULL, "online", "going-offline", NULL, "offline",
-+	};
- 
--	/*
--	 * We can probably put these states in a nice little array
--	 * so that they're not open-coded
--	 */
--	switch (mem->state) {
--	case MEM_ONLINE:
--		output = "online";
--		break;
--	case MEM_OFFLINE:
--		output = "offline";
--		break;
--	case MEM_GOING_OFFLINE:
--		output = "going-offline";
--		break;
--	default:
--		WARN_ON(1);
-+	if (WARN_ON(mem->state >= ARRAY_SIZE(mem_state_str) ||
-+		    !mem_state_str[mem->state]))
- 		return sysfs_emit(buf, "ERROR-UNKNOWN-%ld\n", mem->state);
--	}
- 
--	return sysfs_emit(buf, "%s\n", output);
-+	return sysfs_emit(buf, "%s\n", mem_state_str[mem->state]);
- }
- 
- int memory_notify(unsigned long val, void *v)
--- 
-2.23.0
-
+As the first example in the doc it was... alarming :)
+I've read it as it says that bpf_cpumask_acquire has to be called on
+freshly created cpumask before it can be used.
+I've started to doubt by code reading skills of the previous patches :)
+A basic example is probably necessary to introduce the concept.
+Or this example should have bpf_cpumask_set_cpu right after create and
+more alu ops after release with comments to demonstrate the point.
