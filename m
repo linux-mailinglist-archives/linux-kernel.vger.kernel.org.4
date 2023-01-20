@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B203F675F10
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89123675F12
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 21:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjATUoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 15:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S229542AbjATUpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 15:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjATUoS (ORCPT
+        with ESMTP id S229448AbjATUpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 15:44:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE65F94C98
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:44:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 963B7B82906
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 20:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 675F5C433D2;
-        Fri, 20 Jan 2023 20:44:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674247455;
-        bh=Vt8oiZbQmXunlXHeri8Xgh7T7MbWYfRl0mIFfOXZhl4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FraY02Z+vIyhI39A2tB238RgSVTmrc5QEqs8Q7NpfJERPTu4+eYfQ1w6qkNU6sxUZ
-         K4nQG7utxJXOGG/nocXL6uDfGxn6zhHKCxGd3a9EXY4u9AR8KEX8LvAh7WIzfnIQFD
-         MDWWpp39FJE7RCiBAQ9JswhfnBlV8lSVaQ+qzM/iG3Sn7whCUn/Y0DtJjp+mjHp43C
-         jr+0nqt3d2UO9CeFKAOqCaj4L2+WARiArorPGIBGaDK0iYZwiz886+BxlyZzxHdQ9X
-         /lITu0zq1vVEVb6dQ/SfmcGzx5OmjAKJXp8av9OCLJ0FVelFDh6QXjXvCfmRK3j9Yv
-         QUTiYmHr9YlqA==
-Date:   Fri, 20 Jan 2023 20:44:10 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yimin Gu <ustcymgu@gmail.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Subject: Re: [PATCH v1 1/2] riscv: Kconfig: Allow RV32 to build with no MMU
-Message-ID: <Y8r9GuyUAfJWYY5Z@spud>
-References: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
- <20230119052642.1112171-2-Mr.Bossman075@gmail.com>
- <Y8pJ4y7FyBDQPqIT@wendy>
- <056f0d30-d340-fdc4-3744-1cdedd8b4048@gmail.com>
+        Fri, 20 Jan 2023 15:45:47 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7549B135
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:45:46 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id k10-20020a17090a590a00b0022ba875a1a4so3177962pji.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 12:45:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x62E/nl+ONbICiSsmar4KjRWoAfoTSBdrOdf9qKQras=;
+        b=LlMl9c3NNGZmycFs5fSTn3CIyY+wd5nQUAS9vIqtV2A1S10Snz9ztD6ABsdBAIJMRX
+         oOqyZ9S+OA9lpbBymTACh/JWRKDGwvqeTHfjPnQKyCRpvfE8/kR08j3fH1/fBHcmzXW+
+         TameGWN6nJVw0vttTbxWtt9aJX7iXSs3sRQbx3v6Im2BnGLE8bw+ILl7oI/tGr8nE3K9
+         w0W39/8ApnDEXH2dAz1PRBoVc6nRzQCJet7n6Dt4cJAHBnHCBFVZCcL2Cuuj+41U6mTN
+         5YH9HJS4Zk1qsDfsPa38q/o9UzgT13gMNA75WHbP8gGNlwakrQWhF/PC1Ia7CBB96akN
+         hkbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x62E/nl+ONbICiSsmar4KjRWoAfoTSBdrOdf9qKQras=;
+        b=HhOuZ2EvUy3pO1+1vhtjmMzowFbK5B59nBxIlkkm7vgDjZeZa9kPdS1u+H0zb5KkoL
+         AFESXyuvpglMeRVkdSMIaTaX03/ldPSwQ9sB+YXCz7YqNBDLUQqNawe4JilAK+WB3fZe
+         caeolGzmX5xXJfEZigyibUgO5pIdaa9vCJMNHFgIqnwRqxQv+1NxPHlTYXAmMXAadL3Y
+         YmbSTFQc2ktQ7obFer1Eypat2kfT4MHAzcF2h7DDEq0rMGRI4EH9UxyraI7hXvxovRgo
+         r/MRj2R7XH6PnLi5DsbbUaIv3GQExQA6C19KgTw9CINdieNeg0hTPGiE7OTeNVvegRoq
+         qbjQ==
+X-Gm-Message-State: AFqh2kpgjNpMtv5+t2uVA98TFCvBKgfYf5xxH19C8qwFRZmatXyLvJqZ
+        SDORaJs2MGkLCC9lHFk0o1aOCKSfNF9Im+5SA5jJ
+X-Google-Smtp-Source: AMrXdXvQWGH+TfxgJ4yUEtio0sfEpYaSLEATZ2oGg7OHBsGmzao1b/xL9lJ3//JRhrCw2Td14bRYp8jbP4onPyGj+Rw=
+X-Received: by 2002:a17:90a:17a1:b0:229:9ffe:135b with SMTP id
+ q30-20020a17090a17a100b002299ffe135bmr1730636pja.72.1674247546190; Fri, 20
+ Jan 2023 12:45:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="axrD9d1syAKU/5YD"
-Content-Disposition: inline
-In-Reply-To: <056f0d30-d340-fdc4-3744-1cdedd8b4048@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230116212105.1840362-1-mjguzik@gmail.com> <20230116212105.1840362-2-mjguzik@gmail.com>
+In-Reply-To: <20230116212105.1840362-2-mjguzik@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 20 Jan 2023 15:45:34 -0500
+Message-ID: <CAHC9VhSKEyyd-s_j=1UbA0+vOK7ggyCp6e-FNSG7XVYvCxoLnA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Mateusz Guzik <mjguzik@gmail.com>
+Cc:     viro@zeniv.linux.org.uk, serge@hallyn.com,
+        torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,103 +67,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 16, 2023 at 4:21 PM Mateusz Guzik <mjguzik@gmail.com> wrote:
+>
+> access(2) remains commonly used, for example on exec:
+> access("/etc/ld.so.preload", R_OK)
+>
+> or when running gcc: strace -c gcc empty.c
+> % time     seconds  usecs/call     calls    errors syscall
+> ------ ----------- ----------- --------- --------- ----------------
+>   0.00    0.000000           0        42        26 access
+>
+> It falls down to do_faccessat without the AT_EACCESS flag, which in turn
+> results in allocation of new creds in order to modify fsuid/fsgid and
+> caps. This is a very expensive process single-threaded and most notably
+> multi-threaded, with numerous structures getting refed and unrefed on
+> imminent new cred destruction.
+>
+> Turns out for typical consumers the resulting creds would be identical
+> and this can be checked upfront, avoiding the hard work.
+>
+> An access benchmark plugged into will-it-scale running on Cascade Lake
+> shows:
+> test    proc    before  after
+> access1 1       1310582 2908735  (+121%)  # distinct files
+> access1 24      4716491 63822173 (+1353%) # distinct files
+> access2 24      2378041 5370335  (+125%)  # same file
 
---axrD9d1syAKU/5YD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Out of curiosity, do you have any measurements of the impact this
+patch has on the AT_EACCESS case when the creds do need to be
+modified?
 
-Hey Jesse,
+> The above benchmarks are not integrated into will-it-scale, but can be
+> found in a pull request:
+> https://github.com/antonblanchard/will-it-scale/pull/36/files
+>
+> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
+>
+> v2:
+> - fix current->cred usage warn reported by the kernel test robot
+> Link: https://lore.kernel.org/all/202301150709.9EC6UKBT-lkp@intel.com/
+> ---
+>  fs/open.c | 32 +++++++++++++++++++++++++++++++-
+>  1 file changed, 31 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/open.c b/fs/open.c
+> index 82c1a28b3308..3c068a38044c 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -367,7 +367,37 @@ COMPAT_SYSCALL_DEFINE6(fallocate, int, fd, int, mode, compat_arg_u64_dual(offset
+>   * access() needs to use the real uid/gid, not the effective uid/gid.
+>   * We do this by temporarily clearing all FS-related capabilities and
+>   * switching the fsuid/fsgid around to the real ones.
+> + *
+> + * Creating new credentials is expensive, so we try to skip doing it,
+> + * which we can if the result would match what we already got.
+>   */
+> +static bool access_need_override_creds(int flags)
+> +{
+> +       const struct cred *cred;
+> +
+> +       if (flags & AT_EACCESS)
+> +               return false;
+> +
+> +       cred = current_cred();
+> +       if (!uid_eq(cred->fsuid, cred->uid) ||
+> +           !gid_eq(cred->fsgid, cred->gid))
+> +               return true;
+> +
+> +       if (!issecure(SECURE_NO_SETUID_FIXUP)) {
+> +               kuid_t root_uid = make_kuid(cred->user_ns, 0);
+> +               if (!uid_eq(cred->uid, root_uid)) {
+> +                       if (!cap_isclear(cred->cap_effective))
+> +                               return true;
+> +               } else {
+> +                       if (!cap_isidentical(cred->cap_effective,
+> +                           cred->cap_permitted))
+> +                               return true;
+> +               }
+> +       }
+> +
+> +       return false;
+> +}
 
-On Fri, Jan 20, 2023 at 12:39:06PM -0500, Jesse Taube wrote:
-> On 1/20/23 02:59, Conor Dooley wrote:
-> > Since you'll have to re-submit, making sure that allowing !MMU on rv32
-> > doesn't break the build due to canaan k210 drivers being enabled despite
-> > relying on 64-bit divisions, I've got some nits for you.
-> Not sure what driver needs 64bit, but sense !MMU was only selected by 64B=
-IT.
+I worry a little that with nothing connecting
+access_need_override_creds() to access_override_creds() there is a bug
+waiting to happen if/when only one of the functions is updated.
 
-LKP reported a build error for it:
-https://lore.kernel.org/linux-riscv/202301201538.zNlqgE4L-lkp@intel.com/
+Given the limited credential changes in access_override_creds(), I
+wonder if a better solution would be to see if we could create a
+light(er)weight prepare_creds()/override_creds() that would avoid some
+of the prepare_creds() hotspots (I'm assuming that is where most of
+the time is being spent).  It's possible this could help improve the
+performance of other, similar operations that need to modify task
+creds for a brief, and synchronous, period of time.
 
-> This should work.
-> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> index 69774bb362d6..b9835b8ede86 100644
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -43,7 +43,7 @@ config SOC_VIRT
->=20
->  config SOC_CANAAN
->         bool "Canaan Kendryte K210 SoC"
-> -       depends on !MMU
-> +       depends on !MMU && 64BIT
->         select CLINT_TIMER if RISCV_M_MODE
->         select SERIAL_SIFIVE if TTY
->         select SERIAL_SIFIVE_CONSOLE if TTY
+Have you done any profiling inside of access_override_creds() to see
+where the most time is spent?  Looking at the code I have some gut
+feelings on the hotspots, but it would be good to see some proper data
+before jumping to any conclusions.
 
-I don't think this is the correct fix for the problem - the drivers
-really should not do implicit 64-bit divisions IMO.
-Linux has division helpers for them in math64.h.
-None of the other SoCs have a dependency on 64BIT and I'd not been keen
-on adding on here.
+>  static const struct cred *access_override_creds(void)
+>  {
+>         const struct cred *old_cred;
+> @@ -436,7 +466,7 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
+>         if (flags & AT_EMPTY_PATH)
+>                 lookup_flags |= LOOKUP_EMPTY;
+>
+> -       if (!(flags & AT_EACCESS)) {
+> +       if (access_need_override_creds(flags)) {
+>                 old_cred = access_override_creds();
+>                 if (!old_cred)
+>                         return -ENOMEM;
+> --
+> 2.34.1
 
-I suspect the fix is as simple as the below, but I'd need to go test it.
-
-Thanks,
-Conor.
-
---- 8< ---
-=46rom ecfa79ad1b24f68cfccb77d666e443293d52d066 Mon Sep 17 00:00:00 2001
-=46rom: Conor Dooley <conor.dooley@microchip.com>
-Date: Fri, 20 Jan 2023 20:36:29 +0000
-Subject: [PATCH] clk: k210: remove an implicit 64-bit division
-
-The K210 clock driver depends on SOC_CANAAN, which is only selectable
-when !MMU on RISC-V. !MMU is not possible on 32-bit yet, but patches
-have been sent for its enabling. The kernel test robot reported this
-implicit 64-bit division there.
-
-Replace the implicit division with an explicit one.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/linux-riscv/202301201538.zNlqgE4L-lkp@intel.c=
-om/
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Since it was always guarded such that it only ever built for 64-bit, I
-am not sure that a fixes tag is needed, but it would be:
-Fixes: c6ca7616f7d5 ("clk: Add RISC-V Canaan Kendryte K210 clock driver")
----
- drivers/clk/clk-k210.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/clk-k210.c b/drivers/clk/clk-k210.c
-index 67a7cb3503c3..17c5bfb384ad 100644
---- a/drivers/clk/clk-k210.c
-+++ b/drivers/clk/clk-k210.c
-@@ -495,7 +495,7 @@ static unsigned long k210_pll_get_rate(struct clk_hw *h=
-w,
- 	f =3D FIELD_GET(K210_PLL_CLKF, reg) + 1;
- 	od =3D FIELD_GET(K210_PLL_CLKOD, reg) + 1;
-=20
--	return (u64)parent_rate * f / (r * od);
-+	return div_u64(parent_rate * f, r * od);
- }
-=20
- static const struct clk_ops k210_pll_ops =3D {
---=20
-2.39.0
-
-
---axrD9d1syAKU/5YD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8r9GgAKCRB4tDGHoIJi
-0kllAQDKgK/+5PpYdTkzPe0Ai+nKWB4Wc4qSfHnfZoIl5Y7ibQD1FwXPEeo2EZBb
-EiqR1/R9JwfcXsFaHsw51dpTq066CA==
-=734a
------END PGP SIGNATURE-----
-
---axrD9d1syAKU/5YD--
+-- 
+paul-moore.com
