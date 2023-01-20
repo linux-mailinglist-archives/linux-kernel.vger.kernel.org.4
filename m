@@ -2,164 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5808E6758A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30BB6758A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjATPdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S230501AbjATPdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:33:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjATPcy (ORCPT
+        with ESMTP id S229975AbjATPdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:32:54 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCD2BCE22
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:32:49 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4fd37a1551cso52591097b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=poorly.run; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IPtDJM5M6jGN6qD0tP24K72UIm4iRXYGKWNFo7x72g=;
-        b=SPoq6nBK/JeShjz0kPsSHbBdOJtV/AmVLorEPqTuGDzC70Ow5DX8doU0rsRDKCcTD1
-         Jltcq/okn/fjqBisJ9sE69yh3amFyHgGDIqt3YyHdPR0N6qepAWxsS2OMETpUksYGV1S
-         kwvgHr7iyU+Zf8HqHBuJwD0xp+BnLHmYnP0u3hdglzpy03kUEls0HWOct6IEtaAqANmb
-         Q+V1t217x323JxoCLe6IfUbqtk4A/Ytth5Y1OutLyazCII9UdOCnZNL5iFxHvuAhrIPK
-         3bwvEBE3iFXfMvlRByIuUpVcNW3pdXTUVnZ8yCJLWxGQb/RIggDxCRemoyzqpl81n21X
-         kMFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9IPtDJM5M6jGN6qD0tP24K72UIm4iRXYGKWNFo7x72g=;
-        b=SMDH/Q2hZ3+62CMuidj1D1gtdqZnlk4qVdWwofgQu+yHgbycW94qycmUo4wKxY81HC
-         5ruSWAHWyTisCZpcl6bhoQSeqNCRVs0pZ+J2MvP0g0SttDvMSzekuQ341Y8HSPi0N/1x
-         m0JSIE7ArKhjUXjK6pOakaL1OlSTYxdhuxSVZ/YAY0eRXUZ0C0rAGqpJ03UeBwqR0vvX
-         yx7ONWaXSynkPGZO/c8d8jXheatko4b7Ie+9AMwvotEhdWBZiQj0qNHbPF463xxNwLeO
-         6kSVgqa3/4tBq737V1iApp37Mz45oi+Rxavjk7M9Bqs3/eAbUNLLAsTkJFle00ghRYkk
-         +AvQ==
-X-Gm-Message-State: AFqh2kqHOS22uEC3D44EYFdSTx1cIA30Fwx/PrDJWMajnsp2KZfK+fZL
-        uzakmAqhd6yAxeO4dIvnLpa73w==
-X-Google-Smtp-Source: AMrXdXtru88v2k61i9cQGS6ax35vAmCsXdW2DZPSz/qrSHebfuajOctI7UdN7zUMawsmB7qZX4N0+w==
-X-Received: by 2002:a0d:d610:0:b0:3af:2118:fc34 with SMTP id y16-20020a0dd610000000b003af2118fc34mr11723672ywd.34.1674228768750;
-        Fri, 20 Jan 2023 07:32:48 -0800 (PST)
-Received: from localhost (200.234.86.34.bc.googleusercontent.com. [34.86.234.200])
-        by smtp.gmail.com with ESMTPSA id j20-20020a05620a289400b006fed58fc1a3sm26448188qkp.119.2023.01.20.07.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 07:32:47 -0800 (PST)
-Date:   Fri, 20 Jan 2023 15:32:47 +0000
-From:   Sean Paul <sean@poorly.run>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Yacoub <markyacoub@chromium.org>, quic_khsieh@quicinc.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        tzimmermann@suse.de, ville.syrjala@linux.intel.com,
-        stanislav.lisovskiy@intel.com, matthew.d.roper@intel.com,
-        imre.deak@intel.com, lucas.demarchi@intel.com,
-        manasi.d.navare@intel.com, swati2.sharma@intel.com,
-        bhanuprakash.modem@intel.com, javierm@redhat.com,
-        jose.souza@intel.com, lyude@redhat.com, hbh25y@gmail.com,
-        arun.r.murthy@intel.com, ashutosh.dixit@intel.com,
-        ankit.k.nautiyal@intel.com, maxime@cerno.tech, swboyd@chromium.org,
-        christophe.jaillet@wanadoo.fr, quic_sbillaka@quicinc.com,
-        johan+linaro@kernel.org, dianders@chromium.org, marex@denx.de,
-        quic_jesszhan@quicinc.com, bjorn.andersson@linaro.org,
-        abhinavk@codeaurora.org, seanpaul@chromium.org,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: Re: [PATCH v6 01/10] drm/hdcp: Add drm_hdcp_atomic_check()
-Message-ID: <Y8q0H7SiDkdfmyXP@art_vandelay>
-References: <20230118193015.911074-1-markyacoub@google.com>
- <20230118193015.911074-2-markyacoub@google.com>
- <67170ce0-8622-8b35-e73a-7d873b7a3b8b@linaro.org>
+        Fri, 20 Jan 2023 10:33:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB91E8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PjoJ42EgnGagzBWpbrImMu5qIYgZY+Uq1SMiOfjJCwE=; b=MYFDw6J6w+vjOHbQqp65d7Jpnd
+        SKhuANy7rZ71MIIp0Zf6arLF6ikMqARW9PJo641mQp/6JYaV4pWNmOGp4z3jD5RIhuYmAF4UZoagJ
+        c5bBPfynEpuejJTPVovQcbOvCFXcCmgdaOan1KOfK0Vu59F6iwdFeUkbSlERHhbefIyr/1c4QAMSE
+        FUOTAlxx4AsA3K6puj81qppOrGQ6vvrLZVwgLV9+hb4FteIx3PUAv11qQI0MhcfWa7WUttDBpG74Y
+        1Iq0tMRkhDJFguM95s/urrHM2Jds+BcEFwnzWvX9ZnAwdKN74WAyVRSTXeltd0zHVHjWGTJkPeBql
+        u8rGXbGQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pItNp-00250F-HX; Fri, 20 Jan 2023 15:32:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5F56430008D;
+        Fri, 20 Jan 2023 16:32:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 49013201C94AC; Fri, 20 Jan 2023 16:32:49 +0100 (CET)
+Date:   Fri, 20 Jan 2023 16:32:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     "Erhard F." <erhard_f@mailbox.org>, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at
+ "Loading Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
+Message-ID: <Y8q0IfjtKPNxYHFy@hirez.programming.kicks-ass.net>
+References: <20230119022303.177052e4@yea>
+ <Y8lL95T93g5xK+mu@hirez.programming.kicks-ass.net>
+ <Y8lfStnaUFNRxgYu@hirez.programming.kicks-ass.net>
+ <178000f1-1464-03cb-2335-a01b77e70692@amd.com>
+ <Y8p4CnJU6T7+17Sw@hirez.programming.kicks-ass.net>
+ <Y8qr62sZF4HevL75@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <67170ce0-8622-8b35-e73a-7d873b7a3b8b@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8qr62sZF4HevL75@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:37:52AM +0100, Krzysztof Kozlowski wrote:
-> On 18/01/2023 20:30, Mark Yacoub wrote:
-> > From: Sean Paul <seanpaul@chromium.org>
-> > 
-> > This patch moves the hdcp atomic check from i915 to drm_hdcp so other
-> > drivers can use it. No functional changes, just cleaned up some of the
-> > code when moving it over.
-> > 
-> > Acked-by: Jani Nikula <jani.nikula@intel.com>
-> > Acked-by: Jani Nikula <jani.nikula@intel.com>
-> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > Reviewed-by: Abhinav Kumar <abhinavk@codeaurora.org>
-> > Signed-off-by: Sean Paul <seanpaul@chromium.org>
-> > Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
-> > Link: https://patchwork.freedesktop.org/patch/msgid/20210913175747.47456-2-sean@poorly.run #v1
-> > Link: https://patchwork.freedesktop.org/patch/msgid/20210915203834.1439-2-sean@poorly.run #v2
-> > Link: https://patchwork.freedesktop.org/patch/msgid/20211001151145.55916-2-sean@poorly.run #v3
-> > Link: https://patchwork.freedesktop.org/patch/msgid/20211105030434.2828845-2-sean@poorly.run #v4
-> > Link: https://patchwork.freedesktop.org/patch/msgid/20220411204741.1074308-2-sean@poorly.run #v5
-> 
-> It seems all your previous versions were sent not to correct people and
-> lists. Therefore we see it for the first time even though it is v6! 
+On Fri, Jan 20, 2023 at 03:57:48PM +0100, Peter Zijlstra wrote:
+> +extern void __static_call_return(void);
+> +
+> +asm (".global __static_call_return\n\t"
+> +     ".type __static_call_return, @function\n\t"
+> +     ASM_FUNC_ALIGN "\n\t"
+> +     "__static_call_return:\n\t"
+	ANNOTATE_NOENDBR
+	ANNOTATE_RETPOLINE_SAFE
+> +     "ret; int3\n\t"
+> +     ".size __static_call_return, . - __static_call_return \n\t");
 
-Hi Krzysztof,
-Thanks for your review comments.
+are needed to quiet some objtool complaints, but otherwise this seems to
+boot and build a kernel.
 
-Here are the addresses the last version was sent to, who is missing?
-
-To: dri-devel@lists.freedesktop.org, 
-    jani.nikula@intel.com,
-    intel-gfx@lists.freedesktop.org,
-    freedreno@lists.freedesktop.org,
-    rodrigo.vivi@intel.com
-Cc: bjorn.andersson@linaro.org, 
-    swboyd@chromium.org,
-    abhinavk@codeaurora.org,
-    markyacoub@chromium.org,
-    Sean Paul <seanpaul@chromium.org>,
-    Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-    Maxime Ripard <mripard@kernel.org>,
-    Thomas Zimmermann <tzimmermann@suse.de>,
-    David Airlie <airlied@linux.ie>,
-    Daniel Vetter <daniel@ffwll.ch>,
-    Jani Nikula <jani.nikula@linux.intel.com>,
-    Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-    Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-
-> It's
-> not the first such weird CC list in chromium, so maybe your
-> organisational process could be improved? Not only for you but for
-> colleagues as well, so you all start using get_maintainers.pl on newest
-> kernel (not something ancient)?
-
-I can't really speak for others, but I use MAINTAINERS from drm-tip. The 
-previous patch sets were sent before 24df12013853 ("MAINTAINERS: Add 
-Dmitry as MSM DRM driver co-maintainer"), which might explain why you think
-there are absences?
-
-Thanks again,
-
-Sean
-
-> 
-> Best regards,
-> Krzysztof
-> 
-
--- 
-Sean Paul, Software Engineer, Google / Chromium OS
+I suppose I had better go make these proper patches..
