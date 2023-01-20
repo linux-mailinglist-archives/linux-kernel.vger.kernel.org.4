@@ -2,268 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E7C6750A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603976750AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjATJUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S230173AbjATJVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjATJUv (ORCPT
+        with ESMTP id S230184AbjATJVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:20:51 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D4E4218
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:20:49 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nyv0f2rjMz9xqd2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 17:12:50 +0800 (CST)
-Received: from [10.48.133.21] (unknown [10.48.133.21])
-        by APP1 (Coremail) with SMTP id LxC2BwB3_wrNXMpjAqewAA--.4975S2;
-        Fri, 20 Jan 2023 10:20:24 +0100 (CET)
-Message-ID: <acbbd099-07de-fba9-3d44-874bdfc47365@huaweicloud.com>
-Date:   Fri, 20 Jan 2023 10:20:11 +0100
+        Fri, 20 Jan 2023 04:21:12 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3973E9085F;
+        Fri, 20 Jan 2023 01:21:01 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E8E92660230B;
+        Fri, 20 Jan 2023 09:20:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674206459;
+        bh=08pqxwBJ+ELb6MVeH4W4H+Ud+X9mBids/ORKAnMiXrY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NH6V5IygSrDjcCKE9BQhvpFi25inC8l3SCfcBo5tjaBXmP8jAfGuD7JCB+5JeE6vK
+         jB7atxxZwxL2igwD/YZv2XZ0VhVbwG7WclRzM6fjxqhWoth+BT47Y6i2zbAUzKZpkt
+         49v7y1zgQX5echY8oiw+rE3gjhQYjscILKy4fACSUTBD8jmky3EDHcQcN1dfKCYV18
+         M0SlM1kEu1lHETTl4E0Z/Sgi44UN8kBMMHYBak0Fw8Ne6o7h8vuR1rXS7zs2ODHMSP
+         2Wl+fStBEee937lxgp0TfIqDXiXvqZjPbaX1D0OFEdBjOK13uJe6komv7XE+kWeDfy
+         zj0SqvL5uXwgw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        fparent@baylibre.com, chun-jie.chen@mediatek.com,
+        sam.shih@mediatek.com, y.oudjana@protonmail.com,
+        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
+        ryder.lee@kernel.org, daniel@makrotopia.org,
+        jose.exposito89@gmail.com, yangyingliang@huawei.com,
+        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
+        ikjn@chromium.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v4 00/23] MediaTek clocks cleanups and improvements
+Date:   Fri, 20 Jan 2023 10:20:30 +0100
+Message-Id: <20230120092053.182923-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
- <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
- <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
- <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
- <20230120035521.GA319650@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230120035521.GA319650@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwB3_wrNXMpjAqewAA--.4975S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFW3uw4ftFy8AF1kAr4xZwb_yoWxCr1Dpr
-        Z8tFWft3yDtr92qw129w1UAFy0qa4FqF1UJrn5JF1fZr9YvrnxKr13J3ZYgFy5Cr1akr4U
-        Xr1Yqr97Gw1kJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IUbG2NtUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in v4:
+ - Exported cg_regs_dummy to fix modpost issues with mt8173 drivers
+ - Changed mtk_register_reset_controller() to _with_dev() variant
+   to fix last modpost issues
+ - Added Miles' Tested-by tags on all commits touching mt6779/8192
+
+Changes in v3:
+ - Moved struct device pointer as first member in all commits
+   adding propagation of it
+ - Fixed some indentation issues as pointed out by strict checkpatch
+ - Tested again to make sure that nothing went wrong in the
+   process :-)
+
+Changes in v2:
+ - Moved dt-bindings CLK_DUMMY to clk-mtk.h instead
 
 
-On 1/20/2023 4:55 AM, Paul E. McKenney wrote:
-> On Thu, Jan 19, 2023 at 02:51:53PM -0500, Alan Stern wrote:
->> On Thu, Jan 19, 2023 at 10:41:07AM -0800, Paul E. McKenney wrote:
->>> In contrast, this actually needs srcu_down_read() and srcu_up_read():
->>>
->>> ------------------------------------------------------------------------
->>>
->>> C C-srcu-nest-6
->>>
->>> (*
->>>   * Result: Never
->>>   *
->>>   * Flag unbalanced-srcu-locking
->>>   * This would be valid for srcu_down_read() and srcu_up_read().
->>>   *)
->>>
->>> {}
->>>
->>> P0(int *x, int *y, struct srcu_struct *s1, int *idx)
->>> {
->>> 	int r2;
->>> 	int r3;
->>>
->>> 	r3 = srcu_down_read(s1);
->>> 	WRITE_ONCE(*idx, r3);
->>> 	r2 = READ_ONCE(*y);
->>> }
->>>
->>> P1(int *x, int *y, struct srcu_struct *s1, int *idx)
->>> {
->>> 	int r1;
->>> 	int r3;
->>>
->>> 	r1 = READ_ONCE(*x);
->>> 	r3 = READ_ONCE(*idx);
->>> 	srcu_up_read(s1, r3);
->>> }
->>>
->>> P2(int *x, int *y, struct srcu_struct *s1)
->>> {
->>> 	WRITE_ONCE(*y, 1);
->>> 	synchronize_srcu(s1);
->>> 	WRITE_ONCE(*x, 1);
->>> }
->>>
->>> locations [0:r1]
->>> exists (1:r1=1 /\ 0:r2=0)
->> I modified this litmus test by adding a flag variable with an
->> smp_store_release in P0, an smp_load_acquire in P1, and a filter clause
->> to ensure that P1 reads the flag and idx from P1.
->>
->> With the patch below, the results were as expected:
->>
->> Test C-srcu-nest-6 Allowed
->> States 3
->> 0:r1=0; 0:r2=0; 1:r1=0;
->> 0:r1=0; 0:r2=1; 1:r1=0;
->> 0:r1=0; 0:r2=1; 1:r1=1;
->> No
->> Witnesses
->> Positive: 0 Negative: 3
->> Condition exists (1:r1=1 /\ 0:r2=0)
->> Observation C-srcu-nest-6 Never 0 3
->> Time C-srcu-nest-6 0.04
->> Hash=2b010cf3446879fb84752a6016ff88c5
->>
->> It turns out that the idea of removing rf edges from Srcu-unlock events
->> doesn't work well.  The missing edges mess up herd's calculation of the
->> fr relation and the coherence axiom.  So I've gone back to filtering
->> those edges out of carry-dep.
->>
->> Also, Boqun's suggestion for flagging ordinary accesses to SRCU
->> structures no longer works, because the lock and unlock operations now
->> _are_ normal accesses.  I removed that check too, but it shouldn't hurt
->> much because I don't expect to encounter litmus tests that try to read
->> or write srcu_structs directly.
->>
->> Alan
->>
->>
->>
->> Index: usb-devel/tools/memory-model/linux-kernel.bell
->> ===================================================================
->> --- usb-devel.orig/tools/memory-model/linux-kernel.bell
->> +++ usb-devel/tools/memory-model/linux-kernel.bell
->> @@ -53,38 +53,30 @@ let rcu-rscs = let rec
->>   	in matched
->>   
->>   (* Validate nesting *)
->> -flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-locking
->> -flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
->> +flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-lock
->> +flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-unlock
->>   
->>   (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
->> -let srcu-rscs = let rec
->> -	    unmatched-locks = Srcu-lock \ domain(matched)
->> -	and unmatched-unlocks = Srcu-unlock \ range(matched)
->> -	and unmatched = unmatched-locks | unmatched-unlocks
->> -	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
->> -	and unmatched-locks-to-unlocks =
->> -		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
->> -	and matched = matched | (unmatched-locks-to-unlocks \
->> -		(unmatched-po ; unmatched-po))
->> -	in matched
->> +let srcu-rscs = ([Srcu-lock] ; (data | rf)+ ; [Srcu-unlock]) & loc
->>   
->>   (* Validate nesting *)
->> -flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
->> -flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
->> +flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-lock
->> +flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-unlock
->> +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
->>   
->>   (* Check for use of synchronize_srcu() inside an RCU critical section *)
->>   flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
->>   
->>   (* Validate SRCU dynamic match *)
->> -flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
->> +flag ~empty different-values(srcu-rscs) as bad-srcu-value-match
->>   
->>   (* Compute marked and plain memory accesses *)
->>   let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
->> -		LKR | LKW | UL | LF | RL | RU
->> + 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
->>   let Plain = M \ Marked
->>   
->>   (* Redefine dependencies to include those carried through plain accesses *)
->> -let carry-dep = (data ; rfi)*
->> +let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
->>   let addr = carry-dep ; addr
->>   let ctrl = carry-dep ; ctrl
->>   let data = carry-dep ; data
->> Index: usb-devel/tools/memory-model/linux-kernel.def
->> ===================================================================
->> --- usb-devel.orig/tools/memory-model/linux-kernel.def
->> +++ usb-devel/tools/memory-model/linux-kernel.def
->> @@ -49,8 +49,10 @@ synchronize_rcu() { __fence{sync-rcu}; }
->>   synchronize_rcu_expedited() { __fence{sync-rcu}; }
->>   
->>   // SRCU
->> -srcu_read_lock(X)  __srcu{srcu-lock}(X)
->> -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
->> +srcu_read_lock(X) __load{srcu-lock}(*X)
->> +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
->> +srcu_down_read(X) __load{srcu-lock}(*X)
->> +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
->>   synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
->>   synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
-> And for some initial tests:
->
-> https://github.com/paulmckrcu/litmus/blob/master/manual/kernel/C-srcu-nest-1.litmus
->
-> 	"Flag multiple-srcu-matches" but otherwise OK.
-> 	As a "hail Mary" exercise, I used r4 for the second SRCU
-> 	read-side critical section, but this had no effect.
-> 	(This flag is expected and seen for #4 below.)
+This series performs cleanups and improvements on MediaTek clock
+drivers, greatly reducing code duplication (hence also reducing
+kernel size).
 
-This is because srcu_lock/srcu_unlock are reads and writes, and so you 
-get the accidental rf relation here I was talking about earlier.
-In particular your first lock() is linked by  data ; rf ; data to the 
-second unlock(), which therefore seems to have data coming in from two 
-sources.
+There would be a lot to say about it, but summarizing:
 
-You would be better off moving the carry-dep/data definitions higher in 
-the file,
+* Propagates struct device where possible in order to introduce the
+  possibility of using Runtime PM on clock drivers as needed,
+  possibly enhancing reliability of some platforms (obviously, this
+  will do nothing unless power-domains are added to devicetree);
 
--let carry-dep = (data ; rfi)*
-+let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
-  let addr = carry-dep ; addr
-  let ctrl = carry-dep ; ctrl
-  let data = carry-dep ; data
+* Cleans up some duplicated clock(s) registration attempt(s): on
+  some platforms the 26M fixed factor clock is registered early,
+  but then upon platform_driver probe, an attempt to re-register
+  that clock was performed;
 
-and then defining
+* Removes some early clock registration where possible, moving
+  everything to platform_driver clock probe;
 
-+let srcu-rscs = ([Srcu-lock] ; data ; [Srcu-unlock]) & loc
+* Breaks down the big MT8173 clock driver in multiple ones, as it's
+  already done with the others, cleans it up and adds possibility
+  possibility to compile non-boot-critical clock drivers (for 8173)
+  as modules;
 
-Note here I'm just using the freshly redefined data, instead of the (data;rf)+
+* Extends the common mtk_clk_simple_probe() function to be able to
+  register multiple MediaTek clock types;
 
+* Removes duplicated [...]_probe functions from multiple MediaTek SoC
+  clock drivers, migrating almost everything to the common functions
+  mtk_clk_simple_probe();
 
-best wishes, jonas
+* Adds a .remove() callback, pointing to the common mtk_clk_simple_remove()
+  function to all clock drivers that were migrated to the common probe;
+
+* Some more spare cleanups here and there.
+
+All of this was manually tested on various Chromebooks (with different MTK
+SoCs) and no regression was detected.
+
+Cheers!
+
+AngeloGioacchino Del Regno (23):
+  clk: mediatek: mt8192: Correctly unregister and free clocks on failure
+  clk: mediatek: mt8192: Propagate struct device for gate clocks
+  clk: mediatek: clk-gate: Propagate struct device with
+    mtk_clk_register_gates()
+  clk: mediatek: cpumux: Propagate struct device where possible
+  clk: mediatek: clk-mtk: Propagate struct device for composites
+  clk: mediatek: clk-mux: Propagate struct device for mtk-mux
+  clk: mediatek: clk-mtk: Add dummy clock ops
+  clk: mediatek: mt8173: Migrate to platform driver and common probe
+  clk: mediatek: mt8173: Remove mtk_clk_enable_critical()
+  clk: mediatek: mt8173: Break down clock drivers and allow module build
+  clk: mediatek: Switch to mtk_clk_simple_probe() where possible
+  clk: mediatek: clk-mtk: Extend mtk_clk_simple_probe()
+  clk: mediatek: mt8173: Migrate pericfg/topckgen to
+    mtk_clk_simple_probe()
+  clk: mediatek: clk-mt8192: Move CLK_TOP_CSW_F26M_D2 in top_divs
+  clk: mediatek: mt8192: Join top_adj_divs and top_muxes
+  clk: mediatek: mt8186: Join top_adj_div and top_muxes
+  clk: mediatek: clk-mt8183: Join top_aud_muxes and top_aud_divs
+  clk: mediatek: clk-mtk: Register MFG notifier in
+    mtk_clk_simple_probe()
+  clk: mediatek: clk-mt8192: Migrate topckgen to mtk_clk_simple_probe()
+  clk: mediatek: clk-mt8186-topckgen: Migrate to mtk_clk_simple_probe()
+  clk: mediatek: clk-mt6795-topckgen: Migrate to mtk_clk_simple_probe()
+  clk: mediatek: clk-mt7986-topckgen: Properly keep some clocks enabled
+  clk: mediatek: clk-mt7986-topckgen: Migrate to mtk_clk_simple_probe()
+
+ drivers/clk/mediatek/Kconfig                 |   32 +-
+ drivers/clk/mediatek/Makefile                |    6 +-
+ drivers/clk/mediatek/clk-cpumux.c            |    8 +-
+ drivers/clk/mediatek/clk-cpumux.h            |    2 +-
+ drivers/clk/mediatek/clk-gate.c              |   23 +-
+ drivers/clk/mediatek/clk-gate.h              |    7 +-
+ drivers/clk/mediatek/clk-mt2701-aud.c        |   31 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c        |   36 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c        |   56 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c        |   38 +-
+ drivers/clk/mediatek/clk-mt2701-mm.c         |    4 +-
+ drivers/clk/mediatek/clk-mt2701.c            |   24 +-
+ drivers/clk/mediatek/clk-mt2712-mm.c         |    4 +-
+ drivers/clk/mediatek/clk-mt2712.c            |   99 +-
+ drivers/clk/mediatek/clk-mt6765.c            |   13 +-
+ drivers/clk/mediatek/clk-mt6779-mm.c         |    4 +-
+ drivers/clk/mediatek/clk-mt6779.c            |   59 +-
+ drivers/clk/mediatek/clk-mt6795-infracfg.c   |    6 +-
+ drivers/clk/mediatek/clk-mt6795-mm.c         |    3 +-
+ drivers/clk/mediatek/clk-mt6795-pericfg.c    |    6 +-
+ drivers/clk/mediatek/clk-mt6795-topckgen.c   |   84 +-
+ drivers/clk/mediatek/clk-mt6797-mm.c         |    4 +-
+ drivers/clk/mediatek/clk-mt6797.c            |    7 +-
+ drivers/clk/mediatek/clk-mt7622-aud.c        |   54 +-
+ drivers/clk/mediatek/clk-mt7622-eth.c        |   82 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c        |   85 +-
+ drivers/clk/mediatek/clk-mt7622.c            |   26 +-
+ drivers/clk/mediatek/clk-mt7629-eth.c        |    7 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c        |   85 +-
+ drivers/clk/mediatek/clk-mt7629.c            |   22 +-
+ drivers/clk/mediatek/clk-mt7986-eth.c        |   10 +-
+ drivers/clk/mediatek/clk-mt7986-infracfg.c   |    7 +-
+ drivers/clk/mediatek/clk-mt7986-topckgen.c   |  100 +-
+ drivers/clk/mediatek/clk-mt8135.c            |   18 +-
+ drivers/clk/mediatek/clk-mt8167-aud.c        |    2 +-
+ drivers/clk/mediatek/clk-mt8167-img.c        |    2 +-
+ drivers/clk/mediatek/clk-mt8167-mfgcfg.c     |    2 +-
+ drivers/clk/mediatek/clk-mt8167-mm.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8167-vdec.c       |    3 +-
+ drivers/clk/mediatek/clk-mt8167.c            |   12 +-
+ drivers/clk/mediatek/clk-mt8173-apmixedsys.c |  157 +++
+ drivers/clk/mediatek/clk-mt8173-img.c        |   55 +
+ drivers/clk/mediatek/clk-mt8173-infracfg.c   |  155 +++
+ drivers/clk/mediatek/clk-mt8173-mm.c         |   22 +-
+ drivers/clk/mediatek/clk-mt8173-pericfg.c    |  122 ++
+ drivers/clk/mediatek/clk-mt8173-topckgen.c   |  653 ++++++++++
+ drivers/clk/mediatek/clk-mt8173-vdecsys.c    |   57 +
+ drivers/clk/mediatek/clk-mt8173-vencsys.c    |   64 +
+ drivers/clk/mediatek/clk-mt8173.c            | 1125 ------------------
+ drivers/clk/mediatek/clk-mt8183-audio.c      |   27 +-
+ drivers/clk/mediatek/clk-mt8183-mm.c         |    4 +-
+ drivers/clk/mediatek/clk-mt8183.c            |  130 +-
+ drivers/clk/mediatek/clk-mt8186-mcu.c        |    3 +-
+ drivers/clk/mediatek/clk-mt8186-mm.c         |    3 +-
+ drivers/clk/mediatek/clk-mt8186-topckgen.c   |  112 +-
+ drivers/clk/mediatek/clk-mt8192-aud.c        |   30 +-
+ drivers/clk/mediatek/clk-mt8192-mm.c         |    3 +-
+ drivers/clk/mediatek/clk-mt8192.c            |  182 +--
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c |    3 +-
+ drivers/clk/mediatek/clk-mt8195-topckgen.c   |    9 +-
+ drivers/clk/mediatek/clk-mt8195-vdo0.c       |    3 +-
+ drivers/clk/mediatek/clk-mt8195-vdo1.c       |    3 +-
+ drivers/clk/mediatek/clk-mt8365-mm.c         |    5 +-
+ drivers/clk/mediatek/clk-mt8365.c            |   14 +-
+ drivers/clk/mediatek/clk-mt8516-aud.c        |    2 +-
+ drivers/clk/mediatek/clk-mt8516.c            |   12 +-
+ drivers/clk/mediatek/clk-mtk.c               |  136 ++-
+ drivers/clk/mediatek/clk-mtk.h               |   35 +-
+ drivers/clk/mediatek/clk-mux.c               |   14 +-
+ drivers/clk/mediatek/clk-mux.h               |    3 +-
+ 70 files changed, 2041 insertions(+), 2179 deletions(-)
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-img.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-infracfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-pericfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-topckgen.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-vdecsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8173-vencsys.c
+ delete mode 100644 drivers/clk/mediatek/clk-mt8173.c
+
+-- 
+2.39.0
 
