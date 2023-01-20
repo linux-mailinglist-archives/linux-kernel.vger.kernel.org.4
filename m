@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD986753CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2386753CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjATLtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S230143AbjATLtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjATLsP (ORCPT
+        with ESMTP id S230171AbjATLtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:48:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E721917D3;
-        Fri, 20 Jan 2023 03:47:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DEE61F22;
-        Fri, 20 Jan 2023 11:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01DA1C433EF;
-        Fri, 20 Jan 2023 11:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674215270;
-        bh=KAjnNhah3ll/grP437CAe+fwigJLFCx/dyaLEnnMBho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=slnuebzPClnyIgvR+p4EomxUjtfjiNpXEAPWoIIXVvb8g7ApNKm8wUaDHFQWp/PhW
-         V+x93bFijdAdbbj0LdlBPQ+HzcDe59Ei2xb/bucc+w7cLQqVmkKQK7SApZQRFWZH9T
-         0PZFuAkpRbTitDIgYdWmMRicGuQopgwA1+M0d9retbqPGprHKsklV5tjpNAwptpegv
-         MWnv5Le1PGXTCTmMhbVGKtDuSB5UyTRSspd14k5AjzTOGF8jDYG6sMQaINC4PQR9aK
-         cRQAb/1Sg5nYGXhau6QgfdkSCxGjVQRgopVHxdSOPVdAxT7w0jUTy9ZKyO3wxyRR8E
-         5DhM2lXENT7IA==
-Date:   Fri, 20 Jan 2023 11:47:48 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/4] regulator: Introduce Maxim MAX20411 Step-Down
- converter
-Message-ID: <Y8p/ZOj+wUf5os5o@sirena.org.uk>
-References: <20230119214749.4048933-1-quic_bjorande@quicinc.com>
- <20230119214749.4048933-3-quic_bjorande@quicinc.com>
+        Fri, 20 Jan 2023 06:49:22 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4602BCE1B;
+        Fri, 20 Jan 2023 03:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674215341; x=1705751341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qRJcmngDNyEidEMz1acSip8OP7b9pBjE9syj19aPrF4=;
+  b=oC2DYuFpnnMMIyn6rYPC8iH4JvB5JHdDIVGzaqJ8ypuxfGRZ96F3enci
+   /T3iWwi+DMSdZGVUuPdHjjGTA25LhUhwSNN9lG5hTWtvBZWQMl5M1j4Hm
+   2QI10qNojAs8YNRB3OIk3hTS68FsBhkmdTP8hPW+fm/jUKkUkkAp0IbNa
+   TOfoFj0KgCbbTE/ChiaAEdoL5zgIB0sDoxA6Dfo0M/ce32Bcjkvc12iZQ
+   pZ9lGwozBU3B8Tc2ZF3Som04X86f1YlEkMJzmDajIcqtXl4MZ9I3VxPQX
+   x3ii9bZ0BbOdUIRA7UKu0XuHtG4Z+Uhlz4Qg4Ts8xDei6MUc/x/MuVUqD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325598659"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="325598659"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 03:47:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610458510"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="610458510"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 20 Jan 2023 03:47:52 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pIps7-00CB0b-0P;
+        Fri, 20 Jan 2023 13:47:51 +0200
+Date:   Fri, 20 Jan 2023 13:47:50 +0200
+From:   'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 2/9] pktcdvd: replace sscanf() by kstrtoul()
+Message-ID: <Y8p/Zh22evztnaEj@smile.fi.intel.com>
+References: <20230119220809.5518-1-andriy.shevchenko@linux.intel.com>
+ <20230119220809.5518-2-andriy.shevchenko@linux.intel.com>
+ <4f4c89f2c0924f05a894a1457c63ee4c@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9FC1blPi5kbjWuhg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119214749.4048933-3-quic_bjorande@quicinc.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4f4c89f2c0924f05a894a1457c63ee4c@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 10:40:12PM +0000, David Laight wrote:
+> From: Andy Shevchenko
+> > Sent: 19 January 2023 22:08
 
---9FC1blPi5kbjWuhg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Thu, Jan 19, 2023 at 01:47:47PM -0800, Bjorn Andersson wrote:
+> > +	ret = kstrtoint(buf, 10, &val);
+> > +	if (ret)
+> > +		return ret;
 
-> +	desc->ops = &max20411_ops;
-> +	desc->owner = THIS_MODULE;
-> +	desc->type = REGULATOR_VOLTAGE;
-> +	desc->supply_name = "vin";
-> +	desc->name = "max20411";
-> +
-> +	/*
-> +	 * voltage = 0.24375V + selector * 6.25mV
-> +	 * with valid selector between 41 to 165 (0.5V to 1.275V)
-> +	 */
-> +	desc->min_uV = MAX20411_BASE_UV;
-> +	desc->uV_step = MAX20411_UV_STEP;
-> +	desc->linear_min_sel = MAX20411_MIN_SEL;
-> +	desc->n_voltages = MAX20411_MAX_SEL;
+> These don't look directly equivalent.
+> The sscanf() version silently ignores trailing characters.
+> I think kstrtoint() will generate an error.
 
-Doesn't really matter either way but the more normal way to write
-this is to have a static struct with all the fixed values in it
-rather than dynamically initialising one at runtime.  Otherwise
-this looks good.
+Yes, kstrtoint() is stricter than sscanf(), but I believe
+that user space not so abusive. We may always return to
+sscanf(), which I don't think would be good idea rather
+than fixing the user space. But let's see...
 
---9FC1blPi5kbjWuhg
-Content-Type: application/pgp-signature; name="signature.asc"
+> Have you actually checked that the caller allows for
+> an error return.
 
------BEGIN PGP SIGNATURE-----
+_s_size_t somehow hints us about :-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPKf2MACgkQJNaLcl1U
-h9BpIgf/W/fEuYxxoY3giQ6LSCmi8VJrGiDaNHHWNkWJ5MuxP1G6Jc05uv5yUm1j
-8YN7VZeeKNyZBKuXfk6dh/03hLMoWq5EX/MN4AP433tWR2lepJkSACbBnl2tsOOi
-6yfpqqzvKyXyjbstSbxQNjUHh7vpxY1uyWFKZMaHf30JltgXJBoUp1YQK15927Wh
-ibVGsLnXz/JXooBwgxSpnSQQZv5KLQD+e1Lmi3jZ4Oot8o8fLSHJkKDUskTGtpX5
-clYf4rU6jolwBiKmeflK198Iv1rnX5Pybcw2sVrtiE/G2BGf0Ej/EqrcKm52D4ok
-lWyaIv04d0tTTR0OEubdaSJeIn7P7g==
-=LbwF
------END PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
---9FC1blPi5kbjWuhg--
+
