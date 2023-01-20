@@ -2,189 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A3C675A34
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7386675A1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjATQlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S230366AbjATQgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjATQlB (ORCPT
+        with ESMTP id S230369AbjATQgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:41:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC1F758
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 08:40:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674232810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4sa2kw4N+EbeMvCkIPchCu6oDfnzvOZL2pa2xR/ZSFc=;
-        b=XxTFiFxZRgSRUId3b3xP/WlrKpiyJBvCP6cUM7U9IcDZ+QwcedOH/X6TFrIPCNC4FjEygj
-        5+M3/7wdwRyfhdYy8be4LzYDaxiHgWOPPOBv/Yc14JeJSsm3xTXBkaAsXX4w5Ktsh/ZaLC
-        vQbtzK5Xr3pHEM2IAQfpgGPQYnSIjF4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-hXXltTvEOE6UVgGb0Gik3w-1; Fri, 20 Jan 2023 11:33:32 -0500
-X-MC-Unique: hXXltTvEOE6UVgGb0Gik3w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 20 Jan 2023 11:36:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C996D917FF;
+        Fri, 20 Jan 2023 08:36:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 848E5811E6E;
-        Fri, 20 Jan 2023 16:33:31 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A263140EBF6;
-        Fri, 20 Jan 2023 16:33:31 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     pauld@redhat.com, gregkh@linuxfoundation.org, mingo@redhat.com,
-        peterz@infradead.org, ritesh.list@gmail.com,
-        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
-        vincent.guittot@linaro.org, vishalc@linux.vnet.ibm.com,
-        vschneid@redhat.com
-Subject: [PATCH v2] sched/debug: Put sched/domains files under the verbose flag
-Date:   Fri, 20 Jan 2023 11:33:30 -0500
-Message-Id: <20230120163330.1334128-1-pauld@redhat.com>
-In-Reply-To: <20230119150758.880189-1-pauld@redhat.com>
-References: <20230119150758.880189-1-pauld@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8276061FFE;
+        Fri, 20 Jan 2023 16:35:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A07DC4339B;
+        Fri, 20 Jan 2023 16:35:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674232549;
+        bh=r7K+Ya5L1lTN5wHwgGTJIKfXMxPBDnujeeK5v157kB4=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=QqJae6/KoJEjT+YlHt6Ax4bIYKhR2ElNfUU4VM1c+uOOOAw+ArFNNkF05QjSDmQ3j
+         yVM7CmnOPNhaFUKOxQlCB5qG8xd3KogywribmeUqC1Eh+rhWy9NArEGzc9pmTqky2x
+         GtNJP8nBfOYKVCdlMROJX4+48hv2nH9vPZ825a4K5A/y2BYVlQNHWaYSdhVD9mUGTw
+         7/W9fCoGWGfFskotm2g32pUBySomRq1g3P9OoaP2ZgmVJFR/cw5+PaKKPBxJXjx9nW
+         EocxLbbyun+qcgPLaKQDpsu/aJwNnvP47ntZQnh2vfdeiWzb/HaXoCN3xaHfzWigE/
+         xdHUPbov5pKSw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230120133010.299797-1-krzysztof.kozlowski@linaro.org>
+References: <20230120133010.299797-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] regulator: dt-bindings: fixed-regulator: allow gpios
+ property
+Message-Id: <167423254806.1373484.8432300435483887839.b4-ty@kernel.org>
+Date:   Fri, 20 Jan 2023 16:35:48 +0000
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-77e06
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The debug files under sched/domains can take a long time to regenerate,
-especially when updates are done one at a time. Move these files under
-the sched verbose debug flag. Allow changes to verbose to trigger
-generation of the files. This lets a user batch the updates but still
-have the information available.  The detailed topology printk messages
-are also under verbose.
+On Fri, 20 Jan 2023 14:30:10 +0100, Krzysztof Kozlowski wrote:
+> 'gpios' is in general preferred even for single GPIO specifiers and
+> there are DTS boards using it (exynos4412-p4note.dtsi), so allow both
+> versions.
+> 
+> 
 
-Discussion that lead to this approach can be found in the link below.
+Applied to
 
-Simplified code to maintain use of debugfs bool routines suggested by
-Michael Ellerman <mpe@ellerman.id.au>.
+   broonie/regulator.git for-next
 
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
----
+Thanks!
 
- v2: fix comment typo and use cpumask_empty()
+[1/1] regulator: dt-bindings: fixed-regulator: allow gpios property
+      commit: 12df2c182ccb850988d2680a422211a812fb5cb2
 
- kernel/sched/debug.c | 52 +++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 49 insertions(+), 3 deletions(-)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 1637b65ba07a..0b2340a79b65 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -280,6 +280,45 @@ static const struct file_operations sched_dynamic_fops = {
- 
- __read_mostly bool sched_debug_verbose;
- 
-+#ifdef CONFIG_SMP
-+static struct dentry           *sd_dentry;
-+
-+
-+static ssize_t sched_verbose_write(struct file *filp, const char __user *ubuf,
-+				  size_t cnt, loff_t *ppos)
-+{
-+	ssize_t result;
-+	bool orig;
-+
-+	cpus_read_lock();
-+	mutex_lock(&sched_domains_mutex);
-+
-+	orig = sched_debug_verbose;
-+	result = debugfs_write_file_bool(filp, ubuf, cnt, ppos);
-+
-+	if (sched_debug_verbose && !orig)
-+		update_sched_domain_debugfs();
-+	else if (!sched_debug_verbose && orig) {
-+		debugfs_remove(sd_dentry);
-+		sd_dentry = NULL;
-+	}
-+
-+	mutex_unlock(&sched_domains_mutex);
-+	cpus_read_unlock();
-+
-+	return result;
-+}
-+#else
-+#define sched_verbose_write debugfs_write_file_bool
-+#endif
-+
-+static const struct file_operations sched_verbose_fops = {
-+	.read =         debugfs_read_file_bool,
-+	.write =        sched_verbose_write,
-+	.open =         simple_open,
-+	.llseek =       default_llseek,
-+};
-+
- static const struct seq_operations sched_debug_sops;
- 
- static int sched_debug_open(struct inode *inode, struct file *filp)
-@@ -303,7 +342,7 @@ static __init int sched_init_debug(void)
- 	debugfs_sched = debugfs_create_dir("sched", NULL);
- 
- 	debugfs_create_file("features", 0644, debugfs_sched, NULL, &sched_feat_fops);
--	debugfs_create_bool("verbose", 0644, debugfs_sched, &sched_debug_verbose);
-+	debugfs_create_file_unsafe("verbose", 0644, debugfs_sched, &sched_debug_verbose, &sched_verbose_fops);
- #ifdef CONFIG_PREEMPT_DYNAMIC
- 	debugfs_create_file("preempt", 0644, debugfs_sched, NULL, &sched_dynamic_fops);
- #endif
-@@ -345,7 +384,6 @@ late_initcall(sched_init_debug);
- #ifdef CONFIG_SMP
- 
- static cpumask_var_t		sd_sysctl_cpus;
--static struct dentry		*sd_dentry;
- 
- static int sd_flags_show(struct seq_file *m, void *v)
- {
-@@ -402,15 +440,23 @@ void update_sched_domain_debugfs(void)
- 	if (!debugfs_sched)
- 		return;
- 
-+	if (!sched_debug_verbose)
-+		return;
-+
- 	if (!cpumask_available(sd_sysctl_cpus)) {
- 		if (!alloc_cpumask_var(&sd_sysctl_cpus, GFP_KERNEL))
- 			return;
- 		cpumask_copy(sd_sysctl_cpus, cpu_possible_mask);
- 	}
- 
--	if (!sd_dentry)
-+	if (!sd_dentry) {
- 		sd_dentry = debugfs_create_dir("domains", debugfs_sched);
- 
-+		/* rebuild sd_sysctl_cpus if empty since it gets cleared below */
-+		if (cpumask_empty(sd_sysctl_cpus))
-+			cpumask_copy(sd_sysctl_cpus, cpu_online_mask);
-+	}
-+
- 	for_each_cpu(cpu, sd_sysctl_cpus) {
- 		struct sched_domain *sd;
- 		struct dentry *d_cpu;
--- 
-2.31.1
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
