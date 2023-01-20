@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732D56751F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B869675205
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 11:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjATKBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 05:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S230492AbjATKGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 05:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjATKBU (ORCPT
+        with ESMTP id S230303AbjATKGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 05:01:20 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238CA8A6E;
-        Fri, 20 Jan 2023 02:01:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D1A9722A03;
-        Fri, 20 Jan 2023 10:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674208877; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WN+73+vvFy8jILfH+VTK0vTY7CBjJlVQddeBj5UTg2s=;
-        b=E/cJC2S99Uoymz1PZp8Oqu4Ty8EsxToH1To0QwU53UbIyyrpRZtoeqeEv6eXK5vIrcoP0K
-        Fzit4eQEK4CtUbezR62w0B/y82kg1sNoH9DpuN6hDhCaVwkH6R8cLdoyps7C9PzIh2oG0a
-        OZfqa0WqYhQOG8Bix02g2kotpjBgev0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674208877;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WN+73+vvFy8jILfH+VTK0vTY7CBjJlVQddeBj5UTg2s=;
-        b=klHr6JVsQj37PCsVHHV7Q0UdQfA1ErT9+O7CCPUw190tBqVwnbGnJKImu9QlWp8iZwuofA
-        g0rmRsrNOP4ZnYDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF5C51390C;
-        Fri, 20 Jan 2023 10:01:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +7meLm1mymNXRQAAMHmgww
-        (envelope-from <dwagner@suse.de>); Fri, 20 Jan 2023 10:01:17 +0000
-Date:   Fri, 20 Jan 2023 11:01:17 +0100
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Pavel Machek <pavel@denx.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-Subject: Re: [ANNOUNCE] 5.10.162-rt78
-Message-ID: <20230120100117.desy327bamo7khrv@carbon.lan>
-References: <Y8VSslRJZpFbo1/u@uudg.org>
- <40de655e-26f3-aa7b-f1ec-6877396a9f1e@ti.com>
- <Y8krsVFguwWLy+zT@duo.ucw.cz>
- <Y8lCspFtQ0wg6uCy@uudg.org>
- <Y8mwF0m+M1+e/fz/@eldamar.lan>
- <a4f62523-b01e-3986-7914-767f999b4153@kernel.dk>
- <Y8oNTkUVDr7iQWzp@uudg.org>
- <c427d686-c850-4195-011b-93f51faa176d@kernel.dk>
+        Fri, 20 Jan 2023 05:06:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D89A258E;
+        Fri, 20 Jan 2023 02:06:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674209208; x=1705745208;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s8RVOfsWfXmS7vuK9YlhjZHo4/cTdmhqpji15rJG740=;
+  b=ERBYlyKn1jXKVcB9EXZ0j+1fBhQ9idCwTWNM+Zmnr60LQ0PwOKxeyb7v
+   0/nY0mYXh62sYuOl6Em/xQICSApgDL+tTbS0Uuo5KZNj2VzZRFp7xk/Hh
+   8N2YilcB1cusE3+etvWA22VB+7GvTrsQYX8UIv5Q3I+J0hxhS5ouJVF+2
+   U2rO0bWIRVUThNxem5bgMlr2ISin4TY6wJmF4j9P1P/l02AfUNk3eauQ5
+   2NkBYpAydNspQriK1JKNeGgwPx/Ya88NhWDmurApNVFSjwi83Q5dtMapD
+   Z/vkEpaHh0c7jwGi6MmArAw9GzSdEBRvmaoZQVArPyZrOa+N4rw8dkP1P
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,231,1669100400"; 
+   d="scan'208";a="196675868"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 03:06:47 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 20 Jan 2023 03:06:47 -0700
+Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 03:06:44 -0700
+From:   shravan kumar <shravan.chippa@microchip.com>
+To:     <green.wan@sifive.com>, <vkoul@kernel.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <dmaengine@vger.kernel.org>, <shravan.chippa@microchip.com>
+Subject: [PATCH v1] dmaengine: sf-pdma: pdma_desc memory leak fix
+Date:   Fri, 20 Jan 2023 15:36:23 +0530
+Message-ID: <20230120100623.3530634-1-shravan.chippa@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c427d686-c850-4195-011b-93f51faa176d@kernel.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 08:49:28PM -0700, Jens Axboe wrote:
-> I do wonder why I didn't see this in testing - the kernel build bot was
-> also happy with it... But anyway, should be an easy fix.
+From: Shravan Chippa <shravan.chippa@microchip.com>
 
-This is caused by the RT patch set, so you wouldn't see it without all the RT
-patches applied :)
+Commit b2cc5c465c2c ("dmaengine: sf-pdma: Add multithread support for a
+DMA channel") changed sf_pdma_prep_dma_memcpy() to unconditionally
+allocate a new sf_pdma_desc each time it is called.
+
+The driver previously recycled descs, by checking the in_use flag, only
+allocating additional descs if the existing one was in use. This logic
+was removed in commit b2cc5c465c2c ("dmaengine: sf-pdma: Add multithread
+support for a DMA channel"), but sf_pdma_free_desc() was not changed to
+handle the new behaviour.
+
+As a result, each time sf_pdma_prep_dma_memcpy() is called, the previous
+descriptor is leaked, over time leading to memory starvation:
+
+  unreferenced object 0xffffffe008447300 (size 192):
+  comm "irq/39-mchp_dsc", pid 343, jiffies 4294906910 (age 981.200s)
+  hex dump (first 32 bytes):
+    00 00 00 ff 00 00 00 00 b8 c1 00 00 00 00 00 00  ................
+    00 00 70 08 10 00 00 00 00 00 00 c0 00 00 00 00  ..p.............
+  backtrace:
+    [<00000000064a04f4>] kmemleak_alloc+0x1e/0x28
+    [<00000000018927a7>] kmem_cache_alloc+0x11e/0x178
+    [<000000002aea8d16>] sf_pdma_prep_dma_memcpy+0x40/0x112
+
+Add the missing kfree() to sf_pdma_free_desc(), and remove the redundant
+in_use flag.
+
+Fixes: b2cc5c465c2c ("dmaengine: sf-pdma: Add multithread support for a DMA channel")
+Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+---
+ drivers/dma/sf-pdma/sf-pdma.c | 3 +--
+ drivers/dma/sf-pdma/sf-pdma.h | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
+index 6b524eb6bcf3..e578ad556949 100644
+--- a/drivers/dma/sf-pdma/sf-pdma.c
++++ b/drivers/dma/sf-pdma/sf-pdma.c
+@@ -96,7 +96,6 @@ sf_pdma_prep_dma_memcpy(struct dma_chan *dchan,	dma_addr_t dest, dma_addr_t src,
+ 	if (!desc)
+ 		return NULL;
+ 
+-	desc->in_use = true;
+ 	desc->dirn = DMA_MEM_TO_MEM;
+ 	desc->async_tx = vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
+ 
+@@ -290,7 +289,7 @@ static void sf_pdma_free_desc(struct virt_dma_desc *vdesc)
+ 	struct sf_pdma_desc *desc;
+ 
+ 	desc = to_sf_pdma_desc(vdesc);
+-	desc->in_use = false;
++	kfree(desc);
+ }
+ 
+ static void sf_pdma_donebh_tasklet(struct tasklet_struct *t)
+diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
+index dcb3687bd5da..5c398a83b491 100644
+--- a/drivers/dma/sf-pdma/sf-pdma.h
++++ b/drivers/dma/sf-pdma/sf-pdma.h
+@@ -78,7 +78,6 @@ struct sf_pdma_desc {
+ 	u64				src_addr;
+ 	struct virt_dma_desc		vdesc;
+ 	struct sf_pdma_chan		*chan;
+-	bool				in_use;
+ 	enum dma_transfer_direction	dirn;
+ 	struct dma_async_tx_descriptor *async_tx;
+ };
+-- 
+2.34.1
+
