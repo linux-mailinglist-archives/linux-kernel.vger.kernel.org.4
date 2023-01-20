@@ -2,153 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F8B675F7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FD1675F80
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjATVN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S229741AbjATVNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjATVN2 (ORCPT
+        with ESMTP id S229487AbjATVNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:13:28 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B9D8A4C;
-        Fri, 20 Jan 2023 13:13:26 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KKhonO019470;
-        Fri, 20 Jan 2023 21:13:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zq62gIvYUOYZp0PNrvkd+owZCAJA9jgIYgDD39UMtkg=;
- b=Sjjr6Q44OLoaSU9CxyMV9AtrdiUa+4/D5a8CVr+zC0E31T7mbKc/IGl2LnaKFAKgFBYO
- 4ympxxfXOYUCR8+jZ0uh3lAtOaJMo9b6r866FxSXlIZaTPs25RMwDOEzdA6hAIxUy3Fn
- /n69ojdC1JN7/DxtiZ5bG0NNDRYSedmkye3uLKNmQDd6nZxpvK06AN5GjZ6EkbzNGLZs
- d7YGc2gO40q0dC45Wblarin0f+gbe4tMxFexRMvxq0tUFYiLNsPusX8fTiBI3ezbSboE
- ymMQZGL4pyUgWLbzDNEs9VY4hksRDC6YPtDlmTMUWyVWFGpDpQOloks/dFFoh4B2EjL6 ZQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7yc60cga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 21:13:17 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KLDHJ0009059
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 21:13:17 GMT
-Received: from [10.110.31.254] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
- 2023 13:13:16 -0800
-Message-ID: <f709f410-f21b-b2e7-4e76-04b15fb2001a@quicinc.com>
-Date:   Fri, 20 Jan 2023 13:13:16 -0800
+        Fri, 20 Jan 2023 16:13:36 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2070.outbound.protection.outlook.com [40.107.93.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE15C9B12E;
+        Fri, 20 Jan 2023 13:13:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MZsbgI4ozIJ7rH1yPTIer5GlgFFATBCr2LAWjqe3eRNGEwTsq7KDwAeCocx/qXh7kdzQz3Ofah0UJGs+8+pPjtecCnObkZPm4MZ0IKKJoqqO2Rm6+cH0GlsAzDvLyF/Dm/hwpZA0eG3102DCSbXRxot/f95+0TSlClYLGdYehX9AJ68XuHcJEKdu6sJrX+YPL8w48/KDmaPxtO33XeaxZZ/ETiP4GjUPy8x6uZwkbnmT9Ek2yqTuk6V1cOW060wCbFeeFVrcLApOb9zkhuKnqKJvQft8JCTc43VR0lYOCujOIPqUbfrPaRO2pgOw0Vwhqr/2iMXzowNkbkeBYmkO7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5Bq60pyJiKn8pxLX8dSZ5FnItHCV6qffWoBaOjXHSW0=;
+ b=Oorl0whXv1u7RQJK1DPkgOvqpkyhw2jbWPJ0GAIJ3iJdkdSeRx0Rkv1pEk9ppcf+cZFyaE9soNUHnQLVkmkEviWW+Jkm+H2fPmPZx+TTp9A0h88yUOSqz+alUiE7+sdCp7RXijnmMmmOFVX5f272v9yWHq7qmfu6Fhic/RzeLai++BkIYz9+eircgogN2rT90nVYZ91xf3CffMYgV1yp1scjvbeh24H0z/wZxnLfU1AcsKJ6mr5qF/ZZ8Fwt7j4HBmJQ6cCWYhNbt4CAkgIY+cn9AV/T/CjpdKcq86faWSEX4ib1pK86gBoCAa+EMk4T+KDfNy7MKyPQAG8y0Q4v0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5Bq60pyJiKn8pxLX8dSZ5FnItHCV6qffWoBaOjXHSW0=;
+ b=Km+RIu3Qpz1kmrp9CYVy9Lh/Ky91Wat60R4pL5sPu5rnE9YtVYP6PaOo0AerNXCXx1u/ZNeAxZGLCoiJ74l1FLhiFmB9ooVPVUg62QqvZKGmY7DuIW3Cp1ROIx4cMQ5tKmwwQZdTV4d6sJ5WFyMQrttQXX/ck13l3zUu3CWwZnk+htHDzoSf14mjohIQBgRYk/gC7jD4KK5tDWDwZUys30qb6xbUxxpryK1r+J7EzOjgUlmbjbTX8qLUCXEQs9B4b++NBgFx0J1SosmeDhw3Mog12OuhoYbNW64mULkYKR344M6w8rjkZ/0TmrCaAZoHMPZzcXi+glAFbYSkEQHW+w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB6839.namprd12.prod.outlook.com (2603:10b6:806:265::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Fri, 20 Jan
+ 2023 21:13:33 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.6002.013; Fri, 20 Jan 2023
+ 21:13:32 +0000
+Date:   Fri, 20 Jan 2023 17:13:31 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <Y8sD+xH7fohazCtu@nvidia.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/Yqk9/plX+V6ZlpR"
+Content-Disposition: inline
+X-ClientProxiedBy: MN2PR15CA0010.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::23) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v6 0/2] Add base device tree files for QDU1000/QRU1000
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230112210722.6234-1-quic_molvera@quicinc.com>
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <20230112210722.6234-1-quic_molvera@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oms45SBvs9RnGgrpTBNy5zskWvfLaBrE
-X-Proofpoint-ORIG-GUID: oms45SBvs9RnGgrpTBNy5zskWvfLaBrE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_11,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0 clxscore=1015
- mlxlogscore=751 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301200202
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB6839:EE_
+X-MS-Office365-Filtering-Correlation-Id: a360953d-d1eb-4e60-8004-08dafb2b2f81
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZooyT2/vYTYQ8tu6x/n8cG/2YolYK21CoYllIAoFdJEPkxJuBXgqszERFHM4lHDAkSVCvNdZkdrLPvzE/j0GrVqrFYsn7m4fI9bndI8CrZ/ORqg7CY2eMAskvQcHYE3Y/q7ZAobs0gWeS8RDmMb/68I3+Hu3Q+Tnkpp9Zwdl35HW4rtSERRL+hCA1xR59DPPs0kuLqy2syYFgFlzV/6BfoJEysf3pG/OhLSp/4WL/ceHQKCsxT3Ius8EQT3DUkh3XQFYE9OfkZljl/MxiJPvAP2IABiARAx8Qf9yc3ExBIcoZjdtY0it/Sb9eoyTk9/qGRrq+r+TFOStMqf8eWlz9s2Fq1jCJLsdqqfTIHxRQGVpfUFDWHt3e6J1ajdiR7n9EgwnpLYqRv7lNL0yBCHpmdTGoi2rJQ3BbSGYiZ2jJl8IjqSapTTxpa9zP/DBVXNv7tG9qy+m3L15uvE3o0wuLq7S8V4wchAm/2aVCuin5Df0ddrls1ynRKg6B9zieMXlPvePXN7MgimEe6w9lZyoDhHcmw7oK10NU+xa+pANUNeOqS+DYzrYD4Gn4/qfkRmUUzOMav9dPVVklKXcgMyHg64qgGQvcXazrJEKLsoCuGMrwvNS7IQsBBFP+7mZaGfcNoiZVyXWPGaNbX/ZDQcUZdCPtXccvns/l/01Wi2IXubZjcgTSWcgIquC67PANeKV2bHtuXxpf4SQifX1YldeAvlE8gBJhBcuAhuFupTfrZ0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199015)(26005)(2906002)(21480400003)(6512007)(186003)(316002)(2616005)(6506007)(44144004)(36756003)(478600001)(38100700002)(6486002)(107886003)(86362001)(83380400001)(41300700001)(4326008)(5660300002)(8936002)(6916009)(66476007)(8676002)(66556008)(66946007)(67856001)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?84xiBO7W5mwiUO1uzc5YfRTdtv6+9OiTAONCXsxmZ+nxKUv0HiCGVYJhvGkt?=
+ =?us-ascii?Q?02tlOshp10zKgzGVa6zidnyoe8kKKZ/3s6dq2hQmkgsOvrahs7o7YWqov3Nz?=
+ =?us-ascii?Q?FHRWQqBUt3zVoVHFP8Rz7WcNrH9ueE004eoy46yWKUw2hPs30UkFJPfgVxWH?=
+ =?us-ascii?Q?uX+Za6N9dzphNheDLLm96WYi3SOf2j0X3EWdmIVyUfwGPQBEwwW6H6t3QXA5?=
+ =?us-ascii?Q?DhXui8c5KPHEnbuaItnVTahMfmnLDS2gx1esA4JFYtCGuv/HeLv8Q9HKOTM8?=
+ =?us-ascii?Q?5dtRk3tbug6DqBca7eflgqfAVyFp3hyDok+7KcPT9JPXsbBTiASGebtTSTVv?=
+ =?us-ascii?Q?msptTevasty2YI9tZ2UvYPVGjmKckRhGORo3SRwhemJvGquQFh2wZUbVc6Ws?=
+ =?us-ascii?Q?R1tGagcqmib82S+toApvnXo5vddB0dMFY2yjuBf6qvjvGpj5SkuPUQO+ssH8?=
+ =?us-ascii?Q?JlvdXOafUp4PzCAJ6sW9yrFK11lXnFtvE3rhImbSOVNyN6pXnY2IrVSCBN6y?=
+ =?us-ascii?Q?fs6eCD/rIPxcOBTu+gt3UM6kuFXnAIJrYoQHHv2TnvGPx72etfqH9EgguXT3?=
+ =?us-ascii?Q?lyXH7bn73/npzSxNXJ47TfRBCaclRtLDURE82dvw8ftnvWKuE/D0mg1sKNzH?=
+ =?us-ascii?Q?qmv3B90qVVZZUMojzMQoMhrkaFsXxYqkSwezmeoJSeXJJLMBMHA6pqBBHX1s?=
+ =?us-ascii?Q?f0gxv3d4hBtpnWqbcTFLXzbdTEfu8IXJgWf53G/6Cbqx+kT+xT74V3eNS3RC?=
+ =?us-ascii?Q?eSmQxyyMo7woTU5o1A+qDxDft5Q9DAymQ04bFwRYGVOFGzfsqO8nBC9fy/Eu?=
+ =?us-ascii?Q?NjRnspwFUh0+WN+VT83Z/iSS5Ctoghlrb3Bmu7PnohCZXrGzqSmLSVEx7Jwh?=
+ =?us-ascii?Q?8KjGhNBTBZywBYKpTBtKe46NRDpkfG/Np8gNLPwk0v8lAZMQjZruLWMcj2SR?=
+ =?us-ascii?Q?0kmp16g/YpT8gkOydyPSbmsd6+2ZpfijgS6iK/rxdgRpWevXCbRPqY08RORp?=
+ =?us-ascii?Q?7EQdY9G3G/BXXRrrDVSwmDCLuwEnQS1j6TrW7bfGqcbg4JhXub+fgYStiQkx?=
+ =?us-ascii?Q?j4/vTE7q0kPvlCdFJvZmcAdetfQkbWS/1U1LUEOSCk8pTCJeTbM0gCJR6wMA?=
+ =?us-ascii?Q?ZNGJX/dKGcloeygodBDftwnOuy0cIHm7LIJMq/VcrOdUnqyeHpbLgauvAhIP?=
+ =?us-ascii?Q?d+Ttqv78BEcbIkcS/1FavksJDx5p6Vf82/jsq9aP3NkWT5KpWiN3dyF/3UYX?=
+ =?us-ascii?Q?zbHIXlZT0JxM+gPIBfE9tJ/4y82iDNGnVx4OFL6okZP5x+0lj9ZZEtxQ8IiY?=
+ =?us-ascii?Q?SyCJgW1u58ythndJs99lgNprE/+NMriOXI7wgZ7xob8INc5BhjDWDzkFKtFC?=
+ =?us-ascii?Q?LVM8LwqEQr+bChQokuffRKC2S/w7rsxmo0k54wpCw3WsCIBVqWH5oWDoHSXn?=
+ =?us-ascii?Q?3MTll7qK82WugBih8ZIG2ZlcnnAQOV8NAzxtcSl6WyCZpN54ONh+RbRj2k1e?=
+ =?us-ascii?Q?CW3+IdOcE6WUGUCStNi1GLPj6LihIXnK0ioSRG5lQYPfhyNcpwqElUNuc4C+?=
+ =?us-ascii?Q?QQddg3wRdOAAjrHoGlHfNOoMqUg4PCBnHVf5drQU?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a360953d-d1eb-4e60-8004-08dafb2b2f81
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 21:13:32.6934
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m6dVLNXwmWikxY/oM91lsCe/e+mro7jDROq74u94jpv1r1117OcQCovchD3j81Yf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6839
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can someone review these patches please?
+--/Yqk9/plX+V6ZlpR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Linus,
+
+Small PR for the rc cycle.
 
 Thanks,
-Melody
+Jason
 
-On 1/12/2023 1:07 PM, Melody Olvera wrote:
-> This series adds the base device tree files and DTS support for the
-> Qualcomm QDU1000 and QRU1000 IDP SoCs, including the clocks, tlmm, smmu,
-> regulators, mmc, interconnects, cpufreq, and qup. 
->
-> This patchset requires the dt-bindings changes from [1-3].
->
-> The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
-> 1000 are new SoCs meant for enabling Open RAN solutions. See more at
-> https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
->
-> [1] https://lore.kernel.org/all/20221216231426.24760-1-quic_molvera@quicinc.com/
-> [2] https://lore.kernel.org/all/20230112204446.30236-1-quic_molvera@quicinc.com/
-> [3] https://lore.kernel.org/all/20230112203653.23139-1-quic_molvera@quicinc.com/
->
-> Changes from v5:
-> - Moved XYZ-names fields under XYZ fields
-> - Removed irrelevant comments
-> - Updated ordering of some fields
-> - Removed unneeded fields
-> - Revised style on clocks and interrupts
->
-> Changes from v4:
-> - Added chassis-type
-> - Added missing regulator voltages
-> - Sorted includes
-> - Remaned memory nodes
-> - Reorganized nodes to start with compatible/reg
-> - Removed unnecessary clocks
-> - Switched to deleting nodes by label
-> - Moved pin biases and drive strengths to dts files
->
-> Changes from v3:
-> - added PCIE and USB clocks
-> - added missing qdu1000 compats
->
-> Changes from v2:
-> - Revised device nodes to match updated dt-bindings
-> - Revised rpmh-rsc bindings to allow for generic regulator nodes
-> - Updated soc ordering
-> - Moved clock node to DTS files
-> - Updated regulator nodes to be generic
-> - Removed some unnecessary whitespace
->
-> Melody Olvera (2):
->   arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
->   arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
->
->  arch/arm64/boot/dts/qcom/Makefile        |    2 +
->  arch/arm64/boot/dts/qcom/qdu1000-idp.dts |  453 ++++++++
->  arch/arm64/boot/dts/qcom/qdu1000.dtsi    | 1333 ++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/qru1000-idp.dts |  453 ++++++++
->  arch/arm64/boot/dts/qcom/qru1000.dtsi    |   26 +
->  5 files changed, 2267 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
->
->
-> base-commit: 0a093b2893c711d82622a9ab27da4f1172821336
-> prerequisite-patch-id: d439ef85a730c7b736ed8c63162e24c7ae661b60
-> prerequisite-patch-id: c55ff1a38fed5356caa8f40a85ef0b8ebc4d1fa4
-> prerequisite-patch-id: 984e8570d2464f4027dc59294c10f47e7ae29a84
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
 
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+
+for you to fetch changes up to 0f097f08c9b3c1fdb6cc9f2dd423abc17d13f1a2:
+
+  lib/scatterlist: Fix to calculate the last_pg properly (2023-01-16 12:08:31 -0400)
+
+----------------------------------------------------------------
+v6.2 second rc pull request
+
+- Several hfi1 patches fixing some long standing driver bugs
+
+- Overflow when working with sg lists with elements greater than 4G
+
+- An rxe regression with object numbering after the mrs reach their limit
+
+- A theoretical problem with the scatterlist merging code
+
+----------------------------------------------------------------
+Daisuke Matsuda (2):
+      RDMA/rxe: Fix inaccurate constants in rxe_type_info
+      RDMA/rxe: Prevent faulty rkey generation
+
+Dean Luick (5):
+      IB/hfi1: Reject a zero-length user expected buffer
+      IB/hfi1: Reserve user expected TIDs
+      IB/hfi1: Fix expected receive setup error exit issues
+      IB/hfi1: Immediately remove invalid memory from hardware
+      IB/hfi1: Remove user expected buffer invalidate race
+
+Yishai Hadas (1):
+      lib/scatterlist: Fix to calculate the last_pg properly
+
+Yonatan Nachum (1):
+      RDMA/core: Fix ib block iterator counter overflow
+
+ drivers/infiniband/core/verbs.c           |   7 +-
+ drivers/infiniband/hw/hfi1/user_exp_rcv.c | 200 +++++++++++++++++++++---------
+ drivers/infiniband/hw/hfi1/user_exp_rcv.h |   3 +
+ drivers/infiniband/sw/rxe/rxe_param.h     |  10 +-
+ drivers/infiniband/sw/rxe/rxe_pool.c      |  22 ++--
+ lib/scatterlist.c                         |  25 ++--
+ 6 files changed, 179 insertions(+), 88 deletions(-)
+
+--/Yqk9/plX+V6ZlpR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCY8sD+QAKCRCFwuHvBreF
+YbqpAP9DbLDpDMzcelw98Rp5QL5gC1CYo7lSDVjlxwfcCnbgrQEAnIiHwjxwBoDF
+Al6QJ7Oo+E7A8ZG2tEQuw6fLqI/p7A0=
+=YLrn
+-----END PGP SIGNATURE-----
+
+--/Yqk9/plX+V6ZlpR--
