@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C511674FCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D34674FD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 09:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjATIwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 03:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S229672AbjATIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 03:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjATIwr (ORCPT
+        with ESMTP id S229608AbjATIw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:52:47 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF801816A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 00:52:45 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 20 Jan 2023 03:52:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C9A3F290;
+        Fri, 20 Jan 2023 00:52:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D4440228BD;
-        Fri, 20 Jan 2023 08:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674204763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NPjXf88ZU8FVuBa4GWfXY3q6lH6kqoJUTnCqbetZU5Y=;
-        b=rVOftAenNnA8PiL17Z4Pvgxr3PGI5zIZDNJZhTWOuwjNH7ZF8duaDITjsCCPVYUUl+4mAF
-        SsZLXg+YuWZWmpQYKnBigdv+oOwpwP8b3sMrIOZpOAVevFZTdzxUdshJBulqHxA0CeorJN
-        JV/cNcPxjm+c/YD6MkjUZzLm2MN4Cno=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B24EA13251;
-        Fri, 20 Jan 2023 08:52:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hsl6K1tWymP+HQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 20 Jan 2023 08:52:43 +0000
-Date:   Fri, 20 Jan 2023 09:52:43 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-40-surenb@google.com>
- <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
- <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D2D261DD9;
+        Fri, 20 Jan 2023 08:52:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE1AC433EF;
+        Fri, 20 Jan 2023 08:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674204775;
+        bh=pF8eNbsbCUeLrwf17GZGAEG7iLgKy0Hf8Yaml2DZ5io=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s7kE+dQvqASEqAsrZFKUpB2dr5eN58tfyJlxiWzG4ni9oOYmtuIbMuWMwtJTEinWc
+         6CtafCXFNeS+uP8cjHGKtqasX/oVLAxEoCzqWGUFmNmmU/HloJ38OqIwwduEZsX6vz
+         ACYSTwKK1atxPWAR6KI8sRLO6l5WTcJZcnhQH0sXCeLdxvtAbKxNvqU9vuIhAnlDQS
+         jf5sdHxhkK2dzlqwTTTCHEC+BsS9CmoCzo44ZZ5BplFVLnpGjPBr0IwXhiP8jJNL/W
+         lUgC3/ixOG70bsApLo+bMG7/rGBHoBDkfgy/cQw+AgEAhCxGmZQXQs5PyOYKDAqc07
+         t5vq2EjKcU+qA==
+Date:   Fri, 20 Jan 2023 09:52:52 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Hanna Hawa <hhhawa@amazon.com>
+Cc:     andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
+        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
+Subject: Re: [PATCH v5 1/2] pinctrl: Add an API to get the pinctrl pins if
+ initialized
+Message-ID: <Y8pWZDH5zvYbJYCw@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Hanna Hawa <hhhawa@amazon.com>, andriy.shevchenko@linux.intel.com,
+        linus.walleij@linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
+        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        farbere@amazon.com, itamark@amazon.com
+References: <20221228164813.67964-1-hhhawa@amazon.com>
+ <20221228164813.67964-2-hhhawa@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aeP0Kk5FbIutfRbm"
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221228164813.67964-2-hhhawa@amazon.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
-> On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
-> > > call_rcu() can take a long time when callback offloading is enabled.
-> > > Its use in the vm_area_free can cause regressions in the exit path when
-> > > multiple VMAs are being freed. To minimize that impact, place VMAs into
-> > > a list and free them in groups using one call_rcu() call per group.
-> >
-> > After some more clarification I can understand how call_rcu might not be
-> > super happy about thousands of callbacks to be invoked and I do agree
-> > that this is not really optimal.
-> >
-> > On the other hand I do not like this solution much either.
-> > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
-> > much with processes with a huge number of vmas either. It would still be
-> > in housands of callbacks to be scheduled without a good reason.
-> >
-> > Instead, are there any other cases than remove_vma that need this
-> > batching? We could easily just link all the vmas into linked list and
-> > use a single call_rcu instead, no? This would both simplify the
-> > implementation, remove the scaling issue as well and we do not have to
-> > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
-> 
-> Yes, I agree the solution is not stellar. I wanted something simple
-> but this is probably too simple. OTOH keeping all dead vm_area_structs
-> on the list without hooking up a shrinker (additional complexity) does
-> not sound too appealing either.
 
-I suspect you have missed my idea. I do not really want to keep the list
-around or any shrinker. It is dead simple. Collect all vmas in
-remove_vma and then call_rcu the whole list at once after the whole list
-(be it from exit_mmap or remove_mt). See?
+--aeP0Kk5FbIutfRbm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Michal Hocko
-SUSE Labs
+On Wed, Dec 28, 2022 at 04:48:12PM +0000, Hanna Hawa wrote:
+> Add an API to get the pinctrl pins if it was initialized before driver
+> probed. This API will be used in I2C core to get the device pinctrl
+> information for recovery state change.
+>=20
+> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Applied to for-next, thanks!
+
+
+--aeP0Kk5FbIutfRbm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKVmQACgkQFA3kzBSg
+KbatEQ//Q33yje2jGseaoCmxNlQ4L9ZDY/yzBGml4DO8HkaTb3TrBpa1C7DJ4lZ7
+0vm8kdsvLq5ubR8pkRMO0hItw3ijhn2/47scPDlhdtHfweyb84aHC5R/82PM+Ms5
+47OY5qryHS2SWp0p9EbwQNmF8x8GmRz3dAPkKjgp+XWG9aZxnWdyIlckVhcNqJiu
+uZEMkxBQV+3yav6BP05lchV+hXqLQASBbK25N5xkEfF0RWN15o3nEknTBfusAwgr
+9QVI9E2+WGM6Q2lK2uTXhCU3Mv9qO/+JKk+e3FngQbg8BY3m8zLH8ENczcVO4L0y
+kr/Hkq3t0L0Vr53G6OrSxmylU+Q3ZTaBg2jL60I4PMgR3w4TwK+dQ04kyf0h5TnA
+ciKwtPd6dclz4RzvZMKB1e2qS2ZbBoI8a88fR7q0R2PLEsBrrMR69OFzuKaETx+A
+BSxfN1wgNY2QhoIWNs+WcNJ58b6EEIfbUiIHLRqLKr3AmtsvWHiPa80hckGjWZXB
+Eqh4Rfs7ES+Ea1ClYLoAiqAyqm221x/pAVK6wSFBxQu0gRilcmbgafmxxjRKJdpo
+hJ0e7Hi1trq7QrAEpqnIJBTg93lMWRRb5VGsUyy8C2iNj5qT5gR+3r+L0JTQknvZ
+lvbxQcMstd7MPAtqHVOGkr5iLXJY4me+Rh1kzO32Hc/62SFvwDY=
+=Xcpp
+-----END PGP SIGNATURE-----
+
+--aeP0Kk5FbIutfRbm--
