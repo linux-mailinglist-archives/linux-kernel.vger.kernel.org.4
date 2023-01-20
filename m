@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA25675FB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B077675FB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 22:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjATViL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 16:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S229667AbjATVk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 16:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjATViJ (ORCPT
+        with ESMTP id S229379AbjATVk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:38:09 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0309E29176
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:38:08 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id y25so9934264lfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jwiYC8m/SXFufpuSx2buV2p4E0ygNKxslx+oTKyBdro=;
-        b=Vxw8cpeuxEDUD20Qyarvh7pFO8BkkiYniHTS5hzXJTWtVeofrEz4vhOzmloV+w8YMJ
-         PvFy9oZy9zFfiZEyok8ujofE8LVJ785Qc/F7Y/3iS44IJAVOpZgiLjJuCgiFlL7eYIE4
-         L9WrmIzKz2P9IKYmrVQQrSthLBq1QZo12JKCNYn91iLHxgtnyua5WOKcl7Oow9WlgohG
-         yHVqppJOhW/X8X1GhDZPEI/r75fZyUPzQjEkuQTqmdKFLy0R3B7YZP5dgYn1g8lip9pT
-         6gFOb4JNKRqAezA+h7IRhIkuchUICUu/UeZA9zy1zHQafhbvjGP4b+UM/zdbHkAoe49C
-         nAug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jwiYC8m/SXFufpuSx2buV2p4E0ygNKxslx+oTKyBdro=;
-        b=NimvNxrAbQmp254jbXi05hEm25o9qdGfXeV7zts7kxuNCxTXeZz/fv+wsDgvCCcDCG
-         IKvHt7opGSU58iry241xy89ZfUYYvBlgQ+FyMp0Qna0lZewDE3pCev/F8gaW3dLcc4au
-         UdNQnyHSWcR1naKfA8YB651C66jZ+bt6d6X1uoSUhDhsT2opiOmKVL/BU78rdAFemiFz
-         TlD5ik/vcpoK3NbYzifCZDVnltCK9g0+FP+DGaMsx467U72vFZcP7qf03pDzpKw9Rl5c
-         yqph6OdiJ2/+Xw7TZ0OtwwxcuxkSwY5M0I/4K9HHOZS1oyU1r8uDKLKjNbgEoVy8K9uY
-         W67w==
-X-Gm-Message-State: AFqh2kpxq4uED76BAkBD5JCTaMxoN7NjGvcYj0dkO7dR8EZkiBfe0PWd
-        4M5W73jqUytpXTZ3DlyHXVPhU8GrKh8XzQ==
-X-Google-Smtp-Source: AMrXdXtbz7lcA+oEszOH9suo7AlAwAnGr73g4ckQh62MJjrODeBXEoG4wtuWMCr5zs/BuO2fX4XPTQ==
-X-Received: by 2002:a05:6512:224d:b0:4a4:68b8:9c35 with SMTP id i13-20020a056512224d00b004a468b89c35mr5759608lfu.29.1674250686211;
-        Fri, 20 Jan 2023 13:38:06 -0800 (PST)
-Received: from localhost.localdomain ([46.147.136.0])
-        by smtp.gmail.com with ESMTPSA id g38-20020a0565123ba600b004d2199ea23dsm2476783lfv.0.2023.01.20.13.38.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 13:38:05 -0800 (PST)
-From:   Alexander Pantyukhin <apantykhin@gmail.com>
-To:     andriy.shevchenko@linux.intel.com
-Cc:     hch@lst.de, linux-kernel@vger.kernel.org,
-        Alexander Pantyukhin <apantykhin@gmail.com>
-Subject: [PATCH] kib/uuid.c: add check for length for uuid_is_valid
-Date:   Sat, 21 Jan 2023 02:38:02 +0500
-Message-Id: <20230120213802.2467-1-apantykhin@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 20 Jan 2023 16:40:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247E64F344
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:40:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F8F62093
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 21:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F466C433EF;
+        Fri, 20 Jan 2023 21:40:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674250856;
+        bh=t6cCzOyUtRE4Sv+OM5VqdeIXfQyGfsPKwTULAq1p5/g=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=p1Y6XrFGH3a99aaKrRy97Tji5dsHti1uTGRbs5aQBjMY2gAFRvDUvkbq1y6JQGkJ9
+         FLg8OnuHSjB2kUQQ7jJmQB9lxcJR1n5U5la8hxLQkRwVgFlCH1T1ZlfmInQafv/FFe
+         mFPggckIt+hXrlmkKWy2pmklNkL/WMeo3TU9bkVezsrJ/WUyb28l0l2TKL8tJZbTb7
+         l2kIUME+P8YIIDpP0tON4F7lRHfTfcEzar9brNuJ+Ylz4RPIPPpg9TpWbbi7untD0o
+         xAMyQKM7lbkQyL/8AcU9VXQ1OjZ7Vq0mCxJXuwqx9UiLvEO/zj6i32xp1+KC7/QRVM
+         7V50ABW+zZHow==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A79C15C08A4; Fri, 20 Jan 2023 13:40:55 -0800 (PST)
+Date:   Fri, 20 Jan 2023 13:40:55 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230120214055.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
+ <20230120035521.GA319650@paulmck-ThinkPad-P17-Gen-1>
+ <126e32b7-caa7-0a1e-4589-885aef7c5a39@huaweicloud.com>
+ <fbbd5a65-7f93-ba5e-d8a6-236d9af43c47@huaweicloud.com>
+ <20230120153242.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+ <f2ee717f-586f-7ffe-7729-64c88ab36cad@huaweicloud.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f2ee717f-586f-7ffe-7729-64c88ab36cad@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for length strict equality for uuid is valid
+On Fri, Jan 20, 2023 at 09:56:36PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/20/2023 4:32 PM, Paul E. McKenney wrote:
+> > On Fri, Jan 20, 2023 at 01:51:01PM +0100, Jonas Oberhauser wrote:
+> > > I'm not going to get it right today, am I?
+> > Believe me, I know that feeling!  Open-source development is therefore
+> > an extremely good character-building exercise.  At least that is what
+> > I keep telling myself.  ;-)
+> 
+> "Calvin, go do something you hate! Being miserable builds character!"
 
-Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
----
- lib/test_uuid.c | 1 +
- lib/uuid.c      | 3 +++
- 2 files changed, 4 insertions(+)
+Heh!  There is the school of thought that says that if children
+automatically did everything that they needed to do, they would not
+need parents.  Now about adults doing what they need to do, myself
+included...  ;-)
 
-diff --git a/lib/test_uuid.c b/lib/test_uuid.c
-index cd819c397dc7..7a3d258fa695 100644
---- a/lib/test_uuid.c
-+++ b/lib/test_uuid.c
-@@ -37,6 +37,7 @@ static const char * const test_uuid_wrong_data[] = {
- 	"c33f4995-3701-450e-9fbf206a2e98e576 ",	/* no hyphen(s) */
- 	"64b4371c-77c1-48f9-8221-29f054XX023b",	/* invalid character(s) */
- 	"0cb4ddff-a545-4401-9d06-688af53e",	/* not enough data */
-+	"0cb4ddff-a545-4401-9d06-688af53e7f8412" /* too much data */
- };
- 
- static unsigned total_tests __initdata;
-diff --git a/lib/uuid.c b/lib/uuid.c
-index e309b4c5be3d..ca10e2b4334b 100644
---- a/lib/uuid.c
-+++ b/lib/uuid.c
-@@ -89,6 +89,9 @@ bool uuid_is_valid(const char *uuid)
- {
- 	unsigned int i;
- 
-+	if (strlen(uuid) != UUID_STRING_LEN)
-+		return false;
-+
- 	for (i = 0; i < UUID_STRING_LEN; i++) {
- 		if (i == 8 || i == 13 || i == 18 || i == 23) {
- 			if (uuid[i] != '-')
--- 
-2.25.1
+> > > +let srcu-rscs = ([Srcu-lock] ; (data ; [~ Srcu-unlock] ; rfe) * ; data ;
+> > > [Srcu-unlock]) & loc
+> > > 
+> > > I see now that I copied the format from your message but without realizing
+> > > the original had a `|` where I have a `;`.
+> > > I hope this version is finally right and perhaps more natural than the (data
+> > > | rf) version, considering rf can't actually appear in most places and this
+> > > more closely matches carry-dep;data.
+> > > But of course feel free to use
+> > > +let srcu-rscs = ([Srcu-lock] ; (data  | [~ Srcu-unlock] ; rf)+ ;
+> > > [Srcu-unlock]) & loc
+> > > instead if you prefer.
+> > 
+> > The reason for favoring "rf" over "rfe" is the possibility of a litmus
+> > test where the process containing the srcu_down_read() sometimes but
+> > not always also has the matching srcu_up_read().  Perhaps a pair of "if"
+> > statements control which process does the matching srcu_up_read().
+> 
+> If you put the redefinition of data early enough to affect this definition,
+> the rfi option should be covered by the carry-dep in the redefinition of
+> data, so I left it out.
 
+For right now, I will favor obviousness over minimalism, but for the
+real patch, I will let Alan decide what makes the most sense.  I am
+sure that you will not be shy about letting him know of your thoughts
+on the matter.  ;-)
+
+							Thanx, Paul
+
+> > And thank you!!!
+> 
+> always ;-)
+> 
+> jonas
+> 
