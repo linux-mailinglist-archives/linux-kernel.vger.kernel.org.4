@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A914A67482A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D9667482F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjATAmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S229700AbjATAof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjATAmI (ORCPT
+        with ESMTP id S229685AbjATAod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:42:08 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933F77E4B8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:42:05 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id b5so3540923wrn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:42:05 -0800 (PST)
+        Thu, 19 Jan 2023 19:44:33 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3375D8C90A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:44:32 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so230635pjq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=weljRA7BwO6FXmcpTYUo9jyIREoLOwef98aMlzObdfs=;
-        b=MlegrDNSv7+cGm1r+ndiOYQNt94mHEk8jy/ywxEj+Ditl22/oIBgk5egjgCDpQqSFR
-         41L//fY6PrDFnu4eL6fei0zHwRLxJa6/P5Yv+VpxyuK8NUJJ7Gu+TgMTTAhumoGJHGeD
-         FMVFQA2zfwJDLxhi+wYJx5Y7wMuRjXqN+zdiNCQP5FmiC0Dr75KsEW/2KpocvOE88L20
-         v9NSsg9h+MstptICc2Nricqv7ognjjlR5zzCrvzmIgty6Pj8NAQx45bDgFneZL7PQVY8
-         aVuLQIURSn19zoNlq/+g8Xr3dvezhC5ngv3Gt1GSQa0jz5Dhy0UXxiGyNx49tN8LN6z0
-         K0qA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+fvpGapgvtVGeZuAY7OcezbzCMrWexY1QDif5YC73k=;
+        b=XFsSugiSp88z0HmsOr19nYx6GTXzGDj0gHR9xaNyf3HdsqIlfolg80UaaqpwLt6Hw/
+         f3CG89eBjl9+rOfqPoL2WyGaOKw5CHRThrkGAbpiZxT1cpMKa0r/l09hUiJsRww3sCVX
+         PGOvqk0XAu9ph8slSgImKKj/L6v2vSSKsWQss=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=weljRA7BwO6FXmcpTYUo9jyIREoLOwef98aMlzObdfs=;
-        b=aBgpMdpLdEAHtNMgeUNWr+ZkZkMTt5BjsfdU3v55h9rbpl+LonvDgUufSwCxFWx3P4
-         L60Vmx9bQkeLlW4RH8bi1BrAG3VaKXbYbc5H6AvVVNFjAhKZaGPXmsV3mMFssVzco0Ec
-         iGitUtpzMLoRg/dicgad1A7XdMw+EMTOrLVLGud6VxtVhgg5no8TbzSZHHe0uWKd1bkT
-         HK5+ntu4+xb8z9KX/l0ToKAna7E6mVMgNMeUm8Pmp/RpPDGq3Xzhtp8u5VQQWKoChrih
-         XVbnONlwu3OuSOffOJ1SREy712hdfU5ChPGJzXWZqTVX7KaEmdMqkj8MSeDcFXL9pmbn
-         s/JA==
-X-Gm-Message-State: AFqh2kpDpW6AlZPjwSI/xX4NRQKomayJVFL2Tohw5kR7EGQQMgeE8YBJ
-        cBTEtlAE4xHtgcYUtT0UyMRM5g==
-X-Google-Smtp-Source: AMrXdXsS0WNlrFfYfTOegkpyna6zRye3TTLep1NMgpHygm8ESwh6HXyQ4zIZrJ/K7+WYQhgGFjTXFg==
-X-Received: by 2002:adf:fa88:0:b0:2bd:feb5:fb7b with SMTP id h8-20020adffa88000000b002bdfeb5fb7bmr10175838wrr.33.1674175324069;
-        Thu, 19 Jan 2023 16:42:04 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d4bc6000000b0027323b19ecesm34517945wrt.16.2023.01.19.16.42.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 16:42:03 -0800 (PST)
-Message-ID: <ab1c316e-b018-9fa6-0ebf-5c0b47c397a4@linaro.org>
-Date:   Fri, 20 Jan 2023 00:42:02 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C+fvpGapgvtVGeZuAY7OcezbzCMrWexY1QDif5YC73k=;
+        b=Y8McD4pDX9v9KudtcP8aypVCwrtxlr1q77nb0B9ww3KHlSNIvb4zfCeK5GiP39jwvd
+         UOB10F/rqZeFI1solhGCuTV/E2M3Jw920hvQoo4nUwMew3zuCvuG97oaXykJTJ5k0f4E
+         UU8VfvbBR6OY/WgdfNlHOQCDcG7vHA7h+khqw9WrdgDDNxpeqhAAqn+TbAwqCC8nyU2C
+         n/XusAptvFM3rbIReVmCRnIX9jk2ZuQqg7H8isXIp4JTWxzc9+18iL2pvaohsriDZBhz
+         6eR43tPUFrWLMGcOTh3T6cKcEqKnfHHaG/vGDzpVVjxEdtVsAlr/1bF5Kt9o2llzv2E1
+         S0og==
+X-Gm-Message-State: AFqh2kqp4aIWiexcBOPkkikTuJkCg3dpfm4hw/bgO+s3XHbTXLq/yNcp
+        06VsZna4y3BazKDas6S/JHnoFg==
+X-Google-Smtp-Source: AMrXdXtJCRP9I9FgTWke+BtwI9sCViCGPVxeDLSFp+Gamwo74cyDQdWSoZFp4OjdXosxwGgV2T8uYw==
+X-Received: by 2002:a17:902:f646:b0:194:46e0:1b61 with SMTP id m6-20020a170902f64600b0019446e01b61mr13777190plg.63.1674175471728;
+        Thu, 19 Jan 2023 16:44:31 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170902d0d400b00192e1590349sm25533566pln.216.2023.01.19.16.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 16:44:31 -0800 (PST)
+Date:   Thu, 19 Jan 2023 16:44:30 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v5 03/39] x86/cpufeatures: Add CPU feature flags for
+ shadow stacks
+Message-ID: <202301191644.CBF2951@keescook>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-4-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
- <20230117205800.cqexxwxmtupapy7e@builder.lan>
- <58ec79b0-1b58-48c8-6eea-d6675f34192d@linaro.org>
-In-Reply-To: <58ec79b0-1b58-48c8-6eea-d6675f34192d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119212317.8324-4-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 00:40, Bryan O'Donoghue wrote:
+On Thu, Jan 19, 2023 at 01:22:41PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> pronto: wcnss@a204000 {
->          compatible = "qcom,pronto-v2-pd-pil", "qcom,pronto";
->          reg = <0x0a204000 0x2000>, <0x0a202000 0x1000>, <0x0a21b000 
-> 0x3000>;
+> The Control-Flow Enforcement Technology contains two related features,
+> one of which is Shadow Stacks. Future patches will utilize this feature
+> for shadow stack support in KVM, so add a CPU feature flags for Shadow
+> Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
 > 
->          power-domains = <&rpmpd MSM8939_VDDCX>,
->                          <&rpmpd MSM8939_VDDMX_AO>;
->          power-domain-names = "vddcx", "vddmx";
-> };
+> To protect shadow stack state from malicious modification, the registers
+> are only accessible in supervisor mode. This implementation
+> context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
+> on XSAVES.
 > 
-> ---
-> bod
+> The shadow stack feature, enumerated by the CPUID bit described above,
+> encompasses both supervisor and userspace support for shadow stack. In
+> near future patches, only userspace shadow stack will be enabled. In
+> expectation of future supervisor shadow stack support, create a software
+> CPU capability to enumerate kernel utilization of userspace shadow stack
+> support. This user shadow stack bit should depend on the HW "shstk"
+> capability and that logic will be implemented in future patches.
+> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Doh.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-I opened the 4.19 kernel ... not 3.18
-
-*facepalm*
+-- 
+Kees Cook
