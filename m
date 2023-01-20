@@ -2,118 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C65675367
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D511F675369
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 12:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjATL1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 06:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        id S229714AbjATL2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 06:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjATL1b (ORCPT
+        with ESMTP id S229561AbjATL2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:27:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567C345F75
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 03:27:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 20 Jan 2023 06:28:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5095DE1;
+        Fri, 20 Jan 2023 03:28:02 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 034BC22BE1;
+        Fri, 20 Jan 2023 11:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674214081; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FL/tdXJXqMQYDc5GJ56WI1+Et3SfVNE7p+O/D4lXFGY=;
+        b=U7sIyKRPrN0Wk4A0zaEyPee/9sonuBIpKhkB/C7XIb+CCOi3daMBukCwwtzW2W3PPTsWsV
+        eNM3Nfu0dCWvR44rgjgphj3ZJH3ygH5jFjTREgZltpp9h5wPqcaftPGYEUZwLq4GpQe8YE
+        KB5/DMdx+xLsk/KFt+SBvj3J9gdPo98=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674214081;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FL/tdXJXqMQYDc5GJ56WI1+Et3SfVNE7p+O/D4lXFGY=;
+        b=R9oRR7WCKXP1SJ3CLVG2BBHuVF7p+i3vBh5ls8caJoIgy5QZG4kHDC1DSTm6HPsnxMzvzT
+        4B4c57yzWV7SAlBA==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9040E61F22
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 11:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A80D4C433D2;
-        Fri, 20 Jan 2023 11:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674214049;
-        bh=rfM9XoEsJ3fxixGBFYlNuvWTsDntB4jiWzzWwt4TgPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YwvfcJdwevZ+aASmlryPCVwN+yyKPDFI7isQ9VtTUc1nRq0Ca4LyE9GQLAGQUNLeO
-         4dNYSz7ym833D6GvCQNzz/WS649ynrYw8/CABb4fTxXN1+9wuvW0BA0m1D7rpswnB1
-         nF1qAdm4DbjHu3/G3IAe0j3r2lKEj63fER5WkN6g=
-Date:   Fri, 20 Jan 2023 12:27:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/1] drivers: base: cacheinfo: fix shared_cpu_map
-Message-ID: <Y8p6ns/XNrk/CDww@kroah.com>
-References: <20221219105132.27690-1-yongxuan.wang@sifive.com>
- <20221219105132.27690-2-yongxuan.wang@sifive.com>
- <9cfb3356-3e3b-e9f3-1e16-ff02790e5829@arm.com>
+        by relay2.suse.de (Postfix) with ESMTPS id B81922C141;
+        Fri, 20 Jan 2023 11:28:00 +0000 (UTC)
+Date:   Fri, 20 Jan 2023 12:27:59 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Erhard F." <erhard_f@mailbox.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
+ disaply code
+Message-ID: <20230120112759.GS16547@kitsune.suse.cz>
+References: <20230119095323.4659-1-msuchanek@suse.de>
+ <8a9f7ba5-37a4-0927-4ab2-d212f1b098a9@csgroup.eu>
+ <57e026bf-c412-0c47-8956-b565894948e0@suse.de>
+ <20230119132330.GP16547@kitsune.suse.cz>
+ <190c1c68-0249-a291-f2ab-45c9a7f716d7@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9cfb3356-3e3b-e9f3-1e16-ff02790e5829@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <190c1c68-0249-a291-f2ab-45c9a7f716d7@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 10:00:39AM +0100, Pierre Gondois wrote:
-> Hello Yong-Xuan,
-> Except for the nit below, I tried the patch and everything seemed ok, so
-> with that:
-> Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
+Hello,
+
+On Thu, Jan 19, 2023 at 04:20:57PM +0100, Thomas Zimmermann wrote:
+> Hi
 > 
-> Regards,
-> Pierre
+> Am 19.01.23 um 14:23 schrieb Michal Suchánek:
+> > On Thu, Jan 19, 2023 at 02:11:13PM +0100, Thomas Zimmermann wrote:
+> > > Hi
+> > > 
+> > > Am 19.01.23 um 11:24 schrieb Christophe Leroy:
+> > > > 
+> > > > 
+> > > > Le 19/01/2023 à 10:53, Michal Suchanek a écrit :
+> > > > > The commit 2d681d6a23a1 ("of: Make of framebuffer devices unique")
+> > > > > breaks build because of wrong argument to snprintf. That certainly
+> > > > > avoids the runtime error but is not the intended outcome.
+> > > > > 
+> > > > > Also use standard device name format of-display.N for all created
+> > > > > devices.
+> > > > > 
+> > > > > Fixes: 2d681d6a23a1 ("of: Make of framebuffer devices unique")
+> > > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > > > ---
+> > > > > v2: Update the device name format
+> > > > > ---
+> > > > >     drivers/of/platform.c | 12 ++++++++----
+> > > > >     1 file changed, 8 insertions(+), 4 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> > > > > index f2a5d679a324..8c1b1de22036 100644
+> > > > > --- a/drivers/of/platform.c
+> > > > > +++ b/drivers/of/platform.c
+> > > > > @@ -525,7 +525,9 @@ static int __init of_platform_default_populate_init(void)
+> > > > >     	if (IS_ENABLED(CONFIG_PPC)) {
+> > > > >     		struct device_node *boot_display = NULL;
+> > > > >     		struct platform_device *dev;
+> > > > > -		int display_number = 1;
+> > > > > +		int display_number = 0;
+> > > > > +		char buf[14];
+> > > > 
+> > > > Can you declare that in the for block where it is used instead ?
+> > > > 
+> > > > > +		char *of_display_format = "of-display.%d";
+> > > > 
+> > > > Should be const ?
+> > > 
+> > > That should be static const of_display_format[] = then
+> > 
+> > Why? It sounds completely fine to have a const pointer to a string
+> > constatnt.
 > 
-> On 12/19/22 11:51, Yong-Xuan Wang wrote:
-> > The cacheinfo sets up the shared_cpu_map by checking whether the caches
-> > with the same index are shared between CPUs. However, this will trigger
-> > slab-out-of-bounds access if the CPUs do not have the same cache hierarchy.
-> > Another problem is the mismatched shared_cpu_map when the shared cache does
-> > not have the same index between CPUs.
-> > 
-> > CPU0	I	D	L3
-> > index	0	1	2	x
-> > 	^	^	^	^
-> > index	0	1	2	3
-> > CPU1	I	D	L2	L3
-> > 
-> > This patch checks each cache is shared with all caches on other CPUs.
-> > 
-> > Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-> > ---
-> >   drivers/base/cacheinfo.c | 25 +++++++++++++++----------
-> >   1 file changed, 15 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> > index 950b22cdb5f7..d38f80f6fff1 100644
-> > --- a/drivers/base/cacheinfo.c
-> > +++ b/drivers/base/cacheinfo.c
-> > @@ -256,7 +256,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
-> >   {
-> >   	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-> >   	struct cacheinfo *this_leaf, *sib_leaf;
-> > -	unsigned int index;
-> > +	unsigned int index, sib_index;
-> >   	int ret = 0;
-> >   	if (this_cpu_ci->cpu_map_populated)
-> > @@ -284,11 +284,12 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
-> >   			if (i == cpu || !sib_cpu_ci->info_list)
-> >   				continue;/* skip if itself or no cacheinfo */
-> > -
-> > -			sib_leaf = per_cpu_cacheinfo_idx(i, index);
-> > -			if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
-> > -				cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
-> > -				cpumask_set_cpu(i, &this_leaf->shared_cpu_map);
-> > +			for (sib_index = 0; sib_index < cache_leaves(i); sib_index++) {
-> > +				sib_leaf = per_cpu_cacheinfo_idx(i, sib_index);;
+> Generally speaking:
 > 
-> It seems there are 2 ';' above (same in the block below).
+> 'static' because your const pointer is then not a local variable, so it
+> takes pressure off the stack. For global variables, you don't want them to
+> show up in any linker symbol tables.
 
-Yes, the kernel test robot complains about this as well.
+This sounds a lot like an exemplar case of premature optimization.
+A simplistic compiler might do exactly what you say, and allocate a slot
+for the variable on the stack the moment the function is entered.
 
-It needs to be fixed before this change can be accepted.
+However, in real compilers there is no stack pressure from having a
+local variable:
+ - the compiler can put the variable into a register
+ - it can completely omit the variable before and after it's actually
+   used which is that specific function call
 
-thanks,
+> The string "of-display.%d" is stored as an array in the ELF data section.
+> And your char pointer is a reference to that array. For static pointers,
+> these indirections take CPU cycles to update when the loader has to relocate
 
-greg k-h
+Provided that the char pointer ever exists in the compiled code. Its
+address is not taken so it does not need to.
+
+> sections. If you declare of_display_format[] directly as array, you avoid
+> the reference and work directly with the array.
+> 
+> Of course, this is a kernel module and the string is self-contained within
+> the function. So the compiler can probably detect that and optimize the code
+> to be like the 'static const []' version. It's still good to follow best
+> practices, as someone might copy from this function.
+
+If it could not detect it there would be a lot of trouble all around.
+
+Thanks
+
+Michal
