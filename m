@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C362675A27
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC63A675A31
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 17:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjATQjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 11:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S230339AbjATQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 11:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjATQjX (ORCPT
+        with ESMTP id S230119AbjATQkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 11:39:23 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AD94699;
-        Fri, 20 Jan 2023 08:39:20 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1AE58FF809;
-        Fri, 20 Jan 2023 16:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674232759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RTcqpcvjSuMhMocjoOJ/438aoJ+MVvQH8jGg8nUJVFs=;
-        b=UgsGEBFradR2vJ/uKQZyFKy1n+VNMKyvJZRXJqKyf3d7Njiz/zvui1+dBOQYGl5fM6mAN/
-        2CD9WCo5y8OYzN/4Yzn6kCtKs4oRdouV2/up6CLL0CD9up7v3OJDFcBId9T2ilf7jtsp4J
-        7/FfC9xL0AJbVJtZnQmYcStq16Si0gSijHaepuRGbP0eLiaJst+3ftZylEuEhmmQ/ykO8x
-        +C3Oyy8EDrdNvZS202w/pB7SlZbDroPwH978z7DJfrtiK7nZJ53A2XstOvnM0A0H9MpSH8
-        S5vEH2DVT2RgUC+mxc4PSCu9zCBW0xM8+lgeg/2lsf3v3kkVuxqLE6eSHhlH2Q==
-Date:   Fri, 20 Jan 2023 17:39:17 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     Hugo Villeneuve <hugo@hugovil.com>, a.zummo@towertech.it,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 09/14] rtc: pcf2127: set PWRMNG value for PCF2131
-Message-ID: <Y8rDtWEoepkd1D1u@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-10-hugo@hugovil.com>
- <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
+        Fri, 20 Jan 2023 11:40:20 -0500
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93FA40E9;
+        Fri, 20 Jan 2023 08:40:18 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id mg12so15396148ejc.5;
+        Fri, 20 Jan 2023 08:40:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=csi4POQTNrwGOEhk2ixGemwP2nNjAXiSiCcAdPhdTRQ=;
+        b=bHlbi46ChsuTYuiuBurzTfYbs13WkYQjQMVa16wlnSrphvlRZE3EQ9vTRetsUhI3Nb
+         dvzgFKV1rqoHWzebIuKqMHuU6XYG2UwQRiIhtLNmZAHM8GP3xxfuyWqzqfPJj4BuU1Cl
+         uyeEhlmEY/k5TtaAsIB0PUB6MngsffkNCDj7h8D8WLaIowZ7W0a3N+T28qAniU721MIb
+         bqgXNC9J3bSeEUNQcPA2IkTDFJ3momOk0dLTybNDQznTKGEmnX1SzTFjZ5zW+8eyxOPl
+         ZSVA/z27oJhMkiK0L0s14BU/5RW3hodIyA8UnSwFDqiJoyxo7yCtvEt9kEr/wVQPEVN6
+         jMqQ==
+X-Gm-Message-State: AFqh2kqjtymfyBmp5bxBMe+5h5O5JUFF17KVhM98BhHPgdosXkM7ppQQ
+        vt9pHfXXb1s5LRonKsgLPu7SJ+KjEsJi1n8Ap0A=
+X-Google-Smtp-Source: AMrXdXtpPdy6MsSqnbjmEa5Sd5dQV23sws9Ah6n4RaZklieDTar+9aUOWK5AiksS9zwNzb60mWWv6+exwxXt/k4JIC0=
+X-Received: by 2002:a17:907:7855:b0:855:63bb:d3cb with SMTP id
+ lb21-20020a170907785500b0085563bbd3cbmr1587945ejc.532.1674232817416; Fri, 20
+ Jan 2023 08:40:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230107192513.118172-1-tim@linux4.de>
+In-Reply-To: <20230107192513.118172-1-tim@linux4.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 20 Jan 2023 17:40:06 +0100
+Message-ID: <CAJZ5v0jYUmDHn6ati=zOU6JyYYAuc6CUtV2eomPWWa2aBoKdSA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: pch: Add support for Wellsburg PCH
+To:     Tim Zimmermann <tim@linux4.de>, Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Tushar Dave <tushar.n.dave@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Jan 7, 2023 at 8:42 PM Tim Zimmermann <tim@linux4.de> wrote:
+>
+> This adds the PCI ID for the Wellsburg C610 series chipset PCH. The
+> driver can read the temperature from the Wellsburg PCH with only the PCI
+> ID added and no other modifications.
+>
+> Signed-off-by: Tim Zimmermann <tim@linux4.de>
 
-On 07/01/2023 19:36:06+0100, Bruno Thomsen wrote:
-> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > Default PWRMNG[2:0] bits are set to 000b for PCF2127/29, but to
-> > 111b for PCF2131.
-> >
-> > Set these bits to 000b to select same mode as PCF2127/29.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> 
-> I think it's a good idea[1] but there have been concerns about
-> setting default values in the past[2]. In case somebody needs
-> a different behaviour they should add a device tree property.
-> 
-> [1] https://lore.kernel.org/linux-rtc/20190910143945.9364-1-bruno.thomsen@gmail.com/
-> [2] https://lore.kernel.org/linux-rtc/20191211163354.GC1463890@piout.net/
+Rui, Srinivas, any objections to this one?
 
-I confirm this is still my point of view and I won't take this patch as
-this may break existing users.
-
-> 
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 68af4d0438b8..241189ee4a05 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -53,6 +53,7 @@
-> >  #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
-> >  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
-> >  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
-> > +#define PCF2127_CTRL3_PWRMNG_MASK              GENMASK(7, 5)
-> >  /* Control register 4 */
-> >  #define PCF2131_REG_CTRL4              0x03
-> >  #define PCF2131_BIT_CTRL4_TSF4                 BIT(4)
-> > @@ -1129,6 +1130,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >         regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> >                                 PCF2127_BIT_CTRL1_POR_OVRD);
-> >
-> > +       /* Make sure PWRMNG[2:0] is set to 000b. This is the default for
-> > +        * PCF2127/29, but not for PCF2131 (default of 111b).
-> > +        *
-> > +        * PWRMNG[2:0]  = 000b:
-> > +        *   battery switch-over function is enabled in standard mode;
-> > +        *   battery low detection function is enabled
-> > +        */
-> > +       ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-> > +                               PCF2127_CTRL3_PWRMNG_MASK);
-> > +       if (ret < 0) {
-> > +               dev_err(dev, "PWRMNG config failed\n");
-> > +               return ret;
-> > +       }
-> > +
-> >         ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
-> >         if (ret < 0)
-> >                 return ret;
-> > --
-> > 2.30.2
-> >
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> ---
+>  drivers/thermal/intel/intel_pch_thermal.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+> index dabf11a687a1..9e27f430e034 100644
+> --- a/drivers/thermal/intel/intel_pch_thermal.c
+> +++ b/drivers/thermal/intel/intel_pch_thermal.c
+> @@ -29,6 +29,7 @@
+>  #define PCH_THERMAL_DID_CNL_LP 0x02F9 /* CNL-LP PCH */
+>  #define PCH_THERMAL_DID_CML_H  0X06F9 /* CML-H PCH */
+>  #define PCH_THERMAL_DID_LWB    0xA1B1 /* Lewisburg PCH */
+> +#define PCH_THERMAL_DID_WBG    0x8D24 /* Wellsburg PCH */
+>
+>  /* Wildcat Point-LP  PCH Thermal registers */
+>  #define WPT_TEMP       0x0000  /* Temperature */
+> @@ -350,6 +351,7 @@ enum board_ids {
+>         board_cnl,
+>         board_cml,
+>         board_lwb,
+> +       board_wbg,
+>  };
+>
+>  static const struct board_info {
+> @@ -380,6 +382,10 @@ static const struct board_info {
+>                 .name = "pch_lewisburg",
+>                 .ops = &pch_dev_ops_wpt,
+>         },
+> +       [board_wbg] = {
+> +               .name = "pch_wellsburg",
+> +               .ops = &pch_dev_ops_wpt,
+> +       },
+>  };
+>
+>  static int intel_pch_thermal_probe(struct pci_dev *pdev,
+> @@ -495,6 +501,8 @@ static const struct pci_device_id intel_pch_thermal_id[] = {
+>                 .driver_data = board_cml, },
+>         { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_LWB),
+>                 .driver_data = board_lwb, },
+> +       { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_WBG),
+> +               .driver_data = board_wbg, },
+>         { 0, },
+>  };
+>  MODULE_DEVICE_TABLE(pci, intel_pch_thermal_id);
+> --
+> 2.39.0
+>
