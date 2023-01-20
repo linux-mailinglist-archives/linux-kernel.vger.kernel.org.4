@@ -2,161 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8991675062
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A562675065
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjATJNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S229953AbjATJNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjATJNK (ORCPT
+        with ESMTP id S229949AbjATJNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:13:10 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459518BA9C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:12:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=cOSj1tZvBpon7M3wSaKSofqAjKxl
-        548neWGVKiY0Pio=; b=FsYWxeB28/b6PIXYFcr2RMyD7/9Q4fq6FWwc0KiXOCOC
-        zihwl99BTQllFAZFhHDYaQeT/2IVfyNDcf3CDyOEyTjoEx9FwwLJhjwi073OD1Rb
-        KpsK8mpe4EsSg8gUItWT89VUofaDD2foTmd9fYPao2Eykb0z1oFVLgYW8DDMKEw=
-Received: (qmail 689703 invoked from network); 20 Jan 2023 10:12:02 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jan 2023 10:12:02 +0100
-X-UD-Smtp-Session: l3s3148p1@rOFMca7yJskujnvx
-Date:   Fri, 20 Jan 2023 10:12:02 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Fri, 20 Jan 2023 04:13:37 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628ED93706;
+        Fri, 20 Jan 2023 01:13:10 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so5375186wmb.2;
+        Fri, 20 Jan 2023 01:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ux8y6Cx3Fu1EDV86Is7psjeM9rNqa+KOawGSAK6XGIk=;
+        b=JUgOOzKNnW0nTnbNzRK1+tRYnthmcPUqJTN+A6ZkCo+/vW3HP/to4oXcN9oRUgUPuY
+         0aE27/2P042xOIud6eaSEm2xttT0WWA6ZGzhHP8fe/3ka3kGNjvFWwduztFn4bPog1VJ
+         MbJo00GcJ4R9qQbSXvZQoRyUPSfdAKla7HSCjTa7YNEF5FbsDGhC40jHcZ/Tt97Z4QFI
+         8Cb9lOI7oyDHhMa9Wi71iihLbRljnKGcTFP46jTJpYVW3NV+dr5t/pIJAb9vKBezfU4b
+         7jeQfJQ/1pbTsNH/WipPasrCfHSm+ivPa3lknfnKn/03vXV5MUQwm1w65+s4L9Eirfmx
+         LcAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ux8y6Cx3Fu1EDV86Is7psjeM9rNqa+KOawGSAK6XGIk=;
+        b=265E1Jt6AOBf3IGD5kUgdC2eBxRD0oXkbSbh+qoBqm6PuWQ+UQnsTJz7MvPEBiu4MP
+         9Vcdg4zVM6lLlvLRH0rGps2FsY6ddLUIVE8Ae3vrBwONgbwX4Ul5LdYgIx5Y40TsSZYM
+         UfUorksSYQj2NnPj+u/UlOMe0BG1r5VFX/zcGbwF7VATdI3BgyJnR9quSC5VnQIdfF0B
+         L/G2tb/ax8krRJLOAn4ebkstUF2VIrCVANPEwDNkKQy3VtYlrzYoKkzWaqIdwh7TDzCA
+         X89y+IMo/Nsotq1RLiJTDZAeDPHN5j0cr/+X6AMwE8i5zOUd/RBPew1J3ni61C6vb5k1
+         WQqA==
+X-Gm-Message-State: AFqh2kpavgz/7JfVx5L8N/bWF+nQJ3LAYPOindWfFzbdePGgwmzAlSUi
+        KleAeitM++6EF75qBdovico=
+X-Google-Smtp-Source: AMrXdXujUNuBhbykArz4bplt23suFeP7EOY/IXTXm6XfPcIkfmHck7sImTIaeoiTw84iE4TZKAXfMw==
+X-Received: by 2002:a05:600c:4256:b0:3da:2a78:d7a3 with SMTP id r22-20020a05600c425600b003da2a78d7a3mr12824255wmm.33.1674205985529;
+        Fri, 20 Jan 2023 01:13:05 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm1789231wmq.28.2023.01.20.01.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 01:13:05 -0800 (PST)
+Date:   Fri, 20 Jan 2023 12:13:02 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Markus Pargmann <mpa@pengutronix.de>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: mmc: drop unneeded quotes
-Message-ID: <Y8pa4lm/0eZSsIGO@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
         Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Markus Pargmann <mpa@pengutronix.de>,
-        Jaehoon Chung <jh80.chung@samsung.com>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH net-next 4/8] net: microchip: sparx5: Add TC support for
+ IS0 VCAP
+Message-ID: <Y8pbHvJpvuIuCXws@kadam>
+References: <20230120090831.20032-1-steen.hegelund@microchip.com>
+ <20230120090831.20032-5-steen.hegelund@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qvSHo0b6uvEVzdui"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230120090831.20032-5-steen.hegelund@microchip.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 20, 2023 at 10:08:27AM +0100, Steen Hegelund wrote:
+> -/* Add a rule counter action - only IS2 is considered for now */
+> +/* Add a rule counter action */
+>  static int sparx5_tc_add_rule_counter(struct vcap_admin *admin,
+>  				      struct vcap_rule *vrule)
+>  {
+> -	int err;
+> +	int err = 0;
 
---qvSHo0b6uvEVzdui
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Don't initialize.
 
-On Fri, Jan 20, 2023 at 09:57:21AM +0100, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs and redundant blank lines.
-> No functional impact except adjusting to preferred coding style.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  
+> -	err = vcap_rule_mod_action_u32(vrule, VCAP_AF_CNT_ID, vrule->id);
+> -	if (err)
+> -		return err;
+> +	if (admin->vtype == VCAP_TYPE_IS2) {
+> +		err = vcap_rule_mod_action_u32(vrule, VCAP_AF_CNT_ID,
+> +					       vrule->id);
+> +		if (err)
+> +			return err;
+> +		vcap_rule_set_counter_id(vrule, vrule->id);
+> +	}
+>  
+> -	vcap_rule_set_counter_id(vrule, vrule->id);
+>  	return err;
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for Renesas =
-controllers
+return 0;
 
+>  }
 
---qvSHo0b6uvEVzdui
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPKWuIACgkQFA3kzBSg
-KbZkcQ//d697W358YnbGhCJsCu+rd5KEnM6iHwhXBsKsaOMZwbc9OZCyFYKBS3rJ
-78xtgCEJJ7ANjsCC6FHtRxOAG6n3/naGatnu7JXl7DOpaqlCY8Y1SdQEpC9fIDtF
-rAxaC5n5qbNQaTytFIEy62I206noNPGKEAtvuAttMzfNDnroSJqVQi3l9/H28IHh
-DOArczkkV4yO60OkPhinb74UpiApObZbhFAhJtjLtf7nP7niOrcxobmIMzjS85pW
-aSR+QMI5PIkRmRFOujgI2XYUxxXi79KcHt7I5s1h54i9M0dZwRm2uE1MV/v5mdei
-Y79eewXgcxVpUinx/ONrMF+hl559gPxvVp3jPXE3YCBIjupHCtCJroKHOlNtlcWr
-8xjbh+KsnIUy1mAka9p7e0MOy0nlbmrkOxUDF/Fwr1kDytbslHSoVSzv5FqgN8NA
-m2ZIc2FFTDHg1rVrd5dzYDin0GdQQdb5tmi0+iTQI1ibSsB8cFhB2N8ngO+xiD/P
-wDHRlRVspg8jL9+7Ok4k8TYePzPw/3SgUF/8+6PNqKbfP6v1VudpOLcQfCr1vbRg
-tDN+Gc/A151PhjjnPQi3eF1qjZpSQcyjfAJM2iHpum8JbP5CVy3US1XCURZDidvh
-22Q/tlENOOWfKJSKozUt2OwrjeEzcFiPNU7yH/KlBdDNrzr42uQ=
-=ek26
------END PGP SIGNATURE-----
-
---qvSHo0b6uvEVzdui--
+regards,
+dan carpenter
