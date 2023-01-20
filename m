@@ -2,242 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219E46755B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C416755C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 14:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjATNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 08:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S229761AbjATN1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 08:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjATNYs (ORCPT
+        with ESMTP id S229609AbjATN1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 08:24:48 -0500
-Received: from outbound-smtp48.blacknight.com (outbound-smtp48.blacknight.com [46.22.136.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95540BF8A6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:24:45 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp48.blacknight.com (Postfix) with ESMTPS id 0A427FAE0F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 13:24:43 +0000 (GMT)
-Received: (qmail 16057 invoked from network); 20 Jan 2023 13:24:43 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 20 Jan 2023 13:24:43 -0000
-Date:   Fri, 20 Jan 2023 13:24:41 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] locking/rwbase: Prevent indefinite writer starvation
-Message-ID: <20230120132441.4jjke47rnpikiuf5@techsingularity.net>
-References: <20230117083817.togfwc5cy4g67e5r@techsingularity.net>
- <Y8avJm1FQI9vB9cv@linutronix.de>
- <20230117165021.t5m7c2d6frbbfzig@techsingularity.net>
- <Y8gPhTGkfCbGwoUu@linutronix.de>
- <20230118173130.4n2b3cs4pxiqnqd3@techsingularity.net>
- <Y8j+lENBWNWgt4mf@linutronix.de>
- <20230119110220.kphftcehehhi5l5u@techsingularity.net>
- <Y8lvwKHmmnikVDgk@linutronix.de>
- <20230119174101.rddtxk5xlamlnquh@techsingularity.net>
- <Y8pP3CD1PQ4KWhXF@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <Y8pP3CD1PQ4KWhXF@linutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 Jan 2023 08:27:18 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9385EBCE06
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:27:16 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id j9so3873512qvt.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 05:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wax/FnCd+G23LzFKL+3+NhjrVkCOoQ9ELrsUrn0rg8A=;
+        b=b2ZC/nDwG6t1eXrvvXo23gx4nm1wGk55TTAD8Ee/t8Id3MKJA6ZKVD3JPEAvsDzIj6
+         WPLGfi4ODHxWh8XVZ7RNCOQ0mHQ9UC5vQDTIxQYQI533kOXt5y2LujB4NTpI8BJpsKkE
+         ao3FZaxTuuf4nF6EVSGvkoyI5dUT9V2n0G56Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wax/FnCd+G23LzFKL+3+NhjrVkCOoQ9ELrsUrn0rg8A=;
+        b=SL+eK2Op5FK+Lm291dQSLCENfbHP51m5Iy2uV8myGhf7zmuo5Siz7UFbaW3c7uVY7l
+         VFZYHXtGQEXxkCQW17ZxN4/1tJAlvrxIl0UIl7HqRE1oxPVKM5bijGwonEexHbm8s1Mj
+         AsAoi0uxfvIqbTxtlkeWXv1adqkZvh2ARO1iixmoa3CEirf/C3k/20reOKAIBlpJNIBp
+         eZBv1aQNkaFsLa2FqnlhlJmNl5mXMfDdd2VzS5WMADKcd58iUrXodkKzb442gZ0ASiEW
+         gfGBZkcoEavzAsTZMeC06Ui9KQ3NPRvNX1uC2qMe6Zqg8zDV8jwwV9UvvQ1RZJxYYlt2
+         Afkg==
+X-Gm-Message-State: AFqh2kqS4GVUKEcIpNU0Uc5G+3e/ggIrn0xZUIJscn6vS8yBW5mOhJmj
+        +/w2PWSIQ7liIvTENiyMfaEM+w==
+X-Google-Smtp-Source: AMrXdXvdMbeA2DLOpPseOiuOtG1tvir0dVr1//dKps6LH1zCaP7Ha49TgNh6OzKtCVGGM9wD8A8tFA==
+X-Received: by 2002:a05:6214:1043:b0:535:a43d:76d0 with SMTP id l3-20020a056214104300b00535a43d76d0mr2848252qvr.11.1674221235554;
+        Fri, 20 Jan 2023 05:27:15 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id y4-20020a05620a44c400b007069375e0f4sm8010615qkp.122.2023.01.20.05.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 05:27:14 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action from rcu_report_qs_rdp()
+Date:   Fri, 20 Jan 2023 08:27:03 -0500
+Message-Id: <B3E458A6-9279-4716-B242-873C77EC1E3A@joelfernandes.org>
+References: <PH0PR11MB5880A16045A842AB80A25C4BDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <PH0PR11MB5880A16045A842AB80A25C4BDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 09:25:00AM +0100, Sebastian Andrzej Siewior wrote:
-> On 2023-01-19 17:41:01 [+0000], Mel Gorman wrote:
-> > 
-> > Yes, it makes your concern much clearer but I'm not sure it actually matters
-> > in terms of preventing write starvation or in terms of correctness. At
-> > worst, a writer is blocked that could have acquired the lock during a tiny
-> > race but that's a timing issue rather than a correctness issue.
-> 
-> Correct. My concern is that one reader may need to wait 4ms+ for the
-> lock while a following reader (that one that sees the timeout) does not.
-> This can lead to confusion later on.
-> 
 
-Ok, yes, that is a valid concern I had not considered when thinking in
-terms of correctness or writer starvation. It would be very tricky to
-diagnose if it happened.
 
-> > The race could be closed by moving wait_lock acquisition before the
-> > atomic_sub in rwbase_write_lock() but it expands the scope of the wait_lock
-> > and I'm not sure that's necessary for either correctness or preventing
-> > writer starvation. It's a more straight-forward fix but expanding the
-> > scope of a lock unnecessarily has been unpopular in the past.
-> > 
-> > I think we can close the race that concerns you but I'm not convinced we
-> > need to and changing the scope of wait_lock would need a big comment and
-> > probably deserves a separate patch.
-> 
-> would it work to check the timeout vs 0 before and only apply the
-> timeout check if it is != zero? The writer would need to unconditionally
-> or the lowest bit. That should close gaps at a low price. The timeout
-> variable is always read within the lock so there shouldn't be need for
-> any additional barriers.
-> 
+> On Jan 20, 2023, at 3:19 AM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:=
 
-Yes, as a bonus point, it can be checked early in rwbase_allow_reader_bias
-and is an cheap test for the common case so it's win-win all round.
+>=20
+> =EF=BB=BF
+>>=20
+>>=20
+>>>> On Wed, Jan 18, 2023 at 03:30:14PM +0800, Zqiang wrote:
+>>>>> When inovke rcu_report_qs_rdp(), if current CPU's rcu_data structure's=
+ ->
+>>>>> grpmask has not been cleared from the corresponding rcu_node structure=
+'s
+>>>>> ->qsmask, after that will clear and report quiescent state, but in thi=
+s
+>>>>> time, this also means that current grace period is not end, the curren=
+t
+>>>>> grace period is ongoing, because the rcu_gp_in_progress() currently re=
+turn
+>>>>> true, so for non-offloaded rdp, invoke rcu_accelerate_cbs() is impossi=
+ble
+>>>>> to return true.
+>>>>>=20
+>>>>> This commit therefore remove impossible rcu_gp_kthread_wake() calling.=
 
-Patch is now this;
+>>>>>=20
+>>>>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>>>>> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+>>>=20
+>>> Queued (wordsmithed as shown below, as always, please check) for further=
 
---8<--
-locking/rwbase: Prevent indefinite writer starvation
+>>> testing and review, thank you both!
+>>>=20
+>>>                                                      Thanx, Paul
+>>>=20
+>>> ------------------------------------------------------------------------=
 
-rw_semaphore and rwlock are explicitly unfair to writers in the presense
-of readers by design with a PREEMPT_RT configuration. Commit 943f0edb754f
-("locking/rt: Add base code for RT rw_semaphore and rwlock") notes;
+>>>=20
+>>> commit fbe3e300ec8b3edd2b8f84dab4dc98947cf71eb8
+>>> Author: Zqiang <qiang1.zhang@intel.com>
+>>> Date:   Wed Jan 18 15:30:14 2023 +0800
+>>>=20
+>>>    rcu: Remove never-set needwake assignment from rcu_report_qs_rdp()
+>>>=20
+>>>    The rcu_accelerate_cbs() function is invoked by rcu_report_qs_rdp()
+>>>    only if there is a grace period in progress that is still blocked
+>>>    by at least one CPU on this rcu_node structure.  This means that
+>>>    rcu_accelerate_cbs() should never return the value true, and thus tha=
+t
+>>>    this function should never set the needwake variable and in turn neve=
+r
+>>>    invoke rcu_gp_kthread_wake().
+>>>=20
+>>>    This commit therefore removes the needwake variable and the invocatio=
+n
+>>>    of rcu_gp_kthread_wake() in favor of a WARN_ON_ONCE() on the call to
+>>>    rcu_accelerate_cbs().  The purpose of this new WARN_ON_ONCE() is to
+>>>    detect situations where the system's opinion differs from ours.
+>>>=20
+>>>    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>>>    Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+>>>    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>>=20
+>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+>>> index b2c2045294780..7a3085ad0a7df 100644
+>>> --- a/kernel/rcu/tree.c
+>>> +++ b/kernel/rcu/tree.c
+>>> @@ -1956,7 +1956,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>>> {
+>>>      unsigned long flags;
+>>>      unsigned long mask;
+>>> -     bool needwake =3D false;
+>>>      bool needacc =3D false;
+>>>      struct rcu_node *rnp;
+>>>=20
+>>> @@ -1988,7 +1987,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>>>               * NOCB kthreads have their own way to deal with that...
+>>>               */
+>>>              if (!rcu_rdp_is_offloaded(rdp)) {
+>>> -                     needwake =3D rcu_accelerate_cbs(rnp, rdp);
+>>> +                     /*
+>>> +                      * The current GP has not yet ended, so it
+>>> +                      * should not be possible for rcu_accelerate_cbs()=
 
-        The implementation is writer unfair, as it is not feasible to do
-        priority inheritance on multiple readers, but experience has shown
-        that real-time workloads are not the typical workloads which are
-        sensitive to writer starvation.
+>>> +                      * to return true.  So complain, but don't awaken.=
 
-While atypical, it's also trivial to block writers with PREEMPT_RT
-indefinitely without ever making forward progress. Since LTP-20220121,
-the dio_truncate test case went from having 1 reader to having 16 readers
-and the number of readers is sufficient to prevent the down_write ever
-succeeding while readers exist. Eventually the test is killed after 30
-minutes as a failure.
+>>> +                      */
+>>> +                     WARN_ON_ONCE(rcu_accelerate_cbs(rnp, rdp));
+>>>              } else if (!rcu_segcblist_completely_offloaded(&rdp->cblist=
+)) {
+>>>                      /*
+>>>                       * ...but NOCB kthreads may miss or delay callbacks=
+ acceleration
+>>> @@ -2000,8 +2004,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>>>              rcu_disable_urgency_upon_qs(rdp);
+>>>              rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>>>              /* ^^^ Released rnp->lock */
+>>> -             if (needwake)
+>>> -                     rcu_gp_kthread_wake();
+>>>=20
+>>> AFAICS, there is almost no compiler benefit of doing this, and zero runt=
+ime
+>>> benefit of doing this. The WARN_ON_ONCE() also involves a runtime condit=
+ion
+>>> check of the return value of rcu_accelerate_cbs(), so you still have a
+>>> branch. Yes, maybe slightly smaller code without the wake call, but I'm n=
+ot
+>>> sure that is worth it.
+>>>=20
+>>> And, if the opinion of system differs, its a bug anyway, so more added r=
+isk.
+>>>=20
+>>>=20
+>>>=20
+>>>              if (needacc) {
+>>>                      rcu_nocb_lock_irqsave(rdp, flags);
+>>>=20
+>>> And when needacc =3D true, rcu_accelerate_cbs_unlocked() tries to do a w=
+ake up
+>>> anyway, so it is consistent with nocb vs !nocb.
+>>=20
+>> For !nocb, we invoked rcu_accelerate_cbs() before report qs,  so this GP i=
+s impossible to end
+>> and we also not set RCU_GP_FLAG_INIT to start new GP in rcu_accelerate_cb=
+s().
+>> but for nocb, when needacc =3D true, we invoke rcu_accelerate_cbs_unlocke=
+d() after current CPU
+>> has reported qs,  if all CPU have been reported qs,  we will wakeup gp kt=
+hread to end this GP in
+>> rcu_report_qs_rnp().   after that, the rcu_accelerate_cbs_unlocked() is  p=
+ossible to try to wake up
+>> gp kthread if this GP has ended at this time.   so nocb vs !nocb is likel=
+y to be inconsistent.
+>>=20
+>>=20
+>> That is a fair point. But after gp ends,  rcu_check_quiescent_state()
+>> -> note_gp_changes() which will do a accel + GP thread wake up at that
+>> point anyway, once it notices that a GP has come to an end. That
+>> should happen for both the nocb and !nocb cases right?
+>=20
+> For nocb rdp, we won't invoke rcu_accelerate_cbs() and rcu_advance_cbs() i=
+n
+> note_gp_changes().  so also not wakeup gp kthread in note_gp_changes().=20=
 
-dio_truncate is not a realtime application but indefinite writer starvation
-is undesirable. The test case has one writer appending and truncating files
-A and B while multiple readers read file A. The readers and writer are
-contending for one file's inode lock which never succeeds as the readers
-keep reading until the writer is done which never happens.
 
-This patch records a timestamp when the first writer is blocked. DL /
-RT tasks can continue to take the lock for read as long as readers exist
-indefinitely. Other readers can acquire the read lock unless a writer
-has been blocked for a minimum of 4ms. This is sufficient to allow the
-dio_truncate test case to complete within the 30 minutes timeout.
+Yes correct, ok but=E2=80=A6
+>=20
+>>=20
+>> I am wondering if rcu_report_qs_rdp() needs to be rethought to make
+>> both cases consistent.
+>>=20
+>> Why does the nocb case need an accel + GP thread wakeup in the
+>> rcu_report_qs_rdp() function, but the !nocb case does not?
+>=20
+> For nocb accel + GP kthread wakeup only happen in the middle of a (de-)off=
+loading process.
+> this is an intermediate state.
 
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- include/linux/rwbase_rt.h  |  3 +++
- kernel/locking/rwbase_rt.c | 38 +++++++++++++++++++++++++++++++++++---
- 2 files changed, 38 insertions(+), 3 deletions(-)
+Sure, I know what the code currently does, I am asking why and it feels wron=
+g.
 
-diff --git a/include/linux/rwbase_rt.h b/include/linux/rwbase_rt.h
-index 1d264dd08625..b969b1d9bb85 100644
---- a/include/linux/rwbase_rt.h
-+++ b/include/linux/rwbase_rt.h
-@@ -10,12 +10,14 @@
- 
- struct rwbase_rt {
- 	atomic_t		readers;
-+	unsigned long		waiter_timeout;
- 	struct rt_mutex_base	rtmutex;
- };
- 
- #define __RWBASE_INITIALIZER(name)				\
- {								\
- 	.readers = ATOMIC_INIT(READER_BIAS),			\
-+	.waiter_timeout = 0,					\
- 	.rtmutex = __RT_MUTEX_BASE_INITIALIZER(name.rtmutex),	\
- }
- 
-@@ -23,6 +25,7 @@ struct rwbase_rt {
- 	do {							\
- 		rt_mutex_base_init(&(rwbase)->rtmutex);		\
- 		atomic_set(&(rwbase)->readers, READER_BIAS);	\
-+		(rwbase)->waiter_timeout = 0;			\
- 	} while (0)
- 
- 
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index c201aadb9301..9d5bbf2985de 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -39,7 +39,10 @@
-  * major surgery for a very dubious value.
-  *
-  * The risk of writer starvation is there, but the pathological use cases
-- * which trigger it are not necessarily the typical RT workloads.
-+ * which trigger it are not necessarily the typical RT workloads. SCHED_OTHER
-+ * reader acquisitions will be forced into the slow path if a writer is
-+ * blocked for more than RWBASE_RT_WAIT_TIMEOUT jiffies. New DL / RT readers
-+ * can still starve a writer indefinitely.
-  *
-  * Fast-path orderings:
-  * The lock/unlock of readers can run in fast paths: lock and unlock are only
-@@ -65,6 +68,27 @@ static __always_inline int rwbase_read_trylock(struct rwbase_rt *rwb)
- 	return 0;
- }
- 
-+/*
-+ * Allow reader bias for SCHED_OTHER tasks with a pending writer for a
-+ * minimum of 4ms or 1 tick. This matches RWSEM_WAIT_TIMEOUT for the
-+ * generic RWSEM implementation.
-+ */
-+#define RWBASE_RT_WAIT_TIMEOUT DIV_ROUND_UP(HZ, 250)
-+
-+static bool __sched rwbase_allow_reader_bias(struct rwbase_rt *rwb)
-+{
-+	/*
-+	 * Allow reader bias if no writer is blocked or for DL / RT tasks.
-+	 * Such tasks should be designed to avoid heavy writer contention
-+	 * or indefinite starvation.
-+	 */
-+	if (!rwb->waiter_timeout || rt_task(current))
-+		return true;
-+
-+	/* Allow reader bias unless a writer timeout has expired. */
-+	return time_before(jiffies, rwb->waiter_timeout);
-+}
-+
- static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
- 				      unsigned int state)
- {
-@@ -74,9 +98,11 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
- 	raw_spin_lock_irq(&rtm->wait_lock);
- 	/*
- 	 * Allow readers, as long as the writer has not completely
--	 * acquired the semaphore for write.
-+	 * acquired the semaphore for write and reader bias is still
-+	 * allowed.
- 	 */
--	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
-+	if (atomic_read(&rwb->readers) != WRITER_BIAS &&
-+	    rwbase_allow_reader_bias(rwb)) {
- 		atomic_inc(&rwb->readers);
- 		raw_spin_unlock_irq(&rtm->wait_lock);
- 		return 0;
-@@ -255,6 +281,7 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 	for (;;) {
- 		/* Optimized out for rwlocks */
- 		if (rwbase_signal_pending_state(state, current)) {
-+			rwb->waiter_timeout = 0;
- 			rwbase_restore_current_state();
- 			__rwbase_write_unlock(rwb, 0, flags);
- 			trace_contention_end(rwb, -EINTR);
-@@ -264,12 +291,17 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 		if (__rwbase_write_trylock(rwb))
- 			break;
- 
-+		/* Record timeout when reader bias is ignored. */
-+		rwb->waiter_timeout = jiffies + RWBASE_RT_WAIT_TIMEOUT;
-+
- 		raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
- 		rwbase_schedule();
- 		raw_spin_lock_irqsave(&rtm->wait_lock, flags);
- 
- 		set_current_state(state);
- 	}
-+
-+	rwb->waiter_timeout = 0;
- 	rwbase_restore_current_state();
- 	trace_contention_end(rwb, 0);
- 
+I suggest you slightly change your approach to not assuming the code should b=
+e bonafide correct and then fixing it (which is ok once in a while), and ask=
+ing higher level questions to why things are the way they are in the first p=
+lace (that is just my suggestion and I am not in a place to provide advice, f=
+ar from it, but I am just telling you my approach =E2=80=94 I care more abou=
+t the code than increasing my patch count :P).
+
+If you are in an intermediate state, part way to a !nocb state =E2=80=94 you=
+ may have missed a nocb-related accel and wake, correct? Why does that matte=
+r? Once we transition to a !nocb state, we do not do a post-qs-report accel+=
+wake anyway as we clearly know from the discussion. So why do we need to do i=
+t if we missed it for the intermediate stage? So, I am not fully sure yet wh=
+at that needac is doing and why it is needed.
+
+Do not get me wrong, stellar work here. But I suggest challenge the assumpti=
+ons and the design, not always just the code that was already written :), ap=
+ologies for any misplaced or noisy advice.
+
+Thanks!
+
+ - Joel
+
+
+>   =20
+> Thanks
+> Zqiang
+>=20
+>>=20
+>> (I am out of office till Monday but will intermittently (maybe) check
+>> in, RCU is one of those things that daydreaming tends to lend itself
+>> to...)
+>>=20
+>> - Joel
