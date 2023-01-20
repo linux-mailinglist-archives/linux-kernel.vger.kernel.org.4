@@ -2,263 +2,453 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746316758D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70CC6758DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjATPhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S230113AbjATPig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjATPhc (ORCPT
+        with ESMTP id S229769AbjATPie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:37:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E78FCD232;
-        Fri, 20 Jan 2023 07:36:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02E6161FC4;
-        Fri, 20 Jan 2023 15:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D9AC433D2;
-        Fri, 20 Jan 2023 15:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674229006;
-        bh=tkiPft3TsqZUu2mhyvdgu0O7D18zLDJUjdrbxMv2t2c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ZUKLOiEQ+v0oNiSQM1uiSH9DUrM1qn9Lz1uXkeOHTOWYy8yF+lyElJ7sWEqOmJp4o
-         +EBfqMcqEiE3x+EzXJE4MsZzV2x0fjgQ/w7a2ljtoVeSmQHR1KMLzglbG58/bjgWH6
-         gh43drcmpQW79gSoVrlUeYfGOnSPZv1IZI291DJ5SYZv6nlMFghLLQeHFqee2nkcLZ
-         xB81ooJKtb7wxfelrLDEbgy/0QoqII0KPXNQEUEqq3Y0rIUOX1j3xGyGi0uX6zTBIY
-         Ln1u3DO4rIJmwvXr2uN+uE3Z8DRnlf6Xp3q5jBmtAb/aMFxKhQNm/oFMVsHBC8r8O5
-         uLUA9JsZSfW+w==
-Date:   Fri, 20 Jan 2023 09:36:44 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
-Message-ID: <20230120153644.GA636025@bhelgaas>
+        Fri, 20 Jan 2023 10:38:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73AFEC926F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:38:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6852C1515
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:38:11 -0800 (PST)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7DC523F67D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:37:29 -0800 (PST)
+Date:   Fri, 20 Jan 2023 15:36:50 +0000
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        John Stultz <jstultz@google.com>,
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        linux-arm-msm@vger.kernel.org,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        linux-sunxi@lists.linux.dev,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        etnaviv@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Paul <sean@poorly.run>,
+        linux-arm-kernel@lists.infradead.org,
+        Tomi Valkeinen <tomba@kernel.org>,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>
+Subject: Re: [PATCH v3 3/3] drm: Convert users of drm_of_component_match_add
+ to component_match_add_of
+Message-ID: <Y8q0tN88QGKcIfw/@e110455-lin.cambridge.arm.com>
+References: <20230119191040.1637739-1-sean.anderson@seco.com>
+ <20230119191040.1637739-4-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAAhV-H59FLAFGD8oDZGjXWgL2ei_L=rYAaFWWp1skUT9nUPVYg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230119191040.1637739-4-sean.anderson@seco.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 09:31:43PM +0800, Huacai Chen wrote:
-> On Thu, Jan 19, 2023 at 8:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Thu, Jan 19, 2023 at 08:25:20PM +0800, Huacai Chen wrote:
-> > > Ping?
-> >
-> > I suggested another possible way to do this that wasn't so much of a
-> > special case.  Did you explore that at all?
->
-> That is a little difficult for me, but what is worse is that the root
-> cause doesn't come from gpu or console drivers, but from the root
-> port. That means: even if we can workaround the gpu issue in another
-> way, there are still problems on other devices. Besides the graphics
-> card, the most frequent problematic device is the sata controller
-> connected on LS7A chipset, there are incomplete I/O accesses after the
-> root port disabled and also cause reboot failure.
+On Thu, Jan 19, 2023 at 02:10:39PM -0500, Sean Anderson wrote:
+> Every user of this function either uses component_compare_of or
+> something equivalent. Most of them immediately put the device node as
+> well. Convert these users to component_match_add_of and remove
+> drm_of_component_match_add.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> Acked-by: Jyri Sarha <jyri.sarhaı@iki.fi>
+> Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
+> ---
+> 
+> (no changes since v1)
+> 
+>  .../gpu/drm/arm/display/komeda/komeda_drv.c   |  6 ++--
+>  drivers/gpu/drm/arm/hdlcd_drv.c               |  9 +-----
+>  drivers/gpu/drm/arm/malidp_drv.c              | 11 +------
+>  drivers/gpu/drm/armada/armada_drv.c           | 10 ++++---
+>  drivers/gpu/drm/drm_of.c                      | 29 +++----------------
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.c         |  4 +--
+>  .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  3 +-
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  3 +-
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  4 +--
+>  drivers/gpu/drm/msm/msm_drv.c                 | 14 ++++-----
+>  drivers/gpu/drm/sti/sti_drv.c                 |  3 +-
+>  drivers/gpu/drm/sun4i/sun4i_drv.c             |  3 +-
+>  drivers/gpu/drm/tilcdc/tilcdc_external.c      | 10 ++-----
+>  include/drm/drm_of.h                          | 12 --------
+>  14 files changed, 33 insertions(+), 88 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+> index 3f4e719eebd8..e3bfc72c378f 100644
+> --- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+> @@ -103,10 +103,8 @@ static void komeda_add_slave(struct device *master,
+>  	struct device_node *remote;
+>  
+>  	remote = of_graph_get_remote_node(np, port, endpoint);
+> -	if (remote) {
+> -		drm_of_component_match_add(master, match, component_compare_of, remote);
+> -		of_node_put(remote);
+> -	}
+> +	if (remote)
+> +		component_match_add_of(master, match, remote);
+>  }
+>  
+>  static int komeda_platform_probe(struct platform_device *pdev)
+> diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
+> index e3507dd6f82a..5f760bb66af4 100644
+> --- a/drivers/gpu/drm/arm/hdlcd_drv.c
+> +++ b/drivers/gpu/drm/arm/hdlcd_drv.c
+> @@ -347,11 +347,6 @@ static const struct component_master_ops hdlcd_master_ops = {
+>  	.unbind		= hdlcd_drm_unbind,
+>  };
+>  
+> -static int compare_dev(struct device *dev, void *data)
+> -{
+> -	return dev->of_node == data;
+> -}
+> -
+>  static int hdlcd_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *port;
+> @@ -362,9 +357,7 @@ static int hdlcd_probe(struct platform_device *pdev)
+>  	if (!port)
+>  		return -ENODEV;
+>  
+> -	drm_of_component_match_add(&pdev->dev, &match, compare_dev, port);
+> -	of_node_put(port);
+> -
+> +	component_match_add_of(&pdev->dev, &match, port);
+>  	return component_master_add_with_match(&pdev->dev, &hdlcd_master_ops,
+>  					       match);
+>  }
+> diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+> index 589c1c66a6dc..3a49c29ba5b8 100644
+> --- a/drivers/gpu/drm/arm/malidp_drv.c
+> +++ b/drivers/gpu/drm/arm/malidp_drv.c
+> @@ -909,13 +909,6 @@ static const struct component_master_ops malidp_master_ops = {
+>  	.unbind = malidp_unbind,
+>  };
+>  
+> -static int malidp_compare_dev(struct device *dev, void *data)
+> -{
+> -	struct device_node *np = data;
+> -
+> -	return dev->of_node == np;
+> -}
+> -
+>  static int malidp_platform_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *port;
+> @@ -929,9 +922,7 @@ static int malidp_platform_probe(struct platform_device *pdev)
+>  	if (!port)
+>  		return -ENODEV;
+>  
+> -	drm_of_component_match_add(&pdev->dev, &match, malidp_compare_dev,
+> -				   port);
+> -	of_node_put(port);
+> +	component_match_add_of(&pdev->dev, &match, port);
+>  	return component_master_add_with_match(&pdev->dev, &malidp_master_ops,
+>  					       match);
+>  }
 
-Yes, SATA sounds like another case where we want to use the device
-after we call the driver's remove/shutdown method.  That's not
-*worse*, it's just another case where we might have to mark devices
-for special handling.
+For komeda, mali_dp and hdlcd: Acked-by: Liviu Dudau <liviu.dudau@arm.com>
 
-If we remove/shutdown *any* Root Port, not just LS7A, I think the idea
-of assuming downstream devices can continue to work as usual is a
-little suspect.  They might continue to work by accident today, but it
-doesn't seem like a robust design.
+Best regards,
+Liviu
 
-> > I know there's no *existing* way to mark devices that we need to use
-> > all the way through shutdown or reboot, but if it makes sense, there's
-> > no reason we couldn't add one.  That has the potential of being more
-> > generic, e.g., we could do it for all console devices, as opposed to
-> > quirking a Root Port that just happens to be in the path to the
-> > console.
-> >
-> > > On Sat, Jan 7, 2023 at 10:25 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > > On Fri, Jan 6, 2023 at 11:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
-> > > > > > After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe
-> > > > > > services during shutdown") we observe poweroff/reboot
-> > > > > > failures on systems with LS7A chipset.
-> > > > > >
-> > > > > > We found that if we remove "pci_command &=
-> > > > > > ~PCI_COMMAND_MASTER" in do_pci_disable_device(), it can
-> > > > > > work well. The hardware engineer says that the root cause
-> > > > > > is that CPU is still accessing PCIe devices while
-> > > > > > poweroff/reboot, and if we disable the Bus Master Bit at
-> > > > > > this time, the PCIe controller doesn't forward requests to
-> > > > > > downstream devices, and also does not send TIMEOUT to CPU,
-> > > > > > which causes CPU wait forever (hardware deadlock).
-> > > > > >
-> > > > > > To be clear, the sequence is like this:
-> > > > > >
-> > > > > >   - CPU issues MMIO read to device below Root Port
-> > > > > >
-> > > > > >   - LS7A Root Port fails to forward transaction to secondary bus
-> > > > > >     because of LS7A Bus Master defect
-> > > > > >
-> > > > > >   - CPU hangs waiting for response to MMIO read
-> > > > > >
-> > > > > > Then how is userspace able to use a device after the
-> > > > > > device is removed?
-> > > > > >
-> > > > > > To give more details, let's take the graphics driver (e.g.
-> > > > > > amdgpu) as an example. The userspace programs call
-> > > > > > printf() to display "shutting down xxx service" during
-> > > > > > shutdown/reboot, or the kernel calls printk() to display
-> > > > > > something during shutdown/reboot. These can happen at any
-> > > > > > time, even after we call pcie_port_device_remove() to
-> > > > > > disable the pcie port on the graphic card.
-> > > > > >
-> > > > > > The call stack is: printk() --> call_console_drivers() -->
-> > > > > > con->write() --> vt_console_print() --> fbcon_putcs()
-> > > > > >
-> > > > > > This scenario happens because userspace programs (or the
-> > > > > > kernel itself) don't know whether a device is 'usable',
-> > > > > > they just use it, at any time.
-> > > > >
-> > > > > Thanks for this background.  So basically we want to call
-> > > > > .remove() on a console device (or a bridge leading to it),
-> > > > > but we expect it to keep working as usual afterwards?
-> > > > >
-> > > > > That seems a little weird.  Is that the design we want?
-> > > > > Maybe we should have a way to mark devices so we don't
-> > > > > remove them during shutdown or reboot?
-> > > >
-> > > > Sounds reasonable, but it seems no existing way can mark this.
-> > > >
-> > > > Huacai
-> > > > >
-> > > > > > This hardware behavior is a PCIe protocol violation (Bus Master should
-> > > > > > not be involved in CPU MMIO transactions), and it will be fixed in new
-> > > > > > revisions of hardware (add timeout mechanism for CPU read request,
-> > > > > > whether or not Bus Master bit is cleared).
-> > > > > >
-> > > > > > On some x86 platforms, radeon/amdgpu devices can cause similar problems
-> > > > > > [1][2]. Once before I wanted to make a single patch to solve "all of
-> > > > > > these problems" together, but it seems unreasonable because maybe they
-> > > > > > are not exactly the same problem. So, this patch add a new function
-> > > > > > pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
-> > > > > > dedicated for the shutdown path, and then add a quirk just for LS7A to
-> > > > > > avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
-> > > > > > platforms behave as before.
-> > > > > >
-> > > > > > [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
-> > > > > > [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
-> > > > > >
-> > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > > > ---
-> > > > > >  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
-> > > > > >  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
-> > > > > >  include/linux/pci.h                   |  1 +
-> > > > > >  3 files changed, 37 insertions(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> > > > > > index 759ec211c17b..641308ba4126 100644
-> > > > > > --- a/drivers/pci/controller/pci-loongson.c
-> > > > > > +++ b/drivers/pci/controller/pci-loongson.c
-> > > > > > @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > >                       DEV_PCIE_PORT_2, loongson_mrrs_quirk);
-> > > > > >
-> > > > > > +static void loongson_bmaster_quirk(struct pci_dev *pdev)
-> > > > > > +{
-> > > > > > +     /*
-> > > > > > +      * Some Loongson PCIe ports will cause CPU deadlock if there is
-> > > > > > +      * MMIO access to a downstream device when the root port disable
-> > > > > > +      * the Bus Master bit during poweroff/reboot.
-> > > > > > +      */
-> > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
-> > > > > > +
-> > > > > > +     bridge->no_dis_bmaster = 1;
-> > > > > > +}
-> > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > +                     DEV_PCIE_PORT_0, loongson_bmaster_quirk);
-> > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > +                     DEV_PCIE_PORT_1, loongson_bmaster_quirk);
-> > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > +                     DEV_PCIE_PORT_2, loongson_bmaster_quirk);
-> > > > > > +
-> > > > > >  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
-> > > > > >  {
-> > > > > >       pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
-> > > > > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> > > > > > index 2cc2e60bcb39..96f45c444422 100644
-> > > > > > --- a/drivers/pci/pcie/portdrv.c
-> > > > > > +++ b/drivers/pci/pcie/portdrv.c
-> > > > > > @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
-> > > > > >  {
-> > > > > >       device_for_each_child(&dev->dev, NULL, remove_iter);
-> > > > > >       pci_free_irq_vectors(dev);
-> > > > > > -     pci_disable_device(dev);
-> > > > > >  }
-> > > > > >
-> > > > > >  /**
-> > > > > > @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
-> > > > > >       }
-> > > > > >
-> > > > > >       pcie_port_device_remove(dev);
-> > > > > > +
-> > > > > > +     pci_disable_device(dev);
-> > > > > > +}
-> > > > > > +
-> > > > > > +static void pcie_portdrv_shutdown(struct pci_dev *dev)
-> > > > > > +{
-> > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
-> > > > > > +
-> > > > > > +     if (pci_bridge_d3_possible(dev)) {
-> > > > > > +             pm_runtime_forbid(&dev->dev);
-> > > > > > +             pm_runtime_get_noresume(&dev->dev);
-> > > > > > +             pm_runtime_dont_use_autosuspend(&dev->dev);
-> > > > > > +     }
-> > > > > > +
-> > > > > > +     pcie_port_device_remove(dev);
-> > > > > > +
-> > > > > > +     if (!bridge->no_dis_bmaster)
-> > > > > > +             pci_disable_device(dev);
-> > > > > >  }
-> > > > > >
-> > > > > >  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
-> > > > > > @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
-> > > > > >
-> > > > > >       .probe          = pcie_portdrv_probe,
-> > > > > >       .remove         = pcie_portdrv_remove,
-> > > > > > -     .shutdown       = pcie_portdrv_remove,
-> > > > > > +     .shutdown       = pcie_portdrv_shutdown,
-> > > > > >
-> > > > > >       .err_handler    = &pcie_portdrv_err_handler,
-> > > > > >
-> > > > > > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > > > > > index 3df2049ec4a8..a64dbcb89231 100644
-> > > > > > --- a/include/linux/pci.h
-> > > > > > +++ b/include/linux/pci.h
-> > > > > > @@ -573,6 +573,7 @@ struct pci_host_bridge {
-> > > > > >       unsigned int    ignore_reset_delay:1;   /* For entire hierarchy */
-> > > > > >       unsigned int    no_ext_tags:1;          /* No Extended Tags */
-> > > > > >       unsigned int    no_inc_mrrs:1;          /* No Increase MRRS */
-> > > > > > +     unsigned int    no_dis_bmaster:1;       /* No Disable Bus Master */
-> > > > > >       unsigned int    native_aer:1;           /* OS may use PCIe AER */
-> > > > > >       unsigned int    native_pcie_hotplug:1;  /* OS may use PCIe hotplug */
-> > > > > >       unsigned int    native_shpc_hotplug:1;  /* OS may use SHPC hotplug */
-> > > > > > --
-> > > > > > 2.31.1
-> > > > > >
+
+> diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
+> index 0643887800b4..c0211ad7a45d 100644
+> --- a/drivers/gpu/drm/armada/armada_drv.c
+> +++ b/drivers/gpu/drm/armada/armada_drv.c
+> @@ -184,10 +184,12 @@ static void armada_add_endpoints(struct device *dev,
+>  
+>  	for_each_endpoint_of_node(dev_node, ep) {
+>  		remote = of_graph_get_remote_port_parent(ep);
+> -		if (remote && of_device_is_available(remote))
+> -			drm_of_component_match_add(dev, match, component_compare_of,
+> -						   remote);
+> -		of_node_put(remote);
+> +		if (remote) {
+> +			if (of_device_is_available(remote))
+> +				component_match_add_of(dev, match, remote);
+> +			else
+> +				of_node_put(remote);
+> +		}
+>  	}
+>  }
+>  
+> diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> index 7bbcb999bb75..0a474729ddf6 100644
+> --- a/drivers/gpu/drm/drm_of.c
+> +++ b/drivers/gpu/drm/drm_of.c
+> @@ -78,24 +78,6 @@ uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+>  }
+>  EXPORT_SYMBOL(drm_of_find_possible_crtcs);
+>  
+> -/**
+> - * drm_of_component_match_add - Add a component helper OF node match rule
+> - * @master: master device
+> - * @matchptr: component match pointer
+> - * @compare: compare function used for matching component
+> - * @node: of_node
+> - */
+> -void drm_of_component_match_add(struct device *master,
+> -				struct component_match **matchptr,
+> -				int (*compare)(struct device *, void *),
+> -				struct device_node *node)
+> -{
+> -	of_node_get(node);
+> -	component_match_add_release(master, matchptr, component_release_of,
+> -				    compare, node);
+> -}
+> -EXPORT_SYMBOL_GPL(drm_of_component_match_add);
+> -
+>  /**
+>   * drm_of_component_probe - Generic probe function for a component based master
+>   * @dev: master device containing the OF node
+> @@ -130,10 +112,9 @@ int drm_of_component_probe(struct device *dev,
+>  			break;
+>  
+>  		if (of_device_is_available(port->parent))
+> -			drm_of_component_match_add(dev, &match, compare_of,
+> -						   port);
+> -
+> -		of_node_put(port);
+> +			component_match_add_of(dev, &match, port);
+> +		else
+> +			of_node_put(port);
+>  	}
+>  
+>  	if (i == 0) {
+> @@ -171,9 +152,7 @@ int drm_of_component_probe(struct device *dev,
+>  				continue;
+>  			}
+>  
+> -			drm_of_component_match_add(dev, &match, compare_of,
+> -						   remote);
+> -			of_node_put(remote);
+> +			component_match_add_of(dev, &match, remote);
+>  		}
+>  		of_node_put(port);
+>  	}
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> index 1d2b4fb4bcf8..4a0dba34a6e7 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> @@ -590,8 +590,8 @@ static int etnaviv_pdev_probe(struct platform_device *pdev)
+>  			if (!first_node)
+>  				first_node = core_node;
+>  
+> -			drm_of_component_match_add(&pdev->dev, &match,
+> -						   component_compare_of, core_node);
+> +			of_node_get(core_node);
+> +			component_match_add_of(&pdev->dev, &match, core_node);
+>  		}
+>  	} else {
+>  		char **names = dev->platform_data;
+> diff --git a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+> index 9c5d49bf40c9..3ee277615c39 100644
+> --- a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+> +++ b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+> @@ -273,8 +273,7 @@ static int kirin_drm_platform_probe(struct platform_device *pdev)
+>  	if (!remote)
+>  		return -ENODEV;
+>  
+> -	drm_of_component_match_add(dev, &match, component_compare_of, remote);
+> -	of_node_put(remote);
+> +	component_match_add_of(dev, &match, remote);
+>  
+>  	return component_master_add_with_match(dev, &kirin_drm_ops, match);
+>  }
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index 3d5af44bf92d..d0c87175dec4 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -1444,8 +1444,7 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+>  	if (!np)
+>  		return ingenic_drm_bind(dev, false);
+>  
+> -	drm_of_component_match_add(dev, &match, component_compare_of, np);
+> -	of_node_put(np);
+> +	component_match_add_of(dev, &match, np);
+>  
+>  	return component_master_add_with_match(dev, &ingenic_master_ops, match);
+>  }
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> index cd5b18ef7951..abead814bfdc 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -787,8 +787,8 @@ static int mtk_drm_probe(struct platform_device *pdev)
+>  		    comp_type == MTK_DSI) {
+>  			dev_info(dev, "Adding component match for %pOF\n",
+>  				 node);
+> -			drm_of_component_match_add(dev, &match, component_compare_of,
+> -						   node);
+> +			of_node_get(node);
+> +			component_match_add_of(dev, &match, node);
+>  		}
+>  
+>  		ret = mtk_ddp_comp_init(node, &private->ddp_comp[comp_id], comp_id);
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 8b0b0ac74a6f..8ccf57def955 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -5,6 +5,7 @@
+>   * Author: Rob Clark <robdclark@gmail.com>
+>   */
+>  
+> +#include <linux/component.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/fault-inject.h>
+>  #include <linux/kthread.h>
+> @@ -1156,10 +1157,9 @@ static int add_components_mdp(struct device *master_dev,
+>  			continue;
+>  
+>  		if (of_device_is_available(intf))
+> -			drm_of_component_match_add(master_dev, matchptr,
+> -						   component_compare_of, intf);
+> -
+> -		of_node_put(intf);
+> +			component_match_add_of(master_dev, matchptr, intf);
+> +		else
+> +			of_node_put(intf);
+>  	}
+>  
+>  	return 0;
+> @@ -1188,9 +1188,9 @@ static int add_gpu_components(struct device *dev,
+>  		return 0;
+>  
+>  	if (of_device_is_available(np))
+> -		drm_of_component_match_add(dev, matchptr, component_compare_of, np);
+> -
+> -	of_node_put(np);
+> +		component_match_add_of(dev, matchptr, np);
+> +	else
+> +		of_node_put(np);
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/gpu/drm/sti/sti_drv.c b/drivers/gpu/drm/sti/sti_drv.c
+> index ef6a4e63198f..e3aae4574c75 100644
+> --- a/drivers/gpu/drm/sti/sti_drv.c
+> +++ b/drivers/gpu/drm/sti/sti_drv.c
+> @@ -238,8 +238,7 @@ static int sti_platform_probe(struct platform_device *pdev)
+>  	child_np = of_get_next_available_child(node, NULL);
+>  
+>  	while (child_np) {
+> -		drm_of_component_match_add(dev, &match, component_compare_of,
+> -					   child_np);
+> +		component_match_add_of(dev, &match, child_np);
+>  		child_np = of_get_next_available_child(node, child_np);
+>  	}
+>  
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> index cc94efbbf2d4..9b3ddd82f1be 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> @@ -323,7 +323,8 @@ static int sun4i_drv_add_endpoints(struct device *dev,
+>  	     of_device_is_available(node))) {
+>  		/* Add current component */
+>  		DRM_DEBUG_DRIVER("Adding component %pOF\n", node);
+> -		drm_of_component_match_add(dev, match, component_compare_of, node);
+> +		of_node_get(node);
+> +		component_match_add_of(dev, match, node);
+>  		count++;
+>  	}
+>  
+> diff --git a/drivers/gpu/drm/tilcdc/tilcdc_external.c b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+> index 3b86d002ef62..0138ce02a64f 100644
+> --- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
+> +++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+> @@ -155,11 +155,6 @@ int tilcdc_attach_external_device(struct drm_device *ddev)
+>  	return ret;
+>  }
+>  
+> -static int dev_match_of(struct device *dev, void *data)
+> -{
+> -	return dev->of_node == data;
+> -}
+> -
+>  int tilcdc_get_external_components(struct device *dev,
+>  				   struct component_match **match)
+>  {
+> @@ -173,7 +168,8 @@ int tilcdc_get_external_components(struct device *dev,
+>  	}
+>  
+>  	if (match)
+> -		drm_of_component_match_add(dev, match, dev_match_of, node);
+> -	of_node_put(node);
+> +		component_match_add_of(dev, match, node);
+> +	else
+> +		of_node_put(node);
+>  	return 1;
+>  }
+> diff --git a/include/drm/drm_of.h b/include/drm/drm_of.h
+> index 10ab58c40746..685c44dc1dae 100644
+> --- a/include/drm/drm_of.h
+> +++ b/include/drm/drm_of.h
+> @@ -33,10 +33,6 @@ uint32_t drm_of_crtc_port_mask(struct drm_device *dev,
+>  			    struct device_node *port);
+>  uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+>  				    struct device_node *port);
+> -void drm_of_component_match_add(struct device *master,
+> -				struct component_match **matchptr,
+> -				int (*compare)(struct device *, void *),
+> -				struct device_node *node);
+>  int drm_of_component_probe(struct device *dev,
+>  			   int (*compare_of)(struct device *, void *),
+>  			   const struct component_master_ops *m_ops);
+> @@ -69,14 +65,6 @@ static inline uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+>  	return 0;
+>  }
+>  
+> -static inline void
+> -drm_of_component_match_add(struct device *master,
+> -			   struct component_match **matchptr,
+> -			   int (*compare)(struct device *, void *),
+> -			   struct device_node *node)
+> -{
+> -}
+> -
+>  static inline int
+>  drm_of_component_probe(struct device *dev,
+>  		       int (*compare_of)(struct device *, void *),
+> -- 
+> 2.35.1.1320.gc452695387.dirty
+> 
+
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
