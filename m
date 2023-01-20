@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732676751BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472426751C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjATJye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S229645AbjATJzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjATJyb (ORCPT
+        with ESMTP id S229477AbjATJzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:54:31 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06B8518F6;
-        Fri, 20 Jan 2023 01:54:24 -0800 (PST)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30K8fqbH023335;
-        Fri, 20 Jan 2023 04:54:16 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n7qnw09j8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 04:54:16 -0500
-Received: from m0167089.ppops.net (m0167089.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30K9sGjb001974;
-        Fri, 20 Jan 2023 04:54:16 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n7qnw09j5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 04:54:15 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 30K9sECh036494
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Jan 2023 04:54:14 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 20 Jan
- 2023 04:54:13 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 20 Jan 2023 04:54:13 -0500
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.139])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 30K9rqU0021132;
-        Fri, 20 Jan 2023 04:54:09 -0500
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <richardcochran@gmail.com>, <yangyingliang@huawei.com>,
-        <weiyongjun1@huawei.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <lennart@lfdomain.com>
-Subject: [net-next 3/3] dt-bindings: net: adin1110: Document ts-capt pin
-Date:   Fri, 20 Jan 2023 11:53:48 +0200
-Message-ID: <20230120095348.26715-4-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120095348.26715-1-alexandru.tachici@analog.com>
-References: <20230120095348.26715-1-alexandru.tachici@analog.com>
+        Fri, 20 Jan 2023 04:55:41 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BFAA733D;
+        Fri, 20 Jan 2023 01:54:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674208498; x=1705744498;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+nvvEu/BOUFSCsUyjF17UjmDZnCUyvy9snQzL3mM8lQ=;
+  b=WzFqsynfQ/gwu1dYtEwTJXhFbY4ERg4lW9EhACGSrcTPaSzHli5v02tn
+   cPl7XRg4oIqvuqTizr/nF9a+ACzm4mq/EHRw1Wv5zc7U+lgapGaL9cIHB
+   Mwn59zElV0NBADZi+ZEogfA46kl4J7D8RK7NuNwTMZFE43iIsH+wQ/sJ2
+   Op37oXx2JcjoPBFWT9uUhoO0v9RGpAZUALrA7jKVNiu0eGatdixP/AOHk
+   PiiZeOHYaTiMv9ALs2qRHnTYybbulIvQQYms65mAoJgYiT7E9GEY/cFR2
+   zhHmUpqt0VAbChftHfi0jhSnoLLZnKwG9hokBnPNA6AhobvaYPw1FDkqE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305912520"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="305912520"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:54:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="834364601"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="834364601"
+Received: from joe-255.igk.intel.com (HELO localhost) ([10.91.220.57])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:54:56 -0800
+Date:   Fri, 20 Jan 2023 10:54:54 +0100
+From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        dri-devel@lists.freedesktop.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] accel/ivpu: Fix spelling mistake "tansition" ->
+ "transition"
+Message-ID: <20230120095454.GA56856@linux.intel.com>
+References: <20230120092842.79238-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: YDNBpWrcHGfszGd-G8B6bCenBJZ8bm7d
-X-Proofpoint-ORIG-GUID: 4XgliSjMGY250yf6wsqSYqB3E4URa4XP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_06,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 phishscore=0
- spamscore=0 priorityscore=1501 clxscore=1015 suspectscore=0 malwarescore=0
- mlxlogscore=888 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200093
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120092842.79238-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the use of the timestamp capture pin.
+On Fri, Jan 20, 2023 at 09:28:42AM +0000, Colin Ian King wrote:
+> There are spelling mistakes in two ivpu_err error messages. Fix them.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- Documentation/devicetree/bindings/net/adi,adin1110.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/adi,adin1110.yaml b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-index 9de865295d7a..f2db919c166b 100644
---- a/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-+++ b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-@@ -50,6 +50,13 @@ properties:
-     maxItems: 1
-     description: GPIO connected to active low reset
- 
-+  ts-capt-gpios:
-+    maxItems: 1
-+    description: |
-+      Optional active high GPIO. Connected to the TS_TIMER pin of ADIN1110.
-+      When pulled up device will save a timestamp containing both the
-+      seconds and nanoseconds part simultaneously.
-+
- required:
-   - compatible
-   - reg
--- 
-2.34.1
-
+> ---
+>  drivers/accel/ivpu/ivpu_hw_mtl.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/accel/ivpu/ivpu_hw_mtl.c b/drivers/accel/ivpu/ivpu_hw_mtl.c
+> index b59b1f472b40..62bfaa9081c4 100644
+> --- a/drivers/accel/ivpu/ivpu_hw_mtl.c
+> +++ b/drivers/accel/ivpu/ivpu_hw_mtl.c
+> @@ -608,7 +608,7 @@ static int ivpu_boot_d0i3_drive(struct ivpu_device *vdev, bool enable)
+>  
+>  	ret = REGB_POLL_FLD(MTL_BUTTRESS_VPU_D0I3_CONTROL, INPROGRESS, 0, TIMEOUT_US);
+>  	if (ret) {
+> -		ivpu_err(vdev, "Failed to sync before D0i3 tansition: %d\n", ret);
+> +		ivpu_err(vdev, "Failed to sync before D0i3 transition: %d\n", ret);
+>  		return ret;
+>  	}
+>  
+> @@ -621,7 +621,7 @@ static int ivpu_boot_d0i3_drive(struct ivpu_device *vdev, bool enable)
+>  
+>  	ret = REGB_POLL_FLD(MTL_BUTTRESS_VPU_D0I3_CONTROL, INPROGRESS, 0, TIMEOUT_US);
+>  	if (ret)
+> -		ivpu_err(vdev, "Failed to sync after D0i3 tansition: %d\n", ret);
+> +		ivpu_err(vdev, "Failed to sync after D0i3 transition: %d\n", ret);
+>  
+>  	return ret;
+>  }
+> -- 
+> 2.30.2
+> 
