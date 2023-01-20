@@ -2,412 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD309676157
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5543D67615E
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 00:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjATXQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 18:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S229698AbjATXR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 18:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjATXPz (ORCPT
+        with ESMTP id S229494AbjATXR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:15:55 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B106E47430
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:15:53 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so6877401wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MfXu0aEKsZLPUd+pHK859PYllaHR7EY7wWkz0R5COZw=;
-        b=Tl731lC4eJNEQzgrxEEY88dg1tPBIxMUGDqde7ZvFY99qHF0zK5OmGGcnjmFGkAVTQ
-         TRd0zwhXaUN6x4yrz8wqy+4WbB3xT2To99C6yMN6EM6RPUn/Qo/QZ/awyavUJJyja/ZZ
-         atNltk3M2B/mLXWt5qF/4h7pvp91BZihBzV8h+OOV+cpDILGrfLvbpob09N8FzUhTnzm
-         e/o763z6uk+lBA+242ZTpZDKK2/2t/JafESCP0CDEsKS2//+VZy39pUISLyae+KVeNB5
-         m680m02XgIk0ccLJblEZPATneLgdPLSo3z+3Iwif6QOnP+tNE97I6iyA+jxgXS2fJUZm
-         Y1+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MfXu0aEKsZLPUd+pHK859PYllaHR7EY7wWkz0R5COZw=;
-        b=mma+HkBE7EAbEP15md6Ez90dZ3CiH8gRs+4SrkA4kVH7/YoqBmNhnxiyAqiaX0Ikno
-         qw1dWEFV+Yp+MGISs9B8vjUZ9ttLeQGSn2ZV8H8EWX3jhiLIaMKfZINuzGZvWLOlXY+n
-         jGnqecnL/exWS182QzSFyFvK6io90dE+q+Sy8y9Kjn7QJGRGN617VGRKKAmn1Y5JR4UZ
-         BpNWY4sw9MJ3xfV2VsZ5brb0O/vIf9xpF/xLeQjbL7uk5vRQXrxtot180O93XaiUDySp
-         nAxww3AYiCslRsJt6CLevjf6IYas6d2SgS3w1J/T2c7KZGSc8pgCTRIitUPz7UIXABPD
-         gdhQ==
-X-Gm-Message-State: AFqh2kqF3i6MKz/0/6nCjFIoA6h/rr/cp84/F9St50eqPysE0UqpzSE1
-        C7bVekcwDIxulDJsS9nNLt9bKw==
-X-Google-Smtp-Source: AMrXdXv+Z8ROOXP4P8fLXQ1qAhmp+4JB1+9wUNzHLOzlLKkKqm3Wfxk0atCMqpG9iPyyat0Hxv5niw==
-X-Received: by 2002:a1c:ed1a:0:b0:3da:c07:c5fe with SMTP id l26-20020a1ced1a000000b003da0c07c5femr12264817wmh.5.1674256552166;
-        Fri, 20 Jan 2023 15:15:52 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm36436828wrx.21.2023.01.20.15.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 15:15:51 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v6 3/3] thermal/drivers/intel: Use generic trip points int340x
-Date:   Sat, 21 Jan 2023 00:15:30 +0100
-Message-Id: <20230120231530.2368330-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
-References: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
+        Fri, 20 Jan 2023 18:17:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153472B8;
+        Fri, 20 Jan 2023 15:17:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 591FCB82AA6;
+        Fri, 20 Jan 2023 23:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7510DC433D2;
+        Fri, 20 Jan 2023 23:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674256643;
+        bh=SoqwK6Lbe/mngQK8/Z0v1FXpq/aJOBcKcs9SVP31/ss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HAucgctXzN9/951JWEJjbzvwMgSm5mu/FK37EvGSRiIsqcGwiwm0Sd2MMd+k58d9G
+         Fp0qyJPu11GHZFkhDwIPCnhjqIlM0o13n/mq14ncbX/1ZNxhnX5nQdbv2s9DDIINdU
+         zkynKCEzKf2AjpTOkByQy3zeIem0IvE7iniX+PDZ2Zcga80SXcyT6Cx9V/XJYFmqMW
+         8xlCk1YB8+/16Wtm8akBQmfuMqE/uj4FKd8v2julqdoNeZv+InV1oBUkWNUHg/n+Y7
+         w3Xu/Cx89Yyy8Ab+QikkvjG1ytxt2d3Pki9e+jRBI/Cop2LOoXGWd8r6aIjK57H9Ce
+         WGCs8eUeLB8uQ==
+Date:   Fri, 20 Jan 2023 23:17:20 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, harald@profian.com,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Pavan Kumar Paluri <papaluri@amd.com>
+Subject: Re: [PATCH RFC v7 37/64] KVM: SVM: Add KVM_SNP_INIT command
+Message-ID: <Y8shAD2bPCK6nltn@kernel.org>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-38-michael.roth@amd.com>
+ <Y7BG6pSuoZsBQYrx@kernel.org>
+ <fd23ee51-ec47-717d-7cce-1d79db8b6bd3@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/mixed; boundary="Mwn5vxNlX4YIa3fN"
+Content-Disposition: inline
+In-Reply-To: <fd23ee51-ec47-717d-7cce-1d79db8b6bd3@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
 
-Convert the ops content logic into generic trip points and register
-them with the thermal zone.
+--Mwn5vxNlX4YIa3fN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In order to consolidate the code, use the ACPI thermal framework API
-to fill the generic trip point from the ACPI tables.
+On Thu, Jan 05, 2023 at 05:37:20PM -0600, Kalra, Ashish wrote:
+> Hello Jarkko,
+> 
+> On 12/31/2022 8:27 AM, Jarkko Sakkinen wrote:
+> > On Wed, Dec 14, 2022 at 01:40:29PM -0600, Michael Roth wrote:
+> > >   static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> > >   {
+> > >   	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> > > @@ -260,13 +279,23 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> > >   		return ret;
+> > >   	sev->active = true;
+> > > -	sev->es_active = argp->id == KVM_SEV_ES_INIT;
+> > > +	sev->es_active = (argp->id == KVM_SEV_ES_INIT || argp->id == KVM_SEV_SNP_INIT);
+> > > +	sev->snp_active = argp->id == KVM_SEV_SNP_INIT;
+> > >   	asid = sev_asid_new(sev);
+> > >   	if (asid < 0)
+> > >   		goto e_no_asid;
+> > >   	sev->asid = asid;
+> > > -	ret = sev_platform_init(&argp->error);
+> > > +	if (sev->snp_active) {
+> > > +		ret = verify_snp_init_flags(kvm, argp);
+> > > +		if (ret)
+> > > +			goto e_free;
+> > > +
+> > > +		ret = sev_snp_init(&argp->error, false);
+> > > +	} else {
+> > > +		ret = sev_platform_init(&argp->error);
+> > > +	}
+> > 
+> > Couldn't sev_snp_init() and sev_platform_init() be called unconditionally
+> > in order?
+> > 
+> > Since there is a hardware constraint that SNP init needs to always happen
+> > before platform init, shouldn't SNP init happen as part of
+> > __sev_platform_init_locked() instead?
+> > 
+> 
+> On Genoa there is currently an issue that if we do an SNP_INIT before an
+> SEV_INIT and then attempt to launch a SEV guest that may fail, so we need to
+> keep SNP INIT and SEV INIT separate.
+> 
+> We need to provide a way to run (existing) SEV guests on a system that
+> supports SNP without doing an SNP_INIT at all.
+> 
+> This is done using psp_init_on_probe parameter of the CCP module to avoid
+> doing either SNP/SEV firmware initialization during module load and then
+> defer the firmware initialization till someone launches a guest of one
+> flavor or the other.
+> 
+> And then sev_guest_init() does either SNP or SEV firmware init depending on
+> the type of the guest being launched.
 
-It has been tested on a Intel i7-8650U - x280 with the INT3400, the
-PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+OK, got it, thank you. I have not noticed the init_on_probe for
+sev_snp_init() before. Was it in earlier patch set version?
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
-Tested-by: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+The benefit of having everything in __sev_platform_init_lock() would be first 
+less risk of shooting yourself into foot, and also no need to pass
+init_on_probe to sev_snp_init() as it would be internal to sev-dev.c, and
+no need for special cases for callers. It is in my opinion internals of the
+SEV driver to guarantee the order.
+
+E.g. changes to svm/sev.c would be then quite trivial.
+
+> > I found these call sites for __sev_platform_init_locked(), none of which
+> > follow the correct call order:
+> > 
+> > * sev_guest_init()
+> 
+> As explained above, this call site is important for deferring the firmware
+> initialization to an actual guest launch.
+> 
+> > * sev_ioctl_do_pek_csr
+> > * sev_ioctl_do_pdh_export()
+> > * sev_ioctl_do_pek_import()
+> > * sev_ioctl_do_pek_pdh_gen()
+
+What happens if any of these are called before sev_guest_init()? They only
+call __sev_platform_init_locked().
+
+> > * sev_pci_init()
+> > 
+> > For me it looks like a bit flakky API use to have sev_snp_init() as an API
+> > call.
+> > 
+> > I would suggest to make SNP init internal to the ccp driver and take care
+> > of the correct orchestration over there.
+> > 
+> 
+> Due to Genoa issue, we may still need SNP init and SEV init to be invoked
+> separately outside the CCP driver.
+> 
+> > Also, how it currently works in this patch set, if the firmware did not
+> > load correctly, SNP init halts the whole system. The version check needs
+> > to be in all call paths.
+> > 
+> 
+> Yes, i agree with that.
+
+Attached the fix I sent in private earlier.
+
+> Thanks,
+> Ashish
+
+BR, Jarkko
+
+--Mwn5vxNlX4YIa3fN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-crypto-ccp-Prevent-a-spurious-SEV_CMD_SNP_INIT-trigg.patch"
+
+From f24054af9eeeb0314bbd0c37bd97ff38e2ded717 Mon Sep 17 00:00:00 2001
+From: Jarkko Sakkinen <jarkko@profian.com>
+Date: Sun, 4 Dec 2022 06:17:07 +0000
+Subject: [PATCH] crypto: ccp: Prevent a spurious SEV_CMD_SNP_INIT triggered by
+ sev_guest_init()
+
+Move the firmware version check from sev_pci_init() to sev_snp_init().
+
+Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
 ---
-   V6:
-      - Changed thermal ACPI function names according the changes done in the first patch
-      - Put back the GTSH function here as it is specific to int340x
+ drivers/crypto/ccp/sev-dev.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-   V3:
-      - The driver Kconfig option selects CONFIG_THERMAL_ACPI
-      - Change the initialization to use GTSH for the hysteresis on
-        all the trip points
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
- .../int340x_thermal/int340x_thermal_zone.c    | 168 +++++-------------
- .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
- 3 files changed, 46 insertions(+), 133 deletions(-)
-
-diff --git a/drivers/thermal/intel/int340x_thermal/Kconfig b/drivers/thermal/intel/int340x_thermal/Kconfig
-index 5d046de96a5d..b7072d37101d 100644
---- a/drivers/thermal/intel/int340x_thermal/Kconfig
-+++ b/drivers/thermal/intel/int340x_thermal/Kconfig
-@@ -9,6 +9,7 @@ config INT340X_THERMAL
- 	select THERMAL_GOV_USER_SPACE
- 	select ACPI_THERMAL_REL
- 	select ACPI_FAN
-+	select THERMAL_ACPI
- 	select INTEL_SOC_DTS_IOSF_CORE
- 	select PROC_THERMAL_MMIO_RAPL if POWERCAP
- 	help
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-index 228f44260b27..c0cd1d4283d6 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -37,65 +37,6 @@ static int int340x_thermal_get_zone_temp(struct thermal_zone_device *zone,
- 	return 0;
- }
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 7c5698bde655..08787d998f15 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -1387,6 +1387,12 @@ static int __sev_snp_init_locked(int *error)
+ 	if (sev->snp_initialized)
+ 		return 0;
  
--static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
--					 int trip, int *temp)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
--
--	if (trip < d->aux_trip_nr)
--		*temp = d->aux_trips[trip];
--	else if (trip == d->crt_trip_id)
--		*temp = d->crt_temp;
--	else if (trip == d->psv_trip_id)
--		*temp = d->psv_temp;
--	else if (trip == d->hot_trip_id)
--		*temp = d->hot_temp;
--	else {
--		for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--			if (d->act_trips[i].valid &&
--			    d->act_trips[i].id == trip) {
--				*temp = d->act_trips[i].temp;
--				break;
--			}
--		}
--		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
--	}
--
--	return 0;
--}
--
--static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
--					 int trip,
--					 enum thermal_trip_type *type)
--{
--	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
--
--	if (trip < d->aux_trip_nr)
--		*type = THERMAL_TRIP_PASSIVE;
--	else if (trip == d->crt_trip_id)
--		*type = THERMAL_TRIP_CRITICAL;
--	else if (trip == d->hot_trip_id)
--		*type = THERMAL_TRIP_HOT;
--	else if (trip == d->psv_trip_id)
--		*type = THERMAL_TRIP_PASSIVE;
--	else {
--		for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--			if (d->act_trips[i].valid &&
--			    d->act_trips[i].id == trip) {
--				*type = THERMAL_TRIP_ACTIVE;
--				break;
--			}
--		}
--		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
--	}
--
--	return 0;
--}
--
- static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
- 				      int trip, int temp)
- {
-@@ -109,20 +50,15 @@ static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
--	d->aux_trips[trip] = temp;
--
- 	return 0;
- }
- 
--
--static int int340x_thermal_get_trip_hyst(struct thermal_zone_device *zone,
--		int trip, int *temp)
-+static int int340x_thermal_get_global_hyst(struct acpi_device *adev, int *temp)
- {
--	struct int34x_thermal_zone *d = zone->devdata;
- 	acpi_status status;
- 	unsigned long long hyst;
- 
--	status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL, &hyst);
-+	status = acpi_evaluate_integer(adev->handle, "GTSH", NULL, &hyst);
- 	if (ACPI_FAILURE(status))
- 		*temp = 0;
- 	else
-@@ -131,6 +67,7 @@ static int int340x_thermal_get_trip_hyst(struct thermal_zone_device *zone,
- 	return 0;
- }
- 
-+
- static void int340x_thermal_critical(struct thermal_zone_device *zone)
- {
- 	dev_dbg(&zone->device, "%s: critical temperature reached\n", zone->type);
-@@ -138,58 +75,36 @@ static void int340x_thermal_critical(struct thermal_zone_device *zone)
- 
- static struct thermal_zone_device_ops int340x_thermal_zone_ops = {
- 	.get_temp       = int340x_thermal_get_zone_temp,
--	.get_trip_temp	= int340x_thermal_get_trip_temp,
--	.get_trip_type	= int340x_thermal_get_trip_type,
- 	.set_trip_temp	= int340x_thermal_set_trip_temp,
--	.get_trip_hyst =  int340x_thermal_get_trip_hyst,
- 	.critical	= int340x_thermal_critical,
- };
- 
--static int int340x_thermal_get_trip_config(acpi_handle handle, char *name,
--				      int *temp)
--{
--	unsigned long long r;
--	acpi_status status;
--
--	status = acpi_evaluate_integer(handle, name, NULL, &r);
--	if (ACPI_FAILURE(status))
--		return -EIO;
--
--	*temp = deci_kelvin_to_millicelsius(r);
--
--	return 0;
--}
--
- int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
- {
--	int trip_cnt = int34x_zone->aux_trip_nr;
--	int i;
-+	int trip_cnt;
-+	int i, ret;
- 
--	int34x_zone->crt_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
--					     &int34x_zone->crt_temp))
--		int34x_zone->crt_trip_id = trip_cnt++;
-+	trip_cnt = int34x_zone->aux_trip_nr;
- 
--	int34x_zone->hot_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_HOT",
--					     &int34x_zone->hot_temp))
--		int34x_zone->hot_trip_id = trip_cnt++;
-+	ret = thermal_acpi_critical_trip_temp(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
--	int34x_zone->psv_trip_id = -1;
--	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_PSV",
--					     &int34x_zone->psv_temp))
--		int34x_zone->psv_trip_id = trip_cnt++;
-+	ret = thermal_acpi_hot_trip_temp(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
-+
-+	ret = thermal_acpi_passive_trip_temp(int34x_zone->adev, &int34x_zone->trips[trip_cnt]);
-+	if (!ret)
-+		trip_cnt++;
- 
- 	for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--		char name[5] = { '_', 'A', 'C', '0' + i, '\0' };
- 
--		if (int340x_thermal_get_trip_config(int34x_zone->adev->handle,
--					name,
--					&int34x_zone->act_trips[i].temp))
-+		ret = thermal_acpi_active_trip_temp(int34x_zone->adev, &int34x_zone->trips[trip_cnt], i);
-+		if (ret)
- 			break;
- 
--		int34x_zone->act_trips[i].id = trip_cnt++;
--		int34x_zone->act_trips[i].valid = true;
-+		trip_cnt++;
- 	}
- 
- 	return trip_cnt;
-@@ -208,7 +123,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 	acpi_status status;
- 	unsigned long long trip_cnt;
- 	int trip_mask = 0;
--	int ret;
-+	int i, ret;
- 
- 	int34x_thermal_zone = kzalloc(sizeof(*int34x_thermal_zone),
- 				      GFP_KERNEL);
-@@ -228,32 +143,35 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 		int34x_thermal_zone->ops->get_temp = get_temp;
- 
- 	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
--	if (ACPI_FAILURE(status))
--		trip_cnt = 0;
--	else {
--		int i;
--
--		int34x_thermal_zone->aux_trips =
--			kcalloc(trip_cnt,
--				sizeof(*int34x_thermal_zone->aux_trips),
--				GFP_KERNEL);
--		if (!int34x_thermal_zone->aux_trips) {
--			ret = -ENOMEM;
--			goto err_trip_alloc;
--		}
--		trip_mask = BIT(trip_cnt) - 1;
-+	if (!ACPI_FAILURE(status)) {
- 		int34x_thermal_zone->aux_trip_nr = trip_cnt;
--		for (i = 0; i < trip_cnt; ++i)
--			int34x_thermal_zone->aux_trips[i] = THERMAL_TEMP_INVALID;
-+		trip_mask = BIT(trip_cnt) - 1;
++	if (!sev_version_greater_or_equal(SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR)) {
++		dev_dbg(sev->dev, "SEV-SNP support requires firmware version >= %d:%d\n",
++			SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR);
++		return 0;
 +	}
 +
-+	int34x_thermal_zone->trips = kzalloc(sizeof(*int34x_thermal_zone->trips) *
-+					     (INT340X_THERMAL_MAX_TRIP_COUNT + trip_cnt),
-+					      GFP_KERNEL);
-+	if (!int34x_thermal_zone->trips) {
-+		ret = -ENOMEM;
-+		goto err_trips_alloc;
+ 	/*
+ 	 * The SNP_INIT requires the MSR_VM_HSAVE_PA must be set to 0h
+ 	 * across all cores.
+@@ -2319,25 +2325,19 @@ void sev_pci_init(void)
+ 		}
  	}
  
- 	trip_cnt = int340x_thermal_read_trips(int34x_thermal_zone);
- 
-+	for (i = 0; i < trip_cnt; ++i)
-+		int340x_thermal_get_global_hyst(adev, &int34x_thermal_zone->trips[i].hysteresis);
++	rc = sev_snp_init(&error, true);
++	if (rc)
++		/*
++		 * Don't abort the probe if SNP INIT failed,
++		 * continue to initialize the legacy SEV firmware.
++		 */
++		dev_err(sev->dev, "SEV-SNP: failed to INIT error %#x\n", error);
 +
-+	for (i = 0; i < int34x_thermal_zone->aux_trip_nr; i++) {
-+		int34x_thermal_zone->trips[i].type = THERMAL_TRIP_PASSIVE;
-+		int34x_thermal_zone->trips[i].temperature = THERMAL_TEMP_INVALID;
-+	}
-+	
- 	int34x_thermal_zone->lpat_table = acpi_lpat_get_conversion_table(
- 								adev->handle);
- 
--	int34x_thermal_zone->zone = thermal_zone_device_register(
-+	int34x_thermal_zone->zone = thermal_zone_device_register_with_trips(
- 						acpi_device_bid(adev),
-+						int34x_thermal_zone->trips,
- 						trip_cnt,
- 						trip_mask, int34x_thermal_zone,
- 						int34x_thermal_zone->ops,
-@@ -272,9 +190,9 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- err_enable:
- 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
- err_thermal_zone:
-+	kfree(int34x_thermal_zone->trips);
- 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
--	kfree(int34x_thermal_zone->aux_trips);
--err_trip_alloc:
-+err_trips_alloc:
- 	kfree(int34x_thermal_zone->ops);
- err_ops_alloc:
- 	kfree(int34x_thermal_zone);
-@@ -287,7 +205,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
- {
- 	thermal_zone_device_unregister(int34x_thermal_zone->zone);
- 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
--	kfree(int34x_thermal_zone->aux_trips);
-+	kfree(int34x_thermal_zone->trips);
- 	kfree(int34x_thermal_zone->ops);
- 	kfree(int34x_thermal_zone);
- }
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-index e28ab1ba5e06..0c2c8de92014 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-@@ -10,6 +10,7 @@
- #include <acpi/acpi_lpat.h>
- 
- #define INT340X_THERMAL_MAX_ACT_TRIP_COUNT	10
-+#define INT340X_THERMAL_MAX_TRIP_COUNT INT340X_THERMAL_MAX_ACT_TRIP_COUNT + 3
- 
- struct active_trip {
- 	int temp;
-@@ -19,15 +20,8 @@ struct active_trip {
- 
- struct int34x_thermal_zone {
- 	struct acpi_device *adev;
--	struct active_trip act_trips[INT340X_THERMAL_MAX_ACT_TRIP_COUNT];
--	unsigned long *aux_trips;
-+	struct thermal_trip *trips;
- 	int aux_trip_nr;
--	int psv_temp;
--	int psv_trip_id;
--	int crt_temp;
--	int crt_trip_id;
--	int hot_temp;
--	int hot_trip_id;
- 	struct thermal_zone_device *zone;
- 	struct thermal_zone_device_ops *ops;
- 	void *priv_data;
+ 	/*
+ 	 * If boot CPU supports SNP, then first attempt to initialize
+ 	 * the SNP firmware.
+ 	 */
+ 	if (cpu_feature_enabled(X86_FEATURE_SEV_SNP)) {
+-		if (!sev_version_greater_or_equal(SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR)) {
+-			dev_err(sev->dev, "SEV-SNP support requires firmware version >= %d:%d\n",
+-				SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR);
+-		} else {
+-			rc = sev_snp_init(&error, true);
+-			if (rc) {
+-				/*
+-				 * Don't abort the probe if SNP INIT failed,
+-				 * continue to initialize the legacy SEV firmware.
+-				 */
+-				dev_err(sev->dev, "SEV-SNP: failed to INIT error %#x\n", error);
+-			}
+-		}
+-
+ 		/*
+ 		 * Allocate the intermediate buffers used for the legacy command handling.
+ 		 */
 -- 
-2.34.1
+2.38.1
 
+
+--Mwn5vxNlX4YIa3fN--
