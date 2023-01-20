@@ -2,124 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2B8675BBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FDC675BBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjATRj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S230145AbjATRjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjATRjW (ORCPT
+        with ESMTP id S229567AbjATRjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 20 Jan 2023 12:39:22 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DC66E416;
-        Fri, 20 Jan 2023 09:39:13 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id l1so3257587qkg.11;
-        Fri, 20 Jan 2023 09:39:13 -0800 (PST)
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2857C564B7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:39:12 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id j9so4714316qtv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:39:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9g1BEZvZrqodmFDOISLKzRjoO7gt900zQziLNPYxxig=;
-        b=iW5x6FyZ4kRruJuSjFDnWk3ekJ4QnBXu61QLi+LYYLgr3C/dTiEk1S/AjpKOH/cNo+
-         iGXdACuzne7GknNIXvnfUAO6OT1Ssy+qoMhMwFGiQeIj5HHiGGUxPnArgkAPK8ceZQdm
-         6jX5Hl7BNZTO18U4LQqpXHH7O8GvYSDlGa4bX2Jv1gKj/YQaFfcrh7UO47ldtINtb8Y4
-         OvHCH5VrEMi+vsaImGlbd6YJFKqQsjoKEch9yCKE/7pGEfvTg5NKhprOUUTroDH1Rsuu
-         W+xiHucnnbQJU9cwi36Q7uSjt9twwRWoa+XUKrKzPsskwpu/fcJK3P4SB3S1+fzY53VS
-         zNNw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nUwcPnODL6tkDv1+EEZooXCQzQNc6RaXSg0BM7X5yck=;
+        b=HiwKJ0B8Tq/Czmzvwwj3WFQLpQg4XyD1sycR56XD6gZQIrpV2B/W0G3/bD7G+kPeN/
+         fUNUt7l8O6BDKRneUBI0nTIYBN3P90cZCv567eleh4T/6U0V8UadYf1YT2M39pM9Bzsk
+         X/UD8ELxspxIMH00oddsGsis4zD8Y2Q2vA0nJvVDXg88j1qdaMxX/oweh8tuO9jKbRrq
+         pe5NRKabG8x5L6MsyTdHb2dPurmwlUL5TxtwzK+LwO1PcPdIWkk2ZlfYLEEp1rHhOmLC
+         Cy+FwEYdm7Gp4+Zoz/kyrpwZdTSffy/MGvB6+XbhQjHwTKH80gLMoYSIIf9tP+xwlXFu
+         UMgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9g1BEZvZrqodmFDOISLKzRjoO7gt900zQziLNPYxxig=;
-        b=F+dr6xAYKJIsjVPFl7MgKG8DylJ6xDK+XMX1e0TSKpoa090MzG7l+7ouMZU9dSRAf7
-         5Jvc5cqMijp+7Lw9zeo2qCEb8fmcoS2ZwM9DdDEM6yiQc/kbIwU1rdvqoc0IhfnBIQ5G
-         RbA+kG3uaCP4zlgxpv1pkGAjk/4ejZIDO81p0O5lFuZZGaIy1k8blGv9vtIbn0i+gDYu
-         nCH5H2FHmG9Lgj18myVeM4183mpY6xkW8AxtmLa9tSwFo0Rj74TS+ZjYoFio26ejFMTA
-         ULGjwDvKg2A7cWV200NG0a/xlSytk2AaT3Q5xT6azAJ2YooeQHs1bIbfm/3pp395I60q
-         LYPQ==
-X-Gm-Message-State: AFqh2krvmyz+QTqf1MFsdF6ctodk3HYuuKlVOjOGnJ9EvyfkSYH1+FLZ
-        oNwWxuVeLPgv8pXuMWUSHSjU2qJRePov4Eo1f9s=
-X-Google-Smtp-Source: AMrXdXuh+LNPNSifVpuzE1cBEKvlIsgIpCH851pokA3KW+zv3u8Bf8TXGoBoW+nGOBhzndBUlwTJv+42etN/8riX1U4=
-X-Received: by 2002:a05:620a:1139:b0:705:b8ad:5b36 with SMTP id
- p25-20020a05620a113900b00705b8ad5b36mr862323qkk.734.1674236352582; Fri, 20
- Jan 2023 09:39:12 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nUwcPnODL6tkDv1+EEZooXCQzQNc6RaXSg0BM7X5yck=;
+        b=gE48ieRBwytUDKy5rLTeQIwJ8ftU6b03iu9IC1vUgXl3JBeTQ8iJDg6qoa3purqJkA
+         zrg75IgYhYaiirjO8F02IimLNXG/KOQf1bu4GdRk2JGVUxkolmsvWdnCqjUQJiiEtvka
+         8F5qFfRbSXJHf4rOLxIXNQyeW7KA2bNN1v4YYPbmJDKxa6+vglBSdvPTtemOJ43mbp++
+         IvQ/g/PveKdHgvLJCwQckE6vseL1WIkiLMm3rvQBF8w0B5AFYOp1FvV09eg09SxMDyAt
+         MW9AhP67AoB68yLpVcJaEMtR/D/Up5FOB02IWRvuLs6hFEU4L2IghmZiVsNJIw33qCzs
+         cxqw==
+X-Gm-Message-State: AFqh2krEGDHpNPt0kSCG/e5yWOU8GvNw1y6YTtXIhkty1uS8fN9gurOM
+        UPRd26biiutoK73SAPSzgh4=
+X-Google-Smtp-Source: AMrXdXut8qn33mbyBanIQct87VFtSEsClB7xkNdQJFYnrNKxxe8k6Ic9jvSF+Utibg/3+zmxkSdVJw==
+X-Received: by 2002:ac8:6650:0:b0:3b6:2ce9:baef with SMTP id j16-20020ac86650000000b003b62ce9baefmr20448474qtp.59.1674236351179;
+        Fri, 20 Jan 2023 09:39:11 -0800 (PST)
+Received: from [10.4.10.38] (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
+        by smtp.gmail.com with ESMTPSA id fp26-20020a05622a509a00b003a70a675066sm615724qtb.79.2023.01.20.09.39.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 09:39:09 -0800 (PST)
+Message-ID: <056f0d30-d340-fdc4-3744-1cdedd8b4048@gmail.com>
+Date:   Fri, 20 Jan 2023 12:39:06 -0500
 MIME-Version: 1.0
-References: <Y8lZreSphK6DIkJg@kadam> <20230120171408.16099-1-bpappas@pappasbrent.com>
-In-Reply-To: <20230120171408.16099-1-bpappas@pappasbrent.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 20 Jan 2023 19:38:36 +0200
-Message-ID: <CAHp75VfhWV7ArGZ_S-ik7UxvvOocKWTtAHhKGC4tSV+Y8dgb9w@mail.gmail.com>
-Subject: Re: [PATCH v3] media: atomisp: pci: sh_css: Inline single invocation
- of macro STATS_ENABLED()
-To:     Brent Pappas <bpappas@pappasbrent.com>
-Cc:     error27@gmail.com, andy@kernel.org, colin.i.king@gmail.com,
-        gregkh@linuxfoundation.org, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 1/2] riscv: Kconfig: Allow RV32 to build with no MMU
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yimin Gu <ustcymgu@gmail.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+References: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
+ <20230119052642.1112171-2-Mr.Bossman075@gmail.com> <Y8pJ4y7FyBDQPqIT@wendy>
+From:   Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <Y8pJ4y7FyBDQPqIT@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 7:14 PM Brent Pappas <bpappas@pappasbrent.com> wrote:
->
-> Inline the single invocation of the macro STATS_ENABLED().
-> The macro abstraction is not necessary because the logic behind it is only
-> used once.
-
-LGTM,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
-> ---
-> Changelog:
-> V1 -> V2: Inline macro instead of replacing it with a function.
->
-> V2 -> V3: Remove unnecessary check that stage is non-null.
->
->  drivers/staging/media/atomisp/pci/sh_css.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-> index 726cb7aa4ecd..93789500416f 100644
-> --- a/drivers/staging/media/atomisp/pci/sh_css.c
-> +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-> @@ -97,9 +97,6 @@
->   */
->  #define JPEG_BYTES (16 * 1024 * 1024)
->
-> -#define STATS_ENABLED(stage) (stage && stage->binary && stage->binary->info && \
-> -       (stage->binary->info->sp.enable.s3a || stage->binary->info->sp.enable.dis))
-> -
->  struct sh_css my_css;
->
->  int  __printf(1, 0) (*sh_css_printf)(const char *fmt, va_list args) = NULL;
-> @@ -3743,7 +3740,9 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
->                          * The SP will read the params after it got
->                          * empty 3a and dis
->                          */
-> -                       if (STATS_ENABLED(stage)) {
-> +                       if (stage->binary && stage->binary->info &&
-> +                           (stage->binary->info->sp.enable.s3a ||
-> +                            stage->binary->info->sp.enable.dis)) {
->                                 /* there is a stage that needs it */
->                                 return_err = ia_css_bufq_enqueue_buffer(thread_id,
->                                                                         queue_id,
-> --
-> 2.34.1
->
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+On 1/20/23 02:59, Conor Dooley wrote:
+> Hello!
+> 
+> Since you'll have to re-submit, making sure that allowing !MMU on rv32
+> doesn't break the build due to canaan k210 drivers being enabled despite
+> relying on 64-bit divisions, I've got some nits for you.
+Not sure what driver needs 64bit, but sense !MMU was only selected by 
+64BIT. This should work.
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 69774bb362d6..b9835b8ede86 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -43,7 +43,7 @@ config SOC_VIRT
+
+  config SOC_CANAAN
+         bool "Canaan Kendryte K210 SoC"
+-       depends on !MMU
++       depends on !MMU && 64BIT
+         select CLINT_TIMER if RISCV_M_MODE
+         select SERIAL_SIFIVE if TTY
+         select SERIAL_SIFIVE_CONSOLE if TTY
+
+> On Thu, Jan 19, 2023 at 12:26:41AM -0500, Jesse Taube wrote:
+>> From: Yimin Gu <ustcymgu@gmail.com>
+>>
+>> Some RISC-V 32bit ores do not have an MMU, and the kernel should be
+> 
+>   s/ores/cores
+OH thanks sorry for the spelling mistakes.
+
+Thanks,
+Jesse Taube
+>> able to build for them. This patch enables the RV32 to be built with
+>> no MMU support.
+>>
+>> Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
+>> CC: Jesse Taube <Mr.Bossman075@gmail.com>
+>> Tested-By: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> And the automation complains that this tag is not "Tested-by:"
+> 
+> Thanks,
+> Conor.
+> 
+>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+>> ---
+>>   arch/riscv/Kconfig | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 59d18881f35b..49759dbe6a8f 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -163,8 +163,8 @@ config MMU
+>>   
+>>   config PAGE_OFFSET
+>>   	hex
+>> -	default 0xC0000000 if 32BIT
+>> -	default 0x80000000 if 64BIT && !MMU
+>> +	default 0xC0000000 if 32BIT && MMU
+>> +	default 0x80000000 if !MMU
+>>   	default 0xff60000000000000 if 64BIT
+>>   
+>>   config KASAN_SHADOW_OFFSET
+>> @@ -262,7 +262,6 @@ config ARCH_RV32I
+>>   	select GENERIC_LIB_ASHRDI3
+>>   	select GENERIC_LIB_LSHRDI3
+>>   	select GENERIC_LIB_UCMPDI2
+>> -	select MMU
+>>   
+>>   config ARCH_RV64I
+>>   	bool "RV64I"
+>> -- 
+>> 2.39.0
+>>
+>>
