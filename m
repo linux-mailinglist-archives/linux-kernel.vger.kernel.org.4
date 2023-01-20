@@ -2,85 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F2B675903
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB03F675904
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 16:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjATPrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 10:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
+        id S231487AbjATPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 10:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjATPrI (ORCPT
+        with ESMTP id S231475AbjATPrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 10:47:08 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 878A89749;
-        Fri, 20 Jan 2023 07:47:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABCF814BF;
-        Fri, 20 Jan 2023 07:47:48 -0800 (PST)
-Received: from [10.57.47.220] (unknown [10.57.47.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A4C23F67D;
-        Fri, 20 Jan 2023 07:47:05 -0800 (PST)
-Message-ID: <77f9eab5-4fb2-cf96-9628-2a816d519d61@arm.com>
-Date:   Fri, 20 Jan 2023 15:47:03 +0000
+        Fri, 20 Jan 2023 10:47:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B6C9754
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 07:47:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2C5361FCE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 15:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15617C4339B;
+        Fri, 20 Jan 2023 15:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674229630;
+        bh=dnTyS2dlLqRhnPPXKCqBAPZiNszpkGqbyjTurzV/4YY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=C6agBrlQl7DHiGSqQdlLFw0J681U/hU/Q8Fzu6BMThIeyN+i4Qk58Cd8ZH+UKre0s
+         Lnr1ahjyhrju/bfcU3oMWGipQoHm894NAesmq+NQQi7ziV8RVY4ETBr6LUNdlb44vJ
+         3zd8rhHllIKw7Ro74y2HcqtMPJ6VJnIL/t+MWxvhDsk1d1lsHMXd41vrTjuF0a6ovK
+         s1JOs3/Ajs+8gK/Ud7MiYo58DcM1vz8BalTL9Rz9TIqSlOKOUoKvEfyyE0uiFkKmMa
+         C5ZwuMT0Balpw9/TSEnzB3eVln33j/GynDCvxbPuumJMFx4a6aYdCWKoqgcNKpQWQv
+         2qlDcpGicJffg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B06785C0DFC; Fri, 20 Jan 2023 07:47:09 -0800 (PST)
+Date:   Fri, 20 Jan 2023 07:47:09 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230120154709.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y8gjUKoHxqR9+7Hx@rowland.harvard.edu>
+ <3dabbcfb-858c-6aa0-6824-05b8cc8e9cdb@gmail.com>
+ <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
+ <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] perf: cs-etm: Update decoder code for OpenCSD version 1.4
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>,
-        linux-perf-users@vger.kernel.org
-Cc:     acme@kernel.org, linux-arm-kernel@lists.infradead.org,
-        coresight@lists.linaro.org, mathieu.poirier@linaro.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org
-References: <20230120153706.20388-1-mike.leach@linaro.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230120153706.20388-1-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20/01/2023 15:37, Mike Leach wrote:
-> OpenCSD version 1.4 is released with support for FEAT_ITE.
-> This adds a new packet type, with associated output element ID in
-> the packet type enum - OCSD_GEN_TRC_ELEM_INSTRUMENTATION.
+On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
 > 
-> As we just ignore this packet in perf, add to the switch statement
-> to avoid the "enum not handled in switch error", but conditionally
-> so as not to break the perf build for older OpenCSD installations.
 > 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->  tools/perf/util/cs-etm-decoder/cs-etm-decoder.c | 3 +++
->  1 file changed, 3 insertions(+)
+> On 1/19/2023 7:41 PM, Paul E. McKenney wrote:
+> > On Thu, Jan 19, 2023 at 02:39:01PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 1/19/2023 1:11 AM, Paul E. McKenney wrote:
+> > > > On Wed, Jan 18, 2023 at 10:24:50PM +0100, Jonas Oberhauser wrote:
+> > > > > What I was thinking of is more something like this:
+> > > > > 
+> > > > > P0{
+> > > > >      idx1 = srcu_down(&ss);
+> > > > >      srcu_up(&ss,idx1);
+> > > > > }
+> > > > > 
+> > > > > P1{
+> > > > >       idx2 = srcu_down(&ss);
+> > > > >       srcu_up(&ss,idx2)
+> > > > > }
+> > > > And srcu_read_lock() and srcu_read_unlock() already do this.
+> > > I think I left out too much from my example.
+> > > And filling in the details led me down a bit of a rabbit hole of confusion
+> > > for a while.
+> > > But here's what I ended up with:
+> > > 
+> > > 
+> > > P0{
+> > >      idx1 = srcu_down(&ss);
+> > >      store_rel(p1, true);
+> > > 
+> > > 
+> > >      shared cs
+> > > 
+> > >      R x == ?
+> > > 
+> > >      while (! load_acq(p2));
+> > >      R idx2 == idx1 // for some reason, we got lucky!
+> > >      srcu_up(&ss,idx1);
+> > Although the current Linux-kernel implementation happens to be fine with
+> > this sort of abuse, I am quite happy to tell people "Don't do that!"
+> > And you can do this with srcu_read_lock() and srcu_read_unlock().
+> > In contrast, this actually needs srcu_down_read() and srcu_up_read():
 > 
-> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> index fa3aa9c0fb2e..48e7121880a9 100644
-> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> @@ -604,6 +604,9 @@ static ocsd_datapath_resp_t cs_etm_decoder__gen_trace_elem_printer(
->  	case OCSD_GEN_TRC_ELEM_CUSTOM:
->  	case OCSD_GEN_TRC_ELEM_SYNC_MARKER:
->  	case OCSD_GEN_TRC_ELEM_MEMTRANS:
-> +#if (OCSD_VER_NUM >= 0x010400)
-> +	case OCSD_GEN_TRC_ELEM_INSTRUMENTATION:
-> +#endif
->  	default:
->  		break;
->  	}
+> My point/clarification request wasn't about whether you could write that
+> code with read_lock() and read_unlock(), but what it would/should mean for
+> the operational and axiomatic models.
+> As I wrote later in the mail, for the operational model it is quite clear
+> that x==1 should be allowed for lock() and unlock(), but would probably be
+> forbidden for down() and up().
 
-Checked the build with both old and new versions of OpenCSD and it's ok:
+Agreed, the math might say something or another about doing something
+with the srcu_read_lock() or srcu_down_read() return values (other than
+passing them to srcu_read_unlock() or srcu_up_read(), respectively),
+but such somethings are excluded by convention.
 
-Reviewed-by: James Clark <james.clark@arm.com>
+So it would be nice for LKMM to complain about such abuse, but not
+at all mandatory.
+
+> My clarification request is whether that difference in the probable
+> operational model should be reflected in the axiomatic model (as I first
+> suspected based on the word "semaphore" being dropped a lot), or whether
+> it's just due to abuse (i.e., yes the axiomatic model and operational model
+> might be different here, but you're not allowed to look).
+
+For the moment, I am taking the door labeled "abuse".
+
+Maybe someday someone will come up with a valid use case, but they have
+to prove it first.  ;-)
+
+> Which brings us to the next point:
+> 
+> > Could you please review the remainder to see what remains given the
+> > usage restrictions that I called out above?
+> 
+> Perhaps we could say that reading an index without using it later is
+> forbidden?
+> 
+> flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
+> thrown-srcu-cookie-on-floor
+> 
+> So if there is an srcu_down() that produces a cookie that is read by some
+> read R, and R doesn't then pass that value into an srcu_up(), the
+> srcu-warranty is voided.
+
+I like the general idea, but I am dazed and confused by this "flag"
+statement.
+
+> Perhaps it would also be good to add special tags for Srcu-down and Srcu-up
+> to avoid collisions.
+
+Ah, separate down/up tags could make this "flag" statement at least
+somewhat less dazing and confusing.
+
+> always have fun, jonas
+
+Always do!  ;-)
+
+							Thanx, Paul
