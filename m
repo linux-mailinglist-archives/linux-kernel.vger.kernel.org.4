@@ -2,59 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B1B67578A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D5E675791
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 15:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjATOkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 09:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S231192AbjATOk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 09:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjATOke (ORCPT
+        with ESMTP id S230456AbjATOk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 09:40:34 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178002A14C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 06:40:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674225605; x=1705761605;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oYx+ncPt3aXXBAx6eIW+t/dOXcIk5sAoEFiHLkKETcY=;
-  b=zQaHWIH9n/1VWrZ95QPeUIsJ1l80G2GhUyXIRB+aSirK7CDFEf9XVpTq
-   eyBTqPLx6Zq/9tAtgcjHfu5cHXMCzbzvvVm6cB/JH5XqYbmPpJoO/bNlK
-   EeS3K8uPqJaL7Tt2aBm370+EbEQCB8cRswaNDpFwFstxl7asvbdr6IHpH
-   vhzn/DYin6dFqjM7TFI/SzbMoECKVOeJbFZGn3iPr4fx1bwJ5C7W6uno8
-   Xj/i3OOO11Z3VOqswHrzAHR5h9pci5ySP/XDlh57g8l2Ptd+jkauwuVmi
-   Awb3D0ZWfXfB1nzr8Fl2WS/OAGfiTFecmr+HuU0gkNAuA54ZwRVgzl8Xf
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669100400"; 
-   d="scan'208";a="197471546"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 07:38:22 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 20 Jan 2023 07:38:19 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Fri, 20 Jan 2023 07:38:18 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 7/7] soc: microchip: mpfs: handle timeouts and failed services differently
-Date:   Fri, 20 Jan 2023 14:37:35 +0000
-Message-ID: <20230120143734.3438755-8-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230120143734.3438755-1-conor.dooley@microchip.com>
-References: <20230120143734.3438755-1-conor.dooley@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 20 Jan 2023 09:40:56 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABBD73EEB;
+        Fri, 20 Jan 2023 06:40:28 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C048D32001BB;
+        Fri, 20 Jan 2023 09:39:42 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 09:39:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674225582; x=1674311982; bh=b4JAJuHxNJ
+        8crP6ZpOzWWYxWeuwbnT4P0qgnOUpQ0sI=; b=YpFFzP3VF+EXJCLmreWeBNB9+S
+        zXHxKLgMbyNmk2z1VW6q3MxEpkproMFd2XZHbXRd3jw7BKH62BZ93qlWPB+r0tXx
+        GbwZZiyJYZEEWYvt4HcxdsEFFE0lLPObyPr5B8oNMr3YVFJBRj3K66+vhYhzgKs/
+        5dTWdr/9s8iHSN5+5qnrtbJQ3yCMUPDerYNJ22YIVdBWtYejl55VlFikFlwBAIdo
+        1wu/6qiuRfisnPQUn7IDstOQzwRZ2OY2tSeeOoDTrwQg/xL5G/zQs6vtRhpzL8DP
+        Fgdfpbi3GAg9bHuV1lTDVypQ9y4jxRbq1AJ3/5km73+LEObdAHBrQILTSssg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674225582; x=1674311982; bh=b4JAJuHxNJ8crP6ZpOzWWYxWeuwb
+        nT4P0qgnOUpQ0sI=; b=kbkcGpBlS3kIUHVyg0NKren2v+0ZPixCVs0IHEcgFATv
+        /fQDNaGmP5X5P5h19GU2fpwPD1TBW43CHnULxpe+taXxBuiCTAP66XHB1kbw6jVU
+        ktB2N/kXAJKDCtVduL7kHyROWsuKfnhUkBDg1JaaVGYEVshIvkSzyvmQ3Mz0kecY
+        j2mWceXUaRQVegdU9GN/rHa5HlAqyOMZNLltfaUy/sfmk+CWX6cHgoxSueBp0J0i
+        2XczKB1dd7jUSKpZNSGrbGTRUNLi1oRczjpT0oY63IskbhcNKGcpIFxZpm+iiMB0
+        rt1VsRAiJTzs0z272UUCumVGSuTlMg9TxL0SPQ1sQQ==
+X-ME-Sender: <xms:rafKY_kguGhvxY4s77V4bRvXYVPX-TaLHxAX5Rsi2yUO58HcQO4Zkw>
+    <xme:rafKYy3ch5_10fEpPqLPk4skitRZpBS9nUdMMeG_5dV4W4jXI0yFlKr084ITGsZVL
+    lGqbdsXwXqxi2OVO80>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:rafKY1qFhfPcjqcn3SzgSs11DqXRM8WcWlI7Gu-Kicl7WOeQSyzCNQ>
+    <xmx:rafKY3kPhOW_docLyMAkp_w_hKPx7gxrnaYtchGBbzvFANsfGIZ4qA>
+    <xmx:rafKY90Q8cyQNciYnFYz9TNs_bgG3H33QbPAoO9563ztIP9MXp_W6Q>
+    <xmx:rqfKY83B478JlCxC4F7tHYbChgHt68Lo8MC5zaI3n4bvh6M-xJx_5w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5EF90B60086; Fri, 20 Jan 2023 09:39:41 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <aa4d68b2-b5b5-4c17-a44f-7c6db443ea4c@app.fastmail.com>
+In-Reply-To: <20230120141002.2442-10-ysionneau@kalray.eu>
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-10-ysionneau@kalray.eu>
+Date:   Fri, 20 Jan 2023 15:39:22 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Yann Sionneau" <ysionneau@kalray.eu>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Will Deacon" <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Waiman Long" <longman@redhat.com>,
+        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Paul Moore" <paul@paul-moore.com>,
+        "Eric Paris" <eparis@redhat.com>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Jules Maselbas" <jmaselbas@kalray.eu>,
+        "Guillaume Thouvenin" <gthouvenin@kalray.eu>,
+        "Clement Leger" <clement@clement-leger.fr>,
+        "Vincent Chardon" <vincent.chardon@elsys-design.com>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        "Julian Vetter" <jvetter@kalray.eu>,
+        "Samuel Jones" <sjones@kalray.eu>,
+        "Ashley Lesdalons" <alesdalons@kalray.eu>,
+        "Thomas Costis" <tcostis@kalray.eu>,
+        "Marius Gligor" <mgligor@kalray.eu>,
+        "Jonathan Borne" <jborne@kalray.eu>,
+        "Julien Villette" <jvillette@kalray.eu>,
+        "Luc Michel" <lmichel@kalray.eu>,
+        "Louis Morhet" <lmorhet@kalray.eu>,
+        "Julien Hascoet" <jhascoet@kalray.eu>,
+        "Jean-Christophe Pince" <jcpince@gmail.com>,
+        "Guillaume Missonnier" <gmissonnier@kalray.eu>,
+        "Alex Michon" <amichon@kalray.eu>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <git@xen0n.name>,
+        "Shaokun Zhang" <zhangshaokun@hisilicon.com>,
+        "John Garry" <john.garry@huawei.com>,
+        "Guangbin Huang" <huangguangbin2@huawei.com>,
+        "Bharat Bhushan" <bbhushan2@marvell.com>,
+        "Bibo Mao" <maobibo@loongson.cn>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        "Qi Liu" <liuqi115@huawei.com>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        "Alexey Dobriyan" <adobriyan@gmail.com>
+Cc:     "Benjamin Mugnier" <mugnier.benjamin@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2 09/31] kvx: Add build infrastructure
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,66 +143,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The system controller will only deliver an interrupt if a service
-succeeds. This leaves us in the unfortunate position with current code
-where there is no way to differentiate between a legitimate timeout
-where the service has not completed & where it has completed, but
-failed.
+On Fri, Jan 20, 2023, at 15:09, Yann Sionneau wrote:
+>      - Fix clean target raising an error from gcc (LIBGCC)
 
-mbox_send_message() has its own completion, and it will time out of the
-system controller does not lower the busy flag. In this case, a timeout
-has occurred and the error can be propagated back to the caller.
+I had not noticed this on v1 but:
 
-If the busy flag is lowered, but no interrupt has arrived to trigger the
-rx callback, the service can be deemed to have failed. Report EBADMSG in
-this case so that callers can differentiate.
+> +# Link with libgcc to get __div* builtins.
+> +LIBGCC	:= $(shell $(CC) $(DEFAULT_OPTS) --print-libgcc-file-name)
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/soc/microchip/mpfs-sys-controller.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+It's better to copy the bits of libgcc that you actually need
+than to include the whole thing. The kernel is in a weird
+state that is neither freestanding nor the normal libc based
+environment, so we generally want full control over what is
+used. This is particularly important for 32-bit architectures
+that do not want the 64-bit division, but there are probably
+enough other cases as well.
 
-diff --git a/drivers/soc/microchip/mpfs-sys-controller.c b/drivers/soc/microchip/mpfs-sys-controller.c
-index da9cfeda6f78..2dd100ab21b1 100644
---- a/drivers/soc/microchip/mpfs-sys-controller.c
-+++ b/drivers/soc/microchip/mpfs-sys-controller.c
-@@ -45,14 +45,25 @@ int mpfs_blocking_transaction(struct mpfs_sys_controller *sys_controller, struct
- 	reinit_completion(&sys_controller->c);
- 
- 	ret = mbox_send_message(sys_controller->chan, msg);
--	if (ret < 0)
-+	if (ret < 0) {
-+		dev_warn(sys_controller->client.dev,
-+			 "MPFS sys controller service timeout\n");
- 		goto out;
-+	}
- 
- 	ret = 0; /* mbox_send_message returns positive integers on success */
-+
-+	/*
-+	 * Unfortunately, the system controller will only deliver an interrupt
-+	 * if a service succeeds. mbox_send_message() will block until the busy
-+	 * flag is gone. If the busy flag is gone but no interrupt has arrived
-+	 * to trigger the rx callback then the service can be deemed to have
-+	 * failed.
-+	 */
- 	if (!wait_for_completion_timeout(&sys_controller->c, timeout)) {
--		ret = -ETIMEDOUT;
-+		ret = -EBADMSG;
- 		dev_warn(sys_controller->client.dev,
--			 "MPFS sys controller transaction timeout\n");
-+			 "MPFS sys controller service failed\n");
- 	}
- 
- out:
-@@ -110,6 +121,7 @@ static int mpfs_sys_controller_probe(struct platform_device *pdev)
- 	sys_controller->client.dev = dev;
- 	sys_controller->client.rx_callback = rx_callback;
- 	sys_controller->client.tx_block = 1U;
-+	sys_controller->client.tx_tout = msecs_to_jiffies(MPFS_SYS_CTRL_TIMEOUT_MS);
- 
- 	sys_controller->chan = mbox_request_channel(&sys_controller->client, 0);
- 	if (IS_ERR(sys_controller->chan)) {
--- 
-2.39.0
-
+     Arnd
