@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD74675503
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EA3675506
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 13:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjATMvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 07:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S230401AbjATMw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 07:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjATMvo (ORCPT
+        with ESMTP id S230060AbjATMw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:51:44 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3BEF423C;
-        Fri, 20 Jan 2023 04:51:43 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 353FB20E1A40; Fri, 20 Jan 2023 04:51:43 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 353FB20E1A40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1674219103;
-        bh=URyTRIuqDCY2NGOe+vSA2YTEI+XPx3DrrID//4KSy68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ROn7BuxEpZm5tJAGHIAm2uKzT1fbzxuMHKTlXSS36RayXzcgdaGyiH6tAwYZ68PnW
-         05SssYkGJaBb9WS+lGmIOiOCQusTvwFCm7dbP7t/0/V1w9Gba6+qbEki1u9dP7PEHe
-         zEke1Q3A3HeQS/fIj2WESibMX2sVqQYyXI/bgzQs=
-Date:   Fri, 20 Jan 2023 04:51:43 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH 4/4] dt-bindings: hv: Add dt-bindings for VMBus
-Message-ID: <20230120125143.GA20797@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
- <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
- <31d78b4c-1416-d8cb-a187-bf924168ee1e@linaro.org>
- <20230117151325.GA9806@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <23a7ae1d-cd49-8c78-5284-4134755ea19a@linaro.org>
- <20230117155258.GA14857@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <f6b80686-d8bc-9c7b-205c-635d4e681f50@linaro.org>
+        Fri, 20 Jan 2023 07:52:56 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD6240DB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 04:52:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 50B8422CF2;
+        Fri, 20 Jan 2023 12:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674219170; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kTQ8Nq5uvi7FWe1ddqkYPpHbQ6IQIb+Qc6lBsv5QfVI=;
+        b=ElA9uAGLE8ZdsC+6EypPtS7ML7QfEqiyXmTJDtC7kgz7sDJz+8iO8gcTxtbxOmhomCzCdz
+        PnD4wZlJVQA8POWLgxzspN9PojhrsHQ0ZkJU6BiHX6ziA54MnRnMVZyzFgvjAvWeO+sbIx
+        RcIHkdF6CjTh/57o5c7UnanqLjT2Cvg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674219170;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kTQ8Nq5uvi7FWe1ddqkYPpHbQ6IQIb+Qc6lBsv5QfVI=;
+        b=ERovqVMAZaPUFruKbfpihDfcPrnt+VfHJu4rR0qhMeuljKCXst6SlU7fA5QkFSXBRc586Z
+        OY4eZq3brnySttAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0E10A1390C;
+        Fri, 20 Jan 2023 12:52:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5ZZqAqKOymMWKAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 20 Jan 2023 12:52:50 +0000
+Message-ID: <b6da6f3b-8d66-2b8c-b02e-14d274260493@suse.cz>
+Date:   Fri, 20 Jan 2023 13:52:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6b80686-d8bc-9c7b-205c-635d4e681f50@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCHv4 2/2] mm: use stack_depot_early_init for kmemleak
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+References: <1674091345-14799-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <1674091345-14799-2-git-send-email-zhaoyang.huang@unisoc.com>
+ <6e9e406a-8a94-4e34-9e5e-f4bb3a321b4e@suse.cz>
+ <20230119144204.a5a67be85544cd29cd656a5b@linux-foundation.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230119144204.a5a67be85544cd29cd656a5b@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 12:43:40PM +0100, Krzysztof Kozlowski wrote:
-> On 17/01/2023 16:52, Saurabh Singh Sengar wrote:
-> > On Tue, Jan 17, 2023 at 04:41:22PM +0100, Krzysztof Kozlowski wrote:
-> >> On 17/01/2023 16:13, Saurabh Singh Sengar wrote:
-> >>> On Mon, Jan 16, 2023 at 07:55:13PM +0100, Krzysztof Kozlowski wrote:
-> >>>> On 16/01/2023 17:48, Saurabh Sengar wrote:
-> >>>>> Add dt-bindings for Hyper-V VMBus
-> >>>>>
-> >>>>> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> >>>>> ---
-> >>>>>  .../devicetree/bindings/hv/msft,vmbus.yaml         | 34 ++++++++++++++++++++++
-> >>>>
-> >>>> Also, there is no "hv" hardware, so that's not correct location. If your
-> >>>> bindings describe firmware, this should go to firmware. Otherwise, this
-> >>>> does not look like suitable for DT. We do not describe software stuff in DT.
-> >>>
-> >>> VMBus is a virtual device this is simmilar to virtio. I can rename this folder to vmbus.
-> >>>
-> >>
-> >> Then virtio directory. The directories are per subsystems (hardware
-> >> classes).
-> > 
-> > Apologies if I was not clear, I meant to say this is a device conceptually
-> > similar to virtio. But this driver has nothing to do with virtio, we should
+On 1/19/23 23:42, Andrew Morton wrote:
+> On Thu, 19 Jan 2023 11:32:36 +0100 Vlastimil Babka <vbabka@suse.cz> wrote:
 > 
-> Bindings are for hardware, not drivers, so if the device serves the same
-> purpose, it's driver differences do not matter.
+>> But to be cleaner I'd also suggest Andrew adds the hunk below. The call
+>> to stack_depot_init() becomes no-op after this patch so it's not a bug
+>> to leave it there, but it's just misleading now.
+>>
+>> ---8<---
+>> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+>> index 91dda5c2753a..55dc8b8b0616 100644
+>> --- a/mm/kmemleak.c
+>> +++ b/mm/kmemleak.c
+>> @@ -2095,7 +2095,6 @@ void __init kmemleak_init(void)
+>>   	if (kmemleak_error)
+>>   		return;
+>>   
+>> -	stack_depot_init();
+>>   	jiffies_min_age = msecs_to_jiffies(MSECS_MIN_AGE);
+>>   	jiffies_scan_wait = msecs_to_jiffies(SECS_SCAN_WAIT * 1000);
+>>   
 > 
-> > be creating a new folder for it OR I am fine moving it under bus if that's
-> > okay.
-> 
-> Since you do not have children here, it's not really a bus to fit under
-> bus directory...
-> 
-> Probably this should go together with virtio bindings to dedicated
-> hypervisor interfaces directory. We do not create directories for
-> specific solutions (implementations) with only one or few bindings.
-> Directories are for entire classes.
+> I added your signoff to this.
 
-I am OK to keep it anywhere, but I believe virtio is not its correct place. I am also
-concern how will the virtio maintainers will perceive it. Ideally we should be renaming
-virtio to virtualization OR hypervisor OR something more generic where both virtio and
-VMBus can co-exist. Please let me know if renaming virtio is acceptable.
+Fine with me, thanks.
 
-> 
-> Best regards,
-> Krzysztof
+> I used not to bother for such minor to-be-folded fixups, but now
+> Stephen sends me automated nags when his scripts detect this.
+
+Ack, will try to remember that next time.
