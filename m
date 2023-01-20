@@ -2,228 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44146747E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288156747E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 01:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjATAPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 19:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S229505AbjATAQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 19:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjATAPJ (ORCPT
+        with ESMTP id S229498AbjATAQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:15:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE01A296B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:15:08 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674173705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8LqwXu5N/XTWGs4+/Z4tXzItJ00/1ZndX0/k1rrP8E=;
-        b=eKlEnIkTdKjtGT69E8Z6QJ7MFm40+hR7iuL6Bd/6NHrr4anJHpV/P+NrwoXigo9dWxsLSb
-        u7w47EdwWcROXZAcyZx9c0XF6t46aCN3srO3K+4SNKMgbDeLkHLhwdux4l+0B6TmbkwnXd
-        DIak/t5TIyoA6CoJYbFoGsb54z5Ld2M48vJyQBCezfrRbq63h3qIck1gtcOeRePleEnKY+
-        YVJ0V4Lb5pQAkm6G/LOqjkOOy8DFtNCCw0F+cKW7sKde8559IlwaJXHgrS+swnUhTPXMfp
-        oApjcvqZj2mzhXf/dkeaqktSVET42KMsGp38u1v6nhL6zUea4XGzugsoebvytA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674173705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8LqwXu5N/XTWGs4+/Z4tXzItJ00/1ZndX0/k1rrP8E=;
-        b=1/LT9TlvZ1s6nN1Ct1cf9Fc9ceE6t8k/2mGxLjs/Wu7vSnhus6qeB7Kk+N5hkxOhcREYKa
-        rJrSTib8/3z7owCg==
-To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Ashok Raj <ashok.raj@intel.com>, Tony Luck <tony.luck@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: Re: [PATCH v1 Part2 3/5] x86/microcode: Add a generic mechanism to
- declare support for minrev
-In-Reply-To: <20230113172920.113612-4-ashok.raj@intel.com>
-References: <20230113172920.113612-1-ashok.raj@intel.com>
- <20230113172920.113612-4-ashok.raj@intel.com>
-Date:   Fri, 20 Jan 2023 01:15:04 +0100
-Message-ID: <87y1pygiyf.ffs@tglx>
+        Thu, 19 Jan 2023 19:16:54 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16128A3140
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:16:53 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9so3889192pll.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 16:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DEPCY4FH8o/XwFLi2kB8iQ/8Z4EhiwjsxNkLh5khKbU=;
+        b=qElKliehHax2qwYlhU/Eg8OFlYXDMj6MvsngbY40n7qtZMIH37uziyb1ykEXC54oL4
+         txnnLzrubLgvAZhPaR6ezXkv3xfifO2GSb1XCaip2Q3lEzdHntjrsWbGhampHCUY/MT6
+         NB5JC0kzvkh7DI28KWlVReA2m49sZnCfts10DTFCbWcizgaqXCgmAefAwpLnDFoV3ga/
+         Y61HYbcntH9Ef0EjAqxj9OyHrLjFdl7kWwsEPgCopX1+oTK40DiYPu4N42TKC/9JRF61
+         +gGGlB9ZfMESjO4P3nx/a9ZSwpIe9sgg/XfSLKsRxm1XC0eCBT4LYLIc23kYwQFl93gB
+         fQ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DEPCY4FH8o/XwFLi2kB8iQ/8Z4EhiwjsxNkLh5khKbU=;
+        b=b8m47jGGE6SXaK70PUP0qLm7ugveQxjzapxGwFIoFWvpdqeQQ4rBtW47zKbfYYheiw
+         KPtLQ4wy8CLBbZ8KSk9Tie+G3NNOt3AguNvOnfOv/jP8SKuIVDdE94/dBFm+iQFIYh2g
+         spRL5NiFtmzjGp7yskRwh0mEg0+zYHgu5v/IK8cAfHcKgCVAQXV7lCkSMA+CfTL7Cr/u
+         ME4mahmSPq7bkC2c9pWxlaRgkxsQ7tcyiWONjI3CtCt11+RB9PM6EcQpOCd8idb6zAy4
+         Xsxd1dvNpdIZdJIf1tmujHXMCs574GLUM2chIQ6IxK4J8kgt1t5spPiyW4JSJD7Iylm2
+         AfIA==
+X-Gm-Message-State: AFqh2krGAm1GsBal+qlouW+LxTGX/p8UL2lY9F+uALKK95YndZu8lQiv
+        hRqqfjMxKDK3tCIZjciynzbhxA==
+X-Google-Smtp-Source: AMrXdXtv78b6LJfbGg24aE8Prbqx4UwLFqXFtgEWYv5zThMVaL8f60chW7KYaaUoA7dLlLVuVXsjkQ==
+X-Received: by 2002:a05:6a20:a00f:b0:b9:14e:184b with SMTP id p15-20020a056a20a00f00b000b9014e184bmr43474pzj.3.1674173812407;
+        Thu, 19 Jan 2023 16:16:52 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w9-20020a628209000000b0058a72925687sm18226715pfd.212.2023.01.19.16.16.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 16:16:51 -0800 (PST)
+Date:   Fri, 20 Jan 2023 00:16:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "dmatlack@google.com" <dmatlack@google.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8ndcGHUHQjHfbF9@google.com>
+References: <20230114111621.00001840@gmail.com>
+ <Y8bFCb+rs25dKcMY@google.com>
+ <20230117214414.00003229@gmail.com>
+ <Y8cLcY12zDWqO8nd@google.com>
+ <Y8cMnjHFNIFaoX27@google.com>
+ <eadc4a4e37ea0b04b8348395244b792bd34a762d.camel@intel.com>
+ <Y8ljwsrrBBdh1aYw@google.com>
+ <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
+ <Y8m34OEVBfL7Q4Ns@google.com>
+ <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ashok!
+On Thu, Jan 19, 2023, Huang, Kai wrote:
+> On Thu, 2023-01-19 at 21:36 +0000, Sean Christopherson wrote:
+> > The least invasive idea I have is expand the TDP MMU's concept of "frozen" SPTEs
+> > and freeze (a.k.a. lock) the SPTE (KVM's mirror) until the corresponding S-EPT
+> > update completes.
+> 
+> This will introduce another "having-to-wait while SPTE is frozen" problem I
+> think, which IIUC means (one way is) you have to do some loop and retry, perhaps
+> similar to yield_safe.
 
-On Fri, Jan 13 2023 at 09:29, Ashok Raj wrote:
-> Intel microcode adds some meta-data to report a minimum required revision
-> before this new microcode can be safely late loaded. There are no generic
+Yes, but because the TDP MMU already freezes SPTEs (just for a shorter duration),
+I'm 99% sure all of the affected flows already know how to yield/bail when necessary.
 
-s/this new microcode/a new microcode revision/
-
-Changelogs are not restricted by twitter posting rules.
-
-> mechanism to declare support for all vendors.
->
-> Add generic support to microcode core to declare such support, this allows
-> late-loading to be permitted in those architectures that report support
-> for safe late loading.
->
-> Late loading has added support for
->
-> - New images declaring a required minimum base version before a late-load
->   is performed.
->
-> Tainting only happens on architectures that don't support minimum required
-> version reporting.
->
-> Add a new variable in microcode_ops to allow an architecture to declare
-> support for safe microcode late loading.
-> @@ -487,13 +488,22 @@ static ssize_t reload_store(struct device *dev,
->  	if (ret)
->  		goto put;
->  
-> +	safe_late_load = microcode_ops->safe_late_load;
-> +
-> +	/*
-> +	 * If safe loading indication isn't present, bail out.
-> +	 */
-> +	if (!safe_late_load) {
-> +		pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
-> +		pr_err("You should switch to early loading, if possible.\n");
-> +		ret = -EINVAL;
-> +		goto put;
-> +	}
-> +
->  	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
->  	if (tmp_ret != UCODE_NEW)
->  		goto put;
->  
-> -	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
-> -	pr_err("You should switch to early loading, if possible.\n");
-> -
-
-Why are you not moving the pr_err()s right away (in 1/5) to the place
-where you move it now?
-
->  	mutex_lock(&microcode_mutex);
->  	ret = microcode_reload_late();
->  	mutex_unlock(&microcode_mutex);
-> @@ -501,11 +511,16 @@ static ssize_t reload_store(struct device *dev,
->  put:
->  	cpus_read_unlock();
->  
-> +	/*
-> +	 * Only taint if a successful load and vendor doesn't support
-> +	 * safe_late_load
-> +	 */
-> +	if (!(ret && safe_late_load))
-> +		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-
-The resulting code is undecodable garbage. Whats worse is that the
-existing logic in this code is broken already.
-
-#1
-	ssize_t ret = 0;
-
-This 'ret = 0' assignment is pointless as ret is immediately overwritten
-by the next line:
-
-	ret = kstrtoul(buf, 0, &val);
-	if (ret)
-		return ret;
-
-	if (val != 1)
-		return size;
-
-Now this is really useful. If the value is invalid, i.e. it causes the
-function to abort immediately it returns 'size' which means the write
-was successful. Oh well.
-
-Now lets look at a few lines further down:
-
-#2
-
-	ssize_t ret = 0;
-        ...
-        ret = check_online_cpus();
-	if (ret)
-		goto put;
-        ...
-put:
-        ...
-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-        ...
-        return ret;
-
-Why are we tainting the kernel when there was absolutely ZERO action
-done here? All what check_online_cpus() figured out was that not enough
-CPUs were online, right? That justfies a error return, but the taint is
-bogus, no?
-
-The next bogosity is:
-
-	ssize_t ret = 0;
-        ...
-        tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
-	if (tmp_ret != UCODE_NEW)
-		goto put;
-        ...    
-put:
-        ...
-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-
-	if (ret == 0)
-		ret = size;
-
-        return ret;
-
-IOW, the microcode request can fail for whatever reason and the return
-value is unconditionally 'size' which means the write to the sysfs file
-is successfull.
-
-#3
-
-Not to talk about the completely broken error handling in the actual
-microcode loading case in __reload_late()::wait_for_siblings code path.
-
-Maybe more #...
-
-How does any of this make sense and allows sensible scripting of this
-interface?
-
-Surely you spent several orders of magnitude more time to stare at this
-code than I did during this review, no?
-
-Now instead of noticing and fixing any of this nonsense you are duct
-taping this whole safe_late_load handling into that mess to make it even
-more incomprehensible.
-
-If you expected an alternative patch here, then I have to disappoint
-you.
-
-I'm not presenting you the proper solution this time on a silver tablet
-because I'm in the process of taming my 'let me fix this for you' reflex
-to prepare for my retirement some years down the road.
-
-But you should have enough hints to fix all of this for real, right?
-
-Thanks,
-
-        tglx
+The problem with the zero-step mitigation is that it could (theoretically) cause
+a "busy" error on literally any accesses, which makes it infeasible for KVM to have
+sane behavior.  E.g. freezing SPTEs to avoid the ordering issues isn't necessary
+when holding mmu_lock for write, whereas the zero-step madness brings everything
+into play.
