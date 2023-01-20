@@ -2,249 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF8967499A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2CA6749A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 03:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjATCxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 Jan 2023 21:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S229755AbjATC7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 Jan 2023 21:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjATCxR (ORCPT
+        with ESMTP id S229453AbjATC7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 Jan 2023 21:53:17 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E24A8381
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 18:53:13 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id rl14so7347934ejb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 Jan 2023 18:53:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwyZYeNCL1hF3Rz9/fqQMn25Wa4u8woxGDcpYr3p8ic=;
-        b=U+Ttc4HScyps/Mxvk6wFlWGgpDCfOvthtEug9p5XWbYBSB17HngzTsFn+TEHuWHivr
-         SMlTVRoVMEybUzSqek6BNYf/7UYmspLimKWUAnmbe4P9Tkqw+o9hAmBEMqz4JcnnbOb3
-         N+JxQmgXiyKMrvOetCDQpcICHOy6vN6A+g6TyPg5s+y0aYM9+qPSPx64AATRHc43oyg1
-         eUb2O8OgSYpk60iF4+74+IidcmfZhEeMeZw1mICrBR4/IghknFmfUJ4RdZ5br0BzIi7s
-         WZLSxqhYQEbB/YCvpLTm6OKqVkTXpvOfUaeukWVlep4D6bGpgs2jSX1c8CZCvy618gHk
-         0JcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QwyZYeNCL1hF3Rz9/fqQMn25Wa4u8woxGDcpYr3p8ic=;
-        b=XJP9r0x2dTSikUVLXopJiqezBT0n49Nq482jiGV30A6d3++P30w5n2hDM6GBtJh3rZ
-         /rlRgY7d82mnE/6Z/Dyh85MRohHqPmoApvIvyQPRCdxwKpV4Cy80TQpMLeM9xoOTSfua
-         NZZJC5f1q1oOnKTDf/VEVBxiErIuaAZrcK/YgY1snp3YeZraP+iIvUO16qSqxTa6z7X5
-         2u0lWH23SmR1MllpP6nO00q/cVsVVsrwgR+oXKEhXFW5ww4qtVreyFS72DQvKDYKOeZY
-         fSRpQ7mwdyvfpzSb2FqLTmqkIAGhkyhP5nOO1g3yOfE0yoSPtRcD2ZJKjWnwiaxfkDW5
-         tPiA==
-X-Gm-Message-State: AFqh2kr4migNIhYSMlDg601GY2JF/2llGwEUzBnlVabJZxTBFPsoYpCt
-        9GK6+kMtaayD/t50ydj5PtncMS45xREOaeReQ57E3qc9EiA=
-X-Google-Smtp-Source: AMrXdXv56QiMUAIgGHW8YiI95eYqT4IqZREQs4w3kTUeR5JkiTM6DdoK9/lD5z9+l8Yc3AEvtq7NO9fZS2NGC3/X8z0=
-X-Received: by 2002:a17:906:468b:b0:867:887d:67a9 with SMTP id
- a11-20020a170906468b00b00867887d67a9mr1157209ejr.561.1674183191621; Thu, 19
- Jan 2023 18:53:11 -0800 (PST)
+        Thu, 19 Jan 2023 21:59:00 -0500
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0589EE3F;
+        Thu, 19 Jan 2023 18:58:11 -0800 (PST)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 20 Jan
+ 2023 10:58:09 +0800
+Message-ID: <55659095-86d7-91b6-2db6-5cdca228bc09@amlogic.com>
+Date:   Fri, 20 Jan 2023 10:58:09 +0800
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 20 Jan 2023 12:52:59 +1000
-Message-ID: <CAPM=9tyh=fnWEUfE_Y5mMVwxgHEUCpev6pXyOQsxG+NpeEVQgA@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.2-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V6 2/3] clk: meson: S4: add support for Amlogic S4 SoC PLL
+ clock driver
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
+        "qi . duan" <qi.duan@amlogic.com>
+References: <20230116074214.2326-1-yu.tu@amlogic.com>
+ <20230116074214.2326-3-yu.tu@amlogic.com>
+ <1jedrqyd3w.fsf@starbuckisacylon.baylibre.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <1jedrqyd3w.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Jerome,
 
-Just a pretty regular week for this stage of things, amdgpu and i915,
-along with some msm and misc others.
+On 2023/1/19 19:20, Jerome Brunet wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> 
+> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
+> 
+>> Add the S4 PLL clock controller driver in the s4 SoC family.
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> ---
+> 
+> [...]
+> 
+>> +
+>> +static struct clk_regmap s4_fclk_div2 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 24,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div2",
+>> +		.ops = &clk_regmap_gate_ro_ops,
+> 
+> On the previous SoC, these fixed divider gate were not read-only.
+> They are marked as critical when necessary, with the appropriate
+> comment.
+> 
+> Why is it different on the s4 ?
 
-Dave.
+In fact, this part of the SOC is no different from the previous G12a/b 
+and so on.
 
-drm-fixes-2023-01-20:
-drm fixes for 6.2-rc5
+I remember that my first version was made according to G12A, and I 
+changed this way under your suggestion.
 
-fb-helper:
-- switcheroo fix
+Maybe you were busy and forgot. For me, this mode and the previous g12a 
+mode function is ok. I can do either. So now how do you decide to go 
+that way?
 
-msm:
-- kexec shutdown fix
-- fix potential double free
+> 
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div2_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+> 
+> [...]
+> 
+>> +#ifndef __MESON_S4_PLL_H__
+>> +#define __MESON_S4_PLL_H__
+>> +
+>> +/* ANA_CTRL - Registers
+>> + * REG_BASE:  REGISTER_BASE_ADDR = 0xfe008000
+> 
+> This multi-line comment style is wrong in clk/
+> REG_BASE is not used so I'm not sure this is useful
 
-i915:
-- Reject display plane with height =3D=3D 0
-- re-disable RC6p on Sandy Bridge
-- Fix hugepages' selftest
-- DG2 hw workarounds
-- switcheroo fix
+I will remove REG_BASE and  change this format in next version.
 
-vc4:
-- fix a memory leak
-
-panfrost:
-- Kconfig fix
-
-amdgpu:
-- Fix display scaling
-- Fix RN/CZN power reporting on some firmware versions
-- Colorspace fixes
-- Fix resource freeing in error case in CS IOCTL
-- Fix warning on driver unload
-- GC11 fixes
-- DCN 3.1.4/5 S/G display workarounds
-The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4=
-:
-
-  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-20
-
-for you to fetch changes up to 3f30a6e67ce49c0068f8058893326db46b6db11f:
-
-  Merge tag 'amd-drm-fixes-6.2-2023-01-19' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2023-01-20
-11:21:20 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.2-rc5
-
-fb-helper:
-- switcheroo fix
-
-msm:
-- kexec shutdown fix
-- fix potential double free
-
-i915:
-- Reject display plane with height =3D=3D 0
-- re-disable RC6p on Sandy Bridge
-- Fix hugepages' selftest
-- DG2 hw workarounds
-- switcheroo fix
-
-vc4:
-- fix a memory leak
-
-panfrost:
-- Kconfig fix
-
-amdgpu:
-- Fix display scaling
-- Fix RN/CZN power reporting on some firmware versions
-- Colorspace fixes
-- Fix resource freeing in error case in CS IOCTL
-- Fix warning on driver unload
-- GC11 fixes
-- DCN 3.1.4/5 S/G display workarounds
-
-----------------------------------------------------------------
-Alex Deucher (2):
-      drm/amd/display: disable S/G display on DCN 3.1.5
-      drm/amd/display: disable S/G display on DCN 3.1.4
-
-Arnd Bergmann (1):
-      drm/panfrost: fix GENERIC_ATOMIC64 dependency
-
-Chris Wilson (1):
-      drm/i915/selftests: Unwind hugepages to drop wakeref on error
-
-Christian K=C3=B6nig (2):
-      drm/amdgpu: fix cleaning up reserved VMID on release
-      drm/amdgpu: fix amdgpu_job_free_resources v2
-
-Dave Airlie (4):
-      Merge tag 'drm-msm-fixes-2023-01-16' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes
-      Merge tag 'drm-intel-fixes-2023-01-19' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'drm-misc-fixes-2023-01-19' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'amd-drm-fixes-6.2-2023-01-19' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-
-Drew Davenport (1):
-      drm/i915/display: Check source height is > 0
-
-Hamza Mahfooz (1):
-      drm/amd/display: fix issues with driver unload
-
-Joel Fernandes (Google) (1):
-      adreno: Shutdown the GPU properly
-
-Joshua Ashton (2):
-      drm/amd/display: Calculate output_color_space after pixel
-encoding adjustment
-      drm/amd/display: Fix COLOR_SPACE_YCBCR2020_TYPE matrix
-
-Lang Yu (2):
-      drm/amdgpu: correct MEC number for gfx11 APUs
-      drm/amdgpu: allow multipipe policy on ASICs with one MEC
-
-Matt Atwood (2):
-      drm/i915/dg2: Introduce Wa_18018764978
-      drm/i915/dg2: Introduce Wa_18019271663
-
-Maxime Ripard (2):
-      drm/vc4: bo: Fix drmm_mutex_init memory hog
-      drm/vc4: bo: Fix unused variable warning
-
-Nirmoy Das (1):
-      drm/i915: Remove unused variable
-
-Rob Clark (1):
-      drm/msm/gpu: Fix potential double-free
-
-Sasa Dragic (1):
-      drm/i915: re-disable RC6p on Sandy Bridge
-
-Thomas Zimmermann (2):
-      drm/i915: Allow switching away via vga-switcheroo if uninitialized
-      drm/fb-helper: Set framebuffer for vga-switcheroo clients
-
-hongao (1):
-      drm/amd/display: Fix set scaling doesn's work
-
-jie1zhan (1):
-      drm/amdgpu: Correct the power calcultion for Renior/Cezanne.
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c                    |  3 +++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c                    |  1 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_job.c                    | 10 ++++++++--
- drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c                     | 11 +++++++++-=
--
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c          | 14 ++++------=
-----
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c    |  1 -
- drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c      |  4 ++--
- drivers/gpu/drm/amd/pm/swsmu/smu12/renoir_ppt.c            |  7 ++++++-
- drivers/gpu/drm/drm_fb_helper.c                            |  7 +++++++
- drivers/gpu/drm/i915/display/skl_universal_plane.c         |  2 +-
- drivers/gpu/drm/i915/gem/selftests/huge_pages.c            |  8 ++++----
- drivers/gpu/drm/i915/gt/intel_gt_regs.h                    | 10 +++++++---
- drivers/gpu/drm/i915/gt/intel_workarounds.c                | 10 +++++++++-
- drivers/gpu/drm/i915/i915_driver.c                         |  5 +----
- drivers/gpu/drm/i915/i915_pci.c                            |  3 ++-
- drivers/gpu/drm/i915/i915_switcheroo.c                     |  6 +++++-
- drivers/gpu/drm/msm/adreno/adreno_device.c                 |  5 +++--
- drivers/gpu/drm/msm/adreno/adreno_gpu.c                    |  4 ++++
- drivers/gpu/drm/msm/msm_gpu.c                              |  2 ++
- drivers/gpu/drm/msm/msm_gpu.h                              | 12 ++++++++++=
---
- drivers/gpu/drm/panfrost/Kconfig                           |  3 ++-
- drivers/gpu/drm/vc4/vc4_bo.c                               |  6 ++----
- 22 files changed, 92 insertions(+), 42 deletions(-)
+> 
+>> + */
+>> +#define ANACTRL_FIXPLL_CTRL0                       0x040
+>> +#define ANACTRL_FIXPLL_CTRL1                       0x044
+>> +#define ANACTRL_FIXPLL_CTRL2                       0x048
+>> +#define ANACTRL_FIXPLL_CTRL3                       0x04c
+>> +#define ANACTRL_FIXPLL_CTRL4                       0x050
+>> +#define ANACTRL_FIXPLL_CTRL5                       0x054
+>> +#define ANACTRL_FIXPLL_CTRL6                       0x058
+>> +#define ANACTRL_FIXPLL_STS                         0x05c
+>> +#define ANACTRL_GP0PLL_CTRL0                       0x080
+>> +#define ANACTRL_GP0PLL_CTRL1                       0x084
+>> +#define ANACTRL_GP0PLL_CTRL2                       0x088
+>> +#define ANACTRL_GP0PLL_CTRL3                       0x08c
+>> +#define ANACTRL_GP0PLL_CTRL4                       0x090
+>> +#define ANACTRL_GP0PLL_CTRL5                       0x094
+>> +#define ANACTRL_GP0PLL_CTRL6                       0x098
+>> +#define ANACTRL_GP0PLL_STS                         0x09c
+>> +#define ANACTRL_HIFIPLL_CTRL0                      0x100
+>> +#define ANACTRL_HIFIPLL_CTRL1                      0x104
+>> +#define ANACTRL_HIFIPLL_CTRL2                      0x108
+>> +#define ANACTRL_HIFIPLL_CTRL3                      0x10c
+>> +#define ANACTRL_HIFIPLL_CTRL4                      0x110
+>> +#define ANACTRL_HIFIPLL_CTRL5                      0x114
+>> +#define ANACTRL_HIFIPLL_CTRL6                      0x118
+>> +#define ANACTRL_HIFIPLL_STS                        0x11c
+>> +#define ANACTRL_MPLL_CTRL0                         0x180
+>> +#define ANACTRL_MPLL_CTRL1                         0x184
+>> +#define ANACTRL_MPLL_CTRL2                         0x188
+>> +#define ANACTRL_MPLL_CTRL3                         0x18c
+>> +#define ANACTRL_MPLL_CTRL4                         0x190
+>> +#define ANACTRL_MPLL_CTRL5                         0x194
+>> +#define ANACTRL_MPLL_CTRL6                         0x198
+>> +#define ANACTRL_MPLL_CTRL7                         0x19c
+>> +#define ANACTRL_MPLL_CTRL8                         0x1a0
+>> +#define ANACTRL_MPLL_STS                           0x1a4
+>> +#define ANACTRL_HDMIPLL_CTRL0                      0x1c0
+>> +#define ANACTRL_HDMIPLL_CTRL1                      0x1c4
+>> +#define ANACTRL_HDMIPLL_CTRL2                      0x1c8
+>> +#define ANACTRL_HDMIPLL_CTRL3                      0x1cc
+>> +#define ANACTRL_HDMIPLL_CTRL4                      0x1d0
+>> +#define ANACTRL_HDMIPLL_CTRL5                      0x1d4
+>> +#define ANACTRL_HDMIPLL_CTRL6                      0x1d8
+>> +#define ANACTRL_HDMIPLL_STS                        0x1dc
+>> +#define ANACTRL_HDMIPLL_VLOCK                      0x1e4
+>> +
+>> +/*
+>> + * CLKID index values
+>> + *
+>> + * These indices are entirely contrived and do not map onto the hardware.
+>> + * It has now been decided to expose everything by default in the DT header:
+>> + * include/dt-bindings/clock/axg-clkc.h. Only the clocks ids we don't want
+>> + * to expose, such as the internal muxes and dividers of composite clocks,
+>> + * will remain defined here.
+>> + */
+>> +#define CLKID_FIXED_PLL_DCO		0
+>> +#define CLKID_FCLK_DIV2_DIV		2
+>> +#define CLKID_FCLK_DIV3_DIV		4
+>> +#define CLKID_FCLK_DIV4_DIV		6
+>> +#define CLKID_FCLK_DIV5_DIV		8
+>> +#define CLKID_FCLK_DIV7_DIV		10
+>> +#define CLKID_FCLK_DIV2P5_DIV		12
+>> +#define CLKID_GP0_PLL_DCO		14
+>> +#define CLKID_HIFI_PLL_DCO		16
+>> +#define CLKID_HDMI_PLL_DCO		18
+>> +#define CLKID_HDMI_PLL_OD		19
+>> +#define CLKID_MPLL_50M_DIV		21
+>> +#define CLKID_MPLL_PREDIV		23
+>> +#define CLKID_MPLL0_DIV			24
+>> +#define CLKID_MPLL1_DIV			26
+>> +#define CLKID_MPLL2_DIV			28
+>> +#define CLKID_MPLL3_DIV			30
+>> +
+>> +#define NR_PLL_CLKS			32
+>> +/* include the CLKIDs that have been made part of the DT binding */
+>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+>> +
+>> +#endif /* __MESON_S4_PLL_H__ */
+> 
