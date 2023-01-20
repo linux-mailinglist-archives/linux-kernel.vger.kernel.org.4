@@ -2,132 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF71675C20
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C60675C23
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjATRw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S230396AbjATRxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjATRw5 (ORCPT
+        with ESMTP id S230301AbjATRxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:52:57 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F368F7DB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:52:16 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so6370496wml.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:52:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oIkO5gx/n6pvdASc/nUcxO9v2oX9ajTXxRa/fHrC1iw=;
-        b=EfH8CCMDzmm1bTRKeFTIov4kfsWe7s938mLZT9qtCqcj12h6hVJR22yPWg2ePHluSc
-         FzVMs/VLuaYku5u93/kmUgo9J1m37jC8n/Xno8P0Ds2t4upKoUM9Hgrr0PZevxd/ol7C
-         1qrR6Inc0z2qaBh/BS+EriD8ufJphDV/rAyb3n5hdTAoiZmKZUdvH4hDFJzj4PUAQ8c/
-         bAo5ZHxjuWbyqzXKaiuyfo60cM7wqL2ftBFohSaVUtiRyvPbrzFDiIWy8DnAqGfpJBRq
-         nigiIVygMg8NsZMG9pS5rvU4BrmS7XAbqTZqgwhEoBgiape/wlQ7pcd+1BR6qxzSJVAJ
-         aLhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIkO5gx/n6pvdASc/nUcxO9v2oX9ajTXxRa/fHrC1iw=;
-        b=MDD7ujhzZGFPZ2dRLeUo6tBC2njcH6Q/c3TfOlF9H1unPjFy46K/mPs0nQQGABu9eG
-         MJcgwwTa85rCPyCRdTLTLjLrFJbo7wcDXRNMUDDCvbdvsXfFxEvjVQRYXTKtVof4Io7I
-         W1xpZHDX4lWdoguBkZtywUw7LziTDByN3VMwBwvsc7USCpOb8L7jaEdpX3vq4pA94pjU
-         v9t2pg5ANzDhzROL5iecptcM62ETqlGl302OVvcMQq0/QVV06UzvIvQ+FMyhWFB/DhYd
-         kRKsWZkvxrZ7Di9Y62nrZbjR3TIlymT5bQEAYRxSZN2jFWR2sClYFYSArwvx90QiaKeh
-         g3Uw==
-X-Gm-Message-State: AFqh2kqrXDsuP3d5c8tWgK9cSEEE5mCfPKWIuAg5P0V2p7EkQv2T91So
-        3KvS34pILTMWwBMvHCjOBi8HNA==
-X-Google-Smtp-Source: AMrXdXvPOJQ9RjAcaEge6XAGDaW53pLS+pQACmE0EPeVKjEkKdYG8JSKmiTT68N+aJStg52+K2JyEQ==
-X-Received: by 2002:a05:600c:4d06:b0:3da:f0a:83d7 with SMTP id u6-20020a05600c4d0600b003da0f0a83d7mr14851108wmp.8.1674237134886;
-        Fri, 20 Jan 2023 09:52:14 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n42-20020a05600c3baa00b003d96efd09b7sm3732949wms.19.2023.01.20.09.52.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 09:52:14 -0800 (PST)
-Message-ID: <87005399-4cef-c705-24ee-11ed49071ddc@linaro.org>
-Date:   Fri, 20 Jan 2023 18:52:12 +0100
+        Fri, 20 Jan 2023 12:53:19 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D44C16D;
+        Fri, 20 Jan 2023 09:52:56 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2C66C33795;
+        Fri, 20 Jan 2023 17:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674237175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNyEsjm7hTRHmPW+XmOpTTJAr6gba2jkZnI10liz/yE=;
+        b=GjbiRjgqTWyXCgMsFjtKYs9AvuDkHg49it+0qX0XS2aTMfPj7Mw2LGq4NMAoFYcaj9PVej
+        vMAyYMvPMBYBuZ3p8DCAt5IgRAcn/Lj3Sm6fk2rJ/G7ZgTQRF8kz1VRmIiI7Mso2WhAkiI
+        qH5MslyqTpbp47xkbnG2yy0C43RDIu8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674237175;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNyEsjm7hTRHmPW+XmOpTTJAr6gba2jkZnI10liz/yE=;
+        b=JKFUMRfVDlOz7Gei5bw7WnRU5/xBTxCqxl9tiG+nANWfa+RRqPUrsxile+0ykUzlS10JwM
+        oHseEXEeJdaFmKAQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F157F2C141;
+        Fri, 20 Jan 2023 17:52:54 +0000 (UTC)
+Date:   Fri, 20 Jan 2023 18:52:53 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "Erhard F." <erhard_f@mailbox.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v2] of: Fix of platform build on powerpc due to bad of
+ disaply code
+Message-ID: <20230120175253.GW16547@kitsune.suse.cz>
+References: <20230118215045.5551-1-msuchanek@suse.de>
+ <20230119095323.4659-1-msuchanek@suse.de>
+ <CAL_JsqKo+mdjA485KDb1ZauJcbOU-FR1G-Z2sYYNu7+Zn32wSA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] memory: renesas-rpc-if: Remove redundant division of
- dummy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        linux-kernel@vger.kernel.org
-References: <20230112090655.43367-1-wsa+renesas@sang-engineering.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230112090655.43367-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKo+mdjA485KDb1ZauJcbOU-FR1G-Z2sYYNu7+Zn32wSA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/01/2023 10:06, Wolfram Sang wrote:
-> From: Cong Dang <cong.dang.xn@renesas.com>
-> 
-> The dummy cycles value was wrongly calculated if dummy.buswidth > 1,
-> which affects QSPI, OSPI, HyperFlash on various SoCs. We're lucky in
-> Single SPI case since its dummy.buswidth equals to 1, so the result of
-> the division is unchanged
-> 
-> This issue can be reproduced using something like the following commands
-> A. QSPI mode: Mount device with jffs2 format
->     jffs2: CLEANMARKER node found at 0x00000004, not first node in block (0x00000000)
-> 
-> B. QSPI mode: Write data to mtd10, where mtd10 is a parition on SPI Flash
-> storage, defined properly in a device tree
-> 
-> [Correct fragment, read from SPI Flash]
-> 
->   root@v3x:~# echo "hello" > /dev/mtd10
->   root@v3x:~# hexdump -C -n100 /dev/mtd10
->   00000000  68 65 6c 6c 6f 0a ff ff  ff ff ff ff ff ff ff ff  |hello...........|
->   00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-> 
-> [Incorrect read of the same fragment: see the difference at offsets 0-3]
-> 
->   root@v3x:~# echo "hello" > /dev/mtd10
->   root@v3x:~# hexdump -C -n100 /dev/mtd10
->   00000000  00 00 00 00 68 65 6c 6c  6f 0a ff ff ff ff ff ff  |....hello.......|
->   00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-> 
-> As seen from the result, 4 NULL bytes were inserted before the test data.
-> Wrong calculation in rpcif_prepare() led to miss of some dummy cycle. A
-> division by bus width is redundant because it had been performed already
-> in spi-rpc-if.c::rpcif_spi_mem_prepare()
-> 
-> Fix this by removing the redundant division.
-> 
-> Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-> Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
-> Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Sadly, I cannot test this patch myself because I don't have access to
-> hardware which uses a buswidth > 1 for the dummy read. However, from
-> code review, this patch makes sense. The division by buswidth is done
-> twice, once in the SPI driver and once in the RPC core. It should stay
-> only in the SPI driver.
+Hello,
 
-Any tests or further reviews on this? If not, I'll pick it up in few days.
+On Fri, Jan 20, 2023 at 11:23:39AM -0600, Rob Herring wrote:
+> On Thu, Jan 19, 2023 at 3:53 AM Michal Suchanek <msuchanek@suse.de> wrote:
+> >
+> > The commit 2d681d6a23a1 ("of: Make of framebuffer devices unique")
+> > breaks build because of wrong argument to snprintf. That certainly
+> > avoids the runtime error but is not the intended outcome.
+> >
+> > Also use standard device name format of-display.N for all created
+> > devices.
+> >
+> > Fixes: 2d681d6a23a1 ("of: Make of framebuffer devices unique")
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> > v2: Update the device name format
+> > ---
+> >  drivers/of/platform.c | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> > index f2a5d679a324..8c1b1de22036 100644
+> > --- a/drivers/of/platform.c
+> > +++ b/drivers/of/platform.c
+> > @@ -525,7 +525,9 @@ static int __init of_platform_default_populate_init(void)
+> >         if (IS_ENABLED(CONFIG_PPC)) {
+> >                 struct device_node *boot_display = NULL;
+> >                 struct platform_device *dev;
+> > -               int display_number = 1;
+> > +               int display_number = 0;
+> > +               char buf[14];
+> > +               char *of_display_format = "of-display.%d";
+> 
+> static const as suggested and can we just move on please...
+Only const, static could be dodgy
 
-Best regards,
-Krzysztof
+> >                 int ret;
+> >
+> >                 /* Check if we have a MacOS display without a node spec */
+> > @@ -556,7 +558,10 @@ static int __init of_platform_default_populate_init(void)
+> >                         if (!of_get_property(node, "linux,opened", NULL) ||
+> >                             !of_get_property(node, "linux,boot-display", NULL))
+> >                                 continue;
+> > -                       dev = of_platform_device_create(node, "of-display", NULL);
+> > +                       ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
+> 
+> The boot display is always "of-display.0". Just use the fixed string
+> here. Then we can get rid of the whole debate around static const.
 
+I prefer to use the same format string when the names should be
+consistent. Also it would resurrect the starting from 1 debate.
+
+But if you really want to have two strings I do not care all that much.
+
+> 
+> > +                       if (ret >= sizeof(buf))
+> > +                               continue;
+> 
+> This only happens if display_number becomes too big. Why continue on?
+> The next iteration will fail too.
+
+Yes, there is no need to continue with the loop.
+
+Thanks
+
+Michal
+
+> 
+> > +                       dev = of_platform_device_create(node, buf, NULL);
+> >                         if (WARN_ON(!dev))
+> >                                 return -ENOMEM;
+> >                         boot_display = node;
+> > @@ -564,10 +569,9 @@ static int __init of_platform_default_populate_init(void)
+> >                 }
+> >
+> >                 for_each_node_by_type(node, "display") {
+> > -                       char *buf[14];
+> >                         if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
+> >                                 continue;
+> > -                       ret = snprintf(buf, "of-display-%d", display_number++);
+> > +                       ret = snprintf(buf, sizeof(buf), of_display_format, display_number++);
+> >                         if (ret >= sizeof(buf))
+> >                                 continue;
+> 
+> Here too in the original change.
+> 
+> >                         of_platform_device_create(node, buf, NULL);
+> > --
+> > 2.35.3
+> >
