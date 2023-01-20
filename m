@@ -2,187 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5954675BF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCA4675BF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 18:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjATRtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 12:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S229615AbjATRsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 12:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjATRst (ORCPT
+        with ESMTP id S230384AbjATRst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 20 Jan 2023 12:48:49 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCA86FD10;
-        Fri, 20 Jan 2023 09:48:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dbFUiC49x/OJ30zYJ7iq2zM5H0+0xysg2Hv+KixjHQQVtc95vdYyKyCfgUFbDnBFqsvd54WPyzxwEDSZe+JSVg+9vMaewr1JWcCEwEcaYavN1pya69y3ppeHX2axsaSy77oZTY/lXfIUI1de/YTGEci+SUOFwiP3buR+eveotGvDbbeJpqyXwHzgGV+oVVCXRFeTbwNwqNqH5RAsZuKiosRtBO0cnnTzABG0cZbi6vepqVz894TaM7l1uq7lWbOIwPGmqMA1iQ8rs3Qv72O/J8251BeIk1plMUpEfeNi/CH/sGeaXwC34ffwt9eHZNSwLndfQDtKXBNXE8CwqGH0nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DezuBQ3WveODtuy7UruZjCHwcuP6jyUKWJu6mpJaBFg=;
- b=ZrVV4WbDJLc6txYhSsqMbfKx2HX6a6DmJRwEn5txDnZPVoXapD/N9MciWaiiT8ZAHltUoponuxvOHod0A8TDHbcWVn4/bDJBdVqxWjGmureptlL9bgf1ZbFviStAuhYYURFfmh2SjNzCClARNpPLrVoPFMLz30dbwVG5cHtUjcxbrzppHSD5uwnHf0AeMsdt+QyV3r6p5PHtrj0RSE7+KaGByzRQDTZP1M8sYzjKspd62Me0bByWU8E1i/dTbEUNUCBXxUGdRrzG1AletCYUD24bJh9pqtvq2YxH54XcQ+0V8lN7GlXHtlrv4qokNTXEzYeIzKcnjMqxea1ab+NGdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DezuBQ3WveODtuy7UruZjCHwcuP6jyUKWJu6mpJaBFg=;
- b=D6yGKeFgb6p23OJLZzLG9WOcVQAqxNkkkRuO7LKWeu9Fw1GNGqebslP4UHXt53YqMqhCZUkCwxL+xS64cRh/gicb2Sz3E+JdOvbEaiUssehtVgkxjA/CxlOU1oBTXHHiuQcvMyo8nxRNYrtuZ6xuA5ZU4N9V69alFOizjkFaIHo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20)
- by PH7PR12MB8108.namprd12.prod.outlook.com (2603:10b6:510:2bc::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Fri, 20 Jan
- 2023 17:48:33 +0000
-Received: from BL1PR12MB5995.namprd12.prod.outlook.com
- ([fe80::cb0c:2b31:6f3f:12a6]) by BL1PR12MB5995.namprd12.prod.outlook.com
- ([fe80::cb0c:2b31:6f3f:12a6%8]) with mapi id 15.20.6002.027; Fri, 20 Jan 2023
- 17:48:33 +0000
-Message-ID: <eeb060d5-4a90-ee92-91c3-af94a57a2859@amd.com>
-Date:   Fri, 20 Jan 2023 11:48:25 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 00/39] Shadow stacks for userspace
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        akpm@linux-foundation.org, Andrew.Cooper3@citrix.com,
-        christina.schimpe@intel.com
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
-Content-Language: en-US
-From:   John Allen <john.allen@amd.com>
-In-Reply-To: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0005.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::25) To BL1PR12MB5995.namprd12.prod.outlook.com
- (2603:10b6:208:39b::20)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D98388746
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:48:41 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r2so5513467wrv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 09:48:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=usZwUafmssHHjBMbZ97d1dp/H4o4iCVGkXuyEhBu/eE=;
+        b=Xk8v6S4B9l/1/rZC5Acfrnhs5lgw/5B2wVyXT0iRjq2/6CzwmVk2HVGvuCnXq25YXm
+         7cXqKvaFgFecajORnMSICkCtzhDysvIuMaPZJ94snTgQGUbtynCWhpOtJmthFeTgqkJn
+         llBYq1ZjfKp4J1H0YZJfFqVXXGwTAq1xXzPKWxBCDC6HCQfgYdlxa0QDpYlkmhZB6SBy
+         YisYi/DGL2scYRLQwGhRtDm6Ze9Mp2Odt8idZOLZCMsASSiqCankWGGxlzgfMiSmbLEe
+         ENPMDZ6CzrCrFOb7UgoyE58gi+nHNarCy+wsA7liMfKbFz8pYZ4jVL2MIz8Lm5451MHV
+         QoQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=usZwUafmssHHjBMbZ97d1dp/H4o4iCVGkXuyEhBu/eE=;
+        b=5kwQ3+ZSRrfDln0frAJxtYs/qh7/F8aja2Dufv1ui4oBveP/gpykwrQrPq15wKffp/
+         wUQFswtPMBiomhb89FB7RhqGlgj3HAjKGpidM4S8uK+WITanzzzbfKguSImiB5q/52cl
+         0aeR1fKZwx7lH8+9cGYpgAdOKJWqTkBdL1gwx6jKSoKcRtaGMVjzS4wmzRWoNakeSV8z
+         rS5WgMcqDrj+WRP26d/kSISNCwAtpLm9urlpp282+OTqNwwqjbKAM3Ek/bsi5orPhEgn
+         HUfgLomw+FwS2FIhcdGs4o6ZG8IPZRTQ8YS2WSeARTPLD1psj3q6RnrrngpN80o355ON
+         FDlQ==
+X-Gm-Message-State: AFqh2kqnpeA/SFYtwzUI3F+2HEsJuoSRl8dweGMIjJYLHGftwE83nawp
+        fiAtSiyvr5ltGlXwLvMl8MraQg==
+X-Google-Smtp-Source: AMrXdXuScCkgBt6ufGU4Q+zUCLg+jabHQ01J+OwfTLnAkLy8rziGHZ9jITRpp+e1sZ2s8g6Fe6Q6EQ==
+X-Received: by 2002:adf:e70a:0:b0:2b5:90e:cfa5 with SMTP id c10-20020adfe70a000000b002b5090ecfa5mr13962181wrm.29.1674236920097;
+        Fri, 20 Jan 2023 09:48:40 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id r12-20020a5d4e4c000000b002be1d1c0bd7sm9540535wrt.93.2023.01.20.09.48.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 09:48:39 -0800 (PST)
+Message-ID: <ae73ae73-3c5f-d8dc-fda8-0916c976a835@linaro.org>
+Date:   Fri, 20 Jan 2023 17:48:38 +0000
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5995:EE_|PH7PR12MB8108:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8465f3c-eb16-42c7-ac34-08dafb0e8c8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /k5sLPtKY0EFFl0idm0QzkYOFFJxQ8vJ55SrthoULcPGHMkorOi0bD+dIOFzyaV4aAPk0+M1P5zAy2IyEJVgJYw1NWuXVZNudDL8Bg4np1idrUdwS1dPZVmYQF6EfBAdUXRBLyp3EqcKU7HDFpj9MAF4TKaVQXu5bGciSI57zq51dBXxKnYQ22xnNc6ytrzl69vlh/q5amE3yj4Cg/SC4bw3LVw7G/AcVTgf+EsVLr9C5z7xRBq1eAtK0jeVhNaebhMm1WLE6euLhhC2y8QsGpm+imqg6/6/kbEUV6JlAq+nMSN/+gVfIG1VD9RTV2ZoFIgnwyfxlafG3xybo5E2jDjAm0pTJVnagJVKNQzk3iG9xKZxWL6RlsGxPT6AOieoFV2AGhq38LDjvMandofDDahevJwZ9PpEIQ1ul7W+9NqaZdXke5P7OKqPGkLZaWjaCyM1YFHlVrI75OAXSU0cOyzbwNdR/8ZIe1Dzl87IjmSizbsmE1RIZf3rmRv7DeEzwDfz+S0V+06cnqoitGETyFMT/RxZP4J5m7Qa00TTpTNSobHLtBxu9X1WVA/yEPYYbJspgb43ZwcZcdQTx76qyfE3EODddUXvpkB0/fN6hrR5qVvSzC4naGUVS6uvIJQ0nkYvEh8xLJ8UMahTOe4XCmJ99JSbKL+KoTsgMUXpW513Gdr+3xF9Ip9V5bwlg9vAChTkvEHQ10Q1HyDELIrlk8LLaSrM9e8RqeQFJEzxmoOYCCyVtXl8U+q/xt1GATCsondKx+WpgdAZ/EW4OTC93MsNQb/xD1OOUObikBskVEc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5995.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(451199015)(186003)(6666004)(6512007)(31686004)(478600001)(26005)(38100700002)(110136005)(2616005)(6506007)(316002)(8676002)(966005)(6486002)(53546011)(66476007)(66946007)(66556008)(41300700001)(8936002)(83380400001)(2906002)(5660300002)(7406005)(44832011)(7416002)(36756003)(86362001)(31696002)(921005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDNaVXhNaWtmYnZTVUtXN2R5L1lyWEpHTVRkcFBpMmNMRlRWL09HUUx2RlFm?=
- =?utf-8?B?bFNwTisweUUrdWFDSGVjQnhTN0UvTjBLSnIvdWVXWlg2RXBxUThzUEdIMDNZ?=
- =?utf-8?B?MkNObzV2TjgxdTVLYjNIT3FOeUlzQ2dZTEk4L2ZaOEMrYkVCY2d0MlI1azh3?=
- =?utf-8?B?MjRDcTJvN2NwN0tmWERqY0x3Ykk1R3BzRFloYmxKMFdMZXNWcGFzbm1EMDZp?=
- =?utf-8?B?UStxNU1FT2k5a212bVhhQ2FoNk5mS0swR2IxeVVtRUpjb1FmU29BTHdWaVhV?=
- =?utf-8?B?Nk1HeWhqTUVNNVgreVhwemY1SUh5QVpkb0Y4V0FlUk5LUzMzdHlRcWtIRGk2?=
- =?utf-8?B?amdJejBXREFNTkJkMWNtVWNqR0oyMjJnV2VWMEZWa2MxS004Yml4MkxDMEM0?=
- =?utf-8?B?MVlzM3hqdVVKQUhRcGplZE54bUROUzZpa01VWFlZNHIwRGI2UmJZWGZXMFZi?=
- =?utf-8?B?N3oxbFRqRFdPeWU5emJBLzZtSEU4cDZZS09uU3hNcWltSHFYSmtmRkhTZkJk?=
- =?utf-8?B?eDVlaStxSVlMa3BXTnFVcVNHVDBmcHdqL1U4VXc4b0xObHFibGtNdDVlR2Iv?=
- =?utf-8?B?Wm9Ta0IxNk1jZ0ZhUFlzMnBHR0ZqNDRLaXIwcVJPZWJEV01EUUtrWURUZ2dO?=
- =?utf-8?B?THhFYW1ZR0ZiSXg4akxnVkxTZlV5U0xVZUZUd2x5NTl3MHE1ajJuUHdCalRS?=
- =?utf-8?B?QnBJenpUUnJWTUpxakQwdk40QVdJbk0xQnlrSG5wd2VlUUVIL3hGZDljK2tw?=
- =?utf-8?B?eTExZW5pWjRpbWk4SVU2d3dzSndFVFd6WGRUQXNmQjRJdjRmaG5MeUlzYVE4?=
- =?utf-8?B?MjR2TkN3YXI4ZHk2Yk5SZU1KNjhrN01ZZHhLVjI2bjEwNWVFWWRiQ0NyRExz?=
- =?utf-8?B?cmtxYmNtWGUvVXRBWmtkR0pCVG1kZWtCb2o5cmVBM3ZhMWJraGJUQW1ydmlB?=
- =?utf-8?B?S0VLd0luQUFpMUNKSThHUWRzekNsS1dxU3lVVFhWT3lzRTRLUmdBbS95RmVN?=
- =?utf-8?B?Q2xOQkxVVE1EWitqZFdCYXcvckZ0TFhtWnlubUlGbEE2aTJ6TjlFT1ZXZ0dz?=
- =?utf-8?B?ei9JMnZ3b1hMbm1lTzFyZU1ET2xFaDNjeXlCWm4vVDBENWtiREN2YUtzZzM3?=
- =?utf-8?B?ZU9nc2RBZ3BOQnpYL0NoYTd4ZWJ1dENlYmlaNThFeElpNWVxVytaSFEvTnNW?=
- =?utf-8?B?SGJDWmduaDlMZ0tSNnhGdkNiNWVGQ1VUeSt3eTF0QmJFV3JkQTFSV0hXSzRz?=
- =?utf-8?B?a0lxRk1WTU5BYVQ4cmExR3ZhR1pUU2ltYTI5TG5haFBSblZnTE9KemJyYmVW?=
- =?utf-8?B?OVUxZEM1SS9UUXpnYnZha28weGk1ellab1BmSXl4OHlMNFJ6cTU2K3ExM3hE?=
- =?utf-8?B?dEQwaVBpRU0zRVQ2MisyNnkxbUtrR2lzc2krRnVmMEJDLzFWYWhvN1d0Y080?=
- =?utf-8?B?WnpjVGpqZXBPMWJEZ1h2Z0FBOFI4TmYrRmt4T0hvL2o1UHY3WmwxaG5NeGZP?=
- =?utf-8?B?bHJrSjd2S2RnTkJiSVVxV3VCSjBmeExkcGJvK2xnQXpSSWl4U0FZdVFRaEt3?=
- =?utf-8?B?eGg2Q2FMMjJ5MFpCNE9kZVZFWlAwaURYRUdCNTFrTUNNcTNoSE44b1VwV09B?=
- =?utf-8?B?eXgrTXJCazhIdmozYVlxNmxHcFFyYWZ6b1JrcStaellQS2pGTHltWmc1WTlt?=
- =?utf-8?B?TzM0VU04OEN6ZHo4YXl0Ky9ZVVFzNjltcjNNSFNiRVJ4dHU5blBaQmFIZEVO?=
- =?utf-8?B?dWtHQ0VaRkpzOFl0LzdQY1Y3RGl5ZVRlczY4eTlMdG5iWkpKS09ia1JPSGl1?=
- =?utf-8?B?ekltT3diUERWeWpIZjZGRnp4R2paRWJWOFpQb0ttNlI2MHJYbmVMWFJJbWlF?=
- =?utf-8?B?ajdPemRvc3o2eCtKdzZyZC91Wko3ZytPU1A1YXlESytzYWVMWlVjbkRRVFZu?=
- =?utf-8?B?SUVvbTVaQlBDZ244TXZhUGkva2p5M01md3JXYUdUUnV1RkFpcVRlbThTUVpx?=
- =?utf-8?B?dVVMWUFQTXQzTTR2WVlZWmJiY0dONldmSkFHVzBhL1hacUpkSGhzeFZuKy8r?=
- =?utf-8?B?WHlBamhOZ2QzRHZpRmpxdndlVGViU3g3TU5sTEJtaktoZzBENzRBZEd5ekZh?=
- =?utf-8?Q?JF00rPd5FiPCocWcYhqMmd1th?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8465f3c-eb16-42c7-ac34-08dafb0e8c8b
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5995.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 17:48:33.5079
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OxzbH0TSmJQ7uHZFw9DcWzpTfUEIvCTVjzR5ZWJJMCFmL2qGwyq/1FGGmSdnh8PxZvrldF32HXMYG2Bqz+6ZGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8108
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] of: property: fix #nvmem-cell-cells parsing
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Robert Marko <robimarko@gmail.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aisheng Dong <aisheng.dong@nxp.com>
+References: <20230110233056.3490942-1-michael@walle.cc>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230110233056.3490942-1-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 3:22 PM, Rick Edgecombe wrote:
-> I left tested-by tags in place per discussion with testers. Testers, please
-> retest.
 
-Re-tested on my AMD system (Dell PowerEdge R6515 w/ EPYC 7713) and it looks
-like everything is still working properly.
 
-The selftests seem to run cleanly:
+On 10/01/2023 23:30, Michael Walle wrote:
+> Commit 67b8497f005f ("of: property: make #.*-cells optional for simple
+> props") claims to make the cells-name property optional for simple
+> properties, but changed the code for the wrong property, i.e. for
+> DEFINE_SUFFIX_PROP(). Fix that.
+> 
+> Fixes: 67b8497f005f ("of: property: make #.*-cells optional for simple props")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Tested-by: Robert Marko <robimarko@gmail.com>
+> ---
 
-[INFO]	new_ssp = 7ff19be0dff8, *new_ssp = 7ff19be0e001
-[INFO]	changing ssp from 7ff19c7f1ff0 to 7ff19be0dff8
-[INFO]	ssp is now 7ff19be0e000
-[OK]	Shadow stack pivot
-[OK]	Shadow stack faults
-[INFO]	Corrupting shadow stack
-[INFO]	Generated shadow stack violation successfully
-[OK]	Shadow stack violation test
-[INFO]	Gup read -> shstk access success
-[INFO]	Gup write -> shstk access success
-[INFO]	Violation from normal write
-[INFO]	Gup read -> write access success
-[INFO]	Violation from normal write
-[INFO]	Gup write -> write access success
-[INFO]	Cow gup write -> write access success
-[OK]	Shadow gup test
-[INFO]	Violation from shstk access
-[OK]	mprotect() test
-[OK]	Userfaultfd test
-[OK]	32 bit test
+Applied thanks,
 
-Additionally, I could see the control protection messages in dmesg when
-running the shstk violation test from here:
-https://gitlab.com/cet-software/cet-smoke-test
-
-ld-linux-x86-64[99764] control protection ip:401139 sp:7fff025507d8 ssp:7f186e017fd8 error:1(near ret) in shstk1[401000+1000]
-
-Tested-by: John Allen <john.allen@amd.com>
+--srini
+>   drivers/of/property.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 8d9ba20a8f90..95b838185b2f 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1202,8 +1202,8 @@ static struct device_node *parse_prop_cells(struct device_node *np,
+>   	if (strcmp(prop_name, list_name))
+>   		return NULL;
+>   
+> -	if (of_parse_phandle_with_args(np, list_name, cells_name, index,
+> -				       &sup_args))
+> +	if (__of_parse_phandle_with_args(np, list_name, cells_name, 0, index,
+> +					 &sup_args))
+>   		return NULL;
+>   
+>   	return sup_args.np;
+> @@ -1256,8 +1256,8 @@ static struct device_node *parse_suffix_prop_cells(struct device_node *np,
+>   	if (strcmp_suffix(prop_name, suffix))
+>   		return NULL;
+>   
+> -	if (__of_parse_phandle_with_args(np, prop_name, cells_name, 0, index,
+> -					 &sup_args))
+> +	if (of_parse_phandle_with_args(np, prop_name, cells_name, index,
+> +				       &sup_args))
+>   		return NULL;
+>   
+>   	return sup_args.np;
