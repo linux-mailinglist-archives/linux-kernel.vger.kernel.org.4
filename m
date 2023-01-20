@@ -2,228 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FDC675175
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D435467517D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 Jan 2023 10:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjATJqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 04:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
+        id S230131AbjATJro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 04:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjATJqJ (ORCPT
+        with ESMTP id S229749AbjATJrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 04:46:09 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9B07AF17
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:46:08 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h16so4294671wrz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 01:46:07 -0800 (PST)
+        Fri, 20 Jan 2023 04:47:41 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ABFA5D2;
+        Fri, 20 Jan 2023 01:47:37 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id z31so446806pfw.4;
+        Fri, 20 Jan 2023 01:47:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=nsY3N5w/OcuIb37vMvk7tYxNViydXZA0c/CHmVvoNOo=;
-        b=CLZIyAwQPLhK2AxK27j6A6njGog/a2p4aS79YR9wE4GKVD+dwv/7AlHUBNt8aQsIGo
-         /cQH9GianjLCNV9/ankI533Tm3aUqjyjEKh5g2/Ut0g/Ee/sQ21/Ww48Ya0G2z4vSkTA
-         /3LQrIEDUN0SfJL48+K2Dx2+8MO6JqU+ShhlgcvtbAqV7/Z3rf7zE3AYbJSYK7a/daqn
-         YyM+cneeVpNvpm0sgUCpVkp7IYAKwXpv23Iw7mOawy4pE6HdnLVinEM+fDDR0q0nA0Wv
-         iMQ8OKyVx5EP5gAqFGTXWx2tQu848yqiAqs7yqy5/n6TYRRRqnevZyIiiIFamyhkGVSQ
-         +bEg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rPcOeTgKA9sFp6sSVwUMHgyKLqDrFQAyiFwiVpjLuSc=;
+        b=V/AmSrPbxbBAdPP/f05pbBgJQSBg36+auPUDMf8w2+eqdExEerGXZ/06QwEOayvHud
+         6vBxPxxoEDZg98CjuC0dNk7oM3tF0r+434LHeuGQf84FWmm690TOUVsZCOZ6MAeJV0+3
+         qRC6VI5ZVrK4outXs1w3w3D/cGvETGZD22m7gILA9t/X1lvFPaUwJlhaNIRJfSEVuZPB
+         R6ccCThYFlhZdSKwwrRaY2X8NUkaqaJmXw1Xes60LQLuda91Sp3A0jMXMWtiDwiPMSuP
+         F4hsnlKEqCmcsFvY7TKnDc2ATNY/IaYWefQF8xyp3ZEi7NL9RFLIDO9d15r8aZIG7x/C
+         LWiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsY3N5w/OcuIb37vMvk7tYxNViydXZA0c/CHmVvoNOo=;
-        b=JjzdJLuEhCa3xIgRi1x6Z8XtvbosNjYklW49s09obt9BOnW4ODN3kwBCSy/4oA6nMC
-         Se3HkEipEODdULT3u/O1iExXUpFXR1E5QXcw3pmbBEuLi4LovDlyW1Qi3qjztcHnTUp1
-         fshcLCNpfEwP2uBr1xjwVMnSPhEJg9y5l1dJt2ninUS3Du4m6WlV5Cx5uCQykc3O6c7/
-         MOnEhAybiQfjhh89Ly4dmNWNiCaHpplMxMMbsRreU270jhHE3TAk987S6FxM77gKx+Qr
-         UE0W79Kj1mR5J2LDxAk8H/83tW4sQmSfQg6Ka2RTi69XsgfBrbLO1K1tDJ3se42djDGD
-         NfJA==
-X-Gm-Message-State: AFqh2krEKyqwf3H0PxgV5my4G52d8tyQCc7ZNhVbZ5K/k9VEZ8g0KwGf
-        +9Rwcg6RcauttHSFw+ME30shgQ==
-X-Google-Smtp-Source: AMrXdXvyT9hQzOoOVCprmqSF4N4hkPCiVWjbkYVZURild1qzZrpIlziAHbPHLBqJQPPZmE9kvU1gEw==
-X-Received: by 2002:a05:6000:1a8f:b0:2be:3fa7:ab4e with SMTP id f15-20020a0560001a8f00b002be3fa7ab4emr6333419wry.38.1674207966518;
-        Fri, 20 Jan 2023 01:46:06 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id q12-20020adff50c000000b002bc83b85180sm637714wro.114.2023.01.20.01.46.05
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rPcOeTgKA9sFp6sSVwUMHgyKLqDrFQAyiFwiVpjLuSc=;
+        b=Pcp+sbauUuxwRPtazIjmxa8suiKdl35nWMCO28J7W38QPb6l2NScu5kDNOfYjogn0M
+         1rdNmHXfrxCfcJDAi2J2gv4YAckpE095MasMKTb7bwJeiX9oqMe2G7RjNRl/NPw0MwW+
+         6j+ztXUjzu1lrsH3H1WPFZIbp4EJZ0JHlbiylrHeJ6uQYTJn62C+4hiQy3XF5putG8mP
+         FlsGzblXp53lW92ypuAjbsKwCA7ImZ1ByKQXTaq5/Bnrt7a+U05h51ksdYG22IcWBwE6
+         fyUTT086GgAgUeGY3C5z+lLMIzAda55I6M3ROgOkhrJh+IRnSPlyxhW3TGYe55gEMrfL
+         g+vg==
+X-Gm-Message-State: AFqh2koxD4u395MlnZtQ3JxHkYlVGBYYi5ajfUNUkUtls5pEAkDQggHV
+        9pkZGwZ1sAi+UBTmYfJ9yGs=
+X-Google-Smtp-Source: AMrXdXvu2Nl2zxBEaAW5n4+lP+XXPnmrE/mONOPpF1bQtyhemIsleknFhv9g6Xd70UYaBXE9V43iQA==
+X-Received: by 2002:aa7:850c:0:b0:580:ccae:291c with SMTP id v12-20020aa7850c000000b00580ccae291cmr14963503pfn.24.1674208057319;
+        Fri, 20 Jan 2023 01:47:37 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id u5-20020a626005000000b005815017d348sm19308863pfb.179.2023.01.20.01.47.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 01:46:05 -0800 (PST)
-References: <20230116074214.2326-1-yu.tu@amlogic.com>
- <20230116074214.2326-3-yu.tu@amlogic.com>
- <1jedrqyd3w.fsf@starbuckisacylon.baylibre.com>
- <55659095-86d7-91b6-2db6-5cdca228bc09@amlogic.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Fri, 20 Jan 2023 01:47:36 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
-        "qi . duan" <qi.duan@amlogic.com>
-Subject: Re: [PATCH V6 2/3] clk: meson: S4: add support for Amlogic S4 SoC
- PLL clock driver
-Date:   Fri, 20 Jan 2023 10:43:24 +0100
-In-reply-to: <55659095-86d7-91b6-2db6-5cdca228bc09@amlogic.com>
-Message-ID: <1j1qnpy1wh.fsf@starbuckisacylon.baylibre.com>
+        Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH v7 1/2] dt-bindings: leds: backlight: Add Kinetic KTZ8866 backlight
+Date:   Fri, 20 Jan 2023 17:47:27 +0800
+Message-Id: <20230120094728.19967-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add Kinetic KTZ8866 backlight binding documentation.
 
-On Fri 20 Jan 2023 at 10:58, Yu Tu <yu.tu@amlogic.com> wrote:
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+Changes in v2:
+  - Remove "items" between "compatible" and "const: kinetic,ktz8866".
+  - Change "additionalProperties" to "unevaluatedProperties".
 
-> Hi Jerome,
->
-> On 2023/1/19 19:20, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
->> 
->>> Add the S4 PLL clock controller driver in the s4 SoC family.
->>>
->>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>> ---
->> [...]
->> 
->>> +
->>> +static struct clk_regmap s4_fclk_div2 = {
->>> +	.data = &(struct clk_regmap_gate_data){
->>> +		.offset = ANACTRL_FIXPLL_CTRL1,
->>> +		.bit_idx = 24,
->>> +	},
->>> +	.hw.init = &(struct clk_init_data){
->>> +		.name = "fclk_div2",
->>> +		.ops = &clk_regmap_gate_ro_ops,
->> On the previous SoC, these fixed divider gate were not read-only.
->> They are marked as critical when necessary, with the appropriate
->> comment.
->> Why is it different on the s4 ?
->
-> In fact, this part of the SOC is no different from the previous G12a/b and
-> so on.
->
-> I remember that my first version was made according to G12A, and I changed
-> this way under your suggestion.
->
-> Maybe you were busy and forgot. For me, this mode and the previous g12a
-> mode function is ok. I can do either. So now how do you decide to go that
-> way?
+Changes in v3:
+  - Add Krzysztof's R-b.
 
-No I did not forgot.
-I told you that cannot put CRITICAL (or IGNORE_USED) without explaining
-why. I stand by this. Same goes for RO ops. 
+Changes in v4:
+  - Drop Krzysztof's R-b.
+  - Add some new properties.
 
->
->> 
->>> +		.parent_hws = (const struct clk_hw *[]) {
->>> +			&s4_fclk_div2_div.hw
->>> +		},
->>> +		.num_parents = 1,
->>> +	},
->>> +};
->>> +
->> [...]
->> 
->>> +#ifndef __MESON_S4_PLL_H__
->>> +#define __MESON_S4_PLL_H__
->>> +
->>> +/* ANA_CTRL - Registers
->>> + * REG_BASE:  REGISTER_BASE_ADDR = 0xfe008000
->> This multi-line comment style is wrong in clk/
->> REG_BASE is not used so I'm not sure this is useful
->
-> I will remove REG_BASE and  change this format in next version.
->
->> 
->>> + */
->>> +#define ANACTRL_FIXPLL_CTRL0                       0x040
->>> +#define ANACTRL_FIXPLL_CTRL1                       0x044
->>> +#define ANACTRL_FIXPLL_CTRL2                       0x048
->>> +#define ANACTRL_FIXPLL_CTRL3                       0x04c
->>> +#define ANACTRL_FIXPLL_CTRL4                       0x050
->>> +#define ANACTRL_FIXPLL_CTRL5                       0x054
->>> +#define ANACTRL_FIXPLL_CTRL6                       0x058
->>> +#define ANACTRL_FIXPLL_STS                         0x05c
->>> +#define ANACTRL_GP0PLL_CTRL0                       0x080
->>> +#define ANACTRL_GP0PLL_CTRL1                       0x084
->>> +#define ANACTRL_GP0PLL_CTRL2                       0x088
->>> +#define ANACTRL_GP0PLL_CTRL3                       0x08c
->>> +#define ANACTRL_GP0PLL_CTRL4                       0x090
->>> +#define ANACTRL_GP0PLL_CTRL5                       0x094
->>> +#define ANACTRL_GP0PLL_CTRL6                       0x098
->>> +#define ANACTRL_GP0PLL_STS                         0x09c
->>> +#define ANACTRL_HIFIPLL_CTRL0                      0x100
->>> +#define ANACTRL_HIFIPLL_CTRL1                      0x104
->>> +#define ANACTRL_HIFIPLL_CTRL2                      0x108
->>> +#define ANACTRL_HIFIPLL_CTRL3                      0x10c
->>> +#define ANACTRL_HIFIPLL_CTRL4                      0x110
->>> +#define ANACTRL_HIFIPLL_CTRL5                      0x114
->>> +#define ANACTRL_HIFIPLL_CTRL6                      0x118
->>> +#define ANACTRL_HIFIPLL_STS                        0x11c
->>> +#define ANACTRL_MPLL_CTRL0                         0x180
->>> +#define ANACTRL_MPLL_CTRL1                         0x184
->>> +#define ANACTRL_MPLL_CTRL2                         0x188
->>> +#define ANACTRL_MPLL_CTRL3                         0x18c
->>> +#define ANACTRL_MPLL_CTRL4                         0x190
->>> +#define ANACTRL_MPLL_CTRL5                         0x194
->>> +#define ANACTRL_MPLL_CTRL6                         0x198
->>> +#define ANACTRL_MPLL_CTRL7                         0x19c
->>> +#define ANACTRL_MPLL_CTRL8                         0x1a0
->>> +#define ANACTRL_MPLL_STS                           0x1a4
->>> +#define ANACTRL_HDMIPLL_CTRL0                      0x1c0
->>> +#define ANACTRL_HDMIPLL_CTRL1                      0x1c4
->>> +#define ANACTRL_HDMIPLL_CTRL2                      0x1c8
->>> +#define ANACTRL_HDMIPLL_CTRL3                      0x1cc
->>> +#define ANACTRL_HDMIPLL_CTRL4                      0x1d0
->>> +#define ANACTRL_HDMIPLL_CTRL5                      0x1d4
->>> +#define ANACTRL_HDMIPLL_CTRL6                      0x1d8
->>> +#define ANACTRL_HDMIPLL_STS                        0x1dc
->>> +#define ANACTRL_HDMIPLL_VLOCK                      0x1e4
->>> +
->>> +/*
->>> + * CLKID index values
->>> + *
->>> + * These indices are entirely contrived and do not map onto the hardware.
->>> + * It has now been decided to expose everything by default in the DT header:
->>> + * include/dt-bindings/clock/axg-clkc.h. Only the clocks ids we don't want
->>> + * to expose, such as the internal muxes and dividers of composite clocks,
->>> + * will remain defined here.
->>> + */
->>> +#define CLKID_FIXED_PLL_DCO		0
->>> +#define CLKID_FCLK_DIV2_DIV		2
->>> +#define CLKID_FCLK_DIV3_DIV		4
->>> +#define CLKID_FCLK_DIV4_DIV		6
->>> +#define CLKID_FCLK_DIV5_DIV		8
->>> +#define CLKID_FCLK_DIV7_DIV		10
->>> +#define CLKID_FCLK_DIV2P5_DIV		12
->>> +#define CLKID_GP0_PLL_DCO		14
->>> +#define CLKID_HIFI_PLL_DCO		16
->>> +#define CLKID_HDMI_PLL_DCO		18
->>> +#define CLKID_HDMI_PLL_OD		19
->>> +#define CLKID_MPLL_50M_DIV		21
->>> +#define CLKID_MPLL_PREDIV		23
->>> +#define CLKID_MPLL0_DIV			24
->>> +#define CLKID_MPLL1_DIV			26
->>> +#define CLKID_MPLL2_DIV			28
->>> +#define CLKID_MPLL3_DIV			30
->>> +
->>> +#define NR_PLL_CLKS			32
->>> +/* include the CLKIDs that have been made part of the DT binding */
->>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
->>> +
->>> +#endif /* __MESON_S4_PLL_H__ */
->> 
+Changes in v5:
+  - Add missing enum under property description.
+  - Rename uncorrect properties.
+
+Changes in v6:
+  - Correct wrong property suffix and description.
+
+Changes in v7:
+  - Add vddpos and vddeg supply.
+  - Use enable-gpios instead of defining enable pin.
+
+ .../leds/backlight/kinetic,ktz8866.yaml       | 74 +++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+
+diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+new file mode 100644
+index 000000000000..b1d0ade0dfb6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/backlight/kinetic,ktz8866.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Kinetic Technologies KTZ8866 backlight
++
++maintainers:
++  - Jianhua Lu <lujianhua000@gmail.com>
++
++description: |
++  The Kinetic Technologies KTZ8866 is a high efficiency 6-channels-current-sinks
++  led backlight with dual lcd bias power.
++  https://www.kinet-ic.com/ktz8866/
++
++allOf:
++  - $ref: common.yaml#
++
++properties:
++  compatible:
++    const: kinetic,ktz8866
++
++  vddpos-supply:
++    description: positive boost supply regulator.
++
++  vddneg-supply:
++    description: negative boost supply regulator.
++
++  enable-gpios:
++    description: GPIO to use to enable/disable the backlight (HWEN pin).
++    maxItems: 1
++
++  current-num-sinks:
++    description: number of the LED current sinks' channels.
++    enum: [1, 2, 3, 4, 5, 6]
++
++  current-ramping-time-ms:
++    description: LED current ramping time in milliseconds.
++    enum: [2, 4, 8, 16, 32, 64, 128, 192, 256, 320, 384, 448, 512, 576, 640]
++
++  led-ramping-time-ms:
++    description: |
++      LED on/off ramping time in milliseconds, note that the case 0 will be mapped
++      to 512μs because ktz8866 can't ramp faster than it.
++    enum: [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]
++
++  kinetic,enable-lcd-bias:
++    description: Set if we want to output bias power supply for LCD.
++    type: boolean
++
++required:
++  - compatible
++  - vddpos-supply
++  - vddneg-supply
++  - enable-gpios
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    backlight {
++        compatible = "kinetic,ktz8866";
++
++        vddpos-supply = <&bl_vddpos_5p5>;
++        vddneg-supply = <&bl_vddneg_5p5>;
++        enable-gpios = <&tlmm 139 GPIO_ACTIVE_HIGH>;
++        current-num-sinks = <5>;
++        current-ramping-time-ms = <128>;
++        led-ramping-time-ms = <1>;
++        kinetic,enable-lcd-bias;
++    };
+-- 
+2.39.1
 
