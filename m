@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB20676377
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 04:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B41676378
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 04:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjAUDib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 22:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S229643AbjAUDkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 22:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjAUDi3 (ORCPT
+        with ESMTP id S229540AbjAUDkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 22:38:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46457360AD;
-        Fri, 20 Jan 2023 19:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674272287; x=1705808287;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=655Z2JTSd2ywx5suqnhifyZk+ujmUs8Vsg3kb8YRmZw=;
-  b=qVoWvNb2Z21XNq4SW1t/CBNRFaBwzZlu0JzvelM5kF5W49+jHbuKO3Fb
-   NbNQVSVohOqpa/jC8gyFYiRQgcXDj0cVc9o7f/jB/JheENxwkQrlHFfrJ
-   PFPb3on3PzhMtuvBcBCaC2zhAaGCTDgeQiBWSl53pm3t+93H2PTU8MeS7
-   wfasgfZCWPXSa2IVAV6sbmZQQnnl6nj4hnpXX/TBGyqKfTE4fkK3rtNaR
-   eTfpn9lhPeeT4Og64itTyeRkB/+L61O33voMz3Ti0mJtjzY/C0wNCQDIr
-   y6T80T9wYgFwXXbcrONxKvk2UpzI6n6jKtlfiYVAqRvrxGjn5z0hnHM2L
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,234,1669100400"; 
-   d="scan'208";a="193243046"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jan 2023 20:38:06 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 20 Jan 2023 20:38:05 -0700
-Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 20:37:59 -0700
-From:   shravan kumar <shravan.chippa@microchip.com>
-To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
-        <mchehab@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>
-CC:     <festevam@gmail.com>, <kernel@pengutronix.de>, <linux-imx@nxp.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <shravan.chippa@microchip.com>, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH RESEND v10 5/5] media: i2c: imx334: update pixel and link frequency
-Date:   Sat, 21 Jan 2023 09:07:13 +0530
-Message-ID: <20230121033713.3535351-6-shravan.chippa@microchip.com>
+        Fri, 20 Jan 2023 22:40:06 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F8A2D5F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 19:40:06 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id k18so6940529pll.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 19:40:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0GuYQ0G2pHZ2CbzhRDvaQYe3yXi7QgsYoJRG+c3IfY=;
+        b=g9O69hSPUUH1UI04WY8Oj4LiUrVyYZZaB3AkX1QEvzudVMNV8FREOyJGsxcCuLPen/
+         W/VHgHR2CBfmWJQntj4arjevp2CYtiWY39sK7cVpyfztIxwxT81UC6ptUqM61bJmOkGc
+         RrvcLK+J43ektIPvssT5ULhHensowUmVBpUJoQLAteUtqe6OPGYEiWQbpFPUdFPTP1Hb
+         t4/hNh+hy6AdYMPlZrglexXDxnahHY3ax5P/EllOLmR/7hlcQKIoPa30NZFRNoLFz9KQ
+         rTtvoCWgnwCm2L93z3ckefpycnNyqn2kXHho795lyWFuFUEur+PH7vCbKx+Xe/B7Y8ok
+         H2mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E0GuYQ0G2pHZ2CbzhRDvaQYe3yXi7QgsYoJRG+c3IfY=;
+        b=TndtMPyJZrNF7CrME6taj9w//Llzoe4fm3zoDKUF0XSUyq1zwTQtbwDaZ/Qd8xuxxb
+         evMU7NsB4WmPVP0ed3swscsIY6wMPB1cswzQbrDPlpCppKUeA1NBNKn3NAuSNBgPCP+y
+         XiMaWFE4ixB/Hj3n05+1Nd9xnl81vX3VFnjbl91OCFudbNwUT+lf+1rak0C6BiQy1lg4
+         XCOZpedVyt1jMNK4B/6n4OnIimcKercgj8bIIbjb/3IQpSDsb1hwRm9RjFxo/TZ7HuQv
+         S7w5LssrMN5FeoLCiFnNefOEIz9idOZVs+t/u/8D0EmTll2YMG87oQuShl+v1e+JCfG1
+         T6Vw==
+X-Gm-Message-State: AFqh2krBmok6Bc+qBSIShAnQNWS8PWExnePijpYLzdp7ftOaQXcUK7Qc
+        h6om1yb+qXGrmnG2nmhx7ms=
+X-Google-Smtp-Source: AMrXdXvpGvfhQcKB1wwwgU3bg1uNVCaA2QiVeitPKOeP9jLqAhmC7DZISdyx3ps5i+MZ2i/ETs59vA==
+X-Received: by 2002:a17:902:f2ca:b0:193:2303:c9e5 with SMTP id h10-20020a170902f2ca00b001932303c9e5mr15667506plc.20.1674272405501;
+        Fri, 20 Jan 2023 19:40:05 -0800 (PST)
+Received: from hyeyoo.. ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902b18700b0019335832ee9sm23331274plr.179.2023.01.20.19.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 19:40:04 -0800 (PST)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH mm-unstable] lib/Kconfig.debug: do not enable DEBUG_PREEMPT by default
+Date:   Sat, 21 Jan 2023 12:39:42 +0900
+Message-Id: <20230121033942.350387-1-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230121033713.3535351-1-shravan.chippa@microchip.com>
-References: <20230121033713.3535351-1-shravan.chippa@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,130 +81,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+In workloads where this_cpu operations are frequently performed,
+enabling DEBUG_PREEMPT may result in significant increase in
+runtime overhead due to frequent invocation of
+__this_cpu_preempt_check() function.
 
-Update pixel_rate and link frequency for 1920x1080@30
-while changing mode.
+This can be demonstrated through benchmarks such as hackbench where this
+configuration results in a 10% reduction in performance, primarily due to
+the added overhead within memcg charging path.
 
-Add dummy ctrl cases for pixel_rate and link frequency
-to avoid error while changing the modes dynamically.
+Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
+of its potential impact on performance in some workloads.
 
-Add support to handle multiple link frequencies.
+hackbench-process-sockets
+		      debug_preempt	 no_debug_preempt
+Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
+Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
+Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
+Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
+Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
+Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
+Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
+Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
+Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
 
-Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- drivers/media/i2c/imx334.c | 41 ++++++++++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 11 deletions(-)
+ lib/Kconfig.debug | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 309c706114d2..62b104eaa437 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -49,7 +49,8 @@
- #define IMX334_INCLK_RATE	24000000
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ddbfac2adf9c..f6f845a4b9ec 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1176,13 +1176,16 @@ config DEBUG_TIMEKEEPING
+ config DEBUG_PREEMPT
+ 	bool "Debug preemptible kernel"
+ 	depends on DEBUG_KERNEL && PREEMPTION && TRACE_IRQFLAGS_SUPPORT
+-	default y
+ 	help
+ 	  If you say Y here then the kernel will use a debug variant of the
+ 	  commonly used smp_processor_id() function and will print warnings
+ 	  if kernel code uses it in a preemption-unsafe way. Also, the kernel
+ 	  will detect preemption count underflows.
  
- /* CSI2 HW configuration */
--#define IMX334_LINK_FREQ	891000000
-+#define IMX334_LINK_FREQ_891M	891000000
-+#define IMX334_LINK_FREQ_445M	445500000
- #define IMX334_NUM_DATA_LANES	4
- 
- #define IMX334_REG_MIN		0x00
-@@ -139,12 +140,14 @@ struct imx334 {
- 	u32 vblank;
- 	const struct imx334_mode *cur_mode;
- 	struct mutex mutex;
-+	unsigned long menu_skip_mask;
- 	u32 cur_code;
- 	bool streaming;
- };
- 
- static const s64 link_freq[] = {
--	IMX334_LINK_FREQ,
-+	IMX334_LINK_FREQ_891M,
-+	IMX334_LINK_FREQ_445M,
- };
- 
- /* Sensor mode registers for 1920x1080@30fps */
-@@ -468,7 +471,7 @@ static const struct imx334_mode supported_modes[] = {
- 		.vblank_min = 45,
- 		.vblank_max = 132840,
- 		.pclk = 297000000,
--		.link_freq_idx = 0,
-+		.link_freq_idx = 1,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
- 			.regs = mode_1920x1080_regs,
-@@ -598,6 +601,11 @@ static int imx334_update_controls(struct imx334 *imx334,
- 	if (ret)
- 		return ret;
- 
-+	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
-+				       mode->pclk, 1, mode->pclk);
-+	if (ret)
-+		return ret;
++	  This option has potential to introduce high runtime overhead,
++	  depending on workload as it triggers debugging routines for each
++	  this_cpu operation. It should only be used for debugging purposes.
 +
- 	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
- 				       mode->hblank, 1, mode->hblank);
- 	if (ret)
-@@ -698,6 +706,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
- 		pm_runtime_put(imx334->dev);
+ menu "Lock Debugging (spinlocks, mutexes, etc...)"
  
- 		break;
-+	case V4L2_CID_PIXEL_RATE:
-+	case V4L2_CID_LINK_FREQ:
- 	case V4L2_CID_HBLANK:
- 		ret = 0;
- 		break;
-@@ -1047,7 +1057,7 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 	struct fwnode_handle *ep;
- 	unsigned long rate;
- 	int ret;
--	int i;
-+	int i, j;
- 
- 	if (!fwnode)
- 		return -ENXIO;
-@@ -1097,11 +1107,20 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 		goto done_endpoint_free;
- 	}
- 
--	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
--		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ)
-+	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
-+		for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
-+			if (bus_cfg.link_frequencies[i] == link_freq[j]) {
-+				set_bit(j, &imx334->menu_skip_mask);
-+				break;
-+			}
-+		}
-+
-+		if (j == ARRAY_SIZE(link_freq)) {
-+			ret = dev_err_probe(imx334->dev, -EINVAL,
-+					    "no supported link freq found\n");
- 			goto done_endpoint_free;
--
--	ret = -EINVAL;
-+		}
-+	}
- 
- done_endpoint_free:
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
-@@ -1232,10 +1251,10 @@ static int imx334_init_controls(struct imx334 *imx334)
- 	imx334->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
- 							&imx334_ctrl_ops,
- 							V4L2_CID_LINK_FREQ,
--							ARRAY_SIZE(link_freq) -
--							1,
--							mode->link_freq_idx,
-+							__fls(imx334->menu_skip_mask),
-+							__ffs(imx334->menu_skip_mask),
- 							link_freq);
-+
- 	if (imx334->link_freq_ctrl)
- 		imx334->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
+ config LOCK_DEBUGGING_SUPPORT
 -- 
 2.34.1
 
