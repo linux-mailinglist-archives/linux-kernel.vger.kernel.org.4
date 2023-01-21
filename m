@@ -2,214 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28119676728
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C561676748
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjAUPf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 10:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S229760AbjAUPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 10:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjAUPfy (ORCPT
+        with ESMTP id S229587AbjAUPtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 10:35:54 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F6728D1C
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:35:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RG8TAdsl6E5k3GGQ6baB0StK007PJy9k92xEBM5dsrk9N8Qlsa2aFergZOEaX3w/x+fSxnAofAaIFEvzoATls2xqBjuiB5MvJYdp26BWTS/7lDHnu+1bo27eNityo4gPSBS6DIh+/hNbs2LAvkBU5JiM0IoBpGbhfkbNqEBP9DUNu7r+o1ZU6y5H/O5NPA0Qd9RAyLqMx6zkWn+M7KBviACoTEhd1q7WWnDhI5+0iQ7L+TlPVD44lgIdMd7hlElj6fRipogBx2pm+XOK0T5S5yldwMIu8hrtpPyQjVedCcbMuYBT5xWGMDyv7hL/ikFDhdsbxe28OjO/p2FZ8Y3sDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NmNd72rmJuGRAgWmxXV7bUbvQ5oB1ewDHCzYuVXbEC8=;
- b=L2BcUhZ+HFUTh1BjE3GuDS8zXS8JAHRJKwCQZe7nr5aOL+j1hpi1PAMCXNTDylKwCFv7y7yWccy7LU/ZlB6BuRxIJ/ZF0o0foM1wFdkDBEcCVd6Ezf9B3HIy0F4vxuZRRSIMp+DwgIoQ9KWGRPR8Y+C8iXQ8b5Wo9som960Oh45hi1FiSrcBWkRmHmV+Yh8I2p5FiL5fFxW/pE10F1hoUEUVEQfxudkVcW3rRbu9syKuKxmwI8XqGlA67QckeiLs/uDto5C2DJWI82ZNZpCn3gONfD6RddJA9lKkJUEJ0L67kixhpBXHxvA6eFcfG9ve8oFuwdLV7SPD3fjYot+/mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NmNd72rmJuGRAgWmxXV7bUbvQ5oB1ewDHCzYuVXbEC8=;
- b=maCaYhS1GKsnTXPonhBDy6IsKBwOAq0CtlnN9aRCcRuM9obT1CgzQf5rdbG/r0woenzUk3Ar5Hy1OfvXb8kbK7CenJXgYo+VcbShwM/fVHLpCV3pn0kiryuNdFYeASfXvM3TmzqyERb8NqiFCWTeAVjySd4fMHHoFhFqCXrmhP5bRjhDV88Ny41zWxT+SYhUi2//1H3Ks6q+ip/klLSg2PCjKWdeUwEqrEE8FrszYNbsmD41kxKhj21h+O4BLq/zQtsFYiDwOBe+sKiEjNm/vJtvyKJOPNaqqJtI8r2EzT+wVVQ5LU5agmD9xGC2DR1tKAU9JpHjfkk0c4wGE3C3qw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12)
- by DM6PR12MB4450.namprd12.prod.outlook.com (2603:10b6:5:28e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Sat, 21 Jan
- 2023 15:35:50 +0000
-Received: from MN0PR12MB5762.namprd12.prod.outlook.com
- ([fe80::a11:e220:e862:e216]) by MN0PR12MB5762.namprd12.prod.outlook.com
- ([fe80::a11:e220:e862:e216%9]) with mapi id 15.20.6002.028; Sat, 21 Jan 2023
- 15:35:50 +0000
-Message-ID: <c0fccfce-17f8-e25c-ca21-41ce1ffd54dd@nvidia.com>
-Date:   Sat, 21 Jan 2023 09:35:48 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] KVM: arm64: vgic: Fix soft lockup during VM teardown
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20230118022348.4137094-1-sdonthineni@nvidia.com>
- <863588njmt.wl-maz@kernel.org>
- <28061ceb-a7ce-0aca-a97d-8227dcfe6800@nvidia.com>
- <87bkmvdmna.wl-maz@kernel.org>
- <2e0c971a-0199-ff0d-c13c-d007d9f03122@nvidia.com>
- <86wn5imxm9.wl-maz@kernel.org>
- <b3bf3a46-410b-a756-dfd9-ee74d5dc31e0@nvidia.com>
- <86r0vpmn5q.wl-maz@kernel.org>
-From:   Shanker Donthineni <sdonthineni@nvidia.com>
-In-Reply-To: <86r0vpmn5q.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9PR13CA0013.namprd13.prod.outlook.com
- (2603:10b6:806:21::18) To MN0PR12MB5762.namprd12.prod.outlook.com
- (2603:10b6:208:375::12)
+        Sat, 21 Jan 2023 10:49:33 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F0830B1E
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:49:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674316171; x=1705852171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qXKP29H7TTX5eM4j8mswyDZwPaI8Bztl17Da0IlZWnQ=;
+  b=ayimkQUUQvBH8PvWf+nTpaFcqqhWwhI7mPXtSUDuucUS+brcHwhXblzG
+   fgXfuDZzi2bVVdHbdRKPy1A+NnK1y9sGGX4P95X0CYtFcBYe5uSZEsbRH
+   enQpPXGLnWF7n3bMRqq7J7zQc2clLO6ftC9FMOfvL4CI1OIwPW/nQMx4U
+   VUzCoi3imnjfu8zjlodhSs1edjStTRlu8gXzAUKcdVe0DBKBLR3WWNgic
+   z0ivxp+oUQTPqFRpOYDejzQ+ve34dOhtaE9mb1CKFFGYielgb+/Bg5mTE
+   A/wqT4V5ZI031+P4SeIg+H+MnCCZ7Ionw5yY6b9Lm6J0zBj+FfHiCzX3n
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="324481477"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="324481477"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 07:49:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="989721476"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="989721476"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Jan 2023 07:49:29 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJG7U-0004Du-0v;
+        Sat, 21 Jan 2023 15:49:28 +0000
+Date:   Sat, 21 Jan 2023 23:49:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Christopher M. Riedl" <cmr@bluescreens.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Gray <bgray@linux.ibm.com>
+Subject: arch/powerpc/include/asm/book3s/32/tlbflush.h:83:2: error: call to
+ '__compiletime_assert_175' declared with 'error' attribute: BUILD_BUG failed
+Message-ID: <202301212348.eDkowvfF-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5762:EE_|DM6PR12MB4450:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d73a813-1621-4283-4836-08dafbc52cd6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6A5p39EIpJCafkBrab6F2xlyGeLZE0vkzUNythDxAhcEeUzpFxgMMLGsFN3SV8jN1PF07aBKNr2LWPcCOopeemZKdy1OUpqDJncmeO8npUbydv4THbAz19Y2jZcR22VPFKbhIA2B/guONi49WNgxj+sYEcsigEfm1uHan/5HibA5V9RaBOkoF1S/KaLFPZWK4TsRng8WK7rPFaIAy1fgwSHS7csjVyKN2HRwJe2M3ZDIMzqCros88sgA0CDakZqs+eWpJmVVcssCF0iDrHSwrYt/WvLuPQTVb2NRaqvcI6/03pBVIcay5zQQivSdW7jKbkMTucBLlu3uZ0YxJDNpC6PZTSuRbIvuyo8H8fyGuDs16HxW4z95q4v5qWMSAtu+UyUx4WVbTQPkatz/ce038uOE2aTwAmTqsMnR7s2yCQilK1shmauZ8kyDeymQI1PSko3NoItQ5UK273hWRWfH7vMRaGeovFT+Y+mCsSEHB10OM3+ryUWznVKCZGQM8Q+rmkDo7MyXxfZUVJ7FZKB7zd3CsqkOlEKltR9SUWRrEmmB672jB0Ji9OrzubowZQk9jF1NV9q4WXjr8OCkSW+jqdZjKBBflXnFmMSRNa0RBLeIhxfG9jNnMeIksZRbetLuaCkO1j3B+1Kbf5WDnF4y/fZpBMqqI0SbLgzxaCMdJQ0YVworkr1O5Z7LrB1Ot2Sk4YQpFcC/fZECX9/c1o7nLvl6yRGfs9kTx4D1yg4n25U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5762.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(366004)(376002)(396003)(451199015)(26005)(8936002)(86362001)(5660300002)(186003)(66476007)(66556008)(66946007)(6916009)(4326008)(8676002)(6506007)(2906002)(2616005)(7416002)(478600001)(6486002)(53546011)(38100700002)(31696002)(54906003)(36756003)(316002)(83380400001)(41300700001)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dVBPN3hTeVlpSFdmeHY2bVNnQXJKYmk3WDE5dUdFZU5DWDhuTlBSb0hSdFMw?=
- =?utf-8?B?R0hXSXV4WUVkYlNVVitoejlxUllORkpLYThjS3pwZE0rMnJuZGZNVHJkWkhh?=
- =?utf-8?B?S2tvS252Rklwbms3MngwalRUMlE1ZHlIcWNubDBEVFI0MDE1MDc5WkVtdDFP?=
- =?utf-8?B?MEpiZUtlU0ozbjRMdGdLM1hBbHJkd0VXUjQxUU9YZys1V3QvZ3JQbnpQTDBC?=
- =?utf-8?B?Y2YvM0hCcW1PM3JKM3FWYnBjeGRETjQzSUcvT29mVkVpdk1VaUdVeiszQ1Iz?=
- =?utf-8?B?TDJnTzhnb2V5L1BKOS9OWE1WaFJyZGhDVUZZYUxYcVR3WVpRUi9TTGpHa2R1?=
- =?utf-8?B?SUlnK25jZi9KcWprOWtvemdQWDVKV0drNzBPd0pNeVV1bERhdGtFeEI4UEgy?=
- =?utf-8?B?Y0g3aG5UcUxvdHBoME4xeWFDcHgxMnNpT3lmcDFnVng3eksxU1NicUNmd2RV?=
- =?utf-8?B?SmVFQWNvaW85WllURXR6UUYwUWtTeUxtdmVGMzVISlAzVm5GV0VpTUJMSWVH?=
- =?utf-8?B?ZlVhSlJEdHFMNS9rNFhKVXVpaHUza0pQU3FIUnpKa0xVMHVNTXFNSG16Z2hi?=
- =?utf-8?B?VlBIWlZ1MWtBVE1rNEswTUcxS0FCSVdxNldvZjZKQlhKUzdHNmpmUUlRdjl2?=
- =?utf-8?B?RUFGN2xXbEhCaWlnR3BuQ2FpemxYSEptakZZb1FGWXFzZmE2bm5SaVh2QVBO?=
- =?utf-8?B?bG0vSVY1eGxibFF1bTJwQ3V4MFkxdnoxdjlsRzF3S0NJU2EvdmJwUE1DV2NM?=
- =?utf-8?B?bXhQbWZUTEYvSHJNUmJiek5JSW1iQ1RmUDR4TzBOT1pTazc2U2FSa1FBc0la?=
- =?utf-8?B?bTZSWWtlajViaXJzYm9sRWdOREFwWExIMUR4YmYwT1RIc3NITmR6ZExqajdn?=
- =?utf-8?B?T3hKcDR6dmxQa2VsTU9DQTdIdUtSRDFGb1pFdVNNOXV6UkM0a3FRb1ArVEZk?=
- =?utf-8?B?OXBJOEpHMlV4S2MwSmV5K0gxTUJIMjNiNEtYN2F3RjR1RWVSbnNncXRJclFp?=
- =?utf-8?B?TUZMTE1jVnZEYUVpdmpqWGUwWk5mS2dwbDQ4QjFGWm5MdGJMTEVJZ0NQKy9G?=
- =?utf-8?B?NHAxcVhLR3Z6THJpWmdxTGpSK1NJdEFaMDlVZkdtODhuMWV0MFdNbW01Yk14?=
- =?utf-8?B?U0lGSjJwNzdqbXlmclkvdzNadkhhZldaNE9SSUM5UVRtcm1DWFo1QVVkYTJO?=
- =?utf-8?B?RU54NUtkVHBDQ0Jyd1ppa0tLQy9OTUlmdjZucGc1Tnd5d1dEUzhrTnpZQmpt?=
- =?utf-8?B?VmpLTU1NOUFtSll5WGIwaWVrZXdTRGJqeXBNMFVmSElSZWRVSzZPVC92YW9J?=
- =?utf-8?B?c0wvWlVrWUNSL1hJc0NwZE9rQjJJLzdaQWh0QWwxUmRtcHZTT0U3aUZwZUcw?=
- =?utf-8?B?ejYzekRITU9XdTN3ZGFkZG5jZG96N0tCaXFtZkdIMENxZkh4WGMxTXFDaEFL?=
- =?utf-8?B?bDcvWml2V3ZSNDRUTTlaK0lHUDZzVUJNbE9lOEx4VDF5MXVXK1BvZVJ2WFhU?=
- =?utf-8?B?dmdkeGxxMzZiRmhQT3M0VTVuaVVZWmpRRmtpMDlDNXVVcXhzaDlNQTdndFI1?=
- =?utf-8?B?WncrZld1MnVGZ0tJTFQ1eG5MSnpaRW85YWNFU0JCZndkT0Z3M2hOOTZOTEJH?=
- =?utf-8?B?a3E2VngyL291L1c0UGZvNnZPa01PcGtwSDNDRUZ3WHpEamI4TW5XRlRnaVJP?=
- =?utf-8?B?WHV0MjlUMllGcER3SUc1eUg3eHBEOEFyaDBaZjQwczJsQmI3M1hKK2ZybFVX?=
- =?utf-8?B?MllXSkNxdDFUVXQ4bjZhOHhJWlBmN1NDOGZuYmhhSDFCTGhXN3BsejFwa3RK?=
- =?utf-8?B?SnZrNkxVbS9Db1pRWTFDVVBYcmtVb1UxeU5NNDBid1dHeU5wUWthaEVadTdh?=
- =?utf-8?B?SThzVjBGMXV1TDZFSm9DK2lzNkViSG91cDQwbFNvNXlySGVTUGhENmVxVlcr?=
- =?utf-8?B?MFpQOTFqZWJsQlNnNzNxZzh5bVROdEJxdVlacHYrOEZyRkllWnMvU01BK2lm?=
- =?utf-8?B?THk3bEZDbGF3eVpKNlFiRHNud3hDYmYvVm05akVVMjNxc1NqcGJ3VGhkdUda?=
- =?utf-8?B?NktpRlBVcEE5aDBUUHlkTnN1blJUY0xkTVcvdGNkVG54VW5iOVRwc2h6VFpX?=
- =?utf-8?B?YzNxNzRuUmJQMExaLzV4RU4ybEZFczlrSk5PV3MzM3FSRlZUVytncWN0Rk8v?=
- =?utf-8?B?RHc9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d73a813-1621-4283-4836-08dafbc52cd6
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5762.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2023 15:35:50.7122
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OYP94+cU3OHmwjWR0hJdPqlsSONegCu5olTRlZaFXdhNUMII5Y3mzkO8JztWskUf0zqLZd+uuYD6jMtRMDMZCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4450
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christopher,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f883675bf6522b52cd75dc3de791680375961769
+commit: c28c15b6d28a776538482101522cbcd9f906b15c powerpc/code-patching: Use temporary mm for Radix MMU
+date:   7 weeks ago
+config: powerpc-buildonly-randconfig-r001-20230121 (https://download.01.org/0day-ci/archive/20230121/202301212348.eDkowvfF-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c28c15b6d28a776538482101522cbcd9f906b15c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c28c15b6d28a776538482101522cbcd9f906b15c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/lib/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/powerpc/lib/code-patching.c:6:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:29:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/powerpc/include/asm/pgtable.h:11:
+   In file included from arch/powerpc/include/asm/tlbflush.h:6:
+   In file included from arch/powerpc/include/asm/book3s/tlbflush.h:8:
+>> arch/powerpc/include/asm/book3s/32/tlbflush.h:83:2: error: call to '__compiletime_assert_175' declared with 'error' attribute: BUILD_BUG failed
+           BUILD_BUG();
+           ^
+   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
+   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+                       ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:357:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:345:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:338:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:194:1: note: expanded from here
+   __compiletime_assert_175
+   ^
+   1 error generated.
 
 
-On 1/20/23 06:00, Marc Zyngier wrote:
-> What I am asking agin is: is there any overlap between any vgic ioctl
-> and the teardown of the VM? Do you ever see kvm_vm_release() being
-> called before kvm_device_release()?
-> 
-> Because that's the overlap I've been talking all along.
+vim +83 arch/powerpc/include/asm/book3s/32/tlbflush.h
 
-I've not observed overlap of kvm_vm_release() with ioctls kvm_device_ioctl(),
-kvm_vcpu_ioctl() and kvm_vm_ioctl() for 3hrs. Test created hundreds of VMs and
-teardowns.
+274d842fa1efd9 Benjamin Gray 2022-11-09  79  
+274d842fa1efd9 Benjamin Gray 2022-11-09  80  static inline void local_flush_tlb_page_psize(struct mm_struct *mm,
+274d842fa1efd9 Benjamin Gray 2022-11-09  81  					      unsigned long vmaddr, int psize)
+274d842fa1efd9 Benjamin Gray 2022-11-09  82  {
+274d842fa1efd9 Benjamin Gray 2022-11-09 @83  	BUILD_BUG();
+274d842fa1efd9 Benjamin Gray 2022-11-09  84  }
+274d842fa1efd9 Benjamin Gray 2022-11-09  85  
 
+:::::: The code at line 83 was first introduced by commit
+:::::: 274d842fa1efd9449e62222c8896e0be11621f1f powerpc/tlb: Add local flush for page given mm_struct and psize
 
-Debug code:
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 4f26b244f6d0..9c8409a894f5 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -800,7 +800,7 @@ struct kvm {
-         bool dirty_ring_with_bitmap;
-         bool vm_bugged;
-         bool vm_dead;
--
-+       atomic_t checkoverlap;
-  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
-         struct notifier_block pm_notifier;
-  #endif
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 9c60384b5ae0..a5a9071aeb19 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1370,9 +1370,13 @@ static int kvm_vm_release(struct inode *inode, struct file *filp)
-  {
-         struct kvm *kvm = filp->private_data;
+:::::: TO: Benjamin Gray <bgray@linux.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
-+       atomic_inc(&kvm->checkoverlap);
-+       pr_err("%s(%d) start kvm=%px\n",__func__,__LINE__, kvm);
-+
-         kvm_irqfd_release(kvm);
-
-         kvm_put_kvm(kvm);
-+       pr_err("%s(%d) end kvm=%px\n",__func__,__LINE__, kvm);
-         return 0;
-  }
-
-@@ -4073,6 +4077,8 @@ static long kvm_vcpu_ioctl(struct file *filp,
-         if (unlikely(_IOC_TYPE(ioctl) != KVMIO))
-                 return -EINVAL;
-
-+if (atomic_read(&vcpu->kvm->checkoverlap)) pr_err("%s(%d) overlap kvm=%px\n", __func__, __LINE__, vcpu->kvm);
-+
-         /*
-          * Some architectures have vcpu ioctls that are asynchronous to vcpu
-          * execution; mutex_lock() would break them.
-@@ -4346,6 +4352,8 @@ static long kvm_device_ioctl(struct file *filp, unsigned int ioctl,
-         if (dev->kvm->mm != current->mm || dev->kvm->vm_dead)
-                 return -EIO;
-
-+       if (atomic_read(&dev->kvm->checkoverlap)) pr_err("%s(%d) overlap kvm=%px\n", __func__, __LINE__, dev->kvm);
-+
-         switch (ioctl) {
-         case KVM_SET_DEVICE_ATTR:
-                 return kvm_device_ioctl_attr(dev, dev->ops->set_attr, arg);
-@@ -4731,6 +4739,8 @@ static long kvm_vm_ioctl(struct file *filp,
-
-         if (kvm->mm != current->mm || kvm->vm_dead)
-                 return -EIO;
-+if (atomic_read(&kvm->checkoverlap)) pr_err("%s(%d) overlap kvm=%px\n", __func__, __LINE__, kvm);
-+
-         switch (ioctl) {
-         case KVM_CREATE_VCPU:
-                 r = kvm_vm_ioctl_create_vcpu(kvm, arg);
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
