@@ -2,286 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32396765EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 12:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E906B6765F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 12:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjAULKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 06:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S229759AbjAULTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 06:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjAULKf (ORCPT
+        with ESMTP id S229484AbjAULS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 06:10:35 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD9D518C0;
-        Sat, 21 Jan 2023 03:10:08 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id x36so9441293ede.13;
-        Sat, 21 Jan 2023 03:10:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vLSqOnQH7tAVXPlFrrq1kds1lScFb1J3lJpWMqJJ15U=;
-        b=HCjOC37bEyBiNZ7bgPhOwTeWmyrVjSWlRUYSWjmys3KmRcDC5dQk5wTp1nnYkK9zLZ
-         9NucluJnYrNYXa+P6NW3aUzl2jDEqTHZJ+UvniaD62RiDOd/nCD7EIB2LuoIImp3i19N
-         /zyFFmAGUcSK3lMN9/19TNhFn5m0n0iULXCQ415cuwZb9lPd15ZKZ4CMsl6uapqrFY9p
-         XGk3kki1Fxy++E49n1oTw1eS6b1Wo6exfOpxre1BTXf/8kjd20MEVQcRzLMeM+Ea+RKK
-         aJbQjzBVDFNL6yI8tXGSrS2kf7be9m6s/eYVPQ/TUjwSIHnlZ/96M3N7rAkpF2OWok5o
-         sbMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLSqOnQH7tAVXPlFrrq1kds1lScFb1J3lJpWMqJJ15U=;
-        b=58wQ7kyYdtdEBol2tjILqE20RKx2WJ/iiQnu3RkIZjhvtJng5u+r+EBLWISdERJkt0
-         vvAzTIYO6Vxo/Gl8OUL4VIMk4cYrXT8FKLtWo4s6LK7MuUF25SiHyohhdvTq5SIcVV8t
-         NNr/vXXSF/d8nZn48MPpqAihAzuyR5ztHky9Ja4jMxsA+6y+jCizfUnWY7RySWxHWw8E
-         65/N+LJMEmG364Z8LBVeRCXWJgWxnACsK43+MG0n5DybN1tRqskV7x5KEHTjP3fI8Zl5
-         IvG8HFuLJXEq4XHJlb4ONCYJ1oVtCJffEzBpSQOEE+zL68XepVh++4pHHNPFgOy9FZ03
-         LUJg==
-X-Gm-Message-State: AFqh2kr96goTr+DgZxMKBM+SiEiSEcWprszof55n+9F2a9n2tU+1LErR
-        ht/+YF4NzVCRln5QUOMEp0E=
-X-Google-Smtp-Source: AMrXdXtYuA4UjveMnfxfd9xHqJjaF76MVLRWRKshHz33wh/9z7HuVX7pcowtmhCPo5TXUHuRy7i13A==
-X-Received: by 2002:a05:6402:f07:b0:493:b55d:d7f2 with SMTP id i7-20020a0564020f0700b00493b55dd7f2mr22053870eda.14.1674299404856;
-        Sat, 21 Jan 2023 03:10:04 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id kv23-20020a17090778d700b008699bacc03csm11898900ejc.14.2023.01.21.03.10.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Jan 2023 03:10:04 -0800 (PST)
-Message-ID: <0266aabd-2991-2958-ab1e-55f58ab14461@gmail.com>
-Date:   Sat, 21 Jan 2023 12:10:03 +0100
+        Sat, 21 Jan 2023 06:18:58 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE2586B8;
+        Sat, 21 Jan 2023 03:18:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sjnfNZ8hw7XnaikIzmFyW/hjvInLUHEoDAKXX/TVuFo=; b=F+bqWmEc3NoVkh3NFbmuce/5KI
+        WBSwstOFaLP6LUqEqd8XwM7AaHtQCN/CcXZW4+PFRLpPpJOaziMQXVZKs7QvoB+G7+TBxE5QYuRzg
+        j15L5ZmDIGwMAAanVjVOy/RsRqaCya7Br3cmeizeVSbxnkA1KqNt8QFkoAq6BNFAg9DUwXQ/wNT4C
+        P2V2Q+DYz15K7CJRAzCp+I2f4e74Xht4lH9lgO9aGeNpDRDOQXbi0dKCMD5bInRxEYbNxQu6RPuHM
+        BzZ7VdXtEKBJTzXo+sCNlzNy8BI51ibAiP8auKmP9U8JFgKuayX8drTYZ6xsaDUtwLuWgVx84ZZMq
+        wdYdnI2Q==;
+Received: from p200300ccff2fb4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2f:b400:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pJBtQ-00083d-UD; Sat, 21 Jan 2023 12:18:41 +0100
+Received: from andi by aktux with local (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pJBtQ-00Bq2M-Au; Sat, 21 Jan 2023 12:18:40 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     sre@kernel.org, error27@gmail.com, rafael.j.wysocki@intel.com,
+        anton.vorontsov@linaro.org, ramakrishna.pallala@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hns@goldelico.com
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] power: supply: disable faulty cooling logic
+Date:   Sat, 21 Jan 2023 12:16:21 +0100
+Message-Id: <20230121111621.2821558-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 8/8] ARM: dts: rockchip: rk3066a: move gpio nodes to root
-To:     linus.walleij@linaro.org, brgl@bgdev.pl
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, john@metanate.com,
-        quentin.schulz@theobroma-systems.com
-References: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com>
-Content-Language: en-US
-In-Reply-To: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The relation between gpio and pinctrl is now described
-by the gpio-ranges property. Move rk3066a gpio nodes to root.
+The rn5t618 power driver fails to register
+a cooling device because POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX
+is missing but availability is not checked before registering
+cooling device. After improved error checking in the thermal
+code, the registration of the power supply fails entirely.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Checking for availability of _MAX before registering cooling device
+fixes the rn5t618 problem. But the whole logic feels questionable.
+
+First, the logic is inverted here:
+the code tells: max_current = max_cooling but
+0 = max_cooling, so there needs to be some inversion
+in the code which cannot be found. Comparing with other
+cooling devices, it can be found that value for fan speed is not
+inverted, value for cpufreq cooling is inverted (similar situation
+as here lowest frequency = max cooling)
+
+Second, analyzing usage of _MAX: it is seems that maximum capabilities
+of charging controller are specified and not of the battery. Probably
+there is not too much mismatch in the drivers actually implementing
+that. So nothing has exploded yet.  So there is no easy and safe way
+to specifify a max cooling value now.
+
+Conclusion for now (as a regression fix) just remove the cooling device
+registration and do it properly later on.
+
+Fixes: e49a1e1ee078 ("thermal/core: fix error code in __thermal_cooling_device_register()")
+Fixes: 952aeeb3ee28 ("power_supply: Register power supply for thermal cooling device")
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 ---
- arch/arm/boot/dts/rk3066a.dtsi | 159 +++++++++++++++------------------
- 1 file changed, 72 insertions(+), 87 deletions(-)
+ drivers/power/supply/power_supply_core.c | 93 ------------------------
+ 1 file changed, 93 deletions(-)
 
-diff --git a/arch/arm/boot/dts/rk3066a.dtsi b/arch/arm/boot/dts/rk3066a.dtsi
-index 4d7cf6f1b..ac329cf14 100644
---- a/arch/arm/boot/dts/rk3066a.dtsi
-+++ b/arch/arm/boot/dts/rk3066a.dtsi
-@@ -217,6 +217,18 @@
- 				       <150000000>, <75000000>;
- 	};
-
-+	gpio6: gpio@2000a000 {
-+		compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
-+		reg = <0x2000a000 0x100>;
-+		interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru PCLK_GPIO6>;
-+		gpio-controller;
-+		gpio-ranges = <&pinctrl 0 192 32>;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
- 	timer2: timer@2000e000 {
- 		compatible = "snps,dw-apb-timer";
- 		reg = <0x2000e000 0x100>;
-@@ -238,6 +250,18 @@
- 		};
- 	};
-
-+	gpio0: gpio@20034000 {
-+		compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
-+		reg = <0x20034000 0x100>;
-+		interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru PCLK_GPIO0>;
-+		gpio-controller;
-+		gpio-ranges = <&pinctrl 0 0 32>;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
- 	timer0: timer@20038000 {
- 		compatible = "snps,dw-apb-timer";
- 		reg = <0x20038000 0x100>;
-@@ -254,6 +278,30 @@
- 		clock-names = "timer", "pclk";
- 	};
-
-+	gpio1: gpio@2003c000 {
-+		compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
-+		reg = <0x2003c000 0x100>;
-+		interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru PCLK_GPIO1>;
-+		gpio-controller;
-+		gpio-ranges = <&pinctrl 0 32 32>;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
-+	gpio2: gpio@2003e000 {
-+		compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
-+		reg = <0x2003e000 0x100>;
-+		interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru PCLK_GPIO2>;
-+		gpio-controller;
-+		gpio-ranges = <&pinctrl 0 64 32>;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
- 	tsadc: tsadc@20060000 {
- 		compatible = "rockchip,rk3066-tsadc";
- 		reg = <0x20060000 0x100>;
-@@ -266,96 +314,33 @@
- 		status = "disabled";
- 	};
-
-+	gpio3: gpio@20080000 {
-+		compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
-+		reg = <0x20080000 0x100>;
-+		interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru PCLK_GPIO3>;
-+		gpio-controller;
-+		gpio-ranges = <&pinctrl 0 96 32>;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
-+	gpio4: gpio@20084000 {
-+		compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
-+		reg = <0x20084000 0x100>;
-+		interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru PCLK_GPIO4>;
-+		gpio-controller;
-+		gpio-ranges = <&pinctrl 0 128 32>;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
- 	pinctrl: pinctrl {
- 		compatible = "rockchip,rk3066a-pinctrl";
- 		rockchip,grf = <&grf>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges;
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 7c790c41e2fe..cc5b2e22b42a 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1186,83 +1186,6 @@ static void psy_unregister_thermal(struct power_supply *psy)
+ 	thermal_zone_device_unregister(psy->tzd);
+ }
+ 
+-/* thermal cooling device callbacks */
+-static int ps_get_max_charge_cntl_limit(struct thermal_cooling_device *tcd,
+-					unsigned long *state)
+-{
+-	struct power_supply *psy;
+-	union power_supply_propval val;
+-	int ret;
 -
--		gpio0: gpio@20034000 {
--			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
--			reg = <0x20034000 0x100>;
--			interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cru PCLK_GPIO0>;
+-	psy = tcd->devdata;
+-	ret = power_supply_get_property(psy,
+-			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX, &val);
+-	if (ret)
+-		return ret;
 -
--			gpio-controller;
--			gpio-ranges = <&pinctrl 0 0 32>;
--			#gpio-cells = <2>;
+-	*state = val.intval;
 -
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
+-	return ret;
+-}
 -
--		gpio1: gpio@2003c000 {
--			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
--			reg = <0x2003c000 0x100>;
--			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cru PCLK_GPIO1>;
+-static int ps_get_cur_charge_cntl_limit(struct thermal_cooling_device *tcd,
+-					unsigned long *state)
+-{
+-	struct power_supply *psy;
+-	union power_supply_propval val;
+-	int ret;
 -
--			gpio-controller;
--			gpio-ranges = <&pinctrl 0 32 32>;
--			#gpio-cells = <2>;
+-	psy = tcd->devdata;
+-	ret = power_supply_get_property(psy,
+-			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
+-	if (ret)
+-		return ret;
 -
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
+-	*state = val.intval;
 -
--		gpio2: gpio@2003e000 {
--			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
--			reg = <0x2003e000 0x100>;
--			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cru PCLK_GPIO2>;
+-	return ret;
+-}
 -
--			gpio-controller;
--			gpio-ranges = <&pinctrl 0 64 32>;
--			#gpio-cells = <2>;
+-static int ps_set_cur_charge_cntl_limit(struct thermal_cooling_device *tcd,
+-					unsigned long state)
+-{
+-	struct power_supply *psy;
+-	union power_supply_propval val;
+-	int ret;
 -
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
+-	psy = tcd->devdata;
+-	val.intval = state;
+-	ret = psy->desc->set_property(psy,
+-		POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
 -
--		gpio3: gpio@20080000 {
--			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
--			reg = <0x20080000 0x100>;
--			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cru PCLK_GPIO3>;
+-	return ret;
+-}
 -
--			gpio-controller;
--			gpio-ranges = <&pinctrl 0 96 32>;
--			#gpio-cells = <2>;
+-static const struct thermal_cooling_device_ops psy_tcd_ops = {
+-	.get_max_state = ps_get_max_charge_cntl_limit,
+-	.get_cur_state = ps_get_cur_charge_cntl_limit,
+-	.set_cur_state = ps_set_cur_charge_cntl_limit,
+-};
 -
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
+-static int psy_register_cooler(struct power_supply *psy)
+-{
+-	/* Register for cooling device if psy can control charging */
+-	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT)) {
+-		psy->tcd = thermal_cooling_device_register(
+-			(char *)psy->desc->name,
+-			psy, &psy_tcd_ops);
+-		return PTR_ERR_OR_ZERO(psy->tcd);
+-	}
 -
--		gpio4: gpio@20084000 {
--			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
--			reg = <0x20084000 0x100>;
--			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cru PCLK_GPIO4>;
+-	return 0;
+-}
 -
--			gpio-controller;
--			gpio-ranges = <&pinctrl 0 128 32>;
--			#gpio-cells = <2>;
+-static void psy_unregister_cooler(struct power_supply *psy)
+-{
+-	if (IS_ERR_OR_NULL(psy->tcd))
+-		return;
+-	thermal_cooling_device_unregister(psy->tcd);
+-}
+ #else
+ static int psy_register_thermal(struct power_supply *psy)
+ {
+@@ -1272,15 +1195,6 @@ static int psy_register_thermal(struct power_supply *psy)
+ static void psy_unregister_thermal(struct power_supply *psy)
+ {
+ }
 -
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
+-static int psy_register_cooler(struct power_supply *psy)
+-{
+-	return 0;
+-}
 -
--		gpio6: gpio@2000a000 {
--			compatible = "rockchip,rk3066a-gpio-bank", "rockchip,gpio-bank";
--			reg = <0x2000a000 0x100>;
--			interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cru PCLK_GPIO6>;
+-static void psy_unregister_cooler(struct power_supply *psy)
+-{
+-}
+ #endif
+ 
+ static struct power_supply *__must_check
+@@ -1354,10 +1268,6 @@ __power_supply_register(struct device *parent,
+ 	if (rc)
+ 		goto register_thermal_failed;
+ 
+-	rc = psy_register_cooler(psy);
+-	if (rc)
+-		goto register_cooler_failed;
 -
--			gpio-controller;
--			gpio-ranges = <&pinctrl 0 192 32>;
--			#gpio-cells = <2>;
--
--			interrupt-controller;
--			#interrupt-cells = <2>;
--		};
-
- 		pcfg_pull_default: pcfg-pull-default {
- 			bias-pull-pin-default;
---
-2.20.1
+ 	rc = power_supply_create_triggers(psy);
+ 	if (rc)
+ 		goto create_triggers_failed;
+@@ -1387,8 +1297,6 @@ __power_supply_register(struct device *parent,
+ add_hwmon_sysfs_failed:
+ 	power_supply_remove_triggers(psy);
+ create_triggers_failed:
+-	psy_unregister_cooler(psy);
+-register_cooler_failed:
+ 	psy_unregister_thermal(psy);
+ register_thermal_failed:
+ wakeup_init_failed:
+@@ -1540,7 +1448,6 @@ void power_supply_unregister(struct power_supply *psy)
+ 	sysfs_remove_link(&psy->dev.kobj, "powers");
+ 	power_supply_remove_hwmon_sysfs(psy);
+ 	power_supply_remove_triggers(psy);
+-	psy_unregister_cooler(psy);
+ 	psy_unregister_thermal(psy);
+ 	device_init_wakeup(&psy->dev, false);
+ 	device_unregister(&psy->dev);
+-- 
+2.30.2
 
