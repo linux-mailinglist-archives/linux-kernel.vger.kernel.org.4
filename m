@@ -2,169 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FCA6761E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED77A6761E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjAUAGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        id S229707AbjAUAHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjAUAGo (ORCPT
+        with ESMTP id S229525AbjAUAHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:06:44 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDB772C2D;
-        Fri, 20 Jan 2023 16:06:43 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KNx32w023904;
-        Sat, 21 Jan 2023 00:06:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=URJJNvMzIFG5OS0ainlfqJaPOphmY2mAIG3YZvWWKXI=;
- b=c1jvNBtbSJa5Hg1v+arYQqFXD5zUBq8mEZvlGZJFY8sFtOt3n4LJENLdVTk6oNaR7lAa
- 076ej9x6jyi5r/zpbyDH4S7urYijScWdYcb6lJvMRqoPv94ltcixULcd53wCbP/turDS
- koVhh975dyigRVV3gU5qplzw5CBi64YSHWdcpZr3iIshm/rhor8XUotPUKBcbasfyDQD
- l7RvnGd3VRMNcK2SHJq5pfmlhYv2RTwAqBmDhaUFzA4ogSRihR3yaoiSbeUrXlqlhN8L
- XqOeVRpoJFlD9oPO5XcSyfFBphdOpOuXUKVL+MwFXioCtWjrQFs4Im0SwJsiaj95mY+V Rw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7c28jut7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 Jan 2023 00:06:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30L06bgB002229
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 Jan 2023 00:06:37 GMT
-Received: from [10.110.55.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
- 2023 16:06:36 -0800
-Message-ID: <045f9ac1-5d48-fad0-8e74-8d5144aa1431@quicinc.com>
-Date:   Fri, 20 Jan 2023 16:06:36 -0800
+        Fri, 20 Jan 2023 19:07:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389C7B2FF;
+        Fri, 20 Jan 2023 16:07:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF47B620BE;
+        Sat, 21 Jan 2023 00:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A019C433EF;
+        Sat, 21 Jan 2023 00:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674259631;
+        bh=p3Y079nnkl3K5cMAQ/Y53zKuPpFrZ5vU9hR0A7lmpqk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YELDPd1k9OyyD5e4D/rOONQPFPMDNok955AbR4Zgm2U5vhyJy8sg44W4YO/E92Una
+         hCXxltJOYLqdhoVvJAsTFT52PYG25MDOtQFSZ0BJskTyh4A0/oR3nyoz+Imz6RXRP/
+         AKsotEJ/KiBui8rBDxjyifweSTDzkG4dObOzfupoKA/tJepmJBzQyU1vp50XboctRB
+         HV8zJ3Ytu5z4cgmmKOvUq84ZrjN9i1vO8dfKpyTD52tIbSACo0icjst2YFyyyQxZfc
+         MpTnapVsEV/6HbuUi0ZZHwxuOTuddbzOJ5+iOssbDEqgDuiCiki3qsDVAShRbxOv6c
+         LaHwJ+u0lRIpw==
+Date:   Sat, 21 Jan 2023 00:07:08 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
+ suspend fails
+Message-ID: <Y8ssrKlWh9rsptKe@kernel.org>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
+ <20230106030156.3258307-1-Jason@zx2c4.com>
+ <Y8UG77zvJeic7Cyc@kernel.org>
+ <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/5] usb: gadget: Add remote wakeup capable flag
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1673992507-7823-1-git-send-email-quic_eserrao@quicinc.com>
- <1673992507-7823-2-git-send-email-quic_eserrao@quicinc.com>
- <20230119014409.yiw6xlp5cwlmu25s@synopsys.com>
- <f49c54d9-b9fe-e629-3f94-809cd79a2211@quicinc.com>
- <20230120011513.ajwum224lfwwb6ws@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230120011513.ajwum224lfwwb6ws@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aWoYGC2SQq8OlrfFFU6saxsHB1Apbv4K
-X-Proofpoint-ORIG-GUID: aWoYGC2SQq8OlrfFFU6saxsHB1Apbv4K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_12,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200232
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/19/2023 5:15 PM, Thinh Nguyen wrote:
-> On Thu, Jan 19, 2023, Elson Serrao wrote:
->>
->>
->> On 1/18/2023 5:44 PM, Thinh Nguyen wrote:
->>> On Tue, Jan 17, 2023, Elson Roy Serrao wrote:
->>>> Add a flag to indicate whether the gadget is capable
->>>> of sending remote wakeup to the host.
->>>>
->>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>>> ---
->>>>    drivers/usb/gadget/composite.c | 3 +++
->>>>    include/linux/usb/gadget.h     | 2 ++
->>>>    2 files changed, 5 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
->>>> index 403563c..b83963a 100644
->>>> --- a/drivers/usb/gadget/composite.c
->>>> +++ b/drivers/usb/gadget/composite.c
->>>> @@ -965,6 +965,9 @@ static int set_config(struct usb_composite_dev *cdev,
->>>>    	else
->>>>    		usb_gadget_clear_selfpowered(gadget);
->>>> +	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
->>>> +		gadget->rw_capable = 1;
->>>
->>> Some device may not support remote wakeup. gadget->rw_capable should be
->>> set and reported by the UDC. May need a gadget ops to enable remote
->>> wakeup here.
->>>
->>> Thanks,
->>> Thinh
->>>
->> Not exactly clear on which parameter in UDC decides whether a device
->> supports remote wakeup. Here I have this flag just to indicate whether the
->> connected device is rw capable based on the bmAttributes populated in the
->> config descriptor. If the UDC doesnt have a callback for remote wakeup we
->> have that check when calling the gadget op in udc/core.c (have added a
->> similar check in usb_func_wakeup() also ).
+On Mon, Jan 16, 2023 at 03:03:17PM +0100, Jason A. Donenfeld wrote:
+> Hi Jarkko,
 > 
-> That flag describes the gadget's capability, not the device
-> configuration. However, it's being used as a configuration flag.
+> On Mon, Jan 16, 2023 at 9:12 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> > > index d69905233aff..6df9067ef7f9 100644
+> > > --- a/drivers/char/tpm/tpm-interface.c
+> > > +++ b/drivers/char/tpm/tpm-interface.c
+> > > @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
+> > >       }
+> > >
+> > >  suspended:
+> > > -     return rc;
+> > > +     if (rc)
+> > > +             pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
+> > > +                    chip->dev_num, rc);
+> > > +     return 0;
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> > >
+> > > --
+> > > 2.39.0
+> > >
+> >
+> > Let me read all the threads through starting from the original report. I've
+> > had emails piling up because of getting sick before holiday, and holiday
+> > season after that.
+> >
+> > This looks sane
 > 
-> Thanks,
-> Thinh
+> No, not really. I mean, it was sane under the circumstances of, "I'm
+> not going to spend time fixing this for real if the maintainers aren't
+> around," and it fixed the suspend issue. But it doesn't actually fix
+> any real tpm issue. The real issue, AFAICT, is there's some sort of
+> race between the tpm rng read command and either suspend or wakeup or
+> selftest. One of these is missing some locking. And then commands step
+> on each other and the tpm gets upset. This is probably something that
+> should be fixed. I assume the "Fixes: ..." tag will actually go quite
+> far back, with recent things only unearthing a somewhat old bug. But
+> just a hunch.
 > 
+> Jason
 
-Thank you for the clarification. Please let me know if below approach 
-where we consider both gadget's capability and device configuration fine?
+See my response to Vlastimil:
 
-if (gadget->ops->wakeup || gadget->ops->func_wakeup)
-    gadget->rw_capable = USB_CONFIG_ATT_WAKEUP & c->bmAttributes ? 1: 0;
+https://lore.kernel.org/linux-integrity/Y8sr7YJ8e8eSpPFv@kernel.org/
 
-Thanks
-Elson
->>
->> int usb_gadget_wakeup(struct usb_gadget *gadget)
->> {
->> 	int ret = 0;
->>
->> 	if (!gadget->ops->wakeup) {
->> 		ret = -EOPNOTSUPP;
->> 		goto out;
->>
->> Thanks
->> Elson
->>
->>>> +
->>>>    	usb_gadget_vbus_draw(gadget, power);
->>>>    	if (result >= 0 && cdev->delayed_status)
->>>>    		result = USB_GADGET_DELAYED_STATUS;
->>>> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
->>>> index dc3092c..15785f8 100644
->>>> --- a/include/linux/usb/gadget.h
->>>> +++ b/include/linux/usb/gadget.h
->>>> @@ -385,6 +385,7 @@ struct usb_gadget_ops {
->>>>     *	indicates that it supports LPM as per the LPM ECN & errata.
->>>>     * @irq: the interrupt number for device controller.
->>>>     * @id_number: a unique ID number for ensuring that gadget names are distinct
->>>> + * @rw_capable: True if the gadget is capable of sending remote wakeup.
->>>>     *
+Can you try what happens if you do not call tpm_add_hwrng()?
+
+BR, Jarkko
