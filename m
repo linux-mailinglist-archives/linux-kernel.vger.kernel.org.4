@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A126B6769B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FEA6769B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjAUVq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 16:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
+        id S229814AbjAUVr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 16:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjAUVqz (ORCPT
+        with ESMTP id S229587AbjAUVr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 16:46:55 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47CA2684D;
-        Sat, 21 Jan 2023 13:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674337614; x=1705873614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JAKSS4dPSaIj68kmeXyY63au78qva1tFAdBiC+XiVko=;
-  b=cSSSlU4+krggal6PJXVHal+hhF4usKEhKga1K1reD3bIfKfQwmeq/tg6
-   st5b2uWozQ85YPGWpYyoVGvd2kAplAaVAYCEm728XHZ6eEAt71EL6jYYU
-   Yk3qXkZ96+1HMALylaajVbk9UAan07voVGCwUjp428PLQ26EFusETrne2
-   kCjl71IHGMwalWxNKYNdKGnAgcYZbtU4RMCSiIgVCBA4jKdwPdHfpD1Qk
-   MNl3DXseaUE7LdpLs2gB7bPos6tLsZPTsXR1gxnHVyiHeINyXcA7IV+Rk
-   JMFUV0olNX1/9hs0d15tBvoS10Sxj1WhNedk/fF2pSaZT0ZrFHOoVV5aq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="390340341"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="390340341"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 13:46:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="662918042"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="662918042"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Jan 2023 13:46:46 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJLhG-0004VC-09;
-        Sat, 21 Jan 2023 21:46:46 +0000
-Date:   Sun, 22 Jan 2023 05:46:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yanchao Yang <yanchao.yang@mediatek.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev ML <netdev@vger.kernel.org>,
-        kernel ML <linux-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Intel experts <linuxwwan@intel.com>,
-        Chetan <m.chetan.kumar@intel.com>,
-        MTK ML <linux-mediatek@lists.infradead.org>,
-        Liang Lu <liang.lu@mediatek.com>,
-        Haijun Liu <haijun.liu@mediatek.com>,
-        Hua Yang <hua.yang@mediatek.com>,
-        Ting Wang <ting.wang@mediatek.com>,
-        Felix Chen <felix.chen@mediatek.com>,
-        Mingliang Xu <mingliang.xu@mediatek.com>,
-        Min Dong <min.dong@mediatek.com>,
-        Aiden Wang <aiden.wang@mediatek.com>,
-        Guohao Zhang <guohao.zhang@mediatek.com>,
-        Chris Feng <chris.feng@mediatek.com>,
-        Yanchao Yang <yanchao.yang@mediatek.com>,
-        Lambert Wang <lambert.wang@mediatek.com>,
-        Mingchuang Qiao <mingchuang.qiao@mediatek.com>,
-        Xiayu Zhang <xiayu.zhang@mediatek.com>,
-        Haozhe Chang <haozhe.chang@mediatek.com>
-Subject: Re: [PATCH net-next v2 06/12] net: wwan: tmi: Add AT & MBIM WWAN
- ports
-Message-ID: <202301220534.qrMLlR2w-lkp@intel.com>
-References: <20230118113859.175836-7-yanchao.yang@mediatek.com>
+        Sat, 21 Jan 2023 16:47:56 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747891A480
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:47:55 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id a25so6929109qto.10
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:47:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IItOU+p55SK2QjQ3YzQRVeif5DdV8TaENAjnN4IuI2s=;
+        b=Ox9Tv51sqK/MFsroZpFTPtuz1PEtLzo6HMMf9MTMMDYKZxqMPkKrbsC2+rK3NFMu8l
+         rLsc6QbPb99oqg371qE3BP0A1XDzk/VFHO0Ut94/Hd0l10/coXjsPGMkcCJp8Y5Yl0ew
+         PHLhgrxiK4cpCLx03dyKeDId1gGXBpVl/CqBCQH/UziFktXZkw1TTfrzoOSzO0xkGMEe
+         RWOdbtI18O9RJni4b3VzmFhRkVbz32UPyQkU7bYn66Wl7zs7Y2URhEu1UMi+uGdPi0ph
+         P9dB2pAEwBVTrPpz9qtAN6JP5x7yOe4sYGypV8lbsKwvGkbIDSFX+ZQ8RndHSDNHVUK1
+         j2yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IItOU+p55SK2QjQ3YzQRVeif5DdV8TaENAjnN4IuI2s=;
+        b=uvVQ36NKqy81X4belEwnrt/UfOXVWCR5/Xbgi168p0eU+rv6Uz0S0B54BLzxdNnaYl
+         3QjuXqVvTSX/D026J4A4QrxcuXiqPlWrxIRUvGAmMqH5Rog8G+7RzvVYvoaY6+Yd+mWN
+         SvcsDagLD9IjEVjvxPFIbKtE2ZGaeX/Zf0xeaVIG8cAvyTNmqrrysPwAdC2mdmGOu8oP
+         1FXxEw/R5vEhAkSGozSdpnOVj6uKw66M/ajvC3tHEluxxD5nfqw5veIEsf1pps5Ik9yU
+         8bhlzGdcdSjitZCvbHtBP5RMOb9VMI8DwDuQarHYkEetF6NDOZ9PKXJ9xGC4A/sw8oxT
+         Qyzw==
+X-Gm-Message-State: AFqh2kpZxf9C0CIbpSMO0IjQ47IjRqZMjRJ/a97qk6DXN0hYqcjnzA92
+        u5nckGJSC7zHOWA24LboiT9qphg89GF6N29ztw==
+X-Google-Smtp-Source: AMrXdXs88Z/rTXkf6lrgpVDK2Uy2GUR1VanF69oyot1eTJwLrornNIG2z7fxgHwM/Ty9zWOAsE8HFjE1SGmiDq7rQ5g=
+X-Received: by 2002:ac8:70cb:0:b0:3a9:82a1:fb0f with SMTP id
+ g11-20020ac870cb000000b003a982a1fb0fmr961787qtp.22.1674337674581; Sat, 21 Jan
+ 2023 13:47:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118113859.175836-7-yanchao.yang@mediatek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
+ <5703e698-a92a-2026-e5d4-3c6340578918@intel.com>
+In-Reply-To: <5703e698-a92a-2026-e5d4-3c6340578918@intel.com>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Sat, 21 Jan 2023 16:47:48 -0500
+Message-ID: <CAMzpN2iC9_ZfEmQA0469RQqoZ7NsNCCafy3FsZAt6O0gdB9Oig@mail.gmail.com>
+Subject: Re: the x86 sysret_rip test fails on the Intel FRED architecture
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, "Li, Xin3" <xin3.li@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yanchao,
+On Sat, Jan 21, 2023 at 12:34 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 1/20/23 20:59, H. Peter Anvin wrote:
+> >> If not intentional, it might be something that can still be fixed.
+> >> If it is intentional and is going to be with us for a while we have
+> >> a few options.  If userspace is _really_ depending on this
+> >> behavior, we could just clobber r11 ourselves in the FRED entry
+> >> path.  If not, we can remove the assertion in the selftest.
+> > We can't clobber it in the FRED entry path, since it is common for
+> > all events, but we could do it in the syscall dispatch.
+> >
+> > However, it doesn't seem to make sense to do so to me. The current
+> > behavior is much more of an artifact than desired behavior.
+> I guess the SDM statements really are for the kernel's benefit and not
+> for userspace.  Userspace _should_ be treating SYSCALL like a CALL and
+> r11 like any old register that can be clobbered.  Right now, the kernel
+> just happens to clobber it with RFLAGS.
+>
+> I do the the odds of anyone relying on this behavior are pretty small.
+> Let's just zap the check from the selftest, document what we did in the
+> FRED docs and changelog and move on.
 
-Thank you for the patch! Yet something to improve:
+Keep the selftest check, but also accept preserved RCX/R11.  What
+really matters is that the kernel isn't leaking data.
 
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yanchao-Yang/net-wwan-tmi-Add-PCIe-core/20230118-203144
-patch link:    https://lore.kernel.org/r/20230118113859.175836-7-yanchao.yang%40mediatek.com
-patch subject: [PATCH net-next v2 06/12] net: wwan: tmi: Add AT & MBIM WWAN ports
-config: openrisc-randconfig-s052-20230120 (https://download.01.org/0day-ci/archive/20230122/202301220534.qrMLlR2w-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/366056f9aec8d7739b18869078ce15a2a4c9d719
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yanchao-Yang/net-wwan-tmi-Add-PCIe-core/20230118-203144
-        git checkout 366056f9aec8d7739b18869078ce15a2a4c9d719
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   or1k-linux-ld: drivers/net/wwan/mediatek/mtk_port_io.o: in function `mtk_port_relayfs_recv':
->> mtk_port_io.c:(.text+0x238): undefined reference to `relay_switch_subbuf'
-   mtk_port_io.c:(.text+0x238): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `relay_switch_subbuf'
-   or1k-linux-ld: drivers/net/wwan/mediatek/mtk_port_io.o: in function `mtk_port_relayfs_disable':
->> mtk_port_io.c:(.text+0x2c8): undefined reference to `relay_close'
-   mtk_port_io.c:(.text+0x2c8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `relay_close'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+Brian Gerst
