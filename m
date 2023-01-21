@@ -2,173 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DF06766D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 15:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC616766FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjAUOyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 09:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S229794AbjAUPAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 10:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjAUOyc (ORCPT
+        with ESMTP id S229540AbjAUPAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 09:54:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90B21CF56;
-        Sat, 21 Jan 2023 06:54:30 -0800 (PST)
-Date:   Sat, 21 Jan 2023 14:54:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674312869;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WHTB7uciogfXIqZk5e2CC51HjpIcGIORjrCCkOZD00o=;
-        b=w5CFRHhUZKp0LXzX9iJ91nc7HMSBNpRs0PmmtyPEDkQWTDJ9FSfEmLJihjDEpoLXwnRaL9
-        39T2PsYq44oPJLL2YQqmLmLuHYWFfhkEfdZQks6zKdnOWY6sJpjylV9gqYzcPENoya5PUN
-        rI7G6FxUvB6pzltqbdW19Z+U+xAj/fgiAVjOw4pgOp4i45qJ/YhZqF19XtArFie7WAM8fb
-        rWz6APoUUQiiOTdTupQ+fyDd2XMRLvSUg84yLc0AXP4pQJXReZS5I9bjk2VyGA+3PGfETW
-        68jERMeRYPpzcaDZUotT5b5OaedIJmhBLxZ8Lm258nPF8Js40beio+Iuor9jpg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674312869;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WHTB7uciogfXIqZk5e2CC51HjpIcGIORjrCCkOZD00o=;
-        b=qHhZ+657JuJkkWOCzU0JGAwzU7ERZ+2wrzn+RWj51sFYJJJF9frZjEgx7vEpiPaPWPckZ+
-        EDd6nLywzGjrKVAA==
-From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode: Add a parameter to
- microcode_check() to store CPU capabilities
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230109153555.4986-2-ashok.raj@intel.com>
-References: <20230109153555.4986-2-ashok.raj@intel.com>
+        Sat, 21 Jan 2023 10:00:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783541F91D
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:00:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1FC860A24
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 15:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BBEC433D2;
+        Sat, 21 Jan 2023 15:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674313249;
+        bh=xw2Z/7VGgf6MRizE7aJiA1LL99jH3my9WFA793dqn9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JgzGqOv038rBIyhf+03U/zbPgYEf5M/2qfzuF7XpKSnCGXy/OGJ4WC5wEcUmAoDEW
+         pV4Tus09/AATTuLzuSAxFeYjeIhaHOs8ZuVyw0jalt8uUilJJxoWpRbiiQALeMbqWT
+         3kNXzEoxsxC9Pbl0I1jZbyJk2XVPwCcrkbojYopxetw+h9kK9Q8pJn5+9a95jukbBm
+         pDeBtWqHAEYuRiqd7Wv2AIEtVPOaBW7NAX+lOo2aa1etDjs47DFVsQeKDgh/xTsCyJ
+         KLCCsdcQBquFq5Z0bD3l43OhHIC4JJ6GNwL18Lcfi77CHWCMmqOCEqIAvL6D2v/gE0
+         mA5kY9WLUNk/A==
+Date:   Sat, 21 Jan 2023 15:00:44 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yimin Gu <ustcymgu@gmail.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH v1 1/2] riscv: Kconfig: Allow RV32 to build with no MMU
+Message-ID: <Y8v+HOkrT5RF0Ysn@spud>
+References: <20230119052642.1112171-1-Mr.Bossman075@gmail.com>
+ <20230119052642.1112171-2-Mr.Bossman075@gmail.com>
+ <Y8pJ4y7FyBDQPqIT@wendy>
+ <056f0d30-d340-fdc4-3744-1cdedd8b4048@gmail.com>
+ <Y8r9GuyUAfJWYY5Z@spud>
+ <Y8r+B3TZpeI32iTz@spud>
+ <31646cc6-0ed7-89b8-06f9-aaa584ef8047@gmail.com>
+ <Y8sAQqOo4DX7GwHN@spud>
 MIME-Version: 1.0
-Message-ID: <167431286879.4906.14404949532620771196.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fRlkre/rkur7aMjh"
+Content-Disposition: inline
+In-Reply-To: <Y8sAQqOo4DX7GwHN@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
 
-Commit-ID:     ab31c74455c64e69342ddab21fd9426fcbfefde7
-Gitweb:        https://git.kernel.org/tip/ab31c74455c64e69342ddab21fd9426fcbfefde7
-Author:        Ashok Raj <ashok.raj@intel.com>
-AuthorDate:    Mon, 09 Jan 2023 07:35:50 -08:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Fri, 20 Jan 2023 21:45:13 +01:00
+--fRlkre/rkur7aMjh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-x86/microcode: Add a parameter to microcode_check() to store CPU capabilities
+On Fri, Jan 20, 2023 at 08:57:38PM +0000, Conor Dooley wrote:
+> > > > diff --git a/drivers/clk/clk-k210.c b/drivers/clk/clk-k210.c
+> > > > index 67a7cb3503c3..17c5bfb384ad 100644
+> > > > --- a/drivers/clk/clk-k210.c
+> > > > +++ b/drivers/clk/clk-k210.c
+> > > > @@ -495,7 +495,7 @@ static unsigned long k210_pll_get_rate(struct c=
+lk_hw *hw,
+> > > >   	f =3D FIELD_GET(K210_PLL_CLKF, reg) + 1;
+> > > >   	od =3D FIELD_GET(K210_PLL_CLKOD, reg) + 1;
+> > > > -	return (u64)parent_rate * f / (r * od);
+> > > > +	return div_u64(parent_rate * f, r * od);
+> > >=20
+> > > Nope, that's wrong. I omitted the cast...
+> > >=20
+> > > 	return div_u64((u64)parent_rate * f, r * od);
+>=20
+>=20
+> > Ah that's a much better fix, shall I prepend this to the set and author=
+ you?
+>=20
+> Uh, I'd rather check that it is a functional fix first!
+> I have the board, so I'll give it a go tomorrow and let you know.
 
-Add a parameter to store CPU capabilities before performing a microcode
-update so that CPU capabilities can be compared before and after update.
+Gave it a go, board still works with revised version of this change in
+place.
 
-  [ bp: Massage. ]
+Thanks,
+Conor.
 
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230109153555.4986-2-ashok.raj@intel.com
----
- arch/x86/include/asm/processor.h     |  2 +-
- arch/x86/kernel/cpu/common.c         | 21 +++++++++++++--------
- arch/x86/kernel/cpu/microcode/core.c |  3 ++-
- 3 files changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 4e35c66..f256a4d 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -697,7 +697,7 @@ bool xen_set_default_idle(void);
- #endif
- 
- void __noreturn stop_this_cpu(void *dummy);
--void microcode_check(void);
-+void microcode_check(struct cpuinfo_x86 *prev_info);
- 
- enum l1tf_mitigations {
- 	L1TF_MITIGATION_OFF,
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 9cfca3d..0f5a173 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2297,30 +2297,35 @@ void cpu_init_secondary(void)
- #endif
- 
- #ifdef CONFIG_MICROCODE_LATE_LOADING
--/*
-+/**
-+ * microcode_check() - Check if any CPU capabilities changed after an update.
-+ * @prev_info:	CPU capabilities stored before an update.
-+ *
-  * The microcode loader calls this upon late microcode load to recheck features,
-  * only when microcode has been updated. Caller holds microcode_mutex and CPU
-  * hotplug lock.
-+ *
-+ * Return: None
-  */
--void microcode_check(void)
-+void microcode_check(struct cpuinfo_x86 *prev_info)
- {
--	struct cpuinfo_x86 info;
--
- 	perf_check_microcode();
- 
- 	/* Reload CPUID max function as it might've changed. */
--	info.cpuid_level = cpuid_eax(0);
-+	prev_info->cpuid_level = cpuid_eax(0);
- 
- 	/*
- 	 * Copy all capability leafs to pick up the synthetic ones so that
- 	 * memcmp() below doesn't fail on that. The ones coming from CPUID will
- 	 * get overwritten in get_cpu_cap().
- 	 */
--	memcpy(&info.x86_capability, &boot_cpu_data.x86_capability, sizeof(info.x86_capability));
-+	memcpy(&prev_info->x86_capability, &boot_cpu_data.x86_capability,
-+	       sizeof(prev_info->x86_capability));
- 
--	get_cpu_cap(&info);
-+	get_cpu_cap(prev_info);
- 
--	if (!memcmp(&info.x86_capability, &boot_cpu_data.x86_capability, sizeof(info.x86_capability)))
-+	if (!memcmp(&prev_info->x86_capability, &boot_cpu_data.x86_capability,
-+		    sizeof(prev_info->x86_capability)))
- 		return;
- 
- 	pr_warn("x86/CPU: CPU features have changed after loading microcode, but might not take effect.\n");
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 99abb31..dc5dfba 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -438,6 +438,7 @@ wait_for_siblings:
- static int microcode_reload_late(void)
- {
- 	int old = boot_cpu_data.microcode, ret;
-+	struct cpuinfo_x86 prev_info;
- 
- 	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
- 	pr_err("You should switch to early loading, if possible.\n");
-@@ -447,7 +448,7 @@ static int microcode_reload_late(void)
- 
- 	ret = stop_machine_cpuslocked(__reload_late, NULL, cpu_online_mask);
- 	if (ret == 0)
--		microcode_check();
-+		microcode_check(&prev_info);
- 
- 	pr_info("Reload completed, microcode revision: 0x%x -> 0x%x\n",
- 		old, boot_cpu_data.microcode);
+--fRlkre/rkur7aMjh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8v+HAAKCRB4tDGHoIJi
+0m6AAQCZuIQY4wCVK265zGzoLEP15W5Ue5T/PLw4PH1FspFktQEAsy6GmdgtX5pe
+US6Z4LVXtfXIev97q8Yz8HvU6BeFKwM=
+=YZ5v
+-----END PGP SIGNATURE-----
+
+--fRlkre/rkur7aMjh--
