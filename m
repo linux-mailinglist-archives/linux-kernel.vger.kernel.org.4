@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94492676773
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97F067677A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjAUQlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 11:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S229815AbjAUQrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 11:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjAUQlf (ORCPT
+        with ESMTP id S229493AbjAUQrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 11:41:35 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFBE27995
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 08:41:34 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id bj3so8327215pjb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 08:41:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JOX2RPz2RmtLcTQJgM9TGwdLXWI4jQY3SMsLFF1TY9E=;
-        b=bmJaKN/bKfHhWZIWLtG2Pvn/c3k/r56F3JpBC0xtiCFoVEaZstRHrIIv1rj8TBRBQK
-         wGmh1iELEC3vZAgMiqrS56nSh/t3U7tqztDw/H2VEfLSkeR1QCMYoqTPghwDD/2QCrw5
-         VO14AFkoqIv8MWZbasbs6mAtQECs9VDv4lwofXmoUq/4KlG0fMQetgf4bsoUgGy+lik3
-         iCQhilOxmKw4VQZOHVr45XTUNjUe9zsrVMCxbH7LXDj8dSRGuB/LGoASQVEf9hrp10zb
-         7u40hGlgLiZadPrSVOFXcL/ND+1Ue99TeWOw+KvTXROW8+gNTQ2Nv94yPLnqpVnMziIb
-         2geg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JOX2RPz2RmtLcTQJgM9TGwdLXWI4jQY3SMsLFF1TY9E=;
-        b=JXkjDpQ8Pnn/acwHOG/9j7lOWkx9x9TPCQE4gqNu9fxvKxv1t9Z+a+XUhwICjrM/FG
-         W+28u36R7GOK1mqRCGvvL3iHJjeF83ScyczwRQKjKdiA982D4P8CgHUEmd7cHlbP214K
-         nWjFaio9vfmuy4yNqn0OqxdXw18emugefysD7Xc15FCJJ5v55bnVzt+xGnBWH0HmVfRM
-         QOxNJkySG2PFdTaqcSxUVB/jymLZXK8QDMw7ek7RDTrOLchVLYxxa/M6pTcKxo1sQsAr
-         xRIahXkW7NbtpLQNFKCFB+MKZOz/wDCyAONmZy0zIGpdfFaJlN1mt1oA+ALIAvHHeFxU
-         AlsA==
-X-Gm-Message-State: AFqh2kqL2CfFcr2M1LOiiHTFDEt9SIjpwcexZtG+5oNoStrYGaMlDUYC
-        Qy6eE/wr5QuXSzI+pAbq9IR2Pg==
-X-Google-Smtp-Source: AMrXdXvq2npG37Pv2yeeR+lthk+zvozE0BI+KQV6/Q4aojPLb99SNXOuSBlijkfumF51ltILhLTyYA==
-X-Received: by 2002:a17:902:e811:b0:194:98ef:a40e with SMTP id u17-20020a170902e81100b0019498efa40emr21966312plg.31.1674319294182;
-        Sat, 21 Jan 2023 08:41:34 -0800 (PST)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170902d48800b00174f61a7d09sm5790513plg.247.2023.01.21.08.41.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 21 Jan 2023 08:41:33 -0800 (PST)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Huang Rui'" <ray.huang@amd.com>, <sedat.dilek@gmail.com>,
-        <li.meng@amd.com>, <skhan@linuxfoundation.org>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>
-References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
-In-Reply-To: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
-Subject: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
-Date:   Sat, 21 Jan 2023 08:41:35 -0800
-Message-ID: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+        Sat, 21 Jan 2023 11:47:00 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81D1113F1
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 08:46:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674319619; x=1705855619;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Fo08ZcIrtTPKlL29c86Ws9ZwUgBRmQsU5QgIWyncqZQ=;
+  b=MuOROfp1cJ29C5lVhJgq53WtYn3Rziy8J7176A3mqa0TucIIYgfLLubD
+   9pFonUK9kPQrKG6frMaUyr0j+WrpSSMEHIGj3Lo05FTIwMySHx9w+NExt
+   RkdFDbqpTlOy6YOsTq62rEqRe9AjOrr5dHTQXApFziGoSWG0kaL0JOZ83
+   Vp91IM2saj2HYib03YPG3dYJk+i88BoW68j+2kO3aJfKxXs4oQtTlewCP
+   Cmkf0MQoLT8cLHLm7aLEuz3pGIT3nlFoGgA9N+PG748SJDS5seUVB8PVI
+   Yag818QHedC33KX61oM/sk6uwE5+QT4sNudNBD9nwohnhDXpYkGxKP4wz
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="313693275"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="313693275"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 08:46:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="693187852"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="693187852"
+Received: from aureliaw-mobl.amr.corp.intel.com (HELO [10.255.230.48]) ([10.255.230.48])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 08:46:59 -0800
+Message-ID: <5703e698-a92a-2026-e5d4-3c6340578918@intel.com>
+Date:   Sat, 21 Jan 2023 08:46:58 -0800
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: the x86 sysret_rip test fails on the Intel FRED architecture
+Content-Language: en-US
+To:     "H. Peter Anvin" <hpa@zytor.com>, "Li, Xin3" <xin3.li@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com>
+ <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: Adkts+qzXK0iZufMT6q77LIlw14ifA==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Revert the portion of a recent Makefile change that incorrectly
-deletes source files when doing "make clean".
+On 1/20/23 20:59, H. Peter Anvin wrote:
+>> If not intentional, it might be something that can still be fixed.
+>> If it is intentional and is going to be with us for a while we have
+>> a few options.  If userspace is _really_ depending on this
+>> behavior, we could just clobber r11 ourselves in the FRED entry
+>> path.  If not, we can remove the assertion in the selftest.
+> We can't clobber it in the FRED entry path, since it is common for
+> all events, but we could do it in the syscall dispatch.
+> 
+> However, it doesn't seem to make sense to do so to me. The current
+> behavior is much more of an artifact than desired behavior.
+I guess the SDM statements really are for the kernel's benefit and not
+for userspace.  Userspace _should_ be treating SYSCALL like a CALL and
+r11 like any old register that can be clobbered.  Right now, the kernel
+just happens to clobber it with RFLAGS.
 
-Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
-Acked-by: Huang Rui <ray.huang@amd.com>
-Signed-off-by: Doug Smythies <dsmythies@telus.net>
----
-v2: fix address list.
----
- tools/testing/selftests/amd-pstate/Makefile | 5 -----
- 1 file changed, 5 deletions(-)
+I do the the odds of anyone relying on this behavior are pretty small.
+Let's just zap the check from the selftest, document what we did in the
+FRED docs and changelog and move on.
 
-diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-index 5f195ee756d6..5fd1424db37d 100644
---- a/tools/testing/selftests/amd-pstate/Makefile
-+++ b/tools/testing/selftests/amd-pstate/Makefile
-@@ -7,11 +7,6 @@ all:
- uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-
--ifeq (x86,$(ARCH))
--TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
--TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
--endif
--
- TEST_PROGS := run.sh
- TEST_FILES := basic.sh tbench.sh gitsource.sh
-
---
-2.25.1
-
-
-
+If someone screams later, we can fix in some SYSCALL-specific piece of
+the FRED code.
