@@ -2,104 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093C5676A53
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 00:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761AA676A55
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 00:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjAUXbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 18:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S229637AbjAUXc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 18:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAUXbq (ORCPT
+        with ESMTP id S229463AbjAUXc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 18:31:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68A620042;
-        Sat, 21 Jan 2023 15:31:45 -0800 (PST)
+        Sat, 21 Jan 2023 18:32:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8526910250;
+        Sat, 21 Jan 2023 15:32:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B49CB80882;
-        Sat, 21 Jan 2023 23:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30121C433D2;
-        Sat, 21 Jan 2023 23:31:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F44060918;
+        Sat, 21 Jan 2023 23:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE0BC433D2;
+        Sat, 21 Jan 2023 23:32:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674343902;
-        bh=8O7krsn5wVwO+u7aYhAuGYb73mNAd3aEtYdxUn3QPYw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N41fZ5QviX1oQq+7+w8t4mtnKDEhvuCtSHN4YJ0AQzD9ZHqo8j2u8DV8gen+j7CgI
-         +XsPvUss63kk3QKpqGOd8OqOj3bErHGoNxeK27BuEuXayFh02fjMjzuuDC7brOlXuh
-         IlF+L7xdhIG+KJhJjDf2XVB9X1Ni2Jp6GJccYbluSXcKddAPdkpOxq6/og50hRB+eu
-         Qp49AvvOLEkRrW2FAoN/kYbiC7WcBWZSoaWr1BW0Gw2o0IhNdPSDQEeQnI1u7Plg1q
-         BOx7ChqcaPZcypX+64GUGECPRArZ4d6y551BWkM2kEEoGfgjxBbPXIdhuXQL8aD2zX
-         rVz2FEQ5tF1gg==
-Date:   Sun, 22 Jan 2023 08:31:38 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Yoann Congal <yoann.congal@smile.fr>
-Cc:     linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
+        s=k20201202; t=1674343974;
+        bh=xmn62+MR0FZVY202glZIVA2fWAdWaDi9PFeFOODhzlo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ucCJ5P6k2XO8FZmWC7j/0m3scJ+JP8M3Lt7rAMloSoivtrbhwI5Uk0TXgnZazsYQ7
+         XCS1ozVJ2jOAIU/IWRJYYRfnf2HFoavTPDm31X9bX6zoqghYqPcq7acRRlYXiFqyM7
+         dZIt7j+WFjX7TMRO9ZXMXgtmP6yWXY7zh0heuCAq+UM4hhJWVAeCJpYG5EKoqeuon7
+         ftjBLJ7LzmwheSgDjrtP8c6bv93PUsjMdqyMEs4yEaF7jbSHzYrFgNP5xggFnkhq6y
+         eVdjJC5keIt1s5R1jNeTAFcSKDYeXqCMo0SCDzcxSqwU7VFGzCohPnngBqR3sTzh41
+         pJt27ge1chd8Q==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yipeng Zou <zouyipeng@huawei.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Documentation: kprobetrace: Improve readability
-Message-Id: <20230122083138.300ab49e15c7b3de13f0f121@kernel.org>
-In-Reply-To: <20230121225304.1711635-1-yoann.congal@smile.fr>
-References: <20230121225304.1711635-1-yoann.congal@smile.fr>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Fix bash specific "==" operator
+Date:   Sun, 22 Jan 2023 08:32:50 +0900
+Message-Id: <167434397083.3069767.14730152459198287532.stgit@devnote3>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 Jan 2023 23:53:02 +0100
-Yoann Congal <yoann.congal@smile.fr> wrote:
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-> Hi,
-> 
-> Version 3 of this series of small readability fixes on kprobetrace.rst.
-> 
-> v1: https://lore.kernel.org/linux-doc/20220915153358.813993-1-yoann.congal@smile.fr/
+Since commit a1d6cd88c897 ("selftests/ftrace: event_triggers: wait
+longer for test_event_enable") introduced bash specific "=="
+comparation operator, that test will fail when we run it on a
+posix-shell. `checkbashisms` warned it as below.
 
-Thanks for fixing document!
+possible bashism in ftrace/func_event_triggers.tc line 45 (should be 'b = a'):
+        if [ "$e" == $val ]; then
 
-This series looks good to me.
+This replaces it with "=".
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Fixes: a1d6cd88c897 ("selftests/ftrace: event_triggers: wait longer for test_event_enable")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ .../ftrace/test.d/ftrace/func_event_triggers.tc    |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-for this series.
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+index 3eea2abf68f9..2ad7d4b501cc 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+@@ -42,7 +42,7 @@ test_event_enabled() {
+ 
+     while [ $check_times -ne 0 ]; do
+ 	e=`cat $EVENT_ENABLE`
+-	if [ "$e" == $val ]; then
++	if [ "$e" = $val ]; then
+ 	    return 0
+ 	fi
+ 	sleep $SLEEP_TIME
 
-Thank you!
-
-> 
-> Changelog 
-> v3 -> v2:
-> * fix 2 bytes hex -> 2 byte hex typo
-> 
-> v1 -> v2:
-> * Removed all ``markup`` additions
-> * Split commits
-> 
-> Regards,
-> 
-> Yoann Congal (3):Yipeng Zou <zouyipeng@huawei.com>
->   Documentation: kprobetrace: Fix some typos
->   Documentation: kprobetrace: Fix code block markup
->   Documentation: kprobetrace: Split paragraphs
-> 
->  Documentation/trace/kprobetrace.rst | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
