@@ -2,108 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F48A6767B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB21A6767BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjAURej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 12:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S229861AbjAURga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 12:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjAUReg (ORCPT
+        with ESMTP id S229484AbjAURg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 12:34:36 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227EB2D15B;
-        Sat, 21 Jan 2023 09:34:20 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30LHUfHT005012;
-        Sat, 21 Jan 2023 17:34:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=pKv8w7uR5wAI9JticJAXtQh6P199EYXCddfynwTNuNI=;
- b=j2dcg4jrbfc9c1I7pr82pXBXME8ORVLhDgIRUXQrCCfU2IxySqsHLXdB3isy00p8ELeB
- x1qB6Kc3boMa/HBqiJe14joJJ8buZeiRGsbuQOJxvIZTbiqEgv2g0gAi0GpiIE7jk+Bf
- oNmpIIio6pHS0ZMx4o+JHat0WyKYKM3bq3tRKnIJbigxexjzcbsEH6FGE2Ea3XiV2LMe
- j3SrXekNCOIiwaD03dp+lbW3mOg8H5l+lDg5W6nbHrQs7BquLPHkSOHVpvxh2Q35/nsy
- c5HjRKynt+gIoTXM4h/q41fuQ5XaZcNm/yogbxj5ssfLHaybkQAFOLJwDeFO570DeHty Jw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89f58nsv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 Jan 2023 17:34:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30LHYDkv023852
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 Jan 2023 17:34:13 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sat, 21 Jan 2023 09:34:08 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [RESEND v5 6/6] clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
-Date:   Sat, 21 Jan 2023 23:02:20 +0530
-Message-ID: <1674322340-25882-7-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1674322340-25882-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1674322340-25882-1-git-send-email-quic_srivasam@quicinc.com>
+        Sat, 21 Jan 2023 12:36:28 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6BFBD2312D
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 09:36:27 -0800 (PST)
+Received: (qmail 73123 invoked by uid 1000); 21 Jan 2023 12:36:26 -0500
+Date:   Sat, 21 Jan 2023 12:36:26 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y8wimpMpajLudrYb@rowland.harvard.edu>
+References: <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
+ <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
+ <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
+ <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9pG1OYmTNsHleL-fGwg__Eo7vlAbBuf6
-X-Proofpoint-GUID: 9pG1OYmTNsHleL-fGwg__Eo7vlAbBuf6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-21_11,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- clxscore=1015 mlxscore=0 spamscore=0 phishscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301210168
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skip lpass_aon_cc_pll configuration for ADSP based platforms
-based on qcom,adsp-pil-mode property.
-This is to avoid ADSP out of reset fail.
+On Fri, Jan 20, 2023 at 10:41:14PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/20/2023 5:18 PM, Alan Stern wrote:
+> > On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
+> > > Perhaps we could say that reading an index without using it later is
+> > > forbidden?
+> > > 
+> > > flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
+> > > thrown-srcu-cookie-on-floor
+> > We already flag locks that don't have a matching unlock.
+> 
+> Of course, but as you know this is completely orthogonal.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
----
- drivers/clk/qcom/lpassaudiocc-sc7280.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Yeah, okay.  It doesn't hurt to add this check, but the check isn't 
+complete.  For example, it won't catch the invalid usage here:
 
-diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-index 8e2f433..1511337 100644
---- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-+++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-@@ -847,7 +847,8 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
- 		goto exit;
- 	}
- 
--	clk_lucid_pll_configure(&lpass_aon_cc_pll, regmap, &lpass_aon_cc_pll_config);
-+	if (!of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode"))
-+		clk_lucid_pll_configure(&lpass_aon_cc_pll, regmap, &lpass_aon_cc_pll_config);
- 
- 	ret = qcom_cc_really_probe(pdev, &lpass_aon_cc_sc7280_desc, regmap);
- 	if (ret) {
--- 
-2.7.4
+P0(srcu_struct *ss)
+{
+	int r1, r2;
 
+	r1 = srcu_read_lock(ss);
+	srcu_read_unlock(&ss, r1);
+	r2 = srcu_read_lock(ss);
+	srcu_read_unlock(&ss, r2);
+}
+
+exists (~0:r1=0:r2)
+
+On the other hand, how often will people make this sort of mistake in 
+their litmus tests?  My guess is not very.
+
+> Can you briefly explain how the operational model you have in mind for
+> srcu's up and down allows x==1 (and y==0 and idx1==idx2) in the example I
+> sent before (copied with minor edit below for convenience)?
+> 
+> P0{
+>     idx1 = srcu_down(&ss);
+>     store_rel(p1, true);
+> 
+> 
+>     shared cs
+> 
+>     R x == 1
+> 
+>     while (! load_acq(p2));
+>     R idx2 == idx1 // for some reason, we got lucky!
+>     srcu_up(&ss,idx1);
+> }
+> 
+> P1{
+>     idx2 = srcu_down(&ss);
+>     store_rel(p2, true);
+> 
+>     shared cs
+> 
+>     R y == 0
+> 
+>     while (! load_acq(p1));
+>     srcu_up(&ss,idx2);
+> }
+> 
+> P2 {
+>     W y = 1
+>     srcu_sync(&ss);
+>     W x = 1
+> }
+> 
+> 
+> I can imagine models that allow this but they aren't pretty. Maybe you have
+> a better operational model?
+
+The operational model is not very detailed as far as SRCU is concerned.  
+It merely says that synchronize_srcu() executing on CPU C waits until:
+
+	All writes received by C prior to the start of the function have 
+	propagated to all CPUs (call this time t1).  This could be 
+	arranged by having synchronize_srcu() start with an smp_mb().
+
+	For every srcu_down_read() that executed prior to t1, the 
+	matching srcu_up_read() has finished and all writes received 
+	by the unlocking CPU prior to the unlock have propagated to all 
+	CPUs.  This could be arranged by having the srcu_up_read() 
+	call include a release write which has been received by C and 
+	having synchronize_srcu() end with an smp_mb().
+
+The operational model doesn't specify exactly how synchronize_srcu() 
+manages to do these things, though.
+
+Oh yes, it also says that the value returned by srcu_down_read() is an 
+unpredictable int.  This differs from the code in the patched herd 
+model, which says that the value will always be 0.
+
+Anyway, the operational model says the litmus test can succeed as 
+follows:
+
+P0                    P1                     P2
+--------------------- ---------------------- -------------------------
+                      Widx2=srcu_down_read()
+                      Wrel p2=1
+                      Ry=0
+                                             Wy=1
+                                             synchronize_srcu() starts
+	... idx2, p2, and y propagate to all CPUs ...
+                                             Time t1
+Widx1=srcu_down_read()
+Wrel p1=1
+	,,, idx1 and p1 propagate to all CPUs ...
+                      Racq p1=1
+                      srcu_up_read(idx2)
+                                             synchronize_srcu() ends
+                                             Wx=1
+Rx=1
+Racq p2=1
+Ridx2=idx1
+srcu_up_read(idx1)
+
+(The final equality in P0 is allowed because idx1 and idx2 are both 
+random numbers, so they might be equal.)
+
+Incidentally, it's worth pointing out that the algorithm Paul described 
+will forbid this litmus test even if you remove the while loop and the 
+read of idx2 from P0.
+
+Does this answer your question satisfactorily?
+
+> > > So if there is an srcu_down() that produces a cookie that is read by some
+> > > read R, and R doesn't then pass that value into an srcu_up(), the
+> > > srcu-warranty is voided.
+> > No, it isn't.
+> I quote Paul:
+> "If you do anything else at all with it, anything at all, you just voided
+> your SRCU warranty. For that matter, if you just throw that value on the
+> floor and don't pass it to an srcu_up_read() execution, you also just voided
+> your SRCU warranty."
+
+I suspect Paul did not express himself very precisely, and what he 
+really meant was more like this:
+
+	If you don't pass the value to exactly one srcu_up_read() call, 
+	you void the SRCU warranty.  In addition, if you do anything 
+	else with the value that might affect the outcome of the litmus 
+	test, you incur the risk that herd7 might compute an incorrect 
+	result [as in the litmus test I gave near the start of this
+	email].
+
+Merely storing the value in a shared variable which then doesn't get 
+used or is used only for something inconsequential would not cause any 
+problems.
+
+Alan
