@@ -2,103 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9BE676791
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389E167679D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjAURDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 12:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S229879AbjAURUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 12:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAURDg (ORCPT
+        with ESMTP id S229493AbjAURUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 12:03:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2498B298D7;
-        Sat, 21 Jan 2023 09:03:35 -0800 (PST)
+        Sat, 21 Jan 2023 12:20:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EEC1E2A2;
+        Sat, 21 Jan 2023 09:20:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1C2AB80816;
-        Sat, 21 Jan 2023 17:03:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6A7C433D2;
-        Sat, 21 Jan 2023 17:03:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93AA260B4B;
+        Sat, 21 Jan 2023 17:20:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B797C433D2;
+        Sat, 21 Jan 2023 17:20:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674320612;
-        bh=KDw/+vNJAi/mknOa0WX6Ng3Q/0RA2pHOSwGQq7+EYNo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HuAvhLjB/S0zc04GEtF9VGWcCB7qG5XdOX/vEN1tGnJurqUyU5Va8pjleX2BpqDMx
-         1DBYEjVEnjBFx5TMJxCJXI7zrpQMWIMOexR1+df1B4bLny8/4vt2pzpJZmJyEfGgpQ
-         VaalUoUBfg8Dg4BGmjUOzfEOW1RNNXiRf2hG+bdlbc+nqCoVFoQYaZC7SIcN3wQKYS
-         vl/n8mO8rxnNzKFz6fOMO41bk802GYjzq+d/1MlwM8VFj0YnJsDTSbb/R2tuxHnaxy
-         qtLkTzSJsB5UF4h5o5eq5Uixb94jhF7dkj3tZNB291jWt2N+6/jKr2Cl253RK7dQIq
-         Y9ouSKjMPjr8g==
-Date:   Sat, 21 Jan 2023 17:17:09 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lucas Stankus <lucas.p.stankus@gmail.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Renato Lui Geh <renatogeh@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Robert Yang <decatf@gmail.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Philippe Reynes <tremyfr@yahoo.fr>,
-        Alexandru Lazar <alazar@startmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Harald Geyer <harald@ccbib.org>,
-        Eugene Zaikonnikov <ez@norophonic.com>,
-        Phil Reid <preid@electromag.com.au>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        chrome-platform@lists.linux.dev
-Subject: Re: [PATCH 3/5] dt-bindings: iio: correct node names in examples
-Message-ID: <20230121171709.5eb75e94@jic23-huawei>
-In-Reply-To: <20230118184413.395820-3-krzysztof.kozlowski@linaro.org>
-References: <20230118184413.395820-1-krzysztof.kozlowski@linaro.org>
-        <20230118184413.395820-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        s=k20201202; t=1674321638;
+        bh=MWYW71WOqi4bnnlaZF38uiNfpxx5ZVUlMJj2OGDqfsk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=inznUmLh2QAaSOBWaD4vv8savui/9SN4TPOl/WluFZnwhs1F5TDdhT5OmDN9Va/kS
+         T0kjG8TwbrUdTxKB5D/LaV75cOqbE/Mrpb00NwyvmWDzqYz4ttyk35Wf5Nyo1Be88I
+         R/Om+nTUklMbw+ber8QPCj675USFZJK9m4A6MpC12P4vyZVnNaaMeDz2+WSaO9i5aE
+         SEUoVXq/6BZsXj9+iuxgZONsDTG+Hk2SQX5DOPQr/jmGhSzhmTIlWWBE3u45EYdKc4
+         JZuC3OqqQzFIqiYde6mRqFHEKlpQF7K7B1NsqZ84TqE1QU7OTgtxv9zNLAjiTXaXJJ
+         sfzNmlwNfO4+w==
+Message-ID: <539c19a01e7f6d582d7ae2804977ef779b29d44b.camel@kernel.org>
+Subject: Re: [PATCH] nfsd: don't free files unconditionally in
+ __nfsd_file_cache_purge
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Ruben Vestergaard <rubenv@drcmr.dk>,
+        Torkil Svensgaard <torkil@drcmr.dk>,
+        Shachar Kagan <skagan@nvidia.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Sat, 21 Jan 2023 12:20:36 -0500
+In-Reply-To: <3BB57727-27FC-4294-A5F8-FBD8E900D94D@oracle.com>
+References: <20230120195215.42243-1-jlayton@kernel.org>
+         <C04F7C2C-848A-47C5-9C4E-9B9E5E82BAFF@oracle.com>
+         <d5dc64435fb82f17e79ae20a370e90914a291ea9.camel@kernel.org>
+         <3BB57727-27FC-4294-A5F8-FBD8E900D94D@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -108,53 +61,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 19:44:11 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Sat, 2023-01-21 at 17:04 +0000, Chuck Lever III wrote:
+>=20
+> > On Jan 20, 2023, at 3:54 PM, Jeff Layton <jlayton@kernel.org> wrote:
+> >=20
+> > On Fri, 2023-01-20 at 20:21 +0000, Chuck Lever III wrote:
+> > >=20
+> > > > On Jan 20, 2023, at 2:52 PM, Jeff Layton <jlayton@kernel.org> wrote=
+:
+> > > >=20
+> > > > nfsd_file_cache_purge is called when the server is shutting down, i=
+n
+> > > > which case, tearing things down is generally fine, but it also gets
+> > > > called when the exports cache is flushed.
+> > >=20
+> > > Yeah... cache flush is probably the case we've been missing.
+> > >=20
+> > >=20
+> > > > Instead of walking the cache and freeing everything unconditionally=
+,
+> > > > handle it the same as when we have a notification of conflicting ac=
+cess.
+> > > >=20
+> > > > Fixes: ac3a2585f018 ("nfsd: rework refcounting in filecache")
+> > > > Reported-by: Ruben Vestergaard <rubenv@drcmr.dk>
+> > > > Reported-by: Torkil Svensgaard <torkil@drcmr.dk>
+> > > > Reported-by: Shachar Kagan <skagan@nvidia.com>
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > ---
+> > > > fs/nfsd/filecache.c | 61 +++++++++++++++++++++++++++---------------=
+---
+> > > > 1 file changed, 37 insertions(+), 24 deletions(-)
+> > > >=20
+> > > > v2: use the same method to purge entries from the cache as we do wh=
+en
+> > > >   there is a notification of conflicting access.
+> > > >=20
+> > > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+> > > > index 58ac93e7e680..397ae212b98d 100644
+> > > > --- a/fs/nfsd/filecache.c
+> > > > +++ b/fs/nfsd/filecache.c
+> > > > @@ -661,6 +661,40 @@ static struct shrinker	nfsd_file_shrinker =3D =
+{
+> > > > 	.seeks =3D 1,
+> > > > };
+> > > >=20
+> > > > +/**
+> > > > + * maybe_queue_nfsd_file - try to unhash and queue a nfsd_file to =
+be freed
+> > > > + * @nf: nfsd_file to attempt to queue
+> > > > + * @dispose: private list to queue successfully-put objects
+> > > > + *
+> > > > + * Unhash an nfsd_file, try to get a reference to it, and then put=
+ that
+> > > > + * reference. If it's the last reference, queue it to the dispose =
+list.
+> > > > + *
+> > > > + * The caller MUST hold the rcu_read_lock() !
+> > >=20
+> > > __nfsd_file_cache_purge() isn't holding rcu_read_lock(), it's
+> > > holding the nfsd_mutex. Is this comment incorrect, or is it just
+> > > too specific? Or did I miss something obvious?
+> > >=20
+> >=20
+> > It's implicitly taken by rhashtable_walk_start and released by
+> > rhashtable_walk_stop.
+> >=20
+> > FWIW, it'd be nice if there were a lockdep_assert_held equivalent for
+> > the rcu_read_lock() here, but I didn't see one of those.
+>=20
+> Would
+>=20
+> static void
+> nfsd_file_cond_queue(struct nfsd_file *nf, struct list_head *dispose)  =
+=20
+> 	__must_hold(RCU)
+> {
+>=20
+> do the trick?
+>=20
 
-> Do not use underscores and unneeded suffixes (e.g. i2c0) in node name in
-> examples.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Seems like a reasonable thing to add.
 
-> diff --git a/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml b/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
-> index 6c5ad426a016..12f75ddc4a70 100644
-> --- a/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
-> +++ b/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
-> @@ -42,7 +42,7 @@ examples:
->          #address-cells = <1>;
->          #size-cells = <0>;
->  
-> -        heart_mon@0 {
-> +        heart-rate@0 {
+>=20
+> > There is a
+> > rcu_read_lock_held(), but I didn't see a good way to get that to compil=
+e
+> > out when lockdep was disabled.
+> >=20
+> > > > + */
+> > > > +static void
+> > > > +maybe_queue_nfsd_file(struct nfsd_file *nf, struct list_head *disp=
+ose)
+> > >=20
+> > > I prefer the name nfsd_file_try_to_queue() or nfsd_file_try_to_dispos=
+e().
+> > > nfsd_file_ should be the prefix where possible. Unless you're
+> > > redriving, I can fix that.
+> > >=20
+> > >=20
+> >=20
+> > Rename at will.
+>=20
+> Done and applied to nfsd-fixes, replacing v1 of this patch.
+>=20
 
-These are both heart-rate and pulse oximeters so measure more than just
-the rate (oxygen saturation in the blood). Reality is they actually
-measure light absorption over time, but you can calculate an estimate
-of both rate and oxygen saturation from that.
+LGTM. Thanks!
 
-I don't really mind simplifying that to heart-rate, but wanted to
-call this out for possible discussion.
+>=20
+> > > > +{
+> > > > +	int decrement =3D 1;
+> > > > +
+> > > > +	/* If we raced with someone else unhashing, ignore it */
+> > > > +	if (!nfsd_file_unhash(nf))
+> > > > +		return;
+> > > > +
+> > > > +	/* If we can't get a reference, ignore it */
+> > > > +	if (!nfsd_file_get(nf))
+> > > > +		return;
+> > > > +
+> > > > +	/* Extra decrement if we remove from the LRU */
+> > > > +	if (nfsd_file_lru_remove(nf))
+> > > > +		++decrement;
+> > > > +
+> > > > +	/* If refcount goes to 0, then put on the dispose list */
+> > > > +	if (refcount_sub_and_test(decrement, &nf->nf_ref)) {
+> > > > +		list_add(&nf->nf_lru, dispose);
+> > > > +		trace_nfsd_file_closing(nf);
+> > > > +	}
+> > > > +}
+> > > > +
+> > > > /**
+> > > > * nfsd_file_queue_for_close: try to close out any open nfsd_files f=
+or an inode
+> > > > * @inode:   inode on which to close out nfsd_files
+> > > > @@ -688,30 +722,12 @@ nfsd_file_queue_for_close(struct inode *inode=
+, struct list_head *dispose)
+> > > >=20
+> > > > 	rcu_read_lock();
+> > > > 	do {
+> > > > -		int decrement =3D 1;
+> > > > -
+> > > > 		nf =3D rhashtable_lookup(&nfsd_file_rhash_tbl, &key,
+> > > > 				       nfsd_file_rhash_params);
+> > > > 		if (!nf)
+> > > > 			break;
+> > > >=20
+> > > > -		/* If we raced with someone else unhashing, ignore it */
+> > > > -		if (!nfsd_file_unhash(nf))
+> > > > -			continue;
+> > > > -
+> > > > -		/* If we can't get a reference, ignore it */
+> > > > -		if (!nfsd_file_get(nf))
+> > > > -			continue;
+> > > > -
+> > > > -		/* Extra decrement if we remove from the LRU */
+> > > > -		if (nfsd_file_lru_remove(nf))
+> > > > -			++decrement;
+> > > > -
+> > > > -		/* If refcount goes to 0, then put on the dispose list */
+> > > > -		if (refcount_sub_and_test(decrement, &nf->nf_ref)) {
+> > > > -			list_add(&nf->nf_lru, dispose);
+> > > > -			trace_nfsd_file_closing(nf);
+> > > > -		}
+> > > > +		maybe_queue_nfsd_file(nf, dispose);
+> > > > 	} while (1);
+> > > > 	rcu_read_unlock();
+> > > > }
+> > > > @@ -928,11 +944,8 @@ __nfsd_file_cache_purge(struct net *net)
+> > > >=20
+> > > > 		nf =3D rhashtable_walk_next(&iter);
+> > > > 		while (!IS_ERR_OR_NULL(nf)) {
+> > > > -			if (!net || nf->nf_net =3D=3D net) {
+> > > > -				nfsd_file_unhash(nf);
+> > > > -				nfsd_file_lru_remove(nf);
+> > > > -				list_add(&nf->nf_lru, &dispose);
+> > > > -			}
+> > > > +			if (!net || nf->nf_net =3D=3D net)
+> > > > +				maybe_queue_nfsd_file(nf, &dispose);
+> > > > 			nf =3D rhashtable_walk_next(&iter);
+> > > > 		}
+> > > >=20
+> > > > --=20
+> > > > 2.39.0
+> > > >=20
+> > >=20
+> > > --
+> > > Chuck Lever
+> > >=20
+> > >=20
+> > >=20
+> >=20
+> > --=20
+> > Jeff Layton <jlayton@kernel.org>
+>=20
+> --
+> Chuck Lever
+>=20
+>=20
+>=20
 
-
->              compatible = "ti,afe4403";
->              reg = <0>;
->              spi-max-frequency = <10000000>;
-> diff --git a/Documentation/devicetree/bindings/iio/health/ti,afe4404.yaml b/Documentation/devicetree/bindings/iio/health/ti,afe4404.yaml
-> index c0e815d9999e..b334f3e356ad 100644
-> --- a/Documentation/devicetree/bindings/iio/health/ti,afe4404.yaml
-> +++ b/Documentation/devicetree/bindings/iio/health/ti,afe4404.yaml
-> @@ -39,7 +39,7 @@ examples:
->          #address-cells = <1>;
->          #size-cells = <0>;
->  
-> -        heart_mon@58 {
-> +        heart-rate@58 {
->              compatible = "ti,afe4404";
->              reg = <0x58>;
->              tx-supply = <&vbat>;
-
-The rest are all fine.  If no one comments I'll pick this up as it is in a few
-days.
-
-Jonathan
+--=20
+Jeff Layton <jlayton@kernel.org>
