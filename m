@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A410767664B
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 14:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ABA67664F
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 14:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjAUM7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 07:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S229672AbjAUNBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 08:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjAUM7e (ORCPT
+        with ESMTP id S229484AbjAUNBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 07:59:34 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56300196A7
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 04:59:33 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so7576723wma.1
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 04:59:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ps43Ql5Tjnd+rS8BdUE8H1PpwwGazEWm6mc1DzBYYUo=;
-        b=YRbeGPF0vzAL9vP1ayq6j23GPI+Xu6Pjso5rZAqVgnNw0bnHPTBZOE18O/MN4KGs4l
-         hnD/+fHbs58kjw8Rc0oUb/2SWkRcMM4Rrykeo92jjtsXTteSOUCshzZHj+N9lQwiPCm+
-         wuC+YNm38OwL9Dq5krViJMUnShdSFXfVotDbWUC49jml+OmIY9KSxTSfL409bgjSx4FH
-         QGSlQB7QaG9hfY5M04zWqPg/gYyGk3Sldzx2s8XRrgJMPdeR/LelvZxihrayGRjETvfu
-         2oh0GxBJqzlVxaZUHv/nNJ9LusDBBYqql5tsbKpPpXEf3EScICBV+fcoQ5uy/lSD14F4
-         k/SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ps43Ql5Tjnd+rS8BdUE8H1PpwwGazEWm6mc1DzBYYUo=;
-        b=EcZjDyJlGl3wLGhrapmptr4DRd9PD+RxVujD47W2SBWieFNHpgGHFQZ6su+g3zS8kz
-         T9++Rx6zf36ozP9/rWQNvbnuj4xNRWqw5svlQmBZOhFM0dfV0nTuENGZMFJ8gKHmosSa
-         UgYsk5SBQO3q7Q8nU1Fl3iYVmHWbtqaiDsu6QQ5El77noqx0/KPKZKrPCtjdKMMq7tal
-         U+f1iJK8yMFN5D5PhoTOd1RG9k0nQYES42RDWTJKpR/Ldw2kfrQZnxFJuPTJAnT4Q6EI
-         l0SsKKYcR2+pIcdJxXtgzFj4q4BWOYThfbrhP9/7ELDPX7kYYqHFvh2H/CeASa1BVrbQ
-         UoEQ==
-X-Gm-Message-State: AFqh2kodPd0y2iXSS7i30Gdl9+/k9gy9eQmUEgro7jATIv2zJWGBuk4D
-        6Yr6uksHnHoGHq8RqlQEI1hs0y+IzeEWlL/Xzs4=
-X-Google-Smtp-Source: AMrXdXsvhV7YOtWBaqBzKvTlyZbR9+174ah2we4wkBdQQ7+67e9gX8kuShnOy0mnLkPORvi2ftUJ7nHK6xi0yLArczs=
-X-Received: by 2002:a05:600c:1c12:b0:3db:99c:bc9e with SMTP id
- j18-20020a05600c1c1200b003db099cbc9emr985917wms.69.1674305971844; Sat, 21 Jan
- 2023 04:59:31 -0800 (PST)
+        Sat, 21 Jan 2023 08:01:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEC623132;
+        Sat, 21 Jan 2023 05:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YlB0kyjevk0alEzZ7VHdw8fRbblsbas/G7ZnWLhfR0I=; b=vbo3G0CbyJKakxu3dY8cMdcaYu
+        2wqlYcaRc5vQnwt+WljyEznrzEtm+WA8fUrgqXcA3AiuWlnjj82mgXvIoRfEbX0FCydnBAFiN+BBf
+        MVtVm3YVRYrrkr5X+E2q5G941cqCYtiIxFxRNWLttfaKbJB1oxTBXwAipzcVl4hUXK77ECp4R2vKI
+        xxgDFUrrr+XKzWXazL/5jhBoqUBJAvCQ9QBSeKLmyeIWVjUUHNXaQRk4C3NL7X0rmzRpqmrd0BMrA
+        ffD5uBT6vNGOtAKrkQA9EmCGAT6F0OxxtEJUdX6yultP/+dwX9doPqr62L/16Dk/lvTFz+Z3iZL/X
+        oQiYVZ1w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pJDUg-00Ds6m-16; Sat, 21 Jan 2023 13:01:14 +0000
+Date:   Sat, 21 Jan 2023 05:01:14 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/8] iov_iter: Define flags to qualify page extraction.
+Message-ID: <Y8viGuz5//4AP7tZ@infradead.org>
+References: <20230120175556.3556978-1-dhowells@redhat.com>
+ <20230120175556.3556978-2-dhowells@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:adf:d212:0:0:0:0:0 with HTTP; Sat, 21 Jan 2023 04:59:31
- -0800 (PST)
-Reply-To: fionahill.usa@outlook.com
-From:   Fiona Hill <xaviergbesse.2020@gmail.com>
-Date:   Sat, 21 Jan 2023 04:59:31 -0800
-Message-ID: <CABEvWULvp02KDKW9PBNZgQMe15irPsNttX+=Z3A8V2ZfyiWU-Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120175556.3556978-2-dhowells@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello did you receive my message?
+On Fri, Jan 20, 2023 at 05:55:49PM +0000, David Howells wrote:
+> For now only a flag to allow peer-to-peer DMA is allowed; but in future,
+> additional flags will be provided to indicate the I/O direction.
+
+Al still doesn't seem to be sold on the latter part, so maybe just
+drop this sentence for now.
