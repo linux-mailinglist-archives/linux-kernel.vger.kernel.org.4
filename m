@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA8F6761D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DA36761DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjAUACC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S229675AbjAUAEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjAUAB5 (ORCPT
+        with ESMTP id S229622AbjAUAEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:01:57 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91138B753;
-        Fri, 20 Jan 2023 16:01:56 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so1639315wmq.1;
-        Fri, 20 Jan 2023 16:01:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ogL/1lSUlkuM5blt1CF8xgQb3CjQ2KzCvYZsa2SRR4=;
-        b=evrm8fT/Kwu45Vp+aemRE5zqqp7ggtVo8Ps1wtNglPyWMeHF63ePTlgrUZQ9viVblW
-         GTGge4PNNEC9bRo1l4jpE/eJc/jGolUTAZ4oiQWSP5d9D8CN1/zXoDrY//Fcc3RE+AXy
-         YZFTM0OXU6Y6y8YTLuOCF166yVzqay+8/Ae+dQ0AFviC2MXKRD0UY47etrQL3xqdenjX
-         VAPUzJnaK/xlXx/ybEUKOX7zmW1shQ/WbIeuY1BGRH5JYJ8iJNueWZlU+oynSkr2RLuA
-         T8JUUQXbGfZXM+4icMDk69Lc7dDoMXGrIorMkg69QgDkDbePRNxwLynqlfPt93FRyVSm
-         rkgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0ogL/1lSUlkuM5blt1CF8xgQb3CjQ2KzCvYZsa2SRR4=;
-        b=InaKtcafF2yO1w/LiRnPCuhGPtv0q35NM+dNT86C6UymeAFCdDCG2WpwaMYpF499ML
-         cmXhsLM8nxRgsLVSXXiNHQ8+VVR9TuX8s9R6Y4kZwF/6lleMeiv4STx32b97lMMlMrF2
-         SmNgda6U2zsq/TrzxPY2cuqFq46cvoF1M/cXgE4UgRVhoC7nIcEY3qZ1Wx/jQjei+QQC
-         Ogu9Iqn/IxG6HHiGVIWgdaxseP6ROtVl3tHWhLcUIEjPcbzfaw2EwAhnZ1vx96c33oaD
-         NqIA29BKzoMAmwSXW5SjXBTeljOIVwE4+FlnH389LQnRszZzXvdHIMh356rstsaTELmm
-         XX3A==
-X-Gm-Message-State: AFqh2kry7XaQhc7FEmp44gZgUYIETcQno19gmenOBVkkI6sKMcDfh2RW
-        ZR0+eDrw0njLRci72lhqeWM=
-X-Google-Smtp-Source: AMrXdXskIekwssjYf6UOlU07IJ2OwDZ/ncq/l6EMFJqKhTAczBKb+Q/Rw+oKkR5Sxac9CGOc724cuQ==
-X-Received: by 2002:a05:600c:ad0:b0:3d9:ebab:ccff with SMTP id c16-20020a05600c0ad000b003d9ebabccffmr24307431wmr.33.1674259315287;
-        Fri, 20 Jan 2023 16:01:55 -0800 (PST)
-Received: from localhost.localdomain (93-34-92-88.ip49.fastwebnet.it. [93.34.92.88])
-        by smtp.googlemail.com with ESMTPSA id h11-20020a05600c314b00b003db2e3f2c7csm5284292wmo.0.2023.01.20.16.01.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 16:01:54 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 3/3] dt-bindings: opp: opp-v2-kryo-cpu: enlarge opp-supported-hw maximum
-Date:   Sat, 21 Jan 2023 01:01:46 +0100
-Message-Id: <20230121000146.7809-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230121000146.7809-1-ansuelsmth@gmail.com>
-References: <20230121000146.7809-1-ansuelsmth@gmail.com>
+        Fri, 20 Jan 2023 19:04:32 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08193485BC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:04:28 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NzGcD0P4vz9v7Jf
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:56:28 +0800 (CST)
+Received: from [10.81.218.54] (unknown [10.81.218.54])
+        by APP2 (Coremail) with SMTP id GxC2BwDnbmXoK8tjX4WxAA--.46257S2;
+        Sat, 21 Jan 2023 01:04:04 +0100 (CET)
+Message-ID: <736020be-de00-3cd8-2325-c3efb87e03b6@huaweicloud.com>
+Date:   Sat, 21 Jan 2023 01:03:50 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+To:     paulmck@kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
+ <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
+ <c5902c18-e0cc-125e-c2f5-7971f0a7ce07@huaweicloud.com>
+ <20230120153909.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <cc3686b3-b234-b0ee-4d2d-15f54da4331b@huaweicloud.com>
+ <20230120213727.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+ <44a2c301-900e-90ea-4b21-e5264102e699@huaweicloud.com>
+ <20230120231952.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <20230120231952.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDnbmXoK8tjX4WxAA--.46257S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWDWr4UtrWkCrWDZr1UKFg_yoW8ur43pF
+        WfKa1Skr18XFyktws7CrWxW34Fgas5Aay3GryFkrn5Aas8WFWIqr4rt3WSkF9Iywsavw4j
+        vry5tasrGas5A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enlarge opp-supported-hw maximum value. In recent SoC we started
-matching more bit and we currently match mask of 112. The old maximum of
-7 was good for old SoC that didn't had complex id, but now this is
-limiting and we need to enlarge it to support more variants.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index cea932339faf..b4ebaf68b43e 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -55,7 +55,7 @@ patternProperties:
-           1:  MSM8996, speedbin 1
-           2:  MSM8996, speedbin 2
-           3-31:  unused
--        maximum: 0x7
-+        maximum: 0xff
- 
-       clock-latency-ns: true
- 
--- 
-2.38.1
+On 1/21/2023 12:19 AM, Paul E. McKenney wrote:
+> On Fri, Jan 20, 2023 at 11:36:15PM +0100, Jonas Oberhauser wrote:
+>>
+>> On 1/20/2023 10:37 PM, Paul E. McKenney wrote:
+>>> Just out of curiosity, are you [set] up to run LKMM locally at your end?
+>> I don't know what exactly that means. I generally run it on wetware.
+>> But I sometimes ask Hernan to run Dat3M (on his machine) over all the litmus
+>> tests in your repo to spot any obvious problems with variations I consider.
+>> I don't think Dat3M is feature-complete with herd at the moment, just
+>> unbelievably faster. For example I think it ignores all flags in the cat
+>> files.
+>> Oh, I just remembered that I also installed herd7 recently to make sure that
+>> any patches I might send in satisfy herd7 syntax requirements (I think you
+>> called this diagnostic driven development?), but I haven't used it to really
+>> run anything.
+>>
+>> Is it too obvious that my words usually aren't backed by cold machine logic?
+> Well, there was this in one of your messages from earlier today: "I'm not
+> going to get it right today, am I?"  And I freely confess that this led
+> me to suspect that you might not have been availing yourself of herd7's
+> opinion before posting.  ;-)
+The main reason I might usually not consult herd7's opinion is that it 
+often takes a while to write a test case in a way herd7 accepts and 
+treats as intended, but then even so the fact that some tests pass may 
+just give some false confidence when some tricky case is being missed.
+So I find the investment/increased confidence ratio to not yet be at the 
+right point to do this when communicating somewhat informally on the 
+mailing list, which is already taking quite a bit of my time (but at 
+least I'm learning a lot during that time about stuff like RCU/SRCU, 
+history of LKMM, etc.).
+If I need to be more confident I'll use herd7 to make sure the syntax is 
+correct and as a sanity check, and some paper or Coq proofs to be 
+confident in the logic.
+
+If you feel that I'm wasting the lists' time too much by making these 
+kind of mistakes, let me know and I'll reconsider.
+
+Best wishes, jonas
 
