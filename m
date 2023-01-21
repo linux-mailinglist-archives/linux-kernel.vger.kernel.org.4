@@ -2,165 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576BB6768AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 21:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A336C6768EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 21:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjAUUFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 15:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S229710AbjAUUKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 15:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjAUUFK (ORCPT
+        with ESMTP id S229493AbjAUUKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 15:05:10 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA6222A01
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 12:05:09 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id x24-20020a17090ab01800b00229f43b506fso7045743pjq.5
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 12:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0j60d7iQ4NQWxCiQzwUehUL0a3y+Bi4urvTxeUjWvB8=;
-        b=wz7V7Svw9SegVn7t5xdBgv0rmPDaDmHugVucHOACIk/EoelZOb1s4Jwa0vj+9nH6Pf
-         fhjKIdyrdch+NgeMQgk8Fo6j0IKfA19sMs5FlvzBQgMlfHH4+A5CvN4VuXvZBOJHYcel
-         zeVDIsmIvFpAtBIhavYrZIVMZh0I2vUxV/gDjk+Qf2gFHHKsvnLY6JQ4LXmq0S2+cpe1
-         /dBZsFvlEOwIq0BbQ8Cipc24KrYOpVLa3hShtAwkpxHT4RK8KXlxv230Iq3D4BQCxn5o
-         B8C5b/ZWtAyBbxxugpADmTiXsODRJCDcckRCPxxsG0vj0TqZr3fvMJGENK1yelgwhsA4
-         wcBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0j60d7iQ4NQWxCiQzwUehUL0a3y+Bi4urvTxeUjWvB8=;
-        b=EpzouoUwSjJZjpeXZeIqArXHkGf0WjmAUk35RncXHcPjWNPYodXuYmYZldwhdsv+Z2
-         I6yp3+455x9elp4tvvhQXoBD4TRbCBuat+L0s87bSMKdawmp+BJx0EZmDVQVynAuLjsa
-         +MNHsuwNTT07lR3KpnDKgQyirrHemHZx2XJZS5RTa/37g/VrcmVZ+JiHzPJ1tWwdCt1o
-         gasE79KbJwlZTJJauvJvIhEcsjP1p90eL0w7bE9csdCts1FbEEmnoxewRbAVlNP3KMFe
-         RmDLGLGiHJABWWpNFzLoqYubrELLJ1UWlqTv3rheDj9XqFSu6bhbXm6VTY9uNayX6fQk
-         3lWQ==
-X-Gm-Message-State: AFqh2ko8SnQ6uY2efV63Wsqh5ATqEg7d5WdEd511nwoAjhAEgmMMaOpv
-        yWjdJLXdDsu0lEGIZOTpJpuGyA==
-X-Google-Smtp-Source: AMrXdXsgTu/qEHUxOMVP9vS7O/BqUv57gbtll3vcKJw/BSN9mpGVvzKzdBCWTUqBXTzNYKcMoQy+yQ==
-X-Received: by 2002:a05:6a20:d80e:b0:ac:b2a3:e39c with SMTP id iv14-20020a056a20d80e00b000acb2a3e39cmr19018212pzb.62.1674331508623;
-        Sat, 21 Jan 2023 12:05:08 -0800 (PST)
-Received: from localhost.localdomain ([223.233.74.24])
-        by smtp.gmail.com with ESMTPSA id bg7-20020a056a02010700b004785c24ffb4sm15595269pgb.26.2023.01.21.12.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 12:05:07 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm6115: Add smp2p nodes
-Date:   Sun, 22 Jan 2023 01:34:54 +0530
-Message-Id: <20230121200454.1423567-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Sat, 21 Jan 2023 15:10:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C49222DD2
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 12:10:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A82260B4C
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 20:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E37C433D2;
+        Sat, 21 Jan 2023 20:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674331826;
+        bh=3Ju4R0Gr6E8eIeGaaXSXGr5IdOHLnt6JiBa33jk3ebQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TZflQWzsD2Y1/EARcSqTbImaHZg1fiwh/ETge8k3Ps+/j3kYkZOD1rh9PkpUXm9KX
+         Mlz/xvgoCbDr9F0woJd+pGxZaRzEN/k9QF6IY791OjC+O1f7reUegI86MM00qILXf2
+         q+k2x2WrWaNBxEylZiiBt2gkLzWqQHJCJH1qxZ7JTFlrHmVRp2gRXCFjKLCrvTGdsC
+         /Q8fIviaC2QoGINiDlaDWcttADvZzRpkSgUm5vxVEsA4tq7OUL9D1Mb5Sm155VDnKL
+         vU7Rt+G0yme8/kDFRSyV1F7s1WgvS0taC2Ws5jLttcEfTG9GW5OwQbyOPs07VYwRWt
+         XTe+aSmfYlLgA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2BF805C06AB; Sat, 21 Jan 2023 12:10:26 -0800 (PST)
+Date:   Sat, 21 Jan 2023 12:10:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230121201026.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
+ <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
+ <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
+ <Y8wimpMpajLudrYb@rowland.harvard.edu>
+ <20230121184032.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8xDieO/iYOk9Ty1@rowland.harvard.edu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y8xDieO/iYOk9Ty1@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the adsp, cdsp and modem smp2p nodes to sm6115.
+On Sat, Jan 21, 2023 at 02:56:57PM -0500, Alan Stern wrote:
+> On Sat, Jan 21, 2023 at 10:40:32AM -0800, Paul E. McKenney wrote:
+> > On Sat, Jan 21, 2023 at 12:36:26PM -0500, Alan Stern wrote:
+> > > On Fri, Jan 20, 2023 at 10:41:14PM +0100, Jonas Oberhauser wrote:
+> > > > 
+> > > > 
+> > > > On 1/20/2023 5:18 PM, Alan Stern wrote:
+> > > > > On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
+> > > > > > Perhaps we could say that reading an index without using it later is
+> > > > > > forbidden?
+> > > > > > 
+> > > > > > flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
+> > > > > > thrown-srcu-cookie-on-floor
+> > > > > We already flag locks that don't have a matching unlock.
+> > > > 
+> > > > Of course, but as you know this is completely orthogonal.
+> > > 
+> > > Yeah, okay.  It doesn't hurt to add this check, but the check isn't 
+> > > complete.  For example, it won't catch the invalid usage here:
+> > > 
+> > > P0(srcu_struct *ss)
+> > > {
+> > > 	int r1, r2;
+> > > 
+> > > 	r1 = srcu_read_lock(ss);
+> > > 	srcu_read_unlock(&ss, r1);
+> > > 	r2 = srcu_read_lock(ss);
+> > > 	srcu_read_unlock(&ss, r2);
+> > > }
+> > > 
+> > > exists (~0:r1=0:r2)
+> > > 
+> > > On the other hand, how often will people make this sort of mistake in 
+> > > their litmus tests?  My guess is not very.
+> > 
+> > I must be blind this morning.  I see a well-formed pair of back-to-back
+> > SRCU read-side critical sections.  A rather useless pair, given that
+> > both are empty,
+> 
+> And there are no synchronize_srcu() calls.
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 72 ++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+Agreed, an additional level of uselessness, though not invalidity.  After
+all, the more advantageous SRCU use cases execute lots of srcu_read_lock()
+and srcu_read_unlock() calls and very few synchronize_srcu() calls.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 50cb8a82ecd5..3c66f998a81b 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -345,6 +345,78 @@ rpmpd_opp_turbo_plus: opp8 {
- 		};
- 	};
- 
-+	smp2p-adsp {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <443>, <429>;
-+
-+		interrupts = <GIC_SPI 279 IRQ_TYPE_EDGE_RISING>;
-+
-+		mboxes = <&apcs_glb 10>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <2>;
-+
-+		adsp_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		adsp_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	smp2p-cdsp {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <94>, <432>;
-+
-+		interrupts = <GIC_SPI 263 IRQ_TYPE_EDGE_RISING>;
-+
-+		mboxes = <&apcs_glb 30>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <5>;
-+
-+		cdsp_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		cdsp_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	smp2p-mpss {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <435>, <428>;
-+
-+		interrupts = <GIC_SPI 70 IRQ_TYPE_EDGE_RISING>;
-+
-+		mboxes = <&apcs_glb 14>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <1>;
-+
-+		modem_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		modem_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
- 	soc: soc@0 {
- 		compatible = "simple-bus";
- 		#address-cells = <1>;
--- 
-2.38.1
+> >  but valid nonetheless.
+> > 
+> > Or is the bug the use of 0:r1 and 0:r2 in the "exists" clause?  If so,
+> > then I agree that this is not at all a high-priority bug to flag.
+> 
+> Yes, that is the bug.  The patched version of LKMM and the 
+> implementation you described say the exist clause will never be 
+> satisfied, the current version of LKMM says it will always be 
+> satisfied, and the theoretical model for SRCU says it will sometimes 
+> be satisfied -- which is the answer we want.
 
+Got it, thank you.
+
+> > > > Can you briefly explain how the operational model you have in mind for
+> > > > srcu's up and down allows x==1 (and y==0 and idx1==idx2) in the example I
+> > > > sent before (copied with minor edit below for convenience)?
+> > > > 
+> > > > P0{
+> > > >     idx1 = srcu_down(&ss);
+> > > >     store_rel(p1, true);
+> > > > 
+> > > > 
+> > > >     shared cs
+> > > > 
+> > > >     R x == 1
+> > > > 
+> > > >     while (! load_acq(p2));
+> > > >     R idx2 == idx1 // for some reason, we got lucky!
+> > > >     srcu_up(&ss,idx1);
+> > > > }
+> > > > 
+> > > > P1{
+> > > >     idx2 = srcu_down(&ss);
+> > > >     store_rel(p2, true);
+> > > > 
+> > > >     shared cs
+> > > > 
+> > > >     R y == 0
+> > > > 
+> > > >     while (! load_acq(p1));
+> > > >     srcu_up(&ss,idx2);
+> > > > }
+> > > > 
+> > > > P2 {
+> > > >     W y = 1
+> > > >     srcu_sync(&ss);
+> > > >     W x = 1
+> > > > }
+> > > > 
+> > > > 
+> > > > I can imagine models that allow this but they aren't pretty. Maybe you have
+> > > > a better operational model?
+> > > 
+> > > The operational model is not very detailed as far as SRCU is concerned.  
+> > > It merely says that synchronize_srcu() executing on CPU C waits until:
+> > > 
+> > > 	All writes received by C prior to the start of the function have 
+> > > 	propagated to all CPUs (call this time t1).  This could be 
+> > > 	arranged by having synchronize_srcu() start with an smp_mb().
+> > > 
+> > > 	For every srcu_down_read() that executed prior to t1, the 
+> > > 	matching srcu_up_read() has finished and all writes received 
+> > > 	by the unlocking CPU prior to the unlock have propagated to all 
+> > > 	CPUs.  This could be arranged by having the srcu_up_read() 
+> > > 	call include a release write which has been received by C and 
+> > > 	having synchronize_srcu() end with an smp_mb().
+> > 
+> > Agreed.  It took me a few reads to see that this prohibited later writes
+> > by other CPUs affecting reads in the prior critical section, but the "all
+> > writes received by the unlocking CPU" does seem to me to prohibit this.
+> > 
+> > > The operational model doesn't specify exactly how synchronize_srcu() 
+> > > manages to do these things, though.
+> > 
+> > Which is a good thing, given the wide variety of possible implementations.
+> > 
+> > > Oh yes, it also says that the value returned by srcu_down_read() is an 
+> > > unpredictable int.  This differs from the code in the patched herd 
+> > > model, which says that the value will always be 0.
+> > 
+> > As noted earlier, I believe that this is fine.  If significant problems
+> > arise, then we might need to do something.  However, there is some
+> > cost to complexity, so we should avoid getting too speculative about
+> > possible probems.
+> > 
+> > > Anyway, the operational model says the litmus test can succeed as 
+> > > follows:
+> > > 
+> > > P0                    P1                     P2
+> > > --------------------- ---------------------- -------------------------
+> > >                       Widx2=srcu_down_read()
+> > >                       Wrel p2=1
+> > >                       Ry=0
+> > >                                              Wy=1
+> > >                                              synchronize_srcu() starts
+> > > 	... idx2, p2, and y propagate to all CPUs ...
+> > >                                              Time t1
+> > > Widx1=srcu_down_read()
+> > > Wrel p1=1
+> > > 	,,, idx1 and p1 propagate to all CPUs ...
+> > >                       Racq p1=1
+> > >                       srcu_up_read(idx2)
+> > >                                              synchronize_srcu() ends
+> > >                                              Wx=1
+> > > Rx=1
+> > > Racq p2=1
+> > > Ridx2=idx1
+> > > srcu_up_read(idx1)
+> > > 
+> > > (The final equality in P0 is allowed because idx1 and idx2 are both 
+> > > random numbers, so they might be equal.)
+> > 
+> > This all makes sense to me.
+> > 
+> > > Incidentally, it's worth pointing out that the algorithm Paul described 
+> > > will forbid this litmus test even if you remove the while loop and the 
+> > > read of idx2 from P0.
+> > 
+> > Given that the values returned by those two srcu_down_read() calls must
+> > be the same, then, yes, the current Linux-kernel Tree RCU implementation
+> > would forbid this.
+> > 
+> > On the other hand, if the two indexes differ, then P2's synchronize_srcu()
+> > can see that there are no really old readers on !Widx2, then flip
+> > the index.  This would mean that P0's Widx1 would be equal to !Widx2,
+> > which has already been waited on.  Then P2's synchronize_srcu() can
+> > return as soon as it sees P1's srcu_up_read().
+> 
+> Sorry, what I said may not have been clear.  I meant that even if you 
+> remove the while loop and read of idx2 from P0, your algorithm will 
+> still not allow idx1 = idx2 provided everything else is as written.
+
+If synchronize_srcu() has flipped ->srcu_idx by the time that P0's
+srcu_down_read() executes, agreed.  Otherwise, Widx1 and Widx2 might
+well be equal.
+
+> > > 	If you don't pass the value to exactly one srcu_up_read() call, 
+> > > 	you void the SRCU warranty.  In addition, if you do anything 
+> > > 	else with the value that might affect the outcome of the litmus 
+> > > 	test, you incur the risk that herd7 might compute an incorrect 
+> > > 	result [as in the litmus test I gave near the start of this
+> > > 	email].
+> > > 
+> > > Merely storing the value in a shared variable which then doesn't get 
+> > > used or is used only for something inconsequential would not cause any 
+> > > problems.
+> > 
+> > That is consistent with my understanding, but please let me try again
+> > in list form:
+> 
+> ...
+> 
+> > 4.	If a value returned from a given srcu_read_lock() is passed to
+> > 	exactly one srcu_read_unlock(), and then that value is later
+> > 	manipulated, that is bad practice (exactly what are you trying
+> > 	to accomplish by so doing?), but SRCU won't know the difference.
+> > 
+> > 	In particular, the Linux-kernel SRCU implementation doesn't know
+> > 	about the herd7 "exists" clause, but kudos to Jonas for casting
+> > 	his conceptual net widely indeed!
+> 
+> In addition, herd7 might give an answer different from what would 
+> actually happen in the kernel, depending on what the manipulation does.
+
+True, given that the kernel's srcu_read_unlock() can return a
+non-zero value.
+
+> Yes, that is more or less what I was trying to express.
+
+Sounds good!
+
+							Thanx, Paul
