@@ -2,81 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C226764F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 08:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 493126764FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 08:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjAUHaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 02:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S229683AbjAUHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 02:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjAUHax (ORCPT
+        with ESMTP id S229450AbjAUHia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 02:30:53 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5487028D;
-        Fri, 20 Jan 2023 23:30:53 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id ABEFA5C007B;
-        Sat, 21 Jan 2023 02:30:50 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 21 Jan 2023 02:30:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1674286250; x=1674372650; bh=xQZuJHWaJy
-        nRRhNGWAzBSKfZB3gdlchERVUXaGTKKGY=; b=J+bZs+dTheCGrwXth4OQo8UvvP
-        jZTlu5wuJ8SACzM4fz2cHg3h8p1r/VOJG6mfrAoXxynbDnItqG0+DvGvx1gSaEh7
-        M6wR3Uij9+syLEJE+U6xA/xZ9pfKEudsrtPKselHFaUe2R9Fx41cYt0SIA1CwyEL
-        7wrVnPaWa+ibHEnSTDazp5g/DP3wdMlhp895LzJVrqU7Vr77LGCOaTIH1b7J6WFc
-        CExu/tErByIfyqUgXr3lx0K/933eCbVUofhMoGR2hQb1Po+GjnpU7TxaD76RIIPk
-        NC1d+e5Vw6ABxMUQ9pXnKapEDyXcsDymiHWjj3y9wKTJWIAYVM/jCiA/cYbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674286250; x=1674372650; bh=xQZuJHWaJynRRhNGWAzBSKfZB3gd
-        lchERVUXaGTKKGY=; b=pXDGgc8sRF3RQCWFzQrOa7dZuc2JBzhu0vr5Ds61RIEs
-        balSsy8rQKjuxQR1K658FNLHo5ApTGY/27kbR3XBGS8fm7BVPgIR/r9Zrn6oO4f8
-        h4jvSO1bbM2fAvt7xG99NNuZpdOp68Xi2zCXu2KqqdgYAPOYwkZ434ZLjNr8baFI
-        77O5eCC0eG5f8E3WiAdPMLiPDrUdswgRlSFk5OQdnAZFKbHmwO7JmcdTDL4E6ZDN
-        rvjjDGU9VBhJtgBbz9SG+TLKP1B0S9kXcfHU45LKrB3PlZO46Dj1jKlbhHsaS6P1
-        SK/rus3SRQBGRGLXu9eLWFENIMXaykTsBMDTre/KhQ==
-X-ME-Sender: <xms:qpTLY5BYtRn3zEhQC3P77wzDeuTaAPxBSn0LqusuFRwR-WEVsbVbFw>
-    <xme:qpTLY3gxfqw7gtEPCeT2Ee0XFxJplSC25Jxgj-UjO6uD-CjuwV7V7-0Pkef3fhejM
-    W8Pz3ctC2yzBQ>
-X-ME-Received: <xmr:qpTLY0k4LXT2bkbOXSdkaPiIXGE2gRaX_PRBgd1oU60AjRd0_dSWM1QZ5ekpaedeGSXUAK0D0btlmOBUYlW1qTD5mZ05FBno7psOcA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddufedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:qpTLYzz5AY7dzmN0J5W0ek27leN-R2gH1uAicuy4Zsbpbt61KmveoQ>
-    <xmx:qpTLY-TKVkRgRcXD0XmEhdGmTVFFhZqVQpvRDi5zf5k5NvSgS9L3Qg>
-    <xmx:qpTLY2bXU1arMEpratg9x6rWlAEqfwtswEYgdFKPP4YXgvuW1NfOPw>
-    <xmx:qpTLY9EBar7kWVLPykxuvxcF2k1GoNjMrViF393_wSfrP_XtElIMBQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 21 Jan 2023 02:30:49 -0500 (EST)
-Date:   Sat, 21 Jan 2023 08:30:45 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Marek Vasut <marex@denx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tty.current tree
-Message-ID: <Y8uUpXDM2xnlqhjD@kroah.com>
-References: <20230120075832.02bc1124@canb.auug.org.au>
+        Sat, 21 Jan 2023 02:38:30 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA7D3646F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 23:38:28 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C3AB541EF0;
+        Sat, 21 Jan 2023 07:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1674286705;
+        bh=q7UBuSh0sNqJzA71lhmY5ZED0bNc4qbRW1noW7A6qYw=;
+        h=From:To:Cc:Subject:Date;
+        b=yYmj28ndySj3bYRPSK8vfFu+T1cou8hjuwnfxx+HdjpmBgfHnOF55c8O1zi8bNKG+
+         RaRPj87tkE1F40fYCrSXWJPVRnzONuI/1vdKJBvEDTA9lxmCrgFP5P0FdMB9mkqBbn
+         31PnJI3s+2W14td6akGOixk6d2eoFQUCuDVmTM7gE6t/bRI3oTsZzNcCHzLpuU+bd7
+         oZ2K2jzQ82T1WfPbLmLe+sA0BWfEm1Mczm6//BB0ZU3QytOslyfUI8Cnnyej+J+qyC
+         QFX0HDeLkXnxSb7JLT1KdK9hBehxe/AzqY6NISr+MNzRmt+Q97n/gyILMyhBlS8JCb
+         4aZbTFKRJnReA==
+From:   Asahi Lina <lina@asahilina.net>
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Asahi Lina <lina@asahilina.net>
+Subject: [PATCH] soc: apple: rtkit: Add register dump decoding to crashlog
+Date:   Sat, 21 Jan 2023 16:37:41 +0900
+Message-Id: <20230121073741.3807-1-lina@asahilina.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120075832.02bc1124@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,24 +52,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 07:58:32AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tty.current tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/tty/serial/stm32-usart.c: In function 'stm32_usart_interrupt':
-> drivers/tty/serial/stm32-usart.c:804:62: error: 'flags' undeclared (first use in this function)
->   804 |                 uart_unlock_and_check_sysrq_irqrestore(port, flags);
->       |                                                              ^~~~~
-> drivers/tty/serial/stm32-usart.c:804:62: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> Caused by commit
-> 
->   f24771b62a83 ("serial: stm32: Merge hard IRQ and threaded IRQ handling into single IRQ handler")
-> 
-> I have used the tty.current tree from next-20230119 for today.
+When the coprocessor crashes, it's useful to get a proper register dump
+so we can find out what the firmware was doing. Add a decoder for this.
 
-Should now be fixed up as I reverted this, thanks!
+Originally this had ESR decoding by reusing the ARM64 arch header for
+this, but that introduces some module linking and cross-arch compilation
+issues, so let's leave that out for now.
 
-greg k-h
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+ drivers/soc/apple/rtkit-crashlog.c | 83 ++++++++++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
+
+diff --git a/drivers/soc/apple/rtkit-crashlog.c b/drivers/soc/apple/rtkit-crashlog.c
+index 732deed64660..e29ef0a80ab8 100644
+--- a/drivers/soc/apple/rtkit-crashlog.c
++++ b/drivers/soc/apple/rtkit-crashlog.c
+@@ -13,6 +13,7 @@
+ #define APPLE_RTKIT_CRASHLOG_VERSION FOURCC('C', 'v', 'e', 'r')
+ #define APPLE_RTKIT_CRASHLOG_MBOX FOURCC('C', 'm', 'b', 'x')
+ #define APPLE_RTKIT_CRASHLOG_TIME FOURCC('C', 't', 'i', 'm')
++#define APPLE_RTKIT_CRASHLOG_REGS FOURCC('C', 'r', 'g', '8')
+ 
+ struct apple_rtkit_crashlog_header {
+ 	u32 fourcc;
+@@ -31,6 +32,24 @@ struct apple_rtkit_crashlog_mbox_entry {
+ };
+ static_assert(sizeof(struct apple_rtkit_crashlog_mbox_entry) == 0x18);
+ 
++struct apple_rtkit_crashlog_regs {
++	u32 unk_0;
++	u32 unk_4;
++	u64 regs[31];
++	u64 sp;
++	u64 pc;
++	u64 psr;
++	u64 cpacr;
++	u64 fpsr;
++	u64 fpcr;
++	u64 unk[64];
++	u64 far;
++	u64 unk_X;
++	u64 esr;
++	u64 unk_Z;
++};
++static_assert(sizeof(struct apple_rtkit_crashlog_regs) == 0x350);
++
+ static void apple_rtkit_crashlog_dump_str(struct apple_rtkit *rtk, u8 *bfr,
+ 					  size_t size)
+ {
+@@ -94,6 +113,66 @@ static void apple_rtkit_crashlog_dump_mailbox(struct apple_rtkit *rtk, u8 *bfr,
+ 	}
+ }
+ 
++static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
++					   size_t size)
++{
++	struct apple_rtkit_crashlog_regs regs;
++	const char *el;
++	int i;
++
++	if (size < sizeof(regs)) {
++		dev_warn(rtk->dev, "RTKit: Regs section too small: 0x%lx", size);
++		return;
++	}
++
++	memcpy(&regs, bfr, sizeof(regs));
++
++	switch (regs.psr & PSR_MODE_MASK) {
++	case PSR_MODE_EL0t:
++		el = "EL0t";
++		break;
++	case PSR_MODE_EL1t:
++		el = "EL1t";
++		break;
++	case PSR_MODE_EL1h:
++		el = "EL1h";
++		break;
++	case PSR_MODE_EL2t:
++		el = "EL2t";
++		break;
++	case PSR_MODE_EL2h:
++		el = "EL2h";
++		break;
++	default:
++		el = "unknown";
++		break;
++	}
++
++	dev_warn(rtk->dev, "RTKit: Exception dump:");
++	dev_warn(rtk->dev, "  == Exception taken from %s ==", el);
++	dev_warn(rtk->dev, "  PSR    = 0x%llx", regs.psr);
++	dev_warn(rtk->dev, "  PC     = 0x%llx\n", regs.pc);
++	dev_warn(rtk->dev, "  ESR    = 0x%llx\n", regs.esr);
++	dev_warn(rtk->dev, "  FAR    = 0x%llx\n", regs.far);
++	dev_warn(rtk->dev, "  SP     = 0x%llx\n", regs.sp);
++	dev_warn(rtk->dev, "\n");
++
++	for (i = 0; i < 31; i += 4) {
++		if (i < 28)
++			dev_warn(rtk->dev,
++					 "  x%02d-x%02d = %016llx %016llx %016llx %016llx\n",
++					 i, i + 3,
++					 regs.regs[i], regs.regs[i + 1],
++					 regs.regs[i + 2], regs.regs[i + 3]);
++		else
++			dev_warn(rtk->dev,
++					 "  x%02d-x%02d = %016llx %016llx %016llx\n", i, i + 3,
++					 regs.regs[i], regs.regs[i + 1], regs.regs[i + 2]);
++	}
++
++	dev_warn(rtk->dev, "\n");
++}
++
+ void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+ {
+ 	size_t offset;
+@@ -140,6 +219,10 @@ void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+ 			apple_rtkit_crashlog_dump_time(rtk, bfr + offset + 16,
+ 						       section_size);
+ 			break;
++		case APPLE_RTKIT_CRASHLOG_REGS:
++			apple_rtkit_crashlog_dump_regs(rtk, bfr + offset + 16,
++						       section_size);
++			break;
+ 		default:
+ 			dev_warn(rtk->dev,
+ 				 "RTKit: Unknown crashlog section: %x",
+-- 
+2.35.1
+
