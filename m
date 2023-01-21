@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D34676786
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17053676789
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjAUQ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 11:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S229972AbjAUQ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 11:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAUQ60 (ORCPT
+        with ESMTP id S229463AbjAUQ7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 11:58:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF602940C
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 08:58:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 814F6B80885
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 16:58:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC48DC433D2;
-        Sat, 21 Jan 2023 16:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674320303;
-        bh=Rc60u3nQD8vjB9hfAtNH19XQTM3JZUxJHCTagm0Ww8w=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=rHQqUJWCTcUU6AhaSEYYkuYUhqUWdQSGyd2wvrH314T4AetbgXREWVTYUaFm8XOJ8
-         oP/cezx9s/4pCce0YMhp4T2ezQ4GFNKt3dYJ5iv3rc2tk9e6YHXTm4ZzXWh4/CGI1q
-         WgwEL/MEOGchAhbho3YREROj+Hbdmj9cOuh0R2ERYySY5KooxC3nFe6fRqbyyc3ZSW
-         xlmMWrKHsamshuEzbZnlrnvnOZNpxlHtVYeyg7AZON2AIoVOnhhboFTYS7JxhRzY6+
-         y1ujN/6oI2aEE5EKloh58YGdDm1/paDf+9BziUtBB1lWmBHWT/pVF5L30vvJqMhj8f
-         3PM8axc7mBsbA==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 955BB27C0054;
-        Sat, 21 Jan 2023 11:58:21 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Sat, 21 Jan 2023 11:58:21 -0500
-X-ME-Sender: <xms:rBnMY3xs8CKfHZTWiTPvmFqdovIhH86r-nU_ReHS8_xuzBmUzFPmDQ>
-    <xme:rBnMY_S0G7T1XAtFRgs2mrX0cWk6Ox4RRuS3IfKy8HmG63Yv6FEEkX6SEgLaqtmS5
-    3gV9pN6vu-qg58OXCs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddugedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
-    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:rBnMYxWcr_StY-Je2QwqxKK1dbhMVCkQYrCnb9RmFXhUDRM05-Qhdw>
-    <xmx:rBnMYxi_P1OkYINtWYQpUpy24A33gZmlwWJ71bzXi0nBDCToADHKUQ>
-    <xmx:rBnMY5CxN-5-kQF7RdR5Lf3vMZQi7WPnH70detc7b1t1Jl7R21Hoig>
-    <xmx:rRnMY73ogRNB9CTAUFW9AJ7a9ndlOBjr1SzBz4VIgUCSNJTv1veRKg>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B8B7231A0063; Sat, 21 Jan 2023 11:58:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <6bf667ca-da46-4759-b1b0-5aa56dd2eb28@app.fastmail.com>
-In-Reply-To: <87v8l26ww7.fsf@meer.lwn.net>
-References: <20230111193211.1987047-1-sohil.mehta@intel.com>
- <87v8l26ww7.fsf@meer.lwn.net>
-Date:   Sat, 21 Jan 2023 08:58:00 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Jonathan Corbet" <corbet@lwn.net>,
-        "Sohil Mehta" <sohil.mehta@intel.com>, linux-doc@vger.kernel.org
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH] x86/vsyscall: Fix documentation to reflect the default mode
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 21 Jan 2023 11:59:33 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3270E2940E;
+        Sat, 21 Jan 2023 08:59:32 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id a37so8916728ljq.0;
+        Sat, 21 Jan 2023 08:59:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lS7OTDH5xsHguwgoMystLpNa9MHa3l+igtaO3KLB4S8=;
+        b=qWBeeI8GcMaFhAphaGpt1sLrb6bytQUftC0WTM6eilD8PoXtLu1T3Wh0KfM3HcyWbz
+         hMZ/Lnhl9JNmQn481RPwRNc48k9Yg7LGgf/r0P9mFd3GsPEDO4tUVKN1XsvF1FIpB0Jh
+         oy+YvYbswSAwJ8MHDhHbr8Z2T/KJNSOL8kR4rfAbbvP11aRRQKbsw+uvdlSM5NuIXkAX
+         x/nma3tcCc/CtkjN02CRbSntzizU0w9MO2e9AvdccT+rfIM6SAxDVbtEQhZUtJpnYjhy
+         wwIjGW7Glg9PXzfYThUe2gobgln+AuKEzdPmc4cz37UoYvUObKcpz2M7xntdYb2XOBA+
+         Vhxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lS7OTDH5xsHguwgoMystLpNa9MHa3l+igtaO3KLB4S8=;
+        b=6khYCXplpYAIdi3V1DU8hjykc+3mvxIBPMykR9uLDn9HViicH+yupGuQDZljrugBXH
+         0szfHLfYXJ6OVvGeNcmnOEykX+vPYfiw57tiidmMNZzrVo+H06T1jxB29z6mqBjTQX2W
+         MqHVsb5g/puECq3qCJwzVOjAI3v5xHkBodxDGnoyavUQ4a9aORrkaueupucviSryKLOC
+         jBTWaxtZ/aGSszZwXH+vIdug/PJqPIGTqyszHSzP8s/ZsVGL1zsvrVKporeIucohxRzr
+         1+apnRIaUT74EnyznkewhsAFUytIfxDoSwMYD5mkUP1hQtzfibxyDg1fosY2U+LgkaF6
+         JLnQ==
+X-Gm-Message-State: AFqh2krYlTaxTpDO+fXNvfdGd6E/sjSPV4kW6yzZSz5bMt9GWECeCkVy
+        o40CW64KI6m0xohRTWnXiPPivET/WpTyzvobtjg=
+X-Google-Smtp-Source: AMrXdXs2JOXrHvOXx534MiLH8Kc5JcYjdUaE0aZg91H+2RdNyXWFq2+jkC8sSBfnCGviWfUQf8plAu42lOLmnJ+WOoY=
+X-Received: by 2002:a2e:9255:0:b0:289:81a4:3a7b with SMTP id
+ v21-20020a2e9255000000b0028981a43a7bmr1260269ljg.487.1674320370315; Sat, 21
+ Jan 2023 08:59:30 -0800 (PST)
+MIME-Version: 1.0
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+In-Reply-To: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 21 Jan 2023 17:58:53 +0100
+Message-ID: <CA+icZUVoxYrUfW9R9cCcUkHvvbkZoHSCmHVuTVh7gmdf9_jJkQ@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     Huang Rui <ray.huang@amd.com>, li.meng@amd.com,
+        skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Thu, Jan 19, 2023, at 1:24 PM, Jonathan Corbet wrote:
-> Sohil Mehta <sohil.mehta@intel.com> writes:
+On Sat, Jan 21, 2023 at 5:41 PM Doug Smythies <dsmythies@telus.net> wrote:
 >
->> The default vsyscall mode has been updated from emulate to xonly for a
->> while. Update the kernel-parameters doc to reflect that.
->>
->> Fixes: 625b7b7f79c6 ("x86/vsyscall: Change the default vsyscall mode to xonly")
->> Cc: Andy Lutomirski <luto@kernel.org>
->> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
->> Reviewed-by: Tony Luck <tony.luck@intel.com>
->> ---
->> Do documentation fixes typically get backported to stable? I haven't included
->> a stable cc assuming they do not.
->>
->>  Documentation/admin-guide/kernel-parameters.txt | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
+> Revert the portion of a recent Makefile change that incorrectly
+> deletes source files when doing "make clean".
 >
-> Applied, thanks.
+> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> ---
+> v2: fix address list.
+> ---
 
-Belated ack!  Sohil, thanks for the fix.
+Hi Doug,
 
+thanks for the update.
+
+You happen to know through which Git tree this will go?
+linux-pm?
+linux-kselftest?
+
+https://lore.kernel.org/lkml/?q=Doug+Smythies
+
+Hmm, I cannot download the patch with b4:
+
+link="https://lore.kernel.org/lkml/000601d92db7$39e9d0b0$adbd7210$@telus.net/"
+
+$ b4 -d am $link
+Running git --no-pager config -z --get-regexp b4\..*
+Running git --no-pager config -z --get-regexp get-lore-mbox\..*
+Running git --no-pager config -z --get-regexp gpg\..*
+t_mbx_url=https://lore.kernel.org/all/https%3A%2F%2Flore.kernel.org%2Flkml%2F000601d92db79e9d0b0telus.net%2F/t.mbox.gz
+Grabbing thread from
+lore.kernel.org/all/https%3A%2F%2Flore.kernel.org%2Flkml%2F000601d92db79e9d0b0telus.net%2F/t.mbox.gz
+That message-id is not known.
+
+Maybe be patient.
+
+BR,
+-Sedat-
+
+>  tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>  1 file changed, 5 deletions(-)
 >
-> jon
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 5f195ee756d6..5fd1424db37d 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -7,11 +7,6 @@ all:
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>
+> -ifeq (x86,$(ARCH))
+> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> -endif
+> -
+>  TEST_PROGS := run.sh
+>  TEST_FILES := basic.sh tbench.sh gitsource.sh
+>
+> --
+> 2.25.1
+>
+>
+>
