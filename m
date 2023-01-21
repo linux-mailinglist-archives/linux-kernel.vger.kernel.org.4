@@ -2,29 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C686767FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1070B6767EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjAUSHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 13:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S230012AbjAUSAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 13:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjAUSHh (ORCPT
+        with ESMTP id S229749AbjAUSAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 13:07:37 -0500
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E3112F06;
-        Sat, 21 Jan 2023 10:07:36 -0800 (PST)
+        Sat, 21 Jan 2023 13:00:37 -0500
+X-Greylist: delayed 99 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 Jan 2023 10:00:35 PST
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B461BE;
+        Sat, 21 Jan 2023 10:00:35 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
-        t=1674323933;
+        t=1674323937;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AmtCc8t9CHBsb1LMNqV7KWtscMyB6VCsQ0QK4PPIMFw=;
-        b=aSpHwl4nfa3jgckrY4s/AD+fHrbYcDcjzJE6b3Eljfk77FkD7R4Dqhyrk8zx215FbSoWeE
-        HF88jTSpqhsoxo6yCL6zKkbZMRtI5ppIZ92GLDe05e6R4B4JrZqP8S9iMWthfdZEfPQid5
-        jm/hDH+su97be2ucDcETwcHwjuce7qY=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6g3CbtPyBBRAm138QlEI5LXEWjs/LxVGS4Ua6nSkfY4=;
+        b=dgtdEk+8UZ56tJtT+DIuaRTaWNHRkykKn8RFGEwpHPyhDGUcuqOnKvdZjyb4S6GCDtN06+
+        aJpdeHXzSKGAeOdYY4uYVTjIanweGm/3ZzoMxVM0xJW4RHH0V/L6k/7zTVSf3rCPSDHL9z
+        jHClk6bRzZdnTD4LyEqq+C9dGs6fpPU=
 From:   Rayyan Ansari <rayyan@ansari.sh>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -38,9 +40,11 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH v3 0/3] Add XO clocks for MSM8226/MSM8974
-Date:   Sat, 21 Jan 2023 17:58:34 +0000
-Message-Id: <20230121175838.755636-1-rayyan@ansari.sh>
+Subject: [PATCH v3 1/3] clk: qcom: smd: Add XO RPM clocks for MSM8226/MSM8974
+Date:   Sat, 21 Jan 2023 17:58:35 +0000
+Message-Id: <20230121175838.755636-2-rayyan@ansari.sh>
+In-Reply-To: <20230121175838.755636-1-rayyan@ansari.sh>
+References: <20230121175838.755636-1-rayyan@ansari.sh>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -53,20 +57,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v2:
-- Base off linux-next
-- Add correct XO clock to MSM8974 as well
+Add the XO and XO_A clocks to the MSM8974 clock list, which is also
+used on MSM8226.
 
-Rayyan Ansari (3):
-  clk: qcom: smd: Add XO RPM clocks for MSM8226/MSM8974
-  ARM: dts: qcom: msm8226: add clocks and clock-names to GCC node
-  ARM: dts: qcom: msm8974: add correct XO clock source to GCC node
+Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
+---
+ drivers/clk/qcom/clk-smd-rpm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- arch/arm/boot/dts/qcom-msm8226.dtsi | 5 +++++
- arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
- drivers/clk/qcom/clk-smd-rpm.c      | 2 ++
- 3 files changed, 8 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+index 6f23ca4828f4..31f6de13d156 100644
+--- a/drivers/clk/qcom/clk-smd-rpm.c
++++ b/drivers/clk/qcom/clk-smd-rpm.c
+@@ -610,6 +610,8 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8936 = {
+ };
+ 
+ static struct clk_smd_rpm *msm8974_clks[] = {
++	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
++	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
+ 	[RPM_SMD_PNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
+ 	[RPM_SMD_PNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
+ 	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
 -- 
 2.39.0
 
