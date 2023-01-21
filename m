@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C0367657F
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 10:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235C2676588
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 10:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjAUJt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 04:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S229597AbjAUJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 04:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjAUJtj (ORCPT
+        with ESMTP id S229523AbjAUJ51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 04:49:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754205C0FD;
-        Sat, 21 Jan 2023 01:49:38 -0800 (PST)
-Date:   Sat, 21 Jan 2023 09:49:36 -0000
+        Sat, 21 Jan 2023 04:57:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EE81353B;
+        Sat, 21 Jan 2023 01:57:26 -0800 (PST)
+Date:   Sat, 21 Jan 2023 09:57:24 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674294577;
+        s=2020; t=1674295045;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=IbbhcF8jjbhatiPNBh3NGG62KRGU4zaxGafUDJYl9Xo=;
-        b=3qdi+WCe7F+binSuegDbdFWwtU6R5n49zTlkJ4OQI9qZbjLigiIBGhaDb8eT/hYKFtOHqt
-        096KIQXmTYg9Lqu+Hxt5rU76EC8cwRXHzfNRZL930XMIB4x6oSFINqYdHXN6aJ2QJx5Ym/
-        zTDQz5WezMTe2VrEnnR1A1uv/xdN2Ii4ZQC8BauktC/lEbr5lglMQthvFW3+npnNm9J86S
-        R8t5iItd7KxDvmoURglFWukbl2ZK+A1ATS10DhV5CgtWThWJmlZOausUUfdCGCFoI0Bzmt
-        Vs4KiWlNTeu4xJ/fNU8HXb76XoZMW+eXCX5pvMa341U28VDvyDYRzvbZDmIp4w==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pmtBArXGsLKsmisCNbGh0SET3ImTh+pYPr5K7kZMwHY=;
+        b=Hg/rIklRGW36JdCrETInvtXNarbgoLaY/lOyUy6Ak93NEddtHldMfBhO6RcB10IA66ylqH
+        0awaLLvDoonsItIP7g55GJ0J9tptABoqG1T4t2xPBh2owNGBpdMtjniBP0KGR0MlkZuKRm
+        cFcf3dqM5OEqXNFiS/bKZbrekTRhnWCJt7cSdSLX7AzM2/dJ+FIf8kCq8sZcUuYCWeTDoh
+        dytmtbGeGmRN60lEGQeiO+G2YqHSNJO47oe1NtgIikXy8Sd64rZJLCOo9lV9NhbnmRL++L
+        FxXPSSqr5b3KQOkgvGHoLybtLU7Rou6yRDqgbaThdPmU3hQTfa0w/gDpGMqlOw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674294577;
+        s=2020e; t=1674295045;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=IbbhcF8jjbhatiPNBh3NGG62KRGU4zaxGafUDJYl9Xo=;
-        b=rty5S76/5R5b00dXHLgRjXA43kXY9IMoRjtQNj+Q+YSpFzPtq9ywb2RGjAeR07Z23bifWb
-        SDZbxU5AE7tSkfBg==
-From:   "tip-bot2 for Nicholas Piggin" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pmtBArXGsLKsmisCNbGh0SET3ImTh+pYPr5K7kZMwHY=;
+        b=4KDZn+IABRzw2ZpOJRb75NFBCHriMBZyXnDEBktL1lRqedAeqHcvhKEwXBD7lVM+Z4f2Up
+        l8GMnzHuTSQ/ufBA==
+From:   "tip-bot2 for Michal Kubecek" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] exit: Detect and fix irq disabled state in oops
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, x86@kernel.org,
+Subject: [tip: objtool/core] objtool: Check that module init/exit function is
+ an indirect call target
+Cc:     Michal Kubecek <mkubecek@suse.cz>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20230118105215.B9DA960514@lion.mk-sys.cz>
+References: <20230118105215.B9DA960514@lion.mk-sys.cz>
 MIME-Version: 1.0
-Message-ID: <167429457670.4906.17321070796908774567.tip-bot2@tip-bot2>
+Message-ID: <167429504442.4906.8670860752531771829.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,60 +65,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     001c28e57187570e4b5aa4492c7a957fb6d65d7b
-Gitweb:        https://git.kernel.org/tip/001c28e57187570e4b5aa4492c7a957fb6d65d7b
-Author:        Nicholas Piggin <npiggin@gmail.com>
-AuthorDate:    Fri, 20 Jan 2023 11:18:20 +10:00
+Commit-ID:     03d7a1053cf72372be22b43faada5bca12ff183d
+Gitweb:        https://git.kernel.org/tip/03d7a1053cf72372be22b43faada5bca12ff183d
+Author:        Michal Kubecek <mkubecek@suse.cz>
+AuthorDate:    Wed, 18 Jan 2023 11:52:15 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 21 Jan 2023 00:06:10 +01:00
+CommitterDate: Sat, 21 Jan 2023 10:50:18 +01:00
 
-exit: Detect and fix irq disabled state in oops
+objtool: Check that module init/exit function is an indirect call target
 
-If a task oopses with irqs disabled, this can cause various cascading
-problems in the oops path such as sleep-from-invalid warnings, and
-potentially worse.
+Some out-of-tree modules still do not use module_init() / module_exit()
+macros and simply create functions with magic names init_module() and
+cleanup_module() instead. As a result, these functions are not recognized
+as indirect call targets by objtool and such module fails to load into an
+IBT enabled kernel.
 
-Since commit 0258b5fd7c712 ("coredump: Limit coredumps to a single
-thread group"), the unconditional irq enable in coredump_task_exit()
-will "fix" the irq state to be enabled early in do_exit(), so currently
-this may not be triggerable, but that is coincidental and fragile.
+This old way is not even documented any more but it is cleaner to issue
+a warning than to let the module fail on load without obvious reason.
 
-Detect and fix the irqs_disabled() condition in the oops path before
-calling do_exit(), similarly to the way in_atomic() is handled.
-
-Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Link: https://lore.kernel.org/lkml/20221004094401.708299-1-npiggin@gmail.com/
+Link: https://lkml.kernel.org/r/20230118105215.B9DA960514@lion.mk-sys.cz
 ---
- kernel/exit.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/objtool/Documentation/objtool.txt | 8 ++++++++
+ tools/objtool/check.c                   | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 15dc2ec..bccfa42 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -807,6 +807,8 @@ void __noreturn do_exit(long code)
- 	struct task_struct *tsk = current;
- 	int group_dead;
+diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
+index 8a67190..8e53fc6 100644
+--- a/tools/objtool/Documentation/objtool.txt
++++ b/tools/objtool/Documentation/objtool.txt
+@@ -410,6 +410,14 @@ the objtool maintainers.
+    can remove this warning by putting the ANNOTATE_INTRA_FUNCTION_CALL
+    directive right before the call.
  
-+	WARN_ON(irqs_disabled());
++12. file.o: warning: func(): not an indirect call target
 +
- 	synchronize_group_exit(tsk, code);
++   This means that objtool is running with --ibt and a function expected
++   to be an indirect call target is not. In particular, this happens for
++   init_module() or cleanup_module() if a module relies on these special
++   names and does not use module_init() / module_exit() macros to create
++   them.
++
  
- 	WARN_ON(tsk->plug);
-@@ -938,6 +940,11 @@ void __noreturn make_task_dead(int signr)
- 	if (unlikely(!tsk->pid))
- 		panic("Attempted to kill the idle task!");
+ If the error doesn't seem to make sense, it could be a bug in objtool.
+ Feel free to ask the objtool maintainer for help.
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index cab1a16..7c40bd5 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -847,8 +847,15 @@ static int create_ibt_endbr_seal_sections(struct objtool_file *file)
+ 	list_for_each_entry(insn, &file->endbr_list, call_node) {
  
-+	if (unlikely(irqs_disabled())) {
-+		pr_info("note: %s[%d] exited with irqs disabled\n",
-+			current->comm, task_pid_nr(current));
-+		local_irq_enable();
-+	}
- 	if (unlikely(in_atomic())) {
- 		pr_info("note: %s[%d] exited with preempt_count %d\n",
- 			current->comm, task_pid_nr(current),
+ 		int *site = (int *)sec->data->d_buf + idx;
++		struct symbol *sym = insn->sym;
+ 		*site = 0;
+ 
++		if (opts.module && sym && sym->type == STT_FUNC &&
++		    insn->offset == sym->offset &&
++		    (!strcmp(sym->name, "init_module") ||
++		     !strcmp(sym->name, "cleanup_module")))
++			WARN("%s(): not an indirect call target", sym->name);
++
+ 		if (elf_add_reloc_to_insn(file->elf, sec,
+ 					  idx * sizeof(int),
+ 					  R_X86_64_PC32,
