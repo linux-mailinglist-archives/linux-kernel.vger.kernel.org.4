@@ -2,163 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB78D676505
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 08:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FCA67650C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 09:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjAUHsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 02:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S229667AbjAUIDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 03:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjAUHsK (ORCPT
+        with ESMTP id S229578AbjAUIDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 02:48:10 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257C64FAED
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 23:48:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674287289; x=1705823289;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=G+V6+MdVOdpKxRtT1bcJfqVC2gy0rMQG+34twkV78RQ=;
-  b=mlP77P4lyDvis/F5Ik1/kbg1+WhVZEhlkwN2kxFq4/Lbja9DtRCuVDqj
-   fq05jYaYGLnoJnVuDVG3epLaBPrnwYd7iWnqUC8lYivCYo6oe0eoTIKdk
-   V3t5FGFV2hpgYemMEPKiX3qApmP1kXsdUxeJivSLsY4HnYdbphUAw+c9X
-   XNpZGgOT9s+sn3V3ouCdQ7AER3viUkutN9Hq7aXV3bQifQ5Do7h6iW81p
-   dMa1dFrEuceC2sls9l2xi6PBPnAlHUWuu/dmOwmD88yF3tAKsPiH1gnPQ
-   y72EBDlWCqQEVdvvKsxQX7hf6Q7ODYgZJerr/YMOtc2piSFnILgdTuqkm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="327039537"
-X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
-   d="scan'208";a="327039537"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 23:48:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="768968414"
-X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
-   d="scan'208";a="768968414"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jan 2023 23:48:07 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJ8be-0003nq-1N;
-        Sat, 21 Jan 2023 07:48:06 +0000
-Date:   Sat, 21 Jan 2023 15:47:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:lkmm-srcu.2023.01.20a] BUILD SUCCESS
- f0d4b328e12cdc7f34c11f7c82b28a16e097f769
-Message-ID: <63cb9883.nehUVdSKUWtUK6Yq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 21 Jan 2023 03:03:34 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139915925D
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 00:03:31 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id k7-20020a056e02156700b0030f025aeca3so5179596ilu.12
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 00:03:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9YJrK3JuBtS2QgULoPaUqzJ5BAj9a0fMy2abEiu2YnE=;
+        b=HUMuca18nNorMPrT3+sFsI0RDP7TxgBmIJrv9N6ch+ubogHMEZXLei64pdaUfTL8Nm
+         lKWpFTUhts+im6p4JI6tvfkVD10Muwzz4BJfUP6KzBJVF+0WoSvUZI3S5lsFSt1tTcVZ
+         RH8jb47Js6Zgo0apaE+VuEG3VYwsSFbXN2yO44TO3Fo8cKgaT2XAcoqfmMrs6zCm5ZXB
+         PCMxFbnIfLhAl1UVTm2U5FMHqrc9s4veGBhF4+qFQJqopQVeYqI6Vi1Hk8c8y00YTYsP
+         pilHbKy29LLnPfh9Zb++BrgYgkuu5xmrzjqHCNC/gXvX1FYJa9tNW6NYpP7tLPN+ov8G
+         UqRQ==
+X-Gm-Message-State: AFqh2kqiRKsyzMqdzKfV5BuLZJlQFt7x739tS03/xeeADMKxwuFcJqkk
+        0WlyhIFt+WF58DeaHNJ5OZzedKoIT6YmNwi+TpOqdPqLH56A
+X-Google-Smtp-Source: AMrXdXtPqnQD24z4QHzns98msXfMxweBfuSES5tn2xHrqj/aTn5dDoWGXHrTuSXBwVSqBBsabEwnei4Qg/cuYibJpTSGNeCzVJQr
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:41a4:b0:38a:3770:2fa2 with SMTP id
+ az36-20020a05663841a400b0038a37702fa2mr1739324jab.208.1674288210933; Sat, 21
+ Jan 2023 00:03:30 -0800 (PST)
+Date:   Sat, 21 Jan 2023 00:03:30 -0800
+In-Reply-To: <0000000000003a5c4905ef1044d6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000107e1b05f2c19aa5@google.com>
+Subject: Re: [syzbot] WARNING in get_vaddr_frames
+From:   syzbot <syzbot+59a71007ccac79e8bb69@syzkaller.appspotmail.com>
+To:     hverkuil@xs4all.nl, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com,
+        tfiga@chromium.org, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lkmm-srcu.2023.01.20a
-branch HEAD: f0d4b328e12cdc7f34c11f7c82b28a16e097f769  tools/memory-model: Provide exact SRCU semantics
+syzbot has bisected this issue to:
 
-elapsed time: 727m
+commit 6647e76ab623b2b3fb2efe03a86e9c9046c52c33
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu Dec 1 00:10:52 2022 +0000
 
-configs tested: 80
-configs skipped: 2
+    v4l2: don't fall back to follow_pfn() if pin_user_pages_fast() fails
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=115987c5480000
+start commit:   e4cf7c25bae5 Merge tag 'kbuild-fixes-v6.2' of git://git.ke..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=135987c5480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=155987c5480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2651619a26b4d687
+dashboard link: https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ee1934480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=101b997c480000
 
-gcc tested configs:
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-x86_64                            allnoconfig
-arm                  randconfig-r046-20230119
-arc                  randconfig-r043-20230119
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-sh                               allmodconfig
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a015
-x86_64                              defconfig
-arm                                 defconfig
-x86_64                        randconfig-a004
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a002
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a006
-x86_64                               rhel-8.3
-arm64                            allyesconfig
-m68k                             allyesconfig
-arm                              allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                           allyesconfig
-ia64                             allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-m68k                        m5407c3_defconfig
-arc                              alldefconfig
-powerpc                       eiger_defconfig
-sh                             espt_defconfig
-i386                          randconfig-c001
-arm                            hisi_defconfig
-arm                      footbridge_defconfig
-mips                           ci20_defconfig
-sh                           se7724_defconfig
-powerpc                      ppc6xx_defconfig
-loongarch                        alldefconfig
-sh                   sh7770_generic_defconfig
-nios2                               defconfig
-powerpc                   currituck_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
+Reported-by: syzbot+59a71007ccac79e8bb69@syzkaller.appspotmail.com
+Fixes: 6647e76ab623 ("v4l2: don't fall back to follow_pfn() if pin_user_pages_fast() fails")
 
-clang tested configs:
-hexagon              randconfig-r045-20230119
-hexagon              randconfig-r041-20230119
-s390                 randconfig-r044-20230119
-riscv                randconfig-r042-20230119
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-k001
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
