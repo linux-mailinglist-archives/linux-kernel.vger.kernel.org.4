@@ -2,206 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894EB6767C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB306767CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjAURjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 12:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
+        id S229955AbjAURyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 12:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjAURjq (ORCPT
+        with ESMTP id S229523AbjAURyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 12:39:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33913BBB5;
-        Sat, 21 Jan 2023 09:39:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1C2060B3F;
-        Sat, 21 Jan 2023 17:39:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD9AC433D2;
-        Sat, 21 Jan 2023 17:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674322784;
-        bh=TTQhsS+0124V7yGlEPvI/b3+E5gwGkVxPsyPcyh3fYw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HmqH4x6Ptw/zTpfBuoRUAbXOkr2qv5+p6STnrE4T2dfEPmUVBsSQfEd03GNEyCC/U
-         zSCJYPro1XJmxq+h1vEygdpTMK1l1onGJ6ODGMpZUmpB2mOJqMwwNTGFFK/7dn4OWA
-         wKhSWPrcgLyqaNJ0DVS+dq8J9Y+hFLEivOGcnJ0oNQX12os4eAluR+qUO8o9+KUl2y
-         3iBhGWoSXEBc6YDtTqe6gGzH0m0jeogpeXcjME3OpHmHKnCwIpbkJt93QfWWbj0169
-         AH0rwz1A7nyK7xQTekwCA28/jqI/fmbj0vnUWiScpenaxEW8ypeHAa8yrMNJull42t
-         jmicbKXO52B6w==
-Date:   Sat, 21 Jan 2023 17:53:29 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Yulong Zhang <yulong.zhang@metoak.net>
-Cc:     jonathan.cameron@huawei.com, lars@metafoo.de,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] tools/iio/iio_utils:fix memory leak
-Message-ID: <20230121175329.557f7715@jic23-huawei>
-In-Reply-To: <20230117025147.69890-1-yulong.zhang@metoak.net>
-References: <20230116151654.00005666@Huawei.com>
-        <20230117025147.69890-1-yulong.zhang@metoak.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Sat, 21 Jan 2023 12:54:07 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C997A252A5
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 09:54:06 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so7892734wml.3
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 09:54:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e+XTeR27qU4Z1bYsWfJyKy77EFMyC9xXES37vb4VMzs=;
+        b=XgEyXn6gyUZ+grBUqR3Mnvh6rJ0YOqP26TsvfmzL4dJQxN4JVN9ay3CEeFGL5tcWK1
+         MjB+8ZfpUBJx/HsIv6+W2Coz6Ltm/Rpj7LKP06caKOborx9XPnypAnZot2z6ONbuo2CY
+         xNt2xF3+ff2jO2b0JwxxF44uj8D2tt8WC/edgYK3EESFyXNUBL+LGyUebYBurkjZ1/1w
+         3Uj3vGRaZgerGgrZeuJaVli2nqHB2GyiIdOtpjKCq4NnmgIQ1QKgmF6hYRyspNuX8dOX
+         PW0abVuYbnqoQM8BZ2P4/mhWOejNkp985pY4pTIbU8lkXfvs1mK3DY2AL0bBNqyfb1J0
+         fyeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e+XTeR27qU4Z1bYsWfJyKy77EFMyC9xXES37vb4VMzs=;
+        b=4coRyS4aGg1+OlTUoIBHcjRT18KbsrMjwgvfTg7iItSbDM8fF2f43S3bJJ21P6+Qim
+         6jlUUEy87FHcquzdmMNa7HHKA8XJ4BTr+zwdVPVavK+Jo9QkSTZYj5gTc2fybJVzAA3H
+         ovQ3rTBRXVhldQyNIwleJG7aVmbGVHsZAiZsvCquO4DUVIf2fZMvCvcSVlE760s6vLB+
+         QyeA8Bk3grpk9m5+VMJp7v/2gSLoc0p7qD9GNdgKets5wXI0T/wyfcccfXekKzC3fogh
+         Rkj1oB9Lq6UcTo+I/SbFC1lueEduYYFgKTH3G/Rb/rkx99tmMucsrwk1va4cmtA97wve
+         +dkQ==
+X-Gm-Message-State: AFqh2koBAG0M2kDBm8bgSfnrCSgFDCbagc9XJ4/J0RKZNQU4UKeV1qfq
+        mJ0j3WD9ywajWdpB6tGOguFSoLQXIcOhYss69/3y5A==
+X-Google-Smtp-Source: AMrXdXvumznX0IJWX+6wVNOQuRANyu8tvnYD0KInYoEu8z+rzrY4jS9f7iFeI09k2JiFBPQvSbSL15tf2/bO139+3Qs=
+X-Received: by 2002:a1c:7404:0:b0:3da:b40f:c734 with SMTP id
+ p4-20020a1c7404000000b003dab40fc734mr1555607wmc.115.1674323645209; Sat, 21
+ Jan 2023 09:54:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230120123456.12449-1-adrian.hunter@intel.com>
+In-Reply-To: <20230120123456.12449-1-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 21 Jan 2023 09:53:53 -0800
+Message-ID: <CAP-5=fUwkghLbz7O4peCSMbt2LjAtUwi+tB3_wgnZrjkg9jn9w@mail.gmail.com>
+Subject: Re: [PATCH 00/10] perf symbols: Improve dso__synthesize_plt_symbols()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 10:51:47 +0800
-Yulong Zhang <yulong.zhang@metoak.net> wrote:
+On Fri, Jan 20, 2023 at 4:35 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Hi
+>
+> This is the first of 2 patchsets to improve dso__synthesize_plt_symbols().
+> This patchset is really preparation for the 2nd patchset, which focuses
+> on getting rid of unknown symbols that show up in Intel PT traces.
+> The 2nd patchset is still under development.
+>
+> These patches are small and staightforward. Only the new Symbols test is
+> slightly interesting because it provides a way to see what symbols
+> perf discovers for any given dso. The test fails initially, but
+> should pass after patch 7 "perf symbols: Add symbol for .plt header".
+>
+>
+> Adrian Hunter (10):
+>       perf test: Add Symbols test
+>       perf symbols: Factor out get_plt_sizes()
+>       perf symbols: Check plt_entry_size is not zero
+>       perf symbols: Add dso__find_symbol_nocache()
+>       perf symbols: Slightly simplify 'err' usage in dso__synthesize_plt_symbols()
+>       perf symbols: Do not check ss->dynsym twice
+>       perf symbols: Add symbol for .plt header
+>       perf symbols: Allow for .plt entries with no symbol
+>       perf symbols: Combine handling for SHT_RELA and SHT_REL
+>       perf symbols: Check SHT_RELA and SHT_REL type earlier
 
-> 1. fopen sysfs without fclose.
-> 2. asprintf filename without free.
-> 3. if asprintf return error,do not need to free the buffer.
-> 
-> Signed-off-by: Yulong Zhang <yulong.zhang@metoak.net>
-I'm not that worried about rushing in a memory leak fix for the example
-code, so I've queued this up for the next merge window.
+Acked-by: Ian Rogers <irogers@google.com>
 
 Thanks,
+Ian
 
-Jonathan
-
-> ---
->  tools/iio/iio_utils.c | 23 ++++++-----------------
->  1 file changed, 6 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/iio/iio_utils.c b/tools/iio/iio_utils.c
-> index 8d35893b2fa8..6a00a6eecaef 100644
-> --- a/tools/iio/iio_utils.c
-> +++ b/tools/iio/iio_utils.c
-> @@ -264,6 +264,7 @@ int iioutils_get_param_float(float *output, const char *param_name,
->  			if (fscanf(sysfsfp, "%f", output) != 1)
->  				ret = errno ? -errno : -ENODATA;
->  
-> +			fclose(sysfsfp);
->  			break;
->  		}
->  error_free_filename:
-> @@ -345,9 +346,9 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  			}
->  
->  			sysfsfp = fopen(filename, "r");
-> +			free(filename);
->  			if (!sysfsfp) {
->  				ret = -errno;
-> -				free(filename);
->  				goto error_close_dir;
->  			}
->  
-> @@ -357,7 +358,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  				if (fclose(sysfsfp))
->  					perror("build_channel_array(): Failed to close file");
->  
-> -				free(filename);
->  				goto error_close_dir;
->  			}
->  			if (ret == 1)
-> @@ -365,11 +365,9 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  
->  			if (fclose(sysfsfp)) {
->  				ret = -errno;
-> -				free(filename);
->  				goto error_close_dir;
->  			}
->  
-> -			free(filename);
->  		}
->  
->  	*ci_array = malloc(sizeof(**ci_array) * (*counter));
-> @@ -395,9 +393,9 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  			}
->  
->  			sysfsfp = fopen(filename, "r");
-> +			free(filename);
->  			if (!sysfsfp) {
->  				ret = -errno;
-> -				free(filename);
->  				count--;
->  				goto error_cleanup_array;
->  			}
-> @@ -405,20 +403,17 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  			errno = 0;
->  			if (fscanf(sysfsfp, "%i", &current_enabled) != 1) {
->  				ret = errno ? -errno : -ENODATA;
-> -				free(filename);
->  				count--;
->  				goto error_cleanup_array;
->  			}
->  
->  			if (fclose(sysfsfp)) {
->  				ret = -errno;
-> -				free(filename);
->  				count--;
->  				goto error_cleanup_array;
->  			}
->  
->  			if (!current_enabled) {
-> -				free(filename);
->  				count--;
->  				continue;
->  			}
-> @@ -429,7 +424,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  						strlen(ent->d_name) -
->  						strlen("_en"));
->  			if (!current->name) {
-> -				free(filename);
->  				ret = -ENOMEM;
->  				count--;
->  				goto error_cleanup_array;
-> @@ -439,7 +433,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  			ret = iioutils_break_up_name(current->name,
->  						     &current->generic_name);
->  			if (ret) {
-> -				free(filename);
->  				free(current->name);
->  				count--;
->  				goto error_cleanup_array;
-> @@ -450,17 +443,16 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  				       scan_el_dir,
->  				       current->name);
->  			if (ret < 0) {
-> -				free(filename);
->  				ret = -ENOMEM;
->  				goto error_cleanup_array;
->  			}
->  
->  			sysfsfp = fopen(filename, "r");
-> +			free(filename);
->  			if (!sysfsfp) {
->  				ret = -errno;
-> -				fprintf(stderr, "failed to open %s\n",
-> -					filename);
-> -				free(filename);
-> +				fprintf(stderr, "failed to open %s/%s_index\n",
-> +					scan_el_dir, current->name);
->  				goto error_cleanup_array;
->  			}
->  
-> @@ -470,17 +462,14 @@ int build_channel_array(const char *device_dir, int buffer_idx,
->  				if (fclose(sysfsfp))
->  					perror("build_channel_array(): Failed to close file");
->  
-> -				free(filename);
->  				goto error_cleanup_array;
->  			}
->  
->  			if (fclose(sysfsfp)) {
->  				ret = -errno;
-> -				free(filename);
->  				goto error_cleanup_array;
->  			}
->  
-> -			free(filename);
->  			/* Find the scale */
->  			ret = iioutils_get_param_float(&current->scale,
->  						       "scale",
-
+>  tools/perf/Documentation/perf-test.txt |   3 +
+>  tools/perf/tests/Build                 |   1 +
+>  tools/perf/tests/builtin-test.c        |   3 +
+>  tools/perf/tests/symbols.c             | 150 ++++++++++++++++++++++++++
+>  tools/perf/tests/tests.h               |   3 +
+>  tools/perf/util/symbol-elf.c           | 190 +++++++++++++++++----------------
+>  tools/perf/util/symbol.c               |   5 +
+>  tools/perf/util/symbol.h               |   1 +
+>  8 files changed, 262 insertions(+), 94 deletions(-)
+>  create mode 100644 tools/perf/tests/symbols.c
+>
+>
+> Regards
+> Adrian
