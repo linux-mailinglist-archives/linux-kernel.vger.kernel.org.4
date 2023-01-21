@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D18B676924
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 21:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB9E676926
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 21:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjAUUTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 15:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S229815AbjAUUTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 15:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjAUUTE (ORCPT
+        with ESMTP id S229523AbjAUUTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 15:19:04 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CC423653;
-        Sat, 21 Jan 2023 12:19:03 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id g11so4920024eda.12;
-        Sat, 21 Jan 2023 12:19:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CH5ssNbMjjziLJwNcTMZ2d/eFIt2gMohhe8o5T2jQ1M=;
-        b=cmlPIsUKJIXzWwqnC4S5Q6Sh3AiU8MryNr3cqUXSVhP42gUD0VfJGZsO9FNpADkAVC
-         oyZWkecCioCu9CFyvvW4s4luOl1aSnKERWv1dsDFj2v8wwfSwFenA8UC4t/PtoXp8tSC
-         V4vnx8CcjfkLS7KBz3EeOLEmmHI6dyPb43ize4jsyIAzcmnr7XVMf9pAw2Qj8l+4RRjP
-         uaWlcfutQUME1qsMyRgJAmVL8FRjzl6ZtH56MV5Nq3iXHLS19sSlhgs0rlzPXLP9m34u
-         yEhcfZQfiKa8qjge/o5uu2RTRXy29JhSN2w6fRMFlbnSNsjZ7lqxbpddCHpjzHLN9S4B
-         2o+w==
+        Sat, 21 Jan 2023 15:19:44 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0B723C5E
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 12:19:20 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id g1-20020a92cda1000000b0030c45d93884so5954430ild.16
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 12:19:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CH5ssNbMjjziLJwNcTMZ2d/eFIt2gMohhe8o5T2jQ1M=;
-        b=SiBRVxelcAeYOj90hOOhMmNY8ZwtQnRQZMmo7Qzwpuo+s1cXfu82RT4qk9//rtBFvl
-         0S4nI5ex6EM1h98XuyrBz1On43UC92k+T4V3qkx6HlwQh8BoHnGezQ2+tBO3p9ZCBWxu
-         wtPSphQgyyVI/FfVv6njLdYk8srTbhl9/7EY21WtMph4iA6V4YVC18d9YMFLelOjwInF
-         xAhFfZsG8rhaEpcL5IORKgeQpZnluwA0qgtseeKqlR7dtZV1gEJnNYOFNXvr4YGCYRjA
-         sBHprYTC2JDjsoxFVIgRQoMEl3l4hfa+L6mPpG1NisYETSLsoNQyf6FesQfuft2/PWCI
-         JYlQ==
-X-Gm-Message-State: AFqh2kr/wTJkRQmI3mrEoJxVpLQSwLzd8Bft+H8mJfb+QJLCX+kKIsze
-        SUp1ohTSYTMsehuWxoVaM/TkyGIhmUj1aQ==
-X-Google-Smtp-Source: AMrXdXt2T1rSWy07cfoufrTsb4Ux/gRiVjdxbuoH6X7KzDV2UqKSIKXY976EzcAdpKOxcUNxlm2uFw==
-X-Received: by 2002:aa7:ccd3:0:b0:49d:f44f:7ef1 with SMTP id y19-20020aa7ccd3000000b0049df44f7ef1mr22672142edt.14.1674332341236;
-        Sat, 21 Jan 2023 12:19:01 -0800 (PST)
-Received: from localhost.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0047c6f3eccb2sm19203423edr.50.2023.01.21.12.18.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 12:19:00 -0800 (PST)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 2/2] arm: dts: exynos5800: Use Exynos5422 compatible for the DSI controller
-Date:   Sat, 21 Jan 2023 22:18:43 +0200
-Message-Id: <20230121201844.46872-3-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230121201844.46872-1-markuss.broks@gmail.com>
-References: <20230121201844.46872-1-markuss.broks@gmail.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pe29fqGB5jw0Lc13jqigdvwWKgCeBel/2NyFQTzRKFU=;
+        b=xgkXgvCvXWH4F/M/tSF5/c1ynKoV1b4dONmt638vea66239V5GRzGlBZRF0kUqz+EP
+         9eMvwq5125Y0BE6LjClKlwU4UmSiWDVqPkJOdA/YsUlPxoWe+V1Pe3deqLUDQKZgZMH4
+         yE4fT3PGPiqE8d3FQgF8JAUor025ukUJ9ML2OiH7GAdMyT+yzCN+sFQCrSJJ0hSBE+cI
+         kl7XFLezIQNm1whvZ4cEanW6gUQgZtocnSXvHCHTQ4yC1HRcVAZw0kGRYq4k7snmZmgc
+         rrc/ZsCTcuv0/u4fAuFGP5X6nDzOCrV4yVvmUNXIeASOxi973ojcRCBZki8+XiCvaene
+         g9rQ==
+X-Gm-Message-State: AFqh2kp5j/5V+J4w8PRFjhqrEGfQ+r03tJhOriHIfrfRkQ36xa9YIe8s
+        8UH9si7JMxqNFwwWMbtozzNARAuTS4IMXfq742guPB8QXPUG
+X-Google-Smtp-Source: AMrXdXsMhd7fYTsq8AER0qV8wQz7Ln6057/YOLIm7ow9udsEXxqSp9CcJM7BO7xCaulaDj1Cf8u+Mwjm49RoRMxr6/2pXgX+5eSL
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Received: by 2002:a05:6638:24c:b0:3a6:c95:e160 with SMTP id
+ w12-20020a056638024c00b003a60c95e160mr1517664jaq.34.1674332359101; Sat, 21
+ Jan 2023 12:19:19 -0800 (PST)
+Date:   Sat, 21 Jan 2023 12:19:19 -0800
+In-Reply-To: <0000000000004ab8ac05ef9b1578@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008016d805f2cbe102@google.com>
+Subject: Re: [syzbot] [xfs?] KASAN: stack-out-of-bounds Read in xfs_buf_lock
+From:   syzbot <syzbot+0bc698a422b5e4ac988c@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, dan.j.williams@intel.com,
+        djwong@kernel.org, hch@lst.de, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,44 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver adding support for Exynos5422/Exynos5800 DSI controller was
-merged in 2016, yet it wasn't actually used. Add a proper compatible
-for it.
+syzbot has bisected this issue to:
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- arch/arm/boot/dts/exynos5420.dtsi | 2 +-
- arch/arm/boot/dts/exynos5800.dtsi | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+commit 679a99495b8fda800037b25af8cd990eb7dd72c9
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Mon Nov 29 10:21:41 2021 +0000
 
-diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-index 62263eb91b3c..b612468515eb 100644
---- a/arch/arm/boot/dts/exynos5420.dtsi
-+++ b/arch/arm/boot/dts/exynos5420.dtsi
-@@ -597,7 +597,7 @@ mipi_phy: mipi-video-phy {
- 			#phy-cells = <1>;
- 		};
- 
--		dsi@14500000 {
-+		dsi: dsi@14500000 {
- 			compatible = "samsung,exynos5410-mipi-dsi";
- 			reg = <0x14500000 0x10000>;
- 			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
-index 526729dad53f..8328ddb3b02f 100644
---- a/arch/arm/boot/dts/exynos5800.dtsi
-+++ b/arch/arm/boot/dts/exynos5800.dtsi
-@@ -148,6 +148,10 @@ opp-200000000 {
- 	};
- };
- 
-+&dsi {
-+	compatible = "samsung,exynos5422-mipi-dsi";
-+};
-+
- &mfc {
- 	compatible = "samsung,mfc-v8";
- };
--- 
-2.39.0
+    xfs: factor out a xfs_setup_dax_always helper
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17708805480000
+start commit:   7dd4b804e080 Merge tag 'nfsd-6.2-3' of git://git.kernel.or..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14f08805480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10f08805480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bc698a422b5e4ac988c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c58bd2480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11cc664a480000
+
+Reported-by: syzbot+0bc698a422b5e4ac988c@syzkaller.appspotmail.com
+Fixes: 679a99495b8f ("xfs: factor out a xfs_setup_dax_always helper")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
