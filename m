@@ -2,145 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE35676835
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 20:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C55567683C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 20:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjAUTA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 14:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S229686AbjAUTGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 14:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjAUTAz (ORCPT
+        with ESMTP id S229693AbjAUTGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 14:00:55 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C3410FD
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:00:54 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so7977198wma.1
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:00:54 -0800 (PST)
+        Sat, 21 Jan 2023 14:06:52 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A491F23650
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:06:49 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so5879903wms.2
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:06:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xHePGEFjy1UfUCetXTj9MaBdDtJ+Ek+cvWCV2WMJtLM=;
-        b=RFwGK8+pq0UIJ/VIMMEkQat0+CyIaQU82bmKcpY2yzemsJpf2nwCI2Lbe8QIQfXw3Y
-         SHV6CE4c4iZeidJ2OFnPqSdjjhf0l9yV+NwW8NLmAIxi3XdvuSsKJGrkWfGn0PnuwjN7
-         lW4BNVcq/C36cw79gBPJ2jH7llgMbpiCEVQMugIru+b7R0saAnae7ANK3y2L4jT1ClqI
-         A95u/6tIKzU89M9fVai4Hv0W8u8oOQZt5GDLx0G9mcq8xbeQU1pBYeVKKAFP+vrwPl0K
-         EanaIDWIjzTQrKgKaK9V6Fyh+nIEzFOBWQH+2g/DepIbFkQfwT4H90lDbk+UCboMcNv0
-         y+bw==
+        bh=8DfHo6+2cR5G36izj5IdbaMWn0yli9T2fcLAtdygnkg=;
+        b=nNVAF8Ai2srOYxgHMMSLcjMfMSJIaJKtNn8mahBIbadysRz6/1IaIYPCZc9fNT76X0
+         /ld71XvhCdIoYYwg5Ip5ZweklxTNm/nIpdTF1HP/RSyhfC/kVrx3pbCWZ9+SjNuejh7l
+         LFJjRISn7PlBP1HQEf4Bntv1ye+dlOM1fnoF9gIzimWx2Onki6KJn8IpvVriXVb5DipA
+         W1zVr6hX8itcxEypRI4OR4t8FQH13XFCM2lHhED4F7mjnhCjhSCGpWb5Smc17w8qfmou
+         CAeBQVgY657JeupI7OhXooH33r25EnulJ53FhTSFA+phOz2Ds+aaPR0YKIW24AEiwcuA
+         xCvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xHePGEFjy1UfUCetXTj9MaBdDtJ+Ek+cvWCV2WMJtLM=;
-        b=oxuC9sOYBtWoUc9HWtiEkXij/jgn30wUbjzC5mrLZQt8jUWi8nH16pDHAIHE1xgOxd
-         R3cVAvj0t6KANKP0riBEMWXPgjHVpXRL7jaosxYsLcTQIF5nAcwjfNO65AWoguCnWz2O
-         CJ5vfJkAIdsxiRhnW8XcMEaHfvv7xPP8CkpatsPG+x5tcf0qeqItEPtPo8FWb8ZQ7SrH
-         XvYVK/cGG7zOQxm2BdIA5jBZeTCpne46K9JuRNTp3z0GpDhGKHHWcViDvOCrfxGT4cCc
-         dvEJNZeV6nGQYkKA6DW0cWntmldLZhRPzS30//bCL+kdIR3+wVbe2lSs+H5RIijSLCIX
-         hlXw==
-X-Gm-Message-State: AFqh2koLqOafcwYhZMm7+6WVzQAIq9w1e6cJWw2sStfG24JdFzwmWhRn
-        YgOjmWHlDGCyxpCdUTLXU1jzgg==
-X-Google-Smtp-Source: AMrXdXuBuPiNklurQJ5XfLPcWcjvC6JBjCdqXO7Nk+xxhWNbskje7BXiUTucBxE+iU5FlggHBYH8og==
-X-Received: by 2002:a1c:ed0a:0:b0:3d3:4a47:52e9 with SMTP id l10-20020a1ced0a000000b003d34a4752e9mr18254396wmh.15.1674327652728;
-        Sat, 21 Jan 2023 11:00:52 -0800 (PST)
+        bh=8DfHo6+2cR5G36izj5IdbaMWn0yli9T2fcLAtdygnkg=;
+        b=mWYaMqJjqOg9CgXo9n5lXCI6XVTRvxZetZNBvY2eJyn7sriZgwfn19NchTKAA/ddoB
+         /sN3Cegb7Pz8gTKAqhWTKq4WPSLuxbSlOBXKxO8g2EizbfRjY9yHAEV2dpDXyIotOlvc
+         suhJdst/1Oupm39M2jQo20KM3LV3SrQwBXhaQqbdqmkpKwr0KrUjS0e2raWiJFI6zNle
+         nzcVT2JSiEIOrcmUp3yxxAgJ+IOwc1fWanO2HIBrZFLAsimMABxt4yqHlsFmvUgRl60f
+         U8jd9fLbfi4P1j+Hut0FVVmJI03mRDN5I22WJ9X3X2uZH2MeuBP5fnMcJpdMC6VupaZ5
+         tH4A==
+X-Gm-Message-State: AFqh2kqAboQ0XIVwo02qxfUHv4ZHvF8ETlvvmDoFafYjZD2OtLOugyo6
+        HpsP9VmMkIL+oi5Zq/qqPHc9wA==
+X-Google-Smtp-Source: AMrXdXs35m2RpMWRgaSk7+Xj1XDLefPiYN4z7MFYdzeMJV+rnK5EyVmWU+xxPWKMXb+fv0qYvz5pmw==
+X-Received: by 2002:a05:600c:5021:b0:3d9:9755:d659 with SMTP id n33-20020a05600c502100b003d99755d659mr18386535wmr.22.1674328008214;
+        Sat, 21 Jan 2023 11:06:48 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p21-20020a05600c359500b003c70191f267sm6745646wmq.39.2023.01.21.11.00.51
+        by smtp.gmail.com with ESMTPSA id m26-20020a7bcb9a000000b003db2dede1a2sm5858414wmi.26.2023.01.21.11.06.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Jan 2023 11:00:52 -0800 (PST)
-Message-ID: <de2ac5ce-2e54-09fc-71f5-91a2faf15d38@linaro.org>
-Date:   Sat, 21 Jan 2023 20:00:50 +0100
+        Sat, 21 Jan 2023 11:06:47 -0800 (PST)
+Message-ID: <3865e4ae-99e9-bba7-6abf-76d92e79b178@linaro.org>
+Date:   Sat, 21 Jan 2023 20:06:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH 5/6] dt-bindings: rtc: brcm,brcmstb-waketimer: add alarm
- interrupt
+Subject: Re: [PATCH v6 09/10] arm64: dts: qcom: sc7180: Add support for HDCP
+ in dp-controller
 Content-Language: en-US
-To:     Doug Berger <opendmb@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Brian Norris <computersforpeace@gmail.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230120190147.718976-1-opendmb@gmail.com>
- <20230120190147.718976-6-opendmb@gmail.com>
+To:     Sean Paul <sean@poorly.run>
+Cc:     Mark Yacoub <markyacoub@chromium.org>, quic_khsieh@quicinc.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, tzimmermann@suse.de,
+        ville.syrjala@linux.intel.com, stanislav.lisovskiy@intel.com,
+        matthew.d.roper@intel.com, imre.deak@intel.com,
+        lucas.demarchi@intel.com, manasi.d.navare@intel.com,
+        swati2.sharma@intel.com, bhanuprakash.modem@intel.com,
+        javierm@redhat.com, jose.souza@intel.com, lyude@redhat.com,
+        hbh25y@gmail.com, arun.r.murthy@intel.com,
+        ashutosh.dixit@intel.com, ankit.k.nautiyal@intel.com,
+        maxime@cerno.tech, swboyd@chromium.org,
+        christophe.jaillet@wanadoo.fr, quic_sbillaka@quicinc.com,
+        johan+linaro@kernel.org, dianders@chromium.org, marex@denx.de,
+        quic_jesszhan@quicinc.com, bjorn.andersson@linaro.org,
+        abhinavk@codeaurora.org, seanpaul@chromium.org
+References: <20230118193015.911074-1-markyacoub@google.com>
+ <20230118193015.911074-10-markyacoub@google.com>
+ <aee03688-54b6-ed9f-e32c-b46e31d72198@linaro.org>
+ <Y8q5UfpIg0+qnAuG@art_vandelay>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120190147.718976-6-opendmb@gmail.com>
+In-Reply-To: <Y8q5UfpIg0+qnAuG@art_vandelay>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 20:01, Doug Berger wrote:
-> A second interrupt can optionally be specified for this device
-> to be used for generating RTC alarm interrupts.
+On 20/01/2023 16:54, Sean Paul wrote:
+> On Thu, Jan 19, 2023 at 11:35:32AM +0100, Krzysztof Kozlowski wrote:
+>> On 18/01/2023 20:30, Mark Yacoub wrote:
+>>> From: Sean Paul <seanpaul@chromium.org>
+>>>
+>>> This patch adds the register ranges required for HDCP key injection and
+>>
+>> Do not use "This commit/patch".
+>> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+>>
+>> This applies to all your patches. Fix it everywhere.
 > 
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
-> ---
->  .../bindings/rtc/brcm,brcmstb-waketimer.yaml  | 22 ++++++++++++++++---
->  1 file changed, 19 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
-> index 9fe079917a98..a9199f299a68 100644
-> --- a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
-> @@ -11,7 +11,8 @@ maintainers:
->  
->  description:
->    The Broadcom STB wake-up timer provides a 27Mhz resolution timer, with the
-> -  ability to wake up the system from low-power suspend/standby modes.
-> +  ability to wake up the system from low-power suspend/standby modes and
-> +  optionally generate RTC alarm interrupts.
->  
->  allOf:
->    - $ref: "rtc.yaml#"
-> @@ -24,8 +25,14 @@ properties:
->      maxItems: 1
->  
->    interrupts:
-> -    description: the TIMER interrupt
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: the TIMER interrupt
-> +      - description: the ALARM interrupt
-> +    description:
-> +      The TIMER interrupt wakes the system from low-power suspend/standby modes.
-> +      An ALARM interrupt may be specified to interrupt the CPU when an RTC alarm
-> +      is enabled.
->  
->    clocks:
->      description: clock reference in the 27MHz domain
-> @@ -42,3 +49,12 @@ examples:
->          interrupt-parent = <&aon_pm_l2_intc>;
->          clocks = <&upg_fixed>;
->      };
-> +
-> +  - |
-> +    rtc@f041a080 {
-> +        compatible = "brcm,brcmstb-waketimer";
-> +        reg = <0xf041a080 0x14>;
-> +        interrupts-extended = <&aon_pm_l2_intc 0x04>,
-> +                              <&upg_aux_aon_intr2_intc 0x08>;
-> +        clocks = <&upg_fixed>;
+> My goodness, this is peak bikeshedding. Surely we have better things to do with
+> our time?
 
-Change of number of interrupts does not really justify new example. You
-can squash it with previous example or just skip it.
+What do you mean "better things to do"? I review the patches as that's
+expected from maintainer. I spend a lot of time on so indeed I could
+find some other ways to use it.
+
+I spot something which is obvious mistake, although trivial and not
+important, but clicking automated answer is also trivial for me and
+fast. And yes. 90% of my reviews answers are automated because people
+cannot learn to test before sending, cannot learn to read Submitting
+Patches and many other trivial things. Clicking this automated answer
+was also trivial from my point, but entire discussion including your
+disagreement about incorrect title (read Submitting Patches) instead of
+just implementing it - is waste of time.
+
+I'll then consider not wasting time on your patches.
 
 Best regards,
 Krzysztof
