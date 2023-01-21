@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FEA6769B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3375B6769BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjAUVr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 16:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S229644AbjAUVxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 16:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjAUVr4 (ORCPT
+        with ESMTP id S229463AbjAUVxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 16:47:56 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747891A480
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:47:55 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id a25so6929109qto.10
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:47:55 -0800 (PST)
+        Sat, 21 Jan 2023 16:53:51 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9090A17CF3
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:53:50 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id vw16so22038660ejc.12
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:53:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IItOU+p55SK2QjQ3YzQRVeif5DdV8TaENAjnN4IuI2s=;
-        b=Ox9Tv51sqK/MFsroZpFTPtuz1PEtLzo6HMMf9MTMMDYKZxqMPkKrbsC2+rK3NFMu8l
-         rLsc6QbPb99oqg371qE3BP0A1XDzk/VFHO0Ut94/Hd0l10/coXjsPGMkcCJp8Y5Yl0ew
-         PHLhgrxiK4cpCLx03dyKeDId1gGXBpVl/CqBCQH/UziFktXZkw1TTfrzoOSzO0xkGMEe
-         RWOdbtI18O9RJni4b3VzmFhRkVbz32UPyQkU7bYn66Wl7zs7Y2URhEu1UMi+uGdPi0ph
-         P9dB2pAEwBVTrPpz9qtAN6JP5x7yOe4sYGypV8lbsKwvGkbIDSFX+ZQ8RndHSDNHVUK1
-         j2yw==
+        bh=u1FS23f9lMOyJIiIZuP0A4Qiyf73vPOUb05pwu8u1Yk=;
+        b=PUBrTZibudb8t1jCd0OFYhIKtwwkOvb+QOBVGBmdGpTi/6hfNLDgM0ipgNrRV+yLNQ
+         Mp1P3nvFL6qCZIABT7IXlga4Vo3JTlLG208U7Xdow7yidmKM9zlUAfpzXTGDQrRjY8bG
+         4UN91dyptDAgZTMOv5hkiQHYP96VP6T2d+ocnxG4eWZIu/A1CP/Uk8oV/IiQGrxCE7yH
+         UK8qzt78pI5CBwMw/eTEaSdlSAoa7l6HADqO7CB28DxZ8UbFbMMTeZCR+Y9K41qrkvNm
+         f4RuHBHuYyy+OpfQ51oKIkcRBUWTPKNAd0RmCxlGfvqL0PWp/9SpGLieyf3ehidDt4xG
+         moKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IItOU+p55SK2QjQ3YzQRVeif5DdV8TaENAjnN4IuI2s=;
-        b=uvVQ36NKqy81X4belEwnrt/UfOXVWCR5/Xbgi168p0eU+rv6Uz0S0B54BLzxdNnaYl
-         3QjuXqVvTSX/D026J4A4QrxcuXiqPlWrxIRUvGAmMqH5Rog8G+7RzvVYvoaY6+Yd+mWN
-         SvcsDagLD9IjEVjvxPFIbKtE2ZGaeX/Zf0xeaVIG8cAvyTNmqrrysPwAdC2mdmGOu8oP
-         1FXxEw/R5vEhAkSGozSdpnOVj6uKw66M/ajvC3tHEluxxD5nfqw5veIEsf1pps5Ik9yU
-         8bhlzGdcdSjitZCvbHtBP5RMOb9VMI8DwDuQarHYkEetF6NDOZ9PKXJ9xGC4A/sw8oxT
-         Qyzw==
-X-Gm-Message-State: AFqh2kpZxf9C0CIbpSMO0IjQ47IjRqZMjRJ/a97qk6DXN0hYqcjnzA92
-        u5nckGJSC7zHOWA24LboiT9qphg89GF6N29ztw==
-X-Google-Smtp-Source: AMrXdXs88Z/rTXkf6lrgpVDK2Uy2GUR1VanF69oyot1eTJwLrornNIG2z7fxgHwM/Ty9zWOAsE8HFjE1SGmiDq7rQ5g=
-X-Received: by 2002:ac8:70cb:0:b0:3a9:82a1:fb0f with SMTP id
- g11-20020ac870cb000000b003a982a1fb0fmr961787qtp.22.1674337674581; Sat, 21 Jan
- 2023 13:47:54 -0800 (PST)
+        bh=u1FS23f9lMOyJIiIZuP0A4Qiyf73vPOUb05pwu8u1Yk=;
+        b=CtehQsR3rGI6/cxGs2Ax4lTv/esLkHyaJ7BdDbf0lJWGX1lnVo5oYR6EhDbhHoemmd
+         pbBeJ3eqcIOusRaCgLbMkRrXCR2airRgl6FPl26CmNE3PDYXgWuaBQQti8xHh0TWsibh
+         qGOxbjQBSHucbql8G8A2JFj+ISA4HWjPUeS7b3Y5Ksus7ZyzgWm9+Jtq8QGI7wmjrV5J
+         18mCs/JiNGeJAM5niQN94FqO07unVbBjrtSoBNPzO1ABclatT8bPaTAiOkYMlAZ1skwE
+         bSM8EYRoi3j1lefsuD+K43k3Bp4cZUqm/SRtZ3WxWpfUrQDMYjYftouN6qB1On49bmZ1
+         7X2Q==
+X-Gm-Message-State: AFqh2krIs+HH8q1sE/htHP4bsM79jVrYPL4j5pFWkOX571NvE8+baR5d
+        t58gAbpBidHKCzSV9iYZskYRPUnxoTtWoZS64Uc=
+X-Google-Smtp-Source: AMrXdXvgN8MBlOArhDlezRaJf5HbQ4d/ijraBIv5bYpb+nBpWzNlaPkDmNDt04PygoOyQfoySbSrdM8P93F5TZhUSAY=
+X-Received: by 2002:a17:907:20ae:b0:84c:c9fd:42ba with SMTP id
+ pw14-20020a17090720ae00b0084cc9fd42bamr1690145ejb.98.1674338028986; Sat, 21
+ Jan 2023 13:53:48 -0800 (PST)
 MIME-Version: 1.0
-References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
- <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
- <5703e698-a92a-2026-e5d4-3c6340578918@intel.com>
-In-Reply-To: <5703e698-a92a-2026-e5d4-3c6340578918@intel.com>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Sat, 21 Jan 2023 16:47:48 -0500
-Message-ID: <CAMzpN2iC9_ZfEmQA0469RQqoZ7NsNCCafy3FsZAt6O0gdB9Oig@mail.gmail.com>
-Subject: Re: the x86 sysret_rip test fails on the Intel FRED architecture
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, "Li, Xin3" <xin3.li@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Sender: mrtamuhfariq1@gmail.com
+Received: by 2002:a50:3a5d:0:b0:1f4:9f9f:71d5 with HTTP; Sat, 21 Jan 2023
+ 13:53:48 -0800 (PST)
+From:   Bello Abubakar <bellobelloabubakar5@gmail.com>
+Date:   Sat, 21 Jan 2023 13:53:48 -0800
+X-Google-Sender-Auth: J2ERaFohDIpS4E0kTUGo4C_SJS4
+Message-ID: <CAO2k2xc6hjF0DR_jV0nRz0RWzahYZX4-41YnGPLzga6Sd2_RqQ@mail.gmail.com>
+Subject: URGENT REPLY
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,
+        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5354]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrtamuhfariq1[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrtamuhfariq1[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.6 URG_BIZ Contains urgent matter
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 12:34 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 1/20/23 20:59, H. Peter Anvin wrote:
-> >> If not intentional, it might be something that can still be fixed.
-> >> If it is intentional and is going to be with us for a while we have
-> >> a few options.  If userspace is _really_ depending on this
-> >> behavior, we could just clobber r11 ourselves in the FRED entry
-> >> path.  If not, we can remove the assertion in the selftest.
-> > We can't clobber it in the FRED entry path, since it is common for
-> > all events, but we could do it in the syscall dispatch.
-> >
-> > However, it doesn't seem to make sense to do so to me. The current
-> > behavior is much more of an artifact than desired behavior.
-> I guess the SDM statements really are for the kernel's benefit and not
-> for userspace.  Userspace _should_ be treating SYSCALL like a CALL and
-> r11 like any old register that can be clobbered.  Right now, the kernel
-> just happens to clobber it with RFLAGS.
->
-> I do the the odds of anyone relying on this behavior are pretty small.
-> Let's just zap the check from the selftest, document what we did in the
-> FRED docs and changelog and move on.
+--=20
+Hello,
 
-Keep the selftest check, but also accept preserved RCX/R11.  What
-really matters is that the kernel isn't leaking data.
+I am a relative of a politically exposed person (PEP) that is in
+financial regulation. Due to my present health condition, I'd decided
+to write through this email for the security reason.
 
---
-Brian Gerst
+Therefore, kindly treat this as top secret for the security reason.
+I'd after fasting and prayer choose to write not you particularly but
+I believing in probability of you being a confidant chosen by chance;
+luck to help and share in this noble cause.
+
+I need your assistant to conduct secret transfers of family's funds
+worth =E2=82=AC90.5 millions Euros. It was deposited in bank clandestinely.
+
+I am in grave condition and I expect my death any moment now and I
+want to donate the fund to less privilege and you will be rewarded
+with reasonable percentage of the fund if you can assist.
+
+Please contact me back for more details,
+
+Yours truly,
+Bello Abubakar
