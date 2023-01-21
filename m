@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC270676723
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3AB9676724
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjAUP33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 10:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
+        id S229852AbjAUP3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 10:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjAUP31 (ORCPT
+        with ESMTP id S229787AbjAUP3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 10:29:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B962CFDB;
-        Sat, 21 Jan 2023 07:29:15 -0800 (PST)
+        Sat, 21 Jan 2023 10:29:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9342C64D
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:29:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D66760B3D;
-        Sat, 21 Jan 2023 15:29:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCB8C433EF;
-        Sat, 21 Jan 2023 15:29:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6703960B40
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 15:29:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A2EFC433D2;
+        Sat, 21 Jan 2023 15:29:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674314954;
-        bh=5bscMmtzS4ZRjroRjKGURyNoErlZmoSg56KVpMFQZSM=;
+        s=korg; t=1674314975;
+        bh=+21d136c+CDoJ+jjaA9CrZwr2YrFn6bIJwlOkuXzTLE=;
         h=Date:From:To:Cc:Subject:From;
-        b=mXe0uKol6PUWi+6v+ZEwGiSgMSyGViYjsaXWps/jf73Ed0/eYFxEczA3n/PMKiJ5A
-         0kmK5xpWrwon3awi7rxzurwJXdsgNCYwxtFeA0abnHOGkLbqEFg+YGezLl74R9dGVo
-         t50Onfrr6JIvoPjCvAx5JrMfzgSOjqrrQBa0aEow=
-Date:   Sat, 21 Jan 2023 16:29:11 +0100
+        b=HxhM/4MzQKzUIGesBvxdyFDIBEg9RhtNhCk/meXWZOYDhfCFeX+vrbnnxayAgtQCS
+         pJI+vPSXISI0Jn4Er9hC4R7QuNDczDm25tcyM82FdUy48GLDs3I5g5+MiJ3ou7tpCW
+         91LaCm2Yt0JMR0JK953MK3VNquo8ZcEg2oDPdtzQ=
+Date:   Sat, 21 Jan 2023 16:29:33 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver fixes for 6.2-rc5
-Message-ID: <Y8wEx5F+nUsgqj4Z@kroah.com>
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [GIT PULL] Staging driver fix for 6.2-rc5
+Message-ID: <Y8wE3Tu3muhrYchq@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -58,64 +56,25 @@ The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.2-rc5
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-6.2-rc5
 
-for you to fetch changes up to 14ee78d5932afeb710c8305196a676a715bfdea8:
+for you to fetch changes up to 7d83299351fe7c812c529f5e39fe63b5312e4233:
 
-  serial: exar: Add support for Sealevel 7xxxC serial cards (2023-01-20 13:38:38 +0100)
+  staging: vchiq_arm: fix enum vchiq_status return types (2023-01-17 19:23:36 +0100)
 
 ----------------------------------------------------------------
-TTY/Serial driver fixes for 6.2-rc5
+Staging driver fix for 6.2-rc5
 
-Here are some small tty and serial driver fixes for 6.2-rc5 that resolve
-a number of tiny reported issues and some new device ids.  They include:
-  - new device id for the exar serial driver
-  - speakup tty driver bugfix
-  - atmel serial driver baudrate fixup
-  - stm32 serial driver bugfix and then revert as the bugfix broke the
-    build.  That will come back in a later pull request once it is all
-    worked out properly.
-  - amba-pl011 serial driver rs486 mode bugfix
-  - qcom_geni serial driver bugfix
-
-Most of these have been in linux-next with no reported problems (well,
-other than the build breakage which generated the revert), the new
-device id passed 0-day testing.
+Here is a single staging driver fix for 6.2-rc5.  It resolves a build
+issue reported and Fixed by Arnd in the vc04_services driver.  It's been
+in linux-next this week with no reported problems.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
 Arnd Bergmann (1):
-      tty: serial: qcom_geni: avoid duplicate struct member init
+      staging: vchiq_arm: fix enum vchiq_status return types
 
-Gaosheng Cui (1):
-      tty: fix possible null-ptr-defer in spk_ttyio_release
-
-Greg Kroah-Hartman (1):
-      Revert "serial: stm32: Merge hard IRQ and threaded IRQ handling into single IRQ handler"
-
-Ilpo Järvinen (1):
-      serial: pch_uart: Pass correct sg to dma_unmap_sg()
-
-Krzysztof Kozlowski (1):
-      tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buffer
-
-Lino Sanfilippo (1):
-      serial: amba-pl011: fix high priority character transmission in rs486 mode
-
-Marek Vasut (1):
-      serial: stm32: Merge hard IRQ and threaded IRQ handling into single IRQ handler
-
-Matthew Howell (1):
-      serial: exar: Add support for Sealevel 7xxxC serial cards
-
-Tobias Schramm (1):
-      serial: atmel: fix incorrect baudrate setup
-
- drivers/accessibility/speakup/spk_ttyio.c |  3 +++
- drivers/tty/serial/8250/8250_exar.c       | 14 ++++++++++++++
- drivers/tty/serial/amba-pl011.c           |  8 ++++----
- drivers/tty/serial/atmel_serial.c         |  8 +-------
- drivers/tty/serial/pch_uart.c             |  2 +-
- drivers/tty/serial/qcom_geni_serial.c     | 32 +++++++++++++++++++++++--------
- 6 files changed, 47 insertions(+), 20 deletions(-)
+ drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h | 2 +-
+ drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
