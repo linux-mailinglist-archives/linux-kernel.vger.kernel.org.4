@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB97D676604
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 12:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124156765FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 12:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjAUL36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 06:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S229597AbjAUL3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 06:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjAUL3x (ORCPT
+        with ESMTP id S229523AbjAUL3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 06:29:53 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF93B3DC;
-        Sat, 21 Jan 2023 03:29:51 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y11so9450891edd.6;
-        Sat, 21 Jan 2023 03:29:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tQtA9gnXbHiCVZ0cdHgz61/mVXx++tAhOoDuPrap8Z8=;
-        b=IrfWZ6nnGNuKzRQyWZxpXbc/uAwXN43BQn8gO3yrJq2u3+D/z8GgtpgGunHjw7ig5o
-         pbJ8RLv0KPCELe3aZpmvWDkSnx0R2vaOT0K8hMNZ9qONHT+Nz6pquv5j0JNGDSx0jLb8
-         mlntWNQt3gvIbnQrVG+p6iOGnxyARi05vZnjC6aiPspZReA/kCrUlRI7scCaXJB9TdXO
-         0RftYK4T6hdaTXHH86j+ZHaJtPB5WYueVscMBR3jz0io+Jof3qcYptT8dxBw762lYnTy
-         d7+T8gctiDul0KmQVJ1s8ShAo9X5HKbNCHSIB7qGXhlkDl1vLVlMn2EobIfVzYXPGntD
-         U2Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tQtA9gnXbHiCVZ0cdHgz61/mVXx++tAhOoDuPrap8Z8=;
-        b=rI7//64ZdgKn9b1XfLm9YzUkJmDRBi9kQFbHZ7X62/V0g82KhIpSn3HQELIufuuOOI
-         Q0mOkb3uOAgh49RkObKaV8z4X7A0yzY7yAusZmywN7qHz8fesYRz7N+1WXWxNpG75hPL
-         4ePwNtZ3PvTEtEJ8/SEI8ImP8tVody0j3pXjUAoCKhmCBxVZs+xWthxsiDY249GPupRD
-         ogDzOgmeodk3Jd9OeLFP6uBN6Mkxxl8FOxNsJMdYzvG17/2EFm0jpQDiAOYhWIHgbDsn
-         3IZ5ozmiRiQfYb+tjxXLoC9zd9bngUFFypz9sS6EmYf9V+W++KQoik2azptFGeSeTMFz
-         5mpg==
-X-Gm-Message-State: AFqh2kqoVFpQ242MUI6HF3jS+SRKTXmPnP++e7x2++oJOVMu6ww/RUK6
-        TGxgx3HtrHvYko9qMbGowx4=
-X-Google-Smtp-Source: AMrXdXtMK0T0DTiO6dazvK4Gi14KKO6u4xEFwf3TbeONxFRnhsCY1K0ZzvDUaYtLmDLP9uhEZrVYRQ==
-X-Received: by 2002:a05:6402:2055:b0:479:6c4f:40df with SMTP id bc21-20020a056402205500b004796c4f40dfmr16794615edb.18.1674300589520;
-        Sat, 21 Jan 2023 03:29:49 -0800 (PST)
-Received: from fedora.. ([188.252.220.152])
-        by smtp.googlemail.com with ESMTPSA id d26-20020a056402401a00b0046c7c3755a7sm5152151eda.17.2023.01.21.03.29.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 03:29:48 -0800 (PST)
-From:   Robert Marko <robimarko@gmail.com>
-To:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 1/4] soc: qcom: socinfo: move SMEM item struct and defines to a header
+        Sat, 21 Jan 2023 06:29:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38F93B3D2
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 03:29:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5140A5FFC8;
+        Sat, 21 Jan 2023 11:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674300585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5syjoP68/X1yj4HDBfbMlhfi9N1S6g7T+QMIMt/oPX8=;
+        b=gpWM2hDo+vCjQ4xw4JVKSPaz9Mz/4Iae9UEU795MN41r4KP8YTLTzHusMm/29LCLR1L36q
+        qw4pikvS04wq3+FX82eSoJIeHsp9t5MgihNZvN9EjML2J3b3MmsNj2mtArlKWma6tBt2ok
+        /+XutrD1lxd4sH256oSqRPJ6U1N6Ytc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674300585;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5syjoP68/X1yj4HDBfbMlhfi9N1S6g7T+QMIMt/oPX8=;
+        b=m5mnLxazxSC/EnFrtILhKcZfeR78ijOenbWBO58NVlGXSCbVjkW5uBwk3QH9AXrOL/unHj
+        ZDzZHxULPeb1YiBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8F71138FE;
+        Sat, 21 Jan 2023 11:29:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KKH1M6jMy2O0EgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Sat, 21 Jan 2023 11:29:44 +0000
+Message-ID: <86e68d3b-b029-5e82-5bbc-e0ccc2ae1d36@suse.cz>
 Date:   Sat, 21 Jan 2023 12:29:44 +0100
-Message-Id: <20230121112947.53433-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH mm-unstable] lib/Kconfig.debug: do not enable
+ DEBUG_PREEMPT by default
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+References: <20230121033942.350387-1-42.hyeyoo@gmail.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230121033942.350387-1-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,182 +95,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move SMEM item struct and related defines to a header in order to be able
-to reuse them in the Qualcomm NVMEM CPUFreq driver instead of duplicating
-them.
+On 1/21/23 04:39, Hyeonggon Yoo wrote:
+> In workloads where this_cpu operations are frequently performed,
+> enabling DEBUG_PREEMPT may result in significant increase in
+> runtime overhead due to frequent invocation of
+> __this_cpu_preempt_check() function.
+> 
+> This can be demonstrated through benchmarks such as hackbench where this
+> configuration results in a 10% reduction in performance, primarily due to
+> the added overhead within memcg charging path.
+> 
+> Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
+> of its potential impact on performance in some workloads.
+> 
+> hackbench-process-sockets
+> 		      debug_preempt	 no_debug_preempt
+> Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
+> Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
+> Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
+> Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
+> Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
+> Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
+> Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
+> Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
+> Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- drivers/soc/qcom/socinfo.c       | 65 +-----------------------------
- include/linux/soc/qcom/socinfo.h | 68 ++++++++++++++++++++++++++++++++
- 2 files changed, 69 insertions(+), 64 deletions(-)
- create mode 100644 include/linux/soc/qcom/socinfo.h
+Looks like it's there since the beginning of preempt and pre-git. But
+probably should be something for scheduler maintainers rather than mm/slab,
+even if the impact manifests there. You did Cc Ingo (the original author) so
+let me Cc the rest here.
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 3b970a80f3aa..5919f863f369 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -11,6 +11,7 @@
- #include <linux/random.h>
- #include <linux/slab.h>
- #include <linux/soc/qcom/smem.h>
-+#include <linux/soc/qcom/socinfo.h>
- #include <linux/string.h>
- #include <linux/stringify.h>
- #include <linux/sys_soc.h>
-@@ -32,15 +33,6 @@
- #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
- #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
- 
--#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
--#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
--
--/*
-- * SMEM item id, used to acquire handles to respective
-- * SMEM region.
-- */
--#define SMEM_HW_SW_BUILD_ID            137
--
- #ifdef CONFIG_DEBUG_FS
- #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
- #define SMEM_IMAGE_VERSION_SIZE                4096
-@@ -121,62 +113,7 @@ static const char *const pmic_models[] = {
- 	[58] = "PM8450",
- 	[65] = "PM8010",
- };
--#endif /* CONFIG_DEBUG_FS */
--
--/* Socinfo SMEM item structure */
--struct socinfo {
--	__le32 fmt;
--	__le32 id;
--	__le32 ver;
--	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
--	/* Version 2 */
--	__le32 raw_id;
--	__le32 raw_ver;
--	/* Version 3 */
--	__le32 hw_plat;
--	/* Version 4 */
--	__le32 plat_ver;
--	/* Version 5 */
--	__le32 accessory_chip;
--	/* Version 6 */
--	__le32 hw_plat_subtype;
--	/* Version 7 */
--	__le32 pmic_model;
--	__le32 pmic_die_rev;
--	/* Version 8 */
--	__le32 pmic_model_1;
--	__le32 pmic_die_rev_1;
--	__le32 pmic_model_2;
--	__le32 pmic_die_rev_2;
--	/* Version 9 */
--	__le32 foundry_id;
--	/* Version 10 */
--	__le32 serial_num;
--	/* Version 11 */
--	__le32 num_pmics;
--	__le32 pmic_array_offset;
--	/* Version 12 */
--	__le32 chip_family;
--	__le32 raw_device_family;
--	__le32 raw_device_num;
--	/* Version 13 */
--	__le32 nproduct_id;
--	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
--	/* Version 14 */
--	__le32 num_clusters;
--	__le32 ncluster_array_offset;
--	__le32 num_defective_parts;
--	__le32 ndefective_parts_array_offset;
--	/* Version 15 */
--	__le32 nmodem_supported;
--	/* Version 16 */
--	__le32  feature_code;
--	__le32  pcode;
--	__le32  npartnamemap_offset;
--	__le32  nnum_partname_mapping;
--};
- 
--#ifdef CONFIG_DEBUG_FS
- struct socinfo_params {
- 	u32 raw_device_family;
- 	u32 hw_plat_subtype;
-diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
-new file mode 100644
-index 000000000000..6a175d635617
---- /dev/null
-+++ b/include/linux/soc/qcom/socinfo.h
-@@ -0,0 +1,68 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __QCOM_SOCINFO_H__
-+#define __QCOM_SOCINFO_H__
-+
-+/*
-+ * SMEM item id, used to acquire handles to respective
-+ * SMEM region.
-+ */
-+#define SMEM_HW_SW_BUILD_ID		137
-+
-+#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
-+#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
-+
-+/* Socinfo SMEM item structure */
-+struct socinfo {
-+	__le32 fmt;
-+	__le32 id;
-+	__le32 ver;
-+	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
-+	/* Version 2 */
-+	__le32 raw_id;
-+	__le32 raw_ver;
-+	/* Version 3 */
-+	__le32 hw_plat;
-+	/* Version 4 */
-+	__le32 plat_ver;
-+	/* Version 5 */
-+	__le32 accessory_chip;
-+	/* Version 6 */
-+	__le32 hw_plat_subtype;
-+	/* Version 7 */
-+	__le32 pmic_model;
-+	__le32 pmic_die_rev;
-+	/* Version 8 */
-+	__le32 pmic_model_1;
-+	__le32 pmic_die_rev_1;
-+	__le32 pmic_model_2;
-+	__le32 pmic_die_rev_2;
-+	/* Version 9 */
-+	__le32 foundry_id;
-+	/* Version 10 */
-+	__le32 serial_num;
-+	/* Version 11 */
-+	__le32 num_pmics;
-+	__le32 pmic_array_offset;
-+	/* Version 12 */
-+	__le32 chip_family;
-+	__le32 raw_device_family;
-+	__le32 raw_device_num;
-+	/* Version 13 */
-+	__le32 nproduct_id;
-+	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
-+	/* Version 14 */
-+	__le32 num_clusters;
-+	__le32 ncluster_array_offset;
-+	__le32 num_defective_parts;
-+	__le32 ndefective_parts_array_offset;
-+	/* Version 15 */
-+	__le32 nmodem_supported;
-+	/* Version 16 */
-+	__le32  feature_code;
-+	__le32  pcode;
-+	__le32  npartnamemap_offset;
-+	__le32  nnum_partname_mapping;
-+};
-+
-+#endif
--- 
-2.39.1
+> ---
+>  lib/Kconfig.debug | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index ddbfac2adf9c..f6f845a4b9ec 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1176,13 +1176,16 @@ config DEBUG_TIMEKEEPING
+>  config DEBUG_PREEMPT
+>  	bool "Debug preemptible kernel"
+>  	depends on DEBUG_KERNEL && PREEMPTION && TRACE_IRQFLAGS_SUPPORT
+> -	default y
+>  	help
+>  	  If you say Y here then the kernel will use a debug variant of the
+>  	  commonly used smp_processor_id() function and will print warnings
+>  	  if kernel code uses it in a preemption-unsafe way. Also, the kernel
+>  	  will detect preemption count underflows.
+>  
+> +	  This option has potential to introduce high runtime overhead,
+> +	  depending on workload as it triggers debugging routines for each
+> +	  this_cpu operation. It should only be used for debugging purposes.
+> +
+>  menu "Lock Debugging (spinlocks, mutexes, etc...)"
+>  
+>  config LOCK_DEBUGGING_SUPPORT
 
