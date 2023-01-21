@@ -2,138 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17053676789
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47FF676779
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjAUQ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 11:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S229960AbjAUQqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 11:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAUQ7d (ORCPT
+        with ESMTP id S229637AbjAUQqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 11:59:33 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3270E2940E;
-        Sat, 21 Jan 2023 08:59:32 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id a37so8916728ljq.0;
-        Sat, 21 Jan 2023 08:59:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lS7OTDH5xsHguwgoMystLpNa9MHa3l+igtaO3KLB4S8=;
-        b=qWBeeI8GcMaFhAphaGpt1sLrb6bytQUftC0WTM6eilD8PoXtLu1T3Wh0KfM3HcyWbz
-         hMZ/Lnhl9JNmQn481RPwRNc48k9Yg7LGgf/r0P9mFd3GsPEDO4tUVKN1XsvF1FIpB0Jh
-         oy+YvYbswSAwJ8MHDhHbr8Z2T/KJNSOL8kR4rfAbbvP11aRRQKbsw+uvdlSM5NuIXkAX
-         x/nma3tcCc/CtkjN02CRbSntzizU0w9MO2e9AvdccT+rfIM6SAxDVbtEQhZUtJpnYjhy
-         wwIjGW7Glg9PXzfYThUe2gobgln+AuKEzdPmc4cz37UoYvUObKcpz2M7xntdYb2XOBA+
-         Vhxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lS7OTDH5xsHguwgoMystLpNa9MHa3l+igtaO3KLB4S8=;
-        b=6khYCXplpYAIdi3V1DU8hjykc+3mvxIBPMykR9uLDn9HViicH+yupGuQDZljrugBXH
-         0szfHLfYXJ6OVvGeNcmnOEykX+vPYfiw57tiidmMNZzrVo+H06T1jxB29z6mqBjTQX2W
-         MqHVsb5g/puECq3qCJwzVOjAI3v5xHkBodxDGnoyavUQ4a9aORrkaueupucviSryKLOC
-         jBTWaxtZ/aGSszZwXH+vIdug/PJqPIGTqyszHSzP8s/ZsVGL1zsvrVKporeIucohxRzr
-         1+apnRIaUT74EnyznkewhsAFUytIfxDoSwMYD5mkUP1hQtzfibxyDg1fosY2U+LgkaF6
-         JLnQ==
-X-Gm-Message-State: AFqh2krYlTaxTpDO+fXNvfdGd6E/sjSPV4kW6yzZSz5bMt9GWECeCkVy
-        o40CW64KI6m0xohRTWnXiPPivET/WpTyzvobtjg=
-X-Google-Smtp-Source: AMrXdXs2JOXrHvOXx534MiLH8Kc5JcYjdUaE0aZg91H+2RdNyXWFq2+jkC8sSBfnCGviWfUQf8plAu42lOLmnJ+WOoY=
-X-Received: by 2002:a2e:9255:0:b0:289:81a4:3a7b with SMTP id
- v21-20020a2e9255000000b0028981a43a7bmr1260269ljg.487.1674320370315; Sat, 21
- Jan 2023 08:59:30 -0800 (PST)
+        Sat, 21 Jan 2023 11:46:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6375E113F1;
+        Sat, 21 Jan 2023 08:46:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13B16B8075D;
+        Sat, 21 Jan 2023 16:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2BAC433EF;
+        Sat, 21 Jan 2023 16:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674319570;
+        bh=WIOYULKqUjmgQ9s7U3j9QvtriWuRBMzlktmPMzB7lUw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ww4HRwRlML8vsq0/FWhII3m27jKcx9T7mkSjBRV2crwF+WcCfsVk1lpfHr630h+hG
+         v52Dbzmtj5Z16p+5kYEwu+7/LAZ4BHxpq6zO1hebnDe6g0Skg32F4nQKO9lcGnrFnV
+         n67L/g3bcYUHoaGtuSWs8qO73Vme4Cwdb1OaxYk0/k+ADKDcCbhwfwxzJBfXN9dijS
+         T3VSBkQj9FaCglR3418zKcT47PUQg6lAaLZM7QBfkOAEtndhRt7rG/xkxXpvRzImkl
+         /t1X9MT4RyI0mqNQNM0zyeqj+C1r+95Toy7z5OkCXGPuMrVugsYQRyfQmgacJk4x5i
+         9koBEpfGiJwmw==
+Date:   Sat, 21 Jan 2023 16:59:54 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] arm64: dts: qcom: Use labels with generic node
+ names for ADC channels
+Message-ID: <20230121165954.5806ee29@jic23-huawei>
+In-Reply-To: <20230119221757.wltdog4owclidejl@SoMainline.org>
+References: <20230119212632.185881-1-marijn.suijten@somainline.org>
+        <20230119221757.wltdog4owclidejl@SoMainline.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <000601d92db7$39e9d0b0$adbd7210$@telus.net>
-In-Reply-To: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 21 Jan 2023 17:58:53 +0100
-Message-ID: <CA+icZUVoxYrUfW9R9cCcUkHvvbkZoHSCmHVuTVh7gmdf9_jJkQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Huang Rui <ray.huang@amd.com>, li.meng@amd.com,
-        skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 5:41 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Revert the portion of a recent Makefile change that incorrectly
-> deletes source files when doing "make clean".
->
-> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
-> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> ---
-> v2: fix address list.
-> ---
+On Thu, 19 Jan 2023 23:17:57 +0100
+Marijn Suijten <marijn.suijten@somainline.org> wrote:
 
-Hi Doug,
+> +cc linux-iio@vger.kernel.org
+> 
+> Apologies, I blindly copied Jonathans request [1] to send this to
+> iio@vger.kernel.org, without checking for the common linux- prefix.
+Oops from me!
+:)
 
-thanks for the update.
+Jonathan
 
-You happen to know through which Git tree this will go?
-linux-pm?
-linux-kselftest?
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20221211141526.463f43e6@jic23-huawei/
+> 
+> On 2023-01-19 22:26:30, Marijn Suijten wrote:
+> > As discussed in [1] it is more convenient to use a generic adc-chan node
+> > name for ADC channels while storing a friendly - board-specific instead
+> > of PMIC-specific - name in the label, if/when desired to overwrite the
+> > channel description already contained (but previously unused) in the
+> > driver [2].
+> > 
+> > Replace the .* name pattern with the adc-chan literal, but leave the
+> > label property optional for bindings to choose to fall back a channel
+> > label hardcoded in the driver [2] instead.
+> > 
+> > [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
+> > [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
+> > 
+> > Changes since v1:
+> > - Require adc-chan name in dt-bindings;
+> > - Replace more node names with adc-chan and a descriptive label, that
+> >   were found by running dtbs_check on adjusted bindings;
+> > - sm8250-mtp.dts: Fix accidental adc-chan2 node name with pa_therm
+> >   label, which should have been adc-chan with pa_therm2 label.
+> > 
+> > v1: https://lore.kernel.org/linux-arm-msm/20221209215308.1781047-1-marijn.suijten@somainline.org/
+> > 
+> > Marijn Suijten (2):
+> >   dt-bindings: iio: adc: Require generic adc-chan name for channel nodes
+> >   arm64: dts: qcom: Use labels with generic node names for ADC channels
+> > 
+> >  .../bindings/iio/adc/qcom,spmi-vadc.yaml      | 16 ++++----
+> >  arch/arm64/boot/dts/qcom/pm6125.dtsi          | 18 ++++++---
+> >  arch/arm64/boot/dts/qcom/pm660.dtsi           | 33 ++++++++++------
+> >  arch/arm64/boot/dts/qcom/pm8150.dtsi          |  6 +--
+> >  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  8 ++--
+> >  arch/arm64/boot/dts/qcom/pm8150l.dtsi         |  6 +--
+> >  arch/arm64/boot/dts/qcom/pm8950.dtsi          | 39 ++++++++++++-------
+> >  arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |  6 +--
+> >  arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi     |  6 +--
+> >  arch/arm64/boot/dts/qcom/pmp8074.dtsi         | 27 ++++++++-----
+> >  arch/arm64/boot/dts/qcom/pms405.dtsi          | 21 ++++++----
+> >  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      | 15 ++++---
+> >  .../dts/qcom/sc7180-trogdor-coachz-r1.dts     |  4 +-
+> >  .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  3 +-
+> >  .../dts/qcom/sc7180-trogdor-homestar.dtsi     |  3 +-
+> >  .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |  2 +-
+> >  .../dts/qcom/sc7180-trogdor-pompom-r1.dts     |  2 +-
+> >  .../dts/qcom/sc7180-trogdor-pompom-r2.dts     |  2 +-
+> >  .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |  3 +-
+> >  .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |  3 +-
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  3 +-
+> >  arch/arm64/boot/dts/qcom/sc7280-idp.dts       |  2 +-
+> >  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |  2 +-
+> >  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  4 +-
+> >  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 39 ++++++++++++-------
+> >  .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 15 ++++---
+> >  arch/arm64/boot/dts/qcom/sm8250-mtp.dts       | 21 ++++++----
+> >  27 files changed, 196 insertions(+), 113 deletions(-)
+> > 
+> > --
+> > 2.39.1
+> >   
 
-https://lore.kernel.org/lkml/?q=Doug+Smythies
-
-Hmm, I cannot download the patch with b4:
-
-link="https://lore.kernel.org/lkml/000601d92db7$39e9d0b0$adbd7210$@telus.net/"
-
-$ b4 -d am $link
-Running git --no-pager config -z --get-regexp b4\..*
-Running git --no-pager config -z --get-regexp get-lore-mbox\..*
-Running git --no-pager config -z --get-regexp gpg\..*
-t_mbx_url=https://lore.kernel.org/all/https%3A%2F%2Flore.kernel.org%2Flkml%2F000601d92db79e9d0b0telus.net%2F/t.mbox.gz
-Grabbing thread from
-lore.kernel.org/all/https%3A%2F%2Flore.kernel.org%2Flkml%2F000601d92db79e9d0b0telus.net%2F/t.mbox.gz
-That message-id is not known.
-
-Maybe be patient.
-
-BR,
--Sedat-
-
->  tools/testing/selftests/amd-pstate/Makefile | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-> index 5f195ee756d6..5fd1424db37d 100644
-> --- a/tools/testing/selftests/amd-pstate/Makefile
-> +++ b/tools/testing/selftests/amd-pstate/Makefile
-> @@ -7,11 +7,6 @@ all:
->  uname_M := $(shell uname -m 2>/dev/null || echo not)
->  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->
-> -ifeq (x86,$(ARCH))
-> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> -endif
-> -
->  TEST_PROGS := run.sh
->  TEST_FILES := basic.sh tbench.sh gitsource.sh
->
-> --
-> 2.25.1
->
->
->
