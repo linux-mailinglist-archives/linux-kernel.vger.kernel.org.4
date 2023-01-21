@@ -2,92 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124156765FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 12:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE14676609
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 12:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjAUL3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 06:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S229863AbjAULaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 06:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjAUL3s (ORCPT
+        with ESMTP id S229679AbjAUL3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 06:29:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38F93B3D2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 03:29:46 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5140A5FFC8;
-        Sat, 21 Jan 2023 11:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674300585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5syjoP68/X1yj4HDBfbMlhfi9N1S6g7T+QMIMt/oPX8=;
-        b=gpWM2hDo+vCjQ4xw4JVKSPaz9Mz/4Iae9UEU795MN41r4KP8YTLTzHusMm/29LCLR1L36q
-        qw4pikvS04wq3+FX82eSoJIeHsp9t5MgihNZvN9EjML2J3b3MmsNj2mtArlKWma6tBt2ok
-        /+XutrD1lxd4sH256oSqRPJ6U1N6Ytc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674300585;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5syjoP68/X1yj4HDBfbMlhfi9N1S6g7T+QMIMt/oPX8=;
-        b=m5mnLxazxSC/EnFrtILhKcZfeR78ijOenbWBO58NVlGXSCbVjkW5uBwk3QH9AXrOL/unHj
-        ZDzZHxULPeb1YiBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8F71138FE;
-        Sat, 21 Jan 2023 11:29:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KKH1M6jMy2O0EgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Sat, 21 Jan 2023 11:29:44 +0000
-Message-ID: <86e68d3b-b029-5e82-5bbc-e0ccc2ae1d36@suse.cz>
-Date:   Sat, 21 Jan 2023 12:29:44 +0100
+        Sat, 21 Jan 2023 06:29:54 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C813BDB8;
+        Sat, 21 Jan 2023 03:29:52 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z11so9565654ede.1;
+        Sat, 21 Jan 2023 03:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A5mKLuXoQEg2LlBl5cTmg4HRlZTc66MypE0lBCnDK2k=;
+        b=hWNgPQHz5DT7YEs2CEn+12uqj+eFooNyCxxghHL4SZmuyF0iu+57QAVH/Lk+D76xeg
+         8XlVNXk06vM/WiAd77+E5EvvQLJlChV0Wac1eI5Sk1aDbcJpVFJz0jF+4rU0e5SuQuT2
+         WXZqtJfRha3gwgs+E7V2/dvQo6nEE1GhHzXuxE8xmMotoYXFPs4+urJxI0AILPZ8VNE1
+         QMJSgNK57306oL4oEP9U/cDs/qDC7zVOh6vCJ8OTz1/LO+2F3cvT69LjPnpvSInWc9WO
+         fB++rE16bcZRb3ZviM0WJQLk5hFoxMXXgyAFf1Q1HzHV83TxcIz3otCZQW6jzKZ33r0o
+         /C2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A5mKLuXoQEg2LlBl5cTmg4HRlZTc66MypE0lBCnDK2k=;
+        b=1r4GW9D2tzsOtnU6RXdDz8QP0kiijb3q0jFMG2iXUYbBTdQkYSsysrNK2cdwpave9O
+         sEXgP9zC3UJikp7P1lqoyKy+SxsCh/t1U6sJAQaSujEO4pJb3WvxXaR3ZEh4WXUuGbJn
+         FVZdF3btAesRfp2c2rUchDyrXt3b0YL6SbRLAA82I1CDL/4WBRnlTPA8XlYIX+Vk+JZY
+         5djohUPDE/a4Ngat4ydEuLMZeQU+oQJrLPYfGV7DOnWTpsZJVjlq5Vz1FI0xeqbfg+Vp
+         wWXCw1Lytf93mZtjTqv2UACFN3CEU+t5yHcpjPVhlwL2/xjlzypQDjJuhXHtaTfT8Fo1
+         p22w==
+X-Gm-Message-State: AFqh2kp1sl5uPuG0EenzohnvQOIIYCq6uZrxfiBzaP8z6ziDrj2lU6pc
+        YQjV0Kw7Ja97jMO1R1OoJh4=
+X-Google-Smtp-Source: AMrXdXsh7ggzctLoccLy3vZx8Sz0N2IZzlexzElftxpuKcFvoijh7wdY9JKsoJZgD946kAVA8b4sZg==
+X-Received: by 2002:aa7:c9c5:0:b0:49e:f591:d8d2 with SMTP id i5-20020aa7c9c5000000b0049ef591d8d2mr3997269edt.16.1674300590690;
+        Sat, 21 Jan 2023 03:29:50 -0800 (PST)
+Received: from fedora.. ([188.252.220.152])
+        by smtp.googlemail.com with ESMTPSA id d26-20020a056402401a00b0046c7c3755a7sm5152151eda.17.2023.01.21.03.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Jan 2023 03:29:50 -0800 (PST)
+From:   Robert Marko <robimarko@gmail.com>
+To:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 2/4] cpufreq: qcom-nvmem: reuse socinfo SMEM item struct
+Date:   Sat, 21 Jan 2023 12:29:45 +0100
+Message-Id: <20230121112947.53433-2-robimarko@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230121112947.53433-1-robimarko@gmail.com>
+References: <20230121112947.53433-1-robimarko@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH mm-unstable] lib/Kconfig.debug: do not enable
- DEBUG_PREEMPT by default
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-References: <20230121033942.350387-1-42.hyeyoo@gmail.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230121033942.350387-1-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,62 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/23 04:39, Hyeonggon Yoo wrote:
-> In workloads where this_cpu operations are frequently performed,
-> enabling DEBUG_PREEMPT may result in significant increase in
-> runtime overhead due to frequent invocation of
-> __this_cpu_preempt_check() function.
-> 
-> This can be demonstrated through benchmarks such as hackbench where this
-> configuration results in a 10% reduction in performance, primarily due to
-> the added overhead within memcg charging path.
-> 
-> Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
-> of its potential impact on performance in some workloads.
-> 
-> hackbench-process-sockets
-> 		      debug_preempt	 no_debug_preempt
-> Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
-> Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
-> Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
-> Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
-> Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
-> Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
-> Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
-> Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
-> Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Now that socinfo SMEM item struct and defines have been moved to a header
+so we can utilize that instead.
 
-Looks like it's there since the beginning of preempt and pre-git. But
-probably should be something for scheduler maintainers rather than mm/slab,
-even if the impact manifests there. You did Cc Ingo (the original author) so
-let me Cc the rest here.
+Now the SMEM value can be accesed directly, there is no need for defining
+the ID for the SMEM request as well.
 
-> ---
->  lib/Kconfig.debug | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index ddbfac2adf9c..f6f845a4b9ec 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1176,13 +1176,16 @@ config DEBUG_TIMEKEEPING
->  config DEBUG_PREEMPT
->  	bool "Debug preemptible kernel"
->  	depends on DEBUG_KERNEL && PREEMPTION && TRACE_IRQFLAGS_SUPPORT
-> -	default y
->  	help
->  	  If you say Y here then the kernel will use a debug variant of the
->  	  commonly used smp_processor_id() function and will print warnings
->  	  if kernel code uses it in a preemption-unsafe way. Also, the kernel
->  	  will detect preemption count underflows.
->  
-> +	  This option has potential to introduce high runtime overhead,
-> +	  depending on workload as it triggers debugging routines for each
-> +	  this_cpu operation. It should only be used for debugging purposes.
-> +
->  menu "Lock Debugging (spinlocks, mutexes, etc...)"
->  
->  config LOCK_DEBUGGING_SUPPORT
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index a577586b23be..c0a7841a56c1 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -28,8 +28,7 @@
+ #include <linux/pm_opp.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/smem.h>
+-
+-#define MSM_ID_SMEM	137
++#include <linux/soc/qcom/socinfo.h>
+ 
+ enum _msm_id {
+ 	MSM8996V3 = 0xF6ul,
+@@ -143,17 +142,14 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+ static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+ {
+ 	size_t len;
+-	u32 *msm_id;
++	struct socinfo *info;
+ 	enum _msm8996_version version;
+ 
+-	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
+-	if (IS_ERR(msm_id))
++	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
++	if (IS_ERR(info))
+ 		return NUM_OF_MSM8996_VERSIONS;
+ 
+-	/* The first 4 bytes are format, next to them is the actual msm-id */
+-	msm_id++;
+-
+-	switch ((enum _msm_id)*msm_id) {
++	switch (info->id) {
+ 	case MSM8996V3:
+ 	case APQ8096V3:
+ 		version = MSM8996_V3;
+-- 
+2.39.1
 
