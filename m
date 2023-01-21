@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74B26767FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788296767F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjAUSPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 13:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
+        id S229864AbjAUSGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 13:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjAUSPb (ORCPT
+        with ESMTP id S229673AbjAUSGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 13:15:31 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85D92B627
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 10:15:30 -0800 (PST)
-Date:   Sat, 21 Jan 2023 18:15:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674324928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YSLV8t+mHMg9bRk9e6jbKy2QqL7MoxPyHgIADPLc1gw=;
-        b=oBvdKsRBk/KCPvMNqQzp8o87W6yFujl67ZzxL8++ppyZmPdtkHvA2GFp99B8TDvnTVdeQh
-        pWJyS0yCDMpYHvIhdVFpXa6IkFr0EtYQtAtWmeVisBYHjdhKdersuNwplMQo49DHGaQyYa
-        dU2lu1ZuNy6fwOjs8GaspLV05q18rQQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Akihiko Odaki <akihiko.odaki@daynix.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v7 7/7] KVM: arm64: Normalize cache configuration
-Message-ID: <Y8wru2IrgHtBIofM@google.com>
-References: <20230112023852.42012-1-akihiko.odaki@daynix.com>
- <20230112023852.42012-8-akihiko.odaki@daynix.com>
- <Y8meCFkrVXurXlTk@google.com>
- <86k01gm6ys.wl-maz@kernel.org>
+        Sat, 21 Jan 2023 13:06:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACFB8A70;
+        Sat, 21 Jan 2023 10:06:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F0F60B56;
+        Sat, 21 Jan 2023 18:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C51C433EF;
+        Sat, 21 Jan 2023 18:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674324398;
+        bh=oZHXozGWv+1gqZVIyQioRcrJr2CPFyq+E441uqsbG38=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c005qaJtNWB7PhpKNSt4Rm+xnJxPG0utOnAm4mj6r36ekXjkBznklQgCcQWmJF+fF
+         zr89Pv2AJGkfjZpQYhCnPt4bcTsrlH9G0RVDYNg/29SCdhCxlAcZkLThCFbaMeRZ2A
+         qZRuVrr34N6YYHIlGDnRAqVSDXQAR2HQlSFva+kOJQzDXE6cOWfj4IeY/gKjQ8j32I
+         2QytuvBykZjS8/CoDfUnrRsfRYieTPJncH+BMr+9PV5H4asQkB7oN5ldgE6+7XvCY9
+         xOUuAHXh+p/yKuuCaNNZxdG9KRbnDeKaQ6b/zJz7oab52GdV28pU7qQnfYkVNGICf3
+         dKNDydPGaEMGQ==
+Date:   Sat, 21 Jan 2023 18:20:23 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     hvilleneuve@dimonoff.com, lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] iio: adc: ti-ads7924: add Texas Instruments
+ ADS7924 driver
+Message-ID: <20230121182023.1f1516d2@jic23-huawei>
+In-Reply-To: <20230115170623.3680647-1-hugo@hugovil.com>
+References: <20230115170623.3680647-1-hugo@hugovil.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86k01gm6ys.wl-maz@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Marc,
+On Sun, 15 Jan 2023 12:06:21 -0500
+Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-On Sat, Jan 21, 2023 at 12:02:03PM +0000, Marc Zyngier wrote:
-> On Thu, 19 Jan 2023 19:46:16 +0000, Oliver Upton <oliver.upton@linux.dev> wrote:
-> > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> > index 459e6d358dab..b6228f7d1d8d 100644
-> > --- a/arch/arm64/kvm/sys_regs.c
-> > +++ b/arch/arm64/kvm/sys_regs.c
-> > @@ -148,17 +148,19 @@ static u32 get_ccsidr(struct kvm_vcpu *vcpu, u32 csselr)
-> >  
-> >  static int set_ccsidr(struct kvm_vcpu *vcpu, u32 csselr, u32 val)
-> >  {
-> > -	u8 line_size = FIELD_GET(CCSIDR_EL1_LineSize, val);
-> > +	u8 line_size = SYS_FIELD_GET(CCSIDR_EL1, LineSize, val);
-> > +	u32 cur = get_ccsidr(vcpu, csselr);
-> > +	u8 min_line_size = SYS_FIELD_GET(CCSIDR_EL1, LineSize, cur);
-> >  	u32 *ccsidr = vcpu->arch.ccsidr;
-> >  	u32 i;
-> >  
-> > -	if ((val & CCSIDR_EL1_RES0) || line_size < get_min_cache_line_size(csselr))
-> > +	if (cur == val)
-> > +		return 0;
-> > +
-> > +	if ((val & CCSIDR_EL1_RES0) || line_size < min_line_size)
-> >  		return -EINVAL;
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> This doesn't look right. You're comparing the value userspace is
-> trying to set for a given level with the value that is already set for
-> that level, and forbid the cache line size to be smaller. It works if
-> no value has been set yet (you fallback to something derived from
-> CTR_EL0), but this fails if userspace does multiple writes.
-
-Good catch, I tried to skip over the unit/field conversions by doing this
-but it has the consequence of not working as expected for multiple writes.
-
-> The original check is against CTR_EL0, which makes absolute sense
-> because we want to check across the whole hierarchy. It is just that
-> the original code has two bugs:
+> Hello,
+> this patch series adds the driver for the Texas Instruments ADS7924.
 > 
-> - It fails to convert the CCSIDR_EL1.LineSize value to a number of
->   words (the missing +4). Admire how the architecture is actively
->   designed to be hostile to SW by providing two different formats for
->   the cache line size, none of which is in... bytes.
+> The Texas Instruments ADS7924 is a 4 channels, 12-bit analog to
+> digital converter (ADC) with an I2C interface.
 > 
-> - It passes the full CSSELR value to get_min_cache_line_size(), while
->   this function wants a bool... Yes, there are times where you'd want
->   a stronger type system (did anyone say Rust? ;-)
+> Patch 1 contains the driver for the ADS7924.
+> 
+> Patch 2 add the dt-bindings for the ADS7924.
+> 
+> I have tested the driver using the Texas Instruments ADS7924EVM board connected
+> to a Variscite Symphony EVK with a IMX8MN NANO SOM:
+>   - Tested reset pin Ok
+>   - Tested regulator setup Ok
+>   - Tested reading sysfs in_voltage_scale Ok
+>   - Tested reading sysfs in_voltageX_raw (x=0 to 3) Ok
+> 
+> Thank you.
+> 
+> Link: [v1] https://lore.kernel.org/linux-iio/20221222203610.2571287-1-hugo@hugovil.com/
+> Link: [v2] https://lore.kernel.org/linux-iio/20230110160124.3853593-1-hugo@hugovil.com/
+> Link: [v3] https://lore.kernel.org/linux-iio/20230113194959.3276433-1-hugo@hugovil.com/
 
-Hey now, if you say it enough times people are going to start getting
-ideas ;-P
+Series applied to the togreg branch of iio.git and pushed out initially as testing
+for 0-day to work it's magic and see if it can find anything we missed!
 
-> I propose that we fold something like the patch below in instead
-> (tested with get-reg-list).
-
-Agreed, I've backed out my diff and applied yours. Pushed (with force!)
-to my repo now, PTAL.
-
---
 Thanks,
-Oliver
+
+Jonathan
+
+> 
+> Changes for V4:
+> - DT bindings: remove label description.
+> - Remove blank line between datasheet tag and SOB in commit message.
+> - Return value from regulator_get_voltage()
+> - Fix num_channels comparison (cannot be < 0)
+> - Change severity of message to dev_err in ads7924_set_conv_mode().
+> 
+> Changes for V3:
+> - Rebase on linux-6.2-rc1
+> - Refactor to follow usual coding practices as per review comments.
+> - Fix missing include (reported by kernel test robot).
+> - Fix DT bindings errors.
+> - Removed unused define.
+> - Remove breaks after return.
+> - Remove debug message in ads7924_get_channels_config().
+> - Remove braces around swich case IIO_CHAN_INFO_RAW.
+> - Remove comments about regulator_get_voltage() failing for dummy regulator.
+> 
+> Changes for V2:
+> - Dropped patch "iio: adc: Kconfig: add SPI interface mention to AD7924
+>   description"
+> - Fixed comments style
+> - Removed unused defines/variables/etc related to buffered support (no buffered
+>   support for the moment).
+> - Convert of-specific code to use the generic firmware property accessors in
+>   include/linux/property.h.
+> - Use FIELD_GET / FIELD_PREP for bit operations/defines
+> - Simplified conversion result registers definitions/usage.
+> - Now using mutex lock/unlock only for INFO_RAW switch branch
+> - Use dev_err_probe() in all return paths of ads7924_probe()
+> - Removed ads7924_remove() after adding callbacks with
+>   devm_add_action_or_reset().
+> - Change iio_device_register() to devm_iio_device_register().
+> - Add the legacy i2c_device_id table
+> - DT bindings: reorder entries, fix indentation,improve comments, add interrupt
+>   line
+> 
+> Hugo Villeneuve (2):
+>   iio: adc: ti-ads7924: add Texas Instruments ADS7924 driver
+>   dt-bindings: iio: adc: add Texas Instruments ADS7924
+> 
+>  .../bindings/iio/adc/ti,ads7924.yaml          | 110 ++++
+>  MAINTAINERS                                   |   7 +
+>  drivers/iio/adc/Kconfig                       |  11 +
+>  drivers/iio/adc/Makefile                      |   1 +
+>  drivers/iio/adc/ti-ads7924.c                  | 474 ++++++++++++++++++
+>  5 files changed, 603 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+>  create mode 100644 drivers/iio/adc/ti-ads7924.c
+> 
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+
