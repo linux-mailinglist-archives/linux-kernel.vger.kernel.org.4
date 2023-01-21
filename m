@@ -2,163 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC78E676269
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB85667627B
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjAUAa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S229657AbjAUAel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAUAay (ORCPT
+        with ESMTP id S229448AbjAUAej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:30:54 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2088.outbound.protection.outlook.com [40.107.13.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F541420C;
-        Fri, 20 Jan 2023 16:30:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aMaPeHn3aiTcPWz87zq/+mRo43UDsjSI97rya43BicXqSU9aYU1EpxJbHr6FMHbHHJUTXPyuVHpNVbnRbyFZSN0TDwTRzRZTLSWjeXOs4mDd+TbyGsjAG4yx7ullQ0HxHJg3/YCGyH/nwvvfbvgos90YgnmDgmWVixl7NnKQSb/Sv0nNC4ZusugVWkWH3j1TrZwdZYkDPW71vitjDnMQ24LhUDChZP0x46yESCe33jlEIdNDhdnszp1hv5iRDgtYPA4iXDs3ZQRfDQjyHWPbLFgNB8TIWyBEVmJwAT0Gq33ToCTLd52PcFYHc1ZDg6ucnMEdlrzUsd2izHCWgxHxwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gLJsI2qztjOPtvG3i8jT8a7lKhYJPz213YuhXcFNtKc=;
- b=I7QGYIvbJWVwGY0TA2V/rzjXbhqbQt6qxQAOgOiWTMdFw5SHhPLYNYvhTQvBqXS3d4pMCugWP3eR5zvUxYJhRdUSZovuoimUIyvRcfvdY2keBYoWIHCuR5QI4fxNClw+UThbNc5UEHjZwdpzoLql/m5Obd0bC+1LGmoIOIZWNYkvKM7hcEXrTARyTUQ5TI90hFYEIjK7Ougg8/dRHBjlWH6op++XycQ3zsGkSDaruCH160slgus9h/XF2s4qU1BXjMHBx0M93Q7X01+GUFYOJDm76I29MfJU9JjPydIn/b3TSVyu4CwSm9KeDt5mn1ibhFV8/ilKmKqB/E8kZjOgbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=variscite.com; dmarc=pass action=none
- header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gLJsI2qztjOPtvG3i8jT8a7lKhYJPz213YuhXcFNtKc=;
- b=Uc7r/uSCZ4KClDl/WK5YWUSmwcP9yTUWmTdlrgwNp3nKRUFmdcncokqDmKM4E8vdxXGJLaRxzGW9lpx5dH9uY6LXmEXMJL5DeHQWT4OCaPE2D1wpAwkdHyX2InSdtte5BBWjpGq1PNoYnW68F+GpmONWj+YPTlazFL+UE4r8blK41ISCcyD7yAuuxakGGVZadrTmIv5Bmo8kYm/FxDVsyFfaPPGS3xfbMoROi/X/kqS1Z9C7ZvppiH7F2bfAz+ns1n+AFrzSDKkr2hLxd3s845OkUG54FI9Oew+eWe5RJBlT/yUPtWLEo5SJoZC//jt0+WklcdrwafyK8nkNHZhnQA==
-Received: from AM6PR08MB4376.eurprd08.prod.outlook.com (2603:10a6:20b:bb::21)
- by DBBPR08MB6169.eurprd08.prod.outlook.com (2603:10a6:10:205::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Sat, 21 Jan
- 2023 00:29:46 +0000
-Received: from AM6PR08MB4376.eurprd08.prod.outlook.com
- ([fe80::4e5b:51c8:1237:1fee]) by AM6PR08MB4376.eurprd08.prod.outlook.com
- ([fe80::4e5b:51c8:1237:1fee%5]) with mapi id 15.20.6002.027; Sat, 21 Jan 2023
- 00:29:46 +0000
-From:   Pierluigi Passaro <pierluigi.p@variscite.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eran Matityahu <eran.m@variscite.com>,
-        Nate Drude <Nate.D@variscite.com>,
-        Francesco Ferraro <francesco.f@variscite.com>,
-        "pierluigi.passaro@gmail.com" <pierluigi.passaro@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] gpiolib: fix linker errors when GPIOLIB is disabled
-Thread-Topic: [PATCH] gpiolib: fix linker errors when GPIOLIB is disabled
-Thread-Index: AQHZKbP8HePARHu89kiREi8q9tdvPK6iWtyAgAALPlOAAdbngIADzjYK
-Date:   Sat, 21 Jan 2023 00:29:45 +0000
-Message-ID: <AM6PR08MB43766A842F8B9252E3BC6345FFCA9@AM6PR08MB4376.eurprd08.prod.outlook.com>
-References: <20230116140811.27201-1-pierluigi.p@variscite.com>
- <CAMRc=MfeQ_92Vb6inv-1_h=kc1d2as6LLPqJHHtbNk1pK1xRuA@mail.gmail.com>
- <AM6PR08MB437640AB4B959DD356162F2BFFC69@AM6PR08MB4376.eurprd08.prod.outlook.com>
- <CAMRc=MfN5o32AminWbjHVh_OBy-uAOJZyvb-1zhn7zs6EVyhMw@mail.gmail.com>
-In-Reply-To: <CAMRc=MfN5o32AminWbjHVh_OBy-uAOJZyvb-1zhn7zs6EVyhMw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=variscite.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR08MB4376:EE_|DBBPR08MB6169:EE_
-x-ms-office365-filtering-correlation-id: 28bd1ca0-ddae-4ccc-3fdc-08dafb469909
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Of2L8sJD+HW+gkJHju7A9ZeP0zPlSC0SKf2efndz47sFf5B/31u52A89T3e+53agJDyco0kaW/8bT1X5rP2Ykfl8eK0qV0hCSj6wyaQXzSwbC3x5Q3+E4ed3LZSnUiSYk3kVc/9GsHBWaVphCHrKr/ynStU2Z6Zc5PyE2h4G5doQZkoIT4HfKuUVt5FG98FZ/SBlCLjJTn6MTD+VHO9zO+Jrl93x84u68QTQAcFJDgbn640dhJjYJwYhXEHSwIfQZLo3GTNPNT96Ip8e0zjG8RI0Oz167wJHQEYNyUyqVLr4QDhcNa7KeWi1bfD2mHADKGmu29H3iNVG+KrPn+HfpxqgKiIzDx3ZfrfgKdmSgdAXVsuLZaeCL4yQ6bV3F0VnZk3QxBzj+lkkVrsi9TROqTkWG8yaEbGsm8nnkKArOGcXbn7Lyquy67/zcLbhMihsmlhscGl+lKhvCJ6cV2UtXtHuC/RwMLrbZ56kvcHwCgzqAJ2YW7kazffgNr+qfpV/F2RgXbIN+Q0qv4mfV1FV44Mpjpu/MFkdOO4rNfNzxAzZf4GlXAH2MWunZE0ZaIeA8IK2u2gJawgLQik4bE+kPvRh+lIHmNFdnRh8oPssCSoQMAheFBqJBkSilBpyDKF4dFERkKGJ2Ixhx1GRZ2N4K5/mPgn6MwAppdSbj/ooPK/x8XnERM+Ht0rbhNewolksuMNQLOSceY5EgCa4bkYOeA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB4376.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(346002)(396003)(376002)(39840400004)(451199015)(478600001)(33656002)(66946007)(76116006)(91956017)(122000001)(38100700002)(66556008)(66476007)(66446008)(55016003)(2906002)(71200400001)(7696005)(6506007)(54906003)(38070700005)(316002)(64756008)(8676002)(6916009)(4326008)(41300700001)(83380400001)(26005)(53546011)(5660300002)(52536014)(186003)(86362001)(9686003)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?eFynr4kwLYoCouWYCt/nzV0ILfK7cqBXSQlTORwsS0TRffpcdQZYphYbiu?=
- =?iso-8859-1?Q?17wBfKg0uQjaqmloPJGwRgaKHS3GMjDe9UZoK0BVmMs1h7HjiikptZjtAS?=
- =?iso-8859-1?Q?fgmEQ5/XIctuaJBCZDkgJ6NFjlD5cdbPCnBWLJ7dl8fThfVvRy1Xxy1k1e?=
- =?iso-8859-1?Q?qQoV0I9oKmI7vkrKW0AcFwy2rLM5YDqVTkDnEN3pOticM3KTH8ynL5osF8?=
- =?iso-8859-1?Q?ZhHQO88mF518tFN7l4bdKt3M5PpjsjihML+j+WMYv4sMRhfJuSdb8A7i7L?=
- =?iso-8859-1?Q?y2fODIw1ioTHjkImR8ZQPqCKUv6s2Fjn0JDJdbtF/3556XjwLXiBOCbR8T?=
- =?iso-8859-1?Q?KfHscP41vRepcZXkrs11abuxB6mGv6THAk0AN7tQn4fETpvqk+jxR+xXLF?=
- =?iso-8859-1?Q?ypQyfJ//U4NPvDn5mLNfXPxWtm2LbODYq6UPFBZREqUOncdnUW4LcIV6wF?=
- =?iso-8859-1?Q?/WL8WxQvTnBsJYNQBlysECFC9gXVB+8f9giUnHOenhnlaJtBoKctc2N+ev?=
- =?iso-8859-1?Q?xTSPO2hwOMnyTVIEmjWPtOmQ7WumVMpOLEbe8j0CmnD7se3cTzNr6TdS+6?=
- =?iso-8859-1?Q?Rbl4mUo+1yAu6iq6gaQtst0KmvpSIgqBfFRYsNjj9we/n1ffpw5Sci71U6?=
- =?iso-8859-1?Q?3/GRid70DUJKulXaAoIDnRNbTCBOy/fmsPqVm8qnz1V5+yqT9hoMq9C3Mz?=
- =?iso-8859-1?Q?AmF0pLb05/juQYc10evQs38VUEHjk97yiDsqddWmKgfTqXvkAgkZ122hrR?=
- =?iso-8859-1?Q?/hbbH0H83yv7Uey8dDzAP5nXb+hYEFcC9fkterFEpBrAFMlw9OI0NS1+Zz?=
- =?iso-8859-1?Q?zLrPNm7PXIxzYyWIi+MTG0NQdPZUKsj/k48y1GRIS1iWldvF4oc/R8abzO?=
- =?iso-8859-1?Q?/MocvRjCJxofzD+aFoxNyEbnaHgcPKucpJL4rIdhnR+hFgOzwUFYAEy5da?=
- =?iso-8859-1?Q?tuiG290tWIRZNTD9H0Mp0ZLi8O+7loh8bbnSsSlO5yFPhlSPTK117HAb/e?=
- =?iso-8859-1?Q?AcD5OX3jKu1oqyxvvuBIpY/uKWSfiI85C134YEX97O2bMinebq/0ZULxf1?=
- =?iso-8859-1?Q?bsJ0MDnv9bzPlBMTVqMLfbzeRSim/YblgbZuTXX8mw2x0kSzwh/WJZAliM?=
- =?iso-8859-1?Q?BDqONzKG5fa0SynFpeUBjpNfbdkpCdnw7f8PJUB+Ec8ULvaj+WlqwcdHiI?=
- =?iso-8859-1?Q?E0Pr+DMd7L3LNHB2xlDZSL7RFtTzYbD1WqMoXNcx7ajzPaVVUlTPvldMMp?=
- =?iso-8859-1?Q?rErtI1sDNaTl48gH0ah4I1SZby4ZfC6113LyPPPeRauGfJH37BNiBdHFYT?=
- =?iso-8859-1?Q?/kvbbQe81C2y8P58wsuRwQEWp6k9K7B1WMLqvsdAqRHIx8HjgLYNZ7a1ql?=
- =?iso-8859-1?Q?Wresd4kHXOjqtFwHUPDinJ/B447zX/fvcTGzEcn/9/Ts5abGt9iAOni+J3?=
- =?iso-8859-1?Q?R57p4aO7+1SLaUEU8yhyBWSxKRicsEZwaeAbOBC2G1CVBCB7BJi+1fBoPi?=
- =?iso-8859-1?Q?I+JV7pRsi4bt8C1avptVS2jfxAdKK5TD9ibSO8E0n8X2c50kgXu56piWJw?=
- =?iso-8859-1?Q?trTqU4niffbfwzgCH3DKaSPNIxBsXDK/pYvMTBXwJN4uDXtdOB17+EzfK+?=
- =?iso-8859-1?Q?UoVt1kkqdpvA8aRbUGR9OgexLu03h5CbDs?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 20 Jan 2023 19:34:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2A02115
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:34:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59D2A620E3
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 00:34:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CEFC433EF;
+        Sat, 21 Jan 2023 00:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674261277;
+        bh=GKPF/KGxBEcGAXCcG9cNchv/GG0zLrZwptY+F/G+TAw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ix6xX/9YoKQYV8on68SZFxdIWGcHu8b69tRyxUZf6b0UcTQDbAkHYG0WO+gyaVmo7
+         KIkNB1mu/PaG9/NznZETyv0/ImoqKXwvQzTGS0RbsY33mLmNAhQYY+4EBS96LYjzoI
+         FcO9i/6MXjCg5TaYwaPJ23zmCLJJhI4zvjj4newdgj2d16KVKEremP4NioZUtIcLHb
+         5x1tomRTX2/BXyT8Wks27VXvAod2y67s4jHbSQdcEaqZaFQ2ocaBdKh9jRFbE3e4me
+         42U2zYQvbA14cH59JU22JcEJCxOnsDuAryvVttu9U8GmVVvj1bZC9dmvujt+0z8LOn
+         2p578XbPkhGQg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 476F15C0543; Fri, 20 Jan 2023 16:34:37 -0800 (PST)
+Date:   Fri, 20 Jan 2023 16:34:37 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230121003437.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
+ <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
+ <c5902c18-e0cc-125e-c2f5-7971f0a7ce07@huaweicloud.com>
+ <20230120153909.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <cc3686b3-b234-b0ee-4d2d-15f54da4331b@huaweicloud.com>
+ <20230120213727.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+ <44a2c301-900e-90ea-4b21-e5264102e699@huaweicloud.com>
+ <20230120231952.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <736020be-de00-3cd8-2325-c3efb87e03b6@huaweicloud.com>
 MIME-Version: 1.0
-X-OriginatorOrg: variscite.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB4376.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28bd1ca0-ddae-4ccc-3fdc-08dafb469909
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2023 00:29:45.9524
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qhCsFcCGQEbBclSPKvlaO18oPH2Ewnqd0fSMpNEEWXufXeDPHORlmTZEdOeSiZySsLFUPVVxJ74WVpI4UXNd/y/xhOXZlT3zW5wlEMf7cgM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB6169
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <736020be-de00-3cd8-2325-c3efb87e03b6@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 3:22 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:=
-=0A=
-> On Tue, Jan 17, 2023 at 11:17 AM Pierluigi Passaro=0A=
-> <pierluigi.p@variscite.com> wrote:=0A=
-> >=0A=
-> > On Tue, Jan 17, 2023 at 10:36 AM Bartosz Golaszewski <brgl@bgdev.pl> wr=
-ote:=0A=
-> > > On Mon, Jan 16, 2023 at 3:08 PM Pierluigi Passaro=0A=
-> > > <pierluigi.p@variscite.com> wrote:=0A=
-> > > >=0A=
-> > > > Both the functions gpiochip_request_own_desc and=0A=
-> > > > gpiochip_free_own_desc are exported from=0A=
-> > > >     drivers/gpio/gpiolib.c=0A=
-> > > > but this file is compiled only when CONFIG_GPIOLIB is enabled.=0A=
-> > > > Move the protototypes under "#ifdef CONFIG_GPIOLIB" and provide=0A=
-> > > > reasonable definitions in the "#else" branch.=0A=
-> > > >=0A=
-> > > > Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>=0A=
-> > > > Reported-by: kernel test robot <lkp@intel.com>=0A=
-> > >=0A=
-> > > Please add a Fixes tag.=0A=
-> > >=0A=
-> > I beg your pardon for the question: how can I "add a Fixes tag" ?=0A=
-> > Can you point me to any reference documentation / instructions ?=0A=
-> > Thanks=0A=
-> > >=0A=
->=0A=
-> Look at the output of `git blame` on the file in question and see who=0A=
-> added the changes that introduced the problem. Then, before your=0A=
-> Sign-off in the git message add: Fixes: <12 chars of the commit hash>=0A=
-> ("<commit subject>"). See Existing commits with fixes for reference.=0A=
->=0A=
-> Bart=0A=
->=0A=
-Thanks for the guidelines: I've just sent patch v2 with Fixes tag.=
+On Sat, Jan 21, 2023 at 01:03:50AM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/21/2023 12:19 AM, Paul E. McKenney wrote:
+> > On Fri, Jan 20, 2023 at 11:36:15PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 1/20/2023 10:37 PM, Paul E. McKenney wrote:
+> > > > Just out of curiosity, are you [set] up to run LKMM locally at your end?
+> > > I don't know what exactly that means. I generally run it on wetware.
+> > > But I sometimes ask Hernan to run Dat3M (on his machine) over all the litmus
+> > > tests in your repo to spot any obvious problems with variations I consider.
+> > > I don't think Dat3M is feature-complete with herd at the moment, just
+> > > unbelievably faster. For example I think it ignores all flags in the cat
+> > > files.
+> > > Oh, I just remembered that I also installed herd7 recently to make sure that
+> > > any patches I might send in satisfy herd7 syntax requirements (I think you
+> > > called this diagnostic driven development?), but I haven't used it to really
+> > > run anything.
+> > > 
+> > > Is it too obvious that my words usually aren't backed by cold machine logic?
+> > Well, there was this in one of your messages from earlier today: "I'm not
+> > going to get it right today, am I?"  And I freely confess that this led
+> > me to suspect that you might not have been availing yourself of herd7's
+> > opinion before posting.  ;-)
+> The main reason I might usually not consult herd7's opinion is that it often
+> takes a while to write a test case in a way herd7 accepts and treats as
+> intended, but then even so the fact that some tests pass may just give some
+> false confidence when some tricky case is being missed.
+> So I find the investment/increased confidence ratio to not yet be at the
+> right point to do this when communicating somewhat informally on the mailing
+> list, which is already taking quite a bit of my time (but at least I'm
+> learning a lot during that time about stuff like RCU/SRCU, history of LKMM,
+> etc.).
+> If I need to be more confident I'll use herd7 to make sure the syntax is
+> correct and as a sanity check, and some paper or Coq proofs to be confident
+> in the logic.
+> 
+> If you feel that I'm wasting the lists' time too much by making these kind
+> of mistakes, let me know and I'll reconsider.
+
+Not a goal of mine, actually.
+
+The only thing that I will add is that I cheat horribly by creating new
+litmus tests by existing ones.  ;-)
+
+							Thanx, Paul
