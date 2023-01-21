@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD39D67699E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD6E67699D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjAUVf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 16:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S229852AbjAUVf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 16:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjAUVfZ (ORCPT
+        with ESMTP id S229484AbjAUVfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 16:35:25 -0500
+        Sat, 21 Jan 2023 16:35:24 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761D123D9F
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:35:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8E423C72
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:35:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674336924; x=1705872924;
+  t=1674336923; x=1705872923;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LKIASuZL+SUAUvnx3JEGaFL86U5oJY7Zlr6H840H48o=;
-  b=BfM+BUZB99hzpPIGOVbfLxS3rPJdA25zxmlAqrkHk9Jf104CAQMDT521
-   WKwy1fpx+8yjhbXti9kP42jsRFNGJ/Dk9tEiyUmKZcdrb8By351wuTP1Q
-   9RRmr1tR6gieWiP4Z7SKmTcWIGtCVBSieBruAO7mQPFp7Tqy5nJ9Yun52
-   C58SMh9NdgfgHRYeI5kW+5WW0tENT/BvK5bK8TMY107ZygpgX38PW4qNt
-   oPRaTshF6/q5mn7ZaafgM33CcQqPInwYXM095HoPIjKkPSN8TCKrWasLg
-   aIJyxWLH4/BRrdoZRDhnRh+mtjnYW8uhuOVbq56SZK34/USGKcrGKGeK+
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="412066295"
+  bh=zY4nJSbIj2KCZODz6WytpRpGqSak4jvzYQ/pzIgYhPE=;
+  b=SM4uWad2WqK/QlphzQ05Q3D+P7prL7w2wmbHDEVbm118jf3ppNa+Hqyj
+   CR7uUh8Gx7aoC/ot1+72EYitDJ3P2OJiW7ecpEcz5pk92pgF+eFB/lJuw
+   wNbPPIuIbH4Q08RFPq4AKpl2t0Fa2uCloPo2v2SykFNCAWqOyET3LuemT
+   94FOMqbRHD8KfM+y13PkzENARrvxvaQJGwfhSP2gbcHhoMnZJc4UUW8/J
+   PZQWz93JowwbqKllvWMiaVDB9EDiXP0UUx5SPULhOhui9y80MpEmukluu
+   dIAkm4DYUjUuvfNaXAbTSG0cNf8ZYr3DbXFmERjfB+tRX5ei6LGR9ET+H
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="412066308"
 X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="412066295"
+   d="scan'208";a="412066308"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 13:35:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="784946307"
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="784946310"
 X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="784946307"
+   d="scan'208";a="784946310"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 13:35:21 -0800
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -59,12 +59,13 @@ Cc:     Ashok Raj <ashok.raj@intel.com>,
         Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Martin Pohlack <mpohlack@amazon.de>
-Subject: [Part 2 v2[cleanup] 0/4] Some additional cleanups in microcode
-Date:   Sat, 21 Jan 2023 13:35:08 -0800
-Message-Id: <20230121213512.251578-1-ashok.raj@intel.com>
+Subject: [Part 2 v2[cleanup] 1/4] x86/microcode: Taint kernel only if microcode loading was successful
+Date:   Sat, 21 Jan 2023 13:35:09 -0800
+Message-Id: <20230121213512.251578-2-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <87y1pygiyf.ffs@tglx>
+In-Reply-To: <20230121213512.251578-1-ashok.raj@intel.com>
 References: <87y1pygiyf.ffs@tglx>
+ <20230121213512.251578-1-ashok.raj@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -77,37 +78,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas and Boris,
+Currently when late loading is aborted due to check_online_cpu(), kernel
+still ends up tainting the kernel.
 
-This mini series is in response to Thomas's feedback here[1].
+Taint only when microcode loading was successful.
 
-I hope this addresses all/most of your concerns you raised in this thread.
-
-Sorry if I missed any, drop more hints and I'll fix them up.
-
-Patch3 needs an AMD change as well. I wasn't confident looking at the
-source that was returning the patchid vs reading fromt he real MSR. I'll
-check with Boris to confirm before I submit this again.
-
-[1] https://lore.kernel.org/lkml/87y1pygiyf.ffs@tglx/
-
-Now that the other patches are now staged in tip/x86/microcode,
-this series applies on top of that.
-
-Cheers,
-Ashok
-
-Ashok Raj (4):
-  x86/microcode: Taint kernel only if microcode loading was successful
-  x86/microcode: Report invalid writes to reload sysfs file
-  x86/microcode/intel: Fix collect_cpu_info() to reflect current
-    microcode
-  x86/microcode: Do not call apply_microde() on sibling threads
-
- arch/x86/kernel/cpu/microcode/core.c  | 28 ++++++++++++++-------------
- arch/x86/kernel/cpu/microcode/intel.c | 10 +++++++++-
- 2 files changed, 24 insertions(+), 14 deletions(-)
-
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 Cc: LKML <linux-kernel@vger.kernel.org>
 Cc: x86 <x86@kernel.org>
 Cc: Ingo Molnar <mingo@kernel.org>
@@ -127,7 +104,47 @@ Cc: Andy Lutomirski <luto@kernel.org>
 Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
 Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Cc: Martin Pohlack <mpohlack@amazon.de>
+---
+ arch/x86/kernel/cpu/microcode/core.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index d7cbc83df9b6..c5d80ff00b4e 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -475,6 +475,7 @@ static ssize_t reload_store(struct device *dev,
+ 	enum ucode_state tmp_ret = UCODE_OK;
+ 	int bsp = boot_cpu_data.cpu_index;
+ 	unsigned long val;
++	int load_ret = -1;
+ 	ssize_t ret = 0;
+ 
+ 	ret = kstrtoul(buf, 0, &val);
+@@ -495,16 +496,20 @@ static ssize_t reload_store(struct device *dev,
+ 		goto put;
+ 
+ 	mutex_lock(&microcode_mutex);
+-	ret = microcode_reload_late();
++	load_ret = microcode_reload_late();
+ 	mutex_unlock(&microcode_mutex);
+ 
+ put:
+ 	cpus_read_unlock();
+ 
+-	if (ret == 0)
++	/*
++	 * Taint only when loading was successful
++	 */
++	if (load_ret == 0) {
+ 		ret = size;
+-
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++		pr_warn("Microcode late loading tainted the kernel\n");
++	}
+ 
+ 	return ret;
+ }
 -- 
 2.34.1
 
