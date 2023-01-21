@@ -2,154 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA54F6763D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 05:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390386763D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 05:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjAUEZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 23:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S229566AbjAUEiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 23:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjAUEZJ (ORCPT
+        with ESMTP id S229464AbjAUEiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 23:25:09 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70723530EC;
-        Fri, 20 Jan 2023 20:24:53 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id g16so3765838qtu.2;
-        Fri, 20 Jan 2023 20:24:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qwRl6AriAxtLsQshG0WLT8xXpSJi+NGIVxpWZYX/6II=;
-        b=oYxzuFmr5pVt01gJibPdD5ns77LWVJeQmmVcsoPATQ4AhkNE8Da5wsu9Mc1wJLeNaB
-         tehkdeWQw8aXAeGragVTrfuwq647RKKSq23gNAuq9fjHG5+mwpwbdicJcnlrSaljEfQr
-         Eb4bFX6NvVp0r5sOxhE2t/7kgma9WzMeWKopGbGj4cFeEf3SghA9EFKoNP2F8ewXDmpg
-         1GJMDoD0tN/M476NAiSuwmkMZjRnvs29wvpAoqtHYdA4dhfCJDtFiNT4jD3KDxwhJWJy
-         7aVDQmCmdhwT0P+5kyStCHbeHIKIm0dZSkrbfczaE/6i5VUbDGixfB8lbev7Cga34Dh4
-         WNOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qwRl6AriAxtLsQshG0WLT8xXpSJi+NGIVxpWZYX/6II=;
-        b=wVG6Gd/rAGHQc2rlv9wYu0+LBdmUgtcntNe1rssNUWfZw5j2OSNzHu/4eEiqJ2uNWE
-         6RIGnjH147H+VLLT2/YiWJTrT8+wWgGb2Ki+n8IvUpIPxZdDGaou6jyOpuoDK5X2cDhk
-         zfJYB53CgMlRqEAp1ggjbDvtI3HvJDCX9vegzal9dTvROZAPt+82jS9AFHZ4bX8grCH9
-         jLliBqUQT/UpADEPHWtxJBfiBZ3OaRhrTlgPPN4CP08xqKzjtJOD9LEdo5At0Ap1jkVd
-         W+CZLY3VXAG9EY6IQtNaCEPXpVPajuiLcYgDyWZCNMBczHXd+m9+Q1kHsCZ3B4Ib2I8f
-         E3Rg==
-X-Gm-Message-State: AFqh2kolEj+i1bDZ8BECtUVoBZpNOYxNwwyWHOGyDjE2h+Xl4U2XD8M+
-        Z/btl2BBENcohzdoB5giy0VUGH9b2tE=
-X-Google-Smtp-Source: AMrXdXuIb83rZuSdHzA4rxpr75oAXNzqP23zVDgdCNSGS7ZxV26QSDHnFK2M21j5vg9ZIdQWGnLVzw==
-X-Received: by 2002:ac8:6a0e:0:b0:3ab:7928:526c with SMTP id t14-20020ac86a0e000000b003ab7928526cmr23006426qtr.17.1674275092061;
-        Fri, 20 Jan 2023 20:24:52 -0800 (PST)
-Received: from localhost (50-242-44-45-static.hfc.comcastbusiness.net. [50.242.44.45])
-        by smtp.gmail.com with ESMTPSA id ga15-20020a05622a590f00b003b6325dfc4esm8255304qtb.67.2023.01.20.20.24.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 20:24:51 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Haniel Bristot de Oliveira <bristot@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Lafreniere <peter@n8pjl.ca>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-crypto@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: [PATCH 9/9] lib/cpumask: update comment for cpumask_local_spread()
-Date:   Fri, 20 Jan 2023 20:24:36 -0800
-Message-Id: <20230121042436.2661843-10-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230121042436.2661843-1-yury.norov@gmail.com>
-References: <20230121042436.2661843-1-yury.norov@gmail.com>
+        Fri, 20 Jan 2023 23:38:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EA366EE2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 20:38:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4047AB82AC2
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 04:38:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2DDC433D2;
+        Sat, 21 Jan 2023 04:38:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674275925;
+        bh=EvKMLKhjfXncGTfr32q/jztf1GxsasxWfaXH+OAMr8s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Hqio0JiOc4+sEEmXffY5sSLXNr0cdPUCuSqBOEG5QvAligUFoWwiXgiRevRakSLXf
+         8UTQ9aAUMT9/44VYP0svvyALES5rhoHwy84OjIYEA+ZoZqPVVOM8OglwKUmQNJrw3d
+         gKhP/HjsouE+LgbEuhzGRBvm/iuYmFgs6OURrhmnAlgvlt7vUjxtpl2204PL5CNvka
+         8tQPkxzOR9QmKBaPWJq5Uyyijb1Ai5/36nr9smc9M0S5rFgLpWos5LitztAuA0PKm4
+         dfXensQRVHdZtHdNLeIZSeUQd/nC3+aCXbtT8y/opwG4qy3o0QGwf0Ez44rue1caYs
+         Lxoj8pgTMJJIQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6FC045C155D; Fri, 20 Jan 2023 20:38:45 -0800 (PST)
+Date:   Fri, 20 Jan 2023 20:38:45 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230121043845.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230118201918.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
+ <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
+ <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
+ <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have an iterator-based alternative for a very common case
-of using cpumask_local_spread for all cpus in a row, it's worth to
-mention that in comment to cpumask_local_spread().
+On Fri, Jan 20, 2023 at 10:41:14PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/20/2023 5:18 PM, Alan Stern wrote:
+> > On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
+> > > Perhaps we could say that reading an index without using it later is
+> > > forbidden?
+> > > 
+> > > flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
+> > > thrown-srcu-cookie-on-floor
+> > We already flag locks that don't have a matching unlock.
+> 
+> Of course, but as you know this is completely orthogonal.
+> 
+> > I don't see any point in worrying about whatever else happens to the index.
+> 
+> Can you briefly explain how the operational model you have in mind for
+> srcu's up and down allows x==1 (and y==0 and idx1==idx2) in the example I
+> sent before (copied with minor edit below for convenience)?
+> 
+> P0{
+>     idx1 = srcu_down(&ss);
+>     store_rel(p1, true);
+> 
+> 
+>     shared cs
+> 
+>     R x == 1
+> 
+>     while (! load_acq(p2));
+>     R idx2 == idx1 // for some reason, we got lucky!
+>     srcu_up(&ss,idx1);
+> }
+> 
+> P1{
+>     idx2 = srcu_down(&ss);
+>     store_rel(p2, true);
+> 
+>     shared cs
+> 
+>     R y == 0
+> 
+>     while (! load_acq(p1));
+>     srcu_up(&ss,idx2);
+> }
+> 
+> P2 {
+>     W y = 1
+>     srcu_sync(&ss);
+>     W x = 1
+> }
+> 
+> 
+> I can imagine models that allow this but they aren't pretty. Maybe you have
+> a better operational model?
+> 
+> > 
+> > > So if there is an srcu_down() that produces a cookie that is read by some
+> > > read R, and R doesn't then pass that value into an srcu_up(), the
+> > > srcu-warranty is voided.
+> > No, it isn't.
+> I quote Paul:
+> "If you do anything else at all with it, anything at all, you just voided
+> your SRCU warranty. For that matter, if you just throw that value on the
+> floor and don't pass it to an srcu_up_read() execution, you also just voided
+> your SRCU warranty."
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
----
- lib/cpumask.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+I suspect that you guys are talking past one another.  My guess is that
+one of you is saying "we could check" and the other "we are not required
+to check", which are not necessarily in disagreement.
 
-diff --git a/lib/cpumask.c b/lib/cpumask.c
-index 10aa15715c0d..98291b07c756 100644
---- a/lib/cpumask.c
-+++ b/lib/cpumask.c
-@@ -114,11 +114,29 @@ void __init free_bootmem_cpumask_var(cpumask_var_t mask)
-  * @i: index number
-  * @node: local numa_node
-  *
-- * This function selects an online CPU according to a numa aware policy;
-- * local cpus are returned first, followed by non-local ones, then it
-- * wraps around.
-+ * Returns online CPU according to a numa aware policy; local cpus are returned
-+ * first, followed by non-local ones, then it wraps around.
-  *
-- * It's not very efficient, but useful for setup.
-+ * For those who wants to enumerate all CPUs based on their NUMA distances,
-+ * i.e. call this function in a loop, like:
-+ *
-+ * for (i = 0; i < num_online_cpus(); i++) {
-+ *	cpu = cpumask_local_spread(i, node);
-+ *	do_something(cpu);
-+ * }
-+ *
-+ * There's a better alternative based on for_each()-like iterators:
-+ *
-+ *	for_each_numa_hop_mask(mask, node) {
-+ *		for_each_cpu_andnot(cpu, mask, prev)
-+ *			do_something(cpu);
-+ *		prev = mask;
-+ *	}
-+ *
-+ * It's simpler and more verbose than above. Complexity of iterator-based
-+ * enumeration is O(sched_domains_numa_levels * nr_cpu_ids), while
-+ * cpumask_local_spread() when called for each cpu is
-+ * O(sched_domains_numa_levels * nr_cpu_ids * log(nr_cpu_ids)).
-  */
- unsigned int cpumask_local_spread(unsigned int i, int node)
- {
--- 
-2.34.1
+But that is just a guess.  You guys tell me!  ;-)
 
+							Thanx, Paul
