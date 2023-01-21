@@ -2,146 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EF26761E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80F86761EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjAUAJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S229556AbjAUAL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjAUAJI (ORCPT
+        with ESMTP id S229379AbjAUALz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:09:08 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB0B8B760
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:09:06 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id k4so7419867vsc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J7BKazUSzb1FuErPzK4kF9qsdvEIt5ZVPv77Xw43Sic=;
-        b=Lv6dLxXyu3T7dCN1lyJJvzbBKoBwk6tonW4rIMmuQ/8rtpir0a1+37L2jxKr7FYxTa
-         v68sRwqiyjkkOvpKog+fDlcUXr0+EmV+yaXzZ22AQfzjjc+NFALFIGsVUc5ldTKbS231
-         2MixXyLizzVu9ZsHwJRSlGFkcNqmi/T1e2JND2RGE5gq8fkINzqGfjzqZW1EEdtnHYX4
-         I0Fa6v8Y+/cjTwb/A9rqyGsvQWOrgoInqep5TrjRdDSHSdHGq/7DCa4CDhx3nekkrpQ6
-         nuyMajBWPHebMNEqDV0eXaawKW19GCvmI+K5qO39wQWaWT6fjD6Nl3bpCuTIlEm537bV
-         lfmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J7BKazUSzb1FuErPzK4kF9qsdvEIt5ZVPv77Xw43Sic=;
-        b=HMcgDtr/lO5jjlYpr2rygNj1c0Uqz1/9n4CF0NRoZYMk3XAcBNzOZyiVasQqLJ/KCU
-         VUKkMbe3G9N5j9fhzi0vkE88IuVPZtYxMIk/vT+Qflv5NRtlOhIcdMiUV5bRlhCZQOV1
-         PyD8yM+HOyxGq1nrsZ433dZSfxYfyjctDRzcmIxasndOIGP7Kq5ClSiO/LLdCZrYPKc+
-         wgoCQSML9mxs214b+pNGoYBfGN+CAAzdtez+5D5n6++KVRjVkM4UIdxnlvPc6d7XB+NZ
-         YDD5iY8cwsRw+XqLr01Sa+92cXMOse0QrZtn6lkDxxpLMDPJ9wStpUjQEzEBczSG5ik3
-         aJEA==
-X-Gm-Message-State: AFqh2kq/bM6N6r6dmwW2ZUSkYMK6AUq/947Ra7nDYNV7FOrZ4l+HOS98
-        anFDTTsyAuNCiQNw8xvqaS58wg==
-X-Google-Smtp-Source: AMrXdXsqYs732eIFEJxe8fLjdOnsesRBsekrMmjo9aqzufULnunaDZN6UZ5io5tMGIRNcMJjKzFT4w==
-X-Received: by 2002:a67:ebd5:0:b0:3d0:fce9:d9c0 with SMTP id y21-20020a67ebd5000000b003d0fce9d9c0mr9632517vso.31.1674259745390;
-        Fri, 20 Jan 2023 16:09:05 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-167-59-176.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.59.176])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a430c00b006ee949b8051sm26866756qko.51.2023.01.20.16.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 16:09:04 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pJ1RQ-00F5ku-7B;
-        Fri, 20 Jan 2023 20:09:04 -0400
-Date:   Fri, 20 Jan 2023 20:09:04 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        joro@8bytes.org, robin.murphy@arm.com, vasant.hegde@amd.com,
-        jon.grimm@amd.com
-Subject: Re: [PATCH 1/4] iommu/amd: Introduce Protection-domain flag VFIO
-Message-ID: <Y8stIO6oAw8wEgEI@ziepe.ca>
-References: <20230110143137.54517-2-suravee.suthikulpanit@amd.com>
- <Y8F53dzdebKLTlOy@ziepe.ca>
- <90762dee-1559-58ac-220d-a13635d5032e@amd.com>
- <Y8mBczFH/Hw6xot0@ziepe.ca>
- <c3fbec52-1281-eb1c-40f8-588438146c14@amd.com>
- <Y8q9ocj2IZB2r6Np@ziepe.ca>
- <1ba09b11-8a07-24dd-a99f-eeacb2f5c96c@amd.com>
- <Y8rUYTjVhksAu+i9@ziepe.ca>
- <da56ae0c-8f72-b39f-95b8-8870ec9fb336@amd.com>
- <1e1e98ea-5215-be21-b732-58c67e9c8fd6@amd.com>
+        Fri, 20 Jan 2023 19:11:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CDC36474;
+        Fri, 20 Jan 2023 16:11:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB3E4B82AA3;
+        Sat, 21 Jan 2023 00:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31158C433D2;
+        Sat, 21 Jan 2023 00:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674259910;
+        bh=oeflYO/FzcUbxQAMi5p6VjdDtqp1ZHCffKVR3C/+CsM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KSIHNrbB81dhd/QyS09hPzaXJNd6RUJySA8IPAGruXNud6RiPlY0WDf3opptfQ9kb
+         Yio7Hlp1yKwAzqF+7B3LGP86aRZMbK7pCJNKuDWIRR5WrUNgDWN5FX9q74q+endjCV
+         du4nVsgE8svwAtsHOohlRTz4AkGtMRLNDlJ4n+SnQCz1MJLqxmClTNGXHqprLF8w6Y
+         FENOZCWDOum+3nE7ApXzbPe/DqP5IucfAKX5PMTkG8u62VHB7PJVCsv+4KPXTBoREN
+         b1/acXff5y1fIaI73k26xEPGn3/K0nlJauAipeiC78ucwpQPq5d1U/d6B4YpjVjjd1
+         hg4DOCB87gnUw==
+Date:   Sat, 21 Jan 2023 00:11:48 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de
+Subject: Re: [PATCH v2 1/2] tpm: Use managed allocation for bios event log
+Message-ID: <Y8stxF+2XfSFN9wt@kernel.org>
+References: <20230113161017.1079299-1-eajames@linux.ibm.com>
+ <20230113161017.1079299-2-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1e1e98ea-5215-be21-b732-58c67e9c8fd6@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230113161017.1079299-2-eajames@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 04:42:26PM -0600, Tom Lendacky wrote:
-> On 1/20/23 13:55, Kalra, Ashish wrote:
-> > On 1/20/2023 11:50 AM, Jason Gunthorpe wrote:
-> > > On Fri, Jan 20, 2023 at 11:01:21AM -0600, Kalra, Ashish wrote:
-> > > 
-> > > > We basically get the RMP #PF from the IOMMU because there is a page size
-> > > > mismatch between the RMP table and the IOMMU page table. The RMP table's
-> > > > large page entry has been smashed to 4K PTEs to handle page
-> > > > state change to
-> > > > shared on 4K mappings, so this change has to be synced up with the IOMMU
-> > > > page table, otherwise there is now a page size mismatch between RMP table
-> > > > and IOMMU page table which causes the RMP #PF.
-> > > 
-> > > I understand that, you haven't answered my question:
-> > > 
-> > > Why is the IOMMU being programmed with pages it cannot access in the
-> > > first place?
-> > > 
-> > 
-> > I believe the IOMMU page tables are setup as part of device pass-through
-> > to be able to do DMA to all of the guest memory, but i am not an IOMMU
-> > expert, so i will let Suravee elaborate on this.
+On Fri, Jan 13, 2023 at 10:10:16AM -0600, Eddie James wrote:
+> Since the bios event log is freed in the device release function,
+> let devres handle the deallocation. This will allow other memory
+> allocation/mapping functions to be used for the bios event log.
 > 
-> Right. And what I believe Jason is saying is, that for SNP, since we know we
-> can only DMA into shared pages, there is no need to setup the initial IOMMU
-> page tables for all of guest memory. Instead, wait and set up IOMMU mappings
-> when we do a page state change to shared and remove any mappings when we do
-> a page state change to private.
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/char/tpm/eventlog/acpi.c |  5 +++--
+>  drivers/char/tpm/eventlog/efi.c  | 13 +++++++------
+>  drivers/char/tpm/eventlog/of.c   |  3 ++-
+>  drivers/char/tpm/tpm-chip.c      |  1 -
+>  4 files changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+> index 0913d3eb8d51..40360e599bc3 100644
+> --- a/drivers/char/tpm/eventlog/acpi.c
+> +++ b/drivers/char/tpm/eventlog/acpi.c
+> @@ -14,6 +14,7 @@
+>   * Access to the event log extended by the TCG BIOS of PC platform
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/fs.h>
+>  #include <linux/security.h>
+> @@ -135,7 +136,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	}
+>  
+>  	/* malloc EventLog space */
+> -	log->bios_event_log = kmalloc(len, GFP_KERNEL);
+> +	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
+>  	if (!log->bios_event_log)
+>  		return -ENOMEM;
+>  
+> @@ -160,7 +161,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	return format;
+>  
+>  err:
+> -	kfree(log->bios_event_log);
+> +	devm_kfree(&chip->dev, log->bios_event_log);
 
-Correct.
+I wonder do we want to do devm_kfree's at all as the memory is freed during
+detach, i.e. taken care by devres.
 
-I don't know the details of how the shared/private works on AMD, eg if
-the hypervisor even knows of the private/shared transformation..
+>  	log->bios_event_log = NULL;
+>  	return ret;
+>  }
+> diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/efi.c
+> index e6cb9d525e30..4e9d7c2bf32e 100644
+> --- a/drivers/char/tpm/eventlog/efi.c
+> +++ b/drivers/char/tpm/eventlog/efi.c
+> @@ -6,6 +6,7 @@
+>   *      Thiebaud Weksteen <tweek@google.com>
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/efi.h>
+>  #include <linux/tpm_eventlog.h>
+>  
+> @@ -55,7 +56,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  	}
+>  
+>  	/* malloc EventLog space */
+> -	log->bios_event_log = kmemdup(log_tbl->log, log_size, GFP_KERNEL);
+> +	log->bios_event_log = devm_kmemdup(&chip->dev, log_tbl->log, log_size, GFP_KERNEL);
+>  	if (!log->bios_event_log) {
+>  		ret = -ENOMEM;
+>  		goto out;
+> @@ -76,7 +77,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  			     MEMREMAP_WB);
+>  	if (!final_tbl) {
+>  		pr_err("Could not map UEFI TPM final log\n");
+> -		kfree(log->bios_event_log);
+> +		devm_kfree(&chip->dev, log->bios_event_log);
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+> @@ -91,11 +92,11 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  	 * Allocate memory for the 'combined log' where we will append the
+>  	 * 'final events log' to.
+>  	 */
+> -	tmp = krealloc(log->bios_event_log,
+> -		       log_size + final_events_log_size,
+> -		       GFP_KERNEL);
+> +	tmp = devm_krealloc(&chip->dev, log->bios_event_log,
+> +			    log_size + final_events_log_size,
+> +			    GFP_KERNEL);
+>  	if (!tmp) {
+> -		kfree(log->bios_event_log);
+> +		devm_kfree(&chip->dev, log->bios_event_log);
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index a9ce66d09a75..741ab2204b11 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -10,6 +10,7 @@
+>   * Read the event log created by the firmware on PPC64
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+>  #include <linux/tpm_eventlog.h>
+> @@ -65,7 +66,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  		return -EIO;
+>  	}
+>  
+> -	log->bios_event_log = kmemdup(__va(base), size, GFP_KERNEL);
+> +	log->bios_event_log = devm_kmemdup(&chip->dev, __va(base), size, GFP_KERNEL);
+>  	if (!log->bios_event_log)
+>  		return -ENOMEM;
+>  
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 741d8f3e8fb3..b99f55f2d4fd 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -267,7 +267,6 @@ static void tpm_dev_release(struct device *dev)
+>  	idr_remove(&dev_nums_idr, chip->dev_num);
+>  	mutex_unlock(&idr_lock);
+>  
+> -	kfree(chip->log.bios_event_log);
+>  	kfree(chip->work_space.context_buf);
+>  	kfree(chip->work_space.session_buf);
+>  	kfree(chip->allocated_banks);
+> -- 
+> 2.31.1
+> 
 
-At the very worst I suppose if you just turn on the vIOMMU it should
-just start working as the vIOMMU mode should make the paging
-dynamic. eg virtio-iommu or something general might even do the job.
-
-Pinning pages is expensive, breaks swap, defragmentation and wastes a
-lot of iommu memory. Given that the bounce buffers really shouldn't be
-reallocated constantly I'd expect vIOMMU to be performance OK.
-
-This solves the page size mistmatch issue because the iommu never has
-a PFN installed that would generate a RMP #PF. The iommu can continue
-to use large page sizes whenever possible.
-
-It seems to me the current approach of just stuffing all memory into
-the iommu is a just a shortcut to get something working.
-
-Otherwise, what I said before is still the case: only the VMM knows
-what it is doing. It knows if it is using a model where it programs
-private memory into the IOMMU so it knows if it should ask the kernel
-to use a 4k iommu page size.
-
-Trying to have the kernel guess what userspace is doing based on the
-kvm is simply architecturally wrong.
-
-Jason
+BR, Jarkko
