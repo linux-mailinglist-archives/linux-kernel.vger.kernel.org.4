@@ -2,131 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE99676814
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31A5676812
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjAUSk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 13:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S229575AbjAUSkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 13:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjAUSkx (ORCPT
+        with ESMTP id S229493AbjAUSkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 13:40:53 -0500
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 Jan 2023 10:40:51 PST
-Received: from aib29gb126.yyz1.oracleemaildelivery.com (aib29gb126.yyz1.oracleemaildelivery.com [192.29.72.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9751F906
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 10:40:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-2023;
- d=n8pjl.ca;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=pMLAganrqKYVk/bJ7q4cPgOGRtJfyiwG8ewCGGAqW+k=;
- b=eXJzK8g88EsmV7Met9X6SQMnawctdjuFDospxM3giSvhjbdaYKMMMncYs0b6yDEpM3LRrvquBEOr
-   wEBJ9aCaNcMtjfpAMJ27fGrK7CyUDF02knOH8y4yhAJILSuYEKYpqRUg+x+30GlnLpqfgR78YZvL
-   DkkF+gApxpMwVOGSm2s3ovyt8zlfMIt9Rlm2zIRy8jppfpVolHRbSxdD7Ek0RQJa/Asmk9ccBi3O
-   eKYPKCs3ujA/Z0SA/eZ3bhBauRYZSQAYoGJIpFnsdwr3Vj64dwWLceGEcyGeLbtEu4HE57ssEzJC
-   F0qbcj0uIk8Vgw7IukZMfwVL/UslbsvctdtqrA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-yyz-20200204;
- d=yyz1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
- bh=pMLAganrqKYVk/bJ7q4cPgOGRtJfyiwG8ewCGGAqW+k=;
- b=H/Xws22KdvF7dhUE5ndJEt0qpxAo3WhXyb1c2CGmuODY/RyL30tlIVTSlNi6kaCHSgwkt0gGsiBO
-   9moMPxJzCOHPDP5JPPkgWiLm9zaD0aTosUnepXo+4sWYGlHf4xfJQtfk1iTZmEeDiyUAZfjso5pf
-   29ZYbNFMVgBJpgu1m+64+R3Hxw0Dk3l60NHlIcsGrJycMsvjirKKqGEdaaURE/St/vxf1vPybT4f
-   Qod8r+5qAv4Wf/MWEBFHrhkO6+obVy1nHCURqsF9ODowyW4yZgM1yc//R7+NUuqrK+ejXZ7+I4/c
-   4MxkMcVaKeh7N8Cgl71eOBIMhWsKFG/9NrJ2CQ==
-Received: by omta-ad1-fd3-101-ca-toronto-1.omtaad1.vcndpyyz.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20230118 64bit (built Jan 18
- 2023))
- with ESMTPS id <0ROU00C9AMBOTZ30@omta-ad1-fd3-101-ca-toronto-1.omtaad1.vcndpyyz.oraclevcn.com> for
- linux-kernel@vger.kernel.org; Sat, 21 Jan 2023 18:35:48 +0000 (GMT)
-From:   Peter Lafreniere <peter@n8pjl.ca>
-To:     linux-crypto@vger.kernel.org
-Cc:     Peter Lafreniere <peter@n8pjl.ca>, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, conor.dooley@microchip.com,
-        x86@kernel.org
-Subject: [PATCH RESEND] crypto: x86 - exit fpu context earlier in ECB/CBC macros
-Date:   Sat, 21 Jan 2023 13:34:50 -0500
-Message-id: <20230121183450.14570-1-peter@n8pjl.ca>
-X-Mailer: git-send-email 2.39.1
-MIME-version: 1.0
-Content-transfer-encoding: 8bit
-Reporting-Meta: AAHti/A/VBUEry6Wh9cg4KLobGKhnYtxA2zEdZswC1iVMoZYeOrD2P26pp6VvkhJ
- hDYDYUod6foXe7OH+gHG77bs70d6kWYZ9KGp7Sx74onuCan0nX30JUbqyshI3cqm
- nF//p+CXGcAKXbyjOZQpfiNgU7iA8TwBDHXd8SmxSIBBzn0ApxaT4K6HybHk5gdg
- e5ca06Vwd+LKdHfDS326/Wtu/9w4ut+RtK3mqSwbX4pNS7eKtDeuf3L5cBy2/yoV
- rLALK97FJcVPyLVHvHSQX65/EDqIDxmfQY5ZzsJ7i3j9uSxz/e7TddJrdWCoaqeV
- 8aBHkG0+volwZPFIrB1iSwJVcdC4tnCLQUaQGwSqouW4ZtMbwBwXqWOKzLPtXSpd
- 93hf23zFW3g6IWSIcKw2XSHlczGLnGq2lfP4Z9DjRBMTKreR2hjBy4J4fQ4o6g==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Sat, 21 Jan 2023 13:40:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64F71F5D7
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 10:40:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A2D060ADD
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 18:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B035C433EF;
+        Sat, 21 Jan 2023 18:40:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674326432;
+        bh=kMWIzHJn3ScgxAKaE9K4mDKpufuqbv0mKc7mM2MRZdk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=UzctnnfGJekMF+D5g02Hrrqk4ZB8UsQ+5KK8dVQNQWrH4JbCxuHtcxKM/PQ4H7dvc
+         82mP+4uc3hdfVOQFuaIKn5sa7lQ4deY2AfJ7An/lzumI159Azxu6M5AfayKUy/nsQC
+         UdrbUhgROQ280LHj3vKu6br5xL6Ea6afUjVWlrawRUTgwYNKeUVOAib+JBcse+J0+f
+         4x2PMxDmD3hv63LmK5/0YAlRysEXy4pwAlwKIdntHzDn3n9xpWTFrcHN72Zs89z13Q
+         g9nTvzaT4CklM4TK504XkmuaI9/YCHUpbhH5Zx4F3Dldv4+DGFKQPaNYve/JabvHCs
+         eYnelMQCM2rQg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 303165C06AB; Sat, 21 Jan 2023 10:40:32 -0800 (PST)
+Date:   Sat, 21 Jan 2023 10:40:32 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230121184032.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <a5637181-1675-7973-489c-e5d24cbd25c2@huaweicloud.com>
+ <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
+ <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
+ <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
+ <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
+ <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
+ <Y8wimpMpajLudrYb@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8wimpMpajLudrYb@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the ecb/cbc macros hold fpu context unnecessarily when using
-scalar cipher routines (e.g. when handling odd sizes of blocks per walk).
+On Sat, Jan 21, 2023 at 12:36:26PM -0500, Alan Stern wrote:
+> On Fri, Jan 20, 2023 at 10:41:14PM +0100, Jonas Oberhauser wrote:
+> > 
+> > 
+> > On 1/20/2023 5:18 PM, Alan Stern wrote:
+> > > On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
+> > > > Perhaps we could say that reading an index without using it later is
+> > > > forbidden?
+> > > > 
+> > > > flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
+> > > > thrown-srcu-cookie-on-floor
+> > > We already flag locks that don't have a matching unlock.
+> > 
+> > Of course, but as you know this is completely orthogonal.
+> 
+> Yeah, okay.  It doesn't hurt to add this check, but the check isn't 
+> complete.  For example, it won't catch the invalid usage here:
+> 
+> P0(srcu_struct *ss)
+> {
+> 	int r1, r2;
+> 
+> 	r1 = srcu_read_lock(ss);
+> 	srcu_read_unlock(&ss, r1);
+> 	r2 = srcu_read_lock(ss);
+> 	srcu_read_unlock(&ss, r2);
+> }
+> 
+> exists (~0:r1=0:r2)
+> 
+> On the other hand, how often will people make this sort of mistake in 
+> their litmus tests?  My guess is not very.
 
-Change the macros to drop fpu context as soon as the fpu is out of use.
+I must be blind this morning.  I see a well-formed pair of back-to-back
+SRCU read-side critical sections.  A rather useless pair, given that
+both are empty, but valid nonetheless.
 
-No performance impact found (on Intel Haswell).
+Or is the bug the use of 0:r1 and 0:r2 in the "exists" clause?  If so,
+then I agree that this is not at all a high-priority bug to flag.
 
-Signed-off-by: Peter Lafreniere <peter@n8pjl.ca>
----
- arch/x86/crypto/ecb_cbc_helpers.h | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+> > Can you briefly explain how the operational model you have in mind for
+> > srcu's up and down allows x==1 (and y==0 and idx1==idx2) in the example I
+> > sent before (copied with minor edit below for convenience)?
+> > 
+> > P0{
+> >     idx1 = srcu_down(&ss);
+> >     store_rel(p1, true);
+> > 
+> > 
+> >     shared cs
+> > 
+> >     R x == 1
+> > 
+> >     while (! load_acq(p2));
+> >     R idx2 == idx1 // for some reason, we got lucky!
+> >     srcu_up(&ss,idx1);
+> > }
+> > 
+> > P1{
+> >     idx2 = srcu_down(&ss);
+> >     store_rel(p2, true);
+> > 
+> >     shared cs
+> > 
+> >     R y == 0
+> > 
+> >     while (! load_acq(p1));
+> >     srcu_up(&ss,idx2);
+> > }
+> > 
+> > P2 {
+> >     W y = 1
+> >     srcu_sync(&ss);
+> >     W x = 1
+> > }
+> > 
+> > 
+> > I can imagine models that allow this but they aren't pretty. Maybe you have
+> > a better operational model?
+> 
+> The operational model is not very detailed as far as SRCU is concerned.  
+> It merely says that synchronize_srcu() executing on CPU C waits until:
+> 
+> 	All writes received by C prior to the start of the function have 
+> 	propagated to all CPUs (call this time t1).  This could be 
+> 	arranged by having synchronize_srcu() start with an smp_mb().
+> 
+> 	For every srcu_down_read() that executed prior to t1, the 
+> 	matching srcu_up_read() has finished and all writes received 
+> 	by the unlocking CPU prior to the unlock have propagated to all 
+> 	CPUs.  This could be arranged by having the srcu_up_read() 
+> 	call include a release write which has been received by C and 
+> 	having synchronize_srcu() end with an smp_mb().
 
-diff --git a/arch/x86/crypto/ecb_cbc_helpers.h b/arch/x86/crypto/ecb_cbc_helpers.h
-index eaa15c7b29d6..11955bd01af1 100644
---- a/arch/x86/crypto/ecb_cbc_helpers.h
-+++ b/arch/x86/crypto/ecb_cbc_helpers.h
-@@ -13,13 +13,14 @@
- 
- #define ECB_WALK_START(req, bsize, fpu_blocks) do {			\
- 	void *ctx = crypto_skcipher_ctx(crypto_skcipher_reqtfm(req));	\
-+	const int __fpu_blocks = (fpu_blocks);				\
- 	const int __bsize = (bsize);					\
- 	struct skcipher_walk walk;					\
- 	int err = skcipher_walk_virt(&walk, (req), false);		\
- 	while (walk.nbytes > 0) {					\
- 		unsigned int nbytes = walk.nbytes;			\
--		bool do_fpu = (fpu_blocks) != -1 &&			\
--			      nbytes >= (fpu_blocks) * __bsize;		\
-+		bool do_fpu = __fpu_blocks != -1 &&			\
-+			      nbytes >= __fpu_blocks * __bsize;		\
- 		const u8 *src = walk.src.virt.addr;			\
- 		u8 *dst = walk.dst.virt.addr;				\
- 		u8 __maybe_unused buf[(bsize)];				\
-@@ -35,7 +36,12 @@
- } while (0)
- 
- #define ECB_BLOCK(blocks, func) do {					\
--	while (nbytes >= (blocks) * __bsize) {				\
-+	const int __blocks = (blocks);					\
-+	if (do_fpu && __blocks < __fpu_blocks) {			\
-+		kernel_fpu_end();					\
-+		do_fpu = false;						\
-+	}								\
-+	while (nbytes >= __blocks * __bsize) {				\
- 		(func)(ctx, dst, src);					\
- 		ECB_WALK_ADVANCE(blocks);				\
- 	}								\
-@@ -53,7 +59,12 @@
- } while (0)
- 
- #define CBC_DEC_BLOCK(blocks, func) do {				\
--	while (nbytes >= (blocks) * __bsize) {				\
-+	const int __blocks = (blocks);					\
-+	if (do_fpu && __blocks <  __fpu_blocks) {			\
-+		kernel_fpu_end();					\
-+		do_fpu = false;						\
-+	}								\
-+	while (nbytes >= __blocks * __bsize) {				\
- 		const u8 *__iv = src + ((blocks) - 1) * __bsize;	\
- 		if (dst == src)						\
- 			__iv = memcpy(buf, __iv, __bsize);		\
--- 
-2.39.0
+Agreed.  It took me a few reads to see that this prohibited later writes
+by other CPUs affecting reads in the prior critical section, but the "all
+writes received by the unlocking CPU" does seem to me to prohibit this.
 
+> The operational model doesn't specify exactly how synchronize_srcu() 
+> manages to do these things, though.
+
+Which is a good thing, given the wide variety of possible implementations.
+
+> Oh yes, it also says that the value returned by srcu_down_read() is an 
+> unpredictable int.  This differs from the code in the patched herd 
+> model, which says that the value will always be 0.
+
+As noted earlier, I believe that this is fine.  If significant problems
+arise, then we might need to do something.  However, there is some
+cost to complexity, so we should avoid getting too speculative about
+possible probems.
+
+> Anyway, the operational model says the litmus test can succeed as 
+> follows:
+> 
+> P0                    P1                     P2
+> --------------------- ---------------------- -------------------------
+>                       Widx2=srcu_down_read()
+>                       Wrel p2=1
+>                       Ry=0
+>                                              Wy=1
+>                                              synchronize_srcu() starts
+> 	... idx2, p2, and y propagate to all CPUs ...
+>                                              Time t1
+> Widx1=srcu_down_read()
+> Wrel p1=1
+> 	,,, idx1 and p1 propagate to all CPUs ...
+>                       Racq p1=1
+>                       srcu_up_read(idx2)
+>                                              synchronize_srcu() ends
+>                                              Wx=1
+> Rx=1
+> Racq p2=1
+> Ridx2=idx1
+> srcu_up_read(idx1)
+> 
+> (The final equality in P0 is allowed because idx1 and idx2 are both 
+> random numbers, so they might be equal.)
+
+This all makes sense to me.
+
+> Incidentally, it's worth pointing out that the algorithm Paul described 
+> will forbid this litmus test even if you remove the while loop and the 
+> read of idx2 from P0.
+
+Given that the values returned by those two srcu_down_read() calls must
+be the same, then, yes, the current Linux-kernel Tree RCU implementation
+would forbid this.
+
+On the other hand, if the two indexes differ, then P2's synchronize_srcu()
+can see that there are no really old readers on !Widx2, then flip
+the index.  This would mean that P0's Widx1 would be equal to !Widx2,
+which has already been waited on.  Then P2's synchronize_srcu() can
+return as soon as it sees P1's srcu_up_read().
+
+> Does this answer your question satisfactorily?
+> 
+> > > > So if there is an srcu_down() that produces a cookie that is read by some
+> > > > read R, and R doesn't then pass that value into an srcu_up(), the
+> > > > srcu-warranty is voided.
+> > > No, it isn't.
+> > I quote Paul:
+> > "If you do anything else at all with it, anything at all, you just voided
+> > your SRCU warranty. For that matter, if you just throw that value on the
+> > floor and don't pass it to an srcu_up_read() execution, you also just voided
+> > your SRCU warranty."
+> 
+> I suspect Paul did not express himself very precisely,
+
+You know me too well!  ;-)
+
+>                                                        and what he 
+> really meant was more like this:
+> 
+> 	If you don't pass the value to exactly one srcu_up_read() call, 
+> 	you void the SRCU warranty.  In addition, if you do anything 
+> 	else with the value that might affect the outcome of the litmus 
+> 	test, you incur the risk that herd7 might compute an incorrect 
+> 	result [as in the litmus test I gave near the start of this
+> 	email].
+> 
+> Merely storing the value in a shared variable which then doesn't get 
+> used or is used only for something inconsequential would not cause any 
+> problems.
+
+That is consistent with my understanding, but please let me try again
+in list form:
+
+1.	If a value returned from a given srcu_read_lock() is never passed
+	to an srcu_read_unlock(), later calls to synchronize_srcu()
+	are within their rights to simply never return.
+
+2.	If a value returned from a given srcu_read_lock() is modified in
+	any way before being passed to an srcu_read_unlock(), any calls
+	to synchronize_srcu() that have not yet returned are within
+	their rights to simply never return and they are also within
+	their rights to return prematurely.
+
+3.	If a value returned from a given srcu_read_lock() is passed to
+	more than one srcu_read_unlock(), any calls to synchronize_srcu()
+	that have not yet returned are within their rights to simply
+	never return and they are also within their rights to return
+	prematurely.
+
+4.	If a value returned from a given srcu_read_lock() is passed to
+	exactly one srcu_read_unlock(), and then that value is later
+	manipulated, that is bad practice (exactly what are you trying
+	to accomplish by so doing?), but SRCU won't know the difference.
+
+	In particular, the Linux-kernel SRCU implementation doesn't know
+	about the herd7 "exists" clause, but kudos to Jonas for casting
+	his conceptual net widely indeed!
+
+5.	All of the above apply with equal force to srcu_down_read()
+	and srcu_up_read().
+
+6.	If the value returned from a given srcu_read_lock() is transmitted
+	to an srcu_read_unlock() on another thread, the SRCU algorithm
+	will do the right thing, but lockdep will complain bitterly.
+	(This is the use case that srcu_down_read() and srcu_up_read()
+	are intended to address.)
+
+This is not exactly concise, but does it help?
+
+							Thanx, Paul
