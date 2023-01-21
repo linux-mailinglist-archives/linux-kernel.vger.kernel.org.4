@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9C3676296
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444A9676298
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjAUA4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S229799AbjAUA4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjAUA42 (ORCPT
+        with ESMTP id S229653AbjAUA4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:56:28 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0595B595
+        Fri, 20 Jan 2023 19:56:32 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAA45B5B7
         for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:56:28 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id v23so6783855plo.1
+Received: by mail-pj1-x1031.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso10620382pjg.2
         for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:56:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ihs1lPGJTYH/n9uC2fe/fD/dm6RWAiMecmovGp89G+Q=;
-        b=A9nMCXlGrTqywtDFEfUariM/BfBgw9tPr05X918ldhS3Cu8cLbDOnUt4IHI8cDjU9w
-         49nw+/16Ryq22+rCTZUVMFGLFZgWulbUbprCZ3vfI16Ud7B4bZMF/ZhNzKbC6LVlsUJt
-         +K2qy/EK67DYDoA200hvQRXG09r5dkMibL1V0xjVkIytwR2rScU+j9AFwwdm0E9ly3z0
-         SdOngM9jmr/53yHpdGwpEJ5Rn8wauhFJvD0MPQPIeKc9YtCtyrQ2Jq6H6ChN9/yey34J
-         IQ0ZHqHln+eSb16AVAJJ7e+F4T25/ZoIbc2UwK7MDGBqBQCoiu4t4lkWgyXBhouCouZK
-         GcqA==
+        bh=Sn9o4Cmt0XJxCzEv3cd/09WP6t7BNy+VXQN0hb/gQmY=;
+        b=L7W7cMikTHvBje5bd7kfQZcvqe7I9YVqBuam/72E3VPsV4fW8Fz5HVOPOoM8ZCO2Vb
+         RqblFxtiXWWheR6EI23wpxFqsJx+1nPFAs7ifLo/N/e00dmMCl8MyHMiB/0iFkYlMgh/
+         PMhP3brtJ0ug4/IjaDJgT1x9G9VE47AiX8lRtwPJvHjZ1GQtwOke1W7gUTiSvvuaACB6
+         I2lftS6Vz7IwApi0l+OHCIWshkXQ2Eie3SxSvHlptoVmmdY3zyNg7J2dpTub0jD50GD6
+         4aIdOj0DgnaFsKArlq3sQ6wFqgXJVKkGW2AaSsvM77tEBCPC8miw1eczujeEJVZKgwnS
+         HRsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ihs1lPGJTYH/n9uC2fe/fD/dm6RWAiMecmovGp89G+Q=;
-        b=qe7AQGDFuycajMaRxKe3IcmfxJmAof4Y71H9l3XA4fAWL1HnMmZmn90rrOOBzjx+OO
-         AhBV0xNYa0cGR0p31Ud0LDESBcHvh02VP0hCetRr75RH78vS0eqh9+WFUhbBvq4H0rHL
-         CKlsSCiTFmvqBR4IlU6rhy1J8ulITInEh29TSIGtS2X4yABa9pDrYDOdEwwqmAmAcgBx
-         DJVLl6juq7ampEadB0YL4KlIm5mKLkWklXhimHXBpmDwSC/aoivV6zmUS4jn3gFcXXZG
-         K7Mhl4+N0vxIpUoNDsWam2aCqO4IIRxBnqxKLxJAyMxKMoLD4a0Lp76cOecPpsTj1srT
-         ZEfQ==
-X-Gm-Message-State: AFqh2krmVnqsJxuu7L8ftu6j5gLouZITaLoofXmjZXdKmihrawBuDizY
-        tuhEJ7zVSqBaT7G6iK8ZckM=
-X-Google-Smtp-Source: AMrXdXvL7hanGT1T1ZbT+ZacwQm3dlBDi8+nw4wDgXRp1QQbt4DzagEkee9xVp1F7Ltbp5BGj7kUjQ==
-X-Received: by 2002:a17:90a:b002:b0:229:932:a0f3 with SMTP id x2-20020a17090ab00200b002290932a0f3mr17793784pjq.27.1674262587454;
-        Fri, 20 Jan 2023 16:56:27 -0800 (PST)
+        bh=Sn9o4Cmt0XJxCzEv3cd/09WP6t7BNy+VXQN0hb/gQmY=;
+        b=lMMhvCRVCuR23pL2YuyzUtxmnYrB7ExXxGBHURH4fobC75WCET/Vq71wAMHX8dvFuH
+         SYIt0dqC8UwW1B/fKlloMjjNC52p541t8t8wz1zDD0v2Rc4uiKqSdILCDX4bJZRC6WkA
+         FMSt0apcgJzjqEGBS5hCwudrQm2H9csObZ9EDibjd2lifXwf+E7ZB6rMzXTJ/+Pn+7gS
+         F6ghQHgltmQuwtZQchST7bOfSnL7s/yBmxETpG/R0wRNdyI5y/nuTGVSRXbsNz+HcuFa
+         TjXPfytq/91ReUg9UiH9++a8D886W7S9JQOzKV2axSVuf/02TiudxgWh0d+Uys4D7mYG
+         vLsw==
+X-Gm-Message-State: AFqh2kridwYOOl2GPiUkkbUOuJ9cy8QAzcSIj4QiOVSTU5C6FxDrm3Vc
+        2Frmpta9wOOu0JiV2yMAZEI=
+X-Google-Smtp-Source: AMrXdXupG4jNmpCUVU0/GCYE088g0/9TDQgMX6l2qNXRcGzWrfWMP3+CEqCU/5KhCaxKXELoHEkDag==
+X-Received: by 2002:a17:90a:67c2:b0:226:c364:2d1d with SMTP id g2-20020a17090a67c200b00226c3642d1dmr17331993pjm.41.1674262588360;
+        Fri, 20 Jan 2023 16:56:28 -0800 (PST)
 Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::4e4b])
-        by smtp.googlemail.com with ESMTPSA id pc3-20020a17090b3b8300b001fde655225fsm11314371pjb.2.2023.01.20.16.56.26
+        by smtp.googlemail.com with ESMTPSA id pc3-20020a17090b3b8300b001fde655225fsm11314371pjb.2.2023.01.20.16.56.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 16:56:27 -0800 (PST)
+        Fri, 20 Jan 2023 16:56:28 -0800 (PST)
 From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, willy@infradead.org,
         sidhartha.kumar@oracle.com, linux-kernel@vger.kernel.org,
         "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH 1/3] mm: Add folio_movable_ops()
-Date:   Fri, 20 Jan 2023 16:56:20 -0800
-Message-Id: <20230121005622.57808-2-vishal.moola@gmail.com>
+Subject: [PATCH 2/3] mm/migrate: Convert isolate_movable_page() to use folios
+Date:   Fri, 20 Jan 2023 16:56:21 -0800
+Message-Id: <20230121005622.57808-3-vishal.moola@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230121005622.57808-1-vishal.moola@gmail.com>
 References: <20230121005622.57808-1-vishal.moola@gmail.com>
@@ -73,49 +73,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-folio_movable_ops() does the same as page_movable_ops() except uses
-folios instead of pages. This function will help make folio conversions
-in mm/migrate.c more readable.
+Removes 6 calls to compound_head() and prepares the function to take in a
+folio instead of page argument.
 
 Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 ---
- include/linux/migrate.h | 9 +++++++++
- mm/migrate.c            | 2 +-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ mm/migrate.c | 39 ++++++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 19 deletions(-)
 
-diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-index 3ef77f52a4f0..bdff950a8bb4 100644
---- a/include/linux/migrate.h
-+++ b/include/linux/migrate.h
-@@ -122,6 +122,15 @@ static inline bool folio_test_movable(struct folio *folio)
- 	return PageMovable(&folio->page);
- }
- 
-+static inline
-+const struct movable_operations *folio_movable_ops(struct folio *folio)
-+{
-+	VM_BUG_ON(!__folio_test_movable(folio));
-+
-+	return (const struct movable_operations *)
-+		((unsigned long)folio->mapping - PAGE_MAPPING_MOVABLE);
-+}
-+
- static inline
- const struct movable_operations *page_movable_ops(struct page *page)
- {
 diff --git a/mm/migrate.c b/mm/migrate.c
-index a4d3fc65085f..4c1776445c74 100644
+index 4c1776445c74..bcde3cbbc8c9 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -973,7 +973,7 @@ static int move_to_new_folio(struct folio *dst, struct folio *src,
- 			goto out;
- 		}
+@@ -60,6 +60,7 @@
  
--		mops = page_movable_ops(&src->page);
-+		mops = folio_movable_ops(src);
- 		rc = mops->migrate_page(&dst->page, &src->page, mode);
- 		WARN_ON_ONCE(rc == MIGRATEPAGE_SUCCESS &&
- 				!folio_test_isolated(src));
+ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ {
++	struct folio *folio = page_folio(page);
+ 	const struct movable_operations *mops;
+ 
+ 	/*
+@@ -71,11 +72,11 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * the put_page() at the end of this block will take care of
+ 	 * release this page, thus avoiding a nasty leakage.
+ 	 */
+-	if (unlikely(!get_page_unless_zero(page)))
++	if (unlikely(!folio_try_get(folio)))
+ 		goto out;
+ 
+-	if (unlikely(PageSlab(page)))
+-		goto out_putpage;
++	if (unlikely(folio_test_slab(folio)))
++		goto out_putfolio;
+ 	/* Pairs with smp_wmb() in slab freeing, e.g. SLUB's __free_slab() */
+ 	smp_rmb();
+ 	/*
+@@ -83,12 +84,12 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * we use non-atomic bitops on newly allocated page flags so
+ 	 * unconditionally grabbing the lock ruins page's owner side.
+ 	 */
+-	if (unlikely(!__PageMovable(page)))
+-		goto out_putpage;
++	if (unlikely(!__folio_test_movable(folio)))
++		goto out_putfolio;
+ 	/* Pairs with smp_wmb() in slab allocation, e.g. SLUB's alloc_slab_page() */
+ 	smp_rmb();
+-	if (unlikely(PageSlab(page)))
+-		goto out_putpage;
++	if (unlikely(folio_test_slab(folio)))
++		goto out_putfolio;
+ 
+ 	/*
+ 	 * As movable pages are not isolated from LRU lists, concurrent
+@@ -101,29 +102,29 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * lets be sure we have the page lock
+ 	 * before proceeding with the movable page isolation steps.
+ 	 */
+-	if (unlikely(!trylock_page(page)))
+-		goto out_putpage;
++	if (unlikely(!folio_trylock(folio)))
++		goto out_putfolio;
+ 
+-	if (!PageMovable(page) || PageIsolated(page))
++	if (!folio_test_movable(folio) || folio_test_isolated(folio))
+ 		goto out_no_isolated;
+ 
+-	mops = page_movable_ops(page);
+-	VM_BUG_ON_PAGE(!mops, page);
++	mops = folio_movable_ops(folio);
++	VM_BUG_ON_FOLIO(!mops, folio);
+ 
+-	if (!mops->isolate_page(page, mode))
++	if (!mops->isolate_page(&folio->page, mode))
+ 		goto out_no_isolated;
+ 
+ 	/* Driver shouldn't use PG_isolated bit of page->flags */
+-	WARN_ON_ONCE(PageIsolated(page));
+-	SetPageIsolated(page);
+-	unlock_page(page);
++	WARN_ON_ONCE(folio_test_isolated(folio));
++	folio_set_isolated(folio);
++	folio_unlock(folio);
+ 
+ 	return 0;
+ 
+ out_no_isolated:
+-	unlock_page(page);
+-out_putpage:
+-	put_page(page);
++	folio_unlock(folio);
++out_putfolio:
++	folio_put(folio);
+ out:
+ 	return -EBUSY;
+ }
 -- 
 2.38.1
 
