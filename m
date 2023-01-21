@@ -2,126 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DA36761DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5F46761DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjAUAEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        id S229634AbjAUAEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjAUAEc (ORCPT
+        with ESMTP id S229511AbjAUAET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:04:32 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08193485BC
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:04:28 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NzGcD0P4vz9v7Jf
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:56:28 +0800 (CST)
-Received: from [10.81.218.54] (unknown [10.81.218.54])
-        by APP2 (Coremail) with SMTP id GxC2BwDnbmXoK8tjX4WxAA--.46257S2;
-        Sat, 21 Jan 2023 01:04:04 +0100 (CET)
-Message-ID: <736020be-de00-3cd8-2325-c3efb87e03b6@huaweicloud.com>
-Date:   Sat, 21 Jan 2023 01:03:50 +0100
+        Fri, 20 Jan 2023 19:04:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489921630A;
+        Fri, 20 Jan 2023 16:04:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00BE2B81FA4;
+        Sat, 21 Jan 2023 00:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515AAC433D2;
+        Sat, 21 Jan 2023 00:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674259455;
+        bh=iQb7Fc/u/8EmQtoJ7rN3tFo8n6W4Tiv/o4BAl7ymRus=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HB+uNgKwCoCcYgYcMpRtfzWDeu2zVr2B0nX18L3kazH1qCLkmyM24gfj8k1ZMelrG
+         Knk1Q7sxvMY3GnUW2DLmRNgaf6BsMAs8rQOaKqFUGti6PY64w5RyJDyVFhiyE0/hzV
+         g5pEkJOThxPEuNBTE51aGRUh26H6itAvWFmebBrVd7V6pK9rDI5Ukl0VMV4mB/BPkN
+         IZlCL8fcDJeRPsGcsT/n1zXbuFdc9TQO79PX1hrSXDIbohrL5LBO/c1jVJyH8sVUMb
+         VfGCnrx3QmbGYdzQXGOaVJEha27fUo5bRGTAN8lOYdVnGZtgAfXtMxDz/LfOo5ulW1
+         JX0MXuUkqzhpw==
+Date:   Sat, 21 Jan 2023 00:03:57 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
+ suspend fails
+Message-ID: <Y8sr7YJ8e8eSpPFv@kernel.org>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
+ <20230106030156.3258307-1-Jason@zx2c4.com>
+ <Y8U4kwTPpMet13Ks@kernel.org>
+ <af2e5a17-514b-8759-2464-7ebb384a17ba@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8mfWTX7V69pAwo8@rowland.harvard.edu>
- <20230119215304.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <c5902c18-e0cc-125e-c2f5-7971f0a7ce07@huaweicloud.com>
- <20230120153909.GF2948950@paulmck-ThinkPad-P17-Gen-1>
- <cc3686b3-b234-b0ee-4d2d-15f54da4331b@huaweicloud.com>
- <20230120213727.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <44a2c301-900e-90ea-4b21-e5264102e699@huaweicloud.com>
- <20230120231952.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230120231952.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDnbmXoK8tjX4WxAA--.46257S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrWDWr4UtrWkCrWDZr1UKFg_yoW8ur43pF
-        WfKa1Skr18XFyktws7CrWxW34Fgas5Aay3GryFkrn5Aas8WFWIqr4rt3WSkF9Iywsavw4j
-        vry5tasrGas5A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af2e5a17-514b-8759-2464-7ebb384a17ba@suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 16, 2023 at 03:00:03PM +0100, Vlastimil Babka wrote:
+> On 1/16/23 12:44, Jarkko Sakkinen wrote:
+> > On Fri, Jan 06, 2023 at 04:01:56AM +0100, Jason A. Donenfeld wrote:
+> >> TPM 1 is sometimes broken across system suspends, due to races or
+> >> locking issues or something else that haven't been diagnosed or fixed
+> >> yet, most likely having to do with concurrent reads from the TPM's
+> >> hardware random number generator driver. These issues prevent the system
+> >> from actually suspending, with errors like:
+> >> 
+> >>   tpm tpm0: A TPM error (28) occurred continue selftest
+> >>   ...
+> > 
+> > <REMOVE>
+> > 
+> >>   tpm tpm0: A TPM error (28) occurred attempting get random
+> >>   ...
+> >>   tpm tpm0: Error (28) sending savestate before suspend
+> >>   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+> >>   tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+> >>   tpm_tis 00:08: PM: failed to suspend: error 28
+> >>   PM: Some devices failed to suspend, or early wake event detected
+> > 
+> > </REMOVE>
+> > 
+> > Unrelated to thix particular fix.
+> 
+> Not sure I understand.
+> AFAIK this is not a proper fix, but a workaround for when laptop suspend no
+> longer works because TPM fails to suspend. The error messages quoted above
+> are very much related to the problem of suspend not working, and this patch
+> did work as advertised at least for me. I see errors but they don't prevent
+> suspend anymore:
+> 
+> https://lore.kernel.org/all/58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz/
+> 
+> >> This issue was partially fixed by 23393c646142 ("char: tpm: Protect
+> >> tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
+> >> directly because the TPM maintainers weren't available. However, it
+> >> seems like this just addresses the most common cases of the bug, rather
+> >> than addressing it entirely. So there are more things to fix still,
+> >> apparently.
+> >> 
+> >> In lieu of actually fixing the underlying bug, just allow system suspend
+> >> to continue, so that laptops still go to sleep fine. Later, this can be
+> >> reverted when the real bug is fixed.
+> >> 
+> >> Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
+> >> Cc: stable@vger.kernel.org # 6.1+
+> >> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> >> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> >> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >> ---
+> >> This is basically untested and I haven't worked out if there are any
+> >> awful implications of letting the system sleep when TPM suspend fails.
+> >> Maybe some PCRs get cleared and that will make everything explode on
+> >> resume? Maybe it doesn't matter? Somebody well versed in TPMology should
+> >> probably [n]ack this approach.
+> >> 
+> >>  drivers/char/tpm/tpm-interface.c | 5 ++++-
+> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> >> index d69905233aff..6df9067ef7f9 100644
+> >> --- a/drivers/char/tpm/tpm-interface.c
+> >> +++ b/drivers/char/tpm/tpm-interface.c
+> >> @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
+> >>  	}
+> >>  
+> >>  suspended:
+> >> -	return rc;
+> >> +	if (rc)
+> >> +		pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
+> >> +		       chip->dev_num, rc);
+> >> +	return 0;
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> >>  
+> >> -- 
+> >> 2.39.0
+> >> 
+> > 
+> > This tpm_tis local issue, nothing to do with tpm_pm_suspend(). Executing
+> > the selftest as part of wake up, is TPM 1.2 dTPM specific requirement, and
+> > the call is located in tpm_tis_resume() [*].
+> > 
+> > [*] https://lore.kernel.org/lkml/Y8U1QxA4GYvPWDky@kernel.org/
+> 
+> Yes the changelog at the top does say "due to races or locking issues or
+> something else that haven't been diagnosed or fixed yet"
+> 
+> I don't know what causes the TPM to start returning error 28 on resume and
+> never recover from it. But it didn't happen before hwrng started using the
+> TPM. Before that, it was probably just the selftest ever doing anything with
+> the TPM, and on its own I don't recall it ever (before 6.1) failing and
+> preventing further suspend/resume.
 
+Would it be possible to test this theory by commenting out tpm_add_hwrng()
+call from tpm_chip_register()?
 
-On 1/21/2023 12:19 AM, Paul E. McKenney wrote:
-> On Fri, Jan 20, 2023 at 11:36:15PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/20/2023 10:37 PM, Paul E. McKenney wrote:
->>> Just out of curiosity, are you [set] up to run LKMM locally at your end?
->> I don't know what exactly that means. I generally run it on wetware.
->> But I sometimes ask Hernan to run Dat3M (on his machine) over all the litmus
->> tests in your repo to spot any obvious problems with variations I consider.
->> I don't think Dat3M is feature-complete with herd at the moment, just
->> unbelievably faster. For example I think it ignores all flags in the cat
->> files.
->> Oh, I just remembered that I also installed herd7 recently to make sure that
->> any patches I might send in satisfy herd7 syntax requirements (I think you
->> called this diagnostic driven development?), but I haven't used it to really
->> run anything.
->>
->> Is it too obvious that my words usually aren't backed by cold machine logic?
-> Well, there was this in one of your messages from earlier today: "I'm not
-> going to get it right today, am I?"  And I freely confess that this led
-> me to suspect that you might not have been availing yourself of herd7's
-> opinion before posting.  ;-)
-The main reason I might usually not consult herd7's opinion is that it 
-often takes a while to write a test case in a way herd7 accepts and 
-treats as intended, but then even so the fact that some tests pass may 
-just give some false confidence when some tricky case is being missed.
-So I find the investment/increased confidence ratio to not yet be at the 
-right point to do this when communicating somewhat informally on the 
-mailing list, which is already taking quite a bit of my time (but at 
-least I'm learning a lot during that time about stuff like RCU/SRCU, 
-history of LKMM, etc.).
-If I need to be more confident I'll use herd7 to make sure the syntax is 
-correct and as a sanity check, and some paper or Coq proofs to be 
-confident in the logic.
+Since they are called sequentially any sort of concurrency issue can be
+probably ruled out.
 
-If you feel that I'm wasting the lists' time too much by making these 
-kind of mistakes, let me know and I'll reconsider.
+One thing that I noticed is that probably it would be more safe-play to
+move tpm_add_hwrng() call after creating the character device, as there's
+no need to do it before anything else.
 
-Best wishes, jonas
-
+BR, Jarkko
