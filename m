@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1E467634E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 04:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79B8676351
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 04:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjAUDTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 22:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S229747AbjAUDUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 22:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjAUDTC (ORCPT
+        with ESMTP id S229450AbjAUDUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 22:19:02 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8A6AF45;
-        Fri, 20 Jan 2023 19:19:01 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id d10so3667184ilc.12;
-        Fri, 20 Jan 2023 19:19:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BNEPDeyZy+520jJ70Z8ubzdZCaFZrMQI2bVBkEs12kU=;
-        b=E48zNa4BqUeY8ZRL/jlShcttii3p3GAN2DpMYV/mGhDlphOEpMmhtBcSxCnNGZDCtU
-         7auLdY5G1YL8mWCUFAjimglHJgz0JVzFrPQZJj0MFMa0lpUk/uZqKPWZvS0UfVXhhQ2y
-         mUwbYkc0PFd51QMQEUwBA8wsFCydxIVENehJb3J+Qrq7+GVZtAV6jYyKWrvKMVVEO1ts
-         inD8lqciLPw3ayITq6+jpY/N/n1UGrraSqfrSZxBjFimze1ZUhQt1lOL5opVl+6AfwbO
-         MpmzzqXLABam6kEYw95Lm3eytOYr4M3HzqGTS2vg9DNN4Q22H1QfAn20PsKY4cN8cFo/
-         FK9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BNEPDeyZy+520jJ70Z8ubzdZCaFZrMQI2bVBkEs12kU=;
-        b=AbiC7/J+Fb2JEAuv3cSmTbu+gchaKF5B2YYAz8taok8zLLFjCV9SiGPqA2wei7yTyp
-         i50oX1j/HTI/DtIecH0kTrw1+03hjMDrIx3Xsqheqixaof/IU4npdsE1Pamxh4+Sy8II
-         aUtWLym8nXSjprxnMPyCBn2nJQ55DWaO7PvoHGVypSFqDB/NtndHnMftKlYWZ9Tl5pgc
-         VAQNl+8+E0V0e3Cxa0E7j2EYAe9oZPIjCc9RUuJiXhw17XKg0fRKAzg/GUW9f7sJnN6u
-         kaR8fEdmRSgatgvhQKGSzGeLiIskSqXfuNmYZw5/JIB1LoFQuGradlovoh6/kYJUQJjd
-         FgxQ==
-X-Gm-Message-State: AFqh2koZSiF+zGzNkU1bXWZHMeMbi83dxqhxyYEby+LAra9Nb3IF+jy8
-        n7tyuGZa+K4m0+P1DqZDaNEZ7xkrLA0XbJUQSy8J6GdytRQ=
-X-Google-Smtp-Source: AMrXdXvfaALIHcVRYgfGgc9wNixFqvLW7HL6rErcMJV7rqwRwYXquOQcZheG2b0Z5jvuuiSMNnLIanOnFTRAgmav1nQ=
-X-Received: by 2002:a92:c70e:0:b0:30e:a789:f0f7 with SMTP id
- a14-20020a92c70e000000b0030ea789f0f7mr1652606ilp.155.1674271140596; Fri, 20
- Jan 2023 19:19:00 -0800 (PST)
+        Fri, 20 Jan 2023 22:20:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E356AF45;
+        Fri, 20 Jan 2023 19:20:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4292D615FB;
+        Sat, 21 Jan 2023 03:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7F9C433D2;
+        Sat, 21 Jan 2023 03:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674271245;
+        bh=YHgTEddijPN/W39WeUnF/k07WHcGQBEcY6Vh3eUVlIQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WE5zDRh+POgonnHeC4+wy6PByntF1phMkiHbTCPvGn782Z4ggKBVwdB88BcZMtc3d
+         /Ktr9JFJkjyMytc6WNTTcucWgKq0EjP4GB0xi82ynOHi66XXKI/184MDjexrhT6+Iy
+         m0E6f7d6LHWYYjXdIc3JW8RlIVOQPBIY4RNsXiZE6+kcDzk9Ys/gsN+psDJBG8TM3P
+         zfX+Q7o7uh2hUhVL31YCRXS9384zyr5oeiUC9vhILE7AsTwboxIgtqQYvlDz44kFbJ
+         51vPONWV0jVZ9PrAJosNR06WmhAMQC7BhhTx9SXxfFpAyqvaOc7WCjovxz4dWJ55EU
+         xXl9VbWvnIbxA==
+Date:   Sat, 21 Jan 2023 03:20:42 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kanth.ghatraju@oracle.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH] certs: Reference revocation list for all keyrings
+Message-ID: <Y8taCkDpji8AGCUc@kernel.org>
+References: <20230117171506.3888602-1-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-References: <20230120144356.40717-1-gregory.price@memverge.com> <20230120144356.40717-4-gregory.price@memverge.com>
-In-Reply-To: <20230120144356.40717-4-gregory.price@memverge.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Fri, 20 Jan 2023 19:18:49 -0800
-Message-ID: <CANaxB-zet4+S4saBHgYPP6feppBVHkCRJxTkL8R-OyXa_gXG3Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] ptrace,syscall_user_dispatch: add a getter/setter
- for sud configuration
-To:     Gregory Price <gourry.memverge@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117171506.3888602-1-eric.snowberg@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 7:05 AM Gregory Price <gourry.memverge@gmail.com> wrote:
->
-> Implement ptrace getter/setter interface for syscall user dispatch.
->
-> Presently, these settings are write-only via prctl, making it impossible
-> to implement transparent checkpoint (coordination with the software is
-> required).
->
-> This is modeled after a similar interface for SECCOMP, which can have
-> its configuration dumped by ptrace for software like CRIU.
->
-> Signed-off-by: Gregory Price <gregory.price@memverge.com>
+On Tue, Jan 17, 2023 at 12:15:06PM -0500, Eric Snowberg wrote:
+> Systems booted with shim have a Forbidden Signature Database called mokx.
+> During boot, hashes and certs contained within the mokx are loaded into the
+> blacklist keyring.  When calling verify_pkcs7_message_sig the contents of
+> the blacklist keyring (or revocation list) are referenced when validating
+> keys on the platform keyring. Currently, when validating against the
+> secondary or builtin keyrings, the revocation list is not referenced.  Move
+> up the check to allow the revocation list to be used with all keyrings,
+> including the secondary and builtin, allowing the system owner to take
+> corrective action should a vulnerability be found within keys contained
+> within either keyring.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 > ---
->  .../admin-guide/syscall-user-dispatch.rst     |  5 +-
->  include/linux/syscall_user_dispatch.h         | 19 +++++++
->  include/uapi/linux/ptrace.h                   | 10 ++++
->  kernel/entry/syscall_user_dispatch.c          | 49 +++++++++++++++++++
->  kernel/ptrace.c                               |  9 ++++
->  5 files changed, 91 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-> index 60314953c728..a23ae21a1d5b 100644
-> --- a/Documentation/admin-guide/syscall-user-dispatch.rst
-> +++ b/Documentation/admin-guide/syscall-user-dispatch.rst
+>  certs/system_keyring.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index 5042cc54fa5e..865a0510fdeb 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -243,6 +243,12 @@ int verify_pkcs7_message_sig(const void *data, size_t len,
+>  	if (ret < 0)
+>  		goto error;
+>  
+> +	ret = is_key_on_revocation_list(pkcs7);
+> +	if (ret != -ENOKEY) {
+> +		pr_devel("PKCS#7 key is on revocation list\n");
+> +		goto error;
+> +	}
+> +
+>  	if (!trusted_keys) {
+>  		trusted_keys = builtin_trusted_keys;
+>  	} else if (trusted_keys == VERIFY_USE_SECONDARY_KEYRING) {
+> @@ -262,12 +268,6 @@ int verify_pkcs7_message_sig(const void *data, size_t len,
+>  			pr_devel("PKCS#7 platform keyring is not available\n");
+>  			goto error;
+>  		}
+> -
+> -		ret = is_key_on_revocation_list(pkcs7);
+> -		if (ret != -ENOKEY) {
+> -			pr_devel("PKCS#7 platform key is on revocation list\n");
+> -			goto error;
+> -		}
+>  	}
+>  	ret = pkcs7_validate_trust(pkcs7, trusted_keys);
+>  	if (ret < 0) {
+> -- 
+> 2.27.0
+> 
 
-<snip>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> +
-> +int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-> +               void __user *data)
-> +{
-> +       struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-> +       struct syscall_user_dispatch_config config;
-> +
-> +       if (size != sizeof(struct syscall_user_dispatch_config))
-> +               return -EINVAL;
-> +
-> +       if (sd->selector) {
-> +               config.mode = PR_SYS_DISPATCH_ON;
-> +               config.offset = sd->offset;
-> +               config.len = sd->len;
-> +               config.selector = sd->selector;
-> +               config.on_dispatch = sd->on_dispatch;
-> +       } else {
-
-This doesn't look right for me. selector is optional and if it is 0,
-it doesn't mean that
-mode is PR_SYS_DISPATCH_OFF, does it?
-
-> +               config.mode = PR_SYS_DISPATCH_OFF;
-> +               config.offset = 0;
-> +               config.len = 0;
-> +               config.selector = NULL;
-> +               config.on_dispatch = false;
-> +       }
-> +       if (copy_to_user(data, &config, sizeof(config)))
-> +               return -EFAULT;
-> +
-> +       return 0;
-> +}
-> +
+BR, Jarkko
