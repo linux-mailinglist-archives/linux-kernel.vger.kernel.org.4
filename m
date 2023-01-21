@@ -2,138 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7F3676844
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 20:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D55E5676846
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 20:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjAUTKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 14:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
+        id S229706AbjAUTNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 14:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjAUTKV (ORCPT
+        with ESMTP id S229526AbjAUTNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 14:10:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7E246B9
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674328178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NPIxC6UFVdw/MjrtfcvzuLHufLGHSjfY7C1EvrBunNo=;
-        b=K5Zqt0VSIac18zslftA3/mLwz4M9LH+6BblFAXh/0jfoMbBx0DufS4bMgXlOJppDQ2kYAt
-        T+X1wsPgzUSe7QSOWFW0noZ+xBJRYCer421ywjHKxJ1s++B/4OfM5hywoa78VqFCUJE5g0
-        0nyRYsQFLPS7At9s+bTY0zDnxJ21kSc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-396-BcgOs6STOOW9pVO0nN0cCQ-1; Sat, 21 Jan 2023 14:09:37 -0500
-X-MC-Unique: BcgOs6STOOW9pVO0nN0cCQ-1
-Received: by mail-wm1-f72.google.com with SMTP id k34-20020a05600c1ca200b003db30c3ed63so3128877wms.2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:09:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NPIxC6UFVdw/MjrtfcvzuLHufLGHSjfY7C1EvrBunNo=;
-        b=7MT55+Qk+Puff5Zk/EWpteOr0I1yD7dt2xsZlAyW52iivokd4B77krYyYQvpzfnN93
-         0Lsmz0bb9W1P7VYWZRtVtt0ZrN9zMsvFzHckZpMxtPRgQjzoThuwwlflDOsW7i7gF5up
-         qPd5hDeyj7ZJNxO+OdMQNzFThJ7hjYe+5SNK+g6kicTEkaA59X9zT19aJkEuisDmrQbB
-         Ik4oMJCh8NyQng0V1dO7WsAhYtEXpS3W/ti8cnEvrTF3Jw1nKacjsBBc3V+cd3zO8Rx7
-         9an0OzusMr674tZxf0/A1fjz2g4g5VX1Cvyt6nXfq34TbeMsmJ/MAQ9tb02wKk4kd9pJ
-         lAiA==
-X-Gm-Message-State: AFqh2kqmUqKUZ6nGt01MoL/x8QATK20vHZFZFUr6jDYtt4WaU+KZhabl
-        ZMwrzvU4MAmfjklFwIP+kS/OyDXVrONQAR0YSDdtY3y9vTggcjLZKDA/ksCJzZWUxwrHsM7WIou
-        L8VfWcam5Q503FpaNysE7Aw7IIMITpJVmo4scsSCyshuUZFFgVNfciizPh/dDaC/twoDP6eQbSE
-        s=
-X-Received: by 2002:a05:6000:79d:b0:2bf:95cc:7447 with SMTP id bu29-20020a056000079d00b002bf95cc7447mr4039186wrb.32.1674328175960;
-        Sat, 21 Jan 2023 11:09:35 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs01wKQXxokiKiCqH3FkcFM0EKVJSqBjYCIdWWOsWkHS1xKlwhPbFZ792GvPLrzWlGVivQDBQ==
-X-Received: by 2002:a05:6000:79d:b0:2bf:95cc:7447 with SMTP id bu29-20020a056000079d00b002bf95cc7447mr4039169wrb.32.1674328175669;
-        Sat, 21 Jan 2023 11:09:35 -0800 (PST)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id k5-20020adfd845000000b002bdd96d88b4sm23716899wrl.75.2023.01.21.11.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 11:09:35 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/ssd130x: Silence a `dubious: x & !y` warning
-Date:   Sat, 21 Jan 2023 20:09:30 +0100
-Message-Id: <20230121190930.2804224-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.39.0
+        Sat, 21 Jan 2023 14:13:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68596DBD1
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 11:12:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C4A2B8077E
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 19:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662FDC433D2;
+        Sat, 21 Jan 2023 19:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674328376;
+        bh=PdhfA3rRgIE2e0kyzwK3wCYUpNWtN8PfB8MESxPqJ+g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OI8JbQvzQZ0lJ8r2fM7Uo5WeX8XK4zEzTnirrkRLhCcn4Kl47QPVZ6G2A83YcE9gh
+         bSs0A5RSotc317g3JcOmNG4pgTkoX1RjQm911M4WrT6GyupS+at5Kr3TYSuLRvp8i+
+         psSBwKQ6250qaZy7MEs6fMW9YLA2aSyxRifEim0rdWdk4mNBf4B72iYM+toHLxlvp2
+         yAnx6Bv7BXSBDc7KHMmgo1eg4FSjdU5TUr9AJepjlHFYzkXI2wMp/7KHgDMm3kjU/d
+         UvgRgE6jHvGfPjp4HdiNuUJ5pHU/5LtYNJKmd5t+KjDGVyjX8yED6ySf9JEIIOHupE
+         ndfO4jLHvaQuQ==
+Date:   Sat, 21 Jan 2023 19:12:52 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/7] MPFS system controller/mailbox fixes
+Message-ID: <Y8w5NO9E/j/6eT5d@spud>
+References: <20230111134513.2495510-1-conor.dooley@microchip.com>
+ <CABb+yY3+83AP0B4RUGTabqjR=7rXJFMgAvXsM5Go3sz2RMJA1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zjBIZyBoxjBkWVzW"
+Content-Disposition: inline
+In-Reply-To: <CABb+yY3+83AP0B4RUGTabqjR=7rXJFMgAvXsM5Go3sz2RMJA1g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sparse tool complains with the following warning:
 
-$ make M=drivers/gpu/drm/solomon/ C=2
-  CC [M]  drivers/gpu/drm/solomon/ssd130x.o
-  CHECK   drivers/gpu/drm/solomon/ssd130x.c
-drivers/gpu/drm/solomon/ssd130x.c:363:21: warning: dubious: x & !y
+--zjBIZyBoxjBkWVzW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This seems to be a false positive in my opinion but still we can silence
-the tool while making the code easier to read. Let's also add a comment,
-to explain why the "com_seq" logical not is used rather than its value.
+On Sat, Jan 21, 2023 at 10:01:41AM -0600, Jassi Brar wrote:
+> On Wed, Jan 11, 2023 at 7:45 AM Conor Dooley <conor.dooley@microchip.com> wrote:
+> >
+> > In order to differentiate between the service succeeding & the system
+> > controller being inoperative or otherwise unable to function, I had to
+> > switch the controller to poll a busy bit in the system controller's
+> > registers to see if it has completed a service.
+> > This makes sense anyway, as the interrupt corresponds to "data ready"
+> > rather than "tx done", so I have changed the mailbox controller driver
+> > to do that & left the interrupt solely for signalling data ready.
+> > It just so happened that all of the services that I had worked with and
+> > tested up to this point were "infallible" & did not set a status, so the
+> > particular code paths were never tested.
+> >
+> > Jassi, the mailbox and soc patches depend on each other, as the change
+> > in what the interrupt is used for requires changing the client driver's
+> > behaviour too, as mbox_send_message() will now return when the system
+> > controller is no longer busy rather than when the data is ready.
+> > I'm happy to send the lot via the soc tree with your Ack and/or reivew,
+> > if that also works you?
+> >
+> Ok, let me review them and get back to you.
 
-Reported-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
----
+FYI, I did sent a v2 on Friday:
+https://lore.kernel.org/all/20230120143734.3438755-1-conor.dooley@microchip.com/
 
- drivers/gpu/drm/solomon/ssd130x.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+The change is just a timeout duration though.
 
-diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-index c3bf3a18302e..b16330a8b624 100644
---- a/drivers/gpu/drm/solomon/ssd130x.c
-+++ b/drivers/gpu/drm/solomon/ssd130x.c
-@@ -81,7 +81,7 @@
- #define SSD130X_SET_PRECHARGE_PERIOD2_MASK	GENMASK(7, 4)
- #define SSD130X_SET_PRECHARGE_PERIOD2_SET(val)	FIELD_PREP(SSD130X_SET_PRECHARGE_PERIOD2_MASK, (val))
- #define SSD130X_SET_COM_PINS_CONFIG1_MASK	GENMASK(4, 4)
--#define SSD130X_SET_COM_PINS_CONFIG1_SET(val)	FIELD_PREP(SSD130X_SET_COM_PINS_CONFIG1_MASK, !(val))
-+#define SSD130X_SET_COM_PINS_CONFIG1_SET(val)	FIELD_PREP(SSD130X_SET_COM_PINS_CONFIG1_MASK, (val))
- #define SSD130X_SET_COM_PINS_CONFIG2_MASK	GENMASK(5, 5)
- #define SSD130X_SET_COM_PINS_CONFIG2_SET(val)	FIELD_PREP(SSD130X_SET_COM_PINS_CONFIG2_MASK, (val))
- 
-@@ -298,6 +298,7 @@ static void ssd130x_power_off(struct ssd130x_device *ssd130x)
- static int ssd130x_init(struct ssd130x_device *ssd130x)
- {
- 	u32 precharge, dclk, com_invdir, compins, chargepump, seg_remap;
-+	bool scan_mode;
- 	int ret;
- 
- 	/* Set initial contrast */
-@@ -360,7 +361,13 @@ static int ssd130x_init(struct ssd130x_device *ssd130x)
- 
- 	/* Set COM pins configuration */
- 	compins = BIT(1);
--	compins |= (SSD130X_SET_COM_PINS_CONFIG1_SET(ssd130x->com_seq) |
-+	/*
-+	 * The COM scan mode field values are the inverse of the boolean DT
-+	 * property "solomon,com-seq". The value 0b means scan from COM0 to
-+	 * COM[N - 1] while 1b means scan from COM[N - 1] to COM0.
-+	 */
-+	scan_mode = !ssd130x->com_seq;
-+	compins |= (SSD130X_SET_COM_PINS_CONFIG1_SET(scan_mode) |
- 		    SSD130X_SET_COM_PINS_CONFIG2_SET(ssd130x->com_lrremap));
- 	ret = ssd130x_write_cmd(ssd130x, 2, SSD130X_SET_COM_PINS_CONFIG, compins);
- 	if (ret < 0)
--- 
-2.39.0
+> > Secondly, I have a question about what to do if a service does fail, but
+> > not due to a timeout - eg the above example where the "new" image for
+> > the FPGA is actually older than the one that currently exists.
+> > Ideally, if a service fails due to something other than the transaction
+> > timing out, I would go and read the status registers to see what the
+> > cause of failure was.
+> > I could not find a function in the mailbox framework that allows the
+> > client to request that sort of information from the client. Trying to
+> > do something with the auxiliary bus, or exporting some function to a
+> > device specific header seemed like a circumvention of the mailbox
+> > framework.
+> > Do you think it would be a good idea to implement something like
+> > mbox_client_peek_status(struct mbox_chan *chan, void *data) to allow
+> > clients to request this type of information?
+> >
+> .last_tx_done() is supposed to make sure everything is ok.
 
+Hm, might've explained badly as I think you've misunderstood. Or (see
+below) I might have mistakenly thought that last_tx_done() was only meant
+to signify that tx was done.
+
+Anyways, I'll try to clarify.
+Some services don't set a status, but whether a status is, or isn't,
+set has nothing to do with whether the service has completed.
+One service that sets a status is "Authenticate Bitstream". This
+service sets a status of 0x0 if the bitstream in question is okay _and_
+something that the FPGA can be upgraded to. It returns a failure of 0x18
+if the bitstream is valid _but_ is the same as that currently programmed.
+(and of course a whole host of other possible errors in-between)
+
+These statuses, and whether they are a bad outcome or not, is dependant
+on the service and I don't think should be handled in the mailbox
+controller driver.
+
+> If the expected status bit is "sometimes not set", that means that bit
+> is not the complete status.
+
+If the "busy" bit goes low, then the transmission must be complete,
+there should be no need to check other bits for *completion*, but...
+
+> You have to check multiple registers to
+> detect if and what caused the failure.
+
+...maybe I have just misunderstood the role of .last_tx_done(). The
+comment in mailbox-controller.h lead me to believe that it was used just
+to check if it had been completed.
+
+Am I allowed to use .last_tx_done() to pass information back to the
+mailbox client? If I could, that'd certainly be a nice way to get the
+information on whether the service failed etc.
+
+Hopefully that, plus when you have a chance to look at the code, will
+make what I am asking about a little clearer!
+
+Thanks,
+Conor.
+
+--zjBIZyBoxjBkWVzW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8w5NAAKCRB4tDGHoIJi
+0ldrAQCX/0J7YAojS3DUErApT7uUqiraS8RIYGqZRbdynr1LEwEAvPO8zM9NSaDV
+pwmyzML3LI7NGdK+VGFlODcPQTtXig4=
+=dVbB
+-----END PGP SIGNATURE-----
+
+--zjBIZyBoxjBkWVzW--
