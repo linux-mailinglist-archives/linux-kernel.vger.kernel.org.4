@@ -2,435 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E596167675E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA1C676763
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 17:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjAUQYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 11:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S229890AbjAUQ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 11:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjAUQY2 (ORCPT
+        with ESMTP id S229484AbjAUQ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 11:24:28 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79FD24489;
-        Sat, 21 Jan 2023 08:24:26 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso7797846wmc.4;
-        Sat, 21 Jan 2023 08:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Yh+G5HwZOj6jikshO2lhQlgFg4o0zJx6jgmWpS/nw0=;
-        b=YT+WHJbrjk5GwsQexAG4o0yzyee6lDGDZ13iwKJR9Z6/qWQw7KPWucb3g/mVOdWg0K
-         lK75pxCPdN6tX2LQHrKf7dDBON4fD7v3qXx9jsPvnf4nR078IBj9+CGB3CPkumG3jm0U
-         uqzYZza0BHlOxvAP4SZN3Nmb09b760glkooJSBnIZwss8M+ZWQaDi463ZDJo0E0E68JK
-         zP5z7VyPhj2Ywg7hMo8iSp4YhwfESoybFXgv6RgVG8w7iLXpDkAHnm0Za8JgIzyhPNAX
-         i7Il0ZRcCwpi7+dvnKiv6sRP7eaFMlGThx39HPV+VxWdHFgmAtqf4Mzal8+buMoi9Txs
-         hNbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Yh+G5HwZOj6jikshO2lhQlgFg4o0zJx6jgmWpS/nw0=;
-        b=5Htyu1PtFaKWGlgUk0G8RZgmYeFxR7rjcrn98eWuEnIBmquL8Gc5f+kKN2bx5NDXfO
-         zXxL24CHIZmDrg+lW1mNIFbuYFWYfx6G8dpmEJ8/rJTE6oIKNZKoxEJwsr424NRlfuKg
-         G83GrN7oCjLe5ConVLZwvB5AMzt/mHAcbAz9Hqp3X8ZJDua88hGEsuUdhkqnDITqN5nC
-         9B1kOsGfVpVnvhcuSgqUv93o431pjK4xGDMOg7z4/YNEPBXoztiv8LxOelV2kVluHX4W
-         U22ruCexVKQ9XMpTMWKAV67ZEYThYFPis7WIkpWIkhT4kQMqVHgpYUtnQThx0c3PP3Vd
-         f2hw==
-X-Gm-Message-State: AFqh2krbYssorc2/Sk5wKCXoIQMKgML1LPCOdPxjV/uQy4CYjNARwGON
-        wu2VS5DCAk5DcRozx5IQUEQ=
-X-Google-Smtp-Source: AMrXdXtnGedeelpmMIosPs8lv+0c0o73U+y/Q8w3V7TP/j8/PYDmwFA7ZY0MGk28b+bt9H0dEmFWbw==
-X-Received: by 2002:a05:600c:1c86:b0:3da:fa75:ce58 with SMTP id k6-20020a05600c1c8600b003dafa75ce58mr21913306wms.21.1674318265380;
-        Sat, 21 Jan 2023 08:24:25 -0800 (PST)
-Received: from localhost.localdomain (2a02-8428-46a0-7c01-43c0-f52a-beed-541b.rev.sfr.net. [2a02:8428:46a0:7c01:43c0:f52a:beed:541b])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003db30be4a54sm5831443wms.38.2023.01.21.08.24.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 08:24:24 -0800 (PST)
-From:   Christophe Branchereau <cbranchereau@gmail.com>
-To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, paul@crapouillou.net,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christophe Branchereau <cbranchereau@gmail.com>
-Subject: [PATCH v4 2/2] drm/panel: Add driver for the AUO A030JTN01 TFT LCD
-Date:   Sat, 21 Jan 2023 17:24:19 +0100
-Message-Id: <20230121162419.284523-3-cbranchereau@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230121162419.284523-1-cbranchereau@gmail.com>
-References: <20230121162419.284523-1-cbranchereau@gmail.com>
+        Sat, 21 Jan 2023 11:26:31 -0500
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F178024489;
+        Sat, 21 Jan 2023 08:26:27 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VZyXkiY_1674318382;
+Received: from 30.121.21.55(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VZyXkiY_1674318382)
+          by smtp.aliyun-inc.com;
+          Sun, 22 Jan 2023 00:26:23 +0800
+Message-ID: <7ee72d29-6ba6-77e6-7515-e710a26a1e0d@linux.alibaba.com>
+Date:   Sun, 22 Jan 2023 00:26:22 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Amir Goldstein <amir73il@gmail.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        david@fromorbit.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+References: <cover.1674227308.git.alexl@redhat.com>
+ <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <87ilh0g88n.fsf@redhat.com>
+ <CAOQ4uxi7wT09MPf+edS6AkJzBCxjzOnCTfcdwn===q-+G2C4Gw@mail.gmail.com>
+ <87cz78exub.fsf@redhat.com>
+ <CAOQ4uxi2W=HwoXbrLo3yePTGzMxb++EDLj-fAcQZgGWU5Pz3vQ@mail.gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CAOQ4uxi2W=HwoXbrLo3yePTGzMxb++EDLj-fAcQZgGWU5Pz3vQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for the AUO A030JTN01 panel, which is a 320x480 3.0" 4:3
-24-bit TFT LCD panel with non-square pixels and a delta-RGB 8-bit
-interface.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
----
- drivers/gpu/drm/panel/Kconfig               |   8 +
- drivers/gpu/drm/panel/Makefile              |   1 +
- drivers/gpu/drm/panel/panel-auo-a030jtn01.c | 308 ++++++++++++++++++++
- 3 files changed, 317 insertions(+)
- create mode 100644 drivers/gpu/drm/panel/panel-auo-a030jtn01.c
 
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 737edcdf9eef..23cf0f4ba2e6 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -8,6 +8,14 @@ config DRM_PANEL
- menu "Display Panels"
- 	depends on DRM && DRM_PANEL
- 
-+config DRM_PANEL_AUO_A030JTN01
-+	tristate "AUO A030JTN01"
-+	depends on SPI
-+	select REGMAP_SPI
-+	help
-+	  Say Y here to enable support for the AUO A030JTN01 320x480 3.0" panel
-+	  as found in the YLM RS-97 handheld gaming console.
-+
- config DRM_PANEL_ABT_Y030XX067A
- 	tristate "ABT Y030XX067A 320x480 LCD panel"
- 	depends on OF && SPI
-diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index f8f9d9f6a307..af88658abcab 100644
---- a/drivers/gpu/drm/panel/Makefile
-+++ b/drivers/gpu/drm/panel/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_DRM_PANEL_AUO_A030JTN01) += panel-auo-a030jtn01.o
- obj-$(CONFIG_DRM_PANEL_ABT_Y030XX067A) += panel-abt-y030xx067a.o
- obj-$(CONFIG_DRM_PANEL_ARM_VERSATILE) += panel-arm-versatile.o
- obj-$(CONFIG_DRM_PANEL_ASUS_Z00T_TM5P5_NT35596) += panel-asus-z00t-tm5p5-n35596.o
-diff --git a/drivers/gpu/drm/panel/panel-auo-a030jtn01.c b/drivers/gpu/drm/panel/panel-auo-a030jtn01.c
-new file mode 100644
-index 000000000000..3c976a98de6a
---- /dev/null
-+++ b/drivers/gpu/drm/panel/panel-auo-a030jtn01.c
-@@ -0,0 +1,308 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * AU Optronics A030JTN01.0 TFT LCD panel driver
-+ *
-+ * Copyright (C) 2023, Paul Cercueil <paul@crapouillou.net>
-+ * Copyright (C) 2023, Christophe Branchereau <cbranchereau@gmail.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/media-bus-format.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/spi/spi.h>
-+
-+#include <drm/drm_modes.h>
-+#include <drm/drm_panel.h>
-+
-+#define REG05			0x05
-+#define REG06			0x06
-+#define REG07			0x07
-+
-+#define REG05_STDBY		BIT(0)
-+#define REG06_VBLK		GENMASK(4, 0)
-+#define REG07_HBLK		GENMASK(7, 0)
-+
-+
-+struct a030jtn01_info {
-+	const struct drm_display_mode *display_modes;
-+	unsigned int num_modes;
-+	u16 width_mm, height_mm;
-+	u32 bus_format, bus_flags;
-+};
-+
-+struct a030jtn01 {
-+	struct drm_panel panel;
-+	struct spi_device *spi;
-+	struct regmap *map;
-+
-+	const struct a030jtn01_info *panel_info;
-+
-+	struct regulator *supply;
-+	struct gpio_desc *reset_gpio;
-+};
-+
-+static inline struct a030jtn01 *to_a030jtn01(struct drm_panel *panel)
-+{
-+	return container_of(panel, struct a030jtn01, panel);
-+}
-+
-+static int a030jtn01_prepare(struct drm_panel *panel)
-+{
-+	struct a030jtn01 *priv = to_a030jtn01(panel);
-+	struct device *dev = &priv->spi->dev;
-+	unsigned int dummy;
-+	int err;
-+
-+	err = regulator_enable(priv->supply);
-+	if (err) {
-+		dev_err(dev, "Failed to enable power supply: %d\n", err);
-+		return err;
-+	}
-+
-+	usleep_range(1000, 8000);
-+
-+	/* Reset the chip */
-+	gpiod_set_value_cansleep(priv->reset_gpio, 1);
-+	usleep_range(100, 8000);
-+	gpiod_set_value_cansleep(priv->reset_gpio, 0);
-+	usleep_range(2000, 8000);
-+
-+	/*
-+	 * No idea why, but a register read (doesn't matter which) is needed to
-+	 * properly initialize the chip after a reset; otherwise, the colors
-+	 * will be wrong. It doesn't seem to be timing-related as a msleep(200)
-+	 * doesn't fix it.
-+	 */
-+	err = regmap_read(priv->map, REG05, &dummy);
-+	if (err)
-+		goto err_disable_regulator;
-+
-+	/* Use (24 + 6) == 0x1e as the vertical back porch */
-+	err = regmap_write(priv->map, REG06, FIELD_PREP(REG06_VBLK, 0x1e));
-+	if (err)
-+		goto err_disable_regulator;
-+
-+	/* Use (42 + 30) * 3 == 0xd8 as the horizontal back porch */
-+	err = regmap_write(priv->map, REG07, FIELD_PREP(REG07_HBLK, 0xd8));
-+	if (err)
-+		goto err_disable_regulator;
-+
-+	return 0;
-+
-+err_disable_regulator:
-+	gpiod_set_value_cansleep(priv->reset_gpio, 1);
-+	regulator_disable(priv->supply);
-+	return err;
-+}
-+
-+static int a030jtn01_unprepare(struct drm_panel *panel)
-+{
-+	struct a030jtn01 *priv = to_a030jtn01(panel);
-+
-+	gpiod_set_value_cansleep(priv->reset_gpio, 1);
-+	regulator_disable(priv->supply);
-+
-+	return 0;
-+}
-+
-+static int a030jtn01_enable(struct drm_panel *panel)
-+{
-+	struct a030jtn01 *priv = to_a030jtn01(panel);
-+	int ret;
-+
-+	ret = regmap_set_bits(priv->map, REG05, REG05_STDBY);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for the picture to be stable */
-+	if (panel->backlight)
-+		msleep(100);
-+
-+	return 0;
-+}
-+
-+static int a030jtn01_disable(struct drm_panel *panel)
-+{
-+	struct a030jtn01 *priv = to_a030jtn01(panel);
-+
-+	return regmap_clear_bits(priv->map, REG05, REG05_STDBY);
-+}
-+
-+static int a030jtn01_get_modes(struct drm_panel *panel,
-+				struct drm_connector *connector)
-+{
-+	struct a030jtn01 *priv = to_a030jtn01(panel);
-+	const struct a030jtn01_info *panel_info = priv->panel_info;
-+	struct drm_display_mode *mode;
-+	unsigned int i;
-+
-+	for (i = 0; i < panel_info->num_modes; i++) {
-+		mode = drm_mode_duplicate(connector->dev,
-+					  &panel_info->display_modes[i]);
-+		if (!mode)
-+			return -ENOMEM;
-+
-+		drm_mode_set_name(mode);
-+
-+		mode->type = DRM_MODE_TYPE_DRIVER;
-+		if (panel_info->num_modes == 1)
-+			mode->type |= DRM_MODE_TYPE_PREFERRED;
-+
-+		drm_mode_probed_add(connector, mode);
-+	}
-+
-+	connector->display_info.bpc = 8;
-+	connector->display_info.width_mm = panel_info->width_mm;
-+	connector->display_info.height_mm = panel_info->height_mm;
-+
-+	drm_display_info_set_bus_formats(&connector->display_info,
-+					 &panel_info->bus_format, 1);
-+	connector->display_info.bus_flags = panel_info->bus_flags;
-+
-+	return panel_info->num_modes;
-+}
-+
-+static const struct drm_panel_funcs a030jtn01_funcs = {
-+	.prepare	= a030jtn01_prepare,
-+	.unprepare	= a030jtn01_unprepare,
-+	.enable		= a030jtn01_enable,
-+	.disable	= a030jtn01_disable,
-+	.get_modes	= a030jtn01_get_modes,
-+};
-+
-+static bool a030jtn01_has_reg(struct device *dev, unsigned int reg)
-+{
-+	static const u32 a030jtn01_regs_mask = 0x001823f1fb;
-+
-+	return a030jtn01_regs_mask & BIT(reg);
-+};
-+
-+static const struct regmap_config a030jtn01_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.read_flag_mask = 0x40,
-+	.max_register = 0x1c,
-+	.readable_reg = a030jtn01_has_reg,
-+	.writeable_reg = a030jtn01_has_reg,
-+};
-+
-+static int a030jtn01_probe(struct spi_device *spi)
-+{
-+	struct device *dev = &spi->dev;
-+	struct a030jtn01 *priv;
-+	int err;
-+
-+	spi->mode |= SPI_MODE_3 | SPI_3WIRE;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->spi = spi;
-+	spi_set_drvdata(spi, priv);
-+
-+	priv->map = devm_regmap_init_spi(spi, &a030jtn01_regmap_config);
-+	if (IS_ERR(priv->map))
-+		return dev_err_probe(dev, PTR_ERR(priv->map), "Unable to init regmap");
-+
-+	priv->panel_info = spi_get_device_match_data(spi);
-+	if (!priv->panel_info)
-+		return -EINVAL;
-+
-+	priv->supply = devm_regulator_get(dev, "power");
-+	if (IS_ERR(priv->supply))
-+		return dev_err_probe(dev, PTR_ERR(priv->supply), "Failed to get power supply");
-+
-+	priv->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(priv->reset_gpio), "Failed to get reset GPIO");
-+
-+	drm_panel_init(&priv->panel, dev, &a030jtn01_funcs,
-+		       DRM_MODE_CONNECTOR_DPI);
-+
-+	err = drm_panel_of_backlight(&priv->panel);
-+	if (err)
-+		return err;
-+
-+	drm_panel_add(&priv->panel);
-+
-+	return 0;
-+}
-+
-+static void a030jtn01_remove(struct spi_device *spi)
-+{
-+	struct a030jtn01 *priv = spi_get_drvdata(spi);
-+
-+	drm_panel_remove(&priv->panel);
-+	drm_panel_disable(&priv->panel);
-+	drm_panel_unprepare(&priv->panel);
-+}
-+
-+static const struct drm_display_mode a030jtn01_modes[] = {
-+	{ /* 60 Hz */
-+		.clock = 14400,
-+		.hdisplay = 320,
-+		.hsync_start = 320 + 8,
-+		.hsync_end = 320 + 8 + 42,
-+		.htotal = 320 + 8 + 42 + 30,
-+		.vdisplay = 480,
-+		.vsync_start = 480 + 90,
-+		.vsync_end = 480 + 90 + 24,
-+		.vtotal = 480 + 90 + 24 + 6,
-+		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
-+	},
-+	{ /* 50 Hz */
-+		.clock = 12000,
-+		.hdisplay = 320,
-+		.hsync_start = 320 + 8,
-+		.hsync_end = 320 + 8 + 42,
-+		.htotal = 320 + 8 + 42 + 30,
-+		.vdisplay = 480,
-+		.vsync_start = 480 + 90,
-+		.vsync_end = 480 + 90 + 24,
-+		.vtotal = 480 + 90 + 24 + 6,
-+		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
-+	},
-+};
-+
-+static const struct a030jtn01_info a030jtn01_info = {
-+	.display_modes = a030jtn01_modes,
-+	.num_modes = ARRAY_SIZE(a030jtn01_modes),
-+	.width_mm = 70,
-+	.height_mm = 51,
-+	.bus_format = MEDIA_BUS_FMT_RGB888_3X8_DELTA,
-+	.bus_flags = DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE,
-+};
-+
-+static const struct spi_device_id a030jtn01_id[] = {
-+	{ "a030jtn01", (kernel_ulong_t) &a030jtn01_info },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(spi, a030jtn01_id);
-+
-+static const struct of_device_id a030jtn01_of_match[] = {
-+	{ .compatible = "auo,a030jtn01" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, a030jtn01_of_match);
-+
-+static struct spi_driver a030jtn01_driver = {
-+	.driver = {
-+		.name = "auo-a030jtn01",
-+		.of_match_table = a030jtn01_of_match,
-+	},
-+	.id_table = a030jtn01_id,
-+	.probe = a030jtn01_probe,
-+	.remove = a030jtn01_remove,
-+};
-+module_spi_driver(a030jtn01_driver);
-+
-+MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-+MODULE_AUTHOR("Christophe Branchereau <cbranchereau@gmail.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.39.0
+On 2023/1/21 23:54, Amir Goldstein wrote:
+> On Sat, Jan 21, 2023 at 5:01 PM Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+>>
+>> Amir Goldstein <amir73il@gmail.com> writes:
+>>
+>>> On Sat, Jan 21, 2023 at 12:18 AM Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+>>>>
+>>>> Hi Amir,
+>>>>
+>>>> Amir Goldstein <amir73il@gmail.com> writes:
+>>>>
+>>>>> On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson <alexl@redhat.com> wrote:
+>>>>>>
+>>>>>> Giuseppe Scrivano and I have recently been working on a new project we
+>>>>>> call composefs. This is the first time we propose this publically and
+>>>>>> we would like some feedback on it.
+>>>>>>
+>>>>>> At its core, composefs is a way to construct and use read only images
+>>>>>> that are used similar to how you would use e.g. loop-back mounted
+>>>>>> squashfs images. On top of this composefs has two fundamental
+>>>>>> features. First it allows sharing of file data (both on disk and in
+>>>>>> page cache) between images, and secondly it has dm-verity like
+>>>>>> validation on read.
+>>>>>>
+>>>>>> Let me first start with a minimal example of how this can be used,
+>>>>>> before going into the details:
+>>>>>>
+>>>>>> Suppose we have this source for an image:
+>>>>>>
+>>>>>> rootfs/
+>>>>>> ├── dir
+>>>>>> │   └── another_a
+>>>>>> ├── file_a
+>>>>>> └── file_b
+>>>>>>
+>>>>>> We can then use this to generate an image file and a set of
+>>>>>> content-addressed backing files:
+>>>>>>
+>>>>>> # mkcomposefs --digest-store=objects rootfs/ rootfs.img
+>>>>>> # ls -l rootfs.img objects/*/*
+>>>>>> -rw-------. 1 root root   10 Nov 18 13:20 objects/02/927862b4ab9fb69919187bb78d394e235ce444eeb0a890d37e955827fe4bf4
+>>>>>> -rw-------. 1 root root   10 Nov 18 13:20 objects/cc/3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f
+>>>>>> -rw-r--r--. 1 root root 4228 Nov 18 13:20 rootfs.img
+>>>>>>
+>>>>>> The rootfs.img file contains all information about directory and file
+>>>>>> metadata plus references to the backing files by name. We can now
+>>>>>> mount this and look at the result:
+>>>>>>
+>>>>>> # mount -t composefs rootfs.img -o basedir=objects /mnt
+>>>>>> # ls  /mnt/
+>>>>>> dir  file_a  file_b
+>>>>>> # cat /mnt/file_a
+>>>>>> content_a
+>>>>>>
+>>>>>> When reading this file the kernel is actually reading the backing
+>>>>>> file, in a fashion similar to overlayfs. Since the backing file is
+>>>>>> content-addressed, the objects directory can be shared for multiple
+>>>>>> images, and any files that happen to have the same content are
+>>>>>> shared. I refer to this as opportunistic sharing, as it is different
+>>>>>> than the more course-grained explicit sharing used by e.g. container
+>>>>>> base images.
+>>>>>>
+>>>>>> The next step is the validation. Note how the object files have
+>>>>>> fs-verity enabled. In fact, they are named by their fs-verity digest:
+>>>>>>
+>>>>>> # fsverity digest objects/*/*
+>>>>>> sha256:02927862b4ab9fb69919187bb78d394e235ce444eeb0a890d37e955827fe4bf4 objects/02/927862b4ab9fb69919187bb78d394e235ce444eeb0a890d37e955827fe4bf4
+>>>>>> sha256:cc3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f objects/cc/3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f
+>>>>>>
+>>>>>> The generated filesystm image may contain the expected digest for the
+>>>>>> backing files. When the backing file digest is incorrect, the open
+>>>>>> will fail, and if the open succeeds, any other on-disk file-changes
+>>>>>> will be detected by fs-verity:
+>>>>>>
+>>>>>> # cat objects/cc/3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f
+>>>>>> content_a
+>>>>>> # rm -f objects/cc/3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f
+>>>>>> # echo modified > objects/cc/3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f
+>>>>>> # cat /mnt/file_a
+>>>>>> WARNING: composefs backing file '3da5b14909626fc99443f580e4d8c9b990e85e0a1d18883dc89b23d43e173f' unexpectedly had no fs-verity digest
+>>>>>> cat: /mnt/file_a: Input/output error
+>>>>>>
+>>>>>> This re-uses the existing fs-verity functionallity to protect against
+>>>>>> changes in file contents, while adding on top of it protection against
+>>>>>> changes in filesystem metadata and structure. I.e. protecting against
+>>>>>> replacing a fs-verity enabled file or modifying file permissions or
+>>>>>> xattrs.
+>>>>>>
+>>>>>> To be fully verified we need another step: we use fs-verity on the
+>>>>>> image itself. Then we pass the expected digest on the mount command
+>>>>>> line (which will be verified at mount time):
+>>>>>>
+>>>>>> # fsverity enable rootfs.img
+>>>>>> # fsverity digest rootfs.img
+>>>>>> sha256:da42003782992856240a3e25264b19601016114775debd80c01620260af86a76 rootfs.img
+>>>>>> # mount -t composefs rootfs.img -o basedir=objects,digest=da42003782992856240a3e25264b19601016114775debd80c01620260af86a76 /mnt
+>>>>>>
+>>>>>> So, given a trusted set of mount options (say unlocked from TPM), we
+>>>>>> have a fully verified filesystem tree mounted, with opportunistic
+>>>>>> finegrained sharing of identical files.
+>>>>>>
+>>>>>> So, why do we want this? There are two initial users. First of all we
+>>>>>> want to use the opportunistic sharing for the podman container image
+>>>>>> baselayer. The idea is to use a composefs mount as the lower directory
+>>>>>> in an overlay mount, with the upper directory being the container work
+>>>>>> dir. This will allow automatical file-level disk and page-cache
+>>>>>> sharning between any two images, independent of details like the
+>>>>>> permissions and timestamps of the files.
+>>>>>>
+>>>>>> Secondly we are interested in using the verification aspects of
+>>>>>> composefs in the ostree project. Ostree already supports a
+>>>>>> content-addressed object store, but it is currently referenced by
+>>>>>> hardlink farms. The object store and the trees that reference it are
+>>>>>> signed and verified at download time, but there is no runtime
+>>>>>> verification. If we replace the hardlink farm with a composefs image
+>>>>>> that points into the existing object store we can use the verification
+>>>>>> to implement runtime verification.
+>>>>>>
+>>>>>> In fact, the tooling to create composefs images is 100% reproducible,
+>>>>>> so all we need is to add the composefs image fs-verity digest into the
+>>>>>> ostree commit. Then the image can be reconstructed from the ostree
+>>>>>> commit info, generating a file with the same fs-verity digest.
+>>>>>>
+>>>>>> These are the usecases we're currently interested in, but there seems
+>>>>>> to be a breadth of other possible uses. For example, many systems use
+>>>>>> loopback mounts for images (like lxc or snap), and these could take
+>>>>>> advantage of the opportunistic sharing. We've also talked about using
+>>>>>> fuse to implement a local cache for the backing files. I.e. you would
+>>>>>> have the second basedir be a fuse filesystem. On lookup failure in the
+>>>>>> first basedir it downloads the file and saves it in the first basedir
+>>>>>> for later lookups. There are many interesting possibilities here.
+>>>>>>
+>>>>>> The patch series contains some documentation on the file format and
+>>>>>> how to use the filesystem.
+>>>>>>
+>>>>>> The userspace tools (and a standalone kernel module) is available
+>>>>>> here:
+>>>>>>    https://github.com/containers/composefs
+>>>>>>
+>>>>>> Initial work on ostree integration is here:
+>>>>>>    https://github.com/ostreedev/ostree/pull/2640
+>>>>>>
+>>>>>> Changes since v2:
+>>>>>> - Simplified filesystem format to use fixed size inodes. This resulted
+>>>>>>    in simpler (now < 2k lines) code as well as higher performance at
+>>>>>>    the cost of slightly (~40%) larger images.
+>>>>>> - We now use multi-page mappings from the page cache, which removes
+>>>>>>    limits on sizes of xattrs and makes the dirent handling code simpler.
+>>>>>> - Added more documentation about the on-disk file format.
+>>>>>> - General cleanups based on review comments.
+>>>>>>
+>>>>>
+>>>>> Hi Alexander,
+>>>>>
+>>>>> I must say that I am a little bit puzzled by this v3.
+>>>>> Gao, Christian and myself asked you questions on v2
+>>>>> that are not mentioned in v3 at all.
+>>>>>
+>>>>> To sum it up, please do not propose composefs without explaining
+>>>>> what are the barriers for achieving the exact same outcome with
+>>>>> the use of a read-only overlayfs with two lower layer -
+>>>>> uppermost with erofs containing the metadata files, which include
+>>>>> trusted.overlay.metacopy and trusted.overlay.redirect xattrs that refer
+>>>>> to the lowermost layer containing the content files.
+>>>>
+>>>> I think Dave explained quite well why using overlay is not comparable to
+>>>> what composefs does.
+>>>>
+>>>
+>>> Where? Can I get a link please?
+>>
+>> I am referring to this message: https://lore.kernel.org/lkml/20230118002242.GB937597@dread.disaster.area/
+>>
+> 
+> That is a good explanation why the current container runtime
+> overlay storage driver is inadequate, because the orchestration
+> requires untar of OCI tarball image before mounting overlayfs.
+> 
+> It is not a kernel issue, it is a userspace issue, because userspace
+> does not utilize overlayfs driver features that are now 6 years
+> old (redirect_dir) and 4 years old (metacopy).
+> 
+> I completely agree that reflink and hardlinks are not a viable solution
+> to ephemeral containers.
+> 
+>>> If there are good reasons why composefs is superior to erofs+overlayfs
+>>> Please include them in the submission, since several developers keep
+>>> raising the same questions - that is all I ask.
+>>>
+>>>> One big difference is that overlay still requires at least a syscall for
+>>>> each file in the image, and then we need the equivalent of "rm -rf" to
+>>>> clean it up.  It is somehow acceptable for long-running services, but it
+>>>> is not for "serverless" containers where images/containers are created
+>>>> and destroyed frequently.  So even in the case we already have all the
+>>>> image files available locally, we still need to create a checkout with
+>>>> the final structure we need for the image.
+>>>>
+>>>
+>>> I think you did not understand my suggestion:
+>>>
+>>> overlay read-only mount:
+>>>      layer 1: erofs mount of a precomposed image (same as mkcomposefs)
+>>>      layer 2: any pre-existing fs path with /blocks repository
+>>>      layer 3: any per-existing fs path with /blocks repository
+>>>      ...
+>>>
+>>> The mkcomposefs flow is exactly the same in this suggestion
+>>> the upper layer image is created without any syscalls and
+>>> removed without any syscalls.
+>>
+>> mkcomposefs is supposed to be used server side, when the image is built.
+>> The clients that will mount the image don't have to create it (at least
+>> for images that will provide the manifest).
+>>
+>> So this is quite different as in the overlay model we must create the
+>> layout, that is the equivalent of the composefs manifest, on any node
+>> the image is pulled to.
+>>
+> 
+> You don't need to re-create the erofs manifest on the client.
+> Unless I am completely missing something, the flow that I am
+> suggesting is drop-in replacement to what you have done.
+> 
+> IIUC, you invented an on-disk format for composefs manifest.
+> Is there anything preventing you from using the existing
+> erofs on-disk format to pack the manifest file?
+> The files in the manifest would be inodes with no blocks, only
+> with size and attributes and overlay xattrs with references to
+> the real object blocks, same as you would do with mkcomposefs.
+> Is it not?
 
+Yes, some EROFS special images work as all regular files with empty
+data and some overlay "trusted" xattrs included as lower dir would
+be ok.
+
+> 
+> Maybe what I am missing is how are the blob objects distributed?
+> Are they also shipped as composefs image bundles?
+> That can still be the case with erofs images that may contain both
+> blobs with data and metadata files referencing blobs in older images.
+
+Maybe just empty regular files in EROFS (or whatever else fs) with
+a magic "trusted.overlay.blablabla" xattr to point to the real file.
+
+> 
+>>> Overlayfs already has the feature of redirecting from upper layer
+>>> to relative paths in lower layers.
+>>
+>> Could you please provide more information on how you would compose the
+>> overlay image first?
+>>
+>>  From what I can see, it still requires at least one syscall for each
+>> file in the image to be created and these images are not portable to a
+>> different machine.
+> 
+> Terminology nuance - you do not create an overlayfs image on the server
+> you create an erofs image on the server, exactly as you would create
+> a composefs image on the server.
+> 
+> The shipped overlay "image" would then be the erofs image with
+> references to prereqisite images that contain the blobs and the digest
+> of the erofs image.
+> 
+> # mount -t composefs rootfs.img -o basedir=objects /mnt
+> 
+> client will do:
+> 
+> # mount -t erofs rootfs.img -o digest=da.... /metadata
+> # mount -t overlay -o ro,metacopy=on,lowerdir=/metadata:/objects /mnt
+
+Currently maybe not even introduce "-o digest", just loop+dm-verity for
+such manifest is already ok.
+
+> 
+>>
+>> Should we always make "/blocks" a whiteout to prevent it is leaked in
+>> the container?
+> 
+> That would be the simplest option, yes.
+> If needed we can also make it a hidden layer whose objects
+> never appear in the namespace and can only be referenced
+> from an upper layer redirection.
+> 
+>>
+>> And what prevents files under "/blocks" to be replaced with a different
+>> version?  I think fs-verity on the EROFS image itself won't cover it.
+>>
+> 
+> I think that part should be added to the overlayfs kernel driver.
+> We could enhance overlayfs to include optional "overlay.verity" digest
+> on the metacopy upper files to be fed into fsverity when opening lower
+> blob files that reside on an fsverity supported filesystem.
+
+Agreed, another overlayfs "trusted.overlay.verity" xattr in EROFS (or
+whatever else fs) for each empty regular files to do the same
+fsverity_get_digest() trick.  That would have the same impact IMO.
+
+Thanks,
+Gao Xiang
+
+...
+
+> 
+> Thanks,
+> Amir.
