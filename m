@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439E6676544
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 09:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAAA676549
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 09:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjAUIse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 03:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S229746AbjAUIyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 03:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjAUIsY (ORCPT
+        with ESMTP id S229637AbjAUIyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 03:48:24 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0BE86BC
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 00:48:22 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id cf42so11292495lfb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 00:48:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dXt2jMN4iiwvbP3cezivUWmGILp8z7wl3cRsehMoFJs=;
-        b=Hi2O4NBZvvBOV4Bd1H2hjc+Ae0VTfXBFsjgWAEHNwfRSkP5VjQ93B5NAj1xLf7KMYj
-         /4AKPG44ttdW3DqbjW/xJksDf44aOAcvJkzUzGrx684w3B3xczmV6HX0hFjtkjfwBYZD
-         z8DQ0ZBRhZAj313Bz99SuyRiCBNwRL8n1fj7QyslubxPglV7og9n2taXrjwFpV6drk3M
-         whrHhbRzNnPUbZK4GxYRNgt5GZiytnmf+Ya7kb58b/9TMqRse+dr2klfcS6A4S5z0GJx
-         inskJXrEq1qcaLwotE5zIClLGhMUmX7+JZQApjFOultbNEwIc43gpDt7nfyXFuSUNbqd
-         fwrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXt2jMN4iiwvbP3cezivUWmGILp8z7wl3cRsehMoFJs=;
-        b=G3iDa1qlNlD+EJ8QAOSTN0R7x6WAQWhdU/CZWG0I01WzmHB0R8d2Ram+Gm+vshfJt8
-         F8nr8A2+FBqBjcHjfka8zOl3I6pj/fqZ+LSYH8CgUjKOsytYHC1Jsm6PhDDl63cnyy/g
-         Np7vOvQPEybSGVe0/gd3NN3PY2iwk+17mTjhr++P+7HWkjPzbQAJZjoUKWr6YtGANmYG
-         QPf1lYD30834AgCZ5cBFPcAPuB8L2TE9Cn8RiU6spXKqfWasgkA8TQpeNE/+wqTPP2cV
-         dCyxj5NtTgjrUoByh/YYyWqo0h7Y9gPGmwBbMYt02I5fae+l8fMsyq0HCLQahev65003
-         wBTw==
-X-Gm-Message-State: AFqh2koeo7BMKIOP/fwURKiL1zDYJ0IlxavVV8s1Y4wKK/3+vQhV7WdH
-        43RzJbj2OcfofqEQNuEW7/jM4Q==
-X-Google-Smtp-Source: AMrXdXvhbE4+AgbmpnRt6d5WKodQ08h3f+9/7ZW7Jd/+s6rlai+GYUY3U4Lxc0p6ycKRb1lCOgXfCw==
-X-Received: by 2002:a05:6512:36c9:b0:4cc:6ca8:f308 with SMTP id e9-20020a05651236c900b004cc6ca8f308mr4110483lfs.37.1674290901157;
-        Sat, 21 Jan 2023 00:48:21 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id p9-20020a2eb7c9000000b0028b974ac450sm1343259ljo.18.2023.01.21.00.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Jan 2023 00:48:20 -0800 (PST)
-Message-ID: <3c63f52a-038f-6237-09b2-d1f44479611d@linaro.org>
-Date:   Sat, 21 Jan 2023 10:48:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 8/8] arm64: dts: qcom: sm8350: Hook up DSI1 to MDP
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Douglas Anderson <dianders@chromium.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, devicetree@vger.kernel.org
-References: <20230120210101.2146852-1-konrad.dybcio@linaro.org>
- <20230120210101.2146852-8-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230120210101.2146852-8-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sat, 21 Jan 2023 03:54:01 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D65765F00;
+        Sat, 21 Jan 2023 00:53:59 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30L8rhbr011764;
+        Sat, 21 Jan 2023 09:53:43 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
+Subject: [PATCH 0/2] selftests/nolibc: small simplification of test development phase
+Date:   Sat, 21 Jan 2023 09:53:18 +0100
+Message-Id: <20230121085320.11712-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2023 23:01, Konrad Dybcio wrote:
-> Somehow DSI1 was not hooked up to MDP resulting in it not working.
-> Fix it.
-> 
-> Fixes: d4a4410583ed ("arm64: dts: qcom: sm8350: Add display system nodes")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8350.dtsi | 8 ++++++++
->   1 file changed, 8 insertions(+)
+Hello Paul,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+while developing and testing the recent changes for errno/environ/auxv, I
+found that I wasn't relying on the kernel that much and that I was mostly
+using qemu in userland only with my local kernel.
+
+I figured that it was more convenient for this purpose than rebuilding an
+initramfs and kernel for a quick test, and decided to make this approach
+easier to use for everyone by adding a "run-user" target to the Makefile
+to do exactly this. E.g:
+
+Native build:
+  $ time make -C tools/testing/selftests/nolibc run-user
+  ...
+  make: Entering directory '/g/public/linux/master/tools/testing/selftests/nolibc'
+    MKDIR   sysroot/x86/include
+  make[1]: Entering directory '/g/public/linux/master/tools/include/nolibc'
+  make[2]: Entering directory '/g/public/linux/master'
+  make[2]: Leaving directory '/g/public/linux/master'
+  make[2]: Entering directory '/g/public/linux/master'
+    INSTALL /g/public/linux/master/tools/testing/selftests/nolibc/sysroot/sysroot/include
+  make[2]: Leaving directory '/g/public/linux/master'
+  make[1]: Leaving directory '/g/public/linux/master/tools/include/nolibc'
+    CC      nolibc-test
+  18 chroot_root = -1 EPERM               [FAIL]
+  43 link_dir = -1 EACCES  != (-1 EPERM)  [FAIL]
+  See all results in /g/public/linux/master/tools/testing/selftests/nolibc/run.out
+  make: Leaving directory '/g/public/linux/master/tools/testing/selftests/nolibc'
+
+  real    0m0.966s
+  user    0m0.731s
+  sys     0m0.164s
+
+Cross build:
+  $ time make -C tools/testing/selftests/nolibc run-user ARCH=s390 CROSS_COMPILE=/f/tc/nolibc/gcc-11.3.0-nolibc/s390-linux/bin/s390-linux-
+  make: Entering directory '/g/public/linux/master/tools/testing/selftests/nolibc'
+    MKDIR   sysroot/s390/include
+  make[1]: Entering directory '/g/public/linux/master/tools/include/nolibc'
+  make[2]: Entering directory '/g/public/linux/master'
+  make[2]: Leaving directory '/g/public/linux/master'
+  make[2]: Entering directory '/g/public/linux/master'
+    INSTALL /g/public/linux/master/tools/testing/selftests/nolibc/sysroot/sysroot/include
+  make[2]: Leaving directory '/g/public/linux/master'
+  make[1]: Leaving directory '/g/public/linux/master/tools/include/nolibc'
+    CC      nolibc-test
+  18 chroot_root = -1 EPERM               [FAIL]
+  43 link_dir = -1 EACCES  != (-1 EPERM)  [FAIL]
+  See all results in /g/public/linux/master/tools/testing/selftests/nolibc/run.out
+  make: Leaving directory '/g/public/linux/master/tools/testing/selftests/nolibc'
+
+  real    0m1.014s
+  user    0m0.732s
+  sys     0m0.183s
+
+In addition, the "x86_64" value for ARCH= is now supported as I got caught
+too many times with it not working in this subdir while it's used for the
+rest of the kernel ("x86" is used instead as coming from subarch.include).
+Generally you don't type it as x86_64 probably is the native build for most
+users, but when you start to test toolchains it's a different thing.
+
+There's no matter of urgency for these patches, they're just a bit of
+user-friendly stuff. As such, if you're fine with stacking them on top of
+what you already have for 6.3, that will be great, otherwise they can
+easily wait.
+
+Thank you!
+Willy
+
+[CCing Ammar who could benefit from this]
+
+---
+Willy Tarreau (2):
+  selftests/nolibc: support "x86_64" for arch name
+  selftests/nolibc: add a "run-user" target to test the program in user
+    land
+
+ tools/testing/selftests/nolibc/Makefile | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 -- 
-With best wishes
-Dmitry
+2.17.5
 
