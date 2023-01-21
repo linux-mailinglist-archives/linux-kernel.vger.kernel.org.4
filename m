@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425FE676921
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 21:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D18B676924
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 21:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjAUUTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 15:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S229972AbjAUUTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 15:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjAUUTB (ORCPT
+        with ESMTP id S229789AbjAUUTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 15:19:01 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431FD5FCA;
-        Sat, 21 Jan 2023 12:19:00 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id z11so10450599ede.1;
-        Sat, 21 Jan 2023 12:19:00 -0800 (PST)
+        Sat, 21 Jan 2023 15:19:04 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CC423653;
+        Sat, 21 Jan 2023 12:19:03 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g11so4920024eda.12;
+        Sat, 21 Jan 2023 12:19:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vwQ17Lcm2IqVHFAnePP290nHJ1hZODiXeBdsdtLFjw0=;
-        b=FUXXhdqANULg7ZotC2pLpEfJqS2F0W8GKHoIPlLcjHFCFPLSZUSgepsZotVvY7eGMw
-         5vVvC2b/qMx4OpJdm/r+6AQoChRHf/F/VaUPQuVVK76kGGpDfq2Hisa5WqrCx3R/agid
-         2KsW5yhLhIBWOJPTmMtEaaCN3RFEEjjNF4td9mtVXOhrG/5Ypr6ZKDAlqhcSyDOMxJHe
-         HdrA9qw7XbzOcwrGblNwXzvIaKKJc4Q3n/7g3eAYibqH2FOF1ILhaPeS/NGGOrntOQXg
-         YJmqURb56UN4YeLsT7Q1KgbLqQQ/6RJGXA0dV3iqfvOCiwv6carXW6TNedH9GtCCVkIj
-         bWYw==
+        bh=CH5ssNbMjjziLJwNcTMZ2d/eFIt2gMohhe8o5T2jQ1M=;
+        b=cmlPIsUKJIXzWwqnC4S5Q6Sh3AiU8MryNr3cqUXSVhP42gUD0VfJGZsO9FNpADkAVC
+         oyZWkecCioCu9CFyvvW4s4luOl1aSnKERWv1dsDFj2v8wwfSwFenA8UC4t/PtoXp8tSC
+         V4vnx8CcjfkLS7KBz3EeOLEmmHI6dyPb43ize4jsyIAzcmnr7XVMf9pAw2Qj8l+4RRjP
+         uaWlcfutQUME1qsMyRgJAmVL8FRjzl6ZtH56MV5Nq3iXHLS19sSlhgs0rlzPXLP9m34u
+         yEhcfZQfiKa8qjge/o5uu2RTRXy29JhSN2w6fRMFlbnSNsjZ7lqxbpddCHpjzHLN9S4B
+         2o+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vwQ17Lcm2IqVHFAnePP290nHJ1hZODiXeBdsdtLFjw0=;
-        b=IupvOcP/g/hskdDTPJu2BqdP4XUA8IQLoY3tZA3DtlmZj0Pl/PuJc8KnbJp/IkPE96
-         Lm5Y0B2Qo3qG6455mDrtzlJ55hST/ZFAm+rQl0KKY0Fp6o/2wsBuBISm3RAlZi295sW+
-         BWd/5S/FQ1J0nPDOkmsRs+BJrpRBzYIXeh4H+tfvAYutG2qOXCgJzoZ+jl2wFf6KvAU0
-         qnLwT7ctuBZkugZ45NI3bNG310NUvi1ccfkGTLvgrOtwC/z6XZVVjgpWyEn7t/JctUG7
-         1bUkPgaWdVb3X0CfVwVGpvo+kDxn/3GG8Hn8ZvMNpSEtCuPQYtiAuCux9fNLes9se3x/
-         LwUQ==
-X-Gm-Message-State: AFqh2kq9q1zV5gYIy9J2oyjCGpB9r9ljO5BnSSbmVzyAqrnt4FJtVvfj
-        spIWPts4/w5/PEXEd8s+oztIHN6VpVKFfw==
-X-Google-Smtp-Source: AMrXdXvGt++PN5EjA0ztBQb2c/gjgcgD4qFpNIX0JHL6I/yrpki+hm6vVeEIFzUneViDHYXRYrObXA==
-X-Received: by 2002:a05:6402:1cb2:b0:49e:f052:d9d3 with SMTP id cz18-20020a0564021cb200b0049ef052d9d3mr4793877edb.15.1674332338445;
-        Sat, 21 Jan 2023 12:18:58 -0800 (PST)
+        bh=CH5ssNbMjjziLJwNcTMZ2d/eFIt2gMohhe8o5T2jQ1M=;
+        b=SiBRVxelcAeYOj90hOOhMmNY8ZwtQnRQZMmo7Qzwpuo+s1cXfu82RT4qk9//rtBFvl
+         0S4nI5ex6EM1h98XuyrBz1On43UC92k+T4V3qkx6HlwQh8BoHnGezQ2+tBO3p9ZCBWxu
+         wtPSphQgyyVI/FfVv6njLdYk8srTbhl9/7EY21WtMph4iA6V4YVC18d9YMFLelOjwInF
+         xAhFfZsG8rhaEpcL5IORKgeQpZnluwA0qgtseeKqlR7dtZV1gEJnNYOFNXvr4YGCYRjA
+         sBHprYTC2JDjsoxFVIgRQoMEl3l4hfa+L6mPpG1NisYETSLsoNQyf6FesQfuft2/PWCI
+         JYlQ==
+X-Gm-Message-State: AFqh2kr/wTJkRQmI3mrEoJxVpLQSwLzd8Bft+H8mJfb+QJLCX+kKIsze
+        SUp1ohTSYTMsehuWxoVaM/TkyGIhmUj1aQ==
+X-Google-Smtp-Source: AMrXdXt2T1rSWy07cfoufrTsb4Ux/gRiVjdxbuoH6X7KzDV2UqKSIKXY976EzcAdpKOxcUNxlm2uFw==
+X-Received: by 2002:aa7:ccd3:0:b0:49d:f44f:7ef1 with SMTP id y19-20020aa7ccd3000000b0049df44f7ef1mr22672142edt.14.1674332341236;
+        Sat, 21 Jan 2023 12:19:01 -0800 (PST)
 Received: from localhost.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0047c6f3eccb2sm19203423edr.50.2023.01.21.12.18.57
+        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0047c6f3eccb2sm19203423edr.50.2023.01.21.12.18.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 12:18:58 -0800 (PST)
+        Sat, 21 Jan 2023 12:19:00 -0800 (PST)
 From:   Markuss Broks <markuss.broks@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Markuss Broks <markuss.broks@gmail.com>,
@@ -59,9 +59,9 @@ Cc:     Markuss Broks <markuss.broks@gmail.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 1/2] arm: dts: exynos5420: Use Exynos5420 compatible for the MIPI video phy
-Date:   Sat, 21 Jan 2023 22:18:42 +0200
-Message-Id: <20230121201844.46872-2-markuss.broks@gmail.com>
+Subject: [PATCH v2 2/2] arm: dts: exynos5800: Use Exynos5422 compatible for the DSI controller
+Date:   Sat, 21 Jan 2023 22:18:43 +0200
+Message-Id: <20230121201844.46872-3-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230121201844.46872-1-markuss.broks@gmail.com>
 References: <20230121201844.46872-1-markuss.broks@gmail.com>
@@ -77,28 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some reason, the driver adding support for Exynos5420 MIPI phy
-back in 2016 wasn't used on Exynos5420, which caused a kernel panic.
-Add the proper compatible for it.
+The driver adding support for Exynos5422/Exynos5800 DSI controller was
+merged in 2016, yet it wasn't actually used. Add a proper compatible
+for it.
 
 Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 ---
  arch/arm/boot/dts/exynos5420.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/exynos5800.dtsi | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-index 9f2523a873d9..62263eb91b3c 100644
+index 62263eb91b3c..b612468515eb 100644
 --- a/arch/arm/boot/dts/exynos5420.dtsi
 +++ b/arch/arm/boot/dts/exynos5420.dtsi
-@@ -592,7 +592,7 @@ dp_phy: dp-video-phy {
- 		};
- 
- 		mipi_phy: mipi-video-phy {
--			compatible = "samsung,s5pv210-mipi-video-phy";
-+			compatible = "samsung,exynos5420-mipi-video-phy";
- 			syscon = <&pmu_system_controller>;
+@@ -597,7 +597,7 @@ mipi_phy: mipi-video-phy {
  			#phy-cells = <1>;
  		};
+ 
+-		dsi@14500000 {
++		dsi: dsi@14500000 {
+ 			compatible = "samsung,exynos5410-mipi-dsi";
+ 			reg = <0x14500000 0x10000>;
+ 			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
+index 526729dad53f..8328ddb3b02f 100644
+--- a/arch/arm/boot/dts/exynos5800.dtsi
++++ b/arch/arm/boot/dts/exynos5800.dtsi
+@@ -148,6 +148,10 @@ opp-200000000 {
+ 	};
+ };
+ 
++&dsi {
++	compatible = "samsung,exynos5422-mipi-dsi";
++};
++
+ &mfc {
+ 	compatible = "samsung,mfc-v8";
+ };
 -- 
 2.39.0
 
