@@ -2,179 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E1767630E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 03:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D9D676320
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 03:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjAUCZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 21:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S229645AbjAUCjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 21:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjAUCZS (ORCPT
+        with ESMTP id S229461AbjAUCjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 21:25:18 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF52A75A13;
-        Fri, 20 Jan 2023 18:25:17 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30L2MFtm002522;
-        Sat, 21 Jan 2023 02:25:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ObQwEUHojmcN7NVHuaHrfHaFdonTaSYcQVjjOWt9m50=;
- b=dJaWYllNeIXriLuWompeWCzg7P6dgAYJByP1tgx34oQogKyIimjGsqyOmVoxZj4c0R6d
- m98IWwmx58FLTUPqgNSFGGv4jei28cbbpb+DFpdubGJcHKbFswJSrBGP1ZyeCtnT3jSY
- t1MpvpfwBayA6xqyBFvSElPQjwNDBDaDCqhv0owEg7TefzLHJKLRXmm1vsK4M1F4o2PY
- VVfYRtAdTxtSb7lTH2MPr7nQogb6gOlSzTnPatQYObpl1Nd/yy08aJ50TUbLEYcUGyQw
- j7gtB/W/PRZeCXDBe6819jXRl5/Ei4effmD/s/eYAdtpeQOkZcrPA8mu6KWHf/lJl8ml 8w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7yc60rda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 Jan 2023 02:25:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30L2P7qq003341
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 Jan 2023 02:25:07 GMT
-Received: from [10.216.48.43] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
- 2023 18:25:02 -0800
-Message-ID: <91dc8c42-3fda-1386-586a-59d0a9b6b153@quicinc.com>
-Date:   Sat, 21 Jan 2023 07:54:59 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fri, 20 Jan 2023 21:39:47 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD80A73EC8;
+        Fri, 20 Jan 2023 18:39:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674268786; x=1705804786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kkRU9+v7s3/jgXK0nwbwD2l2LkQPlCkqam5LVNMcsA8=;
+  b=ODrT4E915IEjILUY6xxVSjlgkULwKVS8rtva0BBKVdPto/uZ5Z4Xcecu
+   +NO/vNMZXzSF55aWN6x8NkvtJ6+vwhT5/C8HjFeruh7GkhqlZ4VehaGED
+   NVA3wgKFzeLNyXRwxlNV3bxQQWQ+X/3CfNmjCSJ0eZnUvTVyyjGD2qKa/
+   UyXFq9bi6ENDPp2VjsgwyWSVXZA3Am4V6nN2vr4sSXfkwDqN2er37bHb7
+   XgtW2wzLeonxp64FluDeKpbD5Ni+q1utWPnKOR2WUZ7wT0VueQbJTXiNd
+   a8y9+V2AOB0PD1o/O4v+Bm8bDuwVqhGIsCrBg5FJe2ukTtqYS07bHRxfz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="327021861"
+X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
+   d="scan'208";a="327021861"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 18:39:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="749566740"
+X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
+   d="scan'208";a="749566740"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2023 18:39:42 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJ3nB-0003HQ-2w;
+        Sat, 21 Jan 2023 02:39:41 +0000
+Date:   Sat, 21 Jan 2023 10:38:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-3-quic_kriskura@quicinc.com>
- <20230119003619.ane3weigd4ebsta6@synopsys.com>
- <20230120225719.3xau7vwlzxrtbnad@synopsys.com>
- <d2f541bd-ced6-d7b9-a2c3-43e78c249643@quicinc.com>
- <20230121021944.woat55q4qgq43ucq@synopsys.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230121021944.woat55q4qgq43ucq@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: y5E_NjjI1Ustae5r7sfEXPy44yksPhmd
-X-Proofpoint-ORIG-GUID: y5E_NjjI1Ustae5r7sfEXPy44yksPhmd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_13,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0 clxscore=1015
- mlxlogscore=943 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301210021
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
+Message-ID: <202301211057.EQa4jBtA-lkp@intel.com>
+References: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn,
 
+I love your patch! Yet something to improve:
 
-On 1/21/2023 7:49 AM, Thinh Nguyen wrote:
-> On Sat, Jan 21, 2023, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 1/21/2023 4:27 AM, Thinh Nguyen wrote:
->>> On Thu, Jan 19, 2023, Thinh Nguyen wrote:
->>>> Hi,
->>>>
->>>> On Sun, Jan 15, 2023, Krishna Kurapati wrote:
->>>>> Currently the DWC3 driver supports only single port controller
->>>>> which requires at most one HS and one SS PHY.
->>>>
->>>> Add note here that multi-port is for host mode for clarity.
->>>>
->>>>>
->>>>> But the DWC3 USB controller can be connected to multiple ports and
->>>>> each port can have their own PHYs. Each port of the multiport
->>>>> controller can either be HS+SS capable or HS only capable
->>>>> Proper quantification of them is required to modify GUSB2PHYCFG
->>>>> and GUSB3PIPECTL registers appropriately.
->>>>>
->>>>> Add support for detecting, obtaining and configuring phy's supported
->>>>> by a multiport controller and limit the max number of ports
->>>>> supported to 4.
->>>>>
->>>>> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
->>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>>> ---
->>>>>    drivers/usb/dwc3/core.c | 304 +++++++++++++++++++++++++++++-----------
->>>>>    drivers/usb/dwc3/core.h |  15 +-
->>>>>    drivers/usb/dwc3/drd.c  |  14 +-
->>>>>    3 files changed, 244 insertions(+), 89 deletions(-)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>> index 476b63618511..7e0a9a598dfd 100644
->>>>> --- a/drivers/usb/dwc3/core.c
->>>>> +++ b/drivers/usb/dwc3/core.c
->>>>> @@ -120,7 +120,7 @@ static void __dwc3_set_mode(struct work_struct *work)
->>>>>    {
->>>>>    	struct dwc3 *dwc = work_to_dwc(work);
->>>>>    	unsigned long flags;
->>>>> -	int ret;
->>>>> +	int ret, i;
->>>>
->>>> Can we declare variables in separate lines here and other places.
->>>>
->>>>>    	u32 reg;
->>>>>    	u32 desired_dr_role;
->>>>> @@ -200,8 +200,10 @@ static void __dwc3_set_mode(struct work_struct *work)
->>>>>    		} else {
->>>>>    			if (dwc->usb2_phy)
->>>>>    				otg_set_vbus(dwc->usb2_phy->otg, true);
->>>>> -			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
->>>>> -			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
->>>>> +			for (i = 0; i < dwc->num_ports; i++) {
->>>
->>> BTW, is num_ports the total of usb2 + usb3 ports?
->> Hi Thinh,
->>
->>    No, num_ports is just the total number of hw usb ports present (presuming
->> each port is hs capable, this is just the number of HS Phy's available).
->>
-> 
-> I see, thanks. Can you also make this clear in its description. I got
-> mixed up at some point for the equivalent of HCPARAMS1.MAXPORTS.
-> 
-> Thanks,
-> Thinh
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on robh/for-next broonie-sound/for-next linus/master v6.2-rc4]
+[cannot apply to next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sure, Will add this to commit text.
-But as you rightly mentioned, HCSPARAMS1 gives the total number of HS+SS 
-Phy's available (HCSPARAMS1.MAXPORTS). Is there a way to segregate this 
-value (to just number of hs and ss).
+url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20230119214749.4048933-5-quic_bjorande%40quicinc.com
+patch subject: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230121/202301211057.EQa4jBtA-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
+        git checkout 75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Regards,
-Krishna,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm64/boot/dts/qcom/sa8295p-adp.dts:502.1-16 Label or path pmm8540a_gpios not found
+   FATAL ERROR: Syntax error parsing input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
