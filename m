@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B41676378
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 04:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DC567637B
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 04:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjAUDkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 22:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S229715AbjAUDkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 22:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjAUDkG (ORCPT
+        with ESMTP id S229608AbjAUDkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 22:40:06 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F8A2D5F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 19:40:06 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id k18so6940529pll.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 19:40:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E0GuYQ0G2pHZ2CbzhRDvaQYe3yXi7QgsYoJRG+c3IfY=;
-        b=g9O69hSPUUH1UI04WY8Oj4LiUrVyYZZaB3AkX1QEvzudVMNV8FREOyJGsxcCuLPen/
-         W/VHgHR2CBfmWJQntj4arjevp2CYtiWY39sK7cVpyfztIxwxT81UC6ptUqM61bJmOkGc
-         RrvcLK+J43ektIPvssT5ULhHensowUmVBpUJoQLAteUtqe6OPGYEiWQbpFPUdFPTP1Hb
-         t4/hNh+hy6AdYMPlZrglexXDxnahHY3ax5P/EllOLmR/7hlcQKIoPa30NZFRNoLFz9KQ
-         rTtvoCWgnwCm2L93z3ckefpycnNyqn2kXHho795lyWFuFUEur+PH7vCbKx+Xe/B7Y8ok
-         H2mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E0GuYQ0G2pHZ2CbzhRDvaQYe3yXi7QgsYoJRG+c3IfY=;
-        b=TndtMPyJZrNF7CrME6taj9w//Llzoe4fm3zoDKUF0XSUyq1zwTQtbwDaZ/Qd8xuxxb
-         evMU7NsB4WmPVP0ed3swscsIY6wMPB1cswzQbrDPlpCppKUeA1NBNKn3NAuSNBgPCP+y
-         XiMaWFE4ixB/Hj3n05+1Nd9xnl81vX3VFnjbl91OCFudbNwUT+lf+1rak0C6BiQy1lg4
-         XCOZpedVyt1jMNK4B/6n4OnIimcKercgj8bIIbjb/3IQpSDsb1hwRm9RjFxo/TZ7HuQv
-         S7w5LssrMN5FeoLCiFnNefOEIz9idOZVs+t/u/8D0EmTll2YMG87oQuShl+v1e+JCfG1
-         T6Vw==
-X-Gm-Message-State: AFqh2krBmok6Bc+qBSIShAnQNWS8PWExnePijpYLzdp7ftOaQXcUK7Qc
-        h6om1yb+qXGrmnG2nmhx7ms=
-X-Google-Smtp-Source: AMrXdXvpGvfhQcKB1wwwgU3bg1uNVCaA2QiVeitPKOeP9jLqAhmC7DZISdyx3ps5i+MZ2i/ETs59vA==
-X-Received: by 2002:a17:902:f2ca:b0:193:2303:c9e5 with SMTP id h10-20020a170902f2ca00b001932303c9e5mr15667506plc.20.1674272405501;
-        Fri, 20 Jan 2023 19:40:05 -0800 (PST)
-Received: from hyeyoo.. ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902b18700b0019335832ee9sm23331274plr.179.2023.01.20.19.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 19:40:04 -0800 (PST)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH mm-unstable] lib/Kconfig.debug: do not enable DEBUG_PREEMPT by default
-Date:   Sat, 21 Jan 2023 12:39:42 +0900
-Message-Id: <20230121033942.350387-1-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 20 Jan 2023 22:40:49 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A716B40E9;
+        Fri, 20 Jan 2023 19:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674272448; x=1705808448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=76058+GAT2hqimIP8ccK9sXC5zs9L8sllpS9/nWoN0U=;
+  b=Zdw2SYpAHmbCm+wQx1RzBRyqYSJSqr/LAZABI5WBOCtzFN8yrbmUqXqM
+   KP2/MQV+xOFVR0sbf0Sv+NJ6KWMcv3KcCGnd2U+8c64je4kghgS6zVaEU
+   4qIiFieTnS9KKhTQt2VtBaTSHldLhuGKPd1ZQ1SR9sYBk8LAzOYo2cQL8
+   Pko0HLHHzrGiJUDGRhOs7q8RiymHMV4YxMSB+oBmI9fm55LG4HkwfwbcV
+   ULxTPJHzbW5lYrPowW+0w94SWHqOd4hW67nCDHvnZN7le4eoUH5XDmvXB
+   +FRg0RdYNJn9UYLGg5Ay4oY9b4Vlron00R8LYX5p4NXOKOzzzXunMS0gF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="306114227"
+X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
+   d="scan'208";a="306114227"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 19:40:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="906180541"
+X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
+   d="scan'208";a="906180541"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jan 2023 19:40:45 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJ4kG-0003LU-2P;
+        Sat, 21 Jan 2023 03:40:44 +0000
+Date:   Sat, 21 Jan 2023 11:39:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
+Message-ID: <202301211130.XOrJCPF2-lkp@intel.com>
+References: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119214749.4048933-5-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In workloads where this_cpu operations are frequently performed,
-enabling DEBUG_PREEMPT may result in significant increase in
-runtime overhead due to frequent invocation of
-__this_cpu_preempt_check() function.
+Hi Bjorn,
 
-This can be demonstrated through benchmarks such as hackbench where this
-configuration results in a 10% reduction in performance, primarily due to
-the added overhead within memcg charging path.
+I love your patch! Yet something to improve:
 
-Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
-of its potential impact on performance in some workloads.
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on robh/for-next broonie-sound/for-next linus/master v6.2-rc4]
+[cannot apply to next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-hackbench-process-sockets
-		      debug_preempt	 no_debug_preempt
-Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
-Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
-Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
-Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
-Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
-Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
-Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
-Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
-Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
+url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20230119214749.4048933-5-quic_bjorande%40quicinc.com
+patch subject: [PATCH 4/4] arm64: dts: qcom: sa8295p-adp: Add max20411 on i2c4
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230121/202301211130.XOrJCPF2-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bjorn-Andersson/dt-bindings-regulator-Describe-Maxim-MAX20411/20230120-061409
+        git checkout 75c5fbc70a2e2cbd360675e2dc0fb001b3ad6fdf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- lib/Kconfig.debug | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ddbfac2adf9c..f6f845a4b9ec 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1176,13 +1176,16 @@ config DEBUG_TIMEKEEPING
- config DEBUG_PREEMPT
- 	bool "Debug preemptible kernel"
- 	depends on DEBUG_KERNEL && PREEMPTION && TRACE_IRQFLAGS_SUPPORT
--	default y
- 	help
- 	  If you say Y here then the kernel will use a debug variant of the
- 	  commonly used smp_processor_id() function and will print warnings
- 	  if kernel code uses it in a preemption-unsafe way. Also, the kernel
- 	  will detect preemption count underflows.
- 
-+	  This option has potential to introduce high runtime overhead,
-+	  depending on workload as it triggers debugging routines for each
-+	  this_cpu operation. It should only be used for debugging purposes.
-+
- menu "Lock Debugging (spinlocks, mutexes, etc...)"
- 
- config LOCK_DEBUGGING_SUPPORT
+All errors (new ones prefixed by >>):
+
+   Error: arch/arm64/boot/dts/qcom/sa8295p-adp.dts:502.1-16 Label or path pmm8540a_gpios not found
+>> FATAL ERROR: Syntax error parsing input tree
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
