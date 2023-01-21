@@ -2,175 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115776761F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1725B6761F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 01:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjAUAPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 Jan 2023 19:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S229643AbjAUAQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 Jan 2023 19:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjAUAPl (ORCPT
+        with ESMTP id S229609AbjAUAQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:15:41 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FAB677A0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674260140; x=1705796140;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FH1f+g6FWH26Ox9x+EmAyoEpRxm1/VDa0KXQ2U7V8Xk=;
-  b=bTtI9uVrcD+mlYDSkLKzwjqDdCMg6FsthruuGbuPtuD8mtyR/WlOQgY6
-   UEFUmJKbc03qns/dUaCyCbhh/VeM+Mn6PWEtuxXPB6hjXpioYwUcsg1z7
-   cfGl350clpM7tyEOnP7IXd5dQOX6jiga+JHT1pYlHaGHpixzsyNHY4qAA
-   HuWtmd0b2S6prqeCZztVf2JZFF+aspoWiQYj/TERLBhxa2lA7ALVGstd5
-   DAscUyiknRZzYzGSp/bQioaSBa4BYrI7Usb9fjIXYj9tWYUs8dTLXZ02Y
-   1IZ2P97vbIOHxaW7D/kTbB+D/HcIvHUTqG+whJvvDQHzAMdgzpxv0Sqnr
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="323421101"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="323421101"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 16:15:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="749540565"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="749540565"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2023 16:15:35 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJ1Xi-00038g-1C;
-        Sat, 21 Jan 2023 00:15:34 +0000
-Date:   Sat, 21 Jan 2023 08:15:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 71439cf2e33836df937c8d7c6c64816e2c7f2595
-Message-ID: <63cb2e86.D2xWWTYYSGFki2Vq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 20 Jan 2023 19:16:06 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C8E8B753
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:16:05 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id a4-20020a5b0004000000b006fdc6aaec4fso7502373ybp.20
+        for <linux-kernel@vger.kernel.org>; Fri, 20 Jan 2023 16:16:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O13XsMhe3FapLxKaNj8MRbQZ1Bo+zuL+Id74AOAL1Xo=;
+        b=SaD8EG+wEFG08JNVIdCa38YUS+n1ExpCtEFt1+gN0wwtDDRTyXRmnHNuANZfM6N3h6
+         4IBqtaEOfPwcxWrnKGiStt3TMn2aujOR3KxkOBg8jZaJhNfMBmiBIYCrgFNLQaqWwjJp
+         M/GsqFEo8Dg61tRNkM13z0QFeGlQ9NDSsT5gqrArdWnABP9PxItopjLJk9otjMWepxIY
+         rw9hv2fRwV9vPaLfEVQi9HdrILpDDU+R3WGikfHOjxkzMSxE2a4URQDw4My4PFe77Wuj
+         N9/J+QdqUzn+aBKIXrisE+SWDBFNmxhVzfAw+z+wq9W1ITK+GtC3u+t4VJN+6DPYVtcF
+         4JEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O13XsMhe3FapLxKaNj8MRbQZ1Bo+zuL+Id74AOAL1Xo=;
+        b=0k+B9Thf77I0wXV5hNnIFlL0vUyY9urYwudl5VWRHcGIb1SOTIxtAj5HmzG/57Csh7
+         I4H9/Psklw/JADu3VrWWu3w66wp9KPqJ3C0KJ6PnanQXNKt4pndloV9EiJoeS+meC+3I
+         Rekbz/5qqb2bY2vCRqJkns4kqKsYOBjL7NgJ5gpmFrZZaSwjS+WCDpE1MtcpehtvWf9N
+         8IhvTkTYGQSZnIOoWksdNOE7CgQ7IN3nL48Wpz7z0aJiHyJDlVcSei+oNkBpw5fXPrl5
+         0IYBobbgCDSvVZ/tUrPHe7yX5XEbDLF2K5l5iTkuDuNRjfBoie4vmGQUzxpZYeizmhed
+         pfng==
+X-Gm-Message-State: AFqh2kphm9YMoRJY+z7g8r2X3jNueIXRO4qmwQPp7cEggm3KXT/gbYtZ
+        ddc/be+vLbrLl3rJVHVbDr8OCs04HAY3uq80VA==
+X-Google-Smtp-Source: AMrXdXvE4UxHSPt0jkUbjVScWwtHv+JfvxzKfDaUOpaJjockRZgYQA7m9flG5b3pUI8zx4lcw4+eDyS3Grl32fVvEw==
+X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
+ (user=ackerleytng job=sendgmr) by 2002:a05:690c:31c:b0:4fa:7af6:5321 with
+ SMTP id bg28-20020a05690c031c00b004fa7af65321mr1035841ywb.451.1674260164370;
+ Fri, 20 Jan 2023 16:16:04 -0800 (PST)
+Date:   Sat, 21 Jan 2023 00:15:11 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+Message-ID: <20230121001542.2472357-1-ackerleytng@google.com>
+Subject: [RFC PATCH v3 00/31] TDX KVM selftests
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
+        sagis@google.com, erdemaktas@google.com, afranji@google.com,
+        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
+        maz@kernel.org, bgardon@google.com, jmattson@google.com,
+        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
+        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
+        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
+        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
+        pshier@google.com, axelrasmussen@google.com,
+        zhenzhong.duan@intel.com, maciej.szmigiero@oracle.com,
+        like.xu@linux.intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 71439cf2e33836df937c8d7c6c64816e2c7f2595  locking/csd_lock: Remove per-CPU data indirection from CSD lock debugging
+Hello,
 
-elapsed time: 720m
+This is v3 of the patch series for TDX selftests.
 
-configs tested: 92
-configs skipped: 2
+It has been updated for Intel=E2=80=99s V10 of the TDX host patches which w=
+as
+proposed in https://lkml.org/lkml/2022/8/8/877
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The tree can be found at
+https://github.com/googleprodkernel/linux-cc/tree/tdx-selftests-rfc-v3/
 
-gcc tested configs:
-x86_64                            allnoconfig
-um                             i386_defconfig
-powerpc                           allnoconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-x86_64                              defconfig
-sh                               allmodconfig
-alpha                               defconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-s390                                defconfig
-x86_64                         rhel-8.3-kunit
-arm                                 defconfig
-mips                             allyesconfig
-s390                             allyesconfig
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-kvm
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-bpf
-arm                  randconfig-r046-20230119
-arc                  randconfig-r043-20230119
-m68k                             allyesconfig
-arm                              allyesconfig
-m68k                             allmodconfig
-arm64                            allyesconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                                defconfig
-i386                          randconfig-a014
-ia64                             allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                        randconfig-a004
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a002
-i386                          randconfig-a005
-x86_64                        randconfig-a006
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                             allyesconfig
-sh                           se7724_defconfig
-powerpc                      ppc6xx_defconfig
-loongarch                        alldefconfig
-sh                   sh7770_generic_defconfig
-nios2                               defconfig
-powerpc                   currituck_defconfig
-sparc                       sparc32_defconfig
-arm                           stm32_defconfig
-arm64                            alldefconfig
-arm                          exynos_defconfig
-sh                        sh7757lcr_defconfig
-m68k                        m5407c3_defconfig
-arc                              alldefconfig
-powerpc                       eiger_defconfig
-sh                             espt_defconfig
-i386                          randconfig-c001
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
+Changes from RFC v2:
 
-clang tested configs:
-x86_64                          rhel-8.3-rust
-riscv                randconfig-r042-20230119
-hexagon              randconfig-r041-20230119
-hexagon              randconfig-r045-20230119
-s390                 randconfig-r044-20230119
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-i386                          randconfig-a015
-x86_64                        randconfig-a003
-x86_64                        randconfig-a014
-i386                          randconfig-a006
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-mips                       lemote2f_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                     ksi8560_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                    ge_imp3a_defconfig
+Selftest setup now builds upon the KVM selftest framework when setting
+up the guest for testing. We now use the KVM selftest framework to
+build the guest page tables and load the ELF binary into guest memory.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Inlining of the entire guest image is no longer required and that
+allows us to cleanly separate code into different compilation units
+and be able to use proper assembly instead of inline assembly
+(addresses Sean=E2=80=99s comment).
+
+To achieve this, we take a dependency on the SEV VM tests:
+https://lore.kernel.org/lkml/20221018205845.770121-1-pgonda@google.com/T/. =
+Those
+patches provide functions for the host to allocate and track protected
+memory in the guest.
+
+In RFCv3, TDX selftest code is organized into:
+
++ headers in tools/testing/selftests/kvm/include/x86_64/tdx/
++ common code in tools/testing/selftests/kvm/lib/x86_64/tdx/
++ selftests in tools/testing/selftests/kvm/x86_64/tdx_*
+
+RFCv3 also adds additional selftests for UPM.
+
+Dependencies
+
++ Peter=E2=80=99s patches, which provide functions for the host to allocate
+  and track protected memory in the
+  guest. https://lore.kernel.org/lkml/20221018205845.770121-1-pgonda@google=
+.com/T/
++ Peter=E2=80=99s patches depend on Sean=E2=80=99s patches:
+    + https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-1-sea=
+njc@google.com/T/
+    + https://lore.kernel.org/lkml/20221006004512.666529-1-seanjc@google.co=
+m/T/
++ Proposed fixes for these these issues mentioned on the mailing list
+    + https://lore.kernel.org/lkml/36cde6d6-128d-884e-1447-09b08bb5de3d@int=
+el.com/
+    + https://lore.kernel.org/lkml/diqzedtubs0d.fsf@google.com/
+    + https://lore.kernel.org/lkml/67b782ee-c95c-d6bc-3cca-cdfe75f4bf6a@int=
+el.com/
+    + https://lore.kernel.org/lkml/diqzcz7cd983.fsf@ackerleytng-cloudtop-sg=
+.c.googlers.com/
+    + https://lore.kernel.org/linux-mm/20221116205025.1510291-1-ackerleytng=
+@google.com/
+
+Further work for this patch series/TODOs
+
++ Sean=E2=80=99s comments for the non-confidential UPM selftests patch seri=
+es
+  at https://lore.kernel.org/lkml/Y8dC8WDwEmYixJqt@google.com/T/#u apply
+  here as well
++ Add ucall support for TDX selftests
+
+I would also like to acknowledge the following people, who helped
+review or test patches in RFCv1 and RFCv2:
+
++ Sean Christopherson <seanjc@google.com>
++ Zhenzhong Duan <zhenzhong.duan@intel.com>
++ Peter Gonda <pgonda@google.com>
++ Andrew Jones <drjones@redhat.com>
++ Maxim Levitsky <mlevitsk@redhat.com>
++ Xiaoyao Li <xiaoyao.li@intel.com>
++ David Matlack <dmatlack@google.com>
++ Marc Orr <marcorr@google.com>
++ Isaku Yamahata <isaku.yamahata@gmail.com>
+
+Links to earlier patch series
+
++ RFC v1: https://lore.kernel.org/lkml/20210726183816.1343022-1-erdemaktas@=
+google.com/T/#u
++ RFC v2: https://lore.kernel.org/lkml/20220830222000.709028-1-sagis@google=
+.com/T/#u
+
+Ackerley Tng (14):
+  KVM: selftests: Add function to allow one-to-one GVA to GPA mappings
+  KVM: selftests: Expose function that sets up sregs based on VM's mode
+  KVM: selftests: Store initial stack address in struct kvm_vcpu
+  KVM: selftests: Refactor steps in vCPU descriptor table initialization
+  KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES to validate TDs'
+    attribute configuration
+  KVM: selftests: Require GCC to realign stacks on function entry
+  KVM: selftests: Add functions to allow mapping as shared
+  KVM: selftests: Add support for restricted memory
+  KVM: selftests: TDX: Update load_td_memory_region for VM memory backed
+    by restricted memfd
+  KVM: selftests: Expose _vm_vaddr_alloc
+  KVM: selftests: TDX: Add support for TDG.MEM.PAGE.ACCEPT
+  KVM: selftests: TDX: Add support for TDG.VP.VEINFO.GET
+  KVM: selftests: TDX: Add TDX UPM selftest
+  KVM: selftests: TDX: Add TDX UPM selftests for implicit conversion
+
+Erdem Aktas (4):
+  KVM: selftests: Add support for creating non-default type VMs
+  KVM: selftests: Add helper functions to create TDX VMs
+  KVM: selftests: TDX: Add TDX lifecycle test
+  KVM: selftests: TDX: Adding test case for TDX port IO
+
+Roger Wang (1):
+  KVM: selftests: TDX: Add TDG.VP.INFO test
+
+Ryan Afranji (2):
+  KVM: selftests: TDX: Verify the behavior when host consumes a TD
+    private memory
+  KVM: selftests: TDX: Add shared memory test
+
+Sagi Shahar (10):
+  KVM: selftests: TDX: Add report_fatal_error test
+  KVM: selftests: TDX: Add basic TDX CPUID test
+  KVM: selftests: TDX: Add basic get_td_vmcall_info test
+  KVM: selftests: TDX: Add TDX IO writes test
+  KVM: selftests: TDX: Add TDX IO reads test
+  KVM: selftests: TDX: Add TDX MSR read/write tests
+  KVM: selftests: TDX: Add TDX HLT exit test
+  KVM: selftests: TDX: Add TDX MMIO reads test
+  KVM: selftests: TDX: Add TDX MMIO writes test
+  KVM: selftests: TDX: Add TDX CPUID TDVMCALL test
+
+ tools/testing/selftests/kvm/.gitignore        |    3 +
+ tools/testing/selftests/kvm/Makefile          |   10 +-
+ .../selftests/kvm/include/kvm_util_base.h     |   43 +-
+ .../testing/selftests/kvm/include/test_util.h |    2 +
+ .../selftests/kvm/include/x86_64/processor.h  |    4 +
+ .../kvm/include/x86_64/tdx/td_boot.h          |   82 +
+ .../kvm/include/x86_64/tdx/td_boot_asm.h      |   16 +
+ .../selftests/kvm/include/x86_64/tdx/tdcall.h |   59 +
+ .../selftests/kvm/include/x86_64/tdx/tdx.h    |   65 +
+ .../kvm/include/x86_64/tdx/tdx_util.h         |   19 +
+ .../kvm/include/x86_64/tdx/test_util.h        |  164 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  123 +-
+ tools/testing/selftests/kvm/lib/test_util.c   |    7 +
+ .../selftests/kvm/lib/x86_64/processor.c      |   77 +-
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  |    2 +-
+ .../selftests/kvm/lib/x86_64/tdx/td_boot.S    |  101 ++
+ .../selftests/kvm/lib/x86_64/tdx/tdcall.S     |  158 ++
+ .../selftests/kvm/lib/x86_64/tdx/tdx.c        |  231 +++
+ .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   |  562 +++++++
+ .../selftests/kvm/lib/x86_64/tdx/test_util.c  |  101 ++
+ .../kvm/x86_64/tdx_shared_mem_test.c          |  137 ++
+ .../selftests/kvm/x86_64/tdx_upm_test.c       |  460 ++++++
+ .../selftests/kvm/x86_64/tdx_vm_tests.c       | 1329 +++++++++++++++++
+ 23 files changed, 3709 insertions(+), 46 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot.=
+h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/td_boot_=
+asm.h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/tdx_util=
+.h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/tdx/test_uti=
+l.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/td_boot.S
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdcall.S
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_shared_mem_test.=
+c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+
+--
+2.39.0.246.g2a6d74b583-goog
