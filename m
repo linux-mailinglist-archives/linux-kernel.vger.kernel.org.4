@@ -2,289 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A82A676707
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34653676721
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 16:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjAUPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 10:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        id S229776AbjAUP3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 10:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjAUPK1 (ORCPT
+        with ESMTP id S229653AbjAUP24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 10:10:27 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5593234FA;
-        Sat, 21 Jan 2023 07:10:25 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id bk15so20686619ejb.9;
-        Sat, 21 Jan 2023 07:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfTLTRbRZ/hpg7GJwMI9/8DsFVyW9rI61TePGTxtz9M=;
-        b=KrSPKmS09qpqHQr7sUwCLKg777685P4ZDEEsG1lHeb0qUsuT2HDGkPrhitvHpjUu/t
-         VJKgu2lXkyTLvKxtBGuNysSp4JLMV08C/qAamG+L20x/PYJQX01s/g7O56JCMdLDmTAh
-         6FjPg1ai9zHwe7neRK+nLwRayamMD/R/gyRUM4gFiUzYkm9xaZzBBW4wt2rIfCRposH5
-         GcFBQPR4N0DnIQ12HC8oYeyoQaGORpj1Wz2QPKDBQbd4IX+js3yEyX/wW2cFHkGcuy/F
-         v7FYUbKXa/HjqTgSOsBQxOlodp8e1sk2wEWhHFjDCOuGCyxNciA2C/YXwJjO+AuqLmgz
-         Cu3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bfTLTRbRZ/hpg7GJwMI9/8DsFVyW9rI61TePGTxtz9M=;
-        b=MmRmPtfiePmoilhQ1cXRHyl6Z8nNjfdEMY7uNV7B0zM2v2anzFAXI0RG57p6KpyA1E
-         Lmdlzd8Lr2HezQ+EIe5RllCjx+NefMvPAL702YTqt2ge99r+j8JfdSGVsQxyXWEmzRJI
-         n/Bn8WLvOrDkVCOrqWDbcu3YBpTNj/33CYj+DFq05SjrqUe3UM5uBNg6xyPOueTcclyj
-         0DVHF8C/f52gby3tCQpP83IUQrESdNL2TIidkzdg3BLrA8SGo8qP0HUEtm2bVBVpWADw
-         eFG0dTH2gkWaEDoysEOj2PG3NRRBxiqHtUg14GP/WmDi5K/7sLJrSuPupB3yHM3SYSQn
-         EReA==
-X-Gm-Message-State: AFqh2kq6NSCqGZMy+J7/HH/toAcgSzZw4zDwwx0yvhACAeDgy58Hf+29
-        xSxpkxDvXv1bKbtGnG2kmhFwL14INUHJezEUzaw=
-X-Google-Smtp-Source: AMrXdXsdO2/OAYC7SoSxzhcJCVKyAMAQ0sxpHyUR77rCL83GcmNV/0yKXXnBKN3xJ701cqQ4LiLtDJhHgcVSQmaHPis=
-X-Received: by 2002:a17:906:eb13:b0:84d:4cb1:2591 with SMTP id
- mb19-20020a170906eb1300b0084d4cb12591mr2708214ejb.202.1674313823986; Sat, 21
- Jan 2023 07:10:23 -0800 (PST)
+        Sat, 21 Jan 2023 10:28:56 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC79C2BF2F
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 07:28:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GYIE+KWjW91x4WD+WfEiKkvrQD3zAO1ilz+At5CGKyybAtew/cyIYfg2yf4wI7/I9I8VxkbZwki8OzUy2J3imj5TnV/ETlXp4GNLktfV54RVP9CBTnFjwvVS9X/C92HDe00cVX58Llu++wd+/PesYP+bNQbFVWaKLb0TOZCoYcs5XaFzzeeIAJ5NBETJXu0pptiTfm/RV+/VCPg6xqrHbUSajdSn87ThvPIT0oi+ZSiTA85psEeFEA4B+66ULibBSDyLe1lDcSn5FfyloWHeugRkxtfD85NHm93ttzxp09PgmuZEOFBryjflyNh5SE16gLmWy1VgWCpFR2kP/pX6Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NmNd72rmJuGRAgWmxXV7bUbvQ5oB1ewDHCzYuVXbEC8=;
+ b=MdirNRkne9O98TIQQ1qXv44MLrToV+uT1nxeaqufYsvLo8+uumSQji/bgBZ+7dRUhk7R1JUG9+xv6QgnH0oEO5L2vfUvam3gFjre03EcxPxmkW1vlE6NnFsOSQj2nOKaKrsNhi0039h1qwJ4ojPC5EXUETDl9A/cOhd6QSvIfNqdsRUv95osNI/iqy7cFOq4X7Bk7jyItD4bC5aUWQCn4cp8IVOzQ3yrwEp9hBmVoX7vPMzfBNIbo/TPUGGq7aYyjdNCZpf8qmnOKt5N3Z6M+qK8ftnDkIxNqKwxStb7/9SCxWrOIY7OCFt5WRnCSqI5cxh1ltKThCq0wdtd3YN6Aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NmNd72rmJuGRAgWmxXV7bUbvQ5oB1ewDHCzYuVXbEC8=;
+ b=A9+2/AiaY7NeAsUdooFSWSnj/NFzDhgq6gjeEGd+uLTCvFUy1WFmYe/o6IyW4gZqy/chYqTbJpqoAc+5zMDZeMOHPkH+cPnn0XnRWgNXErv39ZUIGNisNb6XkhYXMP4Zn/9gcX46Vjc7DNHGBNi1As2ve8gXiBHMuVAQ8+xn9MXy0oI44lB5mD6N8W5uY1YOZg/JEuoz6It6SfwsNBfyBqmK1dXO+2+e2cuu3NnrevMlFQcHG8d6Av/UzjqwnY2tsMDAJfx4b85eycavz+q139wZqxfcxibd12Z26XdixLuJPgm9wWEeEyAPHWnSCQVX7D1wuu3cFUuWN/ip5ft/Tg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12)
+ by DS7PR12MB6240.namprd12.prod.outlook.com (2603:10b6:8:94::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Sat, 21 Jan
+ 2023 15:28:50 +0000
+Received: from MN0PR12MB5762.namprd12.prod.outlook.com
+ ([fe80::a11:e220:e862:e216]) by MN0PR12MB5762.namprd12.prod.outlook.com
+ ([fe80::a11:e220:e862:e216%9]) with mapi id 15.20.6002.028; Sat, 21 Jan 2023
+ 15:28:50 +0000
+Message-ID: <29a33dfb-e70e-9ebf-ed60-ce04670dfe83@nvidia.com>
+Date:   Sat, 21 Jan 2023 09:28:47 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] KVM: arm64: vgic: Fix soft lockup during VM teardown
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20230118022348.4137094-1-sdonthineni@nvidia.com>
+ <863588njmt.wl-maz@kernel.org>
+ <28061ceb-a7ce-0aca-a97d-8227dcfe6800@nvidia.com>
+ <87bkmvdmna.wl-maz@kernel.org>
+ <2e0c971a-0199-ff0d-c13c-d007d9f03122@nvidia.com>
+ <86wn5imxm9.wl-maz@kernel.org>
+ <b3bf3a46-410b-a756-dfd9-ee74d5dc31e0@nvidia.com>
+ <86r0vpmn5q.wl-maz@kernel.org>
+From:   Shanker Donthineni <sdonthineni@nvidia.com>
+In-Reply-To: <86r0vpmn5q.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0223.namprd04.prod.outlook.com
+ (2603:10b6:806:127::18) To MN0PR12MB5762.namprd12.prod.outlook.com
+ (2603:10b6:208:375::12)
 MIME-Version: 1.0
-References: <CAAhV-H59FLAFGD8oDZGjXWgL2ei_L=rYAaFWWp1skUT9nUPVYg@mail.gmail.com>
- <20230120153644.GA636025@bhelgaas>
-In-Reply-To: <20230120153644.GA636025@bhelgaas>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 21 Jan 2023 23:10:09 +0800
-Message-ID: <CAAhV-H4LDn4YmM6Cwse-yjEeooeyqQ4Gy0gPxN0WS=H6KmuSJw@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB5762:EE_|DS7PR12MB6240:EE_
+X-MS-Office365-Filtering-Correlation-Id: 485559b3-4ca0-4df4-8c24-08dafbc43205
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wJtRcGT1NPCmtxTiUz5m5NI1Jp/Rx1QDSP+12m5f+KphrDG46FwTf3Cr+YazV7JU4NdUhpA/037IfauCG0FOclb9DG2owUlD2AjB3yMrplbNdXXaRV4ZOH+uB8hQ/Tl2NR1PpAAo1ApsSHR5oNWTbFJLcRQdz871mz34LnxTE4UprlfJr4QdPezK0LmVUI35VNJyEgDwWNfr8EYSVIdVlx0V/qEyku4jIgaYX/EXnlQm6xQ/A5q0Imk4wygiSudMNvNxc4u1PQ9mV2EeGYReQYTw/6PVCHUV27iX2FgpXJpi0pxeczTYfKDxywq4iyTFmSyOqfWinLkoUD+rOxCeDXZn16iiEI+R6LuE47ue8+U5Pa4h5jqmHiWzX5wc2FCYiDvGa5nbKdOClhB8LcbsY5o52P1NmOKplz7Eh+4+Eksi+by8jeCY+rKD6qdl8BkadiWwJaBVMDNieytNaeugvzUwA4vXvQ5brooI02wA5jLbJS9hIvr8IGFdNm2+K9XHsGOgfDy2LSd1fbDMFtJfi1WLZ7Gbr+rqO1PhW8i0NIKOev5V9HItCRWq8BQb+z06DNMDMMCYmK631ZqdVOsyD9fvDC5Cm2n0rZZD8rDjS7UAdabyeQEiKfESgJ5stf9yni/7uhlV+AVRSrox6VYNvdT21LzYrQLd/6C4OEXtLCwUEWxVtHBOEb80Eu1N8zsliExAQNAWQASuFY90OR0UqrvmdXLSJAmIV9rPQEc8PyI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5762.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(136003)(346002)(396003)(451199015)(86362001)(31696002)(2906002)(66476007)(186003)(26005)(6512007)(4326008)(66946007)(41300700001)(6916009)(8676002)(66556008)(2616005)(478600001)(6486002)(316002)(6506007)(53546011)(6666004)(54906003)(5660300002)(38100700002)(8936002)(7416002)(83380400001)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?citvV2crbWRwdC9HZ3JybURxYjQ2dXVJUFp4dE02MmhhcENqWEFqL0JSTFd6?=
+ =?utf-8?B?VVNwSHNMY210OVNIYkhneUIvY1pyY3FvbUhHYUYzRTg2bmQyTURqZFJqYVFr?=
+ =?utf-8?B?TXlnTHE4MnI4dzhsT1lTY0NYMnIwMGxlWlRBWFZSVFFKaGo4UzNlcmdKazNp?=
+ =?utf-8?B?RWtSd0VoZVRXWEY2MmZKN2toOVJDSlhXb082VHEyVkd0d29wRkZ3TkQvZThy?=
+ =?utf-8?B?a0Y1TDRmL2FJenJnYlRBK2gwWFluaUp1ZENmZzk4ZWl4d2psa0owYmw4Y3E5?=
+ =?utf-8?B?bDE3TUJmeTNzdGRLUjBjRXRDd0ZXa0tBUTVscmFUVkNKVzdTTHRKakk3NEdW?=
+ =?utf-8?B?RjJUeGxLdmhrWnN1bForL0pTWVlPNno2N3RnK1BFWUlrRnU0VUVRU2hKcVl3?=
+ =?utf-8?B?c1dBRmlkbGtkanZiOHp5ci81VHpIaWxmQTAwNERwaHRWVkJadWRQMmhOWXFN?=
+ =?utf-8?B?WWtxb1IwdTdZN2pEYzdrMXhmVzZib0lHa2F4WTY0RXVUVGVmL0lxRjF1T0s4?=
+ =?utf-8?B?MEFHaER2bFQ5RjFnb3RWZ3hySHdSUXVXcVd0T29QVURYWkY4b1dQR1pJV3kx?=
+ =?utf-8?B?bUwxbmFMMzF0VGl6UUNGOUJNN29ROFYrMExiZ0hRSEUydUZsSDA1MkZ0OERp?=
+ =?utf-8?B?UWVSTUs3dDQ1azhLREdGWStaSGhFamR2cTRSbkRNUlhRVUh1OHU4WlVUTjBz?=
+ =?utf-8?B?ZU95YVJZQk9VWVlyOHc3VkRsVzM3dCtqQ1N0WmFLd0QzcFl2SmVpOTY3VjBE?=
+ =?utf-8?B?VVUvVW1XRWtMd0Zrd09qRVhaNVdJMWUwRTZTSHRNWXVQSjlvVDltRUphUjU1?=
+ =?utf-8?B?THJENUhqTnkzRHZnYisxWWEvWGlxZUFBR001cFVoY01qandjRlhwOVRYR3Q5?=
+ =?utf-8?B?MkxmcGZ4c0ttRE14eHN2UkVveFJpV1dtWXZnT2pHeERjR3IvTW1URzB4Zi9t?=
+ =?utf-8?B?bHFkamZYYjlTb2RzMVVLeitJZGJLQk1TTFB1WHdRUHd2cjNHNTNQVDNHcXRT?=
+ =?utf-8?B?Ym1KbTN3MHFXL2xWQllNZmpJbTZ4N1BaOWluWWE3a0FHUGVEdGhRamgxOE84?=
+ =?utf-8?B?c21xRXg1bmV2UHBsaFJIeENleEF1TWp1MXRuZkh2TzV5YVdUT3k3UU5ocURP?=
+ =?utf-8?B?RVlPSzM1WmdiYTArbUs3M2RnRVhScW5VdmM3M1c5eklhZnFBbFlZL3ZLT0g0?=
+ =?utf-8?B?Q2xwWGk3Z1M2SmRKWk5ZS29BdU5sVXZUb29vbS9ZekRIeVJYa2ZoaE9iaENw?=
+ =?utf-8?B?STZoTjV6YU9Xc3d5OG5RVVFsMmNSWUJQTi92M1VKMzhJU3VYYU5CR0tNdlJ6?=
+ =?utf-8?B?ckhoamVSc01XSkM0a0VMRWhSMFV5Q0QvV1MrQTF1U21UZFVteGJiKzVzNTlh?=
+ =?utf-8?B?RXFQeDhTNStuNTNlWHNTZFRRbXFtSStVcUpwT0NLMUJ5OEYzWHM3c0U0V2d4?=
+ =?utf-8?B?aDZWRTI3Qk44bGhkalF1bllBMmNqWmg3VWl2Slo4Yms0K1ZQOVZ4eStSM28w?=
+ =?utf-8?B?eVZZUDV0akZvbmV4Ry9Ub3ZEemhHLzN2YnV4UWVmZUFSOXJ3bzRGRXBlMzVW?=
+ =?utf-8?B?NjlFV3o5TXNDTElTbVN1akZzZjFhZGZpTFFCNjEwd09kZjNpTkNlMTUzeFhJ?=
+ =?utf-8?B?ZW03RGtVSEprZ3pROVNCWjcrZFZ3YWpRM0Z0NlZEeHp5S3dTeFkvc0I2R1ds?=
+ =?utf-8?B?d0RiOGhqOTNsZlpoMW9uUU1CNllldVorMjdkYmpQdm5TYzJwc0F6aW9yS2JC?=
+ =?utf-8?B?WmN3aTNncVkzZWxFeDJoODJEZGQ3cTFqQzJDcHQ3bnNlR2tueXpRblFaOFZH?=
+ =?utf-8?B?dkg2NXBWZW1mTTk5enhmS2V4NGx4OVpEQXRkbXpCRVh3TW0vbDViWFdZYVlj?=
+ =?utf-8?B?SDFldEY4Z1IybGRoQzJuM09QcVduZkdKdE5IVjV5TTRndDk4dzhQTkR5aXpr?=
+ =?utf-8?B?TG5acjdwdGVjaG13UnA1UVNaWVFjQzBEYldYN2xkc2swSnhuemNTbWpTR1JO?=
+ =?utf-8?B?R0k2SThZTndaSElMMjFMeW5LR2p5dE5ZRVB5eU5Gd0hUc0QvQk1ldW5FWUpv?=
+ =?utf-8?B?Y0J0QVMxaW5HNjYweGVPajRSamJ1YnVaTXpRNGFPSFRub2NyZE1nYlliajJl?=
+ =?utf-8?B?NkpMVXZNUlZrQjlyMlFVUk5XeTl1NlhzUTJLVHBtUzdCZ3MrUjdHWlJsbmZo?=
+ =?utf-8?B?VXc9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 485559b3-4ca0-4df4-8c24-08dafbc43205
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5762.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2023 15:28:49.9776
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bPbIVzQq9yF+zeAL2Rm62uYokzKP0S1zqDJd8EOtzc6PgANXScwhotBtmxPIPGLov526aP8mOeE5OxXxAQ5q4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6240
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 11:36 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Jan 20, 2023 at 09:31:43PM +0800, Huacai Chen wrote:
-> > On Thu, Jan 19, 2023 at 8:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Thu, Jan 19, 2023 at 08:25:20PM +0800, Huacai Chen wrote:
-> > > > Ping?
-> > >
-> > > I suggested another possible way to do this that wasn't so much of a
-> > > special case.  Did you explore that at all?
-> >
-> > That is a little difficult for me, but what is worse is that the root
-> > cause doesn't come from gpu or console drivers, but from the root
-> > port. That means: even if we can workaround the gpu issue in another
-> > way, there are still problems on other devices. Besides the graphics
-> > card, the most frequent problematic device is the sata controller
-> > connected on LS7A chipset, there are incomplete I/O accesses after the
-> > root port disabled and also cause reboot failure.
->
-> Yes, SATA sounds like another case where we want to use the device
-> after we call the driver's remove/shutdown method.  That's not
-> *worse*, it's just another case where we might have to mark devices
-> for special handling.
-That needs too much effort because we need to modify nearly every pci
-driver, and it exceeds my ability. :)
 
->
-> If we remove/shutdown *any* Root Port, not just LS7A, I think the idea
-> of assuming downstream devices can continue to work as usual is a
-> little suspect.  They might continue to work by accident today, but it
-> doesn't seem like a robust design.
-The existing design works for so many years, so it is mostly
-reasonable. For the LS7A case, the root cause comes from the root
-port, so a workaround on the root port seems somewhat reasonable.
 
-Huacai
->
-> > > I know there's no *existing* way to mark devices that we need to use
-> > > all the way through shutdown or reboot, but if it makes sense, there's
-> > > no reason we couldn't add one.  That has the potential of being more
-> > > generic, e.g., we could do it for all console devices, as opposed to
-> > > quirking a Root Port that just happens to be in the path to the
-> > > console.
-> > >
-> > > > On Sat, Jan 7, 2023 at 10:25 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > > > On Fri, Jan 6, 2023 at 11:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
-> > > > > > > After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe
-> > > > > > > services during shutdown") we observe poweroff/reboot
-> > > > > > > failures on systems with LS7A chipset.
-> > > > > > >
-> > > > > > > We found that if we remove "pci_command &=
-> > > > > > > ~PCI_COMMAND_MASTER" in do_pci_disable_device(), it can
-> > > > > > > work well. The hardware engineer says that the root cause
-> > > > > > > is that CPU is still accessing PCIe devices while
-> > > > > > > poweroff/reboot, and if we disable the Bus Master Bit at
-> > > > > > > this time, the PCIe controller doesn't forward requests to
-> > > > > > > downstream devices, and also does not send TIMEOUT to CPU,
-> > > > > > > which causes CPU wait forever (hardware deadlock).
-> > > > > > >
-> > > > > > > To be clear, the sequence is like this:
-> > > > > > >
-> > > > > > >   - CPU issues MMIO read to device below Root Port
-> > > > > > >
-> > > > > > >   - LS7A Root Port fails to forward transaction to secondary bus
-> > > > > > >     because of LS7A Bus Master defect
-> > > > > > >
-> > > > > > >   - CPU hangs waiting for response to MMIO read
-> > > > > > >
-> > > > > > > Then how is userspace able to use a device after the
-> > > > > > > device is removed?
-> > > > > > >
-> > > > > > > To give more details, let's take the graphics driver (e.g.
-> > > > > > > amdgpu) as an example. The userspace programs call
-> > > > > > > printf() to display "shutting down xxx service" during
-> > > > > > > shutdown/reboot, or the kernel calls printk() to display
-> > > > > > > something during shutdown/reboot. These can happen at any
-> > > > > > > time, even after we call pcie_port_device_remove() to
-> > > > > > > disable the pcie port on the graphic card.
-> > > > > > >
-> > > > > > > The call stack is: printk() --> call_console_drivers() -->
-> > > > > > > con->write() --> vt_console_print() --> fbcon_putcs()
-> > > > > > >
-> > > > > > > This scenario happens because userspace programs (or the
-> > > > > > > kernel itself) don't know whether a device is 'usable',
-> > > > > > > they just use it, at any time.
-> > > > > >
-> > > > > > Thanks for this background.  So basically we want to call
-> > > > > > .remove() on a console device (or a bridge leading to it),
-> > > > > > but we expect it to keep working as usual afterwards?
-> > > > > >
-> > > > > > That seems a little weird.  Is that the design we want?
-> > > > > > Maybe we should have a way to mark devices so we don't
-> > > > > > remove them during shutdown or reboot?
-> > > > >
-> > > > > Sounds reasonable, but it seems no existing way can mark this.
-> > > > >
-> > > > > Huacai
-> > > > > >
-> > > > > > > This hardware behavior is a PCIe protocol violation (Bus Master should
-> > > > > > > not be involved in CPU MMIO transactions), and it will be fixed in new
-> > > > > > > revisions of hardware (add timeout mechanism for CPU read request,
-> > > > > > > whether or not Bus Master bit is cleared).
-> > > > > > >
-> > > > > > > On some x86 platforms, radeon/amdgpu devices can cause similar problems
-> > > > > > > [1][2]. Once before I wanted to make a single patch to solve "all of
-> > > > > > > these problems" together, but it seems unreasonable because maybe they
-> > > > > > > are not exactly the same problem. So, this patch add a new function
-> > > > > > > pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
-> > > > > > > dedicated for the shutdown path, and then add a quirk just for LS7A to
-> > > > > > > avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
-> > > > > > > platforms behave as before.
-> > > > > > >
-> > > > > > > [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
-> > > > > > > [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
-> > > > > > >
-> > > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > > > > ---
-> > > > > > >  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
-> > > > > > >  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
-> > > > > > >  include/linux/pci.h                   |  1 +
-> > > > > > >  3 files changed, 37 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> > > > > > > index 759ec211c17b..641308ba4126 100644
-> > > > > > > --- a/drivers/pci/controller/pci-loongson.c
-> > > > > > > +++ b/drivers/pci/controller/pci-loongson.c
-> > > > > > > @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > >                       DEV_PCIE_PORT_2, loongson_mrrs_quirk);
-> > > > > > >
-> > > > > > > +static void loongson_bmaster_quirk(struct pci_dev *pdev)
-> > > > > > > +{
-> > > > > > > +     /*
-> > > > > > > +      * Some Loongson PCIe ports will cause CPU deadlock if there is
-> > > > > > > +      * MMIO access to a downstream device when the root port disable
-> > > > > > > +      * the Bus Master bit during poweroff/reboot.
-> > > > > > > +      */
-> > > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
-> > > > > > > +
-> > > > > > > +     bridge->no_dis_bmaster = 1;
-> > > > > > > +}
-> > > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > > +                     DEV_PCIE_PORT_0, loongson_bmaster_quirk);
-> > > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > > +                     DEV_PCIE_PORT_1, loongson_bmaster_quirk);
-> > > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> > > > > > > +                     DEV_PCIE_PORT_2, loongson_bmaster_quirk);
-> > > > > > > +
-> > > > > > >  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
-> > > > > > >  {
-> > > > > > >       pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
-> > > > > > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> > > > > > > index 2cc2e60bcb39..96f45c444422 100644
-> > > > > > > --- a/drivers/pci/pcie/portdrv.c
-> > > > > > > +++ b/drivers/pci/pcie/portdrv.c
-> > > > > > > @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
-> > > > > > >  {
-> > > > > > >       device_for_each_child(&dev->dev, NULL, remove_iter);
-> > > > > > >       pci_free_irq_vectors(dev);
-> > > > > > > -     pci_disable_device(dev);
-> > > > > > >  }
-> > > > > > >
-> > > > > > >  /**
-> > > > > > > @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
-> > > > > > >       }
-> > > > > > >
-> > > > > > >       pcie_port_device_remove(dev);
-> > > > > > > +
-> > > > > > > +     pci_disable_device(dev);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +static void pcie_portdrv_shutdown(struct pci_dev *dev)
-> > > > > > > +{
-> > > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
-> > > > > > > +
-> > > > > > > +     if (pci_bridge_d3_possible(dev)) {
-> > > > > > > +             pm_runtime_forbid(&dev->dev);
-> > > > > > > +             pm_runtime_get_noresume(&dev->dev);
-> > > > > > > +             pm_runtime_dont_use_autosuspend(&dev->dev);
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > > +     pcie_port_device_remove(dev);
-> > > > > > > +
-> > > > > > > +     if (!bridge->no_dis_bmaster)
-> > > > > > > +             pci_disable_device(dev);
-> > > > > > >  }
-> > > > > > >
-> > > > > > >  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
-> > > > > > > @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
-> > > > > > >
-> > > > > > >       .probe          = pcie_portdrv_probe,
-> > > > > > >       .remove         = pcie_portdrv_remove,
-> > > > > > > -     .shutdown       = pcie_portdrv_remove,
-> > > > > > > +     .shutdown       = pcie_portdrv_shutdown,
-> > > > > > >
-> > > > > > >       .err_handler    = &pcie_portdrv_err_handler,
-> > > > > > >
-> > > > > > > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > > > > > > index 3df2049ec4a8..a64dbcb89231 100644
-> > > > > > > --- a/include/linux/pci.h
-> > > > > > > +++ b/include/linux/pci.h
-> > > > > > > @@ -573,6 +573,7 @@ struct pci_host_bridge {
-> > > > > > >       unsigned int    ignore_reset_delay:1;   /* For entire hierarchy */
-> > > > > > >       unsigned int    no_ext_tags:1;          /* No Extended Tags */
-> > > > > > >       unsigned int    no_inc_mrrs:1;          /* No Increase MRRS */
-> > > > > > > +     unsigned int    no_dis_bmaster:1;       /* No Disable Bus Master */
-> > > > > > >       unsigned int    native_aer:1;           /* OS may use PCIe AER */
-> > > > > > >       unsigned int    native_pcie_hotplug:1;  /* OS may use PCIe hotplug */
-> > > > > > >       unsigned int    native_shpc_hotplug:1;  /* OS may use SHPC hotplug */
-> > > > > > > --
-> > > > > > > 2.31.1
-> > > > > > >
+On 1/20/23 06:00, Marc Zyngier wrote:
+> What I am asking agin is: is there any overlap between any vgic ioctl
+> and the teardown of the VM? Do you ever see kvm_vm_release() being
+> called before kvm_device_release()?
+> 
+> Because that's the overlap I've been talking all along.
+
+I've not observed overlap of kvm_vm_release() with ioctls kvm_device_ioctl(),
+kvm_vcpu_ioctl() and kvm_vm_ioctl() for 3hrs. Test created hundreds of VMs and
+teardowns.
+
+
+Debug code:
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 4f26b244f6d0..9c8409a894f5 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -800,7 +800,7 @@ struct kvm {
+         bool dirty_ring_with_bitmap;
+         bool vm_bugged;
+         bool vm_dead;
+-
++       atomic_t checkoverlap;
+  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
+         struct notifier_block pm_notifier;
+  #endif
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 9c60384b5ae0..a5a9071aeb19 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1370,9 +1370,13 @@ static int kvm_vm_release(struct inode *inode, struct file *filp)
+  {
+         struct kvm *kvm = filp->private_data;
+
++       atomic_inc(&kvm->checkoverlap);
++       pr_err("%s(%d) start kvm=%px\n",__func__,__LINE__, kvm);
++
+         kvm_irqfd_release(kvm);
+
+         kvm_put_kvm(kvm);
++       pr_err("%s(%d) end kvm=%px\n",__func__,__LINE__, kvm);
+         return 0;
+  }
+
+@@ -4073,6 +4077,8 @@ static long kvm_vcpu_ioctl(struct file *filp,
+         if (unlikely(_IOC_TYPE(ioctl) != KVMIO))
+                 return -EINVAL;
+
++if (atomic_read(&vcpu->kvm->checkoverlap)) pr_err("%s(%d) overlap kvm=%px\n", __func__, __LINE__, vcpu->kvm);
++
+         /*
+          * Some architectures have vcpu ioctls that are asynchronous to vcpu
+          * execution; mutex_lock() would break them.
+@@ -4346,6 +4352,8 @@ static long kvm_device_ioctl(struct file *filp, unsigned int ioctl,
+         if (dev->kvm->mm != current->mm || dev->kvm->vm_dead)
+                 return -EIO;
+
++       if (atomic_read(&dev->kvm->checkoverlap)) pr_err("%s(%d) overlap kvm=%px\n", __func__, __LINE__, dev->kvm);
++
+         switch (ioctl) {
+         case KVM_SET_DEVICE_ATTR:
+                 return kvm_device_ioctl_attr(dev, dev->ops->set_attr, arg);
+@@ -4731,6 +4739,8 @@ static long kvm_vm_ioctl(struct file *filp,
+
+         if (kvm->mm != current->mm || kvm->vm_dead)
+                 return -EIO;
++if (atomic_read(&kvm->checkoverlap)) pr_err("%s(%d) overlap kvm=%px\n", __func__, __LINE__, kvm);
++
+         switch (ioctl) {
+         case KVM_CREATE_VCPU:
+                 r = kvm_vm_ioctl_create_vcpu(kvm, arg);
