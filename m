@@ -2,80 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF5567662E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 13:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECEF676636
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 13:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjAUMWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 07:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S229673AbjAUMco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 07:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjAUMWa (ORCPT
+        with ESMTP id S229450AbjAUMcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 07:22:30 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB464B4AA;
-        Sat, 21 Jan 2023 04:22:28 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ss4so20043161ejb.11;
-        Sat, 21 Jan 2023 04:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SKaqGxlLTOruxAEfhyIE3tn2v6Jlg90vsjCQFpbrcU=;
-        b=Ou7VsmQ4pBul8LQ3FzD/j2o5IFJqZiIgdLzrhIsZcOXkcCjHc7aHGbBPULdyQEC3kq
-         XAEnnSFXCXMk+WI9lguSowglbPu4crp+5MZPKK31CQRQjAscFK9FMD/hug6O6Bt/xWaL
-         RvOptZIVDYyvZm+jMr7emKz6bxmaxxEDc25hSzanMfsy2BCws/aO5tlePjqX6jmoamuP
-         AoAa6LVWMosZwLLiWQJQFbmN2wlcDY6Bf/HlL07YXAcORVpheJfzPFOiYORfJfCAdjEm
-         2vpqqVrJmTnD0Sh3rbOvdtviP7iodMaliX6IHCG6uH95Dh/DRp2N2/WRw6Q5W7XM+1AN
-         p7wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3SKaqGxlLTOruxAEfhyIE3tn2v6Jlg90vsjCQFpbrcU=;
-        b=ARDgwtZLAYRQTOjOSEnNQ3vPzpLq5JVihtPzw+Y8Q7GWWxVuE0o5NwM1ackxDbL+yC
-         CknwxD/onbBEJjiskx3xsxCU+0TooNXMvKOeBOete1t8PmgKRXzUKrxzihAxwDANyT0D
-         tePZQDeE9ePlbmz7qf2VMA1ohTdV/9+2Or3xPf+0gZVJw3C6emN0PR1pwhDRsaynJzpR
-         EaoyQUkXPzJrZxoeMzTiUH4IT+EPCZKAEAU3hQfka4w6BuCiS6vypw+D8dOX04pN7Tkg
-         WavAQodY/pSKYe18ACi5fmvCCqDexnRUf1o6mKybBllP2HPUg+II9ujLlcr0o9jw1nDh
-         zewQ==
-X-Gm-Message-State: AFqh2koRD3teyrgBVHLJzNZfZH/nHWM2kvHROm4Vbw8nG/u7756dRd+k
-        QlrrnYEeT6s8DAPHk0PMctM=
-X-Google-Smtp-Source: AMrXdXsajmpkNuxC7LrPk9WotGHpwYyIoVaF3tOPPVe5ros48xvQQNOuArbDkn0ZfeP8SUKTQpBcVw==
-X-Received: by 2002:a17:907:a710:b0:7c0:f71b:8b3 with SMTP id vw16-20020a170907a71000b007c0f71b08b3mr19916732ejc.57.1674303746669;
-        Sat, 21 Jan 2023 04:22:26 -0800 (PST)
-Received: from skbuf ([188.27.185.42])
-        by smtp.gmail.com with ESMTPSA id k24-20020a1709065fd800b0087329ff5922sm6679897ejv.139.2023.01.21.04.22.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 04:22:26 -0800 (PST)
-Date:   Sat, 21 Jan 2023 14:22:23 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Re: [BUG] vlan-aware bridge breaks vlan on another port on same gmac
-Message-ID: <20230121122223.3kfcwxqtqm3b6po5@skbuf>
-References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
- <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
- <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
+        Sat, 21 Jan 2023 07:32:43 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D1E9B;
+        Sat, 21 Jan 2023 04:32:40 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pJD2t-0004b6-4q; Sat, 21 Jan 2023 13:32:31 +0100
+Message-ID: <3af98200-7240-9e93-bd6a-d0e2f71ab1c4@leemhuis.info>
+Date:   Sat, 21 Jan 2023 13:32:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
+Content-Language: en-US, de-DE
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+ <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com>
+ <e501d2fb-aaa0-470d-a8d5-5f8e97898df7@beta.fastmail.com>
+ <CACPK8XfQ=uarsOgJ7LaXqLyGG2vSF-47RkAEV=T2gruapx-yfg@mail.gmail.com>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CACPK8XfQ=uarsOgJ7LaXqLyGG2vSF-47RkAEV=T2gruapx-yfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674304360;5a657a65;
+X-HE-SMSGID: 1pJD2t-0004b6-4q
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,28 +53,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 01:11:43PM +0100, Frank Wunderlich wrote:
-> > What happens in mt7530_port_vlan_filtering() is that the user port (lan0)
-> > *and* the CPU port become VLAN aware. I guess it is the change on the
-> > CPU port that affects the traffic to "wan".
-> 
-> interesting, and funny to see that vlan_aware on gmac is added, but not removed in else branch :p
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-it is... see "if (all_user_ports_removed)" in mt7530_port_set_vlan_unaware().
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-> > If this works, I expect it will break VLAN tagged traffic over lan0 now :)
-> > So I would then like you to remove the first patch and try the next one
+On 19.01.23 02:54, Joel Stanley wrote:
+> On Fri, 26 Aug 2022 at 22:48, Andrew Jeffery <andrew@aj.id.au> wrote:
+>> On Sat, 27 Aug 2022, at 07:26, Linus Walleij wrote:
+>>> On Thu, Aug 18, 2022 at 12:18 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+>>>
+>>>> When the driver want to disable the signal of the function, it doesn't
+>>>> need to query the state of the mux function's signal on a pin. The
+>>>> condition below will miss the disable of the signal:
 > 
-> tried first patch, and wan stays working, now i try to figure out how i can access the vlan in the bridge to set ip-address..
+>>> I can't see the verdict for this patch? Will there be a new
+>>> version, or are we in the middle of a discussion?
+>>> I'd really like Andrew's ACK on the result before merging.
+>>
+>> Apologies, it's been a bit of A Week :)
+>>
+>> Given the approach has been discussed with the IP designer and solves a bug I'm okay for it to be merged. If we run into issues it is easy enough to back it out.
 > 
-> ip link del vlan110 #delete vlan-interface from wan to have clean routing
-> bridge vlan add vid 110 dev lan0
-> bridge vlan add vid 110 dev lanbr0 self
+> As foreseen by Andrew, this caused a regression. On the Romulus
+> machine the device tree contains a gpio hog for GPIO S7. With the
+> patch applied:
 > 
-> how can i now set ip-address to the vlan110 (imho need to extract the vlan as separate netdev) for testing that lan0 still works?
+> [    0.384796] aspeed-g5-pinctrl 1e6e2080.pinctrl: request pin 151
+> (AA20) for 1e780000.gpio:943
+> [    0.385009] Muxing pin 151 for GPIO
+> [    0.385081] Disabling signal VPOB9 for VPO
+> [    0.402291] aspeed-g5-pinctrl 1e6e2080.pinctrl: Failed to acquire
+> regmap for IP block 1
+> [    0.402521] aspeed-g5-pinctrl 1e6e2080.pinctrl: request() failed for pin 151
+> 
+> The code path is aspeed-gpio -> pinmux-g5 -> regmap -> clk, and the
+> of_clock code returns an error as it doesn't have a valid struct
+> clk_hw pointer. The regmap call happens because pinmux wants to check
+> the GFX node (IP block 1) to query bits there.
+> 
+> For reference, reverting the patch gives us this trace:
+> 
+> [    0.393160] Muxing pin 151 for GPIO
+> [    0.393267] Disabling signal VPOB9 for VPO
+> [    0.393383] Want SCU8C[0x00000080]=0x1, got 0x0 from 0x00000000
+> [    0.393552] Disabling signal VPOB9 for VPOOFF1
+> [    0.393681] Want SCU8C[0x00000080]=0x1, got 0x0 from 0x00000000
+> [    0.393835] Disabling signal VPOB9 for VPOOFF2
+> [    0.393965] Want SCU8C[0x00000080]=0x1, got 0x0 from 0x00000000
+> [    0.394097] Enabling signal GPIOS7 for GPIOS7
+> [    0.394217] Muxed pin 151 as GPIOS7
+> [    0.394411] gpio-943 (seq_cont): hogged as output/low
+> 
+> This can be reproduced in qemu without userspace:
+> 
+> qemu-system-arm -M romulus-bmc -nographic -kernel arch/arm/boot/zImage
+> -dtb arch/arm/boot/dts/aspeed-bmc-opp-romulus.dtb -no-reboot
+> 
+> Billy, do you have any suggestions?
 
-ip link add link lanbr0 name lanbr0.110 type vlan id 110
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-Can you try the second patch instead of the first one? Without digging
-deeply into mt7530 hardware docs, that's the best chance of making
-things work without changing how the hardware operates.
+#regzbot ^introduced cf517fef601b
+#regzbot title pinctrl: aspeed-g5-pinctrl 1e6e2080.pinctrl: Failed to
+acquire regmap for IP block 1
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
