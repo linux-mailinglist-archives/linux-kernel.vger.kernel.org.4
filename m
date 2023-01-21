@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3375B6769BA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 22:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B841B6769BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 23:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjAUVxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 16:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S229805AbjAUWD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 17:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAUVxv (ORCPT
+        with ESMTP id S229672AbjAUWDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 16:53:51 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9090A17CF3
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:53:50 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id vw16so22038660ejc.12
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 13:53:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u1FS23f9lMOyJIiIZuP0A4Qiyf73vPOUb05pwu8u1Yk=;
-        b=PUBrTZibudb8t1jCd0OFYhIKtwwkOvb+QOBVGBmdGpTi/6hfNLDgM0ipgNrRV+yLNQ
-         Mp1P3nvFL6qCZIABT7IXlga4Vo3JTlLG208U7Xdow7yidmKM9zlUAfpzXTGDQrRjY8bG
-         4UN91dyptDAgZTMOv5hkiQHYP96VP6T2d+ocnxG4eWZIu/A1CP/Uk8oV/IiQGrxCE7yH
-         UK8qzt78pI5CBwMw/eTEaSdlSAoa7l6HADqO7CB28DxZ8UbFbMMTeZCR+Y9K41qrkvNm
-         f4RuHBHuYyy+OpfQ51oKIkcRBUWTPKNAd0RmCxlGfvqL0PWp/9SpGLieyf3ehidDt4xG
-         moKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u1FS23f9lMOyJIiIZuP0A4Qiyf73vPOUb05pwu8u1Yk=;
-        b=CtehQsR3rGI6/cxGs2Ax4lTv/esLkHyaJ7BdDbf0lJWGX1lnVo5oYR6EhDbhHoemmd
-         pbBeJ3eqcIOusRaCgLbMkRrXCR2airRgl6FPl26CmNE3PDYXgWuaBQQti8xHh0TWsibh
-         qGOxbjQBSHucbql8G8A2JFj+ISA4HWjPUeS7b3Y5Ksus7ZyzgWm9+Jtq8QGI7wmjrV5J
-         18mCs/JiNGeJAM5niQN94FqO07unVbBjrtSoBNPzO1ABclatT8bPaTAiOkYMlAZ1skwE
-         bSM8EYRoi3j1lefsuD+K43k3Bp4cZUqm/SRtZ3WxWpfUrQDMYjYftouN6qB1On49bmZ1
-         7X2Q==
-X-Gm-Message-State: AFqh2krIs+HH8q1sE/htHP4bsM79jVrYPL4j5pFWkOX571NvE8+baR5d
-        t58gAbpBidHKCzSV9iYZskYRPUnxoTtWoZS64Uc=
-X-Google-Smtp-Source: AMrXdXvgN8MBlOArhDlezRaJf5HbQ4d/ijraBIv5bYpb+nBpWzNlaPkDmNDt04PygoOyQfoySbSrdM8P93F5TZhUSAY=
-X-Received: by 2002:a17:907:20ae:b0:84c:c9fd:42ba with SMTP id
- pw14-20020a17090720ae00b0084cc9fd42bamr1690145ejb.98.1674338028986; Sat, 21
- Jan 2023 13:53:48 -0800 (PST)
+        Sat, 21 Jan 2023 17:03:50 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1394218B3B
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 14:03:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674338630; x=1705874630;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2TOL5UsVanpggqc6YR9raY2F/j0UbcvpBoClR1onr5A=;
+  b=DXRZJv1LjfW7V/XNLsr8pCx5gtoxu3ayhvqKX6LhZDGafu9inM+eYmV9
+   8WYiTtF4Y+x9hkBNBf2t/adXqCD92GLWOIMaRmEQ2E6XkGLgRemzYgIss
+   b5DvZopq0KdBCNHR3UcYK7VPUc9WultXYV1ICndIa33T++//dygwOOQWD
+   9bm+qtynohqg8evFNlb4yV0Bo9zeOiuKsZAlOq5itCfenaPmWco0Grcra
+   QzSpNEMvnn1cjLZ6r2sUSXPXUBSOWj8IYzokBaY+mfiJcfVFNPAp6MkM+
+   FE3Ue6r7i5dskuDfRv0l06KLKHmV/ZmbuQQvdOPWXmesHo2vqAlfHF3dL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="313728587"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="313728587"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 14:03:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="906353716"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="906353716"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jan 2023 14:03:47 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJLxi-0004Vk-18;
+        Sat, 21 Jan 2023 22:03:46 +0000
+Date:   Sun, 22 Jan 2023 06:02:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/core] BUILD SUCCESS
+ 5d515ee40cb57ea5331998f27df7946a69f14dc3
+Message-ID: <63cc6108.ZSKSliAHeKMXngh3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Sender: mrtamuhfariq1@gmail.com
-Received: by 2002:a50:3a5d:0:b0:1f4:9f9f:71d5 with HTTP; Sat, 21 Jan 2023
- 13:53:48 -0800 (PST)
-From:   Bello Abubakar <bellobelloabubakar5@gmail.com>
-Date:   Sat, 21 Jan 2023 13:53:48 -0800
-X-Google-Sender-Auth: J2ERaFohDIpS4E0kTUGo4C_SJS4
-Message-ID: <CAO2k2xc6hjF0DR_jV0nRz0RWzahYZX4-41YnGPLzga6Sd2_RqQ@mail.gmail.com>
-Subject: URGENT REPLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5354]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrtamuhfariq1[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrtamuhfariq1[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.6 URG_BIZ Contains urgent matter
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+branch HEAD: 5d515ee40cb57ea5331998f27df7946a69f14dc3  perf/x86/uncore: Don't WARN_ON_ONCE() for a broken discovery table
 
-I am a relative of a politically exposed person (PEP) that is in
-financial regulation. Due to my present health condition, I'd decided
-to write through this email for the security reason.
+elapsed time: 723m
 
-Therefore, kindly treat this as top secret for the security reason.
-I'd after fasting and prayer choose to write not you particularly but
-I believing in probability of you being a confidant chosen by chance;
-luck to help and share in this noble cause.
+configs tested: 63
+configs skipped: 75
 
-I need your assistant to conduct secret transfers of family's funds
-worth =E2=82=AC90.5 millions Euros. It was deposited in bank clandestinely.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I am in grave condition and I expect my death any moment now and I
-want to donate the fund to less privilege and you will be rewarded
-with reasonable percentage of the fund if you can assist.
+gcc tested configs:
+x86_64                            allnoconfig
+x86_64                              defconfig
+i386                                defconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+x86_64                        randconfig-a002
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a016
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+i386                             allyesconfig
+sparc                       sparc32_defconfig
+arm                           stm32_defconfig
+arm64                            alldefconfig
+arm                          exynos_defconfig
+sh                        sh7757lcr_defconfig
+ia64                             allmodconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+sh                         ap325rxa_defconfig
+alpha                            alldefconfig
+i386                          randconfig-c001
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sh                        sh7763rdp_defconfig
+ia64                         bigsur_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                      arches_defconfig
+sh                        dreamcast_defconfig
+mips                             allmodconfig
 
-Please contact me back for more details,
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                          rhel-8.3-rust
+x86_64                        randconfig-a003
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+i386                          randconfig-a015
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+x86_64                        randconfig-k001
+arm                        mvebu_v5_defconfig
 
-Yours truly,
-Bello Abubakar
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
