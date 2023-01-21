@@ -2,253 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8096967669A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 14:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E91BC6766A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 15:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjAUNv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 08:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S229704AbjAUONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 09:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjAUNv1 (ORCPT
+        with ESMTP id S229450AbjAUONV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 08:51:27 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A6193C6
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 05:51:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674309086; x=1705845086;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wZsTDq8tT2GhkMpsNd8DggSnRzxicVC2bzNMp7Ceh8Q=;
-  b=PApcRP43L9KsRHBw66uA0s4Ug/aXX1v226wCITyshJZuQZkS2BTmIXA3
-   FT+oTzSgqdAsD97V7R342L4hlU9M9MlAwe2fY62ea/1yEmBihm9PaL4hV
-   f2ZMtVyWACPuqHylJ5xSMnzsJxtjXC3LTTcvHd7tPiZrSj/XXAfG0DwXj
-   vFjjaK2sH7ncG9/deGD7bdbGfnKnuhkcK3D369im2YLpeVDT/hi7oEDfZ
-   OaHiZdZpssNXIcciskfsdz2vADXicMT+7EunFAsFL3byni4N7RzQXd/zU
-   MxyXEXUAFVkiUa5iXp+IeOVPtx34gMECp2uisX0dH2U3ynt1FyRhQgo1z
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="327873707"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="327873707"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 05:51:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="989702848"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="989702848"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Jan 2023 05:51:24 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJEHD-000486-1W;
-        Sat, 21 Jan 2023 13:51:23 +0000
-Date:   Sat, 21 Jan 2023 21:51:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:nmitest.2023.01.20a] BUILD REGRESSION
- 53e298568bde2c728ee2aac4ac634cca8550a4b4
-Message-ID: <63cbedcb.935XIQz8TNWAaVX4%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 21 Jan 2023 09:13:21 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5BA23138;
+        Sat, 21 Jan 2023 06:13:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1674310370;
+        bh=EXqz70GQPIQCYT1nLHB6JIEG5NSP4ByZ1ECB2Q4fYpw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=rOD0FoAf5W+titksYeICIuZ90QQUup8CZLJV/SN3Xfkx9c31OoL1jZZxq1/JSgoUD
+         ofS9rgWEPxVpHh/zjG6rG5sGQ+94Y/WIKsOe/UrXecslxDLvVEI8qAb8yGoal7RBi7
+         qWbiZ8kv39YKTiDXnV7zcEcgH/K0S+MkAXQJrLlTEV89J8EZZOl8HxrOIBSgt7qFAx
+         5ZJfagH2X6hfd/IoklfjsYyCxMoNtwHrRi/f7Ox9syRRlGTvIyWPrKglXyQwTHL5fD
+         J25fMNREOC+lGA9UbNazIRNShbL9B1+SlElU7aEPOG5LgAliSwsPJEqVnitOljCcUZ
+         1L+bfOubsdaiQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.152.198] ([217.61.152.198]) by web-mail.gmx.net
+ (3c-app-gmx-bap60.server.lan [172.19.172.130]) (via HTTP); Sat, 21 Jan 2023
+ 15:12:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Aw: Re: [BUG] vlan-aware bridge breaks vlan on another port on same
+ gmac
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 21 Jan 2023 15:12:50 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20230121133549.vibz2infg5jwupdc@skbuf>
+References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
+ <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
+ <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
+ <20230121122223.3kfcwxqtqm3b6po5@skbuf>
+ <trinity-7c2af652-d3f8-4086-ba12-85cd18cd6a1a-1674304362789@3c-app-gmx-bap60>
+ <20230121133549.vibz2infg5jwupdc@skbuf>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:75DkVLOdpXIMLqBIY7SOwUCzgXxZYPyfo5cKr/3xL8SwwUsNLdGtV6cws8oydF8bN9O1a
+ YPw1N41mWmqnBoM4H1SLjvGf7wReEsOxIYJf7LxfpiLESsoD7BGx/mkxLXqS2HkFMOZjX7s5ErQo
+ 5OGa2YMcmXAyC6BsGBPdK9eKstyfaKte3eR2PDsLh0p6rl9qDgs3hISDKvYnj9Wr+taAKOuXPuGd
+ QlQ27w8ODwRH5QHdKM0vzsp/+rxvPQxH87XdAvXoX7KQ0SIw1QGWUgYx/1CLa7KHXV6+3QuR12w2
+ v4=
+UI-OutboundReport: notjunk:1;M01:P0:wmk6B6aAZVQ=;J+QEXdqV5YCSowD2rT41GWI/15W
+ ANNdU1r+EaPYx1m0uefzzmBGIPKHJ8krgl/s2qdQIcFTC3UwEykS2lHeSOxLBJjpTAUvNOaD7
+ oZgGmnCwoj08Sf+uazEre6Op3RmL7bhVqbPrJecpBkFfVPRCO1LcmFrjEupzHybA1HtFWHbib
+ KfIb3FWy9sRRqvM3qWvloTC+xY5AKH2T18aZ+pr0F+ii3s0WhIreTxwABm2O/yf7duSSF9dZC
+ caYmieU1phDZWzJ9s5geiKPGl/dnkEihtAaKI/t5Foy5j02UuIp0vFUwlGF7BT6ja5qJ474t0
+ jowKNArDRemdfGT5rGfXcc9jaRu6C64snaGRhAk8adoIquO1s5bg8sDaMNb3MlfN77Rbf3T1X
+ TocKg/85mHUOhWKncnOw2bezKMhskj/pxjO1rfE4wr2dQ7Hl9Ww1h+1QQt/mmgQV2TFMMn2qR
+ hJ3/0zbhWoC09Jgx+e2qL7U32TGEqvBoZHuTdy/rp8U7YmaekboldRp0HLcbtbCNGBDOUEot0
+ QGdhldj+7pWUnFPyygfd6l8LcIMgcAEtlZP2d0dawdEyEStzKA9L+H6bcFdas7oik+O4eHQ2k
+ 748e/BNfea30yLLeOXmaObwi1dXz4wvtrRFVXYbqYfzEOTXeF8sg8X4cq+NP25qUMhCKDoprM
+ VdAk+uyMduwnXOFBbxV4f5cebdvljoLuQPKn5P+MRf+UXPlceIkw9r41163MOrm5w/YiAT3/R
+ cXxyl4O3YhrVT2PuAKizJ7uvngtNup6QuqDSdxsn9yxDW6jQ7RSV2XC4+NlCaJKwz9tTaMwBb
+ r8gtt3JcGahtSdjjH4NwdkwQ==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git nmitest.2023.01.20a
-branch HEAD: 53e298568bde2c728ee2aac4ac634cca8550a4b4  rcutorture: Test NMI diagnostics
+Hi
 
-Error/Warning reports:
+> Gesendet: Samstag, 21. Januar 2023 um 14:35 Uhr
+> Von: "Vladimir Oltean" <olteanv@gmail.com>
+> An: "Frank Wunderlich" <frank-w@public-files.de>
+> Cc: "Andrew Lunn" <andrew@lunn.ch>, "Florian Fainelli" <f.fainelli@gmail=
+.com>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@g=
+oogle.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redh=
+at.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, "Landen Cha=
+o" <Landen.Chao@mediatek.com>, "Sean Wang" <sean.wang@mediatek.com>, "DENG=
+ Qingfang" <dqfext@gmail.com>, "Matthias Brugger" <matthias.bgg@gmail.com>=
+, "Daniel Golle" <daniel@makrotopia.org>
+> Betreff: Re: [BUG] vlan-aware bridge breaks vlan on another port on same=
+ gmac
+>
+> On Sat, Jan 21, 2023 at 01:32:42PM +0100, Frank Wunderlich wrote:
+> > so first patch fixes the behaviour on bpi-r3 (mt7531)...but maybe mt75=
+30 need the tagging on cpu-port
+> >
+> > > Can you try the second patch instead of the first one? Without diggi=
+ng
+> > > deeply into mt7530 hardware docs, that's the best chance of making
+> > > things work without changing how the hardware operates.
+> >
+> > second patch works for wan, but vlan on bridge is broken, no packets r=
+eceiving my laptop (also no untagged ones).
+>
+> It's hard for me to understand how applying only patch "tag_mtk only
+> combine VLAN tag with MTK tag is user port is VLAN aware" can produce
+> the results you describe... For packets sent to port lan0, nothing
+> should have been changed by that patch, because dsa_port_is_vlan_filteri=
+ng(dp)
+> should return true.
+>
+> If you can confirm there isn't any mistake in the testing procedure,
+> I'll take a look later today at the hardware documentation and try to
+> figure out why the CPU port is configured the way it is.
 
-https://lore.kernel.org/oe-kbuild-all/202301211106.33rvYsWW-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301211247.Isi7qGD5-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301211327.02xyAfS3-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301211330.0IJsirCg-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202301211331.RMgsACsP-lkp@intel.com
+ok, booted again the kernel with first patch ("mt7530 don't make the CPU p=
+ort a VLAN user port")
+and yes lan0-vlan is broken...
+seems i need to reboot after each lan/wan test to at least clean arp-cache=
+.
 
-Error/Warning: (recently discovered and may have been fixed)
+but patch2 ("tag_mtk only combine VLAN tag with MTK tag is user port is VL=
+AN aware") still not
+works on lanbridge vlan (no packet received on target).
 
-.tmp_gl_rcutorture.o:(.text+0x7860): undefined reference to `set_nmi_torture'
-ERROR: modpost: "set_nmi_torture" [kernel/rcu/rcutorture.ko] undefined!
-aarch64-linux-ld: kernel/rcu/rcutorture.c:3303: undefined reference to `set_nmi_torture'
-aarch64-linux-ld: rcutorture.c:(.text+0x5a80): undefined reference to `set_nmi_torture'
-arc-elf-ld: rcutorture.c:(.text+0x5352): undefined reference to `set_nmi_torture'
-arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for 'set_nmi_torture' [-Wmissing-prototypes]
-arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
-arm-linux-gnueabi-ld: rcutorture.c:(.text+0x1acc): undefined reference to `set_nmi_torture'
-arm-linux-gnueabi-ld: rcutorture.c:(.text+0x352c): undefined reference to `set_nmi_torture'
-csky-linux-ld: rcutorture.c:(.text+0x3e4c): undefined reference to `set_nmi_torture'
-kernel/rcu/rcutorture.c:(.text+0x33b8): undefined reference to `set_nmi_torture'
-kernel/rcu/rcutorture.c:2230: undefined reference to `set_nmi_torture'
-kernel/rcu/rcutorture.c:3291: undefined reference to `set_nmi_torture'
-kernel/rcu/rcutorture.c:3292: undefined reference to `set_nmi_torture'
-ld.lld: error: undefined symbol: set_nmi_torture
-microblaze-linux-ld: .tmp_gl_rcutorture.o:(.text+0x78c0): undefined reference to `set_nmi_torture'
-mips-linux-ld: rcutorture.c:(.text+0x41a8): undefined reference to `set_nmi_torture'
-mipsel-linux-ld: kernel/rcu/rcutorture.c:(.text+0x3424): undefined reference to `set_nmi_torture'
-or1k-linux-ld: rcutorture.c:(.text+0x3ecc): undefined reference to `set_nmi_torture'
-rcutorture.c:(.text+0x1a8c): undefined reference to `set_nmi_torture'
-rcutorture.c:(.text+0x3e0a): undefined reference to `set_nmi_torture'
-rcutorture.c:(.text+0x3eb0): undefined reference to `set_nmi_torture'
-rcutorture.c:(.text+0x5352): undefined reference to `set_nmi_torture'
-rcutorture.c:(.text+0xa48c): undefined reference to `set_nmi_torture'
-s390-linux-ld: kernel/rcu/rcutorture.c:3303: undefined reference to `set_nmi_torture'
-s390-linux-ld: rcutorture.c:(.text+0xa594): undefined reference to `set_nmi_torture'
-s390x-linux-ld: rcutorture.c:(.text+0x1f6): undefined reference to `set_nmi_torture'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arc-randconfig-r016-20230119
-|   |-- arc-elf-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- arm-allyesconfig
-|   `-- arm-linux-gnueabi-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- arm-randconfig-r046-20230119
-|   |-- arm-linux-gnueabi-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- arm64-allyesconfig
-|   `-- aarch64-linux-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- arm64-randconfig-r004-20230119
-|   `-- aarch64-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- csky-randconfig-r004-20230119
-|   `-- ERROR:set_nmi_torture-kernel-rcu-rcutorture.ko-undefined
-|-- csky-randconfig-r026-20230119
-|   |-- csky-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- i386-randconfig-a001
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- loongarch-randconfig-r002-20230119
-|   `-- kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- loongarch-randconfig-r003-20230119
-|   `-- ERROR:set_nmi_torture-kernel-rcu-rcutorture.ko-undefined
-|-- microblaze-randconfig-r013-20230119
-|   |-- microblaze-linux-ld:.tmp_gl_rcutorture.o:(.text):undefined-reference-to-set_nmi_torture
-|   `-- tmp_gl_rcutorture.o:(.text):undefined-reference-to-set_nmi_torture
-|-- mips-randconfig-m041-20230119
-|   `-- mips-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- mips-randconfig-r025-20230119
-|   |-- kernel-rcu-rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- mipsel-linux-ld:kernel-rcu-rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- openrisc-randconfig-r025-20230119
-|   |-- or1k-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- riscv-randconfig-r001-20230119
-|   `-- kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- s390-allmodconfig
-|   `-- ERROR:set_nmi_torture-kernel-rcu-rcutorture.ko-undefined
-|-- s390-allyesconfig
-|   |-- kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|   `-- s390-linux-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- s390-randconfig-r034-20230119
-|   |-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- s390-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- x86_64-allmodconfig
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- x86_64-allyesconfig
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-`-- x86_64-rhel-8.3-syz
-    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-clang_recent_errors
-|-- arm-randconfig-r006-20230119
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- arm64-randconfig-r015-20230119
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- hexagon-randconfig-r045-20230119
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- i386-randconfig-a002
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
-|-- riscv-randconfig-r014-20230119
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- riscv-randconfig-r015-20230119
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- s390-randconfig-r011-20230119
-|   `-- s39-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- s390-randconfig-r044-20230119
-|   `-- ERROR:set_nmi_torture-kernel-rcu-rcutorture.ko-undefined
-`-- x86_64-randconfig-a001
-    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
-
-elapsed time: 721m
-
-configs tested: 62
-configs skipped: 2
-
-gcc tested configs:
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-x86_64                           rhel-8.3-syz
-um                             i386_defconfig
-x86_64                            allnoconfig
-x86_64                           rhel-8.3-kvm
-um                           x86_64_defconfig
-x86_64                         rhel-8.3-kunit
-s390                                defconfig
-x86_64                           rhel-8.3-bpf
-powerpc                           allnoconfig
-s390                             allyesconfig
-x86_64                        randconfig-a004
-i386                          randconfig-a001
-x86_64                        randconfig-a002
-x86_64                              defconfig
-x86_64                        randconfig-a006
-i386                          randconfig-a003
-i386                          randconfig-a005
-arm                  randconfig-r046-20230119
-arc                  randconfig-r043-20230119
-sh                               allmodconfig
-arm                                 defconfig
-x86_64                    rhel-8.3-kselftests
-powerpc                          allmodconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a013
-m68k                             allmodconfig
-mips                             allyesconfig
-x86_64                        randconfig-a011
-m68k                             allyesconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arm                              allyesconfig
-i386                                defconfig
-arm64                            allyesconfig
-x86_64                           allyesconfig
-ia64                             allmodconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                             allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-x86_64                        randconfig-a005
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r045-20230119
-hexagon              randconfig-r041-20230119
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a014
-s390                 randconfig-r044-20230119
-riscv                randconfig-r042-20230119
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+regards Frank
