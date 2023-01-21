@@ -2,112 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF936767E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 18:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C686767FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 Jan 2023 19:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjAUR7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 12:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S229989AbjAUSHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 13:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjAUR7D (ORCPT
+        with ESMTP id S229673AbjAUSHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 12:59:03 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7151EB46A
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 09:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=EUyECha8HaxVxgq1F1KoFMr1DGt4Ij3T1L3mz8LljAM=; b=1MAQ0
-        3rGGQF+HQYx+iCsXN4SYOL1zEHCSG4P0IMdvNTbjw/ou4gvoaCnWEAf7Ii1Xqjrj2CxtM0KAa0qtO
-        6xzlg7iPuMMlh4GDH2X8oIOEfg1R0qjdAQtqAKxvnFWxl35Jgyfur1jFsBeiBSv1e523z8ERWsDHk
-        0xs7/I2CiPAjoBzo+QjTXQnIjvrEar62l3ifB6KZ9VbKEIJWwGkm2sEULdLyFY4asptqb0F+zoK9A
-        hez1cbWN3HmBCfjbqPAJFvbGTnvvzapYWS9J0gPoCCwyNkvhd1Er7UCUB+OVTj9ost81ArzpfJ+dt
-        t37w7Tr11kn6TjSQj9hQj+rjsFfOA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1pJI8A-0004Ik-P2;
-        Sat, 21 Jan 2023 17:58:18 +0000
-Date:   Sat, 21 Jan 2023 17:58:11 +0000
-From:   John Keeping <john@metanate.com>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Subject: Re: [PATCH] drm/bridge: panel: Set orientation on panel_bridge
- connector
-Message-ID: <Y8wnswk++tvr9xMe@donbot>
-References: <20230120114313.2087015-1-john@metanate.com>
- <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
- <Y8uo7vIcQ6caH9pu@ravnborg.org>
+        Sat, 21 Jan 2023 13:07:37 -0500
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E3112F06;
+        Sat, 21 Jan 2023 10:07:36 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
+        t=1674323933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AmtCc8t9CHBsb1LMNqV7KWtscMyB6VCsQ0QK4PPIMFw=;
+        b=aSpHwl4nfa3jgckrY4s/AD+fHrbYcDcjzJE6b3Eljfk77FkD7R4Dqhyrk8zx215FbSoWeE
+        HF88jTSpqhsoxo6yCL6zKkbZMRtI5ppIZ92GLDe05e6R4B4JrZqP8S9iMWthfdZEfPQid5
+        jm/hDH+su97be2ucDcETwcHwjuce7qY=
+From:   Rayyan Ansari <rayyan@ansari.sh>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Rayyan Ansari <rayyan@ansari.sh>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH v3 0/3] Add XO clocks for MSM8226/MSM8974
+Date:   Sat, 21 Jan 2023 17:58:34 +0000
+Message-Id: <20230121175838.755636-1-rayyan@ansari.sh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8uo7vIcQ6caH9pu@ravnborg.org>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam & Doug,
+Changes since v2:
+- Base off linux-next
+- Add correct XO clock to MSM8974 as well
 
-On Sat, Jan 21, 2023 at 09:57:18AM +0100, Sam Ravnborg wrote:
-> On Fri, Jan 20, 2023 at 01:44:38PM -0800, Doug Anderson wrote:
-> > On Fri, Jan 20, 2023 at 3:43 AM John Keeping <john@metanate.com> wrote:
-> > >
-> > > Commit 15b9ca1641f0 ("drm: Config orientation property if panel provides
-> > > it") added a helper to set the panel panel orientation early but only
-> > > connected this for drm_bridge_connector, which constructs a panel bridge
-> > > with DRM_BRIDGE_ATTACH_NO_CONNECTOR and creates the connector itself.
-> > >
-> > > When the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag is not specified and the
-> > > panel_bridge creates its own connector the orientation is not set unless
-> > > the panel does it in .get_modes which is too late and leads to a warning
-> > > splat from __drm_mode_object_add() because the device is already
-> > > registered.
-> > >
-> > > Call the necessary function to set add the orientation property when the
-> > > connector is created so that it is available before the device is
-> > > registered.
-> > 
-> > I have no huge objection to your patch and it looks OK to me. That
-> > being said, my understanding is that:
-> > 
-> > 1. DRM_BRIDGE_ATTACH_NO_CONNECTOR is "the future" and not using the
-> > flag is "deprecated".
-> Correct.
-> Could we take a look at how much is required to move the relevant driver
-> to use DRM_BRIDGE_ATTACH_NO_CONNECTOR?
->
-> If this is too much work now we may land this simple patch, but the
-> preference is to move all drivers to the new bridge handling and thus
-> asking display drivers to create the connector.
-> 
-> What display driver are we dealing with here?
+Rayyan Ansari (3):
+  clk: qcom: smd: Add XO RPM clocks for MSM8226/MSM8974
+  ARM: dts: qcom: msm8226: add clocks and clock-names to GCC node
+  ARM: dts: qcom: msm8974: add correct XO clock source to GCC node
 
-This is dw-mipi-dsi-rockchip which uses the component path in
-dw-mipi-dsi (and, in fact, is the only driver using that mode of
-dw-mipi-dsi).
+ arch/arm/boot/dts/qcom-msm8226.dtsi | 5 +++++
+ arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+ drivers/clk/qcom/clk-smd-rpm.c      | 2 ++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-I'm not familiar enough with DRM to say whether it's easy to convert to
-DRM_BRIDGE_ATTACH_NO_CONNECTOR - should dw-mipi-dsi-rockchip be moving
-to use dw-mipi-dsi as a bridge driver or should dw_mipi_dsi_bind() have
-a drm_bridge_attach_flags argument?  But I'm happy to test patches if it
-looks easy to convert to you :-)
+-- 
+2.39.0
 
-
-John
