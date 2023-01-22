@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C81676B30
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 06:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BE9676B37
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 06:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjAVFPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 00:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S229706AbjAVFWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 00:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjAVFPq (ORCPT
+        with ESMTP id S229523AbjAVFWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 00:15:46 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165361E2A0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 21:15:45 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bp15so13590279lfb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 21:15:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LaJ0pOpNRWAW4u4WiMs6V/9gJsiYUBUKhGV/64DZPcY=;
-        b=fsYLe25DlODkwoUJbNK0JDedTuF8UGj7usSAtdOZZf3Nwe9hq4+bP0ZgE0sOSOTTys
-         OUqdJs6i0TY7C7QaQ79WVlV3rhM54i4gX+WyzAJnkHYSTwybMztnw7fokGqxLHfnGXzO
-         GJeWU/q2Knpelc0rvEt9HcWDDwaPEfKEGB/Yi47kTr2muldbrcST1kXb4+w6VuD3dyAZ
-         5qyi+LfPEd5wWWeKyCOzccNXPOJfleSGKsIkR+WkVyYAOoUD5P1Npj/YnLLywG7oFMos
-         VZPy0Z22RNYfPDNaPJDl7zcOSti/UHF8O7SCTlOtG9+1cKSzNZSaqmPsCK8AIF3WVwys
-         +xUw==
+        Sun, 22 Jan 2023 00:22:43 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A797D94
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 21:22:41 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id a7-20020a056e0208a700b0030ecfd5d4cdso6401889ilt.9
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 21:22:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LaJ0pOpNRWAW4u4WiMs6V/9gJsiYUBUKhGV/64DZPcY=;
-        b=Qqs/wlm/RW5hn+xJBsVOIVg/1iOkWoGXTEMkH80It3aZlyf1KMIiY1jl1rADLqQnwB
-         dqh5B3PKVaBmYde6/PsZB746AiIuEgVYh3FSZjrXpPjRDVp8oQFjIXRALrm1DW7rT9EX
-         pTO2v2iey09qOW4dgjZdRxc9G2OwgrVIPwYKBgBi903En75sLznbJxIkuLHRDD+M3+kV
-         2eJniM5utfj7YLBp6axErAwquLy1bKFbngikeneaos/YMSrzQr9aguO6uJVbE9bwibBC
-         /ZX+9a3BYv9UHzLsZEh0SyjX7xDiVNosZ9avgnw1CfTiKR6tVz7A13zWI5YSp3rhKZvL
-         URxA==
-X-Gm-Message-State: AFqh2kpZ+4f8VIhrSutJ3kMXdn06P/Vzi4l4cIg3GvBzEdciv7YL9yRn
-        05x9SXZbf2PDhiqktUuGqRcoonuv2t5NYjIUids=
-X-Google-Smtp-Source: AMrXdXuhCl2v5mSYaHJagbIc/LSopm9P2CcVOnE454mGu3wz01w7Z6mX4qg5SrAo6BR8usqM5KUlvuBa3+UJ+6+hxt8=
-X-Received: by 2002:a19:7406:0:b0:4cf:d5bf:75c3 with SMTP id
- v6-20020a197406000000b004cfd5bf75c3mr886307lfe.170.1674364543372; Sat, 21 Jan
- 2023 21:15:43 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NALf3bLFQVGdbzBDnfykp+W6RD21i+P9u/V70ua/+sI=;
+        b=c39CCK3A2zd9HIQgPZFqiZp3dXC+Cpz+CEnP4sSOSlpOlR+JBMace/yXrgZibjEnGm
+         iyYHB4t16zqGI3cbHCynq3raNJap2JlcrmELcM6k/m0B/GFArcLUcbrl1u6o06oxgL+4
+         XKi4/ZTqbpea+tyNstrIJS4yWDblds9+fti4nD0yR5wQUWYY9ZQ3pK/jCBFVfEyd0I6S
+         XiLCrclIpWBDdlolUt9fQ2bxfkCwhkoSwIsQ+VCKejJSLL46L3QME/6tA7Iy/OvvLi9U
+         KQxBQBjg1585OzfQdj3zVThJowLmLeG3ld1Elu6u4lngxEDFt3wYUZXJ/RUPLo1qzDb+
+         k65g==
+X-Gm-Message-State: AFqh2kqSEeCaa/b/bgulRiH3vpN6mAVF6xxzp68zTZ/ZkPEongozlf41
+        zvn6k7A6i3WSlMaHKwHod5Hq3G6D50MTJ4oLG5FD7rZo14Iz
+X-Google-Smtp-Source: AMrXdXu7KDDLbYQrUXFIqTms6Jv7DcW42xpnMeCCOgrlbHv2/XJJ+BCrfp+J0AH+N8XEJbHjjeFmt08m1LlXYepBCue7MVc73HGK
 MIME-Version: 1.0
-Received: by 2002:a05:651c:4d4:0:0:0:0 with HTTP; Sat, 21 Jan 2023 21:15:42
- -0800 (PST)
-From:   Frank Hughes <diamondbk9@gmail.com>
-Date:   Sun, 22 Jan 2023 06:15:42 +0100
-Message-ID: <CAPrdMJBAAqcdWvimUE0Tn0t7Db1nbOYV-PGacQbook_nGwxtXw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
+X-Received: by 2002:a92:d911:0:b0:30d:9b58:1f87 with SMTP id
+ s17-20020a92d911000000b0030d9b581f87mr2158606iln.206.1674364960576; Sat, 21
+ Jan 2023 21:22:40 -0800 (PST)
+Date:   Sat, 21 Jan 2023 21:22:40 -0800
+In-Reply-To: <000000000000a806c405f0c4c45b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b31ed905f2d37856@google.com>
+Subject: Re: [syzbot] [hfs?] possible deadlock in hfs_find_init (2)
+From:   syzbot <syzbot+e390d66dda462b51fde1@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
-        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_5,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+syzbot has found a reproducer for the following issue on:
 
-I am Frank Hughes. Former commander during the American War in Iraq. I
-am currently in Syria for more missions because the US has completed
-the mission in Iraq, but I will soon be assigned to the Joint
-Multinational Readiness Center (JMRC).
+HEAD commit:    edb2f0dc90f2 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12506805480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a1c301efa2b11613
+dashboard link: https://syzkaller.appspot.com/bug?extid=e390d66dda462b51fde1
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d841fe480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=134aa8fa480000
 
-In 6 years here in Iraq, I was able to earn a total of 25 Million
-Dollars. This money came from the oil trade. Second, I have to present
-someone as a foreign partner because I am a uniformed person. I am an
-American and intelligence officer and have  100% sure way to ship
-money through diplomatic shipping companies. I need your acceptance
-and everything is ready.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ca1677dc6969/disk-edb2f0dc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/22527595a2dd/vmlinux-edb2f0dc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/45308e5f6962/Image-edb2f0dc.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/7b6fdf809f4c/mount_0.gz
 
-The only way to be safe with that money is to invest it in your
-country. I'll be there for a while. So i need someone to deal with. If
-you accept, I will move the money to you as my foreign partner. 30% of
-the total funds will be given for your help and 70% will be for me,
-from there I will invest the rest. Before leaving Iraq, I package all
-the money inside a trunk box and sent it away through assistance of a
-United Nation RED CROSS service to security company London. with an
-agreement that I will provide with details of my partner and recipient
-of the shipment.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e390d66dda462b51fde1@syzkaller.appspotmail.com
 
-When we agree to work together, I will you to the company in London to
-complete the shipment formalities and introduce you as the partner and
-recipient of the shipment. Where we are now, we can only communicate
-through our military communications facilities, which are secured.
-Please send me your personal cell phone number so that I can call you
-for further inquiries when I'm from our military network. I will give
-you more details when I get your reply
+============================================
+WARNING: possible recursive locking detected
+6.2.0-rc4-syzkaller-16807-gedb2f0dc90f2 #0 Not tainted
+--------------------------------------------
+kworker/u4:3/103 is trying to acquire lock:
+ffff0000c7f8c0b0 (&tree->tree_lock/1){+.+.}-{3:3}, at: hfs_find_init+0xac/0xcc
 
-Regards
-Commander Frank Hughes.
+but task is already holding lock:
+ffff0000c7f8c0b0 (&tree->tree_lock/1){+.+.}-{3:3}, at: hfs_find_init+0xac/0xcc
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&tree->tree_lock/1);
+  lock(&tree->tree_lock/1);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+4 locks held by kworker/u4:3/103:
+ #0: ffff0000c0250138 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff80000f90bd80 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c7f8c0b0 (&tree->tree_lock/1){+.+.}-{3:3}, at: hfs_find_init+0xac/0xcc
+ #3: ffff0000cc2500f8 (&HFS_I(tree->inode)->extents_lock){+.+.}-{3:3}, at: hfs_extend_file+0x54/0x740 fs/hfs/extent.c:397
+
+stack backtrace:
+CPU: 1 PID: 103 Comm: kworker/u4:3 Not tainted 6.2.0-rc4-syzkaller-16807-gedb2f0dc90f2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: writeback wb_workfn (flush-7:0)
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ __lock_acquire+0x808/0x3084
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ hfs_find_init+0xac/0xcc
+ hfs_ext_read_extent fs/hfs/extent.c:200 [inline]
+ hfs_extend_file+0x120/0x740 fs/hfs/extent.c:401
+ hfs_bmap_reserve+0x44/0xe8 fs/hfs/btree.c:234
+ __hfs_ext_write_extent+0xb8/0x138 fs/hfs/extent.c:121
+ hfs_ext_write_extent+0x9c/0xd8 fs/hfs/extent.c:144
+ hfs_write_inode+0x68/0x478 fs/hfs/inode.c:431
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x240/0x2e4 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x308/0x678 fs/fs-writeback.c:1889
+ wb_writeback+0x198/0x328 fs/fs-writeback.c:2063
+ wb_do_writeback+0xc8/0x384 fs/fs-writeback.c:2206
+ wb_workfn+0x70/0x15c fs/fs-writeback.c:2246
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+
