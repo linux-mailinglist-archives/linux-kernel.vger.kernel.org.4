@@ -2,115 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FAC677135
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED7167713A
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjAVRsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 12:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S230366AbjAVRs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 12:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjAVRsG (ORCPT
+        with ESMTP id S230160AbjAVRs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 12:48:06 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2794614225;
-        Sun, 22 Jan 2023 09:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=oXtBqKfAb6gZ3tfQ3MgNrobjUHttHMBBPKyoKiY0e9A=; b=pD0Uesoxqm2xQl1fk3S3Me5tn1
-        b8oWklAcDw8AFfeAsYPt30rC86t9LVTXdBJ8/pHQdeZPj9ZK6XseI9SpCs3/5sCjzqQ8IwWQh3A/L
-        3fqHnOw0Lm4j9vW32DKtrDavYcBPyUv//xnR2TBbmsb4LlhwF6kcM+cEst5QgfJW4JZeCA3lws+cG
-        jkkbw0qVFyZZCDvP+vvN/VlJN3+BKemek1SOMUWpHvttaLsF5fqV3WSGacmVww52iYeQFLBVb5dKc
-        Uy1G14gkXL7W2TEZBxAzF8aWw2YmJTZB6V5Des09z0/x2FmjkYHlyxeYmBWreuOY0p3ucawDpSicV
-        1vGVBPGg==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pJeRn-00FbxX-JN; Sun, 22 Jan 2023 17:48:04 +0000
-Message-ID: <bc5e2e96-e674-0f12-38e4-84af67135db8@infradead.org>
-Date:   Sun, 22 Jan 2023 09:48:03 -0800
+        Sun, 22 Jan 2023 12:48:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E8313D74;
+        Sun, 22 Jan 2023 09:48:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E704560BCC;
+        Sun, 22 Jan 2023 17:48:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB89C4339C;
+        Sun, 22 Jan 2023 17:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674409736;
+        bh=xD7a+ICcNUORoNgPmgIA6dKQcRIVrlR1bQKsoNQhcwI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R9QudQK7MKhnDue+Cfrl4hn1oEdev0zihg4kd0mBUVU2Xbvxt2cHdk6qHJr4ww2qK
+         oUmzcCZvpagwnpaP1olTWMATKnbDvy17Bfnzl0XqAh8iTSif6R8FMAvCxOMcnZgFFT
+         zvLPtLA+T0k9/bLB4ckKgYYylJQN8jUf9i3yPhaj1PfHUW17Mri7VV3RxqsJJzmNDa
+         ogPUH1sl1ErSXGy2rR19naIwE3JLkofCTSMG3JOX0BR+a3ACYaWHHh/uu6BAQB61sg
+         qDKGUuscpGaRZfPsp4fMUtMZg32dxhECoY2GE2GA/Wh9YVPUaaPIUwmMyC1LKR98f2
+         NgFLDvpIPpMeg==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-15ff0a1f735so3520015fac.5;
+        Sun, 22 Jan 2023 09:48:56 -0800 (PST)
+X-Gm-Message-State: AFqh2koBOn07xTvcaVushhr4b7Ax3DkgqDk8i6DUpIAX8r3Lc7fm+MSu
+        Jc609QPWf/xfjSY9v6e7UBkcEaOzb3hlSATJKc0=
+X-Google-Smtp-Source: AMrXdXtvoxT2ZIDrNIS61KIdiJ14rtFDGARHY3PdXvco95149zfmQ8nlkFbug7LWA0hKOerHMNznWEHnHTskCU0CCck=
+X-Received: by 2002:a05:6870:b0c:b0:15b:9941:ac30 with SMTP id
+ lh12-20020a0568700b0c00b0015b9941ac30mr1694881oab.287.1674409735503; Sun, 22
+ Jan 2023 09:48:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/1] arch/sh: avoid spurious sizeof-pointer-div warning
-Content-Language: en-US
-To:     Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
-        linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <563ff850-9966-b790-96d4-bb0557e1152c@mkarcher.dialup.fu-berlin.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <563ff850-9966-b790-96d4-bb0557e1152c@mkarcher.dialup.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230119071215.23042-1-masahiroy@kernel.org>
+In-Reply-To: <20230119071215.23042-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 23 Jan 2023 02:48:19 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASUwTnOHDF9ym3u2R6bxrELEBsrKeaCCeHdz_mrA-yFYg@mail.gmail.com>
+Message-ID: <CAK7LNASUwTnOHDF9ym3u2R6bxrELEBsrKeaCCeHdz_mrA-yFYg@mail.gmail.com>
+Subject: Re: [PATCH] scripts: remove bin2c
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 1/22/23 08:27, Michael Karcher wrote:
-> Gcc warns about the pattern sizeof(void*)/sizeof(void), as it looks like
-> the abuse of a pattern to calculate the array size. This pattern appears
-> in the unevaluated part of the ternary operator in _INTC_ARRAY if the
-> parameter is NULL.
-> 
-> The replacement uses an alternate approach to return 0 in case of NULL
-> which does not generate the pattern sizeof(void*)/sizeof(void), but still
-> emits the warning if _INTC_ARRAY is called with a nonarray parameter.
-> 
-> This patch is required for successful compilation with -Werror enabled.
-> 
-> The idea to use _Generic for type distinction is taken from Comment #7
-> in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483 by Jakub Jelinek
-> 
-> Signed-off-by: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
-
-There are lots of non-ASCII characters in the new patch. This is one example
-from over 20,000 lines of warnings:
-
-../include/linux/sh_intc.h:102:27: error: stray '\302' in program
-  102 | <U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0> default:<U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0> sizeof(*a)))
-      |                                                                                                                                                                                                                 ^~~~~~~~
-
-With all of those changed to tabs or spaces:
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
+On Thu, Jan 19, 2023 at 4:13 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Commit 80f8be7af03f ("tomoyo: Omit use of bin2c") removed the last
+> use of bin2c.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
-> History:
-> v2:
->   - improve title and remove mostly redundant first sentence of the
->     description
->   - adjust formatting of the _Generic construction
-> 
-> diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
-> index c255273b0281..98d1da0d8e36 100644
-> --- a/include/linux/sh_intc.h
-> +++ b/include/linux/sh_intc.h
-> @@ -97,7 +97,9 @@ struct intc_hw_desc {
->      unsigned int nr_subgroups;
->  };
-> 
-> -#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
-> +#define _INTC_ARRAY(a) a, sizeof(a) / (_Generic(a, \
-> +                                       typeof(NULL):  (size_t)-1, \
-> +                                       default:       sizeof(*a)))
-> 
->  #define INTC_HW_DESC(vectors, groups, mask_regs,    \
->               prio_regs,    sense_regs, ack_regs)    \
-> 
+>
+>  Documentation/dontdiff     |  1 -
+>  init/Kconfig               |  4 ----
+>  scripts/.gitignore         |  1 -
+>  scripts/Makefile           |  1 -
+>  scripts/bin2c.c            | 36 ------------------------------------
+>  scripts/remove-stale-files |  2 ++
+>  6 files changed, 2 insertions(+), 43 deletions(-)
+>  delete mode 100644 scripts/bin2c.c
+
+
+
+
+Applied to linux-kbuild.
+
+
+
+>
+> diff --git a/Documentation/dontdiff b/Documentation/dontdiff
+> index 352ff53a2306..3c399f132e2d 100644
+> --- a/Documentation/dontdiff
+> +++ b/Documentation/dontdiff
+> @@ -91,7 +91,6 @@ asm_offsets.h
+>  autoconf.h*
+>  av_permissions.h
+>  bbootsect
+> -bin2c
+>  binkernel.spec
+>  bootsect
+>  bounds.h
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 7ceabd320425..f66ba19f9482 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -682,10 +682,6 @@ config CPU_ISOLATION
+>
+>  source "kernel/rcu/Kconfig"
+>
+> -config BUILD_BIN2C
+> -       bool
+> -       default n
+> -
+>  config IKCONFIG
+>         tristate "Kernel .config support"
+>         help
+> diff --git a/scripts/.gitignore b/scripts/.gitignore
+> index 11bf3c075fb6..6e9ce6720a05 100644
+> --- a/scripts/.gitignore
+> +++ b/scripts/.gitignore
+> @@ -1,6 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  /asn1_compiler
+> -/bin2c
+>  /generate_rust_target
+>  /insert-sys-cert
+>  /kallsyms
+> diff --git a/scripts/Makefile b/scripts/Makefile
+> index 0e0ae3c06ed7..32b6ba722728 100644
+> --- a/scripts/Makefile
+> +++ b/scripts/Makefile
+> @@ -3,7 +3,6 @@
+>  # scripts contains sources for various helper programs used throughout
+>  # the kernel for the build process.
+>
+> -hostprogs-always-$(CONFIG_BUILD_BIN2C)                 += bin2c
+>  hostprogs-always-$(CONFIG_KALLSYMS)                    += kallsyms
+>  hostprogs-always-$(BUILD_C_RECORDMCOUNT)               += recordmcount
+>  hostprogs-always-$(CONFIG_BUILDTIME_TABLE_SORT)                += sorttable
+> diff --git a/scripts/bin2c.c b/scripts/bin2c.c
+> deleted file mode 100644
+> index c3d7eef3ad06..000000000000
+> --- a/scripts/bin2c.c
+> +++ /dev/null
+> @@ -1,36 +0,0 @@
+> -/*
+> - * Unloved program to convert a binary on stdin to a C include on stdout
+> - *
+> - * Jan 1999 Matt Mackall <mpm@selenic.com>
+> - *
+> - * This software may be used and distributed according to the terms
+> - * of the GNU General Public License, incorporated herein by reference.
+> - */
+> -
+> -#include <stdio.h>
+> -
+> -int main(int argc, char *argv[])
+> -{
+> -       int ch, total = 0;
+> -
+> -       if (argc > 1)
+> -               printf("const char %s[] %s=\n",
+> -                       argv[1], argc > 2 ? argv[2] : "");
+> -
+> -       do {
+> -               printf("\t\"");
+> -               while ((ch = getchar()) != EOF) {
+> -                       total++;
+> -                       printf("\\x%02x", ch);
+> -                       if (total % 16 == 0)
+> -                               break;
+> -               }
+> -               printf("\"\n");
+> -       } while (ch != EOF);
+> -
+> -       if (argc > 1)
+> -               printf("\t;\n\n#include <linux/types.h>\n\nconst size_t %s_size = %d;\n",
+> -                      argv[1], total);
+> -
+> -       return 0;
+> -}
+> diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
+> index c71bf2f68360..04fcdf739638 100755
+> --- a/scripts/remove-stale-files
+> +++ b/scripts/remove-stale-files
+> @@ -29,3 +29,5 @@ rm -f scripts/extract-cert
+>  rm -f scripts/kconfig/[gmnq]conf-cfg
+>
+>  rm -f rust/target.json
+> +
+> +rm -f scripts/bin2c
+> --
+> 2.34.1
+>
+
 
 -- 
-~Randy
+Best Regards
+Masahiro Yamada
