@@ -2,93 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2F3677297
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3606772AA
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjAVVLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 16:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S230107AbjAVVaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 16:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjAVVLp (ORCPT
+        with ESMTP id S229971AbjAVVaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:11:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9B314E8A;
-        Sun, 22 Jan 2023 13:11:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC30060C6C;
-        Sun, 22 Jan 2023 21:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C06C433D2;
-        Sun, 22 Jan 2023 21:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674421903;
-        bh=FafjG3X/vdoJPsflhPttxNdSKifAkgdt8Z7YJK9fMHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aVa6eMXPCj6uxiJwSHdCQg0nP1Q2LUh1XQq9diOYCLjmBaEk/R9KofvXcyGgqOtIB
-         Xol1ZatQRux9+GNoYOsguEiEvetQi0CicD/lAwJf4HmyiR1V4Gx7m9zHdOxpZ/D5eZ
-         rSUyXU5EiyoH6pBNMfiC5G29XzII8OjX8EtJ4APYj6uxMqt1gZgvp8MQYkpXK5zIjd
-         FY41SMhzyRNiLYZZoNTblztMLRyd5zWTTJGsaPWSeX9/h/ihpGCaW5t3c2DGzWSviC
-         MkpKbU/N1Zcy1Mp8Pw1/4kzOF7rUeEjtnddN9IuCIj8OJe2plEHDtQYnhUlxScJszi
-         bek3kpDhfAgBQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 47016405BE; Sun, 22 Jan 2023 18:11:40 -0300 (-03)
-Date:   Sun, 22 Jan 2023 18:11:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 00/10] perf symbols: Improve dso__synthesize_plt_symbols()
-Message-ID: <Y82mjOIHnC2g5sqY@kernel.org>
-References: <20230120123456.12449-1-adrian.hunter@intel.com>
- <CAP-5=fUwkghLbz7O4peCSMbt2LjAtUwi+tB3_wgnZrjkg9jn9w@mail.gmail.com>
+        Sun, 22 Jan 2023 16:30:19 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EE815C85
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:30:17 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so12799444pjq.0
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:30:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6suFEBiFDBF7/CgF8yysN0WnMM/zeevTLOn21QRMh5g=;
+        b=U3fFjDYd3i5BTixCoy3mHhFVdE84HIxh2ZvHx24pGbEEM4cQEd3uO8HDLNjxuHaUKA
+         kFBY64M+HsxGxEew3fiXjZ92Fme1kq9EaHBH63GBfJRRWjBpDETftQ+Xa56pY/tRtlI3
+         Cr15urd2k/9JUky0lwhnSOOqorjOoYY0fdusoupEh1+qiduFDnKBDKN6Wcl+tmMr/wWc
+         RwIe34sn5mTLh2Nuo1och99U9TPzvYX4A3BR2bU8KUM1nsicKkbrKdiTWAQb+jeE+qSN
+         aJLJuS+oNG4IkshelVm+jAg25wDLNg4V9J0T46HYHK3ztgnVahVhr4bDrtDU3UzXbKXJ
+         v/Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6suFEBiFDBF7/CgF8yysN0WnMM/zeevTLOn21QRMh5g=;
+        b=d2omnhQo1l2qsQ+DVhNdJqlFNu+HrvkL5Yq8QU3N4MjKQWcC4nNilymjKV+ZAAJMRO
+         ZprvMe14NsWkfOcl5cgOCoqns/Rhjc9dMs1YORftB5Bwwwt51LxwZ1PcgNzK9KtJ+vgP
+         0w9zX8ht5GBNM9BmhJQB9m+SPjtr9OuBSZy141CEoNV7orFLKq699lp4WZP9r6Zb/XZY
+         +i2CdepHJz0PQzt0QZ+uNue6TyhyatgQEsJ2koo9RSN9wJFoMkPMWzWDajhA4KNimBda
+         ftN6jzOyRCiiYelAtwdYpqjV51VywLf0D8iTI2kvJQGbQq0VyhHwmAv+HSoUzcAqIDJJ
+         lEQA==
+X-Gm-Message-State: AFqh2kr0Mhki478JNv+W6+Ds16dgibbufEhGaa7vQOrTs434ACrVRPlx
+        V1FO8Ffsv5rlGP7Z4BAo4anntgLEB1PNp0gi
+X-Google-Smtp-Source: AMrXdXtFAqDQScp/WucJuxYs0KLE3WhgT6lq/XT8dORGasu7uK9h74fpyhMz4sPX3sseoSA0/DxpHw==
+X-Received: by 2002:a05:6a21:c00f:b0:b9:5fc3:6441 with SMTP id bm15-20020a056a21c00f00b000b95fc36441mr3070423pzc.0.1674423016663;
+        Sun, 22 Jan 2023 13:30:16 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y9-20020a17090aca8900b0022bb3ee9b68sm4290655pjt.13.2023.01.22.13.30.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 13:30:16 -0800 (PST)
+Message-ID: <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
+Date:   Sun, 22 Jan 2023 14:30:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fUwkghLbz7O4peCSMbt2LjAtUwi+tB3_wgnZrjkg9jn9w@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230123080830.7d50fccd@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230123080830.7d50fccd@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Jan 21, 2023 at 09:53:53AM -0800, Ian Rogers escreveu:
-> On Fri, Jan 20, 2023 at 4:35 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > Hi
-> >
-> > This is the first of 2 patchsets to improve dso__synthesize_plt_symbols().
-> > This patchset is really preparation for the 2nd patchset, which focuses
-> > on getting rid of unknown symbols that show up in Intel PT traces.
-> > The 2nd patchset is still under development.
-> >
-> > These patches are small and staightforward. Only the new Symbols test is
-> > slightly interesting because it provides a way to see what symbols
-> > perf discovers for any given dso. The test fails initially, but
-> > should pass after patch 7 "perf symbols: Add symbol for .plt header".
-> >
-> >
-> > Adrian Hunter (10):
-> >       perf test: Add Symbols test
-> >       perf symbols: Factor out get_plt_sizes()
-> >       perf symbols: Check plt_entry_size is not zero
-> >       perf symbols: Add dso__find_symbol_nocache()
-> >       perf symbols: Slightly simplify 'err' usage in dso__synthesize_plt_symbols()
-> >       perf symbols: Do not check ss->dynsym twice
-> >       perf symbols: Add symbol for .plt header
-> >       perf symbols: Allow for .plt entries with no symbol
-> >       perf symbols: Combine handling for SHT_RELA and SHT_REL
-> >       perf symbols: Check SHT_RELA and SHT_REL type earlier
- 
-> Acked-by: Ian Rogers <irogers@google.com>
+On 1/22/23 2:08 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   24337ddf1ff4 ("io_uring: Enable KASAN for request cache")
+> 
+> is missing a Signed-off-by from its committer.
 
-Thanks, added to the tested patches, will push to perf/core shortly.
+Fixed up, thanks.
 
-- Arnaldo
+-- 
+Jens Axboe
+
+
