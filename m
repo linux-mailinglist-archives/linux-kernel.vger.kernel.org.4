@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C45676DA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 15:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB21676DAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 15:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjAVOXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 09:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S230125AbjAVOaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 09:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjAVOX3 (ORCPT
+        with ESMTP id S229912AbjAVOaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 09:23:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF47315CBB;
-        Sun, 22 Jan 2023 06:23:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F57460C34;
-        Sun, 22 Jan 2023 14:23:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368C6C433D2;
-        Sun, 22 Jan 2023 14:23:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674397407;
-        bh=Qf25wTJ+EJ8usb7D3ZpuO5rbutf7nRD4cjHfe+7+Wlg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GQwY7PYqSXJvr1pCF6M08rLLbmfXo0bEtSWwMbvwOPl3ju09/k5w86otIfbqQtCOB
-         Hvv/i1ZhC8++tm9m4YZWKH9dfp1OJQ+nS+HcHWyWgN4ZoVJcBFF5+6V4CoLr27C8Iw
-         7rY34sBRFJSkHoeiKfYGjWezZ57PZVrXQznxbXmY=
-Date:   Sun, 22 Jan 2023 15:23:25 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Johan Hovold <johan+linaro@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH 5.15.y v2 0/5] phy: qcom-qmp-combo: Backport some stable
- fixes
-Message-ID: <Y81G3X7TSNk57hqc@kroah.com>
-References: <20230113204548.578798-1-swboyd@chromium.org>
+        Sun, 22 Jan 2023 09:30:08 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE92717172
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 06:30:06 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id e3so8620988wru.13
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 06:30:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PpDZ5sD5zv7Y/iHdpyDxn61pvRVZoLIH2VkNs6bDVos=;
+        b=h8leWq/zMCW4MAdZeD/mLJTV3TO3KXwN/Nhat4PLODvqeXmeLDwiI7gORQoEl8cgj4
+         EQ/l/PKgKi/aCM+FXHkpU3MKTEO70mPY1wo1d9wInRF6avgckw6m0OIHehX5a5Aqnudr
+         77WDisoz2o11SGIrQtlFeUsnAx38jzQDDG63qMFvtyNZqRpFBGOCGm83HNtT3VZ3RLpr
+         OT2p3RU2tvCEr7BCXDRbAIPrg33a4DTtLetexg+JpRLyKa0iB7jyLlMhr/MLqE6BTHTB
+         AiTNK5oB1CpIS6iU8K3FsiRMls9eczSC7ih0CTQbOrkiF0DdgSzOM8nA7JzU5AMm5K/U
+         HIbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PpDZ5sD5zv7Y/iHdpyDxn61pvRVZoLIH2VkNs6bDVos=;
+        b=LwwrJ836WPx1hlX1OXfPZPWUrdWIH5Rec1idpq9AwBri1v5TWHJRIMFyQu0NcKUZZ7
+         2hXWTDAmOrFGtgvDgCIFPwHD28P8aDQ4b9PTyI5U2MQ/95wDFw/QfxD7bKU+QqkUEqmQ
+         71QYJu4AQxMMLyOBg02crcpuE9Kuzr81Zk5C9ohOzIq1yXqqJjJcsuNbqMeOh7rLBP8H
+         qA8ORW0gg018Fdqo58/fI8wFG9lif3mZ0q1hubsVwe//mtf/Cq4Bmln3qqyC1KTt2FPW
+         wrZJsuNV5vsaCGQbdKKarbbD0IPlXVX8E/7LGsauRgcbFS1jKapSvF4YCFviDpJPyPR6
+         djjg==
+X-Gm-Message-State: AFqh2kqROXuJMtRr18Sg2++4mrep8TchobhXlzYRXtgOcTnqBLzv+1cQ
+        04adAMVI6JKvtNs2jhEeQ9lfJw==
+X-Google-Smtp-Source: AMrXdXtQRKKv9PeFSBCBuLQmkmKWOPSml2EWvIudir73H5SyynbDp6Qmdt9W/FGruq86o5qm6WMgGQ==
+X-Received: by 2002:adf:ce06:0:b0:2bf:95cc:744c with SMTP id p6-20020adfce06000000b002bf95cc744cmr6173296wrn.0.1674397805293;
+        Sun, 22 Jan 2023 06:30:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id a9-20020a5d5089000000b00287da7ee033sm2086281wrt.46.2023.01.22.06.30.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 06:30:04 -0800 (PST)
+Message-ID: <a20028e6-3318-26ca-117a-26c87c292139@linaro.org>
+Date:   Sun, 22 Jan 2023 15:30:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113204548.578798-1-swboyd@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v9 1/5] dt-bindings: PCI: ti,j721e-pci-*: add checks for
+ num-lanes
+Content-Language: en-US
+To:     Achal Verma <a-verma1@ti.com>, mranostay@ti.com, rogerq@kernel.org,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, vigneshr@ti.com, tjoseph@cadence.com,
+        sergio.paracuellos@gmail.com, pthombar@cadence.com,
+        linux-pci@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230122122121.3552375-1-a-verma1@ti.com>
+ <20230122122121.3552375-2-a-verma1@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230122122121.3552375-2-a-verma1@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 12:45:43PM -0800, Stephen Boyd wrote:
-> After the qmp phy driver was split it looks like 5.15.y stable kernels
-> aren't getting fixes like commit 7a7d86d14d07 ("phy: qcom-qmp-combo: fix
-> broken power on") which is tagged for stable 5.10. Trogdor boards use
-> the qmp phy on 5.15.y kernels, so I backported the fixes I could find
-> that looked like we may possibly trip over at some point.
+On 22/01/2023 13:21, Achal Verma wrote:
+> From: Matt Ranostay <mranostay@ti.com>
 > 
-> USB and DP work on my Trogdor.Lazor board with this set.
+> Add num-lanes schema checks based on compatible string on available lanes
+> for that platform.
 > 
-> Changes from v1 (https://lore.kernel.org/r/20230113005405.3992011-1-swboyd@chromium.org):
->  * New patch for memleak on probe deferal to avoid compat issues
->  * Update "fix broken power on" patch for pcie/ufs phy
-> 
-> Johan Hovold (5):
->   phy: qcom-qmp-combo: disable runtime PM on unbind
->   phy: qcom-qmp-combo: fix memleak on probe deferral
->   phy: qcom-qmp-usb: fix memleak on probe deferral
->   phy: qcom-qmp-combo: fix broken power on
->   phy: qcom-qmp-combo: fix runtime suspend
-> 
->  drivers/phy/qualcomm/phy-qcom-qmp.c | 97 ++++++++++++++++++-----------
->  1 file changed, 61 insertions(+), 36 deletions(-)
-> 
-> Cc: Johan Hovold <johan+linaro@kernel.org>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> 
-> base-commit: d57287729e229188e7d07ef0117fe927664e08cb
-> -- 
-> https://chromeos.dev
-> 
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> Signed-off-by: Achal Verma <a-verma1@ti.com>
 
-For obvious reasons, I can't take this series if newer kernel releases
-do not also contain all of these (no would you want me to.)
 
-So can you please also provide a backported series for 6.1.y so that
-these can be considered?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-thanks,
+Best regards,
+Krzysztof
 
-greg k-h
