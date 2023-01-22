@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F015676AF1
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 04:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB34676AF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 04:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjAVDBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 22:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S229763AbjAVDBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 22:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjAVDBN (ORCPT
+        with ESMTP id S229744AbjAVDBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 22:01:13 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E28D1EFEF
-        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 19:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674356472; x=1705892472;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oO6psIhtGdFsIqJCaMn3BBf0KnZ8FJdS6hN5BHC2c50=;
-  b=dVlsRqQXJKPSL8oUt+TSRtpG87txLB5DiFiIQiyXEFYm6l0tdkLcdway
-   hDMxrMrk788E4q3/RPvlLduhQH15ZxuVWzBQUobgdXJIeuPBPatsiukcw
-   Q2MgJgxrrWel23k9lflyH/mHsfLvYaiA4sLkuahioJPmLzbSdN9Eccwap
-   ftDuIJukTDAIE5VFUC7No0a57JFQ9lcZ+PDJQSp4nzDg5KpXoDwOUzkxK
-   nI/BpugurfLj/qucHK3k0Ts0sHNAAVu2GgW1rOX4cSllt5ergqhGa2P3r
-   3UnfGh2lx89WFsdOgQg8WB5V9ZYS1DzlzTEBr86O/S2rSTttShl9aXZWE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="388220810"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="388220810"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 19:01:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="906391986"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="906391986"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Jan 2023 19:01:10 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJQbV-0004hQ-2o;
-        Sun, 22 Jan 2023 03:01:09 +0000
-Date:   Sun, 22 Jan 2023 11:00:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/microcode] BUILD SUCCESS
- a9a5cac225b0830d1879640e25231a37e537f0da
-Message-ID: <63cca6e6.XqtZQHYyIn0dhtEI%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 21 Jan 2023 22:01:30 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECA223DB7
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 19:01:25 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4a263c4ddbaso127681647b3.0
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 19:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ne6qQGUuq72y7Dfk6gWGSHwmrqqO2LzbmO36IfFBAE=;
+        b=qPXfA7zuuF7h+5B3sMdAgOrhEWDHPkMy4WvRUWUO+PIG6n2ZGkQuqP00BdG2BrL5wo
+         68D5MlNGA+tow+zAllzQxxAr7eOQqxM8beX8K7EojYpsMoUEa7klBXXgJ0AmuwDGQKFn
+         vSZo3pgSR+hfszPe4HV30F6oJ3ObqzrJ2qCHacSk6eRAOsmWVUo6Wr9+NJqO3aiv/fmd
+         wlxB/VCwnVST84wmoOtVscKNqLUTleoQFhinZ7q/9Skhxv6scNOWBGFZ4eaC+azQ8hrw
+         REXoHqSq6Cmh4MEyx0I+5myj9leBvd9+QoL8xnMZrajv99TUQtx7Ro0rgOvhvGqViufG
+         fEEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7ne6qQGUuq72y7Dfk6gWGSHwmrqqO2LzbmO36IfFBAE=;
+        b=bcCQWiEWPk19wHQoXwjC1CcGgPytJ7Ek72cz92tJ8YQkiHjNMJ/SwLUcRfvVCga3wh
+         ZMcn/lmxS4vI9M+XpQE1g2+9MYcnoeVB61Op8ePsnFsSSITZfIheD8bHXChSEVaWP9ev
+         +8FkbayzwKiN/f0Pz63BSIixn/QT0iHexeowz3GmB0egytj/xh7ftRX+XN7pjxyHnXW4
+         63/FQ+0ED+WjTtZmdLrTdPKHnqyMSRPzgvqlGVQlJSuhn9JnsfMuz39D9IT23uqkSJDh
+         c3hdot26Za0VCK0ptSUTDIKCehPJ/95u58TaPG9g2xVnvKpfsnnuUem00T0ODOLNS4Rs
+         5d2g==
+X-Gm-Message-State: AFqh2krCUz3bbmM8CMEwUH0rCqtTJovrqSnMHzxypoGzzNPDvghH+QKJ
+        1KET9lrSpnydCKVL9VF/XlTpaMbcpUo839jXjm6FXw==
+X-Google-Smtp-Source: AMrXdXv/qHeBECVBALHenwwxx1YjVufFnnq+u0AOBgD7yd3K4Rdgbc9H5t37w9N0PQbMbJBqYvnqRkbDlVKktH9eYoE=
+X-Received: by 2002:a81:1b8b:0:b0:4ff:774b:7ffb with SMTP id
+ b133-20020a811b8b000000b004ff774b7ffbmr1068529ywb.218.1674356484788; Sat, 21
+ Jan 2023 19:01:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAJuCfpEMEsSYcKakFiDK=QV+apW-2baLcUcw7uRyrmKkWVnR8A@mail.gmail.com>
+ <20230113022555.2467724-1-kamatam@amazon.com> <CAJuCfpEH7kC=S8S_SRLW-X483kpaL4xdn5b35Ou08V7b56QdJA@mail.gmail.com>
+ <CAJuCfpHV2-pnHd6U3paA1fO2gaYP1RTqAJwp_5QC7C2YR3JG5g@mail.gmail.com>
+ <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
+ <20230120013055.3628-1-hdanton@sina.com> <CAJuCfpF9tCx4mjYFyX+p7qO9qt+rm=UMSdBt-uzaOqE0ThG04g@mail.gmail.com>
+ <20230120090001.3807-1-hdanton@sina.com> <CAJuCfpFShuXs_CcfXR6PjYyXemapbuHPG0oZQJb_Y9ZpCUGZXg@mail.gmail.com>
+ <20230121051746.4100-1-hdanton@sina.com>
+In-Reply-To: <20230121051746.4100-1-hdanton@sina.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Sat, 21 Jan 2023 19:01:13 -0800
+Message-ID: <CAJuCfpESYRYavQOkDYyJhurpEcV5ioUMb=i4Q0EJ1UpVpyRfAA@mail.gmail.com>
+Subject: Re: another use-after-free in ep_remove_wait_queue()
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Munehisa Kamata <kamatam@amazon.com>, Tejun Heo <tj@kernel.org>,
+        ebiggers@kernel.org, hannes@cmpxchg.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mengcc@amazon.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
-branch HEAD: a9a5cac225b0830d1879640e25231a37e537f0da  x86/microcode/intel: Print old and new revision during early boot
+On Fri, Jan 20, 2023 at 9:18 PM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On Fri, 20 Jan 2023 08:28:25 -0800 Suren Baghdasaryan <surenb@google.com>
+> > On Fri, Jan 20, 2023 at 1:00 AM Hillf Danton <hdanton@sina.com> wrote:
+> > > +++ b/kernel/sched/psi.c
+> > > @@ -1529,6 +1529,7 @@ static int psi_fop_release(struct inode
+> > >  {
+> > >         struct seq_file *seq = file->private_data;
+> > >
+> > > +       eventpoll_release_file(file);
+> >
+> > Be careful here and see the comment in
+> > https://elixir.bootlin.com/linux/latest/source/fs/eventpoll.c#L912.
+> > eventpoll_release_file() assumes that the last fput() was called and
+> > nobody other than ep_free() will race with us. So, this will not be
+> > that simple.
+>
+> The epmutex serializes eventpoll_release_file() and ep_free(). And this
+> is in psi_fop_release(), so no chance is likely left for another release.
+>
+> > Besides if we really need to fix the order here, the fix
+> > should be somewhere at the level of cgroup_file_release() or even
+> > kernfs to work for other similar situations.
+>
+> Good point but cgroup and kernfs have no idea of psi trigger.
 
-elapsed time: 721m
+Yes, that's why I think if we really need to fix the order here and do
+it properly, it won't be straightforward. IMHO wake_up_pollfree() is
+an appropriate and simple fix for this.
 
-configs tested: 48
-configs skipped: 64
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                              defconfig
-i386                          randconfig-a014
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a012
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-bpf
-i386                          randconfig-a016
-i386                                defconfig
-i386                          randconfig-a001
-x86_64                           allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a013
-i386                          randconfig-a003
-x86_64                        randconfig-a011
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a006
-i386                             allyesconfig
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a011
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a015
-x86_64                        randconfig-a014
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-x86_64                        randconfig-a016
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-i386                          randconfig-a006
-x86_64                        randconfig-a005
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> The bonus of the uaf is check polled file upon release in scenarios like
+> the psi trigger.
+>
