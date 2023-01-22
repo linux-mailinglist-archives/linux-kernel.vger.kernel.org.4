@@ -2,113 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC806771CD
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 20:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDB36771D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 20:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjAVTSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 14:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        id S230038AbjAVTXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 14:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjAVTSl (ORCPT
+        with ESMTP id S229814AbjAVTXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 14:18:41 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F4E17CD2;
-        Sun, 22 Jan 2023 11:18:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674415105; bh=tkp8AA/WrbPSyED/4I0Us07lzEcW/rBKuLqIvF64Fxw=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=l3Yak0+JQQp+Pq909XjXnE1opG4cxxAmEJ67WhxV8OUew+BnNbJFsIbNZ7+P3TvBp
-         j39yMzTveiYU6YkaKSIUY4rq5w0Xh1RomCkdg4rw2Ztx+IbvEE6tZF233VOtsYyugK
-         pAinFq0JxOnVYqfLgR9MCgX9E7qld77TLcWNAxOY=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sun, 22 Jan 2023 20:18:25 +0100 (CET)
-X-EA-Auth: LdDGcmlyCDifsT5HiIapm2X/hnFbkOzUYkONQlTh1pl4H71cRRgUK7ZBETGADFOUHZvCz941mATWu+S9bUSmGyulD29wydo2
-Date:   Mon, 23 Jan 2023 00:48:22 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH] scsi: qla2xxx: Use a variable for repeated mem_size
- computation
-Message-ID: <Y82L/iFjguJwuPC1@ubun2204.myguest.virtualbox.org>
-References: <Y7spwF8HTt0c0l7y@ubun2204.myguest.virtualbox.org>
+        Sun, 22 Jan 2023 14:23:08 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AEAEB76;
+        Sun, 22 Jan 2023 11:23:06 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso7721163wmn.5;
+        Sun, 22 Jan 2023 11:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VZgTOtPGSgMuzF9eyGe3uxsgqZaDBr73xoLKIKQ8qoI=;
+        b=liGewbzhxNIGOH9gaCRbraWIDKYPXaa2hrJABewuTnToA4H3wA274NDzoza54G8OkN
+         5YbPzCgXypzAOhGWXQ7Hx/TXgx98rUVFzk8iqyK5b98asK0/fWMBfGtLrrGHzWJ4vOvO
+         XGSpvZVqcOBHjL9ElNVHKKH0UbDJqncQ79IMGbXNkd30twBh2Rx4U0RxnqLmUhkKRwt9
+         axNIhDXLnB7iL39uvKQrIML+JZOJsC7aUE2uep8BFbnE0RMZoHkhkxU53ClA2/VQYXrP
+         XdWXA3BUslp3EANFIu9SY5ez3j+pBBxCfSUBc22U+LFssA3QmKDh/IznnVLDWU5aWAQP
+         AOsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VZgTOtPGSgMuzF9eyGe3uxsgqZaDBr73xoLKIKQ8qoI=;
+        b=AYDVZD9LFf77yVDsfEkebLa1yNhGNhAV9IlOfjb+AkraTde7CKqwEScfRMReZjG+LD
+         /Mn4u19B1sMoU6lLXomAyl6yEFdALyj/ZwXMEYSOC1Z0ZbNy3vVna7w4RXiNNC5ANBIb
+         GD1YulYYVfMk9ar6kZv0xrpkAujmAOyAUeu0oC9iqEyPkVTqA7T4/LAOb0b3MdE20bN9
+         l2TF8M7Qthqp+PCTUeg9vNFVHx6Us2Jtym3TJA7BVuanWMsQEclayX1HzfzreYzYScWe
+         r0AZieMyuhOX/3/AjNdy4eqWhC0JwRVbS1vCkJ3TD0W/O/FjLEeWwEjy7P30Ky4MULIM
+         hbAg==
+X-Gm-Message-State: AFqh2kqPRCdJWai7vlHhLkkKBnQ1ww8994ftXru7+tTg2M2ovs4/CKpz
+        1/yHh392xz6z6iDFtx4aQghDoUauKqg=
+X-Google-Smtp-Source: AMrXdXtHvhbVur0MasjroXyjBuzK+NXpk6IFLI1QuE5dN3LM74XAv/dXjl5LRZ0myNF9fevLI23wcg==
+X-Received: by 2002:a05:600c:1712:b0:3d9:a145:91a with SMTP id c18-20020a05600c171200b003d9a145091amr21406767wmn.28.1674415384960;
+        Sun, 22 Jan 2023 11:23:04 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.gmail.com with ESMTPSA id x15-20020a05600c188f00b003db122d5ac2sm8327493wmp.15.2023.01.22.11.23.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 11:23:04 -0800 (PST)
+Message-ID: <63cd8d18.050a0220.85c72.4142@mx.google.com>
+X-Google-Original-Message-ID: <Y82MXvxczUljsmWM@Ansuel-xps.>
+Date:   Sun, 22 Jan 2023 20:19:58 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: opp: opp-v2-kryo-cpu: enlarge
+ opp-supported-hw maximum
+References: <20230122174548.13758-1-ansuelsmth@gmail.com>
+ <20230122174548.13758-2-ansuelsmth@gmail.com>
+ <CAA8EJpp1c=sC0d_G1eSuOzJbjusW86zHezfwY3JRH=EBp7tNmA@mail.gmail.com>
+ <63cd7cda.050a0220.53454.5a1b@mx.google.com>
+ <CAA8EJppFKDXJtt5zyM4mhEJ=BQwHUCVJcJKeH2GjkzAvwbfCBw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7spwF8HTt0c0l7y@ubun2204.myguest.virtualbox.org>
+In-Reply-To: <CAA8EJppFKDXJtt5zyM4mhEJ=BQwHUCVJcJKeH2GjkzAvwbfCBw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 02:08:24AM +0530, Deepak R Varma wrote:
-> Use a variable to upfront compute memory size to be allocated, instead of
-> repeatedly computing the memory size at different instructions. The reduced
-> instruction length also allows to tidy up the code. Issue identified using
-> the array_size_dup Coccinelle semantic patch.
+On Sun, Jan 22, 2023 at 09:15:53PM +0200, Dmitry Baryshkov wrote:
+> On Sun, 22 Jan 2023 at 20:13, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> >
+> > On Sun, Jan 22, 2023 at 07:59:42PM +0200, Dmitry Baryshkov wrote:
+> > > On Sun, 22 Jan 2023 at 19:46, Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > > >
+> > > > Enlarge opp-supported-hw maximum value. In recent SoC we started
+> > > > matching more bit and we currently match mask of 112. The old maximum of
+> > > > 7 was good for old SoC that didn't had complex id, but now this is
+> > > > limiting and we need to enlarge it to support more variants.
+> > > >
+> > > > Document all the various mask that can be used and limit them to only
+> > > > reasonable values instead of using a generic maximum limit.
+> > > >
+> > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > > ---
+> > > >  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 20 +++++++++++++++++--
+> > > >  1 file changed, 18 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> > > > index b4947b326773..908cb0d7695a 100644
+> > > > --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> > > > +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> > > > @@ -50,12 +50,28 @@ patternProperties:
+> > > >        opp-supported-hw:
+> > > >          description: |
+> > > >            A single 32 bit bitmap value, representing compatible HW.
+> > > > -          Bitmap:
+> > > > +          Bitmap for MSM8996 format:
+> > > >            0:  MSM8996, speedbin 0
+> > > >            1:  MSM8996, speedbin 1
+> > > >            2:  MSM8996, speedbin 2
+> > > >            3-31:  unused
+> > > > -        maximum: 0x7
+> > > > +
+> > > > +          Bitmap for MSM8996 later revision format:
+> > > > +          0:  MSM8996, speedbin 0
+> > > > +          1:  MSM8996, speedbin 1
+> > > > +          2:  MSM8996, speedbin 2
+> > > > +          3:  always set
+> > >
+> > > This is used for speedbin 3
+> > >
+> >
+> > Is it right that 4 bit speedbin is only introduced later? Cause looking
+> > at the current opp-supported-hw for MSM8996SG and MSM8996 originally
+> > (and based on what this Documentation say) there were only 3 bit and
+> > then they started using a 4th bit. Just asking if it's ok to keep the
+> > bitmap split or i should just merge it.
 > 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
+> I don't think I got the question, please excuse me. Historically
+> msm8996.dtsi used 0xff as 'all possible platforms' value for the GPU
+> tables. Lately I fixed the CPU tables, added support for speed-bin 3.
+> However I left these 0xff in GPU opp table intact. I don't remember if
+> there was any reason behind that. Anyway this bit isn't always set, it
+> is set only for the entries which should be selected for MSM8996 speed
+> bin 3.
+>
 
-Hello,
-May I request a review and feedback comments on this patch proposal?
+Question is: Should I merge the 2 format to something like?
 
-Thank you,
-./drv
+          A single 32 bit bitmap value, representing compatible HW.
+          Bitmap for MSM8996 format:
+          0:  MSM8996, speedbin 0
+          1:  MSM8996, speedbin 1
+          2:  MSM8996, speedbin 2
+          3:  MSM8996, speedbin 3
+          4-31:  unused
 
->  drivers/scsi/qla2xxx/tcm_qla2xxx.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+          Bitmap for MSM8996SG format (speedbin shifted of 4 left):
+          0-3:  unused
+          4:  MSM8996SG, speedbin 0
+          5:  MSM8996SG, speedbin 1
+          6:  MSM8996SG, speedbin 2
+          7-31:  unused
+
+Or just replace the 'Always set' to speedbin 3?
+
+(by the looks of it seems they started blowing speedbin 3 only in later
+revision and initialy there were only 3 speedbin bit)
+
+> >
+> > > > +          4-31:  unused
+> > > > +
+> > > > +          Bitmap for MSM8996SG format (speedbin shifted of 4 left):
+> > > > +          0-3:  unused
+> > > > +          4:  MSM8996SG, speedbin 0
+> > > > +          5:  MSM8996SG, speedbin 1
+> > > > +          6:  MSM8996SG, speedbin 2
+> > > > +          7-31:  unused
+> > > > +        enum: [0x1, 0x2, 0x3, 0x4, 0x7,
+> > > > +               0x9, 0xd, 0xe, 0xf,
+> > > > +               0x10, 0x20, 0x30, 0x70]
+> > > >
+> > > >        clock-latency-ns: true
+> > > >
+> > > > --
+> > > > 2.38.1
+> > > >
+> >
+> > --
+> >         Ansuel
 > 
-> diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-> index 8fa0056b56dd..8024322c9c5a 100644
-> --- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-> +++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-> @@ -1552,6 +1552,7 @@ static const struct qla_tgt_func_tmpl tcm_qla2xxx_template = {
->  static int tcm_qla2xxx_init_lport(struct tcm_qla2xxx_lport *lport)
->  {
->  	int rc;
-> +	size_t map_sz;
->  
->  	rc = btree_init32(&lport->lport_fcport_map);
->  	if (rc) {
-> @@ -1559,17 +1560,15 @@ static int tcm_qla2xxx_init_lport(struct tcm_qla2xxx_lport *lport)
->  		return rc;
->  	}
->  
-> -	lport->lport_loopid_map =
-> -		vzalloc(array_size(65536,
-> -				   sizeof(struct tcm_qla2xxx_fc_loopid)));
-> +	map_sz = array_size(65536, sizeof(struct tcm_qla2xxx_fc_loopid));
-> +
-> +	lport->lport_loopid_map = vzalloc(map_sz);
->  	if (!lport->lport_loopid_map) {
-> -		pr_err("Unable to allocate lport->lport_loopid_map of %zu bytes\n",
-> -		    sizeof(struct tcm_qla2xxx_fc_loopid) * 65536);
-> +		pr_err("Unable to allocate lport->lport_loopid_map of %zu bytes\n", map_sz);
->  		btree_destroy32(&lport->lport_fcport_map);
->  		return -ENOMEM;
->  	}
-> -	pr_debug("qla2xxx: Allocated lport_loopid_map of %zu bytes\n",
-> -	       sizeof(struct tcm_qla2xxx_fc_loopid) * 65536);
-> +	pr_debug("qla2xxx: Allocated lport_loopid_map of %zu bytes\n", map_sz);
->  	return 0;
->  }
->  
+> 
+> 
 > -- 
-> 2.34.1
-> 
-> 
-> 
+> With best wishes
+> Dmitry
 
-
+-- 
+	Ansuel
