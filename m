@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF85676C0F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 11:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283F6676C18
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 11:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjAVKUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 05:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S229768AbjAVKYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 05:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjAVKUA (ORCPT
+        with ESMTP id S229566AbjAVKYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 05:20:00 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245CB1E1D7
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 02:20:00 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3C7C23200645;
-        Sun, 22 Jan 2023 05:19:59 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Sun, 22 Jan 2023 05:19:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1674382798; x=1674469198; bh=r5
-        oKi9VweDyRvedU0o7SpTgiCr05j2yCKy3Tna3B5YU=; b=h2fdLCOC/PbONAgApO
-        aZziaw7BmWZFC3JvYLGNQ/9Mlrty2bjNoWRjbc5YNPFg25obpj60Vqqpximr4NCG
-        le92tYo6UJx5dpcv2CszaWgjd1j4lE6Uv0iOaUfta+os/wVjz2+FCjN0vnPHutOk
-        jb2z6UNG0u8PeaCb9vNRDqylH8Dc1uJF06nMq+4zh2pSDvWKQrLMbh3/Ia6snqIC
-        44ras2jfuGn9hvxgoCSNwXqe+JMcLSFG1nMI2NCRNjJEWowsT7IHbT6hzgSFDRWy
-        nr01+Ayizg2xgYZmCvh8kusOQfS+6cT5Qf1Epe7Pwc/g35kTb8azo3juCTmygYMB
-        sSDA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674382798; x=1674469198; bh=r5oKi9VweDyRvedU0o7SpTgiCr05
-        j2yCKy3Tna3B5YU=; b=U02OMTgK2nM7kCd4hxQI5Dl/tyFyGRrM6GKYKS5Rfbt9
-        ea6VO4UoEWjs5BVnQjUdHtPEnY4Od0ZDH21ITrslQjTUO/xdOjRFezMe/wII2D9a
-        1MVUgB2xwjePc5KbBq3U9sJH3z2Iwh+zFTGCl8LcAnwvZmU7cgrnRExaWuHz9Xuj
-        CEeUSmla/5ja4qc2oQMyO8vNWUDv8F9zDic3f6rJ6F6kkOtTFOXxnoQ7KTzIJ+80
-        rgwPG4AGVniwTCII5bVdoN8JlQxRmiJ49Fo2dIYiVrBjJyzqdRIl4YHNw+UfQ2qd
-        GTDA9Wg3qPThwHmK0f6qrTXWimlw2jNArNiCJ81UXg==
-X-ME-Sender: <xms:zg3NY6WILBKUnTFh5rppTOVUVc-qAZ93XdaARTh3FaRFGHdioG562w>
-    <xme:zg3NY2mIzBWszMDoV_5MeJNtqL0OvuLDjpz7-brarIpt0d6UPcdE2IfBiJ6HfFm1R
-    c36aNUbIKgXUpXzeUI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduiedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:zg3NY-bC0NDrF8QLco4BBMHMcWOooYs04NUHL8kgGxIzf7o3_x_scQ>
-    <xmx:zg3NYxUM6dz-reDPGUS-Pbz6AmHe6yFW6J1sYqh9KL6sipCUgDpaLw>
-    <xmx:zg3NY0nHtAXhqoE8ldE5VAgMgJCghBnhX9k65fuqKegGnJWRWwaudA>
-    <xmx:zg3NY-j3VyCLxA1D9PsAE02_AqHjlzuuh4s94Pa7BDACeV2V1HPQUA>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B7963A6007C; Sun, 22 Jan 2023 05:19:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <938ee8b4-3745-43a7-b813-801df22f2888@app.fastmail.com>
-In-Reply-To: <20230121073741.3807-1-lina@asahilina.net>
-References: <20230121073741.3807-1-lina@asahilina.net>
-Date:   Sun, 22 Jan 2023 11:19:38 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Asahi Lina" <lina@asahilina.net>,
-        "Hector Martin" <marcan@marcan.st>
-Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: apple: rtkit: Add register dump decoding to crashlog
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 22 Jan 2023 05:24:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAE91C303
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 02:23:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674383032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vp4nDruEit5hTFxTjTpKC1ydXnGDFdRa2R0+xR8TkNY=;
+        b=d+RxrJaGACwDWxQevYeg72s5qe1a2KytczAM+FccY1OvjRLtRK640e1w3MpMnHgPgWOEBa
+        sQhDh5OEzBtT/6ZXhdpfehvMtS3gCQaV20n21qL9RbwvA1XBn6MrkMEi5T/0jra4Sw5hPO
+        YLKK9Bs9bUbJuUrXx1daG4WU8Gal54Y=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-440-8jdeQaVzPPukNSTMQ-7fRw-1; Sun, 22 Jan 2023 05:23:50 -0500
+X-MC-Unique: 8jdeQaVzPPukNSTMQ-7fRw-1
+Received: by mail-ej1-f71.google.com with SMTP id hr22-20020a1709073f9600b0086ffb73ac1cso6130584ejc.23
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 02:23:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vp4nDruEit5hTFxTjTpKC1ydXnGDFdRa2R0+xR8TkNY=;
+        b=lUeOozDHeYkGRtYJNJtmYb365j0/kvMdUEjT/xFsrpco5RMqHhd+Ydg7YvJfhvUAQT
+         fqfd75XvfPAltyK+hAbtrpkQpUmlKCqzwld30wUc5EmRHpG/vdfBUFMjlL8M6iCE+Zn1
+         WszqVh5jGx5+qZpX9dGg0n9WqcIGUC5OorKe37UkRFd1n8w7X1wdNuMi6CMXH6FsAy6d
+         J4qhgPLrzzZ3eXGbg1hLX6z70DU7a2Lrz3yl67GjsxRINiUmOiYznzNvAbdSGhADbE9d
+         F114ME/uQ4Jk6r6+YL6utZlbrSKjD1AqqnqX4jFkaBdRKms2lwjlFMJkYYmCae2+ruKQ
+         loVg==
+X-Gm-Message-State: AFqh2krc54RDA42/hPklhDau1wvR/9BHGEyoCnmBxs1ZmR4aQSeXHmwD
+        1NZQFtNdSrLykmr4rCPaax2WEDEkPU06qz4kWrkhjq+mql64Sd+21cXURGLKTiVdKVAuj9IHJTL
+        hmgPReefEGSulOZv+vOfU8PtO
+X-Received: by 2002:a17:906:71a:b0:7c1:6344:84a with SMTP id y26-20020a170906071a00b007c16344084amr22442679ejb.5.1674383029671;
+        Sun, 22 Jan 2023 02:23:49 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsJYsSlxdKNdkV3k0zZFAQEWMBIP57WsNsog63A1Utnn4PhgD2R94CsSnVpUciaRFnFvrZD5Q==
+X-Received: by 2002:a17:906:71a:b0:7c1:6344:84a with SMTP id y26-20020a170906071a00b007c16344084amr22442658ejb.5.1674383029366;
+        Sun, 22 Jan 2023 02:23:49 -0800 (PST)
+Received: from redhat.com ([2.52.149.29])
+        by smtp.gmail.com with ESMTPSA id y19-20020a1709060a9300b0084debc351b3sm17314670ejf.20.2023.01.22.02.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 02:23:48 -0800 (PST)
+Date:   Sun, 22 Jan 2023 05:23:44 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Laurent Vivier <lvivier@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eli Cohen <elic@nvidia.com>, Jason Wang <jasowang@redhat.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Cindy Lu <lulu@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Subject: Re: [PATCH 0/4] virtio_net: vdpa: update MAC address when it is
+ generated by virtio-net
+Message-ID: <20230122052211-mutt-send-email-mst@kernel.org>
+References: <20230122100526.2302556-1-lvivier@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230122100526.2302556-1-lvivier@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023, at 08:37, Asahi Lina wrote:
-> When the coprocessor crashes, it's useful to get a proper register dump
-> so we can find out what the firmware was doing. Add a decoder for this.
->
-> Originally this had ESR decoding by reusing the ARM64 arch header for
-> this, but that introduces some module linking and cross-arch compilation
-> issues, so let's leave that out for now.
->
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
+On Sun, Jan 22, 2023 at 11:05:22AM +0100, Laurent Vivier wrote:
+> When the MAC address is not provided by the vdpa device virtio_net
+> driver assigns a random one without notifying the device.
+> The consequence, in the case of mlx5_vdpa, is the internal routing
+> tables of the device are not updated and this can block the
+> communication between two namespaces.
+> 
+> To fix this problem, use virtnet_send_command(VIRTIO_NET_CTRL_MAC)
+> to set the address from virtnet_probe() when the MAC address is
+> randomly assigned from virtio_net.
+> 
+> While I was testing this change I found 3 other bugs in vdpa_sim_net:
+> 
+> - vdpa_sim_net sets the VIRTIO_NET_F_MAC even if no MAC address is
+>   provided. So virtio_net doesn't generate a random MAC address and
+>   the MAC address appears to be 00:00:00:00:00:00
+> 
+> - vdpa_sim_net never processes the command and virtnet_send_command()
+>   hangs in an infinite loop. To avoid a kernel crash add a timeout
+>   in the loop.
+> 
+> - To allow vdpa_sim_net to process the command, replace the cpu_relax()
+>   in the loop by a schedule(). vdpa_sim_net uses a workqueue to process
+>   the queue, and if we don't allow the kernel to schedule, the queue
+>   is not processed and the loop is infinite.
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+I'd split these things out as opposed to a series unless there's
+a dependency I missed.
 
-thanks,
+All this reminds me of
+https://lore.kernel.org/r/20221226074908.8154-5-jasowang%40redhat.com
 
-Sven
+how is this patch different/better?
+Pls also CC people involved in that original discussion.
+
+Thanks!
+
+> Laurent Vivier (4):
+>   virtio_net: notify MAC address change on device initialization
+>   virtio_net: add a timeout in virtnet_send_command()
+>   vdpa_sim_net: don't always set VIRTIO_NET_F_MAC
+>   virtio_net: fix virtnet_send_command() with vdpa_sim_net
+> 
+>  drivers/net/virtio_net.c             | 21 +++++++++++++++++++--
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  6 ++++++
+>  2 files changed, 25 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.39.0
+> 
 
