@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3316B677378
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 00:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AAB67737B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 00:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjAVXeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 18:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S230218AbjAVXhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 18:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjAVXen (ORCPT
+        with ESMTP id S230094AbjAVXhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 18:34:43 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D69CC3E;
-        Sun, 22 Jan 2023 15:34:41 -0800 (PST)
-Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MGxYh-1pXGEW2C0J-00E4jE; Mon, 23 Jan 2023 00:34:23 +0100
-Message-ID: <786df750-221e-82fc-a324-d30261296974@i2se.com>
-Date:   Mon, 23 Jan 2023 00:34:22 +0100
+        Sun, 22 Jan 2023 18:37:47 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2228A59;
+        Sun, 22 Jan 2023 15:37:45 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0B73F1F54F;
+        Mon, 23 Jan 2023 00:37:42 +0100 (CET)
+Date:   Mon, 23 Jan 2023 00:37:41 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: adc: Require generic adc-chan
+ name for channel nodes
+Message-ID: <20230122233741.7jn2nzghfvhgoemr@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Cameron <jic23@kernel.org>, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>, iio@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230119212632.185881-1-marijn.suijten@somainline.org>
+ <20230119212632.185881-2-marijn.suijten@somainline.org>
+ <20230121170825.0d284151@jic23-huawei>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230120201104.606876-1-umang.jain@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:pwEGleuOvkGVLFNdWT9r9sYPRFmBi28YBzSb3MFzEHeB1TTN5rj
- FM0eWiaEqvlPxR21qTOtFP1AtqZwEyU11wvK3J1XRU0Pn7by/YTj5i0pguOBzYxUHtxTFtF
- Q1RBLA4aWqisAuHIuvKN1p9gdGnXS8mbJvwCBjSDRr5AtFGMuY0yNN77US5cX6J7hLXmT/U
- LBfZAQYeA4IcMe7SKMUGg==
-UI-OutboundReport: notjunk:1;M01:P0:plyGRzBlSb8=;cZnlOFBpGjubLlzObuZBDdxpC6x
- SNgLXlBG1bTLzX72skd7WwDTriTVVa0sgFPTKk5bjE6mLZdFiDgiVqrNEn4fJZyYY1BPrnAyL
- wmcDboRjmc+xqCGNbykozpQJDjZkJt2kUV/rn1c56IqKdde/r0+Lm2Koep4VawgxSZHbNRpUM
- R5bPgVaiZDVbYPYLsSGuX74L3bfS3lEva8XHQ6W4MIgtWL+eXeVhBa3TFCvlqrXUrQxR39iqN
- 7Cwf5SJ2NbzkU8bs0QUVO1nc4n8ORD+zA9yJFOe+EeR7lTHX+qO4ie5XmjL2NJCL/q4QPESal
- KAICWzeBseL3mugJowfAfrY20NvSX9uvHo6WL5QLMAeQy6MCX1lc0RxYR+4Z5tMaXKPnmgQ0E
- jV+ZZB/f/K2djwt2miAqdBWv4SL6kxs9HSwzk3Ee8QCg/mq954sMXJEbKL5PF+MIe1kOB6AnL
- k/S5514lv160Y7ylYA6IKJpo23AV94CUhpKQX9Jbka4rRhpIfmYOl8T0xNPx5INKu86jtqhRd
- uUhih5OvLvrSgInn/OqbtVzoB6dyFnhvizXiEnGOslxFLQjMmZWqumFwHlgKreP1MQF57PmIe
- xnriMKhwzKqFMWFR6GuHdbBc3zWV++xsioBK9omP64gyg57tOJhAF3BTv3sfefHpcLzo84Ude
- TQUCf3TVdVo3oniguaZ0pn7Xo69HgSfys0D1keB3TQ==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230121170825.0d284151@jic23-huawei>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+On 2023-01-21 17:08:25, Jonathan Cameron wrote:
+> On Thu, 19 Jan 2023 22:26:31 +0100
+> Marijn Suijten <marijn.suijten@somainline.org> wrote:
+> 
+> > As discussed in [1] it is more convenient to use a generic adc-chan node
+> > name for ADC channels while storing a friendly - board-specific instead
+> > of PMIC-specific - name in the label, if/when desired to overwrite the
+> > channel description already contained (but previously unused) in the
+> > driver [2].
+> > 
+> > Replace the .* name pattern with the adc-chan literal, but leave the
+> > label property optional for bindings to choose to fall back a channel
+> > label hardcoded in the driver [2] instead.
+> > 
+> > [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
+> > [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Other than the use in the tm5 thermal example that Rob's bot found, this looks
+> good to me.
 
-Am 20.01.23 um 21:10 schrieb Umang Jain:
-> This series just introduces five extra patches for dropping include
-> directives from Makefiles (suggested by Greg KH) and rebased.
->
-> The main patch (6/6) removes platform device/driver abuse and moves
-> things to standard device/driver model using a custom_bus. Specific
-> details are elaborated in the commit message.
->
-> The patch series is based on top of d514392f17fd (tag: next-20230120)
-> of linux-next.
+Yep, shouldn't have ran dt_binding_check and dtbs_check with
+DT_SCHEMA_FILES=just/the/one/edited/here.
 
-applied this series on top of linux-next and build it with 
-arm/multi_v7_defconfig plus the following:
+> I think ideal would be to fix that in a precursor patch then
+> do this one.
 
-CONFIG_BCM_VIDEOCORE=y
-CONFIG_BCM2835_VCHIQ=m
-CONFIG_VCHIQ_CDEV=y
-CONFIG_SND_BCM2835=m
-CONFIG_VIDEO_BCM2835=m
-CONFIG_BCM2835_VCHIQ_MMAL=m
+Can't that be part of the current one?  At least the change requested by
+dt-bindings here is backwards-compatible; the adc-chan@xx format with
+optional label property was already allowed.
 
-and the devices doesn't register on Raspberry Pi 3 B Plus:
+> Note that the existing two patches should be in the other order
+> 1. Update the dtsi
+> 2. Tighten the bounds to check they are right.
 
-[   25.523337] vchiq: module is from the staging directory, the quality 
-is unknown, you have been warned.
-[   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
-bcm2835_audio vchiq device
-[   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
-bcm2835-camera vchiq device
+Hmm, I'm never sure what goes first: drivers, bindings, or DT
+(considering there's an ABI it shouldn't matter whether drivers or DT
+go first, leaving just dt-bindings which could be used to TDD the DT...
+or check adjustment after the fact).  Is this relationship - and the
+order following from it - documented somewhere?
 
+> Doesn't matter much though as the two patches will probably go through
+> different trees.
+
+Should be right, indeed.
+
+- Marijn
