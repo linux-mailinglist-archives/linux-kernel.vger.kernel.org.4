@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9D2676C8F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EAB676C94
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjAVLzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 06:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S229985AbjAVL5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 06:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAVLy5 (ORCPT
+        with ESMTP id S230023AbjAVL5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 06:54:57 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D0125B4
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:54:55 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso7264485wmn.5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:54:55 -0800 (PST)
+        Sun, 22 Jan 2023 06:57:12 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BFC12841
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:57:10 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id t5so8492691wrq.1
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:57:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VLe1tCHvsXuqDEBtfO7OY5kLhydgi9CnGmhErJAm6aY=;
-        b=s0BAxEQrg1XNDKd+RDJjQ/lqdPTA7p1sTOMmyByolojk0mvaFqzqmy7GIdrIZxmIOf
-         nFUchdZptB8ZVzLanP/34atcmww1mMSAPnOW6ClddkbiU7eDltZQOUDza6VkttvsUHfc
-         VQreJV0TXJjnpWyAigdZSH569OgxnVx8rooyMeC0XkS7AD9xKYSlxnN4RqPAyi5VpF7k
-         CoH7kaCdBdozNk9M+weoHgP1irBiEMfOD3knAU/SvcsagkDEAe+ceFKjExWCJUNouNc/
-         k5Jv6eqzFnOZo2sgqVpIZZUumFywQQqcWtw67WTGWBMxjS7Nexwmrc+zVtNxlk1/BNXb
-         5cxA==
+        bh=ckWviSxANZfcro+bBRfyc+cenkmtjOkiW7r6SzucWlg=;
+        b=rVyqAJqcbEVO2mLYQVAhfnqaxyKeML/dcpxmRaA391AWy18uZOcTusGjMi44ncpTql
+         vRUlbx31k3vofUNP4vsPJVAi8lmlvkVa9EF7D+g1STXssK/sO9udFfYn+8KZstXrK7qh
+         xd8yLliT4+F15t5bWD1hE7T1GDf9FwKdq6LRDIE6AKZfPND9W8ihbB18IBlG77AI1lAD
+         h2yHlmJaQeszTJT/hh3lV1J+dPT8wAe85E0VKkfG7d3OdVi0bTLkjAqcxHch+rOespJa
+         a741p3AQgK6ZAVKTC3L2Wy3ECwJcIx3YubDD3GwhhX5WXjHjZWZq6eG8muWvlHTdzBqb
+         Y8YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VLe1tCHvsXuqDEBtfO7OY5kLhydgi9CnGmhErJAm6aY=;
-        b=p+mBqRwxNwOGIRwcIh9+1f+QDb/CrnQa2QdzENrDrZ7StbQnMBCoSQE2Go1xPePVKf
-         QtgQAqQH00c8QvruLnwBE7NOlsLef55UrmPP0cBib4xTBn+QZCYAL3VAwjujv+qQd4Rh
-         P0TxtLzssh0xPjpBl8BibT7tHxIVbqP/dSreUv7lwbucnYo/U3KY44X03crhiDw7+RIY
-         q0dFdXLtvTE+XMB+KabTMCddmMwdpm6x986yC8D0J4kzjWieLgYf5usDDgi9ztFTyDGZ
-         82576Lwu3fEEKxfIkbYy0d5Y7KfSqH5gIuOSr9G4Dzq/OlG4yQQNV7yd6M/q7AWhzKvS
-         9n4g==
-X-Gm-Message-State: AFqh2kpwGuHnjmh0dg7FqWPwLJs2/xOnSg95zMFtcYdBoVK1L24B0t2V
-        nb37jERGQHdQqyk6f83hmHhu5Q==
-X-Google-Smtp-Source: AMrXdXvuCQdb16Nj82HEsGUUdIjG5ZPXUogSicV9IYHza0HEoyjvxXi4JXn+3h6rll38KtJXF4JaFw==
-X-Received: by 2002:a05:600c:1508:b0:3d3:5166:2da4 with SMTP id b8-20020a05600c150800b003d351662da4mr20299706wmg.8.1674388494495;
-        Sun, 22 Jan 2023 03:54:54 -0800 (PST)
+        bh=ckWviSxANZfcro+bBRfyc+cenkmtjOkiW7r6SzucWlg=;
+        b=CC1wd1Zc6Kk1uE1FD25tJOKhq24imwcDzsdoLlQAPCmRy6UFUKrQSzQmrUVcQupoGL
+         En2GlsYVN3enfmKSM0og7Um2WQ4ViiyOMB2T9fCBz9KZDaJAdGqdPVZx0l129XBRZUOB
+         7rib+VIsz/2ILAP8kfmOU8BQHBwge+xMCpNU3YHQtQ5z3ra8JOzzOk8X2r22CDqBXF1G
+         R7YrNFVE3jC7Q6COG5fj1rpDq010XrUS84rRPMYfQ606a8KFPqYYnloOChBAPa3iZiyQ
+         9VNWUZ1aiJTDzobqLJNqLN+hdrARC/ZOGn5C1+t/+RPqclcHz1SfPwu5T5H12WvFB9f4
+         +m0g==
+X-Gm-Message-State: AFqh2krRTYBdF9p5YabzznzYDBIXfQ4Z+VtsAE3PDVWS5lw8DE5t5H3t
+        rVUtsZYZ+iaqpopAiNpPz9rrxw==
+X-Google-Smtp-Source: AMrXdXvUmSo3jcsu3xojfTukvrhpzxz6e7Xp9tLFomGzgShSJjiyaBJUGl7NNs6LSU7eztbkOMG0ag==
+X-Received: by 2002:a5d:5224:0:b0:2bd:bbf7:1f87 with SMTP id i4-20020a5d5224000000b002bdbbf71f87mr20620225wra.60.1674388629088;
+        Sun, 22 Jan 2023 03:57:09 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m37-20020a05600c3b2500b003daf681d05dsm8320826wms.26.2023.01.22.03.54.50
+        by smtp.gmail.com with ESMTPSA id d16-20020adfef90000000b002b9b9445149sm3306165wro.54.2023.01.22.03.57.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 03:54:54 -0800 (PST)
-Message-ID: <995eb624-3efe-10fc-a6ed-883d52d591bb@linaro.org>
-Date:   Sun, 22 Jan 2023 12:54:48 +0100
+        Sun, 22 Jan 2023 03:57:08 -0800 (PST)
+Message-ID: <3043df6d-8cc1-6969-09d4-50ad6195c924@linaro.org>
+Date:   Sun, 22 Jan 2023 12:57:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [RFC PATCH v2 31/31] kvx: Add IPI driver
+Subject: Re: [RFC PATCH v2 29/31] kvx: Add support for cpuinfo
 Content-Language: en-US
 To:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -120,15 +120,15 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-32-ysionneau@kalray.eu>
+ <20230120141002.2442-30-ysionneau@kalray.eu>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120141002.2442-32-ysionneau@kalray.eu>
+In-Reply-To: <20230120141002.2442-30-ysionneau@kalray.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -136,19 +136,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 20/01/2023 15:10, Yann Sionneau wrote:
-> +
-> +int __init kvx_ipi_ctrl_probe(irqreturn_t (*ipi_irq_handler)(int, void *))
+> +static int __init setup_cpuinfo(void)
 > +{
-> +	struct device_node *np;
-> +	int ret;
-> +	unsigned int ipi_irq;
-> +	void __iomem *ipi_base;
+> +	int cpu;
+> +	struct clk *clk;
+> +	unsigned long cpu_freq = 1000000000;
+> +	struct device_node *node = of_get_cpu_node(0, NULL);
 > +
-> +	np = of_find_compatible_node(NULL, NULL, "kalray,kvx-ipi-ctrl");
+> +	clk = of_clk_get(node, 0);
+> +	if (IS_ERR(clk)) {
+> +		printk(KERN_WARNING
+> +		       "Device tree missing CPU 'clock' parameter. Assuming frequency is 1GHZ");
+> +		goto setup_cpu_freq;
+> +	}
+> +
+> +	cpu_freq = clk_get_rate(clk);
 
-Nope, big no.
-
-Drivers go to drivers, not to arch code. Use proper driver infrastructure.
+What about cpufreq? I don't think this is useful.
 
 Best regards,
 Krzysztof
