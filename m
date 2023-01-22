@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB11676BEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 10:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7501676BEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 10:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjAVJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 04:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S229776AbjAVJn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 04:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjAVJhh (ORCPT
+        with ESMTP id S229656AbjAVJn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 04:37:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000C1420B;
-        Sun, 22 Jan 2023 01:37:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5572760BAF;
-        Sun, 22 Jan 2023 09:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC521C4339C;
-        Sun, 22 Jan 2023 09:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674380255;
-        bh=5DRyo3CrCvjcrQiE2XRnY3KDz/9FE09qT4m/dJZH0aE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lNZIpcXkSoIvkFOhU4vTZhoSMYH/FNrvyVZoqcjnGD2/s69Cq72+OwArNRF4Y0XfB
-         K8wZSWe0o3Ez8X35Z8m9gZ5px+EoB3UpyoXrO0Jn3YGzCabyabgxUQZUD9s+4ayFxf
-         TwxwFCrsUDltNDS2jG8PhJQ98LTT3bm3MWRgUsXNBoAOYjvbr4vzKAgkShJiKAK0om
-         ZpXDxImFRySz+saPmOQDwYI/CYL9PeQJFnK1HoJDjhN/RikP2iSzxT+WsnOUXmtCdd
-         Ylgn69DBTJn7EbQ8Orshu3ZKKQejnYB1OhOwAkeUsLr7Ooym/PKu23lPzYon+3ZGI+
-         QXiwxf144D42g==
-Received: by mail-yb1-f173.google.com with SMTP id 123so11561336ybv.6;
-        Sun, 22 Jan 2023 01:37:35 -0800 (PST)
-X-Gm-Message-State: AFqh2kqmQTJWa4dsaQBF89yhes7R6ITscTNk4uOyEH3gha9E7tbROEFA
-        uyeQ9/LTjyymU9hvZu9ZuF30wuVssaJmpK4Lc7Q=
-X-Google-Smtp-Source: AMrXdXsNA4vdApz7Jqsu/ybWJW5C5xYsmc6pnH1yI7UZkk+OVVQkpt4eufUHjmXdw7J7YX64IDe4L/lGXFrrrcbkdYc=
-X-Received: by 2002:a25:344a:0:b0:803:60ae:431c with SMTP id
- b71-20020a25344a000000b0080360ae431cmr697945yba.642.1674380254802; Sun, 22
- Jan 2023 01:37:34 -0800 (PST)
+        Sun, 22 Jan 2023 04:43:26 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C237716AE7
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 01:43:24 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30M9epow1888407
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Sun, 22 Jan 2023 01:40:52 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30M9epow1888407
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674380454;
+        bh=BUz7GySCcyAaeNBP7q6NLLHUXrPwckpAejmAkm7+des=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=AQ3ABt0lp2SQB8E82SgyW3dnjU/a1OQ23VLLo0jLS0XCjhSlyGwf9EUly0ZUCzITV
+         KByl50AQW51N4Daa3z/fEUVu3fVelLNIwyxeylIuDFnKMLoguce8HS5HDbXAwY5StM
+         WyrRWWd5I1h8SNmXmlqzRB7ifMpYgpONTqMKcjW8Ht9Wfcq87Yj+NK7O8x00gMPDCE
+         PXg0PAnDYlnowO9kO4A0nAFBAGHqy8LPlY6+46ZZlz0TdBQRE6lMlRonPycflH5tzH
+         0Ftq6TSKm+dxyzVhlUs4lFFVtUcWQttBCHEhAjdMyD/GNCqPnaLTYi5x0N1280bd89
+         473RAiS09YAKA==
+Date:   Sun, 22 Jan 2023 01:40:49 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        "Li, Xin3" <xin3.li@intel.com>
+CC:     Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: RE: the x86 sysret_rip test fails on the Intel FRED architecture
+User-Agent: K-9 Mail for Android
+In-Reply-To: <b764c6d8-2a84-27f2-31e2-936c357f8111@gnuweeb.org>
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com> <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com> <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <65D9F1DE-96D4-4CC7-A21C-A740B7DDE0C8@zytor.com> <SA1PR11MB67344F0957245A2BC8CA57B7A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b764c6d8-2a84-27f2-31e2-936c357f8111@gnuweeb.org>
+Message-ID: <9300A0A3-B5DD-438A-911B-EEB6C1697B03@zytor.com>
 MIME-Version: 1.0
-References: <20230120123534.137413-1-bagasdotme@gmail.com> <20230120123534.137413-3-bagasdotme@gmail.com>
-In-Reply-To: <20230120123534.137413-3-bagasdotme@gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Sun, 22 Jan 2023 11:37:08 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11O75ivb2RjXCvbOyNRTgYrbNz8JSDgHprnoNS1vx9SQg@mail.gmail.com>
-Message-ID: <CAFCwf11O75ivb2RjXCvbOyNRTgYrbNz8JSDgHprnoNS1vx9SQg@mail.gmail.com>
-Subject: Re: [PATCH linux-next 2/3] habanalabs: Fix list of /sys/class/habanalabs/hl<n>/status
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Freedesktop DRI List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux KVM <kvm@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Ofir Bitton <obitton@habana.ai>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 2:35 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On January 22, 2023 12:54:56 AM PST, Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg=
+> wrote:
+>On 1/22/23 3:22 PM, Li, Xin3 wrote:
+>> The problem is where/how to set %r11 =3D %rflags in the test code=2E
+>>=20
+>> The check happens in the USER1 signal handler, and we could set %r11
+>> just before calling raise(SIGUSR1)=2E  However, the C library implement=
+ation
+>> of raise() modifies %r11, thus we can't preserve %r11 until the SYSCALL
+>> instruction=2E And the test still fails=2E
 >
-> Stephen Rothwell reported htmldocs warnings when merging accel tree:
+>From "man 3 raise":
 >
-> Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected indentation.
-> Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote ends without a blank line; unexpected unindent.
-> Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected indentation.
-> Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote ends without a blank line; unexpected unindent.
+>"""
+>The raise() function sends a signal to the calling process or thread=2E
+>In a single-threaded program it is equivalent to
 >
-> Fix these by fixing alignment of list of card status returned by
-> /sys/class/habanalabs/hl<n>/status.
+>        kill(getpid(), sig);
+>"""
 >
-> Link: https://lore.kernel.org/linux-next/20230120130634.61c3e857@canb.auug.org.au/
-> Fixes: 0a14c331682f61 ("habanalabs: update device status sysfs documentation")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  .../ABI/testing/sysfs-driver-habanalabs       | 23 ++++++++++---------
->  1 file changed, 12 insertions(+), 11 deletions(-)
+>Implementing kill syscall with %r11 modified before entering the kernel
+>may look like this?
 >
-> diff --git a/Documentation/ABI/testing/sysfs-driver-habanalabs b/Documentation/ABI/testing/sysfs-driver-habanalabs
-> index df2ca1a401b5a1..1b98b6503b23f5 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-habanalabs
-> +++ b/Documentation/ABI/testing/sysfs-driver-habanalabs
-> @@ -202,17 +202,18 @@ Date:           Jan 2019
->  KernelVersion:  5.1
->  Contact:        ogabbay@kernel.org
->  Description:    Status of the card:
-> -                "operational" - Device is available for work.
-> -                "in reset" - Device is going through reset, will be available
-> -                        shortly.
-> -                "disabled" - Device is not usable.
-> -                "needs reset" - Device is not usable until a hard reset will
-> -                        be initiated.
-> -                "in device creation" - Device is not available yet, as it is
-> -                        still initializing.
-> -                "in reset after device release" - Device is going through
-> -                        a compute-reset which is executed after a device release
-> -                        (relevant for Gaudi2 only).
-> +
-> +                  * "operational" - Device is available for work.
-> +                  * "in reset" - Device is going through reset, will be
-> +                    available shortly.
-> +                  * "disabled" - Device is not usable.
-> +                  * "needs reset" - Device is not usable until a hard reset
-> +                    is initiated.
-> +                  * "in device creation" - Device is not available yet, as it
-> +                    is still initializing.
-> +                  * "in reset after device release" - Device is going through
-> +                    a compute-reset which is executed after a device release
-> +                    (relevant for Gaudi2 only).
->
->  What:           /sys/class/habanalabs/hl<n>/thermal_ver
->  Date:           Jan 2019
-> --
-> An old man doll... just what I always wanted! - Clara
+>static void __raise(int sig)
+>{
+>        __asm__ volatile (
+>                "pushf\n\t"
+>                "popq %%r11\n\t"
+>                "syscall"
+>                :
+>                : "D"(getpid()),        /* %rdi */
+>                  "S"(sig),             /* %rsi */
+>                  "a"(__NR_kill)        /* %rax */
+>                : "rcx", "r11", "memory"
+>        );
+>}
 >
 
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Thanks!
-Applied to my -next tree.
-Oded
+Exactly=2E
