@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB60677289
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CC067728E
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjAVVGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 16:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
+        id S230099AbjAVVHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 16:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjAVVGl (ORCPT
+        with ESMTP id S229811AbjAVVHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:06:41 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BCB1F5EC;
-        Sun, 22 Jan 2023 13:06:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P0QlH2l2hz4xyY;
-        Mon, 23 Jan 2023 08:06:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674421597;
-        bh=B7Zeq6Me9MxVHnA1Aqf/fs0uZqZlqdTaA1IhVPM79E8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=p7HOUPFPzR2Ye48SR4s4XjO0r9EfUVvps0mHCH8ht51QavLHqcmVGqJxLV5YTu0xq
-         fGGqplQZQoXoGBbsRo3wOJy1pZ/HlbzO3CNovxUsZZP2YPa63EdYXBQKrThFFXOQeX
-         ZyA/cCmWpD1aJ0kTfVg77FgVq1wegKK2R/Mm6rf/RldZWXurw6rYlwerMAznCfFax+
-         /NUDmio//shPOSW+C4UH8l/kmRLAKzAhfCh6+0Pg6cPkTaeTo5pvMbokWR9nRm1POD
-         80R23FFt1RFMkUQuZGwd6dnSCbtsxU7uWtuClALRKe/wh/b1EWpjm2Z9aqv2Ou8EEb
-         dJjrOWhC3YzAQ==
-Date:   Mon, 23 Jan 2023 08:06:33 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the drm-intel tree
-Message-ID: <20230123080633.2279dd52@canb.auug.org.au>
+        Sun, 22 Jan 2023 16:07:12 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341C41F93A;
+        Sun, 22 Jan 2023 13:07:11 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so7255018wmq.0;
+        Sun, 22 Jan 2023 13:07:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCboDqVUUsDGgqRY72gSPVjixyNxdK1vSMMQPv4p8+U=;
+        b=Rrp4V89fMuHgqiVMQpLfX9L+gVN/BTlzKsOMTLGHxO64PcM80m8UGAdVQ8cZ5c/bQp
+         /Sb2lyij/Yik7BMMrFfxW0P2IV2KQyuAGWzy4bOiEJTLT4WopzSnucHyyD2GpkMvR2KT
+         5PNwcObQx7VMkdkeKOW60V4R/9+JjzxRzAPqzwRf92rE69PRTh66MpJO5lYdatMcYBUH
+         be8wuku3jJmGyKXmMRdy/92j2sbVKXm1LEgQnK8GkejiYYhfYn60ht6Ee0jxVfPzzFMQ
+         M5G0mdTcmWVQUboTwALFhSJ+02+g9aGVHOS8Nw185wSicZNWhW39fh4iLNg5ExPP28Ee
+         dzJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kCboDqVUUsDGgqRY72gSPVjixyNxdK1vSMMQPv4p8+U=;
+        b=LRcmrq1JMqwjg2mgi7QlFQAvHGzOIb+UAOBQIHw7Kzdg2ju9r5EipmDtEI/fbij6Ep
+         0JO3xwqWYYK1wMQo9ISOb+4P0hT+vMsas1B3fjm6BzgDFXsxN3nnXh5ZNVF/uhMiFBZ9
+         hpu0D40+9XA/d7SPEgLQbn0mZTLDZaPvYavMXgO1RMPOesgQjRidelyhmciORG6QLXWf
+         BHUERe7ldLMAu6+LvgRecEcdqQLvbhq0ZbxaFrOK6GMDjQ6/Ygpsnu/lTSCJPbXumROs
+         GSu88YshCwYAorh4R2qDmQzsmMAnnYxa+PwFl2SI1olwZnvAVfFW8fa5PU6re4GmK/DW
+         leWg==
+X-Gm-Message-State: AFqh2koXpGBcmd2W56WxluB+Bd8aHmgJDnlrPIVGBOLnI4YkJv5hO9Jj
+        u27twNY+kROy09WurPIQYwM=
+X-Google-Smtp-Source: AMrXdXvQBrFKD6GvoZiyZVRXF/33cCqAKT8qkp6S0xHaAhZoxpWRnjl+rlHCvaeLceU3E2GMR1K9GA==
+X-Received: by 2002:a05:600c:4e0f:b0:3db:3695:11b4 with SMTP id b15-20020a05600c4e0f00b003db369511b4mr9093682wmq.33.1674421629518;
+        Sun, 22 Jan 2023 13:07:09 -0800 (PST)
+Received: from localhost.localdomain (2a02-8428-46a0-7c01-43c0-f52a-beed-541b.rev.sfr.net. [2a02:8428:46a0:7c01:43c0:f52a:beed:541b])
+        by smtp.gmail.com with ESMTPSA id o21-20020a05600c4fd500b003c6f8d30e40sm9822404wmq.31.2023.01.22.13.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 13:07:09 -0800 (PST)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Christophe Branchereau <cbranchereau@gmail.com>
+Subject: [PATCH] ASoC: codecs/jz4760: add digital gain controls
+Date:   Sun, 22 Jan 2023 22:07:03 +0100
+Message-Id: <20230122210703.2552384-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VPE/3vaDF41VYhjI7dlMAx4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/VPE/3vaDF41VYhjI7dlMAx4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Both the DAC and ADC have digital gain controls available
+for their mixers, which go from -31 to 0db by step of 1db.
 
-Hi all,
+Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+---
+ sound/soc/codecs/jz4760.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+diff --git a/sound/soc/codecs/jz4760.c b/sound/soc/codecs/jz4760.c
+index d96a4f6c9183..9df58e23d360 100644
+--- a/sound/soc/codecs/jz4760.c
++++ b/sound/soc/codecs/jz4760.c
+@@ -287,6 +287,7 @@ static const DECLARE_TLV_DB_MINMAX_MUTE(dac_tlv, -3100, 100);
+ static const DECLARE_TLV_DB_SCALE(adc_tlv, 0, 100, 0);
+ static const DECLARE_TLV_DB_MINMAX(out_tlv, -2500, 100);
+ static const DECLARE_TLV_DB_SCALE(linein_tlv, -2500, 100, 0);
++static const DECLARE_TLV_DB_MINMAX(mixer_tlv, -3100, 0);
+ 
+ /* Unconditional controls. */
+ static const struct snd_kcontrol_new jz4760_codec_snd_controls[] = {
+@@ -299,6 +300,14 @@ static const struct snd_kcontrol_new jz4760_codec_snd_controls[] = {
+ 			 JZ4760_CODEC_REG_GCR4, JZ4760_CODEC_REG_GCR3,
+ 			 REG_GCR_GAIN_OFFSET, REG_GCR_GAIN_MAX, 1, linein_tlv),
+ 
++	SOC_SINGLE_TLV("Mixer Capture Volume",
++		       JZ4760_CODEC_REG_MIX1,
++		       REG_GCR_GAIN_OFFSET, REG_GCR_GAIN_MAX, 1, mixer_tlv),
++
++	SOC_SINGLE_TLV("Mixer Playback Volume",
++		       JZ4760_CODEC_REG_MIX2,
++		       REG_GCR_GAIN_OFFSET, REG_GCR_GAIN_MAX, 1, mixer_tlv),
++
+ 	SOC_SINGLE("High-Pass Filter Capture Switch",
+ 		   JZ4760_CODEC_REG_CR4,
+ 		   REG_CR4_ADC_HPF_OFFSET, 1, 0),
+-- 
+2.39.0
 
-  0fe76b198d48 ("drm/i915/display: Check source height is > 0")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/VPE/3vaDF41VYhjI7dlMAx4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPNpVoACgkQAVBC80lX
-0GwMVwf/Y3bMOlR3dore7xhMZF5XdqlaH2lPaOIU3Bny8VXETBAExqcNhNt7gpDn
-oTwIscw4ES7JKhDKgp9xIL/Rae9nlu83vac53ati41UHepCUKX30BE0ms3gtCpyi
-tKCbr7P/I0QtNPNI10xLrxLtJtXsWXP/ovsuZvl3dloplWQCoBk3vpKKYtKyqi9z
-KMOfVrHe6K5mA6RoiAqastw1moTBRLbZFA72K/gfGSknI7NtNtEeur2Y7f5018Yt
-pMpDuhmqv3+KEIU9u5qwe949mTNqGltZ1viVCE2XgzxoNbZr7zpTYaCNyqOnYN9s
-kcwWu2MJxn3ZeQSY6597wNo2ZPjSJQ==
-=TIJ9
------END PGP SIGNATURE-----
-
---Sig_/VPE/3vaDF41VYhjI7dlMAx4--
