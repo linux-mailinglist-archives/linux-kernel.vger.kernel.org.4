@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC626772DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596146772E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjAVVvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 16:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S230261AbjAVV6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 16:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjAVVvJ (ORCPT
+        with ESMTP id S230153AbjAVV6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:51:09 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DBC420B
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:51:08 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-15eec491b40so12061670fac.12
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=40Rmkj5g3cvg97kxah5sFiX7jVih95G4nCiDetrLKPU=;
-        b=VVR0e0bcJbIrdkK1tLNiHw20DB41mQjAsNp72mvJLQIU1CDbu48KXrIK7sXfXrHxqY
-         baCoJb25n99/HsqfcxlHIf0hZraUcY7UYecsGMUGfWEPEmkhYaX0m8yy0OAUcpJzn1UC
-         Bw6nDEEX/cPNR16oI6OmOgx0LINHSgI7RPUQq00Fyqjm3Bb5ZJVBmHhD7Msu/jh5DwNQ
-         BP4stx33k2xQXG08dct350qJvA21UIyagazE1YqK8wvtzssYhO/3nXlk5FPQKw87R6iR
-         TwoB6oBaiqY0KrX4JrhFQxHgS4XAXwoZwzJiFURQm00qjHeL9CNN5saiAjSIVdtD8ZHr
-         hDAw==
+        Sun, 22 Jan 2023 16:58:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF6517146
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:57:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674424651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YAGz6AMzTiiLgzMFcsUhGWBA0NWtp6ggxEU7R8HhwK4=;
+        b=NZLNPQySroESHC72Z+D0EQJ/hEqXAv5glTwdES06WzpR7WSX8ZvNFGwJO5JJOriALL1Dlh
+        jKC/TCfMxjaysgUCVSBXPAh+JyE9Pq8Jw2zKBUnn8NyiQg4qjE0eaEvBUCBVYbVebCfH16
+        edGHYegGeVNYqFauU9Jsu98KbfNhTRU=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-572-8chJ9eTFMrOaKveT9lLU6w-1; Sun, 22 Jan 2023 16:57:30 -0500
+X-MC-Unique: 8chJ9eTFMrOaKveT9lLU6w-1
+Received: by mail-qk1-f200.google.com with SMTP id az16-20020a05620a171000b00709129a745eso5267368qkb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:57:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=40Rmkj5g3cvg97kxah5sFiX7jVih95G4nCiDetrLKPU=;
-        b=JWHqmENrSW+/Jd3F/ByynFhxYviQliA9HPRiSG2ueeV9Da6b/krOnIp1jJY+/Xf6XX
-         QbT0xZ6KW2MVNN2OebheO8Nn93y64y+pCcPy8HdmpaPyy9/4MaRsYSh2Od9EaFoWRMSX
-         5LIi9ifTqrwp1mFxG1ATl+oxarogKkOezd8y/IT+AjmuBU/vh6wCCbYt3k9Xv+VKmiO4
-         gWa0AUGtJZwxMTSCT4VkfULCsRHh0Rm8fkkGYrNaalNXLeEctUM2xlHBshvuLz2iCnRe
-         o/Z7FABr89JvqjESFVlG3CbKS0slgTOj8yJypOrlaEjOeYPZhsLGLaBMAme95T+/qYbc
-         6dVQ==
-X-Gm-Message-State: AFqh2kqVymhbBT5L/YxDXOvw9+SnPsMd/TmPYUvrmi/8l87wIuXMpRR0
-        Q+VsxYDnackddFPNM5U5HHX0OM5lf28=
-X-Google-Smtp-Source: AMrXdXtLPlRpOoXou27NVl1VXfy4IEcdst/ssHJRGQesmKgknaqHJwHijSt8icQZtNlN/6K7VBjuuw==
-X-Received: by 2002:a05:6870:7b8d:b0:15e:ec05:4cd7 with SMTP id jf13-20020a0568707b8d00b0015eec054cd7mr10460161oab.40.1674424267167;
-        Sun, 22 Jan 2023 13:51:07 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056870e75200b0014866eb34cesm9888225oak.48.2023.01.22.13.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 13:51:06 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 22 Jan 2023 13:51:05 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.2-rc5
-Message-ID: <20230122215105.GA1788657@roeck-us.net>
-References: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YAGz6AMzTiiLgzMFcsUhGWBA0NWtp6ggxEU7R8HhwK4=;
+        b=sbouDmP+R6pUo6rTsr+gBDnABVyYvmx9RlrLDIlb/wulR7qvXZ3voliHed/8rBSjDJ
+         OJ32fo1XsjA7v+zcTorhqTdJzfBHylzsJnVAGehFDJYjIid+cd0KDoNlKhBR2SIyCnPh
+         U+Ug61SbHggxXIXghdLqkDTMTbNfvAlmgz+PnGAsGR2aCFre7yHtCSS8Gz01eloZKVQh
+         DHy4nFjnuwV0uAa9YybA0kgy0fMNCCB3TpHMNV5Op2v6KFrNAt6ye3DFBnvCOvGIjPms
+         GReg+RNoMPhOL0efxijAel2AlQqjZe8wr7pdB1Ieek1pprxi6JqHc4shjtDnex05Ut9C
+         22WA==
+X-Gm-Message-State: AFqh2kqnhDad1k7S+vswCbQC5C/9y8Xe9+2eQw8FCccWrnPqWkKc+7TT
+        HurNuoBREJmH+NYxl7AmPVPK9dxLm6gx5rVLKmNKRm6njGFwxOMd25N9cDN1QnRrb3TEYTUi/8y
+        0BL9E8XsSeYxi3UqosEuN8rTz
+X-Received: by 2002:ac8:707:0:b0:3a5:17f0:e718 with SMTP id g7-20020ac80707000000b003a517f0e718mr31136147qth.14.1674424649661;
+        Sun, 22 Jan 2023 13:57:29 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsXLByHvU3jUJu2vyqhI4amE8DNqUGJk9i0e0Hc9QuF48qL4kADNUF69T8akaoaNSs/u0JCig==
+X-Received: by 2002:ac8:707:0:b0:3a5:17f0:e718 with SMTP id g7-20020ac80707000000b003a517f0e718mr31136135qth.14.1674424649445;
+        Sun, 22 Jan 2023 13:57:29 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006fca1691425sm30428273qko.63.2023.01.22.13.57.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 13:57:29 -0800 (PST)
+Subject: Re: [PATCH v2] paride/pcd: return earlier when an error happens in
+ pcd_atapi()
+To:     Jens Axboe <axboe@kernel.dk>, tim@cyberelk.net, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230122154901.505142-1-trix@redhat.com>
+ <1a501bc9-7058-6c47-0ebf-44459bc0e730@kernel.dk>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <b4866797-bcfa-d261-bae2-6e1e132e1863@redhat.com>
+Date:   Sun, 22 Jan 2023 13:57:25 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1a501bc9-7058-6c47-0ebf-44459bc0e730@kernel.dk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 04:44:06PM -0800, Linus Torvalds wrote:
-> Ok, so I thought we were back to normal after the winter holidays at
-> rc4. Now, a week later, I think I was mistaken - we have fairly
-> sizable rc5, so I suspect there was still pent up testing and fixes
-> from people being off.
-> 
-> Anyway, I am expecting to do an rc8 this release regardless, just
-> because we effectively had a lost week or two in the early rc's, so a
-> sizable rc5 doesn't really worry me. I do hope we're done with the
-> release candidates growing, though.
-> 
-> Anyway, there's a bit of everything in rc5: various driver updates
-> (gpu, rdma, networking, tty, usb..), some architecture updates (mostly
-> loongarch and arm64), some filesystem updates, some core networking,
-> and tooling.
-> 
-> The shortlog is appended as usual. Nothing particularly odd stands out to me.
-> 
-> Please do test,
-> 
 
-Nothing to report from my side.
+On 1/22/23 12:49 PM, Jens Axboe wrote:
+> On 1/22/23 8:49 AM, Tom Rix wrote:
+>> clang static analysis reports
+>> drivers/block/paride/pcd.c:856:36: warning: The left operand of '&'
+>>    is a garbage value [core.UndefinedBinaryOperatorResult]
+>>    tocentry->cdte_ctrl = buffer[5] & 0xf;
+>>                          ~~~~~~~~~ ^
+> Has this one been compiled? I'm guessing not tested...
+>
+> In any case, this code is going away hopefully shortly, so let's not
+> bother with changes like this.
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 504 pass: 504 fail: 0
+Going away soon would be nice, this is an old problem.
 
-Guenter
+I did not bother with a fixes: tag because it was is when the repo was 
+created in 2005.
+
+Tom
+
+
+>
+
