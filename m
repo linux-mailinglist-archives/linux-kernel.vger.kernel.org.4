@@ -2,31 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C63367718F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B77677191
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjAVSeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 13:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S231499AbjAVSg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 13:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjAVSeT (ORCPT
+        with ESMTP id S229566AbjAVSg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 13:34:19 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD421BEA
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:34:17 -0800 (PST)
+        Sun, 22 Jan 2023 13:36:28 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41771CF69
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:36:26 -0800 (PST)
 Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 856401BF205;
-        Sun, 22 Jan 2023 18:34:15 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 012DC240003;
+        Sun, 22 Jan 2023 18:36:21 +0000 (UTC)
 From:   Diederik de Haas <didi.debian@cknow.org>
 To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Diederik de Haas <didi.debian@cknow.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] pcmcia: sa1100_generic: Fix full name of the GPL
-Date:   Sun, 22 Jan 2023 19:33:53 +0100
-Message-Id: <20230122183354.56042-1-didi.debian@cknow.org>
+Subject: [PATCH] pcmcia: soc_common: Fix full name of the GPL
+Date:   Sun, 22 Jan 2023 19:36:06 +0100
+Message-Id: <20230122183607.56277-1-didi.debian@cknow.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -40,13 +42,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
 ---
- drivers/pcmcia/sa1100_generic.c | 4 ++--
+ drivers/pcmcia/soc_common.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pcmcia/sa1100_generic.c b/drivers/pcmcia/sa1100_generic.c
-index c2b6e828c2c6..25b247b8c2b4 100644
---- a/drivers/pcmcia/sa1100_generic.c
-+++ b/drivers/pcmcia/sa1100_generic.c
+diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
+index 61b0c8952bb5..3472b6267155 100644
+--- a/drivers/pcmcia/soc_common.c
++++ b/drivers/pcmcia/soc_common.c
 @@ -18,8 +18,8 @@
      Copyright (C) 1999 John G. Dorsey.  All Rights Reserved.
  
