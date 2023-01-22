@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8D2677188
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822EE67718A
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjAVSbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 13:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S231519AbjAVScB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 13:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjAVSbe (ORCPT
+        with ESMTP id S229811AbjAVSb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 13:31:34 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19820CC27
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:31:32 -0800 (PST)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id EA7F120004;
-        Sun, 22 Jan 2023 18:31:30 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] pcmcia:sa11xx_base: Fix full name of the GPL
-Date:   Sun, 22 Jan 2023 19:31:17 +0100
-Message-Id: <20230122183119.55801-1-didi.debian@cknow.org>
-X-Mailer: git-send-email 2.39.0
+        Sun, 22 Jan 2023 13:31:59 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878B91BAC3;
+        Sun, 22 Jan 2023 10:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1674412311; bh=pZYbLu9bebSDoKCfGEX/1j8ZiKjZCw98agjNII8NLOg=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=PWKBOAlZOjhTTbujYkNjnQkKBNnXvzcZ3tCmC+epFMVB+r/gNaAnf+z/vlR2jscEA
+         GEFxln74sDkfpNIAlxm/RiOTT4rL0p6tjCdp5UUq0/3VQPVUpkp+2RvKcbNcYdjzQ0
+         c1MnQ3XY8KeaAJMWxIowYRC/zEfCibzUf5RhfUN4=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun, 22 Jan 2023 19:31:51 +0100 (CET)
+X-EA-Auth: pYwFouFgiBnqX63s88Aa0Ha28O8LCr5CKpkGpHy24mru8pIgBhbNa7r97GyK7VfP0PVzzaqSl/UozqzDarSzIZgyU/4aDhQq
+Date:   Mon, 23 Jan 2023 00:01:48 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] scsi: csiostor: use *ptr instead of ptr with sizeof
+Message-ID: <Y82BFDTF0cQC/goK@ubun2204.myguest.virtualbox.org>
+References: <Y7/8VUXJSFXTpYlz@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7/8VUXJSFXTpYlz@ubun2204.myguest.virtualbox.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
----
- drivers/pcmcia/sa11xx_base.c | 4 ++--
- drivers/pcmcia/sa11xx_base.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Thu, Jan 12, 2023 at 05:55:57PM +0530, Deepak R Varma wrote:
+> The function csio_enqueue_evt() should be passed the actual length of
+> the event/message so that it can be fully copied over to the event
+> queue. Use the sizeof(*ptr) to get the real message length instead of
+> sizeof(ptr).
+> Issue identified using the noderef,cocci coccinelle semantic patch.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
 
-diff --git a/drivers/pcmcia/sa11xx_base.c b/drivers/pcmcia/sa11xx_base.c
-index 48140ac73ed6..514f3c2cb467 100644
---- a/drivers/pcmcia/sa11xx_base.c
-+++ b/drivers/pcmcia/sa11xx_base.c
-@@ -18,8 +18,8 @@
-     Copyright (C) 1999 John G. Dorsey.  All Rights Reserved.
- 
-     Alternatively, the contents of this file may be used under the
--    terms of the GNU Public License version 2 (the "GPL"), in which
--    case the provisions of the GPL are applicable instead of the
-+    terms of the GNU General Public License version 2 (the "GPL"), in
-+    which case the provisions of the GPL are applicable instead of the
-     above.  If you wish to allow the use of your version of this file
-     only under the terms of the GPL and not to allow others to use
-     your version of this file under the MPL, indicate your decision
-diff --git a/drivers/pcmcia/sa11xx_base.h b/drivers/pcmcia/sa11xx_base.h
-index 3d76d720f463..955f1fff2645 100644
---- a/drivers/pcmcia/sa11xx_base.h
-+++ b/drivers/pcmcia/sa11xx_base.h
-@@ -18,8 +18,8 @@
-     Copyright (C) 1999 John G. Dorsey.  All Rights Reserved.
- 
-     Alternatively, the contents of this file may be used under the
--    terms of the GNU Public License version 2 (the "GPL"), in which
--    case the provisions of the GPL are applicable instead of the
-+    terms of the GNU General Public License version 2 (the "GPL"), in
-+    which case the provisions of the GPL are applicable instead of the
-     above.  If you wish to allow the use of your version of this file
-     only under the terms of the GPL and not to allow others to use
-     your version of this file under the MPL, indicate your decision
--- 
-2.39.0
+Hello,
+Requesting a review and feedback comments on this patch proposal please.
+
+Thank you,
+./drv
+
+> Please note: The change is compile tested only.
+> 
+>  drivers/scsi/csiostor/csio_mb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/csiostor/csio_mb.c b/drivers/scsi/csiostor/csio_mb.c
+> index 94810b19e747..4df8a4df4408 100644
+> --- a/drivers/scsi/csiostor/csio_mb.c
+> +++ b/drivers/scsi/csiostor/csio_mb.c
+> @@ -1551,7 +1551,7 @@ csio_mb_isr_handler(struct csio_hw *hw)
+>  		 * Enqueue event to EventQ. Events processing happens
+>  		 * in Event worker thread context
+>  		 */
+> -		if (csio_enqueue_evt(hw, CSIO_EVT_MBX, mbp, sizeof(mbp)))
+> +		if (csio_enqueue_evt(hw, CSIO_EVT_MBX, mbp, sizeof(*mbp)))
+>  			CSIO_INC_STATS(hw, n_evt_drop);
+>  
+>  		return 0;
+> -- 
+> 2.34.1
+> 
+> 
+> 
+
 
