@@ -2,150 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99B6676C80
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BA6676C85
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjAVLvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 06:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S230022AbjAVLvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 06:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjAVLvf (ORCPT
+        with ESMTP id S230007AbjAVLvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 06:51:35 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F5113D68
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:51:32 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:4d08:7796:61ee:69a0])
-        by laurent.telenet-ops.be with bizsmtp
-        id BnrW290010XvA8101nrW3e; Sun, 22 Jan 2023 12:51:30 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pJYsb-006r7N-TU
-        for linux-kernel@vger.kernel.org;
-        Sun, 22 Jan 2023 12:51:29 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pJYsj-008ZlY-CD
-        for linux-kernel@vger.kernel.org;
-        Sun, 22 Jan 2023 12:51:29 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.2-rc5
-Date:   Sun, 22 Jan 2023 12:51:29 +0100
-Message-Id: <20230122115129.2044064-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
-References: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
+        Sun, 22 Jan 2023 06:51:43 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2481E1F5E3
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:51:40 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d2so8449843wrp.8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:51:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QW4gcfTBDAxCEJmp81ra89ieKaIa7EaBAPXtJreoq+w=;
+        b=P/0Gb1PCZZIXYu0NV1Ove+/unx34oDiuMeeBcuZho836SMBMbqREXW49kGJekeeYeP
+         fzP+MyKIYe2eiBQ7rukcC1sC5RGH0lkRTyftvfk7x8nkdmK2b31SghHLBEmZzx4NBpCj
+         ggDUwzAEC9l9h8CA8lfbAlDSU5T0XYkDKHhlfhfERi9QxU9HQhyxryOH1cbFhtWNtsiP
+         k2z2Kh4W04yGAltLW5C0VK+2W2aIXIipP3jMn0F9n1UToYwxL/bNIkx8LTwm1LCYrHf+
+         MFUwUoTz9F7H8+vCFHV6UacV3C7BlRYLfN5vIHptYZ9r+5wxB7SAjdxVuc7IX5uB+nMX
+         QP4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QW4gcfTBDAxCEJmp81ra89ieKaIa7EaBAPXtJreoq+w=;
+        b=WP6PTrQMiLoooMbFLG2qAq7dGRredWRktFZqTZGWZSEuGOMgN1pyy2PxWYWSAVBvV7
+         jiF7EIz9p78jsT0NButMP7sc8KQ8N7BLIik5REN8Rxqka1zc0dX2L1Y+p3/nVWyDbNmv
+         u4qMt0gR5gw9tTJApNZYXD5q9UoeuFr26dySEIcba9dG5Qx9xEAzKQU+LDT29Z7nNrv8
+         W27rRrn3kivER9togp7FsAUgAyNs2AV5mpCZfKP8QA2Mnozzw/u0+PtddLaSTjHsQKt6
+         pi4yIgvBpbgNrXhGaOVhprrRa2aWf58qDqng/zaM2JFpPV7lysxSh3aZriZgnwxzso2A
+         CYrQ==
+X-Gm-Message-State: AFqh2kqwtnjLrvmO8uFXLzX8Zq14/o0W+WnySblEYvy3UZ/ySzOGNTQ0
+        P44ghxqdYwz7D0IKIlKYRuS3Tw==
+X-Google-Smtp-Source: AMrXdXu3komgmJz3v4UQ6DFMLR2KXaq2N92Bqckcvh43HhbdmlU07p0tmzT8+sQ+olcM02A9d6D9gA==
+X-Received: by 2002:adf:f501:0:b0:2ba:dce5:ee28 with SMTP id q1-20020adff501000000b002badce5ee28mr17537961wro.18.1674388299288;
+        Sun, 22 Jan 2023 03:51:39 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v7-20020a5d6787000000b0025e86026866sm3554309wru.0.2023.01.22.03.51.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 03:51:38 -0800 (PST)
+Message-ID: <d02b81ab-fa72-6005-79e9-249225483364@linaro.org>
+Date:   Sun, 22 Jan 2023 12:51:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH v2 07/31] Documentation: Add binding for
+ kalray,kv3-1-pwr-ctrl
+Content-Language: en-US
+To:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Clement Leger <clement@clement-leger.fr>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>,
+        =?UTF-8?Q?Marc_Poulhi=c3=a8s?= <dkm@kataplop.net>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Alex Michon <amichon@kalray.eu>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-8-ysionneau@kalray.eu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230120141002.2442-8-ysionneau@kalray.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.2-rc5[1] compared to v6.1[2].
+On 20/01/2023 15:09, Yann Sionneau wrote:
+> From: Jules Maselbas <jmaselbas@kalray.eu>
+> 
+> Add documentation for `kalray,kv3-1-pwr-ctrl` binding.
+> 
+> Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
+> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+> ---
+> 
+> Notes:
+>     V1 -> V2: new patch
+> 
+>  .../kalray/kalray,kv3-1-pwr-ctrl.yaml         | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
 
-Summarized:
-  - build errors: +6/-14
-  - build warnings: +29/-9
+All the usual comments plus - wrong directory. Power controllers go to
+respective power directory.
 
-JFYI, when comparing v6.2-rc5[1] to v6.2-rc4[3], the summaries are:
-  - build errors: +0/-1
-  - build warnings: +0/-1
+> 
+> diff --git a/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
+> new file mode 100644
+> index 000000000000..968674bb0c63
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
+> @@ -0,0 +1,29 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/kalray/kalray,kv3-1-pwr-ctrl#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Kalray cluster Power Controller (pwr-ctrl)
+> +
+> +description: |
+> +  The Power Controller (pwr-ctrl) control cores reset and wake-up procedure.
+> +
+> +properties:
+> +  compatible:
+> +    const: kalray,kv3-1-pwr-ctrl
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    pwr_ctrl: power-controller@a40000 {
+> +        compatible = "kalray,kv3-1-pwr-ctrl";
+> +        reg = <0x00 0xa40000 0x00 0x4158>;
 
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/2241ab53cbb5cdb08a6b2d4688feb13971058f65/ (all 152 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/5dc4c995db9eb45f6373a956eb1f69460e69e6d4/ (all 152 configs)
-
-
-*** ERRORS ***
-
-6 error regressions:
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
-  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
-  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
-
-14 error improvements:
-  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
-  - /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]: 258:14, 261:46, 263:14, 259:14, 262:14 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
-  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
-  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
-  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
-  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
-  - {standard input}: Error: pcrel too far: 2204, 2259, 2247, 2209, 2231, 2274, 2262, 2232, 2221, 2216, 2215, 2217, 2206, 2293, 2248, 2249, 2261, 2229 => 
-  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
+I really doubt that you tested it... Examples are not run with address
+cells 2.
 
 
-*** WARNINGS ***
+Best regards,
+Krzysztof
 
-29 warning regressions:
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/bus/mhi/host/mhi_pci_generic.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/extcon/extcon-fsa9480.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/cec/core/cec.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/usb/hdpvr/hdpvr.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/pwm/pwm-sifive.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/hptiop.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/sd_mod.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
-
-9 warning improvements:
-  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]: 68:25 => 
-  - /kisskb/src/arch/s390/kernel/setup.c: warning: 'memcpy' offset [0, 127] is out of the bounds [0, 0] [-Warray-bounds]: 524:9 => 
-  - /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]: 989:122, 989:108 => 989:108
-  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
