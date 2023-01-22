@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7746B676B4D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 07:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38228676B4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 07:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjAVGb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 01:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S229669AbjAVGez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 01:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjAVGbZ (ORCPT
+        with ESMTP id S229480AbjAVGex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 01:31:25 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A2B1E5E3;
-        Sat, 21 Jan 2023 22:31:24 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id o66so7858112oia.6;
-        Sat, 21 Jan 2023 22:31:24 -0800 (PST)
+        Sun, 22 Jan 2023 01:34:53 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719B421A2E;
+        Sat, 21 Jan 2023 22:34:52 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-15fe106c7c7so4768008fac.8;
+        Sat, 21 Jan 2023 22:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KBSy9hFuKMUpYaDx9yOTnZrIzQnaQnfxfZMOiVFBsms=;
-        b=V/B7ucgrcYDKYz3RfAr72+1S3BN5L8fJL512/Z8CteHhazoUZMI4Wbvo1wpzi94iR4
-         FxZVTRxrzYQh5ZcJc6EiYN4vtl8WVFBx89YfrZ8LI/+oSRh6BGFH4X2riAxHh+wmQLbr
-         bLZVjGg4tYaSGoHLccn+dG6OcKyHbJJ2QOZCC5ouZLderTzDzGqpWO9wFQasB3KcvOSm
-         azpjj8wcvLcLlNDPN7ihTSzxw7s/uSjg1F2pNCSW7Tu8u9eUcTzu1mnRXv3C2/4qJEUi
-         y3ZDSBGsrbRcQKST8p5i++HTVY6y60xJXzXlUxm5M/UUnhyhgTyIhyRHHDCBte3hDXmH
-         d8Qw==
+        bh=hjbzVjhCY8YZ/A5RPkClWyob4cGDtlGmsyktX8xQAZ0=;
+        b=AI6O02MNsnkNbUUz6zhYWmTclgFQrnfCV5+L6Vj/Xeiir+ga8LrWi6L00msyn6Sswq
+         87eWHCa9yYhGGsLT17C3P1dKVE23mXAHHC7oqz6pCfvAkkW5FRNsy90C5W0YiJRbcdHI
+         i7f5vc4lqAUvkrTXCyj2akJEGNA+Epq4xUlEXHfkPkndapu1KxzFLBR6u9F0WsSFnnYH
+         aTox+O+mLBtedIfYt59man9DlzfT/CctiOMj5prE8JJlee7wjTH2TxV96vWePwEIauxg
+         ilCoOGA0NWwuNZTHs7FMfjSmMVFp8+LRLo1u6O4ebdr+ChWMEwLX8nxBM88Sd/QvqJ67
+         sqoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KBSy9hFuKMUpYaDx9yOTnZrIzQnaQnfxfZMOiVFBsms=;
-        b=65ipLXrSJTXSRnCZagirbr/fInYaJBlcQXDYPCs1y36x6Bkp+m4a/GdETeVyfwZgre
-         MjUKEkCLtypAjYkAxCGAy/GmkD1eBNG4+gqudJmczG3bLyuwtZUbfv6/ex66cIiBbmHn
-         odu4Pa4xQ4Ar91REpT336mkECXJYWXRysCf46TENHhpce/dV9HhL8U0csoblf5gYwyNn
-         gD0Q+zaJs19m9TBgaC3Tv0Qdck7pYsOmXUP93BL+qrqUvSNay0H+0oZQUQEASlRaLNJv
-         EQdGTpQJ5TwtSZDOgrlbvoXCnfV3o5tsp2A7WWT6WyK4YM7sL0uqToaqXIkiZw5WkAUO
-         44kQ==
-X-Gm-Message-State: AFqh2kqpLpwoGtdwM081bwigzd6i8OOTTNo4Z+OH8AG8lP+bxbl6jzgv
-        ZzFopui8XZSrZ/+/AxGiUNHvT+scE4uGqWUcT30=
-X-Google-Smtp-Source: AMrXdXv4l2FkJN5p19054A3oXv1zcs9PicyECPzRymyx8T3kNlHNMoevDmWgT6Ptc+cMAJ9n6JpZ+Ry5UkMUIyl/kTs=
-X-Received: by 2002:a05:6808:4346:b0:369:e573:3e54 with SMTP id
- dx6-20020a056808434600b00369e5733e54mr904178oib.215.1674369083421; Sat, 21
- Jan 2023 22:31:23 -0800 (PST)
+        bh=hjbzVjhCY8YZ/A5RPkClWyob4cGDtlGmsyktX8xQAZ0=;
+        b=lPI6FnmWvgAb/qbeznJS5Erz2bfg2MZkJBjT5yQWF9jbm1t8cU9eSC0tjHtc+9xWrf
+         6jk11UvlZpkh5vlDA8HZ+f/ajjOjAIrWQrpKU6k2jBm9KljUhntsuTAv8CR8pk48OXCW
+         PdA14alJnVdiWWWR5q1XWglpLKXgwPf22rk5NwwDuPAv80X3Bhw9D+a3amVJTrq7tl5/
+         CO0jF73Ada6D1JYJQkF9goI0NsemC3Az3vvYbWGu36ydiROcb6N0lMWwzXb09lEyadLj
+         Yl5AmnIB3UzzrirYApcgR2aR2HJBD6vTJZxPeYgjN9CPFXaX7zC01MC3TxBgJ/udXzyL
+         GgAw==
+X-Gm-Message-State: AFqh2ko1M8/Z1fZCtcNpeSjHHTw4aKs66hww3EoOEQaAlYOl5dZWi9/H
+        cNMcZV4CB01mKZW4zrP4h/A9hkdz+9sQ/v5Qi2E=
+X-Google-Smtp-Source: AMrXdXvPVE3mgOcGMtyP3N6SPAH94rkHKLwREC3iSk4xBoqg3lNWuJJnjXb4pfGcEJhpxoo8L2VoLmWsaRxBWFiKSnI=
+X-Received: by 2002:a05:6870:5d93:b0:15e:ca6a:913 with SMTP id
+ fu19-20020a0568705d9300b0015eca6a0913mr1780711oab.204.1674369291740; Sat, 21
+ Jan 2023 22:34:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119174036.64046-1-wedsonaf@gmail.com> <Y8ozfNAYhuOPgL/7@Boquns-Mac-mini.local>
-In-Reply-To: <Y8ozfNAYhuOPgL/7@Boquns-Mac-mini.local>
+References: <20230119174036.64046-1-wedsonaf@gmail.com> <20230119174036.64046-2-wedsonaf@gmail.com>
+ <Y8ryoTYIKpYtuqow@boqun-archlinux>
+In-Reply-To: <Y8ryoTYIKpYtuqow@boqun-archlinux>
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-Date:   Sun, 22 Jan 2023 03:31:12 -0300
-Message-ID: <CANeycqo3b2+3_156vy+vFUEU=ysxSqpubShQpEL3iOHrAA+ZsA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] rust: types: introduce `ScopeGuard`
+Date:   Sun, 22 Jan 2023 03:34:40 -0300
+Message-ID: <CANeycqp8-S3fb1YF=mj6BzWLytCTTH1ihir_OmhGG7u6mkPkvQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] rust: types: introduce `ForeignOwnable`
 To:     Boqun Feng <boqun.feng@gmail.com>
 Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
@@ -70,167 +71,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 at 03:24, Boqun Feng <boqun.feng@gmail.com> wrote:
+On Fri, 20 Jan 2023 at 16:59, Boqun Feng <boqun.feng@gmail.com> wrote:
 >
-> On Thu, Jan 19, 2023 at 02:40:32PM -0300, Wedson Almeida Filho wrote:
-> > This allows us to run some code when the guard is dropped (e.g.,
-> > implicitly when it goes out of scope). We can also prevent the
-> > guard from running by calling its `dismiss()` method.
+> On Thu, Jan 19, 2023 at 02:40:33PM -0300, Wedson Almeida Filho wrote:
+> > It was originally called `PointerWrapper`. It is used to convert
+> > a Rust object to a pointer representation (void *) that can be
+> > stored on the C side, used, and eventually returned to Rust.
 > >
 > > Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 > > ---
-> >  rust/kernel/types.rs | 127 ++++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 126 insertions(+), 1 deletion(-)
+> >  rust/kernel/lib.rs   |  1 +
+> >  rust/kernel/types.rs | 54 ++++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 55 insertions(+)
+> >
+> > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> > index e0b0e953907d..223564f9f0cc 100644
+> > --- a/rust/kernel/lib.rs
+> > +++ b/rust/kernel/lib.rs
+> > @@ -16,6 +16,7 @@
+> >  #![feature(coerce_unsized)]
+> >  #![feature(core_ffi_c)]
+> >  #![feature(dispatch_from_dyn)]
+> > +#![feature(generic_associated_types)]
+> >  #![feature(receiver_trait)]
+> >  #![feature(unsize)]
 > >
 > > diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> > index e84e51ec9716..f0ad4472292d 100644
+> > index f0ad4472292d..5475f6163002 100644
 > > --- a/rust/kernel/types.rs
 > > +++ b/rust/kernel/types.rs
-> > @@ -2,7 +2,132 @@
+> > @@ -9,6 +9,60 @@ use core::{
+> >      ops::{Deref, DerefMut},
+> >  };
 > >
-> >  //! Kernel types.
-> >
-> > -use core::{cell::UnsafeCell, mem::MaybeUninit};
-> > +use alloc::boxed::Box;
-> > +use core::{
-> > +    cell::UnsafeCell,
-> > +    mem::MaybeUninit,
-> > +    ops::{Deref, DerefMut},
-> > +};
+> > +/// Used to transfer ownership to and from foreign (non-Rust) languages.
+> > +///
+> > +/// Ownership is transferred from Rust to a foreign language by calling [`Self::into_foreign`] and
+> > +/// later may be transferred back to Rust by calling [`Self::from_foreign`].
+> > +///
+> > +/// This trait is meant to be used in cases when Rust objects are stored in C objects and
+> > +/// eventually "freed" back to Rust.
+> > +pub trait ForeignOwnable {
+> > +    /// Type of values borrowed between calls to [`ForeignOwnable::into_foreign`] and
+> > +    /// [`ForeignOwnable::from_foreign`].
+> > +    type Borrowed<'a>;
 > > +
-> > +/// Runs a cleanup function/closure when dropped.
-> > +///
-> > +/// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
-> > +///
-> > +/// # Examples
-> > +///
-> > +/// In the example below, we have multiple exit paths and we want to log regardless of which one is
-> > +/// taken:
-> > +/// ```
-> > +/// # use kernel::ScopeGuard;
-> > +/// fn example1(arg: bool) {
-> > +///     let _log = ScopeGuard::new(|| pr_info!("example1 completed\n"));
-> > +///
-> > +///     if arg {
-> > +///         return;
-> > +///     }
-> > +///
-> > +///     pr_info!("Do something...\n");
-> > +/// }
-> > +///
-> > +/// # example1(false);
-> > +/// # example1(true);
-> > +/// ```
-> > +///
-> > +/// In the example below, we want to log the same message on all early exits but a different one on
-> > +/// the main exit path:
-> > +/// ```
-> > +/// # use kernel::ScopeGuard;
-> > +/// fn example2(arg: bool) {
-> > +///     let log = ScopeGuard::new(|| pr_info!("example2 returned early\n"));
-> > +///
-> > +///     if arg {
-> > +///         return;
-> > +///     }
-> > +///
-> > +///     // (Other early returns...)
-> > +///
-> > +///     log.dismiss();
-> > +///     pr_info!("example2 no early return\n");
-> > +/// }
-> > +///
-> > +/// # example2(false);
-> > +/// # example2(true);
-> > +/// ```
-> > +///
-> > +/// In the example below, we need a mutable object (the vector) to be accessible within the log
-> > +/// function, so we wrap it in the [`ScopeGuard`]:
-> > +/// ```
-> > +/// # use kernel::ScopeGuard;
-> > +/// fn example3(arg: bool) -> Result {
-> > +///     let mut vec =
-> > +///         ScopeGuard::new_with_data(Vec::new(), |v| pr_info!("vec had {} elements\n", v.len()));
-> > +///
-> > +///     vec.try_push(10u8)?;
-> > +///     if arg {
-> > +///         return Ok(());
-> > +///     }
-> > +///     vec.try_push(20u8)?;
-> > +///     Ok(())
-> > +/// }
-> > +///
-> > +/// # assert_eq!(example3(false), Ok(()));
-> > +/// # assert_eq!(example3(true), Ok(()));
-> > +/// ```
-> > +///
-> > +/// # Invariants
-> > +///
-> > +/// The value stored in the struct is nearly always `Some(_)`, except between
-> > +/// [`ScopeGuard::dismiss`] and [`ScopeGuard::drop`]: in this case, it will be `None` as the value
-> > +/// will have been returned to the caller. Since  [`ScopeGuard::dismiss`] consumes the guard,
-> > +/// callers won't be able to use it anymore.
-> > +pub struct ScopeGuard<T, F: FnOnce(T)>(Option<(T, F)>);
+> > +    /// Converts a Rust-owned object to a foreign-owned one.
+> > +    ///
+> > +    /// The foreign representation is a pointer to void.
+> > +    fn into_foreign(self) -> *const core::ffi::c_void;
 > > +
-> > +impl<T, F: FnOnce(T)> ScopeGuard<T, F> {
-> > +    /// Creates a new guarded object wrapping the given data and with the given cleanup function.
-> > +    pub fn new_with_data(data: T, cleanup_func: F) -> Self {
-> > +        // INVARIANT: The struct is being initialised with `Some(_)`.
-> > +        Self(Some((data, cleanup_func)))
-> > +    }
+> > +    /// Borrows a foreign-owned object.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
+> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
+> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow_mut`]
+> > +    /// for this object must have been dropped.
+> > +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowed<'a>;
 > > +
-> > +    /// Prevents the cleanup function from running and returns the guarded data.
-> > +    pub fn dismiss(mut self) -> T {
-> > +        // INVARIANT: This is the exception case in the invariant; it is not visible to callers
-> > +        // because this function consumes `self`.
-> > +        self.0.take().unwrap().0
-> > +    }
-> > +}
-> > +
-> > +impl ScopeGuard<(), Box<dyn FnOnce(())>> {
+> > +    /// Mutably borrows a foreign-owned object.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
+> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
+> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
+> > +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
+> > +    unsafe fn borrow_mut<T: ForeignOwnable>(ptr: *const core::ffi::c_void) -> ScopeGuard<T, fn(T)> {
+> > +        // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
+> > +        // `into_foreign`.
+> > +        ScopeGuard::new_with_data(unsafe { T::from_foreign(ptr) }, |d| {
+> > +            d.into_foreign();
+> > +        })
 >
-> How about `fn(())` here as a placeholder? I.e
+> I kinda want to suggest borrow_mut() to be implemented as:
 >
->         impl ScopeGuard<(), fn(())>
->
+>     pub trait ForeignOwnable {
+>         ...
+>         unsafe fn borrow_mut(ptr: *const core::ffi::c_void) -> ScopeGuard<Self, fn(Self)> {
+>             // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
+>             // `into_foreign`.
+>             ScopeGuard::new_with_data(unsafe { Self::from_foreign(ptr) }, |d| {
+>                 d.into_foreign();
+>             })
+>     }
 
-That's simpler, I like it. I'll change this for v2. Thanks!
+Oh, eliminate the generic type `T` and just use `Self`. Yes, I think
+that's a good simplification.
 
+>
+> to avoid funny code as follow:
+>
+>         let a = Box::new(0).into_foreign();
+>         // Using an irrelevant `impl ForeignOwnable` to `borrow_mut`
+>         let borrowed_a: ScopeGuard<Box<i32>, ...> = unsafe { Arc::<u64>::borrow_mut(a) };
+>
+> but that requires `Self: Sized`. Is it too restrictive?
+
+It isn't. Since we want the raw pointer to fit in a single pointer
+(from C's perspective), we already require `Self: Sized`.
+
+I'll make this change in v2.
+
+>
 > Regards,
 > Boqun
 >
-> > +    /// Creates a new guarded object with the given cleanup function.
-> > +    pub fn new(cleanup: impl FnOnce()) -> ScopeGuard<(), impl FnOnce(())> {
-> > +        ScopeGuard::new_with_data((), move |_| cleanup())
 > > +    }
+> > +
+> > +    /// Converts a foreign-owned object back to a Rust-owned one.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
+> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
+> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
+> > +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
+> > +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
 > > +}
 > > +
-> > +impl<T, F: FnOnce(T)> Deref for ScopeGuard<T, F> {
-> > +    type Target = T;
-> > +
-> > +    fn deref(&self) -> &T {
-> > +        // The type invariants guarantee that `unwrap` will succeed.
-> > +        &self.0.as_ref().unwrap().0
-> > +    }
-> > +}
-> > +
-> > +impl<T, F: FnOnce(T)> DerefMut for ScopeGuard<T, F> {
-> > +    fn deref_mut(&mut self) -> &mut T {
-> > +        // The type invariants guarantee that `unwrap` will succeed.
-> > +        &mut self.0.as_mut().unwrap().0
-> > +    }
-> > +}
-> > +
-> > +impl<T, F: FnOnce(T)> Drop for ScopeGuard<T, F> {
-> > +    fn drop(&mut self) {
-> > +        // Run the cleanup function if one is still present.
-> > +        if let Some((data, cleanup)) = self.0.take() {
-> > +            cleanup(data)
-> > +        }
-> > +    }
-> > +}
-> >
-> >  /// Stores an opaque value.
+> >  /// Runs a cleanup function/closure when dropped.
 > >  ///
+> >  /// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
 > > --
 > > 2.34.1
 > >
