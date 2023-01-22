@@ -2,126 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E588676CB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 13:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A77B676CB8
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 13:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjAVMPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 07:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S229895AbjAVMRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 07:17:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjAVMPt (ORCPT
+        with ESMTP id S229924AbjAVMRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 07:15:49 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02F01ABCF
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 04:15:48 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so8764013wml.3
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 04:15:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cYzBOFIiirkmqMZWjpo+uYx1+JPy1KYoRNQwi1+AmGY=;
-        b=Uj/oOib5AsGrBWAYgFvNZIv9WdtsxocVc6DdiOF1wLCOXWYJlLB0T9w03A/a3nLWnF
-         flwjaPuhcf62F6iKuU+vitZgZxqYXau/HeGwWoUmHkPb53pX0xEc/kEa3e5wWWFHA6Sb
-         zeqFLjpeKh6HCXlhkhGm08VugSwhTfEs96DEvg6YfDAPJ2fWgG1KiGQbt7vc1fx1BmCs
-         j5dBCsO/5N3HdNB97xFgYgAcdANtkAD9B/WgEfklkzxU05LUE6X/HxBSVvC1Tzk1v21U
-         zKn1Y7qJuTPG8CzF74bcbbZixSU/8E1vL6M7QrwmlDz5+JmSzzfz1j+Vf9h8z2jnrqXD
-         WKVQ==
+        Sun, 22 Jan 2023 07:17:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AD21ABCA
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 04:16:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674389779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rXwZ5IpRiYOpk4BxqOLDiJBQ1xame8DGBmk28ubnqrM=;
+        b=EOxMFGRJxQS23LUEbd53cuVgp9Ci8F14jZ2Qs6RNQIkPM5jf1Om1iZg3kxXbxmTxkw6oQm
+        c6QGTObQHcHd9zonRHJR9vNXiehUxoimyYaPs6brTHOjJVe3UoBKCU7/RgisFxQNGTQEgz
+        izvVsD6I9Jj0d9yiYkUmJZmPM3w03ec=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-530-pyTtpBOoM0a66DEbgV-WXQ-1; Sun, 22 Jan 2023 07:16:17 -0500
+X-MC-Unique: pyTtpBOoM0a66DEbgV-WXQ-1
+Received: by mail-vk1-f197.google.com with SMTP id f123-20020a1f9c81000000b003e1a7591524so3718198vke.1
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 04:16:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cYzBOFIiirkmqMZWjpo+uYx1+JPy1KYoRNQwi1+AmGY=;
-        b=acCL04PflJ/GgQkE/2xOHc8917CPbzvRS6klex3U9cRxThHIyhcp1SzjtwOQVGkx1i
-         5Y01as7m1QohgD5TboF3rAlR3/Z14VEt9nnNFlvyV2qqjecjIpiuTMNuna9c7DNjii16
-         +j+tzwUmXaekHRiDpvSe9p5n+uAYFuINkQc3X7fjMTO0VHlN0b4wwW9yhXuuThkn/P4X
-         qJgzGEjaHtVgQ9SE6Qm1muasrCQ3sW6ERrYcoBdU/fGGjUuilRAO0tkctn3vok+nhUtj
-         ETX/iC5c9tMzOp8rTv7u/ZqU/XF/cVebSXk+BHJ5scxQR8YZENWmzSsk8BMGJtS+Re0L
-         XjoA==
-X-Gm-Message-State: AFqh2koCxt1LAVeYH8cAciloOhoVGMAJqXE8mXKZyFHz+dr1h43fHd5F
-        mFEhCDB9d2QCvOl+WyEcjiTFag==
-X-Google-Smtp-Source: AMrXdXvOtIoR3Sl2P5Nhj6vIVBah9gB0DFW+MWosXdF170n1/ZbFPnEZyspK38WX4XzAouVs5N0z7A==
-X-Received: by 2002:a05:600c:2116:b0:3d6:10e:68a8 with SMTP id u22-20020a05600c211600b003d6010e68a8mr17054413wml.0.1674389747348;
-        Sun, 22 Jan 2023 04:15:47 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o28-20020a05600c511c00b003dab40f9eafsm8543663wms.35.2023.01.22.04.15.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 04:15:46 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] ARM: dts: Cleanup for v6.3
-Date:   Sun, 22 Jan 2023 13:15:41 +0100
-Message-Id: <20230122121541.29312-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230122121541.29312-1-krzysztof.kozlowski@linaro.org>
-References: <20230122121541.29312-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rXwZ5IpRiYOpk4BxqOLDiJBQ1xame8DGBmk28ubnqrM=;
+        b=RD64/BxhttJYD96alMxkwypTUTrli/dsFVel3WHcCXI0cYDl7Rr3k3zk81ddZoIjTf
+         4IpMiFDAbIGHh4Balu/DLnMdocdXTCLY/Tybx4OvvVnNzeScYu3BChzZvxBkh+9S8P2p
+         RdFSVd3aS7fWhMFMR4YwBRKKJdrcLm5KX/3ws08HvZ5Gu8BkoxAKF9/c82ush4Z9nj/z
+         eDQEDKU8xLXk3yPJBRmgdbgnhIIPooSiJlT1mcaJvBrKx7b3ziZkzvXlIR1e25UDLgZ+
+         dT9625yiZCa1amxEy1v9R7YFfi/XGWh96SvvB+MJYt3Ubq/B/MMztMhloxToFprte34C
+         gQnQ==
+X-Gm-Message-State: AFqh2kpDeaLk7bfdw6HBqISypAXQIIWxffXIXyIKSbRA4oWt6+sgZt/p
+        kTHkhX6fc1KWwWVyOt1HEgAD3xcQLRBD8BF3/xJydWU6l0NTTtRq7i3wX1VgjxBL8hUpntdEME0
+        B7l6YBREv1txcWpPGbXpZgQ9P/NSlM7f5hfg/AyAm
+X-Received: by 2002:a67:e992:0:b0:3d2:e26a:d76f with SMTP id b18-20020a67e992000000b003d2e26ad76fmr2567177vso.41.1674389776840;
+        Sun, 22 Jan 2023 04:16:16 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt8RUTbUD2yYmQlhCh6ICsxMQJZgQco/EAGYx4CajKySDnAqSNvz1kUZi1oL2Ez+ij8lioHGTWMAHPAEv1502o=
+X-Received: by 2002:a67:e992:0:b0:3d2:e26a:d76f with SMTP id
+ b18-20020a67e992000000b003d2e26ad76fmr2567173vso.41.1674389776614; Sun, 22
+ Jan 2023 04:16:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230121073741.3807-1-lina@asahilina.net>
+In-Reply-To: <20230121073741.3807-1-lina@asahilina.net>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Sun, 22 Jan 2023 12:16:00 +0000
+Message-ID: <CAOgh=FxN=5dvxvUm=Fj-6hVuieN6GFnfG96F9c9=td6B8OvP3g@mail.gmail.com>
+Subject: Re: [PATCH] soc: apple: rtkit: Add register dump decoding to crashlog
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+On Sat, 21 Jan 2023 at 07:48, Asahi Lina <lina@asahilina.net> wrote:
+>
+> When the coprocessor crashes, it's useful to get a proper register dump
+> so we can find out what the firmware was doing. Add a decoder for this.
+>
+> Originally this had ESR decoding by reusing the ARM64 arch header for
+> this, but that introduces some module linking and cross-arch compilation
+> issues, so let's leave that out for now.
+>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Signed-off-by: Eric Curtin <ecurtin@redhat.com>
 
-are available in the Git repository at:
+Is mise le meas/Regards,
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.3
+Eric Curtin
 
-for you to fetch changes up to 3a48b303d44a19d335910f825f9a8473c5ff35e0:
+>  drivers/soc/apple/rtkit-crashlog.c | 83 ++++++++++++++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>
+> diff --git a/drivers/soc/apple/rtkit-crashlog.c b/drivers/soc/apple/rtkit-crashlog.c
+> index 732deed64660..e29ef0a80ab8 100644
+> --- a/drivers/soc/apple/rtkit-crashlog.c
+> +++ b/drivers/soc/apple/rtkit-crashlog.c
+> @@ -13,6 +13,7 @@
+>  #define APPLE_RTKIT_CRASHLOG_VERSION FOURCC('C', 'v', 'e', 'r')
+>  #define APPLE_RTKIT_CRASHLOG_MBOX FOURCC('C', 'm', 'b', 'x')
+>  #define APPLE_RTKIT_CRASHLOG_TIME FOURCC('C', 't', 'i', 'm')
+> +#define APPLE_RTKIT_CRASHLOG_REGS FOURCC('C', 'r', 'g', '8')
+>
+>  struct apple_rtkit_crashlog_header {
+>         u32 fourcc;
+> @@ -31,6 +32,24 @@ struct apple_rtkit_crashlog_mbox_entry {
+>  };
+>  static_assert(sizeof(struct apple_rtkit_crashlog_mbox_entry) == 0x18);
+>
+> +struct apple_rtkit_crashlog_regs {
+> +       u32 unk_0;
+> +       u32 unk_4;
+> +       u64 regs[31];
+> +       u64 sp;
+> +       u64 pc;
+> +       u64 psr;
+> +       u64 cpacr;
+> +       u64 fpsr;
+> +       u64 fpcr;
+> +       u64 unk[64];
+> +       u64 far;
+> +       u64 unk_X;
+> +       u64 esr;
+> +       u64 unk_Z;
+> +};
+> +static_assert(sizeof(struct apple_rtkit_crashlog_regs) == 0x350);
+> +
+>  static void apple_rtkit_crashlog_dump_str(struct apple_rtkit *rtk, u8 *bfr,
+>                                           size_t size)
+>  {
+> @@ -94,6 +113,66 @@ static void apple_rtkit_crashlog_dump_mailbox(struct apple_rtkit *rtk, u8 *bfr,
+>         }
+>  }
+>
+> +static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
+> +                                          size_t size)
+> +{
+> +       struct apple_rtkit_crashlog_regs regs;
+> +       const char *el;
+> +       int i;
+> +
+> +       if (size < sizeof(regs)) {
+> +               dev_warn(rtk->dev, "RTKit: Regs section too small: 0x%lx", size);
+> +               return;
+> +       }
+> +
+> +       memcpy(&regs, bfr, sizeof(regs));
+> +
+> +       switch (regs.psr & PSR_MODE_MASK) {
+> +       case PSR_MODE_EL0t:
+> +               el = "EL0t";
+> +               break;
+> +       case PSR_MODE_EL1t:
+> +               el = "EL1t";
+> +               break;
+> +       case PSR_MODE_EL1h:
+> +               el = "EL1h";
+> +               break;
+> +       case PSR_MODE_EL2t:
+> +               el = "EL2t";
+> +               break;
+> +       case PSR_MODE_EL2h:
+> +               el = "EL2h";
+> +               break;
+> +       default:
+> +               el = "unknown";
+> +               break;
+> +       }
+> +
+> +       dev_warn(rtk->dev, "RTKit: Exception dump:");
+> +       dev_warn(rtk->dev, "  == Exception taken from %s ==", el);
+> +       dev_warn(rtk->dev, "  PSR    = 0x%llx", regs.psr);
+> +       dev_warn(rtk->dev, "  PC     = 0x%llx\n", regs.pc);
+> +       dev_warn(rtk->dev, "  ESR    = 0x%llx\n", regs.esr);
+> +       dev_warn(rtk->dev, "  FAR    = 0x%llx\n", regs.far);
+> +       dev_warn(rtk->dev, "  SP     = 0x%llx\n", regs.sp);
+> +       dev_warn(rtk->dev, "\n");
+> +
+> +       for (i = 0; i < 31; i += 4) {
+> +               if (i < 28)
+> +                       dev_warn(rtk->dev,
+> +                                        "  x%02d-x%02d = %016llx %016llx %016llx %016llx\n",
+> +                                        i, i + 3,
+> +                                        regs.regs[i], regs.regs[i + 1],
+> +                                        regs.regs[i + 2], regs.regs[i + 3]);
+> +               else
+> +                       dev_warn(rtk->dev,
+> +                                        "  x%02d-x%02d = %016llx %016llx %016llx\n", i, i + 3,
+> +                                        regs.regs[i], regs.regs[i + 1], regs.regs[i + 2]);
+> +       }
+> +
+> +       dev_warn(rtk->dev, "\n");
+> +}
+> +
+>  void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+>  {
+>         size_t offset;
+> @@ -140,6 +219,10 @@ void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+>                         apple_rtkit_crashlog_dump_time(rtk, bfr + offset + 16,
+>                                                        section_size);
+>                         break;
+> +               case APPLE_RTKIT_CRASHLOG_REGS:
+> +                       apple_rtkit_crashlog_dump_regs(rtk, bfr + offset + 16,
+> +                                                      section_size);
+> +                       break;
+>                 default:
+>                         dev_warn(rtk->dev,
+>                                  "RTKit: Unknown crashlog section: %x",
+> --
+> 2.35.1
+>
+>
 
-  ARM: dts: at91: align LED node names with dtschema (2023-01-13 11:38:33 +0100)
-
-----------------------------------------------------------------
-Minor improvements in ARM DTS for v6.3
-
-1. Drop 0x from unit address (socpfga).
-2. Align HDMI CEC and LED nodes with bindings (stih410, keystone, dove,
-   at91).
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (5):
-      ARM: dts: socfpga: drop 0x from unit address
-      ARM: dts: stih410: align HDMI CEC node names with dtschema
-      ARM: dts: keystone: align LED node names with dtschema
-      ARM: dts: dove: align LED node names with dtschema
-      ARM: dts: at91: align LED node names with dtschema
-
- arch/arm/boot/dts/at91-gatwick.dts            | 12 ++++++------
- arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   |  6 +++---
- arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts |  6 +++---
- arch/arm/boot/dts/at91-sama5d2_icp.dts        |  6 +++---
- arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     |  6 +++---
- arch/arm/boot/dts/at91-sama5d2_xplained.dts   |  6 +++---
- arch/arm/boot/dts/at91-sama5d3_xplained.dts   |  4 ++--
- arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dts   |  6 +++---
- arch/arm/boot/dts/at91-sama5d4_xplained.dts   |  4 ++--
- arch/arm/boot/dts/at91-sama5d4ek.dts          |  6 +++---
- arch/arm/boot/dts/at91-tse850-3.dts           | 16 ++++++++--------
- arch/arm/boot/dts/dove-cm-a510.dtsi           |  2 +-
- arch/arm/boot/dts/dove-cubox.dts              |  2 +-
- arch/arm/boot/dts/dove-d2plug.dts             |  6 +++---
- arch/arm/boot/dts/dove-d3plug.dts             |  6 +++---
- arch/arm/boot/dts/keystone-k2hk-evm.dts       |  8 ++++----
- arch/arm/boot/dts/sama5d31ek.dts              |  2 +-
- arch/arm/boot/dts/sama5d34ek.dts              |  2 +-
- arch/arm/boot/dts/sama5d3xcm.dtsi             |  2 +-
- arch/arm/boot/dts/sama5d3xcm_cmp.dtsi         |  2 +-
- arch/arm/boot/dts/socfpga.dtsi                |  2 +-
- arch/arm/boot/dts/stih410.dtsi                |  2 +-
- 22 files changed, 57 insertions(+), 57 deletions(-)
