@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8CB676BCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 10:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965E3676BCC
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 10:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjAVJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 04:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S229938AbjAVJJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 04:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjAVJJn (ORCPT
+        with ESMTP id S229480AbjAVJJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 04:09:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030911E5DF
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 01:08:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674378530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xw2MXfkPPnLQlnAfeTOxuXROIA//nwHqLwtbd7CXgk8=;
-        b=Ud10sJyxsNL4xHkYVMsZ2To/UV0Sq40eucPGSD1Fg2lbxAKaTOG3i1eqcFPKzkApxAAy9n
-        Zw36MVfbl5vsz36mLhQ2zn0YjM6cVGD0+1k9AQbsYRZPVZ53pxx8t5S4ycyhkTh+DdW0oo
-        nxHctb711elqOaKnU+Wu0WoyHEspYPk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-UsGxYsLSOFmvS_Mef9Nucw-1; Sun, 22 Jan 2023 04:08:44 -0500
-X-MC-Unique: UsGxYsLSOFmvS_Mef9Nucw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9B0B1875041;
-        Sun, 22 Jan 2023 09:08:43 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A44172026D68;
-        Sun, 22 Jan 2023 09:08:43 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [PATCH] selftests: kvm: move declaration at the beginning of main()
-Date:   Sun, 22 Jan 2023 04:08:43 -0500
-Message-Id: <20230122090843.3743704-1-pbonzini@redhat.com>
+        Sun, 22 Jan 2023 04:09:04 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A3C1F4A5;
+        Sun, 22 Jan 2023 01:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VrpSjRVWRpLB+kPorI91UdQAtzr72U2i/Ay10A+MJmQ=; b=iVxCDSSLpwaBZwREXNIipYG3vR
+        4llqgpbYdLbFt1zbYcVwfBvPaCt+8On9z8KLmkf4Du996DtFfQ/+d2gUFdQ1WUvdD6v9vNmBCh6xv
+        5qO3OsVbKI2z3DkkGMo9yVtgKMRm+tmEPt9tE4ISb0aEsg2TcW319z2ijvj72Vg7PdEzJVUPgIR3M
+        gdsHpFReipT9d6iU7R6wn9QB5NTwVRWPF6r7RPN7xG1jdH904/D+eLGvLPO8GX6tb4K6z23Bj30dM
+        ymlsVFzQcpCKVybiVavDGY33spsFIonmPLNa3CSDFa2VFk3Beh4aDICYoGHkuF1Gdb8JTzsaGcJSM
+        Zy0Efdzg==;
+Received: from p200300ccff40f1001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff40:f100:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pJWLN-0002qn-Np; Sun, 22 Jan 2023 10:08:54 +0100
+Date:   Sun, 22 Jan 2023 10:08:52 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Adam Ford <aford173@gmail.com>, bcousson@baylibre.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH] ARM: dts: gta04: fix excess dma channel usage
+Message-ID: <20230122100852.32ae082c@aktux>
+In-Reply-To: <Y8jxjBZrPV0n363P@atomide.com>
+References: <20230113211151.2314874-1-andreas@kemnade.info>
+        <CAHCN7xJH+c41Yas+xnWA57KNi9arOOJDxJ=joEDEJr2k6jrRrw@mail.gmail.com>
+        <Y8VkjQ2yZQssx/wJ@atomide.com>
+        <20230116173922.585904bf@aktux>
+        <Y8WBuKt6mw6TN1Cp@atomide.com>
+        <CAHCN7x+b2_dnpRs8RarhhgTfBrTVfGfmcQNbfHLoWBwkZ_3Puw@mail.gmail.com>
+        <Y8WEoxiOXgZNB1Oc@atomide.com>
+        <Y8jxjBZrPV0n363P@atomide.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Placing a declaration of evt_reset is pedantically invalid
-according to the C standard.  While GCC does not really care
-and only warns with -Wpedantic, clang ignores the declaration
-altogether with an error:
+On Thu, 19 Jan 2023 09:30:20 +0200
+Tony Lindgren <tony@atomide.com> wrote:
 
-x86_64/xen_shinfo_test.c:965:2: error: expected expression
-        struct kvm_xen_hvm_attr evt_reset = {
-        ^
-x86_64/xen_shinfo_test.c:969:38: error: use of undeclared identifier evt_reset
-        vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &evt_reset);
-                                            ^
+> * Tony Lindgren <tony@atomide.com> [230116 17:33]:
+> > * Adam Ford <aford173@gmail.com> [230116 17:00]:  
+> > > Doesn't this imply the target-module stuff needs to be implemented for
+> > > the drivers?  It looks like a lot of the omap3 drivers are still using
+> > > hwmods although some have target-modules. In this case, the mcspi
+> > > drivers that Andreas is disabling don't appear to have target-module
+> > > stuff configured.  
+> > 
+> > Sorry I don't remember if omap_device.c ignores status disabled or not.
+> > But in any case, it should be trivial to update omap3.dtsi to configure
+> > some of the devices like mcspi to probe with device tree data and ti-sysc
+> > as needed.  
+> 
+> So as long as gta04 power management still behaves with this patch it
+> should good to go.
+> 
+# sleep 10 ; /usr/local/bin/idledump
+     CM_IDLEST1_CORE 00000042
+     CM_IDLEST3_CORE 00000000
+     CM_FCLKEN1_CORE 00000000
+     CM_FCLKEN3_CORE 00000002
+     CM_CLKSTST_CORE 00000003
+     CM_IDLEST_CKGEN 00000209
+    CM_IDLEST2_CKGEN 00000000
+       CM_FCLKEN_DSS 00000000
+       CM_IDLEST_DSS 00000000
+       CM_FCLKEN_CAM 00000000
+       CM_IDLEST_CAM 00000000
+       CM_FCLKEN_PER 00000000
+       CM_IDLEST_PER 00000000
 
-Reported-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-Reported-by: Sean Christopherson <seanjc@google.com>
-Fixes: a79b53aaaab5 ("KVM: x86: fix deadlock for KVM_XEN_EVTCHN_RESET", 2022-12-28)
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-index dae510c263b4..13c75dc18c10 100644
---- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-@@ -434,6 +434,7 @@ static void *juggle_shinfo_state(void *arg)
- int main(int argc, char *argv[])
- {
- 	struct timespec min_ts, max_ts, vm_ts;
-+	struct kvm_xen_hvm_attr evt_reset;
- 	struct kvm_vm *vm;
- 	pthread_t thread;
- 	bool verbose;
-@@ -962,10 +963,8 @@ int main(int argc, char *argv[])
- 	}
- 
-  done:
--	struct kvm_xen_hvm_attr evt_reset = {
--		.type = KVM_XEN_ATTR_TYPE_EVTCHN,
--		.u.evtchn.flags = KVM_XEN_EVTCHN_RESET,
--	};
-+	evt_reset.type = KVM_XEN_ATTR_TYPE_EVTCHN;
-+	evt_reset.u.evtchn.flags = KVM_XEN_EVTCHN_RESET;
- 	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &evt_reset);
- 
- 	alarm(0);
--- 
-2.39.0
+FCLKEN3_CORE becomes 0 after unbinding the bandgap sensor.
+
+but...
+# cat /sys/kernel/debug/pm_debug/time 
+usbhost_pwrdm (ON),OFF:830267486567,RET:0,INA:0,ON:12202880865
+sgx_pwrdm (INA),OFF:0,RET:0,INA:841224365234,ON:1245971680
+core_pwrdm (ON),OFF:0,RET:0,INA:0,ON:842470336914
+per_pwrdm (ON),OFF:520406799328,RET:30043365464,INA:0,ON:292020111087
+
+hmmm.... 
+
+but does not look like anything related to mcspi*.
+
+Regards,
+Andreas
 
