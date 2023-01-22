@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBCA676D5C
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 15:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB5F676D5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 15:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjAVOBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 09:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S230056AbjAVOC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 09:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjAVOBT (ORCPT
+        with ESMTP id S229799AbjAVOCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 09:01:19 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27351E29A
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 06:01:17 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l8so7208202wms.3
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 06:01:17 -0800 (PST)
+        Sun, 22 Jan 2023 09:02:55 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471461E9F9
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 06:02:54 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so6773431wmc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 06:02:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+MdEj4R2+WEYxIlXsIfr4Eo7Q9gZDogpTKz227nG1/8=;
-        b=zvgf5ozrUNYKT3ogWzdIS3NcRA9RDacuIEVoNItjYlS59X8vl31Qxm9aEyzlqrBUVZ
-         6dy1DiNT1zKcOb1keUJP1zF5VoCpCerIjdH9BoTdwGKtKLgXSBxaTslssEb3ENDeTN9N
-         z5JXLyJp5XvXOiHZHoLZNmwJFn/d+W3Of/yO+JP/iWqCObVUNRtV/i3mXNPTKa+AJV/q
-         zjHTz5FKji1DlD9EQzB7LDVYH8uZWfk6rsqMW5Zp9KEL7SstPHifl1J7Q+P3LYhDgub0
-         THfKmYSBAMY+b5bn1RfWtpMBT7d5ZjzNo5WL+moClfaXu2AnSNFzBhmlSfMgm1xruR5j
-         WBhQ==
+        bh=khU7ZPQc8roE7siv/yWI9eKECkTeVRE2Pp/ERSgrr1g=;
+        b=Pr7fK8tvvSp5BqJp/rMDpdRQRijqjloQGCneGA5yIO1/JF2k4IGl5KIalhRxIFD00z
+         szILRu0fOF3N3qVAM/PY4Z5ldE3imcyZFHFiRC+3In6DbTodie4w0l7K4NsCJ5F5a39w
+         iGSann5xiBzktHxg7dSR3D1Lct3JUlXbUTyKSvdHgaoE9mGNwtkF9/OODmIrIv9JfiD0
+         z6ybG7G380Q6JO7wwwq4CxN+DBQAqqj/XGwKB0+A3iLAZ4zBCp5QdxTH5iYJW2VF27uN
+         Hm/cma/lh1KYD4z24DGHsmtuh2wl3FsOiZPl66S3bl3gjVp6Ip+W9ISkdqMKPMRYxNt0
+         lFZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+MdEj4R2+WEYxIlXsIfr4Eo7Q9gZDogpTKz227nG1/8=;
-        b=mciCwqx9zQK7nGZPvdvehwZedqYKu4lpDsnOMZxzDlTQK+BYcbm+uaqR1eH8TnkaLD
-         BK/Fua7egfS7ghsCz4zQ9v+PRFMLh0q2Jj4hTwjbC9djV894f7XGTk4sADUQRfkrR2AP
-         /a7MLjmC4Ym8A1jjBvJYqTYSiUhAkfoRFvBg9o7Wl6aG0zenYBsloSi05j9+Wmeheobs
-         U9T5QC7i8SjKXrlvGHR7RnqR4UI5llVUwUdkagZv5ywKBYam85UFoY6M2TMv7A27OxAY
-         ufEW1YJxUC2CNWCuZlTQbSFsecopHBspBuvs1lRC1UGDtvRSZKk8l7aZVefHWhXoRun+
-         TE/g==
-X-Gm-Message-State: AFqh2kq83HXZ+TTgu03xw5CQafRRSb6yufoJDfFdUsj2EK2Wkl+BfZpf
-        kLPPbBl43nUi+0zS+YgMi0OuJQ==
-X-Google-Smtp-Source: AMrXdXub65L/v5Gp/lU5Ulf4dkZPAzKvizOOvwb0XyxK4MjGgfgQT2QKkAA8tsH4ux1tO/ymBST+sg==
-X-Received: by 2002:a7b:c4d7:0:b0:3db:2fc6:e124 with SMTP id g23-20020a7bc4d7000000b003db2fc6e124mr9592660wmk.7.1674396076402;
-        Sun, 22 Jan 2023 06:01:16 -0800 (PST)
+        bh=khU7ZPQc8roE7siv/yWI9eKECkTeVRE2Pp/ERSgrr1g=;
+        b=W2+BVtgP8L1MFUzwakdo4v4TiuRCdgQea80PQ6Aklr6dB8XtfK+8bGX9sRRobUTvok
+         fRUUMfzgrAncIliu5dshouNFVbQMmA3Vv9kV11e18kkTn08eyVNHrH/wEBGtKN+X9Vpd
+         hbF9irdwzpOJ8p6GlfSqGmZYL2E3LFuXYfk1OhZvx273dGfMhZwTa+0v6OS4Wtc2Hc8a
+         XKFH//fz9KZ0b+tNhP9V2zKiOqOA38qXKUt4U9XNQs160WKJT8uSuns621Z9/Q9QMzeX
+         mQjZo6PfIFPM4btBApkn3uBsr8V/TKB2BffHwcEvhuoGhU1Ts75RtZMlsLbTrDqyAdkj
+         Xf0A==
+X-Gm-Message-State: AFqh2kplYuoqnONN+nzZYcp64avo79m/GVxJtdqjAUKbkOI0iG+2kzCo
+        N99ljVDKZmSXBTQFeTB11QsRUw==
+X-Google-Smtp-Source: AMrXdXuCGIvpJAQmkTd6AvZBg2tWd/Puu4z2+FfvoGAjjOhEue65gT4+4Afc75Ph03oyTVJPm8FM8A==
+X-Received: by 2002:a05:600c:502c:b0:3db:30d:deac with SMTP id n44-20020a05600c502c00b003db030ddeacmr20710173wmr.1.1674396172865;
+        Sun, 22 Jan 2023 06:02:52 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id az41-20020a05600c602900b003dab77aa911sm8200228wmb.23.2023.01.22.06.01.14
+        by smtp.gmail.com with ESMTPSA id o24-20020a05600c511800b003d9de0c39fasm10675337wms.36.2023.01.22.06.02.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 06:01:16 -0800 (PST)
-Message-ID: <3fdfc4fd-5f77-90e6-5712-84d897ed37a3@linaro.org>
-Date:   Sun, 22 Jan 2023 15:01:13 +0100
+        Sun, 22 Jan 2023 06:02:52 -0800 (PST)
+Message-ID: <d63231dd-38a7-2cf4-3433-8f28018665f6@linaro.org>
+Date:   Sun, 22 Jan 2023 15:02:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH 3/3] dt-bindings: opp: opp-v2-kryo-cpu: enlarge
- opp-supported-hw maximum
+Subject: Re: [PATCH v3 2/5] dt-bindings: i2c: Add hpe,gxp-i2c
 Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230121000146.7809-1-ansuelsmth@gmail.com>
- <20230121000146.7809-3-ansuelsmth@gmail.com>
+To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au,
+        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230120190159.23459-1-nick.hawkins@hpe.com>
+ <20230120190159.23459-3-nick.hawkins@hpe.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230121000146.7809-3-ansuelsmth@gmail.com>
+In-Reply-To: <20230120190159.23459-3-nick.hawkins@hpe.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/01/2023 01:01, Christian Marangi wrote:
-> Enlarge opp-supported-hw maximum value. In recent SoC we started
-> matching more bit and we currently match mask of 112. The old maximum of
-> 7 was good for old SoC that didn't had complex id, but now this is
-> limiting and we need to enlarge it to support more variants.
+On 20/01/2023 20:01, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Document compatibility string to support I2C controller
+> in GXP.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
 > ---
->  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> index cea932339faf..b4ebaf68b43e 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> @@ -55,7 +55,7 @@ patternProperties:
->            1:  MSM8996, speedbin 1
->            2:  MSM8996, speedbin 2
+> v3:
+>  *Provide better description with use of Phandle
+> v2:
+>  *Removed uneccessary size-cells and address-cells
+>  *Removed phandle from hpe,sysreg-phandle
+>  *Changed hpe,i2c-max-bus-freq to clock-frequency
+> ---
+>  .../devicetree/bindings/i2c/hpe,gxp-i2c.yaml  | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml b/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
+> new file mode 100644
+> index 000000000000..63bc69e92d0e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/hpe,gxp-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP SoC I2C Controller
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-i2c
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    default: 100000
+> +
+> +  hpe,sysreg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to a global status and enable registers shared
+> +      between each I2C controller instance. Each bit of the
+> +      registers represents an individual I2C engine.
 
-Document more bits.
+But what is the purpose? What is it doing? Why I2C controller needs it?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+
+Keep the same order as in properties:
+
+
 Best regards,
 Krzysztof
 
