@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1BD676CDD
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 13:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50A3676CDF
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 13:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjAVMWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 07:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S230079AbjAVM0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 07:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjAVMWC (ORCPT
+        with ESMTP id S229921AbjAVM0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 07:22:02 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7729EC9;
-        Sun, 22 Jan 2023 04:21:49 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30MCLU4M118101;
-        Sun, 22 Jan 2023 06:21:30 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674390090;
-        bh=GGrsVB2NuWgQ/IDsTg782FJLIK98IZjp/7pCe7Mspxs=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=f8nmQIrqBKxewIRmuG39303yaIZlvaG4IBCqtSupTJUVDW4zlzAuHK1OUtgHpa4XC
-         UrkVBa+7eu28+hSU/uLOEvdR2gUmXAu1ia7smVQmxTgPWOUVZHhMBCJJUxe2lOzrfd
-         IRPbwymuDn/DLl2BIPVhfsk0K32cyR6GAYCCu6eM=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30MCLUUA102341
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 22 Jan 2023 06:21:30 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 22
- Jan 2023 06:21:30 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 22 Jan 2023 06:21:30 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30MCLTIJ008319;
-        Sun, 22 Jan 2023 06:21:29 -0600
-From:   Achal Verma <a-verma1@ti.com>
-To:     <mranostay@ti.com>, <rogerq@kernel.org>, <lpieralisi@kernel.org>,
-        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski@linaro.org>, <vigneshr@ti.com>,
-        <tjoseph@cadence.com>, <sergio.paracuellos@gmail.com>,
-        <pthombar@cadence.com>, <linux-pci@vger.kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9 5/5] PCI: j721e: add j784s4 PCIe configuration
-Date:   Sun, 22 Jan 2023 17:51:21 +0530
-Message-ID: <20230122122121.3552375-6-a-verma1@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230122122121.3552375-1-a-verma1@ti.com>
-References: <20230122122121.3552375-1-a-verma1@ti.com>
+        Sun, 22 Jan 2023 07:26:12 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1638A1BD2
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 04:26:11 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso6675034wmq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 04:26:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pbzwjLdm0DVC3q/9d88DJk7e6Au7jTyV/S/NQHA4YvQ=;
+        b=nPDWmeaoM4qH1sAhGzDTP6Lk7+5v9b1fYhu09zSChveOZxrSgSkXYGzmmFdb14SlMR
+         orOV6l+4/la9UfYkwAlXtYsnViXr7cuRWFGzu+pu78RWbMA0W3cJYgfqFxJLe39MTST0
+         04p1hu5XfGHAdjXw8D33ckO9N9jG7J/50v11ONTHGYBenWKKcjCqpNA02BQoYTuOtRT6
+         DyKTnyoJ8RT1UanFeTWYowKjzbh9Yxa8YcKJXxxaIub8L9QS3nlf14TwVMKR4SsYDjEc
+         c2/lB/fGmZ5EjdxHFtB4vQ5/T72bJReExynR9zqRXnQkcHsPWJNtbMF+jRqPsPZCV1t3
+         HEJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pbzwjLdm0DVC3q/9d88DJk7e6Au7jTyV/S/NQHA4YvQ=;
+        b=WqgksrfF54FT4qdjiDr7nNWN4wjlDO+GKMd7EdueyqKpWp65gMDBaJ2LEEYGNj+nIz
+         JcnBVCGNNIhJKanZqLHMj2fv464KZWmxL9PdBvXC0oO8jDwNiMPAWSo5ZPPJQ13Ad5Em
+         YpFxd2yMXl2XYfvtwCa4LSghbKxcQbWu1hC+r1K5yOEFUB428b+d11/gRf8Ss7bO/i5o
+         FlQJEGHOdt9lD1m/9FX28eNIbPXToQErS7V0FiQpPawNgRPwdmjBJ9bx+qr1LOmEscsx
+         tyd3fqrmTM4m4tb6J84pgUlg8RKOJbeZ3yTMcvZ4navaINDG5BEC9T+VhE4y0Q2vW6bX
+         ev0A==
+X-Gm-Message-State: AFqh2kpeDdcb/g/roFvbfyFMSh4tnlP8zBbS0ocWEz58afhMcHhDEffn
+        2kF1dKid7gBDXml7rbYlnKpNxw==
+X-Google-Smtp-Source: AMrXdXu/6PQg++gYWXKyUi6cdUY1gDvsqc99mVb/kYG1nBNvmI6JVYY7oL9PwPDxTXg+37znE49t3g==
+X-Received: by 2002:a05:600c:4d98:b0:3d3:5c7d:a5f3 with SMTP id v24-20020a05600c4d9800b003d35c7da5f3mr28557197wmp.37.1674390369527;
+        Sun, 22 Jan 2023 04:26:09 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b003d9aa76dc6asm10663808wmq.0.2023.01.22.04.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 04:26:08 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] samsung: soc for v6.3
+Date:   Sun, 22 Jan 2023 13:26:04 +0100
+Message-Id: <20230122122605.30720-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Ranostay <mranostay@ti.com>
+Hi,
 
-Add PCIe configuration for j784s4 platform which has 4x lane support.
+Driver-related binding changes and one maintainer's entry. I called it a
+"drivers" update but it is really rather generic SoC stuff.
 
-Tested-by: Achal Verma <a-verma1@ti.com>
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
-Signed-off-by: Achal Verma <a-verma1@ti.com>
----
- drivers/pci/controller/cadence/pci-j721e.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Best regards,
+Krzysztof
 
-diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-index 58dcac9021e4..cce7b391f931 100644
---- a/drivers/pci/controller/cadence/pci-j721e.c
-+++ b/drivers/pci/controller/cadence/pci-j721e.c
-@@ -330,6 +330,20 @@ static const struct j721e_pcie_data am64_pcie_ep_data = {
- 	.max_lanes = 1,
- };
- 
-+static const struct j721e_pcie_data j784s4_pcie_rc_data = {
-+	.mode = PCI_MODE_RC,
-+	.quirk_retrain_flag = true,
-+	.byte_access_allowed = false,
-+	.linkdown_irq_regfield = LINK_DOWN,
-+	.max_lanes = 4,
-+};
-+
-+static const struct j721e_pcie_data j784s4_pcie_ep_data = {
-+	.mode = PCI_MODE_EP,
-+	.linkdown_irq_regfield = LINK_DOWN,
-+	.max_lanes = 4,
-+};
-+
- static const struct of_device_id of_j721e_pcie_match[] = {
- 	{
- 		.compatible = "ti,j721e-pcie-host",
-@@ -355,6 +369,14 @@ static const struct of_device_id of_j721e_pcie_match[] = {
- 		.compatible = "ti,am64-pcie-ep",
- 		.data = &am64_pcie_ep_data,
- 	},
-+	{
-+		.compatible = "ti,j784s4-pcie-host",
-+		.data = &j784s4_pcie_rc_data,
-+	},
-+	{
-+		.compatible = "ti,j784s4-pcie-ep",
-+		.data = &j784s4_pcie_ep_data,
-+	},
- 	{},
- };
- 
--- 
-2.25.1
 
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.3
+
+for you to fetch changes up to 5e487164afbcd917225fb701e8956f388f43b601:
+
+  MAINTAINERS: arm64: tesla: correct pattern for directory (2023-01-15 12:17:44 +0100)
+
+----------------------------------------------------------------
+Samsung SoC bindings changes for v6.3
+
+1. System Controller: use dedicated/specific compatibles to identify
+   different controllers with different register layout (Exynos, Tesla
+   FSD). Extend the bindings with missing clocks.
+2. Correct maintainers entry for Tesla FSD DTS.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (5):
+      dt-bindings: soc: samsung: exynos-sysreg: split from syscon
+      dt-bindings: soc: samsung: exynos-sysreg: add dedicated SYSREG compatibles to Exynos5433
+      dt-bindings: soc: samsung: exynos-sysreg: add clocks for Exynos850
+      dt-bindings: soc: samsung: exynos-sysreg: correct indentation for deprecated
+      MAINTAINERS: arm64: tesla: correct pattern for directory
+
+Sriranjani P (3):
+      dt-bindings: soc: samsung: exynos-sysreg: Add tesla FSD sysreg compatibles
+      dt-bindings: soc: samsung: exynos-sysreg: add dedicated SYSREG compatibles to Exynos850
+      dt-bindings: soc: samsung: exynos-sysreg: add dedicated SYSREG compatibles to Exynosautov9
+
+ Documentation/devicetree/bindings/mfd/syscon.yaml  |  6 --
+ .../soc/samsung/samsung,exynos-sysreg.yaml         | 87 ++++++++++++++++++++++
+ MAINTAINERS                                        |  2 +-
+ 3 files changed, 88 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
