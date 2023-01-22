@@ -2,176 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722BD677128
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC4667712F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjAVRpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 12:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S229954AbjAVRp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 12:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjAVRpo (ORCPT
+        with ESMTP id S230355AbjAVRp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 12:45:44 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D459DBB95
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 09:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Ze+/UqVC5efI+msWaBq9Og0ji4xsS9P6nrD3yq7rfLQ=; b=WLFIK6VKKCJnU9ptHo1Jgsqluz
-        MOaFRaK6bPEDSCnPx8NFQdQZW1rQoEB1h30hWgknh7Rc9uge+/1GxIb/H7mlGD7eHdcFVFS59RftN
-        Qxyftxm4jdffVQKtnXXICvE0hqOyLZEaq+82F8Y34GUe5vQudcYJhjyOBDv7WztREGgKN9XveQktI
-        jQ7YGduuv7d16hrNJRCggEyDTd7LEp2us4J1BBOPWPf9PZxHIetW3/5a3GYQ+DagARWQ2uN3VRBf2
-        xhz7WMl5mMbxhu9X5glxKh51IsmHu6ZKUrCZYPHmsPBvZFh3oILtSCrLGRhmbfw+cLk6Qxe6Uqw8I
-        7IHo2BEA==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pJePR-00FbtF-Kr; Sun, 22 Jan 2023 17:45:37 +0000
-Message-ID: <f564c135-b03c-6673-d71e-369048b1f8b3@infradead.org>
-Date:   Sun, 22 Jan 2023 09:45:37 -0800
+        Sun, 22 Jan 2023 12:45:57 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A427BC163;
+        Sun, 22 Jan 2023 09:45:54 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so7034723wmq.0;
+        Sun, 22 Jan 2023 09:45:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C1pTKo3OWmmnFLZF4o1FXmS9+0egk/fNiq0vh7NwwbU=;
+        b=aRl4d32ipmSDJVbkB5xcYtx/AEwBlze3zNYXP97tiaBBpEkJWi9Ocm3s2RSA6dbWAT
+         WiKfLjPLWOZZtJTA2bF0t8Ps4md2g3wtDHIq+Y9rZLqri54rsQhr1YSYASz/4hz2klL8
+         pNclQ14iwKUYBdN/Skrr9eBveH+M3sULQMipbSi7KoTkWfZt/ccuvFL67f0liZeAMFSg
+         JHAs8yHxUK9T7Rt/3udUUNESxkzTJhLpBWzknac5PU0aMWT5FYH4EhSDsxP6ICU2N3rB
+         TcViA1D/7jyYCFWyy8lMD/hZnLUGElS8KlzNSV4dCL/LePhKt6UQyiashgwN14Llv6rk
+         dZdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C1pTKo3OWmmnFLZF4o1FXmS9+0egk/fNiq0vh7NwwbU=;
+        b=NqofxZnzJMXcn5kjP7Lfs6woqlwCV+Jr1qlrMldHQI2UXG9fNQL0MRPge9r0d4GxdO
+         MUiFblh1IeWZfZs9nUq1LQwr8igGq6zltsi+L5ctYHnpoCQKUupHwBaLnBvfIhYK6Sh3
+         G41EG0HzV3lctreRZ2ojlBPvXdknMfnW2/gFDuqQC099BWOuteKMmc74QsqF8YB4SUL+
+         0G7O1AUDyrRoEK6blD90W+5Ni9LdiruXgoLtoYW9cEcmvH146uBP3KRkvnze+LFlugME
+         nD5lfjde81CUfA4tv35Zt0YdCLBmryKHOt1Q3x/E0x709g0qlID90cf8IwfpZ86dM1CG
+         CZJA==
+X-Gm-Message-State: AFqh2koN3zpIvAXAI6DuzP289rA9UQXo+mAKJ5omXqUVTMSEGNGAg2qK
+        TxYTTnxMnGiHvpH6C6ewHtWA3lpL16w=
+X-Google-Smtp-Source: AMrXdXv15xgAEn1TsHXrbNh2/YWwtVVKsFJc/09xjz314ROnSyjf0M66mSz36RwziLbNJ3WC3u1s4A==
+X-Received: by 2002:a05:600c:16c9:b0:3db:222:3e0c with SMTP id l9-20020a05600c16c900b003db02223e0cmr21130173wmn.33.1674409553042;
+        Sun, 22 Jan 2023 09:45:53 -0800 (PST)
+Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.googlemail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm9202257wmq.28.2023.01.22.09.45.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 09:45:52 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr bindings optional
+Date:   Sun, 22 Jan 2023 18:45:47 +0100
+Message-Id: <20230122174548.13758-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] scripts/spelling.txt: add more spelling corrections
-Content-Language: en-US
-To:     Diederik de Haas <didi.debian@cknow.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Ian Rogers <irogers@google.com>
-References: <20230122173256.52280-1-didi.debian@cknow.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230122173256.52280-1-didi.debian@cknow.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+- pre-cpr that doesn't have power-domains and base everything on nvmem
+  cells and multiple named microvolt bindings
+- cpr-based that require power-domain in the cpu nodes and use various
+  source to decide the correct voltage and freq
 
+When the schema was introduced, it was wrongly set to always require these
+binding but this is not the case for pre-cpr devices.
 
-On 1/22/23 09:32, Diederik de Haas wrote:
-> Current Debian lintian tool flagged several (more) spelling errors, so
-> add them so they can hopefully prevented in the future.
-> 
-> Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+Make the power-domain optional and set them required only for qcs404
+based devices.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+While at it also make more clear what the opp-table supports by adding
+ref to the opp-v2-kryo-cpu and opp-v2-qcom-level schema.
 
-Thanks.
+Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 81 +++++++++++++------
+ 1 file changed, 56 insertions(+), 25 deletions(-)
 
-> ---
-> As requested in https://lore.kernel.org/lkml/CAP-5=fX1-3ZnXk8G2fB0q9F3MjjA+zWWm1LbuYGc5nL5v3bXYg@mail.gmail.com/
-> 
->  scripts/spelling.txt | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/scripts/spelling.txt b/scripts/spelling.txt
-> index ded8bcfc0247..d53627fa9b81 100644
-> --- a/scripts/spelling.txt
-> +++ b/scripts/spelling.txt
-> @@ -65,6 +65,7 @@ acumulative||accumulative
->  acumulator||accumulator
->  acutally||actually
->  adapater||adapter
-> +adderted||asserted
->  addional||additional
->  additionaly||additionally
->  additonal||additional
-> @@ -122,6 +123,7 @@ alue||value
->  ambigious||ambiguous
->  ambigous||ambiguous
->  amoung||among
-> +amount of times||number of times
->  amout||amount
->  amplifer||amplifier
->  amplifyer||amplifier
-> @@ -287,6 +289,7 @@ capapbilities||capabilities
->  caputure||capture
->  carefuly||carefully
->  cariage||carriage
-> +casued||caused
->  catagory||category
->  cehck||check
->  challange||challenge
-> @@ -370,6 +373,7 @@ conbination||combination
->  conditionaly||conditionally
->  conditon||condition
->  condtion||condition
-> +condtional||conditional
->  conected||connected
->  conector||connector
->  configration||configuration
-> @@ -423,6 +427,7 @@ cound||could
->  couter||counter
->  coutner||counter
->  cryptocraphic||cryptographic
-> +cummulative||cumulative
->  cunter||counter
->  curently||currently
->  cylic||cyclic
-> @@ -627,6 +632,7 @@ existant||existent
->  exixt||exist
->  exlcude||exclude
->  exlcusive||exclusive
-> +exlusive||exclusive
->  exmaple||example
->  expecially||especially
->  experies||expires
-> @@ -838,6 +844,7 @@ integrety||integrity
->  integrey||integrity
->  intendet||intended
->  intented||intended
-> +interal||internal
->  interanl||internal
->  interchangable||interchangeable
->  interferring||interfering
-> @@ -1023,6 +1030,7 @@ negotation||negotiation
->  nerver||never
->  nescessary||necessary
->  nessessary||necessary
-> +none existent||non-existent
->  noticable||noticeable
->  notication||notification
->  notications||notifications
-> @@ -1044,6 +1052,7 @@ occured||occurred
->  occurence||occurrence
->  occure||occurred
->  occuring||occurring
-> +ocurrence||occurrence
->  offser||offset
->  offet||offset
->  offlaod||offload
-> @@ -1055,6 +1064,7 @@ omitt||omit
->  ommiting||omitting
->  ommitted||omitted
->  onself||oneself
-> +onthe||on the
->  ony||only
->  openning||opening
->  operatione||operation
-> @@ -1334,6 +1344,7 @@ sacrifying||sacrificing
->  safly||safely
->  safty||safety
->  satify||satisfy
-> +satisifed||satisfied
->  savable||saveable
->  scaleing||scaling
->  scaned||scanned
-> @@ -1614,6 +1625,7 @@ unuseful||useless
->  unvalid||invalid
->  upate||update
->  upsupported||unsupported
-> +upto||up to
->  useable||usable
->  usefule||useful
->  usefull||useful
-
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..6f5e7904181f 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -17,6 +17,9 @@ description: |
+   on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
+   according to the required OPPs defined in the CPU OPP tables.
+ 
++  For old implementation efuses are parsed to select the correct opp table and
++  voltage and CPR is not supported/used.
++
+ select:
+   properties:
+     compatible:
+@@ -33,37 +36,65 @@ select:
+   required:
+     - compatible
+ 
+-properties:
+-  cpus:
+-    type: object
+-
+-    patternProperties:
+-      '^cpu@[0-9a-f]+$':
+-        type: object
+-
+-        properties:
+-          power-domains:
+-            maxItems: 1
+-
+-          power-domain-names:
+-            items:
+-              - const: cpr
+-
+-        required:
+-          - power-domains
+-          - power-domain-names
+-
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
++
++allOf:
++  - if:
+       properties:
+         compatible:
+-          const: operating-points-v2-kryo-cpu
++          contains:
++            enum:
++              - qcom,qcs404
++
+     then:
++      properties:
++        cpus:
++          type: object
++
++          patternProperties:
++            '^cpu@[0-9a-f]+$':
++              type: object
++
++              properties:
++                power-domains:
++                  maxItems: 1
++
++                power-domain-names:
++                  items:
++                    - const: cpr
++
++              required:
++                - power-domains
++                - power-domain-names
++
+       patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++        '^opp-table(-[a-z0-9]+)?$':
++          if:
++            properties:
++              compatible:
++                const: operating-points-v2-kryo-cpu
++          then:
++            patternProperties:
++              '^opp-?[0-9]+$':
++                required:
++                  - required-opps
+ 
+ additionalProperties: true
+ 
 -- 
-~Randy
+2.38.1
+
