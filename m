@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724DA676C1C
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 11:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B04A676C21
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 11:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjAVKms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 05:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S229881AbjAVKr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 05:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjAVKmq (ORCPT
+        with ESMTP id S229622AbjAVKr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 05:42:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C06A3;
-        Sun, 22 Jan 2023 02:42:43 -0800 (PST)
-Date:   Sun, 22 Jan 2023 10:42:38 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674384159;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PQzAUlffxP+Cue4tZ7knjTLBcxiecYtxOrWhjKJnyII=;
-        b=TqlUA4vBbCPiyJpp1gP8yimb7Cioi56xOa1ocWkq07cDmVH0EndkUs6Chqs3jRCNwcuPQN
-        nBAXw3VUr4fYp7TDY2hP/H/g5ZvNBBuiJoyQZH0e9Tphzmpf64dpNH4zOpURC6v9SINMO1
-        pKdhbaWDMz8nsQG7Xe/mIJYH1AxedKyBYe9K3T8Z8KM8jbY+qm+VUhfv/0mfu/ZPp5T4pT
-        QmXc6znrAoXxsPJMz7wujK/WOIstPoLzYohWayqo+EDOTJMky2LmkHhySJMmOFqEdaFn1M
-        tIMQkPPIURmZ+wYReDksqWSH+5IYDPYzelO9J0yoNPMhGozByb++aNOS6D7Wjw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674384159;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PQzAUlffxP+Cue4tZ7knjTLBcxiecYtxOrWhjKJnyII=;
-        b=ht6Ar4qiK2waBluVvw+/Ohd5EAorLiZ07VR9jNzCaF8AGauCM58nSeZz3vla5EtaGSqJoP
-        Ql99WOXzz1lf2GBg==
-From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/build: Move '-mindirect-branch-cs-prefix' out
- of GCC-only block
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        Sun, 22 Jan 2023 05:47:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2AC13500;
+        Sun, 22 Jan 2023 02:47:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07B6660BC5;
+        Sun, 22 Jan 2023 10:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59610C433EF;
+        Sun, 22 Jan 2023 10:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674384444;
+        bh=qOi/1Aqwa2JrdVvobn/vFD9TgB5xq1PG7dJtowJf2C0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B4nNX53dDuo4U+hzDxPjlFuvEq0hmZSf8x9ecggu678w231t/jH/C0S6xgtdeJPco
+         C/ZpbtMZ5wR4DkFVv5rSRAKWw9Wf748d0PeKvbytE6zfW3zk85+HJAPv4gJAjSwGdr
+         b5AGXTrqZsT1dOa/rUfPOrpqcNtv3z1Zbl6oC/N39+Di3eIIfBGkesuhoiBWJQSLbH
+         k2OXRLaiw0GZ3KtDKztztbMjFTMwZSZKoAwVxJ9V0vvf0plr0zfgKw8l1M366uXCQT
+         F7jPkaG4vMaD8FDaNW5S9V/cQIadBtjS/q/SYNQQeqG8yH1j30JDmmdY9M9TvmAJDn
+         2hLd/6z1qo91A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pJXsf-003kAw-Si;
+        Sun, 22 Jan 2023 10:47:22 +0000
+Date:   Sun, 22 Jan 2023 10:47:21 +0000
+Message-ID: <86h6win8w6.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lizhe <sensor1010@163.com>
+Cc:     bhelgaas@google.com, tglx@linutronix.de, darwi@linutronix.de,
+        jgg@ziepe.ca, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230120165826.2469302-1-nathan@kernel.org>
-References: <20230120165826.2469302-1-nathan@kernel.org>
-MIME-Version: 1.0
-Message-ID: <167438415817.4906.16581804181334586242.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1] drivers/msi.c : use devm_ioremap replace ioremap
+In-Reply-To: <20230121170420.8681-1-sensor1010@163.com>
+References: <20230121170420.8681-1-sensor1010@163.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sensor1010@163.com, bhelgaas@google.com, tglx@linutronix.de, darwi@linutronix.de, jgg@ziepe.ca, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Sat, 21 Jan 2023 17:04:20 +0000,
+Lizhe <sensor1010@163.com> wrote:
+> 
+> use devm_ioremap replace ioremap
+> 
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> ---
+>  drivers/pci/msi/msi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> index 1f716624ca56..184eca85b88b 100644
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -566,7 +566,7 @@ static void __iomem *msix_map_region(struct pci_dev *dev,
+>  	table_offset &= PCI_MSIX_TABLE_OFFSET;
+>  	phys_addr = pci_resource_start(dev, bir) + table_offset;
+>  
+> -	return ioremap(phys_addr, nr_entries * PCI_MSIX_ENTRY_SIZE);
+> +	return devm_ioremap(&dev->dev, phys_addr, nr_entries * PCI_MSIX_ENTRY_SIZE);
+>  }
 
-Commit-ID:     27b5de622ea3fe0ad5a31a0ebd9f7a0a276932d1
-Gitweb:        https://git.kernel.org/tip/27b5de622ea3fe0ad5a31a0ebd9f7a0a276932d1
-Author:        Nathan Chancellor <nathan@kernel.org>
-AuthorDate:    Fri, 20 Jan 2023 09:58:27 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sun, 22 Jan 2023 11:36:45 +01:00
+And where is the unmap dealt with? From what I can see, this will
+probably explode when the device is removed...
 
-x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block
+	 M.
 
-LLVM 16 will have support for this flag so move it out of the GCC-only
-block to allow LLVM builds to take advantage of it.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-Link: https://lore.kernel.org/r/20230120165826.2469302-1-nathan@kernel.org
----
- arch/x86/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 9cf0732..73ed982 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -14,13 +14,13 @@ endif
- 
- ifdef CONFIG_CC_IS_GCC
- RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
--RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
- RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
- endif
- ifdef CONFIG_CC_IS_CLANG
- RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
- RETPOLINE_VDSO_CFLAGS	:= -mretpoline
- endif
-+RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
- 
- ifdef CONFIG_RETHUNK
- RETHUNK_CFLAGS		:= -mfunction-return=thunk-extern
+-- 
+Without deviation from the norm, progress is not possible.
