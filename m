@@ -2,158 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD3E6770BC
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 17:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B2D6770E0
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjAVQrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 11:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S230369AbjAVRGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 12:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjAVQrj (ORCPT
+        with ESMTP id S229837AbjAVRF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 11:47:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2392E1C30E;
-        Sun, 22 Jan 2023 08:47:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B17BF60C71;
-        Sun, 22 Jan 2023 16:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D688C433EF;
-        Sun, 22 Jan 2023 16:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674406048;
-        bh=SvajHjiCSIBlcZUdVxMgRSWO0gJsGtBYT+mr1EHeu0o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HJZbJrnWcLLnDqOiDRQFyTuKeSBq7CbUfFHZzlhHwR68aZIpTBcnnH7lrVDHATIJ5
-         w/Mzn1otM7LO+JhZgcF1eRjNkHrIX6kH73HUxsbtJpGx+ipM17Qa0hyxxMfQoix/Tf
-         r1748utHDH2gwfl5+RJVcuDS4ArHPfoVaxwDRawNux1S9sdh2RCaapXMO7IYw2RywK
-         8xy5xC0S7ec1wTzznrVHpd5sWmDaTKeuBj9DX4zXAVFJbGtMB2BbVg9U+46uDVAwvb
-         mW3+T17DR98iKb/CTcKr2rU5fUJe4wEpXkmpsi/iTJG+Z0//Kr2KoAJJpvWkIqgRKh
-         kv6ZWW4lNc7Nw==
-Date:   Sun, 22 Jan 2023 17:01:05 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lucas Stankus <lucas.p.stankus@gmail.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Renato Lui Geh <renatogeh@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Robert Yang <decatf@gmail.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Philippe Reynes <tremyfr@yahoo.fr>,
-        Alexandru Lazar <alazar@startmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Harald Geyer <harald@ccbib.org>,
-        Eugene Zaikonnikov <ez@norophonic.com>,
-        Phil Reid <preid@electromag.com.au>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        chrome-platform@lists.linux.dev
-Subject: Re: [PATCH 3/5] dt-bindings: iio: correct node names in examples
-Message-ID: <20230122170105.6a1a9766@jic23-huawei>
-In-Reply-To: <45b9b378-6619-c47a-b5ea-6b6b7edca785@linaro.org>
-References: <20230118184413.395820-1-krzysztof.kozlowski@linaro.org>
-        <20230118184413.395820-3-krzysztof.kozlowski@linaro.org>
-        <20230121171709.5eb75e94@jic23-huawei>
-        <45b9b378-6619-c47a-b5ea-6b6b7edca785@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Sun, 22 Jan 2023 12:05:58 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FCD193E9;
+        Sun, 22 Jan 2023 09:05:54 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30MH0DfM028970;
+        Sun, 22 Jan 2023 17:05:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8eO8169TlFFU9q7i4/L6sF2LV7YTHHSzqyCt9efilmk=;
+ b=CAWsb0NPKtgmz+ofZRDnlvoRlFHoeQzFJuvMgpkj5B3V6sU3hxid6KPkQaZFDs4H2x00
+ TASp52MGhyVQo92fhUY5XO979YrH7k5BBUpnOh8vJZpOvrq66IaH6fgux55p3C9ndqHx
+ rp5M6JIcu0+cbZyAHKt+QqGXFMawGbEtp1v/N24c1wZZo7TAlSmw47zvZ7ecHYDgZFVK
+ ib/njgOVywHAwTl7QpQnEVbN1XWKCtEqbNiovB8uTLRjiZocoYsgWt5HgI4dMuEI+LSS
+ oOxRsBIS2YdY+pNrX6iYtjSSw1L6v2ZnedBwAkvOJnsfihPm/67/KFHSXk3uHCj70Y6T vA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89f59q0s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 22 Jan 2023 17:05:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30MH5nwt028438
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 22 Jan 2023 17:05:49 GMT
+Received: from [10.50.40.120] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 22 Jan
+ 2023 09:05:45 -0800
+Message-ID: <29d9de45-1ce7-d6e5-bf02-052e911a067b@quicinc.com>
+Date:   Sun, 22 Jan 2023 22:35:43 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: add QFPROM node
+To:     Robert Marko <robimarko@gmail.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230121112358.52216-1-robimarko@gmail.com>
+ <20230121112358.52216-2-robimarko@gmail.com>
+ <ebdd9932-e251-0cd7-6c98-3c735ecb74a6@quicinc.com>
+ <CAOX2RU7p-0ZTx8fkY4hOk=Zmx6RT+1PwVL+CQxkjzVadm0ehTA@mail.gmail.com>
+Content-Language: en-US
+From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+In-Reply-To: <CAOX2RU7p-0ZTx8fkY4hOk=Zmx6RT+1PwVL+CQxkjzVadm0ehTA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -tlVJTRhbf9X80PuHjALOtFVi3qAgUSa
+X-Proofpoint-GUID: -tlVJTRhbf9X80PuHjALOtFVi3qAgUSa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-22_14,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=987 bulkscore=0
+ clxscore=1015 mlxscore=0 spamscore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301220163
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 Jan 2023 19:31:23 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> On 21/01/2023 18:17, Jonathan Cameron wrote:
-> > On Wed, 18 Jan 2023 19:44:11 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >   
-> >> Do not use underscores and unneeded suffixes (e.g. i2c0) in node name in
-> >> examples.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---  
-> >   
-> >> diff --git a/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml b/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
-> >> index 6c5ad426a016..12f75ddc4a70 100644
-> >> --- a/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
-> >> +++ b/Documentation/devicetree/bindings/iio/health/ti,afe4403.yaml
-> >> @@ -42,7 +42,7 @@ examples:
-> >>          #address-cells = <1>;
-> >>          #size-cells = <0>;
-> >>  
-> >> -        heart_mon@0 {
-> >> +        heart-rate@0 {  
-> > 
-> > These are both heart-rate and pulse oximeters so measure more than just
-> > the rate (oxygen saturation in the blood). Reality is they actually
-> > measure light absorption over time, but you can calculate an estimate
-> > of both rate and oxygen saturation from that.
-> > 
-> > I don't really mind simplifying that to heart-rate, but wanted to
-> > call this out for possible discussion.  
-> 
-> They could be heart-mon. The fix is mostly around the underscore. I
-> don't have any arguments for changing it to heart-rate, thus we can go
-> with whatever you prefer.
-I'm fine with either and as we have a patch with heart-rate that wins
-currently. I'll just let this sit for a little longer than
-normal to see if we get any other responses!
+On 1/22/2023 10:29 PM, Robert Marko wrote:
+> On Sun, 22 Jan 2023 at 17:57, Kathiravan Thirumoorthy
+> <quic_kathirav@quicinc.com> wrote:
+>>
+>> On 1/21/2023 4:53 PM, Robert Marko wrote:
+>>> IPQ8074 has efuses like other Qualcomm SoC-s that are required for
+>>> determining various HW quirks which will be required later for CPR etc,
+>>> so lets add the QFPROM node for start.
+>>>
+>>> Individidual fuses will be added as they are required.
+>>>
+>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>> ---
+>>>    arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 +++++++
+>>>    1 file changed, 7 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>> index 8eba586065a3..f29491f647fe 100644
+>>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>> @@ -301,6 +301,13 @@ mdio: mdio@90000 {
+>>>                        status = "disabled";
+>>>                };
+>>>
+>>> +             qfprom: efuse@a4000 {
+>>> +                     compatible = "qcom,ipq8074-qfprom", "qcom,qfprom";
+>>> +                     reg = <0x000a4000 0x1000>;
+>>
+>>   From the HW document, I see the overall size of this region is 0x2000,
+>> any reason to stick with 0x1000?
+> Like always, I dont have access to docs and 0x1000 is all I could find
+> downstream
+> being used.
+>
+> Any chance you can share the regions inside of QFPROM, it would be great to use
+> the ECC corrected one if available.
 
-Thanks,
+Sorry, What do you refer by "ECC corrected" here?
 
-Jonathan
-> 
-> Best regards,
-> Krzysztof
-> 
+Thanks, Kathiravan T.
 
+
+>
+> Regards,
+> Robert
+>> Thanks, Kathiravan T.
+>>
+>>
+>>> +                     #address-cells = <1>;
+>>> +                     #size-cells = <1>;
+>>> +             };
+>>> +
+>>>                prng: rng@e3000 {
+>>>                        compatible = "qcom,prng-ee";
+>>>                        reg = <0x000e3000 0x1000>;
