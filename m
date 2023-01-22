@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4478676C6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFE4676C79
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjAVLrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 06:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S230011AbjAVLtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 06:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjAVLrI (ORCPT
+        with ESMTP id S229937AbjAVLtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 06:47:08 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5CD1F49A
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:47:07 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so8756454wma.1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:47:06 -0800 (PST)
+        Sun, 22 Jan 2023 06:49:40 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD8F1CF47
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:49:37 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id h16so8437907wrz.12
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M2dS08c5mDDQCSEte2hJr4AncAP49BS6JfkPW/bfJ8w=;
-        b=x60lhg9Ma84/nhgHooGxFDRzaGCTbna6N3OaUhRahz7oFK/Ej2LoBvR8cIclfA+YEc
-         075GAFy/Z+6wvaDI7Vtr/jDBAOmZuEsq7tCWLkeLwtI7bPex58Pm6EjC3JMzpJ+57MIn
-         5T0guh+4iRpkxNWNtfXUGJ63DWXecs+xrEq2+1kGSbEQy5zzLYNSKRU3hy9nS/WC9k2z
-         Gw7aqPry1lPoo9c8A0gEHtEbhMhcD45BAJ6wFHyQcSt+myMtZ/qlgR2AaS8964Zn2P4p
-         UWrCS1Ld/U0RPkqYhhWftQwPG1iq5ZpzAjpwY1XCjBtkkZztPouO1E9exFAGh5clvnfx
-         PSYw==
+        bh=L18XUoVuVYI0pnqHwuAZ/a/gl46rC1ac5Z5pGu4tjjA=;
+        b=caIlICVgjiM2KQmWSw2+dwCmFwH/QmHP5Tpt6H6wVsFqVFanIJ1vuRkXD5LMYCDALE
+         NRjmF+0baehzfnLLnyNncgVe/LMpVF+yHU61SKAbBoH7z61KGzW5m7flF/bFqihPw1Fn
+         O2fP7zc3nkMy81LxNCpHIWtu94zfu5UQvaOFSsNE8v5AYfQqfr8/s8K8Erb8fkRN+yAG
+         wkyY17RV1LAoGfa7M6MaWtFsVRYyBEJ/Cn1lnFbJ+7C3TkgZU6XRz0KkmJz40bv2YJcl
+         sWZRDoQaWXDOf5NedqV2uevyts9HBVC/g4grs5Il5oF6YrOPf4Yvjvay3LwHgph5/uVF
+         hkvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M2dS08c5mDDQCSEte2hJr4AncAP49BS6JfkPW/bfJ8w=;
-        b=S1ZCDfeXR5I+d1MmP8fKZnVcJWs91U5W7HqoCC6iE2eodrbpb3FKNUSlv+HobK/VSo
-         9x8Y2AvkQCLbjwAXbvOkQdoMpulPUE11Cmne1sDAA9uPET3Q9oxcrNqVj8GtCuVgxMYT
-         BY4x7CTAlBkhGbxtse9fI1XRp1Cb0SPfamHpjHr9vH9vHtEylT5lO7U96zxLtdkm3ikf
-         Qg3k4jXHlMXCzDD8UrMJhGzpwqcYc7YhTxG97gMGsagrFT8dWCcdLThdBcTXU+RI4+ro
-         ceRCA59PUzM7mnpHp4lZuF4ch5aVc41XpinATg4qEXgsIco6KgmZUxU07FC/lc0wW3z2
-         XAMA==
-X-Gm-Message-State: AFqh2kq1BHzP+Mf/KBmCxogeUWdl58CBESEgnX5HqYu6lAsIeElCwj2h
-        GNmzmMQ/7ixSqY0P39gm14zV4w==
-X-Google-Smtp-Source: AMrXdXvv5SOq8oLh4MHQyQrfcxkhDTk8DLHjQASO2lJraohGjZ9veTwuZ0pwUHGY71DEX8EYBAct8g==
-X-Received: by 2002:a05:600c:4f82:b0:3db:25a0:ca5b with SMTP id n2-20020a05600c4f8200b003db25a0ca5bmr11762781wmq.37.1674388025485;
-        Sun, 22 Jan 2023 03:47:05 -0800 (PST)
+        bh=L18XUoVuVYI0pnqHwuAZ/a/gl46rC1ac5Z5pGu4tjjA=;
+        b=EUFA5zMrjfgDx6LE0guw1FPqCbBiZ6T9D3CjQ/fRAWx2HETmp05fyi2YMmDWCZ52XJ
+         h8JQqQL/wzVTH2iKeV+VuZTgbvX7L1dTyztCYvgTXOt5NMADMa+PN7hPBuPBLKzEELFf
+         6ZzicYKSp+xmDQGm7vAkA5IGhRJkqRSKT2/xiople3T47G5HWl+d+VJXGIn6lKDPao2J
+         uDDyZMyy+5lIwrm8NWSNUrG1txlAJR+JFRJ4jftyQOGN9EzSAliDSjUTB88FBBT5kZRx
+         Nr0Xph3sHLT5rTH+BTOPKdHn73KXeAAtBFeN+A7Ww38pfUUpMwnSdue4Sb3JUz0wfx9u
+         6nIg==
+X-Gm-Message-State: AFqh2kravSTY/AaXN0bjDhJBl0wYz7zUxsINaCGtKXpzCAvr08d0+qym
+        mjIs8F1QmL5ZCDHPlvg1nDxO4w==
+X-Google-Smtp-Source: AMrXdXuO4A8xyx6+67tnt5vSccGnQfMst13iHm3i0RgTmN8zIeWyW0hP20D/R/sapznzyBbbSLIUpw==
+X-Received: by 2002:adf:f606:0:b0:24b:b74d:8012 with SMTP id t6-20020adff606000000b0024bb74d8012mr17321312wrp.18.1674388176056;
+        Sun, 22 Jan 2023 03:49:36 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600c350f00b003db0b0cc2afsm8452351wmq.30.2023.01.22.03.47.01
+        by smtp.gmail.com with ESMTPSA id m8-20020adfa3c8000000b00236545edc91sm1740479wrb.76.2023.01.22.03.49.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 03:47:04 -0800 (PST)
-Message-ID: <faa9ee85-60d7-6495-2376-384946720f60@linaro.org>
-Date:   Sun, 22 Jan 2023 12:47:00 +0100
+        Sun, 22 Jan 2023 03:49:35 -0800 (PST)
+Message-ID: <c8f7294d-6522-40f6-7923-c379ec8ca6bb@linaro.org>
+Date:   Sun, 22 Jan 2023 12:49:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [RFC PATCH v2 03/31] Documentation: Add binding for
- kalray,kv3-1-apic-gic
+Subject: Re: [RFC PATCH v2 05/31] Documentation: Add binding for
+ kalray,coolidge-itgen
 Content-Language: en-US
 To:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -121,9 +121,9 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-4-ysionneau@kalray.eu>
+ <20230120141002.2442-6-ysionneau@kalray.eu>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120141002.2442-4-ysionneau@kalray.eu>
+In-Reply-To: <20230120141002.2442-6-ysionneau@kalray.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -139,101 +139,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 20/01/2023 15:09, Yann Sionneau wrote:
 > From: Jules Maselbas <jmaselbas@kalray.eu>
 > 
-> Add documentation for `kalray,kv3-1-apic-gic` binding.
+> Add documentation for `kalray,coolidge-itgen` binding.
 > 
 > Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
 > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 > Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+
+The same comments apply plus more...
+
 > ---
-
-All the comments apply here and to all your other patches - wrong
-subject, missing blank lines, missing additionalProperties, missing
-tests (patches were for sure not tested as you can see from bot's
-answers) etc. Really, please start from scratch on example-schema.
-
 > 
 > Notes:
 >     V1 -> V2: new patch
 > 
->  .../kalray,kv3-1-apic-gic.yaml                | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-apic-gic.yaml
+>  .../kalray,coolidge-itgen.yaml                | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kalray,coolidge-itgen.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-apic-gic.yaml b/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-apic-gic.yaml
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/kalray,coolidge-itgen.yaml b/Documentation/devicetree/bindings/interrupt-controller/kalray,coolidge-itgen.yaml
 > new file mode 100644
-> index 000000000000..7a37f19db2fb
+> index 000000000000..47b503bff1d9
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-apic-gic.yaml
-> @@ -0,0 +1,66 @@
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/kalray,coolidge-itgen.yaml
+> @@ -0,0 +1,48 @@
 > +# SPDX-License-Identifier: GPL-2.0
+
+Dual license. Checkpatch should complain about this - did you run it?
+
+This applies to all your other patches (both, run checkpatch and use
+proper license).
+
+
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/kalray,kv3-1-apic-gic#
+> +$id: http://devicetree.org/schemas/interrupt-controller/kalray,coolidge-itgen#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Kalray kv3-1 APIC-GIC
+> +title: Kalray Coolidge SoC Interrupt Generator (ITGEN)
 > +
 > +description: |
-> +  Each cluster in the Coolidge SoC includes an Advanced Programmable Interrupt
-> +  Controller (APIC) which is split in two part:
-> +    - a Generic Interrupt Controller (referred as APIC-GIC)
-> +    - a Mailbox Controller           (referred as APIC-Mailbox)
-> +  The APIC-GIC acts as an intermediary interrupt controller, muxing/routing
-> +  incoming interrupts to output interrupts connected to kvx cores interrupts lines.
-> +  The 139 possible input interrupt lines are organized as follow:
-> +     - 128 from the mailbox controller (one it per mailboxes)
-> +     - 1   from the NoC router
-> +     - 5   from IOMMUs
-> +     - 1   from L2 cache DMA job FIFO
-> +     - 1   from cluster watchdog
-> +     - 2   for SECC, DECC
-> +     - 1   from Data NoC
-> +  The 72 possible output interrupt lines:
-> +     -  68 : 4 interrupts per cores (17 cores)
-> +     -  1 for L2 cache controller
-> +     -  3 extra that are for padding
+> +  The Interrupt Generator (ITGEN) is an interrupt controller block.
+> +  It's purpose is to convert IRQ lines coming from SoC peripherals into writes
+> +  on the AXI bus. The ITGEN intended purpose is to write into the APIC mailboxes.
 > +
 > +allOf:
 > +  - $ref: /schemas/interrupt-controller.yaml#
 > +
 > +properties:
 > +  compatible:
-> +    const: kalray,kv3-1-apic-gic
+> +    const: kalray,coolidge-itgen
+> +
 
-Missing reg
+So why suddenly this patch has proper blank lines...
+
+Missing reg.
 
 > +  "#interrupt-cells":
-> +    const: 1
-> +    description:
-> +      The IRQ number.
-> +  interrupt-controller: true
-> +  interrupt-parent: true
-
-Drop, should not be needed.
-
-> +  interrupts:
-> +    maxItems: 4
+> +    const: 2
 > +    description: |
-> +     Specifies the interrupt line(s) in the interrupt-parent controller node;
-> +     valid values depend on the type of parent interrupt controller
+> +      - 1st cell is for the IRQ number
+> +      - 2nd cell is for the trigger type as defined dt-bindings/interrupt-controller/irq.h
+> +
+> +  interrupt-controller: true
+> +
+> +  msi-parent: true
 > +
 > +required:
 > +  - compatible
 > +  - reg
 > +  - "#interrupt-cells"
 > +  - interrupt-controller
-> +  - interrupt-parent
-> +  - interrupts
+> +  - msi-parent
 > +
 > +examples:
 > +  - |
-> +    apic_gic: interrupt-controller@a20000 {
-> +        compatible = "kalray,kv3-1-apic-gic";
-> +        reg = <0 0xa20000 0 0x12000>;
-> +        #interrupt-cells = <1>;
+> +    itgen: interrupt-controller@27000000 {
+> +        compatible = "kalray,coolidge-itgen";
+> +        reg = <0 0x27000000 0 0x1104>;
+> +        #interrupt-cells = <2>;
 > +        interrupt-controller;
-> +        interrupt-parent = <&intc>;
-> +        interrups = <4 5 6 7>;
+> +        msi-parent = <&apic_mailbox>;
 > +    };
 > +
 > +...
