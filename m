@@ -2,121 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334136770CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 17:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F426770CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 17:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjAVQtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 11:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S230071AbjAVQxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 11:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjAVQtm (ORCPT
+        with ESMTP id S229975AbjAVQxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 11:49:42 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F281C320;
-        Sun, 22 Jan 2023 08:49:32 -0800 (PST)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AE834CD52F;
-        Sun, 22 Jan 2023 16:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1674406136; bh=UC4MZp7joZ5KIGVSNAjIE3z+woZwa8RY5kG95For80s=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=fVblwWHYIq+sZjwawB8O/+pjliEqr1MXSpYnZ4VYptxGu/htsKJQYy3mvkJNPL/Re
-         qnJC9+OEUQ+h0mMU+Rq6PhvP2xrNcbMwYxxWmVbPlrBHPdCOl+2+xU110ZhDqMtN4B
-         hBNLu3aL9/t/mrFmF2DMtf+a7qyhEHH1BaP1wFsc=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Sun, 22 Jan 2023 17:48:36 +0100
-Subject: [PATCH 5/5] ARM: dts: qcom: msm8974-oneplus-bacon: Add notification LED
+        Sun, 22 Jan 2023 11:53:35 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D3A196B7
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 08:53:34 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id i70so4657540ioa.12
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 08:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eOOpS877RbdMk9+2ubqEo2V/9WGV2dh88ER6QWnCNlg=;
+        b=cnc5Qs0w/DIvnCz8gTNZxM6X57omamoi955rvAG3CtFtJeX2cT+dnvqkN+7Xus2Q4c
+         s2qxzQO46fr1gA+uRdQSA13CzzgxLJ0a7YEQ3r7wvURAVb2KoHmW3IFupl+9fvSCirlI
+         Jq8HMZHvBq4lvD+1LNhXqcyZvcvn3+rHfDy12EoXfsijMtND/rVR0UEeVBxICFWeareC
+         UWDzRwYbSOP9VV6Y/bCmFXUv8izM3d6/Coxh9S4RzOgHkhvyfdGerdXkdDYkTh0WKxYF
+         q6XRrslKWZ1mHkUYFtl4b140S23dcsGcg9ytcn1uVUBP4GMlnWhCTs+K0mUbdAU10BM4
+         k6JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eOOpS877RbdMk9+2ubqEo2V/9WGV2dh88ER6QWnCNlg=;
+        b=55B1RoVoD9Zk/a0bRn53yPTYqyRPKONomlGpDDqPeqYMRUoBswVrfN/YGgkpJ+4o08
+         b+sqJJNPjHdEcmAJqwzhZYQFkN1UIAhxndILvR5iDZfnrrEa0Ksio+xikVEM1O+Lw0VB
+         yDge2Z+ZkGT95Un7C+a9B+htuYEIDklzR9sEROphpNPROJ3z/+4lV0tLFTwC0OewLmFA
+         aWJF/r9lizJ8SCIw8w5q5GRt/TXVRuj2C1t7ekgsVQYq5sd2sHYNZyRimfgGbebiBuKP
+         mgxVDqETz0eKS52KVHxGUg+754lQXDjBLjhp8VLgPT0ZvF7L/VzhwJMi8OnvC1uPLyGk
+         RgTQ==
+X-Gm-Message-State: AFqh2kqhulL0sZHnwZwiq3foCXyVoMJW0ebpnGOzRgx6mwWiXBLq8FD+
+        KwuPKjaN3fwYv39yFPYND+k=
+X-Google-Smtp-Source: AMrXdXvjVsBryuY5uffw2HQNjOTKrgAe5dY1Ufl78re2BxE1nBEkaqrToGy6dA7Qx+mrhm/aXVP46w==
+X-Received: by 2002:a6b:f012:0:b0:704:5d40:dfbf with SMTP id w18-20020a6bf012000000b007045d40dfbfmr15589897ioc.1.1674406413503;
+        Sun, 22 Jan 2023 08:53:33 -0800 (PST)
+Received: from [192.168.75.211] ([173.23.87.62])
+        by smtp.gmail.com with ESMTPSA id y13-20020a056638228d00b003a0565a5750sm9829265jas.119.2023.01.22.08.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 08:53:33 -0800 (PST)
+Message-ID: <3b323793-2e98-216c-d84f-97187feb4b72@gmail.com>
+Date:   Sun, 22 Jan 2023 10:53:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] drm: panel-orientation-quirks: Add quirks for One XPlayer
+ handheld variants
+Content-Language: en-US
+To:     maarten.lankhorst@linux.intel.com
+Cc:     mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221213171044.14869-1-ruinairas1992@gmail.com>
+From:   Matthew Anderson <ruinairas1992@gmail.com>
+In-Reply-To: <20221213171044.14869-1-ruinairas1992@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230122-msm8974-bacon-features-v1-5-4049f565c24c@z3ntu.xyz>
-References: <20230122-msm8974-bacon-features-v1-0-4049f565c24c@z3ntu.xyz>
-In-Reply-To: <20230122-msm8974-bacon-features-v1-0-4049f565c24c@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1264; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=UC4MZp7joZ5KIGVSNAjIE3z+woZwa8RY5kG95For80s=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBjzWj2Melh4WgPgof4i5KIb9eQCvJo0gQAcgbgA6Ml
- Zfm8VqOJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY81o9gAKCRBy2EO4nU3XVrm3EA
- C/KppKnzqSEjeDp67YBOnF3nRIdl7sMxjYsRfYN0kkt3dOtwmFkhbXoqplheSGGdjdIpOqWWYyu5p5
- vbabckzcp6SPm/XhlGBPFtq+diyApCW8CUx6JzsS0LhLEVrJpHH5+0gJeRaPQc/rVq8r+wld8x4y+h
- pT0kpn/f3SDYycRw0QwvY6poLHZxu6/BUx54rrKS5klUOuwUatphUBLHO2F9ms0EO5VHsHcoKj4e1S
- rwygzJH1uQnRN4Na6SK6VO9uO9aXcwd4tFqw1Fhrq2KVvpJvN/TmIaxfZBp5OcLEOiUWsYZzDzr8ud
- ie2j811S73Bs3yZdmGfkJUilDHOjJoQyqAcDQBQORrQ5EdldgFuEVHgxfRev8FMCgoMQTFIWunbq0u
- VM7ENcBQ7tBDlX95Ne7tMEUdMXsM/2obbPKYDKJRQ/4cJWbAlfSAVGIZP/TVPq6q+Yj6Bfnz8jcPyH
- 3Hva2cUGoMKhrGv93G5Tolj7NLnNnF3JB2Aq9L2HZlZZhuvdBK/uETx96gAmpA/TBpp8HrM9iJZ5WU
- La9QVrfGOcypa7xbAFB/Ut49xBt3dfuQxRBwh7ppTrR8xRYf8OslVNoJNBnf/+TBQ01AmMF34JImMO
- 8yDLkg4icyACHND+hdUkb2f6K6q0Q9mdcYQYnSnD44tTAsc0z81scOnc8ytw==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the node describing the sn3193 that's used to provide notification
-LED.
+I'm just following up to see where things are standing for this patch. 
+I've seen other orientation patches make it's way to the kernel and am 
+wondering if there is something I need to do on my end.
 
-Unfortunately the driver currently supports neither multicolor API nor
-using the properties function & color, so we use label instead.
-
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- .../arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-index ffb486ceb6a6..a672c45d7070 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-@@ -114,6 +114,34 @@ led@0 {
- 			default-brightness = <80>;
- 		};
- 	};
-+
-+	led-controller@68 {
-+		compatible = "si-en,sn3193";
-+		reg = <0x68>;
-+
-+		shutdown-gpios = <&tlmm 45 GPIO_ACTIVE_HIGH>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		led@1 {
-+			reg = <1>;
-+			label = "red:status";
-+			led-max-microamp = <17500>;
-+		};
-+
-+		led@2 {
-+			reg = <2>;
-+			label = "green:status";
-+			led-max-microamp = <17500>;
-+		};
-+
-+		led@3 {
-+			reg = <3>;
-+			label = "blue:status";
-+			led-max-microamp = <17500>;
-+		};
-+	};
- };
- 
- &blsp1_i2c6 {
-
--- 
-2.39.1
+On 12/13/22 11:10 AM, Matthew Anderson wrote:
+> We have more handhelds in the One XPLAYER lineup now that needs support added to the orientation-quirks.
+> By adding more native resolution checks and the one unique BIOS variant available we add support to most devices.
+>
+> Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
+> ---
+>   .../gpu/drm/drm_panel_orientation_quirks.c    | 30 +++++++++++++++++++
+>   1 file changed, 30 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> index 52d8800a8ab8..335d636e6696 100644
+> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -103,6 +103,12 @@ static const struct drm_dmi_panel_orientation_data lcd800x1280_rightside_up = {
+>   	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+>   };
+>   
+> +static const struct drm_dmi_panel_orientation_data lcd800x1280_leftside_up = {
+> +	.width = 800,
+> +	.height = 1280,
+> +	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
+> +};
+> +
+>   static const struct drm_dmi_panel_orientation_data lcd1080x1920_leftside_up = {
+>   	.width = 1080,
+>   	.height = 1920,
+> @@ -115,6 +121,12 @@ static const struct drm_dmi_panel_orientation_data lcd1200x1920_rightside_up = {
+>   	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+>   };
+>   
+> +static const struct drm_dmi_panel_orientation_data lcd1200x1920_leftside_up = {
+> +	.width = 1200,
+> +	.height = 1920,
+> +	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
+> +};
+> +
+>   static const struct drm_dmi_panel_orientation_data lcd1280x1920_rightside_up = {
+>   	.width = 1280,
+>   	.height = 1920,
+> @@ -344,6 +356,24 @@ static const struct dmi_system_id orientation_data[] = {
+>   		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
+>   		},
+>   		.driver_data = (void *)&lcd1600x2560_leftside_up,
+> +	}, {	/* OneXPlayer Mini 800p */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK TECHNOLOGY CO., LTD."),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
+> +		},
+> +		.driver_data = (void *)&lcd800x1280_leftside_up,
+> +	}, {	/* OneXPlayer Mini 1200p */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK TECHNOLOGY CO., LTD."),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
+> +		},
+> +		.driver_data = (void *)&lcd1200x1920_leftside_up,
+> +	}, {	/* OneXPlayer Mini A07 Bios Variant */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK"),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONEXPLAYER mini A07"),
+> +		},
+> +		.driver_data = (void *)&lcd800x1280_leftside_up,
+>   	}, {	/* Samsung GalaxyBook 10.6 */
+>   		.matches = {
+>   		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD."),
