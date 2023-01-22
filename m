@@ -2,88 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8381676A6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 01:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726B8676A71
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 01:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjAVAPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 19:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S229714AbjAVAQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 19:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAVAPW (ORCPT
+        with ESMTP id S229463AbjAVAQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 19:15:22 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5960A17CE8;
-        Sat, 21 Jan 2023 16:15:21 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <mkarcher@zedat.fu-berlin.de>)
-          id 1pJO10-002AZK-CU; Sun, 22 Jan 2023 01:15:18 +0100
-Received: from pd9f631ca.dip0.t-ipconnect.de ([217.246.49.202] helo=[192.168.144.87])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <Michael.Karcher@fu-berlin.de>)
-          id 1pJO0z-002Kk0-Vw; Sun, 22 Jan 2023 01:15:18 +0100
-Message-ID: <52952170-f1a9-89a0-e307-f974ce2b7977@fu-berlin.de>
-Date:   Sun, 22 Jan 2023 01:15:17 +0100
+        Sat, 21 Jan 2023 19:16:30 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C06C17CEE;
+        Sat, 21 Jan 2023 16:16:29 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 99EB2CD524;
+        Sun, 22 Jan 2023 00:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1674346557; bh=rxdK0Pvqp3/9pqht+d0sJXIl3kqk5gJLUoGob3Ljric=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hgX3ZyMFfsAwFqNcvovSRvjsFLh7muu5H+1Yr7F2fRpUYYsDZh0iDQAJ7ccONMNwO
+         MV9/Qgv5BRjZ4bU+RPrTrJ0XPIrLDVrCEimVK/1f8RF+tSxhZT/qiHby/C/SyMbVzb
+         9uIqhIB6hJtaqA10lKnpeFRmUHNCGvuzg+UVEHr8=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, mka@chromium.org,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan+linaro@kernel.org, quic_kriskura@quicinc.com,
+        dianders@chromium.org, linux-clk@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET support
+Date:   Sun, 22 Jan 2023 01:15:56 +0100
+Message-ID: <5897497.lOV4Wx5bFT@g550jk>
+In-Reply-To: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-To:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-From:   "Michael.Karcher" <Michael.Karcher@fu-berlin.de>
-Cc:     jakub@gcc.gnu.org
-Subject: [PATCH: 1/1] sh4: avoid spurious gcc warning
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Original-Sender: Michael.Karcher@fu-berlin.de
-X-Originating-IP: 217.246.49.202
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent sizeof-pointer-div warning in SH4 intc macros
+Hi Rajendra,
 
-Gcc warns about the pattern sizeof(void*)/sizeof(void), as it looks like
-the abuse of a pattern to calculate the array size. This pattern appears
-in the unevaluated part of the ternary operator in _INTC_ARRAY if the
-parameter is NULL.
+On Dienstag, 20. September 2022 13:15:15 CET Rajendra Nayak wrote:
+> GDSCs cannot be transitioned into a Retention state in SW.
+> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
+> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
+> takes care of retaining the memory/logic for the domain when
+> the parent domain transitions to power collapse/power off state.
+> 
+> On some platforms where the parent domains lowest power state
+> itself is Retention, just leaving the GDSC in ON (without any
+> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
+> it to Retention.
+> 
+> The existing logic handling the PWRSTS_RET seems to set the
+> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
+> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
+> Fix that by leaving the GDSC in ON state.
+> 
+> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+> v3:
+> Updated changelog
+> 
+> There are a few existing users of PWRSTS_RET and I am not
+> sure if they would be impacted with this change
+> 
+> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
+> gdsc is actually transitioning to OFF and might be left
+> ON as part of this change, atleast till we hit system wide
+> low power state.
+> If we really leak more power because of this
+> change, the right thing to do would be to update .pwrsts for
+> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
+> I dont have a msm8974 hardware, so if anyone who has can report
+> any issues I can take a look further on how to fix it.
 
-The replacement uses an alternate approach to return 0 in case of NULL
-which does not generate the pattern sizeof(void*)/sizeof(void), but still
-emits the warning if _INTC_ARRAY is called with a nonarray parameter.
+Unfortunately indeed this patch makes problems on msm8974, at least on 
+fairphone-fp2 hardware.
 
-This patch is required for successful compilation with -Werror enabled.
+With this patch in place, the screen doesn't initialize correctly in maybe 80% 
+of boots and is stuck in weird states, mostly just becomes completely blue.
 
-The idea to use _Generic for type distinction is taken from Comment #7
-in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483 by Jakub Jelinek
+Kernel log at least sometimes includes messages like this:
+[   25.847541] dsi_cmds2buf_tx: cmd dma tx failed, type=0x39, data0=0x51, 
+len=8, ret=-110
 
-Signed-off-by: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
----
+Do you have anything I can try on msm8974? For now, reverting this patch makes 
+display work again on v6.1
 
-diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
-index c255273b0281..d7a7ffb60a34 100644
---- a/include/linux/sh_intc.h
-+++ b/include/linux/sh_intc.h
-@@ -97,7 +97,7 @@ struct intc_hw_desc {
-      unsigned int nr_subgroups;
-  };
+Regards
+Luca
 
--#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
-+#define _INTC_ARRAY(a) a, sizeof(a)/(_Generic((a), typeof(NULL): 
-0xFFFFFFFFU, default: sizeof(*a)))
+> 
+> 2. gpu_gx_gdsc in gpucc-msm8998.c and
+>    gpu_gx_gdsc in gpucc-sdm660.c
+> Both of these seem to add support for 3 power state
+> OFF, RET and ON, however I dont see any logic in gdsc
+> driver to handle 3 different power states.
+> So I am expecting that these are infact just transitioning
+> between ON and OFF and RET state is never really used.
+> The ideal fix for them would be to just update their resp.
+> .pwrsts to PWRSTS_OFF_ON only.
+> 
+>  drivers/clk/qcom/gdsc.c | 10 ++++++++++
+>  drivers/clk/qcom/gdsc.h |  5 +++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index d3244006c661..ccf63771e852 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -368,6 +368,16 @@ static int _gdsc_disable(struct gdsc *sc)
+>  	if (sc->pwrsts & PWRSTS_OFF)
+>  		gdsc_clear_mem_on(sc);
+> 
+> +	/*
+> +	 * If the GDSC supports only a Retention state, apart from ON,
+> +	 * leave it in ON state.
+> +	 * There is no SW control to transition the GDSC into
+> +	 * Retention state. This happens in HW when the parent
+> +	 * domain goes down to a Low power state
+> +	 */
+> +	if (sc->pwrsts == PWRSTS_RET_ON)
+> +		return 0;
+> +
+>  	ret = gdsc_toggle_logic(sc, GDSC_OFF);
+>  	if (ret)
+>  		return ret;
+> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+> index 5de48c9439b2..981a12c8502d 100644
+> --- a/drivers/clk/qcom/gdsc.h
+> +++ b/drivers/clk/qcom/gdsc.h
+> @@ -49,6 +49,11 @@ struct gdsc {
+>  	const u8			pwrsts;
+>  /* Powerdomain allowable state bitfields */
+>  #define PWRSTS_OFF		BIT(0)
+> +/*
+> + * There is no SW control to transition a GDSC into
+> + * PWRSTS_RET. This happens in HW when the parent
+> + * domain goes down to a low power state
+> + */
+>  #define PWRSTS_RET		BIT(1)
+>  #define PWRSTS_ON		BIT(2)
+>  #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
 
-  #define INTC_HW_DESC(vectors, groups, mask_regs,    \
-               prio_regs,    sense_regs, ack_regs)    \
+
+
 
