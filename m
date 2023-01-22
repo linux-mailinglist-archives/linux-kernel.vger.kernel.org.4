@@ -2,241 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EAA676B86
+	by mail.lfdr.de (Postfix) with ESMTP id 7D304676B87
 	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 09:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjAVIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 03:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S229790AbjAVINW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 03:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjAVINX (ORCPT
+        with ESMTP id S229636AbjAVINU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 03:13:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2A7222D2
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 00:13:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674375202; x=1705911202;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cJDZm4Q4gEltynb0011gp744YJV8WVYrUBBBJzea7S4=;
-  b=czTv6/SwVHTjOkMP3ooHYS7wzDBYvt7Q4pDlgC8pMn1IibbnZiCzJyu0
-   wq/NWmBiFD8nhIO7n4e7TcdxaxzrvN0MMZ51bIahUmBYFNwE/VhcIfvKm
-   mkZxfX9AOGyF+YnyN3xZWmjHuOh+RKjq+5OKtbASZcWjzCw0/czn3ZV63
-   kc8bur/WrCQ3Hrt2i6JJPsXr0tnXREkgRIXgFUmsi2VoYrrTB6iYOXclp
-   GHBZ0DCICzy4rjPMr2I89XFEi7UaLovZfe03XED73l+t1wCxoSrOGrIfZ
-   sqaxNcGTTHkAjKVCvQMCEZMhZczQS2MQ2BPqQRsf2jV92041NSjE1VTv1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="313767862"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="313767862"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 00:13:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="803549019"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="803549019"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Jan 2023 00:13:19 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJVTa-0004rw-2v;
-        Sun, 22 Jan 2023 08:13:18 +0000
-Date:   Sun, 22 Jan 2023 16:12:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Singh <ajay.kathat@microchip.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kalle Valo <kvalo@kernel.org>
-Subject: drivers/net/wireless/microchip/wilc1000/cfg80211.c:361:42: sparse:
- sparse: incorrect type in assignment (different base types)
-Message-ID: <202301221647.9RyZMvaz-lkp@intel.com>
+        Sun, 22 Jan 2023 03:13:20 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2051.outbound.protection.outlook.com [40.107.20.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB325222D2;
+        Sun, 22 Jan 2023 00:13:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j3Y68Nqh6L1nQWkFcvL9el774Wm/EZV3Q2MeMXspvrqNMW7ODNjnF/SH56Tu93PdZYtATbCwypUUR7K6fv2D+8fgvsu2FKgGf3/p23CL9wphZmBlqYLqSVgswLi2F8oYFC7Dj0uLXoByS9W7Tel6ZUtwpkX4vlXGSpStFgSpboBczcBExmqy7QzGRRVxB1FXd5MT2LsvLXegEjfnQGLWm6j7nzxG7I+rLwx37zXnJg3aFWNsnEvQgsCjm0quXtibWr2EVKt/tWO7uOc2Cxdi55uCnh34trObP4utuvr0nizbjTKfsKtYghKnFLHfUX0pUAwiVitBIqRw682qoQhXpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UfUziBUeXQpaUQvzKjX3mw+W9PTMrA16Fll+c9aQhfw=;
+ b=QShLN4tw20G7TXnXCL7uKNZNctnlccJvl/uiA+BbqIBrGoJUJpFz7nda550jXjZorEQNcYlxSssqifEGh6YlpLK4cYMHpxVNzqOShlkdgCZrEnLWe2GUwD5zlSHHQGjglHdC+POYNEQIf5mys9S76OxzsVpTcV1O5d4AiIy4fU2qDV57STkMYO9bRlhdNhmCQKOvVbcLtNhzGbxcnZ0nI3pf3P1ZOaYbBUawK3MsceHqEJM1ujbAlunQOismKiBG+zD7ZQHk7gy6sTG7A/U4HpvJKTy600R/PWv6q2tzGd75yWErybyaIr9nF8EpUkairxG3HdwO129CAgFp4VzluQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UfUziBUeXQpaUQvzKjX3mw+W9PTMrA16Fll+c9aQhfw=;
+ b=jGBWlFjp4L186CLHlvIFmc4oT2rXz69v4fHpG5x9uoK/TYm02TN5bVzdYwNM7pLFDazdWj2DTIQ1Wl7LuUEyIL7dp3tmQjGbZKZ1f97zz06U3fZYB14R3yyIishILjdd2M0rHYeoH5OWH+LSTwfnSR5CYCVNJTY7ywX3OUv6eTI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM9PR04MB7491.eurprd04.prod.outlook.com (2603:10a6:20b:283::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Sun, 22 Jan
+ 2023 08:13:17 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc%7]) with mapi id 15.20.6002.028; Sun, 22 Jan 2023
+ 08:13:16 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marex@denx.de, linux-imx@nxp.com
+Subject: [PATCH 0/2] drm/bridge: fsl-ldb: Add i.MX93 LDB support
+Date:   Sun, 22 Jan 2023 16:14:27 +0800
+Message-Id: <20230122081429.694574-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0182.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::20) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM9PR04MB7491:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5bc20bdb-f4f6-46cb-d30f-08dafc5083b3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Aokk7HghSln0G+MBIXoaOd/aSJWaixbIX5mj9Q+dyU+L53oNYkX1ktE29g1gzAt2v7x7C/7VxXHNcOAsYT0DRPF7zGZw1BFEdzhxgQ+Dnm20/1PtMFPPhbSqqi+JyTxkOC/GjfHzH7Azd53yUniQNzB/i5tuLi6Cp4GmZO/4poegrqt3bNdymi9Y3x7+cPfFP+hTrmMB3lzUBQfIA8jDzZWPzmBD86zPqnBTmkMHBMIlDxmHm5balo7Y9q7LUuxVbVka6b4mlgOHnosRYSbcXa5XXIhriogivswFhpELkMZWknKfLcxir+aa48TVk66RTmDHNg9UMv/ZM3ydcOvE+QnT1O4f/pvqBtAdO9IVBJYqFA3tQuEXpif9ABDBSOX9V3UnCgW4mseaZrgQCwcn5aOC0fFjoerwrZmYSyYaNqV//530dCa4nJgKgN7E81v7EYql9ecu9q57f5lStpBZeqL7o2kErm9ijxB0kbzH4NHsp6ifWVLkon7DsX4Vd+TRDjHZXGkpRuBgplwKg1CIEbjVWK7WYf6jW+scc32u/3FshPfclnpwbzc84oMWw2cx0kKBLFKVfKSSkzc3NGxY7xMGQolkWtobMUYiGSF+hZhkrwZG5sAT9fs4Q6Ue2Jq+4dd0IkUEulkCwTv8MhpWPGgjupEPKsc+A4y1LuJwoD1k6d8mhELVMEq5TYGpGs2ElQ7fpTWub4Q6uZ3uNrqpfw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199015)(186003)(2906002)(6486002)(6506007)(6512007)(2616005)(316002)(26005)(478600001)(36756003)(52116002)(38100700002)(6666004)(38350700002)(86362001)(1076003)(83380400001)(41300700001)(4326008)(7416002)(5660300002)(4744005)(8936002)(66946007)(66556008)(66476007)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9UzAhphKDUsTqLm4SkFCvSncvrxpb04xez0g0UYpLusBV4JnV9+4fdMkoFmG?=
+ =?us-ascii?Q?LZiM7oq9TEkVr294iSOBoWvCokE7B5WqxRrVCAP2GRukZcy+r+6QubRVQZ7J?=
+ =?us-ascii?Q?9jlQOVnwvi0sV/bsfeyl3UgJ9+a09cD2lK4NOQd8x55zEWay/vb0ZF8yk/ij?=
+ =?us-ascii?Q?u+cOCT2bd8OgRuLJ8NOi+anUASQPK56rAIAUd9Bi2ZXP7fsPLkQGZNqrQQm/?=
+ =?us-ascii?Q?bKoRITXoAeBTlKz68scPS5eIIPf8BMrRTZoPZb4CVEzN6Uah5GCUIPw1TDiA?=
+ =?us-ascii?Q?QhcBJIrCMc6uZrwXj603hVdk5AV7rgy+ScAHjqLP5zGgj/DkEfbm92Kbz6sp?=
+ =?us-ascii?Q?hbkDQoiUIYSrWJQQ7nZGN3gSiNbx1vvwl7f8MoZj4SszN8Fb3Sp0B0OZnmOl?=
+ =?us-ascii?Q?dxKZjhCr1EggV76m8DPynXSR3In+Y9Wd8+LuhGDMk0NDLbO5FInibZZu49D+?=
+ =?us-ascii?Q?1Ao4ozhT9G28xp7/49zmENW9a5yCtxrjDFqEyLldVgedClOSpPH8KcUtaR9L?=
+ =?us-ascii?Q?6dyZXFhnjqZ93Lhya98tuKJ43dZWEemtis1QX/+/HoHyHQrPySG9cTg1Pq2z?=
+ =?us-ascii?Q?ce8nckdrPt0+N69Xmj2Nn+bLuS7C7CFJugdAFO5RHktWfLz3tb41btNfK7EL?=
+ =?us-ascii?Q?aRPD+weOV6UoPnw4i88/f7Z+C/6OrlRBalzZ56yj/wuzDlwdC8NkUE0aPD7C?=
+ =?us-ascii?Q?TnHKr4PagP2ZFo429hjz3XhfqiUI+r4Iw/uYiOu4Z4pdRUSiD2DI0/1b9t6i?=
+ =?us-ascii?Q?bXUSOoTh5PbvOhAkjkBuG5pt3+fPVsbNVLVpgxOhfelrObQBYGxnvpv/qWgj?=
+ =?us-ascii?Q?lguVhKw6w3DASPx+VBkPZclQzcEGqAhUyS/ErQZ6St7qUT7XqcYVnxRcOEo0?=
+ =?us-ascii?Q?7cFY0by4itWn9vwHn1SI1vxQaMYdRb54kNqqVbNNAkxQxHLmUeomnqmOOxxl?=
+ =?us-ascii?Q?Gh1dpZzIJblKRaHlGER7Tpg2DNrvuC+vuetIXr8UzBrga6cVmhRaFzUZ8p8Z?=
+ =?us-ascii?Q?cGA/wH3Oyta6+LvAWIT++xkUth7eR0H5ZIzGvisZPrK2X1AoigJ2JBVHGL3Z?=
+ =?us-ascii?Q?7zJCc3v9Q6bNqLu878hY8noSAoRzgC0p4XgKaf5C/JXw6v5I8I1YPG+WVebH?=
+ =?us-ascii?Q?RtylC/pN2pVDtN86BYsjTc4ecatbD8LKHN2K3602x6JZ8gBRRAfl1E8aTmua?=
+ =?us-ascii?Q?YF4oo9hVXaOZ65uPa2fJDpsBu8pTf57bcombX1FS+rB+TpiY+vRWcLqp6UpH?=
+ =?us-ascii?Q?yLA38dctor/7o5JHP48KhshL0AcRwnBIyXXp0xNWs3QizjrIwjxHDIltc4aB?=
+ =?us-ascii?Q?/qLPEyxj0JCPCiwJseQy2SZIfaV/ij4VrgzPnOvsHWUUeAgl8mn8Qrmt+9Wy?=
+ =?us-ascii?Q?EyR6tKd4xcOjt1kEdd7Uvbb3dMqUQ3rs+RKpkvXu3nxNmJ1PewhT8dNn0OOz?=
+ =?us-ascii?Q?3XbaJWBCaJ1bFkr78LrU/mVv4ksnV6QvLiulN7Q3gJqi3gRh1/TodeE8bfbJ?=
+ =?us-ascii?Q?12ejbeZCPAYKoMZ9nney1s5aoQaYLmnyBUbIF1YTyyb3yURLinL46HRL+Z4V?=
+ =?us-ascii?Q?ULzxjjC00Fo8dGBKNsS+FgWqCsjsjSDfjLJ21qx4?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5bc20bdb-f4f6-46cb-d30f-08dafc5083b3
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2023 08:13:16.7258
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fj9PbLmsf3fg7IRTGD+1UxwUlV7Hmqii+cgB2Gj6Blam9tM/Qx83zrrCCxHh4mfsHvhmsUTPGkkeudepYpGf+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7491
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2241ab53cbb5cdb08a6b2d4688feb13971058f65
-commit: c5b331d4f550fb78bf1a553b2517616a5ea913d6 wifi: wilc1000: add WPA3 SAE support
-date:   8 months ago
-config: parisc-randconfig-s041-20230122 (https://download.01.org/0day-ci/archive/20230122/202301221647.9RyZMvaz-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c5b331d4f550fb78bf1a553b2517616a5ea913d6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c5b331d4f550fb78bf1a553b2517616a5ea913d6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash drivers/mfd/ drivers/net/wireless/microchip/wilc1000/
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+This patch set aims to add i.MX93 LVDS Display Bridge(LDB) support in
+the existing i.MX8mp LDB DRM bridge driver.  Same to i.MX8mp LDB, i.MX93
+LDB is controlled by mediamix blk-ctrl through two registers.  i.MX93
+LDB supports only one LVDS channel(channel 0) while i.MX8mp supports at
+most two.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/wireless/microchip/wilc1000/cfg80211.c:361:42: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int key_mgmt_suite @@     got restricted __be32 [usertype] @@
-   drivers/net/wireless/microchip/wilc1000/cfg80211.c:361:42: sparse:     expected unsigned int key_mgmt_suite
-   drivers/net/wireless/microchip/wilc1000/cfg80211.c:361:42: sparse:     got restricted __be32 [usertype]
+Patch 1/2 adds device tree binding for i.MX93 LDB in the existing
+fsl,ldb.yaml.
 
-vim +361 drivers/net/wireless/microchip/wilc1000/cfg80211.c
+Patch 2/2 adds i.MX93 LDB support in the existing i.MX8mp LDB DRM bridge
+driver.
 
-   300	
-   301	static int connect(struct wiphy *wiphy, struct net_device *dev,
-   302			   struct cfg80211_connect_params *sme)
-   303	{
-   304		struct wilc_vif *vif = netdev_priv(dev);
-   305		struct wilc_priv *priv = &vif->priv;
-   306		struct host_if_drv *wfi_drv = priv->hif_drv;
-   307		int ret;
-   308		u32 i;
-   309		u8 security = WILC_FW_SEC_NO;
-   310		enum authtype auth_type = WILC_FW_AUTH_ANY;
-   311		u32 cipher_group;
-   312		struct cfg80211_bss *bss;
-   313		void *join_params;
-   314		u8 ch;
-   315	
-   316		vif->connecting = true;
-   317	
-   318		cipher_group = sme->crypto.cipher_group;
-   319		if (cipher_group != 0) {
-   320			if (sme->crypto.wpa_versions & NL80211_WPA_VERSION_2) {
-   321				if (cipher_group == WLAN_CIPHER_SUITE_TKIP)
-   322					security = WILC_FW_SEC_WPA2_TKIP;
-   323				else
-   324					security = WILC_FW_SEC_WPA2_AES;
-   325			} else if (sme->crypto.wpa_versions & NL80211_WPA_VERSION_1) {
-   326				if (cipher_group == WLAN_CIPHER_SUITE_TKIP)
-   327					security = WILC_FW_SEC_WPA_TKIP;
-   328				else
-   329					security = WILC_FW_SEC_WPA_AES;
-   330			} else {
-   331				ret = -ENOTSUPP;
-   332				netdev_err(dev, "%s: Unsupported cipher\n",
-   333					   __func__);
-   334				goto out_error;
-   335			}
-   336		}
-   337	
-   338		if ((sme->crypto.wpa_versions & NL80211_WPA_VERSION_1) ||
-   339		    (sme->crypto.wpa_versions & NL80211_WPA_VERSION_2)) {
-   340			for (i = 0; i < sme->crypto.n_ciphers_pairwise; i++) {
-   341				u32 ciphers_pairwise = sme->crypto.ciphers_pairwise[i];
-   342	
-   343				if (ciphers_pairwise == WLAN_CIPHER_SUITE_TKIP)
-   344					security |= WILC_FW_TKIP;
-   345				else
-   346					security |= WILC_FW_AES;
-   347			}
-   348		}
-   349	
-   350		switch (sme->auth_type) {
-   351		case NL80211_AUTHTYPE_OPEN_SYSTEM:
-   352			auth_type = WILC_FW_AUTH_OPEN_SYSTEM;
-   353			break;
-   354	
-   355		case NL80211_AUTHTYPE_SAE:
-   356			auth_type = WILC_FW_AUTH_SAE;
-   357			if (sme->ssid_len) {
-   358				memcpy(vif->auth.ssid.ssid, sme->ssid, sme->ssid_len);
-   359				vif->auth.ssid.ssid_len = sme->ssid_len;
-   360			}
- > 361			vif->auth.key_mgmt_suite = cpu_to_be32(sme->crypto.akm_suites[0]);
-   362			ether_addr_copy(vif->auth.bssid, sme->bssid);
-   363			break;
-   364	
-   365		default:
-   366			break;
-   367		}
-   368	
-   369		if (sme->crypto.n_akm_suites) {
-   370			if (sme->crypto.akm_suites[0] == WLAN_AKM_SUITE_8021X)
-   371				auth_type = WILC_FW_AUTH_IEEE8021;
-   372			else if (sme->crypto.akm_suites[0] == WLAN_AKM_SUITE_PSK_SHA256)
-   373				auth_type = WILC_FW_AUTH_OPEN_SYSTEM_SHA256;
-   374			else if (sme->crypto.akm_suites[0] == WLAN_AKM_SUITE_8021X_SHA256)
-   375				auth_type = WILC_FW_AUTH_IEE8021X_SHA256;
-   376		}
-   377	
-   378		if (wfi_drv->usr_scan_req.scan_result) {
-   379			netdev_err(vif->ndev, "%s: Scan in progress\n", __func__);
-   380			ret = -EBUSY;
-   381			goto out_error;
-   382		}
-   383	
-   384		bss = cfg80211_get_bss(wiphy, sme->channel, sme->bssid, sme->ssid,
-   385				       sme->ssid_len, IEEE80211_BSS_TYPE_ANY,
-   386				       IEEE80211_PRIVACY(sme->privacy));
-   387		if (!bss) {
-   388			ret = -EINVAL;
-   389			goto out_error;
-   390		}
-   391	
-   392		if (ether_addr_equal_unaligned(vif->bssid, bss->bssid)) {
-   393			ret = -EALREADY;
-   394			goto out_put_bss;
-   395		}
-   396	
-   397		join_params = wilc_parse_join_bss_param(bss, &sme->crypto);
-   398		if (!join_params) {
-   399			netdev_err(dev, "%s: failed to construct join param\n",
-   400				   __func__);
-   401			ret = -EINVAL;
-   402			goto out_put_bss;
-   403		}
-   404	
-   405		ch = ieee80211_frequency_to_channel(bss->channel->center_freq);
-   406		vif->wilc->op_ch = ch;
-   407		if (vif->iftype != WILC_CLIENT_MODE)
-   408			vif->wilc->sta_ch = ch;
-   409	
-   410		wilc_wlan_set_bssid(dev, bss->bssid, WILC_STATION_MODE);
-   411	
-   412		wfi_drv->conn_info.security = security;
-   413		wfi_drv->conn_info.auth_type = auth_type;
-   414		wfi_drv->conn_info.ch = ch;
-   415		wfi_drv->conn_info.conn_result = cfg_connect_result;
-   416		wfi_drv->conn_info.arg = priv;
-   417		wfi_drv->conn_info.param = join_params;
-   418	
-   419		ret = wilc_set_join_req(vif, bss->bssid, sme->ie, sme->ie_len);
-   420		if (ret) {
-   421			netdev_err(dev, "wilc_set_join_req(): Error\n");
-   422			ret = -ENOENT;
-   423			if (vif->iftype != WILC_CLIENT_MODE)
-   424				vif->wilc->sta_ch = WILC_INVALID_CHANNEL;
-   425			wilc_wlan_set_bssid(dev, NULL, WILC_STATION_MODE);
-   426			wfi_drv->conn_info.conn_result = NULL;
-   427			kfree(join_params);
-   428			goto out_put_bss;
-   429		}
-   430		kfree(join_params);
-   431		vif->bss = bss;
-   432		cfg80211_put_bss(wiphy, bss);
-   433		return 0;
-   434	
-   435	out_put_bss:
-   436		cfg80211_put_bss(wiphy, bss);
-   437	
-   438	out_error:
-   439		vif->connecting = false;
-   440		return ret;
-   441	}
-   442	
+Liu Ying (2):
+  dt-bindings: display: bridge: ldb: Add i.MX93 LDB device tree binding
+  drm/bridge: fsl-ldb: Add i.MX93 LDB support
+
+ .../bindings/display/bridge/fsl,ldb.yaml      | 16 +++++-
+ drivers/gpu/drm/bridge/fsl-ldb.c              | 53 +++++++++++++++----
+ 2 files changed, 59 insertions(+), 10 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.37.1
+
