@@ -2,73 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9566267724A
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 21:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231F667724F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 21:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjAVUUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 15:20:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S230097AbjAVUVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 15:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjAVUUm (ORCPT
+        with ESMTP id S229954AbjAVUVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 15:20:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC0115CA3
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 12:20:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 22 Jan 2023 15:21:41 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B715CA2;
+        Sun, 22 Jan 2023 12:21:24 -0800 (PST)
+Received: from [192.168.0.2] (ip5f5ae93c.dynamic.kabel-deutschland.de [95.90.233.60])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5083B80B69
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 20:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 91D74C433EF;
-        Sun, 22 Jan 2023 20:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674418838;
-        bh=WlXdsC9A0/9p1cxSdpupYhEAqCaazI4vau3qUW+OzJk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=itWgISiaT44m2dtqZrZOxwxXJnVquboWgjuzcvcx/HhQgp3Nm+doPX2O4Yross1ms
-         fCA82+8uT9vzMbcVmAe7qGNMR/fHImRe/PnRqAl3Wg9tTIks4XDcJLe9d2MMnnhmYQ
-         ka9ywuhCoVthB6au4Dc5X7vcOR3XgMKDNl/0uAX2jbn5Uk14A74+anVJeMWFO1JCKT
-         WGkEkONQztTMFGbP9wvQPNSy5/cBgvjQlFTUCJsKaHMDJTg9j7QAmtGkbILNRHS22l
-         SUEWdfHdXeSC0LDP9qWdFSqr7whoKXQuxOPdVTyBzYU6yZhNZU6n9lyJnblDh82Y/E
-         4LWGSZXh9qqlA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B885C73FFF;
-        Sun, 22 Jan 2023 20:20:38 +0000 (UTC)
-Subject: Re: [GIT PULL] perf/urgent for v6.2-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y80lgQ26uCQCdG+b@zn.tnic>
-References: <Y80lgQ26uCQCdG+b@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y80lgQ26uCQCdG+b@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.2_rc6
-X-PR-Tracked-Commit-Id: 5a8a05f165fb18d37526062419774d9088c2a9b9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2b299a1cd43271ffb582342a2a3c227aea0f32ac
-Message-Id: <167441883850.2461.18284817805016577797.pr-tracker-bot@kernel.org>
-Date:   Sun, 22 Jan 2023 20:20:38 +0000
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6E30F61CC457B;
+        Sun, 22 Jan 2023 21:21:21 +0100 (CET)
+Message-ID: <1bb796f9-b2dd-1c96-831a-34585770d80d@molgen.mpg.de>
+Date:   Sun, 22 Jan 2023 21:21:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [Intel-wired-lan] [PATCH net] ixgbe: allow to increase MTU to
+ some extent with XDP enalbed
+Content-Language: en-US
+To:     Jason Xing <kerneljasonxing@gmail.com>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.co,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>
+References: <20230121085521.9566-1-kerneljasonxing@gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230121085521.9566-1-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 22 Jan 2023 13:01:05 +0100:
+Dear Jason,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.2_rc6
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2b299a1cd43271ffb582342a2a3c227aea0f32ac
+Thank you for your patch.
 
-Thank you!
+Am 21.01.23 um 09:55 schrieb Jason Xing:
+> From: Jason Xing <kernelxing@tencent.com>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+There is a small typo in the summary: ena*bl*ed
+
+> I encountered one case where I cannot increase the MTU size with XDP
+> enabled if the server is equipped with IXGBE card, which happened on
+> thousands of servers. I noticed it was prohibited from 2017[1] and
+
+That’s included since Linux 4.19-rc1.
+
+> added size checks[2] if allowed soon after the previous patch.
+> 
+> Interesting part goes like this:
+> 1) Changing MTU directly from 1500 (default value) to 2000 doesn't
+> work because the driver finds out that 'new_frame_size >
+> ixgbe_rx_bufsz(ring)' in ixgbe_change_mtu() function.
+> 2) However, if we change MTU to 1501 then change from 1501 to 2000, it
+> does work, because the driver sets __IXGBE_RX_3K_BUFFER when MTU size
+> is converted to 1501, which later size check policy allows.
+> 
+> The default MTU value for most servers is 1500 which cannot be adjusted
+> directly to the value larger than IXGBE_MAX_2K_FRAME_BUILD_SKB (1534 or
+> 1536) if it loads XDP.
+> 
+> After I do a quick study on the manner of i40E driver allowing two kinds
+> of buffer size (one is 2048 while another is 3072) to support XDP mode in
+> i40e_max_xdp_frame_size(), I believe the default MTU size is possibly not
+> satisfied in XDP mode when IXGBE driver is in use, we sometimes need to
+> insert a new header, say, vxlan header. So setting the 3K-buffer flag
+> could solve the issue.
+
+What card did you test with exactly?
+
+> [1] commit 38b7e7f8ae82 ("ixgbe: Do not allow LRO or MTU change with XDP")
+> [2] commit fabf1bce103a ("ixgbe: Prevent unsupported configurations with
+> XDP")
+
+I’d say to not break the line in references.
+
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+>   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> index ab8370c413f3..dc016582f91e 100644
+> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> @@ -4313,6 +4313,9 @@ static void ixgbe_set_rx_buffer_len(struct ixgbe_adapter *adapter)
+>   		if (IXGBE_2K_TOO_SMALL_WITH_PADDING ||
+>   		    (max_frame > (ETH_FRAME_LEN + ETH_FCS_LEN)))
+>   			set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
+> +
+> +		if (ixgbe_enabled_xdp_adapter(adapter))
+> +			set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
+>   #endif
+>   	}
+>   }
+
+
+Kind regards,
+
+Paul
