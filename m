@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA4F676CC4
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 13:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D8A676CD9
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 13:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjAVMVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 07:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S230137AbjAVMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 07:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjAVMVH (ORCPT
+        with ESMTP id S230091AbjAVMVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 07:21:07 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FE24ECF;
-        Sun, 22 Jan 2023 04:21:05 -0800 (PST)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 81EA11BF205;
-        Sun, 22 Jan 2023 12:21:00 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS
-        SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM)
-Subject: [PATCH v2] perf: Various spelling fixes
-Date:   Sun, 22 Jan 2023 13:20:32 +0100
-Message-Id: <20230122122034.48020-1-didi.debian@cknow.org>
-X-Mailer: git-send-email 2.39.0
+        Sun, 22 Jan 2023 07:21:40 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B164ECF;
+        Sun, 22 Jan 2023 04:21:39 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30MCLNtB078561;
+        Sun, 22 Jan 2023 06:21:23 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674390084;
+        bh=vRtiqaH2cZhvkH918KNFvAw1BTARHwz0aD7sKDLAmPo=;
+        h=From:To:CC:Subject:Date;
+        b=Qj2kZiwRLv9uADNVQWbqMjUlxE0qbsu6tjH3bXp6XMrQ1XOkdgdExnMMAA8lHPpFF
+         TQ4s/Nyj2qVeZwtB0vlKIelKnNGySKaNB6mk/HaXHz5EjMhD3zSYUUmep28OuUQ5aK
+         ivB+fXgHLUBL8Wi0hYMowBuOIv3rI/I6Dvu4SlnQ=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30MCLNDi066521
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 22 Jan 2023 06:21:23 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 22
+ Jan 2023 06:21:23 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 22 Jan 2023 06:21:23 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30MCLM6T090032;
+        Sun, 22 Jan 2023 06:21:22 -0600
+From:   Achal Verma <a-verma1@ti.com>
+To:     <mranostay@ti.com>, <rogerq@kernel.org>, <lpieralisi@kernel.org>,
+        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski@linaro.org>, <vigneshr@ti.com>,
+        <tjoseph@cadence.com>, <sergio.paracuellos@gmail.com>,
+        <pthombar@cadence.com>, <linux-pci@vger.kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/5] PCI: add 4x lane support for pci-j721e controllers
+Date:   Sun, 22 Jan 2023 17:51:16 +0530
+Message-ID: <20230122122121.3552375-1-a-verma1@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix various spelling errors as reported by Debian's lintian tool.
+Adding of additional support to Cadence PCIe controller (i.e. pci-j721e.c)
+for up to 4x lanes, and reworking of driver to define maximum lanes per
+board configuration.
 
-"amount of times" -> "number of times"
-ocurrence -> occurrence
-upto -> up to
+Changes from v1:
+* Reworked 'PCI: j721e: Add PCIe 4x lane selection support' to not cause
+  regressions on 1-2x lane platforms
 
-Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
----
- tools/perf/Documentation/perf-bench.txt | 2 +-
- tools/perf/builtin-bench.c              | 2 +-
- tools/perf/builtin-script.c             | 2 +-
- tools/perf/util/evswitch.h              | 4 ++--
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Changes from v2:
+* Correct dev_warn format string from %d to %u since lane count is a
+  unsigned integer
+* Update CC list
 
-diff --git a/tools/perf/Documentation/perf-bench.txt b/tools/perf/Documentation/perf-bench.txt
-index a0529c7fa5ef..f04f0eaded98 100644
---- a/tools/perf/Documentation/perf-bench.txt
-+++ b/tools/perf/Documentation/perf-bench.txt
-@@ -18,7 +18,7 @@ COMMON OPTIONS
- --------------
- -r::
- --repeat=::
--Specify amount of times to repeat the run (default 10).
-+Specify number of times to repeat the run (default 10).
- 
- -f::
- --format=::
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index 334ab897aae3..bd4fd94a2ce0 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -150,7 +150,7 @@ unsigned int bench_repeat = 10; /* default number of times to repeat the run */
- 
- static const struct option bench_options[] = {
- 	OPT_STRING('f', "format", &bench_format_str, "default|simple", "Specify the output formatting style"),
--	OPT_UINTEGER('r', "repeat",  &bench_repeat,   "Specify amount of times to repeat the run"),
-+	OPT_UINTEGER('r', "repeat",  &bench_repeat,   "Specify number of times to repeat the run"),
- 	OPT_END()
- };
- 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 69394ac0a20d..8901acdd7f5b 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -1301,7 +1301,7 @@ static int perf_sample__fprintf_brstackinsn(struct perf_sample *sample,
- 		goto out;
- 
- 	/*
--	 * Print final block upto sample
-+	 * Print final block up to sample
- 	 *
- 	 * Due to pipeline delays the LBRs might be missing a branch
- 	 * or two, which can result in very large or negative blocks
-diff --git a/tools/perf/util/evswitch.h b/tools/perf/util/evswitch.h
-index fd30460b6218..8ffdbe526d98 100644
---- a/tools/perf/util/evswitch.h
-+++ b/tools/perf/util/evswitch.h
-@@ -22,9 +22,9 @@ bool evswitch__discard(struct evswitch *evswitch, struct evsel *evsel);
- 
- #define OPTS_EVSWITCH(evswitch)								  \
- 	OPT_STRING(0, "switch-on", &(evswitch)->on_name,				  \
--		   "event", "Consider events after the ocurrence of this event"),	  \
-+		   "event", "Consider events after the occurrence of this event"),	  \
- 	OPT_STRING(0, "switch-off", &(evswitch)->off_name,				  \
--		   "event", "Stop considering events after the ocurrence of this event"), \
-+		   "event", "Stop considering events after the occurrence of this event"), \
- 	OPT_BOOLEAN(0, "show-on-off-events", &(evswitch)->show_on_off_events,		  \
- 		    "Show the on/off switch events, used with --switch-on and --switch-off")
- 
+Changes from v3:
+* Use the max_lanes setting per chip for the mask size required since
+  bootloader could have set num_lanes to a higher value that the
+  device tree which would leave in an undefined state
+* Reorder patches do the previous change to not break bisect
+* Remove line breaking for dev_warn to allow better grepping and since
+  no strict 80 columns anymore
+
+Changes from v4:
+* Correct invalid settings for j7200 PCIe RC + EP
+* Add j784s4 configuration for selection of 4x lanes
+
+Changes from v5:
+* Dropped 'PCI: j721e: Add warnings on num-lanes misconfiguration' patch
+  from series
+* Reworded 'PCI: j721e: Add per platform maximum lane settings' commit
+  message
+* Added yaml documentation and schema checks for ti,j721e-pci-* lane
+  checking
+
+Changes from v6:
+* Fix wordwrapping in commit messages from ~65 columns to correct 75
+  columns
+* Re-ran get_maintainers.pl to add missing maintainers in CC
+
+Changes from v7:
+* Addressed review comments in ti,j721e-pci-ep.yaml and
+  ti,j721e-pci-host.yaml from v6
+* Added warn message if num-lanes property value is invalid.
+* Addressed build issue reported in
+  https://lore.kernel.org/all/202211260346.4JvNnDdc-lkp@intel.com/
+
+Changes from v8:
+* Use "const: 1" in ti,j721e-pci-ep.yaml and ti,j721e-pci-host.yaml
+  when num-lanes min and max values are equal.
+
+Matt Ranostay (5):
+  dt-bindings: PCI: ti,j721e-pci-*: add checks for num-lanes
+  PCI: j721e: Add per platform maximum lane settings
+  PCI: j721e: Add PCIe 4x lane selection support
+  dt-bindings: PCI: ti,j721e-pci-*: add j784s4-pci-* compatible strings
+  PCI: j721e: add j784s4 PCIe configuration
+
+ .../bindings/pci/ti,j721e-pci-ep.yaml         | 39 ++++++++++++++--
+ .../bindings/pci/ti,j721e-pci-host.yaml       | 39 ++++++++++++++--
+ drivers/pci/controller/cadence/pci-j721e.c    | 45 ++++++++++++++++---
+ 3 files changed, 112 insertions(+), 11 deletions(-)
+
 -- 
-2.39.0
+2.25.1
 
