@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29581676C8A
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9D2676C8F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjAVLyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 06:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S230026AbjAVLzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 06:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjAVLyV (ORCPT
+        with ESMTP id S230023AbjAVLy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 06:54:21 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8501125B3
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:54:18 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id t5so8489423wrq.1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:54:18 -0800 (PST)
+        Sun, 22 Jan 2023 06:54:57 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D0125B4
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:54:55 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso7264485wmn.5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SufkmAjwbNPzx+QZI0to5Uf48TUW+IZPLNjbNqCZpfI=;
-        b=agLJLLTVda4vzbo+pBm1nc5uVfx6hrGX4HQkgIojkD/1cyQqIJv/dW6ozQQZxh9acO
-         0GIArSOuUVD0jo2VEYapOBIRUz5rU0ickudZecB/MxBJcXysLhAmHyMc4oBteDTIVZMP
-         gWC6imLaRflwc3jb3Je1wClPZlQKNp6xyUYD3v0X33auCHxc+qD/ZA/jJBtt4IwIx7rF
-         gSScl4TsJrIet9k0uAS97cSICY1543XxKH25XG+KtqbOQ1xwZB+O3y7k0SPxq0AYdW3y
-         nsmpTPaZyS0wpbBSnQCu92eqyFbTR8SK3YHX60WCqpdfFl3mYAplQ0n+AxAh2HMkH8Q8
-         TEWQ==
+        bh=VLe1tCHvsXuqDEBtfO7OY5kLhydgi9CnGmhErJAm6aY=;
+        b=s0BAxEQrg1XNDKd+RDJjQ/lqdPTA7p1sTOMmyByolojk0mvaFqzqmy7GIdrIZxmIOf
+         nFUchdZptB8ZVzLanP/34atcmww1mMSAPnOW6ClddkbiU7eDltZQOUDza6VkttvsUHfc
+         VQreJV0TXJjnpWyAigdZSH569OgxnVx8rooyMeC0XkS7AD9xKYSlxnN4RqPAyi5VpF7k
+         CoH7kaCdBdozNk9M+weoHgP1irBiEMfOD3knAU/SvcsagkDEAe+ceFKjExWCJUNouNc/
+         k5Jv6eqzFnOZo2sgqVpIZZUumFywQQqcWtw67WTGWBMxjS7Nexwmrc+zVtNxlk1/BNXb
+         5cxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SufkmAjwbNPzx+QZI0to5Uf48TUW+IZPLNjbNqCZpfI=;
-        b=lcOtGTQKu0eRzd23o+Ek0IfrzdG70wPgCF9LLhptXuFBVFu/FU1/mmP6X9fcWx/xAw
-         ZjD1lsQQxutuWkpC4YOpcmmVCd2zv5023PVlKmIwRpjnv87J9t10lUEiQlSI+0IdiuhO
-         gJjlmSru2RyIxaP22IaZLxJP1zpXWtLwjXeDUPJxSdNFdtmxqwVotIFWCpFcixCWCqaw
-         sJKfXm/L8H/WkEZ0vmZUi4nTRCaHl+RBoseXrXhQRkhhqCSc/X0qA1EAoD8hCIzAK3uT
-         bHQ/OCsWcfXSOLjqug/6oTr8IvGQ77+VnkLWK305QgGpT1w8u0F1HwzeJSZ1URDSH+h0
-         4q0w==
-X-Gm-Message-State: AFqh2koa5afwf89NF285wetVLXxv3jZ5TKoUD32Z3+nKTjT/gsj8AkKr
-        jyuOvmftpZV0qakhO8/8VHdQkA==
-X-Google-Smtp-Source: AMrXdXt21M3CsHbnhN4nC75KtRaK9snE7H1KnN8u8SuCQjR3lZXo7Zes1x4/j1347YU7bM+ZYlALNg==
-X-Received: by 2002:adf:e9d2:0:b0:2bd:e6f5:5122 with SMTP id l18-20020adfe9d2000000b002bde6f55122mr17418436wrn.65.1674388457426;
-        Sun, 22 Jan 2023 03:54:17 -0800 (PST)
+        bh=VLe1tCHvsXuqDEBtfO7OY5kLhydgi9CnGmhErJAm6aY=;
+        b=p+mBqRwxNwOGIRwcIh9+1f+QDb/CrnQa2QdzENrDrZ7StbQnMBCoSQE2Go1xPePVKf
+         QtgQAqQH00c8QvruLnwBE7NOlsLef55UrmPP0cBib4xTBn+QZCYAL3VAwjujv+qQd4Rh
+         P0TxtLzssh0xPjpBl8BibT7tHxIVbqP/dSreUv7lwbucnYo/U3KY44X03crhiDw7+RIY
+         q0dFdXLtvTE+XMB+KabTMCddmMwdpm6x986yC8D0J4kzjWieLgYf5usDDgi9ztFTyDGZ
+         82576Lwu3fEEKxfIkbYy0d5Y7KfSqH5gIuOSr9G4Dzq/OlG4yQQNV7yd6M/q7AWhzKvS
+         9n4g==
+X-Gm-Message-State: AFqh2kpwGuHnjmh0dg7FqWPwLJs2/xOnSg95zMFtcYdBoVK1L24B0t2V
+        nb37jERGQHdQqyk6f83hmHhu5Q==
+X-Google-Smtp-Source: AMrXdXvuCQdb16Nj82HEsGUUdIjG5ZPXUogSicV9IYHza0HEoyjvxXi4JXn+3h6rll38KtJXF4JaFw==
+X-Received: by 2002:a05:600c:1508:b0:3d3:5166:2da4 with SMTP id b8-20020a05600c150800b003d351662da4mr20299706wmg.8.1674388494495;
+        Sun, 22 Jan 2023 03:54:54 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ba9-20020a0560001c0900b002b57bae7174sm2174746wrb.5.2023.01.22.03.54.12
+        by smtp.gmail.com with ESMTPSA id m37-20020a05600c3b2500b003daf681d05dsm8320826wms.26.2023.01.22.03.54.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 03:54:16 -0800 (PST)
-Message-ID: <f69adaf2-6582-c134-5671-4d6fd100fcf1@linaro.org>
-Date:   Sun, 22 Jan 2023 12:54:11 +0100
+        Sun, 22 Jan 2023 03:54:54 -0800 (PST)
+Message-ID: <995eb624-3efe-10fc-a6ed-883d52d591bb@linaro.org>
+Date:   Sun, 22 Jan 2023 12:54:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [RFC PATCH v2 30/31] kvx: Add power controller driver
+Subject: Re: [RFC PATCH v2 31/31] kvx: Add IPI driver
 Content-Language: en-US
 To:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -120,15 +120,15 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-31-ysionneau@kalray.eu>
+ <20230120141002.2442-32-ysionneau@kalray.eu>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120141002.2442-31-ysionneau@kalray.eu>
+In-Reply-To: <20230120141002.2442-32-ysionneau@kalray.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -136,56 +136,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 20/01/2023 15:10, Yann Sionneau wrote:
-> From: Jules Maselbas <jmaselbas@kalray.eu>
-> 
-> The Power Controller (pwr-ctrl) control cores reset and wake-up
-> procedure.
-
-
 > +
-> +static struct device_node * __init get_pwr_ctrl_node(void)
+> +int __init kvx_ipi_ctrl_probe(irqreturn_t (*ipi_irq_handler)(int, void *))
 > +{
-> +	const phandle *ph;
-> +	struct device_node *cpu;
-> +	struct device_node *node;
+> +	struct device_node *np;
+> +	int ret;
+> +	unsigned int ipi_irq;
+> +	void __iomem *ipi_base;
 > +
-> +	cpu = of_get_cpu_node(raw_smp_processor_id(), NULL);
-> +	if (!cpu) {
-> +		pr_err("Failed to get CPU node\n");
-> +		return NULL;
-> +	}
-> +
-> +	ph = of_get_property(cpu, "power-controller", NULL);
-> +	if (!ph) {
-> +		pr_err("Failed to get power-controller phandle\n");
-> +		return NULL;
-> +	}
-> +
-> +	node = of_find_node_by_phandle(be32_to_cpup(ph));
-> +	if (!node) {
-> +		pr_err("Failed to get power-controller node\n");
-> +		return NULL;
-> +	}
-> +
-> +	return node;
-> +}
-> +
-> +int __init kvx_pwr_ctrl_probe(void)
-> +{
-> +	struct device_node *ctrl;
-> +
-> +	ctrl = get_pwr_ctrl_node();
-> +	if (!ctrl) {
-> +		pr_err("Failed to get power controller node\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!of_device_is_compatible(ctrl, "kalray,kvx-pwr-ctrl")) {
-> +		pr_err("Failed to get power controller node\n");
+> +	np = of_find_compatible_node(NULL, NULL, "kalray,kvx-ipi-ctrl");
 
-No. Drivers go to drivers, not to arch directory. This should be a
-proper driver instead of some fake stub doing its own driver matching.
-You need to rework this.
+Nope, big no.
+
+Drivers go to drivers, not to arch code. Use proper driver infrastructure.
 
 Best regards,
 Krzysztof
