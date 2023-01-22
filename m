@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143296770E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7EC6770E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjAVRH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 12:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S231500AbjAVRIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 12:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbjAVRHq (ORCPT
+        with ESMTP id S231480AbjAVRHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 12:07:46 -0500
-Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11012003.outbound.protection.outlook.com [52.101.63.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4304CEB44;
+        Sun, 22 Jan 2023 12:07:50 -0500
+Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11012002.outbound.protection.outlook.com [52.101.63.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ABEEFB0;
         Sun, 22 Jan 2023 09:07:44 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZZXEUT3egUPRvDrBDe6rzdV1r5r3V3eyhQCX0SvScopxSSOLe7McM5cvJdJ33gaZmAa9XTBAr/ahwlsVFOtjtsZ/nq/5toL8CckQ0RneBDD/F/iYMmU5og3ju8RJcZE7F9gbffyraY9iMXvyhOI+Q7a+vM4cAIKcpOp9aqvTmOmvqymoIf8FovFhrDWf4kO+1557zFGImisYUrbut/h4roXxxa9cBxNn2tbhgcJmkie3uZJdyYlllDVGsZYsdKuEXCXdsp9RhmKP+c3iNvaQbMrU1rRR7yjwgIse9Ixci7xx3JQIlsB7X9O/YQzHYKvs/+lqJbPkJSvDuXMpv7CX/A==
+ b=Sx+c8KvKmtm6widRcvLyOr1nmSuPNrIoLAgZUvHLF4j3JtrBOWu6LfDz6ZGm7Ns+Oi0onblXCVikp3GD8hldOAJj7i/nTJylUx4pj5X0o3CsUF8QEUIOI+zWOL5X/PmTQWGRUD2iFp/vFU86sV2b2XKbdasA7vkIz13g54BMOkP2ZANcfF0tLeRXYZ9ZWFdBG/CaL10MeO9HN5d4u7BCezc8cs2X5m8Ix/6Ra+RPScL+LWNVGptVWGl4OqKRuZQ3w/87rWyNy14Xxc7iyIG7BEsHsO5YZgPAPndOEk8IGi64q/pfv/eKjxq+hmjoP+MdL8/MW2iTr0snC0oKmIHGGw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F33NeSakApfkP80lHUYIJtHnBNU8aDyUnI8b3FY0DHg=;
- b=nVWXUs6n5HD2ht9Ma4bw3BLeLarcWMpkh1t1Srf+5CsxeTrabBlCECekZ0RZrukAEbSpiphnjLRRvcp/61sjDfnB5PZM3LrsioairzO21KopgmzETsMJs0NZNFB6PZcJNaT2VvbMF4CKeoONgOG8D9YuDEYqZqs7hQm3us2jGDy+FbsB6sXiLwcf6E5zjeuC+BfDIspZTQMHIR31HctsV3VAPaEnfp+LewciZ40R1RNmhtFkkoqQWh5Jcg+B63kWLqvd1RCOUIRhCV8efx03Aw2u2IeH8jFlf7HXwqfZAqDtwljhb2MtOffPanP8eiOLtF2JbVxGXlh1EYWHmsTvZA==
+ bh=rIBdJsxCUmdswEgQ7f80fp1KQeiWBLq6UZqSGbOF+LY=;
+ b=oT2VkxlTKa36ZEyg5ApYT2ifUpk0YgSVtORlj3nDA9hzEPVEjFEbhCXx2KLgfdB7ctpzJodWwhnY7ss+DlpGviuRCWmMS6jN/gVXsTN/l+BLGiMf2EL2FIdKzdXEtra0noMQBP7Sk3K9Vx/zfb2cHGOqXeCIgJtznLKwDANVUGAValBCEt4T3cQTQwAVPTtGNw9V4B09FXzjWx6QcrWgDbPCYWKVFogk9qw4fw71lF/QSY1ONB5i2XEStvO7FLjQxVUG3uWtwNRe4TfpLWtlD+1YO8sfEcA8MKUC/8mJo79gZ3Lt4T2fwRznC7UYzdAC3/UiZGarsGjNTJcQyrmROw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F33NeSakApfkP80lHUYIJtHnBNU8aDyUnI8b3FY0DHg=;
- b=XvLFERo6ZlRiJhOiG3ns+bk1scnRxPtUKOLhgPFN/tMhA6XKOcbKJl4Pg8qAgCb4VlIp9r2CgULFRLFWIq+CfyL5AH6qqo292jRb/qHOp9TkZr8qOtzpj8STfCEjni1dYGMzA/1oSoWem1sVp0ggLj8F1ABK72bWcGzROY53aEw=
+ bh=rIBdJsxCUmdswEgQ7f80fp1KQeiWBLq6UZqSGbOF+LY=;
+ b=09QMIGI+ojFBRbw3ZRg35HZ4Xg4xZCqmgswhBHxH+I/V7I09dX+Vdj+ZZvP8vZjpxwmqmXVMEwpYHonpaWuX3idTdekhcH6dGgesj3TtNxd965nf7yaAc6fyQRu6SaNx8wOU60X87jEYM+Q1YOgP9Z9y8lgRAU/H/zep3F+XHBA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vmware.com;
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
@@ -40,7 +40,7 @@ Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
 Received: from PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::e710:a9a8:3bc8:d0b0]) by PH0PR05MB8703.namprd05.prod.outlook.com
  ([fe80::e710:a9a8:3bc8:d0b0%3]) with mapi id 15.20.6002.031; Sun, 22 Jan 2023
- 17:07:35 +0000
+ 17:07:36 +0000
 From:   Ajay Kaher <akaher@vmware.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         srivatsa@csail.mit.edu, amakhalov@vmware.com,
         vsirnapalli@vmware.com, tkundu@vmware.com, er.ajay.kaher@gmail.com,
         Ajay Kaher <akaher@vmware.com>
-Subject: [PATCH 6/8] eventfs: adding eventfs lookup, read, open functions
-Date:   Sun, 22 Jan 2023 22:37:05 +0530
-Message-Id: <1674407228-49109-6-git-send-email-akaher@vmware.com>
+Subject: [PATCH 7/8] eventfs: creating tracefs_inode_cache
+Date:   Sun, 22 Jan 2023 22:37:06 +0530
+Message-Id: <1674407228-49109-7-git-send-email-akaher@vmware.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1674407228-49109-1-git-send-email-akaher@vmware.com>
 References: <1674407228-49109-1-git-send-email-akaher@vmware.com>
@@ -61,51 +61,51 @@ X-ClientProxiedBy: SJ0PR05CA0074.namprd05.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|MW4PR05MB9322:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a47975e-5562-4199-6f4c-08dafc9b283c
+X-MS-Office365-Filtering-Correlation-Id: 98364896-cc4b-41fb-0dfb-08dafc9b28ce
 X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wCmdregk46XGjMCnE9yb40gExWNcgPiUukMuLPZxv5foNDzCUVwCCJT1aIB9HoG9YV53s15bZUlOq+Atc5E8NNMHPqBDtofgue7TCDFi50t+eGAuuUuJzVlYKSWsBSc8qvIRkcSUhm/ans6aH3WRmAVlvOqeGFLWirkMkSSXWy+Vp1IUGzAnNg7x4ddLB7SgYKm/KpZQ7ia8yyu5pLR8j1NgCo16lnmMJRuYkIzxS7YHJmbV70e3hODXJMJZmwp601sIpHUNo48kbLCKu3ZlohlLV9bKbY5H3KH/kHYuOPHN+ioZV/7HdiTLwCP/W8RLG61umg0j4+fqf/Hp4/YuQw0aHqOqyWlaRFGB95sWA6gifhFsPrsjDqJhqCIShUtkLYJ4oWVz9YABN3xf8wKRwUOnEyDxHHVudCXqSWvtCEzIZIVu9LxRcuWRGfru3s14zqtiDWD+khv331CtFC3MIbVPJ5YjcsL9iZ53KqWL3naULbYebj7MoM31lXVka2wVZiDpqthcqQQ3WN4F9nsqu0FqEURzYE9snru9Pu8DxFtAqdyWwwlMCT9kwerxQkjszZHyEDR1n0+UQL8W3t3PPicJzz+arZkLLnhr5sJJw/gXDHY4C1kN3N9lKTWlC/zq3iv6HR3+GHx9jDhgCIyCxyOEexdq6yguwY1I28xQT17mwL5wBitrDqop8UwfvjjOSBDs+RgFpYccL5JfvGa39w==
+X-Microsoft-Antispam-Message-Info: I/Otofv8srmNB6hAW+otLKZ9CNNe9GeVnkUPzYx1kWcj/730/8REwJLJ1TXfpkr0/HXRqCocUK8d92ouI8moD/vAmhDBTk1JSKbzpe7rPvY/Us2c9SoizY7P3QXVeB6hKvlbZvXCEYrBDEv4YG9j4cAsx4bLNwPV2WMw0Wu8VCRkhnW0+0olRFaRi9UNUNsXaApFYPByjn4gZB/bvJkkFH2trcmmJ4lK9ZHFNVux0FcyMBI7xmBisBXLESQpvhgXAfkYTUEYtguxNDOi5ii0ybIQfio63Xh253GtoXNmkIdycolESZYynTJ3UsBN9dyUXlponlZtB8rS5kqyGGMZq7RIb7bCDdBmbl2KqT084rC6WRFRMXDWn1ojcRR+vmohfKx7W/DvbnGPy+NPx8Qv6OJd4fcM/eEZgPSDoAI0fiLcTh4u7Q4DQoOztYrB1vHl+vobyqugLYkk0nLD9JCB8jMv5l6rmBHY8uKmAeEc7bYd8Oo6CAX4MVT+lHgWBjnhRMjv8+rCZTWfCs83p1nFgiErxJav2LK4Mg32c2uJVjiiZNBJ28+mPfGDFnd5neDqcwBteTOzaiBTYwjYuCaz4Qd23JtZI5uwweGSOgYQK5drueLR6xnSCXXENaPN8twrCO5O3N8oYPRBaks4sTr6Jqto7DS+tm4EBkxyYWpChL5HqqOrYC+pF+g9eqSTbBPgl9tQ1V/Bn04LSTzQQAomQA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199015)(36756003)(8676002)(478600001)(2616005)(4326008)(66556008)(66476007)(6512007)(41300700001)(186003)(66946007)(26005)(2906002)(86362001)(83380400001)(6506007)(107886003)(316002)(6666004)(52116002)(6486002)(5660300002)(8936002)(38350700002)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UdMM+GLL0Q0ed4SJazLtbRI4l6JqAB7P1J7U9Ezr0Iv1+MjnI3LWbs1Gr0KB?=
- =?us-ascii?Q?OBLQvPzDGKL5XU/N+vcYsCN0TX5Nr0d45a14vcFcAeA4YUQmJta4KDCnbPL0?=
- =?us-ascii?Q?ctWCgISWgB3MyMWABYswkx0hywAzSwmxhtGAFi9KI4T6ieryAxze2BIDB2i3?=
- =?us-ascii?Q?QaSE0GljiHX0Bx9F72vD1iJ9cNlHCSYI+sbjb//62Tpo//J4yaT0czkgsuzu?=
- =?us-ascii?Q?HMddAOEj2nWAAJgQt6/q67Qk2chlvBXCupRZVRmR9kmuGD0iKc9ANzFTwRNo?=
- =?us-ascii?Q?K96kdb4TxI3vZ7mlPRtcn/sdaCMaEM8378XqCtbPU87WeSyf0FV4fb4CzDzf?=
- =?us-ascii?Q?xKWGkgVY5HhiDUltiCTWm0hQ+vsNxtrLPCrX5w/x4hCjkptkFw1R9Qw3kL1y?=
- =?us-ascii?Q?4u53n8FOxxeFNSi1U/NWOuLni00YAcMjxkwO1fYZxQXbKKebBMROhR+5f5Dr?=
- =?us-ascii?Q?xbnof3ULa3GgAredsyPe8FOanofKIZFCD/IWpZG/wpZJi0RP5b/fmYXWKi8W?=
- =?us-ascii?Q?cTr9KpCbd6efBeuvLHPdUyKPBdIgwL17SMQ1AtH966iQTT98z/+r1Oypw5Kt?=
- =?us-ascii?Q?6oA5vYOZJewg2v3ybeyyWjRzi5e4vC1hh9kdYxY3Rtvr/SQ39aH3Z/xiMnOz?=
- =?us-ascii?Q?3kj3i6hr9Z1/QqxDaXIjSGotEck21gL1sLBm05DU5zami7qOJ51ASPsyQfJN?=
- =?us-ascii?Q?1XmQC75RVbvWCQmNHkNRibEUaFGCzWjXJqAV1Ih32MHEiaK3wWnFmAkyYD/I?=
- =?us-ascii?Q?LS0F2SMWU0xb02kLff+r40f+U+TynhmpX915zuRz0awzc+OLAdCpVZ+rlKBU?=
- =?us-ascii?Q?3g6WlANgvI+7Ss7VB37x6g4KlWxjiUMxz81pHfHQcV+A7Hvk79M61aTzTfyD?=
- =?us-ascii?Q?PjFZGyLoMlykb00+QBBkElDFuEWcASKJdZLzKcxSkkqRl6kg0W2rXqTlxJNP?=
- =?us-ascii?Q?wtw+y5NWK39ACHj/9tGu6bqVKXCEsq/HHc30WdIbsSgZ/XJxJCCrrVMnR2qH?=
- =?us-ascii?Q?rmRdQnc5p2MGf/OlFhGFaCFdujXwW8JKjBKagHKB7g1e8ep8HnzlNzpPkuBA?=
- =?us-ascii?Q?S2MMzSVgceFLvMbRTsGAHjntvNNqEHdxMbacQElxZ//21iF5YrxXfwXR4Bpt?=
- =?us-ascii?Q?8Nc6n+SMsLBh33iKyTu14AOZEq2k7tb+nliIjSemgL4U4VoqgVwr+sJ0zUxl?=
- =?us-ascii?Q?UlPUt9P6Cv+ChCLTsh8gkFoCgv3hfA0/jniuaayMJz6LaNZ0zxSrYRGBQA+H?=
- =?us-ascii?Q?4gxFfOKAMkMU0az4+9/JnZTCwjeo2fi5UfSli+dXoKSsrOZm/Hy8tYRaUD+O?=
- =?us-ascii?Q?i4YPnWOAgHpnKfnqOX98bmnv4i49+8STBlGZ6ThOwgcApiD62vArCBW3KFjJ?=
- =?us-ascii?Q?AdBGlKBIeQyUXnTxF1Hj3XmLa0XevkxZDXitlHpf3LLLHiXiRUen8bnWdsDt?=
- =?us-ascii?Q?o+ZRAcFlBBSqX1IXslSi7WD16ja1flGF6TWrIWUMBqFF+FpCPuDK08+RRR2t?=
- =?us-ascii?Q?NslARQ11en9O+iDYkchikXTJs1coieDMnnP2iqUqsNpUv0uaqcFkdzgYSZBv?=
- =?us-ascii?Q?1l2W85kb9tnZcy5SlIubOD1lnDoUXyK0kL2fAFj4?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sHMVVb0uCUTVVdiTVJd6RJjbsjo748lDlpoBuWEUunIgpNVfjtfkNHHb27AS?=
+ =?us-ascii?Q?2nU0qA2ZI2kZ4rZ4O5ESgwT7GPQEdnkg8ABNIA7/0qRfVHgyW8DNpmU8fbA5?=
+ =?us-ascii?Q?8rgtoTTMXqLBPnHma4aJB5vQnABM7XbhwvdKkjJELHuzkdlqS7Rf247MlAWG?=
+ =?us-ascii?Q?+FFuWKtYrsIXjcI/fxgnUsG0uwtCmBQuKm8epxoJGzFDYUDVyaA1Lvn4+WeB?=
+ =?us-ascii?Q?9YIUUTNUeHvDHZWdC+omKnNlmjIumczjbrVdCAET8PrtL1gOyOU+PaRKONDO?=
+ =?us-ascii?Q?OxHW49MatAvZ04RrDX924vnzzO6zz/OwZipTkqwUZ3ObIUQ9OG4hruZAhkOT?=
+ =?us-ascii?Q?RxDtWQ6UC7oYBs4OlZ9zU3Yq3MhEmhFQmue7a17L3jSHTqCcXEmjNd/YewES?=
+ =?us-ascii?Q?485WArv5ORxoh+Ik4H/XQpjZRdemggjKd8acVW3u5PBGbzb9Y/OgaXTI/uNl?=
+ =?us-ascii?Q?inDekRkYNlcb3MczPYLFXM9Jl3V8dkWIGBIX6BtHHFutjYQi3PrVfeH3AGk/?=
+ =?us-ascii?Q?Xr9IzbP2oYzgLqjPnfcfDlWhXa/aBc5dnIO1npIuddL89vSJJqTQ6NTaxikA?=
+ =?us-ascii?Q?7fte7/EDUewWKXYycxBiVXEBdfoUcVBbWgMYB1gTNKXa4Mx1rvdjeJp/KcNA?=
+ =?us-ascii?Q?B+StdURFu0fJOj10g0bVZ2ZfiXQwulikE3+kHrK0ufl8ujAh9xBm4Zeedr5B?=
+ =?us-ascii?Q?twtBkATlLduLdLHWym2ty3ynmFTKoHWZ2JLEHltJZrHSWUHo474qYhnglTHJ?=
+ =?us-ascii?Q?mKUy0pxr62CnZx56FPBtSXAsJf2h6dYsJB+Ias+lkwP+r9ot21pP57xVNTIr?=
+ =?us-ascii?Q?mKvYXBehXFTRy9qTcrgYQwcNwT+R5dgDB9UCSR7zZRAEx1EKOpHUNP7y/1jW?=
+ =?us-ascii?Q?4J56Tjqdombzj7T9DizQP/a76oNfbBYCowMon1oSsJ94F1hRLQxYyWF7SFh+?=
+ =?us-ascii?Q?HF3ojgClztba2ZSGCuCtvMBcAAAuGZMLaC+8An3XUQtxQyl5x/pZze/7v28r?=
+ =?us-ascii?Q?J/tINOJSIZOJJIR/c6BOKObK02VB+c0e+9eYO6SFsH8wAykwIdWnA8844I5z?=
+ =?us-ascii?Q?lcBv9wEAGPmmVSTXuMXBFMDibyVotKkxscZ/MMrPI6+kFXwXPObTDTthEYzi?=
+ =?us-ascii?Q?6kFwUGfUMFIGilus8i5fG9JwfgkPChoZmvJ9B8Msrpfqc+9vhiEHltRvOt5m?=
+ =?us-ascii?Q?kNjMfWMH7YzsXR4Yy1/TWAHRbgRq8KqphmISCl6fvmUvOSQ4HdUSI1mbi39l?=
+ =?us-ascii?Q?BYMRUTEH6j0adfNf8F5NWt8ypfgCIU2rQW3AYOlsFYl/5EFo6NIi/baV+rob?=
+ =?us-ascii?Q?+NrV1SiXXkHyToqh0GNDOYe94jOorwfFTW0nYR+de5q9w9ZgeF5Pz8VXPYcB?=
+ =?us-ascii?Q?T4XtRBBwe+tJZJtetgECHvhNcNzlkSYdjXdPhfs1RXJWeFiprVynHevqAoX+?=
+ =?us-ascii?Q?SMxS6vAMTurQza98P3FjHzG+MkfzEUI7UPoHMNaM8k3iEzl1wJw8ffMbaOGR?=
+ =?us-ascii?Q?wX0sfd4X5Tzh+NPv9aRY/DSOiP5oWKa3eLa/KjaCmuOiRNjQh/LsEwHJKDEX?=
+ =?us-ascii?Q?j8G+WKejYaIsBFQHXBOfExiea+dKm/QiJgyatxJZ?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a47975e-5562-4199-6f4c-08dafc9b283c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98364896-cc4b-41fb-0dfb-08dafc9b28ce
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2023 17:07:35.3088
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2023 17:07:36.2319
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W8SkbL9LW7AIQm5P1n5GIgNQuYJq3RkEJ7gGjWHufbA3gTVAROBCS0R6QZeBX+oR2B27Zkwg+gFbSrr40jA7Og==
+X-MS-Exchange-CrossTenant-UserPrincipalName: cuREX2HtdDCE2JMoM/5Bfi/p68W0poRGWYpLumIMFAzElM+2tjZjzRlfs6uZLr5aHnVVs/5vbwDBeO5p3hDP7A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR05MB9322
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -117,229 +117,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding following functions to eventfs:
-eventfs_set_ef_status_free()
-eventfs_post_create_dir()
-eventfs_root_lookup()
-eventfs_release()
-dcache_dir_open_wrapper()
+Creating tracefs_inode_cache which is a cache of tracefs_inode.
+Adding helping functions:
+tracefs_alloc_inode()
+tracefs_free_inode()
 
 Signed-off-by: Ajay Kaher <akaher@vmware.com>
 Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Tested-by: Ching-lin Yu <chinglinyu@google.com>
 ---
- fs/tracefs/event_inode.c | 179 +++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/tracefs.h  |   2 +
- 2 files changed, 181 insertions(+)
+ fs/tracefs/inode.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
-index 28866c0..bcee34e 100644
---- a/fs/tracefs/event_inode.c
-+++ b/fs/tracefs/event_inode.c
-@@ -156,10 +156,189 @@ struct dentry *eventfs_create_dir(const char *name, umode_t mode,
- 	return eventfs_end_creating(dentry);
- }
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 6d950d1..8fdbd81 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -21,13 +21,33 @@
+ #include <linux/parser.h>
+ #include <linux/magic.h>
+ #include <linux/slab.h>
++#include "internal.h"
  
-+/**
-+ * eventfs_set_ef_status_free - set the ef->status to free
-+ * @dentry: dentry who's status to be freed
-+ *
-+ * eventfs_set_ef_status_free will be called if no more
-+ * reference remains
-+ */
-+void eventfs_set_ef_status_free(struct dentry *dentry)
-+{
-+	struct tracefs_inode *ti_parent;
-+	struct eventfs_inode *ei_parent;
-+	struct eventfs_file *ef;
-+
-+	ti_parent = get_tracefs(dentry->d_parent->d_inode);
-+	if (!ti_parent || !(ti_parent->flags & TRACEFS_EVENT_INODE))
-+		return;
-+	ei_parent = ti_parent->private;
-+
-+	list_for_each_entry(ef, &ei_parent->e_top_files, list) {
-+		if (!strcmp(ef->name, dentry->d_name.name)) {
-+			ef->created = false;
-+			ef->dentry = NULL;
-+			break;
-+		}
-+	}
-+}
-+
-+/**
-+ * eventfs_post_create_dir - post create dir routine
-+ * @eventfs_file: eventfs_file of recently created dir
-+ *
-+ * Files with-in eventfs dir should know dentry of parent dir
-+ */
-+void eventfs_post_create_dir(struct eventfs_file *ef)
-+{
-+	struct eventfs_file *ef_child;
-+	struct tracefs_inode *ti;
-+
-+	/* fill parent-child relation */
-+	list_for_each_entry(ef_child, &ef->ei->e_top_files, list) {
-+		ef_child->d_parent = ef->dentry;
-+	}
-+
-+	ti = get_tracefs(ef->dentry->d_inode);
-+	ti->private = ef->ei;
-+}
-+
-+/**
-+ * eventfs_root_lookup - lookup routine to create file/dir
-+ * @dir: directory in which lookup to be done
-+ * @dentry: file/dir dentry
-+ * @flags:
-+ *
-+ * Used to create dynamic file/dir with-in @dir, search with-in ei
-+ * list, if @dentry found go ahead and create the file/dir
-+ */
-+
-+static struct dentry *eventfs_root_lookup(struct inode *dir,
-+					  struct dentry *dentry,
-+					  unsigned int flags)
+ #define TRACEFS_DEFAULT_MODE	0700
++static struct kmem_cache *tracefs_inode_cachep __ro_after_init;
+ 
+ static struct vfsmount *tracefs_mount;
+ static int tracefs_mount_count;
+ static bool tracefs_registered;
+ 
++static struct inode *tracefs_alloc_inode(struct super_block *sb)
 +{
 +	struct tracefs_inode *ti;
-+	struct eventfs_inode *ei;
-+	struct eventfs_file *ef;
-+	struct dentry *ret = simple_lookup(dir, dentry, flags);
 +
-+	ti = get_tracefs(dir);
-+	if (!(ti->flags & TRACEFS_EVENT_INODE))
++	ti = kmem_cache_alloc(tracefs_inode_cachep, GFP_KERNEL);
++	if (!ti)
 +		return NULL;
 +
-+	ei = ti->private;
-+	list_for_each_entry(ef, &ei->e_top_files, list) {
-+		if (strcmp(ef->name, dentry->d_name.name))
-+			continue;
++	ti->flags = 0;
 +
-+		if(ef->created)
-+			continue;
-+
-+		ef->created = true;
-+
-+		if (ef->ei)
-+			ef->dentry = eventfs_create_dir(ef->name, ef->mode, ef->d_parent,
-+							ef->data, ef->fop, ef->iop, 0);
-+		else
-+			ef->dentry = eventfs_create_file(ef->name, ef->mode, ef->d_parent,
-+							 ef->data, ef->fop, 0);
-+
-+		if (IS_ERR_OR_NULL(ef->dentry)) {
-+				ef->created = false;
-+		} else {
-+			if (ef->ei)
-+				eventfs_post_create_dir(ef);
-+			ef->dentry->d_fsdata = ef;
-+			dput(ef->dentry);
-+		}
-+		break;
-+	}
-+	return ret;
++	return &ti->vfs_inode;
 +}
 +
-+/**
-+ * eventfs_release - called to release eventfs file/dir
-+ * @inode: inode to be released
-+ * @file: file to be released (not used)
-+ */
-+static int eventfs_release(struct inode *inode, struct file *file)
++static void tracefs_free_inode(struct inode *inode)
 +{
-+	struct tracefs_inode *ti;
-+	struct eventfs_inode *ei;
-+	struct eventfs_file *ef;
-+
-+	ti = get_tracefs(inode);
-+	if (!(ti->flags & TRACEFS_EVENT_INODE))
-+		return -EINVAL;
-+
-+	ei = ti->private;
-+	list_for_each_entry(ef, &ei->e_top_files, list) {
-+		if (ef->created)
-+			dput(ef->dentry);
-+	}
-+	return dcache_dir_close(inode, file);
++	kmem_cache_free(tracefs_inode_cachep, get_tracefs(inode));
 +}
 +
-+/**
-+ * dcache_dir_open_wrapper - eventfs open wrapper
-+ * @inode: not used
-+ * @file: dir to be opened (to create it's child)
-+ *
-+ * Used to dynamic create file/dir with-in @file, all the
-+ * file/dir will be created. If already created then reference
-+ * will be increased
-+ */
-+int dcache_dir_open_wrapper(struct inode *inode, struct file *file)
+ static ssize_t default_read_file(struct file *file, char __user *buf,
+ 				 size_t count, loff_t *ppos)
+ {
+@@ -346,6 +366,9 @@ static int tracefs_show_options(struct seq_file *m, struct dentry *root)
+ }
+ 
+ static const struct super_operations tracefs_super_operations = {
++	.alloc_inode    = tracefs_alloc_inode,
++	.free_inode     = tracefs_free_inode,
++	.drop_inode     = generic_delete_inode,
+ 	.statfs		= simple_statfs,
+ 	.remount_fs	= tracefs_remount,
+ 	.show_options	= tracefs_show_options,
+@@ -675,10 +698,26 @@ bool tracefs_initialized(void)
+ 	return tracefs_registered;
+ }
+ 
++static void init_once(void *foo)
 +{
-+	struct tracefs_inode *ti;
-+	struct eventfs_inode *ei;
-+	struct eventfs_file *ef;
-+	struct inode *f_inode = file_inode(file);
-+	struct dentry *dentry = file_dentry(file);
++	struct tracefs_inode *ti = (struct tracefs_inode *) foo;
 +
-+	ti = get_tracefs(f_inode);
-+	if (!(ti->flags & TRACEFS_EVENT_INODE))
-+		return -EINVAL;
-+
-+	ei = ti->private;
-+	list_for_each_entry(ef, &ei->e_top_files, list) {
-+		if (ef->created) {
-+			dget(ef->dentry);
-+			continue;
-+		}
-+
-+		ef->created = true;
-+
-+		inode_lock(dentry->d_inode);
-+		if (ef->ei) 
-+			ef->dentry = eventfs_create_dir(ef->name, ef->mode, dentry,
-+							ef->data, ef->fop, ef->iop, 1);
-+		else
-+			ef->dentry = eventfs_create_file(ef->name, ef->mode, dentry,
-+							 ef->data, ef->fop, 1);
-+		inode_unlock(dentry->d_inode);
-+
-+		if (IS_ERR_OR_NULL(ef->dentry)) {
-+			ef->created = false;
-+		} else {
-+			if (ef->ei)
-+				eventfs_post_create_dir(ef);
-+			ef->dentry->d_fsdata = ef;
-+		}
-+	}
-+	return dcache_dir_open(inode, file);
++	inode_init_once(&ti->vfs_inode);
 +}
 +
- static const struct file_operations eventfs_file_operations = {
-+	.open           = dcache_dir_open_wrapper,
-+	.read		= generic_read_dir,
-+	.iterate_shared	= dcache_readdir,
-+	.llseek		= generic_file_llseek,
-+	.release        = eventfs_release,
- };
+ static int __init tracefs_init(void)
+ {
+ 	int retval;
  
- const struct inode_operations eventfs_root_dir_inode_operations = {
-+	.lookup		= eventfs_root_lookup,
- };
- 
- /**
-diff --git a/include/linux/tracefs.h b/include/linux/tracefs.h
-index 52201f3..952d248 100644
---- a/include/linux/tracefs.h
-+++ b/include/linux/tracefs.h
-@@ -63,6 +63,8 @@ int eventfs_add_top_file(const char *name, umode_t mode,
- 
- void eventfs_remove(struct eventfs_file *ef);
- 
-+void eventfs_set_ef_status_free(struct dentry *dentry);
++	tracefs_inode_cachep = kmem_cache_create("tracefs_inode_cache",
++						 sizeof(struct tracefs_inode),
++						 0, (SLAB_RECLAIM_ACCOUNT|
++						     SLAB_MEM_SPREAD|
++						     SLAB_ACCOUNT),
++						 init_once);
++	if (!tracefs_inode_cachep)
++		return -ENOMEM;
 +
- struct dentry *tracefs_create_file(const char *name, umode_t mode,
- 				   struct dentry *parent, void *data,
- 				   const struct file_operations *fops);
+ 	retval = sysfs_create_mount_point(kernel_kobj, "tracing");
+ 	if (retval)
+ 		return -EINVAL;
 -- 
 2.7.4
 
