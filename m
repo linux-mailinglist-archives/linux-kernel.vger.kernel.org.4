@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81729676BE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 10:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB11676BEE
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 10:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjAVJhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 04:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S229807AbjAVJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 04:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjAVJg6 (ORCPT
+        with ESMTP id S229675AbjAVJhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 04:36:58 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D864414497
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 01:36:51 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so6535025wmc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 01:36:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NpxZop004lAiKqyB5tDsS8TgVaCDtVZHtlMKxmTjC0g=;
-        b=ECgPRWWCsy9NToHICzR2kX6HSwQWLtqjk0hUPwSUnXp7BbMafWTGTbDh4bWHQX5+HK
-         5NCXN0o+5LrU1+yn6VoBH6eLxLdefhX0uQhbbghH/hxBv4i3PHrtMuVlx0D5Ww+vfWcN
-         tGLlKwRQlCRJB0xtgLUilAKp6pRbrcbSEEbOa57RQvfjuHbf6GQ+V2uFGwlhapFDj8fl
-         Oin1rIuEMVzaPPWAuMzujhb6hNCwgfBguKuQQoq58KOzr1bzruv0OyUSDWTlNYEskN7o
-         9COOOvQWLvDU+RgGhHr2QQz57uZztka0mqwwr6vs9R8ZAhT9W7qada8ZSCYmkRAAgyht
-         /fYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpxZop004lAiKqyB5tDsS8TgVaCDtVZHtlMKxmTjC0g=;
-        b=UI0M/IJFSZsNJ8s0AnBqoj2pEf9AbofDQMSgz5gHg/8MW6BavDO/zPQb6oR9+jz1AZ
-         hJO1luoWCcsLzB472eghvfBMQp7/1pcYgggQlJ0lFWS/Cys6Anx7v6syT36noRno0GX+
-         N+knaSEmZyRotqeLjfKOYOtFu0vv334qEkIsLq1uUmQmmYMllybezGdvHSpxQ4QDVDTi
-         OiiQI5c49GbMr3iYHRu6S9A7wX4QYy3OdvZKNdZMZHAmNpZEh72FRQSiCi3Lco99g8wJ
-         VHSVnaBER6rfz4/thJ2xv/jbp6GR+e9a1nkJI7qNGir2C5WCw1/qLOGVx0PHjrQi8o9g
-         1+Ew==
-X-Gm-Message-State: AFqh2kqtJbLUBKwcIQjZV2+5Xs74M96ujH1u/ad0LDKgsY895+zvKFuL
-        fVex3sjdQ0pNsN3Y7QvT5RCpJA==
-X-Google-Smtp-Source: AMrXdXuzS6IDyC+K25N0DkOt4MKy8IOR4GrMzqYb0s85tX7fURVExIEukvDBl8Jd5pVgK92NWlbYlw==
-X-Received: by 2002:a05:600c:35d6:b0:3db:2ad:e344 with SMTP id r22-20020a05600c35d600b003db02ade344mr16706207wmq.13.1674380210417;
-        Sun, 22 Jan 2023 01:36:50 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003daff80f16esm10367065wmg.27.2023.01.22.01.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 01:36:50 -0800 (PST)
-Message-ID: <07ce1655-d84b-e4f1-02d4-b69568830175@linaro.org>
-Date:   Sun, 22 Jan 2023 10:36:45 +0100
+        Sun, 22 Jan 2023 04:37:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000C1420B;
+        Sun, 22 Jan 2023 01:37:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5572760BAF;
+        Sun, 22 Jan 2023 09:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC521C4339C;
+        Sun, 22 Jan 2023 09:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674380255;
+        bh=5DRyo3CrCvjcrQiE2XRnY3KDz/9FE09qT4m/dJZH0aE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lNZIpcXkSoIvkFOhU4vTZhoSMYH/FNrvyVZoqcjnGD2/s69Cq72+OwArNRF4Y0XfB
+         K8wZSWe0o3Ez8X35Z8m9gZ5px+EoB3UpyoXrO0Jn3YGzCabyabgxUQZUD9s+4ayFxf
+         TwxwFCrsUDltNDS2jG8PhJQ98LTT3bm3MWRgUsXNBoAOYjvbr4vzKAgkShJiKAK0om
+         ZpXDxImFRySz+saPmOQDwYI/CYL9PeQJFnK1HoJDjhN/RikP2iSzxT+WsnOUXmtCdd
+         Ylgn69DBTJn7EbQ8Orshu3ZKKQejnYB1OhOwAkeUsLr7Ooym/PKu23lPzYon+3ZGI+
+         QXiwxf144D42g==
+Received: by mail-yb1-f173.google.com with SMTP id 123so11561336ybv.6;
+        Sun, 22 Jan 2023 01:37:35 -0800 (PST)
+X-Gm-Message-State: AFqh2kqmQTJWa4dsaQBF89yhes7R6ITscTNk4uOyEH3gha9E7tbROEFA
+        uyeQ9/LTjyymU9hvZu9ZuF30wuVssaJmpK4Lc7Q=
+X-Google-Smtp-Source: AMrXdXsNA4vdApz7Jqsu/ybWJW5C5xYsmc6pnH1yI7UZkk+OVVQkpt4eufUHjmXdw7J7YX64IDe4L/lGXFrrrcbkdYc=
+X-Received: by 2002:a25:344a:0:b0:803:60ae:431c with SMTP id
+ b71-20020a25344a000000b0080360ae431cmr697945yba.642.1674380254802; Sun, 22
+ Jan 2023 01:37:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 5/9] vendor-prefixes: Add VIA Labs, Inc.
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Johan Hovold <johan@kernel.org>, Rob Herring <robh@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230121175639.12818-1-linux.amoon@gmail.com>
- <20230121175639.12818-6-linux.amoon@gmail.com>
- <d0bdc8f9-5ea8-5c77-3193-a2932c87156a@linaro.org>
- <CANAwSgT4P544a2MeybV_hXkDfc_HXiO4Rnxt4qG3RM1-X-KCEQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CANAwSgT4P544a2MeybV_hXkDfc_HXiO4Rnxt4qG3RM1-X-KCEQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230120123534.137413-1-bagasdotme@gmail.com> <20230120123534.137413-3-bagasdotme@gmail.com>
+In-Reply-To: <20230120123534.137413-3-bagasdotme@gmail.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 22 Jan 2023 11:37:08 +0200
+X-Gmail-Original-Message-ID: <CAFCwf11O75ivb2RjXCvbOyNRTgYrbNz8JSDgHprnoNS1vx9SQg@mail.gmail.com>
+Message-ID: <CAFCwf11O75ivb2RjXCvbOyNRTgYrbNz8JSDgHprnoNS1vx9SQg@mail.gmail.com>
+Subject: Re: [PATCH linux-next 2/3] habanalabs: Fix list of /sys/class/habanalabs/hl<n>/status
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Freedesktop DRI List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux KVM <kvm@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Ofir Bitton <obitton@habana.ai>,
+        Sean Christopherson <seanjc@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/01/2023 08:04, Anand Moon wrote:
-> Hi Krzysztof,
-> 
-> On Sun, 22 Jan 2023 at 00:21, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 21/01/2023 18:56, Anand Moon wrote:
->>> Add the vendor prefix for VIA Labs, Inc. (VLI) is a supplier
->>> of USB and USB Power Delivery controllers for multi-functional devices
->>> and platforms.
->>>
->>> Website: https://www.via-labs.com/
->>>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>> ---
->>> v3: - None
->>> V2: - drop Drop marketing, so without "leading".
->>
->> Wasn't this merged? Didn't you get email?
->>
-> 
-> Yes, it was merged into USB testing branch.
-> I have rebased it on Linux master 6.2-rc5,
-> I hope this series picks up again.
+On Fri, Jan 20, 2023 at 2:35 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Stephen Rothwell reported htmldocs warnings when merging accel tree:
+>
+> Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected indentation.
+> Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected indentation.
+> Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote ends without a blank line; unexpected unindent.
+>
+> Fix these by fixing alignment of list of card status returned by
+> /sys/class/habanalabs/hl<n>/status.
+>
+> Link: https://lore.kernel.org/linux-next/20230120130634.61c3e857@canb.auug.org.au/
+> Fixes: 0a14c331682f61 ("habanalabs: update device status sysfs documentation")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  .../ABI/testing/sysfs-driver-habanalabs       | 23 ++++++++++---------
+>  1 file changed, 12 insertions(+), 11 deletions(-)
+>
+> diff --git a/Documentation/ABI/testing/sysfs-driver-habanalabs b/Documentation/ABI/testing/sysfs-driver-habanalabs
+> index df2ca1a401b5a1..1b98b6503b23f5 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-habanalabs
+> +++ b/Documentation/ABI/testing/sysfs-driver-habanalabs
+> @@ -202,17 +202,18 @@ Date:           Jan 2019
+>  KernelVersion:  5.1
+>  Contact:        ogabbay@kernel.org
+>  Description:    Status of the card:
+> -                "operational" - Device is available for work.
+> -                "in reset" - Device is going through reset, will be available
+> -                        shortly.
+> -                "disabled" - Device is not usable.
+> -                "needs reset" - Device is not usable until a hard reset will
+> -                        be initiated.
+> -                "in device creation" - Device is not available yet, as it is
+> -                        still initializing.
+> -                "in reset after device release" - Device is going through
+> -                        a compute-reset which is executed after a device release
+> -                        (relevant for Gaudi2 only).
+> +
+> +                  * "operational" - Device is available for work.
+> +                  * "in reset" - Device is going through reset, will be
+> +                    available shortly.
+> +                  * "disabled" - Device is not usable.
+> +                  * "needs reset" - Device is not usable until a hard reset
+> +                    is initiated.
+> +                  * "in device creation" - Device is not available yet, as it
+> +                    is still initializing.
+> +                  * "in reset after device release" - Device is going through
+> +                    a compute-reset which is executed after a device release
+> +                    (relevant for Gaudi2 only).
+>
+>  What:           /sys/class/habanalabs/hl<n>/thermal_ver
+>  Date:           Jan 2019
+> --
+> An old man doll... just what I always wanted! - Clara
+>
 
-No, that's not how it works. If patch was picked up, you must drop it.
-Otherwise you might mislead maintainers (e.g. other maintainer) to pick
-it up again.
-
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Thanks!
+Applied to my -next tree.
+Oded
