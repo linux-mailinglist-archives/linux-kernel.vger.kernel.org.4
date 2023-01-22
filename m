@@ -2,189 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EC86772D5
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC626772DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjAVVlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 16:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S230038AbjAVVvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 16:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjAVVlo (ORCPT
+        with ESMTP id S229920AbjAVVvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:41:44 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500F6E38A
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674423702; x=1705959702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=32yLwhOfKDtXYB819aV5PhHvCmEEsPI8e8+DzSG5Igk=;
-  b=EMo6Yh0q1vvUQjtJh+KDTcsUIvAeKorRVUrEw4yBnoU8B5mJsGzYXeoh
-   wsWudvqBGbE9xnAm5xALzFvrVOv3MDOGO6/Khm9c3JB3tQgo2XIPUtNKk
-   edOz52n3NKO7xNSzCeNcrTGDOPxRumZGDQ3zurwU2kLi815fupMwpGRrB
-   LSf9qN4iCPK8sEwpOP/s0u2gkKIkQH89zGYg3y2lO2YTYuSfVglLSyiiX
-   AYLBFegYGHSyUN/2nR6dTaNPAOL752VlHIWdD+AZU0Yx29qDkSuSXpF4H
-   UkesnPWxzTc0PIymSwUegz5C3MIQcbMZ7XvPVGoy31XE2m3rodKZPrA5N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="325980161"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="325980161"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 13:41:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="750127488"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="750127488"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Jan 2023 13:41:40 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJi5r-0005G8-2m;
-        Sun, 22 Jan 2023 21:41:39 +0000
-Date:   Mon, 23 Jan 2023 05:41:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: arch/x86/kernel/hpet.c:598:31: warning: unused variable 'info'
-Message-ID: <202301230542.TIuCA8hz-lkp@intel.com>
+        Sun, 22 Jan 2023 16:51:09 -0500
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DBC420B
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:51:08 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-15eec491b40so12061670fac.12
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=40Rmkj5g3cvg97kxah5sFiX7jVih95G4nCiDetrLKPU=;
+        b=VVR0e0bcJbIrdkK1tLNiHw20DB41mQjAsNp72mvJLQIU1CDbu48KXrIK7sXfXrHxqY
+         baCoJb25n99/HsqfcxlHIf0hZraUcY7UYecsGMUGfWEPEmkhYaX0m8yy0OAUcpJzn1UC
+         Bw6nDEEX/cPNR16oI6OmOgx0LINHSgI7RPUQq00Fyqjm3Bb5ZJVBmHhD7Msu/jh5DwNQ
+         BP4stx33k2xQXG08dct350qJvA21UIyagazE1YqK8wvtzssYhO/3nXlk5FPQKw87R6iR
+         TwoB6oBaiqY0KrX4JrhFQxHgS4XAXwoZwzJiFURQm00qjHeL9CNN5saiAjSIVdtD8ZHr
+         hDAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=40Rmkj5g3cvg97kxah5sFiX7jVih95G4nCiDetrLKPU=;
+        b=JWHqmENrSW+/Jd3F/ByynFhxYviQliA9HPRiSG2ueeV9Da6b/krOnIp1jJY+/Xf6XX
+         QbT0xZ6KW2MVNN2OebheO8Nn93y64y+pCcPy8HdmpaPyy9/4MaRsYSh2Od9EaFoWRMSX
+         5LIi9ifTqrwp1mFxG1ATl+oxarogKkOezd8y/IT+AjmuBU/vh6wCCbYt3k9Xv+VKmiO4
+         gWa0AUGtJZwxMTSCT4VkfULCsRHh0Rm8fkkGYrNaalNXLeEctUM2xlHBshvuLz2iCnRe
+         o/Z7FABr89JvqjESFVlG3CbKS0slgTOj8yJypOrlaEjOeYPZhsLGLaBMAme95T+/qYbc
+         6dVQ==
+X-Gm-Message-State: AFqh2kqVymhbBT5L/YxDXOvw9+SnPsMd/TmPYUvrmi/8l87wIuXMpRR0
+        Q+VsxYDnackddFPNM5U5HHX0OM5lf28=
+X-Google-Smtp-Source: AMrXdXtLPlRpOoXou27NVl1VXfy4IEcdst/ssHJRGQesmKgknaqHJwHijSt8icQZtNlN/6K7VBjuuw==
+X-Received: by 2002:a05:6870:7b8d:b0:15e:ec05:4cd7 with SMTP id jf13-20020a0568707b8d00b0015eec054cd7mr10460161oab.40.1674424267167;
+        Sun, 22 Jan 2023 13:51:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t18-20020a056870e75200b0014866eb34cesm9888225oak.48.2023.01.22.13.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 13:51:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 22 Jan 2023 13:51:05 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.2-rc5
+Message-ID: <20230122215105.GA1788657@roeck-us.net>
+References: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2475bf0250dee99b477e0c56d7dc9d7ac3f04117
-commit: 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e irqchip: Add IMX MU MSI controller driver
-date:   4 months ago
-config: i386-buildonly-randconfig-r002-20230123 (https://download.01.org/0day-ci/archive/20230123/202301230542.TIuCA8hz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ drivers/base/ drivers/video/backlight/ kernel/irq/
+On Sat, Jan 21, 2023 at 04:44:06PM -0800, Linus Torvalds wrote:
+> Ok, so I thought we were back to normal after the winter holidays at
+> rc4. Now, a week later, I think I was mistaken - we have fairly
+> sizable rc5, so I suspect there was still pent up testing and fixes
+> from people being off.
+> 
+> Anyway, I am expecting to do an rc8 this release regardless, just
+> because we effectively had a lost week or two in the early rc's, so a
+> sizable rc5 doesn't really worry me. I do hope we're done with the
+> release candidates growing, though.
+> 
+> Anyway, there's a bit of everything in rc5: various driver updates
+> (gpu, rdma, networking, tty, usb..), some architecture updates (mostly
+> loongarch and arm64), some filesystem updates, some core networking,
+> and tooling.
+> 
+> The shortlog is appended as usual. Nothing particularly odd stands out to me.
+> 
+> Please do test,
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Nothing to report from my side.
 
-All warnings (new ones prefixed by >>):
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 504 pass: 504 fail: 0
 
-   arch/x86/kernel/hpet.c: In function 'hpet_msi_init':
-   arch/x86/kernel/hpet.c:520:46: error: invalid use of incomplete typedef 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
-     520 |         irq_domain_set_info(domain, virq, arg->hwirq, info->chip, NULL,
-         |                                              ^~
-   arch/x86/kernel/hpet.c:521:49: error: invalid use of incomplete typedef 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
-     521 |                             handle_edge_irq, arg->data, "edge");
-         |                                                 ^~
-   arch/x86/kernel/hpet.c: In function 'hpet_create_irq_domain':
-   arch/x86/kernel/hpet.c:550:13: error: 'x86_vector_domain' undeclared (first use in this function)
-     550 |         if (x86_vector_domain == NULL)
-         |             ^~~~~~~~~~~~~~~~~
-   arch/x86/kernel/hpet.c:550:13: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/kernel/hpet.c: In function 'hpet_assign_irq':
-   arch/x86/kernel/hpet.c:598:31: error: storage size of 'info' isn't known
-     598 |         struct irq_alloc_info info;
-         |                               ^~~~
-   arch/x86/kernel/hpet.c:600:9: error: implicit declaration of function 'init_irq_alloc_info' [-Werror=implicit-function-declaration]
-     600 |         init_irq_alloc_info(&info, NULL);
-         |         ^~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/hpet.c:601:21: error: 'X86_IRQ_ALLOC_TYPE_HPET' undeclared (first use in this function)
-     601 |         info.type = X86_IRQ_ALLOC_TYPE_HPET;
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~
->> arch/x86/kernel/hpet.c:598:31: warning: unused variable 'info' [-Wunused-variable]
-     598 |         struct irq_alloc_info info;
-         |                               ^~~~
-   arch/x86/kernel/hpet.c:607:1: error: control reaches end of non-void function [-Werror=return-type]
-     607 | }
-         | ^
-   cc1: some warnings being treated as errors
---
-   kernel/irq/msi.c: In function 'msi_domain_ops_get_hwirq':
-   kernel/irq/msi.c:585:19: error: invalid use of incomplete typedef 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
-     585 |         return arg->hwirq;
-         |                   ^~
-   In file included from include/linux/string.h:253,
-                    from arch/x86/include/asm/page_32.h:22,
-                    from arch/x86/include/asm/page.h:14,
-                    from arch/x86/include/asm/thread_info.h:12,
-                    from include/linux/thread_info.h:60,
-                    from arch/x86/include/asm/preempt.h:7,
-                    from include/linux/preempt.h:78,
-                    from include/linux/rcupdate.h:27,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from kernel/irq/msi.c:12:
-   kernel/irq/msi.c: In function 'msi_domain_ops_prepare':
-   kernel/irq/msi.c:591:30: error: invalid application of 'sizeof' to incomplete type 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
-     591 |         memset(arg, 0, sizeof(*arg));
-         |                              ^
-   include/linux/fortify-string.h:279:42: note: in definition of macro '__fortify_memset_chk'
-     279 |         size_t __fortify_size = (size_t)(size);                         \
-         |                                          ^~~~
-   kernel/irq/msi.c:591:9: note: in expansion of macro 'memset'
-     591 |         memset(arg, 0, sizeof(*arg));
-         |         ^~~~~~
-   kernel/irq/msi.c: In function 'msi_domain_ops_set_desc':
-   kernel/irq/msi.c:598:12: error: invalid use of incomplete typedef 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
-     598 |         arg->desc = desc;
-         |            ^~
-   kernel/irq/msi.c: In function '__msi_domain_alloc_irqs':
-   kernel/irq/msi.c:858:9: error: variable 'arg' has initializer but incomplete type
-     858 |         msi_alloc_info_t arg = { };
-         |         ^~~~~~~~~~~~~~~~
-   kernel/irq/msi.c:858:26: error: storage size of 'arg' isn't known
-     858 |         msi_alloc_info_t arg = { };
-         |                          ^~~
->> kernel/irq/msi.c:858:26: warning: unused variable 'arg' [-Wunused-variable]
-   kernel/irq/msi.c: In function 'msi_domain_ops_get_hwirq':
-   kernel/irq/msi.c:586:1: error: control reaches end of non-void function [-Werror=return-type]
-     586 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +/info +598 arch/x86/kernel/hpet.c
-
-3d7295eb3003ae David Woodhouse 2020-10-24  594  
-3d7295eb3003ae David Woodhouse 2020-10-24  595  static int hpet_assign_irq(struct irq_domain *domain, struct hpet_channel *hc,
-3d7295eb3003ae David Woodhouse 2020-10-24  596  			   int dev_num)
-3d7295eb3003ae David Woodhouse 2020-10-24  597  {
-3d7295eb3003ae David Woodhouse 2020-10-24 @598  	struct irq_alloc_info info;
-3d7295eb3003ae David Woodhouse 2020-10-24  599  
-3d7295eb3003ae David Woodhouse 2020-10-24  600  	init_irq_alloc_info(&info, NULL);
-3d7295eb3003ae David Woodhouse 2020-10-24  601  	info.type = X86_IRQ_ALLOC_TYPE_HPET;
-3d7295eb3003ae David Woodhouse 2020-10-24  602  	info.data = hc;
-3d7295eb3003ae David Woodhouse 2020-10-24  603  	info.devid = hpet_dev_id(domain);
-3d7295eb3003ae David Woodhouse 2020-10-24  604  	info.hwirq = dev_num;
-3d7295eb3003ae David Woodhouse 2020-10-24  605  
-3d7295eb3003ae David Woodhouse 2020-10-24  606  	return irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, &info);
-3d7295eb3003ae David Woodhouse 2020-10-24  607  }
-3d7295eb3003ae David Woodhouse 2020-10-24  608  
-
-:::::: The code at line 598 was first introduced by commit
-:::::: 3d7295eb3003aea9f89de35304b3a88ae4d5036b x86/hpet: Move MSI support into hpet.c
-
-:::::: TO: David Woodhouse <dwmw@amazon.co.uk>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Guenter
