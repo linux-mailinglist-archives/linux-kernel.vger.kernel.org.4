@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FA7676F03
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 16:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BEB676E8D
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 16:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjAVPQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 10:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S230368AbjAVPLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 10:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjAVPQq (ORCPT
+        with ESMTP id S230356AbjAVPLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 10:16:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F18022036;
-        Sun, 22 Jan 2023 07:16:44 -0800 (PST)
+        Sun, 22 Jan 2023 10:11:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D99621A21;
+        Sun, 22 Jan 2023 07:11:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1A4A60C57;
-        Sun, 22 Jan 2023 15:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5E5C433EF;
-        Sun, 22 Jan 2023 15:16:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADAC4B80AF8;
+        Sun, 22 Jan 2023 15:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1783C4339B;
+        Sun, 22 Jan 2023 15:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674400603;
-        bh=8BhTjLePLHkgOd8BDVmcZKL8rNQt5ogymyb7v4ld/Jc=;
+        s=korg; t=1674400298;
+        bh=6RMuYueOOyiSkqjvT1gtU8paNnrRVAaE8dSGkkivv24=;
         h=From:To:Cc:Subject:Date:From;
-        b=ZrCMABCloKqGFPBbGdQbzI5NBEHNSgtBIQoGCXtNNPzlzJYgI0pGUJiM30L8cqEKj
-         JRAcQdPV26RrHh9/FE+UKjscMWejvAVnNYMXwbvDf9Uu2H1qTlSgbxqIqmpBmeCpl5
-         bVYIv/CFdJm3BEycwfbmPWbN30bznU5g19vbptQ4=
+        b=VukzD8CKU4OiHO085lbchtF2GagHyO1Ek/T1en+f8RXbK1iXpXKxitHRF4qGX46UQ
+         cE2TBdFcLVTCbntPQvowo+wCzpAFyv7TrVTtnSKctt3LGwVNlnK2Ak8cA61XiaY45A
+         oaSZDBqeNVmV9Zw63352fEljEREgEAhfNR3TuoRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.15 000/117] 5.15.90-rc1 review
-Date:   Sun, 22 Jan 2023 16:03:10 +0100
-Message-Id: <20230122150232.736358800@linuxfoundation.org>
+Subject: [PATCH 5.10 00/98] 5.10.165-rc1 review
+Date:   Sun, 22 Jan 2023 16:03:16 +0100
+Message-Id: <20230122150229.351631432@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.90-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.165-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Branch: linux-5.10.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.15.90-rc1
+X-KernelTest-Version: 5.10.165-rc1
 X-KernelTest-Deadline: 2023-01-24T15:02+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -64,8 +64,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.15.90 release.
-There are 117 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 5.10.165 release.
+There are 98 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -73,9 +73,9 @@ Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.90-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.165-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
 and the diffstat can be found below.
 
 thanks,
@@ -86,16 +86,22 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.15.90-rc1
+    Linux 5.10.165-rc1
+
+Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+    Bluetooth: hci_qca: Fixed issue during suspend
+
+Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+    Bluetooth: hci_qca: check for SSR triggered flag while suspend
+
+Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+    Bluetooth: hci_qca: Wait for SSR completion during suspend
 
 Stephan Gerhold <stephan@gerhold.net>
     soc: qcom: apr: Make qcom,protection-domain optional again
 
 Eric Dumazet <edumazet@google.com>
     Revert "wifi: mac80211: fix memory leak in ieee80211_if_add()"
-
-Damien Le Moal <damien.lemoal@opensource.wdc.com>
-    block: mq-deadline: Rename deadline_is_seq_writes()
 
 Yang Yingliang <yangyingliang@huawei.com>
     net/mlx5: fix missing mutex_unlock in mlx5_fw_fatal_reporter_err_work()
@@ -139,12 +145,6 @@ Ard Biesheuvel <ardb@kernel.org>
 Ard Biesheuvel <ardb@kernel.org>
     arm64: efi: Execute runtime services from a dedicated stack
 
-Alon Zahavi <zahavi.alon@gmail.com>
-    fs/ntfs3: Fix attr_punch_hole() null pointer derenference
-
-Alex Deucher <alexander.deucher@amd.com>
-    drm/amdgpu: drop experimental flag on aldebaran
-
 Joshua Ashton <joshua@froggi.es>
     drm/amd/display: Fix COLOR_SPACE_YCBCR2020_TYPE matrix
 
@@ -153,9 +153,6 @@ Joshua Ashton <joshua@froggi.es>
 
 hongao <hongao@uniontech.com>
     drm/amd/display: Fix set scaling doesn's work
-
-Drew Davenport <ddavenport@chromium.org>
-    drm/i915/display: Check source height is > 0
 
 Sasa Dragic <sasa.dragic@gmail.com>
     drm/i915: re-disable RC6p on Sandy Bridge
@@ -169,17 +166,8 @@ Khazhismel Kumykov <khazhy@chromium.org>
 Tobias Schramm <t.schramm@manjaro.org>
     serial: atmel: fix incorrect baudrate setup
 
-Lino Sanfilippo <l.sanfilippo@kunbus.com>
-    serial: amba-pl011: fix high priority character transmission in rs486 mode
-
-Reinette Chatre <reinette.chatre@intel.com>
-    dmaengine: idxd: Let probe fail when workqueue cannot be enabled
-
 Mohan Kumar <mkumard@nvidia.com>
     dmaengine: tegra210-adma: fix global intr clear
-
-Peter Harliman Liem <pliem@maxlinear.com>
-    dmaengine: lgm: Move DT parsing after initialization
 
 Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
     serial: pch_uart: Pass correct sg to dma_unmap_sg()
@@ -205,14 +193,8 @@ Prashant Malani <pmalani@chromium.org>
 Prashant Malani <pmalani@chromium.org>
     usb: typec: altmodes/displayport: Add pin assignment helper
 
-ChiYuan Huang <cy_huang@richtek.com>
-    usb: typec: tcpm: Fix altmode re-registration causes sysfs create fail
-
 Alexander Stein <alexander.stein@ew.tq-group.com>
     usb: host: ehci-fsl: Fix module alias
-
-Pawel Laszczak <pawell@cadence.com>
-    usb: cdns3: remove fetched trb from cache before dequeuing
 
 Michael Adler <michael.adler@siemens.com>
     USB: serial: cp210x: add SCALANCE LPE-9000 device id
@@ -220,20 +202,8 @@ Michael Adler <michael.adler@siemens.com>
 Alan Stern <stern@rowland.harvard.edu>
     USB: gadgetfs: Fix race between mounting and unmounting
 
-Gaosheng Cui <cuigaosheng1@huawei.com>
-    tty: fix possible null-ptr-defer in spk_ttyio_release
-
 Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
     tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buffer
-
-Sergio Paracuellos <sergio.paracuellos@gmail.com>
-    staging: mt7621-dts: change some node hex addresses to lower case
-
-Paul Moore <paul@paul-moore.com>
-    bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and PERF_BPF_EVENT_PROG_UNLOAD
-
-Ben Dooks <ben.dooks@codethink.co.uk>
-    riscv: dts: sifive: fu740: fix size of pcie 32bit memory
 
 Mika Westerberg <mika.westerberg@linux.intel.com>
     thunderbolt: Use correct function to calculate maximum USB3 link rate
@@ -244,17 +214,11 @@ Enzo Matsumiya <ematsumiya@suse.de>
 Filipe Manana <fdmanana@suse.com>
     btrfs: fix race between quota rescan and disable leading to NULL pointer deref
 
-Filipe Manana <fdmanana@suse.com>
-    btrfs: do not abort transaction on failure to write log tree when syncing log
-
 Haibo Chen <haibo.chen@nxp.com>
     mmc: sdhci-esdhc-imx: correct the tuning start tap and step setting
 
 Samuel Holland <samuel@sholland.org>
     mmc: sunxi-mmc: Fix clock refcount imbalance during unbind
-
-Ard Biesheuvel <ardb@kernel.org>
-    ACPI: PRM: Check whether EFI runtime is available
 
 Ian Abbott <abbotti@mev.co.uk>
     comedi: adv_pci1760: Fix PWM instruction handling
@@ -331,6 +295,15 @@ Dylan Yudaken <dylany@fb.com>
 Jens Axboe <axboe@kernel.dk>
     io_uring: ensure that cached task references are always put on exit
 
+Pavel Begunkov <asml.silence@gmail.com>
+    io_uring: fix CQ waiting timeout handling
+
+Pavel Begunkov <asml.silence@gmail.com>
+    io_uring: lock overflowing for IOPOLL
+
+Jens Axboe <axboe@kernel.dk>
+    io_uring: check for valid register opcode earlier
+
 Dylan Yudaken <dylany@meta.com>
     io_uring: fix async accept on O_NONBLOCK sockets
 
@@ -350,31 +323,19 @@ Pavel Begunkov <asml.silence@gmail.com>
     io_uring: improve send/recv error handling
 
 Jens Axboe <axboe@kernel.dk>
-    io_uring: pass in EPOLL_URING_WAKE for eventfd signaling and wakeups
-
-Jens Axboe <axboe@kernel.dk>
-    eventfd: provide a eventfd_signal_mask() helper
-
-Jens Axboe <axboe@kernel.dk>
-    eventpoll: add EPOLL_URING_WAKE poll wakeup flag
-
-Jens Axboe <axboe@kernel.dk>
     io_uring: don't gate task_work run on TIF_NOTIFY_SIGNAL
 
-James Houghton <jthoughton@google.com>
-    hugetlb: unshare some PMDs when splitting VMAs
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    Bluetooth: hci_qca: Fix driver shutdown on closed serdev
 
-Sasha Levin <sashal@kernel.org>
-    drm/amd: Delay removal of the firmware framebuffer
+Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+    Bluetooth: hci_qca: Wait for timeout during suspend
 
-Guchun Chen <guchun.chen@amd.com>
-    drm/amdgpu: disable runtime pm on several sienna cichlid cards(v2)
+Chris Wilson <chris@chris-wilson.co.uk>
+    drm/i915/gt: Reset twice
 
-Jeremy Szu <jeremy.szu@canonical.com>
-    ALSA: hda/realtek: fix mute/micmute LEDs don't work for a HP platform
-
-Andy Chi <andy.chi@canonical.com>
-    ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
+Yuchi Yang <yangyuchi66@gmail.com>
+    ALSA: hda/realtek - Turn on power early
 
 Ding Hui <dinghui@sangfor.com.cn>
     efi: fix userspace infinite retry read efivars after EFI runtime services page fault
@@ -394,15 +355,6 @@ Alexander Wetzel <alexander@wetzel-home.de>
 Arend van Spriel <arend.vanspriel@broadcom.com>
     wifi: brcmfmac: fix regression for Broadcom PCIe wifi devices
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    Bluetooth: hci_qca: Fix driver shutdown on closed serdev
-
-Arnd Bergmann <arnd@arndb.de>
-    fbdev: omapfb: avoid stack overflow warning
-
-Chris Wilson <chris@chris-wilson.co.uk>
-    perf/x86/rapl: Treat Tigerlake like Icelake
-
 Jaegeuk Kim <jaegeuk@kernel.org>
     f2fs: let's avoid panic if extent_tree is not created
 
@@ -415,17 +367,8 @@ Qu Wenruo <wqu@suse.com>
 Jiri Slaby (SUSE) <jirislaby@kernel.org>
     RDMA/srp: Move large values to a new enum for gcc13
 
-Chunhao Lin <hau@realtek.com>
-    r8169: move rtl_wol_enable_rx() and rtl_prepare_power_down()
-
 Daniil Tatianin <d-tatianin@yandex-team.ru>
     net/ethtool/ioctl: return -EOPNOTSUPP if we have no phy stats
-
-Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-    vduse: Validate vq_num in vduse_validate_config()
-
-Angus Chen <angus.chen@jaguarmicro.com>
-    virtio_pci: modify ENOENT to EINVAL
 
 Ricardo Cañuelo <ricardo.canuelo@collabora.com>
     tools/virtio: initialize spinlocks in vring_test.c
@@ -451,29 +394,18 @@ Diffstat:
  arch/arm64/kernel/efi-rt-wrapper.S                 |  14 +-
  arch/arm64/kernel/efi.c                            |  27 +++
  arch/powerpc/kernel/vmlinux.lds.S                  |   6 +-
- arch/riscv/boot/dts/sifive/fu740-c000.dtsi         |   2 +-
  arch/s390/kernel/vmlinux.lds.S                     |   2 +
- arch/x86/events/rapl.c                             |   2 +
  arch/x86/kernel/fpu/init.c                         |   7 +-
  arch/x86/lib/iomap_copy_64.S                       |   2 +-
- block/mq-deadline.c                                |   4 +-
- drivers/accessibility/speakup/spk_ttyio.c          |   3 +
- drivers/acpi/prmt.c                                |  10 +
- drivers/bluetooth/hci_qca.c                        |   7 +
- drivers/comedi/drivers/adv_pci1760.c               |   2 +-
+ drivers/bluetooth/hci_qca.c                        |  68 ++++++-
  drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |   6 +
- drivers/dma/idxd/device.c                          |   3 +-
- drivers/dma/lgm/lgm-dma.c                          |  10 +-
  drivers/dma/tegra210-adma.c                        |   2 +-
  drivers/firmware/efi/runtime-wrappers.c            |   1 +
  drivers/firmware/google/gsmi.c                     |   7 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |   8 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  14 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  14 ++
  drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   3 +-
  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |   8 +-
  .../gpu/drm/amd/display/dc/core/dc_hw_sequencer.c  |   4 +-
- drivers/gpu/drm/i915/display/skl_universal_plane.c |   2 +-
+ drivers/gpu/drm/i915/gt/intel_reset.c              |  34 +++-
  drivers/gpu/drm/i915/i915_pci.c                    |   3 +-
  drivers/infiniband/ulp/srp/ib_srp.h                |   8 +-
  drivers/misc/fastrpc.c                             |  26 +--
@@ -482,18 +414,15 @@ Diffstat:
  drivers/mmc/host/sdhci-esdhc-imx.c                 |  22 +-
  drivers/mmc/host/sunxi-mmc.c                       |   8 +-
  drivers/net/ethernet/mellanox/mlx5/core/health.c   |   1 +
- drivers/net/ethernet/realtek/r8169_main.c          |  44 ++--
  .../wireless/broadcom/brcm80211/brcmfmac/pcie.c    |   2 +-
  drivers/soc/qcom/apr.c                             |   3 +-
- drivers/staging/mt7621-dts/mt7621.dtsi             |  12 +-
+ drivers/staging/comedi/drivers/adv_pci1760.c       |   2 +-
  .../include/linux/raspberrypi/vchiq.h              |   2 +-
  .../vc04_services/interface/vchiq_arm/vchiq_arm.h  |   4 +-
  drivers/thunderbolt/tunnel.c                       |   2 +-
- drivers/tty/serial/amba-pl011.c                    |   8 +-
  drivers/tty/serial/atmel_serial.c                  |   8 +-
  drivers/tty/serial/pch_uart.c                      |   2 +-
  drivers/tty/serial/qcom_geni_serial.c              |  18 +-
- drivers/usb/cdns3/cdns3-gadget.c                   |  12 ++
  drivers/usb/core/hub.c                             |  13 ++
  drivers/usb/core/usb-acpi.c                        |  65 ++++++
  drivers/usb/gadget/function/f_ncm.c                |   4 +-
@@ -510,43 +439,29 @@ Diffstat:
  drivers/usb/storage/uas-detect.h                   |  13 ++
  drivers/usb/storage/unusual_uas.h                  |   7 -
  drivers/usb/typec/altmodes/displayport.c           |  22 +-
- drivers/usb/typec/tcpm/tcpm.c                      |   7 +-
- drivers/vdpa/vdpa_user/vduse_dev.c                 |   3 +
- drivers/video/fbdev/omap2/omapfb/dss/dsi.c         |  28 ++-
- drivers/virtio/virtio_pci_modern.c                 |   2 +-
- fs/btrfs/disk-io.c                                 |   9 +-
  fs/btrfs/extent-tree.c                             |   7 +-
  fs/btrfs/qgroup.c                                  |  25 ++-
- fs/btrfs/tree-log.c                                |   2 -
  fs/cifs/smb2pdu.c                                  |  15 +-
- fs/eventfd.c                                       |  37 ++--
- fs/eventpoll.c                                     |  18 +-
  fs/f2fs/extent_cache.c                             |   3 +-
  fs/nfs/filelayout/filelayout.c                     |   8 +
  fs/nilfs2/btree.c                                  |  15 +-
- fs/ntfs3/attrib.c                                  |   2 +-
  fs/zonefs/super.c                                  |  22 ++
  include/asm-generic/vmlinux.lds.h                  |   5 +
- include/linux/eventfd.h                            |   7 +
  include/linux/usb.h                                |   3 +
  include/trace/events/btrfs.h                       |   2 +-
  include/trace/trace_events.h                       |   2 +-
- include/uapi/linux/eventpoll.h                     |   6 +
  io_uring/io-wq.c                                   |   2 +-
- io_uring/io_uring.c                                | 223 +++++++++++++++------
- kernel/bpf/offload.c                               |   3 -
- kernel/bpf/syscall.c                               |   6 +-
+ io_uring/io_uring.c                                | 225 +++++++++++++++------
  kernel/sys.c                                       |   2 +
- mm/hugetlb.c                                       |  44 +++-
  net/ethtool/ioctl.c                                |   3 +-
  net/ipv4/tcp_ulp.c                                 |   2 +-
  net/mac80211/agg-tx.c                              |   6 +-
  net/mac80211/driver-ops.c                          |   3 +
  net/mac80211/iface.c                               |   1 -
- sound/pci/hda/patch_realtek.c                      |   3 +
+ sound/pci/hda/patch_realtek.c                      |  30 +--
  .../selftests/bpf/prog_tests/jeq_infer_not_null.c  |   9 +
  .../selftests/bpf/progs/jeq_infer_not_null_fail.c  |  42 ++++
  tools/virtio/vringh_test.c                         |   2 +
- 103 files changed, 914 insertions(+), 295 deletions(-)
+ 75 files changed, 799 insertions(+), 212 deletions(-)
 
 
