@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCF1676A78
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 01:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BB2676A7A
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 01:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjAVAj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 Jan 2023 19:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S229734AbjAVAoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 Jan 2023 19:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAVAj5 (ORCPT
+        with ESMTP id S229463AbjAVAo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 Jan 2023 19:39:57 -0500
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E8F1F91F;
-        Sat, 21 Jan 2023 16:39:54 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VZzM22S_1674347990;
-Received: from 192.168.1.38(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VZzM22S_1674347990)
-          by smtp.aliyun-inc.com;
-          Sun, 22 Jan 2023 08:39:51 +0800
-Message-ID: <31fc4be5-0e53-b1fb-9a2c-f34d598c0fe7@linux.alibaba.com>
-Date:   Sun, 22 Jan 2023 08:39:50 +0800
+        Sat, 21 Jan 2023 19:44:28 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486B7113FF
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 16:44:25 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id o5so7108542qtr.11
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 16:44:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hmFASSe7V+GtmdpDDmfvJALroHqsP2tjnKy0Vcj+mI=;
+        b=LCvoLL+2cBzK8ecVbzqYnFEBRtWpti/2fvgp9eYSBN3D30YbfqCcHnkYJZpUhbX/hu
+         K9g1a7fPOPHn25vk8A9PMIwfRvUp2ro+IF0CfGbQvVERChgHhRxqBJgzK2+u1OX5Gu4s
+         dcONFKBvXj8WCB8575U3VEFAkGNqYNRNxjdl0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4hmFASSe7V+GtmdpDDmfvJALroHqsP2tjnKy0Vcj+mI=;
+        b=FYfKh3l0fNYQkc0G0V7UoPfauFS0d2w9R9OGCZN0XrlkYYYEfDjWTFwtLTHaSkGbu2
+         qCa6EghjlLtWn35rsaWFVjekNofYUaqNmzFbwUSAgUNdrz2eVUwAB7BnF/4aIPmAX3bO
+         zZzoouboeFt+q9jcdAzgPWJTIbovqG92QbzCuErbGfw6ecpgRd/WBcKdK5KKnqHnjeJb
+         0unXztTYhFoJ+ipf9pIXsd1D70FcXkujNoq015gZ7QZqGZfvLLwftcBiM3LOZpH03aLD
+         YIFPUEM9ru841UKvv/uhBkfu9fywCDi7k826x5VmIJR5R/QN9AUUtjwJKqxviXDmePzs
+         INUg==
+X-Gm-Message-State: AFqh2kqoX6fW0k6kAv8wh0h8dZAxbn/CFqUSszR5D/0otKiEpu52bwz+
+        EsXA0ACcaBg6Z8uSKdgbECyyJ71xDKjZsHvd
+X-Google-Smtp-Source: AMrXdXvzK6gUfE7B3wErq4yoAHKldNZ+GKBtw0XugglSKJTykAfLHUIlY1Q26KkHEDxS4wGpW9/NKw==
+X-Received: by 2002:ac8:747:0:b0:3b6:3a28:3377 with SMTP id k7-20020ac80747000000b003b63a283377mr24701232qth.58.1674348263701;
+        Sat, 21 Jan 2023 16:44:23 -0800 (PST)
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com. [209.85.222.173])
+        by smtp.gmail.com with ESMTPSA id g8-20020ae9e108000000b006b5cc25535fsm3243655qkm.99.2023.01.21.16.44.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Jan 2023 16:44:23 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id pj1so4731260qkn.3
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 16:44:23 -0800 (PST)
+X-Received: by 2002:a37:45d3:0:b0:706:96dd:8d4a with SMTP id
+ s202-20020a3745d3000000b0070696dd8d4amr957503qka.336.1674348262534; Sat, 21
+ Jan 2023 16:44:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Giuseppe Scrivano <gscrivan@redhat.com>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        david@fromorbit.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <cover.1674227308.git.alexl@redhat.com>
- <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <87ilh0g88n.fsf@redhat.com>
- <321dfdb1-3771-b16d-604f-224ce8aa22cf@linux.alibaba.com>
- <878rhvg8ru.fsf@redhat.com>
- <3ae1205a-b666-3211-e649-ad402c69e724@linux.alibaba.com>
- <87sfg3ecv5.fsf@redhat.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <87sfg3ecv5.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 21 Jan 2023 16:44:06 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
+Message-ID: <CAHk-=wg+E9tTCrSqBOxejUX11f8ebyRWQ+4exC=cmOEupX_d7Q@mail.gmail.com>
+Subject: Linux 6.2-rc5
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,430 +71,934 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ok, so I thought we were back to normal after the winter holidays at
+rc4. Now, a week later, I think I was mistaken - we have fairly
+sizable rc5, so I suspect there was still pent up testing and fixes
+from people being off.
 
+Anyway, I am expecting to do an rc8 this release regardless, just
+because we effectively had a lost week or two in the early rc's, so a
+sizable rc5 doesn't really worry me. I do hope we're done with the
+release candidates growing, though.
 
-On 2023/1/22 06:34, Giuseppe Scrivano wrote:
-> Gao Xiang <hsiangkao@linux.alibaba.com> writes:
-> 
->> On 2023/1/22 00:19, Giuseppe Scrivano wrote:
->>> Gao Xiang <hsiangkao@linux.alibaba.com> writes:
->>>
->>>> On 2023/1/21 06:18, Giuseppe Scrivano wrote:
->>>>> Hi Amir,
->>>>> Amir Goldstein <amir73il@gmail.com> writes:
->>>>>
->>>>>> On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson <alexl@redhat.com> wrote:
->>>>
->>>> ...
->>>>
->>>>>>>
->>>>>>
->>>>>> Hi Alexander,
->>>>>>
->>>>>> I must say that I am a little bit puzzled by this v3.
->>>>>> Gao, Christian and myself asked you questions on v2
->>>>>> that are not mentioned in v3 at all.
->>>>>>
->>>>>> To sum it up, please do not propose composefs without explaining
->>>>>> what are the barriers for achieving the exact same outcome with
->>>>>> the use of a read-only overlayfs with two lower layer -
->>>>>> uppermost with erofs containing the metadata files, which include
->>>>>> trusted.overlay.metacopy and trusted.overlay.redirect xattrs that refer
->>>>>> to the lowermost layer containing the content files.
->>>>> I think Dave explained quite well why using overlay is not
->>>>> comparable to
->>>>> what composefs does.
->>>>> One big difference is that overlay still requires at least a syscall
->>>>> for
->>>>> each file in the image, and then we need the equivalent of "rm -rf" to
->>>>> clean it up.  It is somehow acceptable for long-running services, but it
->>>>> is not for "serverless" containers where images/containers are created
->>>>> and destroyed frequently.  So even in the case we already have all the
->>>>> image files available locally, we still need to create a checkout with
->>>>> the final structure we need for the image.
->>>>> I also don't see how overlay would solve the verified image problem.
->>>>> We
->>>>> would have the same problem we have today with fs-verity as it can only
->>>>> validate a single file but not the entire directory structure.  Changes
->>>>> that affect the layer containing the trusted.overlay.{metacopy,redirect}
->>>>> xattrs won't be noticed.
->>>>> There are at the moment two ways to handle container images, both
->>>>> somehow
->>>>> guided by the available file systems in the kernel.
->>>>> - A single image mounted as a block device.
->>>>> - A list of tarballs (OCI image) that are unpacked and mounted as
->>>>>      overlay layers.
->>>>> One big advantage of the block devices model is that you can use
->>>>> dm-verity, this is something we miss today with OCI container images
->>>>> that use overlay.
->>>>> What we are proposing with composefs is a way to have "dm-verity"
->>>>> style
->>>>> validation based on fs-verity and the possibility to share individual
->>>>> files instead of layers.  These files can also be on different file
->>>>> systems, which is something not possible with the block device model.
->>>>
->>>> That is not a new idea honestly, including chain of trust.  Even laterly
->>>> out-of-tree incremental fs using fs-verity for this as well, except that
->>>> it's in a real self-contained way.
->>>>
->>>>> The composefs manifest blob could be generated remotely and signed.
->>>>> A
->>>>> client would need just to validate the signature for the manifest blob
->>>>> and from there retrieve the files that are not in the local CAS (even
->>>>> from an insecure source) and mount directly the manifest file.
->>>>
->>>>
->>>> Back to the topic, after thinking something I have to make a
->>>> compliment for reference.
->>>>
->>>> First, EROFS had the same internal dissussion and decision at
->>>> that time almost _two years ago_ (June 2021), it means:
->>>>
->>>>     a) Some internal people really suggested EROFS could develop
->>>>        an entire new file-based in-kernel local cache subsystem
->>>>        (as you called local CAS, whatever) with stackable file
->>>>        interface so that the exist Nydus image service [1] (as
->>>>        ostree, and maybe ostree can use it as well) don't need to
->>>>        modify anything to use exist blobs;
->>>>
->>>>     b) Reuse exist fscache/cachefiles;
->>>>
->>>> The reason why we (especially me) finally selected b) because:
->>>>
->>>>     - see the people discussion of Google's original Incremental
->>>>       FS topic [2] [3] in 2019, as Amir already mentioned.  At
->>>>       that time all fs folks really like to reuse exist subsystem
->>>>       for in-kernel caching rather than reinvent another new
->>>>       in-kernel wheel for local cache.
->>>>
->>>>       [ Reinventing a new wheel is not hard (fs or caching), just
->>>>         makes Linux more fragmented.  Especially a new filesystem
->>>>         is just proposed to generate images full of massive massive
->>>>         new magical symlinks with *overriden* uid/gid/permissions
->>>>         to replace regular files. ]
->>>>
->>>>     - in-kernel cache implementation usually met several common
->>>>       potential security issues; reusing exist subsystem can
->>>>       make all fses addressed them and benefited from it.
->>>>
->>>>     - Usually an exist widely-used userspace implementation is
->>>>       never an excuse for a new in-kernel feature.
->>>>
->>>> Although David Howells is always quite busy these months to
->>>> develop new netfs interface, otherwise (we think) we should
->>>> already support failover, multiple daemon/dirs, daemonless and
->>>> more.
->>> we have not added any new cache system.  overlay does "layer
->>> deduplication" and in similar way composefs does "file deduplication".
->>> That is not a built-in feature, it is just a side effect of how things
->>> are packed together.
->>> Using fscache seems like a good idea and it has many advantages but
->>> it
->>> is a centralized cache mechanism and it looks like a potential problem
->>> when you think about allowing mounts from a user namespace.
->>
->> I think Christian [1] had the same feeling of my own at that time:
->>
->> "I'm pretty skeptical of this plan whether we should add more filesystems
->>   that are mountable by unprivileged users. FUSE and Overlayfs are
->>   adventurous enough and they don't have their own on-disk format. The
->>   track record of bugs exploitable due to userns isn't making this
->>   very attractive."
->>
->> Yes, you could add fs-verity, but EROFS could add fs-verity (or just use
->> dm-verity) as well, but it doesn't change _anything_ about concerns of
->> "allowing mounts from a user namespace".
-> 
-> I've mentioned that as a potential feature we could add in future, given
-> the simplicity of the format and that it uses a CAS for its data instead
-> of fscache.  Each user can have and use their own store to mount the
-> images.
-> 
-> At this point it is just a wish from userspace, as it would improve a
-> few real use cases we have.
-> 
-> Having the possibility to run containers without root privileges is a
-> big deal for many users, look at Flatpak apps for example, or rootless
-> Podman.  Mounting and validating images would be a a big security
-> improvement.  It is something that is not possible at the moment as
-> fs-verity doesn't cover the directory structure and dm-verity seems out
-> of reach from a user namespace.
-> 
-> Composefs delegates the entire logic of dealing with files to the
-> underlying file system in a similar way to overlay.
-> 
-> Forging the inode metadata from a user namespace mount doesn't look
-> like an insurmountable problem as well since it is already possible
-> with a FUSE filesystem.
-> 
-> So the proposal/wish here is to have a very simple format, that at some
-> point could be considered safe to mount from a user namespace, in
-> addition to overlay and FUSE.
+Anyway, there's a bit of everything in rc5: various driver updates
+(gpu, rdma, networking, tty, usb..), some architecture updates (mostly
+loongarch and arm64), some filesystem updates, some core networking,
+and tooling.
 
-My response is quite similar to
-https://lore.kernel.org/r/CAJfpeguyajzHwhae=4PWLF4CUBorwFWeybO-xX6UBD2Ekg81fg@mail.gmail.com/
+The shortlog is appended as usual. Nothing particularly odd stands out to m=
+e.
 
-> 
-> 
->>> As you know as I've contacted you, I've looked at EROFS in the past
->>> and tried to get our use cases to work with it before thinking about
->>> submitting composefs upstream.
->>>   From what I could see EROFS and composefs use two different
->>> approaches
->>> to solve a similar problem, but it is not possible to do exactly with
->>> EROFS what we are trying to do.  To oversimplify it: I see EROFS as a
->>> block device that uses fscache, and composefs as an overlay for files
->>> instead of directories.
->>
->> I don't think so honestly.  EROFS "Multiple device" feature is
->> actually "multiple blobs" feature if you really think "device"
->> is block device.
->>
->> Primary device -- primary blob -- "composefs manifest blob"
->> Blob device -- data blobs -- "composefs backing files"
->>
->> any difference?
-> 
-> I wouldn't expect any substancial difference between two RO file
-> systems.
-> 
-> Please correct me if I am wrong: EROFS uses 16 bits for the blob device
-> ID, so if we map each file to a single blob device we are kind of
-> limited on how many files we can have.
+Please do test,
 
-I was here just to represent "composefs manifest file" concept rather than
-device ID.
+                   Linus
 
-> Sure this is just an artificial limit and can be bumped in a future
-> version but the major difference remains: EROFS uses the blob device
-> through fscache while the composefs files are looked up in the specified
-> repositories.
+---
 
-No, fscache can also open any cookie when opening file.  Again, even with
-fscache, EROFS doesn't need to modify _any_ on-disk format to:
+Abel Vesa (2):
+      misc: fastrpc: Fix use-after-free and race in fastrpc_map_find
+      misc: fastrpc: Don't remove map on creater_process and device_release
 
-   - record a "cookie id" for such special "magical symlink" with a similar
-     symlink on-disk format (or whatever on-disk format with data, just with
-     a new on-disk flag);
+Adam Ford (3):
+      arm64: dts: imx8mm-beacon: Fix ecspi2 pinmux
+      arm64: dts: imx8mp: Fix missing GPC Interrupt
+      arm64: dts: imx8mp: Fix power-domain typo
 
-   - open such "cookie id" on demand when opening such EROFS file just as
-     any other network fses.  I don't think blob device is limited here.
+Adham Faris (1):
+      net/mlx5e: Remove redundant xsk pointer check in mlx5e_mpwrq_validate=
+_xsk
 
-some difference now?
+Adrian Huang (1):
+      md: fix incorrect declaration about claim_rdev in md_import_device
 
-> 
->>> Sure composefs is quite simple and you could embed the composefs
->>> features in EROFS and let EROFS behave as composefs when provided a
->>> similar manifest file.  But how is that any better than having a
->>
->> EROFS always has such feature since v5.16, we called primary device,
->> or Nydus concept --- "bootstrap file".
->>
->>> separate implementation that does just one thing well instead of merging
->>> different paradigms together?
->>
->> It's exist fs on-disk compatible (people can deploy the same image
->> to wider scenarios), or you could modify/enhacnce any in-kernel local
->> fs to do so like I already suggested, such as enhancing "fs/romfs" and
->> make it maintained again due to this magic symlink feature
->>
->> (because composefs don't have other on-disk requirements other than
->>   a symlink path and a SHA256 verity digest from its original
->>   requirement.  Any local fs can be enhanced like this.)
->>
->>>
->>>> I know that you guys repeatedly say it's a self-contained
->>>> stackable fs and has few code (the same words as Incfs
->>>> folks [3] said four years ago already), four reasons make it
->>>> weak IMHO:
->>>>
->>>>     - I think core EROFS is about 2~3 kLOC as well if
->>>>       compression, sysfs and fscache are all code-truncated.
->>>>
->>>>       Also, it's always welcome that all people could submit
->>>>       patches for cleaning up.  I always do such cleanups
->>>>       from time to time and makes it better.
->>>>
->>>>     - "Few code lines" is somewhat weak because people do
->>>>       develop new features, layout after upstream.
->>>>
->>>>       Such claim is usually _NOT_ true in the future if you
->>>>       guys do more to optimize performance, new layout or even
->>>>       do your own lazy pulling with your local CAS codebase in
->>>>       the future unless
->>>>       you *promise* you once dump the code, and do bugfix
->>>>       only like Christian said [4].
->>>>
->>>>       From LWN.net comments, I do see the opposite
->>>>       possibility that you'd like to develop new features
->>>>       later.
->>>>
->>>>     - In the past, all in-tree kernel filesystems were
->>>>       designed and implemented without some user-space
->>>>       specific indication, including Nydus and ostree (I did
->>>>       see a lot of discussion between folks before in ociv2
->>>>       brainstorm [5]).
->>> Since you are mentioning OCI:
->>> Potentially composefs can be the file system that enables something
->>> very
->>> close to "ociv2", but it won't need to be called v2 since it is
->>> completely compatible with the current OCI image format.
->>> It won't require a different image format, just a seekable tarball
->>> that
->>> is compatible with old "v1" clients and we need to provide the composefs
->>> manifest file.
->>
->> May I ask did you really look into what Nydus + EROFS already did (as you
->> mentioned we discussed before)?
->>
->> Your "composefs manifest file" is exactly "Nydus bootstrap file", see:
->> https://github.com/dragonflyoss/image-service/blob/master/docs/nydus-design.md
->>
->> "Rafs is a filesystem image containing a separated metadata blob and
->>   several data-deduplicated content-addressable data blobs. In a typical
->>   rafs filesystem, the metadata is stored in bootstrap while the data
->>   is stored in blobfile.
->>   ...
->>
->>   bootstrap:  The metadata is a merkle tree (I think that is typo, should be
->>   filesystem tree) whose nodes represents a regular filesystem's
->>   directory/file a leaf node refers to a file and contains hash value of
->>   its file data.
->>     Root node and internal nodes refer to directories and contain the
->>    hash value
->>   of their children nodes."
->>
->> Nydus is already supported "It won't require a different image format, just
->> a seekable tarball that is compatible with old "v1" clients and we need to
->> provide the composefs manifest file." feature in v2.2 and will be released
->> later.
-> 
-> Nydus is not using a tarball compatible with OCI v1.
-> 
-> It defines a media type "application/vnd.oci.image.layer.nydus.blob.v1", that
-> means it is not compatible with existing clients that don't know about
-> it and you need special handling for that.
+Akhil R (1):
+      dmaengine: tegra: Fix memory leak in terminate_all()
 
-I am not sure what you're saying: "media type" is quite out of topic here.
+Alan Stern (1):
+      USB: gadgetfs: Fix race between mounting and unmounting
 
-If you said "mkcomposefs" is done in the server side, what is the media
-type of such manifest files?
+Alex Deucher (2):
+      drm/amd/display: disable S/G display on DCN 3.1.5
+      drm/amd/display: disable S/G display on DCN 3.1.4
 
-And why not Nydus cannot do in the same way?
-https://github.com/dragonflyoss/image-service/blob/master/docs/nydus-zran.md
+Alexander Potapenko (1):
+      affs: initialize fsdata in affs_truncate()
 
-> 
-> Anyway, let's not bother LKML folks with these userspace details.  It
-> has no relevance to the kernel and what file systems do.
+Alexander Stein (1):
+      usb: host: ehci-fsl: Fix module alias
 
-I'd like to avoid, I did't say anything about userspace details, I just would
-like to say
-"merged filesystem tree is also _not_ a new idea of composefs"
-not "media type", etc.
+Alexander Usyskin (2):
+      mei: bus: fix unlink on bus in error path
+      mei: me: add meteor lake point M DID
 
-> 
-> 
->>> The seekable tarball allows individual files to be retrieved.  OCI
->>> clients will not need to pull the entire tarball, but only the individual
->>> files that are not already present in the local CAS. They won't also need
->>> to create the overlay layout at all, as we do today, since it is already
->>> described with the composefs manifest file.
->>> The manifest is portable on different machines with different
->>> configurations, as you can use multiple CAS when mounting composefs.
->>> Some users might have a local CAS, some others could have a
->>> secondary
->>> CAS on a network file system and composefs support all these
->>> configurations with the same signed manifest file.
->>>
->>>>       That is why EROFS selected exist in-kernel fscache and
->>>>       made userspace Nydus adapt it:
->>>>
->>>>         even (here called) manifest on-disk format ---
->>>>              EROFS call primary device ---
->>>>              they call Nydus bootstrap;
->>>>
->>>>       I'm not sure why it becomes impossible for ... ($$$$).
->>> I am not sure what you mean, care to elaborate?
->>
->> I just meant these concepts are actually the same concept with
->> different names and:
->>    Nydus is a 2020 stuff;
-> 
-> CRFS[1] is 2019 stuff.
+Alexander Wetzel (3):
+      wifi: mac80211: Proper mark iTXQs for resumption
+      wifi: mac80211: sdata can be NULL during AMPDU start
+      wifi: mac80211: Fix iTXQ AMPDU fragmentation handling
 
-Does CRFS have anything similiar to a merged filesystem tree?
+Alexandre Belloni (1):
+      ARM: footbridge: drop unnecessary inclusion
 
-Here we talked about local CAS:
-I have no idea CRFS has anything similar to it.
+Alexey Dobriyan (1):
+      proc: fix PIE proc-empty-vm, proc-pid-vm tests
 
-> 
->>    EROFS + primary device is a 2021-mid stuff.
->>
->>>> In addition, if fscache is used, it can also use
->>>> fsverity_get_digest() to enable fsverity for non-on-demand
->>>> files.
->>>>
->>>> But again I think even Google's folks think that is
->>>> (somewhat) broken so that they added fs-verity to its incFS
->>>> in a self-contained way in Feb 2021 [6].
->>>>
->>>> Finally, again, I do hope a LSF/MM discussion for this new
->>>> overlay model (full of massive magical symlinks to override
->>>> permission.)
->>> you keep pointing it out but nobody is overriding any permission.
->>> The
->>> "symlinks" as you call them are just a way to refer to the payload files
->>> so they can be shared among different mounts.  It is the same idea used
->>> by "overlay metacopy" and nobody is complaining about it being a
->>> security issue (because it is not).
->>
->> See overlay documentation clearly wrote such metacopy behavior:
->> https://docs.kernel.org/filesystems/overlayfs.html
->>
->> "
->> Do not use metacopy=on with untrusted upper/lower directories.
->> Otherwise it is possible that an attacker can create a handcrafted file
->> with appropriate REDIRECT and METACOPY xattrs, and gain access to file
->> on lower pointed by REDIRECT. This should not be possible on local
->> system as setting “trusted.” xattrs will require CAP_SYS_ADMIN. But
->> it should be possible for untrusted layers like from a pen drive.
->> "
->>
->> Do we really need such behavior working on another fs especially with
->> on-disk format?  At least Christian said,
->> "FUSE and Overlayfs are adventurous enough and they don't have their
->> own on-disk format."
-> 
-> If users want to do something really weird then they can always find a
-> way but the composefs lookup is limited under the directories specified
-> at mount time, so it is not possible to access any file outside the
-> repository.
-> 
-> 
->>> The files in the CAS are owned by the user that creates the mount,
->>> so
->>> there is no need to circumvent any permission check to access them.
->>> We use fs-verity for these files to make sure they are not modified by a
->>> malicious user that could get access to them (e.g. a container breakout).
->>
->> fs-verity is not always enforcing and it's broken here if fsverity is not
->> supported in underlay fses, that is another my arguable point.
-> 
-> It is a trade-off.  It is up to the user to pick a configuration that
-> allows using fs-verity if they care about this feature.
+Ali Mirghasemi (1):
+      USB: serial: option: add Quectel EC200U modem
 
-I don't think fsverity is optional with your plan.
+Aloka Dixit (1):
+      wifi: mac80211: reset multiple BSSID options in stop_ap()
 
-I wrote this all because it seems I didn't mention the original motivation
-to use fscache in v2: kernel already has such in-kernel local cache, and
-people liked to use it in 2019 rather than another stackable way (as
-mentioned in incremental fs thread.)
+Andrew Halaney (1):
+      net: stmmac: enable all safety features by default
 
-Thanks,
-Gao Xiang
+Andrey Konovalov (1):
+      kasan: mark kasan_kunit_executing as static
 
-> 
-> Regards,
-> Giuseppe
-> 
-> [1] https://github.com/google/crfs
+Andy Shevchenko (1):
+      pinctrl: nomadik: Add missing header(s)
+
+Anuradha Weeraman (1):
+      kernel/printk/printk.c: Fix W=3D1 kernel-doc warning
+
+Ard Biesheuvel (1):
+      ACPI: PRM: Check whether EFI runtime is available
+
+Arend van Spriel (4):
+      scripts: rpm: make clear that mkspec script contains 4.13 feature
+      wifi: brcmfmac: avoid handling disabled channels for survey dump
+      wifi: brcmfmac: avoid NULL-deref in survey dump for 2G only device
+      wifi: brcmfmac: fix regression for Broadcom PCIe wifi devices
+
+Arnaldo Carvalho de Melo (6):
+      tools headers UAPI: Sync linux/kvm.h with the kernel sources
+      tools headers UAPI: Sync x86's asm/kvm.h with the kernel sources
+      tools kvm headers arm64: Update KVM header from the kernel sources
+      tools headers arm64: Sync arm64's cputype.h with the kernel sources
+      perf beauty: Update copy of linux/socket.h with the kernel sources
+      tools headers: Syncronize linux/build_bug.h with the kernel sources
+
+Arnd Bergmann (9):
+      pinctrl: sp7021: fix unused function warning
+      ARM: pxa: enable PXA310/PXA320 for DT-only build
+      ARM: omap1: fix !ARCH_OMAP1_ANY link failures
+      ARM: omap1: fix building gpio15xx
+      staging: vchiq_arm: fix enum vchiq_status return types
+      drm/panfrost: fix GENERIC_ATOMIC64 dependency
+      usb: dwc3: fix extcon dependency
+      tty: serial: qcom_geni: avoid duplicate struct member init
+      firmware: zynqmp: fix declarations for gcc-13
+
+Ashish Mhetre (1):
+      memory: tegra: Remove clients SID override programming
+
+Athira Rajeev (2):
+      perf buildid-cache: Fix the file mode with copyfile() while
+adding file to build-id cache
+      perf test build-id: Fix test check for PE file
+
+Basavaraj Natikar (1):
+      HID: amd_sfh: Fix warning unwind goto
+
+Ben Dooks (1):
+      riscv: dts: sifive: fu740: fix size of pcie 32bit memory
+
+Benedikt Niedermayr (1):
+      memory: omap-gpmc: fix wait pin validation
+
+Caleb Connolly (1):
+      net: ipa: disable ipa interrupt during suspend
+
+Chanh Nguyen (1):
+      USB: gadget: Add ID numbers to configfs-gadget driver names
+
+Chen Zhongjin (1):
+      driver core: Fix test_async_probe_init saves device in wrong array
+
+ChiYuan Huang (1):
+      usb: typec: tcpm: Fix altmode re-registration causes sysfs create fai=
+l
+
+Chris Mi (2):
+      net/mlx5e: Set decap action based on attr for sample
+      net/mlx5: E-switch, Fix switchdev mode after devlink reload
+
+Chris Packham (1):
+      arm64: dts: marvell: AC5/AC5X: Fix address for UART1
+
+Chris Wilson (1):
+      drm/i915/selftests: Unwind hugepages to drop wakeref on error
+
+Christian K=C3=B6nig (2):
+      drm/amdgpu: fix cleaning up reserved VMID on release
+      drm/amdgpu: fix amdgpu_job_free_resources v2
+
+Christoph Hellwig (2):
+      btrfs: factor out scratching of one regular super block
+      btrfs: stop using write_one_page in btrfs_scratch_superblock
+
+Christophe JAILLET (1):
+      PM: AVS: qcom-cpr: Fix an error handling path in cpr_probe()
+
+Claudiu Beznea (1):
+      ARM: dts: at91: sam9x60: fix the ddr clock for sam9x60
+
+Cl=C3=A9ment L=C3=A9ger (1):
+      net: lan966x: add missing fwnode_handle_put() for ports node
+
+Cong Wang (2):
+      l2tp: convert l2tp_tunnel_list to idr
+      l2tp: close all race conditions in l2tp_tunnel_register()
+
+Cristian Marussi (4):
+      firmware: arm_scmi: Clear stale xfer->hdr.status
+      firmware: arm_scmi: Harden shared memory access in fetch_response
+      firmware: arm_scmi: Harden shared memory access in fetch_notification
+      firmware: arm_scmi: Fix virtio channels cleanup on shutdown
+
+Dai Ngo (2):
+      NFSD: register/unregister of nfsd-client shrinker at nfsd
+startup/shutdown time
+      NFSD: replace delayed_work with work_struct for nfsd_client_shrinker
+
+Daisuke Matsuda (2):
+      RDMA/rxe: Fix inaccurate constants in rxe_type_info
+      RDMA/rxe: Prevent faulty rkey generation
+
+Damien Le Moal (1):
+      zonefs: Detect append writes at invalid locations
+
+Dan Carpenter (1):
+      misc: fastrpc: fix error code in fastrpc_req_mmap()
+
+Daniel Scally (1):
+      usb: gadget: g_webcam: Send color matching descriptor per frame
+
+Dario Binacchi (1):
+      ARM: imx: add missing of_node_put()
+
+David Hildenbrand (3):
+      mm/hugetlb: fix PTE marker handling in hugetlb_change_protection()
+      mm/hugetlb: fix uffd-wp handling for migration entries in
+hugetlb_change_protection()
+      mm/userfaultfd: enable writenotify while userfaultfd-wp is
+enabled for a VMA
+
+David Howells (1):
+      rxrpc: Fix wrong error return in rxrpc_connect_call()
+
+David Morley (1):
+      tcp: fix rate_app_limited to default to 1
+
+David Rientjes (1):
+      mm, slab: periodically resched in drain_freelist()
+
+Dean Luick (5):
+      IB/hfi1: Reject a zero-length user expected buffer
+      IB/hfi1: Reserve user expected TIDs
+      IB/hfi1: Fix expected receive setup error exit issues
+      IB/hfi1: Immediately remove invalid memory from hardware
+      IB/hfi1: Remove user expected buffer invalidate race
+
+Dominik Kobinski (2):
+      arm64: dts: msm8992-bullhead: add memory hole region
+      arm64: dts: msm8994-angler: fix the memory map
+
+Drew Davenport (1):
+      drm/i915/display: Check source height is > 0
+
+Duke Xin(=E8=BE=9B=E5=AE=89=E6=96=87) (5):
+      USB: serial: option: add Quectel EM05-G (CS) modem
+      USB: serial: option: add Quectel EM05-G (GR) modem
+      USB: serial: option: add Quectel EM05-G (RS) modem
+      USB: serial: option: add Quectel EM05CN (SG) modem
+      USB: serial: option: add Quectel EM05CN modem
+
+Elliot Berman (1):
+      misc: fastrpc: Pass bitfield into qcom_scm_assign_mem
+
+Emanuele Ghidoli (2):
+      arm64: dts: verdin-imx8mm: fix dahlia audio playback
+      arm64: dts: verdin-imx8mm: fix dev board audio playback
+
+Enzo Matsumiya (1):
+      cifs: do not include page data when checking signature
+
+Eric Dumazet (3):
+      net/sched: sch_taprio: fix possible use-after-free
+      Revert "wifi: mac80211: fix memory leak in ieee80211_if_add()"
+      l2tp: prevent lockdep issue in l2tp_tunnel_register()
+
+Eric Pilmore (1):
+      ptdma: pt_core_execute_cmd() should use spinlock
+
+Esina Ekaterina (1):
+      net: wan: Add checks for NULL for utdm in undo_uhdlc_init and
+unmap_si_regs
+
+Fabio Estevam (4):
+      arm64: dts: imx8mp-phycore-som: Remove invalid PMIC property
+      ARM: dts: imx6ul-pico-dwarf: Use 'clock-frequency'
+      ARM: dts: imx7d-pico: Use 'clock-frequency'
+      ARM: dts: imx6qdl-gw560x: Remove incorrect 'uart-has-rtscts'
+
+Felix Fietkau (3):
+      wifi: mac80211: fix initialization of rx->link and rx->link_sta
+      wifi: mac80211: fix MLO + AP_VLAN check
+      wifi: mt76: dma: fix a regression in adding rx buffers
+
+Filipe Manana (7):
+      btrfs: fix missing error handling when logging directory items
+      btrfs: fix directory logging due to race with concurrent index
+key deletion
+      btrfs: add missing setup of log for full commit at add_conflicting_in=
+ode()
+      btrfs: do not abort transaction on failure to write log tree
+when syncing log
+      btrfs: do not abort transaction on failure to update log root
+      btrfs: fix invalid leaf access due to inline extent during lseek
+      btrfs: fix race between quota rescan and disable leading to NULL
+pointer deref
+
+Flavio Suligoi (1):
+      usb: core: hub: disable autosuspend for TI TUSB8041
+
+Florian Westphal (2):
+      selftests: netfilter: fix transaction test script timeout handling
+      netfilter: conntrack: handle tcp challenge acks during connection reu=
+se
+
+Gao Xiang (1):
+      erofs: fix kvcalloc() misuse with __GFP_NOFAIL
+
+Gaosheng Cui (3):
+      memory: atmel-sdramc: Fix missing clk_disable_unprepare in
+atmel_ramc_probe()
+      memory: mvebu-devbus: Fix missing clk_disable_unprepare in
+mvebu_devbus_probe()
+      tty: fix possible null-ptr-defer in spk_ttyio_release
+
+Gavrilov Ilia (1):
+      netfilter: ipset: Fix overflow before widen in the
+bitmap_ip_create() function.
+
+Geert Uytterhoeven (4):
+      ARM: dts: imx: Fix pca9547 i2c-mux node name
+      ARM: dts: vf610: Fix pca9548 i2c-mux node names
+      arm64: dts: freescale: Fix pca954x i2c-mux node names
+      phy: phy-can-transceiver: Skip warning if no "max-bitrate"
+
+Geetha sowjanya (1):
+      octeontx2-pf: Avoid use of GFP_KERNEL in atomic context
+
+Greg Kroah-Hartman (3):
+      Revert "serial: stm32: Merge hard IRQ and threaded IRQ handling
+into single IRQ handler"
+      USB: misc: iowarrior: fix up header size for
+USB_DEVICE_ID_CODEMERCS_IOW100
+      prlimit: do_prlimit needs to have a speculation check
+
+Guoqing Jiang (1):
+      block/rnbd-clt: fix wrong max ID in ida_alloc_max
+
+Haibo Chen (2):
+      arm64: dts: imx93-11x11-evk: correct clock and strobe pad setting
+      mmc: sdhci-esdhc-imx: correct the tuning start tap and step setting
+
+Hamza Mahfooz (1):
+      drm/amd/display: fix issues with driver unload
+
+Hans de Goede (1):
+      ACPI: video: Add backlight=3Dnative DMI quirk for Acer Aspire 4810T
+
+Hao Sun (2):
+      bpf: Skip invalid kfunc call in backtrack_insn
+      bpf: Skip task with pid=3D1 in send_signal_common()
+
+Harshit Mogalapalli (1):
+      Bluetooth: Fix a buffer overflow in mgmt_mesh_add()
+
+Heiko Carstens (1):
+      s390: workaround invalid gcc-11 out of bounds read warning
+
+Heiner Kallweit (4):
+      net: mdio: validate parameter addr in mdiobus_get_phy()
+      net: stmmac: fix invalid call to mdiobus_get_phy()
+      dt-bindings: phy: g12a-usb3-pcie-phy: fix compatible string documenta=
+tion
+      dt-bindings: phy: g12a-usb2-phy: fix compatible string documentation
+
+Huacai Chen (1):
+      LoongArch: Add HWCAP_LOONGARCH_CPUCFG to elf_hwcap
+
+Hugh Dickins (1):
+      mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
+
+Hui Tang (1):
+      reset: uniphier-glue: Fix possible null-ptr-deref
+
+Hui Wang (1):
+      dmaengine: imx-sdma: Fix a possible memory leak in sdma_transfer_init
+
+Ian Abbott (1):
+      comedi: adv_pci1760: Fix PWM instruction handling
+
+Ilpo J=C3=A4rvinen (1):
+      serial: pch_uart: Pass correct sg to dma_unmap_sg()
+
+Jack Pham (1):
+      usb: ucsi: Ensure connector delayed work items are flushed
+
+Jakub Kicinski (3):
+      net: sched: gred: prevent races when adding offloads to stats
+      MAINTAINERS: add networking entries for Willem
+      Revert "Merge branch 'octeontx2-af-CPT'"
+
+James Houghton (1):
+      hugetlb: unshare some PMDs when splitting VMAs
+
+Janne Grunau (2):
+      nvme-apple: reset controller during shutdown
+      nvme-apple: only reset the controller when RTKit is running
+
+Jason Wang (1):
+      virtio-net: correctly enable callback during start_xmit
+
+Jason Xing (1):
+      tcp: avoid the lookup process failing to get sk in ehash table
+
+Jayesh Choudhary (1):
+      dmaengine: ti: k3-udma: Do conditional decrement of
+UDMA_CHAN_RT_PEER_BCNT_REG
+
+Jens Axboe (4):
+      pktcdvd: check for NULL returna fter calling bio_split_to_limits()
+      io_uring/msg_ring: move double lock/unlock helpers higher up
+      io_uring/msg_ring: fix missing lock on overflow for IOPOLL
+      io_uring/poll: don't reissue in case of poll race on multishot reques=
+t
+
+Jiasheng Jiang (1):
+      HID: intel_ish-hid: Add check for ishtp_dma_tx_map
+
+Jie Hai (1):
+      MAINTAINERS: update Jie Hai's email address
+
+Jimmy Hu (1):
+      usb: xhci: Check endpoint is valid before dereferencing it
+
+Jingbo Xu (2):
+      erofs: add documentation for 'domain_id' mount option
+      erofs: clean up parsing of fscache related options
+
+Jinyang He (5):
+      LoongArch: Adjust PC value when unwind next frame in unwinder
+      LoongArch: Get frame info in unwind_start() when regs is not availabl=
+e
+      LoongArch: Use correct sp value to get graph addr in stack unwinders
+      LoongArch: Strip guess unwinder out from prologue unwinder
+      LoongArch: Add generic ex-handler unwind in prologue unwinder
+
+Jiri Kosina (1):
+      HID: revert CHERRY_MOUSE_000C quirk
+
+Jisoo Jang (1):
+      net: nfc: Fix use-after-free in local_cleanup()
+
+Joel Fernandes (Google) (1):
+      adreno: Shutdown the GPU properly
+
+Johan Hovold (3):
+      arm64: dts: qcom: sc8280xp: fix primary USB-DP PHY reset
+      arm64: dts: qcom: sc8280xp: fix USB-DP PHY nodes
+      USB: fix misleading usb_set_intfdata() kernel doc
+
+John Ogness (1):
+      tty: serial: kgdboc: fix mutex locking order for configure_kgdboc()
+
+Jonas Karlman (2):
+      pinctrl: rockchip: fix reading pull type on rk3568
+      pinctrl: rockchip: fix mux route data for rk3568
+
+Joshua Ashton (2):
+      drm/amd/display: Calculate output_color_space after pixel
+encoding adjustment
+      drm/amd/display: Fix COLOR_SPACE_YCBCR2020_TYPE matrix
+
+Jos=C3=A9 Exp=C3=B3sito (1):
+      HID: uclogic: Add support for XP-PEN Deco 01 V2
+
+Juhyung Park (1):
+      usb-storage: apply IGNORE_UAS only for HIKSEMI MD202 on RTL9210
+
+Kees Cook (1):
+      bnxt: Do not read past the end of test names
+
+Keith Busch (1):
+      nvme-pci: fix timeout request state check
+
+Kevin Hao (1):
+      octeontx2-pf: Fix the use of GFP_KERNEL in atomic context on rt
+
+Khazhismel Kumykov (1):
+      gsmi: fix null-deref in gsmi_get_variable
+
+Klaus Kudielka (2):
+      Revert "ARM: dts: armada-38x: Fix compatible string for gpios"
+      Revert "ARM: dts: armada-39x: Fix compatible string for gpios"
+
+Koba Ko (1):
+      dmaengine: Fix double increment of client_count in dma_chan_get()
+
+Konrad Dybcio (6):
+      dt-bindings: interconnect: Add UFS clocks to MSM8996 A2NoC
+      interconnect: qcom: msm8996: Provide UFS clocks to A2NoC
+      interconnect: qcom: msm8996: Fix regmap max_register values
+      interconnect: qcom: rpm: Use _optional func for provider clocks
+      arm64: dts: qcom: msm8992: Don't use sfpb mutex
+      arm64: dts: qcom: msm8992-libra: Fix the memory map
+
+Krzysztof Kozlowski (5):
+      ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI
+      arm64: dts: qcom: sm8350: correct SDHCI interconnect arguments
+      arm64: dts: imx8mq-thor96: fix no-mmc property for SDHCI
+      Bluetooth: hci_qca: Fix driver shutdown on closed serdev
+      tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buff=
+er
+
+Kurt Kanzenbach (1):
+      net: stmmac: Fix queue statistics reading
+
+Lang Yu (2):
+      drm/amdgpu: correct MEC number for gfx11 APUs
+      drm/amdgpu: allow multipipe policy on ASICs with one MEC
+
+Leon Romanovsky (2):
+      net/mlx5e: Remove optimization which prevented update of ESN state
+      net/mlx5e: Protect global IPsec ASO
+
+Li Jun (1):
+      arm64: dts: imx8mp: correct usb clocks
+
+Liam Howlett (3):
+      nommu: fix memory leak in do_mmap() error path
+      nommu: fix do_munmap() error path
+      nommu: fix split_vma() map_count error
+
+Lino Sanfilippo (1):
+      serial: amba-pl011: fix high priority character transmission in rs486=
+ mode
+
+Linus Torvalds (2):
+      ext4: deal with legacy signed xattr name hash values
+      Linux 6.2-rc5
+
+Liu Shixin (1):
+      dmaengine: xilinx_dma: call of_node_put() when breaking out of
+for_each_child_of_node()
+
+Lizzy Fleckenstein (1):
+      init/Kconfig: fix typo (usafe -> unsafe)
+
+Lorenzo Bianconi (2):
+      wifi: mt76: dma: do not increment queue head if mt76_dma_add_buf fail=
+s
+      wifi: mt76: handle possible mt76_rx_token_consume failures
+
+Lorenzo Stoakes (1):
+      mm: update mmap_sem comments to refer to mmap_lock
+
+Lucas Stach (2):
+      soc: imx: imx8mp-blk-ctrl: enable global pixclk with HDMI_TX_PHY PD
+      soc: imx: imx8mp-blk-ctrl: don't set power device name
+
+Luis Gerhorst (1):
+      bpf: Fix pointer-leak due to insufficient speculative store
+bypass mitigation
+
+Luiz Augusto von Dentz (4):
+      Bluetooth: hci_sync: Fix use HCI_OP_LE_READ_BUFFER_SIZE_V2
+      Bluetooth: ISO: Fix possible circular locking dependency
+      Bluetooth: hci_event: Fix Invalid wait context
+      Bluetooth: ISO: Fix possible circular locking dependency
+
+Maciej =C5=BBenczykowski (1):
+      usb: gadget: f_ncm: fix potential NULL ptr deref in ncm_bitrate()
+
+Maor Dickman (2):
+      net/mlx5: E-switch, Fix setting of reserved fields on
+MODIFY_SCHEDULING_ELEMENT
+      net/mlx5e: QoS, Fix wrongfully setting parent_element_id on
+MODIFY_SCHEDULING_ELEMENT
+
+Marco Felsch (1):
+      arm64: dts: imx8mp-evk: pcie0-refclk cosmetic cleanup
+
+Marek Vasut (4):
+      arm64: dts: imx8mm: Drop xtal clock specifier from eDM SBC
+      gpio: mxc: Protect GPIO irqchip RMW with bgpio spinlock
+      gpio: mxc: Always set GPIOs used as interrupt source to INPUT mode
+      serial: stm32: Merge hard IRQ and threaded IRQ handling into
+single IRQ handler
+
+Marijn Suijten (1):
+      phy: Revert "phy: qualcomm: usb28nm: Add MDM9607 init sequence"
+
+Mario Limonciello (2):
+      gpiolib: acpi: Allow ignoring wake capability on pins that aren't in =
+_AEI
+      gpiolib: acpi: Add a ignore wakeup quirk for Clevo NL5xRU
+
+Mark Brown (1):
+      kselftest: Fix error message for unconfigured LLVM builds
+
+Martin Liska (1):
+      scripts: support GNU make 4.4 in jobserver-exec
+
+Masahiro Yamada (6):
+      tomoyo: fix broken dependency on *.conf.default
+      tomoyo: avoid unneeded creation of builtin-policy.h
+      init/version-timestamp.c: remove unneeded #include <linux/version.h>
+      tomoyo: Omit use of bin2c
+      kbuild: export top-level LDFLAGS_vmlinux only to scripts/Makefile.vml=
+inux
+      kbuild: fix 'make modules' error when CONFIG_DEBUG_INFO_BTF_MODULES=
+=3Dy
+
+Mathias Nyman (5):
+      xhci: Fix null pointer dereference when host dies
+      xhci: Add update_hub_device override for PCI xHCI hosts
+      xhci: Add a flag to disable USB3 lpm on a xhci root port level.
+      usb: acpi: add helper to check port lpm capability using acpi _DSM
+      xhci: Detect lpm incapable xHC USB3 roothub ports from ACPI tables
+
+Matt Atwood (2):
+      drm/i915/dg2: Introduce Wa_18018764978
+      drm/i915/dg2: Introduce Wa_18019271663
+
+Matthew Howell (1):
+      serial: exar: Add support for Sealevel 7xxxC serial cards
+
+Matthias Kaehlcke (2):
+      usb: misc: onboard_hub: Invert driver registration order
+      usb: misc: onboard_hub: Move 'attach' work to the driver
+
+Matthieu Baerts (2):
+      mptcp: netlink: respect v4/v6-only sockets
+      selftests: mptcp: userspace: validate v4-v6 subflows mix
+
+Maxime Ripard (3):
+      firmware: raspberrypi: Fix type assignment
+      drm/vc4: bo: Fix drmm_mutex_init memory hog
+      drm/vc4: bo: Fix unused variable warning
+
+Miaoqian Lin (1):
+      soc: imx8m: Fix incorrect check for of_clk_get_by_name()
+
+Michael Adler (1):
+      USB: serial: cp210x: add SCALANCE LPE-9000 device id
+
+Miguel Ojeda (1):
+      docs: kbuild: remove mention to dropped $(objtree) feature
+
+Mika Westerberg (3):
+      thunderbolt: Do not call PM runtime functions in tb_retimer_scan()
+      thunderbolt: Use correct function to calculate maximum USB3 link rate
+      thunderbolt: Disable XDomain lane 1 only in software connection manag=
+er
+
+Mohan Kumar (1):
+      dmaengine: tegra210-adma: fix global intr clear
+
+Naohiro Aota (1):
+      btrfs: zoned: enable metadata over-commit for non-ZNS setup
+
+Nhat Pham (1):
+      Docs/admin-guide/mm/zswap: remove zsmalloc's lack of writeback warnin=
+g
+
+Nirmoy Das (1):
+      drm/i915: Remove unused variable
+
+Nithin Dabilpuram (1):
+      octeontx2-af: restore rxc conf after teardown sequence
+
+Ola Jeppsson (1):
+      misc: fastrpc: Fix use-after-free race condition for maps
+
+Pablo Neira Ayuso (1):
+      netfilter: nft_payload: incorrect arithmetics when fetching VLAN
+header bits
+
+Paolo Abeni (2):
+      mptcp: explicitly specify sock family at subflow creation time
+      net/ulp: use consistent error code when blocking ULP
+
+Patrice Chotard (4):
+      ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp15xx-dhcor-som
+      ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp15xx-dhcom-som
+      ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp157c-emstamp-arg=
+on
+      ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp151a-prtt1l
+
+Paul E. McKenney (1):
+      tomoyo: Remove "select SRCU"
+
+Paul Moore (2):
+      bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and
+PERF_BPF_EVENT_PROG_UNLOAD
+      bpf: remove the do_idr_lock parameter from bpf_prog_free_id()
+
+Paulo Alcantara (7):
+      cifs: fix potential deadlock in cache_refresh_path()
+      cifs: avoid re-lookups in dfs_cache_find()
+      cifs: don't take exclusive lock for updating target hints
+      cifs: remove duplicate code in __refresh_tcon()
+      cifs: handle cache lookup errors different than -ENOENT
+      cifs: fix return of uninitialized rc in dfs_cache_update_tgthint()
+      cifs: remove unused function
+
+Pavel Begunkov (3):
+      block: fix hctx checks for batch allocation
+      io_uring/msg_ring: fix flagging remote execution
+      io_uring/msg_ring: fix remote queue to disabled ring
+
+Pawel Laszczak (1):
+      usb: cdns3: remove fetched trb from cache before dequeuing
+
+Peter Foley (1):
+      kconfig: Update all declared targets
+
+Peter Harliman Liem (1):
+      dmaengine: lgm: Move DT parsing after initialization
+
+Peter Xu (1):
+      mm/hugetlb: pre-allocate pgtable pages for uffd wr-protects
+
+Pierre-Olivier Mercier (1):
+      Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0"
+
+Pietro Borrello (3):
+      HID: check empty report_list in hid_validate_values()
+      HID: check empty report_list in bigben_probe()
+      HID: betop: check shape of output reports
+
+Prashant Malani (3):
+      usb: typec: altmodes/displayport: Add pin assignment helper
+      usb: typec: altmodes/displayport: Fix pin assignment calculation
+      usb: typec: altmodes/displayport: Use proper macro for pin
+assignment check
+
+Qu Wenruo (2):
+      btrfs: add extra error messages to cover non-ENOMEM errors from
+device_add_list()
+      btrfs: qgroup: do not warn on record without old_roots populated
+
+Rafael J. Wysocki (1):
+      MAINTAINERS: Update the ACPICA development list address
+
+Rahul Rameshbabu (1):
+      sch_htb: Avoid grafting on htb_destroy_class_offload when destroying =
+htb
+
+Raju Rangoju (2):
+      amd-xgbe: TX Flow Ctrl Registers are h/w ver dependent
+      amd-xgbe: Delay AN timeout during KR training
+
+Rakesh Sankaranarayanan (1):
+      net: dsa: microchip: ksz9477: port map correction in ALU table
+entry register
+
+Randy Dunlap (4):
+      reset: ti-sci: honor TI_SCI_PROTOCOL setting when not COMPILE_TEST
+      phy: ti: fix Kconfig warning and operator precedence
+      lib/win_minmax: use /* notation for regular comments
+      net: mlx5: eliminate anonymous module_init & module_exit
+
+Rasmus Villemoes (1):
+      init/Kconfig: fix LOCALVERSION_AUTO help text
+
+Reinette Chatre (3):
+      dmaengine: idxd: Let probe fail when workqueue cannot be enabled
+      dmaengine: idxd: Prevent use after free on completion memory
+      dmaengine: idxd: Do not call DMX TX callbacks during workqueue disabl=
+e
+
+Ricardo Ribalda (1):
+      xhci-pci: set the dma max_seg_size
+
+Richard Zhu (1):
+      phy: freescale: imx8m-pcie: Add one missing error return
+
+Rob Clark (1):
+      drm/msm/gpu: Fix potential double-free
+
+Robert Foss (1):
+      MAINTAINERS: update Robert Foss' email address
+
+Robert Hancock (1):
+      net: macb: fix PTP TX timestamp failure due to packet padding
+
+Roderick Colenbrander (2):
+      HID: playstation: sanity check DualShock4 calibration data.
+      HID: playstation: sanity check DualSense calibration data.
+
+Ryusuke Konishi (1):
+      nilfs2: fix general protection fault in nilfs_btree_insert()
+
+Samuel Holland (1):
+      mmc: sunxi-mmc: Fix clock refcount imbalance during unbind
+
+Sasa Dragic (1):
+      drm/i915: re-disable RC6p on Sandy Bridge
+
+SeongJae Park (1):
+      include/linux/mm: fix release_pages_arg kernel doc comment
+
+Shang XiaoJing (2):
+      phy: usb: sunplus: Fix potential null-ptr-deref in sp_usb_phy_probe()
+      phy: rockchip-inno-usb2: Fix missing clk_disable_unprepare() in
+rockchip_usb2phy_power_on()
+
+Shawn.Shao (1):
+      Add exception protection processing for vd in axi_chan_handle_err fun=
+ction
+
+Shyam Sundar S K (1):
+      MAINTAINERS: Update AMD XGBE driver maintainers
+
+Siddh Raman Pant (1):
+      erofs/zmap.c: Fix incorrect offset calculation
+
+Sohom Datta (1):
+      perf expr: Prevent normalize() from reading into undefined
+memory in the expression lexer
+
+Sriram R (1):
+      mac80211: Fix MLO address translation for multiple bss case
+
+Srujana Challa (6):
+      octeontx2-af: recover CPT engine when it gets fault
+      octeontx2-af: add mbox for CPT LF reset
+      octeontx2-af: modify FLR sequence for CPT
+      octeontx2-af: optimize cpt pf identification
+      octeontx2-af: update cpt lf alloc mailbox
+      octeontx2-af: add mbox to return CPT_AF_FLT_INT info
+
+Stephan Gerhold (2):
+      dt-bindings: soc: qcom: apr: Make qcom,protection-domain optional aga=
+in
+      soc: qcom: apr: Make qcom,protection-domain optional again
+
+Sudheer Mogilappagari (1):
+      ethtool: add netlink attr in rss get reply only if value is not null
+
+Suren Baghdasaryan (1):
+      mm: fix vma->anon_name memory leak for anonymous shmem VMAs
+
+Szymon Heidrich (2):
+      wifi: rndis_wlan: Prevent buffer overflow in rndis_query_oid
+      net: usb: sr9700: Handle negative len
+
+Tetsuo Handa (1):
+      tomoyo: Update website link
+
+Thomas Wei=C3=9Fschuh (1):
+      kheaders: explicitly validate existence of cpio command
+
+Thomas Zimmermann (2):
+      drm/i915: Allow switching away via vga-switcheroo if uninitialized
+      drm/fb-helper: Set framebuffer for vga-switcheroo clients
+
+Tiezhu Yang (1):
+      LoongArch: Use common function sign_extend64()
+
+Tim Harvey (1):
+      arm64: dts: imx8mm-venice-gw7901: fix USB2 controller OC polarity
+
+Tobias Schramm (1):
+      serial: atmel: fix incorrect baudrate setup
+
+Tonghao Zhang (1):
+      bpf: hash map, avoid deadlock with suitable hash mask
+
+Udipto Goswami (2):
+      usb: gadget: f_fs: Prevent race during ffs_ep0_queue_wait
+      usb: gadget: f_fs: Ensure ep0req is dequeued before free_request
+
+Ulf Hansson (1):
+      Revert "arm64: dts: qcom: sm8250: Disable the not yet supported
+cluster idle state"
+
+Utkarsh Patel (1):
+      thunderbolt: Do not report errors if on-board retimers are found
+
+Vijaya Krishna Nivarthi (1):
+      dmaengine: qcom: gpi: Set link_rx bit on GO TRE for rx operation
+
+Viresh Kumar (1):
+      thermal: core: call put_device() only after device_register() fails
+
+Vishnu Dasa (1):
+      VMCI: Use threaded irqs instead of tasklets
+
+Vlad Buslov (1):
+      net/mlx5e: Avoid false lock dependency warning on tc_ht even more
+
+Vladimir Oltean (1):
+      net: enetc: avoid deadlock in enetc_tx_onestep_tstamp()
+
+Willem de Bruijn (1):
+      selftests/net: toeplitz: fix race on tpacket_v3 block close
+
+Xin Long (1):
+      Revert "net: team: use IFF_NO_ADDRCONF flag to prevent ipv6 addrconf"
+
+Xingyuan Mo (1):
+      NFSD: fix use-after-free in nfsd4_ssc_setup_dul()
+
+Xu Yang (1):
+      usb: chipidea: core: fix possible constant 0 if use
+IS_ERR(ci->role_switch)
+
+Yang Yingliang (5):
+      usb: musb: fix error return code in omap2430_probe()
+      net/mlx5: fix missing mutex_unlock in mlx5_fw_fatal_reporter_err_work=
+()
+      device property: fix of node refcount leak in
+fwnode_graph_get_next_endpoint()
+      w1: fix deadloop in __w1_remove_master_device()
+      w1: fix WARNING after calling w1_process()
+
+Ying Hsu (1):
+      Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
+
+Yishai Hadas (1):
+      lib/scatterlist: Fix to calculate the last_pg properly
+
+Yonatan Nachum (1):
+      RDMA/core: Fix ib block iterator counter overflow
+
+Yoshihiro Shimoda (1):
+      phy: renesas: r8a779f0-eth-serdes: Fix register setting
+
+Youling Tang (1):
+      LoongArch: Simplify larch_insn_gen_xxx implementation
+
+Yu Kuai (2):
+      block, bfq: switch 'bfqg->ref' to use atomic refcount apis
+      blk-cgroup: fix missing pd_online_fn() while activating policy
+
+Zach O'Keefe (2):
+      mm/MADV_COLLAPSE: don't expand collapse when vm_end is past requested=
+ end
+      mm/shmem: restore SHMEM_HUGE_DENY precedence over MADV_COLLAPSE
+
+Zhengchao Shao (2):
+      Bluetooth: hci_conn: Fix memory leaks
+      Bluetooth: hci_sync: fix memory leak in hci_update_adv_data()
+
+hongao (1):
+      drm/amd/display: Fix set scaling doesn's work
+
+jie1zhan (1):
+      drm/amdgpu: Correct the power calcultion for Renior/Cezanne.
