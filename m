@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F3667723D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 21:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27847677242
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 21:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjAVUK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 15:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S230107AbjAVUQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 15:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjAVUKz (ORCPT
+        with ESMTP id S229980AbjAVUQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 15:10:55 -0500
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7284B12F37;
-        Sun, 22 Jan 2023 12:10:53 -0800 (PST)
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id A07C27A033B;
-        Sun, 22 Jan 2023 21:10:52 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
-        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] paride: Mark PARIDE as deprecated, point to PATA_PARPORT
-Date:   Sun, 22 Jan 2023 21:10:46 +0100
-Message-Id: <20230122201046.1924-1-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <89c5f007-3be3-f1d1-f6f3-c5c1923a9f2a@omp.ru>
-References: <89c5f007-3be3-f1d1-f6f3-c5c1923a9f2a@omp.ru>
+        Sun, 22 Jan 2023 15:16:29 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9525113D67
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 12:16:28 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id jr19so7042567qtb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 12:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
+        b=MV93Rha993qbgUM2fIbMtzal1h1y1c4pQf7btEiAgwQqR481g66Y7Ewh4oODMlYsUM
+         By5j0l5vOmH6l+W+NZmEbKwPAhZXTqCwcwJLFUygODy3v56yPlUEYDWPsoMpIz1NBoue
+         KU9UDyo0RjRxNsN2TrQUfVsN3zJ3VNpmmLl57MNSqKal2RU2vB6XK+MpvJRihWkz8S52
+         eQqxmEXVxvEDm93wr4A9UY4h1LtriliIpsPmLt02FIRDijL0RvfBcL6X9uU94pkIiPz6
+         +my7znDUEH/Wf9SyMrgMHGdyJqQEIcrCaCx4QdWJx/MKRiUF6nob4QtSuOjPq5sIuhTQ
+         6zYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/krrOzf32PMDRBi/P9qe9m671OONK8NSr+9AstJjJkE=;
+        b=ckrbYQNyA8mKbocQY6bJR5L19vQWMEepKdMjC+GBY20Eo18VbjbgJAWe+Cdul6sBtk
+         TnAUG//z+Oqn6kRAe4jiKXYrcn9mwpHWHWFvtn3e+XehyinRJ2nn249PrFGyEkrSO5/c
+         axr/zfDYbijkhtx5m2VJjDe2JToOW8SRf93lQx7fw5rXsi50cAlCd6EdIuTULu9iJp29
+         Czsfp1gyoQt/legbiTAixEZmPm9bzgTYUmrh6Y1Cr3K/DkKksJJcU95kHECYTR/6yp6f
+         nDnNjyvocpi091kWLHkLx3+aW8iACoKYuG0petcp4SyVmidoL2+xE4b8NcCjenOG1Ib4
+         s8Dw==
+X-Gm-Message-State: AFqh2krqcem3vIr7Ueg1vNPYSx12SNGj/NscuZX/1l0NDhGA7d0+fQor
+        KMTFpm+2sufE5sYMSEYvNJ9gKwIzyPiIVvk8Naw=
+X-Google-Smtp-Source: AMrXdXt0Rc+AMJu92jc0HWagyAERbfyK7MxCY1fBJyaJX1KGLWg6++jghdky9dq43vgi9vpDU+5lzI2EUQZuW1jP2Q4=
+X-Received: by 2002:ac8:1497:0:b0:3b6:30bb:934 with SMTP id
+ l23-20020ac81497000000b003b630bb0934mr996136qtj.499.1674418587187; Sun, 22
+ Jan 2023 12:16:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:622a:448:b0:3ab:9268:4e7b with HTTP; Sun, 22 Jan 2023
+ 12:16:26 -0800 (PST)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <mrhamidouabdoulaye@gmail.com>
+Date:   Sun, 22 Jan 2023 21:16:26 +0100
+Message-ID: <CADaEA9Mgx9DM=DH5e0ihFRUmE7KYV15CBUuoe8T4dr2=0s1NwQ@mail.gmail.com>
+Subject: From Dr Ava Smith in United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Kconfig and runtime deprecation warnings to PARIDE, pointing users
-to PATA_PARPORT.
-
-Signed-off-by: Ondrej Zary <linux@zary.sk>
----
- drivers/block/Kconfig         | 4 +++-
- drivers/block/paride/paride.c | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
-index a2184b428493..3a2065c6a4d7 100644
---- a/drivers/block/Kconfig
-+++ b/drivers/block/Kconfig
-@@ -104,7 +104,7 @@ config GDROM
- 	  You can also build this as a module which will be called gdrom.
- 
- config PARIDE
--	tristate "Parallel port IDE device support"
-+	tristate "Parallel port IDE device support (DEPRECATED)"
- 	depends on PARPORT_PC
- 	help
- 	  There are many external CD-ROM and disk devices that connect through
-@@ -130,6 +130,8 @@ config PARIDE
- 	  "MicroSolutions backpack protocol", "DataStor Commuter protocol"
- 	  etc.).
- 
-+	  This driver is deprecated, replaced by libata-based PATA_PARPORT.
-+
- source "drivers/block/paride/Kconfig"
- 
- source "drivers/block/mtip32xx/Kconfig"
-diff --git a/drivers/block/paride/paride.c b/drivers/block/paride/paride.c
-index 0e287993b778..a4a49da9d0d2 100644
---- a/drivers/block/paride/paride.c
-+++ b/drivers/block/paride/paride.c
-@@ -452,6 +452,8 @@ void *pi_register_driver(char *name)
- 	struct parport_driver *parp_drv;
- 	int ret;
- 
-+	pr_warn("PARIDE is deprecated. Use PATA_PARPORT instead.\n");
-+
- 	parp_drv = kzalloc(sizeof(*parp_drv), GFP_KERNEL);
- 	if (!parp_drv)
- 		return NULL;
 -- 
-Ondrej Zary
-
+Hello Dear
+My name is Dr Ava Smith,a medical doctor from United States.
+I have Dual citizenship which is English and French.
+I will share pictures and more details about me as soon as i get
+a response from you
+Thanks
+Ava
