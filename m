@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CE7676C42
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF26676C48
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjAVLTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 06:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S229954AbjAVLVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 06:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjAVLTh (ORCPT
+        with ESMTP id S229902AbjAVLVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 06:19:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B931C31F
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:19:35 -0800 (PST)
+        Sun, 22 Jan 2023 06:21:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E6F1CAC1;
+        Sun, 22 Jan 2023 03:21:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DFA460BB8
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 11:19:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D3CEC433EF;
-        Sun, 22 Jan 2023 11:19:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F8FAB80A36;
+        Sun, 22 Jan 2023 11:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6408C433D2;
+        Sun, 22 Jan 2023 11:21:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674386374;
-        bh=LsoAjTPk29j47GooDDWRB6+zeoprFTT+cR3XifzLdTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=STV/xNCzSat5fd8uTLkC7QcjZsZNudWCZtCmmfFlif3QDCEQt5FHyYvxy5fqOUddI
-         UGl9BoYxcRZPfZlobbl/SiMgCkRp/GK6xngd2rX0kZg/NEkahaC2kpRIJXhV2g+EDa
-         7ybqotzZmredt1GLXSB2koQBEyOjlN4BotIbG/UuyLneRGcrXoK9PgfCBHM4mdf92u
-         54TZYefPUxSzG1smz27u7fDYjx5p/R/d6SaqWFh1Mwjj5VHHs6G1erMYC7DsErm7Z6
-         1cwsUMoG1FdRs6ZEx4LY1cJ+18vLpffO6FuYGldt3yg2lDzXCH//FPUGpfppqmsxtl
-         HDggpY95mFvlw==
-Received: by pali.im (Postfix)
-        id 8398A93D; Sun, 22 Jan 2023 12:19:31 +0100 (CET)
-Date:   Sun, 22 Jan 2023 12:19:31 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when
- building 32-bit uImage
-Message-ID: <20230122111931.hgcsc72fk6alrmzu@pali>
-References: <20220820105200.30425-1-pali@kernel.org>
- <20220828095659.4061-1-pali@kernel.org>
- <e3cb2642-20e4-6c26-104d-329a04260946@csgroup.eu>
- <c8d657db-02da-7840-5b40-755e47277a2c@csgroup.eu>
- <20220828174135.rcql4uiunqbnn5gh@pali>
- <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
- <20221208191602.diywrt3g2f6zmt4s@pali>
- <aca70dc9-2185-9def-7bc0-b415bec8a5c6@csgroup.eu>
- <20221224174452.xxlkmos7yoy3qn42@pali>
+        s=k20201202; t=1674386475;
+        bh=hhL4owlHSb7bTGGL4JOXpwJorCM1k6EPqpOeVcz6xuk=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=kSrwphvoMzmfojC0Gr5hBMhrk/Zt+5W3hSe8664nYNogg1GCoZVD4xPRJppoVa1Wn
+         giClbBm0b9FuwiPRAOK61GYWmnIdWYjw8443ol25fz1kSYhL66Ui00xscNYfyLKlt5
+         cXd+w27p0pQyErVDTAfOptz9kCjBJK4RaeS2syg/AX6UoJUjq1K0PVWw9oBpzffINi
+         pk5ghYXJzqxqRNy3vpAEmizr5+YvBZqCw6oyunbbqj3oa3KYOGW3ou5P+0WIbQcVBs
+         tDz96oDRoyHkmprvuj+/fCbXsuXE86mUb60o2eRc6AOr0iL5h02Z4hn11QL1zVH4c8
+         lxZcSitMEm3QQ==
+Message-ID: <bbb4f42a-28a1-e54d-28d2-1c3c23fc9074@kernel.org>
+Date:   Sun, 22 Jan 2023 12:21:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221224174452.xxlkmos7yoy3qn42@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 1/2] ASoC: qcom: dt-bindings: lpass-va-macro: Update
+ clock name
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        devicetree@vger.kernel.org, konrad.dybcio@linaro.org
+References: <1674210685-19944-1-git-send-email-quic_srivasam@quicinc.com>
+ <1674210685-19944-2-git-send-email-quic_srivasam@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1674210685-19944-2-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 24 December 2022 18:44:52 Pali Rohár wrote:
-> On Thursday 08 December 2022 19:57:39 Christophe Leroy wrote:
-> > Le 08/12/2022 à 20:16, Pali Rohár a écrit :
-> > > On Sunday 28 August 2022 17:43:53 Christophe Leroy wrote:
-> > >> Le 28/08/2022 à 19:41, Pali Rohár a écrit :
-> > >>> On Sunday 28 August 2022 17:39:25 Christophe Leroy wrote:
-> > >>>> Le 28/08/2022 à 19:33, Christophe Leroy a écrit :
-> > >>>>>
-> > >>>>>
-> > >>>>> Le 28/08/2022 à 11:56, Pali Rohár a écrit :
-> > >>>>>> When CONFIG_TARGET_CPU is specified then pass its value to the compiler
-> > >>>>>> -mcpu option. This fixes following build error when building kernel with
-> > >>>>>> powerpc e500 SPE capable cross compilers:
-> > >>>>>>
-> > >>>>>>        BOOTAS  arch/powerpc/boot/crt0.o
-> > >>>>>>      powerpc-linux-gnuspe-gcc: error: unrecognized argument in option
-> > >>>>>> ‘-mcpu=powerpc’
-> > >>>>>>      powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are:
-> > >>>>>> 8540 8548 native
-> > >>>>>>      make[1]: *** [arch/powerpc/boot/Makefile:231:
-> > >>>>>> arch/powerpc/boot/crt0.o] Error 1
-> > >>>>>
-> > >>>>> corenet64_smp_defconfig :
-> > >>>>>
-> > >>>>>      BOOTAS  arch/powerpc/boot/crt0.o
-> > >>>>> powerpc64-linux-gcc: error: missing argument to '-mcpu='
-> > >>>>> make[1]: *** [arch/powerpc/boot/Makefile:237 : arch/powerpc/boot/crt0.o]
-> > >>>>> Erreur 1
-> > >>>>> make: *** [arch/powerpc/Makefile:253 : uImage] Erreur 2
-> > >>>>>
-> > >>>>>
-> > >>>>
-> > >>>> Seems like in fact, E5500_CPU and E6500_CPU are not taken into account
-> > >>>> in CONFIG_TARGET_CPU, and get special treatment directly in
-> > >>>> arch/powerpc/Makefile.
-> > >>>>
-> > >>>> This goes unnoticed because of CFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=
-> > >>>> $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
-> > >>>>
-> > >>>> I think we need to fix that prior to your patch.
-> > >>>
-> > >>> It looks like that CONFIG_TARGET_CPU is broken.
-> > >>>
-> > >>>     $ make ARCH=powerpc corenet64_smp_defconfig CROSS_COMPILE=powerpc64-linux-gnu-
-> > >>>     ...
-> > >>>     # configuration written to .config
-> > >>>
-> > >>>     $ grep CONFIG_TARGET_CPU .config
-> > >>>     CONFIG_TARGET_CPU_BOOL=y
-> > >>>
-> > >>> CONFIG_TARGET_CPU_BOOL is set but CONFIG_TARGET_CPU not!
-> > >>
-> > >> Yes, because there is no default value for E5500_CPU and E6500_CPU. We
-> > >> need to add one for each.
-> > > 
-> > > With "[PATCH v1] powerpc/64: Set default CPU in Kconfig" patch from
-> > > https://lore.kernel.org/linuxppc-dev/3fd60c2d8a28668a42b766b18362a526ef47e757.1670420281.git.christophe.leroy@csgroup.eu/
-> > > this change does not throw above compile error anymore.
-> > 
-> > 
-> > That patch should land in powerpc/next soon. When it has landed, could 
-> > you resent this patch so that snowpatch checks the build again ?
+
+Subject prefix: ASoC: dt-bindings: qcom,lpass-va-macro:
+(you got such comment few days ago)
+
+On 20/01/2023 11:31, Srinivasa Rao Mandadapu wrote:
+> Update clock name from core to macro in lpass-va-macro node
+> to make it compatible with existing driver and device tree node.
+
+s/device tree node/existing DTS files/
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 > 
-> Yes. But I'm still waiting because patch is not in powerpc/next yet.
+> Fixes: 67d99b23c881 ("ASoC: qcom: dt-bindings: add bindings for lpass va macro codec")
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Reported-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Seems that it still has not landed. Any suggestions to move forward?
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-> > Because at the time being it is flagged as "failed", see 
-> > https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220828095659.4061-1-pali@kernel.org/
-> > 
-> > Christophe
+You also got this comment last time... so I don't know what to do more
+here...
+
+Best regards,
+Krzysztof
+
