@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC3D6772B2
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A32D6772B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjAVVfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 16:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S230236AbjAVVhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 16:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjAVVfD (ORCPT
+        with ESMTP id S229879AbjAVVg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:35:03 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544F016AE0;
-        Sun, 22 Jan 2023 13:35:01 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 22 Jan 2023 16:36:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FCB16AE0;
+        Sun, 22 Jan 2023 13:36:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P0RN36mpvz4xyF;
-        Mon, 23 Jan 2023 08:34:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674423300;
-        bh=vgWQMNWMOBeEgmRIMGTyD/Ft1sPNNTzyu9y34fCVk8k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Kox7UxlzDLpHNXbeT9tmCus0kD7YxekyPbq/0xkU3zjeQKgwglCgnfywhA4u29RlQ
-         MNpCR4bhWm+Y7RtuxBBZw8GJQL4r/6FZJhn4fy8Dgg7njvffGITTVZ7ahn1rmYipNE
-         MBrGSOEYOr9AQB1aC+KehQb/mf3whvGGFxtdVJsLz7gsn/SIzz44ysxZzOGr7Wzb/Y
-         nnazBZ3uCafgeOrOKMRia3YJb8M5tjxXn6KyOws4dIU9qawlVaktVollGHlR9/aP/c
-         PU4ygh6rrTXLN2iMQEyKFn965AjMTS28tmPDDEJzVKXbIMnHiiU6W/gUD1siw9j6/U
-         w0Vx7wzLliNEw==
-Date:   Mon, 23 Jan 2023 08:34:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
-Message-ID: <20230123083458.45f3641c@canb.auug.org.au>
-In-Reply-To: <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
-References: <20230123080830.7d50fccd@canb.auug.org.au>
-        <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1DEAB80B45;
+        Sun, 22 Jan 2023 21:36:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7E3C433D2;
+        Sun, 22 Jan 2023 21:36:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674423415;
+        bh=+kFCj2QmQqaqkQtiLOFfyT0VJOQjHQOx/aIvyvGdoLs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qdLvj6w6684w6d/X9zYg2BFZL54G4t/TuI0Ru07Dj8kOCPAVoymyXtBQGBX0RPJgO
+         vFWVq0fHA9L+aPQE+N5MOg+6YTtOcP4dTjZmtyPALYNYrzyNnIhD9D4Cg+s1dLoWRn
+         MTJ0fd1Mc4eMZu8t+o6Ry0xiUg+4vXPCoYAc9LUiLo09CPpbxmYMwjiHz020m3S/KF
+         r0/s0x+hi+U9rpO1ef709JJU1EFLq9kdQwc68nhiBS1+PYEhvp8sB6o3uWPwvR8rBs
+         YtF0hwHJxaiHHqqishvWLDP0UhZxVIOo4CWWoXdjGwNsbqYkC59+fkVed2OcOVwT1C
+         rPI2g6AG2BcFw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] Docs: Add missing SPDX license identifiers of
+Date:   Sun, 22 Jan 2023 21:36:42 +0000
+Message-Id: <20230122213650.187710-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iVJQIDUCZV/cJkn5NgggFCI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/iVJQIDUCZV/cJkn5NgggFCI
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Some subsystem documents are missing SPDX license identifiers on index
+files.  This patchset adds those.
 
-Hi Jens,
+Changes from v1
+(https://lore.kernel.org/lkml/20230114194741.115855-2-sj@kernel.org/)
+- Separate from index file content changes
+- Separate patch for each subsystem doc (Alex Deucher)
+- Use MIT license for gpu (Alex Deucher)
 
-On Sun, 22 Jan 2023 14:30:15 -0700 Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 1/22/23 2:08=E2=80=AFPM, Stephen Rothwell wrote:
-> >=20
-> > Commit
-> >=20
-> >   24337ddf1ff4 ("io_uring: Enable KASAN for request cache")
-> >=20
-> > is missing a Signed-off-by from its committer. =20
->=20
-> Fixed up, thanks.
+SeongJae Park (8):
+  Docs/crypto/index: Add missing SPDX License Identifier
+  Docs/driver-api/index: Add missing SPDX License Identifier
+  Docs/gpu/index: Add missing SPDX License Identifier
+  Docs/hwmon/index: Add missing SPDX License Identifier
+  Docs/input/index: Add missing SPDX License Identifier
+  Docs/mm/index: Add missing SPDX License Identifier
+  Docs/scheduler/index: Add missing SPDX License Identifier
+  Docs/sound/index: Add missing SPDX License Identifier
 
-Thanks.
+ Documentation/crypto/index.rst     | 2 ++
+ Documentation/driver-api/index.rst | 2 ++
+ Documentation/gpu/index.rst        | 2 ++
+ Documentation/hwmon/index.rst      | 2 ++
+ Documentation/input/index.rst      | 2 ++
+ Documentation/mm/index.rst         | 2 ++
+ Documentation/scheduler/index.rst  | 2 ++
+ Documentation/sound/index.rst      | 2 ++
+ 8 files changed, 16 insertions(+)
 
-Except you misspelled "Signed-off-by" :-)
+-- 
+2.25.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iVJQIDUCZV/cJkn5NgggFCI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPNrAIACgkQAVBC80lX
-0Gx37Af+LaA/dwy6gN1s09kONhcXZMMw2nEiV8uihi6czSHCsOZTBGJzoCO7pZ9d
-GODGy+sDN123v4Pnk2gsoRVTHuMW781jVrM/XQof4/YMzNceqHdOFyzIiD97YL3C
-f0CuWaOo1svUzcbpGlgaLHabZb/Xzq/O54myGeFIecNpVcnshci0H6h+jXNIW7F+
-tnci3QdzhXJ0uq4q8KFU58rfnBpmM5uaP8w8YOgqNntXsPVLkqiuCI27NQcAVLMI
-wjDA7XmgCTFqxCR0PQq7mchUDczJ4A6lu+4MJrrUUm2h15HnGB79vKEFCgXLjwh9
-S4lQhX9nQYUCLHd04n5CLbtiY3rUHw==
-=Gkrd
------END PGP SIGNATURE-----
-
---Sig_/iVJQIDUCZV/cJkn5NgggFCI--
