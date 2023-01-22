@@ -2,194 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DE8676E19
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 16:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BB7676E10
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 16:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjAVPHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 10:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        id S230087AbjAVPGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 10:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjAVPHC (ORCPT
+        with ESMTP id S230018AbjAVPGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 10:07:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844DE1E29C;
-        Sun, 22 Jan 2023 07:06:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D0A9B80B16;
-        Sun, 22 Jan 2023 15:06:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54033C433EF;
-        Sun, 22 Jan 2023 15:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674400016;
-        bh=EAvMcsAOcXo3fRxWrLH8jQ4AGIyXihXNUSTFO7orxQY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=j4Wt7Xk6d9Kgf0cMB3BxeAKoovKAbtjwHswN2endfYuvnZSCr+hg5Cj1K7WwXEdeu
-         9WL+keI1F7sh6L+hNstvBj2r7vi62cSJvdEcpA/89m8+5MajOLsHKwxSzBNg8kP0lA
-         iMlT+MJz0nFxUF229lgKgPnYbjVxXWOeCIqbsguw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.14 00/25] 4.14.304-rc1 review
-Date:   Sun, 22 Jan 2023 16:04:00 +0100
-Message-Id: <20230122150217.788215473@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Sun, 22 Jan 2023 10:06:38 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC6A1814A
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 07:06:36 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P0GZk1VtBz9yfJb
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 22:58:38 +0800 (CST)
+Received: from [10.48.133.163] (unknown [10.48.133.163])
+        by APP2 (Coremail) with SMTP id GxC2BwDHmmHUUM1jwHa4AA--.9325S2;
+        Sun, 22 Jan 2023 16:06:09 +0100 (CET)
+Message-ID: <30f2ce62-c5c8-6506-d488-26f83933e1f7@huaweicloud.com>
+Date:   Sun, 22 Jan 2023 16:05:54 +0100
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.304-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.304-rc1
-X-KernelTest-Deadline: 2023-01-24T15:02+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Content-Language: en-US
+From:   Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+Cc:     Diogo Behrens <diogo.behrens@huawei.com>,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC] Potential unnecessary barrier in slow path of rt_mutex
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com, akpm@osdl.org,
+        arjan@linux.intel.com, tglx@linutronix.de, joel@joelfernandes.org,
+        paulmck@kernel.org, stern@rowland.harvard.edu
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDHmmHUUM1jwHa4AA--.9325S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ary7Ar1xtw47ZrWrZryrJFb_yoW7Ar1xpF
+        WUKayDJrZ8tr1jy3ykGr4jy34rAa95A3yUJwnagrWUuFnxGF4rKr48GFy09FyUCrn5Za18
+        Za1jkas2kF4DCaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU1zuWJUUUUU==
+X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.304 release.
-There are 25 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+Hello,
 
-Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-Anything received after that time might be too late.
+We have been trying to verify that the rt_mutex patch 
+https://lkml.org/lkml/2022/12/2/279 guarantees the intended acquire 
+semantics and that there are no other potential problems with it. For 
+that, we are using a verification tool as discussed in 
+https://lkml.org/lkml/2022/8/26/597.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.304-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+The tool reported a data race for which I already submitted a patch in 
+https://lkml.org/lkml/2023/1/20/702.
 
-thanks,
+During the discussion of the rt_mutex patch, Will proposed replacing the 
+explicit barrier in 'mark_rt_mutex_waiters' with 
+'smp_acquire__after_ctrl_dep()'. We wanted to check if it would be 
+possible to get rid of the barrier instead of weakening it.
 
-greg k-h
+While according to LKMM /tools/memory-model/linux-kernel.cat, mutual 
+exclusion is violated if we do this, the verification tool reported that 
+this violation is not possible according to the formal memory models of 
+aarch64, riscv and power. Interestingly, if the data race from above is 
+fixed, mutual exclusion is guaranteed by LKMM even if we fully remove 
+the barrier. The reason for this is that marking the racy access 
+introduces more ordering guarantees.
 
--------------
-Pseudo-Shortlog of commits:
+Another possibility is to keep the barrier, but revert the change 
+WRITE_ONCE() -> xchg_acquire() in 'rt_mutex_set_owner'. Boqun suggested 
+this one might be better because it's weird using xchg_acquire() to get 
+an acquire store.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.304-rc1
+Either the barrier or the acquire store are needed for the correctness 
+of the algorithm. If we relax both, the tool reports a violation.
 
-YingChi Long <me@inclyc.cn>
-    x86/fpu: Use _Alignof to avoid undefined behavior in TYPE_ALIGN
+I would like to get some feedback about the following.
 
-Khazhismel Kumykov <khazhy@chromium.org>
-    gsmi: fix null-deref in gsmi_get_variable
+(1) Since the barriers are in the slow path of the algorithm, is it 
+worth it to try to play it smart or should we play it safe (at the cost 
+of potentially having an extra barrier)?
 
-Tobias Schramm <t.schramm@manjaro.org>
-    serial: atmel: fix incorrect baudrate setup
+(2) In which cases were the acquiring semantics missing before the 
+rt_mutex patch? This is not clear for me from the patch and the 
+corresponding discussion. Once I understand this, I might be able to use 
+the rules from LKMM to give a more formal argument of why one of the 
+barriers is not needed (or find an example that shows that indeed both 
+barriers are necessary).
 
-Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-    serial: pch_uart: Pass correct sg to dma_unmap_sg()
+(3) If we agree that one barrier might not necessary, but we still keep 
+both to be safe, would it make sense to add some comment in the code 
+along the lines "Of these N barriers, you can probably get away with the 
+following subset of them, but we leave all in place to be safe"?
 
-Juhyung Park <qkrwngud825@gmail.com>
-    usb-storage: apply IGNORE_UAS only for HIKSEMI MD202 on RTL9210
+The following litmus test (I hope comments are enough to trace back to 
+the real implementation) shows all the above issues in detail and how 
+the changes I propose impact them. It can be run using the herd7 tool 
+http://diy.inria.fr/www/?record=linux#.
+The final query asks if P0 can release the lock via the fast path even 
+if P1 set the wait bit. The expected result is "No".
 
-Maciej Żenczykowski <maze@google.com>
-    usb: gadget: f_ncm: fix potential NULL ptr deref in ncm_bitrate()
+C rt_mutex
 
-Daniel Scally <dan.scally@ideasonboard.com>
-    usb: gadget: g_webcam: Send color matching descriptor per frame
+{
+   atomic_t owner = ATOMIC_INIT(0);
+}
 
-Alexander Stein <alexander.stein@ew.tq-group.com>
-    usb: host: ehci-fsl: Fix module alias
+P0(int *owner, int *x) {
+   int r0 = 2;                                     // current task
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);    // rtlock acquire
+   int r2 = READ_ONCE(*x);                         // critical section;
+   WRITE_ONCE(*x, r2 + 1);                         // marked to avoid 
+data races
+   int r3 = atomic_cmpxchg_release(owner,r0,0);    // rtlock release 
+succeeds
+}
 
-Michael Adler <michael.adler@siemens.com>
-    USB: serial: cp210x: add SCALANCE LPE-9000 device id
+P1(int *owner, int *x) {
+   int r0 = 4;                                     // current task
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);    // rtlock acquire failed
+   int r2 = *owner;                                // mark waiters
+   int r3 = atomic_cmpxchg_relaxed(owner,r2,r2|1); // mark waiters succeeds
+   smp_mb();                                       // mark waiters
+   int r4 = xchg_acquire(owner,r0);                // set owner
+   int r5 = READ_ONCE(*x);                         // critical section
+}
 
-Flavio Suligoi <f.suligoi@asem.it>
-    usb: core: hub: disable autosuspend for TI TUSB8041
+// 0:r1 = 0:    rtlock acquire succeeds
+// 0:r3 = 2:    rtlock release succeeds
+// 1:r1 = 2:    rtlock acquire failed
+// 1:r3 = 1:r2: mark waiters succeeds
+// 1:r5 = 0:    critical section violated
+exists (0:r1 = 0 /\ 0:r3 = 2 /\ 1:r1 = 2 /\ 1:r3 = 1:r2 /\ 1:r5 = 0)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    USB: misc: iowarrior: fix up header size for USB_DEVICE_ID_CODEMERCS_IOW100
+herd7 reports a race related to 'mark waiters'. Below is the fix I 
+proposed in https://lkml.org/lkml/2023/1/20/702.
 
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05CN modem
+P0(int *owner, int *x) {
+   int r0 = 2;
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);
+   int r2 = READ_ONCE(*x);
+   WRITE_ONCE(*x, r2 + 1);
+   int r3 = atomic_cmpxchg_release(owner,r0,0);
+}
 
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05CN (SG) modem
+P1(int *owner, int *x) {
+   int r0 = 4;
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);
+   int r2 = READ_ONCE(*owner);
+   int r3 = atomic_cmpxchg_relaxed(owner,r2,r2|1);
+   smp_mb();
+   int r4 = xchg_acquire(owner,r0);
+   int r5 = READ_ONCE(*x);
+}
 
-Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
-    USB: serial: option: add Quectel EC200U modem
+This code is correct (result is "No") and there are no races, but it has 
+an unnecessary barrier. smp_mb() can be removed without affecting the 
+result.
 
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G (RS) modem
+P0(int *owner, int *x) {
+   int r0 = 2;
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);
+   int r2 = READ_ONCE(*x);
+   WRITE_ONCE(*x, r2 + 1);
+   int r3 = atomic_cmpxchg_release(owner,r0,0);
+}
 
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G (CS) modem
+P1(int *owner, int *x) {
+   int r0 = 4;
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);
+   int r2 = READ_ONCE(*owner);
+   int r3 = atomic_cmpxchg_relaxed(owner,r2,r2|1);
+   int r4 = xchg_acquire(owner,r0);
+   int r5 = READ_ONCE(*x);
+}
 
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G (GR) modem
+The other possibility is to keep the barrier, but relax the acquire store.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    prlimit: do_prlimit needs to have a speculation check
+P0(int *owner, int *x) {
+   int r0 = 2;
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);
+   int r2 = READ_ONCE(*x);
+   WRITE_ONCE(*x, r2 + 1);
+   int r3 = atomic_cmpxchg_release(owner,r0,0);
+}
 
-Jimmy Hu <hhhuuu@google.com>
-    usb: xhci: Check endpoint is valid before dereferencing it
+P1(int *owner, int *x) {
+   int r0 = 4;
+   int r1 = atomic_cmpxchg_acquire(owner,0,r0);
+   int r2 = READ_ONCE(*owner);
+   int r3 = atomic_cmpxchg_relaxed(owner,r2,r2|1);
+   smp_mb();
+   WRITE_ONCE(*owner,r0);
+   int r5 = READ_ONCE(*x);
+}
 
-Ricardo Ribalda <ribalda@chromium.org>
-    xhci-pci: set the dma max_seg_size
+Once again the result is "No".
 
-Ryusuke Konishi <konishi.ryusuke@gmail.com>
-    nilfs2: fix general protection fault in nilfs_btree_insert()
-
-Jaegeuk Kim <jaegeuk@kernel.org>
-    f2fs: let's avoid panic if extent_tree is not created
-
-Jiri Slaby (SUSE) <jirislaby@kernel.org>
-    RDMA/srp: Move large values to a new enum for gcc13
-
-Daniil Tatianin <d-tatianin@yandex-team.ru>
-    net/ethtool/ioctl: return -EOPNOTSUPP if we have no phy stats
-
-Olga Kornievskaia <olga.kornievskaia@gmail.com>
-    pNFS/filelayout: Fix coalescing test for single DS
-
-
--------------
-
-Diffstat:
-
- Makefile                            |  4 ++--
- arch/x86/kernel/fpu/init.c          |  7 ++-----
- drivers/firmware/google/gsmi.c      |  7 ++++---
- drivers/infiniband/ulp/srp/ib_srp.h |  8 +++++---
- drivers/tty/serial/atmel_serial.c   |  8 +-------
- drivers/tty/serial/pch_uart.c       |  2 +-
- drivers/usb/core/hub.c              | 13 +++++++++++++
- drivers/usb/gadget/function/f_ncm.c |  4 +++-
- drivers/usb/gadget/legacy/webcam.c  |  3 +++
- drivers/usb/host/ehci-fsl.c         |  2 +-
- drivers/usb/host/xhci-pci.c         |  2 ++
- drivers/usb/host/xhci-ring.c        |  5 ++++-
- drivers/usb/misc/iowarrior.c        |  2 +-
- drivers/usb/serial/cp210x.c         |  1 +
- drivers/usb/serial/option.c         | 17 +++++++++++++++++
- drivers/usb/storage/uas-detect.h    | 13 +++++++++++++
- drivers/usb/storage/unusual_uas.h   |  7 -------
- fs/f2fs/extent_cache.c              |  3 ++-
- fs/nfs/filelayout/filelayout.c      |  8 ++++++++
- fs/nilfs2/btree.c                   | 15 ++++++++++++---
- kernel/sys.c                        |  2 ++
- net/core/ethtool.c                  |  3 ++-
- 22 files changed, 99 insertions(+), 37 deletions(-)
-
+Regards,
+Hernan
 
