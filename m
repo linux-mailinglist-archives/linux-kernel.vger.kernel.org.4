@@ -2,75 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42996772CD
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06FC6772D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 22:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjAVVhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 16:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S230018AbjAVViE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 16:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjAVVhH (ORCPT
+        with ESMTP id S229986AbjAVViD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 16:37:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC40216AF7;
-        Sun, 22 Jan 2023 13:37:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1C95ECE0FAB;
-        Sun, 22 Jan 2023 21:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A919FC433A0;
-        Sun, 22 Jan 2023 21:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674423421;
-        bh=ZUIDqsXYDWng6KDCJdrB2KTu4/airR/GrI1+yJu4p2s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XsrsXrKIAUtZmAAMreBA5zeu9qGmaIvptQd7BHSUVq3oZ/dBinIaw/laDwuNGtxCk
-         V8jLuMzBCJRH8j4EHUHJ7B/DhbmQPERpsNPiqYGOet2oMlXP9rfILrnX5riPIEQ/MC
-         jJ4CHWE5psudgqzE936x5NsC3Mv3rYsO0ioeuBnRJdLTVTl3a4M4hYVjVkK8Pk0qfA
-         Nv3yUdMwhOhdlytomyynx1raLjLjMd3TPixFv/Q/WZLWm62BfhCGibjqNlSW43C8mY
-         9O0x6RnIAVlNSgLiy4AXLlb6Yxb0T21TDYwX4RGAp/h+fmj8PJeRivKq6vtb71PtQm
-         ERx5nm3QuhOBQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     SeongJae Park <sj@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] Docs/sound/index: Add missing SPDX License Identifier
-Date:   Sun, 22 Jan 2023 21:36:50 +0000
-Message-Id: <20230122213650.187710-9-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230122213650.187710-1-sj@kernel.org>
-References: <20230122213650.187710-1-sj@kernel.org>
+        Sun, 22 Jan 2023 16:38:03 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F9D18A8F
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:37:47 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q9so7674453pgq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 13:37:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oe89yTjGNmmMUneDO1NsmFMgS00g5APq0GaajvfZiZ0=;
+        b=J+daCyhSYvDYWVjODQE6PTdfJoZ/ugHBfEw9RdNa4DoHyo1sz0xA0/EJfAq/MsCiGo
+         0IHi2W3TAjZz+V/tJ8BsQ9GUDI6K0etRzWK0h+Uh67To7mLugsDzjEAMjIbWJVRr4+Pq
+         QoUL0GUqHrLAEP10C+V1o8Hq6aU5MiD0AgcC2gsVsQHEh3CEedzvx0vIprp7buTYJR1l
+         16gNNdO+aIiTjKlDFYHcZaSdzJ7RfjT7Fbokuzg884aZuKjBXyG2bK0PU0lmt+kbzub5
+         dau2YmokqakH0ocDY17ExpfqvM/6rzhhKQlBbFVliIQz73ghY9GuIFYnqedcsZ4eA+x7
+         Xi3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oe89yTjGNmmMUneDO1NsmFMgS00g5APq0GaajvfZiZ0=;
+        b=Wgjc6JBM1rrcjls7qBKmyB/ITAJwcb9yZDIgDoRwcbGqfn5pMWarf9hRM3tUihD5W9
+         ge/q0MTSkfar2oBBjbEOzUR6YDq49iZe49SmH0PxXnBJosHV2FFJcjr3D3yCe8WYdtWg
+         +I+BAVnd2kpJj3Dmw9G1VfSE92YtYfbGSHKPMLSpnQZrfwKAwHmPbJIGt5XOvbnJKJ9Q
+         pc5bGcexSlSsl4recWDPNRntRd/gsE6yvkOz3grjqP4C5lqVH+su0TFK0xUVF4Pi6LkF
+         7gy+On326NLdEElGOp5xYsy1WuawPwHMhmGhkSwLbXnB5QJzmnBMoZgnX8iBqft/mFcI
+         buHQ==
+X-Gm-Message-State: AFqh2krdgp7rVkEVckrbAJYFMkzw79AjcnnPafrVuvotdYz1LbG07IiB
+        9x8eIuDTRfS1awNHVqfIpWAYSQ==
+X-Google-Smtp-Source: AMrXdXszoC3+w1Q2zpPGPMKmhkMrf+BkeuMJJxCc2NsQnWAXRpcEltY7WDe9CHNW06GZjFQWhmcpBw==
+X-Received: by 2002:a62:87c9:0:b0:587:4621:9645 with SMTP id i192-20020a6287c9000000b0058746219645mr5490475pfe.1.1674423459230;
+        Sun, 22 Jan 2023 13:37:39 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y24-20020aa79438000000b00574ebfdc721sm30736947pfo.16.2023.01.22.13.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 13:37:38 -0800 (PST)
+Message-ID: <dd18f35d-6b16-9601-90b3-2efc2cbed173@kernel.dk>
+Date:   Sun, 22 Jan 2023 14:37:37 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230123080830.7d50fccd@canb.auug.org.au>
+ <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
+ <20230123083458.45f3641c@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230123083458.45f3641c@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing SPDX License Identifier for sound documentation index file.
+On 1/22/23 2:34 PM, Stephen Rothwell wrote:
+> Hi Jens,
+> 
+> On Sun, 22 Jan 2023 14:30:15 -0700 Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 1/22/23 2:08 PM, Stephen Rothwell wrote:
+>>>
+>>> Commit
+>>>
+>>>   24337ddf1ff4 ("io_uring: Enable KASAN for request cache")
+>>>
+>>> is missing a Signed-off-by from its committer.  
+>>
+>> Fixed up, thanks.
+> 
+> Thanks.
+> 
+> Except you misspelled "Signed-off-by" :-)
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- Documentation/sound/index.rst | 2 ++
- 1 file changed, 2 insertions(+)
+Hah, damnit! I never type that by hand, except for here... Anyway,
+fixed THAT one up too.
 
-diff --git a/Documentation/sound/index.rst b/Documentation/sound/index.rst
-index 5abed5fc6485..7e67e12730d3 100644
---- a/Documentation/sound/index.rst
-+++ b/Documentation/sound/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- =============================
- Sound Subsystem Documentation
- =============================
 -- 
-2.25.1
+Jens Axboe
+
 
