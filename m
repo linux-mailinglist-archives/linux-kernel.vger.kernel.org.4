@@ -2,169 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333806771D6
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 20:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B9D677261
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 21:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjAVT2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 14:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S229971AbjAVUbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 15:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjAVT2l (ORCPT
+        with ESMTP id S229973AbjAVUba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 14:28:41 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32FA1ABC1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 11:28:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674415719; x=1705951719;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ulwsytVuXIqYkaG7ErwEZYIxX5CJ+kB5FeiME/JeBHo=;
-  b=W5YeHAlmTniMAwdBn3NiTlH2tciEbEe2BWDPwLqvscspcLgEfm3/+8ir
-   lEO//pkujba0/6K39UB4NpObU4lPlp6kL3aGIp5s88EaTvZIDI7d8cgKb
-   yT7uy6QsJk3pqn4f0kuWsmgWCmaXykdvW6Zm8GoAfRLITcvpHfw4x2PMY
-   YaPcidmvLDLw2Uq4yG/AaKc45y+Xrx7Xdkxq8WnWVL1pw1kKmS8Uxx2RV
-   j40lrIPv5rqv/oZ72A+1lUGLgtF1cn/Cs7Vv2A89Ldl32LYl2HksKoaOC
-   WtGtVfKsWOA1ShrKh+N3knEDu8HmzhAqsgNdqQvTm7WIKTeqfkGZJ3jgW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="328021415"
-X-IronPort-AV: E=Sophos;i="5.97,237,1669104000"; 
-   d="scan'208";a="328021415"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 11:28:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="835251622"
-X-IronPort-AV: E=Sophos;i="5.97,237,1669104000"; 
-   d="scan'208";a="835251622"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2023 11:28:37 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJg16-0005Ce-2d;
-        Sun, 22 Jan 2023 19:28:36 +0000
-Date:   Mon, 23 Jan 2023 03:27:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mm/copypage-xscale.c:84:6: warning: no previous prototype
- for function 'xscale_mc_copy_user_highpage'
-Message-ID: <202301230336.JTD7TDdA-lkp@intel.com>
+        Sun, 22 Jan 2023 15:31:30 -0500
+X-Greylist: delayed 3702 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Jan 2023 12:31:28 PST
+Received: from fallback25.mail.ru (fallback25.m.smailru.net [94.100.189.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0EA193C1;
+        Sun, 22 Jan 2023 12:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=DcSKLk0gVwmz8BpeZbtff0Bkzgj/pJdpCU0MZvQBdl4=;
+        t=1674419488;x=1674509488; 
+        b=oRmVdo/bOPllX79MMMBI+HvlmTdOLscHh1ZsSfrAOu5F4yvjoEW3HzQ5bfoCGEe8A5kN6tiFzYRQsOhi2kWtOvrlzd/rHi/bdQkK1LAkunDQMBZrOg+CczjEBeGArMOv6fySliLJ6UrTZIn+SMST+6s/c6gZk/lnSw6lnFM/LIg=;
+Received: from [10.161.64.60] (port=51314 helo=smtp52.i.mail.ru)
+        by fallback25.m.smailru.net with esmtp (envelope-from <danila@jiaxyga.com>)
+        id 1pJg2C-0006N8-CT; Sun, 22 Jan 2023 22:29:44 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=DcSKLk0gVwmz8BpeZbtff0Bkzgj/pJdpCU0MZvQBdl4=;
+        t=1674415784;x=1674505784; 
+        b=f7iaV3tKVj/tSTGICUAoVI2FBH0TlnlSI37WfE+nRHYpPYilyrVQaDqUiLr+F/Nt9s0aVsoGs9FIbaBqZSOZDg0RQlCZivfrlUOwoKU08NbBHWPa9EZzN2mqstZ0uljndP2lfZAw1iDnAAAvJXJbEUGLxAHk2+ecc1td3oGM5xk=;
+Received: by smtp52.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
+        id 1pJg1v-00025a-OH; Sun, 22 Jan 2023 22:29:28 +0300
+From:   Danila Tikhonov <danila@jiaxyga.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Danila Tikhonov <danila@jiaxyga.com>
+Subject: [PATCH v2 0/2] clk: qcom: Add GCC support for SM7150
+Date:   Sun, 22 Jan 2023 22:29:22 +0300
+Message-Id: <20230122192924.119636-1-danila@jiaxyga.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9A6D6F5724DD3A0B60E915A56FB921C50CC0C40CAEDEC64A7182A05F538085040AE260C501E6C41ABC05D42AFD4F8E0B841100C04E85CEABF43574F03DDDFDF4B
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE76D24A1449B9F25A2EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063726CA83C7ABDB938E8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8A043E42EC604D0F15CA2112500DF1CF0117882F4460429724CE54428C33FAD305F5C1EE8F4F765FCF80095D1E17F4578A471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F4460429728776938767073520902A1BE408319B292CC0D3CB04F14752D2E47CDBA5A96583BA9C0B312567BB2376E601842F6C81A19E625A9149C048EE7B96B19DC40933214782AAF36435267CD8FC6C240DEA7642DBF02ECDB25306B2B78CF848AE20165D0A6AB1C7CE11FEE37812A6222701F2156136E347CC761E07C4224003CC836476E2F48590F00D11D6E2021AF6380DFAD1A18204E546F3947C1D471462564A2E192E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89F0A35B161A8BF67C15E1C53F199C2BB95B5C8C57E37DE458BEDA766A37F9254B7
+X-C1DE0DAB: 0D63561A33F958A5EE318B4E067BA4A4B7DF90B92EEAFD569522EBF41C03BE0D4EAF44D9B582CE87C8A4C02DF684249CC203C45FEA855C8F
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D348BE83DFD8AFB1CAC224345CA66BF9CB722EA0747038FF67A519469981EAFC237D40D5D519B98CFF81D7E09C32AA3244C4C1BFBBC5EAC02664D90DFD8CB244B233A92A9747B6CC886111969D93F5DC462
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojbL9S8ysBdXhi6CxFFqkWTUfe7eZU/ykR
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C73949815D389F18FFC5AFA2EA50F6B0B1BB825CDBA86B69F688CB0D643683D8C0F3ED1CA3C71A376745D86BBE86167304C7680C3980CE5AAA35C7CD60F22E8815EDE5EAEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4FA133F958ACA88638D06B3AF3B1F633A526ED3C2A381FBF9049FFFDB7839CE9EAB1F03AB1C4AFD783499CBF4A5A43ED9935D66D762FB1E7E5B6EFA599FAD3AA3
+X-7FA49CB5: 0D63561A33F958A573DF67D9FBD3C03A6613EFFFCA81E7CAD9CEEF188099397E8941B15DA834481FA18204E546F3947C68B9A68E260AC75CF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637DFC0370CCA7FDEF5389733CBF5DBD5E9B5C8C57E37DE458BD9DD9810294C998ED8FC6C240DEA76428AA50765F790063732583F09E8EA83FCD81D268191BDAD3DBD4B6F7A4D31EC0BEA7A3FFF5B025636AAAE862A0553A39223F8577A6DFFEA7CAC39357BFF8B7FB443847C11F186F3C59DAA53EE0834AAEE
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojrYIVAnYNYwCsWKXgCDo5qQ==
+X-Mailru-MI: 800
+X-Mras: Ok
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Add the Global Clock Controller for SM7150.
 
-First bad commit (maybe != root cause):
+Changes in v2:
+- Dropped redundant "binding" in subject
+- Fixed yamllint and dtschema errors
+- Replaced additionalProperties with unevaluatedProperties
+- Added Danila and David to maintainers
+- Added Konrad Reviewed-by on patch 2
+- Link to v1: https://lore.kernel.org/linux-clk/20230109193030.42764-1-danila@jiaxyga.com/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2241ab53cbb5cdb08a6b2d4688feb13971058f65
-commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
-date:   8 months ago
-config: arm-randconfig-r046-20230122 (https://download.01.org/0day-ci/archive/20230123/202301230336.JTD7TDdA-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7036440eab3e2d47a775d4616909f8235488d714
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Danila Tikhonov (2):
+  dt-bindings: clock: Add SM7150 GCC clocks
+  clk: qcom: Add Global Clock Controller (GCC) driver for SM7150
 
-All warnings (new ones prefixed by >>):
+ .../bindings/clock/qcom,sm7150-gcc.yaml       |   69 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-sm7150.c                 | 3159 +++++++++++++++++
+ include/dt-bindings/clock/qcom,sm7150-gcc.h   |  193 +
+ 5 files changed, 3430 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sm7150.c
+ create mode 100644 include/dt-bindings/clock/qcom,sm7150-gcc.h
 
->> arch/arm/mm/copypage-xscale.c:84:6: warning: no previous prototype for function 'xscale_mc_copy_user_highpage' [-Wmissing-prototypes]
-   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
-        ^
-   arch/arm/mm/copypage-xscale.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
-   ^
-   static 
->> arch/arm/mm/copypage-xscale.c:107:1: warning: no previous prototype for function 'xscale_mc_clear_user_highpage' [-Wmissing-prototypes]
-   xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
-   ^
-   arch/arm/mm/copypage-xscale.c:106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   2 warnings generated.
+--
+2.39.1
 
-
-vim +/xscale_mc_copy_user_highpage +84 arch/arm/mm/copypage-xscale.c
-
-f8f98a9335db4a Russell King    2005-06-08   83  
-063b0a4207e43a Russell King    2008-10-31  @84  void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
-f00a75c094c340 Russell King    2009-10-05   85  	unsigned long vaddr, struct vm_area_struct *vma)
-f8f98a9335db4a Russell King    2005-06-08   86  {
-5472e862de2bc4 Cong Wang       2011-11-25   87  	void *kto = kmap_atomic(to);
-1c9d3df5e88ad7 Richard Purdie  2006-12-30   88  
-c01778001a4f5a Catalin Marinas 2010-09-13   89  	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
-cb9f753a3731f7 Huang Ying      2018-04-05   90  		__flush_dcache_page(page_mapping_file(from), from);
-1c9d3df5e88ad7 Richard Purdie  2006-12-30   91  
-bd31b85960a7fc Thomas Gleixner 2009-07-03   92  	raw_spin_lock(&minicache_lock);
-f8f98a9335db4a Russell King    2005-06-08   93  
-67ece1443174d8 Russell King    2011-07-02   94  	set_top_pte(COPYPAGE_MINICACHE, mk_pte(from, minicache_pgprot));
-f8f98a9335db4a Russell King    2005-06-08   95  
-f8f98a9335db4a Russell King    2005-06-08   96  	mc_copy_user_page((void *)COPYPAGE_MINICACHE, kto);
-f8f98a9335db4a Russell King    2005-06-08   97  
-bd31b85960a7fc Thomas Gleixner 2009-07-03   98  	raw_spin_unlock(&minicache_lock);
-063b0a4207e43a Russell King    2008-10-31   99  
-5472e862de2bc4 Cong Wang       2011-11-25  100  	kunmap_atomic(kto);
-f8f98a9335db4a Russell King    2005-06-08  101  }
-f8f98a9335db4a Russell King    2005-06-08  102  
-f8f98a9335db4a Russell King    2005-06-08  103  /*
-f8f98a9335db4a Russell King    2005-06-08  104   * XScale optimised clear_user_page
-f8f98a9335db4a Russell King    2005-06-08  105   */
-303c6443659bc1 Russell King    2008-10-31  106  void
-303c6443659bc1 Russell King    2008-10-31 @107  xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
-f8f98a9335db4a Russell King    2005-06-08  108  {
-5472e862de2bc4 Cong Wang       2011-11-25  109  	void *ptr, *kaddr = kmap_atomic(page);
-c7b68049943079 Arnd Bergmann   2019-08-09  110  	asm volatile("\
-c7b68049943079 Arnd Bergmann   2019-08-09  111  .arch xscale					\n\
-c7b68049943079 Arnd Bergmann   2019-08-09  112  	mov	r1, %2				\n\
-f8f98a9335db4a Russell King    2005-06-08  113  	mov	r2, #0				\n\
-f8f98a9335db4a Russell King    2005-06-08  114  	mov	r3, #0				\n\
-303c6443659bc1 Russell King    2008-10-31  115  1:	mov	ip, %0				\n\
-bc2eca9a682881 Nicolas Pitre   2018-11-09  116  	strd	r2, r3, [%0], #8		\n\
-bc2eca9a682881 Nicolas Pitre   2018-11-09  117  	strd	r2, r3, [%0], #8		\n\
-bc2eca9a682881 Nicolas Pitre   2018-11-09  118  	strd	r2, r3, [%0], #8		\n\
-bc2eca9a682881 Nicolas Pitre   2018-11-09  119  	strd	r2, r3, [%0], #8		\n\
-f8f98a9335db4a Russell King    2005-06-08  120  	mcr	p15, 0, ip, c7, c10, 1		@ clean D line\n\
-f8f98a9335db4a Russell King    2005-06-08  121  	subs	r1, r1, #1			\n\
-f8f98a9335db4a Russell King    2005-06-08  122  	mcr	p15, 0, ip, c7, c6, 1		@ invalidate D line\n\
-303c6443659bc1 Russell King    2008-10-31  123  	bne	1b"
-43ae286b7d4d8c Nicolas Pitre   2008-11-04  124  	: "=r" (ptr)
-43ae286b7d4d8c Nicolas Pitre   2008-11-04  125  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
-303c6443659bc1 Russell King    2008-10-31  126  	: "r1", "r2", "r3", "ip");
-5472e862de2bc4 Cong Wang       2011-11-25  127  	kunmap_atomic(kaddr);
-f8f98a9335db4a Russell King    2005-06-08  128  }
-f8f98a9335db4a Russell King    2005-06-08  129  
-
-:::::: The code at line 84 was first introduced by commit
-:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
-
-:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
