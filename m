@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A42C67714F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10106677153
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjAVSGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 13:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S230172AbjAVSGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 13:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjAVSGU (ORCPT
+        with ESMTP id S229566AbjAVSGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 13:06:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6E01817F
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:05:33 -0800 (PST)
+        Sun, 22 Jan 2023 13:06:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA0718A80
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:06:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674410732;
+        s=mimecast20190719; t=1674410763;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=tG4L0cEQEIn10iWcKsfL/igQPD1Vyt3atHFmU9xgaeA=;
-        b=WgW+g97CD9NWI9y//4G7IaND1dOCrKCC/quwJdOa9II+/aKR52at6zOxH0B30YkCQ6pQrv
-        N6GICLJlobFQWOtk40B6OIwZ/C1Jh2dAYoAR2Cy5eetnAhgWTcHE5ans0O/Da/I/9GiPYD
-        YunUyz37kunRFbTII/UUBOeyHx0hN9I=
-Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
- [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vcaIEvEw2kQFdDtVG6J3qw3jie84Jdha/erxS3HJUJ4=;
+        b=cvaAp5/vbfVffM/AlIrWVY4cbNhu7mVYRRthmrsDjCBlHz378D8/1Zmt8WgV/EELIElXaS
+        dyuvn4gmPSX3xtG6CeC4hk65w56yLSJ+6SK9/KwcpMQBZRLwhYk6V+ebcVs7LTlpwiewbc
+        Ma+y5JAqUCJJ2VQy7WPGYTvVxfhqJ3c=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-148-q5lEB4eSPx2v3uglYOMuZg-1; Sun, 22 Jan 2023 13:05:30 -0500
-X-MC-Unique: q5lEB4eSPx2v3uglYOMuZg-1
-Received: by mail-vk1-f200.google.com with SMTP id j84-20020a1fa057000000b003e1a9db9f88so4096293vke.13
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:05:30 -0800 (PST)
+ us-mta-557-autcGrryOW6p4SeixDADeA-1; Sun, 22 Jan 2023 13:06:01 -0500
+X-MC-Unique: autcGrryOW6p4SeixDADeA-1
+Received: by mail-vk1-f199.google.com with SMTP id u187-20020a1fabc4000000b003ca3e899f8fso4091457vke.22
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 10:06:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tG4L0cEQEIn10iWcKsfL/igQPD1Vyt3atHFmU9xgaeA=;
-        b=oSNkXzkpmqT+cgs4OF8Sg2yN7I0tW1PEer/qSxgDrvrN7mXkD+wZx4fqOFeb63MH22
-         mwFd7MLVeRsXtzoWNKVCdzY3HUygDeEVTX8h8FyB7QISM+3vp2IICGOv2egxLOvKg8GF
-         tErrVCPjgVL5M8ocONjqtlPxjtEXLAPQyQS7ECBxIMD5TJqytqRZ73+qdMLKsH/Zg66C
-         6uvo4eJeG2oOmlomlwSI3SsOc55oe0OdnsfImvMAFx7jFfSOz+aqzGQS5ZBJfTkzCAhw
-         DVReGGnvmLUL1gSKgfRgbWABMCfPc8V/ZFaUR2qh+OcHOjLtSSFhlSYCqI1xfrydDM6i
-         MKEw==
-X-Gm-Message-State: AFqh2korkMyk0NEWVO01xJAY5X1G/wSXwQ1nO6fAmQPPymGf06j5TvR2
-        zArhP7KALjFopNvpzGtXZVX/FxKolqpdn5qHupxJQzttP+iu5L0t80QBJHprYIreFP8wXjwUUKN
-        ROGvXcikVM4RmbEFa8xZXxa3ZGiR2Md+PdW/a6Elj
-X-Received: by 2002:a67:e992:0:b0:3d2:e26a:d76f with SMTP id b18-20020a67e992000000b003d2e26ad76fmr2649139vso.41.1674410730089;
-        Sun, 22 Jan 2023 10:05:30 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt6xqNFnzcOFl095OFpFyj/GiNxL1ARJlGscYK+I56jVRXdls7GoEtq0uv2D1H4GUbYVv7Yy5Y5IyHwPhmIbco=
-X-Received: by 2002:a67:e992:0:b0:3d2:e26a:d76f with SMTP id
- b18-20020a67e992000000b003d2e26ad76fmr2649136vso.41.1674410729838; Sun, 22
- Jan 2023 10:05:29 -0800 (PST)
+        bh=vcaIEvEw2kQFdDtVG6J3qw3jie84Jdha/erxS3HJUJ4=;
+        b=5pR0cYbtUA774mMWkwUa+TPaF4Hmo+Iyoc8hyfCEd+B1GOOky1cpfCAOwGY3nAUmi0
+         glkKkASCEqtEv2cvPnVxEzumctAjeRpTUU0JCINchk/Bf19LifItgshwRsu8u7khKwhP
+         jkZ1Ta2RdoKOpssvrJW86/B6unMjUFN8v9ZYqUpM+IPWy7gPgUnZkC4Jyibz0breYGcK
+         8zGldrJp3lOb9XSs10dFq6eqRh7LsfBfbuvXOlfrialLgOabLFWmbXxvItlGbB85+rD9
+         rAIec95JkjzxvRBp9Cix4UwJ3TOSH27+Z2ry1mCJRrBj/18g9Iqd9Zialgt/cFFdTfPr
+         WxDw==
+X-Gm-Message-State: AFqh2kqVkiaE6zKeBpNds1GJl3ZTDJ7cSoj8aDJZhXJkX8IKtv4hSuD6
+        zcUPI6Vh01Q3UCjdkMMyaVLuxTtLapir6RrDWDhdPgztD59Pgkj4JMaiioj3v7G9x7Yw4tgdg2h
+        NGsnkJj9oXXPqudN3UzKA6V2IxXvLdxeFr8tBD2v/
+X-Received: by 2002:ab0:39d6:0:b0:5d6:87df:263d with SMTP id g22-20020ab039d6000000b005d687df263dmr2268027uaw.58.1674410761277;
+        Sun, 22 Jan 2023 10:06:01 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt7kt+tvJVSdjC7CXhzl7u8uiu/MSmcfTHSlJjAFczq7OXUmYCh4CDD2soj8KhGCdG1oy5hrUxPqUexDaa/k4Y=
+X-Received: by 2002:ab0:39d6:0:b0:5d6:87df:263d with SMTP id
+ g22-20020ab039d6000000b005d687df263dmr2268026uaw.58.1674410761031; Sun, 22
+ Jan 2023 10:06:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20230121074253.9774-1-lina@asahilina.net>
-In-Reply-To: <20230121074253.9774-1-lina@asahilina.net>
+References: <20230121074135.8629-1-lina@asahilina.net>
+In-Reply-To: <20230121074135.8629-1-lina@asahilina.net>
 From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Sun, 22 Jan 2023 18:05:14 +0000
-Message-ID: <CAOgh=FxP_Zf7uD0QYej=0ULTNFDGHg0OHbAQV4L9bjsG4myT1g@mail.gmail.com>
-Subject: Re: [PATCH] soc: apple: rtkit: Add a private pointer to apple_rtkit_shmem
+Date:   Sun, 22 Jan 2023 18:05:45 +0000
+Message-ID: <CAOgh=FwZ0niWu3=tvjYu91Bt0uxyv=6mE449we78X7KWPBPcCw@mail.gmail.com>
+Subject: Re: [PATCH] soc: apple: rtkit: Export non-devm init/free functions
 To:     Asahi Lina <lina@asahilina.net>
 Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -75,49 +75,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 21 Jan 2023 at 07:48, Asahi Lina <lina@asahilina.net> wrote:
+>
+> While we normally encourage devm usage by drivers, some consumers (and
+> in particular the upcoming Rust abstractions) might want to manually
+> manage memory. Export the raw functions to make this possible.
+>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
+
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+
 Is mise le meas/Regards,
 
 Eric Curtin
 
 
-On Sat, 21 Jan 2023 at 07:53, Asahi Lina <lina@asahilina.net> wrote:
+>  drivers/soc/apple/rtkit.c       | 15 ++++++++++-----
+>  include/linux/soc/apple/rtkit.h | 19 +++++++++++++++++++
+>  2 files changed, 29 insertions(+), 5 deletions(-)
 >
-> This allows downstream consumers to keep track of private data for shmem
-> mappings. In particular, the Rust abstraction will use this to safely
-> drop data associated with a mapping when it is unmapped.
+> diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
+> index fa3cda831d2b..bb33f3cd4efd 100644
+> --- a/drivers/soc/apple/rtkit.c
+> +++ b/drivers/soc/apple/rtkit.c
+> @@ -686,7 +686,7 @@ static int apple_rtkit_request_mbox_chan(struct apple_rtkit *rtk)
+>         return mbox_start_channel(rtk->mbox_chan);
+>  }
 >
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
-
-Sorry Lina, these were obviously supposed to not be signed off tags, but:
-
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
-
-that's what you get, when you copy a tag from somewhere else!
-
->  include/linux/soc/apple/rtkit.h | 2 ++
->  1 file changed, 2 insertions(+)
+> -static struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+> +struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+>                                             const char *mbox_name, int mbox_idx,
+>                                             const struct apple_rtkit_ops *ops)
+>  {
+> @@ -739,6 +739,7 @@ static struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+>         kfree(rtk);
+>         return ERR_PTR(ret);
+>  }
+> +EXPORT_SYMBOL_GPL(apple_rtkit_init);
+>
+>  static int apple_rtkit_wait_for_completion(struct completion *c)
+>  {
+> @@ -922,10 +923,8 @@ int apple_rtkit_wake(struct apple_rtkit *rtk)
+>  }
+>  EXPORT_SYMBOL_GPL(apple_rtkit_wake);
+>
+> -static void apple_rtkit_free(void *data)
+> +void apple_rtkit_free(struct apple_rtkit *rtk)
+>  {
+> -       struct apple_rtkit *rtk = data;
+> -
+>         mbox_free_channel(rtk->mbox_chan);
+>         destroy_workqueue(rtk->wq);
+>
+> @@ -936,6 +935,12 @@ static void apple_rtkit_free(void *data)
+>         kfree(rtk->syslog_msg_buffer);
+>         kfree(rtk);
+>  }
+> +EXPORT_SYMBOL_GPL(apple_rtkit_free);
+> +
+> +static void apple_rtkit_free_wrapper(void *data)
+> +{
+> +       apple_rtkit_free(data);
+> +}
+>
+>  struct apple_rtkit *devm_apple_rtkit_init(struct device *dev, void *cookie,
+>                                           const char *mbox_name, int mbox_idx,
+> @@ -948,7 +953,7 @@ struct apple_rtkit *devm_apple_rtkit_init(struct device *dev, void *cookie,
+>         if (IS_ERR(rtk))
+>                 return rtk;
+>
+> -       ret = devm_add_action_or_reset(dev, apple_rtkit_free, rtk);
+> +       ret = devm_add_action_or_reset(dev, apple_rtkit_free_wrapper, rtk);
+>         if (ret)
+>                 return ERR_PTR(ret);
 >
 > diff --git a/include/linux/soc/apple/rtkit.h b/include/linux/soc/apple/rtkit.h
-> index 62bfa37b5adb..1a9888a1797a 100644
+> index 2d837aa7b91f..62bfa37b5adb 100644
 > --- a/include/linux/soc/apple/rtkit.h
 > +++ b/include/linux/soc/apple/rtkit.h
-> @@ -22,6 +22,7 @@
->   * @size:      Size of the shared memory buffer.
->   * @iova:      Device VA of shared memory buffer.
->   * @is_mapped: Shared memory buffer is managed by the co-processor.
-> + * @private:   Private data pointer for the parent driver.
->   */
+> @@ -77,6 +77,25 @@ struct apple_rtkit *devm_apple_rtkit_init(struct device *dev, void *cookie,
+>                                           const char *mbox_name, int mbox_idx,
+>                                           const struct apple_rtkit_ops *ops);
 >
->  struct apple_rtkit_shmem {
-> @@ -30,6 +31,7 @@ struct apple_rtkit_shmem {
->         size_t size;
->         dma_addr_t iova;
->         bool is_mapped;
-> +       void *private;
->  };
->
+> +/*
+> + * Non-devm version of devm_apple_rtkit_init. Must be freed with
+> + * apple_rtkit_free.
+> + *
+> + * @dev:         Pointer to the device node this coprocessor is assocated with
+> + * @cookie:      opaque cookie passed to all functions defined in rtkit_ops
+> + * @mbox_name:   mailbox name used to communicate with the co-processor
+> + * @mbox_idx:    mailbox index to be used if mbox_name is NULL
+> + * @ops:         pointer to rtkit_ops to be used for this co-processor
+> + */
+> +struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+> +                                         const char *mbox_name, int mbox_idx,
+> +                                         const struct apple_rtkit_ops *ops);
+> +
+> +/*
+> + * Free an instance of apple_rtkit.
+> + */
+> +void apple_rtkit_free(struct apple_rtkit *rtk);
+> +
 >  /*
+>   * Reinitialize internal structures. Must only be called with the co-processor
+>   * is held in reset.
 > --
 > 2.35.1
 >
