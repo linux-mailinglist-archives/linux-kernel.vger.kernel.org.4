@@ -2,137 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5FE6770F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1764677102
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjAVRKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 12:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S230002AbjAVROi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 12:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjAVRKJ (ORCPT
+        with ESMTP id S229955AbjAVROf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 12:10:09 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E116413516;
-        Sun, 22 Jan 2023 09:09:26 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id 200so7219138pfx.7;
-        Sun, 22 Jan 2023 09:09:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vYSXXg5e6s/NvCMij6drYU933rOuoET93FHCVB0DyzQ=;
-        b=QgiPbB3zmcZQ6q1HB0ZmVaGKTzB91HabHLJNzixu4QY6/AOSMuJX/9qt5jk8P9XNmH
-         iL0aqhNhJS6uscxjKYkiFpF+S2y8wdH4GU12QPjx5lQ6F/+ih1LP9qVQ5bSV5jePu/03
-         T2hn1zw4saZ72O0Gm/YcmjIgUdbQZrzw0lHix08iGfmZz2QRvfJJ5FVFifQkPQvTocDK
-         Kmpy6Y6RtCKXeUSuoUzlCEzntf5c7v+Hj5k+aVUvMJPTr8L3DKL2HZlwZ5agq9kJ8tMy
-         96tk6T0f6zf/DM84ZPX8QoT2wnkb3V18onMAsp8ypEULlzN9m/7rz7eZQoURctfDVamq
-         xzhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vYSXXg5e6s/NvCMij6drYU933rOuoET93FHCVB0DyzQ=;
-        b=gBdZNo7fPvNGcXzkNSAgV/u/d3mc08O+78kw8tagdLj0cmrmROtzsMtJiQdNMKmGzu
-         OgzBS/DdPkeg4JOomG+U7aJJyS4PjN4V/Frhq93II5+HcGk/AuyIVuYhBXfegcmKT3yt
-         /Vo1sVWi0bhuCpUR9YITOZ/l3Fn5NjbZJTnX/ZNRuKH1o7UgK0WWp9KQUOZ5Q4ApMKLj
-         YBI4k2GjHMsrU/ICUI58UiA7X+T/+stG8Kvw3GEmK4TABi+oXtxkQsTyQH6YuvDMD/Pw
-         gGeW6FSkXvsSsIW5u3/45cFtN2TqF8CV+mcWGBtdcEbUgjzFYJdriCK4vNvPJpSzS61u
-         xqgg==
-X-Gm-Message-State: AFqh2kqbNhk9LGh8IElKj3upQlvnNjAoObXy0+fVtmBNkgiruOofwLKv
-        gJ3Cvb83/RnfNIeLZRWaD07nml+dBlVCPIw8DbT5Bjjcs3M=
-X-Google-Smtp-Source: AMrXdXsBVB8n/1RhZCeU7snMZ6saiO98lUVGkEkzDdthQucxeEbfO4XxgPU7br4QJd6/rwMScuiWHnpsxUo1bikg1lI=
-X-Received: by 2002:a05:6a00:13a3:b0:58d:973f:e2f1 with SMTP id
- t35-20020a056a0013a300b0058d973fe2f1mr2205617pfg.10.1674407365181; Sun, 22
- Jan 2023 09:09:25 -0800 (PST)
+        Sun, 22 Jan 2023 12:14:35 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5354C26;
+        Sun, 22 Jan 2023 09:14:32 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id B04B685565;
+        Sun, 22 Jan 2023 18:14:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1674407670;
+        bh=qpvKbk0W1f539TSNkgyW7XATGGgOzHEwlUEFmsO6ZKg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jyVkpl1H7BgdVylsZAZ3tkofz9c+78/sh7bS8bAnx0wiWHV0bWUWhU1LQ04z+Dky1
+         G/7Is/tulu+1zBU+4cSPnM4s+S6J1spzQeRU/o+zSw0YNE+0qvlqWYwNQOIq1v5edu
+         F73mWhVfnyUB6hSSwLSk9AZaDkyyCyIyDFNHs0YnCcd8mzDiizkLJ2wKmR2d0OJBWo
+         dF58eUME7kcqRraF9zmmA89jTBkWISlsN+TMK/EUKtX2eOMvP9cn8yA7LT4tQ8o6Kj
+         QjRPrwDEqcgv/KzNO2SrtXwqEBFGxQu9OATxHCLlVQZ5gZprN/otroBslxh/GdwdQb
+         m3g3GD4ziju8Q==
+Message-ID: <a5f8ec67-5888-3ee8-a1b1-32fef386d6cb@denx.de>
+Date:   Sun, 22 Jan 2023 18:14:28 +0100
 MIME-Version: 1.0
-References: <20230121112358.52216-1-robimarko@gmail.com> <20230121112358.52216-2-robimarko@gmail.com>
- <ebdd9932-e251-0cd7-6c98-3c735ecb74a6@quicinc.com> <CAOX2RU7p-0ZTx8fkY4hOk=Zmx6RT+1PwVL+CQxkjzVadm0ehTA@mail.gmail.com>
- <29d9de45-1ce7-d6e5-bf02-052e911a067b@quicinc.com>
-In-Reply-To: <29d9de45-1ce7-d6e5-bf02-052e911a067b@quicinc.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Sun, 22 Jan 2023 18:09:14 +0100
-Message-ID: <CAOX2RU7BfESmsUdZ5jBfYjWXUnDWmFizT8UiPwgzb_SsrT0jnA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: add QFPROM node
-To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/2] drm/bridge: fsl-ldb: Add i.MX93 LDB support
+Content-Language: en-US
+To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org
+References: <20230122121836.778195-1-victor.liu@nxp.com>
+ <20230122121836.778195-3-victor.liu@nxp.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230122121836.778195-3-victor.liu@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 Jan 2023 at 18:05, Kathiravan Thirumoorthy
-<quic_kathirav@quicinc.com> wrote:
->
->
-> On 1/22/2023 10:29 PM, Robert Marko wrote:
-> > On Sun, 22 Jan 2023 at 17:57, Kathiravan Thirumoorthy
-> > <quic_kathirav@quicinc.com> wrote:
-> >>
-> >> On 1/21/2023 4:53 PM, Robert Marko wrote:
-> >>> IPQ8074 has efuses like other Qualcomm SoC-s that are required for
-> >>> determining various HW quirks which will be required later for CPR etc,
-> >>> so lets add the QFPROM node for start.
-> >>>
-> >>> Individidual fuses will be added as they are required.
-> >>>
-> >>> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >>> ---
-> >>>    arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 +++++++
-> >>>    1 file changed, 7 insertions(+)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >>> index 8eba586065a3..f29491f647fe 100644
-> >>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >>> @@ -301,6 +301,13 @@ mdio: mdio@90000 {
-> >>>                        status = "disabled";
-> >>>                };
-> >>>
-> >>> +             qfprom: efuse@a4000 {
-> >>> +                     compatible = "qcom,ipq8074-qfprom", "qcom,qfprom";
-> >>> +                     reg = <0x000a4000 0x1000>;
-> >>
-> >>   From the HW document, I see the overall size of this region is 0x2000,
-> >> any reason to stick with 0x1000?
-> > Like always, I dont have access to docs and 0x1000 is all I could find
-> > downstream
-> > being used.
-> >
-> > Any chance you can share the regions inside of QFPROM, it would be great to use
-> > the ECC corrected one if available.
->
-> Sorry, What do you refer by "ECC corrected" here?
+On 1/22/23 13:18, Liu Ying wrote:
+> Same to i.MX8mp LDB, i.MX93 LDB is controlled by mediamix blk-ctrl
+> through LDB_CTRL and LVDS_CTRL registers.  i.MX93 LDB supports only
+> one LVDS channel(channel 0) and it's LVDS_CTRL register bit1 is used
+> as LVDS_EN instead of CH1_EN.  Add i.MX93 LDB support in the existing
+> i.MX8mp LDB bridge driver by adding i.MX93 LDB compatible string and
+> device data(to reflect different register offsets and LVDS_CTRL register
+> bit1 definition).
+> 
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v1->v2:
+> * No change.
+> 
+>   drivers/gpu/drm/bridge/fsl-ldb.c | 53 ++++++++++++++++++++++++++------
+>   1 file changed, 44 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/fsl-ldb.c b/drivers/gpu/drm/bridge/fsl-ldb.c
+> index 9bcba8fc57e7..6ad63ac7367c 100644
+> --- a/drivers/gpu/drm/bridge/fsl-ldb.c
+> +++ b/drivers/gpu/drm/bridge/fsl-ldb.c
+> @@ -18,7 +18,6 @@
+>   #include <drm/drm_of.h>
+>   #include <drm/drm_panel.h>
+>   
+> -#define LDB_CTRL				0x5c
+>   #define LDB_CTRL_CH0_ENABLE			BIT(0)
+>   #define LDB_CTRL_CH0_DI_SELECT			BIT(1)
+>   #define LDB_CTRL_CH1_ENABLE			BIT(2)
+> @@ -35,9 +34,9 @@
+>   #define LDB_CTRL_ASYNC_FIFO_ENABLE		BIT(24)
+>   #define LDB_CTRL_ASYNC_FIFO_THRESHOLD_MASK	GENMASK(27, 25)
+>   
+> -#define LVDS_CTRL				0x128
+>   #define LVDS_CTRL_CH0_EN			BIT(0)
+>   #define LVDS_CTRL_CH1_EN			BIT(1)
 
-Isnt there a corrected region in the QFPROM meant for reading?
-As far as I understand it's protected by FEC.
+It would be good to add a comment here that the bit is poorly named and 
+that LVDS_CTRL_LVDS_EN=1 means DISABLE, while LVDS_CTRL_LVDS_EN=0 means 
+ENABLE .
 
-Regards,
-Robert
->
-> Thanks, Kathiravan T.
->
->
-> >
-> > Regards,
-> > Robert
-> >> Thanks, Kathiravan T.
-> >>
-> >>
-> >>> +                     #address-cells = <1>;
-> >>> +                     #size-cells = <1>;
-> >>> +             };
-> >>> +
-> >>>                prng: rng@e3000 {
-> >>>                        compatible = "qcom,prng-ee";
-> >>>                        reg = <0x000e3000 0x1000>;
+> +#define LVDS_CTRL_LVDS_EN			BIT(1)
+
+[...]
+
+With that fixed:
+
+Reviewed-by: Marek Vasut <marex@denx.de>
+
+Thanks!
