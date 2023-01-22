@@ -2,135 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283F6676C18
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 11:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724DA676C1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 11:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjAVKYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 05:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S229617AbjAVKms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 05:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjAVKYj (ORCPT
+        with ESMTP id S229826AbjAVKmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 05:24:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAE91C303
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 02:23:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674383032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Sun, 22 Jan 2023 05:42:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C06A3;
+        Sun, 22 Jan 2023 02:42:43 -0800 (PST)
+Date:   Sun, 22 Jan 2023 10:42:38 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674384159;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Vp4nDruEit5hTFxTjTpKC1ydXnGDFdRa2R0+xR8TkNY=;
-        b=d+RxrJaGACwDWxQevYeg72s5qe1a2KytczAM+FccY1OvjRLtRK640e1w3MpMnHgPgWOEBa
-        sQhDh5OEzBtT/6ZXhdpfehvMtS3gCQaV20n21qL9RbwvA1XBn6MrkMEi5T/0jra4Sw5hPO
-        YLKK9Bs9bUbJuUrXx1daG4WU8Gal54Y=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-440-8jdeQaVzPPukNSTMQ-7fRw-1; Sun, 22 Jan 2023 05:23:50 -0500
-X-MC-Unique: 8jdeQaVzPPukNSTMQ-7fRw-1
-Received: by mail-ej1-f71.google.com with SMTP id hr22-20020a1709073f9600b0086ffb73ac1cso6130584ejc.23
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 02:23:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vp4nDruEit5hTFxTjTpKC1ydXnGDFdRa2R0+xR8TkNY=;
-        b=lUeOozDHeYkGRtYJNJtmYb365j0/kvMdUEjT/xFsrpco5RMqHhd+Ydg7YvJfhvUAQT
-         fqfd75XvfPAltyK+hAbtrpkQpUmlKCqzwld30wUc5EmRHpG/vdfBUFMjlL8M6iCE+Zn1
-         WszqVh5jGx5+qZpX9dGg0n9WqcIGUC5OorKe37UkRFd1n8w7X1wdNuMi6CMXH6FsAy6d
-         J4qhgPLrzzZ3eXGbg1hLX6z70DU7a2Lrz3yl67GjsxRINiUmOiYznzNvAbdSGhADbE9d
-         F114ME/uQ4Jk6r6+YL6utZlbrSKjD1AqqnqX4jFkaBdRKms2lwjlFMJkYYmCae2+ruKQ
-         loVg==
-X-Gm-Message-State: AFqh2krc54RDA42/hPklhDau1wvR/9BHGEyoCnmBxs1ZmR4aQSeXHmwD
-        1NZQFtNdSrLykmr4rCPaax2WEDEkPU06qz4kWrkhjq+mql64Sd+21cXURGLKTiVdKVAuj9IHJTL
-        hmgPReefEGSulOZv+vOfU8PtO
-X-Received: by 2002:a17:906:71a:b0:7c1:6344:84a with SMTP id y26-20020a170906071a00b007c16344084amr22442679ejb.5.1674383029671;
-        Sun, 22 Jan 2023 02:23:49 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsJYsSlxdKNdkV3k0zZFAQEWMBIP57WsNsog63A1Utnn4PhgD2R94CsSnVpUciaRFnFvrZD5Q==
-X-Received: by 2002:a17:906:71a:b0:7c1:6344:84a with SMTP id y26-20020a170906071a00b007c16344084amr22442658ejb.5.1674383029366;
-        Sun, 22 Jan 2023 02:23:49 -0800 (PST)
-Received: from redhat.com ([2.52.149.29])
-        by smtp.gmail.com with ESMTPSA id y19-20020a1709060a9300b0084debc351b3sm17314670ejf.20.2023.01.22.02.23.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 02:23:48 -0800 (PST)
-Date:   Sun, 22 Jan 2023 05:23:44 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Laurent Vivier <lvivier@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eli Cohen <elic@nvidia.com>, Jason Wang <jasowang@redhat.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        Cindy Lu <lulu@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-Subject: Re: [PATCH 0/4] virtio_net: vdpa: update MAC address when it is
- generated by virtio-net
-Message-ID: <20230122052211-mutt-send-email-mst@kernel.org>
-References: <20230122100526.2302556-1-lvivier@redhat.com>
+        bh=PQzAUlffxP+Cue4tZ7knjTLBcxiecYtxOrWhjKJnyII=;
+        b=TqlUA4vBbCPiyJpp1gP8yimb7Cioi56xOa1ocWkq07cDmVH0EndkUs6Chqs3jRCNwcuPQN
+        nBAXw3VUr4fYp7TDY2hP/H/g5ZvNBBuiJoyQZH0e9Tphzmpf64dpNH4zOpURC6v9SINMO1
+        pKdhbaWDMz8nsQG7Xe/mIJYH1AxedKyBYe9K3T8Z8KM8jbY+qm+VUhfv/0mfu/ZPp5T4pT
+        QmXc6znrAoXxsPJMz7wujK/WOIstPoLzYohWayqo+EDOTJMky2LmkHhySJMmOFqEdaFn1M
+        tIMQkPPIURmZ+wYReDksqWSH+5IYDPYzelO9J0yoNPMhGozByb++aNOS6D7Wjw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674384159;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PQzAUlffxP+Cue4tZ7knjTLBcxiecYtxOrWhjKJnyII=;
+        b=ht6Ar4qiK2waBluVvw+/Ohd5EAorLiZ07VR9jNzCaF8AGauCM58nSeZz3vla5EtaGSqJoP
+        Ql99WOXzz1lf2GBg==
+From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/build: Move '-mindirect-branch-cs-prefix' out
+ of GCC-only block
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230120165826.2469302-1-nathan@kernel.org>
+References: <20230120165826.2469302-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230122100526.2302556-1-lvivier@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <167438415817.4906.16581804181334586242.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 11:05:22AM +0100, Laurent Vivier wrote:
-> When the MAC address is not provided by the vdpa device virtio_net
-> driver assigns a random one without notifying the device.
-> The consequence, in the case of mlx5_vdpa, is the internal routing
-> tables of the device are not updated and this can block the
-> communication between two namespaces.
-> 
-> To fix this problem, use virtnet_send_command(VIRTIO_NET_CTRL_MAC)
-> to set the address from virtnet_probe() when the MAC address is
-> randomly assigned from virtio_net.
-> 
-> While I was testing this change I found 3 other bugs in vdpa_sim_net:
-> 
-> - vdpa_sim_net sets the VIRTIO_NET_F_MAC even if no MAC address is
->   provided. So virtio_net doesn't generate a random MAC address and
->   the MAC address appears to be 00:00:00:00:00:00
-> 
-> - vdpa_sim_net never processes the command and virtnet_send_command()
->   hangs in an infinite loop. To avoid a kernel crash add a timeout
->   in the loop.
-> 
-> - To allow vdpa_sim_net to process the command, replace the cpu_relax()
->   in the loop by a schedule(). vdpa_sim_net uses a workqueue to process
->   the queue, and if we don't allow the kernel to schedule, the queue
->   is not processed and the loop is infinite.
+The following commit has been merged into the x86/urgent branch of tip:
 
-I'd split these things out as opposed to a series unless there's
-a dependency I missed.
+Commit-ID:     27b5de622ea3fe0ad5a31a0ebd9f7a0a276932d1
+Gitweb:        https://git.kernel.org/tip/27b5de622ea3fe0ad5a31a0ebd9f7a0a276932d1
+Author:        Nathan Chancellor <nathan@kernel.org>
+AuthorDate:    Fri, 20 Jan 2023 09:58:27 -07:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Sun, 22 Jan 2023 11:36:45 +01:00
 
-All this reminds me of
-https://lore.kernel.org/r/20221226074908.8154-5-jasowang%40redhat.com
+x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block
 
-how is this patch different/better?
-Pls also CC people involved in that original discussion.
+LLVM 16 will have support for this flag so move it out of the GCC-only
+block to allow LLVM builds to take advantage of it.
 
-Thanks!
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1665
+Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
+Link: https://lore.kernel.org/r/20230120165826.2469302-1-nathan@kernel.org
+---
+ arch/x86/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Laurent Vivier (4):
->   virtio_net: notify MAC address change on device initialization
->   virtio_net: add a timeout in virtnet_send_command()
->   vdpa_sim_net: don't always set VIRTIO_NET_F_MAC
->   virtio_net: fix virtnet_send_command() with vdpa_sim_net
-> 
->  drivers/net/virtio_net.c             | 21 +++++++++++++++++++--
->  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  6 ++++++
->  2 files changed, 25 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.39.0
-> 
-
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 9cf0732..73ed982 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -14,13 +14,13 @@ endif
+ 
+ ifdef CONFIG_CC_IS_GCC
+ RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
+-RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
+ RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
+ endif
+ ifdef CONFIG_CC_IS_CLANG
+ RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
+ RETPOLINE_VDSO_CFLAGS	:= -mretpoline
+ endif
++RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
+ 
+ ifdef CONFIG_RETHUNK
+ RETHUNK_CFLAGS		:= -mfunction-return=thunk-extern
