@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDB6676EE5
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 16:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965E7676E89
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 16:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjAVPPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 10:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S230352AbjAVPLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 10:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjAVPPc (ORCPT
+        with ESMTP id S230356AbjAVPLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 10:15:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A5922025;
-        Sun, 22 Jan 2023 07:15:31 -0800 (PST)
+        Sun, 22 Jan 2023 10:11:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A61220047;
+        Sun, 22 Jan 2023 07:11:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2B5C60C5C;
-        Sun, 22 Jan 2023 15:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C05C433EF;
-        Sun, 22 Jan 2023 15:15:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA26260C48;
+        Sun, 22 Jan 2023 15:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFF3C433EF;
+        Sun, 22 Jan 2023 15:11:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674400530;
+        s=korg; t=1674400293;
         bh=U36B0Gnx9VcWVoAFSaweXf9NMujQ6bmiBQAB5Y/K/ZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OuUJuKEO/9HaH36M7HQ2n76a4hkmItYZCoAwVw074lVQoMCD+nqh6ElCcq1USBguj
-         mBrkY8EBgkEQ3oG05Y5DXD25Boe8GrceHk1WOdDW3qq+/SwBQ1r71wvaF2tHi8FSYz
-         GFUcOv7v1SPTtZWurB0yLPohAviigbHfLg2IydD0=
+        b=rOouUiBzDhvog2iRxroi/xtqnwibskxEXhT1U57YGTOf8zQuD8SJDwb7i6hOH5OhO
+         xv3i9TxW09DGgzh/uBemR6D2zKH5wTvhBlsrnTp1mXMy84gSf4zBoMPD7cmDS7uUcP
+         v8wIFenkEIZMcK+e19XrDlXl+v7MFteBUCqxg/Eo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         patches@lists.linux.dev, Mikulas Patocka <mpatocka@redhat.com>,
         Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 011/117] x86/asm: Fix an assembler warning with current binutils
-Date:   Sun, 22 Jan 2023 16:03:21 +0100
-Message-Id: <20230122150233.192826703@linuxfoundation.org>
+Subject: [PATCH 5.10 08/98] x86/asm: Fix an assembler warning with current binutils
+Date:   Sun, 22 Jan 2023 16:03:24 +0100
+Message-Id: <20230122150229.776126663@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230122150232.736358800@linuxfoundation.org>
-References: <20230122150232.736358800@linuxfoundation.org>
+In-Reply-To: <20230122150229.351631432@linuxfoundation.org>
+References: <20230122150229.351631432@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
