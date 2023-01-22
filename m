@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B2E677145
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 18:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0A8677149
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 19:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjAVR7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 12:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S230023AbjAVR76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 12:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjAVR7o (ORCPT
+        with ESMTP id S230137AbjAVR74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 12:59:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B81E16AC3;
-        Sun, 22 Jan 2023 09:59:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EECAF60B59;
-        Sun, 22 Jan 2023 17:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C950C433D2;
-        Sun, 22 Jan 2023 17:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674410382;
-        bh=D2pedExuLZNrqCvaz8leJ1LLl8TDRo55BvOVbQvnsHw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pYksia5zWbwxyVwR5OHSi2jDVTKl3QUsTXixSdyMlMTtBDZesvn5bZM+dxR/6pX1M
-         eD3gIeEcpaO4iOPkeALGtoK1m1rPhWjrJk7yUbpCE7c0zdLicPjFqZPOllycOL+zjT
-         HpLpKE5VE+m5+ULT7gZErBxp3/sv0j9+R08waZvs5H+dQkONvziuzS39znoqRZwoXH
-         pVO0SOAR3fr9vqqnki18haiC/DrdaNcXHImL2JY7NMiFjTutaE/E0PllSA1avepqv/
-         KNtv4hUuatbcIREmt6d9RFsFjs+k1rS+X3vz3dNsOLMgQv3LGI6LJqaG5dbt9oets1
-         KJq11C+QseqCQ==
-Received: by mail-ot1-f54.google.com with SMTP id g2-20020a9d6b02000000b006864bf5e658so6107905otp.1;
-        Sun, 22 Jan 2023 09:59:42 -0800 (PST)
-X-Gm-Message-State: AFqh2kpRg52ymA1bA/77EUn152RfDIP5ftZQGsIdRH5AgbPmmQ6qNCXU
-        +mS2mN0P2p9bhmpYd+br01zcebHDgeVzrLE2KiI=
-X-Google-Smtp-Source: AMrXdXv+qtyo8rkIgtdEIum0rnVQ7nA9lGu+dYgdpObD9i+RSncPEFAN4enCYSMJPIkQXTz+zrtc/hI56H8Zxw7puU4=
-X-Received: by 2002:a9d:6a4c:0:b0:684:a3ad:87e8 with SMTP id
- h12-20020a9d6a4c000000b00684a3ad87e8mr1295263otn.225.1674410381648; Sun, 22
- Jan 2023 09:59:41 -0800 (PST)
+        Sun, 22 Jan 2023 12:59:56 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45A16AFA
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 09:59:54 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4fd37a1551cso118132017b3.13
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 09:59:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gcKLKcPFsmTqmqnzqvLNmDUAPYbRLWrG+hsw17aiGg=;
+        b=yb3O28mc6yAg1MgxmbfLfCffCi3H1pib5+SQUTVI+qgE9mIjWBWLFzMPy0fMXwVfL9
+         uuNlXxUIj2Kf40UwRT+z3XQgntVTbDlvuKHTDwkP0ILt45OGUSP5JkxiCuzwgkbtgIA9
+         3X9t03eQ8kKh/Fz+fvoB66aPA++UcAS9HF57D2L1NoLBjjPVFPCdlQPw+inifp4XxVUM
+         VV4rP0VzYQyhWFcqd5T2n56emkRf8H8ZCRJi8RqrOWBkW8EfJolV2iOR+N+3Ac85xuEh
+         W7Wt5PywhVQ6vTauJngNVBwTKHEOdpiXwfHcfDaIBZFUQ9QHUNOqz6IH8D7Ae5DLWdWb
+         HCIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9gcKLKcPFsmTqmqnzqvLNmDUAPYbRLWrG+hsw17aiGg=;
+        b=Fn37CtHC9odBL+/TZEMfPxogybI+eB7j5ZWW8MgzMWtHLI4QQV4fJ4ZAB0xjQequME
+         Tdhm7nc43Jv/ukLF129M4rq65ZKFj5xE4d10+mKMti47STJ021ivHhbbBT97AbCPAB8V
+         9pmYUdaASXBhprEK+bn/5xmT5TfktCPZoCrWSL/HxbxHf79BFauUUAc2LZvdM54tp2v8
+         j9VHjLlPMcQylnLUKIn3c6ZLZLkvYMutq3Gs4k+wzktnNYbOMJAoOQ03vO2fe68RVQEB
+         SIgExxhfaw+xe0QsHf02paYTcnECl5GlY55sou9KLZoqWEJBdp+KeLTKaqpRP5Yvg/a9
+         LLPw==
+X-Gm-Message-State: AFqh2ko0MOlFYHoA1YQstWBraG5omLmBfnuvp1xu6h0PRc64DBwV3XIP
+        yAqwAj2kUd6ilF/Oh5Z6CVjFedFQmpof5p4JWKtaTg==
+X-Google-Smtp-Source: AMrXdXsiN92YylFQpXhOZo/HU3heQ9TSbnhWL0RkwTzI1zxn+6maFN6bMA8SXw7QfAeVYDwkjVSjV4KGOMw0Khvnxqw=
+X-Received: by 2002:a0d:d5c6:0:b0:4ef:ce3a:a54 with SMTP id
+ x189-20020a0dd5c6000000b004efce3a0a54mr2840966ywd.485.1674410393106; Sun, 22
+ Jan 2023 09:59:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20230112023006.1873859-1-masahiroy@kernel.org>
- <202301121403.599806C597@keescook> <CAK7LNARaXH9gJVCJKR5GLuyEiJarxhcXoUyxXDo=MZYKLxFmyA@mail.gmail.com>
-In-Reply-To: <CAK7LNARaXH9gJVCJKR5GLuyEiJarxhcXoUyxXDo=MZYKLxFmyA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 23 Jan 2023 02:59:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATOzfM_5ntS9TiT1=04u28tBvmPJsUWyTptZkS630B-oQ@mail.gmail.com>
-Message-ID: <CAK7LNATOzfM_5ntS9TiT1=04u28tBvmPJsUWyTptZkS630B-oQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+References: <20230122174548.13758-1-ansuelsmth@gmail.com> <20230122174548.13758-2-ansuelsmth@gmail.com>
+In-Reply-To: <20230122174548.13758-2-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 22 Jan 2023 19:59:42 +0200
+Message-ID: <CAA8EJpp1c=sC0d_G1eSuOzJbjusW86zHezfwY3JRH=EBp7tNmA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: opp: opp-v2-kryo-cpu: enlarge
+ opp-supported-hw maximum
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 12:04 PM Masahiro Yamada <masahiroy@kernel.org> wro=
-te:
+On Sun, 22 Jan 2023 at 19:46, Christian Marangi <ansuelsmth@gmail.com> wrote:
 >
-> On Fri, Jan 13, 2023 at 7:06 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Thu, Jan 12, 2023 at 11:30:06AM +0900, Masahiro Yamada wrote:
-> > >     def main():
-> > >         try:
-> > >             # simulate large output (your code replaces this loop)
-> > >             for x in range(10000):
-> > >                 print("y")
-> > >             # flush output here to force SIGPIPE to be triggered
-> > >             # while inside this try block.
-> > >             sys.stdout.flush()
-> > >         except BrokenPipeError:
-> > >             # Python flushes standard streams on exit; redirect remai=
-ning output
-> > >             # to devnull to avoid another BrokenPipeError at shutdown
-> > >             devnull =3D os.open(os.devnull, os.O_WRONLY)
-> > >             os.dup2(devnull, sys.stdout.fileno())
-> > >             sys.exit(1)  # Python exits with error code 1 on EPIPE
-> >
-> > I still think this is wrong -- they should not continue piping, and
-> > should just die with SIGPIPE. It should simply be:
-> >
-> > signal(SIGPIPE, SIG_DFL);
-> >
-> > Nothing else needed. No wasted CPU cycles, shell handling continues as
-> > per normal.
+> Enlarge opp-supported-hw maximum value. In recent SoC we started
+> matching more bit and we currently match mask of 112. The old maximum of
+> 7 was good for old SoC that didn't had complex id, but now this is
+> limiting and we need to enlarge it to support more variants.
 >
+> Document all the various mask that can be used and limit them to only
+> reasonable values instead of using a generic maximum limit.
 >
-> I prefer try-and-except because it is Python's coding style,
-> and we can do something before the exit.
-> (for example, clean up temporary files)
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 20 +++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 >
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> index b4947b326773..908cb0d7695a 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> @@ -50,12 +50,28 @@ patternProperties:
+>        opp-supported-hw:
+>          description: |
+>            A single 32 bit bitmap value, representing compatible HW.
+> -          Bitmap:
+> +          Bitmap for MSM8996 format:
+>            0:  MSM8996, speedbin 0
+>            1:  MSM8996, speedbin 1
+>            2:  MSM8996, speedbin 2
+>            3-31:  unused
+> -        maximum: 0x7
+> +
+> +          Bitmap for MSM8996 later revision format:
+> +          0:  MSM8996, speedbin 0
+> +          1:  MSM8996, speedbin 1
+> +          2:  MSM8996, speedbin 2
+> +          3:  always set
+
+This is used for speedbin 3
+
+> +          4-31:  unused
+> +
+> +          Bitmap for MSM8996SG format (speedbin shifted of 4 left):
+> +          0-3:  unused
+> +          4:  MSM8996SG, speedbin 0
+> +          5:  MSM8996SG, speedbin 1
+> +          6:  MSM8996SG, speedbin 2
+> +          7-31:  unused
+> +        enum: [0x1, 0x2, 0x3, 0x4, 0x7,
+> +               0x9, 0xd, 0xe, 0xf,
+> +               0x10, 0x20, 0x30, 0x70]
 >
-> >
-> > >     if __name__ =3D=3D '__main__':
-> > >         main()
-> > >
-> > >   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avo=
-id
-> > >   BrokenPipeError. Doing that would cause your program to exit
-> > >   unexpectedly whenever any socket connection is interrupted while
-> > >   your program is still writing to it.
-> >
-> > This advise is for socket programs, not command-line tools.
->
->
-> I still do not understand what is bad
-> about using this for command-line tools.
->
->
-> >
-> > -Kees
-> >
-> > --
-> > Kees Cook
->
->
+>        clock-latency-ns: true
 >
 > --
-> Best Regards
-> Masahiro Yamada
+> 2.38.1
+>
 
 
-
-
-Applied with the typos fixes.
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+With best wishes
+Dmitry
