@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237C867707F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 17:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C0D677082
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 17:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjAVQ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 11:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        id S231379AbjAVQ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 11:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjAVQ06 (ORCPT
+        with ESMTP id S229766AbjAVQ1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 11:26:58 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8771E5EF;
-        Sun, 22 Jan 2023 08:26:56 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D748D308;
-        Sun, 22 Jan 2023 17:26:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674404814;
-        bh=eujLJzueQN/rr7uEp/mzOY8lg5QhIUlSSUUSueSHrF8=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=PF6/H4pYaje1DHtCKKhBZbSIvmIwHe93BCVej26Ongx+mvhibGt2Oi5X+QyVzt/zW
-         Ba14W9Q7TkuJNfBb91mHNK9g1hMRHziTVg66FcIqfaYwxhqU4Lcv1MnIvKY2XvyiTT
-         +uz8AO92TN2BXqlf9oWFcN0E34k3Lr2KhJX5M72g=
-Content-Type: text/plain; charset="utf-8"
+        Sun, 22 Jan 2023 11:27:17 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21D21A1D;
+        Sun, 22 Jan 2023 08:27:16 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <mkarcher@zedat.fu-berlin.de>)
+          id 1pJdBZ-0007tz-05; Sun, 22 Jan 2023 17:27:13 +0100
+Received: from pd9f631ca.dip0.t-ipconnect.de ([217.246.49.202] helo=[192.168.144.87])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <kernel@mkarcher.dialup.fu-berlin.de>)
+          id 1pJdBY-000Fm8-MV; Sun, 22 Jan 2023 17:27:12 +0100
+Message-ID: <563ff850-9966-b790-96d4-bb0557e1152c@mkarcher.dialup.fu-berlin.de>
+Date:   Sun, 22 Jan 2023 17:27:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <d5363f85-44e1-eee1-f7a5-61102637ef53@i2se.com>
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com> <d5363f85-44e1-eee1-f7a5-61102637ef53@i2se.com>
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-media@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>
-Date:   Sun, 22 Jan 2023 16:26:50 +0000
-Message-ID: <167440481093.3533645.5465896340839457121@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+To:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+From:   Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+Subject: [PATCH v2 1/1] arch/sh: avoid spurious sizeof-pointer-div warning
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Original-Sender: kernel@mkarcher.dialup.fu-berlin.de
+X-Originating-IP: 217.246.49.202
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,45 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+Gcc warns about the pattern sizeof(void*)/sizeof(void), as it looks like
+the abuse of a pattern to calculate the array size. This pattern appears
+in the unevaluated part of the ternary operator in _INTC_ARRAY if the
+parameter is NULL.
 
-Quoting Stefan Wahren (2023-01-22 14:21:05)
-> Hi Umang,
->=20
-> Am 18.01.23 um 12:58 schrieb Umang Jain:
-> > Drop custom logging from the vchiq interface.
-> > Mostly of them are replaced with dev_dbg and friends
-> > and/or pr_info and friends.
-> >
-> > The debugfs log levels (in 4/4) are mapped to kernel
-> > logs levels (coming from include/linux/kern_levels.h)
-> > Would like some thoughts on it as I am not sure (hence
-> > marking this is RFC)
-> >
-> >  From drivers/staging/vc04_services/interface/TODO:
-> >
-> > """
-> > * Cleanup logging mechanism
-> >
-> > The driver should probably be using the standard kernel logging mechani=
-sms
-> > such as dev_info, dev_dbg, and friends.
-> > """
->=20
-> at first i want to thank you for the work on vchiq so far.
->=20
-> There is something which is not directly related to this series, but it=20
-> is also about debugging. The driver has a buffer which is accessed by=20
-> it's own DEBUG_* macros. The content of this debug buffer can be dumped=20
-> via the /dev/vchiq which is also used by ioctl. I would appreciate to=20
-> move this dump feature into a new debugfs entry.
+The replacement uses an alternate approach to return 0 in case of NULL
+which does not generate the pattern sizeof(void*)/sizeof(void), but still
+emits the warning if _INTC_ARRAY is called with a nonarray parameter.
 
-Do you have a full list of the tasks you'd like to see completed ?
-(including/or above drivers/staging/vc04_services/interface/TODO)
+This patch is required for successful compilation with -Werror enabled.
 
-It would help to have a clear picture of tasks needed to get this driver
-destaged, so that we can support the ISP upstream.
+The idea to use _Generic for type distinction is taken from Comment #7
+in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483 by Jakub Jelinek
 
-Regards
---
-Kieran
+Signed-off-by: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+---
+History:
+v2:
+   - improve title and remove mostly redundant first sentence of the
+     description
+   - adjust formatting of the _Generic construction
+
+diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
+index c255273b0281..98d1da0d8e36 100644
+--- a/include/linux/sh_intc.h
++++ b/include/linux/sh_intc.h
+@@ -97,7 +97,9 @@ struct intc_hw_desc {
+      unsigned int nr_subgroups;
+  };
+
+-#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
++#define _INTC_ARRAY(a) a, sizeof(a) / (_Generic(a, \
++                                       typeof(NULL):  (size_t)-1, \
++                                       default:       sizeof(*a)))
+
+  #define INTC_HW_DESC(vectors, groups, mask_regs,    \
+               prio_regs,    sense_regs, ack_regs)    \
+
