@@ -2,81 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE5D676C3E
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD32676C3F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 12:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjAVLOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 06:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S229799AbjAVLQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 06:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjAVLOX (ORCPT
+        with ESMTP id S229622AbjAVLQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 06:14:23 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A300E1C31D
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:14:22 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso6700992ilj.17
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:14:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=knvEjaz7f71VMDphq93Ttomb3XiR1RLVfVR0GiG+5yc=;
-        b=dAlE7NmHL5sTA7WSolyCGVzDiyKvDUdXKSfwVSWHKA/LxFHYhRNvGYtEfcFNGxdUEf
-         YkBE5DfPppA4IH6rDZrDRy91ytFJecygYF8JpuLDe49P71RvU3tL4g+uNy/+qAwLe41a
-         H4ayCXaq4NK0+lHmKLOfsssEv79N+j/YNT4GiRi+q2OQuDVxh/X8UviNFMB0sU6TPpx5
-         fSBV4msuDbj4XjiO71VKFJESdD8mlI5UT7bohH/yKiCCRW6kdPcLUs/Ul2f1EToBkZ5C
-         RNNzo/lwAMJu9UfbWjnhJzd7wUIUAB61J+c67BaEfGsdesCqcKr6l7HQIrmWxwbfyHhU
-         ijng==
-X-Gm-Message-State: AFqh2kpVZKirEpicevDcZF6qZTep+M7U/BjMMLuRRuZe7ke2zZDo2WT3
-        3/t5PXCsZwKL/jdegKXBDhOeU2i9re6OyG75dZd7VGkTaGhv
-X-Google-Smtp-Source: AMrXdXt6XfxN8kz3zBped8n8r4ixtXs+B2FAnQI2vA4E/ji1IGwbPrta94N1OpQJqC7Z8lQSds9Wh2G+0Tw+vpHVK9m46qL2Pr21
+        Sun, 22 Jan 2023 06:16:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08511B552
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 03:16:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3C660B9C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 11:16:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93361C433D2;
+        Sun, 22 Jan 2023 11:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674386194;
+        bh=AunzTGYzeDZG64eMKvwgrxj6opCJIB+kNltC35V7dE4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iKDLgckXZPUfcjT9BWm7RPTZAhExTI2CqG9A/UoTHS0VvCjVAXxSja6QaO8f+lpZf
+         4igd4+XCik/q9UVQ4mXh58mG7izQ0wN0cAf6V9g+6t1UdBUxhUzqS3q27xk2Cwtd6f
+         rhWmXKs+m8OaCnbxBdcR4IqyCDM9eMTCUZRJdN+Qxkrps3tIm5KGAGagAx7uTNlAic
+         k/B7WHFt7zjg6mIHXYZo3jqrlEHgVd2UYon6uHLPmjSYjaqAwSgo4ipeNQL6rJUXlQ
+         RR+Iev3Q2UYXVGN/Us7sWDj6Xqg5++QWta0AYOmOyIMwVPZTLu1tn/Tdew9WFiYylh
+         HuAjWMj07IS4w==
+Received: by pali.im (Postfix)
+        id A3FFC93D; Sun, 22 Jan 2023 12:16:31 +0100 (CET)
+Date:   Sun, 22 Jan 2023 12:16:31 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        Martin Kennedy <hurricos@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] powerpc/85xx: p2020: Create one unified machine
+ description
+Message-ID: <20230122111631.dgw5uwtfjsqack57@pali>
+References: <20221224211425.14983-1-pali@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1090:b0:30d:7fd4:a6dd with SMTP id
- r16-20020a056e02109000b0030d7fd4a6ddmr2610074ilj.20.1674386061807; Sun, 22
- Jan 2023 03:14:21 -0800 (PST)
-Date:   Sun, 22 Jan 2023 03:14:21 -0800
-In-Reply-To: <00000000000075a52e05ee97ad74@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006e58cb05f2d86236@google.com>
-Subject: Re: [syzbot] [btrfs?] WARNING: kmalloc bug in btrfs_ioctl_send
-From:   syzbot <syzbot+4376a9a073770c173269@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
-        dsterba@suse.cz, josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        w@1wt.eu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221224211425.14983-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hello! Do you have any comments for this patch series?
 
-commit 7661809d493b426e979f39ab512e3adf41fbcc69
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed Jul 14 16:45:49 2021 +0000
-
-    mm: don't allow oversized kvmalloc() calls
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f2c851480000
-start commit:   f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=100ac851480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f2c851480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=827916bd156c2ec6
-dashboard link: https://syzkaller.appspot.com/bug?extid=4376a9a073770c173269
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1775aed7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11cbcbd0480000
-
-Reported-by: syzbot+4376a9a073770c173269@syzkaller.appspotmail.com
-Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Saturday 24 December 2022 22:14:17 Pali Rohár wrote:
+> This patch series unifies all P2020 boards and machine descriptions into
+> one generic unified P2020 machine description. With this generic machine
+> description, kernel can boot on any P2020-based board with correct DTS
+> file.
+> 
+> Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
+> Kernel during booting correctly detects P2020 and prints:
+> [    0.000000] Using Freescale P2020 machine description
+> 
+> Changes in v2:
+> * Added patch "p2020: Move i8259 code into own function" (separated from the next one)
+> * Renamed CONFIG_P2020 to CONFIG_PPC_P2020
+> * Fixed descriptions
+> 
+> Link to v1: https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
+> 
+> Pali Rohár (8):
+>   powerpc/85xx: Mark mpc85xx_rdb_pic_init() as static
+>   powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
+>   powerpc/85xx: p2020: Move all P2020 machine descriptions to p2020.c
+>   powerpc/85xx: p2020: Move i8259 code into own function
+>   powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
+>   powerpc/85xx: p2020: Define just one machine description
+>   powerpc/85xx: p2020: Enable boards by new config option
+>     CONFIG_PPC_P2020
+>   powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
+> 
+>  arch/powerpc/boot/dts/turris1x.dts        |   2 +-
+>  arch/powerpc/platforms/85xx/Kconfig       |  22 ++-
+>  arch/powerpc/platforms/85xx/Makefile      |   1 +
+>  arch/powerpc/platforms/85xx/mpc85xx_ds.c  |  25 +--
+>  arch/powerpc/platforms/85xx/mpc85xx_rdb.c |  46 +-----
+>  arch/powerpc/platforms/85xx/p2020.c       | 193 ++++++++++++++++++++++
+>  6 files changed, 215 insertions(+), 74 deletions(-)
+>  create mode 100644 arch/powerpc/platforms/85xx/p2020.c
+> 
+> -- 
+> 2.20.1
+> 
