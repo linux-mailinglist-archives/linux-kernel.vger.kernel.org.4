@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7184676B24
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 06:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C81676B30
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 Jan 2023 06:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjAVFDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 00:03:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S229679AbjAVFPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 00:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjAVFDS (ORCPT
+        with ESMTP id S229480AbjAVFPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 00:03:18 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A2118A97;
-        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id d10so6820078pgm.13;
-        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
+        Sun, 22 Jan 2023 00:15:46 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165361E2A0
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 21:15:45 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bp15so13590279lfb.13
+        for <linux-kernel@vger.kernel.org>; Sat, 21 Jan 2023 21:15:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
-        b=ZmJe4uoWdrrnu2t0uTnKxkUzdqQIQCbXavzLn5Cckr5wQAN/XNChg6QUa3fC3gqvec
-         ZmffyDkvxjsGFn8lwh7w0D2Wqa4wOTLJ6so7CRqVkI/3oPrMWiS7YDk5EU6RD4IAiARw
-         WO/6KN+/Y/+1/1XOkM5/8yvgltDyHbcAUSDgyZ51d5H+evuJC7n6s0N4/gWuEGKZljYU
-         H6dofb3q0KXwc6iZhZDP6IDfiBZBIgK26cERQryQo/3ttWk3pnyh+th3liOs7N1HT3VD
-         exVu0cfFBrJAXSXqMGAtUNVm3cISNCjmI7HSrQfjXbsnybNZsh9PGCBXdD+eQ//CEweb
-         FHZA==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LaJ0pOpNRWAW4u4WiMs6V/9gJsiYUBUKhGV/64DZPcY=;
+        b=fsYLe25DlODkwoUJbNK0JDedTuF8UGj7usSAtdOZZf3Nwe9hq4+bP0ZgE0sOSOTTys
+         OUqdJs6i0TY7C7QaQ79WVlV3rhM54i4gX+WyzAJnkHYSTwybMztnw7fokGqxLHfnGXzO
+         GJeWU/q2Knpelc0rvEt9HcWDDwaPEfKEGB/Yi47kTr2muldbrcST1kXb4+w6VuD3dyAZ
+         5qyi+LfPEd5wWWeKyCOzccNXPOJfleSGKsIkR+WkVyYAOoUD5P1Npj/YnLLywG7oFMos
+         VZPy0Z22RNYfPDNaPJDl7zcOSti/UHF8O7SCTlOtG9+1cKSzNZSaqmPsCK8AIF3WVwys
+         +xUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
-        b=sqw+lnym3lFQ9Ah61wyFTZCX0rkzG/rnxetzqwy//eaPst26fiyS3Nc04gzf0b9zrD
-         U0PBKDgd+wvSFDR1NebN+TqB9vYQwi11Bdj5LEkgE0XdU0m8qvFH4HU6MhPnh6v1hgNp
-         u19AJBQW95I8Im8ow/9oc/d2tGgMQvEIArwxVQe4PmfXRGiM2hvgGcSe9r2PGvSgnLPU
-         VGXCLJsOlSHVv/DDhhyYxmLIq8VlCmoyidl97YbyfQMauPhzY8l7/K+q4AZbGzFzwll7
-         j8y53BUPmpu5nqrYH+KcHdvdeiXdzBDwUnVSRAoXLiYSElx0e2hESzrTvebf/1sjVhpx
-         dTag==
-X-Gm-Message-State: AFqh2kowCwCDW+73unZOIU1Bhbf2n3DapW1pTkezp+YG0aNMA9G/7Ylk
-        DbnpWMRumHH0z7I7ONTLr94=
-X-Google-Smtp-Source: AMrXdXu31CyeCOIYHJy4PMa+lMnTUCPNOOCVGdySsvrNk+I6w/8v5j3J3q9D4DHiL0qBs7XWzHuMxg==
-X-Received: by 2002:a05:6a00:4519:b0:58d:f047:53b7 with SMTP id cw25-20020a056a00451900b0058df04753b7mr14535557pfb.3.1674363796900;
-        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
-Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
-        by smtp.gmail.com with ESMTPSA id h11-20020a056a00000b00b0058dd9c46a8csm9062788pfk.64.2023.01.21.21.03.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
-Date:   Thu, 19 Jan 2023 03:47:02 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH RFC 1/3] vsock: support sockmap
-Message-ID: <Y8i9NlRpIR/KE/q2@bullseye>
-References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
- <20230118-support-vsock-sockmap-connectible-v1-1-d47e6294827b@bytedance.com>
- <Y8w7d+6UASP3jUHf@pop-os.localdomain>
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LaJ0pOpNRWAW4u4WiMs6V/9gJsiYUBUKhGV/64DZPcY=;
+        b=Qqs/wlm/RW5hn+xJBsVOIVg/1iOkWoGXTEMkH80It3aZlyf1KMIiY1jl1rADLqQnwB
+         dqh5B3PKVaBmYde6/PsZB746AiIuEgVYh3FSZjrXpPjRDVp8oQFjIXRALrm1DW7rT9EX
+         pTO2v2iey09qOW4dgjZdRxc9G2OwgrVIPwYKBgBi903En75sLznbJxIkuLHRDD+M3+kV
+         2eJniM5utfj7YLBp6axErAwquLy1bKFbngikeneaos/YMSrzQr9aguO6uJVbE9bwibBC
+         /ZX+9a3BYv9UHzLsZEh0SyjX7xDiVNosZ9avgnw1CfTiKR6tVz7A13zWI5YSp3rhKZvL
+         URxA==
+X-Gm-Message-State: AFqh2kpZ+4f8VIhrSutJ3kMXdn06P/Vzi4l4cIg3GvBzEdciv7YL9yRn
+        05x9SXZbf2PDhiqktUuGqRcoonuv2t5NYjIUids=
+X-Google-Smtp-Source: AMrXdXuhCl2v5mSYaHJagbIc/LSopm9P2CcVOnE454mGu3wz01w7Z6mX4qg5SrAo6BR8usqM5KUlvuBa3+UJ+6+hxt8=
+X-Received: by 2002:a19:7406:0:b0:4cf:d5bf:75c3 with SMTP id
+ v6-20020a197406000000b004cfd5bf75c3mr886307lfe.170.1674364543372; Sat, 21 Jan
+ 2023 21:15:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8w7d+6UASP3jUHf@pop-os.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:651c:4d4:0:0:0:0 with HTTP; Sat, 21 Jan 2023 21:15:42
+ -0800 (PST)
+From:   Frank Hughes <diamondbk9@gmail.com>
+Date:   Sun, 22 Jan 2023 06:15:42 +0100
+Message-ID: <CAPrdMJBAAqcdWvimUE0Tn0t7Db1nbOYV-PGacQbook_nGwxtXw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
+        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_5,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 11:22:31AM -0800, Cong Wang wrote:
-> On Wed, Jan 18, 2023 at 12:27:39PM -0800, Bobby Eshleman wrote:
-> > +static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
-> > +{
-> > +	struct vsock_sock *vsk = vsock_sk(sk);
-> > +
-> > +	if (!vsk->transport)
-> > +		return -ENODEV;
-> > +
-> > +	if (!vsk->transport->read_skb)
-> > +		return -EOPNOTSUPP;
-> 
-> Can we move these two checks to sockmap update path? It would make
-> vsock_read_skb() faster.
-> 
-> > +
-> > +	return vsk->transport->read_skb(vsk, read_actor);
-> > +}
-> 
-> Essentially can be just this one line.
-> 
-> Thanks.
+Hello,
 
-That makes sense, will do.
+I am Frank Hughes. Former commander during the American War in Iraq. I
+am currently in Syria for more missions because the US has completed
+the mission in Iraq, but I will soon be assigned to the Joint
+Multinational Readiness Center (JMRC).
 
-Thanks,
-Bobby
+In 6 years here in Iraq, I was able to earn a total of 25 Million
+Dollars. This money came from the oil trade. Second, I have to present
+someone as a foreign partner because I am a uniformed person. I am an
+American and intelligence officer and have  100% sure way to ship
+money through diplomatic shipping companies. I need your acceptance
+and everything is ready.
+
+The only way to be safe with that money is to invest it in your
+country. I'll be there for a while. So i need someone to deal with. If
+you accept, I will move the money to you as my foreign partner. 30% of
+the total funds will be given for your help and 70% will be for me,
+from there I will invest the rest. Before leaving Iraq, I package all
+the money inside a trunk box and sent it away through assistance of a
+United Nation RED CROSS service to security company London. with an
+agreement that I will provide with details of my partner and recipient
+of the shipment.
+
+When we agree to work together, I will you to the company in London to
+complete the shipment formalities and introduce you as the partner and
+recipient of the shipment. Where we are now, we can only communicate
+through our military communications facilities, which are secured.
+Please send me your personal cell phone number so that I can call you
+for further inquiries when I'm from our military network. I will give
+you more details when I get your reply
+
+Regards
+Commander Frank Hughes.
