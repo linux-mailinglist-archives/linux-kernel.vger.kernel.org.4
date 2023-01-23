@@ -2,153 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6019C677E14
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3512677E1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjAWOcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:32:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S231956AbjAWOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjAWOb6 (ORCPT
+        with ESMTP id S230520AbjAWOco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:31:58 -0500
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE3C64C;
-        Mon, 23 Jan 2023 06:31:57 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 316C2104841C;
-        Mon, 23 Jan 2023 17:31:55 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 316C2104841C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1674484315; bh=h57s7zxPueQ/WaUzP0DIV44jkjXvbC4rM4m6NnFYSh8=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=DKuOEIZmHTZvj2q86LOmAsNduH4lJAWiZayRQd47P94M8cd2DfJ9K+OQuY0ymg/xD
-         6cXUgAGIIf9I2oO2fsB2zVB/V2ET16QHWIfzSb0q6JoVwnGooX6jGWv+FnfP8c3mIO
-         EjTwD52ouDiPUUXZGAsXiiMNoAZvJJ9MWQw98Vn4=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-        by mx0.infotecs-nt (Postfix) with ESMTP id 2D7D5316A0CB;
-        Mon, 23 Jan 2023 17:31:55 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     "leon@kernel.org" <leon@kernel.org>
-CC:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "fw@strlen.de" <fw@strlen.de>, "joe@perches.com" <joe@perches.com>,
-        "kadlec@netfilter.org" <kadlec@netfilter.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "pablo@netfilter.org" <pablo@netfilter.org>
-Subject: [PATCH v2] netfilter: conntrack: remote a return value of the
- 'seq_print_acct' function.
-Thread-Topic: [PATCH v2] netfilter: conntrack: remote a return value of the
- 'seq_print_acct' function.
-Thread-Index: AQHZLzdwu2dpvZ83O0uhtAvrU7ziYQ==
-Date:   Mon, 23 Jan 2023 14:31:54 +0000
-Message-ID: <20230123143202.1785569-1-Ilia.Gavrilov@infotecs.ru>
-References: <Y86Lji5prQEAxKLi@unreal>
-In-Reply-To: <Y86Lji5prQEAxKLi@unreal>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 23 Jan 2023 09:32:44 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C516C673;
+        Mon, 23 Jan 2023 06:32:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1674484362;
+  x=1706020362;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=1RiHrwj6ISB7lKtNwWNe0bcD7KzheIvmO/6WEMs8K5k=;
+  b=PanAXpHfYvkoUSB4r4BNj818WVY5h/V3Aq1oaiW6Tp67j/D+MvqjxdiK
+   TfJsxOAiOZlI6OQMCW0jkCF8Fsjpub4SrWFRa9fyWfL8BSlSghpeb76sF
+   LrI2DGO1oi/quavQeWXhoVL+5o/h2ynIZzbG30/RgCg0g7DnjegKTtjtk
+   1xnHuddvmBX921Vt4/QlAHUpxc0wiOnuDkuZY9aaqwHGyZ+ILyLcr/MaR
+   yQkGu72Bp1mRt73L93A/mijwD3XvnYjNnidZYOYVqxKLnr4eN57KN9NgP
+   w57X59e95wQ895QQ/F298+S0ondpgH0/2omXlQxcwo6tbhLm+c374/ZNI
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Date:   Mon, 23 Jan 2023 15:32:31 +0100
+Subject: [PATCH] mfd: Add Simple PCI MFD driver
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 174927 [Jan 23 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;infotecs.ru:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/01/23 12:45:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/23 00:37:00 #20794104
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
+X-B4-Tracking: v=1; b=H4sIAH+azmMC/x2NywqDMBAAf0X27MKatgf7K+Ihj01daNKQFSmI/
+ 270OAPD7KBchRXe3Q6VN1H55QZD34FfbP4wSmgMhsyDBkOoksqXMcWAxQu+npHC6EYK0UOLnFVG
+ V232y5WtqVy2VI7yvzfTfBwny19zpHYAAAA=
+To:     Lee Jones <lee@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <kernel@axis.com>
+X-Mailer: b4 0.11.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The static 'seq_print_acct' function always returns 0.
+Add a PCI driver which registers all child nodes specified in the
+devicetree.  It will allow platform devices to be used on virtual
+systems which already support PCI and devicetree, such as UML with
+virt-pci.
 
-Change the return value to 'void' and remove unnecessary checks.
+The driver has no id_table by default; user space needs to provide one
+using the new_id mechanism in sysfs.
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with SVACE.
-
-Fixes: 1ca9e41770cb ("netfilter: Remove uses of seq_<foo> return values")
-Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
-V2: Fix coding style
- net/netfilter/nf_conntrack_standalone.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/mfd/Kconfig          | 11 +++++++++++
+ drivers/mfd/Makefile         |  1 +
+ drivers/mfd/simple-mfd-pci.c | 21 +++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
 
-diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_con=
-ntrack_standalone.c
-index 0250725e38a4..6819d07f9692 100644
---- a/net/netfilter/nf_conntrack_standalone.c
-+++ b/net/netfilter/nf_conntrack_standalone.c
-@@ -275,7 +275,7 @@ static const char* l4proto_name(u16 proto)
- 	return "unknown";
- }
-=20
--static unsigned int
-+static void
- seq_print_acct(struct seq_file *s, const struct nf_conn *ct, int dir)
- {
- 	struct nf_conn_acct *acct;
-@@ -283,14 +283,12 @@ seq_print_acct(struct seq_file *s, const struct nf_co=
-nn *ct, int dir)
-=20
- 	acct =3D nf_conn_acct_find(ct);
- 	if (!acct)
--		return 0;
-+		return;
-=20
- 	counter =3D acct->counter;
- 	seq_printf(s, "packets=3D%llu bytes=3D%llu ",
- 		   (unsigned long long)atomic64_read(&counter[dir].packets),
- 		   (unsigned long long)atomic64_read(&counter[dir].bytes));
--
--	return 0;
- }
-=20
- /* return 0 on success, 1 in case of error */
-@@ -342,8 +340,7 @@ static int ct_seq_show(struct seq_file *s, void *v)
- 	if (seq_has_overflowed(s))
- 		goto release;
-=20
--	if (seq_print_acct(s, ct, IP_CT_DIR_ORIGINAL))
--		goto release;
-+	seq_print_acct(s, ct, IP_CT_DIR_ORIGINAL);
-=20
- 	if (!(test_bit(IPS_SEEN_REPLY_BIT, &ct->status)))
- 		seq_puts(s, "[UNREPLIED] ");
-@@ -352,8 +349,7 @@ static int ct_seq_show(struct seq_file *s, void *v)
-=20
- 	ct_show_zone(s, ct, NF_CT_ZONE_DIR_REPL);
-=20
--	if (seq_print_acct(s, ct, IP_CT_DIR_REPLY))
--		goto release;
-+	seq_print_acct(s, ct, IP_CT_DIR_REPLY);
-=20
- 	if (test_bit(IPS_HW_OFFLOAD_BIT, &ct->status))
- 		seq_puts(s, "[HW_OFFLOAD] ");
---=20
-2.30.2
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 30db49f31866..1e325334e9ae 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -1277,6 +1277,17 @@ config MFD_SIMPLE_MFD_I2C
+ 	  sub-devices represented by child nodes in Device Tree will be
+ 	  subsequently registered.
+ 
++config MFD_SIMPLE_MFD_PCI
++	tristate "Simple Multi-Functional Device support (PCI)"
++	depends on PCI
++	depends on OF || COMPILE_TEST
++	help
++	  This enables support for a PCI driver for which any sub-devices
++	  represented by child nodes in the devicetree will be registered.
++
++	  The driver does not bind to any devices by default; that should
++	  be done via sysfs using new_id.
++
+ config MFD_SL28CPLD
+ 	tristate "Kontron sl28cpld Board Management Controller"
+ 	depends on I2C
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 457471478a93..7ae329039a13 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -268,6 +268,7 @@ obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+ 
+ obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
++obj-$(CONFIG_MFD_SIMPLE_MFD_PCI)	+= simple-mfd-pci.o
+ obj-$(CONFIG_MFD_SMPRO)		+= smpro-core.o
+ obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
+ 
+diff --git a/drivers/mfd/simple-mfd-pci.c b/drivers/mfd/simple-mfd-pci.c
+new file mode 100644
+index 000000000000..c5b2540e924a
+--- /dev/null
++++ b/drivers/mfd/simple-mfd-pci.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <linux/pci.h>
++
++static int simple_mfd_pci_probe(struct pci_dev *pdev,
++				const struct pci_device_id *id)
++{
++	return devm_of_platform_populate(&pdev->dev);
++}
++
++static struct pci_driver simple_mfd_pci_driver = {
++	/* No id_table, use new_id in sysfs */
++	.name = "simple-mfd-pci",
++	.probe = simple_mfd_pci_probe,
++};
++
++module_pci_driver(simple_mfd_pci_driver);
++
++MODULE_LICENSE("GPL");
+
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230120-simple-mfd-pci-54f0d9b90dfc
+
+Best regards,
+-- 
+Vincent Whitchurch <vincent.whitchurch@axis.com>
