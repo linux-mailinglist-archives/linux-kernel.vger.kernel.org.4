@@ -2,169 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107CE67897D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B96B6788CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbjAWVX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S231883AbjAWU4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjAWVXz (ORCPT
+        with ESMTP id S232098AbjAWU4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:23:55 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA9830B15;
-        Mon, 23 Jan 2023 13:23:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=17xF72TkOudZ1GH2KkrHuQYUcqBX4WbXM/q285Cqrn4=; b=XnQVbU04G+ibmyCKDQvP0W/GEB
-        rihr8unbovHcUxwXBhjEJUVsCn46FK+HKV0ITvrF1CbDz0bfVHFkjz8k2YcDbyMdZZbmJlZ3t+e2v
-        oo9rlBLWBPbv206BCcoZFy7MzmIAvU/92OwtsYWKntnyWM/m1NfjN6bToeeOoN9/ZXSY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41506 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pK3qb-0004rC-35; Mon, 23 Jan 2023 15:55:23 -0500
-Date:   Mon, 23 Jan 2023 15:55:20 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230123155520.22a20149745dcbd536536e8f@hugovil.com>
-In-Reply-To: <CAH+2xPBD4ezWPzMj4YzF63duWnw3_af6KkC7eq1EWS=5F_5NGw@mail.gmail.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-12-hugo@hugovil.com>
-        <CAH+2xPBD4ezWPzMj4YzF63duWnw3_af6KkC7eq1EWS=5F_5NGw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Mon, 23 Jan 2023 15:56:49 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400F2360B0;
+        Mon, 23 Jan 2023 12:56:24 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P12Sd5PqXz4y0l;
+        Tue, 24 Jan 2023 07:56:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674507362;
+        bh=eoK4hX06Tgqi8Ba+YSj4Fdh7a7Ml2qISzbV4BV9AUaI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nRguNp00MXTVJKU2+FSUEGYnOoyW6gXoDDdv+oya9dW6kQHQIFD+qd2GaDsHoM1+o
+         O35ssULe7r7BJ6vtT6POxsNh4seF9w4jIRTMklc3L+H0fgsEn0i5T9cHxK06uk3U3k
+         9TCNw0Xr7MiGdnihKaznq+3K12B5ba8oRbY3KMZFDDC0RbMo7EHfq+ArMfMPIVRkOR
+         JO7wpzGT73fX6uMXfVkpWCW66svmJjHXNQ7RyGf44chraw4mne3ahfew84Mgj6uqyq
+         dH+n2ttiupWncqfcKjXKPzM5VcZQTNvZvU7mUGtEIQA1J9Dl2ZccMm//vbEiVb0rya
+         IxxQl06lm/E1w==
+Date:   Tue, 24 Jan 2023 07:56:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the gpio-brgl-fixes tree
+Message-ID: <20230124075600.649bd7bb@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Awt7O9f_eRYXqqNa=3aXwxU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
- sequence for PCF2131
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 Jan 2023 19:44:23 +0100
-Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+--Sig_/Awt7O9f_eRYXqqNa=3aXwxU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > The sequence for updating the time/date registers is slightly
-> > different between PCF2127/29 and PCF2131.
-> >
-> > For PCF2127/29, during write operations, the time counting
-> > circuits (memory locations 03h through 09h) are automatically blocked.
-> >
-> > For PCF2131, time/date registers write access requires setting the
-> > STOP bit and sending the clear prescaler instruction (CPR). STOP then
-> > needs to be released once write operation is completed.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 37 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index e4b78b9c03f9..11fbdab6bf01 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -39,6 +39,7 @@
-> >  #define PCF2127_REG_CTRL1              0x00
-> >  #define PCF2127_BIT_CTRL1_POR_OVRD             BIT(3)
-> >  #define PCF2127_BIT_CTRL1_TSF1                 BIT(4)
-> > +#define PCF2127_BIT_CTRL1_STOP                 BIT(5)
-> >  /* Control register 2 */
-> >  #define PCF2127_REG_CTRL2              0x01
-> >  #define PCF2127_BIT_CTRL2_AIE                  BIT(1)
-> > @@ -70,6 +71,7 @@
-> >  #define PCF2131_REG_SR_RESET           0x05
-> >  #define PCF2131_SR_RESET_READ_PATTERN  0b00100100 /* Fixed pattern. */
-> >  #define PCF2131_SR_RESET_RESET_CMD     0x2C /* SR is bit 3. */
-> > +#define PCF2131_SR_RESET_CPR_CMD       0xA4 /* CPR is bit 7. */
-> 
-> Replace 0xA4 with (BIT(2) | BIT(5) | BIT(7)) or
-> (PCF2131_SR_RESET_READ_PATTERN | BIT(7))
+Hi all,
 
-Done.
+After merging the gpio-brgl-fixes tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
- 
-> >  /* Time and date registers */
-> >  #define PCF2127_REG_TIME_DATE_BASE     0x03
-> >  #define PCF2131_REG_TIME_DATE_BASE     0x07 /* Register 0x06 is 100th seconds,
-> > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >         /* year */
-> >         buf[i++] = bin2bcd(tm->tm_year - 100);
-> >
-> > -       /* write register's data */
-> > +       /* Write access to time registers:
-> > +        * PCF2127/29: no special action required.
-> > +        * PCF2131:    requires setting the STOP bit. STOP bit needs to
-> > +        *             be cleared after time registers are updated.
-> > +        *             It is also recommended to set CPR bit, although
-> > +        *             write access will work without it.
-> > +        */
-> > +       if (pcf2127->cfg->has_reset_reg) {
-> > +               err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > +                                        PCF2127_BIT_CTRL1_STOP,
-> > +                                        PCF2127_BIT_CTRL1_STOP);
-> > +               if (err) {
-> > +                       dev_err(dev, "setting STOP bit failed\n");
-> > +                       return err;
-> > +               }
-> > +
-> > +               err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
-> > +                                  PCF2131_SR_RESET_CPR_CMD);
-> > +               if (err) {
-> > +                       dev_err(dev, "sending CPR cmd failed\n");
-> > +                       return err;
-> > +               }
-> > +       }
-> > +
-> > +       /* write time register's data */
-> >         err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
-> >         if (err) {
-> >                 dev_err(dev,
-> > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >                 return err;
-> >         }
-> >
-> > +       if (pcf2127->cfg->has_reset_reg) {
-> > +               /* Clear STOP bit (PCF2131 only) after write is completed. */
-> > +               err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > +                                        PCF2127_BIT_CTRL1_STOP, 0);
-> > +               if (err) {
-> > +                       dev_err(dev, "clearing STOP bit failed\n");
-> > +                       return err;
-> > +               }
-> > +       }
-> > +
-> >         return 0;
-> >  }
-> >
-> > --
-> > 2.30.2
-> >
-> 
+In file included from include/linux/of_gpio.h:14,
+                 from drivers/net/phy/mdio_bus.c:27:
+include/linux/gpio/driver.h:782:68: error: parameter 4 ('lflags') has incom=
+plete type
+  782 |                                             enum gpio_lookup_flags =
+lflags,
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~=
+^~~~~~
+include/linux/gpio/driver.h:779:33: error: function declaration isn't a pro=
+totype [-Werror=3Dstrict-prototypes]
+  779 | static inline struct gpio_desc *gpiochip_request_own_desc(struct gp=
+io_chip *gc,
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
 
+Caused by commit
 
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+  de5f701724ac ("gpiolib: fix linker errors when GPIOLIB is disabled")
+
+I have used the gpio-brgl-fixes tree from next-20210123 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Awt7O9f_eRYXqqNa=3aXwxU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPO9GAACgkQAVBC80lX
+0GxgTwf/ZuwW2iZVbTgRENWUZeD96uL2xieSUDb8XO8XMCQ7VQtg+u1Hg6O/7SD6
+SOKTFYgo5NdYbLSd91goMU1a810gOHmAte1fI/FheXmuiEnhtiHKgfSJmPcjcDKf
+auPAVYVOeNgieEOvicaztqy431ezATf02Hhje8HsY8IKy01EHL6hzc+sfs7vdFRj
+vrODojFaC4V4GI0sYdyIWNGmd0bHXo+Q+8n67VJFxcNKy74l2dklNhe+WaMXawMs
+SUw8ov9H0ZE3X8raYYM3rywxqSezMLSjGOsIZX9pR9ChwpOlBes5rVVyDQDNg3Vy
+SpSnmOX4HjLQbg2YaXBWLxke4dm42w==
+=KkyY
+-----END PGP SIGNATURE-----
+
+--Sig_/Awt7O9f_eRYXqqNa=3aXwxU--
