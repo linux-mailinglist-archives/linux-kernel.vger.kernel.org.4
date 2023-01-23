@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF45678A72
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16EC678A85
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjAWWLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 17:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S233168AbjAWWNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbjAWWLo (ORCPT
+        with ESMTP id S233179AbjAWWNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 17:11:44 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D58938E9A;
-        Mon, 23 Jan 2023 14:11:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 23 Jan 2023 17:13:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB84539BBA
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674511896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lvUmurC9HOodDs2LaRkp+R+qT18zMiP3C2WK1UkBQdM=;
+        b=ItZgT6QPp68KTAVibaTP4znhV+bC7K013rBJRU8Yc/9zoj0lZg5cIdFm13DSBMJXJukJS3
+        uAVCm2eQ09oq83ymspjwbDMMM3+YJZf/S/N5FNV8s+79IsrJzYTsZ8sVK9tJpXWCSE/enQ
+        aRFFnzRnp534pTunriBH4AtJBDvxAhE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452--3poGQaqMM66JfqihUnbzw-1; Mon, 23 Jan 2023 17:11:33 -0500
+X-MC-Unique: -3poGQaqMM66JfqihUnbzw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BD4D2CE1784;
-        Mon, 23 Jan 2023 22:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D4EC433D2;
-        Mon, 23 Jan 2023 22:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674511864;
-        bh=B2Hun8fx94ummgXxtdvJvI9tjawF7V9UEMWQUtT0mcg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HcgdVb7N420MXjiaT3Cy4xcVCA8Z39ghV+wDLAJdklaXRi0qcZdUgMyp5Bz27Eo6K
-         0Q7zvjVefDXPlafRBzutpafZFdPkAaa8GAp0dSiHQnOgVdJ4M7RSlkk7S5PZaDozLV
-         Zm+Jsb+LanQD1pEa/jGiIrWQINaF9LtUsGPmEN51MNTC8nM5F8Bn0Puj7Zgy8DKghN
-         6Z3okEYMedCreg8+2+l/5bGCJeOMYsA23VZzG37W9ep4OaJx96i+yYienRaLUP4aEK
-         3WbTlYFge3XFCEnj9ncyN4wPRE1UH++foFM7s5dpzFG0AMRf/p9UUz7SbvljzlLvAg
-         qMbc/WPWrLj4Q==
-Date:   Mon, 23 Jan 2023 22:10:59 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Message-ID: <Y88F808GULoKFOVJ@spud>
-References: <20230123112803.817534-1-alexghiti@rivosinc.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DF1F3C22745;
+        Mon, 23 Jan 2023 22:11:32 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.206])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F2C8F492C3C;
+        Mon, 23 Jan 2023 22:11:31 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 17:11:30 -0500
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, pbonzini@redhat.com, bcodding@redhat.com,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nicholas Bellinger <nab@linux-iscsi.org>
+Subject: Re: [PATCH V2] vhost-scsi: unbreak any layout for response
+Message-ID: <Y88GEm63Tsg1AAu4@fedora>
+References: <20230119073647.76467-1-jasowang@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AjN4nqWVveMYgtD1"
+        protocol="application/pgp-signature"; boundary="vqhw79aaCtf0o+Pf"
 Content-Disposition: inline
-In-Reply-To: <20230123112803.817534-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119073647.76467-1-jasowang@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,66 +65,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---AjN4nqWVveMYgtD1
+--vqhw79aaCtf0o+Pf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
-> During the early page table creation, we used to set the mapping for
-> PAGE_OFFSET to the kernel load address: but the kernel load address is
-> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> PAGE_OFFSET is).
+On Thu, Jan 19, 2023 at 03:36:47PM +0800, Jason Wang wrote:
+> Al Viro said:
 >=20
-> But actually we don't have to establish this mapping (ie set va_pa_offset)
-> that early in the boot process because:
+> """
+> Since "vhost/scsi: fix reuse of &vq->iov[out] in response"
+> we have this:
+>                 cmd->tvc_resp_iov =3D vq->iov[vc.out];
+>                 cmd->tvc_in_iovs =3D vc.in;
+> combined with
+>                 iov_iter_init(&iov_iter, ITER_DEST, &cmd->tvc_resp_iov,
+>                               cmd->tvc_in_iovs, sizeof(v_rsp));
+> in vhost_scsi_complete_cmd_work().  We used to have ->tvc_resp_iov
+> _pointing_ to vq->iov[vc.out]; back then iov_iter_init() asked to
+> set an iovec-backed iov_iter over the tail of vq->iov[], with
+> length being the amount of iovecs in the tail.
 >=20
-> - first, setup_vm installs a temporary kernel mapping and among other
->   things, discovers the system memory,
-> - then, setup_vm_final creates the final kernel mapping and takes
->   advantage of the discovered system memory to create the linear
->   mapping.
+> Now we have a copy of one element of that array.  Fortunately, the members
+> following it in the containing structure are two non-NULL kernel pointers,
+> so copy_to_iter() will not copy anything beyond the first iovec - kernel
+> pointer is not (on the majority of architectures) going to be accepted by
+> access_ok() in copyout() and it won't be skipped since the "length" (in
+> reality - another non-NULL kernel pointer) won't be zero.
 >=20
-> During the first phase, we don't know the start of the system memory and
-> then until the second phase is finished, we can't use the linear mapping =
-at
-> all and phys_to_virt/virt_to_phys translations must not be used because it
-> would result in a different translation from the 'real' one once the final
-> mapping is installed.
+> So it's not going to give a guest-to-qemu escalation, but it's definitely
+> a bug.  Frankly, my preference would be to verify that the very first iov=
+ec
+> is long enough to hold rsp_size.  Due to the above, any users that try to
+> give us vq->iov[vc.out].iov_len < sizeof(struct virtio_scsi_cmd_resp)
+> would currently get a failure in vhost_scsi_complete_cmd_work()
+> anyway.
+> """
 >=20
-> So here we simply delay the initialization of va_pa_offset to after the
-> system memory discovery. But to make sure noone uses the linear mapping
-> before, we add some guard in the DEBUG_VIRTUAL config.
+> However, the spec doesn't say anything about the legacy descriptor
+> layout for the respone. So this patch tries to not assume the response
+> to reside in a single separate descriptor which is what commit
+> 79c14141a487 ("vhost/scsi: Convert completion path to use") tries to
+> achieve towards to ANY_LAYOUT.
 >=20
-> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-> in a better TLB utilization.
+> This is done by allocating and using dedicate resp iov in the
+> command. To be safety, start with UIO_MAXIOV to be consistent with the
+> limitation that we advertise to the vhost_get_vq_desc().
 >=20
-> Note that we rely on the firmware to protect itself using PMP.
+> Testing with the hacked virtio-scsi driver that use 1 descriptor for 1
+> byte in the response.
 >=20
-> Acked-by: Rob Herring <robh@kernel.org> # DT bits
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Benjamin Coddington <bcodding@redhat.com>
+> Cc: Nicholas Bellinger <nab@linux-iscsi.org>
+> Fixes: a77ec83a5789 ("vhost/scsi: fix reuse of &vq->iov[out] in response")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+> Changes since V1:
+> - tweak the changelog
+> - fix the allocation size for tvc_resp_iov (should be sizeof(struct iovec=
+))
+> ---
+>  drivers/vhost/scsi.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
 
-No good on !MMU unfortunately Alex:
-=2E./arch/riscv/mm/init.c:222:2: error: use of undeclared identifier 'riscv=
-_pfn_base'
-        riscv_pfn_base =3D PFN_DOWN(phys_ram_base);
-        ^
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
 
-Reproduces with nommu_virt_defconfig.
-
-Thanks,
-Conor.
-
---AjN4nqWVveMYgtD1
+--vqhw79aaCtf0o+Pf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY88F8gAKCRB4tDGHoIJi
-0sk5AP9e/+SB3pTIKzfQPMgtXZkuV5QgIeCGqK1UjjQhd6QjXAD+KMMwHzheEBnp
-V9mWrQAFGU8u6vVcNVc9I1zxH4pt8gg=
-=XTYk
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmPPBhIACgkQnKSrs4Gr
+c8h2CQgAjfogTnTq3fYLEVF3lup+f3//rNwFv+dD9Nj1SS3Hb+2tSXDvQWYcimF0
+Rk2sqHjeU50pU/ne5Scqe1SadPjqZb+iigRq/M0aRUuE3fa4os5tBRRLXbLNzu+v
+iyxXAskl3d9DwbOE13uocY4ldeRqAutyvVrvezMxwyGA2C19yWtmCjsu4FHrA6Wo
+WsM4Xu7WtIiqkxeR5TpkEhQokoMaVU+7w80WR1OsUhT3u40sfSwoN6Ue4kknBBHe
+JC3z804whf97+HwQ062bfKNZGLYpx8xjid9HqseL8u/n4DLsZTl6XN75f4878FbK
+npQ3QkEwdpabVVUxLsYfNsvXyuTwNg==
+=1Jmd
 -----END PGP SIGNATURE-----
 
---AjN4nqWVveMYgtD1--
+--vqhw79aaCtf0o+Pf--
+
