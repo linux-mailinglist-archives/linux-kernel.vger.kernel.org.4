@@ -2,96 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DB0677651
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4063D677655
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjAWIbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S231540AbjAWIcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjAWIba (ORCPT
+        with ESMTP id S230107AbjAWIcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:31:30 -0500
-Received: from mail.groupteam.pl (mail.groupteam.pl [51.75.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1655B166E6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:31:29 -0800 (PST)
-Received: by mail.groupteam.pl (Postfix, from userid 1002)
-        id D24E7A3B8E; Mon, 23 Jan 2023 08:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=groupteam.pl; s=mail;
-        t=1674462686; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
-        h=Date:From:To:Subject:From;
-        b=Lkd0DnmvCmMMpPXw29Jo37pkDjUrI2LJt8YX6DWjruhCSK50sHnfJHkZVf1bevAWX
-         WLNQwv8bcQ8h0laDSPBYe/9+yr9TvZfcVNN80kDwrzynQyzhBAbPKYNBI3U1AVAYRf
-         1RDFq1ytWf/6whmZ+teQ83/5u7idgn6UOmKWn6TUrxXQJ60Mqbh8FWDzDrC0vyY7Ch
-         +j8SShzk1/VkLI6wOb03Mr8agtGHEUvdm9yZ08xZkOede2hl2vWSHjc3SlxDGjT0d7
-         bS3gvKzQxPABA16cefuFZhKJ5DkGd4rlj5hFI6QZj//TDW3pU+Uk5ihYsLNfbDEm8L
-         u8/tLFG3qKDVA==
-Received: by mail.groupteam.pl for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:30:24 GMT
-Message-ID: <20230123074500-0.1.7y.358n1.0.bhb2hbvoaa@groupteam.pl>
-Date:   Mon, 23 Jan 2023 08:30:24 GMT
-From:   "Krzysztof Maj" <krzysztof.maj@groupteam.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Biznesowy angielski
-X-Mailer: mail.groupteam.pl
+        Mon, 23 Jan 2023 03:32:17 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D901A961
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:32:15 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D5AB54000C;
+        Mon, 23 Jan 2023 08:32:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674462734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N5sr1+ft/o4KFGfy74z6A876hko9sf4WKrKKmi7Je/Y=;
+        b=KuoNAfOv2pzHTPxQdsQDTsRxDucuLyajao1IkRwSgW0PBw/AR0kYdXWOVgMFnNpsqGFx+h
+        41ejb8jbZap1x8ttBNzcXJZPqDSO9tXmdmnXaB4VoOySlL6kUZ7wLfT6iMnScmRCIGHzO6
+        PiMk5LexuK8SRkHyEYIiXIAcdE+W/dAEx6sv5T/d6EigOw8p5514TFKf1wFOg4lgoiUshk
+        0o8PJFBOlUK59cdoMz3N5rZsKV4c2N1Clgu/cPlgRXekCBEZJ2kiHF29ilWrDlZXYpxhAo
+        2DOnc9oStAtUweOC3GsaqSRs4hhn9v7ChZPIcSChth/FXjZuwv9ibKkUEgcC9w==
+Date:   Mon, 23 Jan 2023 09:32:09 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Li Chen <lchen@ambarella.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Li Chen <me@linux.beauty>, Roger Quadros <rogerq@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Andreas =?UTF-8?B?QsO2aGxlcg==?= <dev@aboehler.at>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Rickard x Andersson <rickaran@axis.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Ambarella SoC
+        support)
+Subject: Re: [PATCH 12/15] mtd: nand: add Ambarella nand support
+Message-ID: <20230123093209.770995cf@xps-13>
+In-Reply-To: <20230123073305.149940-13-lchen@ambarella.com>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-13-lchen@ambarella.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_ABUSE_SURBL,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: groupteam.pl]
-        *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
-        *      blocklist
-        *      [URIs: groupteam.pl]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [51.75.73.133 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: groupteam.pl]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-X-Spam-Level: *****
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+Hi Li,
 
-czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
-swoich pracownik=C3=B3w?
+I'm sorry, this is not going to work at all.
 
-Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
-w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
-ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
-=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+> +	ambarella_nand_init(host);
+> +
+> +	mtd =3D nand_to_mtd(&host->chip);
+> +	mtd->name =3D "amba_nand";
+> +
+> +	nand_controller_init(&host->controller);
+> +	nand_set_controller_data(&host->chip, host);
+> +	nand_set_flash_node(&host->chip, dev->of_node);
+> +
+> +	host->chip.controller =3D &host->controller;
+> +	host->chip.controller->ops =3D &ambarella_controller_ops;
+> +	host->chip.legacy.chip_delay =3D 0;
+> +	host->chip.legacy.read_byte =3D ambarella_nand_read_byte;
+> +	host->chip.legacy.write_buf =3D ambarella_nand_write_buf;
+> +	host->chip.legacy.read_buf =3D ambarella_nand_read_buf;
+> +	host->chip.legacy.select_chip =3D ambarella_nand_select_chip;
+> +	host->chip.legacy.cmd_ctrl =3D ambarella_nand_cmd_ctrl;
+> +	host->chip.legacy.dev_ready =3D ambarella_nand_dev_ready;
+> +	host->chip.legacy.waitfunc =3D ambarella_nand_waitfunc;
+> +	host->chip.legacy.cmdfunc =3D ambarella_nand_cmdfunc;
+> +	host->chip.legacy.set_features =3D nand_get_set_features_notsupp;
+> +	host->chip.legacy.get_features =3D nand_get_set_features_notsupp;
 
-Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
-=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
-re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
-o=C5=BCliwo=C5=9Bci biznesowe.=20
+Please be aware that we no longer accept legacy introductions upstream.
 
-Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
- kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
-za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
-=2E
+You can look for ->exec_op() conversions using git-log.
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
-w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
+> +	host->chip.options |=3D NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA;
+> +
+> +	rval =3D nand_scan(&host->chip, 1);
+> +	if (rval < 0)
+> +		return rval;
+> +
+> +	rval =3D mtd_device_register(mtd, NULL, 0);
+> +	if (rval < 0)
+> +		nand_cleanup(&host->chip);
+> +
+> +	return rval;
+> +}
+
+[...]
+
+> diff --git a/drivers/mtd/nand/raw/nand_ids.c
+b/drivers/mtd/nand/raw/nand_ids.c
+> index dacc5529b3df..9f264e2a6484 100644
+> --- a/drivers/mtd/nand/raw/nand_ids.c
+> +++ b/drivers/mtd/nand/raw/nand_ids.c
+> @@ -62,6 +62,10 @@ struct nand_flash_dev nand_flash_ids[] =3D {
+>  		{ .id =3D {0x98, 0xd3, 0x91, 0x26, 0x76} },
+>  		  SZ_4K, SZ_1K, SZ_256K, 0, 5, 256, NAND_ECC_INFO(8, SZ_512)},
+> =20
+> +	{"MT29F2G01ABAGD SPINAND 2G 3.3V 8-bit",
+> +		{ .id =3D {0x2c, 0x24, 0x00, 0x00, 0x00} },
+> +		  SZ_2K, SZ_256, SZ_128K, 0, 2, 128},
+> +
+
+Raw NAND !=3D SPI-NAND. I don't get what you're doing here but either you
+want to drive SPI-NANDs and this is a SPI controller driver that
+implements spi-mem ops and should be located under drivers/spi/, or
+this is a plain raw NAND controller which is wired to a parallel NAND
+and this should be under drivers/mtd/nand/raw/.
+
+ECC controllers can be shared with the ECC engine abstraction though.
+
+>  	LEGACY_ID_NAND("NAND 4MiB 5V 8-bit",   0x6B, 4, SZ_8K, SP_OPTIONS),
+>  	LEGACY_ID_NAND("NAND 4MiB 3,3V 8-bit", 0xE3, 4, SZ_8K, SP_OPTIONS),
+>  	LEGACY_ID_NAND("NAND 4MiB 3,3V 8-bit", 0xE5, 4, SZ_8K, SP_OPTIONS),
 
 
-Pozdrawiam
-Krzysztof Maj
+Thanks,
+Miqu=C3=A8l
