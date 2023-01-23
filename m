@@ -2,194 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5082D678155
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D12678157
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjAWQ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S231829AbjAWQ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjAWQ02 (ORCPT
+        with ESMTP id S231698AbjAWQ1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:26:28 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB024124
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:26:27 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id hw16so31882144ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:26:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lab8GS0BsXttrEIIOF5NuoFe5yEpMq3XNGpFEieVFus=;
-        b=oF4rD6jd7XwszpEixf28vjQe5BHyTMqbDMbb0myXN7sNdrC+JWF7pbvptfZlr7EEZu
-         HCOfmKYSseWmcGQZrMEirBmnWHakJk4wj4YR3gUJPzu6+oTCwtccIThIC1wRNBsyWMXu
-         UA1QfgF5DJysHFZOaK/HO8gZU+urYcCCf9sVVohIfO94u8tzqW8/b5tggtzRQWLaG37+
-         7XiMVCZk+HTLtDhrNOTeALvlSHaIBTmfV9EKcQWB56KGNvKJU6JAWK9srHD5ActxyIWq
-         Wrh53EiA1YID0pZF750/wIkqkgG7oi6bMdLd8VzYTe5cs8JuMpY5jjkdg3M6pTcU/vrY
-         3j0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lab8GS0BsXttrEIIOF5NuoFe5yEpMq3XNGpFEieVFus=;
-        b=LrN1HW1wcu/uFw2451WI6CaSTUNneRtiayNdg2Fvv9ln+IJPt/Lmxomyeft6NJTYb+
-         4nE7YIAhdPf4y03xuK2aDueabO865L9btPazKjjq+8zAS3lH3289mbF3t5zb+V7JIzX8
-         m50goiKWYJ2m5WqpaK368Smw9+rMfOmsA6D2j9jnwTA51UwXXU5EQHlXQ9akn3DnzGe/
-         lONh7TerM7Vzp005Zp0v31gUIyEUO4BuK9jE3AVLIdCObXQ4WJ2SvRDfyG+MLbITk0GC
-         QFlOglieot5Q3Hdv83VMTLKTUd0OU9hWdqVlxSPmbUCmMDzKFNdAY/I2a6H2Ba4UwcGf
-         hYVQ==
-X-Gm-Message-State: AFqh2kq1vDWzd3Md8dgW7zCQBvmY6leTUrx6DyUP4mFJ+n+eP30PSXyL
-        Fa7sm3MTLltnPbjhPopLKP5475x0atMEFkqR
-X-Google-Smtp-Source: AMrXdXsLNSc/qQBnWGQwUSUQ/FzBERvIWV6+ygvsH14hClyHcGWFZRhHiJquSdlWNG5cIgsdJW1j7g==
-X-Received: by 2002:a17:906:78b:b0:7c1:9b07:32cd with SMTP id l11-20020a170906078b00b007c19b0732cdmr26403478ejc.39.1674491186264;
-        Mon, 23 Jan 2023 08:26:26 -0800 (PST)
-Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id f6-20020a17090631c600b008779b5c7db6sm5411656ejf.107.2023.01.23.08.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 08:26:25 -0800 (PST)
-Message-ID: <2f0881e3-9f6c-1c77-c6ca-3e291b37bd12@linaro.org>
-Date:   Mon, 23 Jan 2023 17:26:23 +0100
+        Mon, 23 Jan 2023 11:27:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D933EEFA7;
+        Mon, 23 Jan 2023 08:27:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C3B1B80DD6;
+        Mon, 23 Jan 2023 16:27:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E87C433EF;
+        Mon, 23 Jan 2023 16:27:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674491233;
+        bh=aElySqo+VAF1KVpP6Ke3B6uZ7IU+c0ceWArbPT7cCZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FdELtEfSzN5PLLxRytxTssNTHh+LtqHllBKfB1CAmFzHzCneok3MQOKX77D/q67eB
+         ObTAZPjI/9ZNvv98zLWUDhUpVq1qO/iM4GqRFDkSWkkCXb0BeGoePZtknrKlpepE7h
+         nWQrAIUkUSGB8upKEn1p7DMtRif1ARDjZFePClXH1s6U0csxwc6caL8HQMj0EypG1H
+         cNOc5lb97wfyDbwBhVXxkXbufT8fWhUSUfYVqunJYk9+M6CZsEP+hFysx/SPxED1Hi
+         KXoq89kVvpFxqwCkOcJlNXXI60DQkN148oTzVY0wBHr9eU3k0aOCJ/+6DJTgwG05LO
+         Iwsrc4bq+uhFA==
+Date:   Mon, 23 Jan 2023 17:27:10 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action
+ from rcu_report_qs_rdp()
+Message-ID: <Y861Xuoa+CrZt9PB@lothringen>
+References: <PH0PR11MB5880A16045A842AB80A25C4BDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <B3E458A6-9279-4716-B242-873C77EC1E3A@joelfernandes.org>
+ <Y8seE8Tr1w0UWf+m@lothringen>
+ <CAEXW_YTTk_zETWy=xpL-8wF8vh6s_U5z9UyS17uBMda1BYpvug@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: sm6350: Use specific qmpphy
- compatible
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <20230120-sm6350-usbphy-v4-0-4d700a90ba16@fairphone.com>
- <20230120-sm6350-usbphy-v4-3-4d700a90ba16@fairphone.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230120-sm6350-usbphy-v4-3-4d700a90ba16@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YTTk_zETWy=xpL-8wF8vh6s_U5z9UyS17uBMda1BYpvug@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 10:22:19AM -0500, Joel Fernandes wrote:
+> > What am I missing?
+> 
+> That the acceleration is also done by __note_gp_changes() once the
+> grace period ends anyway, so if any acceleration was missed as you
+> say, it will be done anyway.
+> 
+> Also it is done by scheduler tick raising softirq:
+> 
+> rcu_pending() does this:
+>         /* Has RCU gone idle with this CPU needing another grace period? */
+>         if (!gp_in_progress && rcu_segcblist_is_enabled(&rdp->cblist) &&
+>             !rcu_rdp_is_offloaded(rdp) &&
+>             !rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_TAIL))
+>                 return 1;
+> 
+> and rcu_core():
+>         /* No grace period and unregistered callbacks? */
+>         if (!rcu_gp_in_progress() &&
+>             rcu_segcblist_is_enabled(&rdp->cblist) && do_batch) {
+>                 rcu_nocb_lock_irqsave(rdp, flags);
+>                 if (!rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_TAIL))
+>                         rcu_accelerate_cbs_unlocked(rnp, rdp);
+>                 rcu_nocb_unlock_irqrestore(rdp, flags);
+>         }
+> 
+> So, I am not sure if you need needacc at all. Those CBs that have not
+> been assigned grace period numbers will be taken care off :)
 
+But that's only when there is no grace period pending, so it can't happen while
+we report a QS.
 
-On 23.01.2023 14:29, Luca Weiss wrote:
-> The sc7180 phy compatible works fine for some cases, but it turns out
-> sm6350 does need proper phy configuration in the driver, so use the
-> newly added sm6350 compatible.
-> 
-> Because the sm6350 compatible is using the new binding, we need to
-> change the node quite a bit to match it.
-> 
-> This fixes qmpphy init when no USB cable is plugged in during bootloader
-> stage.
-> 
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+OTOH without the needacc, those callbacks waiting to be accelerated would be
+eventually processed but only on the next tick following the end of a grace
+period...if none has started since then. So if someone else starts a new GP
+before the current CPU, we must wait another GP, etc...
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm6350.dtsi | 54 +++++++++++-------------------------
->  1 file changed, 16 insertions(+), 38 deletions(-)
+That's potentially dangerous.
+
+And unfortunately we can't do the acceleration from __note_gp_changes() due
+to lock ordering restrictions: nocb_lock -> rnp_lock
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> index 8224adb99948..128dbbe23ef5 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> @@ -13,6 +13,7 @@
->  #include <dt-bindings/interconnect/qcom,sm6350.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/mailbox/qcom-ipcc.h>
-> +#include <dt-bindings/phy/phy-qcom-qmp.h>
->  #include <dt-bindings/power/qcom-rpmpd.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->  
-> @@ -1314,49 +1315,26 @@ usb_1_hsphy: phy@88e3000 {
->  			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
->  		};
->  
-> -		usb_1_qmpphy: phy@88e9000 {
-> -			compatible = "qcom,sc7180-qmp-usb3-dp-phy";
-> -			reg = <0 0x088e9000 0 0x200>,
-> -			      <0 0x088e8000 0 0x40>,
-> -			      <0 0x088ea000 0 0x200>;
-> -			status = "disabled";
-> -			#address-cells = <2>;
-> -			#size-cells = <2>;
-> -			ranges;
-> +		usb_1_qmpphy: phy@88e8000 {
-> +			compatible = "qcom,sm6350-qmp-usb3-dp-phy";
-> +			reg = <0 0x088e8000 0 0x3000>;
->  
->  			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-> -				 <&xo_board>,
-> -				 <&rpmhcc RPMH_QLINK_CLK>,
-> -				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-> -			clock-names = "aux", "cfg_ahb", "ref", "com_aux";
-> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +			clock-names = "aux", "ref", "com_aux", "usb3_pipe";
-> +
-> +			power-domains = <&gcc USB30_PRIM_GDSC>;
->  
-> -			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
-> -				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
-> +			resets = <&gcc GCC_USB3_PHY_PRIM_BCR>,
-> +				 <&gcc GCC_USB3_DP_PHY_PRIM_BCR>;
->  			reset-names = "phy", "common";
->  
-> -			usb_1_ssphy: usb3-phy@88e9200 {
-> -				reg = <0 0x088e9200 0 0x200>,
-> -				      <0 0x088e9400 0 0x200>,
-> -				      <0 0x088e9c00 0 0x400>,
-> -				      <0 0x088e9600 0 0x200>,
-> -				      <0 0x088e9800 0 0x200>,
-> -				      <0 0x088e9a00 0 0x100>;
-> -				#clock-cells = <0>;
-> -				#phy-cells = <0>;
-> -				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> -				clock-names = "pipe0";
-> -				clock-output-names = "usb3_phy_pipe_clk_src";
-> -			};
-> +			#clock-cells = <1>;
-> +			#phy-cells = <1>;
->  
-> -			dp_phy: dp-phy@88ea200 {
-> -				reg = <0 0x088ea200 0 0x200>,
-> -				      <0 0x088ea400 0 0x200>,
-> -				      <0 0x088eaa00 0 0x200>,
-> -				      <0 0x088ea600 0 0x200>,
-> -				      <0 0x088ea800 0 0x200>;
-> -				#phy-cells = <0>;
-> -				#clock-cells = <1>;
-> -			};
-> +			status = "disabled";
->  		};
->  
->  		dc_noc: interconnect@9160000 {
-> @@ -1430,7 +1408,7 @@ usb_1_dwc3: usb@a600000 {
->  				snps,dis_enblslpm_quirk;
->  				snps,has-lpm-erratum;
->  				snps,hird-threshold = /bits/ 8 <0x10>;
-> -				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
-> +				phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
->  				phy-names = "usb2-phy", "usb3-phy";
->  			};
->  		};
+> Thanks!
 > 
+>   -Joel
