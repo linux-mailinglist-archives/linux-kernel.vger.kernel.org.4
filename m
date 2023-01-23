@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60835677F6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EDA677F74
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjAWPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S232702AbjAWPTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbjAWPSU (ORCPT
+        with ESMTP id S232529AbjAWPT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:18:20 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB54D2B2B3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:17:25 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id k16so9280804wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:17:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXHlh1GVe6XHIGjfxqBlGpday517k1tv+6ix4arA+Zg=;
-        b=mTElaErKpyr/9+bfvnELgYwdkqnRrQO/qiv+5Uq27OCgDaLZ8aaksxAjd9sARIF4ia
-         /MKEh6h6m5FSzyCivP3eglyAgdt3BzjqP26wkFUqzy2+/dG/8NmUZ9FlogJnpdCcldb2
-         acKe0v4SIDaiXlfpQSpvIWPAs+IMm42n+sNx5ilNe2CRyMLhb+Qf8XUxMGpucgpCVr/5
-         0xYCWc18aYTj2u9uyVm24v9OmlUdvlO9ti00jk7Cxckx4+EiBdL7LzF4JhLmGJ/0jnTk
-         phGT5/FRGPYaX0W8aQOgkpWZLLlyatLsvD9LaqDBhKUfBRUYuNa/ewbjRDB8VrtWU+Az
-         k2SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oXHlh1GVe6XHIGjfxqBlGpday517k1tv+6ix4arA+Zg=;
-        b=1xKWIfB3nlfA3I1zxBN8tPNpn3fn+BryCOebFrKFBqKLRQJ7o0SaP19WqPuA/z9oDN
-         xpNBp6EX6lAq0jfLrWOdrHcSQgKJZKS0qr+oCrhQ3TPhz0xgJGHokolfGkJCrXIi/9dc
-         7b+h9oL67SiMj3Lqh3WmTqmxbbfJaghYjfSxUKxg3eRTCdHj9Xj79O1R/wewFawvdUS9
-         PgSNrEh633y7jWmUcaZUT5P7n4e+ijVy+tbiwkugLasguI0tq+pslkDXja9Si9MAJbt+
-         RYa0E1j2DVHnlowJrTcYzlL76nO2FvrQ2QSDEFS9Nm0/PHw6aA0tUZ6Vy3wJDCV3ikUs
-         jldQ==
-X-Gm-Message-State: AFqh2krnWMUXy4Dz42rnmiMpiQBb9PvsFOufwOqv4u6nZhjsZqF/T/5I
-        xwC4qQKtJQ+W7xgWtUU995c6Cw==
-X-Google-Smtp-Source: AMrXdXv4pjrlJCiDM72DBhh38Wa+y+wDQd0b3eQquuYXJF+qOVFv9nVUL1oHgw77dN4sbV8WLhp+iQ==
-X-Received: by 2002:a05:600c:1e1d:b0:3cf:674a:aefe with SMTP id ay29-20020a05600c1e1d00b003cf674aaefemr24094598wmb.22.1674487004649;
-        Mon, 23 Jan 2023 07:16:44 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b3d5:343d:5dc9:ee00? ([2a01:e0a:982:cbb0:b3d5:343d:5dc9:ee00])
-        by smtp.gmail.com with ESMTPSA id x15-20020a05600c188f00b003db122d5ac2sm10449596wmp.15.2023.01.23.07.16.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 07:16:43 -0800 (PST)
-Message-ID: <767eb8e4-fba7-e25b-bcd3-3f05db9a6d80@linaro.org>
-Date:   Mon, 23 Jan 2023 16:16:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 01/13] dt-bindings: serial: amlogic,meson-uart: allow
- other serial properties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 23 Jan 2023 10:19:29 -0500
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [IPv6:2001:1600:4:17::190a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612C72B093
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:18:51 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4P0tyG4P1JzMqhd5;
+        Mon, 23 Jan 2023 16:17:42 +0100 (CET)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4P0tyF1sNpzMqXP1;
+        Mon, 23 Jan 2023 16:17:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1674487062;
+        bh=J7PFdAc9DcVIIoTv0/IDfFvR4Ej9gElZizbV7mhjWEE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lJpaIXkTuhSehSuuHJls4UkfQ9BnYYVz0abbV+fvcaU/8+qhxhY7BKbkBtim+Zgif
+         2LD8Qb/FmjMRSVj58VlR/w9P05R43RsKCiBeWypfOMMObaoukOmE3ES3E+a8siEn5K
+         44Z5VBTBcHiBVVelDYB56gQppt0m0rQgGTylP0hM=
+From:   Philippe Schenker <dev@pschenker.ch>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
         Fabio Estevam <festevam@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        - <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Chester Lin <clin@suse.com>, Fugang Duan <fugang.duan@nxp.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230123151302.368277-1-krzysztof.kozlowski@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230123151302.368277-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] arm64: dts: imx8m(m|p): Add yavia carrier board
+Date:   Mon, 23 Jan 2023 16:17:31 +0100
+Message-Id: <20230123151734.44184-1-dev@pschenker.ch>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 16:12, Krzysztof Kozlowski wrote:
-> Reference common serial properties bindings to allow typical serial
-> properties:
-> 
->    meson-axg-jethome-jethub-j100.dtb: serial@23000: 'bluetooth', 'uart-has-rtscts' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   .../devicetree/bindings/serial/amlogic,meson-uart.yaml       | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
+From: Philippe Schenker <philippe.schenker@toradex.com>
 
-<snip>
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+This series adds the new Yavia Carrier Board for the Verdin family.
+Specifically for Verdin iMX8M Mini and Verdin iMX8M Plus.
+
+Yavia is a compact carrier board providing easy access to the most
+common features of the Verdin family. The intended use of the carrier
+board is application software development. The board is compatible with
+all current and future Verdin SoMs.
+
+https://www.toradex.com/products/carrier-board/yavia
+
+Changes in v2:
+- Added Krzysztof's Acked-by
+- Switch deprecated label in led node with color, function and
+  function-enumerator
+
+Philippe Schenker (3):
+  dt-bindings: arm: fsl: Add verdin yavia carrier-board
+  arm64: dts: imx8mm-verdin: Add yavia carrier board
+  arm64: dts: imx8mp-verdin: Add yavia carrier board
+
+ .../devicetree/bindings/arm/fsl.yaml          |   4 +
+ arch/arm64/boot/dts/freescale/Makefile        |   4 +
+ .../freescale/imx8mm-verdin-nonwifi-yavia.dts |  18 ++
+ .../freescale/imx8mm-verdin-wifi-yavia.dts    |  18 ++
+ .../dts/freescale/imx8mm-verdin-yavia.dtsi    | 169 ++++++++++++++
+ .../freescale/imx8mp-verdin-nonwifi-yavia.dts |  18 ++
+ .../freescale/imx8mp-verdin-wifi-yavia.dts    |  18 ++
+ .../dts/freescale/imx8mp-verdin-yavia.dtsi    | 213 ++++++++++++++++++
+ 8 files changed, 462 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-yavia.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
+
+-- 
+2.39.0
+
