@@ -2,124 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67816781E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38916781EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbjAWQlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S233444AbjAWQmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbjAWQlT (ORCPT
+        with ESMTP id S233372AbjAWQln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:41:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95B2ED72;
-        Mon, 23 Jan 2023 08:40:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22CC160FA7;
-        Mon, 23 Jan 2023 16:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63142C433EF;
-        Mon, 23 Jan 2023 16:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674492015;
-        bh=qWUTRn6e7Trd0sj41WMJ6BQjE8Mh3daIepzHE5J6aeg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XVEyY3b3vTpoiA1wt7tXEaW9mvWVcPvJn0zg+7MyGgKcqRflT7Y/lm9zncpaF38U8
-         Dax6X5/nlOZOAAK9icQbwvwNru40yKC7/VrYT3nGwkevTiX8iAvBA3PZEk1jo5LNpj
-         VWTnK/mrqMoKb0zC/veiEi9Ux0NPdpyCilodcuxBAn+Shfup5zrNp/NkWrml8pslCk
-         rJS6PlaMJEdt58vpgxbuHzHbvGAiTMdBXRnf7EL4VB3WAYAQ13FUOyZXpzY8ti4PH0
-         Uz9lsVUi2GploOn7w81zOYb3KIKLlJBp5FOKt+Oazl+C2XCVcM9d4n+9Em/3hK3oae
-         7hM+lZz5vAdGA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 044625C084D; Mon, 23 Jan 2023 08:40:15 -0800 (PST)
-Date:   Mon, 23 Jan 2023 08:40:14 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-Cc:     Arjan van de Ven <arjan@linux.intel.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, akpm@osdl.org, tglx@linutronix.de,
-        joel@joelfernandes.org, stern@rowland.harvard.edu,
-        diogo.behrens@huawei.com, jonas.oberhauser@huawei.com,
-        linux-kernel@vger.kernel.org,
-        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
-Message-ID: <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
- <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
- <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
+        Mon, 23 Jan 2023 11:41:43 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3F02C65F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:41:00 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d2so11369796wrp.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kkvs3S3jr+7/Bm5mSPQZ0AOsz6TtEKnjkCb8fldDeko=;
+        b=sxlUQKDkfXET+VlBQxjalijTLTwZYIN6OydmvyTwluUIvYogXNszJqiBOmCY3cmuGK
+         BmWwzUdmYl4PCJTzTJXipHPf6E5+67/fX9x0FYPmZy7wGYe7uAskiUdya5Sjfa/YxU2a
+         1z7w4NvmozUvPVVdQ3pTs3zfpJJFAFGwg8l5wP6WW/b+ZYInpDx9Kieo6e/tueywQIAA
+         P4LkpexHLx38dlsty2V0eQ0MGKWxOw6bJR3BArrgaXbmuaWnYC0XECUIaF2OoqOzE5L3
+         Ee46RZMFLWZtfX6dU3mIwFbUYgU28pZw8eoEbDElc1wqri6tTa3uUwJR1Qfdvsg0xADF
+         XXPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kkvs3S3jr+7/Bm5mSPQZ0AOsz6TtEKnjkCb8fldDeko=;
+        b=QjdnK8REBKmXoIlTdHKyeBR9p91+Kmh3Qx+7dxHPWKdlWnwhTiRpYFH6p6jMrS03BO
+         i/KdAzmv9v5UM7x3Xn4XSnV/a0A47E2WNX937d16Tw4IJfeYr8jQJgCRDp53BLH0ViIh
+         YIOcLP5B8yZKhPade2vr9+cypCz7crpTbxyhA8XfdSFVA57d8CoRboumow8GdlkYhiZG
+         Et6LIoyyEQohHG2fHRFRslOvPkPMPRXK41ZmLlyYVFt+YldMGCbqp8mtkoZ1bve4BWAO
+         YAz2j8lIPqCRBWhUXL2PTcxf/KZQtVNbr4po1IjwkREUMlrZ0cLu4sdMp1Es1OT1OwcW
+         kARg==
+X-Gm-Message-State: AFqh2koKVYcfZ26/t3+3vs7n0/7a2lfb/qQstE3/u+7Rx9ISotegJWyq
+        CXH0WVrx6YcGmhPNbTYbc+2tNw==
+X-Google-Smtp-Source: AMrXdXt9F4i0NyH8/CCuBUxnEMaqGRQq4GQ/LpYPY1JEUJbveDf+Md21yVg7s3aVlpQTbFuYCOcjkQ==
+X-Received: by 2002:a5d:65d2:0:b0:2bb:6c04:4598 with SMTP id e18-20020a5d65d2000000b002bb6c044598mr22477407wrw.67.1674492054178;
+        Mon, 23 Jan 2023 08:40:54 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id d5-20020adfa345000000b002be546f947asm8496694wrb.61.2023.01.23.08.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 08:40:53 -0800 (PST)
+Date:   Mon, 23 Jan 2023 18:40:52 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: PCI: qcom: Add SM8550 compatible
+Message-ID: <Y864lFLEQyCwZLef@linaro.org>
+References: <20230119112453.3393911-1-abel.vesa@linaro.org>
+ <7befa113-c45a-93d0-2696-17bbf62af711@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7befa113-c45a-93d0-2696-17bbf62af711@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 04:24:21PM +0100, Hernan Ponce de Leon wrote:
-> On 1/20/2023 4:54 PM, Paul E. McKenney wrote:
-> > On Fri, Jan 20, 2023 at 06:58:20AM -0800, Arjan van de Ven wrote:
-> > > On 1/20/2023 5:55 AM, Hernan Ponce de Leon wrote:
-> > > > From: Hernan Ponce de Leon <hernanl.leon@huawei.com>
-> > > > 
-> > > 
-> > > >    kernel/locking/rtmutex.c | 2 +-
-> > > >    1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> > > > index 010cf4e6d0b8..7ed9472edd48 100644
-> > > > --- a/kernel/locking/rtmutex.c
-> > > > +++ b/kernel/locking/rtmutex.c
-> > > > @@ -235,7 +235,7 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
-> > > >    	unsigned long owner, *p = (unsigned long *) &lock->owner;
-> > > >    	do {
-> > > > -		owner = *p;
-> > > > +		owner = READ_ONCE(*p);
-> > > >    	} while (cmpxchg_relaxed(p, owner,
-> > > 
-> > > 
-> > > I don't see how this makes any difference at all.
-> > > *p can be read a dozen times and it's fine; cmpxchg has barrier semantics for compilers afaics
+On 23-01-20 09:37:32, Krzysztof Kozlowski wrote:
+> On 19/01/2023 12:24, Abel Vesa wrote:
+> > Add the SM8550 platform to the binding.
 > > 
-> > Doing so does suppress a KCSAN warning.  You could also use data_race()
-> > if it turns out that the volatile semantics would prevent a valuable
-> > compiler optimization.
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> > 
+> > The v2 was here:
+> > https://lore.kernel.org/all/20230118111704.3553542-1-abel.vesa@linaro.org/
+> > 
+> > Changes since v2:
+> >  * dropped the pipe from clock-names
+> >  * removed the pcie instance number from aggre clock-names comment
+> >  * renamed aggre clock-names to noc_aggr
+> >  * dropped the _pcie infix from cnoc_pcie_sf_axi
+> >  * renamed pcie_1_link_down_reset to simply link_down
+> >  * added enable-gpios back, since pcie1 node will use it
+> > 
+> > Changes since v1:
+> >  * Switched to single compatible for both PCIes (qcom,pcie-sm8550)
+> >  * dropped enable-gpios property
+> >  * dropped interconnects related properties, the power-domains
+> >  * properties
+> >    and resets related properties the sm8550 specific allOf:if:then
+> >  * dropped pipe_mux, phy_pipe and ref clocks from the sm8550 specific
+> >    allOf:if:then clock-names array and decreased the minItems and
+> >    maxItems for clocks property accordingly
+> >  * added "minItems: 1" to interconnects, since sm8550 pcie uses just one,
+> >    same for interconnect-names
+> > 
+> > 
+> >  .../devicetree/bindings/pci/qcom,pcie.yaml    | 44 +++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > index a5859bb3dc28..93e86dfdd6fe 100644
+> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > @@ -34,6 +34,7 @@ properties:
+> >        - qcom,pcie-sm8250
+> >        - qcom,pcie-sm8450-pcie0
+> >        - qcom,pcie-sm8450-pcie1
+> > +      - qcom,pcie-sm8550
+> >        - qcom,pcie-ipq6018
+> >  
+> >    reg:
+> > @@ -65,9 +66,11 @@ properties:
+> >    dma-coherent: true
+> >  
+> >    interconnects:
+> > +    minItems: 1
+> >      maxItems: 2
 > 
-> I think the import question is "is this a harmful data race (and needs to be
-> fixed as proposed by the patch) or a harmless one (and we should use
-> data_race() to silence tools)?".
+> 1. Why do you skip cpu-pcie interconnect on SM8550?
+> 2. This should not be allowed on other variants.
+
+That is a good point. Will add the cpu-pcie in v5.
+
 > 
-> In https://lkml.org/lkml/2023/1/22/160 I describe how this data race can
-> affect important ordering guarantees for the rest of the code. For this
-> reason I consider it a harmful one. If this is not the case, I would
-> appreciate some feedback or pointer to resources about what races care to
-> avoid spamming the mailing list in the future.
+> >  
+> >    interconnect-names:
+> > +    minItems: 1
+> >      items:
+> >        - const: pcie-mem
+> >        - const: cpu-pcie
+> > @@ -102,6 +105,10 @@ properties:
+> >    power-domains:
+> >      maxItems: 1
+> >  
+> > +  enable-gpios:
+> > +    description: GPIO controlled connection to ENABLE# signal
+> > +    maxItems: 1
+> > +
+> >    perst-gpios:
+> >      description: GPIO controlled connection to PERST# signal
+> >      maxItems: 1
+> > @@ -197,6 +204,7 @@ allOf:
+> >                - qcom,pcie-sm8250
+> >                - qcom,pcie-sm8450-pcie0
+> >                - qcom,pcie-sm8450-pcie1
+> > +              - qcom,pcie-sm8550
+> >      then:
+> >        properties:
+> >          reg:
+> > @@ -611,6 +619,41 @@ allOf:
+> >            items:
+> >              - const: pci # PCIe core reset
+> >  
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,pcie-sm8550
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          minItems: 7
+> > +          maxItems: 8
+> > +        clock-names:
+> > +          minItems: 7
+> > +          items:
+> > +            - const: aux # Auxiliary clock
+> > +            - const: cfg # Configuration clock
+> > +            - const: bus_master # Master AXI clock
+> > +            - const: bus_slave # Slave AXI clock
+> > +            - const: slave_q2a # Slave Q2A clock
+> > +            - const: ddrss_sf_tbu # PCIe SF TBU clock
+> > +            - const: noc_aggr # Aggre NoC PCIe AXI clock
+> > +            - const: cnoc_sf_axi # Config NoC PCIe1 AXI clock
+> > +        iommus:
+> > +          maxItems: 1
+> > +        iommu-map:
+> > +          maxItems: 2
+> 
+> 1. Don't define new properties in allOf. It makes the binding
+> unmaintainable.
+> 
+> 2. Why only SM8550?
 
-In the case, the value read is passed into cmpxchg_relaxed(), which
-checks the value against memory.  In this case, as Arjan noted, the only
-compiler-and-silicon difference between data_race() and READ_ONCE()
-is that use of data_race() might allow the compiler to do things like
-tear the load, thus forcing the occasional spurious cmpxchg_relaxed()
-failure.  In contrast, LKMM (by design) throws up its hands when it sees
-a data race.  Something about not being eager to track the idiosyncrasies
-of many compiler versions.
+Good point again. Will make both iommus and iommu-map properties global
+as even SM8450 has them.
 
-My approach in my own code is to use *_ONCE() unless it causes a visible
-performance regression or if it confuses KCSAN.  An example of the latter
-can be debug code, in which case use of data_race() avoids suppressing
-KCSAN warnings (and also false positives, depending).
+> 
+> > +        resets:
+> > +          minItems: 1
+> 
+> Why second reset is optional?
 
-Except that your other email seems to also be arguing that additional
-ordering is required.  So is https://lkml.org/lkml/2023/1/20/702 really
-sufficient just by itself, or is additional ordering required?
+link_down reset is needed only by g4x2 pcie, AFAICT.
 
-							Thanx, Paul
+> 
+> > +          maxItems: 2
+> > +        reset-names:
+> > +          minItems: 1
+> > +          items:
+> > +            - const: pci # PCIe core reset
+> > +            - const: link_down # PCIe link down reset
+> > +
+> >    - if:
+> >        properties:
+> >          compatible:
+> > @@ -694,6 +737,7 @@ allOf:
+> >                - qcom,pcie-sm8250
+> >                - qcom,pcie-sm8450-pcie0
+> >                - qcom,pcie-sm8450-pcie1
+> > +              - qcom,pcie-sm8550
+> >      then:
+> >        oneOf:
+> >          - properties:
+> 
+> Best regards,
+> Krzysztof
+> 
