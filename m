@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F5A677F5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DCC677F58
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjAWPQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S232574AbjAWPQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjAWPQS (ORCPT
+        with ESMTP id S232383AbjAWPQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:16:18 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4885D298D6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:15:54 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id e3so11104293wru.13
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:15:54 -0800 (PST)
+        Mon, 23 Jan 2023 10:16:19 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8374298F4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:15:57 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o17-20020a05600c511100b003db021ef437so8802944wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:15:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BwvE+hNvEbi3ArWOS8f6NLx2uaIY7bZqvMw2mZCRaeA=;
-        b=iP7yJcRevVyIXBqtFdr8hEo7XcmhpyEew73i7qZ5pDFf2YalJlT2+2L6eMhUJPKvEB
-         ovwZdiGMiIv7uBhdLnysOFAehO+EulwFagYEitdoBL9AkAqEgd1cFgB9gT/eestKUQYg
-         w7Ck3PhCfTHh/WACyDzEbJ2Q2quXKiQXJYBBKOy43IZyd5nI/eBNt1pgH4zkGC7/42QC
-         KJ5sfTXcaMRmSI/xfJR3TTZsUsSepu+y6JHCHrIqB1V/vFdRfEzRYqtt/Yyqm3qgdb6O
-         EUz1eZvjq3SkzwQG0geGVu7RqHO5hfiCDuyeHFc5kCdZWLjhN3HxQ6o1uOJg7RaMyWA+
-         Ws6g==
+        bh=gGUqtcmNGGztvKy8TuZII0s0MTFOqZc3N4jbaSIf+2o=;
+        b=dwvgPSsjdf8g1GrtFnxAIKda9OCQI6LWpkmRo6/zItDkho5w2MOu4hV5mREnKFzGvh
+         pdqSv3RZ8z2bHqDNBg849wGia61aaaHkStqkco6DTWlD3Ap0znF+f3MR7MK8wJV37tEM
+         +vwuU1U4CmVMcwm2kL3XkDUOqCMjTMInVeaBCuah9jeYP6uYHM67GZXqBaIOSP7My4if
+         FpFj1VJ1oOvIbd9p5WxwCJKpfG7fRvdyij7YOQKK0TaejMUiJU/tnzdYITc9hB9yoHng
+         3iEXebpTv7/DTS3Fb2T92pvgdzWb3bVOixvdjgs0Oe9zRD8boOB2aOWjAT6xND/yKMBR
+         aCJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BwvE+hNvEbi3ArWOS8f6NLx2uaIY7bZqvMw2mZCRaeA=;
-        b=qoxGYTkB1bconPMQsHyacSnY3J1rdUCydj65KsiccaLOMtUwjifSeimRM/McIjewTk
-         I7C429R0NATR0COdw0Fb0s6VK5OyWfUt2kSh4UNRIzKZxvHMN/d3XcxlG5A62wS4cT1J
-         UCGPph2uMNLDSM0fu0w20vlEIibftrxjj54jFgofZtzhyRUuHd+3nZh7kVsaVMY660pi
-         G6YzJc6hn4aD6hL/W+6pwwTtIpJHolzovBW+DlM1KUgxJpGrGvH7sdxnhVcGXHyNx4xx
-         +QJv6DHXirhvHa4LfxZIlZHfT/Ftwsx5QTkBIJRViSUsQ9i0NU0U0TbbCTzNisiSkqQ0
-         GIRg==
-X-Gm-Message-State: AFqh2kqmLNmx2t9NibDnfHjank3cd9R/FRV4X/rSUgG5uYWPVi8wmH8R
-        uyVA5aROUhjaFEtR6q+Iy5A+kw==
-X-Google-Smtp-Source: AMrXdXvXAYJQnmYXSlnTplV70kDVJMFqJYVHSyXubKFl1NGZUowmauCODREwVM5q7htLRxlMX1aihw==
-X-Received: by 2002:adf:dc81:0:b0:2a1:328f:23aa with SMTP id r1-20020adfdc81000000b002a1328f23aamr22075523wrj.6.1674486947191;
-        Mon, 23 Jan 2023 07:15:47 -0800 (PST)
+        bh=gGUqtcmNGGztvKy8TuZII0s0MTFOqZc3N4jbaSIf+2o=;
+        b=ZZJK99GIXVqZ7hbEtzCr3Gab99u3t1A/fD8RTLX3nUz55SZsNLgeakOXwM223W8tmS
+         08GVs6JPyA26utCKeTsvpJGoDwd7QVsEyYsRHB4OHUjp236hKvN9ssSTmJShKWqxyaJ6
+         CmUZDxzgj12PiDn936GGt/bnRQo2BtM3xfRu0mVhxE5No9UkVhKEjdOPS831MS+vE53q
+         9FEeAdk3M8/r5cAA3F3LLADKp1yhSyu56oPf2dyCdPYrfeJzGjlv4crRzpYRwJ5+GK7U
+         oMlD8qQjV5p+tRZHRv+a84LHXWhiYl62TyQzR5NYqZqe5G+YdDFQ4KT68ULjt17GU4+n
+         7XuA==
+X-Gm-Message-State: AFqh2kpr0Nf0e5JR0cgirpHabX9TJgBfzivfn8Q7Wm8czrWUWHqcfwMu
+        ApwdXSaP1g89cSqqTwZx3M4oCQ==
+X-Google-Smtp-Source: AMrXdXuIARF8OML/T3d/lgQDnJagf+bF82inqTGa1cD+hqeVTI3vNFzg75FfeKi0QxOMf6fNezyBkA==
+X-Received: by 2002:a05:600c:1d8e:b0:3d9:efe8:a42d with SMTP id p14-20020a05600c1d8e00b003d9efe8a42dmr24300360wms.21.1674486949193;
+        Mon, 23 Jan 2023 07:15:49 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id bt19-20020a056000081300b002bdc3f5945dsm30422593wrb.89.2023.01.23.07.15.45
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003db30be4a54sm11566727wms.38.2023.01.23.07.15.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 07:15:46 -0800 (PST)
+        Mon, 23 Jan 2023 07:15:48 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Tsahee Zidenberg <tsahee@annapurnalabs.com>,
         Antoine Tenart <atenart@kernel.org>,
@@ -57,9 +57,9 @@ To:     Tsahee Zidenberg <tsahee@annapurnalabs.com>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: alpine: align UART node name with bindings
-Date:   Mon, 23 Jan 2023 16:15:45 +0100
-Message-Id: <20230123151545.369762-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: amazon: drop deprecated serial device_type
+Date:   Mon, 23 Jan 2023 16:15:47 +0100
+Message-Id: <20230123151547.369791-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,35 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings expect UART/serial node names to be "serial".
+The device_type property is deprecated by Devicetree specification and
+bindings do not allow it.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/alpine.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/amazon/alpine-v2.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/alpine.dtsi b/arch/arm/boot/dts/alpine.dtsi
-index 4be9887033f9..ff68dfb4eb78 100644
---- a/arch/arm/boot/dts/alpine.dtsi
-+++ b/arch/arm/boot/dts/alpine.dtsi
-@@ -126,7 +126,7 @@ pmu {
- 				     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
- 		};
+diff --git a/arch/arm64/boot/dts/amazon/alpine-v2.dtsi b/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
+index 4eb2cd14e00b..dccbba6e7f98 100644
+--- a/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
++++ b/arch/arm64/boot/dts/amazon/alpine-v2.dtsi
+@@ -159,7 +159,6 @@ io-fabric {
  
--		uart0: uart@fd883000 {
-+		uart0: serial@fd883000 {
- 			compatible = "ns16550a";
- 			reg = <0x0 0xfd883000 0x0 0x1000>;
- 			clock-frequency = <375000000>;
-@@ -135,7 +135,7 @@ uart0: uart@fd883000 {
- 			reg-io-width = <4>;
- 		};
+ 			uart0: serial@1883000 {
+ 				compatible = "ns16550a";
+-				device_type = "serial";
+ 				reg = <0x1883000 0x1000>;
+ 				interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
+ 				clock-frequency = <500000000>;
+@@ -170,7 +169,6 @@ uart0: serial@1883000 {
  
--		uart1: uart@fd884000 {
-+		uart1: serial@fd884000 {
- 			compatible = "ns16550a";
- 			reg = <0x0 0xfd884000 0x0 0x1000>;
- 			clock-frequency = <375000000>;
+ 			uart1: serial@1884000 {
+ 				compatible = "ns16550a";
+-				device_type = "serial";
+ 				reg = <0x1884000 0x1000>;
+ 				interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+ 				clock-frequency = <500000000>;
+@@ -181,7 +179,6 @@ uart1: serial@1884000 {
+ 
+ 			uart2: serial@1885000 {
+ 				compatible = "ns16550a";
+-				device_type = "serial";
+ 				reg = <0x1885000 0x1000>;
+ 				interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+ 				clock-frequency = <500000000>;
+@@ -192,7 +189,6 @@ uart2: serial@1885000 {
+ 
+ 			uart3: serial@1886000 {
+ 				compatible = "ns16550a";
+-				device_type = "serial";
+ 				reg = <0x1886000 0x1000>;
+ 				interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+ 				clock-frequency = <500000000>;
 -- 
 2.34.1
 
