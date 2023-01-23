@@ -2,140 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DB1677D61
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0953D677D73
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjAWOAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S232097AbjAWOBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjAWOAj (ORCPT
+        with ESMTP id S232071AbjAWOBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:00:39 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCF324124;
-        Mon, 23 Jan 2023 06:00:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674482421; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=i8g+OYD4qLJslVd2a7zsTaUeG+ayTHTbXVMmNWT9D8BB1E/NbU37uOdnAdq7HuDj2C
-    a9t0zS0mHoyl+kGCwNXhjSwQoNO8nT0h+7nff4lC+6IU+snioB9KnCC/wll3zCAWVRmM
-    EPEKLPP57R6f/ZqpkcsLRAa9FWjNv7ErU3YvRbvpstsCnDuW2NvMuqe3JlRLX1QZBUPD
-    dDtmlS3iH1610aDtH0xUxcaz0rJ0bwEa1v5QsbFs5kURBXF5eDufUp8iPAtnBCib0xtO
-    FXiuHigQbjjQf7Kag14FpaLnq0HqKYiZNxF+FjOMRU4D61caejPsC+NmVbm+MVcGIBZW
-    yReQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674482421;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MzmR+pdf6WvdnGo11VA79zzyz+QelUpUAN/r6350yD0=;
-    b=Lb+qFbKItS6dgtd2zh82ALVctzo0iiYXbuXUqwhyQPe0w81sddA5Z5z/bw200DdpKk
-    35CfHQClt2jAWXS+S2XVdfJ4xuO17ZxpIrtk0TYyLDx96lGwhSzgVR7Ey20x0ilvtV6U
-    zMmLp0gmIRBPYhFWy9voiWT6bkIBc4U4Jh4WJVpHsN7WSvb9DLyxHs8QaCVAwT4foJG3
-    beCbJ40kt1/HNayQpYwyeTFXa8m/o/j9uAtoVfa8HPv6n/TYbJQi1zW+Exiz4nSLh/eG
-    9NMFo9qXqRQrveMR8aLQTcj77jsLs6efPSfENGQ/0Hr9hoB7wiqYWtFRLGg3IHV1KVUl
-    pfhA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674482421;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MzmR+pdf6WvdnGo11VA79zzyz+QelUpUAN/r6350yD0=;
-    b=cFzH8aoau9UDu1+da4fdxCnPDKNnB6xsZoLQbyFNOKrcdmEDxbp8AMVJNx7Kgrdik8
-    011YOEH9xuOvBNmR7eh5P4CljuMDMOVfrOlRbrncvgl8NtQGYDuV4r+udTCFrgHCQPeb
-    0UqkwB9lXcrP4ZPZhmem+XHW4Avu48ZTJu8x/3fKTr5Je/xgYJNOAGEHR+JtKxH8r/M7
-    xAcUpT5FYAaFTMKbx//FhIiqln9SLyDCrsvARvRh+LQc3XRNmNwe6BY+tJKGj2EvVEwc
-    yA/eoIU5Km6tNpWyv2emNpNBykuPWw/60hoQ2amntjNxa59+dS0gOIKJNcsoG22cEFvQ
-    oK8w==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKjXrKw58qY="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.2.1 AUTH)
-    with ESMTPSA id hf4e4dz0NE0K0OQ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 23 Jan 2023 15:00:20 +0100 (CET)
-Date:   Mon, 23 Jan 2023 15:00:14 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
-Message-ID: <Y86S7h/QxqXoKS1U@gerhold.net>
-References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
- <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
- <Y86CPmgvAi+kChQI@gerhold.net>
- <45800033-e2ae-09c8-b8a2-e97afb6508fd@linaro.org>
+        Mon, 23 Jan 2023 09:01:52 -0500
+Received: from outbound-smtp48.blacknight.com (outbound-smtp48.blacknight.com [46.22.136.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A3F26841
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 06:01:26 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp48.blacknight.com (Postfix) with ESMTPS id 467E9FA7D4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:01:25 +0000 (GMT)
+Received: (qmail 13299 invoked from network); 23 Jan 2023 14:01:24 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 23 Jan 2023 14:01:24 -0000
+Date:   Mon, 23 Jan 2023 14:01:22 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ingo Molnar <mingo@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH mm-unstable] lib/Kconfig.debug: do not enable
+ DEBUG_PREEMPT by default
+Message-ID: <20230123140122.gxg3dqvqsz62qks7@techsingularity.net>
+References: <20230121033942.350387-1-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <45800033-e2ae-09c8-b8a2-e97afb6508fd@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230121033942.350387-1-42.hyeyoo@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:23:22PM +0000, Bryan O'Donoghue wrote:
-> On 23/01/2023 12:49, Stephan Gerhold wrote:
-> > It's only required though because you forgot to drop the DT schema patch
-> > (3/4) when I suggested half a year ago that you make the MSM8939
-> > cpufreq-qcom-nvmem changes together with the CPR stack [1]. :/
+Adding Peter to the cc as this should go via the tip tree even though
+Ingo is cc'd already. Leaving full context and responding inline.
+
+On Sat, Jan 21, 2023 at 12:39:42PM +0900, Hyeonggon Yoo wrote:
+> In workloads where this_cpu operations are frequently performed,
+> enabling DEBUG_PREEMPT may result in significant increase in
+> runtime overhead due to frequent invocation of
+> __this_cpu_preempt_check() function.
 > 
-> Didn't forget, tested that and as I recall there are side-effects removing
-> 8939 from drivers/cpufreq/cpufreq-dt-platdev.c - not all processors were
-> booted.
+> This can be demonstrated through benchmarks such as hackbench where this
+> configuration results in a 10% reduction in performance, primarily due to
+> the added overhead within memcg charging path.
+> 
+> Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
+> of its potential impact on performance in some workloads.
+> 
+> hackbench-process-sockets
+> 		      debug_preempt	 no_debug_preempt
+> Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
+> Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
+> Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
+> Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
+> Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
+> Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
+> Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
+> Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
+> Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+
+This has been default y since very early on in the development of the BKL
+removal. It was probably selected by default because it was expected there
+would be a bunch of new SMP-related bugs. These days, there is no real
+reason to enable it by default except when debugging a preempt-related
+issue or during development. It's not like CONFIG_SCHED_DEBUG which gets
+enabled in a lot of distros as it has some features which are useful in
+production (which is unfortunate but splitting CONFIG_SCHED_DEBUG is a
+completely separate topic).
+
+> ---
+>  lib/Kconfig.debug | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index ddbfac2adf9c..f6f845a4b9ec 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1176,13 +1176,16 @@ config DEBUG_TIMEKEEPING
+>  config DEBUG_PREEMPT
+>  	bool "Debug preemptible kernel"
+>  	depends on DEBUG_KERNEL && PREEMPTION && TRACE_IRQFLAGS_SUPPORT
+> -	default y
+>  	help
+>  	  If you say Y here then the kernel will use a debug variant of the
+>  	  commonly used smp_processor_id() function and will print warnings
+>  	  if kernel code uses it in a preemption-unsafe way. Also, the kernel
+>  	  will detect preemption count underflows.
+>  
+> +	  This option has potential to introduce high runtime overhead,
+> +	  depending on workload as it triggers debugging routines for each
+> +	  this_cpu operation. It should only be used for debugging purposes.
+> +
+>  menu "Lock Debugging (spinlocks, mutexes, etc...)"
+>  
+>  config LOCK_DEBUGGING_SUPPORT
+> -- 
+> 2.34.1
+> 
 > 
 
-The cpufreq-dt-platdev.c addition for MSM8939 does not exist upstream
-because you dropped it in your v3 back then. You just kept the DT schema
-part. I don't have that addition and have no problems with SMP boot so
-I would say it works fine without.
-
-> > Anyway, it looks like qcom-cpufreq-nvmem.yaml requiring "cpr" power
-> > domain unconditionally is a mistake anyway for multiple platforms.
-> > [2] was recently submitted to fix this so that patch should allow you to
-> > drop the dummy nodes. 😄
-> > 
-> > [1]:https://lore.kernel.org/linux-arm-msm/Ysf8VRaXdGg+8Ev3@gerhold.net/
-> > [2]:https://lore.kernel.org/linux-arm-msm/20230122174548.13758-1-ansuelsmth@gmail.com/
-> 
-> 8939 _is_ a CPR device, I think qcs404 comes from msm893x IP.
-> 
-> To me it makes more sense to stub CPR in the DTS than to, wrongly declare
-> the 8939 a non-CPR device.
-> 
-
-It is not clear yet which power domains 8939 needs to list for the CPUs.
-The conclusion of the previous discussion of CPR for MSM8916 was that
-the VDDMX requirements would be best handled separately from the CPR
-driver, by listing it as separate power domain for all CPUs [3].
-
-Unless this conclusion changes with your CPR patch set this means that
-both the DTS and the DT schema will need changes anyway, because you
-wouldn't need power-domain-names = "cpr", but rather
-
-	power-domains = <&rpmpd MSM8939_VDDMX_AO>, <&vreg_dummy>;
-	power-domain-names = "mx", "cpr";
-
-QCS404 is a different situation in this case because it does not have
-the requirement of voting for VDDMX states.
-
-IMO this means that listing only "cpr" there with a dummy node is more
-confusing than helpful right now. (I can explain this further if you
-want, but I think I tend to write too long answers...)
-
-Thanks,
-Stephan
-
-[3]: https://lore.kernel.org/linux-arm-msm/20200403175934.GA96064@gerhold.net/
+-- 
+Mel Gorman
+SUSE Labs
