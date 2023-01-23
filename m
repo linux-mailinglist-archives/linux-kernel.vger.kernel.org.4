@@ -2,135 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE51678146
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B91B678152
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjAWQXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S231686AbjAWQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbjAWQXH (ORCPT
+        with ESMTP id S229676AbjAWQZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:23:07 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A9E25288
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:23:05 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id p141so12747253ybg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:23:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fMnbgf/RHQ3ZAFZtL86FFLpdOpXvUOvzb7OmVGfvdng=;
-        b=GT9CtnzFDJgzUI5mydXp8vMCy8KjDM1ZqtBPYM0kcgx0FRmyl+E9TT47+NJLVc9OqG
-         5B3xB6XB0xC505sdjlph/P3bNWUs+gwAY1bJeex4c5AXqMOiJ4kjsB70LJKHU1jq0S1p
-         hpeWHMoy7IOoUmJEKiUYEepireN9i7kkgjXe4rrGmSrAN1Teoju59/CEYvPmeHmEYidF
-         p6NVvwPXwkThYpdM/Zr6S2ip9BawZ0L6I9IbGk4vDo34NVL1snNIbnQPkwhHHAoedn6L
-         IAMXqS1Abqo4chqx/pUJclhMWVSXP4nbkA+vi+eRWwhfst2RSj0RmxvR/EUi0HREO6Zi
-         Qa7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fMnbgf/RHQ3ZAFZtL86FFLpdOpXvUOvzb7OmVGfvdng=;
-        b=Jd8Lle0cgyqrXvAJwmg1LlmB58J/YPJfdrYttTax4E2UfbA3rw5m52D2H5Taz6zMgz
-         dtAHUEz2T6xUiDhWsAu3ANuCsEGBdACfpuxSstWfhtZt4CI5rpaLm1WdCI2dBK9tJg3H
-         6X01BzRD2hkdt16ZDTicjPIHMB/01TYqiCXogzj3wbtkyjgS4d3bkxrn4Beu79gpWkdR
-         z8QcjEoQZn6j1dELgzVCy2bxwHuVzrJy6AFJ2gR0AEvvRPHCgoC3zNMjIENkS4IgMsjY
-         wQN2azr2seHlMnEwvTf4WXkc/TTuo4+iiOzy4alZqcb1YHvQf9xx1FF/ZqDMtsMUk+q6
-         Qojg==
-X-Gm-Message-State: AFqh2kpRk6YEh92NciltKkTzUPoeUt8DGNV78SI7DJk2cLosYXNx5ZEu
-        fWH/PHcnGf70caUmIQnGkN39zUKNBuJVrNt9uLpOoA==
-X-Google-Smtp-Source: AMrXdXtgthJLROeIi9Kdf1aWHb5lhJLB0d8xJETJsdksQhtsxXC8/QdbWj0HkxC0Jssb10n37A0eaFm+06xsm+/I2B0=
-X-Received: by 2002:a5b:cc8:0:b0:7ba:78b1:9fcc with SMTP id
- e8-20020a5b0cc8000000b007ba78b19fccmr2576165ybr.593.1674490984902; Mon, 23
- Jan 2023 08:23:04 -0800 (PST)
+        Mon, 23 Jan 2023 11:25:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F355EFA7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674491142; x=1706027142;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5F+pTXbbpk7pf7RgZ9qcmjhgtU0br58EY++sDU2Qxrg=;
+  b=R+O2Q+fkgi6lZANnpI66s4cNBM0VHIdPu073n4j3+HNwRRpD4rg5MuB5
+   KNtXhXk4Hm7RvF5g2NieJf4Y4mvuNkNtPM6Bti4ZyMx6OGVc+E3YWI0fO
+   bW/nYWpXJHcbTpxV65Kb3dqlZIOu7PXdMctQ2RKwzXPCtsFcgEe2AbRlB
+   QbliXTIedwlQ0h869TNLUpKjIW2o8qcPNrgpCY3XwVpsNK7a7FyXPdWfU
+   Xipz14/5grl+QatcUW5aV3nGKPNaG7AzUjo6HnSxwYPTYTlBQUERi1vuB
+   6epNwOKKDIsMNg1IDz69DbbgroOCsRgWetq8G66IaLUk7qCozHkIRU/37
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="306436788"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="306436788"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 08:25:41 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="663694296"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="663694296"
+Received: from rgrachek-mobl.amr.corp.intel.com (HELO [10.212.113.123]) ([10.212.113.123])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 08:25:07 -0800
+Message-ID: <427f4e8a-51a5-7a4b-c2c6-92bc98f6db87@linux.intel.com>
+Date:   Mon, 23 Jan 2023 10:25:01 -0600
 MIME-Version: 1.0
-References: <Y8k+syJu7elWAjRj@dhcp22.suse.cz> <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
- <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz> <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
- <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
- <Y8rGJq8LvX2C+Cr7@casper.infradead.org> <20230120170815.yuylbs27r6xcjpq5@revolver>
- <CAJuCfpH4o-iCmzdUcYD9bKieJ6-k-MZYLuHFhH+bN9yE07sibw@mail.gmail.com>
- <Y8rQNj5dVyuxRBOf@casper.infradead.org> <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
- <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
-In-Reply-To: <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 23 Jan 2023 08:22:53 -0800
-Message-ID: <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        peterz@infradead.org, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 6/8] ASoC: cs42l42: Add Soundwire support
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
+ <20230118160452.2385494-7-sbinding@opensource.cirrus.com>
+ <33130336-b2ce-330e-fdec-166eee977e13@linux.intel.com>
+ <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
+ <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
+ <32fd1755-0128-8f32-9a88-a92f1647f903@opensource.cirrus.com>
+ <c8a9ff9b-d1d0-1cef-bf51-e7fa247d24f4@linux.intel.com>
+ <3bac8055-2e6e-dc53-d143-f493e18a1e43@opensource.cirrus.com>
+ <a54bf135-70ba-4c8f-b373-690a9ad8e7ef@linux.intel.com>
+ <d77636dc-f239-9780-edca-fa568582c05f@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <d77636dc-f239-9780-edca-fa568582c05f@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 1:56 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Fri 20-01-23 09:50:01, Suren Baghdasaryan wrote:
-> > On Fri, Jan 20, 2023 at 9:32 AM Matthew Wilcox <willy@infradead.org> wrote:
-> [...]
-> > > The page fault handler (or whatever other reader -- ptrace, proc, etc)
-> > > should have a refcount on the mm_struct, so we can't be in this path
-> > > trying to free VMAs.  Right?
-> >
-> > Hmm. That sounds right. I checked process_mrelease() as well, which
-> > operated on mm with only mmgrab()+mmap_read_lock() but it only unmaps
-> > VMAs without freeing them, so we are still good. Michal, do you agree
-> > this is ok?
->
-> Don't we need RCU procetions for the vma life time assurance? Jann has
-> already shown how rwsem is not safe wrt to unlock and free without RCU.
 
-Jann's case requires a thread freeing the VMA to be blocked on vma
-write lock waiting for the vma real lock to be released by a page
-fault handler. However exit_mmap() means mm->mm_users==0, which in
-turn suggests that there are no racing page fault handlers and no new
-page fault handlers will appear. Is that a correct assumption? If so,
-then races with page fault handlers can't happen while in exit_mmap().
-Any other path (other than page fault handlers), accesses vma->lock
-under protection of mmap_lock (for read or write, does not matter).
-One exception is when we operate on an isolated VMA, then we don't
-need mmap_lock protection, but exit_mmap() does not deal with isolated
-VMAs, so out of scope here. exit_mmap() frees vm_area_structs under
-protection of mmap_lock in write mode, so races with anything other
-than page fault handler should be safe as they are today.
 
-That said, the future possible users of lock_vma_under_rcu() using VMA
-without mmap_lock protection will have to ensure mm's stability while
-they are using the obtained VMA. IOW they should elevate mm's refcount
-and keep it elevated as long as they are using that VMA and not before
-vma->lock is released. I guess it would be a good idea to document
-that requirement in lock_vma_under_rcu() comments if we decide to take
-this route.
+On 1/23/23 10:14, Richard Fitzgerald wrote:
+> On 23/01/2023 16:05, Pierre-Louis Bossart wrote:
+>>
+>>>>> It's nicer to do the check in startup() because then the application
+>>>>> open() will fail cleanly. We could delay until prepare - which is the
+>>>>> point we really need the hardware to be accessible - and hope the
+>>>>> hardware enumerated and initialized by that time. But that's not so
+>>>>> nice from the app point of view.
+>>>>
+>>>> Another way to avoid problems is to rely on the codec component .probe
+>>>> to check if the SoundWire device is initialized before registering a
+>>>> card.
+>>>>
+>>>> I just tried with a system where the ACPI info exposes a codec which is
+>>>> not connected, it fails nicely. That avoids the pitfalls of creating a
+>>>> card which isn't functional since all dependencies are not met.
+>>>>
+>>>> [   64.616530] snd_soc_sof_sdw:mc_probe: sof_sdw sof_sdw: Entry
+>>>> [   64.616549] snd_soc_sof_sdw:log_quirks: sof_sdw sof_sdw: quirk
+>>>> SOF_SDW_PCH_DMIC enabled
+>>>> [   64.616559] snd_soc_sof_sdw:sof_card_dai_links_create: sof_sdw
+>>>> sof_sdw: sdw 2, ssp 0, dmic 2, hdmi 0
+>>>> [   64.616587] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>>>> dai link SDW0-Playback, id 0
+>>>> [   64.616600] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>>>> dai link SDW0-Capture, id 1
+>>>> [   64.616607] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>>>> dai link dmic01, id 2
+>>>> [   64.616614] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>>>> dai link dmic16k, id 3
+>>>> [   69.757115] rt5682 sdw:0:025d:5682:00: Initialization not complete,
+>>>> timed out
+>>>> [   69.757128] rt5682 sdw:0:025d:5682:00: ASoC: error at
+>>>> snd_soc_component_probe on sdw:0:025d:5682:00: -110
+>>>> [   69.757224] sof_sdw sof_sdw: ASoC: failed to instantiate card -110
+>>>> [   69.757734] sof_sdw sof_sdw: snd_soc_register_card failed -110
+>>>>
+>>>> see
+>>>> https://elixir.bootlin.com/linux/latest/source/sound/soc/codecs/rt5682.c#L2927
+>>>>
+>>>> I think this is compatible with the device model and bind/unbind,
+>>>> but it
+>>>> could be improved with the removal of the wait if we had a way to
+>>>> return
+>>>> -EPROBEDEFER, and have a mechanism to force the deferred probe work to
+>>>> be triggered when a device actually shows up. It's a generic problem
+>>>> that the probe cannot always be a synchronous function but may complete
+>>>> 'later'.
+>>>
+>>> I see what you've done in your patch, but I had already experimented
+>>> with this idea and found that the wait_for_completion() can deadlock the
+>>> Soundwire core.
+>>
+>> That's not good. Do you have any logs or explanation on what the
+>> root-cause of this deadlock might be? If something's broken, we might as
+>> well fix it.
+> 
+> I suspect it might be the big mutex lock around the call to probe(),
+> that I removed in one of my pending patches
+> (https://lore.kernel.org/all/20221121162453.1834170-1-rf@opensource.cirrus.com/)
+> So fixing that might make the problem go away.
+> 
+> Charles just pointed out to me that whether component_probe() is
+> called within probe() depends whether everything needed to create
+> a soundcard is already present. Most likely in my case everything is
+> available and so snd_soc_register_component() immediately calls
+> my component_probe(). So probably in your case not everything is
+> ready and so the call to component_probe() is deferred and you
+> don't see the deadlock.
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+In the case I tested, the codec driver was probed based on the presence
+of ACPI information and the register component did happen. That means
+all the resources were present for the card to be created, except that
+the codec hardware was not connected to the bus so the initialization
+never happened of course.
