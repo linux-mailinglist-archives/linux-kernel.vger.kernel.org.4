@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9B3678981
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE68678989
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjAWVZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S232725AbjAWV1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjAWVZH (ORCPT
+        with ESMTP id S232900AbjAWV1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:25:07 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B806C2CC46;
-        Mon, 23 Jan 2023 13:25:05 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id t2so6665336vkk.9;
-        Mon, 23 Jan 2023 13:25:05 -0800 (PST)
+        Mon, 23 Jan 2023 16:27:22 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF0739289
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:27:13 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id q130so6234357iod.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:27:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rwr1V2VbjfpMmoaBdME1VccHGEWw9VckNn3iFCjPBTM=;
-        b=Op5ShM4k8Ny/E3icaPVaXEQ8zNdoFjtqLDFNRy+A5flLnIr5yNN55tEExpscgwgXQ7
-         ulxGMcMpikL6fjKJ4PPxeWBbJGn7khE3kZu7Ua8JjJ8YLnXuy/aZxlfeiVX3KkvEBaQZ
-         jFiCwiitDYrmqyibdUlqRFgkvTqrNEUqnb8+FHbv45+DheaHKyZRASW84mu8aMwKjN1E
-         Krcs/J1EEl4OvI1o8FLG/b974RM9VUpifT6jAuo7q51XJUrylGo5MDSHrTtMr1hKGllu
-         xRhEQLZxlQzCaWwdQoVD9bx63jLShdwiDZkcgKDhwBVmQ5PId58mo6mdwp6M/tRdlLK7
-         F9Ig==
+        bh=jDdvKKY6vXKD/b+VRce+QXw9nBIr50kKl6fkjfVvZeQ=;
+        b=iGe2Fv/+NXwoftR7t8rC953/eZ013rEQ4mBrdt8X9MzNkxMlldK1FT1JvwVd1t2oTa
+         wzt3oK7AQ4pAuDF97gMa3ELDfzuiAPv2Sj6Se4Q8V/18I8Smqebnz75/5jqt/OqIVno1
+         WGAz4o5YbBc6PhfxTSoN3tEK/3lw4PEwRg2QcPp3M9UNmGaGIPjKAmHJ71g/sWvKwVpV
+         uS+jSM/nCuWJJMaknBdzwZaj7BZzgYtRH3I96fVSl4km4WJG+B2zY/RW6id3JJhxFf0B
+         QKznnqt8fScD5DU8shOa7RZGkcigl4jxEbuD3jZT+W9E32zLgkcS9gKPeuGDZl14/ySp
+         Wumg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rwr1V2VbjfpMmoaBdME1VccHGEWw9VckNn3iFCjPBTM=;
-        b=bXqWypQUUfw/uNXywznKIEi/CbfAxO4iH3oPxOXTO4nY+QXyg3G7XQev2fsfUIgDzl
-         0aAL+V9hpSzwK+uWUpLqsXR+e1OCI73k0hCcJOK4TqNGMA/W/zoVD8xzPOG6uBwvYVu5
-         SMjlAWHwGDkZIHNUIBMXdTgtWvjFRDabmZBptect7FZ0Wj1hh84Yd658n4FbpQCTKF4u
-         lHMkY04CtAb1n+xU2+aBnoBe73VzDcmuTsOtTLjATQBtYTkaAHCIbvkJSr1xmanlaNuk
-         Wyeturl1vK40IvE8qbFsYm7Y/1gck3uApoHQbc8WMl0hnTZTZXSW44agNGmTrmn7NMzy
-         NcNw==
-X-Gm-Message-State: AFqh2ko4yyNJqPLghq1c6PEx5glFpt61bB4EwozaeruO0Wu0mVoz4btG
-        TucmOXfD5622hZMxaxlb9OJv1KRm8lvaD9GHhZPd8G0/
-X-Google-Smtp-Source: AMrXdXsq/CITHztVvUQT+oxkRY2L5v1MggNFEQTbxZC4nZ2vf7UY6k94BDrg1frKVH/F2KsvSX5gyH6WHGFzkJcasFI=
-X-Received: by 2002:a05:6122:91d:b0:3e1:a746:2b9e with SMTP id
- j29-20020a056122091d00b003e1a7462b9emr2977054vka.5.1674509104760; Mon, 23 Jan
- 2023 13:25:04 -0800 (PST)
+        bh=jDdvKKY6vXKD/b+VRce+QXw9nBIr50kKl6fkjfVvZeQ=;
+        b=OrQZtQ+DIuNhGsYs8QjOrCubIF3/tMJstuWVOLCpCatitvoh+hxgMzkzwcKz/zNP5S
+         BQuzRSMyqKi1qJIQO0kgA3UlkKEOsxg9i4exxROW8pWh/7MoD2I6QzfkCwpRD9opKyn4
+         MHtMP1WqtwX77NO4lZ7qT/Omnq7BH4X3BMi8H/mQdd7fDcFtTYt2+0wUkR3q2uXSMmr1
+         xVhzq3NPEhRXMEry9UAb+zUYjH1AIs4DrSn1q7E/kV9XVOR65Fokvqg4Op1fMTCeXw1+
+         LeTaoks+TeNGZ7CWXHIGaem7cJXoIgFygLlgTxR/aJSNRCgsY5hFNvcwsrW2AGBEjCUf
+         HaJQ==
+X-Gm-Message-State: AFqh2krFtWeRc4XkdD48MF9EaUCCa/N39vlILnYRfG4nG3YiukAD5qM8
+        cnbJOX82fpCXTsNN4DfMAHLoCY5hQAsBdhf8l3ty2Q==
+X-Google-Smtp-Source: AMrXdXvugBkUlkAE0J84vm8n8+OXi1gfzdkJrM86OXIf0grqvMPwRN3cym8TAc6y9qi0UP+ChtOcMLoFU3K2eooeb88=
+X-Received: by 2002:a6b:4108:0:b0:704:8263:b926 with SMTP id
+ n8-20020a6b4108000000b007048263b926mr1952152ioa.53.1674509232247; Mon, 23 Jan
+ 2023 13:27:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20221224121814.11709-1-lephilousophe@gmail.com> <CAO-hwJJwUQJueutZ5z_4qwBb1Y4+-9h3ta0Xran=s6pJ_e3itQ@mail.gmail.com>
-In-Reply-To: <CAO-hwJJwUQJueutZ5z_4qwBb1Y4+-9h3ta0Xran=s6pJ_e3itQ@mail.gmail.com>
-From:   Philippe Valembois <lephilousophe@gmail.com>
-Date:   Mon, 23 Jan 2023 22:24:53 +0100
-Message-ID: <CAPBBQ-ZYFA82GDz0uf9k=7dmdr+THgP0fqJKvXB_b8a62HMeyA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] HID: evision: Add preliminary support for EVision keyboards
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
+References: <DS0PR02MB90787835F5B9CB9771A20329C4C09@DS0PR02MB9078.namprd02.prod.outlook.com>
+In-Reply-To: <DS0PR02MB90787835F5B9CB9771A20329C4C09@DS0PR02MB9078.namprd02.prod.outlook.com>
+From:   "T.J. Alumbaugh" <talumbau@google.com>
+Date:   Mon, 23 Jan 2023 13:26:36 -0800
+Message-ID: <CABmGT5HiH8OM_F6K7VQj9vj1ZnSvVowwJ_d4EVox5-JDL3Eh5w@mail.gmail.com>
+Subject: Re: [RFC] memory pressure detection in VMs using PSI mechanism for
+ dynamically inflating/deflating VM memory
+To:     "Sudarshan Rajagopalan (QUIC)" <quic_sudaraja@quicinc.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "Trilok Soni (QUIC)" <quic_tsoni@quicinc.com>,
+        "Sukadev Bhattiprolu (QUIC)" <quic_sukadev@quicinc.com>,
+        "Srivatsa Vaddagiri (QUIC)" <quic_svaddagi@quicinc.com>,
+        "Patrick Daly (QUIC)" <quic_pdaly@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,192 +88,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Sudarshan,
 
-Thanks for the review.
-I just sent an updated patch taking your comments into account.
+I had questions about the setup and another about the use of PSI.
 
-Regards,
-Philippe Valembois
+>
+> 1. This will be a native userspace daemon that will be running only in th=
+e Linux VM which will use virtio-mem driver that uses memory hotplug to add=
+/remove memory. The VM (aka Secondary VM, SVM) will request for memory from=
+ the host which is Primary VM, PVM via the backend hypervisor which takes c=
+are of cross-VM communication.
+>
 
-Le lun. 23 janv. 2023 =C3=A0 08:57, Benjamin Tissoires
-<benjamin.tissoires@redhat.com> a =C3=A9crit :
+In regards to the "PVM/SVM" nomenclature, is the implied setup one of
+fault tolerance (i.e. the secondary is there to take over in case of
+failure of the primary VM)? Generally speaking, are the PVM and SVM
+part of a defined system running some workload? The context seems to
+be that the situation is more intricate than "two virtual machines
+running on a host", but I'm not clear how it is different from that
+general notion.
+
 >
-> On Sat, Dec 24, 2022 at 1:23 PM Philippe Valembois
-> <lephilousophe@gmail.com> wrote:
-> >
-> > From: Philippe Valembois <lephilousophe@users.noreply.github.com>
+> 5. Detecting decrease in memory pressure =E2=80=93 the reverse part where=
+ we give back memory to PVM when memory is no longer needed is bit tricky. =
+We look for pressure decay and see if PSI averages (avg10, avg60, avg300) g=
+o down, and along with other memory stats (such as free memory etc) we make=
+ an educated guess that usecase has ended and memory has been free=E2=80=99=
+ed by the usecase, and this memory can be given back to PVM when its no lon=
+ger needed.
 >
-> Jiri, I have a doubt. Do we accept emails from users.noreply.github.com?
->
-> >
-> > For now only supports one model and only filters out bogus reports sent
-> > when the keyboard has been configured through hidraw.
-> > Without this, as events are not released, soft repeat floods userspace
-> > with unknown key events.
-> >
-> > Signed-off-by: Philippe Valembois <lephilousophe@users.noreply.github.c=
-om>
-> > ---
-> >  drivers/hid/Kconfig       |  7 ++++
-> >  drivers/hid/Makefile      |  1 +
-> >  drivers/hid/hid-evision.c | 79 +++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 87 insertions(+)
-> >  create mode 100644 drivers/hid/hid-evision.c
-> >
-> > diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> > index e2a5d30c8..1320ea75c 100644
-> > --- a/drivers/hid/Kconfig
-> > +++ b/drivers/hid/Kconfig
-> > @@ -329,6 +329,13 @@ config HID_ELO
-> >         Support for the ELO USB 4000/4500 touchscreens. Note that this =
-is for
-> >         different devices than those handled by CONFIG_TOUCHSCREEN_USB_=
-ELO.
-> >
-> > +config HID_EVISION
-> > +       tristate "EVision Keyboards Support"
-> > +       depends on USB_HID
->
-> AFAICT, the driver only uses pure HID API, so you should be able to
-> depend on HID, not just USB_HID.
->
-> > +       help
-> > +       Support for some EVision keyboards. Note that this is needed on=
-ly when
-> > +       applying customization using userspace programs.
-> > +
-> >  config HID_EZKEY
-> >         tristate "Ezkey BTC 8193 keyboard"
-> >         default !EXPERT
-> > diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-> > index e8014c1a2..bd01571dd 100644
-> > --- a/drivers/hid/Makefile
-> > +++ b/drivers/hid/Makefile
-> > @@ -45,6 +45,7 @@ obj-$(CONFIG_HID_EMS_FF)      +=3D hid-emsff.o
-> >  obj-$(CONFIG_HID_ELAN)         +=3D hid-elan.o
-> >  obj-$(CONFIG_HID_ELECOM)       +=3D hid-elecom.o
-> >  obj-$(CONFIG_HID_ELO)          +=3D hid-elo.o
-> > +obj-$(CONFIG_HID_EVISION)      +=3D hid-evision.o
-> >  obj-$(CONFIG_HID_EZKEY)                +=3D hid-ezkey.o
-> >  obj-$(CONFIG_HID_FT260)                +=3D hid-ft260.o
-> >  obj-$(CONFIG_HID_GEMBIRD)      +=3D hid-gembird.o
-> > diff --git a/drivers/hid/hid-evision.c b/drivers/hid/hid-evision.c
-> > new file mode 100644
-> > index 000000000..6ea331575
-> > --- /dev/null
-> > +++ b/drivers/hid/hid-evision.c
-> > @@ -0,0 +1,79 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + *  HID driver for EVision devices
-> > + *  For now, only ignore bogus consumer reports
-> > + *  sent after the keyboard has been configured
-> > + *
-> > + *  Copyright (c) 2022 Philippe Valembois
-> > + */
-> > +
-> > +#include <linux/device.h>
-> > +#include <linux/input.h>
-> > +#include <linux/hid.h>
-> > +#include <linux/module.h>
-> > +#include <linux/usb.h>
->
-> Outside of hid_is_usb(), you are not using anything USB related, so
-> this can be dropped
->
-> > +
-> > +
-> > +#define USB_VENDOR_ID_EVISION       0x320f
-> > +#define USB_DEVICE_ID_EVISION_ICL01 0x5041
->
-> We tend to add those variables in drivers/hid/hid-ids.h
->
-> > +
-> > +static int evision_input_mapping(struct hid_device *hdev, struct hid_i=
-nput *hi,
-> > +               struct hid_field *field, struct hid_usage *usage,
-> > +               unsigned long **bit, int *max)
-> > +{
-> > +       if ((usage->hid & HID_USAGE_PAGE) !=3D HID_UP_CONSUMER)
-> > +               return 0;
-> > +
-> > +       // Ignore key down event
->
-> No C++ comments style please, use /* */ instead
->
-> > +       if ((usage->hid & HID_USAGE) >> 8 =3D=3D 0x05)
-> > +               return -1;
-> > +       // Ignore key up event
->
-> Same (and for any other // below).
->
-> > +       if ((usage->hid & HID_USAGE) >> 8 =3D=3D 0x06)
-> > +               return -1;
-> > +
-> > +       switch (usage->hid & HID_USAGE) {
-> > +       // Ignore configuration saved event
-> > +       case 0x0401: return -1;
-> > +       // Ignore reset event
-> > +       case 0x0402: return -1;
-> > +       }
-> > +       return 0;
-> > +}
-> > +
-> > +static int evision_probe(struct hid_device *hdev, const struct hid_dev=
-ice_id *id)
-> > +{
-> > +       int ret;
-> > +
-> > +       if (!hid_is_usb(hdev))
-> > +               return -EINVAL;
->
-> This can be dropped...
->
-> > +
-> > +       ret =3D hid_parse(hdev);
-> > +       if (ret) {
-> > +               hid_err(hdev, "EVision hid parse failed: %d\n", ret);
-> > +               return ret;
-> > +       }
-> > +
-> > +       ret =3D hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-> > +       if (ret) {
-> > +               hid_err(hdev, "EVision hw start failed: %d\n", ret);
-> > +               return ret;
-> > +       }
-> > +
-> > +       return 0;
->
-> ... which means the probe is the default one, meaning it can also be
-> dropped from the patch :)
->
-> > +}
-> > +
-> > +static const struct hid_device_id evision_devices[] =3D {
-> > +       { HID_USB_DEVICE(USB_VENDOR_ID_EVISION, USB_DEVICE_ID_EVISION_I=
-CL01) },
-> > +       { }
-> > +};
-> > +MODULE_DEVICE_TABLE(hid, evision_devices);
-> > +
-> > +static struct hid_driver evision_driver =3D {
-> > +       .name =3D "evision",
-> > +       .id_table =3D evision_devices,
-> > +       .input_mapping =3D evision_input_mapping,
-> > +       .probe =3D evision_probe,
->
-> Just for completeness, remove that .probe line and your driver will
-> behave the same and be smaller :)
->
-> > +};
-> > +module_hid_driver(evision_driver);
-> > +
-> > +MODULE_LICENSE("GPL");
-> > --
-> > 2.38.2
-> >
->
-> Cheers,
-> Benjamin
->
+
+This is also very interesting to me. Detecting a decrease in pressure
+using PSI seems difficult. IIUC correctly, the approach taken in
+OOMD/senpai from Meta seems to be continually applying
+pressure/backing off, and then seeing the outcome of that decision on
+the pressure metric to feedback to the next decision (see links
+below). Is your approach similar? Do you check the metric periodically
+or only when receiving PSI memory events in userspace?
+
+https://github.com/facebookincubator/senpai/blob/main/senpai.py#L117-L148
+https://github.com/facebookincubator/oomd/blob/main/src/oomd/plugins/Senpai=
+.cpp#L529-L538
+
+Very interesting proposal. Thanks for sending,
+
+-T.J.
