@@ -2,228 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF5A67808E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE04678098
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjAWPw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
+        id S232585AbjAWPzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbjAWPww (ORCPT
+        with ESMTP id S231587AbjAWPzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:52:52 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF411BD0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:52:50 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id l8so9376352wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:52:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b/tZ8f/hKuTnmPmwm/3gfR1U9pPYCEdQziOfOTsHWD8=;
-        b=TCXyArpwkAYCRDfZdgOD2gG5tf1XscU6cRLcpKr8YcqSwXGE1Hbdh6WcdLTcNM1A+v
-         +yiZgwW3u/17k5TuCdfHv5Y7P8vYYeJ71i1Q8xBGLpgr+mo25UedeqZCPViGsKO1p74E
-         Yx3oi0jPjP1m9IaYG3yhyICLWUKaWyPAkxCMqNSvyt6ozOKnlbQHWd9jIrkXbQ3H265S
-         gUZz3KZrXaMntBZkIjne9xs1kbUuY8vYMHXAIAPowBhTznp7akNPSIUTfFKFR9P+0rCE
-         t4qsPaaOFTtr9erNSp21NGWkrwnkxJtgNFOx1fZo8s56ai8iWom8/hn3rETqxhqmCSZM
-         ExsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b/tZ8f/hKuTnmPmwm/3gfR1U9pPYCEdQziOfOTsHWD8=;
-        b=eBpM7qftF76jQ3vfeZ8r+kVw7bLS7XQ9ha5dV1ldbvJMC3Wqq0sWOZY2vRQO2VSyJl
-         8l8W/3npQfkypXwY2iKHuVQPmooqJUYw9JXJA7kJwweTgFoNaIoPEL1j+7D1GAEvWrj8
-         3ZsTyHMosnxwa4q2XkewS1jw1QagICX3+dPQpbZntWVgfW/+aouLYfLalFrh6G8c9O0r
-         zmoi1xDhPyJ9cp1d6Fkti2IcsZIVv7IJdFTbuZiRCKM/96wGlUloH6R1hXM5CHWBhgVK
-         UjG7ZVpmI8Wq1uGvikIV/VhyucefqtttJSnb7jwZAvQd7i5WGK1h/GR8MLPLor+fopD1
-         xCKw==
-X-Gm-Message-State: AFqh2kqIoK6puKl8VA+OKzTD/D9oSM4hyKVX9yBW+XP9IYomsUyPhDV2
-        4+c1AS12/p+b8V5sKzdgGOKuFJSgSqq9El6c
-X-Google-Smtp-Source: AMrXdXsvW74isMnE439bftM+OiixytOe6bWOxjDuWosmwOrIoj8bddguUkHujZ5s9OEGL+NVoCbNAA==
-X-Received: by 2002:a05:600c:1d12:b0:3db:53f:baea with SMTP id l18-20020a05600c1d1200b003db053fbaeamr24195728wms.6.1674489168770;
-        Mon, 23 Jan 2023 07:52:48 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f23-20020a7bc8d7000000b003d358beab9dsm10811991wml.47.2023.01.23.07.52.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 07:52:48 -0800 (PST)
-Message-ID: <2b210dc5-fe63-d295-a488-2988601424f3@linaro.org>
-Date:   Mon, 23 Jan 2023 16:52:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 04/15] dt-bindings: arm: add support for Ambarella SoC
-Content-Language: en-US
-To:     Li Chen <me@linux.beauty>
-Cc:     Li Chen <lchen@ambarella.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:ARM/Ambarella SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <20230123073305.149940-5-lchen@ambarella.com>
- <7d191871-1025-43a3-20bf-8fc6b3f92c89@linaro.org>
- <875ycxi8xm.wl-me@linux.beauty>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <875ycxi8xm.wl-me@linux.beauty>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 23 Jan 2023 10:55:03 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3103B2D6F;
+        Mon, 23 Jan 2023 07:55:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ImVZ/G93+aQOYzXoMW+O/EXLBjNYr3fMyuFGMFnS2IA=; b=RiJGZlngYn9ccSseIPDL/llp+0
+        MMIAFxB6JjgzAEMRvm7cBafJZ96NT6t4Yfkp289H7YhE3cKywQ9nVS5Q1FTS+YqWXJBdZuYRp6YJy
+        Hnd+6Zn/ROlAXIV6WC/QI0uuUjqaZhEv2uNQno0jX8Tmn6Q/zt8zDk/tF+BqbPPZAkCc=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41486 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pJz9u-0002LT-0y; Mon, 23 Jan 2023 10:54:58 -0500
+Date:   Mon, 23 Jan 2023 10:54:57 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230123105457.4e08329422b7e51f870b7315@hugovil.com>
+In-Reply-To: <Y8rh2SByHp773UXu@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-3-hugo@hugovil.com>
+        <Y8rh2SByHp773UXu@mail.local>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 02/14] rtc: pcf2127: adapt for time/date registers at
+ any offset
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 16:09, Li Chen wrote:
-> On Mon, 23 Jan 2023 16:07:32 +0800,
-> Krzysztof Kozlowski wrote:
->>
->> On 23/01/2023 08:32, Li Chen wrote:
->>> Create a vendor directory for Ambarella, and add
->>> cpuid, rct, scratchpad documents.
->>>
->>> Signed-off-by: Li Chen <lchen@ambarella.com>
->>> Change-Id: I2c29e45c08666489b0d9b588ac37d713f5b723d1
->>
->> Please run scripts/checkpatch.pl and fix reported warnings.
->>
->> Applies to all your patches. Also test them... I have doubts that you
->> tested if you actually ignored checkpatch :/
-> 
-> Yeah, I checkpatch all patches, and have planned to fix Change-Id finally(manually),
-> but forget it before sending mails, my bad, sorry. I will remove it in v2.
-> 
->>> ---
->>>  .../arm/ambarella/ambarella,cpuid.yaml        | 24 +++++++++++++++++++
->>>  .../bindings/arm/ambarella/ambarella,rct.yaml | 24 +++++++++++++++++++
->>>  .../arm/ambarella/ambarella,scratchpad.yaml   | 24 +++++++++++++++++++
->>>  .../bindings/arm/ambarella/ambarella.yaml     | 22 +++++++++++++++++
->>>  MAINTAINERS                                   |  4 ++++
->>>  5 files changed, 98 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
->>>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
->>>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
->>>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
->>> new file mode 100644
->>> index 000000000000..1f4d9cec8f92
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
->>
->> This goes to soc
-> 
-> Thanks, I wasn't aware that there is a document dir named soc. I will move cpuid yaml
-> to bindings/soc/ambarella/, and leave other yaml still here.
+On Fri, 20 Jan 2023 19:47:53 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-However if device has chip identification features (chipid), then the
-location is "hwinfo".
+> On 15/12/2022 10:02:03-0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > This will simplify the implementation of new variants into this driver.
+> > 
+> > Some variants (PCF2131) have a 100th seconds register. This register is
+> > currently not supported in this driver.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 68 ++++++++++++++++++++++-----------------
+> >  1 file changed, 39 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index b9a5d47a439f..fb0caacaabee 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -44,14 +44,17 @@
+> >  #define PCF2127_BIT_CTRL3_BF			BIT(3)
+> >  #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
+> >  /* Time and date registers */
+> > -#define PCF2127_REG_SC			0x03
+> > +#define PCF2127_REG_TIME_DATE_BASE	0x03
+> > +/* Time and date registers offsets (starting from base register) */
+> > +#define PCF2127_OFFSET_TD_SC		0
+> > +#define PCF2127_OFFSET_TD_MN		1
+> > +#define PCF2127_OFFSET_TD_HR		2
+> > +#define PCF2127_OFFSET_TD_DM		3
+> > +#define PCF2127_OFFSET_TD_DW		4
+> > +#define PCF2127_OFFSET_TD_MO		5
+> > +#define PCF2127_OFFSET_TD_YR		6
+> 
+> Same comment as for the alarms, I would simply remove the defines as
+> they don't really carry any useful information.
+
+Note that if I remove them, the patch for pcf2127_rtc_read_time() would look like this:
+
+ 	/* Clock integrity is not guaranteed when OSF flag is set. */
+-	if (buf[PCF2127_REG_SC] & PCF2127_BIT_SC_OSF) {
++	if (buf[0] & PCF2127_BIT_SC_OSF) {
+...
+-		__func__, buf[PCF2127_REG_CTRL3], buf[PCF2127_REG_SC],
+-		buf[PCF2127_REG_MN], buf[PCF2127_REG_HR],
+-		buf[PCF2127_REG_DM], buf[PCF2127_REG_DW],
+-		buf[PCF2127_REG_MO], buf[PCF2127_REG_YR]);
+-
+-	tm->tm_sec = bcd2bin(buf[PCF2127_REG_SC] & 0x7F);
+-	tm->tm_min = bcd2bin(buf[PCF2127_REG_MN] & 0x7F);
+-	tm->tm_hour = bcd2bin(buf[PCF2127_REG_HR] & 0x3F); /* rtc hr 0-23 */
+-	tm->tm_mday = bcd2bin(buf[PCF2127_REG_DM] & 0x3F);
+-	tm->tm_wday = buf[PCF2127_REG_DW] & 0x07;
+-	tm->tm_mon = bcd2bin(buf[PCF2127_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
+-	tm->tm_year = bcd2bin(buf[PCF2127_REG_YR]);
++		__func__, ctrl3, buf[0],
++		buf[1], buf[2],
++		buf[3], buf[4],
++		buf[5], buf[PCF2127_OFFSET_TD_YR]);
++
++	tm->tm_sec = bcd2bin(buf[0] & 0x7F);
++	tm->tm_min = bcd2bin(buf[1] & 0x7F);
++	tm->tm_hour = bcd2bin(buf[2] & 0x3F); /* rtc hr 0-23 */
++	tm->tm_mday = bcd2bin(buf[3] & 0x3F);
++	tm->tm_wday = buf[4] & 0x07;
++	tm->tm_mon = bcd2bin(buf[5] & 0x1F) - 1; /* rtc mn 1-12 */
++	tm->tm_year = bcd2bin(buf[6]);
+
+Do you still want to remove the defines then?
+
+
+> > +/* Time and date registers bits */
+> >  #define PCF2127_BIT_SC_OSF			BIT(7)
+> > -#define PCF2127_REG_MN			0x04
+> > -#define PCF2127_REG_HR			0x05
+> > -#define PCF2127_REG_DM			0x06
+> > -#define PCF2127_REG_DW			0x07
+> > -#define PCF2127_REG_MO			0x08
+> > -#define PCF2127_REG_YR			0x09
+> >  /* Alarm registers */
+> >  #define PCF2127_REG_ALARM_SC		0x0A
+> >  #define PCF2127_REG_ALARM_MN		0x0B
+> > @@ -106,6 +109,7 @@ struct pcf21xx_config {
+> >  	int max_register;
+> >  	unsigned int has_nvmem:1;
+> >  	unsigned int has_bit_wd_ctl_cd0:1;
+> > +	u8 regs_td_base; /* Time/data base registers. */
+> >  };
+> >  
+> >  struct pcf2127 {
+> > @@ -125,27 +129,31 @@ struct pcf2127 {
+> >  static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> >  {
+> >  	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> > -	unsigned char buf[10];
+> > +	unsigned char buf[7];
+> > +	unsigned int ctrl3;
+> >  	int ret;
+> >  
+> >  	/*
+> >  	 * Avoid reading CTRL2 register as it causes WD_VAL register
+> >  	 * value to reset to 0 which means watchdog is stopped.
+> >  	 */
+> > -	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL3,
+> > -			       (buf + PCF2127_REG_CTRL3),
+> > -			       ARRAY_SIZE(buf) - PCF2127_REG_CTRL3);
+> > -	if (ret) {
+> > -		dev_err(dev, "%s: read error\n", __func__);
+> > +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &ctrl3);
+> > +	if (ret)
+> >  		return ret;
+> > -	}
+> >  
+> > -	if (buf[PCF2127_REG_CTRL3] & PCF2127_BIT_CTRL3_BLF)
+> > +	if (ctrl3 & PCF2127_BIT_CTRL3_BLF)
+> >  		dev_info(dev,
+> >  			"low voltage detected, check/replace RTC battery.\n");
+> >  
+> > +	ret = regmap_bulk_read(pcf2127->regmap, pcf2127->cfg->regs_td_base,
+> > +			       buf, sizeof(buf));
+> > +	if (ret) {
+> > +		dev_err(dev, "%s: read error\n", __func__);
+> > +		return ret;
+> > +	}
+> > +
+> >  	/* Clock integrity is not guaranteed when OSF flag is set. */
+> > -	if (buf[PCF2127_REG_SC] & PCF2127_BIT_SC_OSF) {
+> > +	if (buf[PCF2127_OFFSET_TD_SC] & PCF2127_BIT_SC_OSF) {
+> >  		/*
+> >  		 * no need clear the flag here,
+> >  		 * it will be cleared once the new date is saved
+> > @@ -158,18 +166,18 @@ static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> >  	dev_dbg(dev,
+> >  		"%s: raw data is cr3=%02x, sec=%02x, min=%02x, hr=%02x, "
+> >  		"mday=%02x, wday=%02x, mon=%02x, year=%02x\n",
+> > -		__func__, buf[PCF2127_REG_CTRL3], buf[PCF2127_REG_SC],
+> > -		buf[PCF2127_REG_MN], buf[PCF2127_REG_HR],
+> > -		buf[PCF2127_REG_DM], buf[PCF2127_REG_DW],
+> > -		buf[PCF2127_REG_MO], buf[PCF2127_REG_YR]);
+> > -
+> > -	tm->tm_sec = bcd2bin(buf[PCF2127_REG_SC] & 0x7F);
+> > -	tm->tm_min = bcd2bin(buf[PCF2127_REG_MN] & 0x7F);
+> > -	tm->tm_hour = bcd2bin(buf[PCF2127_REG_HR] & 0x3F); /* rtc hr 0-23 */
+> > -	tm->tm_mday = bcd2bin(buf[PCF2127_REG_DM] & 0x3F);
+> > -	tm->tm_wday = buf[PCF2127_REG_DW] & 0x07;
+> > -	tm->tm_mon = bcd2bin(buf[PCF2127_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
+> > -	tm->tm_year = bcd2bin(buf[PCF2127_REG_YR]);
+> > +		__func__, ctrl3, buf[PCF2127_OFFSET_TD_SC],
+> > +		buf[PCF2127_OFFSET_TD_MN], buf[PCF2127_OFFSET_TD_HR],
+> > +		buf[PCF2127_OFFSET_TD_DM], buf[PCF2127_OFFSET_TD_DW],
+> > +		buf[PCF2127_OFFSET_TD_MO], buf[PCF2127_OFFSET_TD_YR]);
+> > +
+> > +	tm->tm_sec = bcd2bin(buf[PCF2127_OFFSET_TD_SC] & 0x7F);
+> > +	tm->tm_min = bcd2bin(buf[PCF2127_OFFSET_TD_MN] & 0x7F);
+> > +	tm->tm_hour = bcd2bin(buf[PCF2127_OFFSET_TD_HR] & 0x3F); /* rtc hr 0-23 */
+> 
+> You can drop the comment
+
+Done
 
 > 
->>> @@ -0,0 +1,24 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/ambarella,cpuid.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Ambarella SoC ID
->>> +
->>> +maintainers:
->>> +  - Li Chen <lchen@ambarella.com>
->>
->> Missing description.
+> > +	tm->tm_mday = bcd2bin(buf[PCF2127_OFFSET_TD_DM] & 0x3F);
+> > +	tm->tm_wday = buf[PCF2127_OFFSET_TD_DW] & 0x07;
+> > +	tm->tm_mon = bcd2bin(buf[PCF2127_OFFSET_TD_MO] & 0x1F) - 1; /* rtc mn 1-12 */
 > 
-> Sorry, description will be added in v2. BTW, does other YAMLs in this patch
-> also need descriptions?
+> This comment too.
 
-In general yes - we want descriptions which will bring additional
-information. Description should not repeat title, but add more data. For
-trivial cases - maybe actually this one SoC ID - you can skip it.
-
-
+Done
 
 > 
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: "ambarella,cpuid", "syscon"
->>
->> Drop quotes (applies to all your patches)
+> > +	tm->tm_year = bcd2bin(buf[PCF2127_OFFSET_TD_YR]);
+> >  	tm->tm_year += 100;
+> >  
+> >  	dev_dbg(dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
+> > @@ -207,7 +215,7 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >  	buf[i++] = bin2bcd(tm->tm_year - 100);
+> >  
+> >  	/* write register's data */
+> > -	err = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_SC, buf, i);
+> > +	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
+> >  	if (err) {
+> >  		dev_err(dev,
+> >  			"%s: err=%d", __func__, err);
+> > @@ -650,11 +658,13 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >  		.max_register = 0x1d,
+> >  		.has_nvmem = 1,
+> >  		.has_bit_wd_ctl_cd0 = 1,
+> > +		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+> >  	},
+> >  	[PCF2129] = {
+> >  		.max_register = 0x19,
+> >  		.has_nvmem = 0,
+> >  		.has_bit_wd_ctl_cd0 = 0,
+> > +		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+> >  	},
+> >  };
+> >  
+> > -- 
+> > 2.30.2
+> > 
 > 
-> OK, thanks!
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 > 
->> Missing SoC specific compatible.
->>
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>
->> Missing additionalProperties. sorry, start from scratch from some
->> existing recent bindings or better example-schema.
-> 
-> Good to know that there is example-schema, thanks!
->  
->>> +
->>> +examples:
->>> +  - |
->>> +    cpuid_syscon: cpuid@e0000000 {
->>> +        compatible = "ambarella,cpuid", "syscon";
->>> +        reg = <0xe0000000 0x1000>;
->>> +    };
->>> diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
->>> new file mode 100644
->>> index 000000000000..7279bab17d9e
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
->>> @@ -0,0 +1,24 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/ambarella,rct.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Ambarella RCT module
->>> +
->>> +maintainers:
->>> +  - Li Chen <lchen@ambarella.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: "ambarella,rct", "syscon"
->>
->> All the same problems.
-> 
-> Well noted.
-> 
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +examples:
->>> +  - |
->>> +		rct_syscon: rct_syscon@ed080000 {
->>
->> Really? Just take a look and you will see wrong indentation. Also drop
->> underscores in node names and "rct". Node names should be generic.
-> 
-> Sorry for the wrong indentation, will fix it in v2.
-> 
-> Is it ok to contain underscores in lable? if so, I will change it into
-> 
-> rct_syscon: syscon@ed080000 {
 
-Yes, label can have it.
 
-Best regards,
-Krzysztof
-
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
