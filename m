@@ -2,134 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B670A6784EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FD26784F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbjAWSbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S233251AbjAWSbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbjAWSbS (ORCPT
+        with ESMTP id S231545AbjAWSbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:31:18 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BDB35266
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:30:55 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id k6so13955082vsk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:30:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+xUN6pqH4KWhpdAZZASKkpdwX1dWlxeGaeUlHQVMdw=;
-        b=cV8GzTY0zBLyK2FJXATgkWVu401po27fDFp43ID0uM14l9ibUSQYqtncVhKy3qVOxD
-         s4a4ta+I5XrPn6sRK/XvlAiIBk1UnMoLlbm1Hcun1gskbAstCGmVpaS2LwxxDH/NlA6+
-         wU24POhe4aFZItoW1jW22klyPRhUJRHHatgOqF14b+v9JQ+7n4civ14F+6+zRLIw4Wtc
-         SIf5i9igZXGzKSKOCD7kTW1TsuplIudF3/xsJR8iUhO6WtxTOUWKPQ80SE7gNEx1mVg0
-         xyOQbSX9G+r8JCXUfX/xZlmqyY132/qX1FiWcg/749IJPRES7iWwafVer1HtNtqunHed
-         j71Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o+xUN6pqH4KWhpdAZZASKkpdwX1dWlxeGaeUlHQVMdw=;
-        b=5GAlxNggY2pNXDtZDYrskDVfOFeFTCFqeQPl30fuvb5So/GmMjpaM2NIP1vfBbh4pH
-         LPDIg8p5NWWJdAP0L/zNIgRMTxvxU3p5CY5dIRSZgHRfBLUt22F3TR2SNm9IFPhBrZQW
-         1Ks+GK0wmCO7kU4qUOUlyeG4J3SJRvwUtEfAyxnvakUNI/dZmfKH5Y7+KPASx0D5Vl7i
-         NIw9/5bzDN+5/8rt6AUuRLx74DE8x98yCyrf8h1ZIRX3eGaNnL6G8ArAutHyAs0Jv65w
-         xosnl29jUJm8MwHUnJSxb4jrLj+T++cyfekWtD4r7PtUAXs51tVnoSgMDGOMclBwr3Eh
-         3pKA==
-X-Gm-Message-State: AFqh2kpDID3GYh4QSgSeHtEpDtFjJYbIhUMPdTpEomAr/5Rcb4VZvz82
-        azySucSDFzV8NrQHadqq+nTHNCn+8o5QpFVlp5Hd2A==
-X-Google-Smtp-Source: AMrXdXtjMcYu45J9vgTNdZq5yrE/41r93upqkvNOfUCN6J0aGWd7SJJHXhoxYAbIpLuPTUF4sz+iXqmJwilen2GuONg=
-X-Received: by 2002:a05:6102:4425:b0:3c8:c513:197 with SMTP id
- df37-20020a056102442500b003c8c5130197mr3309786vsb.9.1674498641262; Mon, 23
- Jan 2023 10:30:41 -0800 (PST)
+        Mon, 23 Jan 2023 13:31:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73CFA12879
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:31:10 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08CE1C14;
+        Mon, 23 Jan 2023 10:31:36 -0800 (PST)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 850D13F71E;
+        Mon, 23 Jan 2023 10:30:53 -0800 (PST)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     will@kernel.org
+Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ilkka@os.amperecomputing.com
+Subject: [PATCH] Partially revert "perf/arm-cmn: Optimise DTC counter accesses"
+Date:   Mon, 23 Jan 2023 18:30:38 +0000
+Message-Id: <b41bb4ed7283c3d8400ce5cf5e6ec94915e6750f.1674498637.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-References: <20230121001542.2472357-1-ackerleytng@google.com>
- <20230121001542.2472357-9-ackerleytng@google.com> <Y8sxjppvEnm4IBWG@google.com>
-In-Reply-To: <Y8sxjppvEnm4IBWG@google.com>
-From:   Erdem Aktas <erdemaktas@google.com>
-Date:   Mon, 23 Jan 2023 10:30:30 -0800
-Message-ID: <CAAYXXYy7=ZTCZ1LQ3_Sy39ju_xG5++dTrxi+DKGcbpJ5VJ3OuQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
- stacks on function entry
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Ackerley Tng <ackerleytng@google.com>,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
-        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
-        maz@kernel.org, bgardon@google.com, jmattson@google.com,
-        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
-        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
-        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
-        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
-        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
-        pshier@google.com, axelrasmussen@google.com,
-        zhenzhong.duan@intel.com, maciej.szmigiero@oracle.com,
-        like.xu@linux.intel.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 4:28 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Sat, Jan 21, 2023, Ackerley Tng wrote:
-> > Some SSE instructions assume a 16-byte aligned stack, and GCC compiles
-> > assuming the stack is aligned:
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838. This combination
-> > results in a #GP in guests.
-> >
-> > Adding this compiler flag will generate an alternate prologue and
-> > epilogue to realign the runtime stack, which makes selftest code
-> > slower and bigger, but this is okay since we do not need selftest code
-> > to be extremely performant.
->
-> Huh, I had completely forgotten that this is why SSE is problematic.  I ran into
-> this with the base UPM selftests and just disabled SSE.  /facepalm.
->
-> We should figure out exactly what is causing a misaligned stack.  As you've noted,
-> the x86-64 ABI requires a 16-byte aligned RSP.  Unless I'm misreading vm_arch_vcpu_add(),
-> the starting stack should be page aligned, which means something is causing the
-> stack to become unaligned at runtime.  I'd rather hunt down that something than
-> paper over it by having the compiler force realignment.
+It turns out the optimisation implemented by commit 4f2c3872dde5 is
+totally broken, since all the places that consume hw->dtcs_used for
+events other than cycle count are still not expecting it to be sparsely
+populated, and fail to read all the relevant DTC counters correctly if
+so.
 
-Is not it due to the 32bit execution part of the guest code at boot
-time. Any push/pop of 32bit registers might make it a 16-byte
-unaligned stack.
+If implemented correctly, the optimisation potentially saves up to 3
+register reads per event update, which is reasonably significant for
+events targeting a single node, but still not worth a massive amount of
+additional code complexity overall. Getting it right within the current
+design looks a fair bit more involved than it was ever intended to be,
+so let's just make a functional revert which restores the old behaviour
+while still backporting easily.
 
->
-> > Similar issue discussed at
-> > https://lore.kernel.org/all/CAGtprH9yKvuaF5yruh3BupQe4BxDGiBQk3ExtY2m39yP-tppsg@mail.gmail.com/
-> >
-> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> > index 317927d9c55bd..5f9cc1e6ee67e 100644
-> > --- a/tools/testing/selftests/kvm/Makefile
-> > +++ b/tools/testing/selftests/kvm/Makefile
-> > @@ -205,7 +205,7 @@ LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/x86/include
-> >  else
-> >  LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
-> >  endif
-> > -CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
-> > +CFLAGS += -mstackrealign -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
-> >       -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
-> >       -I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
-> >       -I$(<D) -Iinclude/$(UNAME_M) -I ../rseq -I.. $(EXTRA_CFLAGS) \
-> > --
-> > 2.39.0.246.g2a6d74b583-goog
-> >
+Fixes: 4f2c3872dde5 ("perf/arm-cmn: Optimise DTC counter accesses")
+Reported-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/perf/arm-cmn.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index b80a9b74662b..1deb61b22bc7 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -1576,7 +1576,6 @@ static int arm_cmn_event_init(struct perf_event *event)
+ 			hw->dn++;
+ 			continue;
+ 		}
+-		hw->dtcs_used |= arm_cmn_node_to_xp(cmn, dn)->dtc;
+ 		hw->num_dns++;
+ 		if (bynodeid)
+ 			break;
+@@ -1589,6 +1588,12 @@ static int arm_cmn_event_init(struct perf_event *event)
+ 			nodeid, nid.x, nid.y, nid.port, nid.dev, type);
+ 		return -EINVAL;
+ 	}
++	/*
++	 * Keep assuming non-cycles events count in all DTC domains; turns out
++	 * it's hard to make a worthwhile optimisation around this, short of
++	 * going all-in with domain-local counter allocation as well.
++	 */
++	hw->dtcs_used = (1U << cmn->num_dtcs) - 1;
+ 
+ 	return arm_cmn_validate_group(cmn, event);
+ }
+-- 
+2.36.1.dirty
+
