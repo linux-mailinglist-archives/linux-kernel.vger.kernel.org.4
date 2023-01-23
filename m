@@ -2,338 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90D16786C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F266786D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbjAWTst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S231837AbjAWTus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbjAWTsc (ORCPT
+        with ESMTP id S233054AbjAWTuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:48:32 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7039222C3;
-        Mon, 23 Jan 2023 11:48:30 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30NJmPEx029998;
-        Mon, 23 Jan 2023 13:48:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674503305;
-        bh=tptSK+K9WlreJxDt+ufoKKg8e77b46NODqKZ91yItUI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=pEpghtgmm7BTZim/J5U5nxdEsFLbNkpwkYcOXpw5ifGnh+qPCXe4vza2JSjcBctum
-         hmyu4S8WUZWhEmugY+gdieF6TiqE5gBD7501zWNaRzCJqgZzJlXlR00O0JWHav3SHM
-         l/hxtdYXfG/rEm8MJvecRMwEW7V9pKmSDMY91o6M=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30NJmPAi108327
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 23 Jan 2023 13:48:25 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 23
- Jan 2023 13:48:24 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 23 Jan 2023 13:48:24 -0600
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30NJmJ0t031936;
-        Mon, 23 Jan 2023 13:48:23 -0600
-From:   Andrew Davis <afd@ti.com>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mon, 23 Jan 2023 14:50:04 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79F526591
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:50:01 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id h10so9929926qvq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:50:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rGE93gPkAvU6p1g6zMI0ZGEEXbMUYmA6Yp6gqSuvvww=;
+        b=JC7Ly8pZDPQTNo3K1tQHv+sSYUXo//MGnfsKJgowshH4fueBckQk0UMvGHMjxH6f5+
+         7f18QnmMsJ7SZnBI4yNFw/69kxVaralcZtCpLimACvpSfTVeP3ymesdBwdbPZvUEwpnV
+         mw59hgJ1P4k0KWyYwxp9/szWNZ6AZZIWacpC6/SXXH524y84tXbrwsltUjuiFP0HORFd
+         BascxnfgUZWEui4L5G2GnqnpQirCorVXlsSXXeitcLdSJ/itjcyRvT2w2oX4Exuegi7N
+         as/sQTcUgVr7VR3BO7xnQXs8Xi0OQUxF9SS8TigQVQDj0iPUDa7UUAaKmwktKTmr+emu
+         0H1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rGE93gPkAvU6p1g6zMI0ZGEEXbMUYmA6Yp6gqSuvvww=;
+        b=VrXdIxwWQ58Yrd1kcaV4L8fMPusCwXb25F56ea5/svg7O5wFbjRPyW+PPBtgAaj9Y+
+         zccwwwVNfkU78AedKSvfgeNAY+fH8rGc+48HK5yQv2KfnFmIQfmVeqGyXZ8NHGcEqfhK
+         THH/Tc1LziMOt1pntZJBzDp1rLZgawAEE3xOnnDBPIMKYSpdnrknrbkTtMn9RLY3rTu9
+         nfgYPXT+Yt0y/MWIFpNbg9cefQn1rKMWAnrpxBmJTMaKyBCBXrmyFx4qD62f7JSl7Uc9
+         gIcHB0X0XBlJNChh5Gkxe1bzVmW5K07o6cX5IIy9xM/cqDvojJW9MqEyY+GR/9E4MVIv
+         d0sA==
+X-Gm-Message-State: AFqh2kqJnmcLoSp6nyoxKNXauWEO1A+gUAYQg6atuJAdTMpMqkRcDRqT
+        3sbSYZclncvz/qMfVRQ9eFNNew==
+X-Google-Smtp-Source: AMrXdXvZjnmLfOqTE0yM40ZLDkWU26o0u88ybKg/YPkagVEAyWBdG8miScE/MquEbFPqLcKaW6B8fQ==
+X-Received: by 2002:a05:6214:5f09:b0:4c7:5b:75ba with SMTP id lx9-20020a0562145f0900b004c7005b75bamr45249216qvb.31.1674503401130;
+        Mon, 23 Jan 2023 11:50:01 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id 198-20020a3705cf000000b006fed58fc1a3sm24016qkf.119.2023.01.23.11.49.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 11:50:00 -0800 (PST)
+Message-ID: <2517e0aef49a934efa7c1a90e32fa811d060771d.camel@ndufresne.ca>
+Subject: Re: [PATCH RESEND 0/2] media: rockchip: rga: Add rk3568 support
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Michael Tretter <m.tretter@pengutronix.de>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-omap@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH v3 3/3] ARM: dts: am57xx-idk: Add IDK displays and touchscreens
-Date:   Mon, 23 Jan 2023 13:48:18 -0600
-Message-ID: <20230123194818.21448-4-afd@ti.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230123194818.21448-1-afd@ti.com>
-References: <20230123194818.21448-1-afd@ti.com>
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Date:   Mon, 23 Jan 2023 14:49:59 -0500
+In-Reply-To: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
+References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a more interesting use of DT Overlays than the previous patches.
-Here we have two touchscreen modules. Each is compatible with, and can be
-attached to, either of the two AM57xx IDK development board variants
-(AM571x or AM572x).
+Hi Micheal,
 
-Due to the way the extension header was wired on the development boards,
-the touch sensor on the touchscreen modules will connect to different
-SoC pins when connected. For this the touch sensor is modeled as an
-additional overlay that is specific to the development board for which it
-is connected.
+Le vendredi 20 janvier 2023 =C3=A0 10:14 +0100, Michael Tretter a =C3=A9cri=
+t=C2=A0:
+> The RGA2 on the Rockchip rk3568 is the same core as the RGA2 on the Rockc=
+hip
+> rk3288.
+>=20
+> This series adds the necessary device tree binding and node in the device=
+ tree
+> to enable the RGA2 on the Rockchip rk3568.
+>=20
+> I tested the driver with the GStreamer v4l2convert element on a Rock3 Mod=
+el A
+> board.
+>=20
+> This is a RESEND including the linux-media list, as Heiko asked for an
+> Acked-by from someone from media.
 
-Basically the LCD overlay can be swapped, but the touchscreen overlay
-that attaches to the LCD must be used with the corresponding base DT
-and not to the LCD.
+I don't think there will be any concern about this on media side.
 
-AM571x -\ /- osd101t2045.dtbo -\ /- am571x-idk-touchscreen.dtbo
-         X                      X
-AM572x -/ \- osd101t2587.dtbo -/ \- am572x-idk-touchscreen.dtbo
+Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/arm/boot/dts/Makefile                    |  4 ++
- arch/arm/boot/dts/am571x-idk-touchscreen.dtso | 32 +++++++++
- arch/arm/boot/dts/am572x-idk-touchscreen.dtso | 32 +++++++++
- .../boot/dts/am57xx-idk-lcd-osd101t2045.dtso  | 63 ++++++++++++++++++
- .../boot/dts/am57xx-idk-lcd-osd101t2587.dtso  | 66 +++++++++++++++++++
- 5 files changed, 197 insertions(+)
- create mode 100644 arch/arm/boot/dts/am571x-idk-touchscreen.dtso
- create mode 100644 arch/arm/boot/dts/am572x-idk-touchscreen.dtso
- create mode 100644 arch/arm/boot/dts/am57xx-idk-lcd-osd101t2045.dtso
- create mode 100644 arch/arm/boot/dts/am57xx-idk-lcd-osd101t2587.dtso
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index ecc3b00bc2e2..e3e8b3eb34b0 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1000,8 +1000,12 @@ dtb-$(CONFIG_SOC_DRA7XX) += \
- 	am57xx-cl-som-am57x.dtb \
- 	am57xx-sbc-am57x.dtb \
- 	am572x-idk.dtb \
-+	am572x-idk-touchscreen.dtbo \
- 	am571x-idk.dtb \
-+	am571x-idk-touchscreen.dtbo \
- 	am574x-idk.dtb \
-+	am57xx-idk-lcd-osd101t2045.dtbo \
-+	am57xx-idk-lcd-osd101t2587.dtbo \
- 	dra7-evm.dtb \
- 	dra72-evm.dtb \
- 	dra72-evm-revc.dtb \
-diff --git a/arch/arm/boot/dts/am571x-idk-touchscreen.dtso b/arch/arm/boot/dts/am571x-idk-touchscreen.dtso
-new file mode 100644
-index 000000000000..c051ee6c1130
---- /dev/null
-+++ b/arch/arm/boot/dts/am571x-idk-touchscreen.dtso
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019-2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&i2c1 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	touchscreen: edt-ft5506@38 {
-+		compatible = "edt,edt-ft5506", "edt,edt-ft5x06";
-+
-+		reg = <0x38>;
-+
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-+
-+		/* GPIO line is inverted before going to touch panel */
-+		reset-gpios = <&gpio6 15 GPIO_ACTIVE_LOW>;
-+
-+		touchscreen-size-x = <1920>;
-+		touchscreen-size-y = <1200>;
-+
-+		wakeup-source;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/am572x-idk-touchscreen.dtso b/arch/arm/boot/dts/am572x-idk-touchscreen.dtso
-new file mode 100644
-index 000000000000..573e932b1239
---- /dev/null
-+++ b/arch/arm/boot/dts/am572x-idk-touchscreen.dtso
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019-2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&i2c1 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	touchscreen: edt-ft5506@38 {
-+		compatible = "edt,edt-ft5506", "edt,edt-ft5x06";
-+
-+		reg = <0x38>;
-+
-+		interrupt-parent = <&gpio3>;
-+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-+
-+		/* GPIO line is inverted before going to touch panel */
-+		reset-gpios = <&gpio6 15 GPIO_ACTIVE_LOW>;
-+
-+		touchscreen-size-x = <1920>;
-+		touchscreen-size-y = <1200>;
-+
-+		wakeup-source;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/am57xx-idk-lcd-osd101t2045.dtso b/arch/arm/boot/dts/am57xx-idk-lcd-osd101t2045.dtso
-new file mode 100644
-index 000000000000..25d74e9f3c9e
---- /dev/null
-+++ b/arch/arm/boot/dts/am57xx-idk-lcd-osd101t2045.dtso
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019-2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+&{/} {
-+	aliases {
-+		display0 = "/display";
-+		display1 = "/connector";
-+	};
-+
-+	lcd_bl: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&ecap0 0 50000 1>;
-+		brightness-levels = <0 51 53 56 62 75 101 152 255>;
-+		default-brightness-level = <8>;
-+	};
-+};
-+
-+&dsi_bridge {
-+	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	lcd: display {
-+		compatible = "osddisplays,osd101t2045-53ts";
-+		reg = <0>;
-+
-+		label = "lcd";
-+
-+		backlight = <&lcd_bl>;
-+
-+		port {
-+			lcd_in: endpoint {
-+				remote-endpoint = <&dsi_out>;
-+			};
-+		};
-+	};
-+};
-+
-+&dsi_bridge_ports {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	port@1 {
-+		reg = <1>;
-+		dsi_out: endpoint {
-+			remote-endpoint = <&lcd_in>;
-+		};
-+	};
-+};
-+
-+&epwmss0 {
-+	status = "okay";
-+};
-+
-+&ecap0 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/am57xx-idk-lcd-osd101t2587.dtso b/arch/arm/boot/dts/am57xx-idk-lcd-osd101t2587.dtso
-new file mode 100644
-index 000000000000..8cea7ba32487
---- /dev/null
-+++ b/arch/arm/boot/dts/am57xx-idk-lcd-osd101t2587.dtso
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019-2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&{/} {
-+	aliases {
-+		display0 = "/display";
-+		display1 = "/connector";
-+	};
-+
-+	lcd_bl: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&ecap0 0 50000 1>;
-+		brightness-levels = <0 51 53 56 62 75 101 152 255>;
-+		default-brightness-level = <8>;
-+	};
-+};
-+
-+&dsi_bridge {
-+	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	lcd: display {
-+		compatible = "osddisplays,osd101t2587-53ts";
-+		reg = <0>;
-+
-+		label = "lcd";
-+
-+		backlight = <&lcd_bl>;
-+
-+		port {
-+			lcd_in: endpoint {
-+				remote-endpoint = <&dsi_out>;
-+			};
-+		};
-+	};
-+};
-+
-+&dsi_bridge_ports {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	port@1 {
-+		reg = <1>;
-+		dsi_out: endpoint {
-+			remote-endpoint = <&lcd_in>;
-+		};
-+	};
-+};
-+
-+&epwmss0 {
-+	status = "okay";
-+};
-+
-+&ecap0 {
-+	status = "okay";
-+};
--- 
-2.38.1
+>=20
+>=20
+>=20
+> Michael
+>=20
+> To: Jacob Chen <jacob-chen@iotwrt.com>
+> To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> To: Rob Herring <robh+dt@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Heiko Stuebner <heiko@sntech.de>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-rockchip@lists.infradead.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+>=20
+> ---
+> Michael Tretter (2):
+>       media: dt-bindings: media: rockchip-rga: add rockchip,rk3568-rga
+>       arm64: dts: rockchip: Add RGA2 support to rk356x
+>=20
+>  Documentation/devicetree/bindings/media/rockchip-rga.yaml |  4 +++-
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi                  | 11 +++++++++=
+++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> ---
+> base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+> change-id: 20230119-rk3568-rga-d1b0cccc7b82
+>=20
+> Best regards,
 
