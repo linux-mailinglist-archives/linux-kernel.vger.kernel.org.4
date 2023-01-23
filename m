@@ -2,172 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80121678336
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A13678418
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbjAWRck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S233803AbjAWSGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbjAWRc3 (ORCPT
+        with ESMTP id S233780AbjAWSGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:32:29 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7CB30186;
-        Mon, 23 Jan 2023 09:31:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=9mUzZ2pRq14qLCSySucWOb7cYV81m7cHyf4fb1Agy0k=; b=R0bFJvC9cWbboE0TwpMMaqjGWD
-        XFIZFUd/qP5K5COnS6/ReDkXyKRTtdDss1c1lTR8njVHsV5MInQBTMPTqpq9kMh/Ppl5MvDrHfbkW
-        iwI7ShACwGeEQ2twzDs+4h1P5r0mhiwXPlcDaPaUV8CSTeND/QS/Oek3nsHyCZ6AmsdY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41494 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pK0f8-00032V-HA; Mon, 23 Jan 2023 12:31:19 -0500
-Date:   Mon, 23 Jan 2023 12:31:18 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230123123118.39f5a5aab207f5942972b061@hugovil.com>
-In-Reply-To: <Y8rI7/umLv/h64cN@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-11-hugo@hugovil.com>
-        <Y8rI7/umLv/h64cN@mail.local>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Mon, 23 Jan 2023 13:06:08 -0500
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B911C30E90;
+        Mon, 23 Jan 2023 10:05:36 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 4FCF4921A45;
+        Mon, 23 Jan 2023 17:58:44 +0000 (UTC)
+Received: from pdx1-sub0-mail-a264.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id BB33D922158;
+        Mon, 23 Jan 2023 17:58:43 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674496723; a=rsa-sha256;
+        cv=none;
+        b=gTdv1el61SZvUySAqF3vXYM8yJRVr/S0bkQJL5uH08tVKKBsz5lN6fEVVoY2Op8bd4CLcJ
+        rIxjNz3I0nwJEVqYfwjHK0ZOzP/jSV+2ysElGGz09+O2drYhusHgBfEh6nXIY76FacURhA
+        MVC49tzA66T3PAAzV+XoCyyqJ/qnBmN2Nr/ZkQUpSi/EK4CcgQqX1391wu4SAFWlLs9cAT
+        Vs9di9mj7gm+yfnuHAT3ZN15ySn+teou7ssozpXyEtRdCIAXBrhCRTmXw9efFs5PUmkia0
+        pCw7y8BVBlcyIFw+HYpf8qkpmLZj7r8zmuejmmEyIBP9uw/hNTYj1KxQwNBrNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1674496723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:dkim-signature;
+        bh=BufXulOysFl45M9SRAl7NgoF0pjRTbINV3aTpO/3Ll0=;
+        b=zZxNoI1hetwpPD3pqGMk345eWYZh6tKOS95sniBz/yzmYgkNE5MXFISifqBvPxXVNq1UqB
+        CanMdekzeD7Fq46/GBYwK3fl+ANm8JEShYDqpRtlOB4iLiklx8pHd1/WqV4TV6J1oxj0Qt
+        FUElpb7KpbnHe3ISV2R8lMdlPFfrHwwhzR2Wr6xdXYFoiodIturGp7pWGty5Yz+u1REd0r
+        PxOW1dbta4J1l5wrM29P9DdCyNv2Bdb5SY9Exx5k7JiglZwnfC4e1tCeUc/mgZsEk7OHhB
+        AI1BlswawDA1G9KRaOdM4G5ZnyzFnAzpYhneM8JboKp7owMaHKrL9NbNwGxl8w==
+ARC-Authentication-Results: i=1;
+        rspamd-6f569fcb69-cftxt;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Invention-Slimy: 7b43e4ff71ed2569_1674496724060_560391479
+X-MC-Loop-Signature: 1674496724060:1984612872
+X-MC-Ingress-Time: 1674496724060
+Received: from pdx1-sub0-mail-a264.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.109.196.205 (trex/6.7.1);
+        Mon, 23 Jan 2023 17:58:44 +0000
+Received: from localhost.localdomain (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a264.dreamhost.com (Postfix) with ESMTPSA id 4P0yX25qNBzL9;
+        Mon, 23 Jan 2023 09:58:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1674496723;
+        bh=BufXulOysFl45M9SRAl7NgoF0pjRTbINV3aTpO/3Ll0=;
+        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
+        b=YzI3MiKSaptB5+wAH+9AN/mEkKLgbIml37DGffhNydyFQuHHWQmiAw21ZcNWM/wKP
+         GaAmk8JYbuYPYjyU9TwZ7aaW/YlEOzaxOBbuzmKPmr/0hM1AVMffKK7/Ic9ZxED6Ih
+         PDVQF4uRzxHkZygBeMO/Hx9PTJupSk3Ew/2ioWRo48nYFvyRyfxN0+F7+ZyY4DxIqK
+         oBPpws8actnMaHr89Moy+7E9mTTLXQDs5ux3zOeV4cdstPYo/H1ZG0aMOeFiXMO5tp
+         5gYFbnR1N/68ckoY8yvS1nFLLcRRY0JIkiZ9NdxA8cbHqRrHGKX15rZeQSLPgyrnhQ
+         S1koWzu2TVzIQ==
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     tglx@linutronix.de
+Cc:     mingo@kernel.org, peterz@infradead.org, bigeasy@linutronix.de,
+        dave@stgolabs.net, linux-rt-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH -tip 0/2] kernel/hrtimer: Ignore slack time for RT tasks
+Date:   Mon, 23 Jan 2023 09:32:04 -0800
+Message-Id: <20230123173206.6764-1-dave@stgolabs.net>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 10/14] rtc: pcf2127: read and validate PCF2131 device
- signature
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 18:01:35 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+Hi,
 
-> On 15/12/2022 10:02:11-0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Make sure the device we are probing is really the device we are
-> > interested in.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> > 
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 241189ee4a05..e4b78b9c03f9 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -193,11 +193,13 @@ struct pcf21xx_config {
-> >  	unsigned int has_nvmem:1;
-> >  	unsigned int has_bit_wd_ctl_cd0:1;
-> >  	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
-> > +	unsigned int has_reset_reg:1; /* If variant has a reset register. */
-> >  	u8 regs_td_base; /* Time/data base registers. */
-> >  	u8 regs_alarm_base; /* Alarm function base registers. */
-> >  	u8 reg_wd_ctl; /* Watchdog control register. */
-> >  	u8 reg_wd_val; /* Watchdog value register. */
-> >  	u8 reg_clkout; /* Clkout register. */
-> > +	u8 reg_reset;  /* Reset register if available. */
-> >  	unsigned int ts_count;
-> >  	struct pcf21xx_ts_config ts[4];
-> >  	struct attribute_group attribute_group;
-> > @@ -882,6 +884,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >  		.has_nvmem = 1,
-> >  		.has_bit_wd_ctl_cd0 = 1,
-> >  		.has_int_a_b = 0,
-> > +		.has_reset_reg = 0,
-> >  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> >  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
-> >  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> > @@ -906,6 +909,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >  		.has_nvmem = 0,
-> >  		.has_bit_wd_ctl_cd0 = 0,
-> >  		.has_int_a_b = 0,
-> > +		.has_reset_reg = 0,
-> >  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> >  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
-> >  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> > @@ -930,11 +934,13 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >  		.has_nvmem = 0,
-> >  		.has_bit_wd_ctl_cd0 = 0,
-> >  		.has_int_a_b = 1,
-> > +		.has_reset_reg = 1,
-> >  		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
-> >  		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
-> >  		.reg_wd_ctl = PCF2131_REG_WD_CTL,
-> >  		.reg_wd_val = PCF2131_REG_WD_VAL,
-> >  		.reg_clkout = PCF2131_REG_CLKOUT,
-> > +		.reg_reset  = PCF2131_REG_SR_RESET,
-> >  		.ts_count = 4,
-> >  		.ts[0] = {
-> >  			.regs_base = PCF2131_REG_TS1_BASE,
-> > @@ -1075,6 +1081,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf2127->rtc->features);
-> >  	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
-> >  
-> > +	/* Read device signature if available. */
-> > +	if (pcf2127->cfg->has_reset_reg) {
-> > +		ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_reset, &val);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "reading RESET register failed\n");
-> 
-> This is too verbose, please cut down on the number of strings you are
-> adding.
+Patch 2 simply ignores any user passed slack time in the case of RT/DL
+tasks for schedule_hrtimeout_range, which is aligned to what nanosleep(2)
+already does.
 
-See comment below.
+Thanks!
 
-> 
-> > +			return ret;
-> > +		}
-> > +
-> > +		if (val != PCF2131_SR_RESET_READ_PATTERN) {
-> > +			dev_err(dev, "invalid device signature: $%02X\n", (u8)val);
-> 
-> I'm also not convinced this is actually useful. This may have to be
-> updated for the next rtc the driver will support and what if this
-> contradicts what the device tree is claiming at this address?
+Davidlohr Bueso (2):
+  kernel/hrtimer: Rely on rt_task() for DL tasks too
+  kernel/hrtimer: Ignore slack time for RT tasks
 
-I will drop that section.
-
-
-> > +			return -ENODEV;
-> > +		}
-> > +	}
-> > +
-> >  	if (alarm_irq > 0) {
-> >  		unsigned long flags;
-> >  
-> > -- 
-> > 2.30.2
-> > 
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-
+ kernel/time/hrtimer.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+2.39.0
+
