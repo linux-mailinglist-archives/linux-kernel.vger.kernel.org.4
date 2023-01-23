@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E7C677FAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E556E677FB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjAWP1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S232130AbjAWP2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbjAWP1O (ORCPT
+        with ESMTP id S231651AbjAWP2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:27:14 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A590612F2C;
-        Mon, 23 Jan 2023 07:27:07 -0800 (PST)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3AD4B100004;
-        Mon, 23 Jan 2023 15:27:02 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        "open list:8390 NETWORK DRIVERS [WD80x3/SMC-ELITE, SMC-ULT..." 
-        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net/ethernet: Fix full name of the GPL
-Date:   Mon, 23 Jan 2023 16:26:56 +0100
-Message-ID: <2458285.UPXgfWZGIM@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <Y85eX2shWBXv+Z7E@corigine.com>
-References: <20230122182533.55188-1-didi.debian@cknow.org>
- <Y85eX2shWBXv+Z7E@corigine.com>
+        Mon, 23 Jan 2023 10:28:19 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D31A5247
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:28:17 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id l8so9308004wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:28:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4LJarsnkdhyd97tYRIrrxw0RvU50l/jYtwzDdWZInI=;
+        b=kk0OVCGbVgVRrHSQFpCiMa8D71V3DHvt9h1mVmp6bS03a2nTrp1h5mpupoafzy8nVt
+         O0NQE9CnQDNPWhsoYxvcvsNwNxxyatSTn7+LkASKaTDIzZifmrZ8IZBTpfwdKDyrqbAO
+         gVP6IgEvHzwnMZGbs5odEjSftKlAbLZ/pPez+ecM4vWznenW0J4l//G6t/PbMVnTUHeS
+         XpMQYSFh8fDyws9v/6yPI4g3yLfkvHmK7EYqU2/CbF5lGJ60vh2kAagJTNbI8JyUq6zG
+         OLuyShypFYR7fPqk2wRX/HR63rt/vKddHO9e4EFQPJVhi9sjyxODi1gQmg8UJIPb3UYv
+         yFlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4LJarsnkdhyd97tYRIrrxw0RvU50l/jYtwzDdWZInI=;
+        b=n4A+rjml22LWNSWI9C5SaBtIKzj8c6WqDvmE08nsmvQIS1SIPwLGnCgZbAx6sQMgmv
+         Bm+iS2WfD4aI+YdrJGC6xxSj6Gc2z9vRce/VJWgKJpOZVqurHQcadA5332ZQddyMW0Ms
+         W8IjqJ8B6oe+druVQvv4i8QMvB4Ih5d6rRtC99TT3MBCGINTO9bRxXhx+vnp/tRJs4i1
+         01KUAbICWi2OGO65FZhQaDCs7CS6jSDJVg4YsPm+gAM4N5QdrPAZ1F4V7VsDXRROmMO7
+         yUUWvconkAQyGJPOf/x18EUUlOjDIXQF2GFYciPX9uUqfH2eTiETVLfut+RywBq/ysAl
+         2ZQg==
+X-Gm-Message-State: AFqh2krY1WbRFj2wReKiocoEylYPW+jP/ybgr+Y4/8gg9BSsXgJd74Be
+        IzT/aS4ALAwkwczem9K71rMyBA==
+X-Google-Smtp-Source: AMrXdXsR+m2BrOH6D/qXIhjotsev29FI7xivvRFLiQte4C2ftsFg0KoXiV4E6UL03GsC2GTW9Njs6Q==
+X-Received: by 2002:a05:600c:2046:b0:3d2:3ae8:886a with SMTP id p6-20020a05600c204600b003d23ae8886amr32287292wmg.17.1674487695909;
+        Mon, 23 Jan 2023 07:28:15 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id t13-20020a1c770d000000b003db1ca20170sm10673096wmi.37.2023.01.23.07.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 07:28:15 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Misc thermal cleanup and fixes
+Date:   Mon, 23 Jan 2023 16:27:53 +0100
+Message-Id: <20230123152756.4031574-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart11061844.SXfucPHxpH";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart11061844.SXfucPHxpH
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-To: Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH] net/ethernet: Fix full name of the GPL
-Date: Mon, 23 Jan 2023 16:26:56 +0100
-Message-ID: <2458285.UPXgfWZGIM@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <Y85eX2shWBXv+Z7E@corigine.com>
-MIME-Version: 1.0
+This series is based on linux-pm/thermal
 
-On Monday, 23 January 2023 11:15:59 CET Simon Horman wrote:
-> On Sun, Jan 22, 2023 at 07:25:32PM +0100, Diederik de Haas wrote:
-> > Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
-> > ---
-> > 
-> >  drivers/net/ethernet/8390/mac8390.c      | 2 +-
-> >  drivers/net/ethernet/i825xx/sun3_82586.c | 2 +-
-> >  drivers/net/ethernet/i825xx/sun3_82586.h | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> as we are here would it be better to just move to an SPDX header instead?
+It unregisters the netlink generic family for thermal in case the thermal
+framework fails to initialize, removes a unneeded ida_destroy() call and moves
+the thermal trip code in a separate file.
 
-Hi Simon,
+A couple of changes have been removed from the previous version:
 
-Yes it would be better to move to SPDX header(s) instead.
-But I now think [1] that I would be (technically) changing the license and I'm 
-not in a position to do that.
-While it may be reasonable to *assume* that GNU General Public License was 
-meant, I think that's not enough when it comes to legal/license issues.
+ - Ordering the trip points. Some consolidation is needed in the set_trip_temp
+   ops before ordering the trip points, so this change is postpone
 
-So please disregard my patch submission and apologies for the noise.
+ - Remove the mutex destroy call. Even if the call is not needed, the
+   justification of the change is not accurate. So it is postponed also.
 
-Regards,
-  Diederik
+ V2:
+   - Removed ordering the trip points change
+   - Removed mutex destroy change
+   - Added "No functional change intented" as requested by Rui
+   - Added the function declaration for_each_thermal_trip
 
-[1] https://lore.kernel.org/lkml/2281101.Yu7Ql3qPJb@prancing-pony/
---nextPart11061844.SXfucPHxpH
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+Daniel Lezcano (3):
+  thermal/core: Fix unregistering netlink at thermal init time
+  thermal/core: Remove unneeded ida_destroy()
+  thermal/core: Move the thermal trip code to a dedicated file
 
------BEGIN PGP SIGNATURE-----
+ drivers/thermal/Makefile          |   4 +-
+ drivers/thermal/thermal_core.c    |  93 +--------------
+ drivers/thermal/thermal_core.h    |   4 +
+ drivers/thermal/thermal_helpers.c |  62 ----------
+ drivers/thermal/thermal_netlink.c |   5 +
+ drivers/thermal/thermal_netlink.h |   3 +
+ drivers/thermal/thermal_trip.c    | 182 ++++++++++++++++++++++++++++++
+ 7 files changed, 199 insertions(+), 154 deletions(-)
+ create mode 100644 drivers/thermal/thermal_trip.c
 
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCY86nQAAKCRDXblvOeH7b
-bixJAQDceaeG+lfmanfsRwogBmM8zUdG5HAtp8BjxQliqW2qbAD/T5AEa3bJJw7G
-QdZ8qXE9GjesyXwrj1TaEThk/APvNwY=
-=mbWi
------END PGP SIGNATURE-----
-
---nextPart11061844.SXfucPHxpH--
-
-
+-- 
+2.34.1
 
