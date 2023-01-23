@@ -2,466 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00AC6789BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66F16789BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjAWVcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S231659AbjAWVfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjAWVcw (ORCPT
+        with ESMTP id S229956AbjAWVfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:32:52 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0003830292
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:32:49 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id p15so12964324ybu.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7sZbGjww5FWlAU1EcoaOTUYpAbWmR4AoP/zWPk3/AUQ=;
-        b=EBw7YahfKxqYV9d8pyLITvoZ0tpdjT4NP4OOaPzOvguSxlWMiojb0HJH8T+Wk2BZgC
-         iAUz5zZkOH/mXxdx0QDNdpNkrpyFil1pkXMHAQkEzl2X9UWcxu/im5ObVH0PziyCSzsr
-         VhTFQtcnu+Kpq76fyre3qgEYCZBf+BYkFJfuXnGq0NPesCOrgsCXpYCo2Rcq5StCWkq0
-         wMZ/nK86V7/CmkdLFGeFn9arGEeLreNDuz9jvqEh3qrcR8mkJ66Xdjjx1Q9MdVvyuUFn
-         k6puKx6sYOTyAOZHCSBe8XznjvNKMbhckuceAgggBQaltrXoambUPymWPxCAbijcy3iD
-         WM6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7sZbGjww5FWlAU1EcoaOTUYpAbWmR4AoP/zWPk3/AUQ=;
-        b=jjn0jsxL5azbnSxjLNTJxvxTog9H9dOWWWaMAGPmwCByo47xITGegsWcn6uJbyAIya
-         QqBQcV9byXPPmxNskjfxmTGDqpj8rDSmCWJ1TyjO5pDTIfSEJ5HQHjPiKWLHF2JBCee/
-         TnhK29/QWunso+5y4tNfgdMF8Rp+k1bfiI6mFdyXTF6zL8TX6BS7lZTndxyL7LJHx6vv
-         Ncrni0um3uz5DpKpLFGIfKZ8hneaRsJWXtgscWvERT+Y/Phk/1NfvmSrNE0IvLnLxy3K
-         vOjZROEao0MhSApgaLLZRnOFgg9qHMsdL4XJPzajX2YA3c8QQvF8+6rmOVNqY4dXhsRx
-         czqQ==
-X-Gm-Message-State: AFqh2krauXK0hPgvlLQwBMal0U/+2ZRdTeIUzj37I6B+Z5/ZucOicW/b
-        2XLUpOdEhclv7m+Qy3rdKALg/gu9EWoqJSwyZuzpYw==
-X-Google-Smtp-Source: AMrXdXsYiW/C+iLxNwnu+JCLVg8y6p9l0DFHN3NDVK3nkn+6BjYdWYBB7O4nE6BvHFjt02fUZOjx/vktFfFljorDWrs=
-X-Received: by 2002:a25:6a0b:0:b0:7d1:5a92:eb5c with SMTP id
- f11-20020a256a0b000000b007d15a92eb5cmr3019620ybc.166.1674509568779; Mon, 23
- Jan 2023 13:32:48 -0800 (PST)
+        Mon, 23 Jan 2023 16:35:03 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF7E16AD4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:35:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674509702; x=1706045702;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7tS2x0JbAhbDd/jJm0GSuTboIZBIqoIZh/LN4fngXNU=;
+  b=JeDOJZFRhfFzTBGUJXzGha634DMxx3nl7FTeqFe4QzULf+BrAnCY2Ww5
+   TaXASplTo1bKWVkr5EY5lSboDMoFV2UMRUQrnIS1F/dH1IO+fuh+uEH+R
+   NvKrG7KgHpr5Q97FNqO9l8qJvevnNAS/w99dHy5DRrBmhtiIimwQE7z6X
+   5uge1b4SQl63JoavAsovYxu6PJ+7B4N73UcIJqfLC3MCkvlKbSwczEcEW
+   iZ8vDrKVsl2wxenNtZJ/u9+jF3LOzbwhgeGhVn+/FaZ/84n3Ju5wHhfSm
+   ljMoQkW+Tvq5mpLdcAmhkccxR7w/L9nrqYVXpBMPt/LfHgbDwps+kwJqF
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328243320"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="328243320"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 13:35:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="730457019"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="730457019"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jan 2023 13:35:01 -0800
+Received: from [10.251.20.205] (kliang2-mobl1.ccr.corp.intel.com [10.251.20.205])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 65094580AA4;
+        Mon, 23 Jan 2023 13:35:00 -0800 (PST)
+Message-ID: <f661cad2-1299-932e-5845-d95ccd263d75@linux.intel.com>
+Date:   Mon, 23 Jan 2023 16:34:59 -0500
 MIME-Version: 1.0
-References: <20230123190329.520285-1-bgardon@google.com> <20230123190329.520285-3-bgardon@google.com>
-In-Reply-To: <20230123190329.520285-3-bgardon@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 23 Jan 2023 13:32:12 -0800
-Message-ID: <CAHVum0fcn1c17TzyTOyJPML=ApNHWFr1PA0fUAOEUnP1_GO06g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] selftests: KVM: Add page splitting test
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/x86/intel/ds: Fix the conversion from TSC to perf
+ time
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
+        namhyung@kernel.org, eranian@google.com, ak@linux.intel.com,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20230123172027.125385-1-kan.liang@linux.intel.com>
+ <Y87wfaMJ2HLchgap@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <Y87wfaMJ2HLchgap@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:03 AM Ben Gardon <bgardon@google.com> wrote:
->
-> Add a test for page splitting during dirty logging and for hugepage
-> recovery after dirty logging.
->
-> Page splitting represents non-trivial behavior, which is complicated
-> by MANUAL_PROTECT mode, which causes pages to be split on the first
-> clear, instead of when dirty logging is enabled.
->
-> Add a test which makes asserions about page counts to help define the
-
-nit: assertions
-
-> expected behavior of page splitting and to provid needed coverage of the
-
-nit: provide
-
-> behavior. This also helps ensure that a failure in eager page splitting
-> is not covered up by splitting in the vCPU path.
->
-> Tested by running the test on an Intel Haswell machine w/wo
-> MANUAL_PROTECT.
->
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/include/kvm_util_base.h     |   1 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +
->  .../kvm/x86_64/page_splitting_test.c          | 278 ++++++++++++++++++
->  4 files changed, 285 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/page_splitting_test.c
->
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 1750f91dd9362..057ebd709e77a 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -76,6 +76,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
->  TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
->  TEST_GEN_PROGS_x86_64 += x86_64/monitor_mwait_test
->  TEST_GEN_PROGS_x86_64 += x86_64/nested_exceptions_test
-> +TEST_GEN_PROGS_x86_64 += x86_64/page_splitting_test
-
-Should the test be named dirty_log_page_splitting_test or
-dirty_log_page_split_and_recovery_test?
-
-page_splitting_test name is very generic and does not convey much information.
-
->  TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
->  TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
->  TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index fbc2a79369b8b..a089c356f354e 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -213,6 +213,7 @@ extern const struct vm_guest_mode_params vm_guest_mode_params[];
->  int open_path_or_exit(const char *path, int flags);
->  int open_kvm_dev_path_or_exit(void);
->
-> +bool get_kvm_param_bool(const char *param);
->  bool get_kvm_intel_param_bool(const char *param);
->  bool get_kvm_amd_param_bool(const char *param);
->
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 56d5ea949cbbe..fa6d69f731990 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -80,6 +80,11 @@ static bool get_module_param_bool(const char *module_name, const char *param)
->         TEST_FAIL("Unrecognized value '%c' for boolean module param", value);
->  }
->
-> +bool get_kvm_param_bool(const char *param)
-> +{
-> +       return get_module_param_bool("kvm", param);
-> +}
-> +
->  bool get_kvm_intel_param_bool(const char *param)
->  {
->         return get_module_param_bool("kvm_intel", param);
-> diff --git a/tools/testing/selftests/kvm/x86_64/page_splitting_test.c b/tools/testing/selftests/kvm/x86_64/page_splitting_test.c
-> new file mode 100644
-> index 0000000000000..2b4a28e6a95de
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/page_splitting_test.c
-> @@ -0,0 +1,278 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KVM dirty logging page splitting test
-> + *
-> + * Based on dirty_log_perf.c
-> + *
-> + * Copyright (C) 2018, Red Hat, Inc.
-
-Delete?
-
-> + * Copyright (C) 2020, Google, Inc.
-
-2023
 
 
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <time.h>
-> +#include <pthread.h>
-> +#include <linux/bitmap.h>
-> +
-> +#include "kvm_util.h"
-> +#include "test_util.h"
-> +#include "memstress.h"
-> +#include "guest_modes.h"
-> +
-> +#define VCPUS          2
-> +#define SLOTS          2
-> +#define ITERATIONS     2
-> +
-> +static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
-> +
-> +static enum vm_mem_backing_src_type backing_src = VM_MEM_SRC_ANONYMOUS_HUGETLB;
-> +
-> +static u64 dirty_log_manual_caps;
-> +static bool host_quit;
-> +static int iteration;
-> +static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
-> +
-> +struct kvm_page_stats {
-> +       uint64_t pages_4k;
-> +       uint64_t pages_2m;
-> +       uint64_t pages_1g;
-> +       uint64_t hugepages;
-> +};
-> +
-> +static void get_page_stats(struct kvm_vm *vm, struct kvm_page_stats *stats, const char *stage)
-> +{
-> +       stats->pages_4k = vm_get_stat(vm, "pages_4k");
-> +       stats->pages_2m = vm_get_stat(vm, "pages_2m");
-> +       stats->pages_1g = vm_get_stat(vm, "pages_1g");
-> +       stats->hugepages = stats->pages_2m + stats->pages_1g;
-> +
-> +       pr_debug("\nGetting stats after %s: 4K: %ld 2M: %ld 1G: %ld huge: %ld\n",
-> +                stage, stats->pages_4k, stats->pages_2m, stats->pages_1g,
-> +                stats->hugepages);
-> +}
-> +
-> +static void run_vcpus_get_page_stats(struct kvm_vm *vm, struct kvm_page_stats *stats, const char *stage)
-> +{
-> +       int i;
-> +
-> +       iteration++;
-> +       for (i = 0; i < VCPUS; i++) {
-> +               while (READ_ONCE(vcpu_last_completed_iteration[i]) !=
-> +                      iteration)
-> +                       ;
-> +       }
-> +
-> +       get_page_stats(vm, stats, stage);
-> +}
-> +
-> +static void vcpu_worker(struct memstress_vcpu_args *vcpu_args)
-> +{
-> +       struct kvm_vcpu *vcpu = vcpu_args->vcpu;
-> +       int vcpu_idx = vcpu_args->vcpu_idx;
-> +       struct kvm_run *run;
-> +
-> +       run = vcpu->run;
-> +
-> +       while (!READ_ONCE(host_quit)) {
-> +               int current_iteration = READ_ONCE(iteration);
-> +
-> +               vcpu_run(vcpu);
-> +
-> +               TEST_ASSERT(get_ucall(vcpu, NULL) == UCALL_SYNC,
-> +                           "Invalid guest sync status: exit_reason=%s\n",
-> +                           exit_reason_str(run->exit_reason));
-> +
-> +               vcpu_last_completed_iteration[vcpu_idx] = current_iteration;
-> +
-> +               /* Wait for the start of the next iteration to be signaled. */
-> +               while (current_iteration == READ_ONCE(iteration) &&
-> +                      READ_ONCE(iteration) >= 0 &&
-> +                      !READ_ONCE(host_quit))
-> +                       ;
-> +       }
-> +}
-> +
-> +static void run_test(enum vm_guest_mode mode, void *unused)
-> +{
-> +       struct kvm_vm *vm;
-> +       unsigned long **bitmaps;
-> +       uint64_t guest_num_pages;
-> +       uint64_t host_num_pages;
-> +       uint64_t pages_per_slot;
-> +       int i;
-> +       uint64_t total_4k_pages;
-> +       struct kvm_page_stats stats_populated;
-> +       struct kvm_page_stats stats_dirty_logging_enabled;
-> +       struct kvm_page_stats stats_dirty_pass[ITERATIONS];
-> +       struct kvm_page_stats stats_clear_pass[ITERATIONS];
-> +       struct kvm_page_stats stats_dirty_logging_disabled;
-> +       struct kvm_page_stats stats_repopulated;
-> +
-> +       vm = memstress_create_vm(mode, VCPUS, guest_percpu_mem_size,
-> +                                SLOTS, backing_src, false);
-> +
-> +       guest_num_pages = (VCPUS * guest_percpu_mem_size) >> vm->page_shift;
-> +       guest_num_pages = vm_adjust_num_guest_pages(mode, guest_num_pages);
-> +       host_num_pages = vm_num_host_pages(mode, guest_num_pages);
-> +       pages_per_slot = host_num_pages / SLOTS;
-> +
-> +       bitmaps = memstress_alloc_bitmaps(SLOTS, pages_per_slot);
-> +
-> +       if (dirty_log_manual_caps)
-> +               vm_enable_cap(vm, KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2,
-> +                             dirty_log_manual_caps);
-> +
-> +       /* Start the iterations */
-> +       iteration = -1;
-> +       host_quit = false;
-> +
-> +       for (i = 0; i < VCPUS; i++)
-> +               vcpu_last_completed_iteration[i] = -1;
-> +
-> +       memstress_start_vcpu_threads(VCPUS, vcpu_worker);
-> +
-> +       run_vcpus_get_page_stats(vm, &stats_populated, "populating memory");
-> +
-> +       /* Enable dirty logging */
-> +       memstress_enable_dirty_logging(vm, SLOTS);
-> +
-> +       get_page_stats(vm, &stats_dirty_logging_enabled, "enabling dirty logging");
-> +
-> +       while (iteration < ITERATIONS) {
-> +               run_vcpus_get_page_stats(vm, &stats_dirty_pass[iteration - 1],
-> +                                        "dirtying memory");
-> +
-> +               memstress_get_dirty_log(vm, bitmaps, SLOTS);
-> +
-> +               if (dirty_log_manual_caps) {
-> +                       memstress_clear_dirty_log(vm, bitmaps, SLOTS, pages_per_slot);
-> +
-> +                       get_page_stats(vm, &stats_clear_pass[iteration - 1], "clearing dirty log");
-> +               }
-> +       }
-> +
-> +       /* Disable dirty logging */
-> +       memstress_disable_dirty_logging(vm, SLOTS);
-> +
-> +       get_page_stats(vm, &stats_dirty_logging_disabled, "disabling dirty logging");
-> +
-> +       /* Run vCPUs again to fault pages back in. */
-> +       run_vcpus_get_page_stats(vm, &stats_repopulated, "repopulating memory");
-> +
-> +       /*
-> +        * Tell the vCPU threads to quit.  No need to manually check that vCPUs
-> +        * have stopped running after disabling dirty logging, the join will
-> +        * wait for them to exit.
-> +        */
-> +       host_quit = true;
-> +       memstress_join_vcpu_threads(VCPUS);
-> +
-> +       memstress_free_bitmaps(bitmaps, SLOTS);
-> +       memstress_destroy_vm(vm);
-> +
-> +       /* Make assertions about the page counts. */
-> +       total_4k_pages = stats_populated.pages_4k;
-> +       total_4k_pages += stats_populated.pages_2m * 512;
-> +       total_4k_pages += stats_populated.pages_1g * 512 * 512;
-> +
-> +       /*
-> +        * Check that all huge pages were split. Since large pages can only
-> +        * exist in the data slot, and the vCPUs should have dirtied all pages
-> +        * in the data slot, there should be no huge pages left after splitting.
-> +        * Splitting happens at dirty log enable time without
-> +        * KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2 and after the first clear pass
-> +        * with that capability.
-> +        */
-> +       if (dirty_log_manual_caps) {
-> +               TEST_ASSERT(stats_clear_pass[0].hugepages == 0,
-> +                           "Unexpected huge page count after splitting. Expected 0, got %ld",
-> +                           stats_clear_pass[0].hugepages);
-> +               TEST_ASSERT(stats_clear_pass[0].pages_4k == total_4k_pages,
-> +                           "All memory should be mapped at 4k. Expected %ld 4k pages, got %ld",
-> +                           total_4k_pages, stats_clear_pass[0].pages_4k);
-> +               TEST_ASSERT(stats_dirty_logging_enabled.hugepages == stats_populated.hugepages,
-> +                           "Huge page count should not have changed from enabling dirty logging. Expected %ld, got %ld",
-> +                           stats_populated.hugepages, stats_dirty_logging_enabled.hugepages);
-> +       } else {
-> +               TEST_ASSERT(stats_dirty_logging_enabled.hugepages == 0,
-> +                           "Unexpected huge page count after splitting. Expected 0, got %ld",
-> +                           stats_dirty_logging_enabled.hugepages);
-> +               TEST_ASSERT(stats_dirty_logging_enabled.pages_4k == total_4k_pages,
-> +                           "All memory should be mapped at 4k. Expected %ld 4k pages, got %ld",
-> +                           total_4k_pages, stats_dirty_logging_enabled.pages_4k);
-> +       }
-> +
-> +       /*
-> +        * Once dirty logging is disabled and the vCPUs have touched all their
-> +        * memory again, the page counts should be the same as they were
-> +        * right after initial population of memory.
-> +        */
-> +       TEST_ASSERT(stats_populated.pages_4k == stats_repopulated.pages_4k,
-> +                   "4k page count did not return to its initial value after "
-> +                   "dirty logging. Expected %ld, got %ld",
-> +                   stats_populated.pages_4k, stats_repopulated.pages_4k);
-> +       TEST_ASSERT(stats_populated.pages_2m == stats_repopulated.pages_2m,
-> +                   "2m page count did not return to its initial value after "
-> +                   "dirty logging. Expected %ld, got %ld",
-> +                   stats_populated.pages_2m, stats_repopulated.pages_2m);
-> +       TEST_ASSERT(stats_populated.pages_1g == stats_repopulated.pages_1g,
-> +                   "1g page count did not return to its initial value after "
-> +                   "dirty logging. Expected %ld, got %ld",
-> +                   stats_populated.pages_1g, stats_repopulated.pages_1g);
-> +}
+On 2023-01-23 3:39 p.m., Peter Zijlstra wrote:
+> On Mon, Jan 23, 2023 at 09:20:27AM -0800, kan.liang@linux.intel.com wrote:
+>> The TSC unstable case seems to be some corner cases (e.g., due to broken
+>> BIOS). This patch doesn't support the conversion when the TSC is
+>> unstable. The TSC in a PEBS record will be dropped and fallback to the
+>> software perf time provided by the generic code.
+> 
+> :-(
+> 
+> You're saying there's modern systems (PEBS timestamps are fairly new)
+> that trigger unstable TSC ?
+> 
+> What systems in specific have you observed this on -- we really need to
+> name and shame them, this is fully unacceptable.
 
-I know David suggested in the previous version to use __ASSERT_EQ().
+No, I didn't observe any systems which trigger unstable TSC.
 
-I will recommend using __ASSERT_EQ(). If you make the variables name
-meaningful then that should be sufficient in showing the expected
-intent. Some examples:
-ASSERT_EQ(after_clear_dirty_log.hugepages, 0);
-ASSERT_EQ(after_clear_dirty_log.pages_4k, total_4k_pages);
-ASSERT_EQ(after_enable_dirty_log.hugepages, initial_state.hugepages);
-ASSERT_EQ(initial_state.pages_4k, after_disable_dirty_logging.pages_4k);
-...
+Here, I tried to explain the reason why the patch didn't support the
+conversion when the TSC is unstable. Because it's a corner case and very
+unlikely to happen.
+The "broken BIOS" case is quoted from the __sched_clock_work(), which
+shows that the broken BIOS may be a reason of unstable TSC.
 
-This makes code cleaner and error messages printed also self sufficient.
+Sorry for the confusion caused.
 
-> +
-> +static void help(char *name)
-> +{
-> +       puts("");
-> +       printf("usage: %s [-h] [-b vcpu bytes] [-s mem type]\n",
-> +              name);
-> +       puts("");
-> +       printf(" -b: specify the size of the memory region which should be\n"
-> +              "     dirtied by each vCPU. e.g. 10M or 3G.\n"
-> +              "     (default: 1G)\n");
-> +       backing_src_help("-s");
-> +       puts("");
-> +       exit(0);
+Let me rephrase this.
+"This patch doesn't support the conversion when the TSC is unstable.
+Because the TSC unstable case is a corner case and very unlikely to
+happen. Even if it happens, the TSC in a PEBS record will be dropped and
+fall back to the inaccurate software perf time provided by the generic
+code as perf does it on the previous platforms."
 
-This should not be exit(0) if a user passed the wrong option.
+Thanks,
+Kan
 
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +       int opt;
-> +
-> +       TEST_REQUIRE(get_kvm_param_bool("eager_page_split"));
-> +       TEST_REQUIRE(get_kvm_param_bool("tdp_mmu"));
-> +
-> +       while ((opt = getopt(argc, argv, "b:hs:")) != -1) {
-> +               switch (opt) {
-> +               case 'b':
-> +                       guest_percpu_mem_size = parse_size(optarg);
-> +                       break;
-> +               case 's':
-> +                       backing_src = parse_backing_src_type(optarg);
-> +                       break;
-> +               case 'h':
-> +               default:
-> +                       help(argv[0]);
-> +                       break;
-> +               }
-> +       }
-> +
-> +       if (!is_backing_src_hugetlb(backing_src)) {
-> +               pr_info("This test will only work reliably with HugeTLB memory. "
-> +                       "It can work with THP, but that is best effort.");
-> +               return KSFT_SKIP;
-> +       }
-> +
-> +       guest_modes_append_default();
-> +
-> +       dirty_log_manual_caps = 0;
-> +       for_each_guest_mode(run_test, NULL);
-> +
-> +       dirty_log_manual_caps =
-> +               kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
-
-Shouldn't the check be done in the beginning and skip the test f it is
-not supported?
-
-> +       dirty_log_manual_caps &= (KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE |
-> +                                 KVM_DIRTY_LOG_INITIALLY_SET);
-> +       for_each_guest_mode(run_test, NULL);
-> +
-> +       return 0;
-> +}
-> --
-> 2.39.1.405.gd4c25cc71f-goog
->
