@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3E7677CDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B828677CDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjAWNqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S231874AbjAWNqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjAWNqR (ORCPT
+        with ESMTP id S231757AbjAWNqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:46:17 -0500
+        Mon, 23 Jan 2023 08:46:19 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02846EFB9;
-        Mon, 23 Jan 2023 05:46:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A873425283;
+        Mon, 23 Jan 2023 05:46:17 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74DF8143D;
-        Mon, 23 Jan 2023 05:46:56 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CBD01474;
+        Mon, 23 Jan 2023 05:46:59 -0800 (PST)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DECAE3F64C;
-        Mon, 23 Jan 2023 05:46:12 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 857443F64C;
+        Mon, 23 Jan 2023 05:46:15 -0800 (PST)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     catalin.marinas@arm.com, lenb@kernel.org,
@@ -29,9 +29,9 @@ Cc:     catalin.marinas@arm.com, lenb@kernel.org,
         ojeda@kernel.org, peterz@infradead.org, rafael.j.wysocki@intel.com,
         revest@chromium.org, robert.moore@intel.com, rostedt@goodmis.org,
         will@kernel.org
-Subject: [PATCH v3 1/8] ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
-Date:   Mon, 23 Jan 2023 13:45:56 +0000
-Message-Id: <20230123134603.1064407-2-mark.rutland@arm.com>
+Subject: [PATCH v3 2/8] Compiler attributes: GCC cold function alignment workarounds
+Date:   Mon, 23 Jan 2023 13:45:57 +0000
+Message-Id: <20230123134603.1064407-3-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123134603.1064407-1-mark.rutland@arm.com>
 References: <20230123134603.1064407-1-mark.rutland@arm.com>
@@ -45,370 +45,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Architectures without dynamic ftrace trampolines incur an overhead when
-multiple ftrace_ops are enabled with distinct filters. in these cases,
-each call site calls a common trampoline which uses
-ftrace_ops_list_func() to iterate over all enabled ftrace functions, and
-so incurs an overhead relative to the size of this list (including RCU
-protection overhead).
+Contemporary versions of GCC (e.g. GCC 12.2.0) drop the alignment
+specified by '-falign-functions=N' for functions marked with the
+__cold__ attribute, and potentially for callees of __cold__ functions as
+these may be implicitly marked as __cold__ by the compiler. LLVM appears
+to respect '-falign-functions=N' in such cases.
 
-Architectures with dynamic ftrace trampolines avoid this overhead for
-call sites which have a single associated ftrace_ops. In these cases,
-the dynamic trampoline is customized to branch directly to the relevant
-ftrace function, avoiding the list overhead.
+This has been reported to GCC in bug 88345:
 
-On some architectures it's impractical and/or undesirable to implement
-dynamic ftrace trampolines. For example, arm64 has limited branch ranges
-and cannot always directly branch from a call site to an arbitrary
-address (e.g. from a kernel text address to an arbitrary module
-address). Calls from modules to core kernel text can be indirected via
-PLTs (allocated at module load time) to address this, but the same is
-not possible from calls from core kernel text.
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345
 
-Using an indirect branch from a call site to an arbitrary trampoline is
-possible, but requires several more instructions in the function
-prologue (or immediately before it), and/or comes with far more complex
-requirements for patching.
+... which also covers alignment being dropped when '-Os' is used, which
+will be addressed in a separate patch.
 
-Instead, this patch adds a new option, where an architecture can
-associate each call site with a pointer to an ftrace_ops, placed at a
-fixed offset from the call site. A shared trampoline can recover this
-pointer and call ftrace_ops::func() without needing to go via
-ftrace_ops_list_func(), avoiding the associated overhead.
+Currently, use of '-falign-functions=N' is limited to
+CONFIG_FUNCTION_ALIGNMENT, which is largely used for performance and/or
+analysis reasons (e.g. with CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B), but
+isn't necessary for correct functionality. However, this dropped
+alignment isn't great for the performance and/or analysis cases.
 
-This avoids issues with branch range limitations, and avoids the need to
-allocate and manipulate dynamic trampolines, making it far simpler to
-implement and maintain, while having similar performance
-characteristics.
+Subsequent patches will use CONFIG_FUNCTION_ALIGNMENT as part of arm64's
+ftrace implementation, which will require all instrumented functions to
+be aligned to at least 8-bytes.
 
-Note that this allows for dynamic ftrace_ops to be invoked directly from
-an architecture's ftrace_caller trampoline, whereas existing code forces
-the use of ftrace_ops_get_list_func(), which is in part necessary to
-permit the ftrace_ops to be freed once unregistered *and* to avoid
-branch/address-generation range limitation on some architectures (e.g.
-where ops->func is a module address, and may be outside of the direct
-branch range for callsites within the main kernel image).
+This patch works around the dropped alignment by avoiding the use of the
+__cold__ attribute when CONFIG_FUNCTION_ALIGNMENT is non-zero, and by
+specifically aligning abort(), which GCC implicitly marks as __cold__.
+As the __cold macro is now dependent upon config options (which is
+against the policy described at the top of compiler_attributes.h), it is
+moved into compiler_types.h.
 
-The CALL_OPS approach avoids this problems and is safe as:
+I've tested this by building and booting a kernel configured with
+defconfig + CONFIG_EXPERT=y + CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B=y,
+and looking for misaligned text symbols in /proc/kallsyms:
 
-* The existing synchronization in ftrace_shutdown() using
-  ftrace_shutdown() using synchronize_rcu_tasks_rude() (and
-  synchronize_rcu_tasks()) ensures that no tasks hold a stale reference
-  to an ftrace_ops (e.g. in the middle of the ftrace_caller trampoline,
-  or while invoking ftrace_ops::func), when that ftrace_ops is
-  unregistered.
+* arm64:
 
-  Arguably this could also be relied upon for the existing scheme,
-  permitting dynamic ftrace_ops to be invoked directly when ops->func is
-  in range, but this will require additional logic to handle branch
-  range limitations, and is not handled by this patch.
+  Before:
+    # uname -rm
+    6.2.0-rc3 aarch64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    5009
 
-* Each callsite's ftrace_ops pointer literal can hold any valid kernel
-  address, and is updated atomically. As an architecture's ftrace_caller
-  trampoline will atomically load the ops pointer then dereference
-  ops->func, there is no risk of invoking ops->func with a mismatches
-  ops pointer, and updates to the ops pointer do not require special
-  care.
+  After:
+    # uname -rm
+    6.2.0-rc3-00001-g2a2bedf8bfa9 aarch64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    919
 
-A subsequent patch will implement architectures support for arm64. There
-should be no functional change as a result of this patch alone.
+* x86_64:
+
+  Before:
+    # uname -rm
+    6.2.0-rc3 x86_64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    11537
+
+  After:
+    # uname -rm
+    6.2.0-rc3-00001-g2a2bedf8bfa9 x86_64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    2805
+
+There's clearly a substantial reduction in the number of misaligned
+symbols. From manual inspection, the remaining unaligned text labels are
+a combination of ACPICA functions (due to the use of '-Os'), static call
+trampolines, and non-function labels in assembly, which will be dealt
+with in subsequent patches.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Florent Revest <revest@chromium.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Will Deacon <will@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
 ---
- include/linux/ftrace.h |  18 +++++--
- kernel/trace/Kconfig   |   7 +++
- kernel/trace/ftrace.c  | 109 +++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 125 insertions(+), 9 deletions(-)
+ include/linux/compiler_attributes.h |  6 ------
+ include/linux/compiler_types.h      | 27 +++++++++++++++++++++++++++
+ kernel/exit.c                       |  9 ++++++++-
+ 3 files changed, 35 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 99f1146614c0..366c730beaa3 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -39,6 +39,7 @@ static inline void ftrace_boot_snapshot(void) { }
- 
- struct ftrace_ops;
- struct ftrace_regs;
-+struct dyn_ftrace;
- 
- #ifdef CONFIG_FUNCTION_TRACER
- /*
-@@ -57,6 +58,9 @@ void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip);
- void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
- 			       struct ftrace_ops *op, struct ftrace_regs *fregs);
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index 898b3458b24a..b83126452c65 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -75,12 +75,6 @@
+ # define __assume_aligned(a, ...)
  #endif
-+extern const struct ftrace_ops ftrace_nop_ops;
-+extern const struct ftrace_ops ftrace_list_ops;
-+struct ftrace_ops *ftrace_find_unique_ops(struct dyn_ftrace *rec);
- #endif /* CONFIG_FUNCTION_TRACER */
  
- /* Main tracing buffer and events set up */
-@@ -391,8 +395,6 @@ struct ftrace_func_entry {
- 	unsigned long direct; /* for direct lookup only */
- };
- 
--struct dyn_ftrace;
+-/*
+- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
+- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-cold-label-attribute
+- */
+-#define __cold                          __attribute__((__cold__))
 -
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- extern int ftrace_direct_func_count;
- int register_ftrace_direct(unsigned long ip, unsigned long addr);
-@@ -563,6 +565,8 @@ bool is_ftrace_trampoline(unsigned long addr);
-  *  IPMODIFY - the record allows for the IP address to be changed.
-  *  DISABLED - the record is not ready to be touched yet
-  *  DIRECT   - there is a direct function to call
-+ *  CALL_OPS - the record can use callsite-specific ops
-+ *  CALL_OPS_EN - the function is set up to use callsite-specific ops
+ /*
+  * Note the long name.
   *
-  * When a new ftrace_ops is registered and wants a function to save
-  * pt_regs, the rec->flags REGS is set. When the function has been
-@@ -580,9 +584,11 @@ enum {
- 	FTRACE_FL_DISABLED	= (1UL << 25),
- 	FTRACE_FL_DIRECT	= (1UL << 24),
- 	FTRACE_FL_DIRECT_EN	= (1UL << 23),
-+	FTRACE_FL_CALL_OPS	= (1UL << 22),
-+	FTRACE_FL_CALL_OPS_EN	= (1UL << 21),
- };
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 7c1afe0f4129..aab34e30128e 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -79,6 +79,33 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ /* Attributes */
+ #include <linux/compiler_attributes.h>
  
--#define FTRACE_REF_MAX_SHIFT	23
-+#define FTRACE_REF_MAX_SHIFT	21
- #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
- 
- #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
-@@ -820,7 +826,8 @@ static inline int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
-  */
- extern int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr);
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#if defined(CONFIG_DYNAMIC_FTRACE_WITH_REGS) || \
-+	defined(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS)
- /**
-  * ftrace_modify_call - convert from one addr to another (no nop)
-  * @rec: the call site record (e.g. mcount/fentry)
-@@ -833,6 +840,9 @@ extern int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr);
-  * what we expect it to be, and then on success of the compare,
-  * it should write to the location.
-  *
-+ * When using call ops, this is called when the associated ops change, even
-+ * when (addr == old_addr).
-+ *
-  * The code segment at @rec->ip should be a caller to @old_addr
-  *
-  * Return must be:
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 197545241ab8..5df427a2321d 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -42,6 +42,9 @@ config HAVE_DYNAMIC_FTRACE_WITH_REGS
- config HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	bool
- 
-+config HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
-+	bool
-+
- config HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 	bool
- 	help
-@@ -257,6 +260,10 @@ config DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	depends on DYNAMIC_FTRACE_WITH_REGS
- 	depends on HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 
-+config DYNAMIC_FTRACE_WITH_CALL_OPS
-+	def_bool y
-+	depends on HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
-+
- config DYNAMIC_FTRACE_WITH_ARGS
- 	def_bool y
- 	depends on DYNAMIC_FTRACE
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 442438b93fe9..e634b80f49d1 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -125,6 +125,33 @@ struct ftrace_ops global_ops;
- void ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
- 			  struct ftrace_ops *op, struct ftrace_regs *fregs);
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-+/*
-+ * Stub used to invoke the list ops without requiring a separate trampoline.
-+ */
-+const struct ftrace_ops ftrace_list_ops = {
-+	.func	= ftrace_ops_list_func,
-+	.flags	= FTRACE_OPS_FL_STUB,
-+};
-+
-+static void ftrace_ops_nop_func(unsigned long ip, unsigned long parent_ip,
-+				struct ftrace_ops *op,
-+				struct ftrace_regs *fregs)
-+{
-+	/* do nothing */
-+}
-+
-+/*
-+ * Stub used when a call site is disabled. May be called transiently by threads
-+ * which have made it into ftrace_caller but haven't yet recovered the ops at
-+ * the point the call site is disabled.
-+ */
-+const struct ftrace_ops ftrace_nop_ops = {
-+	.func	= ftrace_ops_nop_func,
-+	.flags  = FTRACE_OPS_FL_STUB,
-+};
++#if CONFIG_FUNCTION_ALIGNMENT > 0
++#define __function_aligned		__aligned(CONFIG_FUNCTION_ALIGNMENT)
++#else
++#define __function_aligned
 +#endif
 +
- static inline void ftrace_ops_init(struct ftrace_ops *ops)
- {
- #ifdef CONFIG_DYNAMIC_FTRACE
-@@ -1814,6 +1841,18 @@ static bool __ftrace_hash_rec_update(struct ftrace_ops *ops,
- 			 * if rec count is zero.
- 			 */
- 		}
++/*
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-cold-label-attribute
++ *
++ * When -falign-functions=N is in use, we must avoid the cold attribute as
++ * contemporary versions of GCC drop the alignment for cold functions. Worse,
++ * GCC can implicitly mark callees of cold functions as cold themselves, so
++ * it's not sufficient to add __function_aligned here as that will not ensure
++ * that callees are correctly aligned.
++ *
++ * See:
++ *
++ *   https://lore.kernel.org/lkml/Y77%2FqVgvaJidFpYt@FVFF77S0Q05N
++ *   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345#c9
++ */
++#if !defined(CONFIG_CC_IS_GCC) || (CONFIG_FUNCTION_ALIGNMENT == 0)
++#define __cold				__attribute__((__cold__))
++#else
++#define __cold
++#endif
 +
-+		/*
-+		 * If the rec has a single associated ops, and ops->func can be
-+		 * called directly, allow the call site to call via the ops.
-+		 */
-+		if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS) &&
-+		    ftrace_rec_count(rec) == 1 &&
-+		    ftrace_ops_get_func(ops) == ops->func)
-+			rec->flags |= FTRACE_FL_CALL_OPS;
-+		else
-+			rec->flags &= ~FTRACE_FL_CALL_OPS;
-+
- 		count++;
+ /* Builtins */
  
- 		/* Must match FTRACE_UPDATE_CALLS in ftrace_modify_all_code() */
-@@ -2108,8 +2147,9 @@ void ftrace_bug(int failed, struct dyn_ftrace *rec)
- 		struct ftrace_ops *ops = NULL;
- 
- 		pr_info("ftrace record flags: %lx\n", rec->flags);
--		pr_cont(" (%ld)%s", ftrace_rec_count(rec),
--			rec->flags & FTRACE_FL_REGS ? " R" : "  ");
-+		pr_cont(" (%ld)%s%s", ftrace_rec_count(rec),
-+			rec->flags & FTRACE_FL_REGS ? " R" : "  ",
-+			rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ");
- 		if (rec->flags & FTRACE_FL_TRAMP_EN) {
- 			ops = ftrace_find_tramp_ops_any(rec);
- 			if (ops) {
-@@ -2177,6 +2217,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 		 * want the direct enabled (it will be done via the
- 		 * direct helper). But if DIRECT_EN is set, and
- 		 * the count is not one, we need to clear it.
-+		 *
- 		 */
- 		if (ftrace_rec_count(rec) == 1) {
- 			if (!(rec->flags & FTRACE_FL_DIRECT) !=
-@@ -2185,6 +2226,19 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 		} else if (rec->flags & FTRACE_FL_DIRECT_EN) {
- 			flag |= FTRACE_FL_DIRECT;
- 		}
-+
-+		/*
-+		 * Ops calls are special, as count matters.
-+		 * As with direct calls, they must only be enabled when count
-+		 * is one, otherwise they'll be handled via the list ops.
-+		 */
-+		if (ftrace_rec_count(rec) == 1) {
-+			if (!(rec->flags & FTRACE_FL_CALL_OPS) !=
-+			    !(rec->flags & FTRACE_FL_CALL_OPS_EN))
-+				flag |= FTRACE_FL_CALL_OPS;
-+		} else if (rec->flags & FTRACE_FL_CALL_OPS_EN) {
-+			flag |= FTRACE_FL_CALL_OPS;
-+		}
- 	}
- 
- 	/* If the state of this record hasn't changed, then do nothing */
-@@ -2229,6 +2283,21 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 					rec->flags &= ~FTRACE_FL_DIRECT_EN;
- 				}
- 			}
-+
-+			if (flag & FTRACE_FL_CALL_OPS) {
-+				if (ftrace_rec_count(rec) == 1) {
-+					if (rec->flags & FTRACE_FL_CALL_OPS)
-+						rec->flags |= FTRACE_FL_CALL_OPS_EN;
-+					else
-+						rec->flags &= ~FTRACE_FL_CALL_OPS_EN;
-+				} else {
-+					/*
-+					 * Can only call directly if there's
-+					 * only one set of associated ops.
-+					 */
-+					rec->flags &= ~FTRACE_FL_CALL_OPS_EN;
-+				}
-+			}
- 		}
- 
- 		/*
-@@ -2258,7 +2327,8 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 			 * and REGS states. The _EN flags must be disabled though.
- 			 */
- 			rec->flags &= ~(FTRACE_FL_ENABLED | FTRACE_FL_TRAMP_EN |
--					FTRACE_FL_REGS_EN | FTRACE_FL_DIRECT_EN);
-+					FTRACE_FL_REGS_EN | FTRACE_FL_DIRECT_EN |
-+					FTRACE_FL_CALL_OPS_EN);
- 	}
- 
- 	ftrace_bug_type = FTRACE_BUG_NOP;
-@@ -2431,6 +2501,25 @@ ftrace_find_tramp_ops_new(struct dyn_ftrace *rec)
- 	return NULL;
+ /*
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 15dc2ec80c46..c8e0375705f4 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1898,7 +1898,14 @@ bool thread_group_exited(struct pid *pid)
  }
+ EXPORT_SYMBOL(thread_group_exited);
  
-+struct ftrace_ops *
-+ftrace_find_unique_ops(struct dyn_ftrace *rec)
-+{
-+	struct ftrace_ops *op, *found = NULL;
-+	unsigned long ip = rec->ip;
-+
-+	do_for_each_ftrace_op(op, ftrace_ops_list) {
-+
-+		if (hash_contains_ip(ip, op->func_hash)) {
-+			if (found)
-+				return NULL;
-+			found = op;
-+		}
-+
-+	} while_for_each_ftrace_op(op);
-+
-+	return found;
-+}
-+
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- /* Protected by rcu_tasks for reading, and direct_mutex for writing */
- static struct ftrace_hash *direct_functions = EMPTY_HASH;
-@@ -3780,11 +3869,12 @@ static int t_show(struct seq_file *m, void *v)
- 	if (iter->flags & FTRACE_ITER_ENABLED) {
- 		struct ftrace_ops *ops;
- 
--		seq_printf(m, " (%ld)%s%s%s",
-+		seq_printf(m, " (%ld)%s%s%s%s",
- 			   ftrace_rec_count(rec),
- 			   rec->flags & FTRACE_FL_REGS ? " R" : "  ",
- 			   rec->flags & FTRACE_FL_IPMODIFY ? " I" : "  ",
--			   rec->flags & FTRACE_FL_DIRECT ? " D" : "  ");
-+			   rec->flags & FTRACE_FL_DIRECT ? " D" : "  ",
-+			   rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ");
- 		if (rec->flags & FTRACE_FL_TRAMP_EN) {
- 			ops = ftrace_find_tramp_ops_any(rec);
- 			if (ops) {
-@@ -3800,6 +3890,15 @@ static int t_show(struct seq_file *m, void *v)
- 		} else {
- 			add_trampoline_func(m, NULL, rec);
- 		}
-+		if (rec->flags & FTRACE_FL_CALL_OPS_EN) {
-+			ops = ftrace_find_unique_ops(rec);
-+			if (ops) {
-+				seq_printf(m, "\tops: %pS (%pS)",
-+					   ops, ops->func);
-+			} else {
-+				seq_puts(m, "\tops: ERROR!");
-+			}
-+		}
- 		if (rec->flags & FTRACE_FL_DIRECT) {
- 			unsigned long direct;
+-__weak void abort(void)
++/*
++ * This needs to be __function_aligned as GCC implicitly makes any
++ * implementation of abort() cold and drops alignment specified by
++ * -falign-functions=N.
++ *
++ * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345#c11
++ */
++__weak __function_aligned void abort(void)
+ {
+ 	BUG();
  
 -- 
 2.30.2
