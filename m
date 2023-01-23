@@ -2,148 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD3C677D0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C39677D13
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjAWNva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S231934AbjAWNwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjAWNv3 (ORCPT
+        with ESMTP id S231868AbjAWNwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:51:29 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAF1422F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:51:27 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id e3so10851407wru.13
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:51:27 -0800 (PST)
+        Mon, 23 Jan 2023 08:52:03 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7123DAD;
+        Mon, 23 Jan 2023 05:52:02 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso11067070pjf.1;
+        Mon, 23 Jan 2023 05:52:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S/aPgVYxytvHxJllto1N4mW/e7BZnp3Uj+u6VxCc02s=;
-        b=pnUkWpGE8BU1Q/ZnWNSy8A1mAVzk+vB6belwCcQ6B3j2xskVbgg7rpB5MpSX2SvCod
-         hjJZoCIBz6pNKwMd/S23aQh0SZm7CmwLVYWvz4VvtrflwdI1VXMsl+ipBvlXgIkfxvdw
-         FqtyjR6NeU8usGBc7JIuBatSjTiyxuZ4xt85B7jdU+Bp16JDPY1WTnoMoj1qOxP0LcXd
-         AD8f6IYPWsO4/HPjUdV+u4djT89UWS+8+B6w8aIot0x8uJfN8unsaLVpqT0Ry+Cml5Lb
-         Wm/uO+BAOF7QLUrrRBRPT1lrV4zgIBErh6WT/dvdtHActXqkSXNFOIwa0U/2KOjfoMfH
-         bH3w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WKpg9flnN+chPIMCPl0+2Z6yendwSMhVVKXNRKER7mE=;
+        b=gEuQs96KzRvjAOZjftDCtm34oFblZUcGjQubuPvLFrAyuMPh2VLwUZ6KCCtSBVlBIW
+         CAHdeax9Ou7gIhKMxYUVu3ONMOTNTSV2/IO1CJr3n1ZexIfxhO4Wqs0/q1Y6WqawYnzb
+         XuJ080R76gBYpoakRROXjZ5O/k6nGGw9On/j6ZqOniWQk8cklyfbeWSiMlFkMILeCya6
+         wNe2YwQKaiyPvMAZyigCxHZZfccH+klfanS2TyMSvBtZ13Ev75/CNYB+LmKyfB88Xi7d
+         oO6ct1u1olS54Nyq3BY2OjnDnxN1+jmv7rwlaX+ILLKKef85qyuzLwENkZppr6KAyVNQ
+         j0XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S/aPgVYxytvHxJllto1N4mW/e7BZnp3Uj+u6VxCc02s=;
-        b=celxskz5g5Wr5AtydIYbtDrCS2VQUur5HGa8sXKyMUKV0aSsiWWR9eM3CPKcXTtlRb
-         SdVUUjlcay4ZZttLTVn9cCN3oPHkZ3hCF2A3hJKEukwknWB+6dbczWllpbQi6EgzqXB/
-         YJL5NZf/7reMMwS483ai/cdXjOaqklH89De+gHANKut+JeG4APbZ5JJy2HimbK8X826N
-         816x1ufmHtcK0c+zE3VXHwoUiexWutiNnPUgAuFVeno6dVCvUSBHw+poHHr/0YIjHpc6
-         0qAYbmUmqdX6zV+tfX0K+WUpbipvsC/6XrPvEY9bqv0i8ee+q7Py99hJVBcbFR/p/xQC
-         kSoA==
-X-Gm-Message-State: AFqh2krEmZamktJhe9mvqLwT2/4ihOrtb6tlM+fTg2CWZJKJLP1lJngP
-        fSzzqHnVgteF+trjlMNpMmG9hg==
-X-Google-Smtp-Source: AMrXdXu8LYL65Syg8VeA91+RRN/vtoihzlCknkCIPZF3kK+2V4F+Fo/u29x7IHbFhomd/NYSoXD74w==
-X-Received: by 2002:adf:fc4c:0:b0:2bd:dbbb:e7e2 with SMTP id e12-20020adffc4c000000b002bddbbbe7e2mr20364277wrs.60.1674481885872;
-        Mon, 23 Jan 2023 05:51:25 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id z12-20020adfd0cc000000b002bdff778d87sm19412230wrh.34.2023.01.23.05.51.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 05:51:25 -0800 (PST)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Qi Duan <qi.duan@amlogic.com>
-Subject: [PATCH net] net: mdio-mux-meson-g12a: force internal PHY off on mux switch
-Date:   Mon, 23 Jan 2023 14:50:37 +0100
-Message-Id: <20230123135037.195157-1-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.39.0
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WKpg9flnN+chPIMCPl0+2Z6yendwSMhVVKXNRKER7mE=;
+        b=AZBVcQAlUr40n1tzIKXgwtUiQfR5S3bui/8IhhWlMWe7u3zzrA4i2oacJE7ZQ7fzRy
+         GtzaU+GcpXmRyzBcJjp1SpWsyRmp1GT7katsqcofy1UOy2yccmOxyThFgJ9a4KqB6laQ
+         Kw9ufR5o6QADGnDITJEisBgn2cyiooiWznBPoblHMexGUirNwLuOzC0rLvwEXH5i5MAt
+         OXFHnhwdM1Q1VZtCfMKQx9SiLAxtu5ahE0uBrclpcz8j81HMIJ9/WViDIVWow2zK2GUM
+         G9pt58b0EhmDHuNYHGxqGLmHTVVG/r68OKmsfx+At8beBVCWMK7jDbw6+KTC29EnXnl2
+         z3Cw==
+X-Gm-Message-State: AFqh2krf7k4zLcPBGNt3ZtKkWUy4liCu7tgfs3tjRlzcOPk05V4mz+S/
+        864c0NYIRAuEo2S/5MmldU0=
+X-Google-Smtp-Source: AMrXdXunsM3ZFMr+g19557ktUbRyWA/D+HKokpRk19HOTVTctW0BNUXMYEFHeMObVyHQBb3RGifeDg==
+X-Received: by 2002:a17:903:2442:b0:195:f06f:84ff with SMTP id l2-20020a170903244200b00195f06f84ffmr13563443pls.50.1674481921844;
+        Mon, 23 Jan 2023 05:52:01 -0800 (PST)
+Received: from [192.168.43.80] (subs09b-223-255-225-233.three.co.id. [223.255.225.233])
+        by smtp.gmail.com with ESMTPSA id iw11-20020a170903044b00b00192fc9e8552sm4526940plb.0.2023.01.23.05.51.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 05:52:01 -0800 (PST)
+Message-ID: <c9d6291f-8b50-bd37-f48c-d96834d990dd@gmail.com>
+Date:   Mon, 23 Jan 2023 20:51:57 +0700
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] docs: rv: Fix full name of the GPL
+Content-Language: en-US
+To:     Diederik de Haas <didi.debian@cknow.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230122181224.53996-1-didi.debian@cknow.org>
+ <Y83ts1TVZnwyZjnH@debian.me> <111677351.cJcasWOL3y@prancing-pony>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <111677351.cJcasWOL3y@prancing-pony>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Force the internal PHY off then on when switching to the internal path.
-This fixes problems where the PHY ID is not properly set.
+On 1/23/23 19:48, Diederik de Haas wrote:
+> On Monday, 23 January 2023 03:15:15 CET Bagas Sanjaya wrote:
+>> Similar response as [1].
+> 
+> Please disregard this patch.
+> I'm now sending a similar response as I'm sending to my other patch 
+> submissions, which is the following:
+> 
+> I now consider my initial view of the issue as a spelling error, incorrect. I 
+> would be changing the license and IANAL. I'm also not the copyright holder 
+> which I believe is needed to change the license.
+> 
+> Apologies for the noise.
 
-Fixes: 7090425104db ("net: phy: add amlogic g12a mdio mux support")
-Suggested-by: Qi Duan <qi.duan@amlogic.com>
-Co-developed-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
+Glad to reply, but I see your reply above as if it is written by
+a bot. Care to vary your sentences?
 
-The initial discussion about this change can be found here:
-https://lore.kernel.org/all/1j4jslwen5.fsf@starbuckisacylon.baylibre.com/
-
- drivers/net/mdio/mdio-mux-meson-g12a.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/mdio/mdio-mux-meson-g12a.c b/drivers/net/mdio/mdio-mux-meson-g12a.c
-index 4a2e94faf57e..da61f00a6666 100644
---- a/drivers/net/mdio/mdio-mux-meson-g12a.c
-+++ b/drivers/net/mdio/mdio-mux-meson-g12a.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/delay.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/device.h>
-@@ -151,6 +152,7 @@ static const struct clk_ops g12a_ephy_pll_ops = {
- static int g12a_enable_internal_mdio(struct g12a_mdio_mux *priv)
- {
- 	int ret;
-+	u32 value;
- 
- 	/* Enable the phy clock */
- 	if (!priv->pll_is_enabled) {
-@@ -163,18 +165,25 @@ static int g12a_enable_internal_mdio(struct g12a_mdio_mux *priv)
- 
- 	/* Initialize ephy control */
- 	writel(EPHY_G12A_ID, priv->regs + ETH_PHY_CNTL0);
--	writel(FIELD_PREP(PHY_CNTL1_ST_MODE, 3) |
--	       FIELD_PREP(PHY_CNTL1_ST_PHYADD, EPHY_DFLT_ADD) |
--	       FIELD_PREP(PHY_CNTL1_MII_MODE, EPHY_MODE_RMII) |
--	       PHY_CNTL1_CLK_EN |
--	       PHY_CNTL1_CLKFREQ |
--	       PHY_CNTL1_PHY_ENB,
--	       priv->regs + ETH_PHY_CNTL1);
-+
-+	/* Make sure we get a 0 -> 1 transition on the enable bit */
-+	value = FIELD_PREP(PHY_CNTL1_ST_MODE, 3) |
-+		FIELD_PREP(PHY_CNTL1_ST_PHYADD, EPHY_DFLT_ADD) |
-+		FIELD_PREP(PHY_CNTL1_MII_MODE, EPHY_MODE_RMII) |
-+		PHY_CNTL1_CLK_EN |
-+		PHY_CNTL1_CLKFREQ;
-+	writel(value, priv->regs + ETH_PHY_CNTL1);
- 	writel(PHY_CNTL2_USE_INTERNAL |
- 	       PHY_CNTL2_SMI_SRC_MAC |
- 	       PHY_CNTL2_RX_CLK_EPHY,
- 	       priv->regs + ETH_PHY_CNTL2);
- 
-+	value |= PHY_CNTL1_PHY_ENB;
-+	writel(value, priv->regs + ETH_PHY_CNTL1);
-+
-+	/* The phy needs a bit of time to power up */
-+	mdelay(10);
-+
- 	return 0;
- }
- 
 -- 
-2.39.0
+An old man doll... just what I always wanted! - Clara
 
