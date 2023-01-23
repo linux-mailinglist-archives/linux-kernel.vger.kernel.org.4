@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCBE677568
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944B2677576
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjAWHKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S230474AbjAWHRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:17:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjAWHKJ (ORCPT
+        with ESMTP id S229817AbjAWHRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:10:09 -0500
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D6513DF2
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:10:08 -0800 (PST)
-Received: by mail-vk1-xa33.google.com with SMTP id v81so5514998vkv.5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:10:08 -0800 (PST)
+        Mon, 23 Jan 2023 02:17:00 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8D815C9A
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:16:59 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id q141so5493213vkb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:16:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WjPqSuzor2mexKiakowxVQr4nOSsrzDO0rfbtbGNoJ0=;
-        b=EVERcEcMqSr90XjlxF++5xpZEtsLFuRMqwSNiXlc0zPwSqcClBFfrozDsHWkFW7BXE
-         eKEMo6xE036strpAeBm6CPGX0OEMWBmL6czhjrw7LXmCPLjfxCtztgG6lVgwauixaqAY
-         Y3FOZq5N0myiplQ50oaCQ1i0xLhdIxQU4jkEOAdbSe8OhhyHrIEgwSgFZKZwS2epivvR
-         DIpX6Om4oBKxRYS9OsUdGFC6rR+n7CB7BAlgkxCYdmGLyvCUl463pF3Bhsw6tweB+lZS
-         1FXp+IbXI8lRTCwVwyKSFYaSAg+T72fmR+p+PH4BHhNCCkpFa++sF8XQVskThvRwy0JR
-         YTaw==
+        bh=w/nTmDIKe+CVQP0G3n4sHN1YN0YVxf/pwrE7R3XBahY=;
+        b=j0DuOHuWM+7i161REIceXJtlyGe6lPzVV83om8dv7HIdjBqtObgcqD7vyxgSi0kCqS
+         L6vnZ3zskyNDsHwcEDPGqMgFcSotUTM+KOlv5uKgsF71dozfHHnXplumhn+OrLFKR6ZQ
+         gT2+ihJZiTQMDOSZC4DXuorDglpsrCncRhUkw+dFhodRIcFgAKJlWhZY5gahNZuH0/eB
+         N5u67mwj0P+/AqC4TuZNX+W2aND1zFecRIHowMxje0VQhq0LKgbxl7wRJQp44Ci8A1rU
+         2xEZ4i3VsJ7cyiL21qDmxd7HyybDEL6paFqan8T3bBIVMsAnNjh+WCQFkSLt6TYPb1nh
+         4SzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WjPqSuzor2mexKiakowxVQr4nOSsrzDO0rfbtbGNoJ0=;
-        b=ABT/4NYuq9Go449eGXij78Rtoan2azdwIvdLJ2Ra1xws4lQ0j5cMiQJMkaxkNYG2HF
-         WYqUVI4ri/5TVe1MfynAocOgM49lMlTUw8BlBOUDevoZS4ngyY1QERYaVRkiD6K6v5qe
-         0lEBisK/N0PXBcXIO1/s3Y4AIOQ+ibR9WAdRqIPHHl3kplJvU7Yl2BahHXRnwcrl37nV
-         mWyFdtgPt0QEccPD+msW6ugnFepErZ3e/vqKE6hQd4Zo4uWIpYZXv1c4INwZrfZ4l2/o
-         vvQPNuWE99iGKZWpqMNNC/Ux6kY2sYVyezfDAaCSBR/N6G+LolX0SaM6Sf1B6m39tY7K
-         Y6rw==
-X-Gm-Message-State: AFqh2kpvSQEGDfkuRgtaN0KNReYpLMU3xee5SBEKHIvCEMv2TRH47Dbi
-        YjeJ8REz6TfEuDvZVM6ZIyxfEzsFfOQounDu6Ph4gw==
-X-Google-Smtp-Source: AMrXdXvlw86yjS3bdxq8s5wT6J7Oljmynzmd4ce2Jo2uBxrWlKKExzHkg7k5D2qomyWH8IJo6utmWr8SzlbfCo+2DZU=
+        bh=w/nTmDIKe+CVQP0G3n4sHN1YN0YVxf/pwrE7R3XBahY=;
+        b=NQ+dzSwQ7L8XIGfDTdKj/Mi/xUP7p78LQagiehLZBNEsBrtQstO60G7ZVZds7+plPi
+         y30HiK5ZukrPZo1zL89vqt21YlyM9jMMnWVzmg+ohlqqJTQapg80LaTXyNeNtjaZsgJb
+         BEIgg+L51qyRi661D+0Y+OTVGn55f91AGnM9VVCvmtfL2rLPZ22nUPxgNAnRD2Vfh+Cq
+         OWbwpgBC+3XMwp3NCMdHHBrEVtTyHy3o3WQX/sbsWNivuzK3o4PA5gVxntXuyCgAwtBc
+         FFSuaA+gMuCtBQAzPf6W6OctR2rqOWgbMbBAdZsjZatqCA7QfffbKf1yy3EPBIDk4tVL
+         h7mA==
+X-Gm-Message-State: AFqh2koPj6GoMoXMSnNCRSE4Ta+NLFkfyYSH7dppbepMbmsBWCkc+H9m
+        25TH5U2s7Y7VR7X26kNvzSPT6lvcZ9mW06pULU3VTg==
+X-Google-Smtp-Source: AMrXdXtMlHG8p50ItK9g4I4f9Rz4TM/4HtgzphmZKhBxXNfUZkMl+Lv2xogcqWcFaaPZQky0COP8Q34qHkT7TYmy1z8=
 X-Received: by 2002:a1f:ab92:0:b0:3d5:63ee:dae1 with SMTP id
- u140-20020a1fab92000000b003d563eedae1mr3075127vke.9.1674457807360; Sun, 22
- Jan 2023 23:10:07 -0800 (PST)
+ u140-20020a1fab92000000b003d563eedae1mr3077115vke.9.1674458217943; Sun, 22
+ Jan 2023 23:16:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20230122150232.736358800@linuxfoundation.org>
-In-Reply-To: <20230122150232.736358800@linuxfoundation.org>
+References: <20230122150229.351631432@linuxfoundation.org>
+In-Reply-To: <20230122150229.351631432@linuxfoundation.org>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 23 Jan 2023 12:39:55 +0530
-Message-ID: <CA+G9fYsEvpCj_vSFLxkKA6tzdNOhimqZYF+WCLKYAiNLtrMvsA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc1 review
+Date:   Mon, 23 Jan 2023 12:46:47 +0530
+Message-ID: <CA+G9fYtQ9SLrGt0TtW5d3ctZBHEpQpau_+pNzho=qHve8QiDaA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/98] 5.10.165-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
@@ -61,28 +61,29 @@ Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
         jonathanh@nvidia.com, f.fainelli@gmail.com,
         sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Dennis Gilmore <dennis@ausil.us>,
         Palmer Dabbelt <palmer@rivosinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 Jan 2023 at 20:46, Greg Kroah-Hartman
+On Sun, 22 Jan 2023 at 20:41, Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> This is the start of the stable review cycle for the 5.15.90 release.
-> There are 117 patches in this series, all will be posted as a response
+> This is the start of the stable review cycle for the 5.10.165 release.
+> There are 98 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 >
@@ -91,10 +92,10 @@ On Sun, 22 Jan 2023 at 20:46, Greg Kroah-Hartman
 >
 > The whole patch series can be found in one patch at:
 >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.90-rc1.gz
+5.10.165-rc1.gz
 > or in the git tree and branch at:
 >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
+-rc.git linux-5.10.y
 > and the diffstat can be found below.
 >
 > thanks,
@@ -117,7 +118,7 @@ defined in discarded section `.exit.text' of crypto/algboss.o
 `.exit.text' referenced in section `__bug_table' of
 drivers/char/hw_random/core.o: defined in discarded section
 `.exit.text' of drivers/char/hw_random/core.o
-make[1]: *** [/builds/linux/Makefile:1218: vmlinux] Error 1
+make[1]: *** [/builds/linux/Makefile:1194: vmlinux] Error 1
 
 Bisection points to this commit,
     arch: fix broken BuildID for arm64 and riscv
@@ -139,9 +140,8 @@ microdev_defconfig
 
 
 Build log links,
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2Kgdvgv8TfoAfi1b9HBQ=
-rkWJO1G/
-
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2Kgdn5w5X9wlz0EVgtSZ=
+bTFuRYy/
 
 --
 Linaro LKFT
