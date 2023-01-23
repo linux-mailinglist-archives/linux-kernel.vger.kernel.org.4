@@ -2,156 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A458B67850F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED898678515
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbjAWSjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S232840AbjAWSkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjAWSjj (ORCPT
+        with ESMTP id S232738AbjAWSkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:39:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D3622A22;
-        Mon, 23 Jan 2023 10:39:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E20AFB80DA4;
-        Mon, 23 Jan 2023 18:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 354E2C433D2;
-        Mon, 23 Jan 2023 18:39:34 +0000 (UTC)
-Date:   Mon, 23 Jan 2023 13:39:31 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        heng.su@intel.com, "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH] kprobes: Fix to handle forcibly unoptimized kprobes on
- freeing_list
-Message-ID: <20230123133931.6f6a711d@gandalf.local.home>
-In-Reply-To: <167448024501.3253718.13037333683110512967.stgit@devnote3>
-References: <Y8URdIfVr3pq2X8w@xpf.sh.intel.com>
-        <167448024501.3253718.13037333683110512967.stgit@devnote3>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 13:40:02 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF37241E1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:40:01 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id 80-20020a621453000000b0058952aa1c39so5625947pfu.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:40:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bN8JvZ9hp8tuola9y1jeIFB84hc7FTQzabUJBM21sv4=;
+        b=VdRkRSZOSO2Pw83rSgomIRmzdUd/wRXtowUAj21MTs86PAzrSnmBXR+vB9Bn7Wncq+
+         y3FiPTruc1+E6GlWEY2PNG7EIUP/RXuxAQ0qr7fr9R26ZRISL1ZtoDkBkZujqeEzbPvR
+         QCkBaL6yHkHddAPnpPOXY6WiTCctr90L4TFChyD+XncekLmAu1rxqLDNtUb5ExD6X9vk
+         wzLgm/KUtTUoNZpDyT3I/hxe9a28y+Sb3bA89qThnUD7IyijQP+EIa9XNTwJMB/81LHX
+         Es2lsKIRb4EVlIui2Vv50T2PgvEfs0f4/uUbfef7P+dyzvSwMtxi4SkzLstRUMbSBBF8
+         1X1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bN8JvZ9hp8tuola9y1jeIFB84hc7FTQzabUJBM21sv4=;
+        b=xmeHS3BdGknfHYsjRjzRWBmTusqM1G0/JfG8taoIXeTbyNYHNXqVaDWq9y9vbzy1vg
+         bGfxaEmTVhD+ZYD6av1R9TsGPqHmn4uzbj+ROzcb+s0hf9W72vcEScP3si7jLqdX+twz
+         3Oi+YqVaY6EMGyDdfQYgEa3tpHyM3602kuKTF0zwwlM4dxvAxdM529+eu5jOWtZeL+8o
+         I5Dbke9UUE2ePZnw32FyhrEGyP3Kym8HkUnuaHxIC8P1/G2WLsuZqkCGKUQzB5vhMlcw
+         KA90/QvgJRpnvlwPpqLX54LGggHoNkA568OrqRBedSbEUfB4VSyFqx8M/7B2YF8P2o70
+         3/GA==
+X-Gm-Message-State: AO0yUKWJD+Kc7b+NsScu5L0q6ss1ljacUloTCMPVqo//yEyv5uYKDTTE
+        VleCFj80+W9EAlp/iHOo46fxogs=
+X-Google-Smtp-Source: AK7set+bQAfcJ5dAv95dxrMMN85wSEUYHR31H/QuLejvqZO2FBFtGy+zppANv4kIO14bIka/luzEXyE=
+X-Received: from hmarynka.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:925])
+ (user=ovt job=sendgmr) by 2002:a17:90b:2485:b0:229:f43c:4049 with SMTP id
+ nt5-20020a17090b248500b00229f43c4049mr77962pjb.0.1674499200383; Mon, 23 Jan
+ 2023 10:40:00 -0800 (PST)
+Date:   Mon, 23 Jan 2023 18:39:59 +0000
+In-Reply-To: <20221227203249.1213526-24-sashal@kernel.org>
+Mime-Version: 1.0
+References: <20221227203249.1213526-24-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+Message-ID: <20230123183959.3692697-1-ovt@google.com>
+Subject: [PATCH AUTOSEL 6.1 24/28] NFSD: fix use-after-free in __nfs42_ssc_open()
+From:   Oleksandr Tymoshenko <ovt@google.com>
+To:     sashal@kernel.org
+Cc:     chuck.lever@oracle.com, dai.ngo@oracle.com, hdthky0@gmail.com,
+        jlayton@kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 22:24:05 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Hello,
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Sinec forcibly unoptimized kprobes will be put on the freeing_list directly
+Does this patch need to be backported to 5.15 and all other supported LTS branches
+or only 6.1 is affected?
 
-"Since"
-
-> in the unoptimize_kprobe(), do_unoptimize_kprobes() must continue to check
-> the freeing_list even if unoptimizing_list is empty.
-> 
-> This bug can be happen if a kprobe is put in an instruction which is in the
-
-"This bug can happen if"
-
-> middle of the jump-replaced instruction sequence of an optprobe, *and* the
-> optprobe is recently unregistered and queued on unoptimizing_list.
-> In this case, the optprobe will be unoptimized forcibly (means immediately)
-> and put it into the freeing_list, expecting the optprobe will be handled in
-> do_unoptimize_kprobe().
-> But if there is no other optprobes on the unoptimizing_list, current code
-> returns from the do_unoptimize_kprobe() soon and do not handle the optprobe
-
-                                              "and does not handle'
-
-> which is on the freeing_list, and it will hit the WARN_ON_ONCE() in the
-> do_free_cleaned_kprobes(), because it is not handled in the latter loop of
-> the do_unoptimize_kprobe().
-> 
-> To solve this issue, do not return from do_unoptimize_kprobes() immediately
-> even if unoptimizing_list is empty.
-> 
-> Moreover, this change affects another case. kill_optimized_kprobes() expects
-> kprobe_optimizer() will just free the optprobe on freeing_list.
-> So I changed it to just do list_move() to freeing_list if optprobes are on
-> unoptimizing list. And the do_unoptimize_kprobe() will skip
-> arch_disarm_kprobe() if the probe on freeing_list has gone flag.
-> 
-> Link: https://lore.kernel.org/all/Y8URdIfVr3pq2X8w@xpf.sh.intel.com/
-> 
-> Fixes: e4add247789e ("kprobes: Fix optimize_kprobe()/unoptimize_kprobe() cancellation logic")
-> Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  kernel/kprobes.c |   23 ++++++++++-------------
->  1 file changed, 10 insertions(+), 13 deletions(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 1c18ecf9f98b..73b150fad936 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -555,17 +555,15 @@ static void do_unoptimize_kprobes(void)
->  	/* See comment in do_optimize_kprobes() */
->  	lockdep_assert_cpus_held();
->  
-> -	/* Unoptimization must be done anytime */
-> -	if (list_empty(&unoptimizing_list))
-> -		return;
-> +	if (!list_empty(&unoptimizing_list))
-> +		arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
->  
-> -	arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
-> -	/* Loop on 'freeing_list' for disarming */
-> +	/* Loop on 'freeing_list' for disarming and removing from kprobe hash list */
->  	list_for_each_entry_safe(op, tmp, &freeing_list, list) {
->  		/* Switching from detour code to origin */
->  		op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
-> -		/* Disarm probes if marked disabled */
-> -		if (kprobe_disabled(&op->kp))
-> +		/* Disarm probes if marked disabled and not gone */
-> +		if (kprobe_disabled(&op->kp) && !kprobe_gone(&op->kp))
->  			arch_disarm_kprobe(&op->kp);
->  		if (kprobe_unused(&op->kp)) {
->  			/*
-> @@ -797,14 +795,13 @@ static void kill_optimized_kprobe(struct kprobe *p)
->  	op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
->  
->  	if (kprobe_unused(p)) {
-> -		/* Enqueue if it is unused */
-> -		list_add(&op->list, &freeing_list);
->  		/*
-> -		 * Remove unused probes from the hash list. After waiting
-> -		 * for synchronization, this probe is reclaimed.
-> -		 * (reclaiming is done by do_free_cleaned_kprobes().)
-> +		 * Unused kprobe is on unoptimizing or freeing list. We move it
-> +		 * to freeing_list and let the kprobe_optimizer() removes it from
-
-                                                                 "remove it"
-
-> +		 * the kprobe hash list and frees it.
-
-                                        "and free it."
-
->  		 */
-> -		hlist_del_rcu(&op->kp.hlist);
-> +		if (optprobe_queued_unopt(op))
-> +			list_move(&op->list, &freeing_list);
->  	}
->  
->  	/* Don't touch the code, because it is already freed. */
-
-Other than the spelling issues,
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+Thank you
