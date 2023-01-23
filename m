@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B7D67817A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A5767817F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjAWQb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S233150AbjAWQb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjAWQbZ (ORCPT
+        with ESMTP id S233113AbjAWQby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:31:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A5E29E0F;
-        Mon, 23 Jan 2023 08:31:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E4A960F89;
-        Mon, 23 Jan 2023 16:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801E5C433D2;
-        Mon, 23 Jan 2023 16:31:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674491484;
-        bh=6IfgOcum2gcVYU1kyOtSd1JBd1Ps0O92g/32DAGgyWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n2ztuD0bELDmW6cyWLq00lGxLC9w2npeBI9wEG/tIx654z/SK4IGqXtppB4HAfQcG
-         TuKDhr5uBOyZHknyuumgf+5HDL+vAtAVblN2gM6guZADpCLeziRkR+tcKvSOmEQDar
-         dPQwPlo9MxFMivREynyzVsrCaG8fL3MzFqxl6nD0=
-Date:   Mon, 23 Jan 2023 17:31:21 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com
-Subject: Re: [PATCH] mfd: Add Simple PCI MFD driver
-Message-ID: <Y862WTT03/JxXUG8@kroah.com>
-References: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
- <Y86op9oh5ldrZQyG@google.com>
+        Mon, 23 Jan 2023 11:31:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC002A9B4;
+        Mon, 23 Jan 2023 08:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ogSQ1nggVA0tfMOu1kPeInQ5MLmUuXd3lsU0a14evzA=; b=WSBGPpRgowqRhjKKXsXuw4V/EH
+        cd2qxR7YOgvJNFXUaTprW+CLdgAjbI1xzzHLBkquHLgA70ADUgb67+wO0bBkPGfU4Pl9mEMOBajn4
+        BLYuBGVomAkx+7nLueQyMcl+HBf9Um26Pq/9XMtGUYlKoEmHVJtorcla04CNNfhl8NOF796xBWzNR
+        nhu70RIrQp9Tp/TJWeDCoSAWeDKx8M6M4+kCLiVVlW7pCO+3HGOdZSptJYrescNjhli9ofr1kE+bX
+        IGIB2PYsrrzbGwput0+DBBBuzA7GbewhukaYY5w22Ed7qQKwodbLdyMOydK8/G4TKfFDPZbMCZbuD
+        WAleAu3Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pJzjI-004Mwi-1r; Mon, 23 Jan 2023 16:31:32 +0000
+Date:   Mon, 23 Jan 2023 16:31:32 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/8] iov_iter: Improve page extraction (ref, pin or
+ just list)
+Message-ID: <Y862ZL5umO30Vu/D@casper.infradead.org>
+References: <20230120175556.3556978-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y86op9oh5ldrZQyG@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120175556.3556978-1-dhowells@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 03:32:55PM +0000, Lee Jones wrote:
-> On Mon, 23 Jan 2023, Vincent Whitchurch wrote:
-> 
-> > Add a PCI driver which registers all child nodes specified in the
-> > devicetree.  It will allow platform devices to be used on virtual
-> > systems which already support PCI and devicetree, such as UML with
-> > virt-pci.
-> > 
-> > The driver has no id_table by default; user space needs to provide one
-> > using the new_id mechanism in sysfs.
-> 
-> This feels wrong for several reasons.
-> 
-> Firstly, I think Greg (Cc:ed) will have something to say about this.
+On Fri, Jan 20, 2023 at 05:55:48PM +0000, David Howells wrote:
+>  (3) Make the bio struct carry a pair of flags to indicate the cleanup
+>      mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (equivalent to
+>      FOLL_GET) and BIO_PAGE_PINNED (equivalent to BIO_PAGE_PINNED) is
+>      added.
 
-Yes, this isn't ok.  Please write a real driver for the hardware under
-control here, and that would NOT be a MFD driver (hint, if you want to
-split up a PCI device into different drivers, use the aux bus code, that
-is what it is there for.)
+I think there's a simpler solution than all of this.
 
-thanks,
+As I understand the fundamental problem here, the question is
+when to copy a page on fork.  We have the optimisation of COW, but
+O_DIRECT/RDMA/... breaks it.  So all this page pinning is to indicate
+to the fork code "You can't do COW to this page".
 
-greg k-h
+Why do we want to track that information on a per-page basis?  Wouldn't it
+be easier to have a VM_NOCOW flag in vma->vm_flags?  Set it the first
+time somebody does an O_DIRECT read or RDMA pin.  That's it.  Pages in
+that VMA will now never be COWed, regardless of their refcount/mapcount.
+And the whole "did we pin or get this page" problem goes away.  Along
+with folio->pincount.
+
