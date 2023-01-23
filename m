@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0261F6787AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA356787A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjAWUZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S231700AbjAWUZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbjAWUZR (ORCPT
+        with ESMTP id S231493AbjAWUZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:25:17 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D63367EE
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:25:12 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674505510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=au8ZWtE9bpKXrUx2+rVz6YucHx64Tiv6wraMR9Ps5aI=;
-        b=H4xc2VK1l42xb06YdwJ3PNziW3+B/OpaCye3SvNxBARlyaMHg5CpkcBk+GfaflhfEuqz6i
-        36ZixVWK8UOQ+mvVr0SRsSPUQ8HQJ+d90QOnzABLF8NY7pNdVDHMQnr7bg1ecdh84hoOKe
-        RK6qs+CVXW4/gdorAqT6MrwQrm2Aw0g=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Hector Martin <marcan@marcan.st>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>
-Subject: Re: [PATCH v7 0/7] KVM: arm64: Normalize cache configuration
-Date:   Mon, 23 Jan 2023 20:24:56 +0000
-Message-Id: <167450318853.2568505.3166405888000533001.b4-ty@linux.dev>
-In-Reply-To: <20230112023852.42012-1-akihiko.odaki@daynix.com>
-References: <20230112023852.42012-1-akihiko.odaki@daynix.com>
+        Mon, 23 Jan 2023 15:25:02 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3E504212E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:25:01 -0800 (PST)
+Received: (qmail 139858 invoked by uid 1000); 23 Jan 2023 15:25:00 -0500
+Date:   Mon, 23 Jan 2023 15:25:00 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y87tHNcvb5E+t3da@rowland.harvard.edu>
+References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
+ <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
+ <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
+ <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
+ <1180fe22-5e1d-ec8b-8012-b6578b1ca7c0@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1180fe22-5e1d-ec8b-8012-b6578b1ca7c0@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 11:38:45 +0900, Akihiko Odaki wrote:
-> Before this change, the cache configuration of the physical CPU was
-> exposed to vcpus. This is problematic because the cache configuration a
-> vcpu sees varies when it migrates between vcpus with different cache
-> configurations.
+On Mon, Jan 23, 2023 at 07:25:48PM +0100, Jonas Oberhauser wrote:
+> Alright, after some synchronization in the other parts of this thread I am
+> beginning to prepare the next iteration of the patch.
 > 
-> Fabricate cache configuration from the sanitized value, which holds the
-> CTR_EL0 value the userspace sees regardless of which physical CPU it
-> resides on.
+> On 1/19/2023 4:13 AM, Alan Stern wrote:
+> > On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 1/18/2023 8:52 PM, Alan Stern wrote:
+> > > > On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
+> > > > > -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> > > > > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> > > > > -		fencerel(After-unlock-lock) ; [M])
+> > > > > +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
+> > > > Shouldn't the po case of (co | po) remain intact here?
+> > > You can leave it here, but it is already covered by two other parts: the
+> > > ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
+> > > ppo, and the ordering given through pb is covered by its inclusion in
+> > > strong-order.
+> > What about the ordering given through
+> > A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
+> > superseded by pb as well, but it seems odd not to have it in hb.
 > 
-> [...]
+> How should we resolve this?
+> My current favorite (compromise :D) solution would be to
+> 1. still eliminate both po and co cases from first definition of
+> strong-fence which is used in ppo,
+> 2. define a relation equal to the strong-order in this patch (with po|rf)
 
-Applied to kvmarm/next, thanks!
+Wouldn't it need to have po|co?  Consider:
 
-[1/7] arm64: Allow the definition of UNKNOWN system register fields
-      https://git.kernel.org/kvmarm/kvmarm/c/e2c0b51f1c9d
-[2/7] arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
-      https://git.kernel.org/kvmarm/kvmarm/c/d1a0eb124c44
-[3/7] arm64/sysreg: Add CCSIDR2_EL1
-      https://git.kernel.org/kvmarm/kvmarm/c/8f407d6a15f3
-[4/7] arm64/cache: Move CLIDR macro definitions
-      https://git.kernel.org/kvmarm/kvmarm/c/805e6ec1c5e0
-[5/7] KVM: arm64: Always set HCR_TID2
-      https://git.kernel.org/kvmarm/kvmarm/c/8cc6dedaff42
-[6/7] KVM: arm64: Mask FEAT_CCIDX
-      https://git.kernel.org/kvmarm/kvmarm/c/bf48040cd9b0
-[7/7] KVM: arm64: Normalize cache configuration
-      https://git.kernel.org/kvmarm/kvmarm/c/7af0c2534f4c
+	Wx=1	Rx=1		Ry=1		Rz=1
+		lock(s)		lock(s)		lock(s)
+		unlock(s)	unlock(s)	unlock(s)
+		Wy=1		Wz=1		smp_mb__after_unlock_lock
+						Rx=0
 
---
-Best,
-Oliver
+With the co term this is forbidden.  With only the rf term it is 
+allowed, because po-unlock-lock-po isn't A-cumulative.
+
+> but call it strong-fence for now (in response to Andrea's valid criticism
+> that this patch is doing maybe more than just fix ppo)
+> 3. use the extended strong-fence in the definition of cumul-fence and pb
+> 
+> So I'd still simplify po|co to po|rf and drop the po case from ppo, but
+> return both of those cases in cumul-fence, to be consistent with the idea
+> that cumul-fence should deal with the weak properties of the fences
+> including this after-unlock-lock fence.
+> 
+> 
+> Would that be acceptable?
+
+Subject to the point mentioned above, yes.
+
+Alan
