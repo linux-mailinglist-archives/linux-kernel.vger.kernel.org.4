@@ -2,128 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CCD677C6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C26677C6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbjAWNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S231904AbjAWN0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjAWNZF (ORCPT
+        with ESMTP id S229894AbjAWN0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:25:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA1024492
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674480257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aAf3V2MVK33/cJvKp6aHY4bpR+JdJT/jLy/3Pm1O1K0=;
-        b=EbxXMhRtRiYzDy2F9fR304N9/g+oOp9PfPHLlQ9jRxzWuF/SbMUbDdFY3iAT5Gen9p/LpN
-        kZpG9ti/U+wePKkWACqtbqvFmMxQfrinvB+aphtZT6d6Gbw7ng0SXlzeVIRWKsi1mRx8Zx
-        ROqAE1GsUPEiKkGMv6hLOVsu4GRiJyc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-646-YLXZ6A19MRufIO8unUcCsA-1; Mon, 23 Jan 2023 08:24:16 -0500
-X-MC-Unique: YLXZ6A19MRufIO8unUcCsA-1
-Received: by mail-wm1-f70.google.com with SMTP id o5-20020a05600c4fc500b003db0b3230efso9419639wmq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:24:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aAf3V2MVK33/cJvKp6aHY4bpR+JdJT/jLy/3Pm1O1K0=;
-        b=8RMUDvKChsdWSz3HjQxMag0Q5+Z5aG+F8fWYMByfQpO7IIF8Zc4oWT/48ylJvulmBO
-         SB1ZKzmHQDFbOOy4bf4NPqlzMcC3FzZF00TwKhl/0gKxQRa6vFhrTYVf2t41C9eXsO0X
-         hFFL+7WQbddiOPGylchydeZV6FWRmvV6BBkm5GTwh/mUqIp27A45PkzOqhz66tlhUTMI
-         FHNmsM5OOGl617FuyN1u4/fkNz/Rp1lDpoTjiTDsAT/d24JHEHIj7EV60nPlpxhVU9UX
-         VWZdc+nugxRB7U65Sff1NFbDb5ztIwYXMX50amlz9U7Lpfd70yqeK8A8R6HoBJKAXXaV
-         Vwow==
-X-Gm-Message-State: AFqh2kpAB7UPCABFIWiO8p4/qtPtEM/TN7bQ2EJc+oOjghvdemdjSQrx
-        7icJuHaxZIjhHNck8hi4cZNZzXCzW2PmGyCcVgL6FUpy0o9TYg08Z3N09BHWuUpccKuVJSLT6wQ
-        0z0jGrtUUHC3FNu2iRKxo6Jl9
-X-Received: by 2002:a5d:4dc9:0:b0:2be:21fc:ae3 with SMTP id f9-20020a5d4dc9000000b002be21fc0ae3mr19258705wru.11.1674480255378;
-        Mon, 23 Jan 2023 05:24:15 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvSy/zF5gTuo4Pty91+hnKwsIVtv4UfaZ96iv4w0a9eQ3v+gYxG+33cMyS8lFosJqrFvgcRYQ==
-X-Received: by 2002:a5d:4dc9:0:b0:2be:21fc:ae3 with SMTP id f9-20020a5d4dc9000000b002be21fc0ae3mr19258685wru.11.1674480255115;
-        Mon, 23 Jan 2023 05:24:15 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
-        by smtp.gmail.com with ESMTPSA id n13-20020a5d67cd000000b002bdcce37d31sm33258092wrw.99.2023.01.23.05.24.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 05:24:14 -0800 (PST)
-Message-ID: <c742e47b-dcc0-1fef-dc8c-3bf85d26b046@redhat.com>
-Date:   Mon, 23 Jan 2023 14:24:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v7 2/8] iov_iter: Add a function to extract a page list
- from an iterator
+        Mon, 23 Jan 2023 08:26:45 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA89524135;
+        Mon, 23 Jan 2023 05:26:43 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30N9QlH0008883;
+        Mon, 23 Jan 2023 13:25:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=q5sQ7F7y3oqVxmhsM77aYE5YMDJmMiUFn67QHZbMQMY=;
+ b=tvCSNJ2cSfHqxf1S7EEu8Hn8gHI/m6kkBPN0x8K/8M/b1RYvnGB8ITiwbJfqtpwyth0U
+ JUccCNfg7H78MCsm+thTg2CwpNFrOZrv1imhiAeOM9tnS8LyxctGKadFTei3AQg+Qmdr
+ LjZMYzVRJ1kkVEbxrAcd+uP9xc9VIJVcdcY2eNrkxaUALQTNj9YjO4mKc9zfpOKR+6ni
+ Lr8hSIwBvJgEsuKVVchtqjOYpew3nX/6ZWW5sR6rp9SvN9oBaS2ITycYzoSpF9oAitJD
+ Klof7P+iy4e4bDdqXT+D3X8hF31b0UfassgU1YwIgl1AEWjWlozOUMu5o5wMFC5lhPqA pA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n88kttm2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Jan 2023 13:25:57 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30NBOTQo004087;
+        Mon, 23 Jan 2023 13:25:56 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2043.outbound.protection.outlook.com [104.47.56.43])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g9s5q9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Jan 2023 13:25:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QfwUYGTVQPgs+nJE4ahAC7lEEBClFt6DDsb0fONowur0S1ILwHHFoYY1ciVGljdfVQbUljEvRnismr5AkjXx5q/KSi2TI9QxlcBle5lViHA+YLLwxwYiz6uPFez52FVoDdmB67byqbkGLK78ijQNYGpFUCiEC2JzjwJhTejZKsRKsdvScFfvCVx5Y7HRz96VwwZkjACUQqT6+z+4KECHC804rR4UPY3yUbPVfv1nFYGdbpNN95qefGHR3GkJh0pF8crhLfEDhKt3U7HddqdTHYa4wYgvn5CM7t+XHBzcagDTDvxL6677on2/JMFanYTdEs3KjI+Ku8ncXXgworgckQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q5sQ7F7y3oqVxmhsM77aYE5YMDJmMiUFn67QHZbMQMY=;
+ b=hmN7tfmVFAZr72rrTlvbKMeWwkRrygIHstb36gBOfuEZ/P+y2IMiXlAZHs858iSjaKJ2+goxyVQ9uU327kmLAMFkHY7MdNcpQNLl1SfhSJsDxaS6hWnL7Rn+UwOlBW9uW8nqsnFQmlGxoKcAcTYe4hCAeQaL++IYuYGJmMVK+hKzM0xeP2dyP9TAAdg4AOgtVjgNJ82WSEQJcBHM0rtTAIFQHqbfEZaQ3o41AZEHRKEJ6oPlUdpIQdN9oc2ZDb+swJwE6Z+/kMpB3N/cJ3gUVLF1K+5YyegUs8sxdQ+/sV5zq2pYj58w1h//Wf91Nwfo2Yjq3x6fWMWZ3J5EXZGltA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q5sQ7F7y3oqVxmhsM77aYE5YMDJmMiUFn67QHZbMQMY=;
+ b=DIA0OctBadRL30WBStubzMWXC2iHEpCSTN59rR/XmuwgMMZY+6m8y4taAhw7TdB+jPfMCldnv/PQzCGQVhaz9HklbRrnqPSgrWZx5JLh3P/ezbkNVoWo11Gwj1BDsWsKz+7fON3xgnRr2b/Rq8ghhH3sNpgy7i8KT+p9WTSI9F4=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by SA1PR10MB5687.namprd10.prod.outlook.com (2603:10b6:806:23f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.9; Mon, 23 Jan
+ 2023 13:25:53 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::1040:f0e3:c129:cff]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::1040:f0e3:c129:cff%8]) with mapi id 15.20.6043.009; Mon, 23 Jan 2023
+ 13:25:53 +0000
+Message-ID: <791915a9-0c2b-796a-b788-f026e071859b@oracle.com>
+Date:   Mon, 23 Jan 2023 13:25:46 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/9] jevents/pmu-events improvements
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
-References: <7bbcccc9-6ebf-ffab-7425-2a12f217ba15@redhat.com>
- <246ba813-698b-8696-7f4d-400034a3380b@redhat.com>
- <20230120175556.3556978-1-dhowells@redhat.com>
- <20230120175556.3556978-3-dhowells@redhat.com>
- <3814749.1674474663@warthog.procyon.org.uk>
- <3903251.1674479992@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <3903251.1674479992@warthog.procyon.org.uk>
+To:     Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+References: <20221221223420.2157113-1-irogers@google.com>
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20221221223420.2157113-1-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LNXP265CA0078.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:76::18) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|SA1PR10MB5687:EE_
+X-MS-Office365-Filtering-Correlation-Id: c0a1b8d5-5221-4a9a-c07b-08dafd455a0f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oYpS+mBBBt446nNCVsBBWYsn+WNcq2GfSatfPCPmDz4qpU/54sDV6PjVXZgqY1RS7Mtm7qQKWOUVUeekvX/pdjjeq5ec47oHG0HN8qSPfpstxbFWSMfYySFH2MfQlN3G9aqs4NFNcLZR8O0HhnDOjbTlLSqoM22/rtizOsXXcz+pjTmtXabwCEqkeOtejkcOuej+qO0cDLq+HDt1LcFUulhhQyMZ3nEnHv98G2Zden6rqHTl58Irxp7BkjwNs6SkJxmrjWOmTZAbjfASjz6i4mwsCMQuS17i3b49ZaIe3fzwZcvrdWC850If/aAxZyuNzC2Qy/Is9Y4cn4xnKJ8sX3KDWTXA4AwPBOMeL/gXlAtuLOyN/0KWn/zTrCA6J6ya1/CUAE/d1RhseX3adJxv+50h0QEMA4sf3ccTg2YM5yO2I9ah5551wYwdtgRN//WXtMgi6CWX5PiKG7t7bXoOhNF5DmfxtOYEm5SMV1q5NZpI7PpOleSbXdZV6llDose1vL5rDtwCsoQzUIVGFkDtZAuHLxZX8HcQg9hTyu0TFuAPXFu7oMAeN4ORXEpw0Vm2UgEuc//pRaZQqwzvW3yioDhWg6ovERXl5V1f/OzrhGpl7+7c/KnSzInDGw857fWI7WYF4I1cDw7NXZYdh3Wmh3Mu/3XN8Oo+vuigYiksWah3zHAFGN/FR2Cb8VmhbNOjvjtT5Nmz8ZOEV6OtBRmvyvvKLbxsWaIWYz7OJtu3KncJo9D3ZGD6MsC+VPExPBAi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199015)(2906002)(86362001)(31696002)(6486002)(478600001)(66476007)(4326008)(41300700001)(26005)(186003)(53546011)(8676002)(66556008)(2616005)(36916002)(66946007)(316002)(110136005)(6666004)(921005)(54906003)(7416002)(38100700002)(5660300002)(7406005)(83380400001)(8936002)(6506007)(31686004)(6512007)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clc1NDNUakxXM013bFV4eVBPZGl0MkxKdWFhNkg4OURTMk4wVEdmT3ZjeHhW?=
+ =?utf-8?B?emd4R3lkeUYrRTFONy9RbS9WQXVKMVpjZ2RaY080UU1Xb1oweGVjVHRtRjRG?=
+ =?utf-8?B?UnNSZm9jdkM3QU92TEY3SHBJbXJGQ3M2a3MzNUdJRWxTVEhrRFNoTHJjajQ0?=
+ =?utf-8?B?bDgzMW5HZjVvRFZKM3FKdGJSZmlnUW1YYUhiUWlEOWJ5S3BON2Mxdm9NdTZF?=
+ =?utf-8?B?UU4zdzMyQi9wRENVSjU3Y3hUT2RYNGc3NnNDVDc0TXlJUFQxWWEvZm95Umpq?=
+ =?utf-8?B?dlZLaGNUSGJnc0Z0RmxncHNQUDBMOUEwY2luaGwrcjdVSm9vRFR2Nm00YnhW?=
+ =?utf-8?B?YStBZzBuZ2pKVjRXOUhqekgralZrdGlxM3FGclppcklPMlhRMzNkVzgvbWsy?=
+ =?utf-8?B?Y0hRUTZmNldJTXQ4VUh5cU15bEFtYWZhMllaV3lxay92cFNVVVltSFkzZjNy?=
+ =?utf-8?B?WnJPRVBDdlE2UDVoOEdEeUdrQ2Y1Ym5aekNiZlB6U2xueXRJcTB4ZEM2MC8x?=
+ =?utf-8?B?YjJJSFVHZ3JSR0FLZXJKUkpSd0VJUXZoSWxiL2theS9yWkVQaXQ0bk5PTGRw?=
+ =?utf-8?B?bU5mZEhhU3JnSnN1d3kzREJNOFp0L0tjV2ZvWm1uNE9iekkvYStOZy9tcU5u?=
+ =?utf-8?B?V29mS20zbURGditpU0J6Vlh4cE9VL2x5MlVENXZlYlhNbjFrN3BiVlAvYUNx?=
+ =?utf-8?B?YzdHSHU2enJ4eWhuV3prT3VZTmRMbWFPVzBaR0pIa1R0QzloTjhQR1MxSi8v?=
+ =?utf-8?B?aytGR0tEWVdkclFabTdzdUpuZnBUbGYrd1BsZ00vM0IxcFd1c0JuOGFST2Zn?=
+ =?utf-8?B?dTZPNjRSOHN6cS83N1NlMWJHUmFHVDhLb2R5U285alRyck9ReEdqeXN3ZElh?=
+ =?utf-8?B?dTlIdTMyYkg1aFZ2ZEZhSy9aUE4rN3hqVm9RVVMvWjFNWU9BMW5wMytXK3h2?=
+ =?utf-8?B?V1I1Vm9YdXo5Q1BqT3ZvREc0RDByVlRWbnQwcDZOMU9Scm9Ubmg1ZXVaTkZ1?=
+ =?utf-8?B?dDZqclUvL3F1RkRVTlIzSGFJNEdOMHYzS3lhS0oyQUFTNkFUVnJuNnpPVTJO?=
+ =?utf-8?B?RURLUVhxZ2ExdlcreXpCZnJPQjJIWWJPZEpHcVNEUmJxVk1tckY3ci9KTG1s?=
+ =?utf-8?B?ZkRvTDVLYStnVlhESHkwMVFDZTJPbFk0MUU1YjRWRnRiNWZaY2F2aFk0R3BL?=
+ =?utf-8?B?cGwzV0pEYW4ySTg5c1RoMU1kQ1RYKzBWVkc0UjJhQU4vSlo4QlIyYkt4TWUw?=
+ =?utf-8?B?QktqMDBEMnZRUGJ6NGFnci9kcFpMUHNpcnZJdFRkQ2J5dGpWa0hLZklxSDcx?=
+ =?utf-8?B?S3lQZVlOdkpCdDB4ZmRIb1ZLWE5RYmdpb1o2RVpma2VpNEp4VlZGTnVYSytR?=
+ =?utf-8?B?VnppUS94TU1LQ3p6cy9wUzNHd2pKZllyWmNqT2xzYldCZGVvQy9QRWRzVDJR?=
+ =?utf-8?B?dW1pQ0ZLTW1FU2puQUM1QlUyZ3NmZ2g0dTFSMUZ1VytpZWlleXZ5eUFWc3d3?=
+ =?utf-8?B?QnJEazVnSWF6QVVUZGNYL1hGUThHc3h0cnlHNmhLelUyUFpZODZ2c05aV0JM?=
+ =?utf-8?B?MWhVTDF6b0ZJbDFYc09yb0JWSTlLajdmK0hoZlY4d21acCtwQVp2aXhVVjdK?=
+ =?utf-8?B?VGY0TW1XSVdPUXJUQTY4aDBPOVJ2cTc3MVN5ZUk5cTJBU3NPc0hidXN6QWQ5?=
+ =?utf-8?B?cVUvU00ydk42b0VsaVBMaTR1VTI1R2hDQXlpYUt2VkNUblhKNHlwVURseEdM?=
+ =?utf-8?B?UlNzcWZzeXhnakducUlqZVRrK3dhR3FlRzE3aks3VG9ZSWxSUWdYdEZHR2h4?=
+ =?utf-8?B?c3VJM3F2WGtFU2dzYmNhbVlGR3RjMDVadVl5VlJuNDZSWW1xOUxVMWtVOUVZ?=
+ =?utf-8?B?dGdmKzBrU1hkSDJYWjRBZEhXOTRnNHcrR3FJdGJ0enFESUJzbDJoUkdhem1Y?=
+ =?utf-8?B?bzkxZDl1NGlvRHVVZ3V2T3pqalJFeGsrVzRVQW9PZjVYY0tKYkR0T0M3dnhu?=
+ =?utf-8?B?OFNSRnk1dzNIeFdlVmtMMVlTMU11dWRwNTJoODRDM2VSK04rbW5WN2t1TkJE?=
+ =?utf-8?B?VytPeXN4Z3BDeUYwTGxmRkk3TmtOSEVZeEhLUEo2bUsxNGcvQ1IwaHBRNWlC?=
+ =?utf-8?B?VDl4NWFzeVBVN0hLc1lIUXkwYUhEU3BlZVN2TUNQSm9OamE4bEtDdUJOVDZE?=
+ =?utf-8?B?aUE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?a1p3QjNzK0JyNHdqUTdUOWxtL1VvMkVQaXdOSmU5dlZ5dkJwMi9FdVhDMS9y?=
+ =?utf-8?B?cUEyV3pweE5IRUZVd1d5UTRMYmt1M1hkajdnU1A3QUtxVFFablVtMVBvQktD?=
+ =?utf-8?B?TFpuWXdBeHNsOVFiRk1keU1rTEY0QVpHM245RVRNM2FVUW4ycVRnQjkxaGd4?=
+ =?utf-8?B?OW93cVpEc2hiWFFOS0NYVURjMGFmcUhNSS8xVGI0ODMvMjBtc05EYXlkLzRP?=
+ =?utf-8?B?UEJZcHkwK25qZm9BUVRzbks4S1A4SzVYRjFiNW9NQ3FFYTlQZDhEOFF4c25i?=
+ =?utf-8?B?bzBCZW5tcVFXSDE3Y2ZtNW9jZDI5WTY3RXZheGRXTjRKckxObHBycjdkQytC?=
+ =?utf-8?B?V29BNHRoeHVEaUs5eHRuV0traGh4SU5xVkNaMElpNU9RKzNiRTJYV0Z3U2pz?=
+ =?utf-8?B?b2xMNzd5ODZGS1ZpaGxHQ2t1bzNzeGRub3JwZmRhdENoRjgwVmpBckVjVWFk?=
+ =?utf-8?B?RVhzWUZHQTZ4R2w2TFFHRmVXT3g1THFIZHZ4cmhNcEx0Y3VJM3lOWkxzSXFj?=
+ =?utf-8?B?Z2VObVFYaGJOY1RjZTMxVk9sVTVIWTZGSnQyMjNjYTJhdEd5eUFGYWY0UHVP?=
+ =?utf-8?B?OUVtV3VjWWRVNVRlTXN4b2w0d3pBcSt0RmUrL2x1dEtSZ3UyeE81dEdnL1lm?=
+ =?utf-8?B?QzA1SkdnU0F2MVorZTZ5aHFmSWhhUzl1UmkwY3hNRTJkZURIaWRqekY0U1ZQ?=
+ =?utf-8?B?Sk1DVnJraHF6ZDFlR2tHVHY4WGNXK3BoZ1dnL2hiKzFPQlJ5eStqRWZnNnBp?=
+ =?utf-8?B?aHR4UTZTdlV4a2pRWFJ2ZzNiTmx5c0tXS2NmallTRG44SU1OeENDZ0diUzlt?=
+ =?utf-8?B?V2FiZ1FtcldkcHkwUExhTk54RGVZNTJ1TDFTSXQzTk9NVVRaalVRUVJGVVNa?=
+ =?utf-8?B?bDl5ODhXeFpodE50Mjh6NHY0eTlNSE1CYUJyVzZ4VjN1WUNxWk9hcHk1bDFr?=
+ =?utf-8?B?Mkx3d2ZnZlcydFZHYXpGSmVCMytXOUFXM28wTys5dXZpVXlxb0VhampwendS?=
+ =?utf-8?B?bG4vMUE3dWFBczk0M1RsbUs4Sks2UVZNcWVvOFZHbHcwMzFuNjNmUXVITVlt?=
+ =?utf-8?B?eVlQRmwxS2pxN3d0RCswS1RFM0JBWmF2MTU2ckZWNHhlTHdFSlVnS0c5Rkkr?=
+ =?utf-8?B?V21jdkNEd1VRcWlOZXJETVNNS2YyUDRYKzExL0hhb2QrbkZCRXlYSVBvYjA4?=
+ =?utf-8?B?cm1zZlNxVm9uQStyL291V3JMS0NYQlJwT3JVVFV4NHlFa3lacHRkVStVOGtN?=
+ =?utf-8?B?d2hMYXgzTW9WbVFrRkdCS1FDMW9CbTlPVXliODRSRjVsMkZjTEtvRjlTcjcy?=
+ =?utf-8?B?MC9lZWJpcGI2a3B1M0J6S2N0S3RXdmZ0dE8rSm43MUVOOEEvdmw5eFJUNE56?=
+ =?utf-8?B?bDloKzQzWWE1dUo5N3pJSVpKVVlBSFpHZFZhVDhDMzBsN3VJUjRINjhLTWhH?=
+ =?utf-8?B?OFNpK21ZeGp1V1d3cUhCTStJYnBNTDlkSEw3TVV5b0I2Z3Z0UWx6TlpzYXRV?=
+ =?utf-8?B?R3YxVGlGei9MejlRTmFHWWFSUFg1cENtaGZxQUJxOG1mSnlYVjN5MWVBTzhu?=
+ =?utf-8?B?bXc2QzNZalRiSC9xaGo0dEJ6ZmZnTFNNbUx5RVFpSzBTMllGVHdLRGVFQzds?=
+ =?utf-8?B?VC80MjRhWnB3bVZGcGNCTEw5YzFaUGV4dkFhdVFqSmZQZS8rNVJsMFNBTHht?=
+ =?utf-8?Q?Ej+slPMkLivu2foWL+0t?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0a1b8d5-5221-4a9a-c07b-08dafd455a0f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 13:25:53.4241
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8nyAYkXHeeYL7aZ3k/rq5oN1scQUlFi1VtnvSxz9KetftkN6mZrXB4x9etsBq1q2Z8VAm8m2qJzbW+ABMS7xqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5687
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_10,2023-01-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301230127
+X-Proofpoint-GUID: I7ouWE1ZRdJiHsP0jN5uTGnAjDtxWNoX
+X-Proofpoint-ORIG-GUID: I7ouWE1ZRdJiHsP0jN5uTGnAjDtxWNoX
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 14:19, David Howells wrote:
-> David Hildenbrand <david@redhat.com> wrote:
+On 21/12/2022 22:34, Ian Rogers wrote:
+> Add an optimization to jevents using the metric code, rewrite metrics
+> in terms of each other in order to minimize size and improve
+> readability. For example, on Power8
+> other_stall_cpi is rewritten from:
+> "PM_CMPLU_STALL / PM_RUN_INST_CMPL - PM_CMPLU_STALL_BRU_CRU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_FXU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_VSU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_LSU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_NTCG_FLUSH / PM_RUN_INST_CMPL - PM_CMPLU_STALL_NO_NTF / PM_RUN_INST_CMPL"
+> to:
+> "stall_cpi - bru_cru_stall_cpi - fxu_stall_cpi - vsu_stall_cpi - lsu_stall_cpi - ntcg_flush_cpi - no_ntf_stall_cpi"
+> Which more closely matches the definition on Power9.
 > 
->> Switching from FOLL_GET to FOLL_PIN was in the works by John H. Not sure what
->> the status is. Interestingly, Documentation/core-api/pin_user_pages.rst
->> already documents that "CASE 1: Direct IO (DIO)" uses FOLL_PIN ... which does,
->> unfortunately, no reflect reality yet.
+> A limitation of the substitutions are that they depend on strict
+> equality and the shape of the tree. This means that for "a + b + c"
+> then a substitution of "a + b" will succeed while "b + c" will fail
+> (the LHS for "+ c" is "a + b" not just "b").
 > 
-> Yeah - I just came across that.
+> Separate out the events and metrics in the pmu-events tables saving
+> 14.8% in the table size while making it that metrics no longer need to
+> iterate over all events and vice versa. These changes remove evsel's
+> direct metric support as the pmu_event no longer has a metric to
+> populate it. This is a minor issue as the code wasn't working
+> properly, metrics for this are rare and can still be properly ran
+> using '-M'.
 > 
-> Should iov_iter.c then switch entirely to using pin_user_pages(), rather than
-> get_user_pages()?  In which case my patches only need keep track of
-> pinned/not-pinned and never "got".
+> Add an ability to just build certain models into the jevents generated
+> pmu-metrics.c code. This functionality is appropriate for operating
+> systems like ChromeOS, that aim to minimize binary size and know all
+> the target CPU models.
 
-That would be the ideal case: whenever intending to access page content, 
-use FOLL_PIN instead of FOLL_GET.
+ From a glance, this does not look like it would work for arm64. As I 
+see in the code, we check the model in the arch folder for the test to 
+see if built. For arm64, as it uses arch/implementator/model folder org, 
+and not just arch/model (like x86)
 
-The issue that John was trying to sort out was that there are plenty of 
-callsites that do a simple put_page() instead of calling 
-unpin_user_page(). IIRC, handling that correctly in existing code -- 
-what was pinned must be released via unpin_user_page() -- was the 
-biggest workitem.
+So on the assumption that it does not work for arm64 (or just any arch 
+which uses arch/implementator/model folder org), it would be nice to 
+have that feature also. Or maybe also support not just specifying model 
+but also implementator.
 
-Not sure how that relates to your work here (that's why I was asking): 
-if you could avoid FOLL_GET, that would be great :)
+> 
+> v2. Rebase. Modify the code that skips rewriting a metric with the
+>      same name with itself, to make the name check case insensitive.
+> 
 
--- 
+
+Unfortunately you might need another rebase as this does not apply to 
+acme perf/core (if that is what you want), now for me at:
+
+5670ebf54bd2 (HEAD, origin/tmp.perf/core, origin/perf/core, perf/core)
+perf cs-etm: Ensure that Coresight timestamps don't go backwards
+
+> Ian Rogers (9):
+>    perf jevents metric: Correct Function equality
+>    perf jevents metric: Add ability to rewrite metrics in terms of others
+>    perf jevents: Rewrite metrics in the same file with each other
+>    perf pmu-events: Separate metric out of pmu_event
+>    perf stat: Remove evsel metric_name/expr
+>    perf jevents: Combine table prefix and suffix writing
+>    perf pmu-events: Introduce pmu_metrics_table
+>    perf jevents: Generate metrics and events as separate tables
+>    perf jevents: Add model list option
+
 Thanks,
-
-David / dhildenb
-
+John
