@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC182677EC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CCA677ED2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjAWPH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S232164AbjAWPLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbjAWPHw (ORCPT
+        with ESMTP id S232082AbjAWPLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:07:52 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C675F751
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:07:50 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id p188so15149277yba.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:07:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JM1EiOocNtSZA8MsnSOByXfINK+alIpF0Dhm3T9y7wc=;
-        b=M2x2MjTHjmUlY72HKk4rlnXeJkdFfgeXmtMqYIyp8cmQJ8MtURsID4V59mR9+0Cn8U
-         stkKjYi7X8vbNQipHx9DzCo5RgQyzvB6dknGpuiE2l1ptYtEc2rzCbOVgw0m7H4XAL8o
-         +33Ibf5zFZ7swAPkUpjetRJkoz78HepNsRNWQ6hKfnyVD+7J3g+/TWrKGY9bKjHhpOAB
-         UpYZdp852Txr3UQCAxYOFzoCRl8im3RVsf6FIRyK4TTq6k6UUy8cfgqeU7UC2MbTxumt
-         Pu1wxP/1iGZTTYVkRqg3vdhp89nB6/obEXACanGagUvroApU7sosjl94Y0xWiiFpDO7k
-         v56g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JM1EiOocNtSZA8MsnSOByXfINK+alIpF0Dhm3T9y7wc=;
-        b=Xt/ikXKntzYrXQWGX11Z47mQAOUyNW+54jsFMIaH2tnWT1WPddhfB7659dFQLCpqrk
-         IWa38y8mMPCY6mSEGh11lDPGkeXDQDZbB+8Ubh+fZXFn3QBKsmj6MTm+6MsvYk/BqJgk
-         FiEfVe0+l4soHIvO3H0jdtQThV8r5kl+1/HvOvJCqJs62QJxIBqutRWketaK0o5ti6Vy
-         7yt5aK+y4sKp8wpNBGxGlqQJhLiqR8VZuzLJWiSU5ZjY2SMyoiW1yGzXXrVkN36d0Aqm
-         +rSVYie0TcLrAlWEzUd2nlUQTj5QbZw/iHizSpjV5R+lwgUxpIXSNlDcWenW2afFFRhn
-         p9lA==
-X-Gm-Message-State: AFqh2kpm3skEj7U1FT8c3Y+YEAZOly8ezuDrpyzOcFv8+ZVwYMJFj7fR
-        Zx+lDGippB03itH4gR6fRCOvUnVNGypplJzByNcIfg==
-X-Google-Smtp-Source: AMrXdXtou+r1eGkUjO+yV5sepHYYEBThh559isR/Qxq8Kt/3Do7Ef2BAHj6FQrPgGPw8IKZFv6I1Yuaq3ctMN14OTH4=
-X-Received: by 2002:a25:690a:0:b0:70b:87c6:4fe with SMTP id
- e10-20020a25690a000000b0070b87c604femr2900478ybc.550.1674486469535; Mon, 23
- Jan 2023 07:07:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
- <20230120082054.610626-1-michael@walle.cc> <CAFGrd9qXL-u4XzG9MLK2zbKoDudhTYpr-gJaZPjbysJ9Fo2gnQ@mail.gmail.com>
- <Y857VOG5upNJfpdM@sirena.org.uk>
-In-Reply-To: <Y857VOG5upNJfpdM@sirena.org.uk>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Mon, 23 Jan 2023 16:07:38 +0100
-Message-ID: <CAFGrd9qww=s1iox+cye_-JW=LPpUdKjLfGO1+V_1J92z7eniOw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] spi: spidev: add new mediatek support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 23 Jan 2023 10:11:20 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8241350D;
+        Mon, 23 Jan 2023 07:11:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674486655; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=iRl4xmkR0BOQlUNdYVVOsm6vLoo6I4HSweNVspQMNgqEwk+ZIy8MQy77nGPduRBIzN4Rffzrw+i9Kt9ZrQFvlsJs7jVl1j0nghRCFo5u9H0Wgzuq2acG4QU/QuAjym4jdne8sY1zxnoOQ3ZZKYNNQ46xuk9L1fL+tvP21pk7bmU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674486655; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=pulpL6qwi74emUZJrnomwPTI5bv9SqNXmCaK49COUpY=; 
+        b=aEqBl98iJlLdLD8lFrvhJcguUUZQ+AnllI2bvPNe9JW4aYaMFxSZJcG4sqtRgtdCOLZbfItZYq5JciZguKyM7qa7e2SY+7wymKFnT6gCC/CJEElXmrKWB4GU+VWVQj/5XODmcok9gyO7x/9KBM+Yh3cMSehCUq9RV5f0Vi4t5SQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674486655;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=pulpL6qwi74emUZJrnomwPTI5bv9SqNXmCaK49COUpY=;
+        b=KqTrXSc3wVDb7uAfdYNRXoEIy05gZQfzeCp+n+qcs1e7uWoqU9vbg/0Z34s7sKqG
+        SfS80EBEWP1Q3Z4gb3T8Dc1FyQTdaysXlfkUheXTAOg79Q1H8uDA7AyYQ/VLzIWVguc
+        HqQii+Y3uQQ8nHXxPYkIfdZ+AVuUv1A1oRaelzPY=
+Received: from lchen-xiaoxin.linux.beauty (183.211.210.143 [183.211.210.143]) by mx.zohomail.com
+        with SMTPS id 1674486643071215.31279572110736; Mon, 23 Jan 2023 07:10:43 -0800 (PST)
+Date:   Mon, 23 Jan 2023 23:09:57 +0800
+Message-ID: <875ycxi8xm.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Li Chen <lchen@ambarella.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/15] dt-bindings: arm: add support for Ambarella SoC
+In-Reply-To: <7d191871-1025-43a3-20bf-8fc6b3f92c89@linaro.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-5-lchen@ambarella.com>
+        <7d191871-1025-43a3-20bf-8fc6b3f92c89@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,23 +67,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lun. 23 janv. 2023 =C3=A0 13:19, Mark Brown <broonie@kernel.org> a =C3=
-=A9crit :
+On Mon, 23 Jan 2023 16:07:32 +0800,
+Krzysztof Kozlowski wrote:
 >
-> On Mon, Jan 23, 2023 at 10:37:58AM +0100, Alexandre Mergnat wrote:
+> On 23/01/2023 08:32, Li Chen wrote:
+> > Create a vendor directory for Ambarella, and add
+> > cpuid, rct, scratchpad documents.
+> >
+> > Signed-off-by: Li Chen <lchen@ambarella.com>
+> > Change-Id: I2c29e45c08666489b0d9b588ac37d713f5b723d1
 >
-> > Yes I want to expose the SPI on the pin header for two reasons:
-> > - It's an Evaluation Kit board, I believe exposing SPI helps new
-> > customers to try/understand it.
+> Please run scripts/checkpatch.pl and fix reported warnings.
 >
-> That's not how this works.  Anyone connecting something to the
-> SPI header will need to update the DT to reflect whatever they
-> have connected, if that is something that should be controlled
-> with spidev then they should add the compatible for that thing
-> to the driver.  If that is something that has a regular driver
-> then the regular driver will be used.
+> Applies to all your patches. Also test them... I have doubts that you
+> tested if you actually ignored checkpatch :/
 
-Got it. I think this series should be dropped then. If someone needs
-the SPI, then he should use overlay (or modify the DTS locally).
-I thought I could use spidev to bring SPI into the userspace, to help
-future users play with it ("/dev/spidev0.0").
+Yeah, I checkpatch all patches, and have planned to fix Change-Id finally(manually),
+but forget it before sending mails, my bad, sorry. I will remove it in v2.
+
+> > ---
+> >  .../arm/ambarella/ambarella,cpuid.yaml        | 24 +++++++++++++++++++
+> >  .../bindings/arm/ambarella/ambarella,rct.yaml | 24 +++++++++++++++++++
+> >  .../arm/ambarella/ambarella,scratchpad.yaml   | 24 +++++++++++++++++++
+> >  .../bindings/arm/ambarella/ambarella.yaml     | 22 +++++++++++++++++
+> >  MAINTAINERS                                   |  4 ++++
+> >  5 files changed, 98 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
+> > new file mode 100644
+> > index 000000000000..1f4d9cec8f92
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
+>
+> This goes to soc
+
+Thanks, I wasn't aware that there is a document dir named soc. I will move cpuid yaml
+to bindings/soc/ambarella/, and leave other yaml still here.
+
+> > @@ -0,0 +1,24 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/ambarella,cpuid.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella SoC ID
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+>
+> Missing description.
+
+Sorry, description will be added in v2. BTW, does other YAMLs in this patch
+also need descriptions?
+
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: "ambarella,cpuid", "syscon"
+>
+> Drop quotes (applies to all your patches)
+
+OK, thanks!
+
+> Missing SoC specific compatible.
+>
+> > +
+> > +  reg:
+> > +    maxItems: 1
+>
+> Missing additionalProperties. sorry, start from scratch from some
+> existing recent bindings or better example-schema.
+
+Good to know that there is example-schema, thanks!
+ 
+> > +
+> > +examples:
+> > +  - |
+> > +    cpuid_syscon: cpuid@e0000000 {
+> > +        compatible = "ambarella,cpuid", "syscon";
+> > +        reg = <0xe0000000 0x1000>;
+> > +    };
+> > diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
+> > new file mode 100644
+> > index 000000000000..7279bab17d9e
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
+> > @@ -0,0 +1,24 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/ambarella,rct.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella RCT module
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: "ambarella,rct", "syscon"
+>
+> All the same problems.
+
+Well noted.
+
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +examples:
+> > +  - |
+> > +		rct_syscon: rct_syscon@ed080000 {
+>
+> Really? Just take a look and you will see wrong indentation. Also drop
+> underscores in node names and "rct". Node names should be generic.
+
+Sorry for the wrong indentation, will fix it in v2.
+
+Is it ok to contain underscores in lable? if so, I will change it into
+
+rct_syscon: syscon@ed080000 {
+
+in v2.
+
+>
+> > +        compatible = "ambarella,rct", "syscon";
+> > +        reg = <0xed080000 0x1000>;
+> > +    };
+> > diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
+> > new file mode 100644
+> > index 000000000000..5d2bd243b5c9
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
+> > @@ -0,0 +1,24 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/ambarella,scratchpad.yaml#
+>
+> That's not a clock controller!
+
+Sorry, will fix it in v2.
+
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella Scratchpad
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: "ambarella,scratchpad", "syscon"
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +examples:
+> > +  - |
+> > +    scratchpad_syscon: scratchpad_syscon@e0022000 {
+>
+> All the same problems.
+
+Well noted.
+
+> > +        compatible = "ambarella,scratchpad", "syscon";
+> > +        reg = <0xe0022000 0x100>;
+> > +    };
+> > diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
+> > new file mode 100644
+> > index 000000000000..5991bd745c05
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
+> > @@ -0,0 +1,22 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/ambarella.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella SoC Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    const: "/"
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: Ambarella SoC based platforms
+> > +        items:
+> > +          - enum:
+> > +              - ambarella,s6lm
+>
+> What is this? How do you expect it to apply? Can you try by yourself?
+
+Sorry, I didn't find this file is duplicited with outside ambarella.yaml.
+I will remove it in v2.
+
+Thanks for your review!
+
+Regards,
+Li
