@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DA6677C12
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19D1677C1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjAWNA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S232094AbjAWNDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjAWNAV (ORCPT
+        with ESMTP id S231544AbjAWNDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:00:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67B9EC69;
-        Mon, 23 Jan 2023 05:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4932660F16;
-        Mon, 23 Jan 2023 13:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A6719C4339E;
-        Mon, 23 Jan 2023 13:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674478818;
-        bh=Gztr/MVHCRjc4ugMLOsn6VGCdHf7ad01uj2K2ys0X8M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rYcf2S6yKobqeuSjW3ZpUWORoIQQfNllUPwHCDaK8VyOTMMzV29nyy212Mr3Zaqcb
-         PwG9M8zEABikbkijskkEPEj05GoCcNkPWAwJ4GLscnvJEw2CIl2zqDvyH3v+Zwhu5J
-         +2STXcGWo4cH+x6eCodKKlkSUa05yhuSf2b3EA6axnsb5nJY2G50wcbke1D94uAJgo
-         GgGJBjCHiqpwbUXYwr/d6TfPqvUaNDaGkFFXgroCivcgpkjAXmWLxCSlbf/i0i4EwT
-         iyWk0UsCbj0Yw1ixXyoxrNZwtB+BD9ZpMLnPGG7DK+UC1FPo/1YGw0kHCz3RvqZRDk
-         OK7OMvYvtKnCg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 84899E5256F;
-        Mon, 23 Jan 2023 13:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 23 Jan 2023 08:03:44 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653E422DED
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:03:43 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso9054042wmn.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:03:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zaX0gI0/ZktxsTJ1ltyBOzUuyo84ob21wz6E7O6B+2w=;
+        b=gtduIFeibsORW/y3pwoBVh8NSDUcIWKrmMxVqFKZyjD0Xxfo9YQs3zSVKkFZ2bUc+8
+         I1uO6Ml/Xg6Vm8NBwKANOrgqeTCl34mEYAoPDVnb0CEI6SDhJL5WvZIwNLXHqZ9dKYkc
+         cEd2qbMw93J34xD1Wtm9Ascz+2RBsJRZkmYpBMSKnnyt3xYmlP8cSEG1g30xHstBv95Y
+         ikbonLRDw2Y5bBt6zNK9l0/Q+d+zrW+4FjcfcNco3vHJaAZQIbDea2rRlbfApkgvaG0r
+         wjRuUFdZrfPhnl7BGFhDeR083B/payaCrPb93B1ooM88Kgwi5qVRL7hzUp4SbOVRgCZN
+         bw+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zaX0gI0/ZktxsTJ1ltyBOzUuyo84ob21wz6E7O6B+2w=;
+        b=nRsq3hZ528avETjc9R/sIkHwNNjKVGhSjx1oov92pAkmMVyCy2kXuURs0xmA+7P9kk
+         lkVaACPGB1pYqtrJ4gBPRNNhmJCisXWanOg+jM33rZYG2VRLZa990P3Pwfm2EuWJvBqi
+         ayiiyo690xK83WULIT25UJ3KwJHAW9QCT8cq86tKD4lyHR68iFxn4mkJbbHwSZ6b9Wr9
+         nTWM64HjLkhWiw0mn3YUiuZABBMOVWA7aaoNdf0Ah8nIwX8nsz8sXLN5ft77vDwGmD/6
+         OC022R+0JrS9ur8Pzm9ZGT7DlAgMhnp4NZ7Limf/h1tE1vJKjjnryjQl/xZnGcY8cmKr
+         xA1w==
+X-Gm-Message-State: AFqh2kpyZ0eSgFh69jbKEd9JRNzlTEEIEQxSfA8SO/+tV3/LsnmJ545F
+        2HbUu0OFgXrx9aGAlHBDB7eiyg==
+X-Google-Smtp-Source: AMrXdXvClwHfXDW+e6ScZ+irhQ83QlbY+vHsw/aMa+9Cj9j4Bg4nTDUFZOkEOfgX/zAxE2UCTUxFSg==
+X-Received: by 2002:a05:600c:3d16:b0:3d0:6a57:66a5 with SMTP id bh22-20020a05600c3d1600b003d06a5766a5mr24048487wmb.0.1674479021800;
+        Mon, 23 Jan 2023 05:03:41 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05600c359000b003da105437besm11443558wmq.29.2023.01.23.05.03.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 05:03:41 -0800 (PST)
+Message-ID: <f36c7095-592b-a4e2-4d76-09632efcc63d@linaro.org>
+Date:   Mon, 23 Jan 2023 13:03:40 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
+ <Y86CPmgvAi+kChQI@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y86CPmgvAi+kChQI@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 net-next 00/12] ethtool support for IEEE 802.3 MAC Merge
- layer
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167447881853.32642.15428522709608275315.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 Jan 2023 13:00:18 +0000
-References: <20230119122705.73054-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230119122705.73054-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mkubecek@suse.cz, claudiu.manoil@nxp.com,
-        vinicius.gomes@intel.com, xiaoliang.yang_1@nxp.com,
-        kurt@linutronix.de, rui.sousa@nxp.com, ferenc.fejes@ericsson.com,
-        pranavi.somisetty@amd.com, harini.katakam@amd.com,
-        colin.foster@in-advantage.com, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, andrew@lunn.ch, f.fainelli@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 23/01/2023 12:49, Stephan Gerhold wrote:
+> Also: The undocumented "register-mem" interconnect is still there. 😄
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 19 Jan 2023 14:26:52 +0200 you wrote:
-> Change log
-> ----------
-> 
-> v3->v4:
-> - add missing opening bracket in ocelot_port_mm_irq()
-> - moved cfg.verify_time range checking so that it actually takes place
->   for the updated rather than old value
-> v3 at:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20230117085947.2176464-1-vladimir.oltean@nxp.com/
-> 
-> [...]
-
-Here is the summary with links:
-  - [v4,net-next,01/12] net: ethtool: netlink: introduce ethnl_update_bool()
-    (no matching commit)
-  - [v4,net-next,02/12] net: ethtool: add support for MAC Merge layer
-    https://git.kernel.org/netdev/net-next/c/2b30f8291a30
-  - [v4,net-next,03/12] docs: ethtool-netlink: document interface for MAC Merge layer
-    https://git.kernel.org/netdev/net-next/c/3700000479f0
-  - [v4,net-next,04/12] net: ethtool: netlink: retrieve stats from multiple sources (eMAC, pMAC)
-    https://git.kernel.org/netdev/net-next/c/04692c9020b7
-  - [v4,net-next,05/12] docs: ethtool: document ETHTOOL_A_STATS_SRC and ETHTOOL_A_PAUSE_STATS_SRC
-    https://git.kernel.org/netdev/net-next/c/c319df10a4c8
-  - [v4,net-next,06/12] net: ethtool: add helpers for aggregate statistics
-    https://git.kernel.org/netdev/net-next/c/449c5459641a
-  - [v4,net-next,07/12] net: ethtool: add helpers for MM fragment size translation
-    https://git.kernel.org/netdev/net-next/c/dd1c41645039
-  - [v4,net-next,08/12] net: dsa: add plumbing for changing and getting MAC merge layer state
-    https://git.kernel.org/netdev/net-next/c/5f6c2d498ad9
-  - [v4,net-next,09/12] net: mscc: ocelot: allow ocelot_stat_layout elements with no name
-    https://git.kernel.org/netdev/net-next/c/1a733bbddfad
-  - [v4,net-next,10/12] net: mscc: ocelot: hide access to ocelot_stats_layout behind a helper
-    https://git.kernel.org/netdev/net-next/c/497eea9f8ed5
-  - [v4,net-next,11/12] net: mscc: ocelot: export ethtool MAC Merge stats for Felix VSC9959
-    https://git.kernel.org/netdev/net-next/c/ab3f97a9610a
-  - [v4,net-next,12/12] net: mscc: ocelot: add MAC Merge layer support for VSC9959
-    https://git.kernel.org/netdev/net-next/c/6505b6805655
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Ah indeed. 2:30 am email rule
