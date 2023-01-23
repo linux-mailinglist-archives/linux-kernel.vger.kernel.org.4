@@ -2,175 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24446780B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498816780B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbjAWQAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S232994AbjAWQBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbjAWQAq (ORCPT
+        with ESMTP id S232173AbjAWQBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:00:46 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E2E7297
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:00:43 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id 188so15361746ybi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:00:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NeIcA5S+dnmrIVTwVfRWJo+4PAeUHSf9erW6VTBU+Fk=;
-        b=SEZJD4dx9tkHB8M9ZJpL3Fvn6P01HXOawpP3Md/gmXNji/GzGqSKt2hw3xNEs+BvOQ
-         wDfKBoRGOqWWZYsnURMXLVmN6t1BMDww7Bo7voRF+8rGxAvo//iHoisFyPCRLoOqaQlS
-         /Yk/qAndjQfkW5ysqkVZrGBT/+IjrfbEugsq3YMuU1aebIq55SHOGX1YkWffL6qjEGXZ
-         9Rk/buaJyZxsfXHMXjtA86yKshvJhDxAxCWFnbdpKYJLqLzW9VV3nZP4qs65paryP6Lt
-         zzt/B2xUmNyU7Awki1TPmr8iU3FrYT8vOfjwfwJx01xVz1ED1v+PS8lSQJ//fiVkyTc/
-         Ku5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NeIcA5S+dnmrIVTwVfRWJo+4PAeUHSf9erW6VTBU+Fk=;
-        b=j5ig+HzZ0wvAuKef6z0RR0OTgL2VhXODqfdHwld+vZTxEL7E/WcAOUotpd0ne2tLYP
-         ACt1Dem+0RfgaHaOVviGXJL/VDSLwrzJKmttc/fPuxBL83/jKAlzXD8ygh+mgIvXGwgx
-         prueAY3zoEHEFJgXspE2QoN0tmwa1YIq5+guQ/9l9zHZOF5owPGGWh4U4QXnhS6yPsTI
-         dfk61y5LXqE6Mn4BrbZEkT9Qe3xq44vS5SIoG8dh763CkNeGLMAL4KR3KtJFJJ5pisEb
-         mCaBtPor+j2pz5NmOh0MZaKRaLaeg48Fs5AsW9Sxl5K0DgxVGC88qlK/OHrHG3t01gp7
-         0vFg==
-X-Gm-Message-State: AFqh2kodJyYxV3vOO6lFPJlJ1SIGQrXksOcdPcAN80n5LgyV+uhV3TOS
-        iMZuk2CKfRvHCFFR+PTkBxZbodghYIDvF5APZXv9NQ==
-X-Google-Smtp-Source: AMrXdXujNE1G5UWuwXCs+5+Pw9XLNjdaXbWFeSasbkoUAsicrIlpOl0APXO1UPrAC9V1oPfF2Gp4dFd3hrJ3d7B6s/8=
-X-Received: by 2002:a25:4643:0:b0:7f0:6577:3333 with SMTP id
- t64-20020a254643000000b007f065773333mr1764056yba.525.1674489642788; Mon, 23
- Jan 2023 08:00:42 -0800 (PST)
+        Mon, 23 Jan 2023 11:01:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05474B76C;
+        Mon, 23 Jan 2023 08:01:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C45360F92;
+        Mon, 23 Jan 2023 16:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F27C433EF;
+        Mon, 23 Jan 2023 16:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674489707;
+        bh=+TQ+/1RQ4Y+mpEsDlWjx3tP6VFQIaELp3GBETePs24s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kN78ypcoGzW8NrLrsf3leHzLNORyzrx10GSNboEPf2hz11nMLPUaM6sQhOiDQRHEQ
+         KGNOKHP0wzzJltm2G9ioPjw0Tnj3rkiJ/syTItxQKV8PgAbX3f9ajE5Li6X4mZn4E9
+         LoLurSkgJ0gXxWFUc/xxD5YrS2yNQHyLrRgXwmbsgKkb33BgNWQr8oTq7GhMYlaQFK
+         eBLzusUXb04ucjG0cm2Kapa7KJrlZMoVPodxh+mFGMbfrleu6iuKtvI8ofMrBgCfJq
+         /k6ATkf3fVP9pVyQC0FDV5INYI3lYutLxuyjKqgZzhEoaJjRbIhRVBtxLLvtWK4d4J
+         b5boFnXMX9YZQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pJzGT-00016g-7n; Mon, 23 Jan 2023 17:01:45 +0100
+Date:   Mon, 23 Jan 2023 17:01:45 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm: Initialize mode_config earlier
+Message-ID: <Y86vaTQR7INWezyj@hovoldconsulting.com>
+References: <20230113041051.4189063-1-quic_bjorande@quicinc.com>
+ <eea1c5dc-6bc5-4246-f0e1-0c790de9f078@linaro.org>
+ <9a64c685-9ff0-bc1d-e604-e3773ff9edd7@linaro.org>
+ <20230117025122.jt3wrjkqfnogu4ci@builder.lan>
+ <Y8ZWl85gSpOaLgO4@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20230123093609.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
-In-Reply-To: <20230123093609.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 23 Jan 2023 08:00:31 -0800
-Message-ID: <CABXOdTcEi7zb6YNcWsV6vXjO6T0VTOsuzJUO+APR1tgTfrXgww@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: allow deferred probe of
- switch handles
-To:     Victor Ding <victording@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        gustavoars@kernel.org, heikki.krogerus@linux.intel.com,
-        dnojiri@chromium.org, dustin@howett.net, lee.jones@linaro.org,
-        tzungbi@kernel.org, groeck@chromium.org,
-        gregkh@linuxfoundation.org, pmalani@chromium.org,
-        tinghan.shen@mediatek.com, sebastian.reichel@collabora.com,
-        enric.balletbo@collabora.com, bleung@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8ZWl85gSpOaLgO4@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 1:36 AM Victor Ding <victording@chromium.org> wrote:
->
-> `fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
-> which is called from `cros_typec_get_switch_handles`. When this happens,
-> it does not indicate absence of switches; instead, it only hints that
-> probing of switches should occur at a later time.
->
-> Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
-> probing switches as a better time.
->
-> Signed-off-by: Victor Ding <victording@chromium.org>
-> ---
->
->  drivers/platform/chrome/cros_ec_typec.c | 30 +++++++++++++++++--------
->  1 file changed, 21 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index 59de4ce01fab..f4b3fc788491 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -145,31 +145,37 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
->                                          struct fwnode_handle *fwnode,
->                                          struct device *dev)
->  {
-> +       int ret = 0;
-> +
->         port->mux = fwnode_typec_mux_get(fwnode, NULL);
->         if (IS_ERR(port->mux)) {
-> -               dev_dbg(dev, "Mux handle not found.\n");
-> +               ret = PTR_ERR(port->mux);
-> +               dev_dbg(dev, "Mux handle not found: %d.\n", ret);
+On Tue, Jan 17, 2023 at 09:04:39AM +0100, Johan Hovold wrote:
+> On Mon, Jan 16, 2023 at 08:51:22PM -0600, Bjorn Andersson wrote:
+> > On Fri, Jan 13, 2023 at 10:57:18AM +0200, Dmitry Baryshkov wrote:
+> > > On 13/01/2023 06:23, Dmitry Baryshkov wrote:
+> > > > On 13/01/2023 06:10, Bjorn Andersson wrote:
+> > > > > Invoking drm_bridge_hpd_notify() on a drm_bridge with a HPD-enabled
+> > > > > bridge_connector ends up in drm_bridge_connector_hpd_cb() calling
+> > > > > drm_kms_helper_hotplug_event(), which assumes that the associated
+> > > > > drm_device's mode_config.funcs is a valid pointer.
+> > > > > 
+> > > > > But in the MSM DisplayPort driver the HPD enablement happens at bind
+> > > > > time and mode_config.funcs is initialized late in msm_drm_init(). This
+> > > > > means that there's a window for hot plug events to dereference a NULL
+> > > > > mode_config.funcs.
+> > > > > 
+> > > > > Move the assignment of mode_config.funcs before the bind, to avoid this
+> > > > > scenario.
+> > > > 
+> > > > Cam we make DP driver not to report HPD events until the enable_hpd()
+> > > > was called? I think this is what was fixed by your internal_hpd
+> > > > patchset.
+> > > 
+> > > Or to express this in another words: I thought that internal_hpd already
+> > > deferred enabling hpd event reporting till the time when we need it, didn't
+> > > it?
+> > > 
+> > 
+> > I added a WARN_ON(1) in drm_bridge_hpd_enable() to get a sense of when
+> > this window of "opportunity" opens up, and here's the callstack:
+> > 
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 6 PID: 99 at drivers/gpu/drm/drm_bridge.c:1260 drm_bridge_hpd_enable+0x48/0x94 [drm]
+> > ...
+> > Call trace:
+> >  drm_bridge_hpd_enable+0x48/0x94 [drm]
+> >  drm_bridge_connector_enable_hpd+0x30/0x3c [drm_kms_helper]
+> >  drm_kms_helper_poll_enable+0xa4/0x114 [drm_kms_helper]
+> >  drm_kms_helper_poll_init+0x6c/0x7c [drm_kms_helper]
+> >  msm_drm_bind+0x370/0x628 [msm]
+> >  try_to_bring_up_aggregate_device+0x170/0x1bc
+> >  __component_add+0xb0/0x168
+> >  component_add+0x20/0x2c
+> >  dp_display_probe+0x40c/0x468 [msm]
+> >  platform_probe+0xb4/0xdc
+> >  really_probe+0x13c/0x300
+> >  __driver_probe_device+0xc0/0xec
+> >  driver_probe_device+0x48/0x204
+> >  __device_attach_driver+0x124/0x14c
+> >  bus_for_each_drv+0x90/0xdc
+> >  __device_attach+0xdc/0x1a8
+> >  device_initial_probe+0x20/0x2c
+> >  bus_probe_device+0x40/0xa4
+> >  deferred_probe_work_func+0x94/0xd0
+> >  process_one_work+0x1a8/0x3c0
+> >  worker_thread+0x254/0x47c
+> >  kthread+0xf8/0x1b8
+> >  ret_from_fork+0x10/0x20
+> > ---[ end trace 0000000000000000 ]---
+> > 
+> > As drm_kms_helper_poll_init() is the last thing being called in
+> > msm_drm_init() shifting around the mode_config.func assignment would not
+> > have any impact.
+> > 
+> > Perhaps we have shuffled other things around to avoid this bug?  Either
+> > way, let's this on hold  until further proof that it's still
+> > reproducible.
+> 
+> As I've mentioned off list, I haven't hit the apparent race I reported
+> here:
+> 
+> 	https://lore.kernel.org/all/Y1efJh11B5UQZ0Tz@hovoldconsulting.com/
+> 
+> since moving to 6.2. I did hit it with both 6.0 and 6.1-rc2, but it
+> could very well be that something has changes that fixes (or hides) the
+> issue since.
 
-All of those should call dev_err_probe().
+For unrelated reasons, I tried enabling async probing, and apart from
+apparently causing the panel driver to probe defer indefinitely, I also
+again hit the WARN_ON() I had added to catch this:
 
->                 goto mux_err;
+[   13.593235] WARNING: CPU: 0 PID: 125 at drivers/gpu/drm/drm_probe_helper.c:664 drm_kms_helper_hotplug_event+0x48/0x7
+0 [drm_kms_helper]
+...
+[   13.679429] CPU: 0 PID: 125 Comm: kworker/0:3 Not tainted 6.2.0-rc4 #110
+[   13.687159] Hardware name: Qualcomm QRD, BIOS 6.0.220110.BOOT.MXF.1.1-00470-MAKENA-1 01/10/2022
+[   13.696947] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
+[   13.705044] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   13.713054] pc : drm_kms_helper_hotplug_event+0x48/0x70 [drm_kms_helper]
+[   13.720812] lr : drm_kms_helper_hotplug_event+0x18/0x70 [drm_kms_helper]
+[   13.728557] sp : ffff800009e33c90
+[   13.732779] x29: ffff800009e33c90 x28: ffffad90862eb000 x27: ffff62d2362ee305
+[   13.740956] x26: ffffad90862f1ea0 x25: ffffad9086309b50 x24: 0000000000000000
+[   13.749125] x23: 0000000000000003 x22: ffff62d0c5dad000 x21: 0000000000000002
+[   13.757291] x20: ffff62d0c6d24000 x19: ffff62d0c5dad000 x18: 0000000000000038
+[   13.765443] x17: 0000000000000004 x16: 000000000000d323 x15: 0000000000000004
+[   13.773585] x14: ffffad9086594208 x13: ffffad90865f50e8 x12: 0000000000000000
+[   13.781723] x11: 00000000000400d7 x10: 0000000000000008 x9 : 0000000000000002
+[   13.789867] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000097d00
+[   13.798013] x5 : ffff62d0c3395000 x4 : ffff62d2362ed750 x3 : 0000000000097e00
+[   13.806161] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+[   13.814304] Call trace:
+[   13.817604]  drm_kms_helper_hotplug_event+0x48/0x70 [drm_kms_helper]
+[   13.824959]  drm_bridge_connector_hpd_cb+0xa0/0xc0 [drm_kms_helper]
+[   13.832227]  drm_bridge_hpd_notify+0x40/0x60 [drm]
+[   13.837993]  pmic_glink_altmode_worker+0xc0/0x150 [pmic_glink_altmode]
+[   13.845505]  process_one_work+0x288/0x6c0
+[   13.850404]  worker_thread+0x74/0x450
+[   13.854948]  kthread+0x118/0x120
+[   13.859032]  ret_from_fork+0x10/0x20
+[   13.863473] irq event stamp: 7440
+[   13.867631] hardirqs last  enabled at (7439): [<ffffad9085b00450>] _raw_spin_unlock_irqrestore+0x80/0x90
+[   13.878157] hardirqs last disabled at (7440): [<ffffad9085af33e4>] el1_dbg+0x24/0x90
+[   13.886885] softirqs last  enabled at (7308): [<ffffad908514046c>] _stext+0x46c/0x5d8
+[   13.895697] softirqs last disabled at (7303): [<ffffad90851467b0>] ____do_softirq+0x10/0x20
+[   13.905038] ---[ end trace 0000000000000000 ]---
 
-and this can return directly.
+So the bug still appears to be there (and the MSM DRM driver is fragile
+and broken, but we knew that).
 
->         }
->
->         port->retimer = fwnode_typec_retimer_get(fwnode);
->         if (IS_ERR(port->retimer)) {
-> -               dev_dbg(dev, "Retimer handle not found.\n");
-> +               ret = PTR_ERR(port->retimer);
-> +               dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
->                 goto retimer_sw_err;
->         }
->
->         port->ori_sw = fwnode_typec_switch_get(fwnode);
->         if (IS_ERR(port->ori_sw)) {
-> -               dev_dbg(dev, "Orientation switch handle not found.\n");
-> +               ret = PTR_ERR(port->ori_sw);
-> +               dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
->                 goto ori_sw_err;
->         }
->
->         port->role_sw = fwnode_usb_role_switch_get(fwnode);
->         if (IS_ERR(port->role_sw)) {
-> -               dev_dbg(dev, "USB role switch handle not found.\n");
-> +               ret = PTR_ERR(port->role_sw);
-> +               dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
->                 goto role_sw_err;
->         }
->
-> -       return 0;
-> +       return ret;
->
->  role_sw_err:
->         typec_switch_put(port->ori_sw);
-> @@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
->         typec_mux_put(port->mux);
->         port->mux = NULL;
->  mux_err:
-> -       return -ENODEV;
-> +       return ret;
->  }
->
->  static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
-> @@ -423,9 +429,15 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
->                 }
->
->                 ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
-> -               if (ret)
-> -                       dev_dbg(dev, "No switch control for port %d\n",
-> -                               port_num);
-> +               switch (ret) {
-> +               case 0:
-> +                       break;
-> +               case -EPROBE_DEFER:
-> +                       dev_err(dev, "Deferring getting switch handles at port %d\n", port_num);
-> +                       goto unregister_ports;
-> +               default:
-> +                       dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
-> +               }
->
->                 ret = cros_typec_register_port_altmodes(typec, port_num);
->                 if (ret) {
-> --
-> 2.39.0.246.g2a6d74b583-goog
->
+Johan
