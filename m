@@ -2,93 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F796789D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3196789DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjAWVoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
+        id S232385AbjAWVrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbjAWVoS (ORCPT
+        with ESMTP id S231587AbjAWVrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:44:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF10359A;
-        Mon, 23 Jan 2023 13:44:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B99CE61093;
-        Mon, 23 Jan 2023 21:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1FEC433EF;
-        Mon, 23 Jan 2023 21:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674510256;
-        bh=2Nica+qC+tDvR05sM0UelCmLU4kxZzufP2WsaZa4KFE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=s9FxECEaEJAtc37V9jN5q0qh4A4dvxn8lCGejQg/X/dPNhPx6cGZ3J5GTYXNzO3J7
-         lJmVJoOQai0J6wYyMmsY2N5TmNVyRIQEP9GZeiw2gSKWI9kcMcF8ItazKHwh2pq4Uq
-         2/vrSTwLOkkrt6iigSAV/7GCcig3bgJRC42+XrT0bx1VVygd6lCz0RzNoOWOTmbA6z
-         EO6K29AVgYk0TjfkoktuAvHe/iOPZ+rDTuCYYF/WpVb8N1aF8QmazTp1WdRCJknMQX
-         r7CoJuuCbGCBVh3rbqwKI8og75B8XedpiIUS5sQPVwFlccPbviGo4MAIU8/sN31DIa
-         bAwLEPaC1kLlQ==
-Date:   Mon, 23 Jan 2023 15:44:14 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jean Delvare <jdelvare@suse.de>
-Subject: Re: [PATCH v3 RESEND] acpi,pci: warn about duplicate IRQ routing
- entries returned from _PRT
-Message-ID: <20230123214414.GA987407@bhelgaas>
+        Mon, 23 Jan 2023 16:47:08 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEF3359A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:47:08 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 7so10065510pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:47:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bNWIhXG5Qs/cS/Kge9YI8j6hmkwjT8WYdLmFW/zVK4w=;
+        b=I7B2lxMUcvQhT40X7gb4E9g8d/+2yvoIvQPsuzDkL4AA4cW1bqp6w343ARp6DQfbwT
+         HB3U72WxKcK+giXl0xs5676UFA9XgjB12Odip1XalFk/e5vF+mKLP4nOGNRroaNvaIR8
+         bQULc65y7O643vmUGcx+yKNipka0DSjwXaUKRpFQQFUEMxNB40VjNcSx4PKmzwB8DVEw
+         1tEQqvBnLTQR0eatpxCtHczDL+04sl34/X+XQhYhjCu+HOTafB2jcAMv4xtZ0SeBDdrK
+         al/LEtk4+dRBBpVsUDSvLPYOYFIGdYO2xUdpySykEuAp4oqMQ8oqJUiC37vEOaowR6iR
+         Lr1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bNWIhXG5Qs/cS/Kge9YI8j6hmkwjT8WYdLmFW/zVK4w=;
+        b=zx2li4hNCuuZMQ4BZNCfrV1Pf0dEmnIdOcB++7H7YjIhH9WOmhLzjUPKVHbddWSXWM
+         DlzRWZpW7GWEi+S2sXvoJMwTGADq0s+u7VY+0gFf+mai+yU/BqphWKqmbfC1cvCMfrT3
+         fGXJSUAiNJQ/uEFEz86KRD9IkVM3GCN+GGEbMey9REWQLaaUaB74EHj+D4MuBCuAYJ1M
+         PX1K65PlFM1bA4TsMaaWC5aGAU0PH/7adMPne6Q7oGz+r7TMGMBYwTbcK67OcheGPbCA
+         jAoVnRcH8AkyLGq5D1B/67myDhp92TzGIuTMxnMYtS8p1ZQ0FCVfzbFOfSm1y/pRhAX4
+         f1Rg==
+X-Gm-Message-State: AFqh2kpOC94UtLddbNYppNQZYq8BrjJ2Ju7M+oehui1AgaQfA4Qjb38Z
+        PaLADjsr5sYg9UfT3WUdj9FD0RtOjgopFGLgjYIwS4Oo4Eg=
+X-Google-Smtp-Source: AMrXdXvCLUy1D+cqvlpSTKtU8PocxDNbqF6QFj2+8HllzwfzDCIJYpNZr9tmlhT2ybfJ9Z/22mQD7n4/o1qCikRXNcE=
+X-Received: by 2002:a05:6a00:3496:b0:576:f9e2:a968 with SMTP id
+ cp22-20020a056a00349600b00576f9e2a968mr3320171pfb.84.1674510427720; Mon, 23
+ Jan 2023 13:47:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0113ca60-acf2-f4db-3230-959e9bb15726@o2.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118093832.1945-1-Kuan-Ying.Lee@mediatek.com>
+In-Reply-To: <20230118093832.1945-1-Kuan-Ying.Lee@mediatek.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 23 Jan 2023 22:46:56 +0100
+Message-ID: <CA+fCnZcS-p5nCALg4-96cp+sXNZSvN_u=L+=xK+zaH2rigJMKw@mail.gmail.com>
+Subject: Re: [PATCH v2] kasan: infer the requested size by scanning shadow memory
+To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        chinwen.chang@mediatek.com, qun-wei.lin@mediatek.com,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:00:43PM +0100, Mateusz Jończyk wrote:
-> W dniu 23.01.2023 o 21:33, Bjorn Helgaas pisze:
-> > On Sat, Jan 21, 2023 at 04:33:14PM +0100, Mateusz Jończyk wrote:
-> >> On some platforms, the ACPI _PRT function returns duplicate interrupt
-> >> routing entries. Linux uses the first matching entry, but sometimes the
-> >> second matching entry contains the correct interrupt vector.
-> >>
-> >> Print an error to dmesg if duplicate interrupt routing entries are
-> >> present, so that we could check how many models are affected.
-> >
-> > It shouldn't be too hard to use qemu to figure out whether Windows
-> > uses the last matching entry, i.e., treating _PRT entries as
-> > assignments.  If so, maybe Linux could just do the same.
-> >
-> > Is anybody up for that?
-> 
-> The hardware in question has a working Windows XP installation,
-> and I could in theory check which interrupt vector it uses - but
-> I think that such reverse engineering is forbidden by Windows' EULA.
+On Wed, Jan 18, 2023 at 10:39 AM Kuan-Ying Lee
+<Kuan-Ying.Lee@mediatek.com> wrote:
+>
+> We scan the shadow memory to infer the requested size instead of
+> printing cache->object_size directly.
+>
+> This patch will fix the confusing kasan slab-out-of-bounds
+> report like below. [1]
+> Report shows "cache kmalloc-192 of size 192", but user
+> actually kmalloc(184).
+>
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
+> Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
+> ...
+> The buggy address belongs to the object at ffff888017576600
+>  which belongs to the cache kmalloc-192 of size 192
+> The buggy address is located 184 bytes inside of
+>  192-byte region [ffff888017576600, ffff8880175766c0)
+> ...
+> Memory state around the buggy address:
+>  ffff888017576580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>  ffff888017576600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+>                                         ^
+>  ffff888017576700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff888017576780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+>
+> After this patch, slab-out-of-bounds report will show as below.
+> ==================================================================
+> ...
+> The buggy address belongs to the object at ffff888017576600
+>  which belongs to the cache kmalloc-192 of size 192
+> The buggy address is located 0 bytes right of
+>  allocated 184-byte region [ffff888017576600, ffff8880175766b8)
+> ...
+> ==================================================================
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216457 [1]
+>
+> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+> ---
+> V1 -> V2:
+>  - Implement getting allocated size of object for tag-based kasan.
+>  - Refine the kasan report.
+>  - Check if it is slab-out-of-bounds report type.
+>  - Thanks for Andrey and Dmitry suggestion.
 
-I'm not talking about any sort of disassembly or anything like that;
-just that we can observe what Windows does given the _PRT contents.
-You've already figured out that on your particular hardware, the _PRT
-has two entries, and Linux uses the first one while Windows uses the
-second one, right?
+Hi Kuan-Ying,
 
-On qemu, we have control over the BIOS and can easily update _PRT to
-whatever we want, and then we could boot Windows and see what it uses.
-But I guess maybe that wouldn't tell us anything more than what you
-already discovered.
+I came up with a few more things to fix while testing your patch and
+decided to address them myself. Please check the v3 here:
 
-So my inclination would be to make Linux use the last matching entry.
+https://github.com/xairy/linux/commit/012a584a9f11ba08a6051b075f7fd0a0eb54c719
 
-Bjorn
+The significant changes are to print "freed" for a slab-use-after-free
+and only print the region state for the Generic mode (printing it for
+Tag-Based modes doesn't work properly atm, see the comment in the
+code). The rest is clean-ups and a few added comments. See the full
+list of changes in the commit message.
+
+Please check whether this v3 looks good to you, and then feel free to submit it.
+
+Thank you!
