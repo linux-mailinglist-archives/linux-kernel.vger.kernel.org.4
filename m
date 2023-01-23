@@ -2,143 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35D967834D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1282D67832F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjAWRdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S233384AbjAWRcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233759AbjAWRco (ORCPT
+        with ESMTP id S233238AbjAWRbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:32:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FB92ED54
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:30:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674495046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JKkpA1QDyFR8sFnII4BY3UsDy9lIqmuw1mdMwZBIzUs=;
-        b=Fhc170TjQpEQxFHnnjJobMJ8D9gvK14j7Uggie3Qj3N6IfCX7qrTxr4PS5Dvw1duZzy9OL
-        Y3wajXvUf1y1BDybT6OxRGGU/q5CFhPRvGRpf5bV8uXy88Tem6B9YMcnQl77Hp4iqjIOUb
-        dp5pp1FXDCrjHGTsIbysbiEM+yW5BFg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-Tr5hk-wmOh-yYRPR03ZbOg-1; Mon, 23 Jan 2023 12:30:35 -0500
-X-MC-Unique: Tr5hk-wmOh-yYRPR03ZbOg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 23 Jan 2023 12:31:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44CE2E0F0;
+        Mon, 23 Jan 2023 09:30:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A0DF858F09;
-        Mon, 23 Jan 2023 17:30:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E23071121330;
-        Mon, 23 Jan 2023 17:30:32 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
-Date:   Mon, 23 Jan 2023 17:30:07 +0000
-Message-Id: <20230123173007.325544-11-dhowells@redhat.com>
-In-Reply-To: <20230123173007.325544-1-dhowells@redhat.com>
-References: <20230123173007.325544-1-dhowells@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B608B80E36;
+        Mon, 23 Jan 2023 17:30:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3992DC4339E;
+        Mon, 23 Jan 2023 17:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674495030;
+        bh=na43+kxJFeZDWTaymCLPJyagmqUGNcq1m9NBHlw/eKk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=koOgW0jYxtuIr+Cj6t4EWeooZ54aGTZHKLDTUP8GXPrOmO1SJQjASSZTuMEVvp9hm
+         OBycYItRndnDCia4fTOwcZc7rHEXSPxx5T5gXAVgBIsli6+0wlBnfDSJUsmH81eFm7
+         rjbWsZgv7hh7MM+4E4V1jNouFsCLtHW81hs9zoSzy7A1soTBkO+IdKE0VHJoDWf1uQ
+         cot+27iDhMs57dtMUF7G6OrcT7/nhMeJoflskf7UDtQHZamJlyisleJFrTCu80Gr8A
+         UlkvHX1cZgqjT/eB82mmzvhOeg1K62P7j1e3s3jFV8dHx1lcKvHq3oiCmAlkBC1sHC
+         m4243kT9MD/IQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C17125C084D; Mon, 23 Jan 2023 09:30:29 -0800 (PST)
+Date:   Mon, 23 Jan 2023 09:30:29 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        quic_neeraju@quicinc.com, Uladzislau Rezki <urezki@gmail.com>
+Subject: Re: [PATCH v3] rcu: Further comment and explain the state space of
+ GP sequences
+Message-ID: <20230123173029.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y85868Pei9VutSiW@lothringen>
+ <A6B13595-00FE-4DF4-A5DC-0B54DD0C4E80@joelfernandes.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <A6B13595-00FE-4DF4-A5DC-0B54DD0C4E80@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Renumber FOLL_PIN and FOLL_GET down to bit 0 and 1 respectively so that
-they are coincidentally the same as BIO_PAGE_PINNED and BIO_PAGE_REFFED and
-also so that they can be stored in the bottom two bits of a page pointer
-(something I'm looking at for zerocopy socket fragments).
+On Mon, Jan 23, 2023 at 09:07:43AM -0500, Joel Fernandes wrote:
+> 
+> 
+> > On Jan 23, 2023, at 7:26 AM, Frederic Weisbecker <frederic@kernel.org> wrote:
+> > 
+> > ﻿On Thu, Jan 19, 2023 at 05:06:27PM +0000, Joel Fernandes wrote:
+> >>> On Thu, Jan 19, 2023 at 2:15 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> >>> 
+> >>> On Thu, Jan 19, 2023 at 03:11:35PM +0100, Frederic Weisbecker wrote:
+> >>>> The state space of the GP sequence number isn't documented and the
+> >>>> definitions of its special values are scattered. Try to gather some
+> >>>> common knowledge near the GP seq headers.
+> >>>> 
+> >>>> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> >>>> ---
+> >>>> kernel/rcu/rcu.h | 33 +++++++++++++++++++++++++++++++++
+> >>>> 1 file changed, 33 insertions(+)
+> >>>> 
+> >>>> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> >>>> index 115616ac3bfa..fb95de039596 100644
+> >>>> --- a/kernel/rcu/rcu.h
+> >>>> +++ b/kernel/rcu/rcu.h
+> >>>> @@ -14,6 +14,39 @@
+> >>>> 
+> >>>> /*
+> >>>>  * Grace-period counter management.
+> >>>> + *
+> >>>> + * The two lowest significant bits gather the control flags.
+> >>>> + * The higher bits form the RCU sequence counter.
+> >>>> + *
+> >>>> + * About the control flags, a common value of 0 means that no GP is in progress.
+> >>>> + * A value of 1 means that a grace period has started and is in progress. When
+> >>>> + * the grace period completes, the control flags are reset to 0 and the sequence
+> >>>> + * counter is incremented.
+> >>>> + *
+> >>>> + * However some specific RCU usages make use of custom values.
+> >>>> + *
+> >>>> + * SRCU special control values:
+> >>>> + *
+> >>>> + *   SRCU_SNP_INIT_SEQ       :       Invalid/init value set when SRCU node
+> >>>> + *                                                   is initialized.
+> >>>> + *
+> >>>> + *   SRCU_STATE_IDLE         :       No SRCU gp is in progress
+> >>>> + *
+> >>>> + *   SRCU_STATE_SCAN1        :       State set by rcu_seq_start(). Indicates
+> >>>> + *                                                           we are scanning the inactive readers
+> >>>> + *                                                           index.
+> >> 
+> >> The term "inactive reader" is confusing. The readers can very much be
+> >> active during scans. During a scan stage, there might be a reader on
+> >> any of the 2 indexes that can be right in the middle of their critical
+> >> section (and we don't know which index because they could have got
+> >> preempted, right after sampling idx). Maybe "inactive slot" is a
+> >> better term? And define "inactive slot" as the slot which is no longer
+> >> going to be sampled by new readers.
+> > 
+> > That's why I used "inactive readers index".
+> > I guess I should have written "inactive readers' index" to disambiguate
+> > the fact that inactive refers to "index" and not "readers" but I almost
+> > never observe plural genitive written that way these days.
+> > 
+> > As for the gory details of "inactive" being actually "bound to become
+> > inactive", I'm not sure that belongs here but here is what I can do:
+> 
+> Sounds good and the below change looks good to me.
+> 
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-(Note that BIO_PAGE_REFFED should probably be got rid of at some point,
-hence why FOLL_PIN is at 0.)
+Thank you both!
 
-Also renumber down the other FOLL_* flags to close the gaps.
+I queued the following wordsmithed version, so please let me know if I
+messed anything up.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-mm@kvack.org
----
+							Thanx, Paul
 
-Notes:
-    ver #8)
-     - Put FOLL_PIN at bit 0 and FOLL_GET at bit 1 to match BIO_PAGE_*.
-     - Renumber the remaining flags down to fill in the gap.
+------------------------------------------------------------------------
 
- include/linux/mm.h | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+commit f31701817185b58a6095b74180d1a5b05369f3c3
+Author: Frederic Weisbecker <frederic@kernel.org>
+Date:   Thu Jan 19 14:29:34 2023 +0100
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 3de9d88f8524..c95bc4f77e8f 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3074,26 +3074,28 @@ static inline vm_fault_t vmf_error(int err)
- struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- 			 unsigned int foll_flags);
- 
--#define FOLL_WRITE	0x01	/* check pte is writable */
--#define FOLL_TOUCH	0x02	/* mark page accessed */
--#define FOLL_GET	0x04	/* do get_page on page */
--#define FOLL_DUMP	0x08	/* give error on hole if it would be zero */
--#define FOLL_FORCE	0x10	/* get_user_pages read/write w/o permission */
--#define FOLL_NOWAIT	0x20	/* if a disk transfer is needed, start the IO
-+#define FOLL_PIN	0x01	/* pages must be released via unpin_user_page */
-+#define FOLL_GET	0x02	/* do get_page on page (equivalent to BIO_FOLL_GET) */
-+#define FOLL_WRITE	0x04	/* check pte is writable */
-+#define FOLL_TOUCH	0x08	/* mark page accessed */
-+#define FOLL_DUMP	0x10	/* give error on hole if it would be zero */
-+#define FOLL_FORCE	0x20	/* get_user_pages read/write w/o permission */
-+#define FOLL_NOWAIT	0x40	/* if a disk transfer is needed, start the IO
- 				 * and return without waiting upon it */
- #define FOLL_NOFAULT	0x80	/* do not fault in pages */
- #define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
--#define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
--#define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
--#define FOLL_ANON	0x8000	/* don't do file mappings */
--#define FOLL_LONGTERM	0x10000	/* mapping lifetime is indefinite: see below */
--#define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
--#define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
--#define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
--#define FOLL_PCI_P2PDMA	0x100000 /* allow returning PCI P2PDMA pages */
--#define FOLL_INTERRUPTIBLE  0x200000 /* allow interrupts from generic signals */
-+#define FOLL_TRIED	0x200	/* a retry, previous pass started an IO */
-+#define FOLL_REMOTE	0x400	/* we are working on non-current tsk/mm */
-+#define FOLL_ANON	0x800	/* don't do file mappings */
-+#define FOLL_LONGTERM	0x1000	/* mapping lifetime is indefinite: see below */
-+#define FOLL_SPLIT_PMD	0x2000	/* split huge pmd before returning */
-+#define FOLL_FAST_ONLY	0x4000	/* gup_fast: prevent fall-back to slow gup */
-+#define FOLL_PCI_P2PDMA	0x8000 /* allow returning PCI P2PDMA pages */
-+#define FOLL_INTERRUPTIBLE  0x10000 /* allow interrupts from generic signals */
+    rcu: Further comment and explain the state space of GP sequences
+    
+    The state space of the GP sequence number isn't documented and the
+    definitions of its special values are scattered.  This commit therefore
+    gathers some common knowledge near the grace-period sequence-number
+    definitions.
+    
+    Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+    Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index 115616ac3bfa6..a3adcf9a9919b 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -14,6 +14,43 @@
  
  /*
-+ * Note that FOLL_PIN is sorted to bit 0 to be coincident with BIO_PAGE_PINNED.
+  * Grace-period counter management.
 + *
-  * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
-  * other. Here is what they mean, and how to use them:
-  *
-
++ * The two least significant bits contain the control flags.
++ * The most significant bits contain the grace-period sequence counter.
++ *
++ * When both control flags are zero, no grace period is in progress.
++ * When either bit is non-zero, a grace period has started and is in
++ * progress. When the grace period completes, the control flags are reset
++ * to 0 and the grace-period sequence counter is incremented.
++ *
++ * However some specific RCU usages make use of custom values.
++ *
++ * SRCU special control values:
++ *
++ *	SRCU_SNP_INIT_SEQ	:	Invalid/init value set when SRCU node
++ *					is initialized.
++ *
++ *	SRCU_STATE_IDLE		:	No SRCU gp is in progress
++ *
++ *	SRCU_STATE_SCAN1	:	State set by rcu_seq_start(). Indicates
++ *					we are scanning the readers on the slot
++ *					defined as inactive (there might well
++ *					be pending readers that will use that
++ *					index, but their number is bounded).
++ *
++ *	SRCU_STATE_SCAN2	:	State set manually via rcu_seq_set_state()
++ *					Indicates we are flipping the readers
++ *					index and then scanning the readers on the
++ *					slot newly designated as inactive (again,
++ *					the number of pending readers that will use
++ *					this inactive index is bounded).
++ *
++ * RCU polled GP special control value:
++ *
++ *	RCU_GET_STATE_COMPLETED :	State value indicating an already-completed
++ *					polled GP has completed.  This value covers
++ *					both the state and the counter of the
++ *					grace-period sequence number.
+  */
+ 
+ #define RCU_SEQ_CTR_SHIFT	2
