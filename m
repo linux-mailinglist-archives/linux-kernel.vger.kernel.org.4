@@ -2,135 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262406786F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57C4678701
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbjAWUAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:00:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
+        id S231753AbjAWUB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjAWUA3 (ORCPT
+        with ESMTP id S230267AbjAWUB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:00:29 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AD023311
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:00:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 272B9218F2;
-        Mon, 23 Jan 2023 20:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674504024; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9umLbK138jo14qJ7E8MIOxomDS0h8eCmJZ+29QkDcwY=;
-        b=tQ2EbAB5Pd9IPcZYKmKts4B7J9zBmGbFLnwbQQcjVLR9/1l2Nv5AqZ8GvPV0PD1fIOGfKy
-        xp3I2aoV4vH56nWiCeF20k9hV8vuvOqVOb8DbURfrSSv5EeFT3E0K+tsowMHdS8b+xmH+Z
-        mpFeUtCeqYd1GQVKlV65hKfD5gOl90E=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F08A51357F;
-        Mon, 23 Jan 2023 20:00:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 47MxOlfnzmN/aAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 23 Jan 2023 20:00:23 +0000
-Date:   Mon, 23 Jan 2023 21:00:23 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        peterz@infradead.org, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <Y87nVydD7oF9BGMb@dhcp22.suse.cz>
-References: <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
- <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
- <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
- <Y868Fadajv27QMXh@dhcp22.suse.cz>
- <CAJuCfpGSCHpnZwwVV_922fmMBpFPZL0HAHMABuDzMfuURF2sWg@mail.gmail.com>
- <Y87A2CEKAugfgfHC@dhcp22.suse.cz>
- <CAJuCfpGJRZATfc8eUurvV5kGkSNkG=vK=sfwJbU72PESOyATSw@mail.gmail.com>
- <Y87QjHH2aDG5XCGv@casper.infradead.org>
- <Y87djZwQpXazRd00@dhcp22.suse.cz>
- <Y87gY7fhi5OJ35WQ@casper.infradead.org>
+        Mon, 23 Jan 2023 15:01:56 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F068828854;
+        Mon, 23 Jan 2023 12:01:53 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id z13so12549638plg.6;
+        Mon, 23 Jan 2023 12:01:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LSZUXEn2pln3/CCnZqJdWGRNu0XQyJw+TD8CxoELWNU=;
+        b=GbAaHgmFXhyWDDxIOz0+D+RfOqP2Ok85UUj7wE9eA2EPsUBamv0VgHw/rw5q7SprBJ
+         oPSjzl7bH1MSaVRZXWn/8PrphqaMcRXK2xgs28Q6V1JCky7Vqj0sFL46zQqRYDMCZMcq
+         83FJkrpIExgrxq/DiGwuNHGgYuT/3EfcK0cCrAvg4BHPzBUo7MtsgKu7IFqft4EWlE//
+         98F94YSNCH5fDowYwhe+M3VHyodK9RadX9mngaJQOYIEniOwhqURZ7x5yClVDBQYjkdM
+         kywncC34+EBvStsHTzcArMM0qqFk4UM/L74+76z+21RwIQCwXIHS5NaLbUj+zPfOez5X
+         P4SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LSZUXEn2pln3/CCnZqJdWGRNu0XQyJw+TD8CxoELWNU=;
+        b=uo9K8/wQETmmN23EhUfm7P6xNbvLGdCKeG6qeD3lGGL5ikjyB5p2clvmHetuHicgly
+         AqEbg2ViqU8oYBwrWTu5JQ3EgXnvo5NCZiIEb32q8yrH57ZplS5skITOOULJOJtT/txy
+         FVBPG7uS4KcsJhsictlQQeBHSSh+bW7k/QaDTNpTPnwnUaroj/c0KYk3TMm63p11PQDK
+         lCUi24O9Kg7CyTJgWHZX7BTgd3f7CLY/4JCESifff9BHVC90IMWt4JI4WONzYOlPXW8U
+         xPa6gmX146rNqTbnxY5fV6gSWDytdJnAfbYSym8bPGMb8yuzTtW1rroIO4L7LhX0kO/n
+         AMOg==
+X-Gm-Message-State: AFqh2kqFfCsHF6cMghIJ6fK06f8kVsmVmxHKnE6M2gKqTrtSB8kkKRvX
+        Nav9ZE3DQr3OeyLXp6jndV0=
+X-Google-Smtp-Source: AMrXdXtACcnlSumNzaxRxxHrSlnC/jTpG0PPQ4zhXVuDvzF/k8kTZwQB8KZZTBszN2O1sQB+xyYpWg==
+X-Received: by 2002:a17:902:9343:b0:194:4a2b:d7e4 with SMTP id g3-20020a170902934300b001944a2bd7e4mr26601026plp.17.1674504113363;
+        Mon, 23 Jan 2023 12:01:53 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id be2-20020a170902aa0200b001948809087dsm66804plb.281.2023.01.23.12.01.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 12:01:52 -0800 (PST)
+Message-ID: <775529e0-1b21-82ba-acb1-1fee200eab12@gmail.com>
+Date:   Mon, 23 Jan 2023 12:01:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y87gY7fhi5OJ35WQ@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230123094918.977276664@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230123094918.977276664@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 23-01-23 19:30:43, Matthew Wilcox wrote:
-> On Mon, Jan 23, 2023 at 08:18:37PM +0100, Michal Hocko wrote:
-> > On Mon 23-01-23 18:23:08, Matthew Wilcox wrote:
-> > > On Mon, Jan 23, 2023 at 09:46:20AM -0800, Suren Baghdasaryan wrote:
-> > [...]
-> > > > Yes, batching the vmas into a list and draining it in remove_mt() and
-> > > > exit_mmap() as you suggested makes sense to me and is quite simple.
-> > > > Let's do that if nobody has objections.
-> > > 
-> > > I object.  We *know* nobody has a reference to any of the VMAs because
-> > > you have to have a refcount on the mm before you can get a reference
-> > > to a VMA.  If Michal is saying that somebody could do:
-> > > 
-> > > 	mmget(mm);
-> > > 	vma = find_vma(mm);
-> > > 	lock_vma(vma);
-> > > 	mmput(mm);
-> > > 	vma->a = b;
-> > > 	unlock_vma(mm, vma);
-> > > 
-> > > then that's something we'd catch in review -- you obviously can't use
-> > > the mm after you've dropped your reference to it.
-> > 
-> > I am not claiming this is possible now. I do not think we want to have
-> > something like that in the future either but that is really hard to
-> > envision. I am claiming that it is subtle and potentially error prone to
-> > have two different ways of mass vma freeing wrt. locking. Also, don't we
-> > have a very similar situation during last munmaps?
+On 1/23/23 01:52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.90 release.
+> There are 117 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We shouldn't have two ways of mass VMA freeing.  Nobody's suggesting that.
-> There are two cases; there's munmap(), which typically frees a single
-> VMA (yes, theoretically, you can free hundreds of VMAs with a single
-> call which spans multiple VMAs, but in practice that doesn't happen),
-> and there's exit_mmap() which happens on exec() and exit().
+> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.90-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-This requires special casing remove_vma for those two different paths
-(exit_mmap and remove_mt).  If you ask me that sounds like a suboptimal
-code to even not handle potential large munmap which might very well be
-a rare thing as you say. But haven't we learned that sooner or later we
-will find out there is somebody that cares afterall? Anyway, this is not
-something I care about all that much. It is just weird to special case
-exit_mmap, if you ask me. Up to Suren to decide which way he wants to
-go. I just really didn't like the initial implementation of batching
-based on a completely arbitrary batch limit and lazy freeing.
+On ARCH_BRCMSTB using 32-bit and 64-bit, build tested on BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Michal Hocko
-SUSE Labs
+Florian
+
