@@ -2,222 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005E36775EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8B76775ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjAWH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S231587AbjAWH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbjAWH6v (ORCPT
+        with ESMTP id S231590AbjAWH67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:58:51 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B0412045
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:58:46 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id q8so8273196wmo.5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:58:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9ga+VvRSpJu4l76oKd4H9Up9XpN0x+8jxuTj2ZPdTkg=;
-        b=dJxCi1AFS3cpFWEya02piMDot6FG94QU9gzI/eijeZa4WNFhAPMYqMU5QocVY9k3bs
-         aMDKXMvB9l/ZvKbzOusS9/jBpetySiLY3JnmiwjWlxi2ueG+d2ePL2BDMTIxx/4oQkOa
-         0XTvHCod9lcbRZRjTR0WWOlO5tJhsIpJwMzst3tUrkXKikgSBZxQGsasLjYpc1URtfdR
-         8EyssugnEYt5OOghTrIoOHiCX7pIc6gRvlDS+Hd3gNL5ykj7xyM8AxVmLeHJy8WPQzf5
-         M4ymJCLiqs8khjE5gIZFEFKPtN1m5sKFalMDqUAsQuOqeau7Zgp/CRsqVfQFFGxsqQZI
-         blOQ==
+        Mon, 23 Jan 2023 02:58:59 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0191911E9D
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:58:51 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id 4-20020a6b1404000000b00704700d919cso6592615iou.11
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:58:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ga+VvRSpJu4l76oKd4H9Up9XpN0x+8jxuTj2ZPdTkg=;
-        b=46SnAvO+ACj9iTy5/WvOpu5uG0BoClEYPO6aRY+I61TnAXIIU3izv1tnsj0TCXp5Sr
-         7m73nlguDVN9+mXIQxvwuwd0vzLaXH2qdeUQ7Cv5doVnhM9PQnKzLuPNl9sNuVdYToQm
-         NusyhvUa5+/0KX0uhY63aHb+uouFFMEjgPROiJFt7wNiwUNzEkTQKqZnXVIfH1Un1i1y
-         7OG/X0CXmCV9ttYZXda/66enJf/3PvE69P6hvjAEwXv5uQB1afltiOcDme4dxHjmtfl1
-         y3SU3lOBf9ofqtm4dq4UGiHn9qzntWnYPE3zmCxVC7dyNsdSswuEa1v1D3kqQrdcC6i2
-         WM4g==
-X-Gm-Message-State: AFqh2koaAlu/Bc/JnUfuAeTHvWGhMNRKlly//OAz7tb7NePWmNMceMNo
-        cP2LlgR4pOdzz71M63BCNjizfA==
-X-Google-Smtp-Source: AMrXdXtPj+YoxxIqpGGDDb+F0QTBLzAVI28vB9NS3SW+G61KVEYNL/4Mrxs2O/Q7iBQLYu2hPluudA==
-X-Received: by 2002:a05:600c:c10:b0:3da:f5e6:a320 with SMTP id fm16-20020a05600c0c1000b003daf5e6a320mr28059723wmb.22.1674460725302;
-        Sun, 22 Jan 2023 23:58:45 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m18-20020a05600c4f5200b003cffd3c3d6csm10649776wmq.12.2023.01.22.23.58.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 23:58:44 -0800 (PST)
-Message-ID: <2add1769-1458-b185-bc78-6d573f61b6fc@linaro.org>
-Date:   Mon, 23 Jan 2023 08:58:43 +0100
+        bh=I5Up1rMGfcNvyDnvVl+nuzPiYvmCyR5tUMOQkGTcDP8=;
+        b=XvAivX8kWVxedEgAXUCEFDIEs0KfKNHastS0coGorSENt98Lzonh1kVwSt32iHypGK
+         l6NwqTqsf6G69FI1pDDw/Gu+YLo38XnTc7E73+P4QNOm/VpidqUMtuEc3MsohIBOwmKc
+         yzRGzvD18eeq4OEMkAJk1I82HMGLPlO+mUYOyd0pAkGPBqilHg9jb2TF2TmwfCqaOYAu
+         NYvgjMXKT0HlPA5Km94BUi0Se7RMvbkYUcPnmMjvHDG84KXuLk1MyNcYDFF42ZX8d+vD
+         Zav3fZiCEL1l6xUQFDqxlh05JzdyoeEX6KSk7QvIdLmAnhL+PIPRunpfM8F98hHx+FNY
+         Hdkw==
+X-Gm-Message-State: AFqh2kqkxXrr544uiOvor/YZOUWuYPMdVK3NetJoonGc64FDAPjQyuBs
+        m34iW4xqszmRKzCzrsyAqjwzHlHP9vkiEqpnfr39soOZMRhG
+X-Google-Smtp-Source: AMrXdXsWQAbLU3P6XZkfVyzuUWTTdQiRIx3df0oWJ6qeqlWH4+HXo3sv+PYCwWrvwaM85v5uWcGHfLyv0vjN2cepd88wggadUdQr
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-Content-Language: en-US
-To:     Anna Schumaker <schumaker.anna@gmail.com>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <82526863-d07a-0a5d-2990-1555b1387f26@linaro.org>
- <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
- <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
- <51430925-8046-7066-84ed-2ff0db835347@linaro.org>
- <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4916:b0:375:c16b:7776 with SMTP id
+ cx22-20020a056638491600b00375c16b7776mr2329370jab.54.1674460731151; Sun, 22
+ Jan 2023 23:58:51 -0800 (PST)
+Date:   Sun, 22 Jan 2023 23:58:51 -0800
+In-Reply-To: <000000000000f5b4ab05f0522438@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000012245205f2e9c5a1@google.com>
+Subject: Re: [syzbot] BUG: corrupted list in nfc_llcp_register_device
+From:   syzbot <syzbot+c1d0a03d305972dbbe14@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dvyukov@google.com, edumazet@google.com,
+        hdanton@sina.com, krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linma@zju.edu.cn, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/01/2023 23:25, Anna Schumaker wrote:
-> Hi Krzysztof,
-> 
-> On Mon, Jan 9, 2023 at 3:46 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 09/01/2023 09:14, Krzysztof Kozlowski wrote:
->>> On 08/01/2023 18:09, Trond Myklebust wrote:
->>>> Hi Krzysztof,
->>>>
->>>>> On Jan 8, 2023, at 08:25, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>>>>
->>>>> [You don't often get email from krzysztof.kozlowski@linaro.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification]
->>>>>
->>>>> On 07/01/2023 16:44, Krzysztof Kozlowski wrote:
->>>>>> Hi,
->>>>>>
->>>>>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
->>>>>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
->>>>>> when mounting NFS root on NFSv4 client:
->>>>>>
->>>>>> [   25.739003] systemd[1]: Set hostname to <odroidhc1>.
->>>>>> [   25.771714] systemd[1]: Failed to bump fs.file-max, ignoring: Invalid
->>>>>> argument
->>>>>> [   26.199478] 8<--- cut here ---
->>>>>> [   26.201366] Unable to handle kernel NULL pointer dereference at
->>>>>> virtual address 00000004
->>>>>> ...
->>>>>> [   26.555522]  mmiocpy from xdr_inline_decode+0xec/0x16c
->>>>>> [   26.560628]  xdr_inline_decode from nfs4_xdr_dec_read_plus+0x178/0x358
->>>>>> [   26.567130]  nfs4_xdr_dec_read_plus from call_decode+0x204/0x304
->>>>>>
->>>>>> Full OOPS attached. Full log available here:
->>>>>> https://krzk.eu/#/builders/21/builds/3901/steps/15/logs/serial0
->>>>>>
->>>>>> Disabling NFS_V4_2_READ_PLUS fixes the issue, so obviously the commit is
->>>>>> not the cause, but rather making it default caused the regression.
->>>>>>
->>>>>> I did not make the bisect yet which commit introduced it, if every
->>>>>> config includes NFS_V4_2_READ_PLUS.
->>>>>
->>>>> When every kernel is built with NFS_V4_2_READ_PLUS, bisect pointed to:
->>>>> d3b00a802c84 ("NFS: Replace the READ_PLUS decoding code")
->>>>>
->>>>> commit d3b00a802c845a6021148ce2e669b5a0b5729959
->>>>> Author: Anna Schumaker <Anna.Schumaker@Netapp.com>
->>>>> Date:   Thu Jul 21 14:21:34 2022 -0400
->>>>>
->>>>>    NFS: Replace the READ_PLUS decoding code
->>>>>
->>>>>    We now take a 2-step process that allows us to place data and hole
->>>>>    segments directly at their final position in the xdr_stream without
->>>>>    needing to do a bunch of redundant copies to expand holes. Due to the
->>>>>    variable lengths of each segment, the xdr metadata might cross page
->>>>>    boundaries which I account for by setting a small scratch buffer so
->>>>>    xdr_inline_decode() won't fail.
->>>>>
->>>>>    Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
->>>>>    Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
->>>>>
->>>>> With a trace:
->>>>> [   25.898462] systemd[1]: Set hostname to <odroidhc1>.
->>>>> [   25.933746] systemd[1]: Failed to bump fs.file-max, ignoring: Invalid
->>>>> argument
->>>>> [   25.986237] random: crng init done
->>>>> [   26.264564] 8<--- cut here ---
->>>>> [   26.266823] Unable to handle kernel NULL pointer dereference at
->>>>> virtual address 00000fe8
->>>>> ...
->>>>> [   26.597263]  nfs4_xdr_dec_read_plus from call_decode+0x204/0x304
->>>>> [   26.603222]  call_decode from __rpc_execute+0xd0/0x890
->>>>> [   26.608328]  __rpc_execute from rpc_async_schedule+0x1c/0x34
->>>>> [   26.613960]  rpc_async_schedule from process_one_work+0x294/0x790
->>>>> [   26.620030]  process_one_work from worker_thread+0x54/0x518
->>>>> [   26.625570]  worker_thread from kthread+0xf4/0x128
->>>>> [   26.630336]  kthread from ret_from_fork+0x14/0x2c
->>>>>
->>>>
->>>> Is this test being run against a 6.2-rc2 server, or is it an older server platform? We know there were bugs in older server implementations, so the question is whether this might be a problem with handling a bad/corrupt RPC reply from the server, or whether it is happening against code that is supposed to have been fixed?
->>>
->>> I would say that buggy server should not cause NULL pointer dereferences
->>> on the client. Otherwise this is a perfect recipe for a rogue server in
->>> the network to start crashing clients and running exploits... Imagine a
->>> compromised machine (through some other means) in a local company
->>> network running now a server with NFS share "HR salary data" or "HR
->>> planned layoffs", where unsuspected people in that network access it
->>> leading to exploit of NFS code on their side...
->>>
->>> Server is Raspberry Pi 3 kernel: 5.10.92-2-rpi-legacy-ARCH
->>>
->>> Which points that it is not latest stable, so anyway I need to update.
->>
->> I updated the kernel to 5.15.84-3-rpi-ARCH which is pretty close to
->> latest stable and I can reproduce the issue. Therefore:
->> 1. It is visible on two stable (one new, one old) kernels on the server,
->> 2. Buggy or rogue server should not cause NULL pointer on remote devices...
-> 
-> I'm still working on this issue, but I haven't been able to reproduce
-> it with my setup at all yet. I was hoping I could ask you a couple of
-> questions?
-> 
-> - Are both client and server run on a Raspberry Pi 3?
+syzbot has found a reproducer for the following issue on:
 
-No, server is Rpi3, client is Odroid HC1.
+HEAD commit:    2475bf0250de Merge tag 'sched_urgent_for_v6.2_rc6' of git:..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=116dd0ac480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=23330449ad10b66f
+dashboard link: https://syzkaller.appspot.com/bug?extid=c1d0a03d305972dbbe14
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e4a789480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=100108fa480000
 
-> - Is there a specific workload that triggers the bug, or is it just
-> during boot when using nfsroot?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c1d0a03d305972dbbe14@syzkaller.appspotmail.com
 
-No specific workload - mounting system with nfsroot. You have there full
-logs as it is reproducible every time.
-
-> - Would it be possible to get a Wireshark network trace of the crash
-> (you'll have to run this on the server due to nfsroot).
-
-I'll check.
-
-> - Can you share your export options from /etc/exports and the mount
-> options that the client uses?
-
-exports are the same since like 5 years or more:
-
-/srv/nfs/odroidhc1	192.168.1.0/24(rw,async,no_root_squash,no_subtree_check)
-/srv/nfs/odroidhc1-home
-192.168.1.0/24(rw,async,no_root_squash,no_subtree_check)
-
-
-> 
-> Thanks,
-> Anna
-> 
->>
->> Best regards,
->> Krzysztof
->>
-
-Best regards,
-Krzysztof
+list_add corruption. prev->next should be next (ffff88802620c000), but was ffff88801d633000. (prev=ffffffff8e546e60).
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:30!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 12187 Comm: syz-executor209 Not tainted 6.2.0-rc5-syzkaller-00013-g2475bf0250de #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:__list_add_valid.cold+0x56/0x58 lib/list_debug.c:30
+Code: 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 c0 bc a6 8a e8 df 2c f0 ff 0f 0b 48 89 f1 48 c7 c7 40 bc a6 8a 4c 89 e6 e8 cb 2c f0 ff <0f> 0b 4c 89 e1 48 89 ee 48 c7 c7 a0 be a6 8a e8 b7 2c f0 ff 0f 0b
+RSP: 0018:ffffc90026c577f0 EFLAGS: 00010282
+RAX: 0000000000000075 RBX: ffff888026209000 RCX: 0000000000000000
+RDX: ffff888012c20000 RSI: ffffffff816680ec RDI: fffff52004d8aef0
+RBP: ffff888026209000 R08: 0000000000000075 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffff88802620c000
+R13: ffff88802620c000 R14: 0000000000000000 R15: ffff88802620a140
+FS:  0000000000000000(0000) GS:ffff88802c600000(0063) knlGS:0000000057a07380
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00000000200003c0 CR3: 000000002433d000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_add include/linux/list.h:69 [inline]
+ list_add include/linux/list.h:88 [inline]
+ nfc_llcp_register_device+0x7a8/0x9e0 net/nfc/llcp_core.c:1604
+ nfc_register_device+0x70/0x3b0 net/nfc/core.c:1124
+ nci_register_device+0x7cb/0xb50 net/nfc/nci/core.c:1257
+ virtual_ncidev_open+0x14f/0x230 drivers/nfc/virtual_ncidev.c:148
+ misc_open+0x37a/0x4a0 drivers/char/misc.c:165
+ chrdev_open+0x26a/0x770 fs/char_dev.c:414
+ do_dentry_open+0x6cc/0x13f0 fs/open.c:882
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x1bbc/0x2a50 fs/namei.c:3714
+ do_filp_open+0x1ba/0x410 fs/namei.c:3741
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_compat_sys_openat fs/open.c:1386 [inline]
+ __se_compat_sys_openat fs/open.c:1384 [inline]
+ __ia32_compat_sys_openat+0x143/0x1f0 fs/open.c:1384
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7e6f549
+Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000ff98601c EFLAGS: 00000292 ORIG_RAX: 0000000000000127
+RAX: ffffffffffffffda RBX: 00000000ffffff9c RCX: 0000000020000080
+RDX: 0000000000000002 RSI: 0000000000000000 RDI: 00000000ffffffff
+RBP: 0000000000008933 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_add_valid.cold+0x56/0x58 lib/list_debug.c:30
+Code: 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 c0 bc a6 8a e8 df 2c f0 ff 0f 0b 48 89 f1 48 c7 c7 40 bc a6 8a 4c 89 e6 e8 cb 2c f0 ff <0f> 0b 4c 89 e1 48 89 ee 48 c7 c7 a0 be a6 8a e8 b7 2c f0 ff 0f 0b
+RSP: 0018:ffffc90026c577f0 EFLAGS: 00010282
+RAX: 0000000000000075 RBX: ffff888026209000 RCX: 0000000000000000
+RDX: ffff888012c20000 RSI: ffffffff816680ec RDI: fffff52004d8aef0
+RBP: ffff888026209000 R08: 0000000000000075 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffff88802620c000
+R13: ffff88802620c000 R14: 0000000000000000 R15: ffff88802620a140
+FS:  0000000000000000(0000) GS:ffff88802c600000(0063) knlGS:0000000057a07380
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00000000200003c0 CR3: 000000002433d000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
+   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
+   a:	10 06                	adc    %al,(%rsi)
+   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+  10:	10 07                	adc    %al,(%rdi)
+  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+  16:	10 08                	adc    %cl,(%rax)
+  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1c:	00 00                	add    %al,(%rax)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 51 52             	add    %dl,0x52(%rcx)
+  23:	55                   	push   %rbp
+  24:	89 e5                	mov    %esp,%ebp
+  26:	0f 34                	sysenter
+  28:	cd 80                	int    $0x80
+* 2a:	5d                   	pop    %rbp <-- trapping instruction
+  2b:	5a                   	pop    %rdx
+  2c:	59                   	pop    %rcx
+  2d:	c3                   	retq
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
 
