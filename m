@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941F6774E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 06:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6658D6774FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 06:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjAWF1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 00:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S230072AbjAWFjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 00:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAWF1I (ORCPT
+        with ESMTP id S229441AbjAWFjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 00:27:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C854C22;
-        Sun, 22 Jan 2023 21:27:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 22145CE09E5;
-        Mon, 23 Jan 2023 05:27:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C27AC433D2;
-        Mon, 23 Jan 2023 05:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674451624;
-        bh=yynphTf6Y0jKiK1WTidS6B6p4zKQd9mPx6Rft7mEXeQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=E5TbpuaXhEvg/Z7Z3NqXMjvrIAk3Va3jdsNFySiaLAJzHjSR3wMLVs5tz1lVe/fqe
-         lTt0/u/5J5q7k5xgP6wLt1lEA87iT7RXGnE/RF9l3qqfqvhacd9ZXzGleW+PHdzq6I
-         pctEqflGeJ6vGdH+GakYhIz+gMiJENHG02gJ7/K7azFREgPaXyL1Z6ugWflda+TzVz
-         Ylj63T6j2bov5Nugk7fD+m8uMCotDCtBu9B3ggf3rqb+pLRTd+8pFISFhjPpkEm7DT
-         TTcyeR1sAElDH5ULuQxXgMOcu9r1jTqN/x1PQmylD1hgFOyDDyvZazvCtFiyoxj9Fn
-         67zctJ4u0RM9g==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        William McVicker <willmcvicker@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH] kbuild: do not automatically add -w option to modpost
-Date:   Mon, 23 Jan 2023 14:26:53 +0900
-Message-Id: <20230123052653.711899-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 23 Jan 2023 00:39:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BAA12051;
+        Sun, 22 Jan 2023 21:39:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674452376; x=1705988376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zdyocXy2oYdV9XjxoMErRIbQkEh52w7mmJ9HtzKXpK8=;
+  b=gg/PwBajstDB9vyN2SC6dtGiy/p1RxWe9GMmoNjDGLBzaLW3S1igOsi3
+   ey6zsFDNPmK1cjd2Uq94CN73eFVe97RzeICuSOq0UtcbW+5p6IFZX7Ec7
+   yKtpjGUcY8eij/KSvqax5KdySYBcJll4HAfLJenFvCI8AdQ9/GiGdvsOJ
+   LX9yVYocXyZM5SvEEhKz7PdqxnKo4mdf6gxN2qWpkEW/U2fvfS6gEDqpY
+   os7A9p2GI2kL0YHaaoIB5AwHy0KvBIKRJqnWdVX4+ONGHUHnAyCydPLvx
+   akTaVvs+QVCTleZM+Ta2Pf82N2PQJzzjX6OGJFRwwcmH5/bs6W5rXxQU0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="327238307"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="327238307"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 21:39:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="906860472"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="906860472"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.11.175])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 21:39:35 -0800
+Date:   Sun, 22 Jan 2023 21:39:33 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Robert Richter <rrichter@amd.com>
+Cc:     Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cxl/mbox: Add debug messages for supported mailbox
+ commands
+Message-ID: <Y84dleBbsQhE0Dic@aschofie-mobl2>
+References: <20230119130450.107519-1-rrichter@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119130450.107519-1-rrichter@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When there is a missing input file (vmlinux.o or Module.symvers), you
-are likely to get a ton of unresolved symbols.
+On Thu, Jan 19, 2023 at 02:04:50PM +0100, Robert Richter wrote:
+> Only unsupported mailbox commands are reported in debug messages. A
+> list of supported commands is useful too. Change debug messages to
+> also report the opcodes of supported commands.
 
-Currently, Kbuild automatically adds the -w option to allow module builds
-to continue with warnings instead of errors.
+Hi Robert,
+I wonder if you can get this info another way. When I try this 
+loading cxl_test today, I get 99 new messages. Is this going to
+create too much noise with debug kernels?
+Alison
 
-This may not be what the user expects because it is generally more useful
-to catch all possible issues at build time instead of at run time.
-
-Let's not do what the user did not ask.
-
-If you still want to build modules anyway, you can proceed by explicitly
-setting KBUILD_MODPOST_WARN=1. Since you may miss a real issue, you need
-to be aware of what you are doing.
-
-Suggested-by: William McVicker <willmcvicker@google.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/Makefile.modpost | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 43343e13c542..9254ed811ddd 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -121,16 +121,14 @@ modpost-args += -e $(addprefix -i , $(KBUILD_EXTRA_SYMBOLS))
- 
- endif # ($(KBUILD_EXTMOD),)
- 
--ifneq ($(missing-input),)
--modpost-args += -w
--endif
--
- quiet_cmd_modpost = MODPOST $@
-       cmd_modpost = \
- 	$(if $(missing-input), \
- 		echo >&2 "WARNING: $(missing-input) is missing."; \
- 		echo >&2 "         Modules may not have dependencies or modversions."; \
--		echo >&2 "         You may get many unresolved symbol warnings.";) \
-+		echo >&2 "         You may get many unresolved symbol errors.";) \
-+		echo >&2 "         You can set KBUILD_MODPOST_WARN=1 to turn errors into warning"; \
-+		echo >&2 "         if you want to proceed at your own risk."; \
- 	$(MODPOST) $(modpost-args)
- 
- targets += $(output-symdump)
--- 
-2.34.1
-
+> 
+> On that occasion also add missing trailing newlines.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> ---
+>  drivers/cxl/core/mbox.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index a48ade466d6a..ffa9f84c2dce 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -629,11 +629,12 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
+>  
+>  		if (!cmd) {
+>  			dev_dbg(cxlds->dev,
+> -				"Opcode 0x%04x unsupported by driver", opcode);
+> +				"Opcode 0x%04x unsupported by driver\n", opcode);
+>  			continue;
+>  		}
+>  
+>  		set_bit(cmd->info.id, cxlds->enabled_cmds);
+> +		dev_dbg(cxlds->dev, "Opcode 0x%04x supported by driver\n", opcode);
+>  	}
+>  }
+>  
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> -- 
+> 2.30.2
+> 
