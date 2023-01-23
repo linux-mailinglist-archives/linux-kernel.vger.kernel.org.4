@@ -2,129 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD173677F88
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF157677F8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjAWPWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S232586AbjAWPXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjAWPWI (ORCPT
+        with ESMTP id S232683AbjAWPXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:22:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F572BEFD
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674487147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dAjCGEyu+CetHV6CkMW6JgjgwSUzdzfmM+USEBgwzng=;
-        b=g/Cxrd4G6102KBPNy4gxf8dARfX02kOWOsO8581Rjy5UbIc0pmxoHjE2N4loJtB7Gp0oZq
-        MYzj3b25dg+sf284ffNacXdevA1JUoaJIvtCc5G8pkRqt8ftYoW1h2e0soBmAu6TowanUu
-        SetBnNSElLRUZm3nKXDX6hWouHvGQwU=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-551-BvlkdGLWOzyM9oiSGR3NPw-1; Mon, 23 Jan 2023 10:19:06 -0500
-X-MC-Unique: BvlkdGLWOzyM9oiSGR3NPw-1
-Received: by mail-yb1-f199.google.com with SMTP id g73-20020a25db4c000000b00802b0159bccso8593323ybf.22
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:19:06 -0800 (PST)
+        Mon, 23 Jan 2023 10:23:31 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCEF298E6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:22:34 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id n5so13464058ljc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:22:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xlQ4uFJF8luICaZz9X8rsfnPJTK43Q09mIidIvdivig=;
+        b=eGzk9GshCU7cFcuCxU4wS13X3ucoFt2bijXDYi7cpQFXb1i5pbtaTFdh2tAo3ktz7B
+         /E5y+EfEppTO62lNGUoqDDMB1QR9Ql6lxmPW9WQQCQ2apqofcaZIRqjJcI0Nd6Tsd1nz
+         URLLlNS2VJaW3e9vktdvBv634wmzQHST+ZGF0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dAjCGEyu+CetHV6CkMW6JgjgwSUzdzfmM+USEBgwzng=;
-        b=aNSlohVm07Z+OOq0bJfhidCaY1XEQG6NsQknAMArYoP+bOpWHDybwcuiCbnwalMf91
-         FbYu/uC2J450mOcJOgfD3bKQtsaQYBtgK/Fb1Z7UjDKiaRlRaPzFTPkWnPcxNuLsqU4M
-         eEYZGFTJAEWCX1f0WO4Jzm1ecx+KXNwCcAe6XuVm6LTwQ8Tky5Y1FMpEBoO8ARdCd3Cy
-         C2kfYXMbaeRYoRfnQQnZskbetuZp3sV6g+vc+hinUwcBz31MLf7yxVcCCZ4illxVFbk2
-         21VY2N/TYsH5nAiqJaZV+84JHfMbSO44ldjhPC2NuYweSjzbAhscViT7jAIOpnFhzU6L
-         H7EA==
-X-Gm-Message-State: AFqh2kobpWz7dcsuEhQrNpj4dAezCTOBRnf5TJq+Fl8JB6UYxgioecVk
-        1HKc9bxI8dxjIGd64eBQOD5C9/OcraSgANJS2XE8/raJ6/+yr0IbhrDfS0mBGBHYA539zXJPpq0
-        linFqGByinCVITmfFwELJH9WP
-X-Received: by 2002:a25:4844:0:b0:802:dfdf:4efa with SMTP id v65-20020a254844000000b00802dfdf4efamr5505871yba.8.1674487145935;
-        Mon, 23 Jan 2023 07:19:05 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtT1iHyYMaC6UskCZcrx1X3rLcukqYQk+FzypY3B/sY9FOpy3M7XMidQ86PMu755T3yk5P43w==
-X-Received: by 2002:a25:4844:0:b0:802:dfdf:4efa with SMTP id v65-20020a254844000000b00802dfdf4efamr5505842yba.8.1674487145698;
-        Mon, 23 Jan 2023 07:19:05 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id bs15-20020a05620a470f00b006b61b2cb1d2sm32001007qkb.46.2023.01.23.07.19.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 07:19:05 -0800 (PST)
-Date:   Mon, 23 Jan 2023 10:19:03 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
- walk_hugetlb_range
-Message-ID: <Y86lZxGEQOBv3Hmw@x1n>
-References: <CADrL8HVGMTowH4trJhS+eM_EwZKoUgu7LmfwyTGyGRnNnwL3Zg@mail.gmail.com>
- <Y8hITxr/BBMuO6WX@monkey>
- <CADrL8HUggALQET-09Zw3BhFjZdw_G9+v6CU=qtGtK=KZ_DeAsw@mail.gmail.com>
- <Y8l+f2wNp2gAjvYg@monkey>
- <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
- <Y8m9gJX4PNoIrpjE@monkey>
- <Y8nCyqLF71g88Idv@x1n>
- <CADrL8HXkdxDdixWRKNw6RFdbiBX-Cb1Lk7qxg6LdeNywbMOaOA@mail.gmail.com>
- <Y8nNHKW0sTnrq8hw@x1n>
- <Y8nV2TvMK12yTPzE@monkey>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xlQ4uFJF8luICaZz9X8rsfnPJTK43Q09mIidIvdivig=;
+        b=bEr7ruIg3p4kbFIV8uQWhaj+Nwffj4hhhAOfqE8YM1HFbtC+VrRN0sJSPqr27dzvg6
+         zbqDPEmoxYAGwmmQl72zKfAXgMGQYJBe69u5TmhTQv/5K6hZbZPaWRGSn5pCiyPhJ+1D
+         DrRgK5aKmqysg1EXhy2alz7ALG0DAwoRZoxMTPvuz3ymjO6iYSg6AYNghf3JVSW8JU7x
+         CbDtGyy2nGM7LcWCVydaaqyWdojMqJesudYgSHwu9+5J0yThB6CxFMVduPVCyqdZ57B3
+         qE9wwQxk2WwfCaleJWvFurhtGm30XGypC/ep4uSIGvtqN1SzKe0BpJd/2jyfZ0NHmMvx
+         9V6g==
+X-Gm-Message-State: AFqh2koi5GwjL5EJHJ0x9HcvaY4k+r5f5fSLyUI3m4a/cqkcHuVP6u7c
+        yD0hoDfpEqzWVSuuKQ5VajaE/U9sZ2XyAOzQM10jkw==
+X-Google-Smtp-Source: AMrXdXsOBFPqVmUsprncB4I98OFPJNh7h2zhsGDwtNxEsEMk1Pe4AQgHpa0VNMJ3KrWKDOsIJwYLTUJ0EhSfNIA0uvM=
+X-Received: by 2002:a2e:2e08:0:b0:28b:8253:1a32 with SMTP id
+ u8-20020a2e2e08000000b0028b82531a32mr1676771lju.483.1674487350784; Mon, 23
+ Jan 2023 07:22:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y8nV2TvMK12yTPzE@monkey>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <PH0PR11MB5880A16045A842AB80A25C4BDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <B3E458A6-9279-4716-B242-873C77EC1E3A@joelfernandes.org> <Y8seE8Tr1w0UWf+m@lothringen>
+In-Reply-To: <Y8seE8Tr1w0UWf+m@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 23 Jan 2023 10:22:19 -0500
+Message-ID: <CAEXW_YTTk_zETWy=xpL-8wF8vh6s_U5z9UyS17uBMda1BYpvug@mail.gmail.com>
+Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action
+ from rcu_report_qs_rdp()
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mike,
+Hi Frederic,
 
-On Thu, Jan 19, 2023 at 03:44:25PM -0800, Mike Kravetz wrote:
-> On 01/19/23 18:07, Peter Xu wrote:
-> > 
-> > Actually when revisiting the locks I'm getting a bit confused on whether
-> > the vma lock is needed if pmd sharing is anyway forbidden for HGM.  I
-> > raised a question in the other patch of MADV_COLLAPSE, maybe they're
-> > related questions so we can keep it there.
-> 
-> I can quickly answer that.  Yes.  The vma lock is also being used for
-> fault/truncation synchronization.  Commit e700898fa075 make sure it is
-> even used on architectures that do not support PMD sharing.
-> 
-> I had come up with a rather ugly method of using the fault mutex for
-> fault/truncation synchronization, but using the vma lock was more
-> elegant.
+On Fri, Jan 20, 2023 at 6:04 PM Frederic Weisbecker <frederic@kernel.org> w=
+rote:
+>
+> On Fri, Jan 20, 2023 at 08:27:03AM -0500, Joel Fernandes wrote:
+> >
+> > Sure, I know what the code currently does, I am asking why and it feels=
+ wrong.
+> >
+> > I suggest you slightly change your approach to not assuming the code sh=
+ould be bonafide correct and then fixing it (which is ok once in a while), =
+and asking higher level questions to why things are the way they are in the=
+ first place (that is just my suggestion and I am not in a place to provide=
+ advice, far from it, but I am just telling you my approach =E2=80=94 I car=
+e more about the code than increasing my patch count :P).
+> >
+> > If you are in an intermediate state, part way to a !nocb state =E2=80=
+=94 you may have
+> > missed a nocb-related accel and wake, correct? Why does that matter? On=
+ce we
+> > transition to a !nocb state, we do not do a post-qs-report accel+wake a=
+nyway
+> > as we clearly know from the discussion.
+>
+> I'm confused. We are doing that acceleration on qs report for !nocb CPU, =
+right?
+>
+> > So why do we need to do it if we
+> > missed it for the intermediate stage? So, I am not fully sure yet what =
+that
+> > needac is doing and why it is needed.
+>
+> To summarize:
+>
+> * If the CPU is NOCB, all the callbacks advance and acceleration is perfo=
+rmed
+>   by the rcuo/rcuog kthreads.
+>
+> * If the CPU is not NOCB, all the callbacks acceleration is performed by =
+the
+>   CPU, such as in the case of rcu_report_qs_rdp().
+>
+> * If the CPU is transitionning from NOCB to !NOCB or from !NOCB to NOCB, =
+the
+>   kthreads may not be available to do the advance/acceleration, so we mus=
+t do
+>   it locally. That's the needacc path.
 
-Thanks for answering, I'll need to read some more on truncation later.
-Before that, since COLLAPSE will already require the i_mmap_rwsem write
-lock already, does it mean it is naturally race-free against truncation
-even without vma lock?
+Sure, I agree it "must be done locally" for the benefit of the
+half-way transition.
 
--- 
-Peter Xu
+> What am I missing?
 
+That the acceleration is also done by __note_gp_changes() once the
+grace period ends anyway, so if any acceleration was missed as you
+say, it will be done anyway.
+
+Also it is done by scheduler tick raising softirq:
+
+rcu_pending() does this:
+        /* Has RCU gone idle with this CPU needing another grace period? */
+        if (!gp_in_progress && rcu_segcblist_is_enabled(&rdp->cblist) &&
+            !rcu_rdp_is_offloaded(rdp) &&
+            !rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_TAIL))
+                return 1;
+
+and rcu_core():
+        /* No grace period and unregistered callbacks? */
+        if (!rcu_gp_in_progress() &&
+            rcu_segcblist_is_enabled(&rdp->cblist) && do_batch) {
+                rcu_nocb_lock_irqsave(rdp, flags);
+                if (!rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_T=
+AIL))
+                        rcu_accelerate_cbs_unlocked(rnp, rdp);
+                rcu_nocb_unlock_irqrestore(rdp, flags);
+        }
+
+So, I am not sure if you need needacc at all. Those CBs that have not
+been assigned grace period numbers will be taken care off :)
+
+Thanks!
+
+  -Joel
