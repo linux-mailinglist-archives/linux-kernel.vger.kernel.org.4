@@ -2,107 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422756783F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E108678400
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjAWSCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S233493AbjAWSDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbjAWSCl (ORCPT
+        with ESMTP id S232710AbjAWSDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:02:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42474301B2;
-        Mon, 23 Jan 2023 10:02:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4E4DC14;
-        Mon, 23 Jan 2023 10:03:21 -0800 (PST)
-Received: from [10.57.75.85] (unknown [10.57.75.85])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8362B3F71E;
-        Mon, 23 Jan 2023 10:02:37 -0800 (PST)
-Message-ID: <0a5019bd-8666-45b1-bcaa-e3bacc869bc8@arm.com>
-Date:   Mon, 23 Jan 2023 18:02:36 +0000
+        Mon, 23 Jan 2023 13:03:37 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBBCCA0E;
+        Mon, 23 Jan 2023 10:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=e4d0VnsFAkiIRf6tSLOqqkKcGHjRyQzCc9X+2Ei+du4=; b=n2eQeEa+UitAEQbDS0EqKYH0M5
+        6NQtlr4FQbbO8m80g6LV7aAWpHpfh+RZq0ZmvWgXvgHy2ipYGvNYLH/mx6Kswqdf6UtHFjVRgoVAV
+        wIwXViPE8PJy+rV6/rpVdaVlS1SOB0++9q6h7+AfzDhGQpciUUWNoX9LFQ4dJH/aS7Ks=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pK1A6-002w00-QG; Mon, 23 Jan 2023 19:03:18 +0100
+Date:   Mon, 23 Jan 2023 19:03:18 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] net: phy: C45-over-C22 access
+Message-ID: <Y87L5r8uzINALLw4@lunn.ch>
+References: <20230120224011.796097-1-michael@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] perf: cs-etm: Improve missing sink warning message
-To:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, acme@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230123161114.261255-1-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230123161114.261255-1-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120224011.796097-1-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 16:11, James Clark wrote:
-> Make the sink error message more similar to the event error message that
-> reminds about missing kernel support. The available sinks are also
-> determined by the hardware so mention that too.
+On Fri, Jan 20, 2023 at 11:40:06PM +0100, Michael Walle wrote:
+> After the c22 and c45 access split is finally merged. This can now be
+> posted again. The old version can be found here:
+> https://lore.kernel.org/netdev/20220325213518.2668832-1-michael@walle.cc/
+> Although all the discussion was here:
+> https://lore.kernel.org/netdev/20220323183419.2278676-1-michael@walle.cc/
 > 
-> Also, usually it's not necessary to specify the sink, so add that as a
-> hint.
+> The goal here is to get the GYP215 and LAN8814 running on the Microchip
+> LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
+> LAN8814 has a bug which makes it impossible to use C45 on that bus.
+> Fortunately, it was the intention of the GPY215 driver to be used on a C22
+> bus. But I think this could have never really worked, because the
+> phy_get_c45_ids() will always do c45 accesses and thus gpy_probe() will
+> fail.
 > 
-> Now the error for a made up sink looks like this:
-> 
->    $ perf record -e cs_etm/@abc/
->    Couldn't find sink "abc" on event cs_etm/@abc/.
->    Missing kernel or device support? Errno: 2 (No such file or directory)
-> 
->    Hint: An appropriate sink will picked automatically if none is specified.
-> 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->   tools/perf/arch/arm/util/cs-etm.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-> index 481e170cd3f1..c6195a7a3cbf 100644
-> --- a/tools/perf/arch/arm/util/cs-etm.c
-> +++ b/tools/perf/arch/arm/util/cs-etm.c
-> @@ -283,7 +283,9 @@ static int cs_etm_set_sink_attr(struct perf_pmu *pmu,
->   
->   		ret = perf_pmu__scan_file(pmu, path, "%x", &hash);
->   		if (ret != 1) {
-> -			pr_err("failed to set sink \"%s\" on event %s with %d (%s)\n",
-> +			pr_err("Couldn't find sink \"%s\" on event %s\n"
+> Introduce C45-over-C22 support and use it if the MDIO bus doesn't support
+> C45. Also enable it when a PHY is promoted from C22 to C45.
 
-Could this be tied to "errno == ENOENT" ?  Otherwise, this could be 
-guiding the user to wrong direction.
+I see this breaking up into two problems.
 
-> +			       "Missing kernel or device support? errno: %d (%s)\n\n"
-> +			       "Hint: An appropriate sink will picked automatically if one isn't specified.\n",
+1) Scanning the bus and finding device, be it by C22, C45, or C45 over C22.
 
-minor nit: "... sink will *be* picked.." ?
+2) Allowing drivers to access C45 register spaces, without caring if
+it is C45 transfers or C45 over C22.
 
-Otherwise, looks good to me.
+For scanning the bus we currently have:
 
-Suzuki
 
->   			       sink, evsel__name(evsel), errno,
->   			       str_error_r(errno, msg, sizeof(msg)));
->   			return ret;
-> 
-> base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
+        if (bus->read) {
+                err = mdiobus_scan_bus_c22(bus);
+                if (err)
+                        goto error;
+        }
 
+        prevent_c45_scan = mdiobus_prevent_c45_scan(bus);
+
+        if (!prevent_c45_scan && bus->read_c45) {
+                err = mdiobus_scan_bus_c45(bus);
+                if (err)
+                        goto error;
+        }
+
+I think we should be adding something like:
+
+	else {
+		if (bus->read) {
+	                err = mdiobus_scan_bus_c45_over_c22(bus);
+	                if (err)
+	                        goto error;
+	        }
+	}
+
+That makes the top level pretty obvious what is going on.
+
+But i think we need some more cleanup lower down. We now have a clean
+separation in MDIO bus drivers between C22 bus transactions and C45
+transactions bus. But further up it is less clear. PHY drivers should
+be using phy_read_mmd()/phy_write_mmd() etc, which means access the
+C45 address space, but says nothing about what bus transactions to
+use. So that is also quite clean.
+
+The problem is in the middle.  get_phy_c45_devs_in_pkg() uses
+mdiobus_c45_read(). Does mdiobus_c45_read() mean perform a C45 bus
+transaction, or access the C45 address space? I would say it means
+perform a C45 bus transaction. It does not take a phydev, so we are
+below the concept of PHYs, and so C45 over C22 does not exist at this
+level.
+
+So i think we need to review all calls to
+mdiobus_c45_read/mdiobus_c45_write() etc and see if they mean C45 bus
+transaction or C45 address space. Those meaning address space should
+be changed to phy_read_mmd()/phy_write_mmd().
+
+get_phy_device(), get_phy_c45_devs_in_pkg(), get_phy_c45_ids(),
+phy_c45_probe_present() however do not deal with phydev, so cannot use
+phy_read_mmd()/phy_write_mmd(). They probably need the bool is_c45
+replaced with an enum indicating what sort of bus transaction should
+be performed. Depending on that value, they can call
+mdiobus_c45_read() or mmd_phy_indirect() and __mdiobus_read().
+
+I don't have time at the moment, but i would like to dig more into
+phydev->is_c45. has_c45 makes sense to indicate it has c45 address
+space. But we need to see if it is every used to indicate to use c45
+transactions. But it is clear we need a new member to indicate if C45
+or C45 over C22 should be performed, and this should be set by how the
+PHY was found in the first place.
+
+    Andrew
