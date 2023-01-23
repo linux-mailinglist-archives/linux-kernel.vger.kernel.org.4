@@ -2,101 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378E9678532
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8E4678535
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjAWSpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S231823AbjAWSph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjAWSpX (ORCPT
+        with ESMTP id S231782AbjAWSpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:45:23 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0CF2139;
-        Mon, 23 Jan 2023 10:45:22 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <mkarcher@zedat.fu-berlin.de>)
-          id 1pK1om-003lk6-AJ; Mon, 23 Jan 2023 19:45:20 +0100
-Received: from pd9f631ca.dip0.t-ipconnect.de ([217.246.49.202] helo=[192.168.144.87])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <kernel@mkarcher.dialup.fu-berlin.de>)
-          id 1pK1om-0001f8-4B; Mon, 23 Jan 2023 19:45:20 +0100
-Message-ID: <68e5d3d1-7d7d-232c-c6dc-3f65bfb55114@mkarcher.dialup.fu-berlin.de>
-Date:   Mon, 23 Jan 2023 19:45:19 +0100
+        Mon, 23 Jan 2023 13:45:34 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3231C2139;
+        Mon, 23 Jan 2023 10:45:33 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 6ab0bde2f88019d8; Mon, 23 Jan 2023 19:45:31 +0100
+Received: from kreacher.localnet (unknown [213.134.188.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id E5DE2213259F;
+        Mon, 23 Jan 2023 19:45:30 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2 drivers
+Date:   Mon, 23 Jan 2023 19:45:30 +0100
+Message-ID: <2882611.e9J7NaK4W3@kreacher>
+In-Reply-To: <5916342.lOV4Wx5bFT@kreacher>
+References: <5916342.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
-Subject: [PATCH v3 1/1] arch/sh: avoid spurious sizeof-pointer-div warning
-To:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: kernel@mkarcher.dialup.fu-berlin.de
-X-Originating-IP: 217.246.49.202
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.188.170
+X-CLIENT-HOSTNAME: 213.134.188.170
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedguddthecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeekrddujedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudejtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+ thhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gcc warns about the pattern sizeof(void*)/sizeof(void), as it looks like
-the abuse of a pattern to calculate the array size. This pattern appears
-in the unevaluated part of the ternary operator in _INTC_ARRAY if the
-parameter is NULL.
+On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki wrote:
+> Hi All,
+> 
+> This is a new version of the series from Daniel posted as:
+> 
+> https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
+> 
+> The first patch has been reworked (see https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/)
+> and the other two have been rebased on top of it.
+> 
+> I have retained the R-by tags from Rui, because the changes in patches [2-3/3] are
+> not essential, but I think that this new set needs to be tested again.
+> 
+> Srinivas, can you test it please?
 
-The replacement uses an alternate approach to return 0 in case of NULL
-which does not generate the pattern sizeof(void*)/sizeof(void), but still
-emits the warning if _INTC_ARRAY is called with a nonarray parameter.
+Something's wrong, sorry.
 
-This patch is required for successful compilation with -Werror enabled.
+I get some invalid trip temperatures with this set.
 
-The idea to use _Generic for type distinction is taken from Comment #7
-in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483 by Jakub Jelinek
-
-Signed-off-by: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
----
-History:
-v4:
-   - Put the case distinction into the numerator instead of the denominator
-   - Refactor the case disctinction into a second macro
-v3:
-   - I had a stern discussion with Thunderbird about not mangling the
-     space characters in my email, and I hope spaces get sent as standard
-     spaces now
-v2:
-   - improve title and remove mostly redundant first sentence of the
-     description
-   - adjust formatting of the _Generic construction
-
-diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
-index c255273b0281..98d1da0d8e36 100644
---- a/include/linux/sh_intc.h
-+++ b/include/linux/sh_intc.h
-@@ -97,7 +97,9 @@ struct intc_hw_desc {
-      unsigned int nr_subgroups;
-  };
-
--#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
-+#define _INTC_SIZEOF_OR_ZERO(a) (_Generic(a,                 \
-+                                 typeof(NULL):  0,           \
-+                                 default:       sizeof(a)))
-+#define _INTC_ARRAY(a) a, _INTC_SIZEOF_OR_ZERO(a)/sizeof(*a)
-
-  #define INTC_HW_DESC(vectors, groups, mask_regs,    \
-               prio_regs,    sense_regs, ack_regs)    \
 
 
 
