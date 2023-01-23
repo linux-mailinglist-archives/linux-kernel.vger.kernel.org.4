@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C24677971
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505A5677974
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjAWKpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 05:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S231679AbjAWKqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 05:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjAWKpQ (ORCPT
+        with ESMTP id S229548AbjAWKqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 05:45:16 -0500
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE1A193F0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:45:07 -0800 (PST)
-Received: by mail-qv1-f50.google.com with SMTP id k12so8799358qvj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:45:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=08p1jI+6elfnKuSSg94O9FjfIBDWaypOUdxAVSVIN8c=;
-        b=qbt32op16iZdSOpUE7NV6oN6Iv1e2e+6+dHassM44taEGZadZYg1kmLpEb0cfLgxU2
-         BSGfv31CaTHZFo6h+hLGn75Fyd4TW7wbwgRzksOCCWVG4m8dX4aszl7ZKO/PUwtwdDhe
-         JQe55IWSA/GhvlOn5/WxufJB+3ypKcN7HzVrQ822xGuuo2+V2tvJQ+rHXquiHIqAjHoD
-         4d5eF7SRnPnvUtdrHkX+nT1immOlW14jaISYgwjj9TfS2Y2eDuGqI4eNQ0dmws1Yq36W
-         I6UsyyWnhFV6OYipNVnrAZ+u/gks1n0QR+w0aYsyzCOL4p81BitGA0E3x8r5qri814W0
-         5ltQ==
-X-Gm-Message-State: AFqh2krKX6ydXNt2pzLptqyl+6xx7h2RYMS18bSvt9moi25G6yXtnANT
-        GMRq05f14FSfKbnTPlLpr5vAVR5h0+LUMw==
-X-Google-Smtp-Source: AMrXdXtPmwOh5PD1/HgLhNnVDZoBt8FfqtqfambkdOo5pBCTMn6K/zTYqNI8YAyzCVuQ21ConN8I4g==
-X-Received: by 2002:a05:6214:aa4:b0:535:5cd2:e716 with SMTP id ew4-20020a0562140aa400b005355cd2e716mr20207889qvb.51.1674470706685;
-        Mon, 23 Jan 2023 02:45:06 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id s1-20020a05620a29c100b00704c6263924sm14778755qkp.13.2023.01.23.02.45.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 02:45:06 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5018be4ae8eso102826867b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:45:06 -0800 (PST)
-X-Received: by 2002:a0d:cbd7:0:b0:46f:bd6:957d with SMTP id
- n206-20020a0dcbd7000000b0046f0bd6957dmr2346573ywd.383.1674470705864; Mon, 23
- Jan 2023 02:45:05 -0800 (PST)
+        Mon, 23 Jan 2023 05:46:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B8618144
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:45:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674470717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lQYrnwFUsQDqjmZGkPEbqFd0u/uKqN3ucpVdTalmvp0=;
+        b=VNRu5anfz9+2AUtkWHc0H+JC+HOXlpkExZHLNUspic8PPd60rdlfZEQjhcvN8g02wUHknb
+        H5IVo2dOcLpiHkGNPNXqKWtXE87ndnsUl8CpMgTt/DfR2b22ZNi9cODoq4cZtPNBv30EIF
+        hp9hHPNApph0Jp3wRMf3n7qykRudWyE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-14-z2gzx7qvMwO7rvRXUnnpYw-1; Mon, 23 Jan 2023 05:45:13 -0500
+X-MC-Unique: z2gzx7qvMwO7rvRXUnnpYw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DEA7629ABA00;
+        Mon, 23 Jan 2023 10:45:11 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 22BF74014EBE;
+        Mon, 23 Jan 2023 10:45:06 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Subject: Re: [PATCH v5 23/39] mm: Don't allow write GUPs to shadow stack memory
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+        <20230119212317.8324-24-rick.p.edgecombe@intel.com>
+        <aa973c0f-5d90-36df-01b2-db9d9182910e@redhat.com>
+Date:   Mon, 23 Jan 2023 11:45:04 +0100
+In-Reply-To: <aa973c0f-5d90-36df-01b2-db9d9182910e@redhat.com> (David
+        Hildenbrand's message of "Mon, 23 Jan 2023 10:10:04 +0100")
+Message-ID: <87fsc1il73.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20221123025141.4012-1-jaimeliao.tw@gmail.com>
-In-Reply-To: <20221123025141.4012-1-jaimeliao.tw@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 Jan 2023 11:44:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU7f25OFOg7ek-37fFQbQ7Wupo2aPgAdA5QrY2HMp5d=g@mail.gmail.com>
-Message-ID: <CAMuHMdU7f25OFOg7ek-37fFQbQ7Wupo2aPgAdA5QrY2HMp5d=g@mail.gmail.com>
-Subject: Re: [PATCH] memory: renesas-rpc-if: Fix missing setting address
-To:     JaimeLiao <jaimeliao.tw@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        jaimeliao@mxic.com.tw, leoyu@mxic.com.tw, alvinzhou@mxic.com.tw,
-        juliensu@mxic.com.tw
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jaime,
+* David Hildenbrand:
 
-CC linux-renesas-soc
+> On 19.01.23 22:23, Rick Edgecombe wrote:
+>> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+>> type of memory called shadow stack. This shadow stack memory has some
+>> unusual properties, which requires some core mm changes to function
+>> properly.
+>> Shadow stack memory is writable only in very specific, controlled
+>> ways.
+>> However, since it is writable, the kernel treats it as such. As a result
+>> there remain many ways for userspace to trigger the kernel to write to
+>> shadow stack's via get_user_pages(, FOLL_WRITE) operations. To make this a
+>> little less exposed, block writable GUPs for shadow stack VMAs.
+>> Still allow FOLL_FORCE to write through shadow stack protections, as
+>> it
+>> does for read-only protections.
+>
+> So an app can simply modify the shadow stack itself by writing to
+> /proc/self/mem ?
+>
+> Is that really intended? Looks like security hole to me at first
+> sight, but maybe I am missing something important.
 
-Thanks for your patch!
+Isn't it possible to overwrite GOT pointers using the same vector?
+So I think it's merely reflecting the status quo.
 
-On Wed, Nov 23, 2022 at 3:55 AM JaimeLiao <jaimeliao.tw@gmail.com> wrote:
-> In the RPC manual mode, if the data direction is not set
-> (such as the flash erase command), the address misses the
-> setting.
+Thanks,
+Florian
 
-This patch never received review comments.
-As of commit fff53a551db50f5e ("memory: renesas-rpc-if: Correct QSPI
-data transfer in Manual mode") in v5.16-rc1, RPCIF_SMADR is written
-before the switch() statement, hence this patch can be ignored.
-
-See also
-https://lore.kernel.org/all/CAMuHMdWpvuC2Cm41jCQm+rT8MZB5GN+Z0bPz941QzsHX17Ux-g@mail.gmail.com
-
-> Signed-off-by: JaimeLiao <jaimeliao.tw@gmail.com>
-
-> --- a/drivers/memory/renesas-rpc-if.c
-> +++ b/drivers/memory/renesas-rpc-if.c
-> @@ -571,6 +571,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
->                 }
->                 break;
->         default:
-> +               regmap_write(rpc->regmap, RPCIF_SMADR, rpc->smadr);
->                 regmap_write(rpc->regmap, RPCIF_SMENR, rpc->enable);
->                 regmap_write(rpc->regmap, RPCIF_SMCR,
->                              rpc->smcr | RPCIF_SMCR_SPIE);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
