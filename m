@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82EE6788BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCF26788C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbjAWUyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S232208AbjAWUy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjAWUyH (ORCPT
+        with ESMTP id S231803AbjAWUyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:54:07 -0500
+        Mon, 23 Jan 2023 15:54:08 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFFF32E70
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857BE23D9F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:07 -0800 (PST)
 Received: from ipservice-092-217-089-134.092.217.pools.vodafone-ip.de ([92.217.89.134] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1pK3pJ-0000Lk-Il; Mon, 23 Jan 2023 21:54:01 +0100
+        id 1pK3pK-0000Lk-C5; Mon, 23 Jan 2023 21:54:02 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 08/23] staging: r8188eu: remove unused function parameter
-Date:   Mon, 23 Jan 2023 21:53:27 +0100
-Message-Id: <20230123205342.229589-9-martin@kaiser.cx>
+Subject: [PATCH 09/23] staging: r8188eu: remove dead assignment
+Date:   Mon, 23 Jan 2023 21:53:28 +0100
+Message-Id: <20230123205342.229589-10-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123205342.229589-1-martin@kaiser.cx>
 References: <20230123205342.229589-1-martin@kaiser.cx>
@@ -44,36 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pxmitpriv parameter in function dequeue_one_xmitframe is not needed.
-It can be removed.
+There's no point in moving xmitframe_plist to the next list element.
+xmitframe_plist is not used any more after this assignment.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_xmit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/r8188eu/core/rtw_xmit.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index a431bffbccf2..aefd32b98d08 100644
+index aefd32b98d08..943e7a56f7ce 100644
 --- a/drivers/staging/r8188eu/core/rtw_xmit.c
 +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -1355,7 +1355,7 @@ s32 rtw_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitfram
- 	return _SUCCESS;
- }
+@@ -1365,11 +1365,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct tx_servq *ptxservq, struc
  
--static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, struct tx_servq *ptxservq, struct __queue *pframe_queue)
-+static struct xmit_frame *dequeue_one_xmitframe(struct tx_servq *ptxservq, struct __queue *pframe_queue)
- {
- 	struct list_head *xmitframe_plist, *xmitframe_phead;
- 	struct	xmit_frame	*pxmitframe = NULL;
-@@ -1402,7 +1402,7 @@ struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
- 
- 			pframe_queue = &ptxservq->sta_pending;
- 
--			pxmitframe = dequeue_one_xmitframe(pxmitpriv, ptxservq, pframe_queue);
-+			pxmitframe = dequeue_one_xmitframe(ptxservq, pframe_queue);
- 
- 			if (pxmitframe) {
- 				phwxmit->accnt--;
+ 	if (xmitframe_phead != xmitframe_plist) {
+ 		pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
+-
+-		xmitframe_plist = xmitframe_plist->next;
+-
+ 		list_del_init(&pxmitframe->list);
+-
+ 		ptxservq->qcnt--;
+ 	}
+ 	return pxmitframe;
 -- 
 2.30.2
 
