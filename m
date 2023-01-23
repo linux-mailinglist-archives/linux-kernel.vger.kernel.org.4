@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52728677F7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4208C677F78
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbjAWPUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        id S232487AbjAWPTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjAWPUQ (ORCPT
+        with ESMTP id S232598AbjAWPTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:20:16 -0500
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B272A9AA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:19:43 -0800 (PST)
+        Mon, 23 Jan 2023 10:19:31 -0500
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6AD29177;
+        Mon, 23 Jan 2023 07:18:51 -0800 (PST)
 Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4P0tyJ19LyzMqX7l;
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4P0tyJ6NTZzMqBk7;
         Mon, 23 Jan 2023 16:17:44 +0100 (CET)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4P0tyH4DCczMqXNp;
-        Mon, 23 Jan 2023 16:17:43 +0100 (CET)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4P0tyJ1vp7zMqXNr;
+        Mon, 23 Jan 2023 16:17:44 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
         s=20220412; t=1674487064;
-        bh=+8gDwawrJxcJAlEtw0VJvo/ZnmBWx007KlWqpnE3LXk=;
+        bh=NGLwp0GY1OF2DwMEj8qnWtv0AIQWx6dwRPS3v8teXNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O3c+12628Ccw4QZNurat96yAYXcbcNVveMDhpQc40P/+ey22Bw9bhKMbHAU7Q9+ZF
-         7gIHSW6cMKH7ELEN51m+lBXlAMz46z7zUgSOl3/z500OcZcAWUhMH923sDOEeAtPLI
-         O6+Jj4Az2LZQ/r0Ml6hhkGQjNNoMEoA/dVOpObuU=
+        b=TiRmdH0NJGakbf5zhK9xD3BU9U14kMPzD2CvpLIRWWZlg3r+Ke6ewDs4NxijwR4MX
+         AqP9rQqKr7AfH1dC8mGqlwHN5yIgm+c2uAcmK3g+qwy4HfSt1gQjBHFxSGc3tyKJ/h
+         WRaZa2CU6GtTy9ops5UxO6RE8NfKJ3VmfgHTBsuQ=
 From:   Philippe Schenker <dev@pschenker.ch>
 To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -37,6 +37,7 @@ Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Aishwarya Kothari <aishwarya.kothari@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Marek Vasut <marex@denx.de>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -44,9 +45,9 @@ Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Reinhold Mueller <reinhold.mueller@emtrion.com>,
         Tim Harvey <tharvey@gateworks.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] arm64: dts: imx8mm-verdin: Add yavia carrier board
-Date:   Mon, 23 Jan 2023 16:17:33 +0100
-Message-Id: <20230123151734.44184-3-dev@pschenker.ch>
+Subject: [PATCH v2 3/3] arm64: dts: imx8mp-verdin: Add yavia carrier board
+Date:   Mon, 23 Jan 2023 16:17:34 +0100
+Message-Id: <20230123151734.44184-4-dev@pschenker.ch>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230123151734.44184-1-dev@pschenker.ch>
 References: <20230123151734.44184-1-dev@pschenker.ch>
@@ -54,9 +55,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,7 +65,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Philippe Schenker <philippe.schenker@toradex.com>
 
-Add new carrier board device tree Yavia for the Verdin iMX8M Mini SoM.
+Add new carrier board device tree Yavia for the Verdin iMX8M Plus SoM.
 
 Yavia is a compact carrier board providing easy access to the most
 common features of the Verdin family. The intended use of the carrier
@@ -83,34 +83,34 @@ Changes in v2:
   function-enumerator
 
  arch/arm64/boot/dts/freescale/Makefile        |   2 +
- .../freescale/imx8mm-verdin-nonwifi-yavia.dts |  18 ++
- .../freescale/imx8mm-verdin-wifi-yavia.dts    |  18 ++
- .../dts/freescale/imx8mm-verdin-yavia.dtsi    | 169 ++++++++++++++++++
- 4 files changed, 207 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-yavia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-yavia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-yavia.dtsi
+ .../freescale/imx8mp-verdin-nonwifi-yavia.dts |  18 ++
+ .../freescale/imx8mp-verdin-wifi-yavia.dts    |  18 ++
+ .../dts/freescale/imx8mp-verdin-yavia.dtsi    | 213 ++++++++++++++++++
+ 4 files changed, 251 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-yavia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index e0f6a7970f58..432f0c981eb8 100644
+index 432f0c981eb8..df895e3798b8 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -75,8 +75,10 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7903.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7904.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-dahlia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-dev.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-yavia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-dahlia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-dev.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-yavia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2pro.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-yavia.dts b/arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-yavia.dts
+@@ -98,8 +98,10 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dev.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-yavia.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dahlia.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dev.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-yavia.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-hummingboard-pulse.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-kontron-pitx-imx8m.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-yavia.dts b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-yavia.dts
 new file mode 100644
-index 000000000000..c71825ecf2ea
+index 000000000000..b28477df1ec6
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-yavia.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-yavia.dts
 @@ -0,0 +1,18 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
@@ -119,22 +119,22 @@ index 000000000000..c71825ecf2ea
 +
 +/dts-v1/;
 +
-+#include "imx8mm-verdin.dtsi"
-+#include "imx8mm-verdin-nonwifi.dtsi"
-+#include "imx8mm-verdin-yavia.dtsi"
++#include "imx8mp-verdin.dtsi"
++#include "imx8mp-verdin-nonwifi.dtsi"
++#include "imx8mp-verdin-yavia.dtsi"
 +
 +/ {
-+	model = "Toradex Verdin iMX8M Mini on Yavia Board";
-+	compatible = "toradex,verdin-imx8mm-nonwifi-yavia",
-+		     "toradex,verdin-imx8mm-nonwifi",
-+		     "toradex,verdin-imx8mm",
-+		     "fsl,imx8mm";
++	model = "Toradex Verdin iMX8M Plus on Yavia Board";
++	compatible = "toradex,verdin-imx8mp-nonwifi-yavia",
++		     "toradex,verdin-imx8mp-nonwifi",
++		     "toradex,verdin-imx8mp",
++		     "fsl,imx8mp";
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-yavia.dts b/arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-yavia.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-yavia.dts b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-yavia.dts
 new file mode 100644
-index 000000000000..fe39de9310d6
+index 000000000000..100bef12089c
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-yavia.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-yavia.dts
 @@ -0,0 +1,18 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
@@ -143,23 +143,23 @@ index 000000000000..fe39de9310d6
 +
 +/dts-v1/;
 +
-+#include "imx8mm-verdin.dtsi"
-+#include "imx8mm-verdin-wifi.dtsi"
-+#include "imx8mm-verdin-yavia.dtsi"
++#include "imx8mp-verdin.dtsi"
++#include "imx8mp-verdin-wifi.dtsi"
++#include "imx8mp-verdin-yavia.dtsi"
 +
 +/ {
-+	model = "Toradex Verdin iMX8M Mini WB on Yavia Board";
-+	compatible = "toradex,verdin-imx8mm-wifi-yavia",
-+		     "toradex,verdin-imx8mm-wifi",
-+		     "toradex,verdin-imx8mm",
-+		     "fsl,imx8mm";
++	model = "Toradex Verdin iMX8M Plus WB on Yavia Board";
++	compatible = "toradex,verdin-imx8mp-wifi-yavia",
++		     "toradex,verdin-imx8mp-wifi",
++		     "toradex,verdin-imx8mp",
++		     "fsl,imx8mp";
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin-yavia.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-verdin-yavia.dtsi
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
 new file mode 100644
-index 000000000000..1e28c78e381f
+index 000000000000..bd7b31cc3760
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-yavia.dtsi
-@@ -0,0 +1,169 @@
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
+@@ -0,0 +1,213 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 +/*
 + * Copyright 2023 Toradex
@@ -168,6 +168,22 @@ index 000000000000..1e28c78e381f
 +#include <dt-bindings/leds/common.h>
 +
 +/ {
++	/* Carrier Board Supply +V1.8 */
++	reg_1p8v: regulator-1p8v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <1800000>;
++		regulator-min-microvolt = <1800000>;
++		regulator-name = "+V1.8_SW";
++	};
++
++	/* Carrier Board Supply +V3.3 */
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "+V3.3_SW";
++	};
++
 +	leds {
 +		compatible = "gpio-leds";
 +
@@ -219,8 +235,12 @@ index 000000000000..1e28c78e381f
 +	};
 +};
 +
++&backlight {
++	power-supply = <&reg_3p3v>;
++};
++
 +/* Verdin SPI_1 */
-+&ecspi2 {
++&ecspi1 {
 +	status = "okay";
 +};
 +
@@ -234,16 +254,20 @@ index 000000000000..1e28c78e381f
 +	status = "okay";
 +};
 +
-+&fec1 {
++&eqos {
 +	status = "okay";
 +};
 +
-+&gpio3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_gpios_ext_yavia>;
++&flexcan1 {
++	status = "okay";
 +};
 +
 +&hwmon_temp {
++	status = "okay";
++};
++
++/* Verdin I2C_2_DSI */
++&i2c2 {
 +	status = "okay";
 +};
 +
@@ -251,57 +275,77 @@ index 000000000000..1e28c78e381f
 +	status = "okay";
 +};
 +
-+/* Verdin I2C_1 */
 +&i2c4 {
 +	status = "okay";
 +};
 +
 +/* Verdin PCIE_1 */
-+&pcie0 {
++&pcie {
 +	status = "okay";
 +};
 +
-+&pcie_phy {
-+	status = "okay";
-+};
-+
-+/* Verdin PWM_3_DSI */
-+&pwm1 {
++&pcie_phy{
 +	status = "okay";
 +};
 +
 +/* Verdin PWM_1 */
-+&pwm2 {
++&pwm1 {
 +	status = "okay";
 +};
 +
 +/* Verdin PWM_2 */
++&pwm2 {
++	status = "okay";
++};
++
++/* Verdin PWM_3_DSI */
 +&pwm3 {
 +	status = "okay";
 +};
 +
-+/* Verdin UART_3 */
++&reg_usdhc2_vmmc {
++	vin-supply = <&reg_3p3v>;
++};
++
++/* Verdin UART_1 */
 +&uart1 {
 +	status = "okay";
 +};
 +
-+/* Verdin UART_1 */
++/* Verdin UART_2 */
 +&uart2 {
 +	status = "okay";
 +};
 +
-+/* Verdin UART_2 */
++/* Verdin UART_3, used as the Linux Console */
 +&uart3 {
 +	status = "okay";
 +};
 +
 +/* Verdin USB_1 */
-+&usbotg1 {
++&usb3_phy0 {
++	status = "okay";
++};
++
++&usb3_0 {
++	status = "okay";
++};
++
++&usb_dwc3_0 {
 +	status = "okay";
 +};
 +
 +/* Verdin USB_2 */
-+&usbotg2 {
++&usb3_phy1 {
++	status = "okay";
++};
++
++&usb3_1 {
++	status = "okay";
++};
++
++&usb_dwc3_1 {
++	disable-over-current;
 +	status = "okay";
 +};
 +
@@ -313,19 +357,19 @@ index 000000000000..1e28c78e381f
 +&iomuxc {
 +	pinctrl_leds_yavia: ledsyaviagrp {
 +		fsl,pins = <
-+			MX8MM_IOMUXC_NAND_ALE_GPIO3_IO0		0x106	/* SODIMM 52 */
-+			MX8MM_IOMUXC_NAND_CE0_B_GPIO3_IO1	0x106	/* SODIMM 54 */
-+			MX8MM_IOMUXC_NAND_DATA00_GPIO3_IO6	0x106	/* SODIMM 56 */
-+			MX8MM_IOMUXC_NAND_DATA01_GPIO3_IO7	0x106	/* SODIMM 58 */
-+			MX8MM_IOMUXC_NAND_DATA02_GPIO3_IO8	0x106	/* SODIMM 60 */
-+			MX8MM_IOMUXC_NAND_DATA03_GPIO3_IO9	0x106	/* SODIMM 62 */
++			MX8MP_IOMUXC_NAND_ALE__GPIO3_IO00	0x106	/* SODIMM 52 */
++			MX8MP_IOMUXC_NAND_CE0_B__GPIO3_IO01	0x106	/* SODIMM 54 */
++			MX8MP_IOMUXC_NAND_DATA00__GPIO3_IO06	0x106	/* SODIMM 56 */
++			MX8MP_IOMUXC_NAND_DATA01__GPIO3_IO07	0x106	/* SODIMM 58 */
++			MX8MP_IOMUXC_NAND_DATA02__GPIO3_IO08	0x106	/* SODIMM 60 */
++			MX8MP_IOMUXC_NAND_DATA03__GPIO3_IO09	0x106	/* SODIMM 62 */
 +		>;
 +	};
 +
 +	pinctrl_gpios_ext_yavia: gpiosextyaviagrp {
 +		fsl,pins = <
-+			MX8MM_IOMUXC_NAND_CE1_B_GPIO3_IO2	0x106	/* SODIMM 64 */
-+			MX8MM_IOMUXC_NAND_DQS_GPIO3_IO14	0x106	/* SODIMM 66 */
++			MX8MP_IOMUXC_NAND_CE1_B__GPIO3_IO02	0x106	/* SODIMM 64 */
++			MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14	0x106	/* SODIMM 66 */
 +		>;
 +	};
 +};
