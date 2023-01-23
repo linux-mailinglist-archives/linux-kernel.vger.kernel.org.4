@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79636788F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD1C6788E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbjAWU7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S232386AbjAWU62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbjAWU6u (ORCPT
+        with ESMTP id S232315AbjAWU6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:58:50 -0500
+        Mon, 23 Jan 2023 15:58:24 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02413802D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:58:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBB33864D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:58:02 -0800 (PST)
 Received: from ipservice-092-217-089-134.092.217.pools.vodafone-ip.de ([92.217.89.134] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1pK3pT-0000Lk-W6; Mon, 23 Jan 2023 21:54:12 +0100
+        id 1pK3pU-0000Lk-OM; Mon, 23 Jan 2023 21:54:12 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 21/23] staging: r8188eu: struct agg_pkt_info is unused
-Date:   Mon, 23 Jan 2023 21:53:40 +0100
-Message-Id: <20230123205342.229589-22-martin@kaiser.cx>
+Subject: [PATCH 22/23] staging: r8188eu: apsd_setting is unused
+Date:   Mon, 23 Jan 2023 21:53:41 +0100
+Message-Id: <20230123205342.229589-23-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123205342.229589-1-martin@kaiser.cx>
 References: <20230123205342.229589-1-martin@kaiser.cx>
@@ -44,29 +44,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct agg_pkt_info is not used in the r8188eu driver. Remove it.
+apsd_setting in struct tx_servq is not used, it can be removed.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/include/rtw_xmit.h | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/staging/r8188eu/include/rtw_xmit.h | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
-index 4aa7833487c8..548d2cfb88ec 100644
+index 548d2cfb88ec..33c3031de2c4 100644
 --- a/drivers/staging/r8188eu/include/rtw_xmit.h
 +++ b/drivers/staging/r8188eu/include/rtw_xmit.h
-@@ -250,11 +250,6 @@ struct	hw_txqueue {
- 	int	ac_tag;
- };
- 
--struct agg_pkt_info {
--	u16 offset;
--	u16 pkt_len;
--};
--
- struct	xmit_priv {
+@@ -228,8 +228,6 @@ struct tx_servq {
+ struct sta_xmit_priv {
  	spinlock_t lock;
- 	struct list_head be_pending;
+ 	int	option;
+-	int	apsd_setting;	/* When bit mask is on, the associated edca
+-				 * queue supports APSD. */
+ 	struct tx_servq	be_q;			/* priority == 0,3 */
+ 	struct tx_servq	bk_q;			/* priority == 1,2 */
+ 	struct tx_servq	vi_q;			/* priority == 4,5 */
 -- 
 2.30.2
 
