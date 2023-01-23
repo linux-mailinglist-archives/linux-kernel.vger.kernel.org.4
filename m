@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FC86788C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3506788C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjAWUyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S232503AbjAWUyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjAWUyO (ORCPT
+        with ESMTP id S232158AbjAWUyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:54:14 -0500
+        Mon, 23 Jan 2023 15:54:20 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8DE36085
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727B332E47
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:13 -0800 (PST)
 Received: from ipservice-092-217-089-134.092.217.pools.vodafone-ip.de ([92.217.89.134] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1pK3pN-0000Lk-GG; Mon, 23 Jan 2023 21:54:05 +0100
+        id 1pK3pO-0000Lk-80; Mon, 23 Jan 2023 21:54:06 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 13/23] staging: r8188eu: make rtw_chk_hi_queue_cmd a void function
-Date:   Mon, 23 Jan 2023 21:53:32 +0100
-Message-Id: <20230123205342.229589-14-martin@kaiser.cx>
+Subject: [PATCH 14/23] staging: r8188eu: decrement qcnt in rtw_dequeue_xframe
+Date:   Mon, 23 Jan 2023 21:53:33 +0100
+Message-Id: <20230123205342.229589-15-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123205342.229589-1-martin@kaiser.cx>
 References: <20230123205342.229589-1-martin@kaiser.cx>
@@ -44,72 +44,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both callers of rtw_chk_hi_queue_cmd do not check the return value.
-Convert rtw_chk_hi_queue_cmd to a void function.
+rtw_dequeue_xframe calls dequeue_one_xmitframe and passes a struct
+tx_servq. The only use for this parameter is to decrement its qcnt if an
+xmit_frame could be extracted.
+
+It makes more sense to remove the struct tx_servq parameter from
+dequeue_one_xmitframe and decrement qcnt in the calling function when
+dequeue_one_xmitframe returns success, i.e. when an xmit_frame was
+extracted.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c    | 16 +++++-----------
- drivers/staging/r8188eu/include/rtw_cmd.h |  2 +-
- 2 files changed, 6 insertions(+), 12 deletions(-)
+ drivers/staging/r8188eu/core/rtw_xmit.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index eb79435da355..d57360a68fb3 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -1197,24 +1197,20 @@ static void rtw_chk_hi_queue_hdl(struct adapter *padapter)
- 	}
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index 96079d9a6c42..7802a34ebcfd 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -1355,7 +1355,7 @@ s32 rtw_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitfram
+ 	return _SUCCESS;
  }
  
--u8 rtw_chk_hi_queue_cmd(struct adapter *padapter)
-+void rtw_chk_hi_queue_cmd(struct adapter *padapter)
+-static struct xmit_frame *dequeue_one_xmitframe(struct tx_servq *ptxservq, struct __queue *pframe_queue)
++static struct xmit_frame *dequeue_one_xmitframe(struct __queue *pframe_queue)
  {
- 	struct cmd_obj	*ph2c;
- 	struct drvextra_cmd_parm	*pdrvextra_cmd_parm;
- 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
--	u8	res = _SUCCESS;
- 
- 	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
--	if (!ph2c) {
--		res = _FAIL;
--		goto exit;
--	}
-+	if (!ph2c)
-+		return;
- 
- 	pdrvextra_cmd_parm = kzalloc(sizeof(*pdrvextra_cmd_parm), GFP_ATOMIC);
- 	if (!pdrvextra_cmd_parm) {
- 		kfree(ph2c);
--		res = _FAIL;
--		goto exit;
-+		return;
- 	}
- 
- 	pdrvextra_cmd_parm->ec_id = CHECK_HIQ_WK_CID;
-@@ -1223,9 +1219,7 @@ u8 rtw_chk_hi_queue_cmd(struct adapter *padapter)
- 
- 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
- 
--	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
--exit:
--	return res;
-+	rtw_enqueue_cmd(pcmdpriv, ph2c);
+ 	struct list_head *xmitframe_plist, *xmitframe_phead;
+ 	struct xmit_frame *pxmitframe;
+@@ -1367,7 +1367,6 @@ static struct xmit_frame *dequeue_one_xmitframe(struct tx_servq *ptxservq, struc
+ 	xmitframe_plist = xmitframe_phead->next;
+ 	pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
+ 	list_del_init(&pxmitframe->list);
+-	ptxservq->qcnt--;
+ 	return pxmitframe;
  }
  
- u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt)
-diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
-index 9df7d4bf441d..e8eecd52d1d8 100644
---- a/drivers/staging/r8188eu/include/rtw_cmd.h
-+++ b/drivers/staging/r8188eu/include/rtw_cmd.h
-@@ -743,7 +743,7 @@ u8 rtw_rpt_timer_cfg_cmd(struct adapter *padapter, u16 minRptTime);
- u8 rtw_antenna_select_cmd(struct adapter *padapter, u8 antenna, u8 enqueue);
- u8 rtw_ps_cmd(struct adapter *padapter);
+@@ -1398,10 +1397,11 @@ struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
  
--u8 rtw_chk_hi_queue_cmd(struct adapter *padapter);
-+void rtw_chk_hi_queue_cmd(struct adapter *padapter);
+ 			pframe_queue = &ptxservq->sta_pending;
  
- u8 rtw_set_chplan_cmd(struct adapter *padapter, u8 chplan);
+-			pxmitframe = dequeue_one_xmitframe(ptxservq, pframe_queue);
++			pxmitframe = dequeue_one_xmitframe(pframe_queue);
  
+ 			if (pxmitframe) {
+ 				phwxmit->accnt--;
++				ptxservq->qcnt--;
+ 
+ 				/* Remove sta node when there are no pending packets. */
+ 				if (list_empty(&pframe_queue->queue))
 -- 
 2.30.2
 
