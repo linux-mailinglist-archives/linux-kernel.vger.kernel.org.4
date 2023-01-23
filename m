@@ -2,145 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBFD67809A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4F56780A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbjAWPzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S232958AbjAWP4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbjAWPzV (ORCPT
+        with ESMTP id S232881AbjAWP4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:55:21 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7FC30E5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:16 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id s3so9085594pfd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sbuQ2eAJkHwKWpK2Z21TvfvZZsWUOmsMIR9vvLknpYs=;
-        b=WQmjabEAtB9BEkpn55XmcV9lxKiEMGiQ+erS4aRFrM/SvbEcUDMMvtLfa8JNjKhq/j
-         pAu0hnQtQSxV77MQTroBJpAM9Y+91ykFFaiXqzt4CXi/ulQIQJzKiYdMxm+AeACmyUhj
-         baNW0OfSe+Btw2l9eujUITCmMxR4YswB66UkI=
+        Mon, 23 Jan 2023 10:56:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A816592
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674489320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jCAD4d47/BHFzPuHYVMhr0BvGhmMwApgFifpM3vZL8Q=;
+        b=fxIPcO1qqMVO7209VHb59Qvacf97v8lYdjqifUUuXzpGgS1pLvrF5LJ1VUZhXq1EMmZkMs
+        UM4q9+Auew9Wuxxorn6XFpN+MiUhL3hka+JTjXfbnRaNCEtkXBTN0fCdZAZNuYJtbitARZ
+        4w6tG5ECUv0SblYHpU3sfKxr3LWu514=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-477--gSX5ra0OeuRADtWOW0gyQ-1; Mon, 23 Jan 2023 10:55:18 -0500
+X-MC-Unique: -gSX5ra0OeuRADtWOW0gyQ-1
+Received: by mail-ed1-f72.google.com with SMTP id f11-20020a056402354b00b0049e18f0076dso8764579edd.15
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sbuQ2eAJkHwKWpK2Z21TvfvZZsWUOmsMIR9vvLknpYs=;
-        b=nRj1Uyrcvu+qdlV/72Y75NAirwMdiOkwWF4P9tSA0tUOvHsvGxejlCUB1Hb58DWu/B
-         O6AGu+tSksORu4KJdD46WR/ZnCgSD1wzD9eBN3mNwoPr/S6TBe+1RcXn1g/0rYaSgmCP
-         489B5RInziSF7EGYe0EMhXILOAn94Cc4budhUtqD8unlK3HEB8Kba8fOAIjsgG/x+lIh
-         BNkVBtwWtiKhU7UIzVWKr2S511Zh02AodGAgVYD73aDT1pf/2UJMloTqtBJFzuvZDvzH
-         Wcd+a4IsKAb8L4kb804wyiC7hr5S0Ya4Pi8YKirCPzRp5bcJ9+oqkZzlTBzY7YdLJpwU
-         tdJQ==
-X-Gm-Message-State: AFqh2kq41BUSwA8RlxOB9goOmoxpRq20dXqk8/oqAdygWs72sYxSm39A
-        KW5uGdSlrgo0l0RkNGd4oVl+vpGkhDa8xTRT
-X-Google-Smtp-Source: AMrXdXsYF8pnS1Oc+L6hPOadVYAGJNXB7Ax/UA1bbadINLSBVjkFUQxNHuo2V1NUKNhamb5yQAPGtw==
-X-Received: by 2002:a62:830d:0:b0:58d:94f4:a8b9 with SMTP id h13-20020a62830d000000b0058d94f4a8b9mr28179365pfe.11.1674489316479;
-        Mon, 23 Jan 2023 07:55:16 -0800 (PST)
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com. [209.85.216.46])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa79731000000b0058d97b624f0sm15895176pfg.75.2023.01.23.07.55.16
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jCAD4d47/BHFzPuHYVMhr0BvGhmMwApgFifpM3vZL8Q=;
+        b=r+fRXiRFtRJKFglY4yM2oPcALZu9CosgOwuWx7ETpN9pVRjCsdSlh1j5x+mf+6rYRJ
+         GvMat0Dub4wRkbStipsMlMQbTgFYcHsOTY1l4I6I7kcK8fKQkq+5nA92C3syTOsFsdMT
+         VkpYZ4BM3sJEPdE0p1Wbf1vhHg8eKvrNc3emp+qsDke8hSn11yU8q1ZivVbicts0btzQ
+         IGABkXVPZzFs8P1mlPigL+bv6YPY6CFugG3Gi0qGOe07ce9xuX4DtNKVyWzx8X1VDwbp
+         rIvqBnlMNGBevYrN7jPqbPPQCrW8C6tYxxVt0B3ieQgCgB1mxq1lyi1YMCwSky9U4yS2
+         9uSg==
+X-Gm-Message-State: AFqh2kpBTTpekz6SxwKyK6iQTjdqpUImOx91xsNiS97aMw9+5/XZMe1v
+        FyMguzF20s0XWebAd8l0BCbZskVeCzrfn4nlLqg0aWHCdAFVDK8hE1qGpTyb7YFRpCq3uBYOS1t
+        6r+ylnAdObsSspcTYddIiCyHR
+X-Received: by 2002:aa7:c6d9:0:b0:497:233d:3ef4 with SMTP id b25-20020aa7c6d9000000b00497233d3ef4mr24123950eds.22.1674489317262;
+        Mon, 23 Jan 2023 07:55:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsVeO/dcvWK52S6F3pLlXPbt0ufj0yLiui/5X5gLEcz4UVQceMWRf5bZ0OWMJ4nR/4Iu2j48w==
+X-Received: by 2002:aa7:c6d9:0:b0:497:233d:3ef4 with SMTP id b25-20020aa7c6d9000000b00497233d3ef4mr24123940eds.22.1674489317090;
+        Mon, 23 Jan 2023 07:55:17 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id 11-20020a170906308b00b007c0f217aadbsm22068428ejv.24.2023.01.23.07.55.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Mon, 23 Jan 2023 07:55:16 -0800 (PST)
-Received: by mail-pj1-f46.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso7002613pjp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:16 -0800 (PST)
-X-Received: by 2002:a17:90a:1:b0:225:cb85:673d with SMTP id
- 1-20020a17090a000100b00225cb85673dmr2482344pja.184.1674489315288; Mon, 23 Jan
- 2023 07:55:15 -0800 (PST)
+Message-ID: <b2d42cec-4ef8-2032-dad0-13ee49f05784@redhat.com>
+Date:   Mon, 23 Jan 2023 16:55:15 +0100
 MIME-Version: 1.0
-References: <20230121134812.16637-1-mario.limonciello@amd.com>
- <20230121134812.16637-3-mario.limonciello@amd.com> <CAMRc=Meeiix1BuPi81Ad08yePvd7U5S-AVNwU+vYUHv2VcDiEQ@mail.gmail.com>
-In-Reply-To: <CAMRc=Meeiix1BuPi81Ad08yePvd7U5S-AVNwU+vYUHv2VcDiEQ@mail.gmail.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Mon, 23 Jan 2023 08:55:02 -0700
-X-Gmail-Original-Message-ID: <CAHQZ30Dgs=ScuQ2MkNkuHyZNC1wwaBDkMhcvh9dt3oAppTKBbw@mail.gmail.com>
-Message-ID: <CAHQZ30Dgs=ScuQ2MkNkuHyZNC1wwaBDkMhcvh9dt3oAppTKBbw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gpiolib-acpi: Don't set GPIOs for wakeup in S3 mode
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Smythe <ncsmythe@scruboak.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Hasemeyer <markhas@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 1/1] platform/surface: Switch to use
+ acpi_evaluate_dsm_typed()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Mark Gross <markgross@kernel.org>
+References: <20230118093823.39679-1-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230118093823.39679-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 8:03 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Sat, Jan 21, 2023 at 2:48 PM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
-> >
-> > commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
-> > adjusted the policy to enable wakeup by default if the ACPI tables
-> > indicated that a device was wake capable.
-> >
-> > It was reported however that this broke suspend on at least two System76
-> > systems in S3 mode and two Lenovo Gen2a systems, but only with S3.
-> > When the machines are set to s2idle, wakeup behaves properly.
-> >
-> > Configuring the GPIOs for wakeup with S3 doesn't work properly, so only
-> > set it when the system supports low power idle.
-> >
-> > Fixes: 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
-> > Fixes: b38f2d5d9615c ("i2c: acpi: Use ACPI wake capability bit to set wake_irq")
-> > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2357
-> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=2162013
-> > Reported-by: Nathan Smythe <ncsmythe@scruboak.org>
-> > Tested-by: Nathan Smythe <ncsmythe@scruboak.org>
-> > Suggested-by: Raul Rangel <rrangel@chromium.org>
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> >  drivers/gpio/gpiolib-acpi.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-> > index 9ef0f5641b521..17c53f484280f 100644
-> > --- a/drivers/gpio/gpiolib-acpi.c
-> > +++ b/drivers/gpio/gpiolib-acpi.c
-> > @@ -1104,7 +1104,8 @@ int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name, in
-> >                                 dev_dbg(&adev->dev, "IRQ %d already in use\n", irq);
-> >                         }
-> >
-> > -                       if (wake_capable)
-> > +                       /* avoid suspend issues with GPIOs when systems are using S3 */
-> > +                       if (wake_capable && acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
-> >                                 *wake_capable = info.wake_capable;
-> >
-> >                         return irq;
-> > --
-> > 2.34.1
-> >
->
-> Applied, thanks!
->
-> Bart
+Hi Andy,
+
+On 1/18/23 10:38, Andy Shevchenko wrote:
+> The acpi_evaluate_dsm_typed() provides a way to check the type of the
+> object evaluated by _DSM call. Use it instead of open coded variant.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Thank you for the 3 patches switching to acpi_evaluate_dsm_typed().
+I have added all 3 to my review-hans  branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Regards,
+
+Hans
 
 
-We still need to figure out a proper fix for this. If you read my post
-here: https://gitlab.freedesktop.org/drm/amd/-/issues/2357#note_1732372
-I think we misinterpreted what the SharedAndWake bit is used for. To
-me it sounds like it's only valid for HW Reduced ACPI platforms, and
-S0ix. My changes made it so we call `dev_pm_set_wake_irq` when the
-Wake bit is set. Does anyone have any additional context on the Wake
-bit? I think we either need to make `dev_pm_set_wake_irq` (or a
-variant) only enable the wake on S0i3, or we can teach the ACPI
-subsystem to manage arming the IRQ's wake bit. Kind of like we already
-manage the GPE events for the device.
+> ---
+>  drivers/platform/surface/surface_hotplug.c | 13 +++----------
+>  1 file changed, 3 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/platform/surface/surface_hotplug.c b/drivers/platform/surface/surface_hotplug.c
+> index f004a2495201..7b6d887dccdb 100644
+> --- a/drivers/platform/surface/surface_hotplug.c
+> +++ b/drivers/platform/surface/surface_hotplug.c
+> @@ -101,18 +101,12 @@ static void shps_dsm_notify_irq(struct platform_device *pdev, enum shps_irq_type
+>  	param.type = ACPI_TYPE_INTEGER;
+>  	param.integer.value = value;
+>  
+> -	result = acpi_evaluate_dsm(handle, &shps_dsm_guid, SHPS_DSM_REVISION,
+> -				   shps_dsm_fn_for_irq(type), &param);
+> -
+> +	result = acpi_evaluate_dsm_typed(handle, &shps_dsm_guid, SHPS_DSM_REVISION,
+> +					 shps_dsm_fn_for_irq(type), &param, ACPI_TYPE_BUFFER);
+>  	if (!result) {
+>  		dev_err(&pdev->dev, "IRQ notification via DSM failed (irq=%d, gpio=%d)\n",
+>  			type, value);
+>  
+> -	} else if (result->type != ACPI_TYPE_BUFFER) {
+> -		dev_err(&pdev->dev,
+> -			"IRQ notification via DSM failed: unexpected result type (irq=%d, gpio=%d)\n",
+> -			type, value);
+> -
+>  	} else if (result->buffer.length != 1 || result->buffer.pointer[0] != 0) {
+>  		dev_err(&pdev->dev,
+>  			"IRQ notification via DSM failed: unexpected result value (irq=%d, gpio=%d)\n",
+> @@ -121,8 +115,7 @@ static void shps_dsm_notify_irq(struct platform_device *pdev, enum shps_irq_type
+>  
+>  	mutex_unlock(&sdev->lock[type]);
+>  
+> -	if (result)
+> -		ACPI_FREE(result);
+> +	ACPI_FREE(result);
+>  }
+>  
+>  static irqreturn_t shps_handle_irq(int irq, void *data)
+
