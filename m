@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB20E6782A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6615F6782A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbjAWRLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S232746AbjAWRLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjAWRK5 (ORCPT
+        with ESMTP id S232566AbjAWRLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:10:57 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EE493F5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:10:52 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id z5so11480068wrt.6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:10:52 -0800 (PST)
+        Mon, 23 Jan 2023 12:11:48 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604999744
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:11:46 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso9098562wmq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:11:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ye4fqaKuWEQ0VBJGa/puIN6G52G7rZfX+7Sp2w5Asa0=;
-        b=AlS6Sy28XmPmahGHyCVVZnddWfq6aZfGYwtLhUOGOyec1e+pMe6bqP7BPl9dY713as
-         MJX4cKz6YOw8bn2XwZiOqmaejGMBWD9m9aFGdI25RYHHbDn/EE0865XGFZPYyimqYEiX
-         Ohw54jWTPZmbkKVbT6kOZmv3U1teLSUv3hD15eDClAkZFwv2/pBt4EeHLlrrlh8ABgnI
-         ddbwTh/KTg+YBE8JZbebMtkU0+2eS4vIbv2MP2wCQKkKt78FWZHJg3J2K/R8gqfuHKjQ
-         A5tdKyucw8DNEzT1X0yXdst2/HdRPMTc0X98ogylsAAukdCZgV7AmBibVI/LVaFkx0Zy
-         MHRQ==
+        bh=w/1n6Rnx67kZYArlthTKZLtXubhv3HxF61v2sHJZdtI=;
+        b=D6mCK+sNgyqI8k7P3xFY+QAzdy/QUXCsgKTvL9iznmaCEiA8KTzPZ2mFBeVub9/7Q6
+         a7EDMeXOn8It3e3nKAuHDlTRpXllRzGRE9CN1T8MqH5ig1cE4lEukqZgSIrYzq7Sue9P
+         P+iYYOAmc7TdAMF4plYPtU91tT+ZzVXkJKlxdOh/9t9/QU+5GTtOCDTuNgultTH2OUFp
+         q6QVQ1cSNcSW2lmIzKW4BE96j6q5j2qTgpp8g2D2c2mnllwMBA3fCFB+7ZKl4/FykDC9
+         OjApyeqiDR6rvBTdmkmCDFDbdsYEL/ll4bBjkrQqQYskcjbtrj7PDLdsmYy3U7h1iHnm
+         AkOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ye4fqaKuWEQ0VBJGa/puIN6G52G7rZfX+7Sp2w5Asa0=;
-        b=JaLS+MLfdPIxXySMIeVsL5+O6WfPMQnQhhidOUli2iZrfRlRUhXoLxjSXpSqZq8bSg
-         OEI5y8cDGQXqNavrmxnOCvoRAagGo6B0kcAtY7EHtM+kJi7ro6CfaAcSqZx7ITP4F1fp
-         nq9ACjEtf/5LXrPSPOG3RAfCNzeetMU4dJ4W8p2PbFc9mdenZU3B+E1C6628O3MH1Yvl
-         InPBhPKcREWa3mpKHXCMjeuVfTAK+JkmX8h+pPJaKq6JztsPKsSEuAkCdI2hM7ycQ2//
-         kojUQQ8RmIUXqEbLwNxmuD1zfA7mZ2YmSXch3yIu/NmvalmFALWb5aVx3dDJVQcayXVq
-         Tq8A==
-X-Gm-Message-State: AFqh2kqHQ1HUTGGM2p6jMLxsbfvThfFJyjBEvyLA2qQ5KexihHOeqcbs
-        /bDwXNndod22vOGmE50LwIxDXg==
-X-Google-Smtp-Source: AMrXdXsJQ6qklnvii5yk83hLv4husOGcpBtpe2KAI5knLsCK/7V4f29aoYZQd+RytVPnb8G58WONiA==
-X-Received: by 2002:adf:f0c1:0:b0:2bd:e7a0:6b5e with SMTP id x1-20020adff0c1000000b002bde7a06b5emr22897157wro.40.1674493850759;
-        Mon, 23 Jan 2023 09:10:50 -0800 (PST)
+        bh=w/1n6Rnx67kZYArlthTKZLtXubhv3HxF61v2sHJZdtI=;
+        b=1U7EtulIY7kfJeJ7of2hDT8cEeCMIWKAUX9SgecTLqwcxFoliPskRaJr1etlgtKWhW
+         qUu1siYUPUnHmEvo1jq9tqSJmmdTU2b1T3WjH3ZrhGKc01xhnr/m7ouMkhmEQ8TKialo
+         eKeL5/3VeVj8MBAhS2HSmjIeFA3l15LFH+CQJZN6XVM1OhY3WI81mGVYdUZKcSfgcMOg
+         qmkxfUQYOCPSZop69vDuNQvmHZ4PND5nEak53O57+7Lmcl1Vm28V7Y24xH1Wudx3EzhC
+         MaB3a3l5djoOukvnp6YwG43WI5S9a9qoPqjrG/jObgxbUV9P7lUaP//S3eN5d/f24aF0
+         ozGg==
+X-Gm-Message-State: AFqh2kq2g5wbeXOeFHuUg9B5MhXKgH9XJgpnPqnSyzf0WMqGRXM7VlV8
+        tsC7/IGY66FTtEnEJpk2C/RBIA==
+X-Google-Smtp-Source: AMrXdXtGdUeLHbnaS4hmtb2SyIomWK0GV8Cd02EvA/qIDnUsl5zN96cLh5XItAyRcUDAWCzJAsB44Q==
+X-Received: by 2002:a1c:7312:0:b0:3d2:3eda:dd1 with SMTP id d18-20020a1c7312000000b003d23eda0dd1mr23603852wmb.17.1674493904926;
+        Mon, 23 Jan 2023 09:11:44 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05600016ca00b00267bcb1bbe5sm5304137wrf.56.2023.01.23.09.10.49
+        by smtp.gmail.com with ESMTPSA id h11-20020a05600c314b00b003db2e3f2c7csm15249768wmo.0.2023.01.23.09.11.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 09:10:50 -0800 (PST)
-Message-ID: <f67b23e8-a476-7f8c-b692-e85ebbe669f5@linaro.org>
-Date:   Mon, 23 Jan 2023 18:10:48 +0100
+        Mon, 23 Jan 2023 09:11:44 -0800 (PST)
+Message-ID: <1481d44d-f84c-db12-d95d-75f367e973de@linaro.org>
+Date:   Mon, 23 Jan 2023 18:11:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
 Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: Add MSM8926 and Samsung
  Galaxy Tab 4 10.1 LTE
 Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Stefan Hansson <newbyte@postmarketos.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -72,60 +73,66 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         matti.lehtimaki@gmail.com
 References: <20230122144749.87597-1-newbyte@postmarketos.org>
  <20230122144749.87597-3-newbyte@postmarketos.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230122144749.87597-3-newbyte@postmarketos.org>
+ <f67b23e8-a476-7f8c-b692-e85ebbe669f5@linaro.org>
+In-Reply-To: <f67b23e8-a476-7f8c-b692-e85ebbe669f5@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/01/2023 15:47, Stefan Hansson wrote:
-> MSM8926 (also known as Snapdragon 400) is very similar to MSM8226 and
-> APQ8026 with the primary difference being that it features an LTE modem
-> unlike the former two which feature a 3G modem and a GPS-only modem,
-> respectively.
+On 23/01/2023 18:10, Krzysztof Kozlowski wrote:
+> On 22/01/2023 15:47, Stefan Hansson wrote:
+>> MSM8926 (also known as Snapdragon 400) is very similar to MSM8226 and
+>> APQ8026 with the primary difference being that it features an LTE modem
+>> unlike the former two which feature a 3G modem and a GPS-only modem,
+>> respectively.
+>>
+>> This also documents Samsung Galaxy Tab 4 10.1 LTE (samsung,matisselte)
+>> which is a tablet by Samsung based on the MSM8926 SoC.
+>>
+>> Signed-off-by: Stefan Hansson <newbyte@postmarketos.org>
+>> ---
+>>  Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> index 47913a8e3eea..7a0b2088ead9 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> @@ -35,6 +35,7 @@ description: |
+>>          mdm9615
+>>          msm8226
+>>          msm8916
+>> +        msm8926
+>>          msm8953
+>>          msm8956
+>>          msm8974
+>> @@ -219,6 +220,11 @@ properties:
+>>            - const: qcom,msm8916-v1-qrd/9-v1
+>>            - const: qcom,msm8916
+>>  
+>> +      - items:
+>> +          - enum:
+>> +              - samsung,matisselte
 > 
-> This also documents Samsung Galaxy Tab 4 10.1 LTE (samsung,matisselte)
-> which is a tablet by Samsung based on the MSM8926 SoC.
-> 
-> Signed-off-by: Stefan Hansson <newbyte@postmarketos.org>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 47913a8e3eea..7a0b2088ead9 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -35,6 +35,7 @@ description: |
->          mdm9615
->          msm8226
->          msm8916
-> +        msm8926
->          msm8953
->          msm8956
->          msm8974
-> @@ -219,6 +220,11 @@ properties:
->            - const: qcom,msm8916-v1-qrd/9-v1
->            - const: qcom,msm8916
->  
-> +      - items:
-> +          - enum:
-> +              - samsung,matisselte
+> 1. matisse is the code name, lte is version/suffix. I don't think they
+> should be together, because then it looks like "matisselte" is a name.
+> It actually sounds like one word.
 
-1. matisse is the code name, lte is version/suffix. I don't think they
-should be together, because then it looks like "matisselte" is a name.
-It actually sounds like one word.
+Update: there is already matisse-wifi, so please follow the same naming
+convention. Version suffix should be separated with hyphen.
 
-2. You base on other SoC but you do not include its compatibles. Why? Is
-it intended? None of the properties applicable to other SoC will match
-here, thus I actually wonder if you run dtbs_check...
+> 
+> 2. You base on other SoC but you do not include its compatibles. Why? Is
+> it intended? None of the properties applicable to other SoC will match
+> here, thus I actually wonder if you run dtbs_check...
 
 Best regards,
 Krzysztof
