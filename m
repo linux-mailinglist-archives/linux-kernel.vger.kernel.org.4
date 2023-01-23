@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B04677D96
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49971677D9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjAWOGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S232169AbjAWOH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjAWOGn (ORCPT
+        with ESMTP id S232119AbjAWOHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:06:43 -0500
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B44C21;
-        Mon, 23 Jan 2023 06:06:41 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id E083810389FB;
-        Mon, 23 Jan 2023 17:06:39 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru E083810389FB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1674482800; bh=n7RVdhcVkO+AmN0igLFV5fU8una/MboowXmwC5E43tw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=T/cLtE14hhKne49SgCQ+nrXiUH5xP7ae0yQ/z+Jb5skLPsd2GRrOGAUiNKVYVpHEH
-         ZVMJQ95Ln4puZWWLpeGtsqO6FWG1tZUiR0Gp+QfDocqeugjoSn16GncDenxNpvmp3o
-         X7Yi9VxQ0jStEUMxwZuDfBxpC1Bjt/ekeI0eCi8E=
-Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
-        by mx0.infotecs-nt (Postfix) with ESMTP id DD3B730E0CA4;
-        Mon, 23 Jan 2023 17:06:39 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Joe Perches <joe@perches.com>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: Re: [PATCH] netfilter: conntrack: remote a return value of the
- 'seq_print_acct' function.
-Thread-Topic: [PATCH] netfilter: conntrack: remote a return value of the
- 'seq_print_acct' function.
-Thread-Index: AQHZLy6nPel+9vJLcUy5hm2kN75FKq6r1zSA
-Date:   Mon, 23 Jan 2023 14:06:39 +0000
-Message-ID: <fbc11588-ac61-4fcb-a8fa-c03dba098fba@infotecs.ru>
-References: <20230123081957.1380790-1-Ilia.Gavrilov@infotecs.ru>
- <Y86Lji5prQEAxKLi@unreal>
-In-Reply-To: <Y86Lji5prQEAxKLi@unreal>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AC82A1241E7BBF4BB27587A873327034@infotecs.ru>
-Content-Transfer-Encoding: base64
+        Mon, 23 Jan 2023 09:07:25 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF03EFBE
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 06:07:23 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so8641523wmc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 06:07:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMK/+RMwR61EzRWy37zhx+HZF9yxvaCOnadqFz7PJVw=;
+        b=CM0oF444X+aiG/eAAfU0knzXf6q2ftR8sHRJ8V0RejWsFpHX3FCCyzj01HX+1++CZV
+         uNmAr8rUeVhaMPUXrwAOg9d+0sKIiMh16Fc3wSZrUEeORQztIpm89kg+mKWmqrAKSkE7
+         0CRqR/f2W6z2MY4kxFhF1RWweemt9/0Zx7TU3ru5FL7ycTSe5WLYgpH9A2vs0+YKMiLJ
+         Mb3ZRCHEf9XFbu+aQzUhrn8lUwEZFXylevywtMKfzXm7cZT6lpE0v2IqXufMVyBNa0UG
+         6P3mzHiGL6qgA63HBybmQQFA1TOZlZGa6RnKf3wFscxfL1rBl1baf9Kdl5DAqyczAsKH
+         /IAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fMK/+RMwR61EzRWy37zhx+HZF9yxvaCOnadqFz7PJVw=;
+        b=TCZmKWPTGZ/VDxsolcX0CeXSEzGrifWVrJjTM96Jco33pkfI2s0mml0ltlGRTyctXH
+         kNRjIXsot8TeoHfBPysZ12y/cS6cL0QcA1qHoYD4WFQQ8qZRFAKFd8O9fylP0lmfi8Lh
+         GOf21kuwvSIYvTSBrvuHSCQNY7+94m/DGwJLxuYZvinYHVinF1iOCNywlIMOpg4zkA6U
+         nMt7dltRlZ3dDSzkEP+0LSCV+tfo/mcOEgBLD69Bic57R0uuM5hEhwXFfG578hLDTeZw
+         a0lTYWhiXROcopDqqGollbuzAlZmZgVNMZs9q3VS6YT/mXjfbRiGBRAdz17pE3FGN+zy
+         h+TA==
+X-Gm-Message-State: AFqh2kpN1pg2yfaBTE5R9z4YltDukvS3+UfmWCB1hf1TCkPIZGUUw9J9
+        2MQjLCJsc90xgi9fE09Gobmnng==
+X-Google-Smtp-Source: AMrXdXtJfkW4hbK0327mqFk53zxLlnRblI0rDrk+cXT98CF5YwUFKDniiT98vVncOHdBgU0uXWowvg==
+X-Received: by 2002:a05:600c:4f45:b0:3cf:68d3:3047 with SMTP id m5-20020a05600c4f4500b003cf68d33047mr24275228wmq.41.1674482842339;
+        Mon, 23 Jan 2023 06:07:22 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id q7-20020a05600c46c700b003c6bbe910fdsm13841655wmo.9.2023.01.23.06.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 06:07:21 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/3] arm64: meson-g12b: add initial support for Odroid-N2L
+Date:   Mon, 23 Jan 2023 15:07:15 +0100
+Message-Id: <20230122-topic-odroid-n2l-upstream-initial-v1-0-1ce5e08039d0@linaro.org>
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 174927 [Jan 23 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_msgid_8}, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, infotecs.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/01/23 12:45:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/23 00:37:00 #20794104
-X-KLMS-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJOUzmMC/x2NQQqDMBAAvyJ77oLZCrb9SukhJmtdSDeyiVIQ/
+ 97Q48xh5oDCJlzg0R1gvEuRrA3cpYOweH0zSmwM1NO1d0RY8yoBc7QsEZUSbmupxv6DolLFJ7z
+ xMI+DG+8UHLTO5AvjZF7D0kq6pdTkajzL9z9+vs7zB8agXNiIAAAA
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Dongjin Kim <tobetter@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCg0K0KEg0YPQstCw0LbQtdC90LjQtdC8LA0K0JjQu9GM0Y8g0JPQsNCy0YDQuNC70L7Qsg0K
-0JLQtdC00YPRidC40Lkg0L/RgNC+0LPRgNCw0LzQvNC40YHRgg0K0J7RgtC00LXQuyDRgNCw0LfR
-gNCw0LHQvtGC0LrQuA0K0JDQniAi0JjQvdGE0L7QotC10JrQoSIg0LIg0LMuINCh0LDQvdC60YIt
-0J/QtdGC0LXRgNCx0YPRgNCzDQoxMjcyODcsINCzLiDQnNC+0YHQutCy0LAsINCh0YLQsNGA0YvQ
-uSDQn9C10YLRgNC+0LLRgdC60L4t0KDQsNC30YPQvNC+0LLRgdC60LjQuSDQv9GA0L7QtdC30LQs
-INC00L7QvCAxLzIzLCDRgdGC0YAuIDENClQ6ICs3IDQ5NSA3MzctNjEtOTIgKCDQtNC+0LEuIDQ5
-MjEpDQrQpDogKzcgNDk1IDczNy03Mi03OA0KDQoNCklsaWEuR2F2cmlsb3ZAaW5mb3RlY3MucnUN
-Cnd3dy5pbmZvdGVjcy5ydQ0KDQoNCk9uIDEvMjMvMjMgMTY6MjgsIExlb24gUm9tYW5vdnNreSB3
-cm90ZToNCj4gT24gTW9uLCBKYW4gMjMsIDIwMjMgYXQgMDg6MTk6NTBBTSArMDAwMCwgR2F2cmls
-b3YgSWxpYSB3cm90ZToNCj4+IFRoZSBzdGF0aWMgJ3NlcV9wcmludF9hY2N0JyBmdW5jdGlvbiBh
-bHdheXMgcmV0dXJucyAwLg0KPj4NCj4+IENoYW5nZSB0aGUgcmV0dXJuIHZhbHVlIHRvICd2b2lk
-JyBhbmQgcmVtb3ZlIHVubmVjZXNzYXJ5IGNoZWNrcy4NCj4+DQo+PiBGb3VuZCBieSBJbmZvVGVD
-UyBvbiBiZWhhbGYgb2YgTGludXggVmVyaWZpY2F0aW9uIENlbnRlcg0KPj4gKGxpbnV4dGVzdGlu
-Zy5vcmcpIHdpdGggU1ZBQ0UuDQo+Pg0KPj4gRml4ZXM6IDFjYTllNDE3NzBjYiAoIm5ldGZpbHRl
-cjogUmVtb3ZlIHVzZXMgb2Ygc2VxXzxmb28+IHJldHVybiB2YWx1ZXMiKQ0KPj4gU2lnbmVkLW9m
-Zi1ieTogSWxpYS5HYXZyaWxvdiA8SWxpYS5HYXZyaWxvdkBpbmZvdGVjcy5ydT4NCj4+IC0tLQ0K
-Pj4gICBuZXQvbmV0ZmlsdGVyL25mX2Nvbm50cmFja19zdGFuZGFsb25lLmMgfCAyNiArKysrKysr
-KysrLS0tLS0tLS0tLS0tLS0tDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCsp
-LCAxNiBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvbmV0L25ldGZpbHRlci9uZl9j
-b25udHJhY2tfc3RhbmRhbG9uZS5jIGIvbmV0L25ldGZpbHRlci9uZl9jb25udHJhY2tfc3RhbmRh
-bG9uZS5jDQo+PiBpbmRleCAwMjUwNzI1ZTM4YTQuLmJlZTk5ZDRiY2YzNiAxMDA2NDQNCj4+IC0t
-LSBhL25ldC9uZXRmaWx0ZXIvbmZfY29ubnRyYWNrX3N0YW5kYWxvbmUuYw0KPj4gKysrIGIvbmV0
-L25ldGZpbHRlci9uZl9jb25udHJhY2tfc3RhbmRhbG9uZS5jDQo+PiBAQCAtMjc1LDIyICsyNzUs
-MTggQEAgc3RhdGljIGNvbnN0IGNoYXIqIGw0cHJvdG9fbmFtZSh1MTYgcHJvdG8pDQo+PiAgIHJl
-dHVybiAidW5rbm93biI7DQo+PiAgIH0NCj4+DQo+PiAtc3RhdGljIHVuc2lnbmVkIGludA0KPj4g
-K3N0YXRpYyB2b2lkDQo+PiAgIHNlcV9wcmludF9hY2N0KHN0cnVjdCBzZXFfZmlsZSAqcywgY29u
-c3Qgc3RydWN0IG5mX2Nvbm4gKmN0LCBpbnQgZGlyKQ0KPj4gICB7DQo+PiAtc3RydWN0IG5mX2Nv
-bm5fYWNjdCAqYWNjdDsNCj4+IC1zdHJ1Y3QgbmZfY29ubl9jb3VudGVyICpjb3VudGVyOw0KPj4g
-K3N0cnVjdCBuZl9jb25uX2FjY3QgKmFjY3QgPSBuZl9jb25uX2FjY3RfZmluZChjdCk7DQo+Pg0K
-Pj4gLWFjY3QgPSBuZl9jb25uX2FjY3RfZmluZChjdCk7DQo+PiAtaWYgKCFhY2N0KQ0KPj4gLXJl
-dHVybiAwOw0KPj4gLQ0KPj4gLWNvdW50ZXIgPSBhY2N0LT5jb3VudGVyOw0KPj4gLXNlcV9wcmlu
-dGYocywgInBhY2tldHM9JWxsdSBieXRlcz0lbGx1ICIsDQo+PiAtICAgKHVuc2lnbmVkIGxvbmcg
-bG9uZylhdG9taWM2NF9yZWFkKCZjb3VudGVyW2Rpcl0ucGFja2V0cyksDQo+PiAtICAgKHVuc2ln
-bmVkIGxvbmcgbG9uZylhdG9taWM2NF9yZWFkKCZjb3VudGVyW2Rpcl0uYnl0ZXMpKTsNCj4+ICtp
-ZiAoYWNjdCkgew0KPj4gK3N0cnVjdCBuZl9jb25uX2NvdW50ZXIgKmNvdW50ZXIgPSBhY2N0LT5j
-b3VudGVyOw0KPj4NCj4+IC1yZXR1cm4gMDsNCj4+ICtzZXFfcHJpbnRmKHMsICJwYWNrZXRzPSVs
-bHUgYnl0ZXM9JWxsdSAiLA0KPj4gKyAgICh1bnNpZ25lZCBsb25nIGxvbmcpYXRvbWljNjRfcmVh
-ZCgmY291bnRlcltkaXJdLnBhY2tldHMpLA0KPj4gKyAgICh1bnNpZ25lZCBsb25nIGxvbmcpYXRv
-bWljNjRfcmVhZCgmY291bnRlcltkaXJdLmJ5dGVzKSk7DQo+PiArfQ0KPg0KPiBUaGUgcHJlZmVy
-cmVkIGxpbnV4IGtlcm5lbCBzdHlsZSBpcyB0byBwZXJmb3JtIGlmIChjaGVja19lcnJvcikgcmV0
-dXJuOw0KPiBJbiB0aGlzIGNhc2UsIHRoaXMgcGF0dGVybiBzaG91bGQgc3RheS4NCj4NCj4gYWNj
-dCA9IG5mX2Nvbm5fYWNjdF9maW5kKGN0KTsNCj4gaWYgKCFhY2N0KQ0KPiAgICAgcmV0dXJuOw0K
-Pg0KPiBUaGFua3MNCg0KVGhhbmsgeW91IGZvciByZXZpZXcuIEknbGwgZml4IGl0IGluIHYyLg0K
+ODROID-N2L is a variant SBC in small form factor and some peripherals
+are removed from ODROID-N2PLUS based on S922X SoC.
+
+- On-board ethernet is removed      
+- On-board RTC is removed        
+- USB 3.0 hub is removed, so one USB 2.0 and one USB 3.0 host ports
+are available                                                                               
+- Huge heatsink is replaced with 40x40mm heatsink, 5V active heatsink
+is recommended or a tall passive sink is optional                  
+- 3.5mm earjack is removed                                                                  
+- IR remote receiver is removed                                                             
+- MIPI DSI port is added
+
+So achieve this the current odroid-n2 dtsi is moved as odroid.dtsi
+and only the N2/N2+ changes are kept in the odroid-n2.
+With this only a minimal changes are needed to support the Odroid-N2L.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (3):
+      dt-bindings: arm: amlogic: document Odroid-N2L
+      arm64: dts: meson-g12b: move common node into new odroid.dtsi
+      arm64: dts: meson-g12b-odroid: Add initial support for Hardkernel ODROID-N2L
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     | 448 +--------------------
+ .../boot/dts/amlogic/meson-g12b-odroid-n2l.dts     | 125 ++++++
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi | 445 ++++++++++++++++++++
+ 5 files changed, 581 insertions(+), 439 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230122-topic-odroid-n2l-upstream-initial-8e4f741792c1
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
