@@ -2,157 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9E3677DE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E2A677DD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjAWOYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S232258AbjAWOVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbjAWOYJ (ORCPT
+        with ESMTP id S230377AbjAWOVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:24:09 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE15624108;
-        Mon, 23 Jan 2023 06:24:07 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30NELWIe048974;
-        Mon, 23 Jan 2023 08:21:32 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674483692;
-        bh=BlwQD0ARUqblb48RoEOI25OrVzMPGwg0R8vqptzkpJg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=FvdWBlHevL+XhAXaPy6/J5HISPF/VxUYp4ghd1OWL43dNVfYvXx7g2ekBT5wQUebb
-         Z/07W4YvJKF6TF7RTc4RvQAKzkBGhqILEYF+bDhNVaut9uibJTMsoi4PzBJtGFNdxQ
-         U3G4OdSkYHOE3bCY4gA0ok7R5fHJd+5EAWcvuU0g=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30NELWpG001905
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 23 Jan 2023 08:21:32 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 23
- Jan 2023 08:21:31 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 23 Jan 2023 08:21:31 -0600
-Received: from [10.250.234.171] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30NEKpI9018755;
-        Mon, 23 Jan 2023 08:20:53 -0600
-Message-ID: <90084f5f-6e9d-7b17-5487-3b4b01bd5e7d@ti.com>
-Date:   Mon, 23 Jan 2023 19:50:50 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 02/13] spi: Replace all spi->chip_select and
- spi->cs_gpiod references with function call
-Content-Language: en-US
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        <broonie@kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <jic23@kernel.org>,
-        <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
-        <sanju.mehta@amd.com>, <chin-ting_kuo@aspeedtech.com>,
-        <clg@kaod.org>, <kdasu.kdev@gmail.com>, <f.fainelli@gmail.com>,
-        <rjui@broadcom.com>, <sbranden@broadcom.com>,
-        <eajames@linux.ibm.com>, <olteanv@gmail.com>, <han.xu@nxp.com>,
-        <john.garry@huawei.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <narmstrong@baylibre.com>,
-        <khilman@baylibre.com>, <matthias.bgg@gmail.com>,
-        <haibo.chen@nxp.com>, <linus.walleij@linaro.org>,
-        <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
-        <robert.jarzmik@free.fr>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <heiko@sntech.de>,
-        <krzysztof.kozlowski@linaro.org>, <andi@etezian.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
-        <masahisa.kojima@linaro.org>, <jaswinder.singh@linaro.org>,
-        <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <l.stelmach@samsung.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <alex.aring@gmail.com>, <stefan@datenfreihafen.org>,
-        <kvalo@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <skomatineni@nvidia.com>,
-        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-        <j.neuschaefer@gmx.net>, <vireshk@kernel.org>, <rmfrfs@gmail.com>,
-        <johan@kernel.org>, <elder@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <git@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <radu_nicolae.pirea@upb.ro>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>,
-        <bcm-kernel-feedback-list@broadcom.com>, <fancer.lancer@gmail.com>,
-        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
-        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <yogeshgaur.83@gmail.com>,
-        <konrad.dybcio@somainline.org>, <alim.akhtar@samsung.com>,
-        <ldewangan@nvidia.com>, <michal.simek@amd.com>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
-        <libertas-dev@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
-        <linux-iio@vger.kernel.org>, <michael@walle.cc>,
-        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <greybus-dev@lists.linaro.org>, <linux-staging@lists.linux.dev>,
-        <amitrkcian2002@gmail.com>
-References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
- <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 09:21:41 -0500
+X-Greylist: delayed 47329 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 06:21:38 PST
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8BF2D2004D;
+        Mon, 23 Jan 2023 06:21:38 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [112.254.167.99])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDnet3ml85jwadpCg--.20831S2;
+        Mon, 23 Jan 2023 22:21:34 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-media@vger.kernel.org, sean@mess.org
+Cc:     maximlevitsky@gmail.com, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v2] media: rc: Fix use-after-free bugs caused by ene_tx_irqsim()
+Date:   Mon, 23 Jan 2023 22:21:23 +0800
+Message-Id: <20230123142123.58870-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgDnet3ml85jwadpCg--.20831S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFyrJF17Kw1rAw4xuF17Jrb_yoW8Ww47p3
+        y8GFWSkry8Jr42vFnrXw4ku3W5Zws5J34UuryxW3yjvrn5GFy5AF9Yqa4jqay5AFyxZFZF
+        vr4rXF4fCFn8uFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUe_M3DUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcEAVZdtdU8lAAjsg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Amit,
+When the ene device is detaching, function ene_remove() will
+be called. But there is no function to cancel tx_sim_timer
+in ene_remove(), the timer handler ene_tx_irqsim() could race
+with ene_remove(). As a result, the UAF bugs could happen,
+the process is shown below.
 
-On 20/01/23 00:23, Amit Kumar Mahapatra wrote:
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
-> members of struct spi_device to be an array. But changing the type of these
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpiod
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
->
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
-> [...]
->  drivers/spi/spi-cadence-quadspi.c |  5 +++--
->  drivers/spi/spi-cadence-xspi.c    |  4 ++--
->  drivers/spi/spi-cadence.c         |  4 ++--
-[...]
+    (cleanup routine)          |        (timer routine)
+                               | mod_timer(&dev->tx_sim_timer, ..)
+ene_remove()                   | (wait a time)
+  kfree(dev) //FREE            |
+                               | ene_tx_irqsim()
+                               |   dev->hw_lock //USE
+                               |   ene_tx_sample(dev) //USE
 
-For SPI Cadence QSPI,
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Fix by adding del_timer_sync(&dev->tx_sim_timer) in ene_remove(),
+The tx_sim_timer could stop before ene device is deallocated.
 
+What's more, the timer can call ene_tx_sample() which can write
+to the io ports. So we should put rc_unregister_device() and
+del_timer_sync(&dev->tx_sim_timer) before release_region() in
+ene_remove().
+
+Fixes: 9ea53b74df9c ("V4L/DVB: STAGING: remove lirc_ene0100 driver")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - Move rc_unregister_device() and del_timer_sync() before release_region().
+
+ drivers/media/rc/ene_ir.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/rc/ene_ir.c b/drivers/media/rc/ene_ir.c
+index e09270916fb..2864360af9e 100644
+--- a/drivers/media/rc/ene_ir.c
++++ b/drivers/media/rc/ene_ir.c
+@@ -1112,8 +1112,9 @@ static void ene_remove(struct pnp_dev *pnp_dev)
+ 	spin_unlock_irqrestore(&dev->hw_lock, flags);
+ 
+ 	free_irq(dev->irq, dev);
+-	release_region(dev->hw_io, ENE_IO_SIZE);
+ 	rc_unregister_device(dev->rdev);
++	del_timer_sync(&dev->tx_sim_timer);
++	release_region(dev->hw_io, ENE_IO_SIZE);
+ 	kfree(dev);
+ }
+ 
 -- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+2.17.1
 
