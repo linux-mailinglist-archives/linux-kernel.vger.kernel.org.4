@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FE367870C
+	by mail.lfdr.de (Postfix) with ESMTP id D77E767870E
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbjAWUCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S232940AbjAWUCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbjAWUC3 (ORCPT
+        with ESMTP id S232902AbjAWUCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:02:29 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD7528854;
-        Mon, 23 Jan 2023 12:02:28 -0800 (PST)
+        Mon, 23 Jan 2023 15:02:31 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCB530EBF;
+        Mon, 23 Jan 2023 12:02:29 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B150D40005;
-        Mon, 23 Jan 2023 20:02:26 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7F31824000B;
+        Mon, 23 Jan 2023 20:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674504146;
+        t=1674504147;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i4CYOl5oNdw44YefzmYwC9lPiS1qIhS68kXXq1VFs7Y=;
-        b=Zy6NVI6mqBIUHMRhbq92oVN/rz91vj+BTE2KLGqj1zYuVn0X1kCg2TYEIFZkRPFaRyK/Uc
-        dmjWfVt6HwtDIuo6tu8y4KgHScBGOZ71EPBwXCRrRCM+Niw2WcMdRUNYuHsugB3VVtHrB6
-        g86FnThlDyF1MDZFar+m+boHgOX03Xwv03P6Jxi/u59SexLM50WBTR0OdG7mKEa7JG2eAU
-        Bviag3+orR22GvUFK2vooa/DSy70naTS8ZBHgkvHp0LzCkhuP7/YrcC/JWyqVCqw466SBq
-        LSDDoYOCFOnlQxuBFJ4k3FP35C13yWT0+EzqQmZpk5Y3csjnVWKGhmqJpb7OMA==
+        bh=0s8fB4SB1tQYPXzwsCZtyf9R6xiwoC+ZC5ZWgRWvKTE=;
+        b=H3jCM/ZVWDDDNwuETFqpY5ZJy8yxY2BBXf/O5Bs27SAYGCPcLWbov9Q57NS6aGIU34Nn3z
+        GGdpvNVdH3DeFYVG9sT89EWhGesgHEpI/izuEiDLest+d8YUmO9wbsLNVPHkT/aKx3xTQq
+        GtH9M4950RAmWi4xo9DoE3dnzIvsM4A10QnXnKKbk2uEFys3OzbNzjxQWy2WvN2kFHfJcZ
+        o6Gs8vLqJKiFOo8rnuP8707oac8orIpSL9PgThLiFyxBzfe/pchZgP1KJKFyXuuoXt4CWn
+        hR01/HvjtRKbPNlp6MVYY6aEl9by3UDvQwvh4P7Wm6HxJQC7Y3KwI5tFHnNAvQ==
 From:   alexandre.belloni@bootlin.com
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 04/12] rtc: m41t80: use IRQ flags obtained from fwnode
-Date:   Mon, 23 Jan 2023 21:02:09 +0100
-Message-Id: <20230123200217.1236011-4-alexandre.belloni@bootlin.com>
+Subject: [PATCH 05/12] rtc: pcf2123: use IRQ flags obtained from fwnode
+Date:   Mon, 23 Jan 2023 21:02:10 +0100
+Message-Id: <20230123200217.1236011-5-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230123200217.1236011-1-alexandre.belloni@bootlin.com>
 References: <20230123200217.1236011-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,29 +60,29 @@ RTC and the IRQ controller.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-m41t80.c | 7 ++++++-
+ drivers/rtc/rtc-pcf2123.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index 494052dbd39f..c1963f7c424d 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -914,9 +914,14 @@ static int m41t80_probe(struct i2c_client *client)
- 					      "wakeup-source");
- #endif
- 	if (client->irq > 0) {
+diff --git a/drivers/rtc/rtc-pcf2123.c b/drivers/rtc/rtc-pcf2123.c
+index e13b5e695d06..e714661e61a9 100644
+--- a/drivers/rtc/rtc-pcf2123.c
++++ b/drivers/rtc/rtc-pcf2123.c
+@@ -413,9 +413,14 @@ static int pcf2123_probe(struct spi_device *spi)
+ 
+ 	/* Register alarm irq */
+ 	if (spi->irq > 0) {
 +		unsigned long irqflags = IRQF_TRIGGER_LOW;
 +
-+		if (dev_fwnode(&client->dev))
++		if (dev_fwnode(&spi->dev))
 +			irqflags = 0;
 +
- 		rc = devm_request_threaded_irq(&client->dev, client->irq,
- 					       NULL, m41t80_handle_irq,
--					       IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+					       irqflags | IRQF_ONESHOT,
- 					       "m41t80", client);
- 		if (rc) {
- 			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
+ 		ret = devm_request_threaded_irq(&spi->dev, spi->irq, NULL,
+ 				pcf2123_rtc_irq,
+-				IRQF_TRIGGER_LOW | IRQF_ONESHOT,
++				irqflags | IRQF_ONESHOT,
+ 				pcf2123_driver.driver.name, &spi->dev);
+ 		if (!ret)
+ 			device_init_wakeup(&spi->dev, true);
 -- 
 2.39.1
 
