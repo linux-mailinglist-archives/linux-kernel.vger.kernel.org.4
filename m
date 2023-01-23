@@ -2,145 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764D7677C07
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F594677C0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbjAWM6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S232020AbjAWM7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjAWM6o (ORCPT
+        with ESMTP id S231862AbjAWM7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:58:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D9110E9;
-        Mon, 23 Jan 2023 04:58:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9268560EF8;
-        Mon, 23 Jan 2023 12:58:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C932CC433D2;
-        Mon, 23 Jan 2023 12:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674478723;
-        bh=iqF4YslRUAOR8em9VxtEx6LNWXvY7IrQ9E5c6+BFk0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sLSkM4a7cfgHy6X48ai/sKQ8h0q2CPGhVzFjtpYM+HhP5bGwzhSY6wU+xBRrOq3aX
-         HvehlCCyhdJ19nF4mc0OdYwHm2xCSZehb409VJIpq53hIFWp7N4s3RPnkOTDeo+3WP
-         nN9eh9T9kImOTbUktrXoLWqaZo4UMgiPVwIOfgXwTTTLfvLZ038n6OdF7AQ+stSOk7
-         rj9/o7bGh8bZaCUF3xURM+0UypDj1j6LuW77UlwMS/RUpjQk67/wNSPOBFySXVElVS
-         PbkvnvWx2OJfhFgjTykorxxaBIWwlrA70tqc7KwZ37Vo+IW1FjDkna/r0XFAcOg88k
-         Jrkp0TzDBGUww==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DF79F405BE; Mon, 23 Jan 2023 09:58:39 -0300 (-03)
-Date:   Mon, 23 Jan 2023 09:58:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Disha Goel <disgoel@linux.vnet.ibm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] perf test: Switch basic bpf filtering test to use
- syscall tracepoint
-Message-ID: <Y86Ef0KKlor+XsXm@kernel.org>
-References: <20230123083224.276404-1-naveen.n.rao@linux.vnet.ibm.com>
+        Mon, 23 Jan 2023 07:59:46 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5CB448E;
+        Mon, 23 Jan 2023 04:59:43 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B97EE24000E;
+        Mon, 23 Jan 2023 12:59:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674478782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=na7HRl0jra781/0Bx/fX+Bp8fWBwR3ej1zRQGenoYHY=;
+        b=G8/vJ77o1xKjT2Zinoy5wk7M6XQTQgH5tPbUFgFhQxZNzL7xLHHP1mbuDIwNez0tAPniFS
+        CkIIVMEIGJGJROyFIkBnHONfa4eyly0C0ACx9vrvaTutKt9DpG0ta8paxapZd4tNO8/h+m
+        DOEFfOmPWB7whrHFQt5kvbdMK4h1RIsYmXCLLQnpmAdP+23fTC3Mphq+RwoB5oJBMqSOF7
+        zkfmj1k+1kovZuzySlRFHsjF/HWOZbsL57hNjDy00pXfhKjLA6Vb4nM7ghRV6eM2YAeO7s
+        VZaurQTn2NePS8ig0yR1Aoe8fyP+gag8TRaQncLCydFTQpOZ69tfYj7Eao+Akg==
+Date:   Mon, 23 Jan 2023 13:59:38 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 2/3] ASoC: codecs: Add support for the Renesas
+ IDT821034 codec
+Message-ID: <20230123135938.1855d6a8@bootlin.com>
+In-Reply-To: <79b35117-98aa-dc7c-2a27-805cd4ac2c71@csgroup.eu>
+References: <20230120095036.514639-1-herve.codina@bootlin.com>
+        <20230120095036.514639-3-herve.codina@bootlin.com>
+        <d51b826b-e71f-393c-586b-6a1ca953f26f@csgroup.eu>
+        <20230123095631.4aba35d6@bootlin.com>
+        <eb20dc66-f564-ed7e-8873-65621e5970de@csgroup.eu>
+        <20230123131755.1f5702be@bootlin.com>
+        <79b35117-98aa-dc7c-2a27-805cd4ac2c71@csgroup.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123083224.276404-1-naveen.n.rao@linux.vnet.ibm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 23, 2023 at 02:02:24PM +0530, Naveen N. Rao escreveu:
-> BPF filtering tests can sometime fail. Running the test in verbose mode
-> shows the following:
+On Mon, 23 Jan 2023 12:30:32 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-Thanks, applied.
+> Le 23/01/2023 =C3=A0 13:17, Herve Codina a =C3=A9crit=C2=A0:
+> > Hi Christophe,
+> >=20
+> > On Mon, 23 Jan 2023 11:13:23 +0000
+> > Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+> >  =20
+> >> Hi Herv=C3=A9,
+> >>
+> >> Le 23/01/2023 =C3=A0 09:56, Herve Codina a =C3=A9crit=C2=A0: =20
+> >>>
+> >>> gpiochip_get_data() is defined only when CONFIG_GPIOLIB is set.
+> >>> That's why the #if section is used. =20
+> >>
+> >> gpiochip_get_data() is still declared when CONFIG_GPIOLIB is not set, =
+so
+> >> it is not a problem, the call to it will be eliminated at buildtime.
+> >>
+> >> By the way, at the time being I get the following warnings:
+> >>
+> >>     CC      sound/soc/codecs/idt821034.o
+> >> sound/soc/codecs/idt821034.c:310:12: warning: 'idt821034_read_slic_raw'
+> >> defined but not used [-Wunused-function]
+> >>     310 | static int idt821034_read_slic_raw(struct idt821034 *idt8210=
+34,
+> >> u8 ch, u8 *slic_raw)
+> >>         |            ^~~~~~~~~~~~~~~~~~~~~~~
+> >> sound/soc/codecs/idt821034.c:305:11: warning:
+> >> 'idt821034_get_written_slic_raw' defined but not used [-Wunused-functi=
+on]
+> >>     305 | static u8 idt821034_get_written_slic_raw(struct idt821034
+> >> *idt821034, u8 ch)
+> >>         |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >> sound/soc/codecs/idt821034.c:276:12: warning: 'idt821034_write_slic_ra=
+w'
+> >> defined but not used [-Wunused-function]
+> >>     276 | static int idt821034_write_slic_raw(struct idt821034
+> >> *idt821034, u8 ch, u8 slic_raw)
+> >>         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+> >> sound/soc/codecs/idt821034.c:271:11: warning: 'idt821034_get_slic_conf'
+> >> defined but not used [-Wunused-function]
+> >>     271 | static u8 idt821034_get_slic_conf(struct idt821034 *idt82103=
+4,
+> >> u8 ch)
+> >>         |           ^~~~~~~~~~~~~~~~~~~~~~~
+> >> sound/soc/codecs/idt821034.c:250:12: warning: 'idt821034_set_slic_conf'
+> >> defined but not used [-Wunused-function]
+> >>     250 | static int idt821034_set_slic_conf(struct idt821034 *idt8210=
+34,
+> >> u8 ch, u8 slic_dir)
+> >>         |            ^~~~~~~~~~~~~~~~~~~~~~~
+> >>
+> >>
+> >> With the following changes I have no warning and an objdump -x on
+> >> idt821034.o shows no reference to gpiochip_get_data()
+> >>
+> >> diff --git a/sound/soc/codecs/idt821034.c b/sound/soc/codecs/idt821034=
+.c
+> >> index 5eb93fec6042..8b75388e22ce 100644
+> >> --- a/sound/soc/codecs/idt821034.c
+> >> +++ b/sound/soc/codecs/idt821034.c
+> >> @@ -968,7 +968,6 @@ static const struct snd_soc_component_driver
+> >> idt821034_component_driver =3D {
+> >>    	.endianness		=3D 1,
+> >>    };
+> >>
+> >> -#if IS_ENABLED(CONFIG_GPIOLIB)
+> >>    #define IDT821034_GPIO_OFFSET_TO_SLIC_CHANNEL(_offset) (((_offset) /
+> >> 5) % 4)
+> >>    #define IDT821034_GPIO_OFFSET_TO_SLIC_MASK(_offset)    BIT((_offset=
+) % 5)
+> >>
+> >> @@ -1133,12 +1132,6 @@ static int idt821034_gpio_init(struct idt821034
+> >> *idt821034)
+> >>    	return devm_gpiochip_add_data(&idt821034->spi->dev,
+> >> &idt821034->gpio_chip,
+> >>    				      idt821034);
+> >>    }
+> >> -#else /* IS_ENABLED(CONFIG_GPIOLIB) */
+> >> -static int idt821034_gpio_init(struct idt821034 *idt821034)
+> >> -{
+> >> -	return 0;
+> >> -}
+> >> -#endif
+> >>
+> >>    static int idt821034_spi_probe(struct spi_device *spi)
+> >>    {
+> >> @@ -1165,6 +1158,9 @@ static int idt821034_spi_probe(struct spi_device=
+ *spi)
+> >>    	if (ret)
+> >>    		return ret;
+> >>
+> >> +	if (!IS_ENABLED(CONFIG_GPIOLIB))
+> >> +		return 0;
+> >> +
+> >>    	ret =3D idt821034_gpio_init(idt821034);
+> >>    	if (ret)
+> >>    		return ret;
+> >>
+> >>
+> >> Christophe =20
+> >=20
+> > Right, I did the test too and indeed, I can remove the #if section.
+> >=20
+> > I will use (I think is clearer) at idt821034_spi_probe():
+> > 	if (!IS_ENABLED(CONFIG_GPIOLIB)) {
+> >     		ret =3D idt821034_gpio_init(idt821034);
+> > 		if (ret)
+> >     			return ret;
+> > 	}
+> >  =20
+>=20
+>=20
+> I guess you mean :
+>=20
+> 	if (IS_ENABLED(CONFIG_GPIOLIB))
 
-- Arnaldo
+Yes of course. Sorry for the typo.
 
->   $ sudo perf test 42
->   42: BPF filter                                                      :
->   42.1: Basic BPF filtering                                           : FAILED!
->   42.2: BPF pinning                                                   : Skip
->   42.3: BPF prologue generation                                       : Skip
->   $ perf --version
->   perf version 4.18.0-425.3.1.el8.ppc64le
->   $ sudo perf test -v 42
->   42: BPF filter                                                      :
->   42.1: Basic BPF filtering                                           :
->   --- start ---
->   test child forked, pid 711060
->   ...
->   bpf: config 'func=do_epoll_wait' is ok
->   Looking at the vmlinux_path (8 entries long)
->   Using /usr/lib/debug/lib/modules/4.18.0-425.3.1.el8.ppc64le/vmlinux for symbols
->   Open Debuginfo file: /usr/lib/debug/.build-id/81/56f5a07f92ccb62c5600ba0e4aacfb5f3a7534.debug
->   Try to find probe point from debuginfo.
->   Matched function: do_epoll_wait [4ef8cb0]
->   found inline addr: 0xc00000000061dbe4
->   Probe point found: __se_compat_sys_epoll_pwait+196
->   found inline addr: 0xc00000000061d9f4
->   Probe point found: __se_sys_epoll_pwait+196
->   found inline addr: 0xc00000000061d824
->   Probe point found: __se_sys_epoll_wait+36
->   Found 3 probe_trace_events.
->   Opening /sys/kernel/tracing//kprobe_events write=1
->   ...
->   BPF filter result incorrect, expected 56, got 56 samples
->   test child finished with -1
->   ---- end ----
->   BPF filter subtest 1: FAILED!
-> 
-> The statement above about the result being incorrect looks weird, and it
-> is due to that particular perf build missing commit 3e11300cdfd5f1
-> ("perf test: Fix bpf test sample mismatch reporting"). In reality, due
-> to commit 4b04e0decd2518 ("perf test: Fix basic bpf filtering test"),
-> perf expects there to be 56*3 samples.
-> 
-> However, the number of samples we receive is going to be dependent on
-> where the probes are installed, which is dependent on where
-> do_epoll_wait gets inlined. On s390x, it looks like probes at all the
-> inlined locations are hit. But, that is not the case on ppc64le.
-> 
-> Fix this by switching the test to instead use the syscall tracepoint.
-> This ensures that we will only ever install a single event enabling us
-> to reliably determine the sample count.
-> 
-> Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+>=20
+>=20
+> > Is that ok for you ? =20
+>=20
+>=20
+>=20
+> What about:
+>=20
+> 	if (IS_ENABLED(CONFIG_GPIOLIB))
+> 		return idt821034_gpio_init(idt821034);
+> 	else
+> 		return 0;
+>=20
+> Christophe
 
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> ---
->  tools/perf/tests/bpf-script-example.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/tests/bpf-script-example.c b/tools/perf/tests/bpf-script-example.c
-> index 7981c69ed1b456..b638cc99d5ae56 100644
-> --- a/tools/perf/tests/bpf-script-example.c
-> +++ b/tools/perf/tests/bpf-script-example.c
-> @@ -43,7 +43,7 @@ struct {
->  	__type(value, int);
->  } flip_table SEC(".maps");
->  
-> -SEC("func=do_epoll_wait")
-> +SEC("syscalls:sys_enter_epoll_pwait")
->  int bpf_func__SyS_epoll_pwait(void *ctx)
->  {
->  	int ind =0;
-> 
-> base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
-> -- 
-> 2.39.1
-> 
+Well, maybe this version ?
 
--- 
+static int idt821034_spi_probe(struct spi_device *spi)
+{
+	...
 
-- Arnaldo
+	if (IS_ENABLED(CONFIG_GPIOLIB))
+ 		return idt821034_gpio_init(idt821034);
+
+	return 0;
+}
+
+Thanks,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
