@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467DB678BD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A4D678BD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjAWXK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S232477AbjAWXLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 18:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjAWXK5 (ORCPT
+        with ESMTP id S232509AbjAWXLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:10:57 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B5B2ED5E;
-        Mon, 23 Jan 2023 15:10:56 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id u19so34601536ejm.8;
-        Mon, 23 Jan 2023 15:10:56 -0800 (PST)
+        Mon, 23 Jan 2023 18:11:04 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630532F78B;
+        Mon, 23 Jan 2023 15:11:02 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id az20so34693716ejc.1;
+        Mon, 23 Jan 2023 15:11:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KxVqHX/t1GmPKxmzWNFuPMIsX21SLa7bq9EMxvXTX4I=;
-        b=FtrRebO7wW5W84nJClLKGVMZx+FCTjAL3RBPYe9/QWNiGKitzsEbDTvyq+O+ePTuMZ
-         jKHVm6/rDt8c6wyOFK1MhXw6SFSpiWqYXbNgBZL9o+HI0W/C+ikDtusxS4w7Ovq3gVXW
-         k7qcDU5jo1+wMo6nps3GK0xNWmoYIW4c9Vn4KvdSzcBIhQ1I3ctAHpzQxLPbqxJd9VFu
-         p4WQdO/LTgj+IPpMfLmyfFbGJB9Yj4Lyi18T6QPZSeD1PURGbfoapSYm6jmPX3qG2wPS
-         VPpEmSIL1gd7Hq5NDuARJXXWTAjx2BnsIMMzNy2iz7WG/cGtogBZoJ92TWDnupvk91Nh
-         vJaA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fX3QH1ZOcQvF+gQ1gLNMqKF7PvJfNfpG3/++e3twGu8=;
+        b=U057nvsz/datauyVaPlYhXmqIrYcDdunLpibOlSZwOmpGY2vCNIhh5i7ZQ74fSE1/S
+         adGgRGbb0m6CfE4+XkcxKdNGMITCvgy6wcYFoh8k1agtdGRADo3YGx0K5QcloFcnkGpe
+         x956svw6kH1wyaTl3W4JgejYiAI+cNnVfHs3vjL+tnJcPxAeJMOmizFBhDVb5qQunnkj
+         9xZh3crSnifdGJNc7GnJbJcWeVRkDlvJlWaSaOMSlBlKZi0OGPPSWaI5SFpjhiKI01tp
+         OrSVM/kgFeu4lfDRptEMkFD2mUP7YxI27J6hXZQHImUP3cOUCd7gRnYhxDleTKRPun8Y
+         X+kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KxVqHX/t1GmPKxmzWNFuPMIsX21SLa7bq9EMxvXTX4I=;
-        b=Us5PF9U3SBIxUoVu44YTdttHYXcf7YB9c20xViznDSLVlDlQWXRwiK5SqkviBIZHN4
-         hJjpjl2JTTvyK0oWyTrS6aOWMHjRKAqol8AR8WpcfI71OBpUoappnIkpMwj/59jgSWxX
-         0uhDq9XYUcXsC7uNQ49Txu0e8I76Dqgzab5246bZehH6+oCC+CWFEn3AEJyNa1nMJO+f
-         g+/HrxKAFk9Y9+Y71aTyvfwU6BYGdU5w3JQ21899eO7pE79YTdxRnoNoE0ITOXhfjw8g
-         kYvyMDD+PHAN+0crY4Q/IPEthSNvrvBI/OhW2+RVeEAh/gq+vl1lxJH5CDo4tvHDSL5g
-         ss7w==
-X-Gm-Message-State: AFqh2kpF8PdLS1w81PlrWyYQF/nGwZefR/XdaAp5HTNDNqa5SipBWO+1
-        /vI7SuLJ9glYie1UBme6Hl1uqdVB920=
-X-Google-Smtp-Source: AMrXdXvUZlJS0y5fAr6nFCzMNEtRAfvMzxLFBRf7zGTZoOdGh/si4UPGFi5rgfA6nUd5G6Cd1ndr4w==
-X-Received: by 2002:a17:907:a2cb:b0:870:7b:94db with SMTP id re11-20020a170907a2cb00b00870007b94dbmr32254202ejc.28.1674515455117;
-        Mon, 23 Jan 2023 15:10:55 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fX3QH1ZOcQvF+gQ1gLNMqKF7PvJfNfpG3/++e3twGu8=;
+        b=uYYJuwaIChgN/yIvd+UeAd6gURtrCzrREMeLRlNBWMurRnb22LzFohjDHW1WRRj9pG
+         S7paln3US9kk7ySEAwmRndxfzI2/UYJuBo9S+2DJDjEd9gU+EHitMeghD65ZY5jFfUGg
+         Ot1CjTqTMc5TMdGZu2MIVSiEN/g3UZThAOerVOWMrBQk43jg0DUrLaBNLxpg2RTwG4jT
+         4xQDQZCqmC9JtxrWLV3NGQPFgg2KxXiDxGE2n2ECoK6PW8OX/UwHzbXEUyTEXUFF5vRV
+         3drbHz0UIHFpOOgMrgIdjYTHZ83/f7dvR+Ao8+MJogPMBqnhvAKG47f6G//dHL6RMmCm
+         y0Zg==
+X-Gm-Message-State: AFqh2kqIuoRvEN88cXldajWsuPGGrFuRlX6WqhAnWJd2LVi8m3vSeO1i
+        0yERNCFnbw7qgwg9xFKZ2LphMuyNw/o=
+X-Google-Smtp-Source: AMrXdXsSZkXHBsadaCu/VPMcCQEnQj5D6f0BpuMCmvrCjbyyGvcuFW+0v5yRXBZ+GoLTkiWdGHFAwg==
+X-Received: by 2002:a17:906:f299:b0:7c0:fd1a:79ee with SMTP id gu25-20020a170906f29900b007c0fd1a79eemr27533477ejb.63.1674515460602;
+        Mon, 23 Jan 2023 15:11:00 -0800 (PST)
 Received: from localhost.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id b21-20020a170906709500b0084d43e23436sm72601ejk.38.2023.01.23.15.10.53
+        by smtp.gmail.com with ESMTPSA id b21-20020a170906709500b0084d43e23436sm72601ejk.38.2023.01.23.15.10.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 15:10:54 -0800 (PST)
+        Mon, 23 Jan 2023 15:11:00 -0800 (PST)
 From:   Markuss Broks <markuss.broks@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Markuss Broks <markuss.broks@gmail.com>,
@@ -58,14 +59,16 @@ Cc:     Markuss Broks <markuss.broks@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Paul Gazzillo <paul@pgazz.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
         Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 0/2] Add a driver for AMS TCS3490 light sensor
-Date:   Tue, 24 Jan 2023 01:10:23 +0200
-Message-Id: <20230123231028.26073-1-markuss.broks@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: iio: tcs3490: Add bindings for AMS TCS3490 light sensor
+Date:   Tue, 24 Jan 2023 01:10:24 +0200
+Message-Id: <20230123231028.26073-2-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230123231028.26073-1-markuss.broks@gmail.com>
+References: <20230123231028.26073-1-markuss.broks@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,29 +81,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This light sensor can sense four channels of visible light
-(red, green, blue, clear) and IR light. These features allow it to
-be used for sensing the light source, or getting the environment color
-temperature to adjust display gamma and backlight level.
+Add device-tree bindings for the AMS TCS3490 Color ALS.
 
-It is used on Sony Xperia Yoshino family devices.
-
-Tested on Sony Xperia XZ1 (poplar).
-
-Markuss Broks (2):
-  dt-bindings: iio: tcs3490: Add bindings for AMS TCS3490 light sensor
-  iio: light: Add support for AMS TCS3490 Color Light-to-Digital
-    Converter
-
- .../bindings/iio/light/ams,tcs3490.yaml       |  52 ++++
- MAINTAINERS                                   |   7 +
- drivers/iio/light/Kconfig                     |  12 +
- drivers/iio/light/Makefile                    |   1 +
- drivers/iio/light/tcs3490.c                   | 272 ++++++++++++++++++
- 5 files changed, 344 insertions(+)
+Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+---
+ .../bindings/iio/light/ams,tcs3490.yaml       | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/iio/light/ams,tcs3490.yaml
- create mode 100644 drivers/iio/light/tcs3490.c
 
+diff --git a/Documentation/devicetree/bindings/iio/light/ams,tcs3490.yaml b/Documentation/devicetree/bindings/iio/light/ams,tcs3490.yaml
+new file mode 100644
+index 000000000000..0938d5edd791
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/ams,tcs3490.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/ams,tcs3490.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: AMS TCS3490 Color Light-to-Digital Converter
++
++maintainers:
++  - Markuss Broks <markuss.broks@gmail.com>
++
++description: |
++  This color and IR light sensor is typically used to adjust the backlight
++  intensity and correct the display color gamut. Additionally can be used
++  for light source type detection as it reports the IR content of the light.
++  It can sense four channels of visible light (red, green, blue, clear) and
++  IR light.
++
++properties:
++  compatible:
++    enum:
++      - ams,tcs3490
++
++  reg:
++    description:
++      I2C address of the device (typically 0x39).
++    maxItems: 1
++
++  vdd-supply: true
++
++required:
++  - compatible
++  - reg
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        light@39 {
++            compatible = "ams,tcs3490";
++            reg = <0x39>;
++            vdd-supply = <&cam_vio_vreg>;
++        };
++    };
++...
 -- 
 2.39.0
 
