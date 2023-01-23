@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884416789FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6507678A00
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbjAWVxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S231642AbjAWVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAWVxB (ORCPT
+        with ESMTP id S231864AbjAWVxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:53:01 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBBD30B19;
-        Mon, 23 Jan 2023 13:52:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=JFC3UPEu1ezEy0l8JdNPemkkpO3xtgjSFVWDfLbQfJ8=; b=MBR3za1n6Rih4M3GbDca5HK2Jl
-        sI8heeIIMUW5zxjhFuFk1QGhm6g1eQrFhSwwI5TG5EvL7y32nBDPOntYZWGTrGvXui+hK+555iWlH
-        VUaxZ+jOhOfroeVOkPFLE+4GC71KYJrel4+qGWMHDowVzjP/4ZRaZDSosoC48Cx5C6P3F9okTqvTQ
-        bgwEv9kG6G8NIB/eA6q3YYW45CqUTvFhG8U/45fTGv4vwCWJfBBkGITtvQ9FK+uok3w5d0QnB01cH
-        EagrFqS/g3SPKHclp74ZcQ797fggvdar6ParkN8X5AUUHE1ZRLbasfOQtJWu0hugy4FHCg3xBXxyD
-        PiMOwR/A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pK4kK-001bDK-FF; Mon, 23 Jan 2023 21:52:56 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     corbet@lwn.net, gregkh@linuxfoundation.org,
-        javier.gonz@samsung.com, linux-doc@vger.kernel.org
-Cc:     a.manzanares@samsung.com, dave@stgolabs.net,
-        darren@os.amperecomputing.com, catalin.marinas@arm.com,
-        mcgrof@kernel.org, ndesaulniers@google.com, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof.c@samsung.com>
-Subject: [PATCH v2] docs: embargoed-hardware-issues: add embargoed HW contact for Samsung
-Date:   Mon, 23 Jan 2023 13:52:55 -0800
-Message-Id: <20230123215255.381312-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Mon, 23 Jan 2023 16:53:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C7636479;
+        Mon, 23 Jan 2023 13:53:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4FB061029;
+        Mon, 23 Jan 2023 21:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F38C433EF;
+        Mon, 23 Jan 2023 21:53:06 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 16:53:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
+        mark.rutland@arm.com, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
+        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
+ is disabled
+Message-ID: <20230123165304.370121e7@gandalf.local.home>
+In-Reply-To: <20230123205515.059999893@infradead.org>
+References: <20230123205009.790550642@infradead.org>
+        <20230123205515.059999893@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After discussions internally at the company, Javier has been volunteered
-and is willing to be the embargoed hardware contact for Samsung.
+On Mon, 23 Jan 2023 21:50:12 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Cc: Javier González <javier.gonz@samsung.com>
-Signed-off-by: Luis Chamberlain <mcgrof.c@samsung.com>
----
+> All RCU disabled code should be noinstr and hence we should never get
+> here -- when we do, WARN about it and make sure to not actually do
+> tracing.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/kernel/ftrace.c |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -646,6 +646,9 @@ void prepare_ftrace_return(unsigned long
+>  	if (unlikely(atomic_read(&current->tracing_graph_pause)))
+>  		return;
+>  
+> +	if (WARN_ONCE(!rcu_is_watching(), "RCU not on for: %pS\n", (void *)ip))
+> +		return;
+> +
 
-This v2 uses tabs as requested by Greg.
+Please add this to after recursion trylock below. Although WARN_ONCE()
+should not not have recursion issues, as function tracing can do weird
+things, I rather be safe than sorry, and not have the system triple boot
+due to some path that might get added in the future.
 
- Documentation/process/embargoed-hardware-issues.rst | 1 +
- 1 file changed, 1 insertion(+)
+If rcu_is_watching() is false, it will still get by the below recursion
+check and warn. That is, the below check should be done before this
+function calls any other function.
 
-diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Documentation/process/embargoed-hardware-issues.rst
-index b6b4481e2474..fbb754253cf7 100644
---- a/Documentation/process/embargoed-hardware-issues.rst
-+++ b/Documentation/process/embargoed-hardware-issues.rst
-@@ -251,6 +251,7 @@ an involved disclosed party. The current ambassadors list:
-   IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
-   Intel		Tony Luck <tony.luck@intel.com>
-   Qualcomm	Trilok Soni <tsoni@codeaurora.org>
-+  Samsung       Javier González <javier.gonz@samsung.com>
- 
-   Microsoft	James Morris <jamorris@linux.microsoft.com>
-   VMware
--- 
-2.35.1
+>  	bit = ftrace_test_recursion_trylock(ip, *parent);
+>  	if (bit < 0)
+>  		return;
+> 
 
+-- Steve
