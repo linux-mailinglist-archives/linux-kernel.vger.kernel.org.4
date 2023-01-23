@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDEB677D27
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3B1677D40
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjAWN44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S231960AbjAWN6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjAWN4y (ORCPT
+        with ESMTP id S231929AbjAWN6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:56:54 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8113612867;
-        Mon, 23 Jan 2023 05:56:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=kJ3kL95O8Ni1CAI079jZv8+o4kwjue5dTbLO4wMZu7c=; b=eJxgwBi/io6zymxaTcG9vh87vL
-        4CZBbYblgun/xRyeAOfIh/hat8pu4UsS2J5USHmN4AyTeTYxRAjMAMzd3IUczF8Jiih/XXJwNPU5W
-        gPD2AuHqa7E6Llr6vJOcyhgjApP9NECRRwxPxbbI01GLp0qWOa7PtIcDEkHTE7FPYEaQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pJxJQ-002uTj-0Z; Mon, 23 Jan 2023 14:56:40 +0100
-Date:   Mon, 23 Jan 2023 14:56:40 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Breno Leitao <leitao@debian.org>, netdev@vger.kernel.org,
-        leit@fb.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, sa+renesas@sang-engineering.com,
-        linux-kernel@vger.kernel.org,
-        Michael van der Westhuizen <rmikey@meta.com>
-Subject: Re: [RFC PATCH v2] netpoll: Remove 4s sleep during carrier detection
-Message-ID: <Y86SGI5QMBS5kAI4@lunn.ch>
-References: <20230119164448.1348272-1-leitao@debian.org>
- <20230119180008.2156048-1-leitao@debian.org>
- <20230119110421.3efc0f6b@kernel.org>
+        Mon, 23 Jan 2023 08:58:51 -0500
+Received: from egress-ip33b.ess.de.barracuda.com (egress-ip33b.ess.de.barracuda.com [18.185.115.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAE824105
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:58:50 -0800 (PST)
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199]) by mx-outbound23-45.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 23 Jan 2023 13:58:46 +0000
+Received: by mail-pl1-f199.google.com with SMTP id e1-20020a17090301c100b001945de452a1so7175929plh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mistralsolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZCU5KCutkK5CpNVdBpSwm+3e9SSsQihQOZqK0tOJ/IE=;
+        b=B+8lAfF04x4MvHNAT4gKQj71X4gmfdIKckofAnnsjr+M10rC8268DeZeySbY+e9YhK
+         nQOr8whn2dsbSd15gKG+kiSWBFI9BUDcKjA853BggjQwgt6nNK0fuoL134wa6+rJBzFj
+         bJUKNs8pVBk8dOyrZbGsN0NtfwZwJ+umHmB/M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZCU5KCutkK5CpNVdBpSwm+3e9SSsQihQOZqK0tOJ/IE=;
+        b=QtMUC9IAE6TlsYKSj2+NA1NGDvA8ZzeYCr2PWkjQtCW2/uaYxlYMwGO4nhU6W7Fxbp
+         QAVdz4AD7IOLE4qyw1qWpzZIsfi6HmTzQ81DXn9cO/T+rjJdhZ3pEJEpTUx4Fn7qnFey
+         /VRDwzIBNOzK1nifqVCBRQQuhP9taieCgtTLyNSu7qUXmGaM5JlRv2MW5Q6miTZhu4Iq
+         izc51fZFZHk75DhYwAAe8KoYJZk5YWiyN4rOfaCscwPDLkOlUrVAOJYQAYZ5EPkSqOdW
+         Yiak6Qdx0VOe9o7PrAszUpP51QrxQKUC9Jr7quzfhCF6Y5as0opN56j/4s9doK6OWZWw
+         lq0A==
+X-Gm-Message-State: AFqh2kqMa0YZZq0+BzYmPgcC89YlfFlwh6ksZ5t9s+7aPMGsngvrii37
+        jnccizfUODquDxswed1qm5ksJoaLPQidzheifegLl0/uLUIEv+/0uPOat563Js/+2nVRHUm+0sQ
+        aBQ4TG2hw8BUu4tmniV3/TjttB7fvQli6rMW9R2zC1J1eePSpEJuNgYRVKFXk
+X-Received: by 2002:a17:902:988f:b0:194:8fbd:1eb4 with SMTP id s15-20020a170902988f00b001948fbd1eb4mr24592538plp.1.1674482324129;
+        Mon, 23 Jan 2023 05:58:44 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXth3IaPRcDlGXxZzXhYI6oHJACxfO7NrYwiepvAGgPsNbnIZyMH5pUR4tdWKVGzxoCXhrPgNQ==
+X-Received: by 2002:a17:902:988f:b0:194:8fbd:1eb4 with SMTP id s15-20020a170902988f00b001948fbd1eb4mr24592513plp.1.1674482323605;
+        Mon, 23 Jan 2023 05:58:43 -0800 (PST)
+Received: from LAP568U.mistral.in ([106.51.227.150])
+        by smtp.gmail.com with ESMTPSA id y3-20020a170902b48300b0019309be03e7sm474478plr.66.2023.01.23.05.58.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 05:58:42 -0800 (PST)
+From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
+X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+Subject: [PATCH 0/2] Fix IO PADCONFIG size issue and support
+Date:   Mon, 23 Jan 2023 19:28:29 +0530
+Message-Id: <20230123135831.4184-1-sinthu.raja@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119110421.3efc0f6b@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-BESS-ID: 1674482324-305933-5381-10042-1
+X-BESS-VER: 2019.1_20221214.2106
+X-BESS-Apparent-Source-IP: 209.85.214.199
+X-BESS-Outbound-Spam-Score: 0.00
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245654 [from 
+        cloudscan23-149.eu-central-1b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:04:21AM -0800, Jakub Kicinski wrote:
-> On Thu, 19 Jan 2023 10:00:08 -0800 Breno Leitao wrote:
-> > This patch proposes to remove the msleep(4s) during netpoll_setup() if
-> > the carrier appears instantly.
-> > 
-> > Modern NICs do not seem to have this bouncing problem anymore, and this
-> > sleep slows down the machine boot unnecessarily
+From: Sinthu Raja <sinthu.raja@ti.com>
 
-I'm not sure 'bouncing' is the correct word here. That would imply up,
-down, up, down and then stable up. What i guess the real issue here
-was the MAC driver said the link was up while autoneg was still
-happening, which takes around 1.5 seconds.
+Hi All,
+This patch series fix the incorrect IO PADCONFIG size of the wakeup domain
+for J721S2 SoC and add RPi expansion header support for AM68 SK.
 
-> We should mention in the message that the wait is counter-productive on
-> servers which have BMC communicating over NC-SI via the same NIC as gets
-> used for netconsole. BMC will keep the PHY up, hence the carrier
-> appearing instantly.
-> 
-> We could add a smaller delay, but really having instant carrier and
-> then loosing it seems like a driver bug, so let's try to rip the band
-> aid off and ask for forgiveness instead.
+Sinthu Raja (2):
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Fix IO PADCONFIG size for wakeup
+    domain
+  arm64: dts: ti: k3-am68-sk-base-board: Add pinmux for RPi Header
 
-It would be good to put some of this into the commit message. Explain
-the case you see it go wrong.
+ .../boot/dts/ti/k3-am68-sk-base-board.dts     | 70 ++++++++++++++++++-
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  2 +-
+ 2 files changed, 70 insertions(+), 2 deletions(-)
 
-The other scenarios i can think of are:
+-- 
+2.36.1
 
-The bootloader configured the interface up, and used the interface,
-e.g. to tftp boot. The PHY was left up when transitioning into
-Linux. Hence there is no need to wait around 1.5 seconds for autoneg
-to complete.
-
-The link is fibre, SERDES getting sync could happen within 0.1Hz, and
-so it appears to be instantaneously.
-
-This work around does seem very old, pre-git times, so i also doubt
-there are many systems which are truly broken like this.
-
-      Andrew
