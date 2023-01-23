@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21507677940
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B860267793F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjAWKeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 05:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S231890AbjAWKdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 05:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjAWKeS (ORCPT
+        with ESMTP id S231302AbjAWKdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 05:34:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FF31115F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674470012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ElqFEoc0EbRc9UUN0JseQJHQuAPyVJiJ/2beNKrTrWs=;
-        b=GPK/L0mM7v/ubK+43NTo2yFkja9gwJLQR7DpzyjD+cpAS4P+m19Lanamf+CgkhGXVBWhqN
-        R6b+fc0SWoI8sm3LqS22L77GM4M9KIksYcX90p6fuDm4CR5XY+vEP/nUu4lRoR2EGeuhqA
-        fFJrXo26tTdZCfh4D6i8EiLauUaiC18=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-VwNwJErtOwW7F8Fx2jV1fg-1; Mon, 23 Jan 2023 05:33:30 -0500
-X-MC-Unique: VwNwJErtOwW7F8Fx2jV1fg-1
-Received: by mail-wm1-f70.google.com with SMTP id m7-20020a05600c4f4700b003d971a5e770so7292982wmq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:33:30 -0800 (PST)
+        Mon, 23 Jan 2023 05:33:43 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6232917CE5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:33:42 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o17-20020a05600c511100b003db021ef437so8163729wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6MMnzFkFz/mA+K9jC0tf0KwwFVsDs5pFYEiKF65a6jE=;
+        b=gLHLn+zgy5+aBJbyNbrlB1SUOwNJSWeV6qW3BCQVK/2aFAbyM35TO0xIVbnosTkodS
+         VEJ5OeKl6RdPptAgoOPLRXAz38pZ1wrlW825jhk0abixWK5DmFgeW2NCmPFP3gq7gc+0
+         TfpUseSfz9A5qSnE+3ylgvwG5jsXvxmIXcDcv+HxKQUj8XcBfbgleOHUKJksQgbphkDG
+         wsnlVTwVYk36tr4sg9OTmCLZZi8PEmW/9MslnraY/MNM5QJGRxR84roNrfKlWrdFR63F
+         KMA7Yz6qG7VGksOxVcROYiQ3qG7y8bdiMEb/Xfw33rKgE1hvTDg0IjXEOI84eaSShlD0
+         dFhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ElqFEoc0EbRc9UUN0JseQJHQuAPyVJiJ/2beNKrTrWs=;
-        b=D9d8uFMDCNPswlpfO+z5XNiFVzZhbSx3m+dYGPt9loCYG/NIh2T6FC3lC09bTmo5gU
-         npHG8HbL94n+oBwd6NyTfOFvGaokRIUUeaD2JyawQ/ELThKrEFtIKg/2xeB+dcuh2EQv
-         0cfCPG2b9kaBzvjSeSSvrZZBMh/z1wu5jJ9YbPpoMUJwhVmgduXOKzXlDYhbAv4kkbHI
-         OtT52p1NlxIEwRK3y/Ba+20QCBQ3YYP5gXR2f56QiKZMj4pSdFrkmLfHiVxri3AgSrj0
-         kwMpNcfFMCf2RI0YsKWmaxVa+Q+QmjCCkf0u+sn5dmZF2SIqJ+e76gX2+N1xX2/4+LdJ
-         gEHQ==
-X-Gm-Message-State: AFqh2kqPDkmbI/BfQxMnnXoJESlbPvBDU0kOuKF2uY5LvExwEQ5BD2My
-        3UYl0YTblRMTm/r1UcnXNYTUpK89rt6sbgvFJA1+1aN6Q8mfC8T42gwnleBN4qr3mfvZa6alO9M
-        tqnlPfXUiXDdMZZ/mQGIJb6KU
-X-Received: by 2002:adf:d0c3:0:b0:2bd:e5cb:e7df with SMTP id z3-20020adfd0c3000000b002bde5cbe7dfmr16250520wrh.32.1674470009603;
-        Mon, 23 Jan 2023 02:33:29 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsk5G9ktr9anm6O4EXqjV/YLTZzKnz+baHLmpWrz/G0eS9BZQhooZDNEW6O1TbYbRlganruIw==
-X-Received: by 2002:adf:d0c3:0:b0:2bd:e5cb:e7df with SMTP id z3-20020adfd0c3000000b002bde5cbe7dfmr16250502wrh.32.1674470009318;
-        Mon, 23 Jan 2023 02:33:29 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
-        by smtp.gmail.com with ESMTPSA id q4-20020adfdfc4000000b002bc6c180738sm41477377wrn.90.2023.01.23.02.33.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 02:33:28 -0800 (PST)
-Message-ID: <3842ed6a-6c9d-7909-2ab8-106cb4897973@redhat.com>
-Date:   Mon, 23 Jan 2023 11:33:28 +0100
+        bh=6MMnzFkFz/mA+K9jC0tf0KwwFVsDs5pFYEiKF65a6jE=;
+        b=LQOD9k6vX5ZfIURnhsJNo4XTJCr3XH8dHJRT9mU3yxxqnQ6XybBxbXOD7Fiy3KBGNj
+         R3Y8cAny6jnILmwR1vq49kAWydNcAGLkjo5fIROg15Gx72HQvxEf5yKVLqhMLwsvB12i
+         aLmjTObfeY/wQdmsLcY/tGWrltkp1D5SXYJ/je7RhekEMYr6U2Rbo0C3Zv4p+4TVvFIP
+         Di9LytkTJnCss84zkkbugdvSD0ZUJsfST47hVKHenSYiMDQ7ppu2OF6Vdqt3QTQ7yxQL
+         TD8RXMDIoBZhEMoOQzzJwlfXLjQZ1FaaFvTP7zZtO00Vs8PwoISt3po8OYBrQYIfnnr3
+         vRRA==
+X-Gm-Message-State: AFqh2kr89uR6cfMyldd9pATjfUYwf5IA+ANIAyXUaunfy+k+v2J8U+Lc
+        ZV1FNtKL7j9VZ3F6lmLyICroEg==
+X-Google-Smtp-Source: AMrXdXuDYCYMGkqt/MEynGbDbtb1dGFpk9V3tpifPrVph+TaLbutl5Zu1/1b19yME/c2FugXPQbxRw==
+X-Received: by 2002:a05:600c:4e4b:b0:3db:2e6d:9f79 with SMTP id e11-20020a05600c4e4b00b003db2e6d9f79mr12081589wmq.39.1674470020959;
+        Mon, 23 Jan 2023 02:33:40 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:30ed:611a:2bcc:ca68])
+        by smtp.gmail.com with ESMTPSA id p19-20020a1c5453000000b003db09692364sm10222634wmi.11.2023.01.23.02.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 02:33:40 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] clk: qcom: gcc-sa8775p: remove unused variables
+Date:   Mon, 23 Jan 2023 11:33:38 +0100
+Message-Id: <20230123103338.230320-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] drivers/base/memory: Use array to show memory block
- state
-Content-Language: en-US
-To:     Gavin Shan <gshan@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, osalvador@suse.de,
-        gregkh@linuxfoundation.org, rafael@kernel.org, shan.gavin@gmail.com
-References: <20230120233814.368803-1-gshan@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230120233814.368803-1-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.01.23 00:38, Gavin Shan wrote:
-> Use an array to show memory block state from '/sys/devices/system/
-> memory/memoryX/state', to simplify the code. Besides, WARN_ON()
-> is removed since the warning can be caught by the return value,
-> which is "ERROR-UNKNOWN-%ld\n". A system reboot caused by WARN_ON()
-> is definitely unexpected as Greg mentioned.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+There are four struct definitions in the driver that aren't used so
+remove them.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: ed432b1ed00a ("clk: qcom: add the GCC driver for sa8775p")
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/clk/qcom/gcc-sa8775p.c | 20 --------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/drivers/clk/qcom/gcc-sa8775p.c b/drivers/clk/qcom/gcc-sa8775p.c
+index b5da7e0b2eaf..d6e78de2c66f 100644
+--- a/drivers/clk/qcom/gcc-sa8775p.c
++++ b/drivers/clk/qcom/gcc-sa8775p.c
+@@ -310,16 +310,6 @@ static const struct clk_parent_data gcc_parent_data_9[] = {
+ 	{ .index = DT_BI_TCXO },
+ };
+ 
+-static const struct parent_map gcc_parent_map_10[] = {
+-	{ P_PCIE_0_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_10[] = {
+-	{ .index = DT_PCIE_0_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+ static const struct parent_map gcc_parent_map_11[] = {
+ 	{ P_PCIE_PHY_AUX_CLK, 1 },
+ 	{ P_BI_TCXO, 2 },
+@@ -330,16 +320,6 @@ static const struct clk_parent_data gcc_parent_data_11[] = {
+ 	{ .index = DT_BI_TCXO },
+ };
+ 
+-static const struct parent_map gcc_parent_map_12[] = {
+-	{ P_PCIE_1_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_12[] = {
+-	{ .index = DT_PCIE_1_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+ static const struct parent_map gcc_parent_map_13[] = {
+ 	{ P_BI_TCXO, 0 },
+ 	{ P_GCC_GPLL0_OUT_MAIN, 1 },
 -- 
-Thanks,
-
-David / dhildenb
+2.37.2
 
