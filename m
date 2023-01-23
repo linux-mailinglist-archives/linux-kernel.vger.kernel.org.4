@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F066788B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813B06788B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjAWUyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S231961AbjAWUyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWUyC (ORCPT
+        with ESMTP id S231717AbjAWUyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:54:02 -0500
+        Mon, 23 Jan 2023 15:54:03 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CBD7DB5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E755B11654
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:02 -0800 (PST)
 Received: from ipservice-092-217-089-134.092.217.pools.vodafone-ip.de ([92.217.89.134] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1pK3pE-0000Lk-TD; Mon, 23 Jan 2023 21:53:56 +0100
+        id 1pK3pF-0000Lk-NR; Mon, 23 Jan 2023 21:53:57 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 02/23] staging: r8188eu: pass struct adapter to usb_write
-Date:   Mon, 23 Jan 2023 21:53:21 +0100
-Message-Id: <20230123205342.229589-3-martin@kaiser.cx>
+Subject: [PATCH 03/23] staging: r8188eu: remove struct intf_hdl
+Date:   Mon, 23 Jan 2023 21:53:22 +0100
+Message-Id: <20230123205342.229589-4-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123205342.229589-1-martin@kaiser.cx>
 References: <20230123205342.229589-1-martin@kaiser.cx>
@@ -44,82 +44,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usb_write function takes a struct intf_hdl only to extract the struct
-adapter from it. We can pass struct adapter directly.
+There are no more users of struct intf_hdl in the r8188eu driver. We can
+now remove this struct.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/hal/usb_ops_linux.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/staging/r8188eu/include/drv_types.h | 1 -
+ drivers/staging/r8188eu/include/rtw_io.h    | 6 ------
+ drivers/staging/r8188eu/os_dep/usb_intf.c   | 6 ------
+ 3 files changed, 13 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-index d82abfcd91f3..9f008e61a6f2 100644
---- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
-+++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-@@ -49,9 +49,8 @@ static int usb_read(struct adapter *adapt, u16 value, void *data, u8 size)
- 	return status;
- }
+diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
+index 614673902377..7b170eed66b3 100644
+--- a/drivers/staging/r8188eu/include/drv_types.h
++++ b/drivers/staging/r8188eu/include/drv_types.h
+@@ -152,7 +152,6 @@ struct adapter {
+ 	struct	mlme_ext_priv mlmeextpriv;
+ 	struct	cmd_priv	cmdpriv;
+ 	struct	evt_priv	evtpriv;
+-	struct	intf_hdl	intf;
+ 	struct	xmit_priv	xmitpriv;
+ 	struct	recv_priv	recvpriv;
+ 	struct	sta_priv	stapriv;
+diff --git a/drivers/staging/r8188eu/include/rtw_io.h b/drivers/staging/r8188eu/include/rtw_io.h
+index 0d2aa432f88d..033ea7146861 100644
+--- a/drivers/staging/r8188eu/include/rtw_io.h
++++ b/drivers/staging/r8188eu/include/rtw_io.h
+@@ -17,12 +17,6 @@
+ #include <linux/usb/ch9.h>
  
--static int usb_write(struct intf_hdl *intf, u16 value, void *data, u8 size)
-+static int usb_write(struct adapter *adapt, u16 value, void *data, u8 size)
- {
--	struct adapter *adapt = intf->padapter;
- 	struct dvobj_priv *dvobjpriv = adapter_to_dvobj(adapt);
- 	struct usb_device *udev = dvobjpriv->pusbdev;
- 	int status;
-@@ -131,48 +130,44 @@ int __must_check rtw_read32(struct adapter *adapter, u32 addr, u32 *data)
+ struct intf_priv;
+-struct intf_hdl;
+-
+-struct	intf_hdl {
+-	struct adapter *padapter;
+-	struct dvobj_priv *pintf_dev;
+-};
  
- int rtw_write8(struct adapter *adapter, u32 addr, u8 val)
+ int __must_check rtw_read8(struct adapter *adapter, u32 addr, u8 *data);
+ int __must_check rtw_read16(struct adapter *adapter, u32 addr, u16 *data);
+diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
+index 1f70e5fee1b2..1f114b1fc4d5 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_intf.c
++++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
+@@ -290,7 +290,6 @@ static int rtw_usb_if1_init(struct dvobj_priv *dvobj, struct usb_interface *pusb
  {
--	struct intf_hdl *intf = &adapter->intf;
- 	u16 value = addr & 0xffff;
+ 	struct adapter *padapter = NULL;
+ 	struct net_device *pnetdev = NULL;
+-	struct intf_hdl *pintf;
  	int ret;
  
--	ret = usb_write(intf, value, &val, 1);
-+	ret = usb_write(adapter, value, &val, 1);
+ 	padapter = vzalloc(sizeof(*padapter));
+@@ -317,11 +316,6 @@ static int rtw_usb_if1_init(struct dvobj_priv *dvobj, struct usb_interface *pusb
+ 	padapter->intf_start = &usb_intf_start;
+ 	padapter->intf_stop = &usb_intf_stop;
  
- 	return RTW_STATUS_CODE(ret);
- }
+-	/* step init_io_priv */
+-	pintf = &padapter->intf;
+-	pintf->padapter = padapter;
+-	pintf->pintf_dev = adapter_to_dvobj(padapter);
+-
+ 	/* step read_chip_version */
+ 	rtl8188e_read_chip_version(padapter);
  
- int rtw_write16(struct adapter *adapter, u32 addr, u16 val)
- {
--	struct intf_hdl *intf = &adapter->intf;
- 	u16 value = addr & 0xffff;
- 	__le16 data = cpu_to_le16(val);
- 	int ret;
- 
--	ret = usb_write(intf, value, &data, 2);
-+	ret = usb_write(adapter, value, &data, 2);
- 
- 	return RTW_STATUS_CODE(ret);
- }
- 
- int rtw_write32(struct adapter *adapter, u32 addr, u32 val)
- {
--	struct intf_hdl *intf = &adapter->intf;
- 	u16 value = addr & 0xffff;
- 	__le32 data = cpu_to_le32(val);
- 	int ret;
- 
--	ret = usb_write(intf, value, &data, 4);
-+	ret = usb_write(adapter, value, &data, 4);
- 
- 	return RTW_STATUS_CODE(ret);
- }
- 
- int rtw_writeN(struct adapter *adapter, u32 addr, u32 length, u8 *data)
- {
--	struct intf_hdl *intf = &adapter->intf;
- 	u16 value = addr & 0xffff;
- 
- 	if (length > VENDOR_CMD_MAX_DATA_LEN)
- 		return -EINVAL;
- 
--	return usb_write(intf, value, data, length);
-+	return usb_write(adapter, value, data, length);
- }
- 
- static void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf)
 -- 
 2.30.2
 
