@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AA26789D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F796789D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjAWVnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S232197AbjAWVoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbjAWVns (ORCPT
+        with ESMTP id S231587AbjAWVoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:43:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BE24ED3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:43:45 -0800 (PST)
+        Mon, 23 Jan 2023 16:44:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF10359A;
+        Mon, 23 Jan 2023 13:44:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47439B80DD4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 21:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A647FC433D2;
-        Mon, 23 Jan 2023 21:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674510222;
-        bh=s9OQmsSE6hF3mWRQ1LHeoX+JrnuEq95UKv7kN6OTMsA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qfzS6werlmRKcsJzQWqnprzjD5nFyrhGlZl2H4WlRVwAuxeJjNNo8txRX87kBLqLO
-         fd8Vnww8Nk+47SC0jEwMTOEWGh6dGaV7ifj1JtY11kH96CgksoRrXE/rZDbKxEpMp3
-         Ld7Pk0y6gPkLkbgsJDKNdMpzKdkdhe1/Sh4+iDWM=
-Date:   Mon, 23 Jan 2023 13:43:41 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     Liam.Howlett@oracle.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>
-Subject: Re: [PATCH] maple_tree: should get pivots boundary by type
-Message-Id: <20230123134341.2514c269a07ad9e7989921c6@linux-foundation.org>
-In-Reply-To: <20221112234308.23823-1-richard.weiyang@gmail.com>
-References: <20221112234308.23823-1-richard.weiyang@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B99CE61093;
+        Mon, 23 Jan 2023 21:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1FEC433EF;
+        Mon, 23 Jan 2023 21:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674510256;
+        bh=2Nica+qC+tDvR05sM0UelCmLU4kxZzufP2WsaZa4KFE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=s9FxECEaEJAtc37V9jN5q0qh4A4dvxn8lCGejQg/X/dPNhPx6cGZ3J5GTYXNzO3J7
+         lJmVJoOQai0J6wYyMmsY2N5TmNVyRIQEP9GZeiw2gSKWI9kcMcF8ItazKHwh2pq4Uq
+         2/vrSTwLOkkrt6iigSAV/7GCcig3bgJRC42+XrT0bx1VVygd6lCz0RzNoOWOTmbA6z
+         EO6K29AVgYk0TjfkoktuAvHe/iOPZ+rDTuCYYF/WpVb8N1aF8QmazTp1WdRCJknMQX
+         r7CoJuuCbGCBVh3rbqwKI8og75B8XedpiIUS5sQPVwFlccPbviGo4MAIU8/sN31DIa
+         bAwLEPaC1kLlQ==
+Date:   Mon, 23 Jan 2023 15:44:14 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH v3 RESEND] acpi,pci: warn about duplicate IRQ routing
+ entries returned from _PRT
+Message-ID: <20230123214414.GA987407@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0113ca60-acf2-f4db-3230-959e9bb15726@o2.pl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,37 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Nov 2022 23:43:08 +0000 Wei Yang <richard.weiyang@gmail.com> wrote:
-
-> We should get pivots boundary by type.
+On Mon, Jan 23, 2023 at 10:00:43PM +0100, Mateusz Jończyk wrote:
+> W dniu 23.01.2023 o 21:33, Bjorn Helgaas pisze:
+> > On Sat, Jan 21, 2023 at 04:33:14PM +0100, Mateusz Jończyk wrote:
+> >> On some platforms, the ACPI _PRT function returns duplicate interrupt
+> >> routing entries. Linux uses the first matching entry, but sometimes the
+> >> second matching entry contains the correct interrupt vector.
+> >>
+> >> Print an error to dmesg if duplicate interrupt routing entries are
+> >> present, so that we could check how many models are affected.
+> >
+> > It shouldn't be too hard to use qemu to figure out whether Windows
+> > uses the last matching entry, i.e., treating _PRT entries as
+> > assignments.  If so, maybe Linux could just do the same.
+> >
+> > Is anybody up for that?
 > 
+> The hardware in question has a working Windows XP installation,
+> and I could in theory check which interrupt vector it uses - but
+> I think that such reverse engineering is forbidden by Windows' EULA.
 
-When fixing a bug, please always fully describe the runtime effects of
-that bug.
+I'm not talking about any sort of disassembly or anything like that;
+just that we can observe what Windows does given the _PRT contents.
+You've already figured out that on your particular hardware, the _PRT
+has two entries, and Linux uses the first one while Windows uses the
+second one, right?
 
-I see from earlier review that the bug could result in overindexing
-mt_pivots[], but Liam says this code isn't presently used, but
-mas_alloc() calls mte_pivot(), so I'm all confused.
+On qemu, we have control over the BIOS and can easily update _PRT to
+whatever we want, and then we could boot Windows and see what it uses.
+But I guess maybe that wouldn't tell us anything more than what you
+already discovered.
 
+So my inclination would be to make Linux use the last matching entry.
 
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -669,12 +669,13 @@ static inline unsigned long mte_pivot(const struct maple_enode *mn,
->  				 unsigned char piv)
->  {
->  	struct maple_node *node = mte_to_node(mn);
-> +	enum maple_type type = mte_node_type(mn);
->  
-> -	if (piv >= mt_pivots[piv]) {
-> +	if (piv >= mt_pivots[type]) {
->  		WARN_ON(1);
->  		return 0;
->  	}
-> -	switch (mte_node_type(mn)) {
-> +	switch (type) {
->  	case maple_arange_64:
->  		return node->ma64.pivot[piv];
->  	case maple_range_64:
-> -- 
-> 2.33.1
-> 
+Bjorn
