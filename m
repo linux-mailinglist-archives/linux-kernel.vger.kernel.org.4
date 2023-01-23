@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D03C677B09
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FDB677B0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjAWMeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S231687AbjAWMfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjAWMeT (ORCPT
+        with ESMTP id S231666AbjAWMfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:34:19 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF9322A0C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:33:47 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ud5so30081288ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:33:47 -0800 (PST)
+        Mon, 23 Jan 2023 07:35:03 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803D4CC17
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:35:02 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s3so14384220edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:35:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=f7PdZNkVZQyBUiPCTrzhXWzp946FKR6kqjCXzmeEkJQ=;
-        b=u8iw0yyOzLckrMJpcvLnoQLXQ5fch+bLWKRrztkri0Ze5LgyE4ym21FjyM7MquyC3c
-         jula37vfW1S3CrffrJsp47NkR/eg/HjoID9SkKCLuUuZiQ5Aznb0PuhI1JYXC28IBDBU
-         ysIyILT1yYIJLrqPAMmJnuyzGPlfCOiD/QfUdQVw0tYH2l/BuFH2aye01ZkZ+fVPd1/h
-         Z60xTq5e8d955/YXVgPo3VSWxHeBv6ndg6rfD25DkoSM2+G0VjJTxNsSqQfFn0aRolvU
-         nTrweq/ru1REa8V/0R6fv75HBz5PWXayyT8WjTrL2DnVGX6l4+NvWSHf7wbSIkS7MYby
-         JIrg==
+        bh=M4+KUClQ0qkIGm4MUSZut5LiRn33cDlgrxS0MQDfslk=;
+        b=mdp59eDBN45F1ORkm0FDXW8RZkcxCQdrrW/zgKu8wyb6Xf0MsVeWRdknox7Bf4GA9l
+         ePuQDjvOLw/kpz1WZv7xyLOBDtCntn3wU1d4C0nRNBKTkFQmpkTZHfAbzFFAf6FIAw2D
+         H2oTYV5pbpT26rwJbQrc5z3nkSAnEsgnANEs8lTqXGI7u/q+8Z0D8GTRjhJFC2Fh6hWL
+         cWECUKVJE6r3NuYdDqBoUd6A5GkRLC0yBiKoGPK26XEy2VATQIRo4w64oR+kH5QBTFuh
+         IHTXmG77s6Ty3sHTtnBhgA5RHPSutMl3ySoNWSHypYtuybIqKJ/r5i133pCjaWp5Jf44
+         4YZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7PdZNkVZQyBUiPCTrzhXWzp946FKR6kqjCXzmeEkJQ=;
-        b=1igdciAz2mLqu+03yc3D+dmxq8aQth+ZLlWefQ+5/+GfdIGQdiob9AVV3pVrfr0f/E
-         RabKG/JFp3quU+UT12K6g656DGDGUVXngP/Cov403p2c8UAvekzkzolr5s87FtIiuGk9
-         hASNEe5P6z49spyn1XEg1g3Rx3WHrHLOSWw9zSmJwZpvoDbLFE8BR298MT0QjulFmjsl
-         UdX+Aog2hJO3GbZ26pMCnltI8uAGGxkV9JhAuDA1yj1KqR4DaKM5moS/pE2d55nisMws
-         NO0lCsLgx1Mp2184qnuEy37hhQ7wC8GUBjeKkSF/dSfZgZkdRHR85jc/rITPB4SI7A+/
-         NC3w==
-X-Gm-Message-State: AFqh2kr45J+ja00BbYP/eDaoYw1UbdlZ3AmL7FWQ3miKLfGYO3oCLszs
-        z+fy3ZCH3Uw3YV0I29+0yJZXXg==
-X-Google-Smtp-Source: AMrXdXuVRMUs1FacslZSphud2cMRR+YrHqiKKzSaHDMGsuKiFwB565nFwqsqDBiYRdAaCcpDI2G+QQ==
-X-Received: by 2002:a17:907:1c08:b0:86f:de0b:b066 with SMTP id nc8-20020a1709071c0800b0086fde0bb066mr26424926ejc.76.1674477225613;
-        Mon, 23 Jan 2023 04:33:45 -0800 (PST)
+        bh=M4+KUClQ0qkIGm4MUSZut5LiRn33cDlgrxS0MQDfslk=;
+        b=D1YUj8sfn/C6Vk8TMS6skmt1SzeTiktSP2Tv6K4nCMcz7hyAuTyljv6jvielMau7Hb
+         aElosRxm06KhJjb39q2/W9vFedYmsHlxI4Ck45xldmrcACvk+V1KRIdTSOD9ush9gFoG
+         +OS5gu1zx51z7BpNEp14nwZARq/6ZLk3Yt7eJicFJD91EqOJZtO14ML80oZG4iXL10n9
+         /DCe9fxQJvvzkUOVCiGQP3FcwMTb/hNZvIQFzKumDrwalXhGPAbakfZut/M8jeQE0g1r
+         4sTpI5NzQbfw0M6ZLlLG8vDJ5r37H6kBmQnVThLwA0Kdl0No+DKGQUFs1IiPmMfEeB5+
+         w8zQ==
+X-Gm-Message-State: AFqh2koBXYYd/Pd9pSVt5MddNUiajdfpwTpd9eokzZuMdhfONELfKSg7
+        dbiKRPlBdGHzT2p7pnojkaaw9Q==
+X-Google-Smtp-Source: AMrXdXuo/91LTzUQh+IngNBNh6kfYJo9YB62kuFstBqw4VTGxkVtjkPijeYfEcHXugOQ/l9W8jQS4Q==
+X-Received: by 2002:a05:6402:159:b0:49d:a87f:ba7b with SMTP id s25-20020a056402015900b0049da87fba7bmr24391582edu.39.1674477301059;
+        Mon, 23 Jan 2023 04:35:01 -0800 (PST)
 Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b007c0b28b85c5sm21991031ejt.138.2023.01.23.04.33.44
+        by smtp.gmail.com with ESMTPSA id v19-20020a509553000000b0046cbcc86bdesm21768965eda.7.2023.01.23.04.34.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 04:33:45 -0800 (PST)
-Message-ID: <e2fbecf6-aeb9-b754-46c0-2273cfa6d0a0@linaro.org>
-Date:   Mon, 23 Jan 2023 13:33:44 +0100
+        Mon, 23 Jan 2023 04:35:00 -0800 (PST)
+Message-ID: <1c226b22-cc1a-7393-270f-330095c93872@linaro.org>
+Date:   Mon, 23 Jan 2023 13:34:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH] MAINTAINERS: Update qcom CPR maintainer entry
+Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: ipq8074: add QFPROM node
 Content-Language: en-US
-To:     Niklas Cassel <niklas.cassel@wdc.com>, linux-kernel@vger.kernel.org
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Niklas Cassel <nks@flawful.org>
-References: <20230123104305.44641-1-niklas.cassel@wdc.com>
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, srinivas.kandagatla@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_kathirav@quicinc.com
+References: <20230123101631.475712-1-robimarko@gmail.com>
+ <20230123101631.475712-2-robimarko@gmail.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230123104305.44641-1-niklas.cassel@wdc.com>
+In-Reply-To: <20230123101631.475712-2-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,35 +80,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 23.01.2023 11:43, Niklas Cassel wrote:
-> From: Niklas Cassel <nks@flawful.org>
+On 23.01.2023 11:16, Robert Marko wrote:
+> IPQ8074 has efuses like other Qualcomm SoC-s that are required for
+> determining various HW quirks which will be required later for CPR etc,
+> so lets add the QFPROM node for start.
 > 
-> I do no longer have access to qcom CPR hardware, nor the documentation for
-> said hardware.
+> Individidual fuses will be added as they are required.
 > 
-> Based on past and recent activity, I propose Bjorn and Konrad as the new
-> qcom CPR maintainers.
-> 
-> Signed-off-by: Niklas Cassel <nks@flawful.org>
-> Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Changes in v2:
+> * Enlarge the register space size due to info from Kathiravan T.
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  MAINTAINERS | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f781f936ae35..fe2606727966 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17261,7 +17261,8 @@ F:	drivers/clk/qcom/
->  F:	include/dt-bindings/clock/qcom,*
+> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> index 8eba586065a3..ff59a2f38293 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> @@ -301,6 +301,13 @@ mdio: mdio@90000 {
+>  			status = "disabled";
+>  		};
 >  
->  QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
-> -M:	Niklas Cassel <nks@flawful.org>
-> +M:	Bjorn Andersson <andersson@kernel.org>
-> +M:	Konrad Dybcio <konrad.dybcio@linaro.org>
->  L:	linux-pm@vger.kernel.org
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
+> +		qfprom: efuse@a4000 {
+> +			compatible = "qcom,ipq8074-qfprom", "qcom,qfprom";
+> +			reg = <0x000a4000 0x2000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +		};
+> +
+>  		prng: rng@e3000 {
+>  			compatible = "qcom,prng-ee";
+>  			reg = <0x000e3000 0x1000>;
