@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F87677A48
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81FE677A4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjAWLji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S231388AbjAWLlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjAWLjg (ORCPT
+        with ESMTP id S229868AbjAWLlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:39:36 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97E713528;
-        Mon, 23 Jan 2023 03:39:35 -0800 (PST)
+        Mon, 23 Jan 2023 06:41:50 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE761352C;
+        Mon, 23 Jan 2023 03:41:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=gPxeHE23tzwpVy1+JbNy/k0yRKOwiVwjSX5YR1hlEhU=; b=QB
-        O71gvsjUeB7TTHvlyWZCof0gz/oq/yce3G7IQAH6VXHM7Ng5tL8uI6LDHhfP3wp+oEgZ6MUs2gbEW
-        R5JhaZjKHQHzLYa6NjfFyGNUUJREJ+WIfa3/NnRKWQyFvK0sFaIBAgessjJ6BuI8URfRlK67o+Gny
-        Lxv+UzinU9f2fbUvAw5LaXoMeaQBuCmHXcSP75qlQDY/ecSKfz7EV7lkxWkIIk2hr/mw8rrUmj5Lx
-        1xAaUPv529iYjf0R8SKuXNAg+i4qhetgUGmjiPnPDkcqRhpNfD/vAbaBZFcwiXuczre6lJyBGopgr
-        nNUmSc8lqWb3PJenNjqP3rc9qFAznzng==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1pJvAg-0003Qc-CB;
-        Mon, 23 Jan 2023 11:39:30 +0000
-From:   John Keeping <john@metanate.com>
-To:     netdev@vger.kernel.org
-Cc:     John Keeping <john@metanate.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] brcmfmac: support CQM RSSI notification with older firmware
-Date:   Mon, 23 Jan 2023 11:39:24 +0000
-Message-Id: <20230123113924.2472721-1-john@metanate.com>
-X-Mailer: git-send-email 2.39.1
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BElcCOJTdrcOanesXl7wLvueYCq0G60+MFFN+WYtDtA=; b=RpZeumbGz/v753aDcq7BZ8VMDW
+        P0dHsJdfsj0mbkSUiEvB2/SWcM4WISJcrZRy/ogId6xwr6OTspMHOm349/cb8wmjxPp/kevZvrrYS
+        AQzh0klcsOtjvuUwl7nnpVlGHe6QMd/rbVOmedF9v8+wiVlNz1hZQfRe28LuW8HzW+au8KXYm6Cl1
+        jOF0As3eoNZ694+yAgp2bO+LLIDmcENAqEdf2teIMI8aaiNXaH/tyew1nxSAS+4krFssMGJE4dgml
+        7DgqaSA+9McmVf4ap26m7GE3miawTrQbVAcx9sOaSTOo+fUw9AjgNW8ZBw6fLXIcOB4OUQDzQLQxw
+        83azSlDQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pJvCA-001Woo-16;
+        Mon, 23 Jan 2023 11:41:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C91F6300327;
+        Mon, 23 Jan 2023 12:41:29 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9FE5821477E2D; Mon, 23 Jan 2023 12:41:29 +0100 (CET)
+Date:   Mon, 23 Jan 2023 12:41:29 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [perf] lockdep warning between cpu_add_remove_lock and
+ &dev->mutex.
+Message-ID: <Y85yadQes4fSwCZm@hirez.programming.kicks-ass.net>
+References: <8c3fc3d1-8fed-be22-e0e7-ef1e1ea723ce@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c3fc3d1-8fed-be22-e0e7-ef1e1ea723ce@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the BCM4339 firmware from linux-firmware (version "BCM4339/2 wl0:
-Sep  5 2019 11:05:52 version 6.37.39.113 (r722271 CY)" from
-cypress/cyfmac4339-sdio.bin) the RSSI respose is only 4 bytes, which
-results in an error being logged.
+On Mon, Jan 23, 2023 at 07:39:24PM +0900, Tetsuo Handa wrote:
+> Hello.
+> 
+> I tried to apply below patch, and hit lockdep warning during boot.
+> Can you break this dependency?
 
-It seems that older devices send only the RSSI field and neither SNR nor
-noise is included.  Handle this by accepting a 4 byte message and
-reading only the RSSI from it.
+  cpu_add_remove_lock
+    cpu_hotplug_lock
+      pmus_lock
+        dev->mutex		(pmu_dev_alloc)
 
-Fixes: 7dd56ea45a66 ("brcmfmac: add support for CQM RSSI notifications")
-Signed-off-by: John Keeping <john@metanate.com>
+vs
+
+  dev->mutex
+    cpu_add_remove_lock		(pci_device_probe)
+
+
+Possibly something like this might do -- I'm not entirely sure it's
+fully correct, needs a bit of auditing.
+
 ---
- .../broadcom/brcm80211/brcmfmac/cfg80211.c         | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-index b115902eb475..7dbb6f07d067 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-@@ -6489,18 +6489,20 @@ static s32 brcmf_notify_rssi(struct brcmf_if *ifp,
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index eacc3702654d..d6b2265a9982 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -13570,9 +13570,9 @@ static void perf_event_exit_cpu_context(int cpu)
  {
- 	struct brcmf_cfg80211_vif *vif = ifp->vif;
- 	struct brcmf_rssi_be *info = data;
--	s32 rssi, snr, noise;
-+	s32 rssi, snr = 0, noise = 0;
- 	s32 low, high, last;
+ 	struct perf_cpu_context *cpuctx;
+ 	struct perf_event_context *ctx;
++	int idx = srcu_read_lock(&pmus_srcu);
  
--	if (e->datalen < sizeof(*info)) {
-+	if (e->datalen >= sizeof(*info)) {
-+		rssi = be32_to_cpu(info->rssi);
-+		snr = be32_to_cpu(info->snr);
-+		noise = be32_to_cpu(info->noise);
-+	} else if (e->datalen >= sizeof(rssi)) {
-+		rssi = be32_to_cpu(*(s32 *)data);
-+	} else {
- 		brcmf_err("insufficient RSSI event data\n");
- 		return 0;
- 	}
+ 	// XXX simplify cpuctx->online
+-	mutex_lock(&pmus_lock);
+ 	cpuctx = per_cpu_ptr(&perf_cpu_context, cpu);
+ 	ctx = &cpuctx->ctx;
  
--	rssi = be32_to_cpu(info->rssi);
--	snr = be32_to_cpu(info->snr);
--	noise = be32_to_cpu(info->noise);
--
- 	low = vif->cqm_rssi_low;
- 	high = vif->cqm_rssi_high;
- 	last = vif->cqm_rssi_last;
--- 
-2.39.1
-
+@@ -13581,7 +13581,7 @@ static void perf_event_exit_cpu_context(int cpu)
+ 	cpuctx->online = 0;
+ 	mutex_unlock(&ctx->mutex);
+ 	cpumask_clear_cpu(cpu, perf_online_mask);
+-	mutex_unlock(&pmus_lock);
++	srcu_read_unlock(&pmus_srcu, idx);
+ }
+ #else
+ 
+@@ -13593,10 +13594,11 @@ int perf_event_init_cpu(unsigned int cpu)
+ {
+ 	struct perf_cpu_context *cpuctx;
+ 	struct perf_event_context *ctx;
++	int idx;
+ 
+ 	perf_swevent_init_cpu(cpu);
+ 
+-	mutex_lock(&pmus_lock);
++	idx = srcu_read_lock(&pmus_srcu);
+ 	cpumask_set_cpu(cpu, perf_online_mask);
+ 	cpuctx = per_cpu_ptr(&perf_cpu_context, cpu);
+ 	ctx = &cpuctx->ctx;
+@@ -13604,7 +13606,7 @@ int perf_event_init_cpu(unsigned int cpu)
+ 	mutex_lock(&ctx->mutex);
+ 	cpuctx->online = 1;
+ 	mutex_unlock(&ctx->mutex);
+-	mutex_unlock(&pmus_lock);
++	srcu_read_unlock(&pmus_srcu, idx);
+ 
+ 	return 0;
+ }
