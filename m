@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFA56780DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6B16780E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbjAWQFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S233051AbjAWQHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjAWQFW (ORCPT
+        with ESMTP id S233065AbjAWQG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:05:22 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26671EF8B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:05:21 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2507B2D9;
-        Mon, 23 Jan 2023 17:05:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674489919;
-        bh=rtpuuM/0/Ik1tlzGJltsRahHhvIG5qRN19lfY1L+tQ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F+lBd06HpR8XKUcTZXgOOjRqgm/WVRT5I/LPrzW7jqaDXk371mYahDJRF3A06eqld
-         f0QjJVd6x/thjXTTO/mcFh5W720DMJfg0tghGaEn2SKUG65NmXrYbayqK3TcQlnKl7
-         lw6w53vzWYyCm+Mb+ligdulLJ34QXi0VINWawI4s=
-Date:   Mon, 23 Jan 2023 18:05:15 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     John Keeping <john@metanate.com>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Subject: Re: [PATCH] drm/bridge: panel: Set orientation on panel_bridge
- connector
-Message-ID: <Y86wO8nvFbC81b1S@pendragon.ideasonboard.com>
-References: <20230120114313.2087015-1-john@metanate.com>
- <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
- <Y8uo7vIcQ6caH9pu@ravnborg.org>
- <Y8wnswk++tvr9xMe@donbot>
- <Y81Px74OUYt21nj4@pendragon.ideasonboard.com>
- <Y856rWmtA4tQCcZz@donbot>
+        Mon, 23 Jan 2023 11:06:58 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C218279A1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674490006; x=1706026006;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tZaw3zsdtxxYGbmV/cEBHlWxxBcj5qE7158PLJuVKqk=;
+  b=gqdMoFHjLcFQx+yzWLBR7/LYXxRbwBZq+yDo1hiXRa9XkiPclrACHhz8
+   hjcB06bP/ZYBM0kueB3b/iivKNNaqQ0JT2Rzz40SbSgb1NZKvlGvHMZz5
+   KMuWufBvx0e+bLf33NICafNlEEyPzMToT8NaJdpsjrDuQusVYLUuZsxYm
+   vQ0x0g/O0Obv+oeNpqu66FsEuQXJZg+9SOnbYWstrQxiJxYppxuPvvBnL
+   SeYFoosQD9nTUJZ0Ddo7AbSXA7ziJzy5bsIhG347ZcgOXtFuIYMQDdKut
+   bn468FDVrlfzo5PzuNZQnh4TLRVF2VVgGsk0TXhnj/BWidMToNP7/q+ce
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="388426464"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="388426464"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 08:05:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="693962003"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="693962003"
+Received: from rgrachek-mobl.amr.corp.intel.com (HELO [10.212.113.123]) ([10.212.113.123])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 08:05:51 -0800
+Message-ID: <a54bf135-70ba-4c8f-b373-690a9ad8e7ef@linux.intel.com>
+Date:   Mon, 23 Jan 2023 10:05:50 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y856rWmtA4tQCcZz@donbot>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 6/8] ASoC: cs42l42: Add Soundwire support
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
+ <20230118160452.2385494-7-sbinding@opensource.cirrus.com>
+ <33130336-b2ce-330e-fdec-166eee977e13@linux.intel.com>
+ <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
+ <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
+ <32fd1755-0128-8f32-9a88-a92f1647f903@opensource.cirrus.com>
+ <c8a9ff9b-d1d0-1cef-bf51-e7fa247d24f4@linux.intel.com>
+ <3bac8055-2e6e-dc53-d143-f493e18a1e43@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <3bac8055-2e6e-dc53-d143-f493e18a1e43@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
 
-On Mon, Jan 23, 2023 at 12:16:45PM +0000, John Keeping wrote:
-> On Sun, Jan 22, 2023 at 05:01:27PM +0200, Laurent Pinchart wrote:
-> > On Sat, Jan 21, 2023 at 05:58:11PM +0000, John Keeping wrote:
-> > > On Sat, Jan 21, 2023 at 09:57:18AM +0100, Sam Ravnborg wrote:
-> > > > On Fri, Jan 20, 2023 at 01:44:38PM -0800, Doug Anderson wrote:
-> > > > > On Fri, Jan 20, 2023 at 3:43 AM John Keeping wrote:
-> > > > > >
-> > > > > > Commit 15b9ca1641f0 ("drm: Config orientation property if panel provides
-> > > > > > it") added a helper to set the panel panel orientation early but only
-> > > > > > connected this for drm_bridge_connector, which constructs a panel bridge
-> > > > > > with DRM_BRIDGE_ATTACH_NO_CONNECTOR and creates the connector itself.
-> > > > > >
-> > > > > > When the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag is not specified and the
-> > > > > > panel_bridge creates its own connector the orientation is not set unless
-> > > > > > the panel does it in .get_modes which is too late and leads to a warning
-> > > > > > splat from __drm_mode_object_add() because the device is already
-> > > > > > registered.
-> > > > > >
-> > > > > > Call the necessary function to set add the orientation property when the
-> > > > > > connector is created so that it is available before the device is
-> > > > > > registered.
-> > > > > 
-> > > > > I have no huge objection to your patch and it looks OK to me. That
-> > > > > being said, my understanding is that:
-> > > > > 
-> > > > > 1. DRM_BRIDGE_ATTACH_NO_CONNECTOR is "the future" and not using the
-> > > > > flag is "deprecated".
-> > > >
-> > > > Correct.
-> > > > Could we take a look at how much is required to move the relevant driver
-> > > > to use DRM_BRIDGE_ATTACH_NO_CONNECTOR?
-> > > >
-> > > > If this is too much work now we may land this simple patch, but the
-> > > > preference is to move all drivers to the new bridge handling and thus
-> > > > asking display drivers to create the connector.
-> > 
-> > I fully agree with Doug and Sam here. Let's see if we can keep the yak
-> > shaving minimal :-)
-> > 
-> > > > What display driver are we dealing with here?
-> > > 
-> > > This is dw-mipi-dsi-rockchip which uses the component path in
-> > > dw-mipi-dsi (and, in fact, is the only driver using that mode of
-> > > dw-mipi-dsi).
-> > > 
-> > > I'm not familiar enough with DRM to say whether it's easy to convert to
-> > > DRM_BRIDGE_ATTACH_NO_CONNECTOR - should dw-mipi-dsi-rockchip be moving
-> > > to use dw-mipi-dsi as a bridge driver or should dw_mipi_dsi_bind() have
-> > > a drm_bridge_attach_flags argument?  But I'm happy to test patches if it
-> > > looks easy to convert to you :-)
-> > 
-> > I'd go for the former (use dw_mipi_dsi_probe() and acquire the DSI
-> > bridge with of_drm_find_bridge() instead of using the component
-> > framework) if possible, but I don't know how intrusive that would be.
+>>> It's nicer to do the check in startup() because then the application
+>>> open() will fail cleanly. We could delay until prepare - which is the
+>>> point we really need the hardware to be accessible - and hope the
+>>> hardware enumerated and initialized by that time. But that's not so
+>>> nice from the app point of view.
+>>
+>> Another way to avoid problems is to rely on the codec component .probe
+>> to check if the SoundWire device is initialized before registering a
+>> card.
+>>
+>> I just tried with a system where the ACPI info exposes a codec which is
+>> not connected, it fails nicely. That avoids the pitfalls of creating a
+>> card which isn't functional since all dependencies are not met.
+>>
+>> [   64.616530] snd_soc_sof_sdw:mc_probe: sof_sdw sof_sdw: Entry
+>> [   64.616549] snd_soc_sof_sdw:log_quirks: sof_sdw sof_sdw: quirk
+>> SOF_SDW_PCH_DMIC enabled
+>> [   64.616559] snd_soc_sof_sdw:sof_card_dai_links_create: sof_sdw
+>> sof_sdw: sdw 2, ssp 0, dmic 2, hdmi 0
+>> [   64.616587] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>> dai link SDW0-Playback, id 0
+>> [   64.616600] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>> dai link SDW0-Capture, id 1
+>> [   64.616607] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>> dai link dmic01, id 2
+>> [   64.616614] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
+>> dai link dmic16k, id 3
+>> [   69.757115] rt5682 sdw:0:025d:5682:00: Initialization not complete,
+>> timed out
+>> [   69.757128] rt5682 sdw:0:025d:5682:00: ASoC: error at
+>> snd_soc_component_probe on sdw:0:025d:5682:00: -110
+>> [   69.757224] sof_sdw sof_sdw: ASoC: failed to instantiate card -110
+>> [   69.757734] sof_sdw sof_sdw: snd_soc_register_card failed -110
+>>
+>> see
+>> https://elixir.bootlin.com/linux/latest/source/sound/soc/codecs/rt5682.c#L2927
+>>
+>> I think this is compatible with the device model and bind/unbind, but it
+>> could be improved with the removal of the wait if we had a way to return
+>> -EPROBEDEFER, and have a mechanism to force the deferred probe work to
+>> be triggered when a device actually shows up. It's a generic problem
+>> that the probe cannot always be a synchronous function but may complete
+>> 'later'.
 > 
-> I'm a bit confused about what's required since dw-mipi-dsi-rockchip
-> already uses dw_mipi_dsi_probe(),
+> I see what you've done in your patch, but I had already experimented
+> with this idea and found that the wait_for_completion() can deadlock the
+> Soundwire core.
 
-Indeed, my bad.
-
-> but I think moving away from the
-> component framework would be significant work as that's how the MIPI
-> subdriver fits in to the overall Rockchip display driver.
-
-It will be some work, yes. It however doesn't mean that the whole
-Rockchip display driver needs to move away from the component framework,
-it can be limited to the DSI encoder. It's not immediately clear to me
-why the DSI encoder uses the component framework in the first place, and
-if it would be difficult to move away from it.
-
-> Any changes / modernisation to the Rockchip MIPI driver look like it
-> will take more time than I have available to spend on this, so I'd
-> really like to see this patch land as it's a simple fix to an existing
-> working code path.
-
-So who volunteers for fixing it properly ? :-)
-
-I'll let Doug and Sam decide regarding mering this patch.
-
--- 
-Regards,
-
-Laurent Pinchart
+That's not good. Do you have any logs or explanation on what the
+root-cause of this deadlock might be? If something's broken, we might as
+well fix it.
