@@ -2,295 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AFD6777DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041556777DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjAWJxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S231916AbjAWJyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjAWJxK (ORCPT
+        with ESMTP id S231907AbjAWJyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:53:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ACF21946;
-        Mon, 23 Jan 2023 01:52:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E40CB80CAE;
-        Mon, 23 Jan 2023 09:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E139C433D2;
-        Mon, 23 Jan 2023 09:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674467566;
-        bh=yEh4ftej8ibO7zrehFmfhbFrApcu8aIdeQPJa77r/xg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZKAXnOort5Rk73LYtEW5ezyL0yuiCBT3AonYq1RpCDJh6W7S7ghpjwGrTVxViOI6K
-         Nas9TBjsjLPIzxE7/sOv1EtR1YtcbHpUMFNlp/8GKoxmQ9UtljqajBgeZcW0i/8HaN
-         ZTKaJFo6l9iwq5iLGcY9GjCodjDgzXfxuCstc5yQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.4 00/51] 5.4.230-rc2 review
-Date:   Mon, 23 Jan 2023 10:52:43 +0100
-Message-Id: <20230123094907.292995722@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Mon, 23 Jan 2023 04:54:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494F522796
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:53:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674467582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XGBr/F0XFzE0vVYozw1/BKRP3jPgyxC9gUjhQB9Xc7E=;
+        b=c7U7OZ+jrczNzreyjnvOkM8sMgpFeX6jNteXxCfp7KlwTy1izzKtSQPunhtGn4NS5fWLKj
+        3van3cy18e686LiQMDttW5LgkCEFXL+Dsq0DEgWC9VcYRu+933qe4p3CJ4q4nF4bYRbJfa
+        e5+WfW32OIN2I/6h4t2gd5wfzXkxJog=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-653-V1yfNBvWOCuQYPEEHeEh1A-1; Mon, 23 Jan 2023 04:53:01 -0500
+X-MC-Unique: V1yfNBvWOCuQYPEEHeEh1A-1
+Received: by mail-qt1-f198.google.com with SMTP id j14-20020ac874ce000000b003b6917d0731so3895451qtr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:53:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGBr/F0XFzE0vVYozw1/BKRP3jPgyxC9gUjhQB9Xc7E=;
+        b=oY5RfRBaEmhZLMhjaqT7M/lVedA87Vaa5FFW7n0ov+5a+MeY1L+3QS15wMJi2V9KBa
+         SEyjB7CpqjNMRG9RO/cUb0z3R3223/DGp9V+FAsbUP9xBBU5EDQY/blAIlcaIlRSG1hO
+         fuR2Xc3tA7j6ayipxV6Ge1jBN1uzjsfDYN9JxvW/v0yxjPeckhZGKo0k0rqNiS2EEGw7
+         1Xo/6s95IQ/PjT8gIrGAeIPbin2yLc4ki0xLiBBHIbhyN88dJiCWl7Rm6sDE8n7HM4AB
+         IJOUNRlkmDc1i+j1UKQUgdg9AgXI47zistPUHxyuGiHrbDv9zD7VBvGwta+FDSPi5Aqn
+         8Csw==
+X-Gm-Message-State: AFqh2kpgR8R70sNFoLhWngE0/u0jOp9G028xPybaorCJe+gM+6x7P0ys
+        GT8w3yijZFu/5OoDWrN/Tq8zEbQiVjqM+cqiai59kxsDaBFCyBMyf5nmWEo8bT53qT4tuLzfkEL
+        aZ07SIqOZU3mPxUIuEUdZ8cvt
+X-Received: by 2002:a05:6214:37c6:b0:532:35a1:af91 with SMTP id nj6-20020a05621437c600b0053235a1af91mr36780668qvb.27.1674467580908;
+        Mon, 23 Jan 2023 01:53:00 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtGVUKKbQfXcHL30rqUuIDlvGIgB5ckTck/POv0Vt/uPjVDeonGJ8IteOq2bZBAnoCEGaxYYg==
+X-Received: by 2002:a05:6214:37c6:b0:532:35a1:af91 with SMTP id nj6-20020a05621437c600b0053235a1af91mr36780656qvb.27.1674467580648;
+        Mon, 23 Jan 2023 01:53:00 -0800 (PST)
+Received: from [192.168.100.30] ([82.142.8.70])
+        by smtp.gmail.com with ESMTPSA id g8-20020ae9e108000000b006b5cc25535fsm5651738qkm.99.2023.01.23.01.52.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 01:53:00 -0800 (PST)
+Message-ID: <8b80ac91-cf60-f5ff-a5dd-c5247c9c8f64@redhat.com>
+Date:   Mon, 23 Jan 2023 10:52:57 +0100
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.230-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.230-rc2
-X-KernelTest-Deadline: 2023-01-25T09:49+00:00
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/4] virtio_net: notify MAC address change on device
+ initialization
+Content-Language: en-US
+To:     Eli Cohen <elic@nvidia.com>, linux-kernel@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Cindy Lu <lulu@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>
+References: <20230122100526.2302556-1-lvivier@redhat.com>
+ <20230122100526.2302556-2-lvivier@redhat.com>
+ <07a24753-767b-4e1e-2bcf-21ec04bc044a@nvidia.com>
+From:   Laurent Vivier <lvivier@redhat.com>
+In-Reply-To: <07a24753-767b-4e1e-2bcf-21ec04bc044a@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.230 release.
-There are 51 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On 1/22/23 14:47, Eli Cohen wrote:
+> 
+> On 22/01/2023 12:05, Laurent Vivier wrote:
+>> In virtnet_probe(), if the device doesn't provide a MAC address the
+>> driver assigns a random one.
+>> As we modify the MAC address we need to notify the device to allow it
+>> to update all the related information.
+>>
+>> The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
+>> assign a MAC address by default. The virtio_net device uses a random
+>> MAC address (we can see it with "ip link"), but we can't ping a net
+>> namespace from another one using the virtio-vdpa device because the
+>> new MAC address has not been provided to the hardware.
+>>
+>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>> ---
+>>   drivers/net/virtio_net.c | 14 ++++++++++++++
+>>   1 file changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+>> index 7723b2a49d8e..25511a86590e 100644
+>> --- a/drivers/net/virtio_net.c
+>> +++ b/drivers/net/virtio_net.c
+>> @@ -3800,6 +3800,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+>>           eth_hw_addr_set(dev, addr);
+>>       } else {
+>>           eth_hw_addr_random(dev);
+>> +        dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
+>> +             dev->dev_addr);
+>>       }
+>>       /* Set up our device-specific information */
+>> @@ -3956,6 +3958,18 @@ static int virtnet_probe(struct virtio_device *vdev)
+>>       pr_debug("virtnet: registered device %s with %d RX and TX vq's\n",
+>>            dev->name, max_queue_pairs);
+>> +    /* a random MAC address has been assigned, notify the device */
+>> +    if (dev->addr_assign_type == NET_ADDR_RANDOM &&
+> Maybe it's better to not count on addr_assign_type and use a local variable to indicate 
+> that virtnet_probe assigned random MAC. The reason is that the hardware driver might have 
+> done that as well and does not need notification.
 
-Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-Anything received after that time might be too late.
+eth_hw_addr_random() sets explicitly NET_ADDR_RANDOM, while eth_hw_addr_set() doesn't 
+change addr_assign_type so it doesn't seem this value is set by the hardware driver.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.230-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-and the diffstat can be found below.
+So I guess it's the default value (NET_ADDR_PERM) in this case (even if it's a random 
+address from the point of view of the hardware).
 
-thanks,
+If you prefer I can replace it by "!virtio_has_feature(vdev, VIRTIO_NET_F_MAC)"?
 
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.230-rc2
-
-Hugh Dickins <hughd@google.com>
-    mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
-
-YingChi Long <me@inclyc.cn>
-    x86/fpu: Use _Alignof to avoid undefined behavior in TYPE_ALIGN
-
-Joshua Ashton <joshua@froggi.es>
-    drm/amd/display: Fix COLOR_SPACE_YCBCR2020_TYPE matrix
-
-hongao <hongao@uniontech.com>
-    drm/amd/display: Fix set scaling doesn's work
-
-Sasa Dragic <sasa.dragic@gmail.com>
-    drm/i915: re-disable RC6p on Sandy Bridge
-
-Khazhismel Kumykov <khazhy@chromium.org>
-    gsmi: fix null-deref in gsmi_get_variable
-
-Tobias Schramm <t.schramm@manjaro.org>
-    serial: atmel: fix incorrect baudrate setup
-
-Mohan Kumar <mkumard@nvidia.com>
-    dmaengine: tegra210-adma: fix global intr clear
-
-Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-    serial: pch_uart: Pass correct sg to dma_unmap_sg()
-
-Heiner Kallweit <hkallweit1@gmail.com>
-    dt-bindings: phy: g12a-usb3-pcie-phy: fix compatible string documentation
-
-Juhyung Park <qkrwngud825@gmail.com>
-    usb-storage: apply IGNORE_UAS only for HIKSEMI MD202 on RTL9210
-
-Maciej Żenczykowski <maze@google.com>
-    usb: gadget: f_ncm: fix potential NULL ptr deref in ncm_bitrate()
-
-Daniel Scally <dan.scally@ideasonboard.com>
-    usb: gadget: g_webcam: Send color matching descriptor per frame
-
-Prashant Malani <pmalani@chromium.org>
-    usb: typec: altmodes/displayport: Fix pin assignment calculation
-
-Prashant Malani <pmalani@chromium.org>
-    usb: typec: altmodes/displayport: Add pin assignment helper
-
-Alexander Stein <alexander.stein@ew.tq-group.com>
-    usb: host: ehci-fsl: Fix module alias
-
-Michael Adler <michael.adler@siemens.com>
-    USB: serial: cp210x: add SCALANCE LPE-9000 device id
-
-Alan Stern <stern@rowland.harvard.edu>
-    USB: gadgetfs: Fix race between mounting and unmounting
-
-Enzo Matsumiya <ematsumiya@suse.de>
-    cifs: do not include page data when checking signature
-
-Filipe Manana <fdmanana@suse.com>
-    btrfs: fix race between quota rescan and disable leading to NULL pointer deref
-
-Samuel Holland <samuel@sholland.org>
-    mmc: sunxi-mmc: Fix clock refcount imbalance during unbind
-
-Ian Abbott <abbotti@mev.co.uk>
-    comedi: adv_pci1760: Fix PWM instruction handling
-
-Flavio Suligoi <f.suligoi@asem.it>
-    usb: core: hub: disable autosuspend for TI TUSB8041
-
-Ola Jeppsson <ola@snap.com>
-    misc: fastrpc: Fix use-after-free race condition for maps
-
-Abel Vesa <abel.vesa@linaro.org>
-    misc: fastrpc: Don't remove map on creater_process and device_release
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    USB: misc: iowarrior: fix up header size for USB_DEVICE_ID_CODEMERCS_IOW100
-
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05CN modem
-
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05CN (SG) modem
-
-Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
-    USB: serial: option: add Quectel EC200U modem
-
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G (RS) modem
-
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G (CS) modem
-
-Duke Xin(辛安文) <duke_xinanwen@163.com>
-    USB: serial: option: add Quectel EM05-G (GR) modem
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    prlimit: do_prlimit needs to have a speculation check
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Detect lpm incapable xHC USB3 roothub ports from ACPI tables
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    usb: acpi: add helper to check port lpm capability using acpi _DSM
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Add a flag to disable USB3 lpm on a xhci root port level.
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Add update_hub_device override for PCI xHCI hosts
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Fix null pointer dereference when host dies
-
-Jimmy Hu <hhhuuu@google.com>
-    usb: xhci: Check endpoint is valid before dereferencing it
-
-Ricardo Ribalda <ribalda@chromium.org>
-    xhci-pci: set the dma max_seg_size
-
-Yuchi Yang <yangyuchi66@gmail.com>
-    ALSA: hda/realtek - Turn on power early
-
-Chris Wilson <chris@chris-wilson.co.uk>
-    drm/i915/gt: Reset twice
-
-Ding Hui <dinghui@sangfor.com.cn>
-    efi: fix userspace infinite retry read efivars after EFI runtime services page fault
-
-Ryusuke Konishi <konishi.ryusuke@gmail.com>
-    nilfs2: fix general protection fault in nilfs_btree_insert()
-
-Shawn.Shao <shawn.shao@jaguarmicro.com>
-    Add exception protection processing for vd in axi_chan_handle_err function
-
-Arend van Spriel <arend.vanspriel@broadcom.com>
-    wifi: brcmfmac: fix regression for Broadcom PCIe wifi devices
-
-Jaegeuk Kim <jaegeuk@kernel.org>
-    f2fs: let's avoid panic if extent_tree is not created
-
-Jiri Slaby (SUSE) <jirislaby@kernel.org>
-    RDMA/srp: Move large values to a new enum for gcc13
-
-Daniil Tatianin <d-tatianin@yandex-team.ru>
-    net/ethtool/ioctl: return -EOPNOTSUPP if we have no phy stats
-
-Hao Sun <sunhao.th@gmail.com>
-    selftests/bpf: check null propagation only neither reg is PTR_TO_BTF_ID
-
-Olga Kornievskaia <olga.kornievskaia@gmail.com>
-    pNFS/filelayout: Fix coalescing test for single DS
-
-
--------------
-
-Diffstat:
-
- ...ie-phy.yaml => amlogic,g12a-usb3-pcie-phy.yaml} |  6 +-
- Makefile                                           |  4 +-
- arch/x86/kernel/fpu/init.c                         |  7 +--
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |  6 ++
- drivers/dma/tegra210-adma.c                        |  2 +-
- drivers/firmware/efi/runtime-wrappers.c            |  1 +
- drivers/firmware/google/gsmi.c                     |  7 ++-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  4 +-
- .../gpu/drm/amd/display/dc/core/dc_hw_sequencer.c  |  4 +-
- drivers/gpu/drm/i915/gt/intel_reset.c              | 34 +++++++++--
- drivers/gpu/drm/i915/i915_pci.c                    |  3 +-
- drivers/infiniband/ulp/srp/ib_srp.h                |  8 ++-
- drivers/misc/fastrpc.c                             | 26 +++++----
- drivers/mmc/host/sunxi-mmc.c                       |  8 ++-
- .../wireless/broadcom/brcm80211/brcmfmac/pcie.c    |  2 +-
- drivers/staging/comedi/drivers/adv_pci1760.c       |  2 +-
- drivers/tty/serial/atmel_serial.c                  |  8 +--
- drivers/tty/serial/pch_uart.c                      |  2 +-
- drivers/usb/core/hub.c                             | 13 +++++
- drivers/usb/core/usb-acpi.c                        | 65 ++++++++++++++++++++++
- drivers/usb/gadget/function/f_ncm.c                |  4 +-
- drivers/usb/gadget/legacy/inode.c                  | 28 +++++++---
- drivers/usb/gadget/legacy/webcam.c                 |  3 +
- drivers/usb/host/ehci-fsl.c                        |  2 +-
- drivers/usb/host/xhci-pci.c                        | 45 +++++++++++++++
- drivers/usb/host/xhci-ring.c                       |  5 +-
- drivers/usb/host/xhci.c                            | 18 +++++-
- drivers/usb/host/xhci.h                            |  5 ++
- drivers/usb/misc/iowarrior.c                       |  2 +-
- drivers/usb/serial/cp210x.c                        |  1 +
- drivers/usb/serial/option.c                        | 17 ++++++
- drivers/usb/storage/uas-detect.h                   | 13 +++++
- drivers/usb/storage/unusual_uas.h                  |  7 ---
- drivers/usb/typec/altmodes/displayport.c           | 22 +++++---
- fs/btrfs/qgroup.c                                  | 25 ++++++---
- fs/cifs/smb2pdu.c                                  | 15 +++--
- fs/f2fs/extent_cache.c                             |  3 +-
- fs/nfs/filelayout/filelayout.c                     |  8 +++
- fs/nilfs2/btree.c                                  | 15 ++++-
- include/linux/usb.h                                |  3 +
- kernel/sys.c                                       |  2 +
- mm/khugepaged.c                                    | 14 ++---
- net/core/ethtool.c                                 |  3 +-
- sound/pci/hda/patch_realtek.c                      | 30 +++++-----
- .../selftests/bpf/prog_tests/jeq_infer_not_null.c  |  9 +++
- .../selftests/bpf/progs/jeq_infer_not_null_fail.c  | 42 ++++++++++++++
- 46 files changed, 432 insertions(+), 121 deletions(-)
-
+Thanks,
+Laurent
 
