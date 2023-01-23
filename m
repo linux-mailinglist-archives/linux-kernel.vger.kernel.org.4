@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B176C678777
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D748C67876D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbjAWUSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S232230AbjAWUSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbjAWUSX (ORCPT
+        with ESMTP id S231485AbjAWUST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:18:23 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C02C16AEB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:18:22 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h12so7947602wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:18:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cAE8c6dFz3FEq85yU3g0Xx5Oubt8sx5CHZhlIZdhMpA=;
-        b=b4SkVTCR3zcq4w4TMiDfjUHVzmIXti4vErDIN2OtGrU0v4sjm4FMTfyocdliEMmdzZ
-         QSpw6fD9bPpdIgt/3CjMwyE71U1hlty58Xojx7TShJ5snbVVqpE6qP+B79G7ZoFbnmJ/
-         yrhLOI5nK75w1hOaiKLLE9ulTCN2Pva6g2uHHIVZsI32fpoifY52KQ4q1FlIWl2yRM4i
-         mOiHYTtW856u+qRPI7zW92//0x7c2fOBeA6kYGxfE1ZxI8Vqzzk1fzUPDliUFAJ4dY4C
-         4fU3yq5CEegb0/s8uuaP62Hmz7c5kDSXcWhK+C6xP1JTkD8jDobrC4MslJ3n5HRzpXQc
-         IVrg==
+        Mon, 23 Jan 2023 15:18:19 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB7034C23;
+        Mon, 23 Jan 2023 12:18:18 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id r9so11396465oie.13;
+        Mon, 23 Jan 2023 12:18:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cAE8c6dFz3FEq85yU3g0Xx5Oubt8sx5CHZhlIZdhMpA=;
-        b=hGWmGMGcUCbhu19pTCs6UCZJVFyoSUFhOrVk64nvAWOnGCI+vU5goevoSkDhnOXkPs
-         1AA49yDHosrzm14DsvBVOj+tus785B6Y+XmNeo7n4zEmJgAgNuqmhiP/IkN+f8OlgIr7
-         NfHlT8WUrSTfUqc5P6NmdGA4yIKXbq4fA/KrbLgK2SKRUm4PJZ4VGgnUUHOTEZjAHl7v
-         O9vzirm/HtAAv+GUHt6jANOEmKnnwcT3rXZ7eJzs/9FwsPuV98uws6yTx85vVC9dBOeW
-         h+hp2v9hLU/2zFdHLIZE6PtYRlK0l9tnTM7BhKVeI8uKkYu+ctHcopYtVbzfsbsuWXjd
-         GcMg==
-X-Gm-Message-State: AFqh2krmLizFT+L2G3dmyb/OxjOcAN/BPGZIjHC/44dSkySWaacFAs8c
-        NlUzhIMK4yVA/3QhRazEG7svRA==
-X-Google-Smtp-Source: AMrXdXtRQT561eClfu+WVsxcTSlAtfwnyVBDIpONayWNok3WlPg7TXKUcWvPpuKkAikgcfGfmXOsbg==
-X-Received: by 2002:adf:fe03:0:b0:2be:516a:e6da with SMTP id n3-20020adffe03000000b002be516ae6damr12024505wrr.14.1674505100504;
-        Mon, 23 Jan 2023 12:18:20 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v1-20020a5d4b01000000b002be53aa2260sm210078wrq.117.2023.01.23.12.18.19
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mK0iGLqhByM+nmssrOHeinttd969xwUfXTpdV4dep5c=;
+        b=n/ZgXUNNpvEd+LVPWGtU33CCgPl/CxQ15SOHcmMCX9i7VvOG7Gpyh3NAen0b3PTBuk
+         8LUpeQOKDC97BvrD1suzTd2LMRI2XZRDc4omHS93RX97pKsputDMR9FKGRH6TBLEWwje
+         mPms+nhq0UcPV/wwWDCygp5yundkZOrS6jD64ByiLb7lvz3HLI4o/OsQfjPdoH120VVN
+         M5gQsMcupzL/7XwHKI3K3kh9wdYDNAW9BE0/5raRZOy1SZ+XPxZFLO6WRkHSCb/aYdc0
+         hHNJpw0sxCAbXZaOgNZfKkuf89FpdL8TftRun4UQ2EIS8VGkNuHlxUAXOgg1Oa5HwRhc
+         RaGA==
+X-Gm-Message-State: AFqh2kpLy1O/IpnoHislKCa5lZEULFiqJLdlOqD5RBnR0Uab+crQejS9
+        cBEL5mbUjo/XPWkMObd68w==
+X-Google-Smtp-Source: AMrXdXvG469eglRB6stlMcR9S5LSQ9Bd8cqzftLdjrwTlwQV82cvdD2vmDaBK/X/vfCMNq4asQc4ZA==
+X-Received: by 2002:aca:3205:0:b0:364:be69:fbc with SMTP id y5-20020aca3205000000b00364be690fbcmr12402093oiy.9.1674505097515;
+        Mon, 23 Jan 2023 12:18:17 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w21-20020a056808091500b0036eafb8eee9sm147503oih.22.2023.01.23.12.18.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 12:18:20 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Mon, 23 Jan 2023 12:18:17 -0800 (PST)
+Received: (nullmailer pid 2454843 invoked by uid 1000);
+        Mon, 23 Jan 2023 20:18:16 -0000
+Date:   Mon, 23 Jan 2023 14:18:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        ath11k@lists.infradead.org, de Goede <hdegoede@redhat.com>,
+        devicetree@vger.kernel.org,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        "David S. Miller" <davem@davemloft.net>,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] clk: qcom: rpmh: fix double RPMH_IPA_CLK assignment
-Date:   Mon, 23 Jan 2023 21:18:12 +0100
-Message-Id: <20230123201812.1230039-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230123201812.1230039-1-krzysztof.kozlowski@linaro.org>
-References: <20230123201812.1230039-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] dt-bindings: net: wireless: minor whitespace and name
+ cleanups
+Message-ID: <167450509566.2454785.18050476344855369899.robh@kernel.org>
+References: <20230118175413.360153-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118175413.360153-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RPMH_IPA_CLK is assigned twice:
 
-  drivers/clk/qcom/clk-rpmh.c:578:35: error: initialized field overwritten [-Werror=override-init]
+On Wed, 18 Jan 2023 18:54:13 +0100, Krzysztof Kozlowski wrote:
+> Minor cleanups:
+>  - Drop redundant blank lines,
+>  - Correct indentaion in examples,
+>  - Correct node names in examples to drop underscore and use generic
+>    name.
+> 
+> No functional impact except adjusting to preferred coding style.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/net/wireless/esp,esp8089.yaml    | 20 +++---
+>  .../bindings/net/wireless/ieee80211.yaml      |  1 -
+>  .../bindings/net/wireless/mediatek,mt76.yaml  |  1 -
+>  .../bindings/net/wireless/qcom,ath11k.yaml    | 11 ++-
+>  .../bindings/net/wireless/silabs,wfx.yaml     |  1 -
+>  .../bindings/net/wireless/ti,wlcore.yaml      | 70 +++++++++----------
+>  6 files changed, 50 insertions(+), 54 deletions(-)
+> 
 
-Fixes: aa055bf158cd ("clk: qcom: rpmh: define IPA clocks where required")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 393b83f6020e..45ee370f3307 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -575,7 +575,6 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
- 	[RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
- 	[RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
- 	[RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
--	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
- };
- 
- static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
--- 
-2.34.1
-
+Acked-by: Rob Herring <robh@kernel.org>
