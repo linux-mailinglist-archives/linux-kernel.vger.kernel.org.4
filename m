@@ -2,176 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D02677E96
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1E9677E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbjAWPCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S232140AbjAWPDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjAWPCw (ORCPT
+        with ESMTP id S230109AbjAWPDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:02:52 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB2022A14
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:02:48 -0800 (PST)
+        Mon, 23 Jan 2023 10:03:14 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B33D27D55
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:03:11 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id i185so13163327vsc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:03:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674486169; x=1706022169;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:mime-version:content-id:
-   content-transfer-encoding;
-  bh=GEa2wspqr6J3lyPu8fImvpGGVirL3i14PWRHbuLKCRk=;
-  b=jKV76K2EQIzz0sU49/ht+8P5KIMxgXHIaYG7vC4ik14gXQ08olr7exgA
-   O2pgZ9vTU4/JGOujVEVSbu97Y8ZT6vNj1EWaDyEh+c/d1TjKb4EXXWNtc
-   yADET10F6tmLVVxwLr5Pa8cJoU2t5WF5ecfz/q19YmzheENIpFCCxcfUn
-   /TpwZfK6C+ykTywT3bF8iL5FSCAE4xq5zumgZNL/acTJhZF5bVu6+6Vq0
-   qQ9Y3wAJ3cdKNiZfCskCXShblAgINI3v9Dozz3A+ZF0RaTf2O4l6GiJAt
-   FCjGaLvu1oWy+xItJJg+SWSYsURSJuHtYmcTwcZEfRkfAgPR35oIpfQ3G
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,239,1669071600"; 
-   d="scan'208";a="28595830"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 23 Jan 2023 16:02:46 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 23 Jan 2023 16:02:47 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 23 Jan 2023 16:02:47 +0100
-X-IronPort-AV: E=Sophos;i="5.97,239,1669071600"; 
-   d="scan'208";a="28595829"
-Received: from vmail01.tq-net.de ([10.150.72.11])
-  by mx1.tq-group.com with ESMTP; 23 Jan 2023 16:02:46 +0100
-Received: from vmail01.tq-net.de (10.150.72.11) by vmail01.tq-net.de
- (10.150.72.11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 23 Jan
- 2023 16:02:45 +0100
-Received: from vmail01.tq-net.de ([10.150.72.11]) by vmail01.tq-net.de
- ([10.150.72.11]) with mapi id 15.01.2507.016; Mon, 23 Jan 2023 16:02:45 +0100
-From:   "Stein, Alexander" <Alexander.Stein@tq-group.com>
-To:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "Tudor.Ambarus@microchip.com" <Tudor.Ambarus@microchip.com>
-CC:     "michael@walle.cc" <michael@walle.cc>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mtd: spi-nor: Fix shift-out-of-bounds
-Thread-Topic: [PATCH 1/2] mtd: spi-nor: Fix shift-out-of-bounds
-Thread-Index: AQHYOQodYTda3weuU0+yf380GWE6Ea6t9KqA
-Date:   Mon, 23 Jan 2023 15:02:45 +0000
-Message-ID: <5642351.DvuYhMxLoT@steina-w>
-References: <20211106075616.95401-1-tudor.ambarus@microchip.com>
- <5550605.DvuYhMxLoT@steina-w>
- <b8d01f36-663a-928a-6dbe-64952b5bd8d0@microchip.com>
-In-Reply-To: <b8d01f36-663a-928a-6dbe-64952b5bd8d0@microchip.com>
-Accept-Language: de-DE, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.150.72.21]
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vdEP1orVhR0RezSlr+Bk5SknaVZLercEc+OaPdFHTB0=;
+        b=UkrdsVI9+Jmy6yBulcAjFXOa5KDLNt/K+pp4xMPlyl5pSnX4DoDs1z82Meacrkv1pE
+         AT4wL/LSLxoKdBmTZF1FqwsffWcr8EewFmsU1pTtmwBBHF7yHH8TohJ9+6nJmyirc35j
+         49pOFcFtURN9yj/jwldEWNC1ztl62Pr7F5QV+JQ+omBLu/sxlOmPV+USO5KUQzL9nVNG
+         XZErEluGyIRGLpRedCyQ03HA+9WignWPryAcjLu4ML5ZjjTnu3xERVz83LMqb2lgz+kM
+         qgLWpEDmWpBb53fn7689wUfDrYAkXgsJoZaLiTD/YrnJbn+4PZ56X3TICuZxkggIaau2
+         KeyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vdEP1orVhR0RezSlr+Bk5SknaVZLercEc+OaPdFHTB0=;
+        b=yJ1BGFJB10tf37T4dfsRrglAVsK8l2P1n6yc/TaTkEaCzsQZ1O3YxlOdC12ftE4/2/
+         XD4XVOpHQJ2pG2ozz2bUT8VKkDxe1A64eUA6QIfQu4ZtQ9hMCJciALm9WmYJsV6Py6z3
+         Q1M60XsILYDBMRc4IUVV0yKLgyLFINu/4qGjfpV90A78e8V+hYsDdzaZjuo/skkCSgTR
+         sNApAhLPksrRxS2q/OmV1yDTtyOlM8eESQQmQaBbJxGRt7FuHIfrccKEHn+vfo3A9zVa
+         yGSCihemt/0S//r0t53v5sd6D+dB/sXzuSlbjnPL6hwAykxDEqo/+p3rInaNK0tsL5nK
+         mjww==
+X-Gm-Message-State: AFqh2kp8UvHZEGoDNhhrZmz2XK0sN5aDJHJs9a7T+RgU+bCyB7/ZADIZ
+        aoaPLHB2aNMFWiaC4zNq3SzLXd1+KUKzgvc8WkY/Ig==
+X-Google-Smtp-Source: AMrXdXtwrxv8GFdwtYOtaBTUCUyCHU2NPO8kUqVB15LrUE9fQKrc2O3kqc84mU9/kRL6M3zEdf5Ohtuo880V42lOx/I=
+X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
+ j8-20020a0561023e0800b003c51ac1bf38mr3656737vsv.78.1674486190097; Mon, 23 Jan
+ 2023 07:03:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Language: en-US
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <442701B35985684F88905FBEBE92D650@tq-group.com>
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230121134812.16637-1-mario.limonciello@amd.com> <20230121134812.16637-3-mario.limonciello@amd.com>
+In-Reply-To: <20230121134812.16637-3-mario.limonciello@amd.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 23 Jan 2023 16:02:59 +0100
+Message-ID: <CAMRc=Meeiix1BuPi81Ad08yePvd7U5S-AVNwU+vYUHv2VcDiEQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpiolib-acpi: Don't set GPIOs for wakeup in S3 mode
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Smythe <ncsmythe@scruboak.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tudor,=0A=
-=0A=
-Am Mittwoch, 16. M=E4rz 2022, 08:47:40 CET schrieb Tudor.Ambarus@microchip.=
-com:=0A=
-> On 3/16/22 09:39, Alexander Stein wrote:=0A=
-> =0A=
-> > [You don't often get email from alexander.stein@tq-group.com. Learn why=
-=0A=
-> > this is important at http://aka.ms/LearnAboutSenderIdentification.]=0A=
- =0A=
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the=0A=
-> > content is safe=0A=
- =0A=
-> > Hello,=0A=
-> =0A=
-> =0A=
-> hi,=0A=
-> =0A=
-> =0A=
-> > =0A=
-> > Am Samstag, 6. November 2021, 08:56:15 CET schrieb Tudor Ambarus:=0A=
-> > =0A=
-> >> When paring SFDP we may choose to mask out an erase type, passing=0A=
-> >> an erase size of zero to spi_nor_set_erase_type().=0A=
-> >> Fix shift-out-of-bounds and just clear the erase params when=0A=
-> >> passing zero for erase size.=0A=
-> >> While here avoid a superfluous dereference and use 'size' directly.=0A=
-> >>=0A=
-> >>=0A=
-> >>=0A=
-> >> UBSAN: shift-out-of-bounds in drivers/mtd/spi-nor/core.c:2237:24=0A=
-> >> shift exponent 4294967295 is too large for 32-bit type 'int'=0A=
-> >>=0A=
-> >>=0A=
-> >>=0A=
-> >> Fixes: 5390a8df769e ("mtd: spi-nor: add support to non-uniform SFDP SP=
-I=0A=
-> >> NOR=0A=
- flash memories") Reported-by: Alexander Stein=0A=
-> >> <Alexander.Stein@tq-group.com>=0A=
-> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>=0A=
-> >> ---=0A=
-> >> =0A=
-> >>  drivers/mtd/spi-nor/core.c | 9 +++++++--=0A=
-> >>  1 file changed, 7 insertions(+), 2 deletions(-)=0A=
-> >>=0A=
-> >>=0A=
-> >>=0A=
-> >> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c=
-=0A=
-> >> index 3d97c189c332..a1b5d5432f41 100644=0A=
-> >> --- a/drivers/mtd/spi-nor/core.c=0A=
-> >> +++ b/drivers/mtd/spi-nor/core.c=0A=
-> >> @@ -2230,8 +2230,13 @@ void spi_nor_set_erase_type(struct=0A=
-> >> spi_nor_erase_type=0A=
- *erase, u32 size, erase->size =3D size;=0A=
-> >> =0A=
-> >>       erase->opcode =3D opcode;=0A=
-> >>       /* JEDEC JESD216B Standard imposes erase sizes to be power of 2.=
-=0A=
-> >>       */=0A=
-> >> =0A=
-> >> -     erase->size_shift =3D ffs(erase->size) - 1;=0A=
-> >> -     erase->size_mask =3D (1 << erase->size_shift) - 1;=0A=
-> >> +     if (size) {=0A=
-> >> +             erase->size_shift =3D ffs(size) - 1;=0A=
-> >> +             erase->size_mask =3D (1 << erase->size_shift) - 1;=0A=
-> >> +     } else {=0A=
-> >> +             erase->size_shift =3D 0;=0A=
-> >> +             erase->size_mask =3D 0;=0A=
-> >> +     }=0A=
-> >> =0A=
-> >>  }=0A=
-> >>=0A=
-> >>=0A=
-> >>=0A=
-> >>  /**=0A=
-> > =0A=
-> > =0A=
-> > What is the status of this patch? It is not applied up until now, no? H=
-as=0A=
-> > it=0A=
- been superseeded?=0A=
-> > =0A=
-> =0A=
-> =0A=
-> I think it's marked with "changes requested". I'm going to send a v2.=0A=
-=0A=
-Is there a v2 somewhere?=0A=
-=0A=
-Best regards,=0A=
-Alexander=0A=
+On Sat, Jan 21, 2023 at 2:48 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+> adjusted the policy to enable wakeup by default if the ACPI tables
+> indicated that a device was wake capable.
+>
+> It was reported however that this broke suspend on at least two System76
+> systems in S3 mode and two Lenovo Gen2a systems, but only with S3.
+> When the machines are set to s2idle, wakeup behaves properly.
+>
+> Configuring the GPIOs for wakeup with S3 doesn't work properly, so only
+> set it when the system supports low power idle.
+>
+> Fixes: 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+> Fixes: b38f2d5d9615c ("i2c: acpi: Use ACPI wake capability bit to set wake_irq")
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2357
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2162013
+> Reported-by: Nathan Smythe <ncsmythe@scruboak.org>
+> Tested-by: Nathan Smythe <ncsmythe@scruboak.org>
+> Suggested-by: Raul Rangel <rrangel@chromium.org>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/gpio/gpiolib-acpi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index 9ef0f5641b521..17c53f484280f 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -1104,7 +1104,8 @@ int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name, in
+>                                 dev_dbg(&adev->dev, "IRQ %d already in use\n", irq);
+>                         }
+>
+> -                       if (wake_capable)
+> +                       /* avoid suspend issues with GPIOs when systems are using S3 */
+> +                       if (wake_capable && acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
+>                                 *wake_capable = info.wake_capable;
+>
+>                         return irq;
+> --
+> 2.34.1
+>
+
+Applied, thanks!
+
+Bart
