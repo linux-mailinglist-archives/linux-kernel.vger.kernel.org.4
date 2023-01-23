@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F04678370
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7EF678374
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjAWRjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S230377AbjAWRk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbjAWRjT (ORCPT
+        with ESMTP id S232032AbjAWRk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:39:19 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29C29423;
-        Mon, 23 Jan 2023 09:39:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674495557; x=1706031557;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=72mROXM5bY+9TiTxvULVJ7CcWsGH/U7JStjakO0iwsI=;
-  b=kSRRT1V7cZUbIySw8p/Fp9YzZIQr3RwrtlAZNMoWGIjNM6z3gmhHW+yT
-   TlyRqv4QofPtKkLAz4fHTKiPaEkz09WEkhyGn/OlfgjSdQ3WPZlchli78
-   ZOJeZUgZHEWzKTmUMhNPlxOOsOsVNcs/ZhtFLLzitooZJZembdqu6PMUY
-   L7KMoALWHjjAoMd2UFrPrORjpGDaE293IH6tVdvpLVCfVADvSBtTD3d9A
-   mBktlIJAkyn1HbjcjwEWQ1gzigYq2fB4U5LyLkyXU0NqWEqc0Cv6ffPIC
-   tZkbwfUSCD0bqjCd/6yQa86FFIPLzlsJXlEyrhwhuNCSHmwqVlnnfZ7Pt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="390601984"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="390601984"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 09:39:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="694017809"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="694017809"
-Received: from giangiac-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.47.71])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 09:39:14 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH 2/2] serial: liteuart: Correct error rollback
-Date:   Mon, 23 Jan 2023 19:38:57 +0200
-Message-Id: <20230123173857.40695-3-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230123173857.40695-1-ilpo.jarvinen@linux.intel.com>
-References: <20230123173857.40695-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 23 Jan 2023 12:40:27 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED60229423;
+        Mon, 23 Jan 2023 09:40:23 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30NHeBIh003751;
+        Mon, 23 Jan 2023 11:40:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674495611;
+        bh=sehj8PPhKP8iCZukopJOwhDBK6WdADlL1otDbYsZdzo=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=wemGoECxpv7xvHjez//xYEtRzNtCGkJhpZYRFhCJYoh9PUJzI9BZJ45Q1tD279Mfw
+         OdiEg3qoNOoXa84/FdLrszMakbM2d5Ignol6H753YJ/A8axgX3Xr1D1y4fSSM+3gyA
+         skG2k6vgJPKHlnHjeiptbj5Hu1t8dyHJQS9bPIGw=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30NHeBNa003327
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 23 Jan 2023 11:40:11 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 23
+ Jan 2023 11:40:11 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 23 Jan 2023 11:40:11 -0600
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30NHe7gx122259;
+        Mon, 23 Jan 2023 11:40:08 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Sinthu Raja <sinthu.raja@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH V5 0/3] AM68 SK: Add initial support
+Date:   Mon, 23 Jan 2023 23:09:57 +0530
+Message-ID: <167449552974.2854311.9918348404128839408.b4-ty@ti.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230116071446.28867-1-sinthu.raja@ti.com>
+References: <20230116071446.28867-1-sinthu.raja@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Goto to the correct rollback label instead of directly returning.
+Hi Sinthu Raja,
 
-Fixes: 5602cf99dcdc ("serial: liteuart: add IRQ support for the RX path")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/liteuart.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 16 Jan 2023 12:44:43 +0530, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
+> 
+> Hi All,
+> This series of patches add support for AM68 Starter kit(SK). AM68 SK
+> is a low cost, small form factor board designed for TI’s AM68 SoC.
+> 
+> Refer below link to AM68 Technical Reference Manual for further details:
+> http://www.ti.com/lit/pdf/spruj28
+> 
+> [...]
 
-diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index ef557d59e4c8..192ad681de35 100644
---- a/drivers/tty/serial/liteuart.c
-+++ b/drivers/tty/serial/liteuart.c
-@@ -313,7 +313,7 @@ static int liteuart_probe(struct platform_device *pdev)
- 
- 	ret = platform_get_irq_optional(pdev, 0);
- 	if (ret < 0 && ret != -ENXIO)
--		return ret;
-+		goto err_erase_id;
- 	if (ret > 0)
- 		port->irq = ret;
- 
--- 
-2.30.2
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+
+[1/3] dt-bindings: arm: ti: Add binding for AM68 SK
+      commit: 73b1c4f5f53e531f75d4b65dec4784cf67e685f2
+[2/3] arm64: dts: ti: Add initial support for AM68 SK System on Module
+      commit: 2b6277b76d42cbb781c558ea982e23cd770dd363
+[3/3] arm64: dts: ti: k3-am68-sk: Add support for AM68 SK base board
+      commit: a266c180b398eab5030bdcf2d1bbdc62fb7fc9c1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
 
