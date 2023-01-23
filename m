@@ -2,121 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF5367820B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C5A678210
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbjAWQoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S233127AbjAWQo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbjAWQnu (ORCPT
+        with ESMTP id S233461AbjAWQoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:43:50 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A32CC76
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:43:29 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id mp20so32049467ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:43:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vcXRJ0p9dSQwtYuK68UIrA1JOD2HVWbevssm1dEmW0s=;
-        b=QEIJ9QPG8x8B6vjgAz7fPyws6isNOggbyH0HLKQSe+gmyg2CqI/dL2j9T2bUzQCJU2
-         MbxF+0RmACrj0dSXZWId24OZo0NnvOFrTX7V897WOFSTvboJNdck4YnRpXg7sLKeK2qQ
-         ovNU8m9YzvGwH1BBGY8KC691AR26y0wQ6z2CanipjgUTf/djQzz28y6P9DjX1VE9jiV9
-         X7RHXODyBmHHbHhQb1oVVQJayVfQ+Zt/nNJEYX+axtmIHN8IhxuG2jsR5ydKLnhx2dGO
-         4zGymTQXechEewDa9gMHqbqhusEjCSHG03m95r9dcSsAy7UvUehnAc/nW20M0BCx3pma
-         F2Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vcXRJ0p9dSQwtYuK68UIrA1JOD2HVWbevssm1dEmW0s=;
-        b=3W9HNS6L5lytOBH2ElDc71EZ9yUdKxoNazLcnpNxWHhLbSnitopoKtQkCwTlIhr+17
-         V6YI/nvXSn1ReA7t+RiKtCfoP11abFA2pfCDnsASGk6LLI+rM/oYKONbzQzxlVvCfkzR
-         0Uthpj5Uul9kXVx3BHADCgPpDg1jV72el4TmgVdN1ogA+3x0EyvUuwlHG92YX4tstQxk
-         HwJ2eG9H3UdQ0QXZnmV26ac6b2/rkOJpB63Mon2I0zkArWZUM4xd3QonZl/nsJJaPEda
-         YaHLFDdkzY1y2ovSfrpyIo18oJo2fSnn5f2N9blIQ1ESkXZoBqP1Pld3Z28XHcdOrQ1y
-         w+7Q==
-X-Gm-Message-State: AFqh2kpDS1Nqcegq64aZ0WNjvsmUikvMGgc6HsAfXv7DgrxepZWdktDf
-        artWxt0PwDZKGPZ1If+NYgVZhQ==
-X-Google-Smtp-Source: AMrXdXtx10wrmb6agMuWawS+yP9oB+G7IkK4ZBE+8ZSkgIfby3Or4KQEVfURmboAKIwz3mV1Rfoz/A==
-X-Received: by 2002:a17:907:2119:b0:86e:d375:1f09 with SMTP id qn25-20020a170907211900b0086ed3751f09mr26068103ejb.67.1674492206500;
-        Mon, 23 Jan 2023 08:43:26 -0800 (PST)
-Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm22220825ejf.210.2023.01.23.08.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 08:43:26 -0800 (PST)
-Message-ID: <d05b15d4-04d8-2dc2-91ec-b5df0154aef9@linaro.org>
-Date:   Mon, 23 Jan 2023 17:43:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 4/5] ARM: dts: qcom: msm8974-oneplus-bacon: Add backlight
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Mon, 23 Jan 2023 11:44:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFC614EB4;
+        Mon, 23 Jan 2023 08:44:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D51B0B80BA2;
+        Mon, 23 Jan 2023 16:43:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54EF1C433D2;
+        Mon, 23 Jan 2023 16:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674492221;
+        bh=WqiKybcgqHZWpuB4CvE00HHXeoUcUZQ/JLOLaoCTkjs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VMfiu99BCpzXWevJaNTFsM7TvomFshh155tDVnj617ku4vl+uGiV/afQxhpl51xYZ
+         5/aKaa6OyNCwO6e9q1Vrp0kXheC3K/ETLPsFeLWBxiS76uDirPdh160vf5J6uYiz4s
+         abPu/xzky904dYcqdiC27e2B/YUuSdYp0QkTDKD3s7TYgO1rVggtOtHeJJEICbtUqK
+         wXB15hTfqe4/ZKJ4kmibkxznxf+m9eoUNboDd8ENZZhMWVzt6Z4m4AXWkVCeXy+OT+
+         /RqlQf1xn6I79xpgZQ0hxAAQ2lauf9uN/3pFVTk/Vv2c6KA1atbyBUIH4Vj85Y3SnA
+         pCFUI5I27C/uA==
+Date:   Mon, 23 Jan 2023 10:43:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230122-msm8974-bacon-features-v1-0-4049f565c24c@z3ntu.xyz>
- <20230122-msm8974-bacon-features-v1-4-4049f565c24c@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230122-msm8974-bacon-features-v1-4-4049f565c24c@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
+Message-ID: <20230123164339.GA892847@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230122001116.jbhttuaed7zuls26@mobilestation>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22.01.2023 17:48, Luca Weiss wrote:
-> Add the node for the lm3630 that is used to control backlight.
+On Sun, Jan 22, 2023 at 03:11:16AM +0300, Serge Semin wrote:
+> On Fri, Jan 20, 2023 at 04:50:36PM -0600, Bjorn Helgaas wrote:
+> > On Fri, Jan 13, 2023 at 08:14:06PM +0300, Serge Semin wrote:
+> > > Since the DW PCIe RP/EP driver is about to be updated to register the DW
+> > > eDMA-based DMA-engine the drivers build modes must be synchronized.
+> > > Currently the DW PCIe RP/EP driver is always built as a builtin module.
+> > > Meanwhile the DW eDMA driver can be built as a loadable module. Thus in
+> > > the later case the kernel with DW PCIe controllers support will fail to be
+> > > linked due to lacking the DW eDMA probe/remove symbols. At the same time
+> > > forcibly selecting the DW eDMA driver from the DW PCIe RP/EP kconfig will
+> > > effectively eliminate the tristate type of the former driver fixing it to
+> > > just the builtin kernel module.
+> > > 
+> > > Seeing the DW eDMA engine isn't that often met built into the DW PCIe
+> > > Root-ports and End-points let's convert the DW eDMA driver config to being
+> > > more flexible instead of just forcibly selecting the DW eDMA kconfig. In
+> > > order to do that first the DW eDMA PCIe driver config should be converted
+> > > to being depended from the DW eDMA core config instead of selecting the
+> > > one. Second the DW eDMA probe and remove symbols should be referenced only
+> > > if they are reachable by the caller. Thus the user will be able to build
+> > > the DW eDMA core driver with any type, meanwhile the dependent code will
+> > > be either restricted to the same build type (e.g. DW eDMA PCIe driver if
+> > > DW eDMA driver is built as a loadable module) or just won't be able to use
+> > > the eDMA engine registration/de-registration functionality (e.g. DW PCIe
+> > > RP/EP driver if DW eDMA driver is built as a loadable module).
+> > 
+> > I'm trying to write the merge commit log, and I understand the linking
+> > issue, but I'm having a hard time figuring out what the user-visible
+> > scenarios are here.
+> > 
+> > I assume there's something that works when CONFIG_PCIE_DW=y and
+> > CONFIG_DW_EDMA_PCIE=y but does *not* work when CONFIG_PCIE_DW=y and
+> > CONFIG_DW_EDMA_PCIE=m?
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> No. The DW eDMA code availability (in other words the CONFIG_DW_EDMA
+> config value) determines whether the corresponding driver (DW PCIe
+> RP/EP or DW eDMA PCI) is capable to perform the eDMA engine probe
+> procedure. Additionally both drivers has the opposite dependency from
+> the DW eDMA code.
+> |                |     DW PCIe RP/EP    |     DW eDMA PCIe     |
+> | CONFIG_DW_EDMA +----------------------+----------------------+
+> |                | Probe eDMA | KConfig | Probe eDMA | Kconfig |
+> +----------------+------------+---------+------------+---------+
+> |        y       |     YES    |   y,n   |     YES    |  y,m,n  |
+> |        m       |     NO     |   y,n   |     YES    |    m,n  |
+> |        n       |     NO     |   y,n   |     NO     |      n  |
+> +--------------------------------------------------------------+
+> 
+> Basically it means the DW PCIe RP/EP driver will be able to probe the
+> DW eDMA engine only if the corresponding driver is built into the
+> kernel. At the same time the DW PCIe RP/EP driver doesn't depend on
+> the DW eDMA core module config state. The DW eDMA PCIe driver in
+> opposite depends on the DW eDMA code config state, but will always be
+> able to probe the DW eDMA engine as long as the corresponding code is
+> loaded as either a part of the kernel or as a loadable module.
+> 
+> > If both scenarios worked the same, I would think the existing
+> > dw_edma_pcie_probe() would be enough, and you wouldn't need to call
+> > dw_pcie_edma_detect() from dw_pcie_host_init() and dw_pcie_ep_init().
+> 
+> No. These methods have been implemented for the absolutely different
+> drivers.
+> dw_edma_pcie_probe() is called for an end-point PCIe-device found on a
+> PCIe-bus.
+> dw_pcie_host_init()/dw_pcie_ep_init() and dw_pcie_edma_detect() are
+> called for a platform-device representing a DW PCIe RP/EP controller.
+> In other words dw_pcie_edma_detect() and dw_edma_pcie_probe() are in
+> no means interchangeable.
 
-Konrad
->  arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-> index 10ba3c94e26d..ffb486ceb6a6 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-> +++ b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-> @@ -99,6 +99,21 @@ rmi4-f12@12 {
->  			syna,clip-y-high = <1920>;
->  		};
->  	};
-> +
-> +	led-controller@36 {
-> +		compatible = "ti,lm3630a";
-> +		reg = <0x36>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		led@0 {
-> +			reg = <0>;
-> +			led-sources = <0 1>;
-> +			label = "lcd-backlight";
-> +			default-brightness = <80>;
-> +		};
-> +	};
->  };
->  
->  &blsp1_i2c6 {
-> 
+The question is what the user-visible difference between
+CONFIG_DW_EDMA_PCIE=y and CONFIG_DW_EDMA_PCIE=m is.  If there were no
+difference, dw_pcie_host_init() would not need to call
+dw_pcie_edma_detect().
+
+Can you give me a one- or two-sentence merge commit comment that
+explains why we want to merge this?  "Relax driver config settings"
+doesn't tell us that.
+
+Bjorn
