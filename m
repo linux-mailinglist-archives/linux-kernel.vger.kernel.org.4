@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCB967828C
+	by mail.lfdr.de (Postfix) with ESMTP id E855167828D
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjAWRFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S232696AbjAWRFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbjAWRFX (ORCPT
+        with ESMTP id S233112AbjAWRF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:05:23 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CD72CFF0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:17 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id v17so10909953oie.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:17 -0800 (PST)
+        Mon, 23 Jan 2023 12:05:27 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7B727D6E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:18 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id s124so10949773oif.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=enfabrica.net; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bIxaYzXG+vaQkdBzDvgzY0uG6gWijIiHh8BJL3SYw7o=;
-        b=Rngullo9FIQWmYiF+ZxTZkXPONEiae8rLiI21tPQuQM7sel0wQrIaqKGTfGlyJBYHi
-         BZloPHvNsYpAB8Gjfq+/MLy+JFG1bzk9t4DEAy5bahBhWPSMcKlhIaQDxnWkS4E2ZfMh
-         wZxkcA3BZUUaKrNCRvUanXkMY/EQKELh7+/g1BPznjojLSKoZdicMlmspziUhSnqotUK
-         4gf7K+AEVEXHRBuH95fye+Pn26CWzGSzOf0MgsD7nrYkVs73JTz+/9vjgUZZkV5BCZEJ
-         pKn+T9w2ueZQx9kRjRDuaeK0hP1PuZupTr0opup9/ZBIs7pDl5ZdZ4dC2rzu8Dko5QBl
-         yiaQ==
+        bh=f2GRRNrDhCrnlwVW91CW9FSUCR/cr5m9HywrBeRIIiU=;
+        b=finZTNj1eGWaV2AmpSJfvqcxLGxQU2fTE9yH9iw/wQIpHK0AtwI358OYChnUXm/8iJ
+         885GsZ7L+Qd2HsByw4673Ec8W+rPwybrY8NNH9uVdmzttMMGB3crZ6X3JaWMwMfvVtZ5
+         Kat9fNB7+JiCO6EMl4pHgb/8bzTiYCfgU5JtHk2K5dkGGaEJs7DbGIxeER6UUFvFSuBS
+         gyV74PLOidorQhN12tk9QB59wPIuufCpu3l30daIVWeu9BC3GItN8Y5FYyuJDN1xy7xZ
+         Dw46z8YRHz0afNEvAByA6Aq4wWLUJrJAEcTazwhOgd3Fof5IFs50ES3tOmcCZL68xZil
+         mneg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bIxaYzXG+vaQkdBzDvgzY0uG6gWijIiHh8BJL3SYw7o=;
-        b=Zibnmg+YKECytdB+XXbYqBkbcROq0KNMGRYEu2s5Dv/e0kV2TUYVnDg1c6QX6DaMwp
-         dmZCKzTy8GkHpFUbwnUCAUdQtnJ+LN+GsS2fVYt/a/2fI74IH+mwqYdGfsvGs1XPE0/5
-         VtQxCGBihDLuybGy23J5wktdsG7mtRBxogLSesY5nipHxRav0ItIkkTDCElOpVdP+HMt
-         2Jw+RWiMImjsUdODMiJFAHOT18oLUw88UOXvcSOCxEt2O5GHmPqgzxskvxHF8sfkF6lI
-         33AYOef1p0mz39J51WPtoglHF25eFZikSzJbJi60ENTR42FGcEcX9rXGdzw9W3XecqyQ
-         6A2Q==
-X-Gm-Message-State: AFqh2kqdvAoSNJqdw2U4vAW5RwOP3uKlt0NX48wgs4RjAY+B0Cuvm2ry
-        PYbPdqrP3GOjQ2wWW7Eteln41NF39rZRv+ogpzU71Z3Mr8r7DXvxPtDkuIgdhA6guTCc/KNeI0V
-        x7yLPS2fjBqU1/UgFaBhgoXuioi6rZBAWtSP6yFs0B+Wlvb2GQmn5jd0fNaCSgpbzOMH6lNPc7C
-        v78H3AjEipAJ5Z
-X-Google-Smtp-Source: AMrXdXtmQsBbX7TxTVWro+5YzIyFVsPhCNiCtKLjq/clS6dNMO6H0Okkpr01ZFCld64pV0RG/sUUQA==
-X-Received: by 2002:aca:ea56:0:b0:364:458a:a719 with SMTP id i83-20020acaea56000000b00364458aa719mr12645525oih.23.1674493516311;
-        Mon, 23 Jan 2023 09:05:16 -0800 (PST)
+        bh=f2GRRNrDhCrnlwVW91CW9FSUCR/cr5m9HywrBeRIIiU=;
+        b=wtJAjAu6kTq6tzVtqGEecOsSO4HtCatwlLSjJVnfrFBpeaNpaeo7N51zWtUyJ4Tfg/
+         UpdCSDnJCD4c/qR835Jdf2M+eeBjVMOgsHp3MbT/bT0+sxsmcw8dj8+oBjHkjpAZBlUS
+         +wj6fZn0TxydNfsMJP5MiLuxCpqPkdiNWZd4+Dt4EIy9MUitdGFTckzVaFOksZNzezVA
+         Hgfcv1tnhM/x3rCYd3XU6yEqviGZicgmDyuY/LZPwoIgWI9ft0bfmmmceEwxcARJk6pt
+         gteOlDniMfnFERgiulOjfkWhNTihPd8x9W8HuyJtKlxf73GPU5TQxr7sFh7gL/BeiOtB
+         caSw==
+X-Gm-Message-State: AFqh2ko+MqRxjn2snaNbo5c8UCZo6WOsBNXJRw/ZjgXIANVS2vJiuskL
+        aPUJFpHySW3mIwfqYSWOSJZTTy3kyfvLpyD2ieeeOzKJL5wQ/ViS9HJsUjKeAab2vgCck8KsIL8
+        CpMCWNOE+403AKNcKTYwdApFYCrbN35pHNibirLvo1mkM4S+QCL9hD3f0Bj/4pm7hanuQig33ub
+        xRnYB62CQPzA==
+X-Google-Smtp-Source: AMrXdXtf3m6tswAwu4JAcP7eCbHkFbal+Boirz42qiwEY8KwjUMPKGRMWdR5Ardxhr7Hb+ZCseEe/g==
+X-Received: by 2002:a05:6808:1414:b0:363:b9af:ec89 with SMTP id w20-20020a056808141400b00363b9afec89mr15920247oiv.1.1674493518413;
+        Mon, 23 Jan 2023 09:05:18 -0800 (PST)
 Received: from DESKTOP-B7RB26P.localdomain (cpe-70-114-202-97.austin.res.rr.com. [70.114.202.97])
-        by smtp.gmail.com with ESMTPSA id 2-20020aca0502000000b0035ec1384c9esm23160163oif.23.2023.01.23.09.05.14
+        by smtp.gmail.com with ESMTPSA id 2-20020aca0502000000b0035ec1384c9esm23160163oif.23.2023.01.23.09.05.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 09:05:15 -0800 (PST)
+        Mon, 23 Jan 2023 09:05:18 -0800 (PST)
 From:   George Prekas <george@enfabrica.net>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -72,9 +72,9 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Andrei Vagin <avagin@gmail.com>,
         George Prekas <george@enfabrica.net>
-Subject: [PATCH 5/9] mm: kmemleak: do not scan sparsemap_buf
-Date:   Mon, 23 Jan 2023 11:04:15 -0600
-Message-Id: <20230123170419.7292-6-george@enfabrica.net>
+Subject: [PATCH 6/9] mm: kmemleak: do not scan cpu_cache of struct kmem_cache
+Date:   Mon, 23 Jan 2023 11:04:16 -0600
+Message-Id: <20230123170419.7292-7-george@enfabrica.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230123170419.7292-1-george@enfabrica.net>
 References: <20230123170419.7292-1-george@enfabrica.net>
@@ -89,37 +89,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sparsemap_buf is used for vmemmap and vmemmap contains an array of
-struct page. kmemleak scans the pages separately. If it scans them
-twice, then it will duplicate the number of found references and will
-cause missed leaks.
+The code already makes sure that kmemleak will not scan similar caches:
+array_cache and alien_cache. For the cpu_cache, the code takes a
+different approach using kmemleak_erase. This approach handles object
+allocations but does not handle transfers to other caches and leads to
+undetected leaks.
+
+According to the comment in alloc_arraycache: [...] when such objects
+are allocated or transferred to another cache the pointers are not
+cleared and they could be counted as valid references during a kmemleak
+scan. Therefore, kmemleak must not scan such objects.
 
 Signed-off-by: George Prekas <george@enfabrica.net>
 ---
- mm/sparse.c | 3 +++
- 1 file changed, 3 insertions(+)
+ mm/slab.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/mm/sparse.c b/mm/sparse.c
-index 2779b419ef2a..49df7a052037 100644
---- a/mm/sparse.c
-+++ b/mm/sparse.c
-@@ -14,6 +14,7 @@
- #include <linux/swap.h>
- #include <linux/swapops.h>
- #include <linux/bootmem_info.h>
-+#include <linux/kmemleak.h>
+diff --git a/mm/slab.c b/mm/slab.c
+index 29300fc1289a..a927e1a285d1 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1744,6 +1744,7 @@ static struct array_cache __percpu *alloc_kmem_cache_cpus(
+ 	for_each_possible_cpu(cpu) {
+ 		init_arraycache(per_cpu_ptr(cpu_cache, cpu),
+ 				entries, batchcount);
++		kmemleak_no_scan(per_cpu_ptr(cpu_cache, cpu));
+ 	}
  
- #include "internal.h"
- #include <asm/dma.h>
-@@ -466,6 +467,8 @@ static void __init sparse_buffer_init(unsigned long size, int nid)
- 	 */
- 	sparsemap_buf = memmap_alloc(size, section_map_size(), addr, nid, true);
- 	sparsemap_buf_end = sparsemap_buf + size;
-+	/* sparsemap_buf has been registered with its physical address in kmemleak */
-+	kmemleak_no_scan_phys(virt_to_phys(sparsemap_buf));
+ 	return cpu_cache;
+@@ -3023,20 +3024,8 @@ static inline void *____cache_alloc(struct kmem_cache *cachep, gfp_t flags)
+ 
+ 	STATS_INC_ALLOCMISS(cachep);
+ 	objp = cache_alloc_refill(cachep, flags);
+-	/*
+-	 * the 'ac' may be updated by cache_alloc_refill(),
+-	 * and kmemleak_erase() requires its correct value.
+-	 */
+-	ac = cpu_cache_get(cachep);
+ 
+ out:
+-	/*
+-	 * To avoid a false negative, if an object that is in one of the
+-	 * per-CPU caches is leaked, we need to make sure kmemleak doesn't
+-	 * treat the array pointers as a reference to the object.
+-	 */
+-	if (objp)
+-		kmemleak_erase(&ac->entry[ac->avail]);
+ 	return objp;
  }
  
- static void __init sparse_buffer_fini(void)
 -- 
 2.37.1
 
