@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B686785B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11D76785B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjAWTCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S232032AbjAWTDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjAWTCj (ORCPT
+        with ESMTP id S231548AbjAWTDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:02:39 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3053C166F2;
-        Mon, 23 Jan 2023 11:02:38 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NHSJPL007475;
-        Mon, 23 Jan 2023 19:02:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ZY0xpRJaWKFLpnnJgp+bGJO/WmfFGXwo7nAzo2SfNzE=;
- b=FFh5XNk7B8Ilse9g9ouGtdNrubjvCmCMf/XAEgSu+Cu6qwq1o7BVtCaRVwYgZMOGgx1i
- SNwZUqQq+ICd6TLjwnJ2yw0VBKGjH+sWkKeepla/e/DIEZ/DIk0JGfBUKWvmZGcxatVu
- Fx/0wY5AuJo0xwcpW2yzEzvrnNd3crGOWi5uKLy0xaFlmAJIZRBs0qbvygNEu3xNuGJB
- L6aXQPhPKxWSfoVw8o4NNvB8JXqUJNiVT/8sCJplA6KTuHBazlORsej12BwnB1LszIFu
- VMn/De6nHUT6wjl5XQcsmKClmxW5wkiLBgCFkCv3Zw4HV4d6EIkdIdOV2Zb2FTb+I85A iw== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n9t3djs3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 19:02:31 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NHxPYK004808;
-        Mon, 23 Jan 2023 19:02:31 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n87p7sdwe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 19:02:30 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30NJ2Snv7602826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Jan 2023 19:02:29 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBA735805A;
-        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29FE958062;
-        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
-Received: from [9.160.36.55] (unknown [9.160.36.55])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
-Message-ID: <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
-Date:   Mon, 23 Jan 2023 14:02:27 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: linux-next: manual merge of the kvms390 tree with the s390 tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230123121245.526d262b@canb.auug.org.au>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <20230123121245.526d262b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 35m911hxxgigjn5pZCaXtfl3BaGm9dox
-X-Proofpoint-ORIG-GUID: 35m911hxxgigjn5pZCaXtfl3BaGm9dox
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
- impostorscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- adultscore=0 mlxscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301230178
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 14:03:36 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0231746B5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:03:33 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t13-20020a056902018d00b0074747131938so14058074ybh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=c0aPFGh+EbhpDA8u1HNNvqmerWyOrSTVQUevWLuMx4M=;
+        b=Q1Xep6WuRTECPnzaTPDk1AXEL0yLRuhCEvbplErSAnbd3CrR3YvxHq8r6K6RXJ0UgQ
+         Zy2ZjKKcZrIHaA+Rt3o0dEBEmLbsQ1uXj+SI3S5NUvseyPfZUGWSz1p01WV7HXt1Kkia
+         ihKUU5v8C4KxEVhd0lK5i8iCySG9GJqG+An625QnLrjcNy6bBixHCsYTmUJ6leNwQAz1
+         aqzT51Gj+ovQJOhjP3uksyHBBD4zwCSMHMbjw8kMixNxfo/P4FQoGbkv8y6Nkr2/MHRn
+         E/xHJLGV1JUnQt7nIg2vV9iEZ/FTdPSo6JiagwOvMc1Cjyn4v0HSAUPkW99i91a93N5T
+         mrwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c0aPFGh+EbhpDA8u1HNNvqmerWyOrSTVQUevWLuMx4M=;
+        b=qraoe3XcVv/ucXe5ooHnSmdAdeRe/wD7K4mXSUzzHhVqCV5BkoQwFARQNgtehXaznQ
+         2Fl9vX2CwUe/4ifIfrOI1HdnKDf1kvADCNblfAKOn4uRO9UYPIXj4WfLmiQygYixiCQW
+         X18hkOKHIRXqF187IYk1wgFHeaULvik2BExIy+cVZi0jK1tad5lp8UgrgWZZlvuFFGaw
+         v/FpqL70m3ARzzF9OVhLNCc9i+VJPFgNL6Z0FKHPHDaSTNYEG8XED22N3480dkfDA5ep
+         9NTDEnJXFZd5Ev6FXrkqVuvhK/3yUyayj/f/UvVpVMahhWFzQqXcDPt1YdpMQwbspseP
+         gyIA==
+X-Gm-Message-State: AFqh2kq7u9F2x9wDMvTDTJk+fcibGqf5+djIVDFe8QxzuaS7O83Q3dZ6
+        yQ150YNqKidOliEVr82mdPZkVe5JIGPuL4Wiic3PBg6DmrdwyWVRaxf6WXrH5mNjLHLmR8YZhn4
+        Q5rUbAiKExArsXg0XWIsFtfHh6iXe+RPkKn2oYPeXmPt1cVtti7J+aygImfjqwtdnDC72LDKi
+X-Google-Smtp-Source: AMrXdXvBPYOOk8PHU2HSNvIU68hsuQuFEwQeQIo3oAvzHvykBwTNsWTHYm5Oh9iFucvI//nhkWcvZo2zMZN8
+X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
+ (user=bgardon job=sendgmr) by 2002:a25:300a:0:b0:7e9:643f:155a with SMTP id
+ w10-20020a25300a000000b007e9643f155amr1996264ybw.607.1674500612211; Mon, 23
+ Jan 2023 11:03:32 -0800 (PST)
+Date:   Mon, 23 Jan 2023 19:03:27 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
+Message-ID: <20230123190329.520285-1-bgardon@google.com>
+Subject: [PATCH v2 0/2] selftests: KVM: Add a test for eager page splitting
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+David Matlack recently added a feature known as eager page splitting
+to x86 KVM. This feature improves vCPU performance during dirty
+logging because the splitting operation is moved out of the page
+fault path, avoiding EPT/NPT violations or allowing the vCPU threads
+to resolve the violation in the fast path.
 
-On 1/22/23 8:12 PM, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the kvms390 tree got a conflict in:
->
->    drivers/s390/crypto/vfio_ap_ops.c
->
-> between commit:
->
->    0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for queue reset")
->
-> from the s390 tree and commit:
->
->    bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for queue reset")
->
-> from the kvms390 tree.
->
-> They seem to do the same thing, so I used the version of this file from
-> the s390 tree as it's commit is much newer and has other changes to this
-> file i.e. I effectively dropped the kvms390 tree commit.
+While this feature is a great performance improvement, it does not
+have adequate testing in KVM selftests. Add a test to provide coverage
+of eager page splitting.
 
+Patch 1 is a quick refactor to be able to re-use some code from
+dirty_log_perf_test.
+Patch 2 adds the actual test.
 
-That's odd, the patch series posted to the kernel mailing lists did not 
-have both of those patches. I think the problem may have occurred 
-because there was an earlier version of the patch in question that was 
-used to debug a problem in our CI. That patch should have been reverted 
-prior to installing the latest version.
+V1->V2:
+	Run test in multiple modes, as suggested by David and Ricardo
+	Cleanups from shameful copy-pasta, as suggested by David
 
+Ben Gardon (2):
+  selftests: KVM: Move dirty logging functions to memstress.(c|h)
+  selftests: KVM: Add page splitting test
 
->
-> I fixed it up (see above) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/dirty_log_perf_test.c       |  84 +-----
+ .../selftests/kvm/include/kvm_util_base.h     |   1 +
+ .../testing/selftests/kvm/include/memstress.h |   8 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +
+ tools/testing/selftests/kvm/lib/memstress.c   |  72 +++++
+ .../kvm/x86_64/page_splitting_test.c          | 278 ++++++++++++++++++
+ 7 files changed, 372 insertions(+), 77 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/page_splitting_test.c
+
+-- 
+2.39.1.405.gd4c25cc71f-goog
+
