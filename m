@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAC16786DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029226786E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbjAWTx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S232343AbjAWTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjAWTxY (ORCPT
+        with ESMTP id S231468AbjAWTyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:53:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C90D22DFA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674503560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aze1G6mgWzCcRJXgFNa8HjfCbOTiXXX/A6U9nxgbJkM=;
-        b=eYP8SXiVmitY88lZdljXv1D8/xQEjI9MwVGIX3JQlCIC7EfHcQXSeonAvotqTafdtQU7yg
-        X9IrUjfJKorckbldp39qFexYJMGYhkSd3Hr1Ov0KcHmBORVkV1HB62J0iRnUkjSEtDZu9B
-        rbLjed23vVDYv/+XPs+dOJpYXQNbxnA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-JZDVN0L7MfuQFgCDu-fvCA-1; Mon, 23 Jan 2023 14:52:36 -0500
-X-MC-Unique: JZDVN0L7MfuQFgCDu-fvCA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB437380406A;
-        Mon, 23 Jan 2023 19:52:35 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-192-224.brq.redhat.com [10.40.192.224])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 6618D175A2;
-        Mon, 23 Jan 2023 19:52:32 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 23 Jan 2023 20:52:33 +0100 (CET)
-Date:   Mon, 23 Jan 2023 20:52:29 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org
-Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
- for sud configuration
-Message-ID: <20230123195228.GD6268@redhat.com>
-References: <20230123032942.18263-1-gregory.price@memverge.com>
- <20230123032942.18263-4-gregory.price@memverge.com>
- <20230123154101.GA6268@redhat.com>
- <Y87OEdDXwZG8pmmE@memverge.com>
+        Mon, 23 Jan 2023 14:54:31 -0500
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A49030EBD;
+        Mon, 23 Jan 2023 11:54:30 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id w14so15948651edi.5;
+        Mon, 23 Jan 2023 11:54:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7OnFmO9xTR9Xu/C+ebnyO395E7LnrsXHhVtvHZqLro4=;
+        b=OfUhXFjPcuBGN1Yp2tm+KNK24mlwVEF6HJ4K6Q0lkUE7srQSs02pBoovIGek5ySAfG
+         0kk4KazibhHQqORSxLKejOmpdAPQLeYGuxM8j/dcgo43wrngZGG0WiqmFh6FYj3TdhSu
+         J26ysP1CQ/j49U+rsJiJkXfsFr5kh/IVF3YOuveYO+56nfnDeFevu5qufGhL8IUwN8jd
+         37AsRJr2I9VtpiJm808wXcF6VsTyJ2OHgp7rrojRqXrFTSzUlg0ocHlk6SyEh7I5hvIQ
+         3mPsV7ZZK1IkQ6Wo4f+WpNMZJnYrXwxt5+98AD3NxbJvgpy3eMGuz1cV5VyewIyB9OXH
+         OEMw==
+X-Gm-Message-State: AO0yUKUoCNtRSs3YrVghaUn7wou4bLzcggCAENEgB/GRg0StG8MkpStD
+        1MEyWCXnq00R9UwUevnaSyaTiZ2dFWr4VZ8UkmI=
+X-Google-Smtp-Source: AK7set9cTilvBV+L5qo6TMmPzDimd8d6AOUOsy91hVUnjjLUoYABTMFOCbFaqCLdAWnKXOhc1HAxC/jEk9VOXmYMfpY=
+X-Received: by 2002:a50:ec8f:0:b0:49f:6dda:9e1f with SMTP id
+ e15-20020a50ec8f000000b0049f6dda9e1fmr92431edr.251.1674503668936; Mon, 23 Jan
+ 2023 11:54:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y87OEdDXwZG8pmmE@memverge.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <5916342.lOV4Wx5bFT@kreacher> <2882611.e9J7NaK4W3@kreacher>
+ <3234230.44csPzL39Z@kreacher> <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
+In-Reply-To: <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 23 Jan 2023 20:54:17 +0100
+Message-ID: <CAJZ5v0gK_O-9_tPEVbmBbf+2vxVA2_C5tPGOo_qghyw86pohoA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2 drivers
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/23, Gregory Price wrote:
+On Mon, Jan 23, 2023 at 8:26 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> So i think dropping 2/3 in the list is good.  If you concur i'll do
-> that.
+> On Mon, 2023-01-23 at 19:52 +0100, Rafael J. Wysocki wrote:
+> > On Monday, January 23, 2023 7:45:30 PM CET Rafael J. Wysocki wrote:
+> > > On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki wrote:
+> > > > Hi All,
+> > > >
+> > > > This is a new version of the series from Daniel posted as:
+> > > >
+> > > > https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
+> > > >
+> > > > The first patch has been reworked (see
+> > > > https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/)
+> > > > and the other two have been rebased on top of it.
+> > > >
+> > > > I have retained the R-by tags from Rui, because the changes in
+> > > > patches [2-3/3] are
+> > > > not essential, but I think that this new set needs to be tested
+> > > > again.
+> > > >
+> > > > Srinivas, can you test it please?
+> > >
+> > > Something's wrong, sorry.
+> > >
+> > > I get some invalid trip temperatures with this set.
+> >
+> > Sorry, scratch this, I got confused by THERMAL_TEMP_INVALID showing
+> > up in
+> > sysfs, but it did show up before too.
+> >
+> > Please test!
+> >
+>
+> >
+>
+> >
+> It will be easy if you have some test branch to avoid dependecies on
+> other patches.
 
-Well I obviously think that 2/3 should be dropped ;)
-
-As for 1/3 and 3/3, feel free to add my reviewed-by.
-
-Oleg.
-
+Please see the thermal-intel-test branch in linux-pm.git.  It's this
+series on top of the core thermal stuff + ARM drivers.
