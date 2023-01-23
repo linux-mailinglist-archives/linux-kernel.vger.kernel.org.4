@@ -2,112 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458466775C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF316775CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjAWHp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S231515AbjAWHsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjAWHp0 (ORCPT
+        with ESMTP id S231378AbjAWHsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:45:26 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD6FA5E3;
-        Sun, 22 Jan 2023 23:45:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674459925; x=1705995925;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KIyndeexdTHv4RNt0zG8sPiItU4fljUQ7URxmJcbYtE=;
-  b=Nlfqa6uqejgMA3SOfxCjS8GvP2FhAcLK9tLfTzTSPSaTzoa+85c/z6Tu
-   BJLyHFmJjYAxo/VQcBIVXSwzICBnXKi76ETvQH5eLpMiOWA2Z7tT7f+fB
-   b4WFSOnJA0etXDXQaYA4NubxGqC/tx9m1geIBzNhIAQ3pFQew3WrmHblj
-   nK4C5oKiRzmiJPLnv3LvxcVeOTLOXkAU92hKzal03kQdNnmF0bRKwMjtY
-   YRvcphggNZvtO6bm8MHidgZIELxXOZ59llpWK4hCJx8HPYA4M20bn3QcA
-   rtTopNfUKy4a921rqVsQo5+Fh82TQ+/LeUdpaL9tNkhDkYoekyU3a6+9z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="390492209"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="390492209"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 23:45:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="785499743"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="785499743"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Jan 2023 23:45:00 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJrVk-0005VE-0k;
-        Mon, 23 Jan 2023 07:45:00 +0000
-Date:   Mon, 23 Jan 2023 15:44:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH 2/8] eventfs: adding eventfs dir add functions
-Message-ID: <202301231550.WxxxHvcl-lkp@intel.com>
-References: <1674407228-49109-2-git-send-email-akaher@vmware.com>
+        Mon, 23 Jan 2023 02:48:45 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ECFEB6C;
+        Sun, 22 Jan 2023 23:48:41 -0800 (PST)
+Received: from [192.168.1.103] (unknown [103.86.18.176])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 030D72B3;
+        Mon, 23 Jan 2023 08:48:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674460117;
+        bh=Yf7dMr2OR4TnIoULBmpOCg94iMGE3jqxfzU/ffcRV/I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o53JBhnbczTfiUKuw7d/YRbuRKZsbdnxanySZPPuDITzrsRJ6OWIziWZ8UPShIT6b
+         tst1WUj/iaYTDMKpeUvEfsFJKliwtX3q+L24qDzinypwhu5gbbdZJLhdOvIrpWYtG1
+         0ZGIBhdRHyXg7k29yVg1Zu0sqsu6HfFgruXgm2To=
+Message-ID: <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
+Date:   Mon, 23 Jan 2023 13:18:30 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674407228-49109-2-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
+ with a custom bus_type
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>
+References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
+ <786df750-221e-82fc-a324-d30261296974@i2se.com>
+From:   Umang Jain <umang.jain@ideasonboard.com>
+In-Reply-To: <786df750-221e-82fc-a324-d30261296974@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajay,
+Hi Stefan,
 
-Thank you for the patch! Perhaps something to improve:
+Thank for the testing.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc5 next-20230123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 1/23/23 5:04 AM, Stefan Wahren wrote:
+> Hi Umang,
+>
+> Am 20.01.23 um 21:10 schrieb Umang Jain:
+>> This series just introduces five extra patches for dropping include
+>> directives from Makefiles (suggested by Greg KH) and rebased.
+>>
+>> The main patch (6/6) removes platform device/driver abuse and moves
+>> things to standard device/driver model using a custom_bus. Specific
+>> details are elaborated in the commit message.
+>>
+>> The patch series is based on top of d514392f17fd (tag: next-20230120)
+>> of linux-next.
+>
+> applied this series on top of linux-next and build it with 
+> arm/multi_v7_defconfig plus the following:
+>
+> CONFIG_BCM_VIDEOCORE=y
+> CONFIG_BCM2835_VCHIQ=m
+> CONFIG_VCHIQ_CDEV=y
+> CONFIG_SND_BCM2835=m
+> CONFIG_VIDEO_BCM2835=m
+> CONFIG_BCM2835_VCHIQ_MMAL=m
+>
+> and the devices doesn't register on Raspberry Pi 3 B Plus:
+>
+> [   25.523337] vchiq: module is from the staging directory, the 
+> quality is unknown, you have been warned.
+> [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
+> bcm2835_audio vchiq device
+> [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
+> bcm2835-camera vchiq device
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-patch link:    https://lore.kernel.org/r/1674407228-49109-2-git-send-email-akaher%40vmware.com
-patch subject: [PATCH 2/8] eventfs: adding eventfs dir add functions
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230123/202301231550.WxxxHvcl-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/db5e58a9349f39590a8fb39f0c3373c4c483e064
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-        git checkout db5e58a9349f39590a8fb39f0c3373c4c483e064
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
+I was able to reproduce and it seems the issue here is the change 
+mentioned in the cover
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+- drop dma_set_mask_and_coherent
 
-sparse warnings: (new ones prefixed by >>)
->> fs/tracefs/event_inode.c:27:31: sparse: sparse: symbol 'eventfs_root_dir_inode_operations' was not declared. Should it be static?
+in V6.
 
-vim +/eventfs_root_dir_inode_operations +27 fs/tracefs/event_inode.c
+(I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp applied 
+so my branch has the DMA hunk included while I was testing V6)
 
-    26	
-  > 27	const struct inode_operations eventfs_root_dir_inode_operations = {
-    28	};
-    29	
+Below is the hunk which should resolve the issue.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+@@ -6,6 +6,7 @@
+   */
+
+  #include <linux/device/bus.h>
++#include <linux/dma-mapping.h>
+  #include <linux/slab.h>
+  #include <linux/string.h>
+
+@@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent, 
+const char *name)
+         device->dev.type = &vchiq_device_type;
+         device->dev.release = vchiq_device_release;
+
++       ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
++       if (ret < 0) {
++               vchiq_device_release(&device->dev);
++               return ret;
++       }
++
+         ret = device_register(&device->dev);
+         if (ret) {
+                 put_device(&device->dev);
+
+It seems we need to include the dma_set_mask_and_coherent() even if 
+bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look into 
+why is that/
+
+  Laurent, any thoughts on this please?
