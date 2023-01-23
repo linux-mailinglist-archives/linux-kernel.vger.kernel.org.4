@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915B9678444
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDFA67844D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbjAWSPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
+        id S232348AbjAWSSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjAWSPr (ORCPT
+        with ESMTP id S229607AbjAWSSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:15:47 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119F7272C;
-        Mon, 23 Jan 2023 10:15:47 -0800 (PST)
+        Mon, 23 Jan 2023 13:18:06 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F5B83CA;
+        Mon, 23 Jan 2023 10:18:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674497747; x=1706033747;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fCebxrq3wvFUCTQ6n7ODNVvPM0+JUTSbVVQl7ngMGaU=;
-  b=WsOzdQONK7CyFiUqUUEyoNvndmt7I4xO/owq+izA4CQwjw0ylhU+oTtS
-   QUvpUytI26odnIV41QY/3lVIzijd7FkEhKn9l0F1pIKn6FBKZbW4pF5Rz
-   FBqvvC2R1nTazmy8VyjmrxWnGSF6NWu30Ox+miwFRQGLhxfp4JaKK2y86
-   J7EXLag4KWdRprFIDdWQ5eJeZ3mipWKMAW8Gl8zAALn+J6M80aGUunpgT
-   k8UDa56tSTY43sV7aPDKUQR3S8GMmWbkAoiqCzlvRIvwL3jxzKTBPDAag
-   Nv3lPyGB9g1Uu3M0lfLCULHZSj3proA54FBOu4Cpr0ZgDXPMXgQ52S87p
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="390611361"
+  t=1674497886; x=1706033886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oB3FmPyCBPbmcm/SDWIRHTSS2uz2g7vBEzSlCTwjPDc=;
+  b=VlD+9ZkQPMIS9rElK9RCq4gIubAOOwZp+muU5apom1mYz6kpBbOaV+1R
+   Ev0xbJGugch8KzbXAbax6jwMSYydggzdTMu/KCGqAwfFOF4rnB5rlu08+
+   nCOh8YwDaXu7fzcP96RIRh4rqk3UjBEvXi42kmfV8H8Knpulq3lGLR6un
+   tU+yImcdfl5SH67DcMVs63/C9wN9v2y+k0J0bOuC5v4DZAo8DZ/kEmznx
+   ZlaOhqOlpfhqluzXBrp4cSAOZ8ZF6crKXFkeSCYgcN6obUGfJIAk63Xyw
+   7xAQgbnNFEXYid5pyX9WmAs78JVIZOdk7G6oO/YqdtjUCuA41SR4Cq5Zo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="388461976"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="390611361"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 10:15:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="611714969"
+   d="scan'208";a="388461976"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 10:18:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="663764330"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="611714969"
-Received: from smmorton-mobl.amr.corp.intel.com (HELO [10.212.176.16]) ([10.212.176.16])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 10:15:45 -0800
-Message-ID: <948c678b-5f26-2390-dd68-1b9b7b3fd50f@intel.com>
-Date:   Mon, 23 Jan 2023 10:15:45 -0800
+   d="scan'208";a="663764330"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Jan 2023 10:18:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pK1OL-00Drwz-1E;
+        Mon, 23 Jan 2023 20:18:01 +0200
+Date:   Mon, 23 Jan 2023 20:18:01 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Subject: Re: [PATCH v1 1/3] ACPI: video: Fix refcounting in
+ apple_gmux_backlight_present()
+Message-ID: <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
+References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
+ <9e24156c-65fc-d38b-317a-9cc8fb2201b9@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] x86/hibernate: Use fixmap for saving unmapped pages
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, rafael@kernel.org, pavel@ucw.cz,
-        len.brown@intel.com, rppt@kernel.org, peterz@infradead.org,
-        luto@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e24156c-65fc-d38b-317a-9cc8fb2201b9@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/23 15:51, Rick Edgecombe wrote:
-> Hibernate uses the direct map to read memory it saves to disk. Since
-> sometimes pages are not accessible on the direct map ("not present" on
-> x86), it has special case logic to temporarily make a page present. On x86
-> these direct map addresses can be mapped at various page sizes, but the
-> logic works ok as long as the not present pages are always mapped as
-> PAGE_SIZE such that they don't require a split to map the region as
-> present. If the address was mapped not present by a larger page size, the
-> split may fail and hibernate would then try to read an address mapped not
-> present.
+On Mon, Jan 23, 2023 at 06:46:44PM +0100, Hans de Goede wrote:
+> On 1/23/23 18:10, Andy Shevchenko wrote:
+> > acpi_dev_get_first_match_dev() gets ACPI device with the bumped
+> > refcount. The caller must drop it when it's done.
+> > 
+> > Fix ACPI device refcounting in apple_gmux_backlight_present().
 
-The "split" thing here kinda threw me a bit.
+...
 
-First, this code depends on having a 'struct page'.  On 64-bit, that
-means that the pages at least have an address in the direct map.
+> Thank you for your work on this, much appreciated and I like
+> the new acpi_get_first_match_physical_node().
+> 
+> But I don't think this patch is a good idea. There is a
+> regression related to apple_gmux_backlight_present()
+> with a patch-set fixing it pending.
+> 
+> And that patch-set actually removes this function. Adding
+> a fix for this real, but not really important leak now,
+> will just make backporting the actual fix harder.
+> 
+> So I would prefer for this patch to not go in and to
+> go for (a to be submitted v2) of the patch-set fixing
+> the regression right away instead.
 
-But, that doesn't mean that there's an actual mapping in the direct map
-for the page.  Lots of things zap the direct map.  To make up for this,
-the hibernate code tries to temporarily restore a zapped mapping with
-hibernate_map_page()->set_direct_map_default_noflush().
+Maybe I missed something, but I noticed that you actually moved (not killed)
+the code which is currently in this function. If it's the case, I prefer my
+fix to be imported first.
 
-What's the actual failure mode here, though?  Does __change_page_attr()
-just fail to find an existing PTE and fall over?  Or, does it actually
-try to and fail to allocate the PTE page?
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
