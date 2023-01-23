@@ -2,337 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB858678911
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEA567890F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbjAWVEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S232825AbjAWVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjAWVEX (ORCPT
+        with ESMTP id S232690AbjAWVD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:04:23 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048D830E91
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:04:20 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id x4so14784645ybp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:04:20 -0800 (PST)
+        Mon, 23 Jan 2023 16:03:59 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017A63609C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:03:57 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id k18so12712362pll.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:03:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6NJAGbNI8oPlvRxeqKL+jenYaYeVQWdxn2l3Nfe6D7c=;
-        b=buYyI/i6zjKLibXxssREyjpPcbyoN1RPOD3Mr2byrxfjhqHpZLw/AqJkapNsUVEW+B
-         rKCrhVlBGeO30sR7MG9Q1TElbE9H8hwPVFrCZMyn+7Z+XB3eWgdrHp1AXBs2xycAjDhn
-         xRwSbpDrn1CK0RQpErR29ntII/yJKEChGwuKWho5ZuAL7ZdzqzU3nGcvCm3WmNQz/gXk
-         a6eT18shA38rUPAfsZcWNS4C5zNF58bQjUEShS5dgAQNWS3SpLHtwVKEqg9I1Z9c0Iw4
-         7VMz9QJWwvAO716ugceYwfxN5/QVoSz37uazhvsor4soIza3eEQlu6RIj+9/F5EO4ytS
-         8erA==
+        bh=QYRKS6tK0AlWUYVU3JpIqYKEaEflzI/5b9bQPlwSQRk=;
+        b=RQJpS5bvHF4bxpPevxaJjNW3kpOhnZzXPQGREFopGamxR7V572BdQUe4yPrg8PUVsd
+         zFzcPI2g0DbV0kWC1xfx50eoLy2Nn/YHpllWhCHCA1NPVYz7oJnQrktxBVsJe6T1e+V8
+         p1c+ycDNxaZnW0SDTwbjdRWLossVWgxd5bLaU4Qq2ezwha56am0ywXzm0rgui6vsXkc9
+         5wW6a/smQp3381B4MXFvGbvAoVO8ekkw8orzE8EDSsTJUknsKutErStCvDlkj54w76BB
+         YRBtgncznYske9y2p7AEf6SzbFhv4RiC/GmH4ActQD0mCR3x0zhNg5jVmQP2R5I3APFP
+         6rUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6NJAGbNI8oPlvRxeqKL+jenYaYeVQWdxn2l3Nfe6D7c=;
-        b=bYrv1w02/xS/8G1Hja0WyJI835HDi7B9CZv1FvDglCApum1GtjNpxUt41LJgWKhLke
-         GEjRG/evl/406bNySL8/AP91PJcoVDF6x6vXd+9KxtUJemC5R7nuGiRdRfnaRnJHHlxq
-         6fquzTliCxEi8bXEkf4uHC4LFjA8EXkUu2kpFyeplbgqcugffb5+PiW1penzZSkEfHXU
-         KFU2G9wjxKSgBKriWmjmCCoVZGshT3voIs6dHyNidTA8buIeMa7H1eZNDT1gakX38WJc
-         dKW+8PvLDsINnJMQ5i5KbygmhUXQEbnLReGkTn+g5gDFQNWictxrbVezyA2C86hmnxfI
-         4EHQ==
-X-Gm-Message-State: AFqh2kr379si8aAalM01kySPQ7Fdz3iXwL1XJ/fVU5HoQ8uC37OZJUnG
-        AtMTpmMRhBBUCFX5B6UtILtsmOh2ZHKxF7RuZq6wFnyKlKO6e0RZ
-X-Google-Smtp-Source: AMrXdXtX7vmKPQsg8GJFUHm8aGqlZR2EcPTkJ/DzR+LfCs+E8BLLP9p2bmnrlQG+b+zo+ow4Js75rX7YVtyH8en0K3k=
-X-Received: by 2002:a25:d451:0:b0:7ce:4650:5e5a with SMTP id
- m78-20020a25d451000000b007ce46505e5amr2843155ybf.123.1674507859865; Mon, 23
- Jan 2023 13:04:19 -0800 (PST)
+        bh=QYRKS6tK0AlWUYVU3JpIqYKEaEflzI/5b9bQPlwSQRk=;
+        b=u0PeZ0YQg36OztlL0/RiLID5so1+21XqCKVJH5wZV6imq+dOH5NxHdZxaRBsUkaAWs
+         9knvLEJF6f0saGSO9pgbbv9a0ZLea64XoazMDE5XEALKxpI5SmahIzv6aDemAjkAuM4g
+         J4BoZUl1m4HoXnizvUf0kr3Q0hQje6TQzerm/BBpdjINQ48T1rMGzcIM3T+75glMlbPd
+         UqIOZt+Zt88zTWugeFWnfSttT249o59Vn1XJSFq+K30XHIcinofOYmqmUCxPgY5HJh0i
+         3oK3jNWc/O/SJAqCY41pmiWm7O58F9KFfYNNblqJ0wE6xKWF8TALOusMjaUnxLnv2Gko
+         ZYJA==
+X-Gm-Message-State: AFqh2kq+Z8ijSa2ZXP6FLj4l8b4WL5S1wtRrstQndo06f2f5X/aOnZE+
+        jO6TCCzn+fP0w8Pl2bSmQCUDceK4FzO9BIvQ/tfLTePlIB5U
+X-Google-Smtp-Source: AMrXdXux2G/SuTCc/RUxY/DLSxHTuuQuPv2N05DFnASMKwMSo03QpwuFQI1Y9345VD/C3jEW3vlPiDkvTVqmGTEGkio=
+X-Received: by 2002:a17:90a:17a1:b0:229:9ffe:135b with SMTP id
+ q30-20020a17090a17a100b002299ffe135bmr2899277pja.72.1674507837468; Mon, 23
+ Jan 2023 13:03:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20230123190329.520285-1-bgardon@google.com> <20230123190329.520285-2-bgardon@google.com>
-In-Reply-To: <20230123190329.520285-2-bgardon@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 23 Jan 2023 13:03:43 -0800
-Message-ID: <CAHVum0cJ1MDMNaq24prxTKfp_UypnzSsQ9vXwzUYaSYBn7Ufqg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] selftests: KVM: Move dirty logging functions to memstress.(c|h)
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>
+References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+ <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+ <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
+ <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
+ <a764acb285d0616c8608eaab8671ceb9c22cb390.camel@huaweicloud.com>
+ <058f1bdf4ba75c3a00918cefbf1be32477b51639.camel@linux.ibm.com>
+ <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
+ <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com> <dfb387003ee50db5fe0d71bc825cc39df47f74ed.camel@huaweicloud.com>
+In-Reply-To: <dfb387003ee50db5fe0d71bc825cc39df47f74ed.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 23 Jan 2023 16:03:46 -0500
+Message-ID: <CAHC9VhSkx58Q=U8GfyCSn5MvRv95myOwu9yweoYsG82a7K3oCQ@mail.gmail.com>
+Subject: Re: [PATCH v2] security: Restore passing final prot to ima_file_mmap()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:03 AM Ben Gardon <bgardon@google.com> wrote:
+On Mon, Jan 23, 2023 at 3:30 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Fri, 2023-01-20 at 16:04 -0500, Paul Moore wrote:
+> > On Fri, Jan 13, 2023 at 5:53 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Thu, 2023-01-12 at 12:45 -0500, Mimi Zohar wrote:
+> > > > On Thu, 2023-01-12 at 13:36 +0100, Roberto Sassu wrote:
+> > > > > On Wed, 2023-01-11 at 09:25 -0500, Paul Moore wrote:
+> > > > > > On Wed, Jan 11, 2023 at 4:31 AM Roberto Sassu
+> > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
+> > > > > > > > On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
+> > > > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > >
+> > > > > > > > > Commit 98de59bfe4b2f ("take calculation of final prot in
+> > > > > > > > > security_mmap_file() into a helper") moved the code to update prot with the
+> > > > > > > > > actual protection flags to be granted to the requestor by the kernel to a
+> > > > > > > > > helper called mmap_prot(). However, the patch didn't update the argument
+> > > > > > > > > passed to ima_file_mmap(), making it receive the requested prot instead of
+> > > > > > > > > the final computed prot.
+> > > > > > > > >
+> > > > > > > > > A possible consequence is that files mmapped as executable might not be
+> > > > > > > > > measured/appraised if PROT_EXEC is not requested but subsequently added in
+> > > > > > > > > the final prot.
+> > > > > > > > >
+> > > > > > > > > Replace prot with mmap_prot(file, prot) as the second argument of
+> > > > > > > > > ima_file_mmap() to restore the original behavior.
+> > > > > > > > >
+> > > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> > > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > > ---
+> > > > > > > > >  security/security.c | 2 +-
+> > > > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/security/security.c b/security/security.c
+> > > > > > > > > index d1571900a8c7..0d2359d588a1 100644
+> > > > > > > > > --- a/security/security.c
+> > > > > > > > > +++ b/security/security.c
+> > > > > > > > > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+> > > > > > > > >                                         mmap_prot(file, prot), flags);
+> > > > > > > > >         if (ret)
+> > > > > > > > >                 return ret;
+> > > > > > > > > -       return ima_file_mmap(file, prot);
+> > > > > > > > > +       return ima_file_mmap(file, mmap_prot(file, prot));
+> > > > > > > > >  }
+> > > > > > > >
+> > > > > > > > This seems like a reasonable fix, although as the original commit is
+> > > > > > > > ~10 years old at this point I am a little concerned about the impact
+> > > > > > > > this might have on IMA.  Mimi, what do you think?
+> >
+> > So ... where do we stand on this patch, Mimi, Roberto?  I stand by my
+> > original comment, but I would want to see an ACK from Mimi at the very
+> > least before merging this upstream.  If this isn't ACK-able, do we
+> > have a plan to resolve this soon?
 >
-> Move some helper functions from dirty_log_perf_test.c to the memstress
-> library so that they can be used in a future commit which tests page
-> splitting during dirty logging.
->
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  .../selftests/kvm/dirty_log_perf_test.c       | 84 ++-----------------
->  .../testing/selftests/kvm/include/memstress.h |  8 ++
->  tools/testing/selftests/kvm/lib/memstress.c   | 72 ++++++++++++++++
->  3 files changed, 87 insertions(+), 77 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index e9d6d1aecf89c..416719e205183 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -136,77 +136,6 @@ struct test_params {
->         bool random_access;
->  };
->
-> -static void toggle_dirty_logging(struct kvm_vm *vm, int slots, bool enable)
-> -{
-> -       int i;
-> -
-> -       for (i = 0; i < slots; i++) {
-> -               int slot = MEMSTRESS_MEM_SLOT_INDEX + i;
-> -               int flags = enable ? KVM_MEM_LOG_DIRTY_PAGES : 0;
-> -
-> -               vm_mem_region_set_flags(vm, slot, flags);
-> -       }
-> -}
-> -
-> -static inline void enable_dirty_logging(struct kvm_vm *vm, int slots)
-> -{
-> -       toggle_dirty_logging(vm, slots, true);
-> -}
-> -
-> -static inline void disable_dirty_logging(struct kvm_vm *vm, int slots)
-> -{
-> -       toggle_dirty_logging(vm, slots, false);
-> -}
-> -
-> -static void get_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[], int slots)
-> -{
-> -       int i;
-> -
-> -       for (i = 0; i < slots; i++) {
-> -               int slot = MEMSTRESS_MEM_SLOT_INDEX + i;
-> -
-> -               kvm_vm_get_dirty_log(vm, slot, bitmaps[i]);
-> -       }
-> -}
-> -
-> -static void clear_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[],
-> -                           int slots, uint64_t pages_per_slot)
-> -{
-> -       int i;
-> -
-> -       for (i = 0; i < slots; i++) {
-> -               int slot = MEMSTRESS_MEM_SLOT_INDEX + i;
-> -
-> -               kvm_vm_clear_dirty_log(vm, slot, bitmaps[i], 0, pages_per_slot);
-> -       }
-> -}
-> -
-> -static unsigned long **alloc_bitmaps(int slots, uint64_t pages_per_slot)
-> -{
-> -       unsigned long **bitmaps;
-> -       int i;
-> -
-> -       bitmaps = malloc(slots * sizeof(bitmaps[0]));
-> -       TEST_ASSERT(bitmaps, "Failed to allocate bitmaps array.");
-> -
-> -       for (i = 0; i < slots; i++) {
-> -               bitmaps[i] = bitmap_zalloc(pages_per_slot);
-> -               TEST_ASSERT(bitmaps[i], "Failed to allocate slot bitmap.");
-> -       }
-> -
-> -       return bitmaps;
-> -}
-> -
-> -static void free_bitmaps(unsigned long *bitmaps[], int slots)
-> -{
-> -       int i;
-> -
-> -       for (i = 0; i < slots; i++)
-> -               free(bitmaps[i]);
-> -
-> -       free(bitmaps);
-> -}
-> -
->  static void run_test(enum vm_guest_mode mode, void *arg)
->  {
->         struct test_params *p = arg;
-> @@ -236,7 +165,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->         host_num_pages = vm_num_host_pages(mode, guest_num_pages);
->         pages_per_slot = host_num_pages / p->slots;
->
-> -       bitmaps = alloc_bitmaps(p->slots, pages_per_slot);
-> +       bitmaps = memstress_alloc_bitmaps(p->slots, pages_per_slot);
->
->         if (dirty_log_manual_caps)
->                 vm_enable_cap(vm, KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2,
-> @@ -277,7 +206,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->
->         /* Enable dirty logging */
->         clock_gettime(CLOCK_MONOTONIC, &start);
-> -       enable_dirty_logging(vm, p->slots);
-> +       memstress_enable_dirty_logging(vm, p->slots);
->         ts_diff = timespec_elapsed(start);
->         pr_info("Enabling dirty logging time: %ld.%.9lds\n\n",
->                 ts_diff.tv_sec, ts_diff.tv_nsec);
-> @@ -306,7 +235,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                         iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
->
->                 clock_gettime(CLOCK_MONOTONIC, &start);
-> -               get_dirty_log(vm, bitmaps, p->slots);
-> +               memstress_get_dirty_log(vm, bitmaps, p->slots);
->                 ts_diff = timespec_elapsed(start);
->                 get_dirty_log_total = timespec_add(get_dirty_log_total,
->                                                    ts_diff);
-> @@ -315,7 +244,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->
->                 if (dirty_log_manual_caps) {
->                         clock_gettime(CLOCK_MONOTONIC, &start);
-> -                       clear_dirty_log(vm, bitmaps, p->slots, pages_per_slot);
-> +                       memstress_clear_dirty_log(vm, bitmaps, p->slots,
-> +                                                 pages_per_slot);
->                         ts_diff = timespec_elapsed(start);
->                         clear_dirty_log_total = timespec_add(clear_dirty_log_total,
->                                                              ts_diff);
-> @@ -334,7 +264,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->
->         /* Disable dirty logging */
->         clock_gettime(CLOCK_MONOTONIC, &start);
-> -       disable_dirty_logging(vm, p->slots);
-> +       memstress_disable_dirty_logging(vm, p->slots);
->         ts_diff = timespec_elapsed(start);
->         pr_info("Disabling dirty logging time: %ld.%.9lds\n",
->                 ts_diff.tv_sec, ts_diff.tv_nsec);
-> @@ -359,7 +289,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->                         clear_dirty_log_total.tv_nsec, avg.tv_sec, avg.tv_nsec);
->         }
->
-> -       free_bitmaps(bitmaps, p->slots);
-> +       memstress_free_bitmaps(bitmaps, p->slots);
->         arch_cleanup_vm(vm);
->         memstress_destroy_vm(vm);
->  }
-> diff --git a/tools/testing/selftests/kvm/include/memstress.h b/tools/testing/selftests/kvm/include/memstress.h
-> index 72e3e358ef7bd..ce4e603050eaa 100644
-> --- a/tools/testing/selftests/kvm/include/memstress.h
-> +++ b/tools/testing/selftests/kvm/include/memstress.h
-> @@ -72,4 +72,12 @@ void memstress_guest_code(uint32_t vcpu_id);
->  uint64_t memstress_nested_pages(int nr_vcpus);
->  void memstress_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_vcpu *vcpus[]);
->
-> +void memstress_enable_dirty_logging(struct kvm_vm *vm, int slots);
-> +void memstress_disable_dirty_logging(struct kvm_vm *vm, int slots);
-> +void memstress_get_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[], int slots);
-> +void memstress_clear_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[],
-> +                              int slots, uint64_t pages_per_slot);
-> +unsigned long **memstress_alloc_bitmaps(int slots, uint64_t pages_per_slot);
-> +void memstress_free_bitmaps(unsigned long *bitmaps[], int slots);
-> +
->  #endif /* SELFTEST_KVM_MEMSTRESS_H */
-> diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/selftests/kvm/lib/memstress.c
-> index 5f1d3173c238c..3632956c6bcf5 100644
-> --- a/tools/testing/selftests/kvm/lib/memstress.c
-> +++ b/tools/testing/selftests/kvm/lib/memstress.c
-> @@ -5,6 +5,7 @@
->  #define _GNU_SOURCE
->
->  #include <inttypes.h>
-> +#include <linux/bitmap.h>
->
->  #include "kvm_util.h"
->  #include "memstress.h"
-> @@ -320,3 +321,74 @@ void memstress_join_vcpu_threads(int nr_vcpus)
->         for (i = 0; i < nr_vcpus; i++)
->                 pthread_join(vcpu_threads[i].thread, NULL);
->  }
-> +
-> +static void toggle_dirty_logging(struct kvm_vm *vm, int slots, bool enable)
-> +{
-> +       int i;
-> +
-> +       for (i = 0; i < slots; i++) {
-> +               int slot = MEMSTRESS_MEM_SLOT_INDEX + i;
-> +               int flags = enable ? KVM_MEM_LOG_DIRTY_PAGES : 0;
-> +
-> +               vm_mem_region_set_flags(vm, slot, flags);
-> +       }
-> +}
-> +
-> +void memstress_enable_dirty_logging(struct kvm_vm *vm, int slots)
-> +{
-> +       toggle_dirty_logging(vm, slots, true);
-> +}
-> +
-> +void memstress_disable_dirty_logging(struct kvm_vm *vm, int slots)
-> +{
-> +       toggle_dirty_logging(vm, slots, false);
-> +}
+> Sorry, I had business trips last week. Will send the patches this week.
 
-Very simple functions, maybe just make it inline in the memstress header.
+No worries, I just wasn't sure of the status and wanted to check in on this.
 
-> +
-> +void memstress_get_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[], int slots)
-> +{
-> +       int i;
-> +
-> +       for (i = 0; i < slots; i++) {
-> +               int slot = MEMSTRESS_MEM_SLOT_INDEX + i;
-> +
-> +               kvm_vm_get_dirty_log(vm, slot, bitmaps[i]);
-> +       }
-> +}
-> +
-> +void memstress_clear_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[],
-> +                              int slots, uint64_t pages_per_slot)
-> +{
-> +       int i;
-> +
-> +       for (i = 0; i < slots; i++) {
-> +               int slot = MEMSTRESS_MEM_SLOT_INDEX + i;
-> +
-> +               kvm_vm_clear_dirty_log(vm, slot, bitmaps[i], 0, pages_per_slot);
-> +       }
-> +}
-> +
-> +unsigned long **memstress_alloc_bitmaps(int slots, uint64_t pages_per_slot)
-> +{
-> +       unsigned long **bitmaps;
-> +       int i;
-> +
-> +       bitmaps = malloc(slots * sizeof(bitmaps[0]));
-> +       TEST_ASSERT(bitmaps, "Failed to allocate bitmaps array.");
-> +
-> +       for (i = 0; i < slots; i++) {
-> +               bitmaps[i] = bitmap_zalloc(pages_per_slot);
-> +               TEST_ASSERT(bitmaps[i], "Failed to allocate slot bitmap.");
-> +       }
-> +
-> +       return bitmaps;
-> +}
-> +
-> +void memstress_free_bitmaps(unsigned long *bitmaps[], int slots)
-> +{
-> +       int i;
-> +
-> +       for (i = 0; i < slots; i++)
-> +               free(bitmaps[i]);
-> +
-> +       free(bitmaps);
-> +}
-> --
-> 2.39.1.405.gd4c25cc71f-goog
->
-
-Other than the inline suggestion, which is optional.
-
-Reviewed-by: Vipin Sharma <vipinsh@google.com>
+-- 
+paul-moore.com
