@@ -2,228 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F594677C0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA58677C0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbjAWM7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S232031AbjAWNAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbjAWM7q (ORCPT
+        with ESMTP id S231918AbjAWNAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:59:46 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5CB448E;
-        Mon, 23 Jan 2023 04:59:43 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B97EE24000E;
-        Mon, 23 Jan 2023 12:59:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674478782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=na7HRl0jra781/0Bx/fX+Bp8fWBwR3ej1zRQGenoYHY=;
-        b=G8/vJ77o1xKjT2Zinoy5wk7M6XQTQgH5tPbUFgFhQxZNzL7xLHHP1mbuDIwNez0tAPniFS
-        CkIIVMEIGJGJROyFIkBnHONfa4eyly0C0ACx9vrvaTutKt9DpG0ta8paxapZd4tNO8/h+m
-        DOEFfOmPWB7whrHFQt5kvbdMK4h1RIsYmXCLLQnpmAdP+23fTC3Mphq+RwoB5oJBMqSOF7
-        zkfmj1k+1kovZuzySlRFHsjF/HWOZbsL57hNjDy00pXfhKjLA6Vb4nM7ghRV6eM2YAeO7s
-        VZaurQTn2NePS8ig0yR1Aoe8fyP+gag8TRaQncLCydFTQpOZ69tfYj7Eao+Akg==
-Date:   Mon, 23 Jan 2023 13:59:38 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mon, 23 Jan 2023 08:00:15 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A1B4234D2;
+        Mon, 23 Jan 2023 05:00:10 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A295C14;
+        Mon, 23 Jan 2023 05:00:52 -0800 (PST)
+Received: from a077893.arm.com (unknown [10.163.50.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AD4AE3F64C;
+        Mon, 23 Jan 2023 05:00:05 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 2/3] ASoC: codecs: Add support for the Renesas
- IDT821034 codec
-Message-ID: <20230123135938.1855d6a8@bootlin.com>
-In-Reply-To: <79b35117-98aa-dc7c-2a27-805cd4ac2c71@csgroup.eu>
-References: <20230120095036.514639-1-herve.codina@bootlin.com>
-        <20230120095036.514639-3-herve.codina@bootlin.com>
-        <d51b826b-e71f-393c-586b-6a1ca953f26f@csgroup.eu>
-        <20230123095631.4aba35d6@bootlin.com>
-        <eb20dc66-f564-ed7e-8873-65621e5970de@csgroup.eu>
-        <20230123131755.1f5702be@bootlin.com>
-        <79b35117-98aa-dc7c-2a27-805cd4ac2c71@csgroup.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V8 0/6] arm64/perf: Enable branch stack sampling
+Date:   Mon, 23 Jan 2023 18:29:50 +0530
+Message-Id: <20230123125956.1350336-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 12:30:32 +0000
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+This series enables perf branch stack sampling support on arm64 platform
+via a new arch feature called Branch Record Buffer Extension (BRBE). All
+relevant register definitions could be accessed here.
 
-> Le 23/01/2023 =C3=A0 13:17, Herve Codina a =C3=A9crit=C2=A0:
-> > Hi Christophe,
-> >=20
-> > On Mon, 23 Jan 2023 11:13:23 +0000
-> > Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
-> >  =20
-> >> Hi Herv=C3=A9,
-> >>
-> >> Le 23/01/2023 =C3=A0 09:56, Herve Codina a =C3=A9crit=C2=A0: =20
-> >>>
-> >>> gpiochip_get_data() is defined only when CONFIG_GPIOLIB is set.
-> >>> That's why the #if section is used. =20
-> >>
-> >> gpiochip_get_data() is still declared when CONFIG_GPIOLIB is not set, =
-so
-> >> it is not a problem, the call to it will be eliminated at buildtime.
-> >>
-> >> By the way, at the time being I get the following warnings:
-> >>
-> >>     CC      sound/soc/codecs/idt821034.o
-> >> sound/soc/codecs/idt821034.c:310:12: warning: 'idt821034_read_slic_raw'
-> >> defined but not used [-Wunused-function]
-> >>     310 | static int idt821034_read_slic_raw(struct idt821034 *idt8210=
-34,
-> >> u8 ch, u8 *slic_raw)
-> >>         |            ^~~~~~~~~~~~~~~~~~~~~~~
-> >> sound/soc/codecs/idt821034.c:305:11: warning:
-> >> 'idt821034_get_written_slic_raw' defined but not used [-Wunused-functi=
-on]
-> >>     305 | static u8 idt821034_get_written_slic_raw(struct idt821034
-> >> *idt821034, u8 ch)
-> >>         |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> sound/soc/codecs/idt821034.c:276:12: warning: 'idt821034_write_slic_ra=
-w'
-> >> defined but not used [-Wunused-function]
-> >>     276 | static int idt821034_write_slic_raw(struct idt821034
-> >> *idt821034, u8 ch, u8 slic_raw)
-> >>         |            ^~~~~~~~~~~~~~~~~~~~~~~~
-> >> sound/soc/codecs/idt821034.c:271:11: warning: 'idt821034_get_slic_conf'
-> >> defined but not used [-Wunused-function]
-> >>     271 | static u8 idt821034_get_slic_conf(struct idt821034 *idt82103=
-4,
-> >> u8 ch)
-> >>         |           ^~~~~~~~~~~~~~~~~~~~~~~
-> >> sound/soc/codecs/idt821034.c:250:12: warning: 'idt821034_set_slic_conf'
-> >> defined but not used [-Wunused-function]
-> >>     250 | static int idt821034_set_slic_conf(struct idt821034 *idt8210=
-34,
-> >> u8 ch, u8 slic_dir)
-> >>         |            ^~~~~~~~~~~~~~~~~~~~~~~
-> >>
-> >>
-> >> With the following changes I have no warning and an objdump -x on
-> >> idt821034.o shows no reference to gpiochip_get_data()
-> >>
-> >> diff --git a/sound/soc/codecs/idt821034.c b/sound/soc/codecs/idt821034=
-.c
-> >> index 5eb93fec6042..8b75388e22ce 100644
-> >> --- a/sound/soc/codecs/idt821034.c
-> >> +++ b/sound/soc/codecs/idt821034.c
-> >> @@ -968,7 +968,6 @@ static const struct snd_soc_component_driver
-> >> idt821034_component_driver =3D {
-> >>    	.endianness		=3D 1,
-> >>    };
-> >>
-> >> -#if IS_ENABLED(CONFIG_GPIOLIB)
-> >>    #define IDT821034_GPIO_OFFSET_TO_SLIC_CHANNEL(_offset) (((_offset) /
-> >> 5) % 4)
-> >>    #define IDT821034_GPIO_OFFSET_TO_SLIC_MASK(_offset)    BIT((_offset=
-) % 5)
-> >>
-> >> @@ -1133,12 +1132,6 @@ static int idt821034_gpio_init(struct idt821034
-> >> *idt821034)
-> >>    	return devm_gpiochip_add_data(&idt821034->spi->dev,
-> >> &idt821034->gpio_chip,
-> >>    				      idt821034);
-> >>    }
-> >> -#else /* IS_ENABLED(CONFIG_GPIOLIB) */
-> >> -static int idt821034_gpio_init(struct idt821034 *idt821034)
-> >> -{
-> >> -	return 0;
-> >> -}
-> >> -#endif
-> >>
-> >>    static int idt821034_spi_probe(struct spi_device *spi)
-> >>    {
-> >> @@ -1165,6 +1158,9 @@ static int idt821034_spi_probe(struct spi_device=
- *spi)
-> >>    	if (ret)
-> >>    		return ret;
-> >>
-> >> +	if (!IS_ENABLED(CONFIG_GPIOLIB))
-> >> +		return 0;
-> >> +
-> >>    	ret =3D idt821034_gpio_init(idt821034);
-> >>    	if (ret)
-> >>    		return ret;
-> >>
-> >>
-> >> Christophe =20
-> >=20
-> > Right, I did the test too and indeed, I can remove the #if section.
-> >=20
-> > I will use (I think is clearer) at idt821034_spi_probe():
-> > 	if (!IS_ENABLED(CONFIG_GPIOLIB)) {
-> >     		ret =3D idt821034_gpio_init(idt821034);
-> > 		if (ret)
-> >     			return ret;
-> > 	}
-> >  =20
->=20
->=20
-> I guess you mean :
->=20
-> 	if (IS_ENABLED(CONFIG_GPIOLIB))
+https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
 
-Yes of course. Sorry for the typo.
+This series applies on v6.2-r5
 
->=20
->=20
-> > Is that ok for you ? =20
->=20
->=20
->=20
-> What about:
->=20
-> 	if (IS_ENABLED(CONFIG_GPIOLIB))
-> 		return idt821034_gpio_init(idt821034);
-> 	else
-> 		return 0;
->=20
-> Christophe
+Changes in V8:
 
-Well, maybe this version ?
+- Replaced arm_pmu->features as arm_pmu->has_branch_stack, updated its helper
+- Added a comment and line break before arm_pmu->private element 
+- Added WARN_ON_ONCE() in helpers i.e armv8pmu_branch_[read|valid|enable|disable]()
+- Dropped comments in armv8pmu_enable_event() and armv8pmu_disable_event()
+- Replaced open bank encoding in BRBFCR_EL1 with SYS_FIELD_PREP()
+- Changed brbe_hw_attr->brbe_version from 'bool' to 'int'
+- Updated pr_warn() as pr_warn_once() with values in brbe_get_perf_[type|priv]()
+- Replaced all pr_warn_once() as pr_debug_once() in armv8pmu_branch_valid()
+- Added a comment in branch_type_to_brbcr() for the BRBCR_EL1 privilege settings
+- Modified the comment related to BRBINFx_EL1.LASTFAILED in capture_brbe_flags()   
+- Modified brbe_get_perf_entry_type() as brbe_set_perf_entry_type()
+- Renamed brbe_valid() as brbe_record_is_complete()
+- Renamed brbe_source() as brbe_record_is_source_only()
+- Renamed brbe_target() as brbe_record_is_target_only()
+- Inverted checks for !brbe_record_is_[target|source]_only() for info capture
+- Replaced 'fetch' with 'get' in all helpers that extract field value
+- Dropped 'static int brbe_current_bank' optimization in select_brbe_bank()
+- Dropped select_brbe_bank_index() completely, added capture_branch_entry()
+- Process captured branch entries in two separate loops one for each BRBE bank
+- Moved branch_records_alloc() inside armv8pmu_probe_pmu()
+- Added a forward declaration for the helper has_branch_stack()
+- Added new callbacks armv8pmu_private_alloc() and armv8pmu_private_free()
+- Updated armv8pmu_probe_pmu() to allocate the private structure before SMP call
 
-static int idt821034_spi_probe(struct spi_device *spi)
-{
-	...
+Changes in V7:
 
-	if (IS_ENABLED(CONFIG_GPIOLIB))
- 		return idt821034_gpio_init(idt821034);
+https://lore.kernel.org/all/20230105031039.207972-1-anshuman.khandual@arm.com/
 
-	return 0;
-}
+- Folded [PATCH 7/7] into [PATCH 3/7] which enables branch stack sampling event
+- Defined BRBFCR_EL1_BRANCH_FILTERS, BRBCR_EL1_DEFAULT_CONFIG in the header
+- Defined BRBFCR_EL1_DEFAULT_CONFIG in the header
+- Updated BRBCR_EL1_DEFAULT_CONFIG with BRBCR_EL1_FZP
+- Defined BRBCR_EL1_DEFAULT_TS in the header
+- Updated BRBCR_EL1_DEFAULT_CONFIG with BRBCR_EL1_DEFAULT_TS
+- Moved BRBCR_EL1_DEFAULT_CONFIG check inside branch_type_to_brbcr()
+- Moved down BRBCR_EL1_CC, BRBCR_EL1_MPRED later in branch_type_to_brbcr()
+- Also set BRBE in paused state in armv8pmu_branch_disable()
+- Dropped brbe_paused(), set_brbe_paused() helpers
+- Extracted error string via branch_filter_error_msg[] for armv8pmu_branch_valid()
+- Replaced brbe_v1p1 with brbe_version in struct brbe_hw_attr
+- Added valid_brbe_[cc, format, version]() helpers
+- Split a separate brbe_attributes_probe() from armv8pmu_branch_probe()
+- Capture event->attr.branch_sample_type earlier in armv8pmu_branch_valid()
+- Defined enum brbe_bank_idx with possible values for BRBE bank indices
+- Changed armpmu->hw_attr into armpmu->private
+- Added missing space in stub definition for armv8pmu_branch_valid()
+- Replaced both kmalloc() with kzalloc()
+- Added BRBE_BANK_MAX_ENTRIES
+- Updated comment for capture_brbe_flags()
+- Updated comment for struct brbe_hw_attr
+- Dropped space after type cast in couple of places
+- Replaced inverse with negation for testing BRBCR_EL1_FZP in armv8pmu_branch_read()
+- Captured cpuc->branches->branch_entries[idx] in a local variable
+- Dropped saved_priv from armv8pmu_branch_read()
+- Reorganize PERF_SAMPLE_BRANCH_NO_[CYCLES|NO_FLAGS] related configuration
+- Replaced with FIELD_GET() and FIELD_PREP() wherever applicable
+- Replaced BRBCR_EL1_TS_PHYSICAL with BRBCR_EL1_TS_VIRTUAL
+- Moved valid_brbe_nr(), valid_brbe_cc(), valid_brbe_format(), valid_brbe_version()
+  select_brbe_bank(), select_brbe_bank_index() helpers inside the C implementation
+- Reorganized brbe_valid_nr() and dropped the pr_warn() message
+- Changed probe sequence in brbe_attributes_probe()
+- Added 'brbcr' argument into capture_brbe_flags() to ascertain correct state
+- Disable BRBE before disabling the PMU event counter
+- Enable PERF_SAMPLE_BRANCH_HV filters when is_kernel_in_hyp_mode()
+- Guard armv8pmu_reset() & armv8pmu_sched_task() with arm_pmu_branch_stack_supported()
 
-Thanks,
-Herv=C3=A9
+Changes in V6:
 
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://lore.kernel.org/linux-arm-kernel/20221208084402.863310-1-anshuman.khandual@arm.com/
+
+- Restore the exception level privilege after reading the branch records
+- Unpause the buffer after reading the branch records
+- Decouple BRBCR_EL1_EXCEPTION/ERTN from perf event privilege level
+- Reworked BRBE implementation and branch stack sampling support on arm pmu
+- BRBE implementation is now part of overall ARMV8 PMU implementation
+- BRBE implementation moved from drivers/perf/ to inside arch/arm64/kernel/
+- CONFIG_ARM_BRBE_PMU renamed as CONFIG_ARM64_BRBE in arch/arm64/Kconfig
+- File moved - drivers/perf/arm_pmu_brbe.c -> arch/arm64/kernel/brbe.c
+- File moved - drivers/perf/arm_pmu_brbe.h -> arch/arm64/kernel/brbe.h
+- BRBE name has been dropped from struct arm_pmu and struct hw_pmu_events
+- BRBE name has been abstracted out as 'branches' in arm_pmu and hw_pmu_events
+- BRBE name has been abstracted out as 'branches' in ARMV8 PMU implementation
+- Added sched_task() callback into struct arm_pmu
+- Added 'hw_attr' into struct arm_pmu encapsulating possible PMU HW attributes
+- Dropped explicit attributes brbe_(v1p1, nr, cc, format) from struct arm_pmu
+- Dropped brbfcr, brbcr, registers scratch area from struct hw_pmu_events
+- Dropped brbe_users, brbe_context tracking in struct hw_pmu_events
+- Added 'features' tracking into struct arm_pmu with ARM_PMU_BRANCH_STACK flag
+- armpmu->hw_attr maps into 'struct brbe_hw_attr' inside BRBE implementation
+- Set ARM_PMU_BRANCH_STACK in 'arm_pmu->features' after successful BRBE probe
+- Added armv8pmu_branch_reset() inside armv8pmu_branch_enable()
+- Dropped brbe_supported() as events will be rejected via ARM_PMU_BRANCH_STACK
+- Dropped set_brbe_disabled() as well
+- Reformated armv8pmu_branch_valid() warnings while rejecting unsupported events
+
+Changes in V5:
+
+https://lore.kernel.org/linux-arm-kernel/20221107062514.2851047-1-anshuman.khandual@arm.com/
+
+- Changed BRBCR_EL1.VIRTUAL from 0b1 to 0b01
+- Changed BRBFCR_EL1.EnL into BRBFCR_EL1.EnI
+- Changed config ARM_BRBE_PMU from 'tristate' to 'bool'
+
+Changes in V4:
+
+https://lore.kernel.org/all/20221017055713.451092-1-anshuman.khandual@arm.com/
+
+- Changed ../tools/sysreg declarations as suggested
+- Set PERF_SAMPLE_BRANCH_STACK in data.sample_flags
+- Dropped perfmon_capable() check in armpmu_event_init()
+- s/pr_warn_once/pr_info in armpmu_event_init()
+- Added brbe_format element into struct pmu_hw_events
+- Changed v1p1 as brbe_v1p1 in struct pmu_hw_events
+- Dropped pr_info() from arm64_pmu_brbe_probe(), solved LOCKDEP warning
+
+Changes in V3:
+
+https://lore.kernel.org/all/20220929075857.158358-1-anshuman.khandual@arm.com/
+
+- Moved brbe_stack from the stack and now dynamically allocated
+- Return PERF_BR_PRIV_UNKNOWN instead of -1 in brbe_fetch_perf_priv()
+- Moved BRBIDR0, BRBCR, BRBFCR registers and fields into tools/sysreg
+- Created dummy BRBINF_EL1 field definitions in tools/sysreg
+- Dropped ARMPMU_EVT_PRIV framework which cached perfmon_capable()
+- Both exception and exception return branche records are now captured
+  only if the event has PERF_SAMPLE_BRANCH_KERNEL which would already
+  been checked in generic perf via perf_allow_kernel()
+
+Changes in V2:
+
+https://lore.kernel.org/all/20220908051046.465307-1-anshuman.khandual@arm.com/
+
+- Dropped branch sample filter helpers consolidation patch from this series 
+- Added new hw_perf_event.flags element ARMPMU_EVT_PRIV to cache perfmon_capable()
+- Use cached perfmon_capable() while configuring BRBE branch record filters
+
+Changes in V1:
+
+https://lore.kernel.org/linux-arm-kernel/20220613100119.684673-1-anshuman.khandual@arm.com/
+
+- Added CONFIG_PERF_EVENTS wrapper for all branch sample filter helpers
+- Process new perf branch types via PERF_BR_EXTEND_ABI
+
+Changes in RFC V2:
+
+https://lore.kernel.org/linux-arm-kernel/20220412115455.293119-1-anshuman.khandual@arm.com/
+
+- Added branch_sample_priv() while consolidating other branch sample filter helpers
+- Changed all SYS_BRBXXXN_EL1 register definition encodings per Marc
+- Changed the BRBE driver as per proposed BRBE related perf ABI changes (V5)
+- Added documentation for struct arm_pmu changes, updated commit message
+- Updated commit message for BRBE detection infrastructure patch
+- PERF_SAMPLE_BRANCH_KERNEL gets checked during arm event init (outside the driver)
+- Branch privilege state capture mechanism has now moved inside the driver
+
+Changes in RFC V1:
+
+https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: James Clark <james.clark@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (6):
+  drivers: perf: arm_pmu: Add new sched_task() callback
+  arm64/perf: Add BRBE registers and fields
+  arm64/perf: Add branch stack support in struct arm_pmu
+  arm64/perf: Add branch stack support in struct pmu_hw_events
+  arm64/perf: Add branch stack support in ARMV8 PMU
+  arm64/perf: Enable branch stack events via FEAT_BRBE
+
+ arch/arm64/Kconfig                  |  11 +
+ arch/arm64/include/asm/perf_event.h |  42 +++
+ arch/arm64/include/asm/sysreg.h     | 103 ++++++
+ arch/arm64/kernel/Makefile          |   1 +
+ arch/arm64/kernel/brbe.c            | 538 ++++++++++++++++++++++++++++
+ arch/arm64/kernel/brbe.h            | 257 +++++++++++++
+ arch/arm64/kernel/perf_event.c      |  78 ++--
+ arch/arm64/tools/sysreg             | 161 +++++++++
+ drivers/perf/arm_pmu.c              |  12 +-
+ include/linux/perf/arm_pmu.h        |  22 +-
+ 10 files changed, 1199 insertions(+), 26 deletions(-)
+ create mode 100644 arch/arm64/kernel/brbe.c
+ create mode 100644 arch/arm64/kernel/brbe.h
+
+-- 
+2.25.1
+
