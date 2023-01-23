@@ -2,142 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD9867873A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C0B67873C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjAWUHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S232686AbjAWUHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:07:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjAWUG6 (ORCPT
+        with ESMTP id S232824AbjAWUHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:06:58 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9F55270;
-        Mon, 23 Jan 2023 12:06:48 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id x7so10980812qtv.13;
-        Mon, 23 Jan 2023 12:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6TSakBrNxghirXLfLJZH6VvdIGUAJ1Ds+wOxPUUvA+Y=;
-        b=EEBqgKN2oUh3EYEH+6SEwk2FtiHESLX1RrrTvfWFVCY1qbL3trl6J9MO7xhnaMGCcc
-         sPNjRdYK34UCF7+xAdezBuLE3kilKrKQvqor/YYmqF+Uwi1t3AU0Ora8+liiG/X2cH2L
-         uMgmt0rIKSXv7gjUqX8yS6vbY2qhgZFhVAi0SFrQ6rq3J6TrmqKZpMvCwimrtYqklDLe
-         JCQTuSxE4hZvykQCdimy0jAWiSQWB2SRqREEehnBv7AmUJqtnG6jY8KBOuJzs26RgVOt
-         WFPmxZRv+bDzsa/VUbADoL0gRtfcjPRlR4ZScmRjDABnNgBjmLwxwoGPohugo7wDKWOV
-         BGgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6TSakBrNxghirXLfLJZH6VvdIGUAJ1Ds+wOxPUUvA+Y=;
-        b=ZCb5rpT8SAR81Fk0Uz9lod6C2E7sbzF1W4DtOSsOuDflPu2zonU2PawpMxfQHf5trJ
-         T5rraHogx/VlrrAylwPfcmuVU9NFK1yGBREhKWxQ+ccQUQqm7zYRKm2PQFkymyYflqyo
-         tgAZOTdc/iOCV46nZU/zLnlDuISP3g7tl/3WjqufbM5YQX5zwAvf0qiA/pP2hMma697W
-         4Dp1eCKQRjzgxtvhqfntPiydsypYSh39YJgvA9JWOH0XD1bgeQbH2OFpCyHfWnbzV0lB
-         qneMfFJAeCY+5qynbR1pbQW53tu3aQoLnhOhxzDRDwe2NRTEfWjAOybz81MGFE1A3vjh
-         Mr8Q==
-X-Gm-Message-State: AFqh2kow2o94ltFZH7mn9b2Jxl/1h0xF4lVXWIdw8Dft16B2dKIUNKWX
-        uMn3kAttTjPUqALa1c2j4M8=
-X-Google-Smtp-Source: AMrXdXtaxVV4afC/qjhg8s+YOdgYHD6KctqdBiUSdcl6Iv41L78W4z9tJVuna8ts11e0n4WF/PHewA==
-X-Received: by 2002:ac8:718d:0:b0:3b0:11a1:3140 with SMTP id w13-20020ac8718d000000b003b011a13140mr33941440qto.43.1674504407207;
-        Mon, 23 Jan 2023 12:06:47 -0800 (PST)
-Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
-        by smtp.gmail.com with ESMTPSA id cg5-20020a05622a408500b003b6382f66b1sm11163331qtb.29.2023.01.23.12.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 12:06:46 -0800 (PST)
-Date:   Mon, 23 Jan 2023 15:06:44 -0500
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v1 1/1] serial: liteuart: Remove a copy of UART id in
- private structure
-Message-ID: <Y87o1Mk8eHoPG1zA@errol.ini.cmu.edu>
-References: <20230123192604.81452-1-andriy.shevchenko@linux.intel.com>
+        Mon, 23 Jan 2023 15:07:34 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1767281
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:07:31 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P11CS2Bvfz9v7ZH
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:59:32 +0800 (CST)
+Received: from [10.81.216.232] (unknown [10.81.216.232])
+        by APP2 (Coremail) with SMTP id GxC2BwBHG2Lg6M5j5sa9AA--.11637S2;
+        Mon, 23 Jan 2023 21:07:07 +0100 (CET)
+Message-ID: <d1a576ee-4af4-6053-8ae2-dc04fdd1b73b@huaweicloud.com>
+Date:   Mon, 23 Jan 2023 21:06:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123192604.81452-1-andriy.shevchenko@linux.intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7> <Y87m5KcSaieYZyeM@rowland.harvard.edu>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y87m5KcSaieYZyeM@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwBHG2Lg6M5j5sa9AA--.11637S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww43ZFWrAFy7tr1xWrW5Awb_yoW8XrWkpF
+        yvkay3tF97Aryq9a1kCrWIq3ZrZ393tryktF48C3yfG3sYqrna9F4ftrWrua43Jr4fuw1j
+        vw4Yq3WkXF1UuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UuBT5UUUUU=
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 09:26:04PM +0200, Andy Shevchenko wrote:
-> The struct liteuart_port keeps tracking of UART ID which is also
-> saved in the struct uart_port as line member. Drop the former one
-> and use the latter everywhere.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> 
-> Depends on
-> https://lore.kernel.org/linux-serial/20230123191741.79751-1-andriy.shevchenko@linux.intel.com/
-> 
->  drivers/tty/serial/liteuart.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index 562892395570..80de3a42b67b 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -46,7 +46,6 @@
->  struct liteuart_port {
->  	struct uart_port port;
->  	struct timer_list timer;
-> -	u32 id;
->  	u8 irq_reg;
->  };
->  
-> @@ -314,7 +313,6 @@ static int liteuart_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	uart->id = dev_id;
->  	/* values not from device tree */
->  	port->dev = &pdev->dev;
->  	port->iotype = UPIO_MEM;
-> @@ -334,7 +332,7 @@ static int liteuart_probe(struct platform_device *pdev)
->  	return 0;
->  
->  err_erase_id:
-> -	xa_erase(&liteuart_array, uart->id);
-> +	xa_erase(&liteuart_array, dev_id);
->  
->  	return ret;
->  }
-> @@ -342,10 +340,10 @@ static int liteuart_probe(struct platform_device *pdev)
->  static int liteuart_remove(struct platform_device *pdev)
->  {
->  	struct uart_port *port = platform_get_drvdata(pdev);
-> -	struct liteuart_port *uart = to_liteuart_port(port);
-> +	unsigned int line = port->line;
->  
->  	uart_remove_one_port(&liteuart_driver, port);
-> -	xa_erase(&liteuart_array, uart->id);
-> +	xa_erase(&liteuart_array, line);
->  
->  	return 0;
->  }
 
-Nice, thanks!
 
-Reviewed-by: Gabriel Somlo <gsomlo@gmail.com>
+On 1/23/2023 8:58 PM, Alan Stern wrote:
+> On Mon, Jan 23, 2023 at 05:16:27PM +0100, Jonas Oberhauser wrote:
+>> On 1/19/2023 5:41 PM, Alan Stern wrote:
+>>
+>>> But when you're comparing grace periods or critical sections to each other,
+>>> things get a little ambiguous.  Should G1 be considered to come before
+>>> G2 when t1(G1) < t1(G2), when t2(G1) < t2(G2), or when t2(G1) < t1(G2)?
+>>> Springing for (po ; rcu-order ; po?) amounts to choosing the second
+>>> alternative.
+>> Aha, I see! Powerful notation indeed.
+>> Keeping that in mind, wouldn't it make sense for pb also be changed to
+>> `...;po?` ?
+> You mean changing the definition of pb to either:
+>
+> 	prop ; strong-fence ; hb* ; po? ; [Marked]
+>
+> or
+>
+> 	prop ; strong-fence ; hb* ; [Marked] ; po? ; [Marked]
 
-> -- 
-> 2.39.0
-> 
+Oh no, not at all!
+
+I mean that
+     pb = prop ; po ; {strong ordering-operation} ; po ; hb* ; [Marked]
+could instead be
+     pb = prop ; po ; {strong ordering-operation} ; po? ; hb* ; [Marked]
+
+(note that the po ; ... ; po part is actually folded inside the actual 
+definition of strong fence).
+
+> rcu-fence is different because rcu-order has to begin and end with
+> either a grace period or a critical section, and both of these restrict
+> the execution order of surrounding events:
+>
+> 	If X is a synchronize_rcu() or rcu_read_unlock() then events
+> 	po-before X must execute before X;
+>
+> 	If X is a synchronize_rcu() or rcu_read_lock() then events
+> 	po-after X must execute after X.
+>
+I believe so do the strong ordering-operations in pb.
+best wishes, jonas
+
