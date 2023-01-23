@@ -2,106 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51D76773ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1476773F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjAWCG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 21:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S230255AbjAWCLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 21:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWCGy (ORCPT
+        with ESMTP id S229817AbjAWCLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 21:06:54 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9050810AB0;
-        Sun, 22 Jan 2023 18:06:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674439613; x=1705975613;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B+VMm9bQp6s4IiTU8jZ0r/14Ef7CmjxEBcL3TuqH830=;
-  b=MQ8UqXpOHVKVskXuLUp5Rg/V2E7tabnaOiKwRnQ/UUt5m3TD7CqOP9N8
-   Za7Hhu9WRdFVVYEiz3k5eJzDHareVcULV06hT+xMyEpJMSqh1mhgqbpzY
-   d2+N4E2BblxOmN1A8HITBfiJRAELVM5x4rOdQCHer0yzp3rpjDx1hagRi
-   yRfaqk6iHdrGSXNhnAhpo/0xXhUBwlXENfAsQg6AF0/sn3JBakcf14xeH
-   LGKJdOnQ/UUqb/MExrUDtFgwW32NlJlwgfQqrHsBhEz2VW2wsllDVNQgq
-   Byzob/tYipOa/qy7/g9jFsK9cBO024W5p4cJxlypgZUHpimkzOS+TtJyj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="327225354"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="327225354"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 18:06:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="661481336"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="661481336"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Jan 2023 18:06:49 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJmET-0005MC-0S;
-        Mon, 23 Jan 2023 02:06:49 +0000
-Date:   Mon, 23 Jan 2023 10:06:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH 2/8] eventfs: adding eventfs dir add functions
-Message-ID: <202301230913.1Wohch4k-lkp@intel.com>
-References: <1674407228-49109-2-git-send-email-akaher@vmware.com>
+        Sun, 22 Jan 2023 21:11:07 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A12125A2;
+        Sun, 22 Jan 2023 18:11:03 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id v23so10089358plo.1;
+        Sun, 22 Jan 2023 18:11:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hgCwbfHUqzSMimmUl+HmnmrlXdLUzZkCtP90K9LBmDA=;
+        b=PfcyXdaH9tjRLkzHJNi/eAO06HNhh0jUvKHfHWHKMllH3R9XtQURjdPzmby86O01PS
+         fausoC/5p+pJj+lQqmeZdofPx0EghCLr2Nq3LdZLTj8mpAtzHLCrv4ytA79XlJyszNx1
+         bt7hoJTS1eA4ptKtpzGLNckn9awtWFWfT0fgMMlgASRCO/IBekoWUq+T78bx+l5SIALG
+         iItL82C3ZDdgUG5WSfNcu3h0EOW3Iqa2lnYe4CDHsVL5IRQD5wCeb2epQZAkRGm5jEsK
+         3wAfEajQSYlQgGlhWpx10rqH2NeqhmhYJHyooIzfQEuzHs/grxcLT3tfy7ib5Y/rWH1n
+         7aew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hgCwbfHUqzSMimmUl+HmnmrlXdLUzZkCtP90K9LBmDA=;
+        b=Jc2+kxvxI1hcAI+U7eFBSA4dFvyNadja/xMEsC5Jw8iuzA+2o2m1ACPtiortvvFoD9
+         m1LzVOp4xJOQBIyPkRrBg6zXNWagerVCO2jsm4JbEzmyrUNG0wQ7QrKAPcKpRTdJyGuU
+         NckbkDMHurLg8PjCTU3XkTmjR1AIXMRw72GxeqQiJLwFzxmvWircOlXBGzLAUmHris7Q
+         n3Rhj0KNKLVwzYdWvSLmu/8EciYa+FrY4Rm3zYc8mqp780eEe5vSD8sCZfkjhiKjYeuV
+         7cBP2WG3qvg/LZ1rqXYmrY+0+Xz9yAOp76yjgxWnxUdR6r6yQbnbkSuG8Zg+6iP4yAiR
+         uMpQ==
+X-Gm-Message-State: AFqh2kqU/7GpAPVIshtjjrA8W7C1Lw+Om2EWCiAhEXB34VA5SZIc+uYr
+        0LmRG17Y2cuXG3ISYMMCmYo=
+X-Google-Smtp-Source: AMrXdXvzKpxRzl6KdiTqxN1ZHV0dLGbklJ27cUWHuu38ZmnNYcvS/h5O4VPOh9o1IlCxMOr+RhT/pA==
+X-Received: by 2002:a17:90b:18a:b0:228:c8a1:3510 with SMTP id t10-20020a17090b018a00b00228c8a13510mr22968510pjs.5.1674439863008;
+        Sun, 22 Jan 2023 18:11:03 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
+        by smtp.gmail.com with ESMTPSA id lj10-20020a17090b344a00b002272616d3e1sm5497508pjb.40.2023.01.22.18.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 18:11:02 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id DB3551055BA; Mon, 23 Jan 2023 09:10:58 +0700 (WIB)
+Date:   Mon, 23 Jan 2023 09:10:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Diederik de Haas <didi.debian@cknow.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] docs: ext4: Fix full name of the GPL
+Message-ID: <Y83sssQr5DMg2KMc@debian.me>
+References: <20230122180552.53445-1-didi.debian@cknow.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zNGtea+rj3WwB3Tt"
 Content-Disposition: inline
-In-Reply-To: <1674407228-49109-2-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230122180552.53445-1-didi.debian@cknow.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajay,
 
-Thank you for the patch! Perhaps something to improve:
+--zNGtea+rj3WwB3Tt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc5 next-20230120]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Sun, Jan 22, 2023 at 07:05:51PM +0100, Diederik de Haas wrote:
+> Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-patch link:    https://lore.kernel.org/r/1674407228-49109-2-git-send-email-akaher%40vmware.com
-patch subject: [PATCH 2/8] eventfs: adding eventfs dir add functions
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230123/202301230913.1Wohch4k-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/db5e58a9349f39590a8fb39f0c3373c4c483e064
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-        git checkout db5e58a9349f39590a8fb39f0c3373c4c483e064
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
+No patch description, really?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  Documentation/filesystems/ext4/about.rst | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/filesystems/ext4/about.rst b/Documentation/fil=
+esystems/ext4/about.rst
+> index cc76b577d2f4..c150519bbf3f 100644
+> --- a/Documentation/filesystems/ext4/about.rst
+> +++ b/Documentation/filesystems/ext4/about.rst
+> @@ -17,7 +17,8 @@ created demonstration filesystems.
+> =20
+>  License
+>  -------
+> -This book is licensed under the terms of the GNU Public License, v2.
+> +This book is licensed under the terms of the GNU General Public License,
+> +v2.
 
-sparse warnings: (new ones prefixed by >>)
->> fs/tracefs/event_inode.c:27:31: sparse: sparse: symbol 'eventfs_root_dir_inode_operations' was not declared. Should it be static?
+The doc has already SPDX identifier above. Please remmove the sentence above
+instead.
+=20
+In recent days, I have seen the sudden influx of s/GNU Public License/GNU
+General Public License/g patches from you, for which many developers ask yo=
+u to
+replace with SPDX identifier instead (see [1], [2], and [3]). Please do
+a tree-wide SPDX patch.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks.
+
+[1]: https://lore.kernel.org/lkml/ad99d227-ce82-319b-6323-b70ac009d0e7@roec=
+k-us.net/=09
+[2]: https://lore.kernel.org/lkml/6d9053c6-b56e-51f4-db47-79264f1f5672@wana=
+doo.fr/
+[3]: https://lore.kernel.org/lkml/20230122111707.68ddead6@hermes.local/
+ =20
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--zNGtea+rj3WwB3Tt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY83sqgAKCRD2uYlJVVFO
+oxLVAQCDkmlPnvmX1rmIBFt/kjjIMljAjJVOHUvSZqg1yxnk9gD/fDOypd3ecfEi
+VdlKAtmtiwyYQnLNF1HWRWlG2JtqPAY=
+=OAcv
+-----END PGP SIGNATURE-----
+
+--zNGtea+rj3WwB3Tt--
