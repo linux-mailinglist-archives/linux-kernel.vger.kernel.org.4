@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB356782EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF7D6782E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbjAWRUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S233615AbjAWRUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbjAWRUw (ORCPT
+        with ESMTP id S233574AbjAWRUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:20:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3231F6594
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:19:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674494398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pOoqxnL289W8RYJpdgnKmU7vs7+RtONm5/MOnF58uqA=;
-        b=SCnQDeHJGERVWmMCpkbCQ5FpuJCj2hH2GL+Eae7KcJNhN8j7fImkREGmm/APhMT4y4EZPb
-        DodBP829K5OSxMuCttEt3/hY98ji/U/I2UwSsKmEREZJRvNbd8NJ6j46jyxGphI39Hlas7
-        wLvsWFF7XEEoe80SPNYujwqJi4kOd30=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-164-DQJIWadMMVONSMP0SVtNSQ-1; Mon, 23 Jan 2023 12:19:53 -0500
-X-MC-Unique: DQJIWadMMVONSMP0SVtNSQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE35D3C10220;
-        Mon, 23 Jan 2023 17:19:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1421492B02;
-        Mon, 23 Jan 2023 17:19:51 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y865EIsHv3oyz+8U@casper.infradead.org>
-References: <Y865EIsHv3oyz+8U@casper.infradead.org> <Y862ZL5umO30Vu/D@casper.infradead.org> <20230120175556.3556978-1-dhowells@redhat.com> <318138.1674491927@warthog.procyon.org.uk>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com, John Hubbard <jhubbard@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/8] iov_iter: Improve page extraction (ref, pin or just list)
+        Mon, 23 Jan 2023 12:20:15 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257A0449D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:20:13 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso9117980wmq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V0msOilVBY3pjgMACo3Te8zEGERavlW1uoU0JEDp1xM=;
+        b=pah5q2Hj/GvzfjsYuW6mAtlCdeIXaWMAxaTQUuLqDBUXpQT10XeRsLwX0d52wTpeBO
+         WvgF9ZkJm7ER3iakvA+Me3DBjferPoGSnV3hT11DUHH96u79pVd1PqT1tiTpYHmU/ytp
+         aRDojCASz9NqsQMDmFUOd8KvhXN7WfxKvVEdYm11sWvWYoi3vyHT0vpqEZN4K7ShrpyA
+         0Ls93gY3yE7/xvMU49fDBX0WCiISaT1QCsNOI2cVFrq5Ticm/FTAeqjl9CEXnmxaf/34
+         Sqer/ZDtQTdIdZ/sJ1nkoBKl952d1+xsNMc+FvvbLmF33oRTKPY5Jz3vMOhDCYIJzz8T
+         NUpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V0msOilVBY3pjgMACo3Te8zEGERavlW1uoU0JEDp1xM=;
+        b=TaGjDp0TDAxKDRjuchaQVeU6Haf3gXE3ZfvEtuf82hcFGle7u0kGRaocYex3XLm3Fx
+         mxOxouqBZCjqqMKeJ+kaElfSRo3yS5wkO1nhKmCbWcsf/6rWyIN4YRCSTIAh5zdX7hnK
+         Ehav4lSAFYnc6QdrrS6lJw1w49GwINdKGda3MgNGCU2t95SipimPs7X8xkbW59Xni7nX
+         mDFQGBbmMCtoVTC9565GER2tG2TAMmmxMd0PXzHtbx8Vq2pCag771aRcAtVN9XIv1K+0
+         7HNCTNkBTLVUUWFBv+m7dcmqJlpZ7Fm1DSYjH4Z0dIQ9JiowA26O1wfqtxFoSPP26RfO
+         gjqw==
+X-Gm-Message-State: AFqh2koE1jhp5cROHrY82PYgU0n6NfAiDluTsRiY+3VagmIdkEy/zYat
+        4s9rk0pNFa0fJgPkdImCarbqYA==
+X-Google-Smtp-Source: AMrXdXsOd0W6F4AyRHz94PTRyrytWVwh2ZPNKPOiNOKdtIRejMRkoAOE9QGRdRKQ3WxJBLGOkq0Fpw==
+X-Received: by 2002:a05:600c:35d4:b0:3db:3694:b93c with SMTP id r20-20020a05600c35d400b003db3694b93cmr11899304wmq.15.1674494411786;
+        Mon, 23 Jan 2023 09:20:11 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003daff80f16esm15530766wmg.27.2023.01.23.09.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 09:20:11 -0800 (PST)
+Message-ID: <bfe19712-5801-573b-220e-c96494f11393@linaro.org>
+Date:   Mon, 23 Jan 2023 18:20:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <324814.1674494391.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 23 Jan 2023 17:19:51 +0000
-Message-ID: <324815.1674494391@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: PCI: qcom: Add SM8550 compatible
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230119112453.3393911-1-abel.vesa@linaro.org>
+ <7befa113-c45a-93d0-2696-17bbf62af711@linaro.org>
+ <Y864lFLEQyCwZLef@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y864lFLEQyCwZLef@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
+On 23/01/2023 17:40, Abel Vesa wrote:
+> 
+>>
+>>> +        resets:
+>>> +          minItems: 1
+>>
+>> Why second reset is optional?
+> 
+> link_down reset is needed only by g4x2 pcie, AFAICT.
 
-> > Wouldn't that potentially make someone's entire malloc() heap entirely=
- NOCOW
-> > if they did a single DIO to/from it.
-> =
+OK
 
-> Yes.  Would that be an actual problem for any real application?
-
-Without auditing all applications that do direct I/O writes, it's hard to
-say - but a big database engine, Oracle for example, forking off a process=
-,
-say, could cause a massive slow down as fork suddenly has to copy a huge
-amount of malloc'd data unnecessarily[*].
-
-[*] I'm making wild assumptions about how Oracle's DB engine works.
-
-> > Also you only mention DIO read - but what about "start DIO write; fork=
-();
-> > touch buffer" in the parent - now the write buffer belongs to the chil=
-d
-> > and they can affect the parent's write.
-> =
-
-> I'm struggling to see the problem here.  If the child hasn't exec'd, the
-> parent and child are still in the same security domain.  The parent
-> could have modified the buffer before calling fork().
-
-It could still inadvertently change the data its parent set to write out. =
- The
-child *shouldn't* be able to change the parent's in-progress write.  The m=
-ost
-obvious problem would be in something that does DIO from a stack buffer, I
-think.
-
-David
+Best regards,
+Krzysztof
 
