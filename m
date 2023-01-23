@@ -2,120 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C4C678252
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57812678254
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjAWQym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S232023AbjAWQzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbjAWQyf (ORCPT
+        with ESMTP id S230141AbjAWQzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:54:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AB6B76D;
-        Mon, 23 Jan 2023 08:54:29 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F371D2D9;
-        Mon, 23 Jan 2023 17:54:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674492867;
-        bh=DEIsYAdzjE5R62Z2EIoklE1UuDpML7s7ZziMIR2i0Tk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=spZCZjqgWsIrZZ8DCDJgVSoz+o5bHQbhdEJSHZdi17ndQeSv68aJl8jFYraY+0U7c
-         XVqRgFVcSs5MHwsvLK+bYyj48Fa8GqvjJ0E6JOTmz/NGIBmUdIxkkSmjkeYuhgcmjF
-         PqFDkWYDXv199SXuQapuKlzksaPPh5dMS/wBqxHs=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <d4867882-4eff-e926-e1eb-3217e608f091@i2se.com>
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com> <d5363f85-44e1-eee1-f7a5-61102637ef53@i2se.com> <167440481093.3533645.5465896340839457121@Monstersaurus> <d4867882-4eff-e926-e1eb-3217e608f091@i2se.com>
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mon, 23 Jan 2023 11:55:52 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526CC3C1F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:55:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DECAD3368D;
+        Mon, 23 Jan 2023 16:55:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674492949; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8BjJbv2vSf4l0oQI30wY+XiPDmLzLJJ1YmQm5vdgIO4=;
+        b=DowRaoZYF0DeIxE5rrpPUHrdtHLSGouZuBYp1UXXzCpcOsnYuUnw/+EsyLjIUJXwvSbKlv
+        YmdlbigPX1vE/c+7P0tm1DnHn6yH8N43z91lTgOiW5caVgiYg3GB3QJ2S6XxYxClbEtDdK
+        Lzw2UfkJI8FWvmkwi843sWifbhhiVEw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6C101357F;
+        Mon, 23 Jan 2023 16:55:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id v0QsLBW8zmPNCQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 23 Jan 2023 16:55:49 +0000
+Date:   Mon, 23 Jan 2023 17:55:49 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
         linux-arm-kernel@lists.infradead.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-media@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>
-Date:   Mon, 23 Jan 2023 16:54:24 +0000
-Message-ID: <167449286433.135671.17893045578331831111@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <Y868Fadajv27QMXh@dhcp22.suse.cz>
+References: <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
+ <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+ <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
+ <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+ <20230120170815.yuylbs27r6xcjpq5@revolver>
+ <CAJuCfpH4o-iCmzdUcYD9bKieJ6-k-MZYLuHFhH+bN9yE07sibw@mail.gmail.com>
+ <Y8rQNj5dVyuxRBOf@casper.infradead.org>
+ <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
+ <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
+ <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
-
-Quoting Stefan Wahren (2023-01-22 18:07:03)
-> Hi Kieran,
->=20
-> Am 22.01.23 um 17:26 schrieb Kieran Bingham:
-> > Hi Stefan,
+On Mon 23-01-23 08:22:53, Suren Baghdasaryan wrote:
+> On Mon, Jan 23, 2023 at 1:56 AM Michal Hocko <mhocko@suse.com> wrote:
 > >
-> > Quoting Stefan Wahren (2023-01-22 14:21:05)
-> >> Hi Umang,
-> >>
-> >> Am 18.01.23 um 12:58 schrieb Umang Jain:
-> >>> Drop custom logging from the vchiq interface.
-> >>> Mostly of them are replaced with dev_dbg and friends
-> >>> and/or pr_info and friends.
-> >>>
-> >>> The debugfs log levels (in 4/4) are mapped to kernel
-> >>> logs levels (coming from include/linux/kern_levels.h)
-> >>> Would like some thoughts on it as I am not sure (hence
-> >>> marking this is RFC)
-> >>>
-> >>>   From drivers/staging/vc04_services/interface/TODO:
-> >>>
-> >>> """
-> >>> * Cleanup logging mechanism
-> >>>
-> >>> The driver should probably be using the standard kernel logging mecha=
-nisms
-> >>> such as dev_info, dev_dbg, and friends.
-> >>> """
-> >> at first i want to thank you for the work on vchiq so far.
-> >>
-> >> There is something which is not directly related to this series, but it
-> >> is also about debugging. The driver has a buffer which is accessed by
-> >> it's own DEBUG_* macros. The content of this debug buffer can be dumped
-> >> via the /dev/vchiq which is also used by ioctl. I would appreciate to
-> >> move this dump feature into a new debugfs entry.
-> > Do you have a full list of the tasks you'd like to see completed ?
-> > (including/or above drivers/staging/vc04_services/interface/TODO)
->=20
-> i consider every point except of point 1 (importing new drivers) as=20
-> necessary to leave staging.
+> > On Fri 20-01-23 09:50:01, Suren Baghdasaryan wrote:
+> > > On Fri, Jan 20, 2023 at 9:32 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > [...]
+> > > > The page fault handler (or whatever other reader -- ptrace, proc, etc)
+> > > > should have a refcount on the mm_struct, so we can't be in this path
+> > > > trying to free VMAs.  Right?
+> > >
+> > > Hmm. That sounds right. I checked process_mrelease() as well, which
+> > > operated on mm with only mmgrab()+mmap_read_lock() but it only unmaps
+> > > VMAs without freeing them, so we are still good. Michal, do you agree
+> > > this is ok?
+> >
+> > Don't we need RCU procetions for the vma life time assurance? Jann has
+> > already shown how rwsem is not safe wrt to unlock and free without RCU.
+> 
+> Jann's case requires a thread freeing the VMA to be blocked on vma
+> write lock waiting for the vma real lock to be released by a page
+> fault handler. However exit_mmap() means mm->mm_users==0, which in
+> turn suggests that there are no racing page fault handlers and no new
+> page fault handlers will appear. Is that a correct assumption? If so,
+> then races with page fault handlers can't happen while in exit_mmap().
+> Any other path (other than page fault handlers), accesses vma->lock
+> under protection of mmap_lock (for read or write, does not matter).
+> One exception is when we operate on an isolated VMA, then we don't
+> need mmap_lock protection, but exit_mmap() does not deal with isolated
+> VMAs, so out of scope here. exit_mmap() frees vm_area_structs under
+> protection of mmap_lock in write mode, so races with anything other
+> than page fault handler should be safe as they are today.
 
-Thanks
-
-> Additionally there is the additional point (i can add them to the TODO)=20
-> above. Unfortunately i don't have a complete insight, how vchiq should=20
-> be to be acceptable. Sorry, if i can't help you further with possible=20
-> resource planning.
->=20
-> Are some points on the TODO list unclear?
-
-I believe the list is fine, but I was enquiring if there were anymore
-additional tasks above the scope listed in
-drivers/staging/vc04_services/interface/TODO which are required. I don't
-think you need to send a patch for the task above - unless there are a
-lot more tasks required, or it becomes too much to do now.
-
-The goal is to get the ISP upstream to support libcamera, and it would
-help to know how deep the rabbit hole really is ;-)
-
---
-Kieran
+I do not see you talking about #PF (RCU + vma read lock protected) with
+munmap. It is my understanding that the latter will synchronize over per
+vma lock (along with mmap_lock exclusive locking). But then we are back
+to the lifetime guarantees, or do I miss anything.
+-- 
+Michal Hocko
+SUSE Labs
