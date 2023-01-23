@@ -2,112 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E250867822F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912F7678230
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjAWQvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S233134AbjAWQvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjAWQvK (ORCPT
+        with ESMTP id S232095AbjAWQvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:51:10 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EF72CC69
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:51:03 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v13so15289710eda.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:51:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fFIft8S32BmFZKXY5TvNYqQs4sV2+M7z/vCsuLNDIQE=;
-        b=pM4MCpPZ58vBoPT5SaN7QWcijJhXPym6TiFxQeHTPGWJ7oVF6196AL0E2oFMBnTBWv
-         UEABa6ZOXpI3n4hhk2g9xHy424c10v73x30XC3JTnQHYxVQ0a9NEKgPahnWVs2Jajq3q
-         uPokLboxZrVWSzy1if8wyka+clN99G4TBYhYrEtPfRDVRKuYBzjpkgfAY1CAhkue3mdQ
-         5AtyGSvtvc9h38hQOoTooh42TFAwHD44LGcbs6zwf1AigZDs0tErfJ256nEwxFX83RLW
-         SHy4LtYUw+bOmgM4rRAzQwPY/y0++X4epXLza3zzaSFWEXGDx8XEeLNcNz2ltecfaNYt
-         8qLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFIft8S32BmFZKXY5TvNYqQs4sV2+M7z/vCsuLNDIQE=;
-        b=yE5M0PNzlRsaMerd7ygC62qM89irI4lqHv2NUiHJs8anMyfVCgcMC/JqdJmXF3H309
-         6kOeg/RllEWMkYezS1yyNGewveJvBjdtcjpjRXKQBUOC0+uPhZ1fB0OYrVkm+bttakvi
-         fjRJylbkDIkgNrbfaHu5ludLrCRDp9RNJblV/Qwomf+H1YUk3QCu+9wT3bnngTxDGwfl
-         x1JRQgOktdKBKuKk12cJuMy4qVCMHZqJigRTks0cffggVomxeePttY7HQD3neW4mwj/6
-         VRYwXGHy14X4n2+woiHedxLX0T3cWzA3+o73arZ55H+/t4HNHP5NczbEiSablkNTiG1H
-         We2w==
-X-Gm-Message-State: AFqh2kpK/wPikEWXjubxBxNCGqDpCGqx+QnucwfnzgMLWYW9tWBrNxim
-        Mckpz1N4IuKpSmU9OgyrZ+n5Tg==
-X-Google-Smtp-Source: AMrXdXv5E+oOzXqjXTpRxirJ47TSsNWS2CN2ScOVvs+G5nw1KdES0FIdpKuXaVeAJyIRrcFsuq3e4w==
-X-Received: by 2002:aa7:c393:0:b0:49e:6887:9f88 with SMTP id k19-20020aa7c393000000b0049e68879f88mr17844573edq.29.1674492661547;
-        Mon, 23 Jan 2023 08:51:01 -0800 (PST)
-Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id r25-20020a50aad9000000b0049f29a7c0d6sm80220edc.34.2023.01.23.08.51.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 08:51:01 -0800 (PST)
-Message-ID: <22746282-3029-8451-bd3d-9aacc4112eb7@linaro.org>
-Date:   Mon, 23 Jan 2023 17:50:59 +0100
+        Mon, 23 Jan 2023 11:51:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF102BF08;
+        Mon, 23 Jan 2023 08:51:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C0D460F9B;
+        Mon, 23 Jan 2023 16:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DE21C433D2;
+        Mon, 23 Jan 2023 16:51:10 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 11:51:08 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com
+Subject: Re: [PATCH 0/8] tracing: introducing eventfs
+Message-ID: <20230123115108.7dab91f3@gandalf.local.home>
+In-Reply-To: <1674407228-49109-9-git-send-email-akaher@vmware.com>
+References: <1674407228-49109-1-git-send-email-akaher@vmware.com>
+        <1674407228-49109-9-git-send-email-akaher@vmware.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v4 1/3] clk: qcom: smd: Add XO RPM clocks for
- MSM8226/MSM8974
-Content-Language: en-US
-To:     Rayyan Ansari <rayyan@ansari.sh>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20230121192540.9177-1-rayyan@ansari.sh>
- <20230121192540.9177-2-rayyan@ansari.sh>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230121192540.9177-2-rayyan@ansari.sh>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 22 Jan 2023 22:37:08 +0530
+Ajay Kaher <akaher@vmware.com> wrote:
 
-
-On 21.01.2023 20:25, Rayyan Ansari wrote:
-> Add the XO and XO_A clocks to the MSM8974 clock list, which is also
-> used on MSM8226.
+> Events Tracing infrastructure contains lot of files, directories
+> (internally in terms of inodes, dentries). And ends up by consuming
+> memory in MBs. We can have multiple events of Events Tracing, which
+> further requires more memory.
 > 
-> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/clk/qcom/clk-smd-rpm.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Instead of creating inodes/dentries, eventfs could keep meta-data and
+> skip the creation of inodes/dentries. As and when require, eventfs will
+> create the inodes/dentries only for required files/directories.
+> Also eventfs would delete the inodes/dentries once no more requires
+> but preserve the meta data.
 > 
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index 6f23ca4828f4..31f6de13d156 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -610,6 +610,8 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8936 = {
->  };
->  
->  static struct clk_smd_rpm *msm8974_clks[] = {
-> +	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
-> +	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->  	[RPM_SMD_PNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
+> Tracing events took ~9MB, with this approach it took ~4.5MB
+> for ~10K files/dir.
+> 
+> [PATCH 1/8]: Introducing struct tracefs_inode
+> [PATCH 2/8]: Adding eventfs-dir-add functions
+> [PATCH 3/8]: Adding eventfs-file-add function
+> [PATCH 4/8]: Adding eventfs-file-directory-remove function
+> [PATCH 5/8]: Adding functions to create-eventfs-files
+> [PATCH 6/8]: Adding eventfs lookup, read, open functions
+> [PATCH 7/8]: Creating tracefs_inode_cache
+> [PATCH 8/8]: Moving tracing events to eventfs
+
+Hi Ajay,
+
+Thanks a lot for sending these out.
+
+Note, something went wrong with your threading, as all the patches should
+be a reply to this one, but instead, they all (including this email) are a
+reply to patch 1 ??
+
+Also, for v2, can you address all the kernel test robot issues as well as
+what Dan Carpenter wrote. There's also a couple of whitespace issues.
+
+Finally, when I run the ftrace selftests that are in the kernel repository:
+
+ # cd linux.git
+ # cd tools/testing/selftests/ftrace
+ # ./ftracetests
+
+It crashes with a NULL kernel dereference:
+
+[ 1021.844973] general protection fault, probably for non-canonical address 0x626f7270747365a6: 0000 [#1] PREEMPT SMP PTI
+[ 1021.848900] CPU: 2 PID: 1160 Comm: ftracetest Not tainted 6.2.0-rc3-test-00014-g1a351602422d #152
+[ 1021.852384] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+[ 1021.855716] RIP: 0010:dcache_dir_open_wrapper+0x6b/0x1b0
+[ 1021.857700] Code: 75 28 e9 f7 00 00 00 48 8b 7b 10 48 85 ff 74 09 48 83 c7 58 e8 36 ad 0c 00 48 8b 43 18 48 8d 58 e8 49 39 c4 0f 84 d4 00 00 00 <80> 7b 4a 00 75 d7 c6 43 4a 01 48 8b 45 30 48 8d b8 a0 00 00 00 e8
+[ 1021.864170] RSP: 0018:ffffa68b40f0fcb0 EFLAGS: 00010296
+[ 1021.866133] RAX: 626f727074736574 RBX: 626f72707473655c RCX: ffff9c6bc08cb000
+[ 1021.868797] RDX: ffffffff89058dc0 RSI: ffff9c6bc09f6f00 RDI: ffff9c6bceef2810
+[ 1021.871389] RBP: ffff9c6bcee223c0 R08: ffffffff8a3b2da0 R09: ffff9c6bceef2810
+[ 1021.873953] R10: 0000000000000007 R11: 0000000000000002 R12: ffff9c6bc3664980
+[ 1021.876669] R13: ffff9c6bc09f6f00 R14: ffff9c6bceef2810 R15: ffff9c6bc09f6f00
+[ 1021.880350] FS:  00007f58e39ba740(0000) GS:ffff9c6d37c80000(0000) knlGS:0000000000000000
+[ 1021.883289] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1021.885401] CR2: 000055a0c1465000 CR3: 000000010f5a8003 CR4: 0000000000170ee0
+[ 1021.888117] Call Trace:
+[ 1021.889227]  <TASK>
+[ 1021.890216]  ? __pfx_dcache_dir_open_wrapper+0x10/0x10
+[ 1021.892088]  do_dentry_open+0x1e5/0x410
+[ 1021.893501]  path_openat+0xd7f/0x1220
+[ 1021.894863]  ? asm_exc_page_fault+0x22/0x30
+[ 1021.896325]  ? trace_hardirqs_on+0x2a/0xe0
+[ 1021.897715]  do_filp_open+0xaf/0x160
+[ 1021.898972]  do_sys_openat2+0xaf/0x170
+[ 1021.900211]  __x64_sys_openat+0x6a/0xa0
+[ 1021.901451]  do_syscall_64+0x3a/0x90
+[ 1021.902636]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[ 1021.904145] RIP: 0033:0x7f58e3ab9e41
+[ 1021.905255] Code: 44 24 18 31 c0 41 83 e2 40 75 3e 89 f0 25 00 00 41 00 3d 00 00 41 00 74 30 89 f2 b8 01 01 00 00 48 89 fe bf 9c ff ff ff 0f 05 <48> 3d 00 f0 ff ff 77 3f 48 8b 54 24 18 64 48 2b 14 25 28 00 00 00
+[ 1021.910033] RSP: 002b:00007ffdfae49b40 EFLAGS: 00000287 ORIG_RAX: 0000000000000101
+[ 1021.913838] RAX: ffffffffffffffda RBX: 000055a0c145bfb1 RCX: 00007f58e3ab9e41
+[ 1021.915613] RDX: 0000000000090800 RSI: 000055a0c1463380 RDI: 00000000ffffff9c
+[ 1021.917358] RBP: 000055a0c146338f R08: 0000000000000001 R09: 000000000000000f
+[ 1021.919110] R10: 0000000000000000 R11: 0000000000000287 R12: 000055a0c1463380
+[ 1021.920864] R13: 000055a0c145bfb1 R14: 0000000000000000 R15: 000055a0c145bfb2
+[ 1021.922613]  </TASK>
+[ 1021.923331] Modules linked in: vmw_vsock_virtio_transport vmw_vsock_virtio_transport_common vsock ip_tables
+[ 1021.925741] Dumping ftrace buffer:
+[ 1021.926709]    (ftrace buffer empty)
+[ 1021.927754] ---[ end trace 0000000000000000 ]---
+[ 1021.928993] RIP: 0010:dcache_dir_open_wrapper+0x6b/0x1b0
+
+Could you see what happened there?
+
+Thanks!
+
+-- Steve
