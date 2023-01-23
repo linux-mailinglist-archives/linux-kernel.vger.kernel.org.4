@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E6A678299
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947CD6782B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjAWRJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
+        id S233487AbjAWRP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjAWRJP (ORCPT
+        with ESMTP id S233282AbjAWRPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:09:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C590CB47F;
-        Mon, 23 Jan 2023 09:09:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 600D660FA5;
-        Mon, 23 Jan 2023 17:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA1DC433D2;
-        Mon, 23 Jan 2023 17:09:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674493751;
-        bh=Hz7k1SP8zG/4WZs/sS6lA7LYgIRw8mvfEhLYuE7uw7w=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Ie6Vl1vsh7puZY2UIHoFh/uxswZPu0q1meulNUre2Jz3Xv8TZtUNiTFinT22Z36WI
-         JZUWGhpGhmmXp5V0wE8w6eJL9XQ2Wmfqg6Qmc2dpvlstmRT8w+YUAbK0+q8ow22CfY
-         76KlN5XW15JjS/sUMujmkja/HYWcfQYZdrLTRWw21o69Dm/KAp/a0g8u6C4NowcL5N
-         5vS9tL8LfkH/byWJWGlmrtnTBfoG0AfOstv3DMYh4IWDafgxSLKNRztnr7uuEYdhGo
-         w9sXZVLW8yz+V2TCsDD4xm8VEZMK1rq3jIoyh7rZWXaUxBD8hhBa0g6rh8mqAjpzKb
-         QKgTEXChHyWWQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5D9175C084D; Mon, 23 Jan 2023 09:09:11 -0800 (PST)
-Date:   Mon, 23 Jan 2023 09:09:11 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Willy Tarreau <w@1wt.eu>, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] selftests/nolibc: small simplification of test
- development phase
-Message-ID: <20230123170911.GR2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230121085320.11712-1-w@1wt.eu>
- <20230121200038.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230121213455.GA16121@1wt.eu>
- <Y868lIin0bLM9HfM@biznet-home.integral.gnuweeb.org>
+        Mon, 23 Jan 2023 12:15:22 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC152CC55;
+        Mon, 23 Jan 2023 09:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674494114; x=1706030114;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/DBnlX2nHw8xdE1A7dfpSiRzHDfuI95hSDjM/i9Kzow=;
+  b=YisKAmcEsusnIBZwQXx2fFjo+zxnt0nELBJj2KSgMBjiw9BdJKJN2FqT
+   KGorQyMznTqkRI48vdkq3vBNUdn8hcvDur+eOoenkm8c5ZAKc9uLH1aQ9
+   7tcCmShxvqignrXj096zYOUw2B202QzOWmhBPSjH4ExHHTKSJaybK874l
+   lSzR5rXEO0QPVAVAgneA/zmi0RUfikR1QeyPNWl53g8zrnKIv7/gNNDDh
+   X2dtKTbGkR01EkdFL1qhzgVaGSmP0ICcLp8RWnIrerUPdpJ/fcElsDiZk
+   Jiq6dGRP/4t03p6KDCFzeuMd6xAnEWV2Z49NCnk3Ex2KdkLKznR5thYI4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328182987"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="328182987"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 09:09:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="639261262"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="639261262"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 23 Jan 2023 09:09:38 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5A777119; Mon, 23 Jan 2023 19:10:14 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Subject: [PATCH v1 1/3] ACPI: video: Fix refcounting in apple_gmux_backlight_present()
+Date:   Mon, 23 Jan 2023 19:10:04 +0200
+Message-Id: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y868lIin0bLM9HfM@biznet-home.integral.gnuweeb.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:57:56PM +0700, Ammar Faizi wrote:
-> On Sat, Jan 21, 2023 at 10:34:55PM +0100, Willy Tarreau wrote:
-> > On Sat, Jan 21, 2023 at 12:00:38PM -0800, Paul E. McKenney wrote:
-> > > One dependency is of course qemu-x86_64, so in the meantime I will figure
-> > > out where I get that from.  ;-)
-> > 
-> > I build it from time to time from the sources, it's not that long and
-> > normally doesn't reserve me any surprises. But if you have it for other
-> > platforms it's likely that you have it for most platforms as well,
-> > including this one.
-> 
-> Willy,
-> 
-> Is there a way to make it work for the default qemu installation?
-> Or maybe it's a mandatory requirement to build qemu from the source?
-> 
-> I use the qemu that comes from Ubuntu apt. I have "qemu-system-x86_64",
-> but no "qemu-x86_64". So, something like this...
-> 
->   $ which qemu-x86_64
->   $ echo $?
->   1
-> 
->   $ which qemu-system-x86_64
->   /usr/bin/qemu-system-x86_64
-> 
->   $ time make run-user
->     MKDIR   sysroot/x86/include
->   make[1]: Entering directory '/home/ammarfaizi2/work/linux.work.cc/tools/include/nolibc'
->   make[2]: Entering directory '/home/ammarfaizi2/work/linux.work.cc'
->   make[2]: Leaving directory '/home/ammarfaizi2/work/linux.work.cc'
->   make[2]: Entering directory '/home/ammarfaizi2/work/linux.work.cc'
->     INSTALL /home/ammarfaizi2/work/linux.work.cc/tools/testing/selftests/nolibc/sysroot/sysroot/include
->   make[2]: Leaving directory '/home/ammarfaizi2/work/linux.work.cc'
->   make[1]: Leaving directory '/home/ammarfaizi2/work/linux.work.cc/tools/include/nolibc'
->     CC      nolibc-test
->   /bin/sh: 1: qemu-x86_64: not found
->   0 test(s) passed.
-> 
->   real    0m0.506s
->   user    0m0.393s
->   sys     0m0.086s
-> 
-> It would be great if we can avoid building qemu from the source. But if
-> not, let's go with that.
+acpi_dev_get_first_match_dev() gets ACPI device with the bumped
+refcount. The caller must drop it when it's done.
 
-I had no problems building it from source.
+Fix ACPI device refcounting in apple_gmux_backlight_present().
 
-One possible enhancement would be to make the error message tell the
-user to build from source, but I will let you guys debate the merits
-and drawbacks of that approach.
+Fixes: 3cf3b7f012f3 ("ACPI: video: Fix Apple GMUX backlight detection")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/acpi/video_detect.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-							Thanx, Paul
+diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+index 65cec7bb6d96..0ccde0d4c527 100644
+--- a/drivers/acpi/video_detect.c
++++ b/drivers/acpi/video_detect.c
+@@ -114,12 +114,14 @@ static bool apple_gmux_backlight_present(void)
+ {
+ 	struct acpi_device *adev;
+ 	struct device *dev;
++	bool ret;
+ 
+ 	adev = acpi_dev_get_first_match_dev(GMUX_ACPI_HID, NULL, -1);
+ 	if (!adev)
+ 		return false;
+ 
+-	dev = acpi_get_first_physical_node(adev);
++	dev = get_device(acpi_get_first_physical_node(adev));
++	acpi_dev_put(adev);
+ 	if (!dev)
+ 		return false;
+ 
+@@ -127,7 +129,9 @@ static bool apple_gmux_backlight_present(void)
+ 	 * drivers/platform/x86/apple-gmux.c only supports old style
+ 	 * Apple GMUX with an IO-resource.
+ 	 */
+-	return pnp_get_resource(to_pnp_dev(dev), IORESOURCE_IO, 0) != NULL;
++	ret = pnp_get_resource(to_pnp_dev(dev), IORESOURCE_IO, 0) != NULL;
++	put_device(dev);
++	return ret;
+ }
+ 
+ /* Force to use vendor driver when the ACPI device is known to be
+-- 
+2.39.0
+
