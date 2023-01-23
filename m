@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE366785F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F9267861C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbjAWTRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S232481AbjAWTTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjAWTRR (ORCPT
+        with ESMTP id S232450AbjAWTTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:17:17 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB6F65BD;
-        Mon, 23 Jan 2023 11:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674501436; x=1706037436;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xUd5gtdKQP9i7qQAzIxAFPhsw1u+3g5bDp1G9zgUY9w=;
-  b=R2t92l0rc6oq8nPlERA/18yUlUPwbDzM3gF4gPUR8YONlRwbhIPPxB/V
-   ftrHJG5KqRscBVwbxelKowUurJ9gMlWh5Uyxj562e+i0Knzbq4cPC3Y1N
-   nH03dh5kGWpVsUFGoiftA4WGm1m5PL5PRh7ChNB0Tt4nofumYJwnN40jp
-   4qYclTEiu0cDYPWgsi9pFH+n+gANLrXk+7kyDjuRBXJB5j8S1333x8Dsb
-   nj0nc+zUsfMOmLB7iN499o+lDZal+KjVK4rMk6CdgwD7PqOVtlkWExOQl
-   psQczJLz9WH4BBBVLTHoa3kpLLoVtOmn5v5bPuIDyDUciSfBJmPYH1omH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327385790"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="327385790"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:17:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="611735871"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="611735871"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 23 Jan 2023 11:17:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B24F9119; Mon, 23 Jan 2023 21:17:46 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] serial: liteuart: Don't mix devm_*() with non-devm_*() calls
-Date:   Mon, 23 Jan 2023 21:17:41 +0200
-Message-Id: <20230123191741.79751-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Mon, 23 Jan 2023 14:19:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74C6C662
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:18:40 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D88981F38D;
+        Mon, 23 Jan 2023 19:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674501517; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IwnHNTQFcQb01gBYPKpdSxIYM/5A8BBiqgukBcwCA74=;
+        b=JUxt9xlrd3LgkvlvoFN0EQ4jwlcdyUlX8q9x3WmrxamRn53nUj5FSlg3bsj2ocxy8rD/Q5
+        ISzd1s5PZbyEdgu0lzE9O8aWDcfuIWnMZns0F2ydDQ+Wnv6oShzsLM/2bCSLBg0s/k8TWi
+        quDM2A4Py+U43iRzcRvBJge9zyFfYYY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AED941357F;
+        Mon, 23 Jan 2023 19:18:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +SQ7Ko3dzmNFVAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 23 Jan 2023 19:18:37 +0000
+Date:   Mon, 23 Jan 2023 20:18:37 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <Y87djZwQpXazRd00@dhcp22.suse.cz>
+References: <CAJuCfpH4o-iCmzdUcYD9bKieJ6-k-MZYLuHFhH+bN9yE07sibw@mail.gmail.com>
+ <Y8rQNj5dVyuxRBOf@casper.infradead.org>
+ <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
+ <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
+ <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
+ <Y868Fadajv27QMXh@dhcp22.suse.cz>
+ <CAJuCfpGSCHpnZwwVV_922fmMBpFPZL0HAHMABuDzMfuURF2sWg@mail.gmail.com>
+ <Y87A2CEKAugfgfHC@dhcp22.suse.cz>
+ <CAJuCfpGJRZATfc8eUurvV5kGkSNkG=vK=sfwJbU72PESOyATSw@mail.gmail.com>
+ <Y87QjHH2aDG5XCGv@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y87QjHH2aDG5XCGv@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the probe we need to call all devm_*() first followed by
-non-devm_*() calls. This is due to reversed clean up that
-may happen in a wrong order otherwise. The driver currently
-allocates xarray before calling
-devm_platform_get_and_ioremap_resource(). While it's not an
-issue in this certain case, it's still better to be pedantic.
+On Mon 23-01-23 18:23:08, Matthew Wilcox wrote:
+> On Mon, Jan 23, 2023 at 09:46:20AM -0800, Suren Baghdasaryan wrote:
+[...]
+> > Yes, batching the vmas into a list and draining it in remove_mt() and
+> > exit_mmap() as you suggested makes sense to me and is quite simple.
+> > Let's do that if nobody has objections.
+> 
+> I object.  We *know* nobody has a reference to any of the VMAs because
+> you have to have a refcount on the mm before you can get a reference
+> to a VMA.  If Michal is saying that somebody could do:
+> 
+> 	mmget(mm);
+> 	vma = find_vma(mm);
+> 	lock_vma(vma);
+> 	mmput(mm);
+> 	vma->a = b;
+> 	unlock_vma(mm, vma);
+> 
+> then that's something we'd catch in review -- you obviously can't use
+> the mm after you've dropped your reference to it.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/liteuart.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+I am not claiming this is possible now. I do not think we want to have
+something like that in the future either but that is really hard to
+envision. I am claiming that it is subtle and potentially error prone to
+have two different ways of mass vma freeing wrt. locking. Also, don't we
+have a very similar situation during last munmaps?
 
-diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index 192ad681de35..562892395570 100644
---- a/drivers/tty/serial/liteuart.c
-+++ b/drivers/tty/serial/liteuart.c
-@@ -286,37 +286,35 @@ static int liteuart_probe(struct platform_device *pdev)
- 	struct xa_limit limit;
- 	int dev_id, ret;
- 
--	/* look for aliases; auto-enumerate for free index if not found */
--	dev_id = of_alias_get_id(pdev->dev.of_node, "serial");
--	if (dev_id < 0)
--		limit = XA_LIMIT(0, CONFIG_SERIAL_LITEUART_MAX_PORTS);
--	else
--		limit = XA_LIMIT(dev_id, dev_id);
--
- 	uart = devm_kzalloc(&pdev->dev, sizeof(struct liteuart_port), GFP_KERNEL);
- 	if (!uart)
- 		return -ENOMEM;
- 
--	ret = xa_alloc(&liteuart_array, &dev_id, uart, limit, GFP_KERNEL);
--	if (ret)
--		return ret;
--
--	uart->id = dev_id;
- 	port = &uart->port;
- 
- 	/* get membase */
- 	port->membase = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
--	if (IS_ERR(port->membase)) {
--		ret = PTR_ERR(port->membase);
--		goto err_erase_id;
--	}
-+	if (IS_ERR(port->membase))
-+		return PTR_ERR(port->membase);
- 
- 	ret = platform_get_irq_optional(pdev, 0);
- 	if (ret < 0 && ret != -ENXIO)
--		goto err_erase_id;
-+		return ret;
- 	if (ret > 0)
- 		port->irq = ret;
- 
-+	/* look for aliases; auto-enumerate for free index if not found */
-+	dev_id = of_alias_get_id(pdev->dev.of_node, "serial");
-+	if (dev_id < 0)
-+		limit = XA_LIMIT(0, CONFIG_SERIAL_LITEUART_MAX_PORTS);
-+	else
-+		limit = XA_LIMIT(dev_id, dev_id);
-+
-+	ret = xa_alloc(&liteuart_array, &dev_id, uart, limit, GFP_KERNEL);
-+	if (ret)
-+		return ret;
-+
-+	uart->id = dev_id;
- 	/* values not from device tree */
- 	port->dev = &pdev->dev;
- 	port->iotype = UPIO_MEM;
 -- 
-2.39.0
-
+Michal Hocko
+SUSE Labs
