@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F169F67895B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4FB678958
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbjAWVSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:18:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S232801AbjAWVSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjAWVSn (ORCPT
+        with ESMTP id S231540AbjAWVSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:18:43 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23E1ABF0;
-        Mon, 23 Jan 2023 13:18:42 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id n7so12072695wrx.5;
-        Mon, 23 Jan 2023 13:18:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xpwrGNkZx+sVBzOW0j2j89vPfNOgreFG5uTvNf7DxPU=;
-        b=Re4cufl2WPD0YzvKeEyjkmvLydeJYy4KQuxRe9CRuQ7oDQ2oxGsg7J74D+XYFYfct+
-         DVJ1YyRjLXunFJRCg4W/rjWhbeRwbuzEblodhZwoqiC7r3x2pzyAbbQtAynNERDGnnbX
-         zMVrCMPY8ke7Jbh2+8hj+26bMuG4dp1g33QvGkYP9QdftlePedoBdkirLZe4pOKb7ukQ
-         M8JQ9vwHFsNZVwYcEW/QRxpZY/otC5RMcGVuQ4X85bysv+eFZSIjdjjjuNlioOjFf9n8
-         2St3GosQSf2WgkMhkmFO6DpjIlYyqTMgsMYYCHuDvI8R1kYPfZMb72uxwYqPDdR3AAm0
-         wxGw==
+        Mon, 23 Jan 2023 16:18:12 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DFC125BC;
+        Mon, 23 Jan 2023 13:18:12 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id o66so11570294oia.6;
+        Mon, 23 Jan 2023 13:18:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xpwrGNkZx+sVBzOW0j2j89vPfNOgreFG5uTvNf7DxPU=;
-        b=wJ7LccqocBR14g4rKzce5ezVkMtiHo6HrqOMtgUyvI/C1cfI4rGv7e252Cnh9gUzmU
-         iqPLL/26S0wS41FoySJDnH5UQhN73GrokjHakJzVg82XEvYquCyWWb3TPipLvYel8+jA
-         7cL9KXBRe8iLITNCoYMljcQrlpRTWwKhW12O1e4oIMEnqFIjyKBw6r4/i3hUgN8QRQND
-         eUMfRvsRKaUXb+54/8Ktf8/TYfkZETy/qxYaEbUW5pmIMhMRlHYI5oJmYmQaooL7zFVu
-         16wQc3M4829Rh4DaIMB5k6foINb+SM+CJvwpaF02Rpej5CiXi6OUcQ6gSdcfoYas1YNl
-         5RMg==
-X-Gm-Message-State: AFqh2krV2lYGZeHRngH2vZk7WFKRhwo4hAtpeJ5VaxCjee3ekxXkv0yC
-        fFOYz3cwHIE5iLnXVbyzK28=
-X-Google-Smtp-Source: AMrXdXuTEcmNF+SqV8HUBdeUbSceMBFZ6/+tS/tF0O/XdFHGgavdDJZnFa9jxPCwWwHamsCJj6BzeA==
-X-Received: by 2002:adf:e2d0:0:b0:2bb:e868:6a45 with SMTP id d16-20020adfe2d0000000b002bbe8686a45mr17384896wrj.56.1674508720406;
-        Mon, 23 Jan 2023 13:18:40 -0800 (PST)
-Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
-        by smtp.googlemail.com with ESMTPSA id v1-20020a5d4b01000000b002be53aa2260sm314121wrq.117.2023.01.23.13.18.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ywud7ZWeMHmFOjclbft5yqOHQmEsSUXtRD9i7sVK4H4=;
+        b=ALTfYGYOylZVx5sewQN3qY/XI5Rp4gu8T0SZ6W8C6Rb7abeoeeCadQlN5gelcOTagw
+         xEkiqouP6mbxUAmFVQKOySSEa6knxj4rNpoJsyyoyWRrwxcvJAUxJi8A7LzFu9MbjIfZ
+         zhKUJyfnWbmq9m/zp+2owLkUNG3OIcF2HzhXVbzRp5+tBMF2Vcyzl9vzZVFBBRPe0b6b
+         DHUmcWYbRj40FJz+rmD7h/5CbVwrJLUMAj4WVOc+1pVKNEwBn9q5dm/ScMGC3D1XfJun
+         2I4b0s/VnZOtUFitZeRBQV73mqpGPrybWIZ4JNsVV17bqhcscf0oCUXDz6fJ+adV9iu/
+         cY4g==
+X-Gm-Message-State: AFqh2kqUNkBs3IxoiX9zWRrBiJBMaSsE+sjPlSNJ36f92UdcKtGmeE0H
+        El9yRQO/YEdcsZYWY7vGKw==
+X-Google-Smtp-Source: AMrXdXs10bEeIFi0iNTyIEE1UTl8pknOudNavorSMN1FcmHPxgWJTXAPtNxXk9tDO/wrml1h3JNCxg==
+X-Received: by 2002:aca:3203:0:b0:36a:d348:26d8 with SMTP id y3-20020aca3203000000b0036ad34826d8mr10764521oiy.52.1674508691287;
+        Mon, 23 Jan 2023 13:18:11 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y5-20020a056808130500b00363ef79e2a1sm223198oiv.31.2023.01.23.13.18.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 13:18:40 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Mon, 23 Jan 2023 13:18:10 -0800 (PST)
+Received: (nullmailer pid 2655726 invoked by uid 1000);
+        Mon, 23 Jan 2023 21:18:09 -0000
+Date:   Mon, 23 Jan 2023 15:18:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH] dt-bindings: arm: qcom,ids: Add Soc IDs for IPQ8064 and variants
-Date:   Mon, 23 Jan 2023 22:17:27 +0100
-Message-Id: <20230123211727.21542-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Viresh Kumar <vireshk@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ilia Lin <ilia.lin@kernel.org>, linux-clk@vger.kernel.org,
+        Nishanth Menon <nm@ti.com>, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: qcom,sm8450-camcc: constrain
+ required-opps
+Message-ID: <167450868811.2655634.3848215536562654320.robh@kernel.org>
+References: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Soc IDs for Qualcomm IPQ8064 and variants.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- include/dt-bindings/arm/qcom,ids.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Thu, 19 Jan 2023 14:00:27 +0100, Krzysztof Kozlowski wrote:
+> Be specific how many required-opps are allowed.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> This change is independent, although logically is connected with my
+> dtschema pull:
+> https://github.com/devicetree-org/dt-schema/pull/95
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
-index f7aef3f310d7..dc86461ab664 100644
---- a/include/dt-bindings/arm/qcom,ids.h
-+++ b/include/dt-bindings/arm/qcom,ids.h
-@@ -45,6 +45,10 @@
- #define QCOM_ID_MSM8126			198
- #define QCOM_ID_APQ8026			199
- #define QCOM_ID_MSM8926			200
-+#define QCOM_ID_IPQ8062			201
-+#define QCOM_ID_IPQ8064			202
-+#define QCOM_ID_IPQ8066			203
-+#define QCOM_ID_IPQ8068			204
- #define QCOM_ID_MSM8326			205
- #define QCOM_ID_MSM8916			206
- #define QCOM_ID_MSM8994			207
-@@ -80,6 +84,8 @@
- #define QCOM_ID_APQ8094			253
- #define QCOM_ID_MSM8956			266
- #define QCOM_ID_MSM8976			278
-+#define QCOM_ID_IPQ8065			280
-+#define QCOM_ID_IPQ8069			281
- #define QCOM_ID_MDM9607			290
- #define QCOM_ID_APQ8096			291
- #define QCOM_ID_MSM8998			292
--- 
-2.38.1
-
+Acked-by: Rob Herring <robh@kernel.org>
