@@ -2,103 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68173677A13
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C47C677A17
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjAWLX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S231801AbjAWLZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjAWLX4 (ORCPT
+        with ESMTP id S231905AbjAWLY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:23:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F6A1720
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:23:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54A06B80B25
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:23:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBF9C433EF;
-        Mon, 23 Jan 2023 11:23:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674473033;
-        bh=MG4dKe/lEhMeBHCTD7Z6kSXtoYwi3Oyjui1AiICa0Vg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ivqSFefkOM6YftWNlMf9kE83iM3KwzVDdwT6p6aNT/PoWJ5DJRyUaIFopU394im/F
-         B59lAxKTE+j0V+dJ4t4SvCwRr8MuR9W9a3dOcADZb253Zz8Bon7rvA/pcFlmwxOdpV
-         ZPKdLcQ4dnyb0fPJVfYnpSJ4RhZUrQrk/hyesA/BURM2GVzEgkbiBa0wavNMXo3HGa
-         kiy8GdPJaYxn1Pjuin1gOlzSYu9dxVTYVcSsjqE23WYudSBHbrPUXEASGAirMqaZc0
-         kteP4lhEgdQR3ehwTeeEaQZT/qQ0UbGybMM8PSffDgg6vEEN86NZ3lt2+3RHuXxrSY
-         lLd5D7FPL7l2Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pJuvW-003vOM-Iz;
-        Mon, 23 Jan 2023 11:23:50 +0000
-Date:   Mon, 23 Jan 2023 11:23:50 +0000
-Message-ID: <86cz75mr3t.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Shanker Donthineni <sdonthineni@nvidia.com>
-Cc:     James Morse <james.morse@arm.com>,
+        Mon, 23 Jan 2023 06:24:57 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12EB7AA9;
+        Mon, 23 Jan 2023 03:24:54 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pJuvo-0007Oa-VK; Mon, 23 Jan 2023 12:24:09 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-riscv@lists.infradead.org
+Cc:     Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Chris Stillson <stillson@rivosinc.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Dao Lu <daolu@rivosinc.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Han-Kuan Chen <hankuan.chen@sifive.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Alexander Graf <graf@amazon.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        hasheddan <georgedanielmangum@gmail.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Myrtle Shah <gatecat@ds0.me>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH] KVM: arm64: vgic: Fix soft lockup during VM teardown
-In-Reply-To: <c0fccfce-17f8-e25c-ca21-41ce1ffd54dd@nvidia.com>
-References: <20230118022348.4137094-1-sdonthineni@nvidia.com>
-        <863588njmt.wl-maz@kernel.org>
-        <28061ceb-a7ce-0aca-a97d-8227dcfe6800@nvidia.com>
-        <87bkmvdmna.wl-maz@kernel.org>
-        <2e0c971a-0199-ff0d-c13c-d007d9f03122@nvidia.com>
-        <86wn5imxm9.wl-maz@kernel.org>
-        <b3bf3a46-410b-a756-dfd9-ee74d5dc31e0@nvidia.com>
-        <86r0vpmn5q.wl-maz@kernel.org>
-        <c0fccfce-17f8-e25c-ca21-41ce1ffd54dd@nvidia.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: sdonthineni@nvidia.com, james.morse@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, vsethi@nvidia.com, yuzenghui@huawei.com, oliver.upton@linux.dev, suzuki.poulose@arm.com, ardb@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Colin Cross <ccross@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Barret Rhoden <brho@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Chris Stillson <stillson@rivosinc.com>
+Subject: Re: [PATCH v12 03/17] riscv: Add new csr defines related to vector extension
+Date:   Mon, 23 Jan 2023 12:24:06 +0100
+Message-ID: <2096011.OBFZWjSADL@diego>
+In-Reply-To: <20220921214439.1491510-3-stillson@rivosinc.com>
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
+ <20220921214439.1491510-3-stillson@rivosinc.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 Jan 2023 15:35:48 +0000,
-Shanker Donthineni <sdonthineni@nvidia.com> wrote:
+Am Mittwoch, 21. September 2022, 23:43:45 CET schrieb Chris Stillson:
+> From: Greentime Hu <greentime.hu@sifive.com>
 > 
+> Follow the riscv vector spec to add new csr numbers.
 > 
-> 
-> On 1/20/23 06:00, Marc Zyngier wrote:
-> > What I am asking agin is: is there any overlap between any vgic ioctl
-> > and the teardown of the VM? Do you ever see kvm_vm_release() being
-> > called before kvm_device_release()?
-> > 
-> > Because that's the overlap I've been talking all along.
-> 
-> I've not observed overlap of kvm_vm_release() with ioctls
-> kvm_device_ioctl(), kvm_vcpu_ioctl() and kvm_vm_ioctl() for
-> 3hrs. Test created hundreds of VMs and teardowns.
+> [guoren@linux.alibaba.com: first porting for new vector related csr]
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Co-developed-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
+> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-OK, that's reassuring. Thanks for looking into this.
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-	M.
 
--- 
-Without deviation from the norm, progress is not possible.
+
+
