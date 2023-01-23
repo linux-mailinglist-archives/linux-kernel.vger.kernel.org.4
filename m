@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18C8678A79
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF45678A72
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbjAWWMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 17:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S233070AbjAWWLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:11:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbjAWWL7 (ORCPT
+        with ESMTP id S233001AbjAWWLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 17:11:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBE72D7A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:10:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674511830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tn/O2nlZnV2isuFdcAfSve/LURJU3mBv/b7vcJ8ZS4M=;
-        b=Y2rr6XzfYml06IcXbWPxl57pR2t2CQkq/N5/EI8mET8N58TkOOPUklW9qtQVpPodOpZQuy
-        a6jGSlwQcO/XBgmhi9wKpZLFtL9OUk5d/V0oT0iaeTTbe6qC0U8gCICaCtqvETG+2VNgBj
-        MJNo3DspGUF4/cX6MtM78pICFvCTZjo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-654-3g-2RsZfOPumkpaxog_BdQ-1; Mon, 23 Jan 2023 17:10:29 -0500
-X-MC-Unique: 3g-2RsZfOPumkpaxog_BdQ-1
-Received: by mail-ed1-f69.google.com with SMTP id z20-20020a05640240d400b0049e1b5f6175so9277241edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:10:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn/O2nlZnV2isuFdcAfSve/LURJU3mBv/b7vcJ8ZS4M=;
-        b=G9vKHehZeFxWZLmzAsOHpU/T4GCVsy4qS3+nKj2JC45mSkFt6lM42QMLPHthIY11JK
-         L2bXkHew8E51GOIY7eWIslFXCKKy68paOmR/jVs4GuMHmkD2vUfipPh5dCp7VaxDl2jq
-         4e+ZhxA/yDRGa5IzkjZ+1RaAreXzRvYfrUy6OL0LMtNGLgrO31EGFXZgW/u6gyFWnrX0
-         LdECRnTolNFPeyuJDnUeyRh+2/j328IFuMz0+thk6eN4HAVhfUTqxQHLfjZN0zsVHN1D
-         vCBgipehArieKZvV9hYoYBfc8KzmdGtlGhEnydglNWC/VeBq9x/tYSntgVMK7DR0s3q9
-         2yZw==
-X-Gm-Message-State: AFqh2kopw9YM2pKGuEBYzpUiBsUcl2dm3BLePQYeD5RSxsEzc/Zno+pY
-        Ipwr5JW1Uhr/9QogtRqMtRrRiYqzbWijZwufzo/Une9ObiznB9cnoQ8bvu/gPQhNZlGKog7BOr3
-        bZVbzvyZ0ysPm9mDxbY/zenDI
-X-Received: by 2002:a05:6402:1bc3:b0:479:8303:dc1c with SMTP id ch3-20020a0564021bc300b004798303dc1cmr26555237edb.7.1674511828031;
-        Mon, 23 Jan 2023 14:10:28 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtGL1+Bx4VyltLVnMYNGDHIki9rQWRdDDuwasI7UL+pOQRRUm2pItzAzGlZPzNtzQzRVGZbSw==
-X-Received: by 2002:a05:6402:1bc3:b0:479:8303:dc1c with SMTP id ch3-20020a0564021bc300b004798303dc1cmr26555223edb.7.1674511827839;
-        Mon, 23 Jan 2023 14:10:27 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa7c04f000000b00497d8613532sm272944edo.5.2023.01.23.14.10.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 14:10:27 -0800 (PST)
-Message-ID: <ea836a1e-a4ab-1c72-dd1f-b1e61fa9595e@redhat.com>
-Date:   Mon, 23 Jan 2023 23:10:26 +0100
+        Mon, 23 Jan 2023 17:11:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D58938E9A;
+        Mon, 23 Jan 2023 14:11:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BD4D2CE1784;
+        Mon, 23 Jan 2023 22:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D4EC433D2;
+        Mon, 23 Jan 2023 22:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674511864;
+        bh=B2Hun8fx94ummgXxtdvJvI9tjawF7V9UEMWQUtT0mcg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HcgdVb7N420MXjiaT3Cy4xcVCA8Z39ghV+wDLAJdklaXRi0qcZdUgMyp5Bz27Eo6K
+         0Q7zvjVefDXPlafRBzutpafZFdPkAaa8GAp0dSiHQnOgVdJ4M7RSlkk7S5PZaDozLV
+         Zm+Jsb+LanQD1pEa/jGiIrWQINaF9LtUsGPmEN51MNTC8nM5F8Bn0Puj7Zgy8DKghN
+         6Z3okEYMedCreg8+2+l/5bGCJeOMYsA23VZzG37W9ep4OaJx96i+yYienRaLUP4aEK
+         3WbTlYFge3XFCEnj9ncyN4wPRE1UH++foFM7s5dpzFG0AMRf/p9UUz7SbvljzlLvAg
+         qMbc/WPWrLj4Q==
+Date:   Mon, 23 Jan 2023 22:10:59 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+Message-ID: <Y88F808GULoKFOVJ@spud>
+References: <20230123112803.817534-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/3] ACPI: video: Fix refcounting in
- apple_gmux_backlight_present()
-Content-Language: en-US, nl
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>
-References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
- <9e24156c-65fc-d38b-317a-9cc8fb2201b9@redhat.com>
- <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="AjN4nqWVveMYgtD1"
+Content-Disposition: inline
+In-Reply-To: <20230123112803.817534-1-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 1/23/23 19:18, Andy Shevchenko wrote:
-> On Mon, Jan 23, 2023 at 06:46:44PM +0100, Hans de Goede wrote:
->> On 1/23/23 18:10, Andy Shevchenko wrote:
->>> acpi_dev_get_first_match_dev() gets ACPI device with the bumped
->>> refcount. The caller must drop it when it's done.
->>>
->>> Fix ACPI device refcounting in apple_gmux_backlight_present().
-> 
-> ...
-> 
->> Thank you for your work on this, much appreciated and I like
->> the new acpi_get_first_match_physical_node().
->>
->> But I don't think this patch is a good idea. There is a
->> regression related to apple_gmux_backlight_present()
->> with a patch-set fixing it pending.
->>
->> And that patch-set actually removes this function. Adding
->> a fix for this real, but not really important leak now,
->> will just make backporting the actual fix harder.
->>
->> So I would prefer for this patch to not go in and to
->> go for (a to be submitted v2) of the patch-set fixing
->> the regression right away instead.
-> 
-> Maybe I missed something, but I noticed that you actually moved (not killed)
-> the code which is currently in this function. If it's the case, I prefer my
-> fix to be imported first.
+--AjN4nqWVveMYgtD1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The code is not really moved, patch 2/3 of my patch-set factors out
-the detection code from drivers/platform/x86/apple-gmux.c's probe
-function. The new factored out code uses a similar construct as
-the apple_gmux_backlight_present() code (including the same leak).
+On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
+> During the early page table creation, we used to set the mapping for
+> PAGE_OFFSET to the kernel load address: but the kernel load address is
+> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> PAGE_OFFSET is).
+>=20
+> But actually we don't have to establish this mapping (ie set va_pa_offset)
+> that early in the boot process because:
+>=20
+> - first, setup_vm installs a temporary kernel mapping and among other
+>   things, discovers the system memory,
+> - then, setup_vm_final creates the final kernel mapping and takes
+>   advantage of the discovered system memory to create the linear
+>   mapping.
+>=20
+> During the first phase, we don't know the start of the system memory and
+> then until the second phase is finished, we can't use the linear mapping =
+at
+> all and phys_to_virt/virt_to_phys translations must not be used because it
+> would result in a different translation from the 'real' one once the final
+> mapping is installed.
+>=20
+> So here we simply delay the initialization of va_pa_offset to after the
+> system memory discovery. But to make sure noone uses the linear mapping
+> before, we add some guard in the DEBUG_VIRTUAL config.
+>=20
+> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+> in a better TLB utilization.
+>=20
+> Note that we rely on the firmware to protect itself using PMP.
+>=20
+> Acked-by: Rob Herring <robh@kernel.org> # DT bits
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 
-Then patch 3/3 drops apple_gmux_backlight_present() and calls
-the new factored out probe code.
+No good on !MMU unfortunately Alex:
+=2E./arch/riscv/mm/init.c:222:2: error: use of undeclared identifier 'riscv=
+_pfn_base'
+        riscv_pfn_base =3D PFN_DOWN(phys_ram_base);
+        ^
 
-I'll fix the leak in v2 and then add the 3 patches to pdx86/fixes
-for the next pull-req to Linus (thus also fixing the leak).
+Reproduces with nommu_virt_defconfig.
 
-Regards,
+Thanks,
+Conor.
 
-Hans
+--AjN4nqWVveMYgtD1
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY88F8gAKCRB4tDGHoIJi
+0sk5AP9e/+SB3pTIKzfQPMgtXZkuV5QgIeCGqK1UjjQhd6QjXAD+KMMwHzheEBnp
+V9mWrQAFGU8u6vVcNVc9I1zxH4pt8gg=
+=XTYk
+-----END PGP SIGNATURE-----
+
+--AjN4nqWVveMYgtD1--
