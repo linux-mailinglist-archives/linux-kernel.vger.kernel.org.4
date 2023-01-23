@@ -2,567 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21631677426
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EB7677427
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjAWCbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 21:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        id S231535AbjAWCcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 21:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjAWCbr (ORCPT
+        with ESMTP id S231537AbjAWCcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 21:31:47 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CA4166E3
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 18:31:39 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d14so5799282wrr.9
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 18:31:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4eEkv/abbkcfzh0mmzSXI9XPpVbAKcusD1fGaRxOUqE=;
-        b=MSBKLu+pAQbX2LtjNhRHTDnPQNTpp4MDmprNFnqmurdaSVOmQDFFcjO0vEABiQY1s5
-         LScBiuW5GWR48KgZVdSzpL4LxkmevEPeiWfjH78z8w4CII8U4jdGg/mRaCenLOUOc05M
-         UNDMtch7xuZS6BryfyRx2RyPydYOn3UcrrDCYSzER8D1K91/g4M5OXOLvEVFOqsWpgZm
-         KMsYh9X3qF0BhCKkdXfvwk07QFGq6dDXBZvvVC0SS3c7TpOhqab/HU1zek/pFbnG4xm0
-         sLl/PiEBqcbJHha7aDcMgNoLx6avcRQUvfWww4LfEzJJ5+BDn1ZGgiG4i9v6lnaXx8xJ
-         9JZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4eEkv/abbkcfzh0mmzSXI9XPpVbAKcusD1fGaRxOUqE=;
-        b=jEGoM74qLYPB/WHikmE+eK7YfEEuk8ycW7RLxcRO1i4RhKWZyiuiKF9/j2scc2FVXM
-         BnHKi7m0ecdN/8x5umrMEls7ig2wdNrw2Vue5os/vrpKAplTBofWA4Ms26MdJCL9iybE
-         OvTCswa03vEnmPWvCRfqmEwxSqfgyzUBe3zsY4Uc4061w+M7IqDUwcfHDXVsiLEgneWe
-         /gyTMlHMCSEhgdLhA53Tz4vnsAYZTdzSVU/1aFpgTJ8aZxoBUwC+uG2lVndN1C6RYY6a
-         jlXZL4b71fk8dOUYmqr1XUe52chapPhoSVnyCF95buekNxMwSFrgxx4PAMR50bBOJr8l
-         BFaQ==
-X-Gm-Message-State: AFqh2kqfN3ZWPpd4CDkkV91nnGzadofPEsGS/n/HRNQxn1xEF0jOur7R
-        1buW5PsRpCXqPNxcRuHSQKGByQ==
-X-Google-Smtp-Source: AMrXdXsmwMQz7lZrrinRD27lQUnbxMVbPqk2Yw2Nz9mJADoLW0ThNXi5KYDUDgDvFe+zYaTAkVPGLQ==
-X-Received: by 2002:a5d:6b85:0:b0:2bd:d782:c2bc with SMTP id n5-20020a5d6b85000000b002bdd782c2bcmr20154872wrx.33.1674441097458;
-        Sun, 22 Jan 2023 18:31:37 -0800 (PST)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id r11-20020adff70b000000b002bdf290efdasm18672703wrp.58.2023.01.22.18.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 18:31:37 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bryan.odonoghue@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, stephan@gerhold.net
-Subject: [PATCH v4 6/6] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
-Date:   Mon, 23 Jan 2023 02:31:27 +0000
-Message-Id: <20230123023127.1186619-7-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
-References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
-MIME-Version: 1.0
+        Sun, 22 Jan 2023 21:32:09 -0500
+Received: from outbound.mail.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B087E1ABE1
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 18:31:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ocQIFpw5I8tDPZjsGGtZ3+pvzsP0/l0TnbmXgdzB4Hg5OUjDFFKXWC6OyzbAtk04o1v6yRbrrQYAJB88yADYNY4ScmNleZilP9yWFgsLUbDxMvOXH7cooQ7432Dmgvsnd9JxYnywHvlH91pVoZdZigUcFcvThdTQ9OeQLSAsEgRvB0uwEjFiyYXWwIpx5QuPhfGeJz64hgFFQbNQwMukRmSJFwlKYjA04RlTkjONM99DpQLihGEYmlKEbojZqxWfxnjUdsYm0MTku1P1QIwXLvNl+RkJTbGGv2gCWxB1fG7+Lyz4WyeIz+VKqGd+KXBGj2cbOfirrYES0csANrOyfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X+my8ctBev+0Gm5yn1gu7KV/Sq0IsNA2CzmqUyAVabc=;
+ b=KDU1GACqwdCZRmAbYt/j9Pqa8LaHNSAHg4eerbW9eT70C2krUtEtOiIGeVaCjJUaRTLZ2ckOleXluYDM/I+PHJvAzfBP5Th1ufuDBemA7LhSJkWPBazy3rLzKWYZLUbaFl4aj1V/ChyKSYUrqcSh03dz7auxr5nBGy7APzXkDU6bRXsIUlzVFGbP+wpWNyIypshgRQ452yXZCcli3PPdmbohYh7ehiCBerToYfmrv49I1G+lZqdrH53ALNCD0iZrz6i/oGYj3itpPQUgF8O2LgfJYmSn2cxpsk6LkXpRmj7/qgFbgoNvP2SjkekXksOQ5gWZDih2TLmaudwrG8oJJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=X+my8ctBev+0Gm5yn1gu7KV/Sq0IsNA2CzmqUyAVabc=;
+ b=acXXanzEyqc8FbmKBVXp9D4P6ChcLqepZHpDxhvhYtxOFOzQCnGo9lNUg9YyPDvIaN0QO0frOjrjkfVHFIxS0RC29VE41k37NkcxZkR5rvacoNDkVxS/PtNync/OisDugRFvqzMEqlsdK7tmzyDvcbBY0a5irarKmUul6MAUCfo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SJ0PR12MB6854.namprd12.prod.outlook.com (2603:10b6:a03:47c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
+ 2023 02:31:46 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a59e:bafb:f202:313c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a59e:bafb:f202:313c%7]) with mapi id 15.20.6002.028; Mon, 23 Jan 2023
+ 02:31:45 +0000
+Message-ID: <982bd736-6b09-0ac4-e421-903f6a4baaf0@amd.com>
+Date:   Sun, 22 Jan 2023 20:31:43 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: amdgpu: suspend-to-idle on a 4350G desktop
+To:     =?UTF-8?Q?Rafael_=c3=81vila_de_Esp=c3=adndola?= <rafael@espindo.la>
+Cc:     linux-kernel@vger.kernel.org
+References: <87edrnu9mk.fsf@espindo.la>
+Content-Language: en-US
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <87edrnu9mk.fsf@espindo.la>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: SA1P222CA0096.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:35e::23) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ0PR12MB6854:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a3bdc3c-3331-41b6-20f5-08dafce9f88f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mh+nsiXD/4IDIqm0i9MqnaRYTKlOct+TrGYbSxQyy+Rqne2KzGdKwdvtWNn66fxGC0CcioQuCaGl7bNKuIygh1xoiqx0VT4zbopb//Z2QxYwlV11CA3ArYKQwnvh0SKO3u478V+zx2HwYvrOorfEgH/1xkBWi6ySV8KvEL5jiAHIK3THiKOMK2U3JhRb2OG2wVj/fP2gWR7xTGNqBtyWpK2X7eP3Y6GpcGV5gmmMucasQl6A7DG4w61HceHZko9TTwrsHfj5PgmyLb00+ARTDMWvo5tnTLlxGHUVGe9R4UZrAFgm7hdVI/G/AVQxfd3KK/BrCH6rETE1gmr38KdnYY87oKi1RC3vQTGaYTpra12GvJ3RYm5qsYUs1DS3Q/+e1/TtIRYRNhpKFxREM5yB75sMpSClxibbO36AO6YKAJt3Z1ya5yCAQEVaLFZmRzhqSfPq9ao0iHl7WG4pAY8/NOH1xRKu4ahk/BggEhFTq4css3+UjZSvm5uTMbPb5u1i5YsK/1IjS3WUwwqDzoWhP4jE8aOnsOR03SufUKZgi+ZJxxciVJaUeO94XcMm4eLOAdoIEkbPUjjnafL1GGJ2MQbEQHdZokhDVVrBsHOku13xoumiMzNIPqPiaPSDQuK3GvpXpaanakbQbCl3JHwb28W37va9GdtiA3Aru4NhdSaswDQbZennD+4IG6IiDU7Y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199015)(83380400001)(38100700002)(86362001)(31696002)(15650500001)(2906002)(41300700001)(4326008)(5660300002)(8936002)(8676002)(6916009)(53546011)(6506007)(186003)(6512007)(66574015)(2616005)(316002)(66946007)(66476007)(66556008)(478600001)(966005)(6486002)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnlYZThJbW8ydW8rM1A0bk1VU2pIbG9GOXFhcW1KaktycFJIVjR5MFJ1NEFF?=
+ =?utf-8?B?bnZaNmRWQ0Jxd2F1SjhuRGpYV1FTQnJycWhjOVZpYnNFNEkrWnRONmIwMk1X?=
+ =?utf-8?B?Ym9HcmpWOGxoTDFvaUhtVmVPTmpVd0tNQ21pSzI0WWhuV2Y0Zm5NQVM2a3Jv?=
+ =?utf-8?B?WWttY0h3WDU0cmtVMnJvTTRjRXN5WWRPaWxxMFpVa0FucVVOQzU3OFVqS2p3?=
+ =?utf-8?B?V2J0NmEvOFdZN2pNYWhTQkp3dUxobHFob0NTZzRkMFAzMjdnTTd2cW9WVlVH?=
+ =?utf-8?B?QURCVGIxeHg5N0U2VW45VUFnQllZTjk5bEF6SWtDOWpJSjB5YnM3ZVNFSllS?=
+ =?utf-8?B?QkxSUkdaQlBadlFrVlNLSDVnV0d5VmpCRGhiQnkwMHdaWmU2YkNOM1hBQVVM?=
+ =?utf-8?B?SHRJQW9iN2NtNjh5YlF4TGJuYUtXRldaRGw3ZElRNGx5NzR6ay9WR3cxa0RR?=
+ =?utf-8?B?dUZxKzVZMXgxTkgyYzZVZkQ0ZndYaDhaNmhWNnpJempudFNGa29LRkFIL3lE?=
+ =?utf-8?B?Y2xOQ0plVGlYVWZ0QzdBWjlaOUMzNG81YUR2cElmQVdEc0VBQnU0U2xyWWZW?=
+ =?utf-8?B?cDVRZXdhM3lGSGdSbzhHeHpqR2xSUzh1NjJyemp0cVNSNWIvalMyZkN2Z3p6?=
+ =?utf-8?B?TncwbFdTc3ZnYytjS0hWMU9sL2dacGt6RHFoNDNKNXZFNElxREhtWm1tUisv?=
+ =?utf-8?B?Z1pmWW5BVUtKYmEvOXk0TVMzeEJ6Z3M1dmZFL2pnZTl0WmVJaFJINGxEL3Nv?=
+ =?utf-8?B?OWJWYjRNQzZXMnI5dEF2c2ZMMWtOLy9LMmZleXJFSU93aUhYdURQTVpSMTJq?=
+ =?utf-8?B?MjljUVFiSHpzOGFtYmZxZ2RPR3NLS1doRkRpQWg4VEpLMXdyK0tPWXpSOEhG?=
+ =?utf-8?B?MVU3Q1dYSkRFUXVzZ3N3MWtpMjZla296R2QxamlkdWdMWlRaVWN1bnFHUUNE?=
+ =?utf-8?B?bG1DVHhBV3E2bklUZE81TkJqRzRJZ0ovVXFCY2xHeFFmRTNZTDlhaFNyWEZF?=
+ =?utf-8?B?RGd6WElOMXJBSlR1eXJmWlowSnJHLzZ0b0hYaDhiQSswWFBodUY2N3pqVkF4?=
+ =?utf-8?B?Z1hIZy9ZdlBHMmVXWU8zczgzaGFsWUFmbCs3Z09aVHUvekh2YlZtUHBZNUlF?=
+ =?utf-8?B?cHllcXlFZDJUQ3o1dnI2ay9JK1ZiU3pvNGtERVVZNlVJNkxnRHVyOFlxVTBU?=
+ =?utf-8?B?Q0xSNmtydkYzZ2dRd2QzRjBRdFM4YnRsb2xGRE5pZTBQWE5qbGt1eU1EaFEr?=
+ =?utf-8?B?S0Mzc2I0ajhFREF1T0RBeldSVmlYYnJGL2ErekpjdHVPVW5SOU1wcldSNThn?=
+ =?utf-8?B?ci9Tcnc1Zk1JQXpUNU00T0VQQVJuQjB1VG15Zmo0UnQ2ZHFNQjk0THBKVllS?=
+ =?utf-8?B?WEFBMkU4RlRqd000R2NiMUx3Uld1Q0FMVzVudm4xbUVuTThHRTRCc1oya0p6?=
+ =?utf-8?B?aUhsMVJzcnIvQUpFQnBaNEZ1M0tsd0ZrUHd0QjJqQi82dEdLQ3RCUTZrb0ZE?=
+ =?utf-8?B?cWtpMXBIMWFNdjE4SEJwSzI5d05EalE1TTQ3V2lQUU1DWHFBUXduaUFTQnV1?=
+ =?utf-8?B?MzFKS2tod2k4WjhUZ2xxMGFQNS82bWlVbEJ2Smp3dmFic2JkTWk4dEtyY3lC?=
+ =?utf-8?B?emtnRlZlMHdQeFFBUUF6dVFIUkNHRVI1SnJkaVR1dlN0UU1ZK1FFN3lrenoy?=
+ =?utf-8?B?UW9tNUFnQjd6K0xCaHliRnFhS0JXa3l3SmJpR1lkTXVuSlhINDRxTVNMeGJx?=
+ =?utf-8?B?TDcrVHdZMkh2aUs0ZlpVZ1FzR2VZSlpBVHVHOWpFa3A4OTdwM0dFVDBXbXlW?=
+ =?utf-8?B?QUJ4UnZXWFFVUlU1d2ZZT3V3clRFNzE1c3UyQ2JZNEdLQlhkTWNRc3VqYU1R?=
+ =?utf-8?B?eHM0NW5xOGV6N2FWUWk1MjdpODhycmlSTzhFOWIxenI5LytzMHRjRGV0VUtF?=
+ =?utf-8?B?NmdhSEZ0cFJnRi93WW1ZS2F6YWN4V3FhdlEzUVBuMlMvSVNENmE5YUh4UVN6?=
+ =?utf-8?B?ekQ0QzFTYzhKVVNLeTVJdXJHVG9pcEJoU0t4V280T0c3clNjQW5tRC9CTG5i?=
+ =?utf-8?B?aTE1YWV3YysvYzhTdFI0RDdLRjRDRWFaTmdENUxyWmJhTDNEWTVkV3dhNDht?=
+ =?utf-8?B?ZVd4OUJDMGlleU0xeXh4VnZpVUU3MTJxOGE3bzQ1U1NncUNTL2RYc1JPRTNs?=
+ =?utf-8?Q?TQCEis8ECFk+4g8t52Dki3U5ESBymnF+T+DtKFreI5IP?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a3bdc3c-3331-41b6-20f5-08dafce9f88f
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 02:31:45.6254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yamcBjzxeyFlDO85P9VjLGVlEl58qCu/Wk3i9nlkazGJx1MLOSSumyIYZ463Fuct2BFduJtLLFPdppHcjMLghA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6854
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
+On 1/21/2023 10:37, Rafael Ávila de Espíndola wrote:
+> Hi,
+> 
+> I have a desktop that doubles as a NAS, and would like to suspend it
+> when not in use. It works, but when it comes back it is using about 7W
+> more than before going to sleep.
+> 
+> It looks like a6ed2035878e5ad2e43ed175d8812ac9399d6c40 is the
+> culprit. The system doesn't even support S3:
+> 
+> % cat /sys/power/mem_sleep
+> [s2idle]
+> 
+> And looks like the vendor decided that they should not define
+> ACPI_FADT_LOW_POWER_S0. The MB is a Gigabyte B550I AORUS PRO AX with
+> bios version F16e.
+> 
+> Which systems had crashes when ACPI_FADT_LOW_POWER_S0 was not defined?
+> Would it be possible to limit the check only to those systems or at
+> least only to systems that have S3?
+> 
+> I can build the amdgpu module without that check and see if the problem
+> goes away if that would help.
+> 
+> Thanks,
+> Rafael
 
-Tulip is paired with:
+Rafael,
 
-- wcn3660
-- smb1360 battery charger
-- 720p Truly NT35521 Panel
+Can you please open a bug report here
+https://gitlab.freedesktop.org/drm/amd/-/issues
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 453 ++++++++++++++++++
- 2 files changed, 454 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+And attach the log from:
+https://gitlab.freedesktop.org/drm/amd/-/blob/master/scripts/amd_s2idle.py
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 73ff8d3213d99..1df3dbaf8a6d8 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -27,6 +27,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5x.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-new file mode 100644
-index 0000000000000..841d88fe3659f
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-@@ -0,0 +1,453 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022-2023, Bryan O'Donoghue.
-+ *
-+ */
-+
-+/dts-v1/;
-+
-+#include "msm8939.dtsi"
-+#include "msm8939-pm8916.dtsi"
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-+
-+/ {
-+	model = "Sony Xperia M4 Aqua";
-+	compatible = "sony,kanuti-tulip", "qcom,msm8939";
-+
-+	qcom,board-id = <8 0>;
-+	qcom,msm-id = <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>, <QCOM_ID_APQ8039 0x30000>;
-+
-+	aliases {
-+		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-+		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	negative5_reg: negative5-regulator {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&negative5_reg_default>;
-+		regulator-name = "negative5_reg";
-+		gpio = <&tlmm 17 GPIO_ACTIVE_LOW>;
-+		startup-delay-us = <0>;
-+	};
-+
-+	positive5_reg: positive5-regulator {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&positive5_reg_default>;
-+		regulator-name = "positive5_reg";
-+		gpio = <&tlmm 114 GPIO_ACTIVE_LOW>;
-+		startup-delay-us = <0>;
-+	};
-+
-+	usb_id: usb-id {
-+		compatible = "linux,extcon-usb-gpio";
-+		id-gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usb_id_default>;
-+	};
-+};
-+
-+&dsi0 {
-+	status = "okay";
-+
-+	panel@0 {
-+		compatible = "sony,tulip-truly-nt35521";
-+		reg = <0>;
-+		positive5-supply = <&positive5_reg>;
-+		negative5-supply = <&negative5_reg>;
-+		reset-gpios = <&tlmm 25 GPIO_ACTIVE_LOW>;
-+		enable-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
-+
-+		ports {
-+			port {
-+				panel_in: endpoint {
-+					remote-endpoint = <&dsi0_out>;
-+				};
-+			};
-+		};
-+
-+	};
-+};
-+
-+&dsi0_out {
-+	remote-endpoint = <&panel_in>;
-+	data-lanes = <0 1 2 3>;
-+};
-+
-+&dsi_phy0 {
-+	qcom,dsi-phy-regulator-ldo-mode;
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	ak8963_default: ak8963-default-state {
-+		pins = "gpio69";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	ak8963_sleep: ak8963-sleep-state {
-+		pins = "gpio69";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	/* Ambient light and proximity sensor apds9930 and apds9900 */
-+	apds99xx_default: apds99xx-default-state {
-+		pins = "gpio113";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	apds99xx_sleep: apds99xx-sleep-state {
-+		pins = "gpio113";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	cam_sensor_flash_default: cam-sensor-flash-default-state {
-+		pins = "gpio98", "gpio97";
-+		function = "gpio";
-+		bias-disable;
-+		drive-strength = <2>;
-+	};
-+
-+	cci1_default: cci1-default-state {
-+		pins = "gpio31", "gpio32";
-+		function = "cci_i2c";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	cdc_ext_spk_pa_active: cdc-ext-spk-pa-on-state {
-+		pins = "gpio0";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		output-low;
-+	};
-+
-+	cdc_ext_spk_pa_sus: cdc-ext-spk-pa-off-state {
-+		pins = "gpio0";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	cdc_slim_lines_act: lines-on-state {
-+		pins = "gpio63";
-+		function = "cdc_pdm0";
-+		drive-strength = <8>;
-+		output-high;
-+	};
-+
-+	cdc_slim_lines_sus: lines-off-state {
-+		pins = "gpio63";
-+		function = "cdc_pdm0";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	cross_conn_det_act: lines-on-state {
-+		pins = "gpio120";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-down;
-+		output-low;
-+	};
-+
-+	cross_conn_det_sus: lines-off-state {
-+		pins = "gpio120";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	ext_buck_vsel: vsel0-state {
-+		pins = "gpio111";
-+		function = "gpio";
-+		drive-strength = <2>;
-+	};
-+
-+	ext_cdc_tlmm_lines_act: tlmm-lines-on-state {
-+		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-disable;
-+	};
-+
-+	ext_cdc_tlmm_lines_sus: tlmm-lines-off-state {
-+		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	gpio_key_suspend: gpio-key-suspend-state {
-+		pins = "gpio107", "gpio108", "gpio109";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	negative5_reg_default: negative5-reg-default-state {
-+		pins = "gpio17";
-+		function = "gpio";
-+		output-low;
-+	};
-+
-+	positive5_reg_default: positive5-reg-default-state {
-+		pins = "gpio114";
-+		function = "gpio";
-+		output-low;
-+	};
-+
-+	/* Gyroscope and accelerometer sensor combo */
-+	mpu6050_default: mpu6050-default-state {
-+		pins = "gpio115";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	mpu6050_sleep: mpu6050-sleep-state {
-+		pins = "gpio115";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	nfc_disable_active: nfc-disable-active-state {
-+		pins = "gpio20";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nfc_disable_suspend: nfc-disable-suspend-state {
-+		pins = "gpio20";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-disable;
-+	};
-+
-+	nfc_int_active: nfc-int-active-state {
-+		pins = "gpio21";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nfc_int_suspend: nfc-int-suspend-state {
-+		pins = "gpio21";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nt35521_te_default: nt35521-te-default-state {
-+		pins = "gpio24";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-down;
-+	};
-+
-+	nt35521_backlight: nt35521-backlight-default-state {
-+		pins = "gpio10";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-down;
-+	};
-+
-+	smb_int: smb-int-default-state {
-+		pins = "gpio62";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	ts_int_active: ts-int-active-state {
-+		pins = "gpio13";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-pull-up;
-+	};
-+
-+	ts_int_suspend: ts-int-suspend-state {
-+		pins = "gpio13";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	ts_reset_active: ts-reset-active-state {
-+		pins = "gpio12";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-pull-up;
-+	};
-+
-+	ts_reset_suspend: ts-reset-suspend-state {
-+		pins = "gpio12";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	ts_release: ts-release-default-state {
-+		pins = "gpio13", "gpio12";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	usb_id_default: usb-id-default-state {
-+		pins = "gpio110";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&pronto {
-+	status = "okay";
-+
-+	iris {
-+		compatible = "qcom,wcn3660";
-+	};
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-+	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-+	vdd_l7-supply = <&pm8916_s4>;
-+
-+	pm8916_s3: s3 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1300000>;
-+	};
-+
-+	pm8916_s4: s4 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2100000>;
-+	};
-+
-+	pm8916_l2: l2 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	pm8916_l4: l4 {
-+		regulator-min-microvolt = <2050000>;
-+		regulator-max-microvolt = <2050000>;
-+	};
-+
-+	pm8916_l5: l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	pm8916_l6: l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+
-+	pm8916_l7: l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	pm8916_l8: l8 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	pm8916_l9: l9 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l10: l10 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l11: l11 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-system-load = <200000>;
-+		regulator-allow-set-load;
-+	};
-+
-+	pm8916_l12: l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l13: l13 {
-+		regulator-min-microvolt = <3075000>;
-+		regulator-max-microvolt = <3075000>;
-+	};
-+
-+	pm8916_l14: l14 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l15: l15 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l16: l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	pm8916_l17: l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	pm8916_l18: l18 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2700000>;
-+	};
-+};
-+
-+&sdhc_1 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc1_default_state>;
-+	pinctrl-1 = <&sdc1_sleep_state>;
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc2_default_state>;
-+	pinctrl-1 = <&sdc2_sleep_state>;
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
-+	status = "okay";
-+};
-+
-+&usb {
-+	extcon = <&usb_id>, <&usb_id>;
-+	status = "okay";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&usb_id>;
-+};
--- 
-2.38.1
-
+Thanks,
