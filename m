@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524316773A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 01:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4046773AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 01:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjAWAok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 19:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S230025AbjAWA7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 19:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWAoj (ORCPT
+        with ESMTP id S229514AbjAWA7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 19:44:39 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F6AC677;
-        Sun, 22 Jan 2023 16:44:36 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 7so7868482pga.1;
-        Sun, 22 Jan 2023 16:44:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3RCWcIvL/2BqpEistR/pk1fEYWC8PuKRkeJFMaOklmU=;
-        b=CN8/icpWxNNFI0vVXK464SGC+sF87is7+R6voWl0bE3bNOQT0FRN+oZB7/LtuND7cp
-         ENl5Xxlg3o3TLP4ILjFNZpKOh+NRNWOFYgqhAuAEbvCSHmaK+ljhERXK5Ugi9t/jnI+/
-         mqpUOkwTVEQtvsbVQZVxNtS54kBlTSnPGSO8uVgoJdzsWoRaPV3zuswDC8oIQrTS/juU
-         rwgUSgO0ttGWgCSjLEcOTBJnVL/BZWa+g1OzAwfnw6xh00j3QCanwGnVpf2G5ltHHsty
-         XmZA3khsIGXkA2+Myald9aO5QWZMoerhzAhPbL8rcaUT9FiHnJ1QNQP52uxzXCL+k2oN
-         iRSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3RCWcIvL/2BqpEistR/pk1fEYWC8PuKRkeJFMaOklmU=;
-        b=eXpAauacDpTSMNIr9GM0pxOk87mqk5zxRmOkUvM/Tf71l4iU15z+29ITIcHgp98pbE
-         5unH6F4mEAuI0IC4XXqzo24ccV8UGP+j9QpE92TISsQtSFvZV40efhq5KMci8MAJyi0x
-         oh9Ap823PiRsjnyzD1o84+zJxpny2zW/BYg5yqZECGTodCEcpZlzuwALy/4T6kb2UMto
-         36WXKqypiuegIc4lGpnMYuGRL10VaihtM2SRZzhUuroUElojGXkPLFJJxnU4D33lHdn4
-         z3ENOzm88lPwQNty44XW8eCLzyywtDbncjBpNRmQwsGvFKkRSLiYtFxP+h+AbQxZ3Z/S
-         IS/g==
-X-Gm-Message-State: AFqh2kpJvnScAtt4mAcb/JJOoxMTh0OcoSMHj9tk+6fqBvg16asmX/or
-        XmNbCQWn3rZWWMG8FwTB7xSwW/KlI5P3N2NQWgqQI3oTFdOv3Q==
-X-Google-Smtp-Source: AMrXdXsGlpqOikKQbTT9bhVSnXxJrNIWNOS7on4GHluGRON0CVCAWyMaNdmDSsestCLWXqJRE5SbRISkc1yXoApS3YU=
-X-Received: by 2002:a63:585b:0:b0:492:23d4:fcb9 with SMTP id
- i27-20020a63585b000000b0049223d4fcb9mr2059944pgm.18.1674434676044; Sun, 22
- Jan 2023 16:44:36 -0800 (PST)
+        Sun, 22 Jan 2023 19:59:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF5F1285A;
+        Sun, 22 Jan 2023 16:59:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D59C160D2D;
+        Mon, 23 Jan 2023 00:59:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C22C433EF;
+        Mon, 23 Jan 2023 00:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674435569;
+        bh=NCthFj9GZBr2LLZm13hQBSasePv4YP50exC3frgkfeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ai2lLRrxUwPhzfYlE8r1410J9AW+xz6xYFnEXavnhGEGSmHYbFkDhoVV3+dk9EnI4
+         nRM/49X/CJHpnRn4Edr7/5UarPloyOB6K9HXquBirgslHRSKtc2Y0qIs7EaEbTe2/D
+         JauxrwHadQRfaN+G1Ao6Ttz2yzWkJ13hkopAMwzS/m+xez3PYpu/TsromicTVEmoT0
+         STe2dFzRQ0EPB8Y/1y3F/KOpHCTvGPELULMfI70ndOCzXO5Ix0TvHgVPTjKcWX6reJ
+         f+mVh46FjSjJ53HepYolHGJpDuNDt0Myy/k5zV1NkIep8vDKg9wPWQ8vGESZK5p+Om
+         AS/Hn2ahhiMuA==
+Date:   Sun, 22 Jan 2023 19:59:27 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, wangkefeng.wang@huawei.com,
+        liushixin2@huawei.com, david@redhat.com, tongtiangen@huawei.com,
+        yuzhao@google.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 5.4 05/16] arm64/mm: Define dummy pud_user_exec()
+ when using 2-level page-table
+Message-ID: <Y83b7370jLnWbyx9@sashalap>
+References: <20230116140520.116257-1-sashal@kernel.org>
+ <20230116140520.116257-5-sashal@kernel.org>
+ <Y8WX1/q8dSEAPDy0@arm.com>
 MIME-Version: 1.0
-References: <20221219052128.18190-1-zhouzhouyi@gmail.com> <Y7wN0TKU1jDyTZs5@lothringen>
- <20230109152505.GA4070882@paulmck-ThinkPad-P17-Gen-1> <CAABZP2waOx0K=qLHmUoQZ2_g9q7LJQbCyYLaQRMPMGhiLTrcPQ@mail.gmail.com>
-In-Reply-To: <CAABZP2waOx0K=qLHmUoQZ2_g9q7LJQbCyYLaQRMPMGhiLTrcPQ@mail.gmail.com>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Mon, 23 Jan 2023 08:44:25 +0800
-Message-ID: <CAABZP2w0SGvKjbLXo2Ygm=xiXTcM0BGFfXBjYg6HscUQHGS=LQ@mail.gmail.com>
-Subject: Re: [PATCH linux-next] mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, fweisbec@gmail.com,
-        tglx@linutronix.de, mingo@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y8WX1/q8dSEAPDy0@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:59 PM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+On Mon, Jan 16, 2023 at 06:30:47PM +0000, Catalin Marinas wrote:
+>On Mon, Jan 16, 2023 at 09:05:08AM -0500, Sasha Levin wrote:
+>> From: Will Deacon <will@kernel.org>
+>>
+>> [ Upstream commit 4e4ff23a35ee3a145fbc8378ecfeaab2d235cddd ]
+>>
+>> With only two levels of page-table, the generic 'pud_*' macros are
+>> implemented using dummy operations in pgtable-nopmd.h. Since commit
+>> 730a11f982e6 ("arm64/mm: add pud_user_exec() check in
+>> pud_user_accessible_page()"), pud_user_accessible_page() unconditionally
+>> calls pud_user_exec(), which is an arm64-specific helper and therefore
+>> isn't defined by pgtable-nopmd.h. This results in a build failure for
+>> configurations with only two levels of page table:
+>>
+>>    arch/arm64/include/asm/pgtable.h: In function 'pud_user_accessible_page':
+>> >> arch/arm64/include/asm/pgtable.h:870:51: error: implicit declaration of function 'pud_user_exec'; did you mean 'pmd_user_exec'? [-Werror=implicit-function-declaration]
+>>      870 |         return pud_leaf(pud) && (pud_user(pud) || pud_user_exec(pud));
+>>          |                                                   ^~~~~~~~~~~~~
+>>          |                                                   pmd_user_exec
+>>
+>> Fix the problem by defining pud_user_exec() as pud_user() in this case.
+>>
+>> Link: https://lore.kernel.org/r/202301080515.z6zEksU4-lkp@intel.com
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Will Deacon <will@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
 >
-> On Mon, Jan 9, 2023 at 11:25 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Mon, Jan 09, 2023 at 01:51:29PM +0100, Frederic Weisbecker wrote:
-> > > On Mon, Dec 19, 2022 at 01:21:28PM +0800, Zhouyi Zhou wrote:
-> > > > mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE to fix concurrency bug
-> > > > reported by KCSAN.
-> > > >
-> > > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > > ---
-> > > > During the rcutorture test on linux-next,
-> > > > ./tools/testing/selftests/rcutorture/bin/torture.sh --do-kcsan  --kcsan-kmake-arg "CC=clang-12"
-> > > > following KCSAN BUG is reported:
-> > > > [   35.397089] BUG: KCSAN: data-race in tick_nohz_idle_stop_tick / tick_nohz_next_event^M
-> > > > [   35.400593] ^M
-> > > > [   35.401377] write to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 3:^M
-> > > > [   35.405325]  tick_nohz_idle_stop_tick+0x14c/0x3e0^M
-> > > > [   35.407162]  do_idle+0xf3/0x2a0^M
-> > > > [   35.408016]  cpu_startup_entry+0x15/0x20^M
-> > > > [   35.409084]  start_secondary+0x8f/0x90^M
-> > > > [   35.410207]  secondary_startup_64_no_verify+0xe1/0xeb^M
-> > > > [   35.411607] ^M
-> > > > [   35.412042] no locks held by swapper/3/0.^M
-> > > > [   35.413172] irq event stamp: 53048^M
-> > > > [   35.414175] hardirqs last  enabled at (53047): [<ffffffffb41f8404>] tick_nohz_idle_enter+0x104/0x140^M
-> > > > [   35.416681] hardirqs last disabled at (53048): [<ffffffffb41229f1>] do_idle+0x91/0x2a0^M
-> > > > [   35.418988] softirqs last  enabled at (53038): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
-> > > > [   35.421347] softirqs last disabled at (53029): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
-> > > > [   35.423685] ^M
-> > > > [   35.424119] read to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 0:^M
-> > > > [   35.425870]  tick_nohz_next_event+0x233/0x2b0^M
-> > > > [   35.427119]  tick_nohz_idle_stop_tick+0x8f/0x3e0^M
-> > > > [   35.428386]  do_idle+0xf3/0x2a0^M
-> > > > [   35.429265]  cpu_startup_entry+0x15/0x20^M
-> > > > [   35.430429]  rest_init+0x20c/0x210^M
-> > > > [   35.431382]  arch_call_rest_init+0xe/0x10^M
-> > > > [   35.432508]  start_kernel+0x544/0x600^M
-> > > > [   35.433519]  secondary_startup_64_no_verify+0xe1/0xeb^M
-> > > >
-> > > > fix above bug by marking access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
-> > >
-> > > This has been discussed before with passion:
-> > >
-> > > http://archive.lwn.net:8080/linux-kernel/1C65422C-FFA4-4651-893B-300FAF9C49DE@lca.pw/T/
-> > >
-> > > To me data_race() would be more appropriate but that would need a changelog with
-> > > proper analysis of the tick_do_timer_cpu state machine.
-> >
-> > Please also an analysis of why the compiler cannot do any destructive
-> > optimizations in this case.  Maybe also comments.
-> I want to try the analysis above, as a newbie I have taught myself
-> LLVM for 3 years in my spare time ;-)
-I am continuing to study LLVM/Clang's optimization behaviour on
-tick_do_timer_cpu, it is very interesting and fascinating, but as a
-newbie, I still need 3-4 week to go, could you wait for me a little
-while? ;-)
+>I don't think this patch should be backported to 5.4. It is a fix for a
+>commit that went in shortly before this one (730a11f982e6). The latter
+>commit does have a Fixes tag but I guess Will thought it's not worth a
+>cc stable (and it's up to 5.19 anyway).
 
-Many Thanks
-Zhouyi
-> >
-> > > One more thing on my TODO list, but feel free to beat me at it :-)
-> Please take your time ;-)   Please don't look my next possible email
-> as a reminder ;-)
-> >
-> > I know that feeling!  ;-)
-> >
-> Thanx, Zhouyi
-> >                                                         Thanx, Paul
+Ack, I'll drop it.
+
+-- 
+Thanks,
+Sasha
