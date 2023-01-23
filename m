@@ -2,241 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4DE67875F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077B8678767
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjAWURG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S230493AbjAWUSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjAWURE (ORCPT
+        with ESMTP id S229842AbjAWUR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:17:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0540C34C13
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:17:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FC93B80E94
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 20:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48749C433EF;
-        Mon, 23 Jan 2023 20:17:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674505020;
-        bh=kq2ExAlpBw5+7g+/b6W0B1Cpiq4JKdLt0vagwVtLwTI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=f6tCv5ZZYXL1Zu4qtAt/R5L3ZCeSu9s4tDidsYrJ8POXzEqWdRQO2LgAZ3FUmvk+y
-         BaJSAgl2eOu3PS69duCl78164PJfkKVkutDxkqnws4G+Thw9JlR4SMiE73e5zVt+Mh
-         pVhxarp+cYE84h9fe9nm6IixoW/QeLU4Mc1LWD52kwJfEbgk0VUnS+ixyowRBNi7w3
-         6UZR+EzwytHIc9HMiHELuTOIy/o4z+IxqHAofX5+hU/pBYBZAq6Y65IUdgSV9E8wZk
-         7Mg1vtnHK5e8uQknI8baqEf0QtxPBh5J1w2A43lJfXI5P7DNZkYPu2lTzfXYTIS38L
-         9yDUNMXFBAI4Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DE4635C044F; Mon, 23 Jan 2023 12:16:59 -0800 (PST)
-Date:   Mon, 23 Jan 2023 12:16:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230118200601.GH2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8hclxuhpGm+krkz@rowland.harvard.edu>
- <20230119000214.GM2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8q6v3BZ8dlyoTxo@rowland.harvard.edu>
- <20230120175804.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8rff3HJ2o9wUyGT@rowland.harvard.edu>
- <20230120192032.GR2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8r7SBdfuZX/y1cd@rowland.harvard.edu>
- <20230120212037.GW2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y82dWEW4RwclDTGM@rowland.harvard.edu>
+        Mon, 23 Jan 2023 15:17:59 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5198416AF7;
+        Mon, 23 Jan 2023 12:17:55 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id s66so11422829oib.7;
+        Mon, 23 Jan 2023 12:17:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EY7We4I2hSyd2pZ0VulkHT4dyOP0LEqk/GnlS4AQK4k=;
+        b=I1EpZJhxYsdr/XJM2UfLcn95KJVWpQ4fOzT35SNJJf36aewU2iA2bMy8Ahu47THh4L
+         yromRPH7qvmkdp0Tt01W5oj3GfRbciO/1A8wBU1u4kVquEImqLaO6afnOU3ywCYlXyEP
+         54jGu/8TdSEfq0nh8NtXUnOfeeTu/RFx3/yzM0RoauOr9CGUEFhP2jz4DDFsL6ZciIM9
+         v+Ucdx45UZAT/Og4DPW2+KuiqLXIleVJ6G95Id9rufUuR5z3jnQWPgcS/GJ8odnU44Zo
+         jS09gJRA/88XVktotZYSsrTwhR9eCAtf02fJUqImYtuZlP36UFZck2WH2Z5TZgl7Odzx
+         IaxA==
+X-Gm-Message-State: AFqh2kr4DHZb7Th1sv9Xb6eEbbkzMH8bmSams/8U6NJlhN8HySUmKotr
+        9FcJdQnTVkH9ri01/tlbrA==
+X-Google-Smtp-Source: AMrXdXuvPUKWyC8RGNKpvhdFpfXGmbs7xnQ1zVyMxDHfPRH77j6ghKDaBa0O8cM4huncdcgY7ZWv7g==
+X-Received: by 2002:a05:6808:f14:b0:364:e9f4:9dd with SMTP id m20-20020a0568080f1400b00364e9f409ddmr15059505oiw.47.1674505074502;
+        Mon, 23 Jan 2023 12:17:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i11-20020aca2b0b000000b00369a721732asm124660oik.41.2023.01.23.12.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 12:17:54 -0800 (PST)
+Received: (nullmailer pid 2454148 invoked by uid 1000);
+        Mon, 23 Jan 2023 20:17:51 -0000
+Date:   Mon, 23 Jan 2023 14:17:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, Han Xu <han.xu@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Parshuram Thombare <pthombar@cadence.com>,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        Gabor Juhos <juhosg@openwrt.org>,
+        Bert Vermeulen <bert@biot.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Marek Vasut <marex@denx.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Pragnesh Patel <pragnesh.patel@sifive.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Erwan Leray <erwan.leray@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 2/2] spi: dt-bindings: cleanup examples - indentation,
+ lowercase hex
+Message-ID: <20230123201751.GA2450665-robh@kernel.org>
+References: <20230118173932.358153-1-krzysztof.kozlowski@linaro.org>
+ <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y82dWEW4RwclDTGM@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230118173932.358153-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 03:32:24PM -0500, Alan Stern wrote:
-> On Fri, Jan 20, 2023 at 01:20:37PM -0800, Paul E. McKenney wrote:
-> > On Fri, Jan 20, 2023 at 03:36:24PM -0500, Alan Stern wrote:
-> > > On Fri, Jan 20, 2023 at 11:20:32AM -0800, Paul E. McKenney wrote:
-> > > > On Fri, Jan 20, 2023 at 01:37:51PM -0500, Alan Stern wrote:
-> > > > > srcu_read_unlock() does not need a full smp_mb().
-> > > > 
-> > > > That is quite possible, and that is what we are looking into.  And testing
-> > > > thus far agrees with you.  But the grace-period ordering constraints
-> > > > are quite severe, so this requires careful checking and severe testing.
-> > > 
-> > > If you're interested, I can provide a simple argument to show that the 
-> > > Fundamental Law of RCU would continue to hold with only a release fence.  
-> > > There is an added requirement: merely that synchronize_srcu() must have 
-> > > an smp_mb() somewhere after its final read of the unlock counters -- 
-> > > which your version of the algorithm already has.
-> > 
-> > Please!
-> > 
-> > For your amusement, here is a very informal argument that this is
-> > the case:
-> > 
-> > https://docs.google.com/document/d/1xvwQzavmH474MBPAIBqVyvCrCcS5j2BpqhErPhRj7Is/edit?usp=sharing
-> > 
-> > See the "Read-Side Optimizations" section at the end.
+On Wed, Jan 18, 2023 at 06:39:32PM +0100, Krzysztof Kozlowski wrote:
+> Cleanup examples:
+>  - use 4-space indentation (for cases when it is neither 4 not 2 space),
+>  - drop redundant blank lines,
+>  - use lowercase hex.
 > 
-> It looks like you've got the basic idea.  Most of the complications seem 
-> to arise from the different ways a grace period can happen.
+> No functional impact except adjusting to preferred coding style.
 > 
-> Here's what I was thinking.  Let C be a read-side critical section, with 
-> L being its invocation of srcu_down_read() and U being the matching 
-> invocation of srcu_up_read().  Let idx be the index value read by L (and 
-> used by U).  I will assume that L has the form:
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  26 +--
+>  .../bindings/spi/amlogic,meson6-spifc.yaml    |  22 +--
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      |  24 +--
+>  .../bindings/spi/brcm,spi-bcm-qspi.yaml       | 156 +++++++++---------
+>  .../bindings/spi/cdns,qspi-nor.yaml           |   4 +-
+>  .../bindings/spi/nvidia,tegra210-quad.yaml    |  42 ++---
+>  .../bindings/spi/qcom,spi-qcom-qspi.yaml      |   1 -
+>  .../devicetree/bindings/spi/renesas,rspi.yaml |  22 +--
+>  .../bindings/spi/spi-sunplus-sp7021.yaml      |   4 +-
+>  .../devicetree/bindings/spi/st,stm32-spi.yaml |   1 -
+>  10 files changed, 150 insertions(+), 152 deletions(-)
+
+[...]
+
+> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+> index d35c6f7e2dd5..18afdaab946d 100644
+> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+> @@ -95,7 +95,6 @@ examples:
+>               <&dmamux1 1 40 0x400 0x05>;
+>        dma-names = "rx", "tx";
+>        cs-gpios = <&gpioa 11 0>;
+
+Looks like the indentation needs adjusting here.
+
+> -
+>      };
+>  
+>  ...
+> -- 
+> 2.34.1
 > 
-> 	idx = READ_ONCE(ss->index);
-> 	temp = this_cpu(ss->lock)[idx];
-> 	WRITE_ONCE(this_cpu(ss->lock)[idx], temp + 1)
-> 	smp_mb();
-> 
-> (or whatever is the right syntax for incrementing a per-cpu array 
-> element).
-
-The actual code uses this_cpu_inc() in order to permit srcu_read_lock()
-and srcu_read_unlock() to be used in softirq and interrupt handlers,
-but yes, ignoring interrupts, this is the form.
-
->            Likewise, assume U has the form:
-> 
-> 	temp = this_cpu(ss->unlock)[idx];
-> 	smp_store_release(&this_cpu(ss->unlock)[idx], temp + 1);
-
-And same here.
-
-> Let G be any SRCU grace period -- an invocation of synchronize_srcu(ss). 
-> Assume G has the overall form:
-> 
-> 	accumulate_and_compare_loop(!ss->index);
-> 	smp_mb();
-> 	WRITE_ONCE(ss->index, !ss->index);
-> 	smp_mb();
-> 	accumulate_and_compare_loop(!ss->index);
-> 
-> where accumulate_and_compare_loop(i) has the form:
-> 
-> 	do {
-> 		s = t = 0;
-> 		for each CPU c:
-> 			s += READ_ONCE(cpu(c, ss->unlock)[i]);
-> 		smp_mb();
-> 		for each CPU c:
-> 			t += READ_ONCE(cpu(c, ss->lock)[i]);
-> 	} while (s != t);
-> 
-> It's not too hard to show, and I trust you already believe, that in the 
-> final iteration of the accumulate_and_compare_loop(i) call for which 
-> i = idx, the lock-counter increment in L is observed if and only if the 
-> unlock-counter increment in U is observed.  Thus we have two cases:
-> 
-> Case 1: Both of the increments are observed.  Since the increment in U 
-> is a store-release, every write that propagated to U's CPU before the 
-> increment is therefore visible to G's CPU before its last read of an 
-> unlock counter.  Since the full fence in accumulate_and_compare_loop() 
-> is executed after the last such read, these writes must propagate to 
-> every CPU before G ends.
-> 
-> Case 2: Neither of the increments is observed.  Let W be any write which 
-> propagated to G's CPU before G started.  Does W propagate to C before L 
-> ends?  We have the following SB or RWC pattern:
-> 
-> 	G                          C
-> 	------------------------   -----------------------
-> 	W propagates to G's CPU    L writes lock counter
-> 	G does smp_mb()            L does smp_mb()
-> 	G reads L's lock counter   W propagates to C's CPU
-> 
-> (The smp_mb() in the left column is the one in 
-> accumulate_and_compare_loop(idx), which precedes the reads of the lock 
-> counters.)
-> 
-> If L's smp_mb() ended before G's did then L's write to the lock counter 
-> would have propagated to G's CPU before G's smp_mb() ended, and hence G 
-> would have observed the lock-counter increment.  Since this didn't 
-> happen, we know that G's smp_mb() ends before L's does.  This means that 
-> W must propagate to every CPU before L terminates, and hence before C's 
-> critical section starts.
-> 
-> Together, these two cases cover the requirements of the Fundamental Law 
-> of RCU.  The memory barrier in U was needed only in Case 1, and there it 
-> only needed to be a release fence.
-
-Looks good to me!
-
-One twist is that the design of both SRCU and RCU are stronger than LKMM
-requires, as illustrated by the litmus test at the end of this email.
-
-I believe that your proof outline above also covers this case, but I
-figure that I should ask.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-C C-srcu-observed-2
-
-(*
- * Result: Sometimes
- *
- * But please note that the Linux-kernel SRCU implementation is designed
- * to provide Never.
- *)
-
-{}
-
-P0(int *x, int *y, int *z, struct srcu_struct *s)
-{
-	int r1;
-	int r2;
-
-	r1 = srcu_read_lock(s);
-	WRITE_ONCE(*y, 1);
-	WRITE_ONCE(*x, 1);
-	srcu_read_unlock(s, r3);
-}
-
-P1(int *x, int *y, int *z, struct srcu_struct *s)
-{
-	int r1;
-	int r2;
-
-	r1 = READ_ONCE(*y);
-	synchronize_srcu(s);
-	WRITE_ONCE(*z, 1);
-}
-
-P2(int *x, int *y, int *z, struct srcu_struct *s)
-{
-	int r1;
-
-	WRITE_ONCE(*z, 2);
-	smp_mb();
-	r2 = READ_ONCE(*x);
-}
-
-exists (1:r1=1 /\ 1:r2=0 /\ z=1)
