@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95294677C7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9EA677C82
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjAWNa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S231783AbjAWNac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjAWNaZ (ORCPT
+        with ESMTP id S232001AbjAWNa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:30:25 -0500
+        Mon, 23 Jan 2023 08:30:26 -0500
 Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398D222A10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:30:24 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id az20so30528680ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:30:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2682722A14
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:30:25 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id hw16so30393161ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:30:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GNbLj/XmOS18lcQ6X8VOqWOavPYN+fm3m3tQOx//CQY=;
-        b=y1I2hXpHlXyGKsjZYDgisHlHbdrEFWMrdHw+LbJUg2u9PZkEeKin8vq7vzHQ5KTcRw
-         AwLhJQZ2Ld5yppC0c3LhRYB1CaJibzMyuDPe93tQfyVIJnK4HQ5ZeYlsHQqPFxA4+8pZ
-         IYgvWu3JrRyj4qZwRXWyZeV19HzqrLgp8m3t06I1/szGtrp4wxVcdU5ljdVuvUP6n0mm
-         pnZr+lzBGgT0nEcV9UekpHf6E4BRgHKjiyMXfZ4RLEvpuIw4/Xkjw1fhs33y0jSyAzTm
-         qcBRVahxjqq+IRiVe/abu+UHvm/ar293kZjtI2z8KrJnL6WnV0fzUHCPPyDN5T1S/9Wh
-         hXmQ==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PiCSAx5OP0HL/qhjmYmfiTOJSjelq43AEFISt1JmlPM=;
+        b=WBtE0bBwM3UOcZHnEzwQfAzX4RFesXn7iyw9+E8Mm8055sx4yURLxuTVsU3qS7jEoS
+         086mIbUN/JwIk5zvZGrmb6GZS1TYFha7P0yMnLlP0KrwqHHxN6nrYYE/cz63N6gH7K+s
+         OBNnaJDVj/MdiSTnIFLITh/QfScqcZbCDDSXH8uLLqwkYUUrdOA0ddoOW+3U0S2c6KpM
+         F0jrnQtM8VcQhnThVcoJj3ExStITLqo2btEQByXhRt57L45ddw6vkQ48DI0sGpPeAh7I
+         7dT1H7/UYevnf2Gg/ohL04DM1APsIHRq5rsnpvUzjVS0oHqJ0sw2K5bK7wovlMZHefiy
+         YCmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GNbLj/XmOS18lcQ6X8VOqWOavPYN+fm3m3tQOx//CQY=;
-        b=JwtIeHXs7ghvsjt3AbjSjL8pjOT63/1ObBBtBgfgIWMcAZIZgBV6YdvjwbYIxeFNcy
-         yIYQQgBKL+ZEcoeDw3ZwbeSqH8jd529EeiEdmJNm2bzwRIHl+9h4AEJ5STerZMlz3NeC
-         JUcreiK76MV1TD0qGtrZEOPAUTXEmfq6r1tULNBCH34BhHD9JeXATh1yw1oqI4ptd39g
-         54brTQIXQw/3LWtu+X1S1YuPaEp8XcCcNJhrrU/n3WMyK8TvRVuVC9NCTgN0bjf6AG5T
-         iKpEjPkpdqkV/w64pTUrfFjE+r8fLwF143meU6tJLLLyd3qnyV2/nxFGzXEPDF/gilSB
-         cFGw==
-X-Gm-Message-State: AFqh2krVwRY6ZqAU+cYtDqrmr9rsQ55rK9wNnwqxUaAC2+aR2xgR01GR
-        k/egxAR9gVt6g7xC+RheHupSjQ==
-X-Google-Smtp-Source: AMrXdXsO2W7vTKmldyNi2VluWAXyWgl/FTLpjx5ljjPpjsV580GO1FHx9OHRarQY2voFWBfv9iIenA==
-X-Received: by 2002:a17:906:5417:b0:877:5dbc:da84 with SMTP id q23-20020a170906541700b008775dbcda84mr19849609ejo.72.1674480622737;
-        Mon, 23 Jan 2023 05:30:22 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PiCSAx5OP0HL/qhjmYmfiTOJSjelq43AEFISt1JmlPM=;
+        b=3xts70jkXKy6ZKjqAbm7wb6ctvkEv4jkghglsd6DTYRJ7LHTxv5jSvQHXUTWWheDUN
+         l30dccdTjn2rO/oMySq6ZZLaSVHZLvGK6A8cyD0nEYnDEEAoYJu4Il+qjTXJb8+JOLVl
+         etwiBAHSpJibO9/O1UthMWLZqff2ya2OKmk/XRZWxugTaKuZ6+oNDtxldxkYBtWLRTCQ
+         ZQYtfMQiuEa7CCqjnQWqKxKLWWos8Rh7JpfUJ9r555yADX3tkYN7r5BzqpbwlIQpSaoO
+         oR6ZiRMDpNZR82NvJrX7mDGjLTnwchsk4+/hRbrtMXxWZfbBRnLf0RpnXx0Z1EXCvWoi
+         QpQA==
+X-Gm-Message-State: AFqh2kqi8IGvNF8BZJlM6/ao6RbDLkJZpxkzK5n08u25ypwM2ZtkQWkY
+        iUm6BnaTwnSkk5pC+AJRD4vZbA==
+X-Google-Smtp-Source: AMrXdXvMacONiIlsA+l49gQG20Y/D0E/HrMPyVBKSIzyJSf4UKkvzRx1VNwWXufjIQLel3IMCgZF6A==
+X-Received: by 2002:a17:907:a2cb:b0:870:7b:94db with SMTP id re11-20020a170907a2cb00b00870007b94dbmr30053894ejc.28.1674480623700;
+        Mon, 23 Jan 2023 05:30:23 -0800 (PST)
 Received: from [172.16.220.87] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170906c30500b008552bc8399dsm18410066ejz.172.2023.01.23.05.30.21
+        by smtp.gmail.com with ESMTPSA id s5-20020a170906c30500b008552bc8399dsm18410066ejz.172.2023.01.23.05.30.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 05:30:22 -0800 (PST)
+        Mon, 23 Jan 2023 05:30:23 -0800 (PST)
 From:   Luca Weiss <luca.weiss@fairphone.com>
-Subject: [PATCH v4 0/3] Add USB/DP combo PHY config for SM6350
-Date:   Mon, 23 Jan 2023 14:29:48 +0100
-Message-Id: <20230120-sm6350-usbphy-v4-0-4d700a90ba16@fairphone.com>
+Date:   Mon, 23 Jan 2023 14:29:49 +0100
+Subject: [PATCH v4 1/3] dt-bindings: phy: qcom,qmp-usb3-dp: Add sm6350
+ compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMyLzmMC/zWNywrDIBBFf6W47oRR85Cu+h+lC2PHKiQanKYPQ
- v69UujyXDjnboKpRGJxOmyi0DNyzKlCezwIF2y6E8RbZaFQaZQKgededwgrj0v4gBlcR9qjkoZ
- EdUbLBGOxyYVqpXWa6rgU8vH9O7lcK/uSZ3iEQvafVlJqRCNbjU0/GC1BwrQ627woMp+9jWUJO
- VHj8iz2/QtItfVgtgAAAA==
+Message-Id: <20230120-sm6350-usbphy-v4-1-4d700a90ba16@fairphone.com>
+References: <20230120-sm6350-usbphy-v4-0-4d700a90ba16@fairphone.com>
+In-Reply-To: <20230120-sm6350-usbphy-v4-0-4d700a90ba16@fairphone.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -84,36 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While this patchset started out as just adding a dedicated init sequence
-for SM6350 since USB PHY init didn't work in some cases, now it's also
-migrating the phy config and dts over to a new format.
+Add the compatible describing the combo phy found on SM6350.
 
-Also note, that the DP portions are pratically untested since TCPM
-(type-C port manager) and possibly other components aren't brought up
-yet.
-
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
-Changes in v4:
-- Fix dp_serdes offsets in driver, add dp_txa & dp_txb fields (as in v2)
-- Fix order of resets in dtsi
-- Link to v3: https://lore.kernel.org/r/20221130081430.67831-1-luca.weiss@fairphone.com
+ Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
----
-Luca Weiss (3):
-      dt-bindings: phy: qcom,qmp-usb3-dp: Add sm6350 compatible
-      phy: qcom-qmp-combo: Add config for SM6350
-      arm64: dts: qcom: sm6350: Use specific qmpphy compatible
+diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+index 6f31693d9868..0764cd977e76 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+@@ -17,6 +17,7 @@ properties:
+   compatible:
+     enum:
+       - qcom,sc8280xp-qmp-usb43dp-phy
++      - qcom,sm6350-qmp-usb3-dp-phy
+ 
+   reg:
+     maxItems: 1
 
- .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml         |   1 +
- arch/arm64/boot/dts/qcom/sm6350.dtsi               |  54 +++-----
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c          | 139 ++++++++++++++++++++-
- 3 files changed, 154 insertions(+), 40 deletions(-)
----
-base-commit: d514392f17fd4d386cfadde7f849d97db4ca1fb0
-change-id: 20230120-sm6350-usbphy-87c5e3f0218e
-
-Best regards,
 -- 
-Luca Weiss <luca.weiss@fairphone.com>
+2.39.1
 
