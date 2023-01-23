@@ -2,243 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AD0678084
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD066678088
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjAWPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
+        id S232955AbjAWPvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbjAWPvT (ORCPT
+        with ESMTP id S232951AbjAWPvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:51:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5DD13D65;
-        Mon, 23 Jan 2023 07:51:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D222BB80D39;
-        Mon, 23 Jan 2023 15:51:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129C6C433EF;
-        Mon, 23 Jan 2023 15:51:10 +0000 (UTC)
-Message-ID: <200db318-73e8-988c-7992-e529e332a6a1@xs4all.nl>
-Date:   Mon, 23 Jan 2023 16:51:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 00/12] Add support for multiple chips
+        Mon, 23 Jan 2023 10:51:38 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2113.outbound.protection.outlook.com [40.107.241.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E54E1EFF1;
+        Mon, 23 Jan 2023 07:51:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XdF3XBEbbxuNITI0+gAKJeXBbmCJk1valm19lgI1AF3DKmSqguCnQkCnA5y6T0Mj0C1FzpX8rYGhFlr89hE6pVnG3g+uim1KmScEFDNJ8h0vBs3Y+cIsnqo55CeLQAaZ5BfcT7RoQ3iRhmwyv3ufKsL6u1nnnEpPS6JClZyU2jf8TcKF4TfkcrcIngfH9rq82meRM5/v8NiDcaKsWV8UDpVcB2ZLQdinFQBdNQIQYsu+nulVTx+9cm94S4SvA4pPuihTM/XNkxvAW2lMOF2UhfFpy+xFVMe0leqr5WzqvRnJ77rOjzOo9BAqGU9vtM8kzSoSdfOpfX0EzPygUeI1vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zup7Qv07NCQvuWDpC0pQrBahOrndwNtvkrl3G4pJTaw=;
+ b=P6jF/CUwm4k3eygLXNLBW6HKkbneoVnYMt5uIIBMutI4KXnIMIF88ceQl6pjirlAbn9G8bll1OGaFo82Nv1uqfOmo7DENmPTiD3xJueX/LnFwSd6+slCgs/sbghXZan1TbiaaAcOX4I1CUCzrVmOSZ4YJmwlGZ3FbAYyhiaA0OnswDF6encBRl4Ch8gndkUf1tNJLXwkB5V+c6HyG2Z8v8euZK7BttvTs9Vx+yz6xQ5O4VL274CaPuVFRrEbCN9vdyCNk/MvevkEeYxjw4isYK1TQQIxY2/4v3L26tmUU3k2f9ALQVkbKVd/sHgsOxkfME130OMPsIfsvE2DPV5IHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
+ header.d=esd.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zup7Qv07NCQvuWDpC0pQrBahOrndwNtvkrl3G4pJTaw=;
+ b=t97ibxSvrlrsT2i0kSYHbjG069n6AzsYxL9hmYcMr6/E24GxJjNos8W+JZsjvBCGMIxpcXBYFF4Gy47eZ/In9VrEKpvm+OiwlOlJ5E0X5CqjwXW6alTjEQESLJxgx/W+/c8NNmM4TG7iEg+GAXBRDyJ4JKVPlS93GH9bnyLFK8Q=
+Received: from GVXPR03MB8426.eurprd03.prod.outlook.com (2603:10a6:150:4::9) by
+ AS8PR03MB7142.eurprd03.prod.outlook.com (2603:10a6:20b:23d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
+ 2023 15:51:30 +0000
+Received: from GVXPR03MB8426.eurprd03.prod.outlook.com
+ ([fe80::acef:56e7:b5cf:317d]) by GVXPR03MB8426.eurprd03.prod.outlook.com
+ ([fe80::acef:56e7:b5cf:317d%3]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
+ 15:51:30 +0000
+From:   Frank Jungclaus <Frank.Jungclaus@esd.eu>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
+CC:     =?iso-8859-15?Q?Stefan_M=E4tje?= <Stefan.Maetje@esd.eu>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] can: esd_usb: Improved decoding for
+ ESD_EV_CAN_ERROR_EXT messages
+Thread-Topic: [PATCH 3/3] can: esd_usb: Improved decoding for
+ ESD_EV_CAN_ERROR_EXT messages
+Thread-Index: AQHZE/C023IBXwmcgEW0dqi5txYJI652P5GAgAA5mwCAAANXgIA14LUA
+Date:   Mon, 23 Jan 2023 15:51:29 +0000
+Message-ID: <8dad612dc67b19d1f5c295b46e70ad56666c1b17.camel@esd.eu>
+References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+         <20221219212717.1298282-2-frank.jungclaus@esd.eu>
+         <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
+         <CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com>
+         <20221220090525.tvmgmtffmy7ruyi3@pengutronix.de>
+In-Reply-To: <20221220090525.tvmgmtffmy7ruyi3@pengutronix.de>
+Accept-Language: en-001, de-DE, en-US
 Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230113064104.22402-1-moudy.ho@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230113064104.22402-1-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GVXPR03MB8426:EE_|AS8PR03MB7142:EE_
+x-ms-office365-filtering-correlation-id: ca9ff66e-73af-489d-41f0-08dafd59b19d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: C92JyGyLxjd/wSvEgoDz/zHqu+L8Fb2rov3PGa9QGhghW41moAlWOSiR5KvJqRfkMd4BEY2lr2yXqAQd813FZCz/+yPPSwAsJSjzXTx99a45Hzzx5VRVlfaL9H6XmPRVQdgMOyjG+RvMyQDT/yJ33Yd2t48XGLMUfZ/GFYo65sV5I9XyLPhnKvISGoo3DJAHjKwDV4xY4itZhOL91ZLOB3ABbfkqJVsmhpK2bGEtXRWBjE5YNPTVBf4SErSwPSALIxOSXgyhzrWFWcFm+re/ZjTjq/UJAsOw+98vVCNDYLEotjPoP8FsfbjMXI3OBFjHAOynVyQVk/TI1Bw1DXlHjxbIIEManZOLEATiBqih/B6Q4q+JIDREDGmSheQgKPIwxSD4JPiRRvXsZTTLP1mFcBsSvniqW0SbJsdbME7L+D8jAF5OSWV1PSdKxLHAZUxFZAC4Tm0d56VacOvMXEkNapxmGPmbl3VGCUqfUd0ST4oucP5Qc95akJ8HJ2tqe4Pq3DgCnOoe+8qy015X/H32GgZuI6JOMOYWMNd35AXtV5Mgfi67lftDt8dgtkOCYNNftFgSY/mnA5V5v8+JXd0Yfw7+sS6tFFk3tePRjIIuDfXeJKc9KbQS0svKsgTSLQcykOCOXnS9OmgoeMc415CHrwL28/ydZbqQiWxPuCeOgZ0j1AyUg3647G4jrZX1TWI+SBzOh+S34TzLCZVGM+ox9zq9xQm0gU8+DYThTmBAXeQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXPR03MB8426.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(346002)(39840400004)(396003)(136003)(451199015)(122000001)(38100700002)(36756003)(86362001)(478600001)(316002)(38070700005)(110136005)(54906003)(966005)(64756008)(66446008)(6486002)(8676002)(66946007)(66556008)(76116006)(4326008)(66476007)(91956017)(2616005)(71200400001)(2906002)(4001150100001)(6506007)(53546011)(83380400001)(26005)(5660300002)(6512007)(41300700001)(186003)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?q6+nLdX11RJDucU74dPJtH7tIoKi0EPWhTarUI0NCIvi6vII1LWioGOIr?=
+ =?iso-8859-15?Q?S9XBCSwXkrk5necW6sIlK7Tattd3gbOcUilIJ2ZoKBNtAIRe/Xiplw//J?=
+ =?iso-8859-15?Q?3r7RDBsB2NkoJRVZ5TugzSdfLvLB/WVnIgN/8P7bcRYthbP3DaAcR6UVN?=
+ =?iso-8859-15?Q?wNU73FM+5oA6KBj+n+h1M1fQvUoxZbnjO8x2qEmJO2dL6q9T/F0DPykea?=
+ =?iso-8859-15?Q?iGUSdDyv69Bor6NMeh/EHvsrGVhdevN1Z/ZiYaay2811qxUjYbcW9oqm4?=
+ =?iso-8859-15?Q?HYuql67vCco3mYtrKGG1HW40nROwrrDc630YMFKMWblJeNrktiaexxHhu?=
+ =?iso-8859-15?Q?PV8h5eEC96QuWpJ6WPh2LySdcdQE+xtithZZiDsS7K74LtBBCJC3gYzN9?=
+ =?iso-8859-15?Q?UMXGxS2U8Pm2Q8jYnm2ZiTeJUm13fNYi9lcpHrmpFbca2gOSHC4mg/A+U?=
+ =?iso-8859-15?Q?5hfaUo7Rf8qPrtfm3ae8nByIjUiC+dEBqYuhfoSXCPsDpNohVHY8jq180?=
+ =?iso-8859-15?Q?WQDtf2sj9DsUDvk55nPOSoKWdS1JjXF8sobmRY2lHpw9V+YLiHTU4B9/f?=
+ =?iso-8859-15?Q?iUQfcdltxNH9sPRtA9U0ADW0r4YD42XxiUMcoc0vnfpgTihlR1nVnm1tq?=
+ =?iso-8859-15?Q?jgL9U/Xntr7In1p9Uf5v9/Jw2hjXjtEp7wawM5Wefz3rla29dIYvL4V0b?=
+ =?iso-8859-15?Q?i7OxaA5MW3Y2+dxvd0GlVp3gZ2NwVqJMSbRarOAWMfJtHjLG+zNTU2g+r?=
+ =?iso-8859-15?Q?9J4sCPHtFSySOURnBzHYxzQ+0oyOTW9q16yI2DAvnQO/OLJKnCgoUccc5?=
+ =?iso-8859-15?Q?Vi9JoqPxh+qgJr9dAuMTiEM2n7CAAop9BVVIqx4vAQ0FRAbwwbqLmz9cJ?=
+ =?iso-8859-15?Q?uqNXGEoNd7lc4jjDJEnpZQVSi5HeJRSkDgnxe/vtRqN+eHzKevpYqz7sL?=
+ =?iso-8859-15?Q?ovfRDZ9KqvQoiTEcfUt6TX9wH1A9G2n3DnFhxObZx52cex19e90A6eToZ?=
+ =?iso-8859-15?Q?hG7szak+VNDlR98ZtUOTVhGoUYTpcmSv3evFCTl4KsxUBx3xUN0ShHVct?=
+ =?iso-8859-15?Q?OacjvnpmPzp1i5lsFpz8F5VYea7ZFKAZzIt/ElXDwaUyMe1jlWOnRLD7O?=
+ =?iso-8859-15?Q?G9uvEsPPi7siWLkzlRL5+45Lp0qvXwvxU7lGljZI+kBp50hwVe8NBdQSn?=
+ =?iso-8859-15?Q?ZirhECEgsjw7Wy9EHHbPQYkpnPaCtIgC8K5ViNJaOGdVcsiL1Inx+ODUO?=
+ =?iso-8859-15?Q?8M6cmiIzDIdOf6sh7ukPBc/QlQP4Vv6fYP+2S95zrOWn179J5reLDypBZ?=
+ =?iso-8859-15?Q?1MGyrLcZeypifhMLtiibUzVE+rT1P532JGPTYVc7DDkgEermY/9XG2T+W?=
+ =?iso-8859-15?Q?1ZGmKcifiREBGiOU1skGwsunNJJnbuIMGCTbpY3BvnigN3JOJkcK8Ffeo?=
+ =?iso-8859-15?Q?4EVxw/2osVeC27pCujS0c9709fJmQhIthr4hMfGFIQ2rf2sc0f8Xccq98?=
+ =?iso-8859-15?Q?txh7IRpZounRLZ1RW0hKkrZ8kgQo4JkKj5yRKcO3uG7+4F+DPCYmysnae?=
+ =?iso-8859-15?Q?hTDSYYTLJJ74tkHM3PkgbBfQJsdBvVovXuyZPQKzlDdVbMNRBtRI+dL0D?=
+ =?iso-8859-15?Q?hk7jdQvnnv91Zn+vddhoaJQ2yAmAkgsI/nt0KlTYy7PY29UqDRYuUP0gd?=
+ =?iso-8859-15?Q?NoibBzIMtIpdfUV5rPtDGHWQGQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <6CAE58EFABAC8E4DBF8BB453258D1BDC@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GVXPR03MB8426.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca9ff66e-73af-489d-41f0-08dafd59b19d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2023 15:51:29.9823
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lvJxfglS1/uKsADVru+2l8hpjT1IKGaPrmudPG+N82BjIWmXptKz9YmCnz5zBFdztgDhL12kKUcEl2yRNqKL/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7142
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 07:40, Moudy Ho wrote:
-> Changes since v4:
-> - Rebase on linux-next.
-> - Fix potential frame size overflow in "mtk-mdp3-regs.c".
-> - Fix OOB in MDP3 component clocks in "mtk-mdp3-comp.*".
-> - Reconfigure the shared memory between MDP3 kerenl and SCP.
-> 
-> Changes since v3:
-> - Rebase on linux-next.
-> - In the file "mtk-mdp3-m2m.c", use the limited resolution defined by
->   each platform to replace the default format.
-> - Add platform ID in driver data, and refine shared memory structure preprocessing.
-> - Simplify the way to get mutex ID in function "mdp_path_subfrm_require".
-> 
-> Changes since v2:
-> - Depend on :
->   [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=687004
-> - Split the shared memory header(mtk-img-ipi.h) by preprocessing instead, and
->   classify the generic parts into "mtk-mdp3-type.h", and move
->   chip-specific parts to"mt8183/mdp3-comp-mt8183.h".
-> 
-> Changes since v1:
-> - Depend on :
->   [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=687004
-> - For hardware-specific structures in the shared memory header(mtk-img-ipi.h),
->   split the relevant functions and structure definitions.
-> 
-> Hi,
-> 
-> To support multiple chips, a chip configuration header file needs to be created
-> and the relevant information split and moved into it.
+On Tue, 2022-12-20 at 10:05 +0100, Marc Kleine-Budde wrote:
+> On 20.12.2022 17:53:28, Vincent MAILHOL wrote:
+> > > >  struct tx_msg {
+> > > > @@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_n=
+et_priv *priv,
+> > > >         u32 id =3D le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
+> > > >=20
+> > > >         if (id =3D=3D ESD_EV_CAN_ERROR_EXT) {
+> > > > -               u8 state =3D msg->msg.rx.data[0];
+> > > > -               u8 ecc =3D msg->msg.rx.data[1];
+> > > > -               u8 rxerr =3D msg->msg.rx.data[2];
+> > > > -               u8 txerr =3D msg->msg.rx.data[3];
+> > > > +               u8 state =3D msg->msg.rx.ev_can_err_ext.status;
+> > > > +               u8 ecc =3D msg->msg.rx.ev_can_err_ext.ecc;
+> > > > +               u8 rxerr =3D msg->msg.rx.ev_can_err_ext.rec;
+> > > > +               u8 txerr =3D msg->msg.rx.ev_can_err_ext.tec;
+> > >=20
+> > > I do not like how you have to write msg->msg.rx.something. I think it
+> > > would be better to make the union within struct esd_usb_msg anonymous=
+:
+> > >=20
+> > >   https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/=
+esd_usb.c#L169
+> >=20
+> > Or maybe just declare esd_usb_msg as an union instead of a struct:
+>=20
+> +1
 
-FYI: compiling this series with smatch results in the following warnings and errors:
+Accepted ;)
+I'll try to address this in a separate code-clean-up patch.
 
-drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c:285 mdp_vpu_process() warn: inconsistent returns 'vpu->lock'.
-drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c:43 is_output_disabled() error: uninitialized symbol 'dis_output'.
-drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c:43 is_output_disabled() error: uninitialized symbol 'dis_tile'.
-drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c:427 mdp_cmdq_send() warn: missing error code 'ret'
-drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:59 get_comp_public_id() error: 'mdp_dev' dereferencing possible ERR_PTR()
-
-Regards,
-
-	Hans
-
-> 
-> The v4l2-compliance test results list is as follows:
-> v4l2-compliance 1.23.0-4942, 32 bits, 32-bit time_t
-> v4l2-compliance SHA: 4cf258c24026 2022-07-28 15:43:45
-> 
-> Compliance test for mtk-mdp3 device /dev/video0:
-> 
-> Driver Info:
-> 	Driver name      : mtk-mdp3
-> 	Card type        : MediaTek MDP3
-> 	Bus info         : platform:14001000.mdp3-rdma0
-> 	Driver version   : 6.2.0
-> 	Capabilities     : 0x84204000
-> 		Video Memory-to-Memory Multiplanar
-> 		Streaming
-> 		Extended Pix Format
-> 		Device Capabilities
-> 	Device Caps      : 0x04204000
-> 		Video Memory-to-Memory Multiplanar
-> 		Streaming
-> 		Extended Pix Format
-> 
-> Required ioctls:
-> 	test VIDIOC_QUERYCAP: OK
-> 	test invalid ioctls: OK
-> 
-> Allow for multiple opens:
-> 	test second /dev/video0 open: OK
-> 	test VIDIOC_QUERYCAP: OK
-> 	test VIDIOC_G/S_PRIORITY: OK
-> 	test for unlimited opens: OK
-> 
-> Debug ioctls:
-> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
-> 
-> Input ioctls:
-> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
-> 
-> Output ioctls:
-> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
-> 
-> Input/Output configuration ioctls:
-> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-> 	test VIDIOC_G/S_EDID: OK (Not Supported)
-> 
-> Control ioctls:
-> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-> 	test VIDIOC_QUERYCTRL: OK
-> 	test VIDIOC_G/S_CTRL: OK
-> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-> 	Standard Controls: 4 Private Controls: 0
-> 
-> Format ioctls:
-> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-> 	test VIDIOC_G/S_PARM: OK (Not Supported)
-> 	test VIDIOC_G_FBUF: OK (Not Supported)
-> 	test VIDIOC_G_FMT: OK
-> 	test VIDIOC_TRY_FMT: OK
-> 	test VIDIOC_S_FMT: OK
-> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-> 	test Cropping: OK
-> 	test Composing: OK
-> 	test Scaling: OK
-> 
-> Codec ioctls:
-> 	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-> 	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-> 
-> Buffer ioctls:
-> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-> 	test VIDIOC_EXPBUF: OK
-> 	test Requests: OK (Not Supported)
-> 	test TIME32/64: OK
-> 
-> Test input 0:
-> 
-> Streaming ioctls:
-> 	test read/write: OK (Not Supported)
-> 	test blocking wait: OK
->     (snip)
-> 	test MMAP (no poll): OK
-> 	(snip)
-> 	test MMAP (select): OK
->     (snip)
-> 	test MMAP (epoll): OK
-> 	test USERPTR (no poll): OK (Not Supported)
-> 	test USERPTR (select): OK (Not Supported)
-> 	test DMABUF: Cannot test, specify --expbuf-device
-> 
-> Stream using all formats:
-> 	(snip)
-> Total for mtk-mdp3 device /dev/video0: 1174, Succeeded: 1174, Failed: 0, Warnings: 0
-> 
-> Moudy Ho (12):
->   media: platform: mtk-mdp3: fix potential frame size overflow in
->     mdp_try_fmt_mplane()
->   media: platform: mtk-mdp3: add chip configuration header file
->   media: platform: mtk-mdp3: chip config split about component settings
->   media: platform: mtk-mdp3: chip config split about subcomponents
->   media: platform: mtk-mdp3: chip config split about color format
->   media: platform: mtk-mdp3: chip config split about resolution
->     limitations
->   media: platform: mtk-mdp3: chip config split about pipe info
->   media: platform: mtk-mdp3: extend mdp_color format for compressed mode
->   media: platform: mtk-mdp3: dynamically allocate component clocks
->   media: platform: mtk-mdp3: Split general definitions used in MDP3
->   media: platform: mtk-mdp3: decompose hardware-related information in
->     shared memory
->   media: platform: mtk-mdp3: reconfigure shared memory
-> 
->  .../mediatek/mdp3/mt8183/mdp3-comp-mt8183.h   | 144 +++++
->  .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   | 409 +++++++++++++
->  .../platform/mediatek/mdp3/mtk-img-ipi.h      | 188 +-----
->  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 145 +++--
->  .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 567 ++++++++++++------
->  .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  27 +-
->  .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  49 +-
->  .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  18 +-
->  .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  28 +-
->  .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   1 -
->  .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 287 +--------
->  .../platform/mediatek/mdp3/mtk-mdp3-regs.h    | 214 +++----
->  .../platform/mediatek/mdp3/mtk-mdp3-type.h    |  53 ++
->  .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     | 194 +++---
->  .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |  29 +-
->  15 files changed, 1397 insertions(+), 956 deletions(-)
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> 
+>=20
+> >   union esd_usb_msg {
+> >           struct header_msg hdr;
+> >           struct version_msg version;
+> >           struct version_reply_msg version_reply;
+> >           struct rx_msg rx;
+> >           struct tx_msg tx;
+> >           struct tx_done_msg txdone;
+> >           struct set_baudrate_msg setbaud;
+> >           struct id_filter_msg filter;
+> >   };
+>=20
+> Marc
+>=20
 
