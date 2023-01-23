@@ -2,296 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD16B678313
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D28678316
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjAWR0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S233717AbjAWR1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbjAWR0u (ORCPT
+        with ESMTP id S233653AbjAWR1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:26:50 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324182E0C9;
-        Mon, 23 Jan 2023 09:26:45 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NEHPYF030291;
-        Mon, 23 Jan 2023 09:26:31 -0800
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3n8e9swpft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 09:26:31 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EZUIMvP570AQCaEAVYcJs+XuENu/RYYCGqQ2Qbpfi1WtYd8yUaeMdshc+edB2wjvWy2Prs66drm1cx4+joV5f5+wJoSqpzfwks7CXLseQXYOHeBX76+MzPQ31VUnQrXGJyMaDT2yTEAtbnP2azxCv1rfQqrjqXCYzvfITqm8wqkwqdJs5qA4Jt4TIVh0zoNIRBcL2McEUauSy1dSWDRLp6sz8WXVhwdq3EpfUWOxk45saZgGCaaEu42lBpfdnwHqxFCOom7yJ+cPtGYiCneOPABLX0HkZVH3+NcAqyADp1qs+zR3OY1kCEkHycGazRdoIOwnb0s6VLw6zGkjIownxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tTRIbxAf9zLjEaHSl5LgFu5j6YfD21IuU8Gb+tLtkG4=;
- b=GHLKmREckb38XeC1IkpQbaUnoBig5tJI5ek69e7+Dc5MmoZCdrHbNBptCxcTbIB92rjxrqfPJR5NQF18+ELVP2wNyZokvqK1iXB3MMUWJ7GY4mrtr2GjKSUjSmxVRyJxd4KgvWXzb2Qj7mgELZ98IEIPxL8z13PhIbFLqmKZ7LoZT2C+tO8HQn274UWlQk7SJvSh6LweySbfKbZknD8MApIF9RmLHcAntnX3CUkAjsvtXwWnGEr+J1ji71IXFgnvbrhoApLQFVwbH08xZQBFYe43C6kcb1nfkjRuP1icwHVtwoKGMSoxWZo3dqlGoFi9FrC0/hFkNnlohFFD01aLrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tTRIbxAf9zLjEaHSl5LgFu5j6YfD21IuU8Gb+tLtkG4=;
- b=XwIPWLIm7tFeEAa6Iry8t3wROPLlm/5EOZEDXVZyHUumwYi4uSVE5whzT8BBuugxSUT3bpvUCCj+KKt9vNguHesos6ZqNT2M0BS7JSdwb7KxsGk9Bvv8V3jssE8pgBBrf293krwt5TKExrcLifhmNA2b+tsE1fGBe80GmvjsdFo=
-Received: from PH0PR18MB4474.namprd18.prod.outlook.com (2603:10b6:510:ea::22)
- by CO6PR18MB3810.namprd18.prod.outlook.com (2603:10b6:5:347::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
- 2023 17:26:27 +0000
-Received: from PH0PR18MB4474.namprd18.prod.outlook.com
- ([fe80::e6ca:f949:a109:b83e]) by PH0PR18MB4474.namprd18.prod.outlook.com
- ([fe80::e6ca:f949:a109:b83e%2]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
- 17:26:27 +0000
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geethasowjanya Akula <gakula@marvell.com>,
-        Jerin Jacob Kollanukkaran <jerinj@marvell.com>,
-        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "tariqt@nvidia.com" <tariqt@nvidia.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "maxtram95@gmail.com" <maxtram95@gmail.com>,
-        Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: Re: [net-next Patch v2 2/5] octeontx2-pf: qos send queues management
-Thread-Topic: [net-next Patch v2 2/5] octeontx2-pf: qos send queues management
-Thread-Index: AQHZL0/S7zsZxEsHj0aeZHreC7VI4Q==
-Date:   Mon, 23 Jan 2023 17:26:27 +0000
-Message-ID: <PH0PR18MB4474BE62B79C293DFA866967DEC89@PH0PR18MB4474.namprd18.prod.outlook.com>
-References: <20230118105107.9516-1-hkelam@marvell.com>
- <20230118105107.9516-3-hkelam@marvell.com> <Y81oeTZiSTOCXsoK@corigine.com>
-In-Reply-To: <Y81oeTZiSTOCXsoK@corigine.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-rorf: true
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcaGtlbGFtXGFw?=
- =?us-ascii?Q?cGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
- =?us-ascii?Q?OWUzNWJcbXNnc1xtc2ctMGQ3YzhlYWItOWI0My0xMWVkLWI2ZDMtZDQzYjA0?=
- =?us-ascii?Q?N2UyYjlkXGFtZS10ZXN0XDBkN2M4ZWFkLTliNDMtMTFlZC1iNmQzLWQ0M2Iw?=
- =?us-ascii?Q?NDdlMmI5ZGJvZHkudHh0IiBzej0iMzUxMSIgdD0iMTMzMTg5NjgzODE5OTg5?=
- =?us-ascii?Q?OTc3IiBoPSIxRWc3NHJMS0FJaU9jdlRTM0NISlVaOGZrdUE9IiBpZD0iIiBi?=
- =?us-ascii?Q?bD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFOZ0hBQURa?=
- =?us-ascii?Q?UzliUFR5L1pBWjdSWkh3UVRtalBudEZrZkJCT2FNOE1BQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBSEFBQUFCb0J3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?RUFBUUFCQUFBQTNUekZBQUFBQUFBQUFBQUFBQUFBQUo0QUFBQmhBR1FBWkFC?=
- =?us-ascii?Q?eUFHVUFjd0J6QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFF?=
- =?us-ascii?Q?QUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdNQWRRQnpBSFFBYndCdEFGOEFjQUJs?=
- =?us-ascii?Q?QUhJQWN3QnZBRzRBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFB?=
- =?us-ascii?Q?QUFDZUFBQUFZd0IxQUhNQWRBQnZBRzBBWHdCd0FHZ0Fid0J1QUdVQWJnQjFB?=
- =?us-ascii?Q?RzBBWWdCbEFISUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCakFIVUFj?=
- =?us-ascii?Q?d0IwQUc4QWJRQmZBSE1BY3dCdUFGOEFaQUJoQUhNQWFBQmZBSFlBTUFBeUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
-x-dg-refone: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR01B?=
- =?us-ascii?Q?ZFFCekFIUUFid0J0QUY4QWN3QnpBRzRBWHdCckFHVUFlUUIzQUc4QWNnQmtB?=
- =?us-ascii?Q?SE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQVl3QjFBSE1BZEFCdkFHMEFY?=
- =?us-ascii?Q?d0J6QUhNQWJnQmZBRzRBYndCa0FHVUFiQUJwQUcwQWFRQjBBR1VBY2dCZkFI?=
- =?us-ascii?Q?WUFNQUF5QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFB?=
- =?us-ascii?Q?QUlBQUFBQUFKNEFBQUJqQUhVQWN3QjBBRzhBYlFCZkFITUFjd0J1QUY4QWN3?=
- =?us-ascii?Q?QndBR0VBWXdCbEFGOEFkZ0F3QURJQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFH?=
- =?us-ascii?Q?UUFiQUJ3QUY4QWN3QnJBSGtBY0FCbEFGOEFZd0JvQUdFQWRBQmZBRzBBWlFC?=
- =?us-ascii?Q?ekFITUFZUUJuQUdVQVh3QjJBREFBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQVFBQUFBQUFBQUFDQUFBQUFBQ2VBQUFBWkFCc0FIQUFYd0J6QUd3?=
- =?us-ascii?Q?QVlRQmpBR3NBWHdCakFHZ0FZUUIwQUY4QWJRQmxBSE1BY3dCaEFHY0FaUUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
-x-dg-reftwo: QUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQmtBR3dBY0FCZkFIUUFaUUJoQUcwQWN3QmZBRzhBYmdCbEFHUUFjZ0JwQUhZQVpRQmZBR1lBYVFCc0FHVUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdVQWJRQmhBR2tBYkFCZkFHRUFaQUJrQUhJQVpRQnpBSE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFiUUJoQUhJQWRnQmxBR3dBYkFCZkFIUUFaUUJ5QUcwQWFRQnVBSFVBY3dBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg==
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR18MB4474:EE_|CO6PR18MB3810:EE_
-x-ms-office365-filtering-correlation-id: 1c5eaaad-82ec-4a44-6482-08dafd66f571
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G4+UHtF3ZO3JXIw+eNCxVaTlVbIeoxrAELPyHNai0eiHkUsKXPnFAiW6NZ1QqQh7uECzEjQ/oAbvY6TKBH8tjR0Ys75AxTVzoN78/0Q4sbKZVgi63NknfLgVDBO17XcR+1hpPp43ymyiWiUK51ImMgI/EuxQA4J137JkVc6gQh0SUkNMiWXxllDZje5ZY0ljbnmO6X6dcG4N2sajeIDYV8wxYm2DlDjl1Z88vKkD4bikXPOftIHxO35ABhxFOOebvXc/5zOhXyMhULnd5iL2a/WUowF7ewhxGPcB9HFBPz+fozqerNz5GmLoenRhXOV4dr5R1t25yfYuMSK5g5SF5ZMnqeGoQlRSuGSD/Rg8XQ01DS72JhOxxCtjXjgB4wpv30XksQgjiLttFp2/B3bvqKV0INQPwtmg6yRLeehkSBw0X8PFAVga+iAQxOWg+lteH0JX/R76TCj7Ijzzh14ju3oLZhvQusXXJz8+45atPO1/oPO5seI1mesu5d8RxdOYT2EYgKysgi4QW89yJnO2AHtYxro5GQJ8LDZ5EyYvQRw2lm0MtvAcFfZ16SBkKTtj+qyfU4HFs30ibVNTu6U6OLvzPJiJyPpl5e0EGR3ZZLtB//VCODIhkK1E7pEtTyoorHq02snJPKSX/Xfxka4if28Clv3Do1IQsXDyHyhBWdOxjYylQ3Lba/Am6jFnUowFcgMIM/IYp0sOkNsmDtIBkA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB4474.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(39850400004)(136003)(376002)(396003)(451199015)(66899015)(38070700005)(38100700002)(2906002)(7416002)(52536014)(8936002)(4326008)(5660300002)(41300700001)(122000001)(83380400001)(33656002)(86362001)(26005)(478600001)(71200400001)(7696005)(66476007)(8676002)(6916009)(6506007)(186003)(55016003)(66446008)(9686003)(66946007)(54906003)(76116006)(316002)(107886003)(66556008)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uDzIKrFJGILim+c6uWa4BXH9BT/GgferFQ7wadp2NX0qRtONVhNaxqHz44R/?=
- =?us-ascii?Q?kNJKWYzTYR5wCVWAZTE/1kUXU38NAB4LNh6PKP/gRVoGZH4Gn+BiegnuBeC8?=
- =?us-ascii?Q?M5KgLQIe0ZM1+yaeJJQjh7goXJWrmtNBQ6bnAztmPI30U/6/d+Gy6UUZdu/Y?=
- =?us-ascii?Q?KX+/Iss4u4VkYkAuq0/rXYprlJFuzlGJBcvBBPsEDoSdgP4lXApYQYNnoZEe?=
- =?us-ascii?Q?ra8F54Sz5IDm3L5YWm/2wYH4mvYhoEJzQboVcGUgPGtmOxM00HxUcIA2kspt?=
- =?us-ascii?Q?XvhofUAFFTp/7TJ5OApdP2Xb/GxozM8bF+G1Re3/lc+CyMvUqwOa9B+xFoc7?=
- =?us-ascii?Q?kczBLtmmhztCbxpjrfbSVc1cYmFZ8fdtVgFGfFWO1qOqkbq1f4pEdeuX9ymR?=
- =?us-ascii?Q?g3rXmP0lcNU1Rt+wnrZkDTCd6bpNq8LxQ1WYsGh9ucwoyo+3FfF0Q/0EgLms?=
- =?us-ascii?Q?c82fXaXrPTrID8lxP64XTkoBYwPX/mfWeHmtZ8UHQm3XOPsSJHL9qVcL9AnW?=
- =?us-ascii?Q?v+UMNYNw8CGsm12L1D6ji9gdrRcv5udj5DpzlAvl1FtbjuLhMBRetHfVZjil?=
- =?us-ascii?Q?7R3LvuSWzIvgISt43ozRCBmmb4IYPUgg6Ecc7at9W+yYoD/r02IsFDCWvgkB?=
- =?us-ascii?Q?CSqelTAbgOex/EyiKJXZdOnheHyIJIXmeRQmfq1Knt2RTFcP7goeUzeOvJpS?=
- =?us-ascii?Q?2pdJfRryS+oYXwRfuZBxaIdzGggBCTX6HneTkKV5xeeupcHzjEmHNExSslbb?=
- =?us-ascii?Q?1WsiaRLo74Zz1ZRT1kECnbrF31elZ0xnmqInW3LYJ9S3kgxOu7F2Te4/lHxU?=
- =?us-ascii?Q?xqrbFoFtCrHzQ3S9XGEyViH6JDh2U7NPmsWSzR8YNN2slDOKqVRGGqfcKbND?=
- =?us-ascii?Q?cVxRMU7WQiyy4nlxxTxjCEKPC0i9tR5McXwK/UtrSmfzJHcBvj+qkluw6esM?=
- =?us-ascii?Q?XcoTcRXl/M+x+3KKFPrCeGgFoXiGSELur2S9IUpnVRUjU0gTU6j/ldr5wehT?=
- =?us-ascii?Q?ZopER30ZUieQY1fiivhdBoItKiyLC5j1WZrYOBCK5WD945a5tI1MQQTSb0bn?=
- =?us-ascii?Q?gfgtj5jRabrl+lds0wf4SSLj4byh7jr9nhODejDipxq/IZjLBOAA8tYjOwvk?=
- =?us-ascii?Q?LNeslt4C32p+2tFCspPXqcB4CYP8zzeJ8to8HnSEH09wuOq4wX6c94y7mf6B?=
- =?us-ascii?Q?OnuQomXHrUEnvTe49kbsvPOBX90q0ln5nht+nZh6p+IrwmK+chCcYBswdXRP?=
- =?us-ascii?Q?Kx/LDzUqhYVNvSYIXYVhWErs2jmMoUi4ku7ImsKHcnYqMsJBLWLgtpbA8Cvv?=
- =?us-ascii?Q?4hVAYCZuGyZUMJDY0i0jCQm9rOHY5cf3voHweUrj7Z7K3LZtvITna4YSaHWK?=
- =?us-ascii?Q?WW1PgdJMewhEG59L99G3nStqF1i9BQXVbK4EAXfVPZ2kmJsq+7uyUzeLplO2?=
- =?us-ascii?Q?sM3+eJcNkMJcQPLLYeYa34ZJbpQW0f94tYee81fJtHKm7Uk1mVf4Q6nkKTIY?=
- =?us-ascii?Q?R29uaSOyttWe2pF/UcaQzfoI21KPF/OGak8PkEtdFXKfpcZZVp861/QKRD6i?=
- =?us-ascii?Q?wGDV86r3hv5nWu+6tdQJXvfaQhujxB9vvbNfD5wR?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB4474.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c5eaaad-82ec-4a44-6482-08dafd66f571
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2023 17:26:27.2374
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0/IK6eSfyF0XYL5NsX95+7F5pLwASchGXbG6eNc2ZytGXIfWkxLObeK1V0rCDgzvVx1+M5/vAwJX6U74T8KAEw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR18MB3810
-X-Proofpoint-ORIG-GUID: FGy5x3uL78oshGqztjSwa3uXWV8Dqi--
-X-Proofpoint-GUID: FGy5x3uL78oshGqztjSwa3uXWV8Dqi--
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 12:27:16 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CF32F7A3;
+        Mon, 23 Jan 2023 09:27:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GrRBC1CSAlithprtwej5NYCZ2OlzkUl1j98wc+4lZwY=; b=LVDpAnzgtGPq/GZ9BdcOiXvctk
+        KAlJiWkxeLcKGwTZNIkwqL9ALbU2sodwL0GLnEGdmwEVtWMqPKeEEscI+ZLHu5c9InnCukAXDhgH5
+        LFn8VykDyBdqG3eR6uasTMTrD8Jb+8+/HtBEEP0M+rAW6y5O4wwUnGMtlxRRJLFPw2q0=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41492 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pK0az-0002xt-FZ; Mon, 23 Jan 2023 12:27:02 -0500
+Date:   Mon, 23 Jan 2023 12:27:01 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230123122701.1548311030689f85b733fcbb@hugovil.com>
+In-Reply-To: <Y8rkA/N6RqSzgXpt@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-8-hugo@hugovil.com>
+        <Y8rkA/N6RqSzgXpt@mail.local>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 07/14] rtc: pcf2127: add support for PCF2131 RTC
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the inputs, will address the review comments in the next version=
-.
+On Fri, 20 Jan 2023 19:57:07 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-Thanks,
-Hariprasad k
+> On 15/12/2022 10:02:08-0500, Hugo Villeneuve wrote:
+> >  	  PCF2127 has an additional feature of 512 bytes battery backed
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index 3265878edc48..4148e135f935 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -1,16 +1,26 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  /*
+> > - * An I2C and SPI driver for the NXP PCF2127/29 RTC
+> > + * An I2C and SPI driver for the NXP PCF2127/29/31 RTC
+> >   * Copyright 2013 Til-Technologies
+> > + * Copyright 2021 DimOnOff
+> 
+> For the record, I don't really like that because git will be the
+> authoritative source for the copyright. This will only end up being
+> outdated info (as it is already)
 
-On Wed, Jan 18, 2023 at 04:21:04PM +0530, Hariprasad Kelam wrote:
-> From: Subbaraya Sundeep <sbhatta@marvell.com>
->=20
-> Current implementation is such that the number of Send queues (SQs)=20
-> are decided on the device probe which is equal to the number of online=20
-> cpus. These SQs are allocated and deallocated in interface open and c=20
-> lose calls respectively.
->=20
-> This patch defines new APIs for initializing and deinitializing Send=20
-> queues dynamically and allocates more number of transmit queues for=20
-> QOS feature.
->=20
-> Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Removed.
 
-...
+> 
+> >   *
+> >   * Author: Renaud Cerrato <r.cerrato@til-technologies.fr>
+> >   *
+> >   * Watchdog and tamper functions
+> >   * Author: Bruno Thomsen <bruno.thomsen@gmail.com>
+> >   *
+> > + * PCF2131 support
+> > + * Author: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > + *
+> >   * based on the other drivers in this same directory.
+> >   *
+> > - * Datasheet: https://www.nxp.com/docs/en/data-sheet/PCF2127.pdf
+> > + * Datasheets: https://www.nxp.com/docs/en/data-sheet/PCF2127.pdf
+> > + *             https://www.nxp.com/docs/en/data-sheet/PCF2131DS.pdf
+> > + */
+> > +
+> > +/*
+> > + * The following features are not yet implemented for the PCF2131:
+> > + *   - support for 1/100th seconds
+> 
+> This will never be added so I would remove that comment
 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c=20
-> b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> index 88f8772a61cd..0868ae825736 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> @@ -758,11 +758,16 @@ int otx2_txschq_stop(struct otx2_nic *pfvf) =20
-> void otx2_sqb_flush(struct otx2_nic *pfvf)  {
->  	int qidx, sqe_tail, sqe_head;
-> +	struct otx2_snd_queue *sq;
->  	u64 incr, *ptr, val;
->  	int timeout =3D 1000;
-> =20
->  	ptr =3D (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
-> -	for (qidx =3D 0; qidx < pfvf->hw.tot_tx_queues; qidx++) {
-> +	for (qidx =3D 0; qidx < pfvf->hw.tot_tx_queues +=20
-> +pfvf->hw.tc_tx_queues;
+Done.
 
-nit:
+> 
+> >   */
+> >  
+> >  #include <linux/i2c.h>
+> > @@ -43,8 +53,30 @@
+> >  #define PCF2127_BIT_CTRL3_BLF			BIT(2)
+> >  #define PCF2127_BIT_CTRL3_BF			BIT(3)
+> >  #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
+> > +/* Control register 4 */
+> > +#define PCF2131_REG_CTRL4		0x03
+> > +#define PCF2131_BIT_CTRL4_TSF4			BIT(4)
+> > +#define PCF2131_BIT_CTRL4_TSF3			BIT(5)
+> > +#define PCF2131_BIT_CTRL4_TSF2			BIT(6)
+> > +#define PCF2131_BIT_CTRL4_TSF1			BIT(7)
+> > +/* Control register 5 */
+> > +#define PCF2131_REG_CTRL5		0x04
+> > +#define PCF2131_BIT_CTRL5_TSIE4			BIT(4)
+> > +#define PCF2131_BIT_CTRL5_TSIE3			BIT(5)
+> > +#define PCF2131_BIT_CTRL5_TSIE2			BIT(6)
+> > +#define PCF2131_BIT_CTRL5_TSIE1			BIT(7)
+> > +/* Software reset register */
+> > +#define PCF2131_REG_SR_RESET		0x05
+> > +#define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
+> > +#define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
+> >  /* Time and date registers */
+> >  #define PCF2127_REG_TIME_DATE_BASE	0x03
+> > +#define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
+> > +					      * but we do not support it. By
+> > +					      * using offset 0x07, we can be
+> > +					      * compatible with existing
+> > +					      * time/date functions.
+> > +					      */
+> 
+> Because we will never support 100th of seconds, this comment is not
+> useful
 
-It seems awkward that essentially this is saying that the total tx queues i=
-s 'tot_tx_queues' + 'tc_tx_queues'.
-As I read 'tot' as being short for 'total'.
+Removed.
 
-Also, the pfvf->hw.tot_tx_queues + pfvf->hw.tc_tx_queues pattern is rather =
-verbose and repeated often. Perhaps a helper would... help.
+> 
+> >  /* Time and date registers offsets (starting from base register) */
+> >  #define PCF2127_OFFSET_TD_SC		0
+> >  #define PCF2127_OFFSET_TD_MN		1
+> > @@ -57,6 +89,7 @@
+> >  #define PCF2127_BIT_SC_OSF			BIT(7)
+> >  /* Alarm registers */
+> >  #define PCF2127_REG_ALARM_BASE		0x0A
+> > +#define PCF2131_REG_ALARM_BASE		0x0E
+> 
+> I'd keep the defines ordered by address, so you could move all the
+> PCF2131 defines after the PCF2127 ones
 
-Will add these changes in   next version.
+Done.
 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c=20
-> b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> index c1ea60bc2630..3acda6d289d3 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
 
-...
+> 
+> >  /* Alarm registers offsets (starting from base register) */
+> >  #define PCF2127_OFFSET_ALARM_SC		0
+> >  #define PCF2127_OFFSET_ALARM_MN		1
+> > @@ -67,16 +100,26 @@
+> >  #define PCF2127_BIT_ALARM_AE			BIT(7)
+> >  /* CLKOUT control register */
+> >  #define PCF2127_REG_CLKOUT		0x0f
+> > +#define PCF2131_REG_CLKOUT		0x13
+> >  #define PCF2127_BIT_CLKOUT_OTPR			BIT(5)
+> >  /* Watchdog registers */
+> >  #define PCF2127_REG_WD_CTL		0x10
+> > +#define PCF2131_REG_WD_CTL		0x35
+> >  #define PCF2127_BIT_WD_CTL_TF0			BIT(0)
+> >  #define PCF2127_BIT_WD_CTL_TF1			BIT(1)
+> >  #define PCF2127_BIT_WD_CTL_CD0			BIT(6)
+> >  #define PCF2127_BIT_WD_CTL_CD1			BIT(7)
+> >  #define PCF2127_REG_WD_VAL		0x11
+> > +#define PCF2131_REG_WD_VAL		0x36
+> >  /* Tamper timestamp1 registers */
+> >  #define PCF2127_REG_TS1_BASE		0x12
+> > +#define PCF2131_REG_TS1_BASE		0x14
+> > +/* Tamper timestamp2 registers */
+> > +#define PCF2131_REG_TS2_BASE		0x1B
+> > +/* Tamper timestamp3 registers */
+> > +#define PCF2131_REG_TS3_BASE		0x22
+> > +/* Tamper timestamp4 registers */
+> > +#define PCF2131_REG_TS4_BASE		0x29
+> >  /* Tamper timestamp registers common offsets (starting from base register) */
+> >  #define PCF2127_OFFSET_TS_CTL		0
+> >  #define PCF2127_OFFSET_TS_SC		1
+> > @@ -92,11 +135,22 @@
+> >   * RAM registers
+> >   * PCF2127 has 512 bytes general-purpose static RAM (SRAM) that is
+> >   * battery backed and can survive a power outage.
+> > - * PCF2129 doesn't have this feature.
+> > + * PCF2129/31 doesn't have this feature.
+> >   */
+> >  #define PCF2127_REG_RAM_ADDR_MSB	0x1A
+> >  #define PCF2127_REG_RAM_WRT_CMD		0x1C
+> >  #define PCF2127_REG_RAM_RD_CMD		0x1D
+> > +/* Interrupt mask registers */
+> > +#define PCF2131_REG_INT_A_MASK1		0x31
+> > +#define PCF2131_REG_INT_A_MASK2		0x32
+> > +#define PCF2131_REG_INT_B_MASK1		0x33
+> > +#define PCF2131_REG_INT_B_MASK2		0x34
+> > +#define PCF2131_BIT_INT_BLIE		BIT(0)
+> > +#define PCF2131_BIT_INT_BIE		BIT(1)
+> > +#define PCF2131_BIT_INT_AIE		BIT(2)
+> > +#define PCF2131_BIT_INT_WD_CD		BIT(3)
+> > +#define PCF2131_BIT_INT_SI		BIT(4)
+> > +#define PCF2131_BIT_INT_MI		BIT(5)
+> >  
+> >  /* Watchdog timer value constants */
+> >  #define PCF2127_WD_VAL_STOP		0
+> > @@ -110,6 +164,14 @@
+> >  		PCF2127_BIT_CTRL2_AF | \
+> >  		PCF2127_BIT_CTRL2_WDTF | \
+> >  		PCF2127_BIT_CTRL2_TSF2)
+> > +#define PCF2131_CTRL2_IRQ_MASK ( \
+> > +		PCF2127_BIT_CTRL2_AF | \
+> > +		PCF2127_BIT_CTRL2_WDTF)
+> > +#define PCF2131_CTRL4_IRQ_MASK ( \
+> > +		PCF2131_BIT_CTRL4_TSF4 | \
+> > +		PCF2131_BIT_CTRL4_TSF3 | \
+> > +		PCF2131_BIT_CTRL4_TSF2 | \
+> > +		PCF2131_BIT_CTRL4_TSF1)
+> >  
+> >  struct pcf21xx_ts_config {
+> >  	u8 regs_base; /* Base register to read timestamp values. */
+> > @@ -370,7 +432,7 @@ static int pcf2127_wdt_set_timeout(struct watchdog_device *wdd,
+> >  }
+> >  
+> >  static const struct watchdog_info pcf2127_wdt_info = {
+> > -	.identity = "NXP PCF2127/PCF2129 Watchdog",
+> > +	.identity = "NXP PCF2127/29/31 Watchdog",
+> 
+> This change may break userspace tools as this is exposed to userspace
 
-> @@ -1688,11 +1693,13 @@ int otx2_open(struct net_device *netdev)
-> =20
->  	netif_carrier_off(netdev);
-> =20
-> -	pf->qset.cq_cnt =3D pf->hw.rx_queues + pf->hw.tot_tx_queues;
->  	/* RQ and SQs are mapped to different CQs,
->  	 * so find out max CQ IRQs (i.e CINTs) needed.
->  	 */
->  	pf->hw.cint_cnt =3D max(pf->hw.rx_queues, pf->hw.tx_queues);
-> +	pf->hw.cint_cnt =3D max_t(u8, pf->hw.cint_cnt, pf->hw.tc_tx_queues);
+Ok, removed.
 
-nit: maybe this is nicer? *completely untested!*
 
-	pf->hw.cint_cnt =3D max3(pf->hw.rx_queues, pf->hw.tx_queues),
-			       pf->hw.tc_tx_queues);
-
-Will add these changes in   next version.
-
-...
-
-> @@ -735,7 +741,10 @@ static void otx2_sqe_add_hdr(struct otx2_nic *pfvf, =
-struct otx2_snd_queue *sq,
->  		sqe_hdr->aura =3D sq->aura_id;
->  		/* Post a CQE Tx after pkt transmission */
->  		sqe_hdr->pnc =3D 1;
-> -		sqe_hdr->sq =3D qidx;
-> +		if (pfvf->hw.tx_queues =3D=3D qidx)
-> +			sqe_hdr->sq =3D qidx + pfvf->hw.xdp_queues;
-> +		else
-> +			sqe_hdr->sq =3D qidx;
-
-nit: maybe this is nicer? *completely untested!*
-
-		sqe_hdr =3D pfvf->hw.tx_queues !=3D qidx ?
-			  qidx + pfvf->hw.xdp_queues : qidx;
-Will add these changes in   next version.
-...
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
