@@ -2,160 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A792B67831D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09534678318
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjAWR3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S233670AbjAWR2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbjAWR3J (ORCPT
+        with ESMTP id S233527AbjAWR2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:29:09 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC922D16F;
-        Mon, 23 Jan 2023 09:29:04 -0800 (PST)
-Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1McpW8-1ok7ZX04pO-00ZuiV; Mon, 23 Jan 2023 18:28:37 +0100
-Message-ID: <53a8f159-22ab-b280-17b2-b80f59256342@i2se.com>
-Date:   Mon, 23 Jan 2023 18:28:36 +0100
+        Mon, 23 Jan 2023 12:28:51 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 65E805B8A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:28:50 -0800 (PST)
+Received: (qmail 133765 invoked by uid 1000); 23 Jan 2023 12:28:49 -0500
+Date:   Mon, 23 Jan 2023 12:28:49 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
+        quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y87D0ekKCHFLjzeP@rowland.harvard.edu>
+References: <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
+ <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
+ <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
+ <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
+ <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
+ <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
+ <Y8rCBOkM/hY+Z27t@rowland.harvard.edu>
+ <2f656643-deef-552e-e489-b7afd0dc777f@huaweicloud.com>
+ <Y8xRe1Gr6LNjKD4S@rowland.harvard.edu>
+ <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-Content-Language: en-US
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
- <786df750-221e-82fc-a324-d30261296974@i2se.com>
- <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:7nTGGc5lX0c+L6/nAxWYVWYD4u9G64oQU2WhKE98wTjP7dTDi7r
- kdmhtVJ8fB1A9KCpRupZP2fS4gelboHYpq4Ckzs98JDMHgyfTjWgNkNjACSKq6vZl6sptAz
- +IcH0T3VrsIsyXNTwM+dmjTg1C/NazaD1N4uBQSnT0pTTWRWIxdWq/DhKMnHQcNvYwCFxzU
- HlkFXi2OHCgZAt4quBAsQ==
-UI-OutboundReport: notjunk:1;M01:P0:EVGuaTAFbUA=;KFEjkEtKNrpv8H13g0IwuLkXzUN
- NaficCkLufcSy63olrRh2X6wo12VDYIls42pH0dnIlbXgyW/yz3vq+M78+rG/fXc6U1HrtLb9
- i0huFGuCKngc9MQUyd42vZEMfKWkvchLE9BBDom1iPnEmYR+nMg5mjk7BGRhrF1Phvd8h1uh3
- LhNgW0eMaYp0WSsFsCeKFdga4HEwRD/8itxAmvTe9CYn22ZkgGNeNrXe0/Tfee2VRZhQBoXL4
- RFFbx9Smw6Oo91baDDnsdVG5EZq5ZmdUDFith/deIzQdXUIaxXPZdveD+bqYDKYioe8kI+YNu
- zfWdviQPZc3jCEbuX8vdVaoYB/+Iiu+mHU1fr48wkLSl+V5+gBCHGCcs0uhiO9rWBa6m3QA71
- ocsuUh5NSXf4gxcIPDzTC/0Ma47/r2hKqszMU/a5r14UtLkvbMaEXN95qgKSGLbYUEII4of2R
- rJUDAKkCW8bzCnBKv7/JsMJ/Bi9y95hPl9q65ev84Q8Oj4V8EFVZ6YyA3vVRB5VpxJEi317v4
- Xt9eW3hU7ow6djMr+4gyKTbsXtxKbndMh3phuCO4PPuGpf0P3zI3oXjdBF1WlLyxMDbfndfbR
- G7IQ5MVI62vZra6wajKiWVhrtw6c9/TcTHCioGCEg2WgfXl+0WY+b9UVaOSHF3l9fv4OQy8vW
- zWhnum4nmbNijxX+88SzQLPurJnU6LyuxFlNmaZ0JA==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+On Mon, Jan 23, 2023 at 02:59:37PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/21/2023 9:56 PM, Alan Stern wrote:
+> > There is yet another level of fences in the hierarchy: those which order
+> > instruction execution but not propagation (smp_rmb() and acquire).  One
+> > of the important points about cumul-fence is that it excludes this
+> > level.
+> > 
+> > That's for a functional reason -- prop simply doesn't work for those
+> > fences, so it has to exclude them.  But it does work for strong fences,
+> > so excluding them would be an artificial restriction.
+> 
+> Hm, so could we say some fences order
+> 1) propagation with propagation (weak fences)
+> 2) execution with execution (rmb, acquire)
+> 3) propagation with execution (strong fences)
+> 
+> where ordering with execution implicitly orders with propagation as well
+> because things can only propagate after they execute.
+> However, the 4th possibility (execution with only propagation) happens not
+> to exist. I'm not sure if it would even be distinguishable from the second
+> type.
 
-Am 23.01.23 um 08:48 schrieb Umang Jain:
-> Hi Stefan,
->
-> Thank for the testing.
->
-> On 1/23/23 5:04 AM, Stefan Wahren wrote:
->> Hi Umang,
->>
->> Am 20.01.23 um 21:10 schrieb Umang Jain:
->>> This series just introduces five extra patches for dropping include
->>> directives from Makefiles (suggested by Greg KH) and rebased.
->>>
->>> The main patch (6/6) removes platform device/driver abuse and moves
->>> things to standard device/driver model using a custom_bus. Specific
->>> details are elaborated in the commit message.
->>>
->>> The patch series is based on top of d514392f17fd (tag: next-20230120)
->>> of linux-next.
->>
->> applied this series on top of linux-next and build it with 
->> arm/multi_v7_defconfig plus the following:
->>
->> CONFIG_BCM_VIDEOCORE=y
->> CONFIG_BCM2835_VCHIQ=m
->> CONFIG_VCHIQ_CDEV=y
->> CONFIG_SND_BCM2835=m
->> CONFIG_VIDEO_BCM2835=m
->> CONFIG_BCM2835_VCHIQ_MMAL=m
->>
->> and the devices doesn't register on Raspberry Pi 3 B Plus:
->>
->> [   25.523337] vchiq: module is from the staging directory, the 
->> quality is unknown, you have been warned.
->> [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
->> bcm2835_audio vchiq device
->> [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
->> bcm2835-camera vchiq device
->
-> I was able to reproduce and it seems the issue here is the change 
-> mentioned in the cover
->
-> - drop dma_set_mask_and_coherent
->
-> in V6.
->
-> (I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp 
-> applied so my branch has the DMA hunk included while I was testing V6)
->
-> Below is the hunk which should resolve the issue.
->
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> @@ -6,6 +6,7 @@
->   */
->
->  #include <linux/device/bus.h>
-> +#include <linux/dma-mapping.h>
->  #include <linux/slab.h>
->  #include <linux/string.h>
->
-> @@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent, 
-> const char *name)
->         device->dev.type = &vchiq_device_type;
->         device->dev.release = vchiq_device_release;
->
-> +       ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
-> +       if (ret < 0) {
-> +               vchiq_device_release(&device->dev);
-> +               return ret;
-> +       }
-> +
->         ret = device_register(&device->dev);
->         if (ret) {
->                 put_device(&device->dev);
-Yes, this patch fixes the errors above. But i noticed that the series 
-also break autoprobing of bcm2835-audio and bcm2835-camera.
->
-> It seems we need to include the dma_set_mask_and_coherent() even if 
-> bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look 
-> into why is that/
->
->  Laurent, any thoughts on this please?
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Only in that such a memory barrier would order po-earlier anything 
+against po-later stores, whereas rmb orders loads against loads and 
+acquire orders loads against anything.
+
+>  In the operational model, can you forward from stores that have not
+> executed yet?
+
+Yes, it is explicitly allowed.  But forwarding doesn't apply in this 
+situation because stores can be forwarded only to po-later loads, not to 
+po-earlier ones.
+
+> > > Right now, both pb and cumul-fence deal with strong fences. And again, I
+> > I would say that cumul-fence _allows_ strong fences, or _can work with_
+> > strong fences.  And I would never want to say that cumul-fence and prop
+> > can't be used with strong fences.  In fact, if you find a situation
+> > where this happens, it might incline you to consider if the fence could
+> > be replaced with a weaker one.
+> 
+> Can you explain the latter part?
+> What does it mean to 'find a situation where this happens'?
+> As I understand the sentence, in current LKMM I don't think this is
+> possible.
+> Do you mean that if you find a case where you could make a cycle with
+> cumul-fence/prop using strong fences, you might just rely on a weaker fence
+> instead?
+
+Exactly.
+
+
+> > Not quite right.  A hypothetical non-A-cumulative case for pb would have
+> > to omit the cumul-fence term entirely.
+> 
+> Wouldn't that violate the transitivity of "X is required to propagate before
+> Y" ?
+> If I have
+> �� X ->cumul-fence+ Y ->weird-strong-fence Z
+> doesn't that mean that for every CPU C,
+> 1. X is required to propagate to C before Y propagates to C
+> 2. Y is required to propagate to C before any instruction po-after Z�
+> executes
+
+Not if Y is a load.
+
+> But then also X is required to pragate to C before any instruction po-after
+> Z� executes.
+> How is this enforced if there is no cumul-fence* in the new pb?
+
+You do have a point.  I guess one would have to put
+
+	(cumul-fence+ ; [W])?
+
+or something like it in the definition.
+
+> Thinking about prop and pb along these lines gives me a weird feeling.
+> Trying to pinpoint it down, it seems a little bit weird that A-cumul doesn't
+> appear around the strong-fence in pb.
+
+I think the reason it got left out was because all strong fences are 
+A-cumulative.  If some of them weren't, it would have to appear there in 
+some form.
+
+>  Of course it should not appear after
+> prop which already has an rfe? at the end. Nevertheless, having the rfe? at
+> the end is clearly important to representing the idea behind prop. If it
+> weren't for the fact that A-cumul is needed to define prop, it almost makes
+> me think that it would be nice to express the difference between
+> A-cumulative and non-A-cumulative fences (that order propagation) by saying
+> that an A-cumulative fence has
+> � prop ; a-cumul-fence;rfe? <= prop
+> while the non-A-cumulative fence has
+> � prop-without-rfe ; non-a-cumul-fence <= prop-without-rfe
+
+Isn't this just a more complicated way of saying what the A-cumul() 
+macro expresses?
+
+
+> I'm not against this partially overlapping kind of redundancy, but I dislike
+> subsuming kind of redundancy where some branches of the logic just never
+> need to be used.
+
+Consider: Could we remove all propagation-ordering fences from ppo 
+because they are subsumed by prop?  (Or is that just wrong?)
+
+> > In fact, I wouldn't mind removing the happens-before, propagation, and
+> > rcu axioms from LKMM entirely, replacing them with the single
+> > executes-before axiom.
+> 
+> I was planning to propose the same thing, however, I would also propose to
+> redefine hb and rb by dropping the hb/pb parts at the end of these
+> relations.
+> 
+> �hb = ....
+> �pb = prop ; strong-fence ; [Marked]
+> �rb = prop ; rcu-fence ; [Marked]
+> 
+> �xb = hb|pb|rb
+> �acyclic xb
+
+I'm not so sure that's a good idea.  For instance, it would require the 
+definitions of rcu-link and rb to be changed from having (hb* ; pb*) to 
+having (hb | pb)*.  Also, although it's not mentioned anywhere, the 
+definition of xbstar could be changed to hb* ; pb* ; rb* because each of 
+these relations absorbs a weaker one to its right.
+
+> > > I'm wondering a little if there's some way in the middle, e.g., by writting
+> > > short comments in the model wherever something is redundant. Something like
+> > > (* note: strong-fence is included here for completeness, and can be safely
+> > > ignored *).
+> > I have no objection to doing that.  It seems like a good idea.
+> > 
+> > Alan
+> 
+> Perhaps we can start a new thread then to discuss a few points where
+> redundancies might be annotated this way or eliminated.
+
+Sure, go ahead.
+
+Alan
