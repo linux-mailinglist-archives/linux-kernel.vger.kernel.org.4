@@ -2,142 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAAD677C66
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CCD677C6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjAWNYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S231897AbjAWNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjAWNYK (ORCPT
+        with ESMTP id S231708AbjAWNZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:24:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5C6241C8;
-        Mon, 23 Jan 2023 05:24:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A6DB60EFF;
-        Mon, 23 Jan 2023 13:24:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF69C433EF;
-        Mon, 23 Jan 2023 13:24:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674480248;
-        bh=ArZD+vzGLsVKJI7cX9BEAFuLvKvwj6sORjWsvS6pqDY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fBqyZ45W9RDORnHHWkcJApD07rBcF6Te6kro7wkwFYiJ6mJb2WXxF4a5i18695iQ0
-         s+kkDouQvzHK2jqsjI+hhmRroRIzc2dupO364dDPduQki+DIFqDnbGcjRBv5i7pVrJ
-         d+mZfLlj/UJROXrRP1AOEH+W8HrLp8LZfuwOq27kM+LYBB1sWkWUnp3v83hkaJgPju
-         Kh1igjcEJsvJLjeQPfA+pKRhHEzFCDuM6b5XCMNb2RS/B3LmYWsO7YUZwA0BU+8aDy
-         Nd+dIM87/TBbEHwehBi4LTPD4dYAuCDXOjh0K/u/OreAnWsJVRJTyvOv+eLMPjmF/1
-         CdLLUk6EHw38Q==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     linux-trace-kernel@vger.kernel.org
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        heng.su@intel.com, "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH] kprobes: Fix to handle forcibly unoptimized kprobes on freeing_list
-Date:   Mon, 23 Jan 2023 22:24:05 +0900
-Message-Id: <167448024501.3253718.13037333683110512967.stgit@devnote3>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-In-Reply-To: <Y8URdIfVr3pq2X8w@xpf.sh.intel.com>
-References: <Y8URdIfVr3pq2X8w@xpf.sh.intel.com>
-User-Agent: StGit/0.19
+        Mon, 23 Jan 2023 08:25:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA1024492
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:24:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674480257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aAf3V2MVK33/cJvKp6aHY4bpR+JdJT/jLy/3Pm1O1K0=;
+        b=EbxXMhRtRiYzDy2F9fR304N9/g+oOp9PfPHLlQ9jRxzWuF/SbMUbDdFY3iAT5Gen9p/LpN
+        kZpG9ti/U+wePKkWACqtbqvFmMxQfrinvB+aphtZT6d6Gbw7ng0SXlzeVIRWKsi1mRx8Zx
+        ROqAE1GsUPEiKkGMv6hLOVsu4GRiJyc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-646-YLXZ6A19MRufIO8unUcCsA-1; Mon, 23 Jan 2023 08:24:16 -0500
+X-MC-Unique: YLXZ6A19MRufIO8unUcCsA-1
+Received: by mail-wm1-f70.google.com with SMTP id o5-20020a05600c4fc500b003db0b3230efso9419639wmq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:24:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aAf3V2MVK33/cJvKp6aHY4bpR+JdJT/jLy/3Pm1O1K0=;
+        b=8RMUDvKChsdWSz3HjQxMag0Q5+Z5aG+F8fWYMByfQpO7IIF8Zc4oWT/48ylJvulmBO
+         SB1ZKzmHQDFbOOy4bf4NPqlzMcC3FzZF00TwKhl/0gKxQRa6vFhrTYVf2t41C9eXsO0X
+         hFFL+7WQbddiOPGylchydeZV6FWRmvV6BBkm5GTwh/mUqIp27A45PkzOqhz66tlhUTMI
+         FHNmsM5OOGl617FuyN1u4/fkNz/Rp1lDpoTjiTDsAT/d24JHEHIj7EV60nPlpxhVU9UX
+         VWZdc+nugxRB7U65Sff1NFbDb5ztIwYXMX50amlz9U7Lpfd70yqeK8A8R6HoBJKAXXaV
+         Vwow==
+X-Gm-Message-State: AFqh2kpAB7UPCABFIWiO8p4/qtPtEM/TN7bQ2EJc+oOjghvdemdjSQrx
+        7icJuHaxZIjhHNck8hi4cZNZzXCzW2PmGyCcVgL6FUpy0o9TYg08Z3N09BHWuUpccKuVJSLT6wQ
+        0z0jGrtUUHC3FNu2iRKxo6Jl9
+X-Received: by 2002:a5d:4dc9:0:b0:2be:21fc:ae3 with SMTP id f9-20020a5d4dc9000000b002be21fc0ae3mr19258705wru.11.1674480255378;
+        Mon, 23 Jan 2023 05:24:15 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvSy/zF5gTuo4Pty91+hnKwsIVtv4UfaZ96iv4w0a9eQ3v+gYxG+33cMyS8lFosJqrFvgcRYQ==
+X-Received: by 2002:a5d:4dc9:0:b0:2be:21fc:ae3 with SMTP id f9-20020a5d4dc9000000b002be21fc0ae3mr19258685wru.11.1674480255115;
+        Mon, 23 Jan 2023 05:24:15 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d67cd000000b002bdcce37d31sm33258092wrw.99.2023.01.23.05.24.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 05:24:14 -0800 (PST)
+Message-ID: <c742e47b-dcc0-1fef-dc8c-3bf85d26b046@redhat.com>
+Date:   Mon, 23 Jan 2023 14:24:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v7 2/8] iov_iter: Add a function to extract a page list
+ from an iterator
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
+References: <7bbcccc9-6ebf-ffab-7425-2a12f217ba15@redhat.com>
+ <246ba813-698b-8696-7f4d-400034a3380b@redhat.com>
+ <20230120175556.3556978-1-dhowells@redhat.com>
+ <20230120175556.3556978-3-dhowells@redhat.com>
+ <3814749.1674474663@warthog.procyon.org.uk>
+ <3903251.1674479992@warthog.procyon.org.uk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <3903251.1674479992@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On 23.01.23 14:19, David Howells wrote:
+> David Hildenbrand <david@redhat.com> wrote:
+> 
+>> Switching from FOLL_GET to FOLL_PIN was in the works by John H. Not sure what
+>> the status is. Interestingly, Documentation/core-api/pin_user_pages.rst
+>> already documents that "CASE 1: Direct IO (DIO)" uses FOLL_PIN ... which does,
+>> unfortunately, no reflect reality yet.
+> 
+> Yeah - I just came across that.
+> 
+> Should iov_iter.c then switch entirely to using pin_user_pages(), rather than
+> get_user_pages()?  In which case my patches only need keep track of
+> pinned/not-pinned and never "got".
 
-Sinec forcibly unoptimized kprobes will be put on the freeing_list directly
-in the unoptimize_kprobe(), do_unoptimize_kprobes() must continue to check
-the freeing_list even if unoptimizing_list is empty.
+That would be the ideal case: whenever intending to access page content, 
+use FOLL_PIN instead of FOLL_GET.
 
-This bug can be happen if a kprobe is put in an instruction which is in the
-middle of the jump-replaced instruction sequence of an optprobe, *and* the
-optprobe is recently unregistered and queued on unoptimizing_list.
-In this case, the optprobe will be unoptimized forcibly (means immediately)
-and put it into the freeing_list, expecting the optprobe will be handled in
-do_unoptimize_kprobe().
-But if there is no other optprobes on the unoptimizing_list, current code
-returns from the do_unoptimize_kprobe() soon and do not handle the optprobe
-which is on the freeing_list, and it will hit the WARN_ON_ONCE() in the
-do_free_cleaned_kprobes(), because it is not handled in the latter loop of
-the do_unoptimize_kprobe().
+The issue that John was trying to sort out was that there are plenty of 
+callsites that do a simple put_page() instead of calling 
+unpin_user_page(). IIRC, handling that correctly in existing code -- 
+what was pinned must be released via unpin_user_page() -- was the 
+biggest workitem.
 
-To solve this issue, do not return from do_unoptimize_kprobes() immediately
-even if unoptimizing_list is empty.
+Not sure how that relates to your work here (that's why I was asking): 
+if you could avoid FOLL_GET, that would be great :)
 
-Moreover, this change affects another case. kill_optimized_kprobes() expects
-kprobe_optimizer() will just free the optprobe on freeing_list.
-So I changed it to just do list_move() to freeing_list if optprobes are on
-unoptimizing list. And the do_unoptimize_kprobe() will skip
-arch_disarm_kprobe() if the probe on freeing_list has gone flag.
+-- 
+Thanks,
 
-Link: https://lore.kernel.org/all/Y8URdIfVr3pq2X8w@xpf.sh.intel.com/
-
-Fixes: e4add247789e ("kprobes: Fix optimize_kprobe()/unoptimize_kprobe() cancellation logic")
-Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- kernel/kprobes.c |   23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 1c18ecf9f98b..73b150fad936 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -555,17 +555,15 @@ static void do_unoptimize_kprobes(void)
- 	/* See comment in do_optimize_kprobes() */
- 	lockdep_assert_cpus_held();
- 
--	/* Unoptimization must be done anytime */
--	if (list_empty(&unoptimizing_list))
--		return;
-+	if (!list_empty(&unoptimizing_list))
-+		arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
- 
--	arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
--	/* Loop on 'freeing_list' for disarming */
-+	/* Loop on 'freeing_list' for disarming and removing from kprobe hash list */
- 	list_for_each_entry_safe(op, tmp, &freeing_list, list) {
- 		/* Switching from detour code to origin */
- 		op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
--		/* Disarm probes if marked disabled */
--		if (kprobe_disabled(&op->kp))
-+		/* Disarm probes if marked disabled and not gone */
-+		if (kprobe_disabled(&op->kp) && !kprobe_gone(&op->kp))
- 			arch_disarm_kprobe(&op->kp);
- 		if (kprobe_unused(&op->kp)) {
- 			/*
-@@ -797,14 +795,13 @@ static void kill_optimized_kprobe(struct kprobe *p)
- 	op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
- 
- 	if (kprobe_unused(p)) {
--		/* Enqueue if it is unused */
--		list_add(&op->list, &freeing_list);
- 		/*
--		 * Remove unused probes from the hash list. After waiting
--		 * for synchronization, this probe is reclaimed.
--		 * (reclaiming is done by do_free_cleaned_kprobes().)
-+		 * Unused kprobe is on unoptimizing or freeing list. We move it
-+		 * to freeing_list and let the kprobe_optimizer() removes it from
-+		 * the kprobe hash list and frees it.
- 		 */
--		hlist_del_rcu(&op->kp.hlist);
-+		if (optprobe_queued_unopt(op))
-+			list_move(&op->list, &freeing_list);
- 	}
- 
- 	/* Don't touch the code, because it is already freed. */
+David / dhildenb
 
