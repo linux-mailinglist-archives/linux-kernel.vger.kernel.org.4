@@ -2,158 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714DB678115
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DF867811B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233080AbjAWQNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S233087AbjAWQO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjAWQNV (ORCPT
+        with ESMTP id S232075AbjAWQO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:13:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928861041A;
-        Mon, 23 Jan 2023 08:13:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37B3F60F92;
-        Mon, 23 Jan 2023 16:13:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECD9C4339C;
-        Mon, 23 Jan 2023 16:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674490398;
-        bh=y3rlWFzRd5nv0QP6FNJjNaP0em7C2Z0wJEKnu1FpctU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hKrh9Ce1WgD0UltABa98QrbBzmAVpPlOzZ4zviLnttb/X2lRuv1cLVc8b2IHbracc
-         e5lNuWoM1AJBTfyWg5Oa0G5kqyXK5zHyWsdxpETK083ReHnt43dINpF9rQwQ8LLrkA
-         6usuJhBGbTjTkLc6fWEeXLOHvam1TA4erak8GNHKgjMYnXPS3cQScVJLFkS2TbeByC
-         bW++SW+HvB/KKJ4z9QARsjszxAubOhH+5GHLSJxOLelkvHH31ylpVFfDV7G0EXiSlZ
-         y8yHJ2YRCEqDXbT2XMTbIDDYztDvC7D1BZKbw+au9rFm2XJTd8ZFIf14QOqWPSkoOw
-         ovLMohXUDByFA==
-Received: by mail-vs1-f48.google.com with SMTP id v127so13386487vsb.12;
-        Mon, 23 Jan 2023 08:13:18 -0800 (PST)
-X-Gm-Message-State: AFqh2kpsX2Z62Xm7yi4Wik/lLCYtW+27DI35fmr1h5Fmk2M4xLKpRFa0
-        ZmARxu9JkXCSumQB+lZ7R428deFiWdV0IBK3zQ==
-X-Google-Smtp-Source: AMrXdXs8IozFEOjBRXAonZvI6lE5aKxS6Ril5C6iaDuS9uZbH9ZZdPMTl2C8ezrZ2Am5asQFk6kNYbhWKDyEwX7GI64=
-X-Received: by 2002:a67:f441:0:b0:3d3:e619:3c9f with SMTP id
- r1-20020a67f441000000b003d3e6193c9fmr2916176vsn.6.1674490397497; Mon, 23 Jan
- 2023 08:13:17 -0800 (PST)
+        Mon, 23 Jan 2023 11:14:26 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8467F2659A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:14:25 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id r9so11302894wrw.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:14:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xhWhg+JuWpH66LGbtp0HELb5qzJ+wDxiJkPbeIleqvY=;
+        b=LE4CGd6YvWykB2LGRtQySlcZcz5IpKMgb3o1AVvjaObGK94WPygzmtYSrKnSplWMxh
+         CLRScqMzFoGVqITFCTi/HO7hmQR0vl1NeKsxJKJ63NCxRkzBvJSjpDiZDvEGMhFANwnT
+         Woce5z7k1lF7DzJ1M1yOSQvMZcImSXBY0PUgbw9Oet09I+g3pTGF7IJNQOCDYxrp2PTJ
+         0DANDipQl0y/QIOnQB3MJKRzgDPiYe8FNZjvph5w1lPOdWP9zFhLb7xc0uCwuTdbvX2E
+         8PBjof+aHSRHBhiK2WM4Hr6NA4BVhThCP1roZKiT7a6dMH+tfLts0OqilLx49YEdxHKN
+         P0ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhWhg+JuWpH66LGbtp0HELb5qzJ+wDxiJkPbeIleqvY=;
+        b=KyjjVcgwwOR7Z/XNyeBixLjpHtQdA/kgt2O2KZA3tdt5lK89LRg8YoqT0qIpeCfBZz
+         wP3VeMdBSAV6Unu8C4FSSwCKK6hDVWFqznJqtXn4UQ6EZ3a2n6sKCo0HZNK7l8w2Atps
+         c0RraPRxbtBZQVUZeSovMFe5gAk84aqVrYmR0u+/W7vO3OYfJRU5TBp4+F6nlQSFHorT
+         cQz0+hmzw2Ite5xToeCUkAsnzR8gDuqr73VAdtPF1k/cnzRy0f8qjdxVfpj8aYWftJXy
+         VC2HPagR0lgifathke/67OlZZOcW1PoOarXVo7jQprb9BIsQVNksQmX2zL6u1QfdcmWY
+         /iTw==
+X-Gm-Message-State: AFqh2kq7EjhpsIfJop9+vKdCq+pHbaodWlGcfBgK5KUnRQu+WBRi9WZz
+        zxwvNWizRnmcZ2jxa6UrzjXuOA==
+X-Google-Smtp-Source: AMrXdXs7vxhLakcU7TmXf5NFoLwqsO/mZDZ+3lJ0pB/UiDi2GJk3mfN51PLloZRCRnEhaE3u8I2weg==
+X-Received: by 2002:adf:dc47:0:b0:2be:5ca4:7480 with SMTP id m7-20020adfdc47000000b002be5ca47480mr9393695wrj.46.1674490464104;
+        Mon, 23 Jan 2023 08:14:24 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id h3-20020adfe983000000b002bdf5832843sm21813631wrm.66.2023.01.23.08.14.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 08:14:23 -0800 (PST)
+Message-ID: <254ce21e-5c19-0c29-acc4-9758bdca83b6@linaro.org>
+Date:   Mon, 23 Jan 2023 16:14:22 +0000
 MIME-Version: 1.0
-References: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
-In-Reply-To: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 23 Jan 2023 10:13:06 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKKJn3iuHu-Q5XTknCbAW1gt1BmF0w4Gzfcq2S5mv0gZw@mail.gmail.com>
-Message-ID: <CAL_JsqKKJn3iuHu-Q5XTknCbAW1gt1BmF0w4Gzfcq2S5mv0gZw@mail.gmail.com>
-Subject: Re: [PATCH] mfd: Add Simple PCI MFD driver
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Lizhi Hou <lizhi.hou@amd.com>
-Cc:     Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
+ <Y86CPmgvAi+kChQI@gerhold.net>
+ <45800033-e2ae-09c8-b8a2-e97afb6508fd@linaro.org>
+ <Y86S7h/QxqXoKS1U@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y86S7h/QxqXoKS1U@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 8:32 AM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> Add a PCI driver which registers all child nodes specified in the
-> devicetree.  It will allow platform devices to be used on virtual
-> systems which already support PCI and devicetree, such as UML with
-> virt-pci.
+On 23/01/2023 14:00, Stephan Gerhold wrote:
+> Unless this conclusion changes with your CPR patch set this means that
+> both the DTS and the DT schema will need changes anyway, because you
+> wouldn't need power-domain-names = "cpr", but rather
+> 
+> 	power-domains = <&rpmpd MSM8939_VDDMX_AO>, <&vreg_dummy>;
+> 	power-domain-names = "mx", "cpr";
 
-There's similar work underway for Xilinx/AMD PCIe FPGAs[1]. It's the
-same thing really. Non-discoverable things downstream of a PCI device.
-There's also a desire for that to work on non-DT (ACPI) based hosts.
-While UML supports DT, that's currently only for the unittest AFAIK.
-So it's more like a non-DT host. How does the DT get populated for UML
-for this to work?
+I have not been owning the CPR for 8939 so far but, this what we have in 
+our 4.19 tree.
 
-Can you provide details on the actual h/w you want to use. What
-problem are you trying to solve?
+CPU0: cpu@100 {
+         device_type = "cpu";
+         compatible = "arm,cortex-a53", "arm,armv8";
+         reg = <0x100>;
+         next-level-cache = <&L2_1>;
+         enable-method = "qcom,kpss-acc-v2";
+         qcom,acc = <&acc0>;
+         qcom,saw = <&saw0>;
+         clocks = <&apcs1>;
+         operating-points-v2 = <&cluster1_opp_table>;
+         power-domains = <&cpr>;
+         power-domain-names = "cpr";
+         #cooling-cells = <2>;
+         capacity-dmips-mhz = <1024>;
+};
 
-Really, what I want to see here is everyone interested in this feature
-to work together on it. Not just creating a one-off solution for their
-1 use case that's a subset of a bigger solution.
+cpr: power-controller@b018000 {
+         compatible = "qcom,msm8939-cpr", "qcom,cpr";
+         reg = <0x0b018000 0x1000>;
+         interrupts = <0 15 IRQ_TYPE_EDGE_RISING>;
+         clocks = <&rpmcc CXO_SMD_CXO_A_CLK>;
+         clock-names = "ref";
+         power-domains = <&rpmpd MSM8939_VDDMX_AO>;
+         #power-domain-cells = <0>;
+         operating-points-v2 = <&cpr_opp_table>;
+};
 
-> The driver has no id_table by default; user space needs to provide one
-> using the new_id mechanism in sysfs.
+So the CPR code not the CPU code owns VDDMX_AO. I'm not sure if there's 
+a good reason why it has been done that way.
 
-But your DT will have the id in it already. Wouldn't you rather
-everything work without userspace intervention? I can't imagine the
-list here would be too long.
+Anyway, this feels like a bit of a departure from our core discussion. I 
+will see if it is possible to drop the CPU power-domain entirely 
+contingent on the patch you flagged.
 
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  drivers/mfd/Kconfig          | 11 +++++++++++
->  drivers/mfd/Makefile         |  1 +
->  drivers/mfd/simple-mfd-pci.c | 21 +++++++++++++++++++++
->  3 files changed, 33 insertions(+)
->
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 30db49f31866..1e325334e9ae 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1277,6 +1277,17 @@ config MFD_SIMPLE_MFD_I2C
->           sub-devices represented by child nodes in Device Tree will be
->           subsequently registered.
->
-> +config MFD_SIMPLE_MFD_PCI
-> +       tristate "Simple Multi-Functional Device support (PCI)"
-> +       depends on PCI
-> +       depends on OF || COMPILE_TEST
-> +       help
-> +         This enables support for a PCI driver for which any sub-devices
-> +         represented by child nodes in the devicetree will be registered.
-> +
-> +         The driver does not bind to any devices by default; that should
-> +         be done via sysfs using new_id.
-> +
->  config MFD_SL28CPLD
->         tristate "Kontron sl28cpld Board Management Controller"
->         depends on I2C
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 457471478a93..7ae329039a13 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -268,6 +268,7 @@ obj-$(CONFIG_MFD_QCOM_PM8008)       += qcom-pm8008.o
->
->  obj-$(CONFIG_SGI_MFD_IOC3)     += ioc3.o
->  obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)       += simple-mfd-i2c.o
-> +obj-$(CONFIG_MFD_SIMPLE_MFD_PCI)       += simple-mfd-pci.o
->  obj-$(CONFIG_MFD_SMPRO)                += smpro-core.o
->  obj-$(CONFIG_MFD_INTEL_M10_BMC)   += intel-m10-bmc.o
->
-> diff --git a/drivers/mfd/simple-mfd-pci.c b/drivers/mfd/simple-mfd-pci.c
-> new file mode 100644
-> index 000000000000..c5b2540e924a
-> --- /dev/null
-> +++ b/drivers/mfd/simple-mfd-pci.c
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/pci.h>
-> +
-> +static int simple_mfd_pci_probe(struct pci_dev *pdev,
-> +                               const struct pci_device_id *id)
-> +{
-> +       return devm_of_platform_populate(&pdev->dev);
-
-Really, this could be anything in the child DT. Not just what Linux
-classifies as an MFD. So maybe drivers/mfd is not the right place.
-
-Rob
-
-[1] https://lore.kernel.org/all/1674183732-5157-1-git-send-email-lizhi.hou@amd.com/
+---
+bod
