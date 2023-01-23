@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303486785F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A70A678664
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjAWTRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S231586AbjAWTb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjAWTRP (ORCPT
+        with ESMTP id S230346AbjAWTb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:17:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD140FA;
-        Mon, 23 Jan 2023 11:17:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B00A60FE5;
-        Mon, 23 Jan 2023 19:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F2FC433EF;
-        Mon, 23 Jan 2023 19:17:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674501433;
-        bh=WPTo/AYSSV3PH4rx0T+DOwWymx0lq8Uby5njTsynD3g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qIFZNkae57YPCdDiHeWgTq101KzsRoV+P2dV6cJUNu1D2ZQ402vEvlIWyw6mkvYyQ
-         UaKffvML6hJ3wu0fM2fp0Xh6YKog6GAMDyYeedSYB1Awoa6Wt7GrvnSjrgxfM/XpH/
-         EyCj9dEe0/Bf72NrD9R7ZFdGLieFfEgELTvlZ0FQQZIrOxBLTqz7tAf5iYms9kjrwu
-         17Fh9DexQVSjGUumyhFEMXBviNypDoLvIeMsnXmCuZzHejl9Trl8PlNtXukzlKW1LW
-         BmhkE2H9QotRtoDzc2stXSym2If9OHO46gHD/9U+SWP+JgeBFrycI8p3iZN/glzmGY
-         p9mmm5Rv5BNRA==
-Date:   Mon, 23 Jan 2023 19:30:59 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
-Message-ID: <20230123193059.27a1c1a7@jic23-huawei>
-In-Reply-To: <Y853a5jr4rfrDHfd@smile.fi.intel.com>
-References: <20230118100623.42255-1-andriy.shevchenko@linux.intel.com>
-        <20230122172441.4f8d75f5@jic23-huawei>
-        <Y853a5jr4rfrDHfd@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Mon, 23 Jan 2023 14:31:57 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E57B771;
+        Mon, 23 Jan 2023 11:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674502316; x=1706038316;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=d0TymjITAt4p1WrJetdkWvEzktXVON3Q9fS07Rfw2Dw=;
+  b=BgyzU9ubY6sLTsfSmRRowMLzTINdrQvJbq6Zwr0QgPw7pOo+YRaw8uxc
+   qgFdzVKb3xZNi7mO6hBo3X3i3cErYx+MUzvTmn9VdMgSi/wWvsNUr+4GY
+   3VyQhk/vwdBsDoM795+6IDbeCfWCE8o524qlP5HgsJLa9OfFuM+kyFcXm
+   +W+Hf9niTJ3+eZCl3sWOKSIm+oMGo7QF+NoOFSoQAoDu4lTBB/ZsEVQYs
+   hC0TMwPPN1/Hrcz84hafAJ3eIduQst6y7w6qgAJzZUzgvBm+a53u6nhMd
+   aJQ8w1Ng4zy85Jpb776k6yshsp/Q8KU/IVbiEes1axZj3UGuFx7IU7Uo1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328216791"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="328216791"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:31:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750552130"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="750552130"
+Received: from mhkirsch-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.134.26])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:31:55 -0800
+Message-ID: <cc1bc78192d2a73b29840a19cf89ea0625fb9aba.camel@linux.intel.com>
+Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for
+ processor_thermal_device_pci
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>
+Date:   Mon, 23 Jan 2023 11:31:54 -0800
+In-Reply-To: <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+         <20230118181622.33335-2-daniel.lezcano@linaro.org>
+         <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+         <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 14:02:51 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Hi Daniel,
 
-> On Sun, Jan 22, 2023 at 05:24:41PM +0000, Jonathan Cameron wrote:
-> > On Wed, 18 Jan 2023 12:06:23 +0200
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >   
-> > > The node name can contain an address part which is unused
-> > > by the driver. Moreover, this string is propagated into
-> > > the userspace label, sysfs filenames *and breaking ABI*.
+On Mon, 2023-01-23 at 19:02 +0100, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> 
+> On 18/01/2023 20:09, srinivas pandruvada wrote:
+> > On Wed, 2023-01-18 at 19:16 +0100, Daniel Lezcano wrote:
+> > > The thermal framework gives the possibility to register the trip
+> > > points with the thermal zone. When that is done, no get_trip_*
+> > > ops
+> > > are
+> > > needed and they can be removed.
 > > > 
-> > > Cut the address part out before assigning the channel name.
+> > > Convert ops content logic into generic trip points and register
+> > > them
+> > > with the
+> > > thermal zone.
 > > > 
-> > > Fixes: 4f47a236a23d ("iio: adc: qcom-spmi-adc5: convert to device properties")
-> > > Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> > 
-> > LGTM, but given it will have ABI impact, I'd like to hear from 
-> > Andy, Bjorn or Konrad as maintainers and /or Dmitry as someone
-> > who has touched this driver fairly recently.  
+> > In this scheme is the assumption is that trip point temperature
+> > never
+> > changes? If firmware updated the trip temperature, what needs to be
+> > done?
 > 
-> Hmm... But this is to fix the ABI breakage. It means that the previous series
-> by Nuno had broken it.
-Absolutely agree. I plan to take the change. The risk that someone needs
-to fix up their use of the broken ABI makes it worth a little more shouting
-about than if we had caught it sooner.
+> I'm a bit confused about the situation where the firmware can change
+> the 
+> trip point in the back of the OSPM.
+> 
+> Does the firmware send a notification about the trip change? Or does
+> it 
+> assume the OSPM will be reading the trip point while
+> monitoring/polling 
+> the thermal zone ?
+Firmware sends an ACPI notification. For example INT3403.
 
-Jonathan
+https://elixir.bootlin.com/linux/latest/C/ident/INT3403_PERF_TRIP_POINT_CHANGED
+
 
 > 
-> > Mostly I want to be sure they know this exists before it causes surprise.  
+> Is the question for this particular driver?
+This PCH driver trips are not changed by firmware hence we don't have
+to worry about here.
+
+Thanks,
+Srinivas
+
 > 
+> If the trip point is changed by the userspace (via sysfs), 
+> thermal_zone_set_trip() is used which in turn changes the thermal
+> trip 
+> temperature directly in the generic structure and then calls the back
+> set_trip_temp.
+> 
+
+
 
