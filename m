@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8B16773BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 02:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E0E6773C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 02:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjAWBMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 20:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S229817AbjAWBPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 20:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWBMw (ORCPT
+        with ESMTP id S230073AbjAWBPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 20:12:52 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1421EB78;
-        Sun, 22 Jan 2023 17:12:49 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P0XCM6MQcz4y0L;
-        Mon, 23 Jan 2023 12:12:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674436368;
-        bh=KUHJVBb0Qq22/V85zvNZ0qTQgnpqraZ8hupOkBaj0L4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JoFyBxpQ0tA1Q82JkMLHzvvxF+yfVdqVJsoqHsH22+0QBj7YYa5Dm16ZgMUIpEMVp
-         QHngTuCiMShLpGGmu762I4bkxl8XTFG8dnQhE6eKcdD18frkE/sjJQFF+z3qz3ekqE
-         uGuIx5R/j8xPyc6fX3thPShXO9NTzdLftWK/dftuPVVuFMCdqfrZrFeeSngxSLbYjp
-         Akt7JVBoxHxrPzZJEZcQK+46g6bgzQ0jsJR1HkPnH1pv5pxe5XvZVCCkHmMYYkGU+5
-         7MvXbcpTeB8TpXOfMgoGDd8OLN71fLgjZb0/lqYlkeQHa3qPusrti+gtd/1jhcbnpn
-         PvvU4ZkGh58tA==
-Date:   Mon, 23 Jan 2023 12:12:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Tony Krowiak <akrowiak@linux.ibm.com>
-Subject: linux-next: manual merge of the kvms390 tree with the s390 tree
-Message-ID: <20230123121245.526d262b@canb.auug.org.au>
+        Sun, 22 Jan 2023 20:15:09 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830D512F23
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 17:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1674436508; x=1705972508;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LuyJfJNm5m5Jpm5aU+fmbU7EjQu9MnQinDOZWZl6LMo=;
+  b=SlAwpZBYFBfeJOyWSWCepnK3C5wIZjympVpK40W7Qh+VfpGHqDCBWrJT
+   v637wnbVZuT2uETojU1AHxvD1TxhH42LW076zGJ+R+KVLisH3sxv40dfC
+   gGoONo7V9zT9G/9ApXbF1bqB7SULV9rFdurRxPzCenefg1Y5YFVHIkS9i
+   jvdGmxmcDZGqfpU1z9GtdcheP3uP9OGUozg8It4rYB7gbVsztXsA4jU2N
+   7ogJ0Q09qN8GcAnR6dsEsHITD5s97A0BSWh3Zr3UdQO8KuNSrFZEPDF1C
+   8ITtwu4d6LUOiFt+iy6+7Y65olsXvtrG31xKpvp+KKyXediEqUhwo1aNf
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,238,1669046400"; 
+   d="scan'208";a="325809182"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 23 Jan 2023 09:15:05 +0800
+IronPort-SDR: l5DitLAtCIWLZ1QlB3KFna1c/wLZC0yKSO+ryjuckZjcUhEHyBX19JlzIb/rdUlYRiIor8tRa5
+ WDOcecEry7GreRewk0CEnu7IuacW/2YrykDzrt2x83HkT00v7Z5ovOu24eqgpK64CCZOT3z5tY
+ bPRi+Rpc1kOAG6GFDVN17oupcMj7YYwMfhpu4ep6ygRnHzPH5B5ZkVrD866fd8oYVKZx6Ib7Po
+ 1GKilPklJKHchNa9VWHNFeVV/LjLw8mqt+FDsrq5AnsSW8Wkvk9Oiep/u//o+GoAifwlxR7m2H
+ gsE=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Jan 2023 16:32:40 -0800
+IronPort-SDR: 8VM2AYcbuyTTIy1Cc0qysje+sOduzHKMAFSB7/+PK3qNFR99sz7KddGNcFAGija8LEQvFFxgVM
+ +EEa0PlLn0gQcmtjOaicXXngh3T+tFt/OFHD5kyM5XPCx5lfDeNHx7Z0D3+8c0mmmney17AHv8
+ MDngiS/prgU7W/TSUgtMtl2oJ7EYitAlhhJhqx0JJkxzZALJBVUqJ85FDQYsrN8nksh2g1av+k
+ iYP3wBFUSACLhT1Fou1TIEDCs4zrYplZ7dlh+KoAWPcRfwTuTuaWPUE65vU79/4ppjrd4eH+4n
+ DAI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Jan 2023 17:15:05 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P0XG12z3Qz1Rwrq
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 17:15:05 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1674436504; x=1677028505; bh=LuyJfJNm5m5Jpm5aU+fmbU7EjQu9MnQinDO
+        ZWZl6LMo=; b=JM1/DFvqlMOlc/TfZhjLWeE9jxx+TKJhhVK2qBWIGFM+YpgmUp8
+        qz4Iji6xp921vG/YLvxdKPLB5dLgqL1BMEiVL/GZjTdLL33LfpP63KDsteIl64z2
+        23uycPOhH9edc9ha/iR3zRY8tGb8R+3fxdhIZ19kwPQ/WnYkVSUn5yOqo+VOrABQ
+        sCAGCo2PlOwr3smT1ji6jDOJpyjXtJVdXG0E8LrZrXhBoeqldF+DfO6jkHScB9Gp
+        yBlZsg/SaKQPjb7jstkx/Gp4HJiCh2VF6x+55wC70ziS8xN5xWHqbXwtJAuVnVdT
+        YK1ho9cYa3SEsdj/QzfPWvZtF41VNbeSePQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 48L2nY-OKx6z for <linux-kernel@vger.kernel.org>;
+        Sun, 22 Jan 2023 17:15:04 -0800 (PST)
+Received: from [10.225.163.50] (unknown [10.225.163.50])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P0XFy6wPpz1RvLy;
+        Sun, 22 Jan 2023 17:15:02 -0800 (PST)
+Message-ID: <bca52f5a-ee84-b5d4-1f81-1466233c5425@opensource.wdc.com>
+Date:   Mon, 23 Jan 2023 10:15:01 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZBDOGty0f.AH1xSSNea2MlZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] pata_parport: add driver (PARIDE replacement)
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Ondrej Zary <linux@zary.sk>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, Tim Waugh <tim@cyberelk.net>,
+        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230121225314.32459-1-linux@zary.sk>
+ <20230122075710.GA4046@lst.de>
+ <38af9155-b940-d4df-b6cd-7420d1183927@kernel.dk>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <38af9155-b940-d4df-b6cd-7420d1183927@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ZBDOGty0f.AH1xSSNea2MlZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/23/23 03:24, Jens Axboe wrote:
+> On 1/22/23 12:57=E2=80=AFAM, Christoph Hellwig wrote:
+>> I suspect a comment in the Kconfig for the old PARIDE code to point
+>> to this and maybe even a runtime warning when using the old paride
+>> code would be great.
+>>
+>> But except for that the code looks awesome, so let's get it merged ASA=
+P:
+>>
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>=20
+> Since Ondrej is probably one of the few (maybe the only) user of this
+> code, why don't we just kill off the paride code in a separate patch
+> right after?
 
-Hi all,
++1
 
-Today's linux-next merge of the kvms390 tree got a conflict in:
-
-  drivers/s390/crypto/vfio_ap_ops.c
-
-between commit:
-
-  0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for qu=
-eue reset")
-
-from the s390 tree and commit:
-
-  bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for qu=
-eue reset")
-
-from the kvms390 tree.
-
-They seem to do the same thing, so I used the version of this file from
-the s390 tree as it's commit is much newer and has other changes to this
-file i.e. I effectively dropped the kvms390 tree commit.
-
-I fixed it up (see above) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I do not see the point of deprecating it first. Let's remove that code
+directly.
 
 --=20
-Cheers,
-Stephen Rothwell
+Damien Le Moal
+Western Digital Research
 
---Sig_/ZBDOGty0f.AH1xSSNea2MlZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPN3w0ACgkQAVBC80lX
-0GzFKAf8DGGQvV9nsbrruM4/LONJm5CZd7KHpYggx/9OSh9s5WPkaH4l7M4VEtDL
-Hdp1yh1TbIdVphz7UgjfAeN/pDYiDzR04+X3EJtEdJ+QbXKF0qAtFrr62r4ULNbY
-sjJnoHEiVtB4ikYCvMn/eA+mXVHMf4F/6TQk3xmwOMvJapr1jJs0Zy2Hjl6r0VfF
-RYD4NPovHrlujQqlwv8IILiKXl/sThdYPGGRpE8EciBBtpbc9pEV3w91QhZRfEOX
-ohGYWeZ8u7FPFCv3mLI7HYVV3nnBez5ozl/N6wdq/hmEXo0cH8TsDQxXO0rudifd
-72o4wnqXluD1SEeWXYsYjTALbgw9Og==
-=XWEZ
------END PGP SIGNATURE-----
-
---Sig_/ZBDOGty0f.AH1xSSNea2MlZ--
