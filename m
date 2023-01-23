@@ -2,174 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BC8677A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D285F677A64
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjAWLw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S231726AbjAWLxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjAWLwx (ORCPT
+        with ESMTP id S231591AbjAWLxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:52:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BA176BB;
-        Mon, 23 Jan 2023 03:52:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45FE660D41;
-        Mon, 23 Jan 2023 11:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A8DC433EF;
-        Mon, 23 Jan 2023 11:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674474768;
-        bh=SEl4ANWe5oATt+uLZVRHPCdsSg++lvaBG5FZKtWEm4U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Saf/zMbCH96islMlFClr4MW7iG9lGy5n1dNgfSfTFV586F7zBPh1k+Y6SkXjfKSVy
-         hz+0oKDP4IJbB8teaVvhOAUahdufYubb5NNYCRv2O6jKNRlusSIsCgDeN7n3gQqstz
-         VbCP5VscHJL9Yb2RvmiVmIVY0pnSvnMT4DXrwC9I=
-Date:   Mon, 23 Jan 2023 12:52:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Li Chen <lchen@ambarella.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, Li Chen <me@linux.beauty>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/15] debugfs: allow to use regmap for print regs
-Message-ID: <Y851DWfj+hZIiR38@kroah.com>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <20230123073305.149940-2-lchen@ambarella.com>
+        Mon, 23 Jan 2023 06:53:47 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA8B11EBB;
+        Mon, 23 Jan 2023 03:53:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674474827; x=1706010827;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XOKFYtVwSuo7NbceUr8gbJ4il7bdjARy4NJ/Z6J55HI=;
+  b=A0CfBle0F/i8RhDrXOPbQ/whmXHOFnoHruxA2o1ug4PKEhYHPCsb0Q4O
+   P8be6k02pK79izoygNkm1biLDLTbhFlyPvnObzbkEQmnb9L0EsHgJrG2k
+   GzoeiAbsffExZS/pF+cY+bZNLScNhAJE1nZg18jATjJJ31mNIRMs+aMKd
+   GHVKGbkXi6DUmWoLvy+C+3iOJWmtzkmyEw3PZjS870jOoh8DZcXYLRVxI
+   X11JTTA+c59ccPbhd933jThorCxqY3wbUQH8Wsi/E/URyTmRit2egLcEs
+   IB/ykIaAKEAe6kQIJj63qozjhJc5IIO/w5E8Bdkscdca9eg5Lqo8adk1V
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,239,1669100400"; 
+   d="asc'?scan'208";a="193427985"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jan 2023 04:53:47 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 23 Jan 2023 04:53:44 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Mon, 23 Jan 2023 04:53:42 -0700
+Date:   Mon, 23 Jan 2023 11:53:19 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor@kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Subject: Re: [PATCH v3] riscv: Allow to downgrade paging mode from the command
+Message-ID: <Y851L2KgfIF3V6of@wendy>
+References: <20230123104841.813999-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="XcFxwQIDKAyigG7z"
 Content-Disposition: inline
-In-Reply-To: <20230123073305.149940-2-lchen@ambarella.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230123104841.813999-1-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 03:32:16PM +0800, Li Chen wrote:
-> Currently, debugfs_regset32 only contains void __iomem *base,
-> and it is not friendly to regmap user.
-> 
-> Let's add regmap to debugfs_regset32, and add regmap
-> support to debugfs_print_reg32.
-> 
-> Signed-off-by: Li Chen <me@linux.beauty>
-> Change-Id: I8ef015ed0906a4ad85b7592f771dcf64c23f7832
+--XcFxwQIDKAyigG7z
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No change-id please.
+Hey Alex,
 
+On Mon, Jan 23, 2023 at 11:48:41AM +0100, Alexandre Ghiti wrote:
+> Add 2 early command line parameters that allow to downgrade satp mode
+> (using the same naming as x86):
+> - "no5lvl": use a 4-level page table (down from sv57 to sv48)
+> - "no4lvl": use a 3-level page table (down from sv57/sv48 to sv39)
+>=20
+> Note that going through the device tree to get the kernel command line
+> works with ACPI too since the efi stub creates a device tree anyway with
+> the command line.
+>=20
+> Also, as those params are treated very early in the boot process and we
+> use standard device tree functions that may be kasan instrumented, we
+> only enable them for !KASAN configurations.
+>=20
+> Reviewed-by: Bj=F6rn T=F6pel <bjorn@kernel.org>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > ---
->  Documentation/filesystems/debugfs.rst |  2 ++
->  fs/debugfs/file.c                     | 43 ++++++++++++++++++++++++++-
->  include/linux/debugfs.h               | 11 +++++++
->  3 files changed, 55 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/filesystems/debugfs.rst b/Documentation/filesystems/debugfs.rst
-> index dc35da8b8792..b2c76ac3a333 100644
-> --- a/Documentation/filesystems/debugfs.rst
-> +++ b/Documentation/filesystems/debugfs.rst
-> @@ -178,6 +178,8 @@ file::
->  
->      void debugfs_print_regs32(struct seq_file *s, const struct debugfs_reg32 *regs,
->  			 int nregs, void __iomem *base, char *prefix);
-> +    void debugfs_print_regmap_regs32(struct seq_file *s, const struct debugfs_reg32 *regs,
-> +			 int nregs, struct regmap *regmap*, char *prefix);
 
-One too many "*" characters on that last line, right?
+A changelog would be nice here, especially since this is a resend.
 
->  
->  The "base" argument may be 0, but you may want to build the reg32 array
->  using __stringify, and a number of register names (macros) are actually
-> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-> index b54f470e0d03..2fb792843b30 100644
-> --- a/fs/debugfs/file.c
-> +++ b/fs/debugfs/file.c
-> @@ -1137,14 +1137,55 @@ void debugfs_print_regs32(struct seq_file *s, const struct debugfs_reg32 *regs,
->  }
->  EXPORT_SYMBOL_GPL(debugfs_print_regs32);
->  
-> +/**
-> + * debugfs_print_regmap_regs32 - use seq_print to describe a set of registers
-> + * @s: the seq_file structure being used to generate output
-> + * @regs: an array if struct debugfs_reg32 structures
-> + * @nregs: the length of the above array
-> + * @regmap: regmap to be used in reading the registers
-> + * @prefix: a string to be prefixed to every output line
-> + *
-> + * This function outputs a text block describing the current values of
-> + * some 32-bit hardware registers. It is meant to be used within debugfs
-> + * files based on seq_file that need to show registers, intermixed with other
-> + * information. The prefix argument may be used to specify a leading string,
-> + * because some peripherals have several blocks of identical registers,
-> + * for example configuration of dma channels
-> + */
-> +void debugfs_print_regmap_regs32(struct seq_file *s, const struct debugfs_reg32 *regs,
-> +			  int nregs, struct regmap *regmap, char *prefix)
-> +{
-> +	int i;
-> +	u32 val;
+>  .../admin-guide/kernel-parameters.txt         |  9 ++-
+>  arch/riscv/mm/init.c                          | 72 +++++++++++++++++--
+>  2 files changed, 74 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..fd647412ec91 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3578,8 +3578,15 @@
+>  			emulation library even if a 387 maths coprocessor
+>  			is present.
+> =20
+> -	no5lvl		[X86-64] Disable 5-level paging mode. Forces
+> +	no4lvl		[RISCV] Disable 4-level and 5-level paging modes. Forces
+> +			kernel to use 3-level paging instead.
+> +			Note: On RISC-V, this can't be used when KASAN is
+> +			enabled.
 > +
-> +	for (i = 0; i < nregs; i++, regs++) {
-> +		if (prefix)
-> +			seq_printf(s, "%s", prefix);
-> +		regmap_read(regmap, regs->offset, &val);
-> +		seq_printf(s, "%s = 0x%08x\n", regs->name, val);
-> +		if (seq_has_overflowed(s))
-> +			break;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(debugfs_print_regmap_regs32);
-> +
->  static int debugfs_regset32_show(struct seq_file *s, void *data)
->  {
->  	struct debugfs_regset32 *regset = s->private;
->  
-> +	void __iomem *base = regset->base;
-> +	struct regmap *regmap = regset->regmap;
+> +	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
+>  			kernel to use 4-level paging instead.
+> +			Note: On RISC-V, this can't be used when KASAN is
+> +			enabled.
+> =20
+>  	nofsgsbase	[X86] Disables FSGSBASE instructions.
+> =20
 
-Why the extra blank line?  Did you run checkpatch?
+For the improved descriptions & commit message:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-And it's generally not considered a good idea to dereference a pointer
-_before_ it is checked.  It will not crash, but static checkers will
-have a field day with it.
+Thanks,
+Conor.
 
 
-> +
-> +	if ((regmap && base) || (!regmap && !base))
-> +		return -EINVAL;
-> +
->  	if (regset->dev)
->  		pm_runtime_get_sync(regset->dev);
->  
-> -	debugfs_print_regs32(s, regset->regs, regset->nregs, regset->base, "");
-> +	if (base)
-> +		debugfs_print_regs32(s, regset->regs, regset->nregs, base, "");
-> +	else
-> +		debugfs_print_regmap_regs32(s, regset->regs, regset->nregs, regmap, "");
->  
->  	if (regset->dev)
->  		pm_runtime_put(regset->dev);
-> diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-> index ea2d919fd9c7..87dfea6a25a0 100644
-> --- a/include/linux/debugfs.h
-> +++ b/include/linux/debugfs.h
-> @@ -17,6 +17,7 @@
->  
->  #include <linux/types.h>
->  #include <linux/compiler.h>
-> +#include <linux/regmap.h>
+--XcFxwQIDKAyigG7z
+Content-Type: application/pgp-signature; name="signature.asc"
 
-No need to include this here, just provide a prototype for "struct
-regmap" and all will be fine.
+-----BEGIN PGP SIGNATURE-----
 
-thanks,
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY851LwAKCRB4tDGHoIJi
+0l53AQCQBy900mmtPk9mKM2S57CvkHVjvKm4ZRfqIL0OzE1p/wD9EENKG8gQAyvL
+Ul0Q3WPbMqxqHndNJMtEyr2dDYBQkAI=
+=gpGS
+-----END PGP SIGNATURE-----
 
-greg k-h
+--XcFxwQIDKAyigG7z--
