@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD9B677AE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B095677AE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjAWM2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S231590AbjAWM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjAWM2n (ORCPT
+        with ESMTP id S231583AbjAWM2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:28:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DC3BB97
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:27:58 -0800 (PST)
+        Mon, 23 Jan 2023 07:28:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74182BBA2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:28:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674476877;
+        s=mimecast20190719; t=1674476887;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y8EL4a7vt9YoRH2uQ3LUcgsvGE0j3ZgGDUhZzXtuW0o=;
-        b=YEdpnmPPRY2XX7uPk1Dfj9AdJPz50VW4m2ihh/gkKkyzhUWXOJRk2R2AUdvlN2elqpzJF9
-        IT/wN/1smAz7HwPS3AREe/QJ9Ge21u0wJcmNFGsixzFLPd/j13ThGfIndwt4cCroEOGNy8
-        w9ToMsDyKII771b/fHC/A4ZXlDh54M4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TR4irgtY7ztL5sSFlKEb+j+Ijhp2vw5PzeO8p8ZDAa0=;
+        b=MJP5ttFrNEcYpwRw0mnB3Kcsl2hmTe7AoB6Z7wOoON7P9oaz4Sj86fTtduIbKW6xGB8eza
+        /k2FfwUKZX+7qfcdSpLHcm9NNj9ZrzlQsDlOMO7NsAflRu13/DuZ+uRvfCRhXBCUpiJ3D4
+        2dVCzlT7MViiF9p1rvi/gP9YE5DNcis=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-21kCdnzsOfOLhnr7u3jcCQ-1; Mon, 23 Jan 2023 07:27:56 -0500
-X-MC-Unique: 21kCdnzsOfOLhnr7u3jcCQ-1
-Received: by mail-ed1-f70.google.com with SMTP id h18-20020a056402281200b0049e5078a6c3so8368707ede.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:27:56 -0800 (PST)
+ us-mta-618-gZPTNsAKP-Wt07PD95pd1Q-1; Mon, 23 Jan 2023 07:28:05 -0500
+X-MC-Unique: gZPTNsAKP-Wt07PD95pd1Q-1
+Received: by mail-ed1-f72.google.com with SMTP id h18-20020a056402281200b0049e5078a6c3so8368933ede.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:28:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y8EL4a7vt9YoRH2uQ3LUcgsvGE0j3ZgGDUhZzXtuW0o=;
-        b=HrQbYipWB2XG0Rsyt3u1EZO3dkRDmp89wfroVW21rVFLI7tCxXr0vxaV+JzFniGZ/L
-         J6/KwVrbpcH3U9PMW/vrbPCqR7k88lnXqwWWVhtqp99V56CoOme2RwfQcFlhMIp0trwW
-         P4EuJP1iAdG9tFhDcTXMp/6ogzkcwIh+Zsd6M3IxG3jBjLzXqtKr2wZy6G70auKyk8i+
-         XNj9ue9REW5Zgw9fxGHZQRks0Q9Oltj5XbcHPZjJCi0YrgQrDzsYNmfP+LAtnBS3y4LJ
-         nktKIdRAimnTbTZX5UMrAp5trxmEi3sxTEWYescuMAxsjbSNTvQxz2tEySVBYqJ2Umfq
-         TJgw==
-X-Gm-Message-State: AFqh2kpsUrQUZLnxk+qypHcQXohhZ1stF8Nj5pWNolFltU/DKMHCIg6n
-        6GIKIXeYOZAYtlkRxh+yp/H1G8WFRYY5xbJQhZPVclLhUcFI8x66Rgot96TCqNPl9hF0bdSxuOz
-        pF5utKJtwmxJBCQTdE3e460yS
-X-Received: by 2002:a17:906:6b13:b0:872:cc12:f712 with SMTP id q19-20020a1709066b1300b00872cc12f712mr22432598ejr.43.1674476875553;
-        Mon, 23 Jan 2023 04:27:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsUq/Q66Db25Cp9CBpPwyu76f1Jixb+J0Ie/WrZ2C239Oa3Z1Glt23XEHOuP2EHwbgYtOS2Vg==
-X-Received: by 2002:a17:906:6b13:b0:872:cc12:f712 with SMTP id q19-20020a1709066b1300b00872cc12f712mr22432586ejr.43.1674476875307;
-        Mon, 23 Jan 2023 04:27:55 -0800 (PST)
+        bh=TR4irgtY7ztL5sSFlKEb+j+Ijhp2vw5PzeO8p8ZDAa0=;
+        b=RnOjE/8Ho6LzgbZxONl1GMdrybGme1akNMrgcSH9PjbAqj3UyroKSOtDT/eGSxNZqL
+         MmqRwjGcVAhyiQhJqvEwlRVwqmu9inhSVoegxr2mWjlDlHGU0xhWxPfLZa8j6YWoVukE
+         cdgQ80jba0NMWpGLH6Ty438q/2J9Gzth7G51QNpfxZL/TYJMXCF3sxINvaIhY0BxD2gm
+         huEbB7pIJfvJEweDPN9HSg9oOqS4fsvjWZpJkQaJR+MLPVfUb/q/pU+KohCvJs1BghYE
+         C/D1Nh5ZNpjYOefaD6lfRV5LHyeQmhxprlpCoBONuHsvYf+KS7WmbKe1fd9YGnZtYuHS
+         0MIQ==
+X-Gm-Message-State: AFqh2kpWpZZUMzcS56kFO+9QSkcdlVdPZQawu+eKQUuKFV4amzE/f6BC
+        Mt/Sx43MxJhYute/Onbhu7xCNFQQEZGpDBcFOBr5KGczUfkLr9HoFbksstdoYmHXbEfvi4Vu+mD
+        QUIzUvFrLdYVa8enGZxc7Bk5v
+X-Received: by 2002:a05:6402:1394:b0:49e:a107:268e with SMTP id b20-20020a056402139400b0049ea107268emr14854315edv.3.1674476883676;
+        Mon, 23 Jan 2023 04:28:03 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu/uKBFGucXnQ0693oDy3k7J+PIivVmahE2diYnaWUnpUSOqQPxQSuMCPkm3VVn8RK3rSu1Lg==
+X-Received: by 2002:a05:6402:1394:b0:49e:a107:268e with SMTP id b20-20020a056402139400b0049ea107268emr14854302edv.3.1674476883484;
+        Mon, 23 Jan 2023 04:28:03 -0800 (PST)
 Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b0084d242d07ffsm21647277ejm.8.2023.01.23.04.27.54
+        by smtp.gmail.com with ESMTPSA id b11-20020a05640202cb00b00499b3d09bd2sm443623edx.91.2023.01.23.04.28.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 04:27:54 -0800 (PST)
-Message-ID: <cba8bfbf-187d-3ba2-3d2d-cdac88fa9362@redhat.com>
-Date:   Mon, 23 Jan 2023 13:27:53 +0100
+        Mon, 23 Jan 2023 04:28:02 -0800 (PST)
+Message-ID: <5860bf02-6b55-a885-742b-cd1477c7b1aa@redhat.com>
+Date:   Mon, 23 Jan 2023 13:28:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v6] media: atomisp: pci: Replace bytes macros with
- functions
+Subject: Re: [PATCH] media: atomisp: pci: hive_isp_css_common: host: vmem:
+ Replace SUBWORD macros with functions
 Content-Language: en-US
-To:     Brent Pappas <bpappas@pappasbrent.com>, andy.shevchenko@gmail.com
-Cc:     ailus@linux.intel.com, error27@gmail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        mchehab@kernel.org
-References: <CAHp75VcxvPZOZpGMSQXkCFv+WekHckMJkympfdR0ih72AjjkNw@mail.gmail.com>
- <20230118160739.26059-1-bpappas@pappasbrent.com>
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230120182625.23227-1-bpappas@pappasbrent.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230118160739.26059-1-bpappas@pappasbrent.com>
+In-Reply-To: <20230120182625.23227-1-bpappas@pappasbrent.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,14 +85,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 1/18/23 17:07, Brent Pappas wrote:
-> Replace the function-like macros FPNTBL_BYTES(), SCTBL_BYTES(), and
-> MORPH_PLANE_BYTES() with functions to comply with Linux coding style
-> standards.
-> Replace multiplication with calls to array_size() and array3_size()
-> to prevent accidental arithmetic overflow.
+On 1/20/23 19:26, Brent Pappas wrote:
+> Replace the macros SUBWORD() and INV_SUBWORD() with functions to comply
+> with Linux coding style standards.
 > 
 > Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+
 
 Thank you.
 
@@ -108,101 +104,66 @@ Hans
 
 
 
-
 > ---
-> Changelog:
-> V1 -> V2: Use size_mul() to perform size_t multiplication without risk of
-> 		  overflow.
-> 		  Remove the inline keyword from function definitions.
+> I am not sure if it would better to inline SUBWORD() or turn it into
+> a function.
+> On the one hand, SUBWORD() is only invoked once, so it may be better to
+> to inline it.
+> On the other hand, the macro defined beside it, INV_SUBWORD() should be
+> turned into to a function because it is invoked multiple times, so it
+> may make sense to turn SUBWORD() into a function as well.
+> I have opted to turn SUBWORD() into a function.
 > 
-> V2 -> V3: Add commit message.
+>  .../pci/hive_isp_css_common/host/vmem.c       | 21 +++++++++++++------
+>  1 file changed, 15 insertions(+), 6 deletions(-)
 > 
-> V3 -> V4: Use array_size() and array3_size() for multiplication.
-> 
-> V4 -> V5: Fix indentation.
-> 
-> V5 -> V6: Try again to fix indentation (use tabs of size 8).
-> 
->  .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
->  1 file changed, 23 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-> index f08564f58242..7e111df5c09d 100644
-> --- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-> +++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-> @@ -98,17 +98,27 @@
->  #include "sh_css_frac.h"
->  #include "ia_css_bufq.h"
+> diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
+> index 6620f091442f..316abfb72a83 100644
+> --- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
+> +++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
+> @@ -28,10 +28,19 @@ typedef hive_uedge *hive_wide;
+>  /* Copied from SDK: sim_semantics.c */
 >  
-> -#define FPNTBL_BYTES(binary) \
-> -	(sizeof(char) * (binary)->in_frame_info.res.height * \
-> -	 (binary)->in_frame_info.padded_width)
-> +static size_t fpntbl_bytes(const struct ia_css_binary *binary)
+>  /* subword bits move like this:         MSB[____xxxx____]LSB -> MSB[00000000xxxx]LSB */
+> -#define SUBWORD(w, start, end)     (((w) & (((1ULL << ((end) - 1)) - 1) << 1 | 1)) >> (start))
+> +static inline hive_uedge
+> +subword(hive_uedge w, unsigned int start, unsigned int end)
 > +{
-> +	return array3_size(sizeof(char),
-> +			   binary->in_frame_info.res.height,
-> +			   binary->in_frame_info.padded_width);
+> +	return (w & (((1ULL << (end - 1)) - 1) << 1 | 1)) >> start;
 > +}
 >  
-> -#define SCTBL_BYTES(binary) \
-> -	(sizeof(unsigned short) * (binary)->sctbl_height * \
-> -	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
-> +static size_t sctbl_bytes(const struct ia_css_binary *binary)
+>  /* inverse subword bits move like this: MSB[xxxx____xxxx]LSB -> MSB[xxxx0000xxxx]LSB */
+> -#define INV_SUBWORD(w, start, end) ((w) & (~(((1ULL << ((end) - 1)) - 1) << 1 | 1) | ((1ULL << (start)) - 1)))
+> +static inline hive_uedge
+> +inv_subword(hive_uedge w, unsigned int start, unsigned int end)
 > +{
-> +	return size_mul(sizeof(unsigned short),
-> +			  array3_size(binary->sctbl_height,
-> +				      binary->sctbl_aligned_width_per_color,
-> +				      IA_CSS_SC_NUM_COLORS));
+> +	return w & (~(((1ULL << (end - 1)) - 1) << 1 | 1) |
+> +		    ((1ULL << start) - 1));
 > +}
 >  
-> -#define MORPH_PLANE_BYTES(binary) \
-> -	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
-> -	 (binary)->morph_tbl_height)
-> +static size_t morph_plane_bytes(const struct ia_css_binary *binary)
-> +{
-> +	return array3_size(SH_CSS_MORPH_TABLE_ELEM_BYTES,
-> +			   binary->morph_tbl_aligned_width,
-> +			   binary->morph_tbl_height);
-> +}
+>  #define uedge_bits (8 * sizeof(hive_uedge))
+>  #define move_lower_bits(target, target_bit, src, src_bit) move_subword(target, target_bit, src, 0, src_bit)
+> @@ -50,18 +59,18 @@ move_subword(
+>  	unsigned int start_bit  = target_bit % uedge_bits;
+>  	unsigned int subword_width = src_end - src_start;
 >  
->  /* We keep a second copy of the ptr struct for the SP to access.
->     Again, this would not be necessary on the chip. */
-> @@ -3279,7 +3289,7 @@ sh_css_params_write_to_ddr_internal(
->  	if (binary->info->sp.enable.fpnr) {
->  		buff_realloced = reallocate_buffer(&ddr_map->fpn_tbl,
->  						   &ddr_map_size->fpn_tbl,
-> -						   (size_t)(FPNTBL_BYTES(binary)),
-> +						   fpntbl_bytes(binary),
->  						   params->config_changed[IA_CSS_FPN_ID],
->  						   &err);
->  		if (err) {
-> @@ -3304,7 +3314,7 @@ sh_css_params_write_to_ddr_internal(
+> -	hive_uedge src_subword = SUBWORD(src, src_start, src_end);
+> +	hive_uedge src_subword = subword(src, src_start, src_end);
 >  
->  		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
->  						   &ddr_map_size->sc_tbl,
-> -						   SCTBL_BYTES(binary),
-> +						   sctbl_bytes(binary),
->  						   params->sc_table_changed,
->  						   &err);
->  		if (err) {
-> @@ -3538,8 +3548,7 @@ sh_css_params_write_to_ddr_internal(
->  			buff_realloced |=
->  			    reallocate_buffer(virt_addr_tetra_x[i],
->  					    virt_size_tetra_x[i],
-> -					    (size_t)
-> -					    (MORPH_PLANE_BYTES(binary)),
-> +					    morph_plane_bytes(binary),
->  					    params->morph_table_changed,
->  					    &err);
->  			if (err) {
-> @@ -3549,8 +3558,7 @@ sh_css_params_write_to_ddr_internal(
->  			buff_realloced |=
->  			    reallocate_buffer(virt_addr_tetra_y[i],
->  					    virt_size_tetra_y[i],
-> -					    (size_t)
-> -					    (MORPH_PLANE_BYTES(binary)),
-> +					    morph_plane_bytes(binary),
->  					    params->morph_table_changed,
->  					    &err);
->  			if (err) {
+>  	if (subword_width + start_bit > uedge_bits) { /* overlap */
+>  		hive_uedge old_val1;
+> -		hive_uedge old_val0 = INV_SUBWORD(target[start_elem], start_bit, uedge_bits);
+> +		hive_uedge old_val0 = inv_subword(target[start_elem], start_bit, uedge_bits);
+>  
+>  		target[start_elem] = old_val0 | (src_subword << start_bit);
+> -		old_val1 = INV_SUBWORD(target[start_elem + 1], 0,
+> +		old_val1 = inv_subword(target[start_elem + 1], 0,
+>  				       subword_width + start_bit - uedge_bits);
+>  		target[start_elem + 1] = old_val1 | (src_subword >> (uedge_bits - start_bit));
+>  	} else {
+> -		hive_uedge old_val = INV_SUBWORD(target[start_elem], start_bit,
+> +		hive_uedge old_val = inv_subword(target[start_elem], start_bit,
+>  						 start_bit + subword_width);
+>  
+>  		target[start_elem] = old_val | (src_subword << start_bit);
 
