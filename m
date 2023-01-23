@@ -2,333 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E885D6774AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780E86774B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjAWEcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 23:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S231476AbjAWEok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 23:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjAWEcQ (ORCPT
+        with ESMTP id S229549AbjAWEoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 23:32:16 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0FF12068;
-        Sun, 22 Jan 2023 20:32:15 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id jr19so7634434qtb.7;
-        Sun, 22 Jan 2023 20:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8prGQr8Vfaec3pEoqAbLPG61rDuM0C3fQ7rQgQW79rI=;
-        b=V4L9E5ETJryULz7qLbNew6CGMxIVX6SASckRpk9e2nzcYCWidZ8IRudiB9KVFMxA0M
-         4V8sut3LTV2qtgDS1/olyFGA0VqOQngGpatyDGySRbjk2dONKfGud6oQNhFzE2Sb8t5w
-         f5Vng5f7gEHNdM72MaQ+grYsu/aJNPukmh5k1C+pOIPAJdnJY4V1RtGnNPx1EN09JeBQ
-         UHdC7/7Oae0NQxUKgLxqqQEhVfdseaAWWhZ56mf4xT1WgN7ypUV7+W1HaU6wbp7qcAZY
-         1Ami3On3Ob7QrE3F2znTrz6IwAxsJiLvIwtvAnguBlRQI7Y5/SEqI9oM6mqoOikmkYdP
-         2yDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8prGQr8Vfaec3pEoqAbLPG61rDuM0C3fQ7rQgQW79rI=;
-        b=L3gTYBZUDKaPIhPg0TZ9BTlxdBPQJaFN5Mu2zb6Y9QrfJWXBb4jgLUuzhcl5dxNCOP
-         PrvTf2Y3pQvhzryvSV03emTS11Jx300toS8IUT2E8EYRn1qb8DvLEwKLIdIiJkJqD6pO
-         pja/Nu+Bz+8POSggvc6pmgRzJRYXvNmv+hUXwDcDSaxPOwI+nqBIju288V9C/1bOGnsc
-         en2pMibvJs/QpF1WLXUr8tJhD6Ru9wRENhKtps9De4S9I5HYPPtD8nOlUT1ehAjWV0aA
-         2Ccec9xo5iyNzj4q1nnPez1iWG7my9YsMzTJfStpy0Ct2pHwZ0JbLEPhSpHtDipHhbYR
-         pdJg==
-X-Gm-Message-State: AFqh2kpZTg0bGFd8oG0v0JuuvKLUTzySAXaBUR9pLA2uZsBs5TGc2BOR
-        UXczjysXgQSSVNn8r/4q9+g=
-X-Google-Smtp-Source: AMrXdXvnGIr1XFz6sfgi9Wpu9mTqt+hNX2osMI21ATgH82yevhMyTYz7UJPddA+j6f92rbjmBEZu5Q==
-X-Received: by 2002:ac8:6e83:0:b0:3b6:3787:679d with SMTP id c3-20020ac86e83000000b003b63787679dmr30013729qtv.8.1674448334250;
-        Sun, 22 Jan 2023 20:32:14 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:f188:4fdb:4a:b729? ([2600:1700:2442:6db0:f188:4fdb:4a:b729])
-        by smtp.gmail.com with ESMTPSA id bm37-20020a05620a19a500b00704d8ad2e11sm13948206qkb.42.2023.01.22.20.32.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 20:32:13 -0800 (PST)
-Message-ID: <0b44ec45-a5d8-87ff-34e9-cfed58eb060c@gmail.com>
-Date:   Sun, 22 Jan 2023 22:32:13 -0600
+        Sun, 22 Jan 2023 23:44:38 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EA313501;
+        Sun, 22 Jan 2023 20:44:37 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30N4djeL005120;
+        Mon, 23 Jan 2023 04:44:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OacOLlrKZ8JwK9orVXA8AsmjPvwSvOiWb+YQJupZdHc=;
+ b=pyw1F8UUN/si4ysc9TlU/weUAtxSbN2tsrg8LrHldbCzwTWvyeA1ggYohxtjU9RXNYZ1
+ HGH5wYMqCoKuL2j19CDVbaojaouSh269rOV7Ah5Vo1YCo6u77i1oJJreo6YjUBwt7oLl
+ fHIaeQgIP0Ob1/o6vSnSCTT5yJ3KGUV6y/c51F9MI1IPPwWO5iYaq1UmtQMLgOsLKalO
+ tioMWhq45zTQxxl010pK5aRWo/ForE5Q/902Eh1b5U6hH20Sc6GJzkWnxniusEtjYLDN
+ nYw+yiVzjBpRVeQ8Oke4Qe5q81LW5MPT8SqaZ/m+f2OgH5I5CAP6qTFHGSBm3tIRVIx9 nw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89htt6u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 04:44:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30N4iW9E025702
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 04:44:32 GMT
+Received: from [10.50.40.120] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 22 Jan
+ 2023 20:44:29 -0800
+Message-ID: <0b224700-4774-0c34-7ce1-0a984b62b3c0@quicinc.com>
+Date:   Mon, 23 Jan 2023 10:14:26 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V7 0/3] Generate device tree node for pci devices
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: add QFPROM node
+To:     Robert Marko <robimarko@gmail.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230121112358.52216-1-robimarko@gmail.com>
+ <20230121112358.52216-2-robimarko@gmail.com>
+ <ebdd9932-e251-0cd7-6c98-3c735ecb74a6@quicinc.com>
+ <CAOX2RU7p-0ZTx8fkY4hOk=Zmx6RT+1PwVL+CQxkjzVadm0ehTA@mail.gmail.com>
+ <29d9de45-1ce7-d6e5-bf02-052e911a067b@quicinc.com>
+ <CAOX2RU7BfESmsUdZ5jBfYjWXUnDWmFizT8UiPwgzb_SsrT0jnA@mail.gmail.com>
 Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org, helgaas@kernel.org
-Cc:     clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+In-Reply-To: <CAOX2RU7BfESmsUdZ5jBfYjWXUnDWmFizT8UiPwgzb_SsrT0jnA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: DThyUDSLr-WQp1k0nFCb0SapXD4m6Acz
+X-Proofpoint-GUID: DThyUDSLr-WQp1k0nFCb0SapXD4m6Acz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_02,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=952 suspectscore=0 clxscore=1015 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301230044
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob, Lizhi,
 
-On 1/19/23 21:02, Lizhi Hou wrote:
-> This patch series introduces OF overlay support for PCI devices which
-> primarily addresses two use cases. First, it provides a data driven method
-> to describe hardware peripherals that are present in a PCI endpoint and
-> hence can be accessed by the PCI host. Second, it allows reuse of a OF
-> compatible driver -- often used in SoC platforms -- in a PCI host based
-> system.
+On 1/22/2023 10:39 PM, Robert Marko wrote:
+> On Sun, 22 Jan 2023 at 18:05, Kathiravan Thirumoorthy
+> <quic_kathirav@quicinc.com> wrote:
+>>
+>> On 1/22/2023 10:29 PM, Robert Marko wrote:
+>>> On Sun, 22 Jan 2023 at 17:57, Kathiravan Thirumoorthy
+>>> <quic_kathirav@quicinc.com> wrote:
+>>>> On 1/21/2023 4:53 PM, Robert Marko wrote:
+>>>>> IPQ8074 has efuses like other Qualcomm SoC-s that are required for
+>>>>> determining various HW quirks which will be required later for CPR etc,
+>>>>> so lets add the QFPROM node for start.
+>>>>>
+>>>>> Individidual fuses will be added as they are required.
+>>>>>
+>>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>>>> ---
+>>>>>     arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 +++++++
+>>>>>     1 file changed, 7 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>>>> index 8eba586065a3..f29491f647fe 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>>>> @@ -301,6 +301,13 @@ mdio: mdio@90000 {
+>>>>>                         status = "disabled";
+>>>>>                 };
+>>>>>
+>>>>> +             qfprom: efuse@a4000 {
+>>>>> +                     compatible = "qcom,ipq8074-qfprom", "qcom,qfprom";
+>>>>> +                     reg = <0x000a4000 0x1000>;
+>>>>    From the HW document, I see the overall size of this region is 0x2000,
+>>>> any reason to stick with 0x1000?
+>>> Like always, I dont have access to docs and 0x1000 is all I could find
+>>> downstream
+>>> being used.
+>>>
+>>> Any chance you can share the regions inside of QFPROM, it would be great to use
+>>> the ECC corrected one if available.
+>> Sorry, What do you refer by "ECC corrected" here?
+> Isnt there a corrected region in the QFPROM meant for reading?
+> As far as I understand it's protected by FEC.
 
-I had hoped to review this series by today, but have not yet due to working
-on some new unittest features.  I hope to get to this series Monday.
 
--Frank
+Yes, there are two regions for the QFPROM, the region which you used 
+here is the one used for reading and there is a error correction logic 
+for it and it is size is 8KB not 4KB.
 
-> 
-> There are 2 series devices rely on this patch:
-> 
->   1) Xilinx Alveo Accelerator cards (FPGA based device)
->   2) Microchip LAN9662 Ethernet Controller
-> 
->      Please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
-> 
-> Normally, the PCI core discovers PCI devices and their BARs using the
-> PCI enumeration process. However, the process does not provide a way to
-> discover the hardware peripherals that are present in a PCI device, and
-> which can be accessed through the PCI BARs. Also, the enumeration process
-> does not provide a way to associate MSI-X vectors of a PCI device with the
-> hardware peripherals that are present in the device. PCI device drivers
-> often use header files to describe the hardware peripherals and their
-> resources as there is no standard data driven way to do so. This patch
-> series proposes to use flattened device tree blob to describe the
-> peripherals in a data driven way. Based on previous discussion, using
-> device tree overlay is the best way to unflatten the blob and populate
-> platform devices. To use device tree overlay, there are three obvious
-> problems that need to be resolved.
-> 
-> First, we need to create a base tree for non-DT system such as x86_64. A
-> patch series has been submitted for this:
-> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
-> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
-> 
-> Second, a device tree node corresponding to the PCI endpoint is required
-> for overlaying the flattened device tree blob for that PCI endpoint.
-> Because PCI is a self-discoverable bus, a device tree node is usually not
-> created for PCI devices. This series adds support to generate a device
-> tree node for a PCI device which advertises itself using PCI quirks
-> infrastructure.
-> 
-> Third, we need to generate device tree nodes for PCI bridges since a child
-> PCI endpoint may choose to have a device tree node created.
-> 
-> This patch series is made up of three patches.
-> 
-> The first patch is adding OF interface to create or destroy OF node
-> dynamically.
-> 
-> The second patch introduces a kernel option, CONFIG_DYNAMIC_PCI_OF_NODEX.
-> When the option is turned on, the kernel will generate device tree nodes
-> for all PCI bridges unconditionally. The patch also shows how to use the
-> PCI quirks infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device
-> tree node for a device. Specifically, the patch generates a device tree
-> node for Xilinx Alveo U50 PCIe accelerator device. The generated device
-> tree nodes do not have any property.
-> 
-> The third patch adds basic properties ('reg', 'compatible' and
-> 'device_type') to the dynamically generated device tree nodes. More
-> properties can be added in the future.
-> 
-> Here is the example of device tree nodes generated within the ARM64 QEMU.
-> # lspci -t    
-> -[0000:00]-+-00.0
->            +-01.0-[01]--
->            +-01.1-[02]----00.0
->            +-01.2-[03]----00.0
->            +-01.3-[04]----00.0
->            +-01.4-[05]----00.0
->            +-01.5-[06]--
->            +-01.6-[07]--
->            +-01.7-[08]--
->            +-02.0-[09-0b]----00.0-[0a-0b]----00.0-[0b]--+-00.0
->            |                                            \-00.1
->            +-02.1-[0c]--
->            \-03.0-[0d-0e]----00.0-[0e]----01.0
-> 
-> # tree /sys/firmware/devicetree/base/pcie\@10000000
-> /sys/firmware/devicetree/base/pcie@10000000
-> |-- #address-cells
-> |-- #interrupt-cells
-> |-- #size-cells
-> |-- bus-range
-> |-- compatible
-> |-- device_type
-> |-- dma-coherent
-> |-- interrupt-map
-> |-- interrupt-map-mask
-> |-- linux,pci-domain
-> |-- msi-parent
-> |-- name
-> |-- pci@1,0
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,1
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,2
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,3
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,4
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,5
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,6
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@1,7
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@2,0
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- pci@0,0
-> |   |   |-- #address-cells
-> |   |   |-- #size-cells
-> |   |   |-- compatible
-> |   |   |-- device_type
-> |   |   |-- pci@0,0
-> |   |   |   |-- #address-cells
-> |   |   |   |-- #size-cells
-> |   |   |   |-- compatible
-> |   |   |   |-- dev@0,0
-> |   |   |   |   |-- compatible
-> |   |   |   |   `-- reg
-> |   |   |   |-- dev@0,1
-> |   |   |   |   |-- compatible
-> |   |   |   |   `-- reg
-> |   |   |   |-- device_type
-> |   |   |   |-- ranges
-> |   |   |   `-- reg
-> |   |   |-- ranges
-> |   |   `-- reg
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@2,1
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- ranges
-> |   `-- reg
-> |-- pci@3,0
-> |   |-- #address-cells
-> |   |-- #size-cells
-> |   |-- compatible
-> |   |-- device_type
-> |   |-- pci@0,0
-> |   |   |-- #address-cells
-> |   |   |-- #size-cells
-> |   |   |-- compatible
-> |   |   |-- device_type
-> |   |   |-- ranges
-> |   |   `-- reg
-> |   |-- ranges
-> |   `-- reg
-> |-- ranges
-> `-- reg
-> 
-> Changes since v6:
-> - Removed single line wrapper functions
-> - Added Signed-off-by Clément Léger <clement.leger@bootlin.com>
-> 
-> Changes since v5:
-> - Fixed code review comments
-> - Fixed incorrect 'ranges' and 'reg' properties and verified address
->   translation.
-> 
-> Changes since RFC v4:
-> - Fixed code review comments
-> 
-> Changes since RFC v3:
-> - Split the Xilinx Alveo U50 PCI quirk to a separate patch
-> - Minor changes in commit description and code comment
-> 
-> Changes since RFC v2:
-> - Merged patch 3 with patch 2
-> - Added OF interfaces of_changeset_add_prop_* and use them to create
->   properties.
-> - Added '#address-cells', '#size-cells' and 'ranges' properties.
-> 
-> Changes since RFC v1:
-> - Added one patch to create basic properties.
-> - To move DT related code out of PCI subsystem, replaced of_node_alloc()
->   with of_create_node()/of_destroy_node()
-> 
-> Lizhi Hou (3):
->   of: dynamic: Add interfaces for creating device node dynamically
->   PCI: Create device tree node for selected devices
->   PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
-> 
->  drivers/of/dynamic.c        | 197 +++++++++++++++++++++++++++++++++
->  drivers/pci/Kconfig         |  12 ++
->  drivers/pci/Makefile        |   1 +
->  drivers/pci/bus.c           |   2 +
->  drivers/pci/msi/irqdomain.c |   6 +-
->  drivers/pci/of.c            |  71 ++++++++++++
->  drivers/pci/of_property.c   | 212 ++++++++++++++++++++++++++++++++++++
->  drivers/pci/pci-driver.c    |   3 +-
->  drivers/pci/pci.h           |  19 ++++
->  drivers/pci/quirks.c        |  11 ++
->  drivers/pci/remove.c        |   1 +
->  include/linux/of.h          |  24 ++++
->  12 files changed, 556 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/pci/of_property.c
-> 
+Thanks, Kathiravan T.
 
+>
+> Regards,
+> Robert
+>> Thanks, Kathiravan T.
+>>
+>>
+>>> Regards,
+>>> Robert
+>>>> Thanks, Kathiravan T.
+>>>>
+>>>>
+>>>>> +                     #address-cells = <1>;
+>>>>> +                     #size-cells = <1>;
+>>>>> +             };
+>>>>> +
+>>>>>                 prng: rng@e3000 {
+>>>>>                         compatible = "qcom,prng-ee";
+>>>>>                         reg = <0x000e3000 0x1000>;
