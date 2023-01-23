@@ -2,77 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F2C6780C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D186780C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbjAWQDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S232785AbjAWQEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbjAWQDf (ORCPT
+        with ESMTP id S231530AbjAWQE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:03:35 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C02CC2E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:03:34 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30NG37qq020715
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 11:03:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1674489790; bh=EXK4HWxguanCnWaNmAc/k1AK4Y+TRvhBmSc5HlQjr1M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=R1G1eVOGPf/1/FfxMKdinpFWxmnEbeByNKdffGzYv1d9dDwHkBVllBw5+qZ+/URAH
-         ANE7Gn6sj0qTdB+zw0HwWAXsjBGQA7c+TdG0ahlTg0KHzYPmySBZhSRSXF8QAB0yBT
-         WrLSn8OZ+lbrqJ4Ry4zDkksFdDgSXarD/SnvnN8Z70dlWjf0Hge1MEn/YBjujK1jPB
-         AobCGEJYbMeLXGdGuD4h2+Yoar4sM5Oh0iNUzOTtqJ7JMwNbfqW4tCVTtqvEG4Co2e
-         9VaIofVsMC0py0BPctcMkS7SN8P6NIbhuGcYe3vfJ12mcycC2ETOKBnHoB7b7gY+Y7
-         GorBla5yEsVIg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 6F63415C469B; Mon, 23 Jan 2023 11:03:07 -0500 (EST)
-Date:   Mon, 23 Jan 2023 11:03:07 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Steve French <smfrench@gmail.com>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J. Wong" <djwong@kernel.org>, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Subject: Re: [GIT PULL] gfs2 writepage fix
-Message-ID: <Y86vu2WSGWCHpdJL@mit.edu>
-References: <20230122090115.1563753-1-agruenba@redhat.com>
- <CAHk-=wgjMNbNG0FMatHtmzEZPj0ZmQpNRsnRvH47igJoC9TBww@mail.gmail.com>
- <20230123100556.qxdjdmcms5ven52v@quack3>
+        Mon, 23 Jan 2023 11:04:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81337A5EB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:04:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3233BB80DF5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABFEC433D2;
+        Mon, 23 Jan 2023 16:04:22 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 16:04:19 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Joey Gouly <joey.gouly@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
+Subject: Re: [PATCH v2 1/2] mm: Implement memory-deny-write-execute as a prctl
+Message-ID: <Y86wA0s/HRVtqLru@arm.com>
+References: <20230119160344.54358-1-joey.gouly@arm.com>
+ <20230119160344.54358-2-joey.gouly@arm.com>
+ <4a1faf67-178e-c9ba-0db1-cf90408b0d7d@redhat.com>
+ <Y857Uoq7fjO0lZ12@arm.com>
+ <8b4e31cf-de20-703c-4b53-ad86d4282a37@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230123100556.qxdjdmcms5ven52v@quack3>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <8b4e31cf-de20-703c-4b53-ad86d4282a37@redhat.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:05:56AM +0100, Jan Kara wrote:
-> Thanks for the heads up. So we had kind of a similar issue for ext4 but it
-> got caught by Ted during his regression runs so we've basically done what
-> GFS2 is doing for the merge window and now there's patchset pending to
-> convert the data=journal path as well because as Andreas states in his
-> changelog of the revert that's a bit more tricky. But at least for ext4
-> the conversion of data=journal path resulted in much cleaner and shorter
-> code.
+On Mon, Jan 23, 2023 at 01:53:46PM +0100, David Hildenbrand wrote:
+> On 23.01.23 13:19, Catalin Marinas wrote:
+> > On Mon, Jan 23, 2023 at 12:45:50PM +0100, David Hildenbrand wrote:
+> > > On 19.01.23 17:03, Joey Gouly wrote:
+> > > > diff --git a/include/linux/mman.h b/include/linux/mman.h
+> > > > index 58b3abd457a3..cee1e4b566d8 100644
+> > > > --- a/include/linux/mman.h
+> > > > +++ b/include/linux/mman.h
+> > > > @@ -156,4 +156,38 @@ calc_vm_flag_bits(unsigned long flags)
+> > > >    }
+> > > >    unsigned long vm_commit_limit(void);
+> > > > +
+> > > > +/*
+> > > > + * Denies creating a writable executable mapping or gaining executable permissions.
+> > > > + *
+> > > > + * This denies the following:
+> > > > + *
+> > > > + * 	a)	mmap(PROT_WRITE | PROT_EXEC)
+> > > > + *
+> > > > + *	b)	mmap(PROT_WRITE)
+> > > > + *		mprotect(PROT_EXEC)
+> > > > + *
+> > > > + *	c)	mmap(PROT_WRITE)
+> > > > + *		mprotect(PROT_READ)
+> > > > + *		mprotect(PROT_EXEC)
+> > > > + *
+> > > > + * But allows the following:
+> > > > + *
+> > > > + *	d)	mmap(PROT_READ | PROT_EXEC)
+> > > > + *		mmap(PROT_READ | PROT_EXEC | PROT_BTI)
+> > > > + */
+> > > 
+> > > Shouldn't we clear VM_MAYEXEC at mmap() time such that we cannot set VM_EXEC
+> > > anymore? In an ideal world, there would be no further mprotect changes
+> > > required.
+> > 
+> > I don't think it works for this scenario. We don't want to disable
+> > PROT_EXEC entirely, only disallow it if the mapping is not already
+> > executable. The below should be allowed:
+> > 
+> > 	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
+> > 	mprotect(addr, size, PROT_READ | PROT_EXEC | PROT_BTI);
+> > 
+> > but IIUC what you meant, it fails if we cleared VM_MAYEXEC at mmap()
+> > time.
+> 
+> Yeah, if you allow write access at mmap time, clear VM_MAYEXEC (and disallow
+> VM_EXEC of course).
 
-https://thunk.org/tytso/images/firestarter-fs-development-without-testing.jpg
+This should work but it doesn't fully mimic systemd's MDWE behaviour
+(e.g. disallow mprotect(PROT_EXEC) even if the mmap was PROT_READ only).
+Topi wanted to stay close to that at least in the first incarnation of
+this control (can be extended later).
 
-:-)
+> But I guess we'd have to go one step further: if we allow exec access
+> at mmap time, clear VM_MAYWRITE (and disallow VM_WRITE of course).
 
-							- Ted
+Yes, both this and the VM_MAYEXEC clearing if VM_WRITE would be useful
+but as additional controls a process can enable.
+
+> That at least would be then similar to how we handle mmaped files: if the
+> file is not executable, we clear VM_MAYEXEC. If the file is not writable, we
+> clear VM_MAYWRITE.
+
+We still allow VM_MAYWRITE for private mappings, though we do clear
+VM_MAYEXEC if not executable.
+
+It would be nice to use VM_MAY* flags for this logic but we can only
+emulate MDWE if we change the semantics of 'MAY': only check the 'MAY'
+flags for permissions being changed (e.g. allow PROT_EXEC if the vma is
+already VM_EXEC even if !VM_MAYEXEC). Another issue is that we end up
+with some weird combinations like having VM_EXEC without VM_MAYEXEC
+(maybe that's fine).
+
+> Clearing VM_MAYWRITE would imply that also writes via /proc/self/mem to such
+> memory would be forbidden, which might also be what we are trying to
+> achieve, or is that expected to still work?
+
+I think currently with systemd's MDWE it still works (I haven't tried
+though), unless there's something else forcing that file read-only.
+
+> But clearing VM_MAYWRITE would mean that is_cow_mapping() would no
+> longer fire for some VMAs, and we'd have to check if that's fine in
+> all cases.
+
+This will break __access_remote_vm() AFAICT since it can't do a CoW on
+read-only private mapping.
+
+> Having that said, this patch handles the case when the prctl is applied to a
+> process after already having created some writable or executable mappings,
+> to at least forbid if afterwards on these mappings. What is expected to
+> happen if the process already has writable mappings that are executable at
+> the time we enable the prctl?
+
+They are expected to continue to work. The prctl() is meant to be
+invoked by something like systemd so that any subsequent exec() will
+inherit the property.
+
+> Clarifying what the expected semantics with /proc/self/mem are would be
+> nice.
+
+Yeah, this series doesn't handle this. Topi, do you know if systemd does
+anything about /proc/self/mem? To me this option is more about catching
+inadvertent write|exec mappings rather than blocking programs that
+insist on doing this (they can always map a memfd file twice with
+separate write and exec attributes for example).
+
+-- 
+Catalin
