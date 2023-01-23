@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B91B678152
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5082D678155
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbjAWQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S229676AbjAWQ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjAWQZn (ORCPT
+        with ESMTP id S231700AbjAWQ02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:25:43 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F355EFA7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:25:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674491142; x=1706027142;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5F+pTXbbpk7pf7RgZ9qcmjhgtU0br58EY++sDU2Qxrg=;
-  b=R+O2Q+fkgi6lZANnpI66s4cNBM0VHIdPu073n4j3+HNwRRpD4rg5MuB5
-   KNtXhXk4Hm7RvF5g2NieJf4Y4mvuNkNtPM6Bti4ZyMx6OGVc+E3YWI0fO
-   bW/nYWpXJHcbTpxV65Kb3dqlZIOu7PXdMctQ2RKwzXPCtsFcgEe2AbRlB
-   QbliXTIedwlQ0h869TNLUpKjIW2o8qcPNrgpCY3XwVpsNK7a7FyXPdWfU
-   Xipz14/5grl+QatcUW5aV3nGKPNaG7AzUjo6HnSxwYPTYTlBQUERi1vuB
-   6epNwOKKDIsMNg1IDz69DbbgroOCsRgWetq8G66IaLUk7qCozHkIRU/37
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="306436788"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="306436788"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 08:25:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="663694296"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="663694296"
-Received: from rgrachek-mobl.amr.corp.intel.com (HELO [10.212.113.123]) ([10.212.113.123])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 08:25:07 -0800
-Message-ID: <427f4e8a-51a5-7a4b-c2c6-92bc98f6db87@linux.intel.com>
-Date:   Mon, 23 Jan 2023 10:25:01 -0600
+        Mon, 23 Jan 2023 11:26:28 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB024124
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:26:27 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id hw16so31882144ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:26:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lab8GS0BsXttrEIIOF5NuoFe5yEpMq3XNGpFEieVFus=;
+        b=oF4rD6jd7XwszpEixf28vjQe5BHyTMqbDMbb0myXN7sNdrC+JWF7pbvptfZlr7EEZu
+         HCOfmKYSseWmcGQZrMEirBmnWHakJk4wj4YR3gUJPzu6+oTCwtccIThIC1wRNBsyWMXu
+         UA1QfgF5DJysHFZOaK/HO8gZU+urYcCCf9sVVohIfO94u8tzqW8/b5tggtzRQWLaG37+
+         7XiMVCZk+HTLtDhrNOTeALvlSHaIBTmfV9EKcQWB56KGNvKJU6JAWK9srHD5ActxyIWq
+         Wrh53EiA1YID0pZF750/wIkqkgG7oi6bMdLd8VzYTe5cs8JuMpY5jjkdg3M6pTcU/vrY
+         3j0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lab8GS0BsXttrEIIOF5NuoFe5yEpMq3XNGpFEieVFus=;
+        b=LrN1HW1wcu/uFw2451WI6CaSTUNneRtiayNdg2Fvv9ln+IJPt/Lmxomyeft6NJTYb+
+         4nE7YIAhdPf4y03xuK2aDueabO865L9btPazKjjq+8zAS3lH3289mbF3t5zb+V7JIzX8
+         m50goiKWYJ2m5WqpaK368Smw9+rMfOmsA6D2j9jnwTA51UwXXU5EQHlXQ9akn3DnzGe/
+         lONh7TerM7Vzp005Zp0v31gUIyEUO4BuK9jE3AVLIdCObXQ4WJ2SvRDfyG+MLbITk0GC
+         QFlOglieot5Q3Hdv83VMTLKTUd0OU9hWdqVlxSPmbUCmMDzKFNdAY/I2a6H2Ba4UwcGf
+         hYVQ==
+X-Gm-Message-State: AFqh2kq1vDWzd3Md8dgW7zCQBvmY6leTUrx6DyUP4mFJ+n+eP30PSXyL
+        Fa7sm3MTLltnPbjhPopLKP5475x0atMEFkqR
+X-Google-Smtp-Source: AMrXdXsLNSc/qQBnWGQwUSUQ/FzBERvIWV6+ygvsH14hClyHcGWFZRhHiJquSdlWNG5cIgsdJW1j7g==
+X-Received: by 2002:a17:906:78b:b0:7c1:9b07:32cd with SMTP id l11-20020a170906078b00b007c19b0732cdmr26403478ejc.39.1674491186264;
+        Mon, 23 Jan 2023 08:26:26 -0800 (PST)
+Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
+        by smtp.gmail.com with ESMTPSA id f6-20020a17090631c600b008779b5c7db6sm5411656ejf.107.2023.01.23.08.26.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 08:26:25 -0800 (PST)
+Message-ID: <2f0881e3-9f6c-1c77-c6ca-3e291b37bd12@linaro.org>
+Date:   Mon, 23 Jan 2023 17:26:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v2 6/8] ASoC: cs42l42: Add Soundwire support
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: sm6350: Use specific qmpphy
+ compatible
 Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20230118160452.2385494-1-sbinding@opensource.cirrus.com>
- <20230118160452.2385494-7-sbinding@opensource.cirrus.com>
- <33130336-b2ce-330e-fdec-166eee977e13@linux.intel.com>
- <418f6b73-b5ac-8d87-a856-3413ec103f91@opensource.cirrus.com>
- <6ea1b85f-22e2-8744-9638-6321a5a21acf@linux.intel.com>
- <32fd1755-0128-8f32-9a88-a92f1647f903@opensource.cirrus.com>
- <c8a9ff9b-d1d0-1cef-bf51-e7fa247d24f4@linux.intel.com>
- <3bac8055-2e6e-dc53-d143-f493e18a1e43@opensource.cirrus.com>
- <a54bf135-70ba-4c8f-b373-690a9ad8e7ef@linux.intel.com>
- <d77636dc-f239-9780-edca-fa568582c05f@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <d77636dc-f239-9780-edca-fa568582c05f@opensource.cirrus.com>
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <20230120-sm6350-usbphy-v4-0-4d700a90ba16@fairphone.com>
+ <20230120-sm6350-usbphy-v4-3-4d700a90ba16@fairphone.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230120-sm6350-usbphy-v4-3-4d700a90ba16@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,78 +87,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/23/23 10:14, Richard Fitzgerald wrote:
-> On 23/01/2023 16:05, Pierre-Louis Bossart wrote:
->>
->>>>> It's nicer to do the check in startup() because then the application
->>>>> open() will fail cleanly. We could delay until prepare - which is the
->>>>> point we really need the hardware to be accessible - and hope the
->>>>> hardware enumerated and initialized by that time. But that's not so
->>>>> nice from the app point of view.
->>>>
->>>> Another way to avoid problems is to rely on the codec component .probe
->>>> to check if the SoundWire device is initialized before registering a
->>>> card.
->>>>
->>>> I just tried with a system where the ACPI info exposes a codec which is
->>>> not connected, it fails nicely. That avoids the pitfalls of creating a
->>>> card which isn't functional since all dependencies are not met.
->>>>
->>>> [   64.616530] snd_soc_sof_sdw:mc_probe: sof_sdw sof_sdw: Entry
->>>> [   64.616549] snd_soc_sof_sdw:log_quirks: sof_sdw sof_sdw: quirk
->>>> SOF_SDW_PCH_DMIC enabled
->>>> [   64.616559] snd_soc_sof_sdw:sof_card_dai_links_create: sof_sdw
->>>> sof_sdw: sdw 2, ssp 0, dmic 2, hdmi 0
->>>> [   64.616587] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
->>>> dai link SDW0-Playback, id 0
->>>> [   64.616600] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
->>>> dai link SDW0-Capture, id 1
->>>> [   64.616607] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
->>>> dai link dmic01, id 2
->>>> [   64.616614] snd_soc_sof_sdw:init_dai_link: sof_sdw sof_sdw: create
->>>> dai link dmic16k, id 3
->>>> [   69.757115] rt5682 sdw:0:025d:5682:00: Initialization not complete,
->>>> timed out
->>>> [   69.757128] rt5682 sdw:0:025d:5682:00: ASoC: error at
->>>> snd_soc_component_probe on sdw:0:025d:5682:00: -110
->>>> [   69.757224] sof_sdw sof_sdw: ASoC: failed to instantiate card -110
->>>> [   69.757734] sof_sdw sof_sdw: snd_soc_register_card failed -110
->>>>
->>>> see
->>>> https://elixir.bootlin.com/linux/latest/source/sound/soc/codecs/rt5682.c#L2927
->>>>
->>>> I think this is compatible with the device model and bind/unbind,
->>>> but it
->>>> could be improved with the removal of the wait if we had a way to
->>>> return
->>>> -EPROBEDEFER, and have a mechanism to force the deferred probe work to
->>>> be triggered when a device actually shows up. It's a generic problem
->>>> that the probe cannot always be a synchronous function but may complete
->>>> 'later'.
->>>
->>> I see what you've done in your patch, but I had already experimented
->>> with this idea and found that the wait_for_completion() can deadlock the
->>> Soundwire core.
->>
->> That's not good. Do you have any logs or explanation on what the
->> root-cause of this deadlock might be? If something's broken, we might as
->> well fix it.
+On 23.01.2023 14:29, Luca Weiss wrote:
+> The sc7180 phy compatible works fine for some cases, but it turns out
+> sm6350 does need proper phy configuration in the driver, so use the
+> newly added sm6350 compatible.
 > 
-> I suspect it might be the big mutex lock around the call to probe(),
-> that I removed in one of my pending patches
-> (https://lore.kernel.org/all/20221121162453.1834170-1-rf@opensource.cirrus.com/)
-> So fixing that might make the problem go away.
+> Because the sm6350 compatible is using the new binding, we need to
+> change the node quite a bit to match it.
 > 
-> Charles just pointed out to me that whether component_probe() is
-> called within probe() depends whether everything needed to create
-> a soundcard is already present. Most likely in my case everything is
-> available and so snd_soc_register_component() immediately calls
-> my component_probe(). So probably in your case not everything is
-> ready and so the call to component_probe() is deferred and you
-> don't see the deadlock.
+> This fixes qmpphy init when no USB cable is plugged in during bootloader
+> stage.
+> 
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-In the case I tested, the codec driver was probed based on the presence
-of ACPI information and the register component did happen. That means
-all the resources were present for the card to be created, except that
-the codec hardware was not connected to the bus so the initialization
-never happened of course.
+Konrad
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 54 +++++++++++-------------------------
+>  1 file changed, 16 insertions(+), 38 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> index 8224adb99948..128dbbe23ef5 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -13,6 +13,7 @@
+>  #include <dt-bindings/interconnect/qcom,sm6350.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/mailbox/qcom-ipcc.h>
+> +#include <dt-bindings/phy/phy-qcom-qmp.h>
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>  
+> @@ -1314,49 +1315,26 @@ usb_1_hsphy: phy@88e3000 {
+>  			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
+>  		};
+>  
+> -		usb_1_qmpphy: phy@88e9000 {
+> -			compatible = "qcom,sc7180-qmp-usb3-dp-phy";
+> -			reg = <0 0x088e9000 0 0x200>,
+> -			      <0 0x088e8000 0 0x40>,
+> -			      <0 0x088ea000 0 0x200>;
+> -			status = "disabled";
+> -			#address-cells = <2>;
+> -			#size-cells = <2>;
+> -			ranges;
+> +		usb_1_qmpphy: phy@88e8000 {
+> +			compatible = "qcom,sm6350-qmp-usb3-dp-phy";
+> +			reg = <0 0x088e8000 0 0x3000>;
+>  
+>  			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
+> -				 <&xo_board>,
+> -				 <&rpmhcc RPMH_QLINK_CLK>,
+> -				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
+> -			clock-names = "aux", "cfg_ahb", "ref", "com_aux";
+> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +			clock-names = "aux", "ref", "com_aux", "usb3_pipe";
+> +
+> +			power-domains = <&gcc USB30_PRIM_GDSC>;
+>  
+> -			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
+> -				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
+> +			resets = <&gcc GCC_USB3_PHY_PRIM_BCR>,
+> +				 <&gcc GCC_USB3_DP_PHY_PRIM_BCR>;
+>  			reset-names = "phy", "common";
+>  
+> -			usb_1_ssphy: usb3-phy@88e9200 {
+> -				reg = <0 0x088e9200 0 0x200>,
+> -				      <0 0x088e9400 0 0x200>,
+> -				      <0 0x088e9c00 0 0x400>,
+> -				      <0 0x088e9600 0 0x200>,
+> -				      <0 0x088e9800 0 0x200>,
+> -				      <0 0x088e9a00 0 0x100>;
+> -				#clock-cells = <0>;
+> -				#phy-cells = <0>;
+> -				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> -				clock-names = "pipe0";
+> -				clock-output-names = "usb3_phy_pipe_clk_src";
+> -			};
+> +			#clock-cells = <1>;
+> +			#phy-cells = <1>;
+>  
+> -			dp_phy: dp-phy@88ea200 {
+> -				reg = <0 0x088ea200 0 0x200>,
+> -				      <0 0x088ea400 0 0x200>,
+> -				      <0 0x088eaa00 0 0x200>,
+> -				      <0 0x088ea600 0 0x200>,
+> -				      <0 0x088ea800 0 0x200>;
+> -				#phy-cells = <0>;
+> -				#clock-cells = <1>;
+> -			};
+> +			status = "disabled";
+>  		};
+>  
+>  		dc_noc: interconnect@9160000 {
+> @@ -1430,7 +1408,7 @@ usb_1_dwc3: usb@a600000 {
+>  				snps,dis_enblslpm_quirk;
+>  				snps,has-lpm-erratum;
+>  				snps,hird-threshold = /bits/ 8 <0x10>;
+> -				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+> +				phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
+>  				phy-names = "usb2-phy", "usb3-phy";
+>  			};
+>  		};
+> 
