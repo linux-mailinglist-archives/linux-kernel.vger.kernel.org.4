@@ -2,133 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA816785C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8416785C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbjAWTFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S232280AbjAWTGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjAWTFD (ORCPT
+        with ESMTP id S231501AbjAWTGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:05:03 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69372658F;
-        Mon, 23 Jan 2023 11:05:02 -0800 (PST)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pK27m-00070k-O9; Mon, 23 Jan 2023 20:04:59 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pK27m-000ON9-8v; Mon, 23 Jan 2023 20:04:58 +0100
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
- definitions
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, memxor@gmail.com
-References: <20230123171506.71995-1-void@manifault.com>
- <20230123171506.71995-4-void@manifault.com>
- <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
- <Y87We/92xiv5/+g+@maniforge.lan>
- <20230123185434.ybfhrmbootcnjuoj@macbook-pro-6.dhcp.thefacebook.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ebff2166-8a70-af62-b859-6b5c6b008b36@iogearbox.net>
-Date:   Mon, 23 Jan 2023 20:04:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 23 Jan 2023 14:06:30 -0500
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135E530192
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:06:23 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:6083:1fd7:ba05:ea8d])
+        by michel.telenet-ops.be with bizsmtp
+        id CK6L2900E4604Ck06K6Lbv; Mon, 23 Jan 2023 20:06:22 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pK28y-0076NV-L1;
+        Mon, 23 Jan 2023 20:06:20 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pK296-00Ekpr-Hh;
+        Mon, 23 Jan 2023 20:06:20 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Magnus Damm <magnus.damm@gmail.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/2] arm64: dts: renesas: r8a779g0/white-hawk: Add CAN-FD support
+Date:   Mon, 23 Jan 2023 20:06:17 +0100
+Message-Id: <cover.1674500205.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20230123185434.ybfhrmbootcnjuoj@macbook-pro-6.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26790/Mon Jan 23 09:31:32 2023)
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 7:54 PM, Alexei Starovoitov wrote:
-> On Mon, Jan 23, 2023 at 12:48:27PM -0600, David Vernet wrote:
->> On Mon, Jan 23, 2023 at 10:33:05AM -0800, Alexei Starovoitov wrote:
->>> On Mon, Jan 23, 2023 at 11:15:06AM -0600, David Vernet wrote:
->>>> -void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
->>>> +BPF_KFUNC(void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign))
->>>>   {
->>>>   	struct btf_struct_meta *meta = meta__ign;
->>>>   	u64 size = local_type_id__k;
->>>> @@ -1790,7 +1786,7 @@ void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
->>>>   	return p;
->>>>   }
->>>>   
->>>> -void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
->>>> +BPF_KFUNC(void bpf_obj_drop_impl(void *p__alloc, void *meta__ign))
->>>>   {
->>>
->>> The following also works:
->>> -BPF_KFUNC(void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign))
->>> +BPF_KFUNC(
->>> +void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
->>> +)
->>>
->>> and it looks little bit cleaner to me.
->>>
->>> git grep -A1 BPF_KFUNC
->>> can still find all instances of kfuncs.
->>>
->>> wdyt?
->>
->> I'm fine with putting it on its own line if that's your preference.
->> Agreed that it might be a bit cleaner, especially for functions with the
->> return type on its own line, so we'd have e.g.:
->>
->> BPF_KFUNC(
->> struct nf_conn *
->> bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
->> 		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
-> 
-> Yeah. Especially for those.
-> 
->> ) {
->>
->> // ...
->>
->> }
->>
->> Note the presence of the { on the closing paren. Are you ok with that?
->> Otherwise I think it will look a bit odd:
-> 
-> Yep. Good idea. Either ){ or ) { look good to me.
-> 
->> BPF_KFUNC(
->> struct nf_conn *
->> bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
->> 		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
->> )
->> {
->>
->> }
+	Hi all,
 
-Did you look into making this similar to the EXPORT_SYMBOL() infra? If possible
-that would look much more natural to developers, e.g. :
+This patch series enables support for the CAN-FD interface on the Renesas
+R-Car V4H (R8A779G0) SoC, and for the first two CAN-FD channels on the
+Renesas White-Hawk development board.
 
-struct nf_conn *
-bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
-  		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
-{
-	[...]
-}
+While R-Car V4H supports 8 CAN-FD channels, and White-Hawk has
+transceivers mounted for the first 4 channels, my test results are
+similar to what Ulrich Hecht reported for R-Car V3U on the Falcon
+development board before, i.e. only channels 0 and 1 work, and thus this
+series enables support for these channels only.  Whether this is a
+CAN-FD driver issue, a pin control issue, an IP core issue, or an SoC
+integration issue is still to be seen...
 
-EXPORT_BPF_KFUNC(bpf_skb_ct_lookup);
+For testing, this series and its dependencies can be found at [1].
+
+Thanks for your comments!
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/r8a779g0-canfd-v1
+
+Geert Uytterhoeven (2):
+  arm64: dts: renesas: r8a779g0: Add CAN-FD node
+  arm64: dts: renesas: white-hawk: Add CAN-FD support
+
+ .../boot/dts/renesas/r8a779g0-white-hawk.dts  | 44 ++++++++++++++
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi     | 57 +++++++++++++++++++
+ 2 files changed, 101 insertions(+)
+
+-- 
+2.34.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
