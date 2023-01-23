@@ -2,502 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDCD677FB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0485677FB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjAWP2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S232057AbjAWP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbjAWP2b (ORCPT
+        with ESMTP id S231847AbjAWP2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:28:31 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BB22202A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:28:21 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m15so9309815wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:28:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PODENPNbVWjL8xQyhgyl+t+P0w0tYfl3GahnpsmHGfc=;
-        b=rBe6MWIuBU4PCPosy8wmdLnAW+6r7YikSJA5xpfDvJzaopUx7GneUOOzFqT9WpC6Zm
-         w6bQKEy7zRI/udwTUnkYPw96lYwXM8Pf67jtjjPSHaMNoboQrVuixb/HaIUgkhL8QFk4
-         7ZV4G2vh/5vzA2V6zwW7i/DItMiUA0UTkitFGhS8OxDvjgKob8yyTgPHmy6/WY8bpLuN
-         mJzSVPvjqSreJ3jsdELvRgK+jG+6nJ483IsVpGRBUo0fvukuT07KQVenLCJAOuPb2RDk
-         adjSfKfbqAYL/frRh3KkHsAkKTDll2XM0Q98sMey6w6wYQWfWtTBOVowWDup4NozKtoA
-         1cnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PODENPNbVWjL8xQyhgyl+t+P0w0tYfl3GahnpsmHGfc=;
-        b=tmrIejEbEhtcTe7CbjZgHnQJkd2lS6dWDEUVSB4/0kLXsUKifbgJvbM8mRjh3r/E45
-         T1279CTAELNiuNcsz02x7xgXavZpYH9r0f4mQ/5ZcfZ8XAHiPLRtma1m7oI7nRIXHxTd
-         73WZUKId/BChzLeMJ31in9pnsElN9mOzRoIgpfehx92HKwk/UEBZ+LW3MsqKm0Bd+f6i
-         QRJ2DU5DFNBVOS9YLvHYDyYLyJgr+XXHqO1XNIvquVvGoqVnzs5MTOrD8cr+qzMrQ7bg
-         4F9Nb7kWt0guxQhPpUq+2eeXIlqg6RBAlgIAwnGVQDDHV80XSO0paXXlKjOyY2GzHgCz
-         98lQ==
-X-Gm-Message-State: AFqh2kqvJWFgiXglACkXXrnbWP3eEe0uahH0cJrWQw0a3HlHSaaD3yU3
-        /6XvvH5O1XGuHX4Y1At+TphPsw==
-X-Google-Smtp-Source: AMrXdXvGnLNGRLSFXB24uuBDMTzuXupdOxNjf55X9XoW+9vcUkTl81sFYVSEBG8lSDLiEJR7iG3gsg==
-X-Received: by 2002:a05:600c:1c01:b0:3c6:e63e:23e9 with SMTP id j1-20020a05600c1c0100b003c6e63e23e9mr24804179wms.24.1674487700334;
-        Mon, 23 Jan 2023 07:28:20 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1c770d000000b003db1ca20170sm10673096wmi.37.2023.01.23.07.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 07:28:19 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 3/3] thermal/core: Move the thermal trip code to a dedicated file
-Date:   Mon, 23 Jan 2023 16:27:56 +0100
-Message-Id: <20230123152756.4031574-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230123152756.4031574-1-daniel.lezcano@linaro.org>
-References: <20230123152756.4031574-1-daniel.lezcano@linaro.org>
+        Mon, 23 Jan 2023 10:28:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171CF55A5;
+        Mon, 23 Jan 2023 07:28:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD5060F5E;
+        Mon, 23 Jan 2023 15:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6D9C433EF;
+        Mon, 23 Jan 2023 15:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674487685;
+        bh=8nopWCghWSW6qg8L9ZsS34jM69jMO1LFoFfm/AalAfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RUxRmKp7CiHKY961/2uBdqNaRyuSjLFLuN5KZxLhGIBaSbPplMiYkKHSdBxj2WOWJ
+         uXECKrCONlmX91BA7249i7kYHI66nZWawITAlgpYhgbQ3xL7umIgOE4xoEgzspGaQD
+         nUNzaSzoHeJUMeh2hphujQmnzLs/+sO2z24JxDVhSrZKlMChdGKup/5KjRrjPyTIlL
+         wyHR+IuQqTDXtmpbS9uKt1BfYKhLtKnKuFPoeqF3X7ZLq4RCRu/1BsyiaA74XJpPc/
+         81+4RPUdPSMD3WS4TfplghlIJsgNxur8wySmD4FSl0ouRHTd5vr5FjtPC7bxx6DZ+3
+         c+kROTFx620qw==
+Date:   Mon, 23 Jan 2023 15:27:58 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv5 07/10] mfd: rk8xx: add rk806 support
+Message-ID: <Y86nfvtV4AacstMZ@google.com>
+References: <20230109172723.60304-1-sebastian.reichel@collabora.com>
+ <20230109172723.60304-8-sebastian.reichel@collabora.com>
+ <Y8rIadiDIEdXuM0Y@google.com>
+ <20230123143321.lsddiol6bo2agfbk@mercury.elektranox.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20230123143321.lsddiol6bo2agfbk@mercury.elektranox.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal_core.c files contains a lot of functions handling
-different thermal components like the governors, the trip points, the
-cooling device, the OF cooling device, etc ...
+On Mon, 23 Jan 2023, Sebastian Reichel wrote:
 
-This organization does not help to migrate to a more sane code where
-there is a better self-encapsulation as all the components' internals
-can be directly accessed from a single file.
+> Hi,
+> 
+> On Fri, Jan 20, 2023 at 04:59:21PM +0000, Lee Jones wrote:
+> > On Mon, 09 Jan 2023, Sebastian Reichel wrote:
+> > 
+> > > Add support for SPI connected rk806, which is used by the RK3588
+> > > evaluation boards. The PMIC is advertised to support I2C and SPI,
+> > > but the evaluation boards all use SPI. Thus only SPI support is
+> > > added here.
+> > > 
+> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > > ---
+> > >  drivers/mfd/Kconfig       |  14 ++
+> > >  drivers/mfd/Makefile      |   1 +
+> > >  drivers/mfd/rk8xx-core.c  |  67 ++++++-
+> > >  drivers/mfd/rk8xx-spi.c   | 122 ++++++++++++
+> > >  include/linux/mfd/rk808.h | 409 ++++++++++++++++++++++++++++++++++++++
+> > >  5 files changed, 611 insertions(+), 2 deletions(-)
+> > >  create mode 100644 drivers/mfd/rk8xx-spi.c
+> > > 
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index 692e38283bda..13582ea5cb44 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -1222,6 +1222,20 @@ config MFD_RK8XX_I2C
+> > >  	  through I2C interface. The device supports multiple sub-devices
+> > >  	  including interrupts, RTC, LDO & DCDC regulators, and onkey.
+> > >  
+> > > +config MFD_RK8XX_SPI
+> > > +	tristate "Rockchip RK806 Power Management Chip"
+> > > +	depends on SPI && OF
+> > > +	select MFD_CORE
+> > > +	select REGMAP_SPI
+> > > +	select REGMAP_IRQ
+> > > +	select MFD_RK8XX
+> > > +	help
+> > > +	  If you say yes here you get support for the RK806 Power Management
+> > > +	  chip.
+> > > +	  This driver provides common support for accessing the device
+> > > +	  through an SPI interface. The device supports multiple sub-devices
+> > > +	  including interrupts, LDO & DCDC regulators, and power on-key.
+> > > +
+> > >  config MFD_RN5T618
+> > >  	tristate "Ricoh RN5T567/618 PMIC"
+> > >  	depends on I2C
+> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > > index f65ef1bd0810..a88f27cd837b 100644
+> > > --- a/drivers/mfd/Makefile
+> > > +++ b/drivers/mfd/Makefile
+> > > @@ -222,6 +222,7 @@ obj-$(CONFIG_MFD_NTXEC)		+= ntxec.o
+> > >  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
+> > >  obj-$(CONFIG_MFD_RK8XX)		+= rk8xx-core.o
+> > >  obj-$(CONFIG_MFD_RK8XX_I2C)	+= rk8xx-i2c.o
+> > > +obj-$(CONFIG_MFD_RK8XX_SPI)	+= rk8xx-spi.o
+> > >  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
+> > >  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
+> > >  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
+> > > diff --git a/drivers/mfd/rk8xx-core.c b/drivers/mfd/rk8xx-core.c
+> > > index c52f5fa1a4da..289f4c1f30c2 100644
+> > > --- a/drivers/mfd/rk8xx-core.c
+> > > +++ b/drivers/mfd/rk8xx-core.c
+> > > @@ -37,6 +37,11 @@ static const struct resource rk805_key_resources[] = {
+> > >  	DEFINE_RES_IRQ(RK805_IRQ_PWRON_FALL),
+> > >  };
+> > >  
+> > > +static struct resource rk806_pwrkey_resources[] = {
+> > > +	DEFINE_RES_IRQ(RK806_IRQ_PWRON_FALL),
+> > > +	DEFINE_RES_IRQ(RK806_IRQ_PWRON_RISE),
+> > > +};
+> > > +
+> > >  static const struct resource rk817_pwrkey_resources[] = {
+> > >  	DEFINE_RES_IRQ(RK817_IRQ_PWRON_RISE),
+> > >  	DEFINE_RES_IRQ(RK817_IRQ_PWRON_FALL),
+> > > @@ -64,6 +69,16 @@ static const struct mfd_cell rk805s[] = {
+> > >  	},
+> > >  };
+> > >  
+> > > +static const struct mfd_cell rk806s[] = {
+> > > +	{ .name = "rk805-pinctrl", },
+> > > +	{ .name = "rk808-regulator", },
+> > > +	{
+> > > +		.name = "rk805-pwrkey",
+> > > +		.num_resources = ARRAY_SIZE(rk806_pwrkey_resources),
+> > > +		.resources = &rk806_pwrkey_resources[0],
+> > 
+> > My OCD-sense is tingling.
+> > 
+> > Could you please add the resources *before* the num_resources please?
+> > 
+> > Also: '.resources = rk806_pwrkey_resources' is fine
+> 
+> Ack.
+> 
+> > 
+> > > +	},
+> > > +};
+> > > +
+> > >  static const struct mfd_cell rk808s[] = {
+> > >  	{ .name = "rk808-clkout", .id = PLATFORM_DEVID_NONE, },
+> > >  	{ .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
+> > > @@ -122,6 +137,12 @@ static const struct rk808_reg_data rk805_pre_init_reg[] = {
+> > >  	{RK805_THERMAL_REG, TEMP_HOTDIE_MSK, TEMP115C},
+> > >  };
+> > >  
+> > > +static const struct rk808_reg_data rk806_pre_init_reg[] = {
+> > > +	{ RK806_GPIO_INT_CONFIG, RK806_INT_POL_MSK, RK806_INT_POL_L },
+> > > +	{ RK806_SYS_CFG3, RK806_SLAVE_RESTART_FUN_MSK, RK806_SLAVE_RESTART_FUN_EN },
+> > > +	{ RK806_SYS_OPTION, RK806_SYS_ENB2_2M_MSK, RK806_SYS_ENB2_2M_EN },
+> > > +};
+> > > +
+> > >  static const struct rk808_reg_data rk808_pre_init_reg[] = {
+> > >  	{ RK808_BUCK3_CONFIG_REG, BUCK_ILMIN_MASK,  BUCK_ILMIN_150MA },
+> > >  	{ RK808_BUCK4_CONFIG_REG, BUCK_ILMIN_MASK,  BUCK_ILMIN_200MA },
+> > > @@ -272,6 +293,27 @@ static const struct regmap_irq rk805_irqs[] = {
+> > >  	},
+> > >  };
+> > >  
+> > > +static const struct regmap_irq rk806_irqs[] = {
+> > > +	/* INT_STS0 IRQs */
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_PWRON_FALL, 0, RK806_INT_STS_PWRON_FALL),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_PWRON_RISE, 0, RK806_INT_STS_PWRON_RISE),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_PWRON, 0, RK806_INT_STS_PWRON),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_PWRON_LP, 0, RK806_INT_STS_PWRON_LP),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_HOTDIE, 0, RK806_INT_STS_HOTDIE),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_VDC_RISE, 0, RK806_INT_STS_VDC_RISE),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_VDC_FALL, 0, RK806_INT_STS_VDC_FALL),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_VB_LO, 0, RK806_INT_STS_VB_LO),
+> > > +	/* INT_STS1 IRQs */
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_REV0, 1, RK806_INT_STS_REV0),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_REV1, 1, RK806_INT_STS_REV1),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_REV2, 1, RK806_INT_STS_REV2),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_CRC_ERROR, 1, RK806_INT_STS_CRC_ERROR),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_SLP3_GPIO, 1, RK806_INT_STS_SLP3_GPIO),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_SLP2_GPIO, 1, RK806_INT_STS_SLP2_GPIO),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_SLP1_GPIO, 1, RK806_INT_STS_SLP1_GPIO),
+> > > +	REGMAP_IRQ_REG(RK806_IRQ_WDT, 1, RK806_INT_STS_WDT),
+> > > +};
+> > > +
+> > >  static const struct regmap_irq rk808_irqs[] = {
+> > >  	/* INT_STS */
+> > >  	[RK808_IRQ_VOUT_LO] = {
+> > > @@ -422,6 +464,18 @@ static struct regmap_irq_chip rk805_irq_chip = {
+> > >  	.init_ack_masked = true,
+> > >  };
+> > >  
+> > > +static struct regmap_irq_chip rk806_irq_chip = {
+> > > +	.name = "rk806",
+> > > +	.irqs = rk806_irqs,
+> > > +	.num_irqs = ARRAY_SIZE(rk806_irqs),
+> > > +	.num_regs = 2,
+> > > +	.irq_reg_stride = 2,
+> > > +	.mask_base = RK806_INT_MSK0,
+> > > +	.status_base = RK806_INT_STS0,
+> > > +	.ack_base = RK806_INT_STS0,
+> > > +	.init_ack_masked = true,
+> > > +};
+> > > +
+> > >  static const struct regmap_irq_chip rk808_irq_chip = {
+> > >  	.name = "rk808",
+> > >  	.irqs = rk808_irqs,
+> > > @@ -548,6 +602,7 @@ int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap
+> > >  	struct rk808 *rk808;
+> > >  	const struct rk808_reg_data *pre_init_reg;
+> > >  	const struct mfd_cell *cells;
+> > > +	bool dual_support = false;
+> > >  	int nr_pre_init_regs;
+> > >  	int nr_cells;
+> > >  	int ret;
+> > > @@ -569,6 +624,14 @@ int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap
+> > >  		cells = rk805s;
+> > >  		nr_cells = ARRAY_SIZE(rk805s);
+> > >  		break;
+> > > +	case RK806_ID:
+> > > +		rk808->regmap_irq_chip = &rk806_irq_chip;
+> > > +		pre_init_reg = rk806_pre_init_reg;
+> > > +		nr_pre_init_regs = ARRAY_SIZE(rk806_pre_init_reg);
+> > > +		cells = rk806s;
+> > > +		nr_cells = ARRAY_SIZE(rk806s);
+> > > +		dual_support = true;
+> > > +		break;
+> > >  	case RK808_ID:
+> > >  		rk808->regmap_irq_chip = &rk808_irq_chip;
+> > >  		pre_init_reg = rk808_pre_init_reg;
+> > > @@ -602,7 +665,7 @@ int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap
+> > >  		return dev_err_probe(dev, -EINVAL, "No interrupt support, no core IRQ\n");
+> > >  
+> > >  	ret = devm_regmap_add_irq_chip(dev, rk808->regmap, irq,
+> > > -				       IRQF_ONESHOT, -1,
+> > > +				       IRQF_ONESHOT | (dual_support ? IRQF_SHARED : 0), -1,
+> > 
+> > Why not 'dual_support = IRQF_SHARED', then | it regardless?
+> 
+> Ack
+> 
+> > 
+> > >  				       rk808->regmap_irq_chip, &rk808->irq_data);
+> > >  	if (ret)
+> > >  		return dev_err_probe(dev, ret, "Failed to add irq_chip\n");
+> > > @@ -617,7 +680,7 @@ int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap
+> > >  					     pre_init_reg[i].addr);
+> > >  	}
+> > >  
+> > > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+> > > +	ret = devm_mfd_add_devices(dev, dual_support ? PLATFORM_DEVID_AUTO : PLATFORM_DEVID_NONE,
+> > 
+> > Any reason why you can't use AUTO all the time?
+> 
+> That would change device names (and thus sysfs paths) for already
+> supported devices. DEVID_AUTO appends a ".<number>" suffix compared
+> to DEVID_NONE.
 
-For the sake of clarity, let's move the thermal trip points code in a
-dedicated thermal_trip.c file and add a function to browse all the
-trip points like we do with the thermal zones, the govenors and the
-cooling devices.
+How about using cell->id instead of doing this little dance?
 
-The same can be done for the cooling devices and the governor code but
-that will come later as the current work in the thermal framework is
-to fix the trip point handling and use a generic trip point structure.
-
-No functional changes intended.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/Makefile          |   4 +-
- drivers/thermal/thermal_core.c    |  87 --------------
- drivers/thermal/thermal_core.h    |   4 +
- drivers/thermal/thermal_helpers.c |  62 ----------
- drivers/thermal/thermal_trip.c    | 182 ++++++++++++++++++++++++++++++
- 5 files changed, 188 insertions(+), 151 deletions(-)
- create mode 100644 drivers/thermal/thermal_trip.c
-
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 2506c6c8ca83..2faf4651f34a 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -4,8 +4,8 @@
- #
- 
- obj-$(CONFIG_THERMAL)		+= thermal_sys.o
--thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
--					thermal_helpers.o
-+thermal_sys-y			+= thermal_core.o thermal_sysfs.o	
-+thermal_sys-y			+= thermal_trip.o thermal_helpers.o
- 
- # netlink interface to manage the thermal framework
- thermal_sys-$(CONFIG_THERMAL_NETLINK)		+= thermal_netlink.o
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index fad0c4a07d16..4ee685043a3e 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1155,12 +1155,6 @@ static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms
- 		*delay_jiffies = round_jiffies(*delay_jiffies);
- }
- 
--int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
--{
--	return tz->num_trips;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_get_num_trips);
--
- int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	int i, ret = -EINVAL;
-@@ -1187,87 +1181,6 @@ int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
- 
--int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
--			    struct thermal_trip *trip)
--{
--	int ret;
--
--	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
--		return -EINVAL;
--
--	if (tz->trips) {
--		*trip = tz->trips[trip_id];
--		return 0;
--	}
--
--	if (tz->ops->get_trip_hyst) {
--		ret = tz->ops->get_trip_hyst(tz, trip_id, &trip->hysteresis);
--		if (ret)
--			return ret;
--	} else {
--		trip->hysteresis = 0;
--	}
--
--	ret = tz->ops->get_trip_temp(tz, trip_id, &trip->temperature);
--	if (ret)
--		return ret;
--
--	return tz->ops->get_trip_type(tz, trip_id, &trip->type);
--}
--EXPORT_SYMBOL_GPL(__thermal_zone_get_trip);
--
--int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
--			  struct thermal_trip *trip)
--{
--	int ret;
--
--	mutex_lock(&tz->lock);
--	ret = __thermal_zone_get_trip(tz, trip_id, trip);
--	mutex_unlock(&tz->lock);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
--
--int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
--			  const struct thermal_trip *trip)
--{
--	struct thermal_trip t;
--	int ret;
--
--	if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
--		return -EINVAL;
--
--	ret = __thermal_zone_get_trip(tz, trip_id, &t);
--	if (ret)
--		return ret;
--
--	if (t.type != trip->type)
--		return -EINVAL;
--
--	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
--		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
--		if (ret)
--			return ret;
--	}
--
--	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
--		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
--		if (ret)
--			return ret;
--	}
--
--	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
--		tz->trips[trip_id] = *trip;
--
--	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
--				      trip->temperature, trip->hysteresis);
--
--	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
--	
--	return 0;
--}
--
- /**
-  * thermal_zone_device_register_with_trips() - register a new thermal zone device
-  * @type:	the thermal zone device type
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 26350206a98d..7af54382e915 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -52,6 +52,10 @@ int for_each_thermal_cooling_device(int (*cb)(struct thermal_cooling_device *,
- int for_each_thermal_governor(int (*cb)(struct thermal_governor *, void *),
- 			      void *thermal_governor);
- 
-+int __for_each_thermal_trip(struct thermal_zone_device *,
-+			    int (*cb)(struct thermal_trip *, void *),
-+			    void *);
-+
- struct thermal_zone_device *thermal_zone_get_by_id(int id);
- 
- struct thermal_attr {
-diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-index 8977d5ddc23c..0f648131b0b5 100644
---- a/drivers/thermal/thermal_helpers.c
-+++ b/drivers/thermal/thermal_helpers.c
-@@ -146,68 +146,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
- 
--/**
-- * __thermal_zone_set_trips - Computes the next trip points for the driver
-- * @tz: a pointer to a thermal zone device structure
-- *
-- * The function computes the next temperature boundaries by browsing
-- * the trip points. The result is the closer low and high trip points
-- * to the current temperature. These values are passed to the backend
-- * driver to let it set its own notification mechanism (usually an
-- * interrupt).
-- *
-- * This function must be called with tz->lock held. Both tz and tz->ops
-- * must be valid pointers.
-- *
-- * It does not return a value
-- */
--void __thermal_zone_set_trips(struct thermal_zone_device *tz)
--{
--	struct thermal_trip trip;
--	int low = -INT_MAX, high = INT_MAX;
--	int i, ret;
--
--	lockdep_assert_held(&tz->lock);
--
--	if (!tz->ops->set_trips)
--		return;
--
--	for (i = 0; i < tz->num_trips; i++) {
--		int trip_low;
--
--		ret = __thermal_zone_get_trip(tz, i , &trip);
--		if (ret)
--			return;
--
--		trip_low = trip.temperature - trip.hysteresis;
--
--		if (trip_low < tz->temperature && trip_low > low)
--			low = trip_low;
--
--		if (trip.temperature > tz->temperature &&
--		    trip.temperature < high)
--			high = trip.temperature;
--	}
--
--	/* No need to change trip points */
--	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
--		return;
--
--	tz->prev_low_trip = low;
--	tz->prev_high_trip = high;
--
--	dev_dbg(&tz->device,
--		"new temperature boundaries: %d < x < %d\n", low, high);
--
--	/*
--	 * Set a temperature window. When this window is left the driver
--	 * must inform the thermal core via thermal_zone_device_update.
--	 */
--	ret = tz->ops->set_trips(tz, low, high);
--	if (ret)
--		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
--}
--
- static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
- 				       int target)
- {
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-new file mode 100644
-index 000000000000..5ce71f1cb1ba
---- /dev/null
-+++ b/drivers/thermal/thermal_trip.c
-@@ -0,0 +1,182 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  Copyright (C) 2008 Intel Corp
-+ *  Copyright (C) 2008 Zhang Rui <rui.zhang@intel.com>
-+ *  Copyright (C) 2008 Sujith Thomas <sujith.thomas@intel.com>
-+ *  Copyright 2022 Linaro Limited
-+ *
-+ * Thermal trips handling
-+ */
-+#include "thermal_core.h"
-+
-+int __for_each_thermal_trip(struct thermal_zone_device *tz,
-+			    int (*cb)(struct thermal_trip *, void *),
-+			    void *data)
-+{
-+	int i, ret;
-+	struct thermal_trip trip;
-+
-+	lockdep_assert_held(&tz->lock);
-+
-+	for (i = 0; i < tz->num_trips; i++) {
-+
-+		ret = __thermal_zone_get_trip(tz, i, &trip);
-+		if (ret)
-+			return ret;
-+		
-+		ret = cb(&trip, data);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
-+{
-+	return tz->num_trips;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_get_num_trips);
-+
-+/**
-+ * __thermal_zone_set_trips - Computes the next trip points for the driver
-+ * @tz: a pointer to a thermal zone device structure
-+ *
-+ * The function computes the next temperature boundaries by browsing
-+ * the trip points. The result is the closer low and high trip points
-+ * to the current temperature. These values are passed to the backend
-+ * driver to let it set its own notification mechanism (usually an
-+ * interrupt).
-+ *
-+ * This function must be called with tz->lock held. Both tz and tz->ops
-+ * must be valid pointers.
-+ *
-+ * It does not return a value
-+ */
-+void __thermal_zone_set_trips(struct thermal_zone_device *tz)
-+{
-+	struct thermal_trip trip;
-+	int low = -INT_MAX, high = INT_MAX;
-+	int i, ret;
-+
-+	lockdep_assert_held(&tz->lock);
-+
-+	if (!tz->ops->set_trips)
-+		return;
-+
-+	for (i = 0; i < tz->num_trips; i++) {
-+		int trip_low;
-+
-+		ret = __thermal_zone_get_trip(tz, i , &trip);
-+		if (ret)
-+			return;
-+
-+		trip_low = trip.temperature - trip.hysteresis;
-+
-+		if (trip_low < tz->temperature && trip_low > low)
-+			low = trip_low;
-+
-+		if (trip.temperature > tz->temperature &&
-+		    trip.temperature < high)
-+			high = trip.temperature;
-+	}
-+
-+	/* No need to change trip points */
-+	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
-+		return;
-+
-+	tz->prev_low_trip = low;
-+	tz->prev_high_trip = high;
-+
-+	dev_dbg(&tz->device,
-+		"new temperature boundaries: %d < x < %d\n", low, high);
-+
-+	/*
-+	 * Set a temperature window. When this window is left the driver
-+	 * must inform the thermal core via thermal_zone_device_update.
-+	 */
-+	ret = tz->ops->set_trips(tz, low, high);
-+	if (ret)
-+		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
-+}
-+
-+int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
-+			    struct thermal_trip *trip)
-+{
-+	int ret;
-+
-+	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
-+		return -EINVAL;
-+
-+	if (tz->trips) {
-+		*trip = tz->trips[trip_id];
-+		return 0;
-+	}
-+
-+	if (tz->ops->get_trip_hyst) {
-+		ret = tz->ops->get_trip_hyst(tz, trip_id, &trip->hysteresis);
-+		if (ret)
-+			return ret;
-+	} else {
-+		trip->hysteresis = 0;
-+	}
-+
-+	ret = tz->ops->get_trip_temp(tz, trip_id, &trip->temperature);
-+	if (ret)
-+		return ret;
-+
-+	return tz->ops->get_trip_type(tz, trip_id, &trip->type);
-+}
-+EXPORT_SYMBOL_GPL(__thermal_zone_get_trip);
-+
-+int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
-+			  struct thermal_trip *trip)
-+{
-+	int ret;
-+
-+	mutex_lock(&tz->lock);
-+	ret = __thermal_zone_get_trip(tz, trip_id, trip);
-+	mutex_unlock(&tz->lock);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
-+
-+int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-+			  const struct thermal_trip *trip)
-+{
-+	struct thermal_trip t;
-+	int ret;
-+
-+	if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
-+		return -EINVAL;
-+
-+	ret = __thermal_zone_get_trip(tz, trip_id, &t);
-+	if (ret)
-+		return ret;
-+
-+	if (t.type != trip->type)
-+		return -EINVAL;
-+
-+	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
-+		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
-+		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
-+		tz->trips[trip_id] = *trip;
-+
-+	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
-+				      trip->temperature, trip->hysteresis);
-+
-+	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-+	
-+	return 0;
-+}
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
