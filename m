@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1476773F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265636773F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjAWCLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 21:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S230083AbjAWCNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 21:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWCLH (ORCPT
+        with ESMTP id S229817AbjAWCNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 21:11:07 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A12125A2;
-        Sun, 22 Jan 2023 18:11:03 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id v23so10089358plo.1;
-        Sun, 22 Jan 2023 18:11:03 -0800 (PST)
+        Sun, 22 Jan 2023 21:13:07 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1875125A3;
+        Sun, 22 Jan 2023 18:13:06 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k18so10069172pll.5;
+        Sun, 22 Jan 2023 18:13:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hgCwbfHUqzSMimmUl+HmnmrlXdLUzZkCtP90K9LBmDA=;
-        b=PfcyXdaH9tjRLkzHJNi/eAO06HNhh0jUvKHfHWHKMllH3R9XtQURjdPzmby86O01PS
-         fausoC/5p+pJj+lQqmeZdofPx0EghCLr2Nq3LdZLTj8mpAtzHLCrv4ytA79XlJyszNx1
-         bt7hoJTS1eA4ptKtpzGLNckn9awtWFWfT0fgMMlgASRCO/IBekoWUq+T78bx+l5SIALG
-         iItL82C3ZDdgUG5WSfNcu3h0EOW3Iqa2lnYe4CDHsVL5IRQD5wCeb2epQZAkRGm5jEsK
-         3wAfEajQSYlQgGlhWpx10rqH2NeqhmhYJHyooIzfQEuzHs/grxcLT3tfy7ib5Y/rWH1n
-         7aew==
+        bh=zVZ4BsIi3M57UVZxYYQMFwl1v2Bh74U8ai5p/1Pxiqw=;
+        b=b6kiQIOxO5D+IODOPJuq7xyIPKZ/gPwDHsJp0TpRQcKBvKakfqcWnxvrbaW/yDjV1D
+         AXOHSMXIt+GtsnqHRrrxQiHT/YIDYbDgRyG/GaYDYdWVh0XY0NaiEXa8YEP9vnX/53Jy
+         nlBhnIYC/Z8xZc/5Z2G0gBrQG3fAJzdXuDd968HXFlwRJnGc5bpKizsSIVTNg/mCOqfN
+         EYvHZ//gzi0QtkXt3WM9KBlOgOLTi1hGnYzZ8qWJrHqr8vpHyjquwmK5I6tnvhBhe7jM
+         xNDqCLtDpx6BsOd/YLMC5Alc1ucqhVAS78mW6EkHjhtx5dq25fA+3b3usJBI9BBPY0T8
+         sNEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hgCwbfHUqzSMimmUl+HmnmrlXdLUzZkCtP90K9LBmDA=;
-        b=Jc2+kxvxI1hcAI+U7eFBSA4dFvyNadja/xMEsC5Jw8iuzA+2o2m1ACPtiortvvFoD9
-         m1LzVOp4xJOQBIyPkRrBg6zXNWagerVCO2jsm4JbEzmyrUNG0wQ7QrKAPcKpRTdJyGuU
-         NckbkDMHurLg8PjCTU3XkTmjR1AIXMRw72GxeqQiJLwFzxmvWircOlXBGzLAUmHris7Q
-         n3Rhj0KNKLVwzYdWvSLmu/8EciYa+FrY4Rm3zYc8mqp780eEe5vSD8sCZfkjhiKjYeuV
-         7cBP2WG3qvg/LZ1rqXYmrY+0+Xz9yAOp76yjgxWnxUdR6r6yQbnbkSuG8Zg+6iP4yAiR
-         uMpQ==
-X-Gm-Message-State: AFqh2kqU/7GpAPVIshtjjrA8W7C1Lw+Om2EWCiAhEXB34VA5SZIc+uYr
-        0LmRG17Y2cuXG3ISYMMCmYo=
-X-Google-Smtp-Source: AMrXdXvzKpxRzl6KdiTqxN1ZHV0dLGbklJ27cUWHuu38ZmnNYcvS/h5O4VPOh9o1IlCxMOr+RhT/pA==
-X-Received: by 2002:a17:90b:18a:b0:228:c8a1:3510 with SMTP id t10-20020a17090b018a00b00228c8a13510mr22968510pjs.5.1674439863008;
-        Sun, 22 Jan 2023 18:11:03 -0800 (PST)
+        bh=zVZ4BsIi3M57UVZxYYQMFwl1v2Bh74U8ai5p/1Pxiqw=;
+        b=sYiM29BH5sLSxu1QLb2ps0Hfg5J8o7LiDWozodEEP+BKxWbxI6dMpXT4B6Sw19PxDr
+         GnxGrO1sWK+Mknj9wRLXCDbhLeaQntN+3O1OFSfsfsKF5wyjr4vh/UReg+Utyl/zX4om
+         4fPRprHkYznpITNWOw5deopBuaNHiv0HE9fmOoyzdY+4kJVi7wIlffVFvPIqqHOz12Ha
+         Is/+6oqLhLmsLXFu7dQei5UjyyXxFOQdrqTk13V4Bx0TKbe3JLUSeJo1zVqUjAJdatzw
+         jQHNj+oSuqT/Q/SPSQM+80P629/JrcLx/yB73fNH1kkF5ySWLpbHvcmoPCsT1tTPIACN
+         YUOQ==
+X-Gm-Message-State: AFqh2krH5P9Ort/Sf4Mey4UTh2ACuvJexKVBogs+1RAhweTTFGh0RCN/
+        ccQhD7+AE66rIbqAPYJ9vrU=
+X-Google-Smtp-Source: AMrXdXscUgBpZLNwhB8xZE1/oI0IHG/yb2J/eVIw3JOc4OkJgkrK7/bKZ92Fa3BW+BlRuwU2IWUaAw==
+X-Received: by 2002:a17:902:c755:b0:194:cf89:cd15 with SMTP id q21-20020a170902c75500b00194cf89cd15mr12366103plq.15.1674439985998;
+        Sun, 22 Jan 2023 18:13:05 -0800 (PST)
 Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
-        by smtp.gmail.com with ESMTPSA id lj10-20020a17090b344a00b002272616d3e1sm5497508pjb.40.2023.01.22.18.11.02
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b001930b7e2c04sm27822554pli.287.2023.01.22.18.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 18:11:02 -0800 (PST)
+        Sun, 22 Jan 2023 18:13:05 -0800 (PST)
 Received: by debian.me (Postfix, from userid 1000)
-        id DB3551055BA; Mon, 23 Jan 2023 09:10:58 +0700 (WIB)
-Date:   Mon, 23 Jan 2023 09:10:58 +0700
+        id DC38D101C11; Mon, 23 Jan 2023 09:13:02 +0700 (WIB)
+Date:   Mon, 23 Jan 2023 09:13:02 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Diederik de Haas <didi.debian@cknow.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
+        "open list:Real-time Linux Analysis (RTLA) tools" 
+        <linux-trace-devel@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] docs: ext4: Fix full name of the GPL
-Message-ID: <Y83sssQr5DMg2KMc@debian.me>
-References: <20230122180552.53445-1-didi.debian@cknow.org>
+Subject: Re: [PATCH] docs: rtla: Fix full name of the GPL
+Message-ID: <Y83tLoHnM496akUH@debian.me>
+References: <20230122181053.53725-1-didi.debian@cknow.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zNGtea+rj3WwB3Tt"
+        protocol="application/pgp-signature"; boundary="Txk6XMGNDFHr4ncX"
 Content-Disposition: inline
-In-Reply-To: <20230122180552.53445-1-didi.debian@cknow.org>
+In-Reply-To: <20230122181053.53725-1-didi.debian@cknow.org>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
@@ -79,62 +80,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---zNGtea+rj3WwB3Tt
+--Txk6XMGNDFHr4ncX
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jan 22, 2023 at 07:05:51PM +0100, Diederik de Haas wrote:
+On Sun, Jan 22, 2023 at 07:10:53PM +0100, Diederik de Haas wrote:
 > Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
 
 No patch description, really?
 
 > ---
->  Documentation/filesystems/ext4/about.rst | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/tools/rtla/common_appendix.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/Documentation/filesystems/ext4/about.rst b/Documentation/fil=
-esystems/ext4/about.rst
-> index cc76b577d2f4..c150519bbf3f 100644
-> --- a/Documentation/filesystems/ext4/about.rst
-> +++ b/Documentation/filesystems/ext4/about.rst
-> @@ -17,7 +17,8 @@ created demonstration filesystems.
-> =20
->  License
->  -------
-> -This book is licensed under the terms of the GNU Public License, v2.
-> +This book is licensed under the terms of the GNU General Public License,
-> +v2.
+> diff --git a/Documentation/tools/rtla/common_appendix.rst b/Documentation=
+/tools/rtla/common_appendix.rst
+> index b5cf2dc223df..c631341e914e 100644
+> --- a/Documentation/tools/rtla/common_appendix.rst
+> +++ b/Documentation/tools/rtla/common_appendix.rst
+> @@ -10,4 +10,4 @@ LICENSE
+>  COPYING
+>  =3D=3D=3D=3D=3D=3D=3D
+>  Copyright \(C) 2021 Red Hat, Inc. Free use of this software is granted u=
+nder
+> -the terms of the GNU Public License (GPL).
+> +the terms of the GNU General Public License (GPL).
 
-The doc has already SPDX identifier above. Please remmove the sentence above
-instead.
-=20
-In recent days, I have seen the sudden influx of s/GNU Public License/GNU
-General Public License/g patches from you, for which many developers ask yo=
-u to
-replace with SPDX identifier instead (see [1], [2], and [3]). Please do
-a tree-wide SPDX patch.
+Missing SPDX identifier. Please add it instead of trivial sed above.
 
-Thanks.
+Thanks.=20
 
-[1]: https://lore.kernel.org/lkml/ad99d227-ce82-319b-6323-b70ac009d0e7@roec=
-k-us.net/=09
-[2]: https://lore.kernel.org/lkml/6d9053c6-b56e-51f4-db47-79264f1f5672@wana=
-doo.fr/
-[3]: https://lore.kernel.org/lkml/20230122111707.68ddead6@hermes.local/
- =20
 --=20
 An old man doll... just what I always wanted! - Clara
 
---zNGtea+rj3WwB3Tt
+--Txk6XMGNDFHr4ncX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY83sqgAKCRD2uYlJVVFO
-oxLVAQCDkmlPnvmX1rmIBFt/kjjIMljAjJVOHUvSZqg1yxnk9gD/fDOypd3ecfEi
-VdlKAtmtiwyYQnLNF1HWRWlG2JtqPAY=
-=OAcv
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY83tLgAKCRD2uYlJVVFO
+o/85AP9UbBUdsoLh08WIbyeRWqYJhehD7WaS6F0vFTE/hBaJkQD+LaBlc13Nqn0n
+u0KUTmY00RZGt92XwIKShu7WUKyzJAI=
+=+QfP
 -----END PGP SIGNATURE-----
 
---zNGtea+rj3WwB3Tt--
+--Txk6XMGNDFHr4ncX--
