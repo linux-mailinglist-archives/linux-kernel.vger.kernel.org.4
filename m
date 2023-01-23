@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2065F677A6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8268F677A6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjAWMB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S231514AbjAWMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbjAWMBZ (ORCPT
+        with ESMTP id S229579AbjAWMBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:01:25 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEEF1167F;
-        Mon, 23 Jan 2023 04:00:40 -0800 (PST)
-Received: from lenovo-t14s.redhat.com ([82.142.8.70]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M8QNs-1pOJD73y9A-004VEn; Mon, 23 Jan 2023 13:00:26 +0100
-From:   Laurent Vivier <lvivier@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Gautam Dawar <gautam.dawar@xilinx.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        Eli Cohen <elic@nvidia.com>, Cindy Lu <lulu@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Parav Pandit <parav@nvidia.com>
-Subject: [PATCH v2 1/1] virtio_net: notify MAC address change on device initialization
-Date:   Mon, 23 Jan 2023 13:00:22 +0100
-Message-Id: <20230123120022.2364889-2-lvivier@redhat.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230123120022.2364889-1-lvivier@redhat.com>
-References: <20230123120022.2364889-1-lvivier@redhat.com>
+        Mon, 23 Jan 2023 07:01:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F01E166C3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674475253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Okwn/a4YJNsJ0yzPfIHYIoNOHrMsUYtIsHnnkAfJ8M=;
+        b=HltLphbJObN306c8f6fpvBVKH+6qAWSV/38vw6VJrh/l3HuIatwid1XN+ONj8Zm/XYf2e0
+        kSge43fUdbqfexOXk/aoq8877Gq1FItZDLUZ4Snx9hwhBMzrsDOG6h6NZ59FWnO3JQuif0
+        n5ZOVqxZEaPFJu+lCIukwtGcgusTqSc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-UdwdbkYsMe6BQydYc7CUVA-1; Mon, 23 Jan 2023 07:00:49 -0500
+X-MC-Unique: UdwdbkYsMe6BQydYc7CUVA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E6BB802BEE;
+        Mon, 23 Jan 2023 12:00:48 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D0C3C492B02;
+        Mon, 23 Jan 2023 12:00:46 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <3814749.1674474663@warthog.procyon.org.uk>
+References: <3814749.1674474663@warthog.procyon.org.uk> <246ba813-698b-8696-7f4d-400034a3380b@redhat.com> <20230120175556.3556978-1-dhowells@redhat.com> <20230120175556.3556978-3-dhowells@redhat.com>
+Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
+Subject: Re: [PATCH v7 2/8] iov_iter: Add a function to extract a page list from an iterator
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:U0OU6mhChXwxhUWbxTYRcj2Ph4Oul09dobjDl8aQ0FSqEgeTUXd
- jdosvrGb4AtJQz0Df17BbboemEU7njqjKZhWLwC+AKhJ+Fs88CSjBVU7WomS3OXXc4zLCaI
- nmCXrP/uY6BLKx2zrFGAG32xUfOoIJmbWzhQQ1uqMey/0SHyWlWdPe+TxbBil97AylNbX23
- 14GYG08545QkHihjYhKQg==
-UI-OutboundReport: notjunk:1;M01:P0:qEBdQkGMqCk=;GMabZS3iibKazuhA5ggR/ksGTDv
- lDJPpsnMhCK26MmckF6wd0wv4Wh6CCI2msPvKYVXOOWeG+i2fCQl11Gpiy9PYf6o19EsqvmSz
- fp09Eu2Z0NhlCMyA+9z/jgl8DY9MHi/FdQSSbjj6bOiUe+YeaNvLNVNMyOYFRqMcp14SoklZD
- YdIF1qCJBbD0cyguM6FM9N5tORMLZWqZ8xhEOHpAhcyoiANFONWHzJWy3SgfqwilWwEFNY3/C
- hYMUMxxY7sDBbheynrUF5YJ3CqwsBG9wnyOceg1vnn8TeBpW9/5RH7eajpth3Yq9MaHaPq1po
- xQaIDEhOXvQuC82zL7M4oNH3OaibP1sIr1sOUqn3fqkSX6WGs+8Lh6pDN48E2mA8fyettEMRO
- 7iWlcAwbBl68EaKSanOaSp9V4XhClGheziTw0+qHZlbEU0kR77fw13/ldAe4Ray6qua/MmSKy
- B42VUCnvywjSOJTXLkD3QxH7yOHvHsFAr1t28D5rd0+uMskwLT4+4LfAKCvaZDLXrga9PqhSl
- f1TVFYarEwJa5NVyUDbyl9DnQztSXfRSp+3kwivp2JosjxHIY9kfW7jMOz0OgX6hzHqotK+xY
- l8nwWIS9qymjaP/fV1O4rzxEwgzLnrLQeJDEL59rUk3ZZxgtLIUfpgNgerwh5w0phZC32h9hM
- m2UITY6L2AW4PwZex9hfT/giI82eTxQoOnooxK1rew==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3815848.1674475246.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 23 Jan 2023 12:00:46 +0000
+Message-ID: <3815849.1674475246@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In virtnet_probe(), if the device doesn't provide a MAC address the
-driver assigns a random one.
-As we modify the MAC address we need to notify the device to allow it
-to update all the related information.
+David Howells <dhowells@redhat.com> wrote:
 
-The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
-assign a MAC address by default. The virtio_net device uses a random
-MAC address (we can see it with "ip link"), but we can't ping a net
-namespace from another one using the virtio-vdpa device because the
-new MAC address has not been provided to the hardware.
+> > How does this work align with the goal of no longer using FOLL_GET for
+> > O_DIRECT? We should get rid of any FOLL_GET usage for accessing page c=
+ontent.
+> =
 
-Signed-off-by: Laurent Vivier <lvivier@redhat.com>
----
- drivers/net/virtio_net.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> Would that run the risk of changes being made by the child being visible=
+ to
+> the a DIO write if the parent changes the buffer first?
+> =
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 7723b2a49d8e..4bdc8286678b 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3800,6 +3800,8 @@ static int virtnet_probe(struct virtio_device *vdev)
- 		eth_hw_addr_set(dev, addr);
- 	} else {
- 		eth_hw_addr_random(dev);
-+		dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
-+			 dev->dev_addr);
- 	}
- 
- 	/* Set up our device-specific information */
-@@ -3956,6 +3958,18 @@ static int virtnet_probe(struct virtio_device *vdev)
- 	pr_debug("virtnet: registered device %s with %d RX and TX vq's\n",
- 		 dev->name, max_queue_pairs);
- 
-+	/* a random MAC address has been assigned, notify the device */
-+	if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
-+	    virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_MAC_ADDR)) {
-+		struct scatterlist sg;
-+
-+		sg_init_one(&sg, dev->dev_addr, dev->addr_len);
-+		if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MAC,
-+					  VIRTIO_NET_CTRL_MAC_ADDR_SET, &sg)) {
-+			dev_warn(&vdev->dev, "Failed to update MAC address.\n");
-+		}
-+	}
-+
- 	return 0;
- 
- free_unregister_netdev:
--- 
-2.39.0
+> =
+
+> 	PARENT			CHILD
+> 	=3D=3D=3D=3D=3D=3D			=3D=3D=3D=3D=3D
+> 	start-DIO-write
+> 	fork() =3D pid		fork() =3D 0
+> 	alter-buffer
+> 	CoW happens
+> 	page copied		original page retained
+> 				alter-buffer
+> 		<DMA-happens>
+
+Ah, I think I might have got the wrong end of the stick.  A pinned page is
+*always* copied on fork() if I understand copy_present_pte() correctly.
+
+David
 
