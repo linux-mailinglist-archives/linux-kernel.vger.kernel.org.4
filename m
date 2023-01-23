@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1F867863E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6B767863C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjAWTZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S232382AbjAWTZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:25:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbjAWTZp (ORCPT
+        with ESMTP id S232242AbjAWTZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:25:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262A6559F;
-        Mon, 23 Jan 2023 11:25:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A47866101C;
-        Mon, 23 Jan 2023 19:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049FCC433EF;
-        Mon, 23 Jan 2023 19:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674501941;
-        bh=CQO8sAt05z7HNpCiygP6X5/bkrbsFXfz4htbMDsLKr4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JCpubCMxBXCgZgZrqd16Lo5/KeyXxxf4JEYejAE0MrSkmNjjGw3onmRw3d5tfh44Y
-         nEZntg9SqGEdUmNztK3xrw4ibZhZRK0HBzOBo4tfiKSvSc3hKzlVJMdusZUGc4EKiA
-         gbH1Nj6H3eLOzweNFcYYMzwcrlPMz/PEXi4Y3YeZk5VSvEoAxc+qcpATjapDl07cb4
-         affT7597qVXEgwvPNtmNJPi2LOYLx0u0jc4/vj0HuGDMDRz5iRbsG9/Bh4AJ2tIlHr
-         r9Y5cSfpq+v5PkfESaZAH4NUTGp/ASSgn0hmpuTDp8V+57shikW5TNhV4q+SJdIDKw
-         IxgVKztKk1Ojw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8A4DC5C043A; Mon, 23 Jan 2023 11:25:40 -0800 (PST)
-Date:   Mon, 23 Jan 2023 11:25:40 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] selftests/nolibc: small simplification of test
- development phase
-Message-ID: <20230123192540.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230121085320.11712-1-w@1wt.eu>
- <20230121200038.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230121213455.GA16121@1wt.eu>
- <Y868lIin0bLM9HfM@biznet-home.integral.gnuweeb.org>
- <20230123172016.GB13172@1wt.eu>
- <Y87EVVt431Wx2zXk@biznet-home.integral.gnuweeb.org>
- <20230123174003.GU2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230123191250.GD13172@1wt.eu>
+        Mon, 23 Jan 2023 14:25:36 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C262684;
+        Mon, 23 Jan 2023 11:25:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674501935; x=1706037935;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Jn06hBZFhvvnzBpPCBigXwHR/0Hpu5dt4n5dAWV7Zy0=;
+  b=a1Y7dBrBHuS4N04nXn2PxVacSAGJ7iW8sNNKiZ5k8uz6pQfwL8E+8Kgw
+   wawuyezqwJScuy1W/eWvx84eLViVs7QRoZ06r/JwhwVrw8+OijKIUp3y2
+   0E4bkszG0vQ5EQGyM8LYADTXSx6pitvK7loglBkYMpwSmnagfpINhpHH1
+   IVVnKArCtC22Rkw3ikGlW6AXihakF8th5kFfYqudLyORMiK0fw24ChOkB
+   U23XU36l2bRmuVi3jXoLdve0/paTq5XrGNlXcJYEr4cJau9C6Vrz5SmaQ
+   9009s9USuzaiaqSlZrecgMw1UckiuD0JEG63QQqAAOmxJhJQNH0/TEfgX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328215111"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="328215111"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:25:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750549548"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="750549548"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jan 2023 11:25:32 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9BD17119; Mon, 23 Jan 2023 21:26:07 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] serial: liteuart: Remove a copy of UART id in private structure
+Date:   Mon, 23 Jan 2023 21:26:04 +0200
+Message-Id: <20230123192604.81452-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123191250.GD13172@1wt.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 08:12:50PM +0100, Willy Tarreau wrote:
-> On Mon, Jan 23, 2023 at 09:40:03AM -0800, Paul E. McKenney wrote:
-> > Except that when I install Ubuntu 20.04's version, I get this:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > $ sudo make run-user
-> >   MKDIR   sysroot/x86/include
-> > make[1]: Entering directory '/home/git/linux-rcu/tools/include/nolibc'
-> > make[2]: Entering directory '/home/git/linux-rcu'
-> > make[2]: Leaving directory '/home/git/linux-rcu'
-> > make[2]: Entering directory '/home/git/linux-rcu'
-> >   INSTALL /home/git/linux-rcu/tools/testing/selftests/nolibc/sysroot/sysroot/include
-> > make[2]: Leaving directory '/home/git/linux-rcu'
-> > make[1]: Leaving directory '/home/git/linux-rcu/tools/include/nolibc'
-> >   CC      nolibc-test
-> > 32 gettimeofday_null = -1 EFAULT        [FAIL]
-> > See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > I have attached run.out.
-> > 
-> > In contrast, with my hand-built qemu-x86_64, all tests passed.
-> > 
-> > This might be just a version-related bug, but figured I should let you
-> > guys know.
-> 
-> Interesting. Maybe something differs in the way it passes expectedly
-> invalid pointers to some syscalls. Keep in mind that it's using your
-> local kernel also, that could make a difference. I'm not that much keen
-> on trying to investigate that one to be honest, given that this user
-> mode is really meant to ease the life of test developers like Ammar
-> and myself who just want to focus on the correctness of the test they're
-> adding and not that much on the validity of the test itself in this
-> context. I suggest we keep this one in mind without putting too much
-> effort on it for now.
+The struct liteuart_port keeps tracking of UART ID which is also
+saved in the struct uart_port as line member. Drop the former one
+and use the latter everywhere.
 
-Indeed, it is easy for me to remove qemu-user and re-install my
-hand-built version.  In fact, I just now did this and verified that
-everything now passes.  ;-)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
 
-							Thanx, Paul
+Depends on
+https://lore.kernel.org/linux-serial/20230123191741.79751-1-andriy.shevchenko@linux.intel.com/
+
+ drivers/tty/serial/liteuart.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+index 562892395570..80de3a42b67b 100644
+--- a/drivers/tty/serial/liteuart.c
++++ b/drivers/tty/serial/liteuart.c
+@@ -46,7 +46,6 @@
+ struct liteuart_port {
+ 	struct uart_port port;
+ 	struct timer_list timer;
+-	u32 id;
+ 	u8 irq_reg;
+ };
+ 
+@@ -314,7 +313,6 @@ static int liteuart_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	uart->id = dev_id;
+ 	/* values not from device tree */
+ 	port->dev = &pdev->dev;
+ 	port->iotype = UPIO_MEM;
+@@ -334,7 +332,7 @@ static int liteuart_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_erase_id:
+-	xa_erase(&liteuart_array, uart->id);
++	xa_erase(&liteuart_array, dev_id);
+ 
+ 	return ret;
+ }
+@@ -342,10 +340,10 @@ static int liteuart_probe(struct platform_device *pdev)
+ static int liteuart_remove(struct platform_device *pdev)
+ {
+ 	struct uart_port *port = platform_get_drvdata(pdev);
+-	struct liteuart_port *uart = to_liteuart_port(port);
++	unsigned int line = port->line;
+ 
+ 	uart_remove_one_port(&liteuart_driver, port);
+-	xa_erase(&liteuart_array, uart->id);
++	xa_erase(&liteuart_array, line);
+ 
+ 	return 0;
+ }
+-- 
+2.39.0
+
