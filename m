@@ -2,177 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9490D677797
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAFF67779C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjAWJnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S231654AbjAWJqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjAWJnM (ORCPT
+        with ESMTP id S231493AbjAWJqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:43:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E201A1F935;
-        Mon, 23 Jan 2023 01:43:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37813B80CA6;
-        Mon, 23 Jan 2023 09:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD88C433D2;
-        Mon, 23 Jan 2023 09:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674466987;
-        bh=zqDlD4UopnwoyaNHYVa7uoZaLDHyVvELIS4k830a3tE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cQck51QSo8S3o8L0jiTiWU/KpeSoiVyZcK+f7dn56i9J8+qhqem70UnLO8vXJSPPS
-         MOdxE5M0Wd/Ptvrkhv7VfpzcMxs9Lm6UJ7bGVyI1jII0C9XM2eTgZ9Qs6IoJ0khLcn
-         c2/+3OctjRN9iQWnGfLZyQuUgoNMXcfLZOr5m5ts86o8deD5axtsAD8mqCgrqWXdD7
-         xQCVXHedeCqIqYv089jZIu6gFkfITQ7YI0v/h6OczP74sRn2v+YaU1UnBhlHncT7M0
-         N6BKpWRzW/5y3pcD4QfnmVSuR/jFHHmtZEKF2zZvIbHBxppNrd+R8HLPByyzH/8BMY
-         3qrAU6OFlJF+Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pJtM0-0000GF-SP; Mon, 23 Jan 2023 10:43:04 +0100
-Date:   Mon, 23 Jan 2023 10:43:04 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] phy: qcom-qmp-combo: Add config for SM6350
-Message-ID: <Y85WqDrGXAXp7gS/@hovoldconsulting.com>
-References: <20221130081430.67831-1-luca.weiss@fairphone.com>
- <20221130081430.67831-2-luca.weiss@fairphone.com>
- <Y6xP4YRAp68TfxFi@hovoldconsulting.com>
- <Y8BIX+js1ircJyb9@matsya>
- <cf968a25-02f7-d402-530b-eb379b707e54@linaro.org>
- <CPR2LS3SJQ3I.Z7UY505COG3@otso>
- <CAA8EJpoOMMALHz7ysft6KvQaYhGWPD+xZiUjOTrC8CA_y81n-w@mail.gmail.com>
- <CPX2VVT5EUDV.2LH6VI2586F02@otso>
+        Mon, 23 Jan 2023 04:46:18 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2110.outbound.protection.outlook.com [40.107.215.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520C51B547
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:46:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=icAkN1A2iehOyCBi2478pQ+nhI/AurcC8POZ7Le4KdH6xWeIiS3bqbN3I9II8k8uoGsABOQ5mIDFN3nRZmgMnJ2TQfVHEwIRZLceyuid02AthJrhTZXbtC/XpXksEReJuBqjkgbK6LpoRLuiVdn47E5xHbt0XsYbcikzAz1FBY7sVJPa3y67wsjNeeVC1qU+XGaGiAolYvbRx8PfwHlbYACyqle7sewjWhT2GzXdQJlO6hPFr6a8WueFCAtaVs4iuv18NlTCsIZGh/4vHF7OSyaP6nWYHMg7RZi3HfADZ3yo5l0EqIJIe3Ho6VMg2jcoDBA7KToX9OpiMKAVnqluFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EeTah9Sh4ca1NmIFs74cPy3SvfbejDbxJ/JZJfTsga4=;
+ b=dVXRSyoTlImG3ZkuTiQUdKPJ8S0oBbFqc3QK/sFpHJsKNubIEFvuUc2AyYCJpH3tV5596kARGwzbUtSInm2pZJtaoJBAVeyxMH0RTQ0nAGXKQCXpepLqB65DZngX5SlIinzjTXDqHHI3478pDBTLEOJizyFMoudzxAe5ZPg2xu4kY1IB7nz+WidgDDB6mVRpQjV5/URvxZOlKM0aaxXjjaI876qcGF8pnxh351rWb6LOBozPWY14obsMZcigpUfxn9BUAHNsFZta3lM74bI6V9NEFOfyJXrznuqWHrW4w6Ng81jUNHsrPrY8KEYCEQdOu95sXsTyVeHmSG1POdKaGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EeTah9Sh4ca1NmIFs74cPy3SvfbejDbxJ/JZJfTsga4=;
+ b=RWbGQ1l95ykdyR8V4woWA/binlDqcjU00dbBgck+ap+jeRNog8VkbRq6eaItAUlDV/ewZNqP9+QvtV3Fqj/5a8v/tH+ItGQ1sebKVnCy346tPiHBc9jnnX+ccobS153ztwhclR4xq7YsHDqgkXlwtcTRgFhMmCBvC0GOXYBVmUtEYjLIdAVr9vpVr8y7fOEHgFhuCji6wJUVLwKAR0LGNswQgRk7X7M9FseB7fspEFdL5+Bvmyz+VjEHdBza/0gRtRbRXUvEvL8LME4wxMCOgfm64kVB9VfG3G8Gt/HJlq59qgCgiaXBxGV3CznX5In7PcQXUgv/7binY8sBSltulA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB6113.apcprd06.prod.outlook.com (2603:1096:400:335::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.14; Mon, 23 Jan
+ 2023 09:46:13 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%4]) with mapi id 15.20.6043.016; Mon, 23 Jan 2023
+ 09:46:12 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: allow set compression option of files without blocks
+Date:   Mon, 23 Jan 2023 17:46:01 +0800
+Message-Id: <20230123094601.32940-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0003.apcprd02.prod.outlook.com
+ (2603:1096:4:194::13) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CPX2VVT5EUDV.2LH6VI2586F02@otso>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB6113:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd66e5a6-2872-4427-682d-08dafd26a96e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rX3mVstUKBsCw3FnUd3EbpPGDbcUk70XR9ZgKSTkY6AW/mdhVfzQ4DihpTA7Zh+3vTMsBAtg1Y3qUgvbCuUwZbC0Qmo0RCdQeu4hyYUiTjm87c1h5DkWgL731aFx1qifBtTl3w7QZAlu1iEPkAyf9U+FPHq8amgyDCTci1cv+gHMLEuNeQelHvYM3AvePeBGXKtrE9NexbwO4/GCmf8EBDgwQiUFWa3FTAIU0IFxZWGkJPwV1NeQQ2bDfggUrWDIWRFt4AFWUlfrf8Zv9frHaAT4fJ34aS85sixRdxelSL4tqpxJwp6nr+MJ36JGNCIgeEaRh23UDO/nRQ9fYej2J+/i44YGJetfvQkQyFt1DTN4iU4emPigcjcWdGW3NwpH5U02YXZDzhWdilqSahSo2oJbTASSkpuKWV6dlDglcs3k892n0t4ei8m6TLpsx0BAR9CJ4XllPOLg0amJmHCV4+xsFxefUuEem3nFiNT3fXEBO4gyBay49zbOa7yXmjKZZNw5zIhrM1gUBeXjDKq/ya9CNgjt07xHl6/SqW1MbPw/VoQwVFR+0MuuLJNsxa7VwWLpOLSFR2RtCIOF0EHXvnhbOFJ7GwW+hJ874uDKAa2EGLHfNyOj4YjIetVJwWjb74OhrkZYdxjeOmyarCIs/AwqjhVU5Dt9wWWU4jfAJfBkWQvWtF1CrNAe/k/kjuVV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(39850400004)(136003)(376002)(451199015)(36756003)(2906002)(5660300002)(38100700002)(38350700002)(8936002)(4326008)(4744005)(41300700001)(83380400001)(86362001)(478600001)(6486002)(52116002)(66476007)(8676002)(6512007)(26005)(186003)(6506007)(316002)(2616005)(66946007)(107886003)(1076003)(6666004)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a+Df6vxTxX5QEb7EV6RzGb1K1F12rPvPZ29N9FGOZkfFmkLjN4yfvFMfTbgD?=
+ =?us-ascii?Q?wBEJlzwfgYDzG/ZjBLbouLsQLisnlFqao1hpA4HWDpLLe6boH31ub8As/1s8?=
+ =?us-ascii?Q?QDbf50w1rKdNtdYQ/XgMZFV0XsiH0yTyYZIng8Wz6MpDg596qtk+ql+PUQOs?=
+ =?us-ascii?Q?ccoBC6rFQ278Uwl6aaAA9COjK4XXKs2oAanp/6i73x4yHcOPxzunWKxcTUfO?=
+ =?us-ascii?Q?2Ii0gf8tLEX2ArasDZDOx4LgPpM0+e76/InUDHwihGrBqe/2cZxYAO8QOz4A?=
+ =?us-ascii?Q?E8mgAcJCyT4n/dFf2GOEqL8jDJXmBLZlB5MvevctwxXL89M8GNskXj2V8xRO?=
+ =?us-ascii?Q?pwsGkBcZMuJIotF4M94wFn8Agv17VFzfb3cdIEYJnc4yfkS3Za/mgDynBnRg?=
+ =?us-ascii?Q?+FA/m4c5XqDYL7i3Dm1hI/0NfxJqB0Qa1Ahe8sBLx7gny3pc5QZSk6vkmefk?=
+ =?us-ascii?Q?0tzFrA/tDYkF6NNZOq+bP7YzCiKSuwbep36NuyrMyw3TiRKx6+8+SFgywV18?=
+ =?us-ascii?Q?XBLFuAvXLh/82J/rkJpz7cH8iC0nlkLAL9gi8LnTx6K1wsJ1oc/Fsx7S6keQ?=
+ =?us-ascii?Q?Ia8fgM6QnANJbkXUQLTx496RME/YbC9/qgJub3fMqDKnZJJPLrXf/jpPmAaz?=
+ =?us-ascii?Q?T2uHGcn54gaBNY0tNy5OlN2RFClQ79GfxWpr5Ks6IplKxRpQt4geqIlYXHbN?=
+ =?us-ascii?Q?1lpe9Ib4NyejlkQwTDClIV5CnOdSgESx7HwbRorvKIfag+FFk/24IXt7oSVs?=
+ =?us-ascii?Q?+eNySmxoNUt5+h90GDGcnO3pqO1ypslZymV+3JnaaWDkTyYIyhzIP3KIN5Zo?=
+ =?us-ascii?Q?wQr5UNwB44pxpVbYYCnLbOnKwc20L/VpcYSnClPPWeBfTV6vzHqyc383UqDB?=
+ =?us-ascii?Q?K5kGdwxUqB4ET14wnCelhlB+t/v1A+fft13bAvZmLW8P6XtFSNsw+8nhPRb2?=
+ =?us-ascii?Q?6EtfOJRadriLu4UfzLcOhPZm1BPEdpqiquaTdlOQhBdg2s4+913zZ6DcZ67h?=
+ =?us-ascii?Q?duL6CQR8LvmXUwZ9LfTTnnwb96UY3zbvNvMQ7yc0cPcBgLnlRPuvZLzHyhn0?=
+ =?us-ascii?Q?pMNrOldnoFj+d3G8Avr4o7qgx8mubv3JgtPwj6h+vRCv1m1TGY3Z+pvUu4f+?=
+ =?us-ascii?Q?I+OUvK3A8Y0OWQOgsIQx1WgH8DKK6dFgWvmyOiUN9nd+C4TNdbj0faSTgUSO?=
+ =?us-ascii?Q?D1Tj5gzdGrEswVLpVWTI2Vwt5FHR69oFlKhYavDKyoXSqPGCKhOnVE5TXo4L?=
+ =?us-ascii?Q?ZAS58wcLq3Sv8y8hJym8lArKqiGli+1NWxLbR6aaATP4h0P3pGPYMzG7wUjs?=
+ =?us-ascii?Q?HkfY++rqndmJ8G2S0yVFTVoaqSBCclWvn/m/4CUNIudscHkOvYsOjGs92hNR?=
+ =?us-ascii?Q?Jcf3BepEeZJD57uK5gq+iWt5AgUO9Ml0NzZM6saSrptdYH/oz14xGi9l/4Pz?=
+ =?us-ascii?Q?tN0JxuBUnbvsf33xfOrbMy8RhtRk9dOfsXCU5fYENoQnh/ICYMmpmWigJ+Wg?=
+ =?us-ascii?Q?x8+GAXrs33VG9quZ+z+4qhCDAB4PzzyleNn6yorW+ciLzMpU3wrKsIbf6zPJ?=
+ =?us-ascii?Q?xzRax5HtpW98PqyIV9AoXvKLEntclChBUk5TIX3e?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd66e5a6-2872-4427-682d-08dafd26a96e
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 09:46:12.2171
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3u9YkSieTPgzpjqhBTivHb9pnWbT2NoNfeyMikPv0QeeTZ6KLlFGRsh9nzRK8BveD0aak8iJPqxyJoexX+SGeg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6113
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 03:13:46PM +0100, Luca Weiss wrote:
-> On Fri Jan 13, 2023 at 2:01 PM CET, Dmitry Baryshkov wrote:
-> > On Fri, 13 Jan 2023 at 14:44, Luca Weiss <luca.weiss@fairphone.com> wrote:
-> > >
-> > > Hi Dmitry,
-> > >
-> > > On Thu Jan 12, 2023 at 8:33 PM CET, Dmitry Baryshkov wrote:
-> > > > On 12/01/2023 19:50, Vinod Koul wrote:
-> > > > > On 28-12-22, 15:17, Johan Hovold wrote:
-> > > > >> Luca, Vinod,
-> > > > >>
-> > > > >> On Wed, Nov 30, 2022 at 09:14:28AM +0100, Luca Weiss wrote:
-> > > > >>> Add the tables and config for the combo phy found on SM6350.
-> > > > >>>
-> > > > >>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > > > >>> ---
-> > > > >>> Changes since v2:
-> > > > >>> * Drop dp_txa/dp_txb changes, not required
-> > > > >>> * Fix dp_dp_phy offset
-> > > > >>>
-> > > > >>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 126 ++++++++++++++++++++++
-> > > > >>>   1 file changed, 126 insertions(+)
-> > > > >>>
-> > > > >>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > > > >>> index 77052c66cf70..6ac0c68269dc 100644
-> > > > >>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > > > >>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > > > >>
-> > > > >>> @@ -975,6 +1039,19 @@ static const char * const sc7180_usb3phy_reset_l[] = {
-> > > > >>>           "phy",
-> > > > >>>   };
-> > > > >>>
-> > > > >>> +static const struct qmp_combo_offsets qmp_combo_offsets_v3 = {
-> > > > >>> + .com            = 0x0000,
-> > > > >>> + .txa            = 0x1200,
-> > > > >>> + .rxa            = 0x1400,
-> > > > >>> + .txb            = 0x1600,
-> > > > >>> + .rxb            = 0x1800,
-> > > > >>> + .usb3_serdes    = 0x1000,
-> > > > >>> + .usb3_pcs_misc  = 0x1a00,
-> > > > >>> + .usb3_pcs       = 0x1c00,
-> > > > >>> + .dp_serdes      = 0x1000,
-> > > > >>
-> > > > >> I would have expected this to be 0x2000 as that's what the older
-> > > > >> platforms have been using for the dp serdes table so far. Without access
-> > > > >> to any documentation it's hard to tell whether everyone's just been
-> > > > >> cargo-culting all along or if there's actually something there at offset
-> > > > >> 0x2000.
-> > > >
-> > > > usb3_serdes is 0x1000, so dp_serdes equal to 0x1000 is definitely an typo.
-> > > >
-> > > > Judging from the downstream dtsi, the DP PHY starts at offset 0x2000. So
-> > > > dp_serdes is equal to 0x2000, dp_phy = 0x2a00, ln_tx1 = 0x2200, ln_tx2 =
-> > > > 0x2600.
-> > >
-> > > Can you share how you got to the 0x2000 offset? You can see my
-> > > (potentially wrong) reasoning for 0x1000 a few messages ago[0].
-> > >
-> > > The only 0x2000-something I could find now while looking at it again is
-> > > "#define USB3_DP_PHY_DP_DP_PHY_PD_CTL 0x2a18" which becomes
-> > > USB3_DP_DP_PHY_PD_CTL in the driver but this is seemingly not used at
-> > > all in my msm-4.19 tree.
-> >
-> > Quite simple: see [1]. DP_PLL is at +0x2000
-> >
-> > [1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/lagoon-sde-pll.dtsi#27
-> 
-> I still disagree from what I see.
-> 
-> E.g. this part of the dp_serdes init table in mainline:
-> 
-> static const struct qmp_phy_init_tbl qmp_v3_dp_serdes_tbl_rbr[] = {
-> 	QMP_PHY_INIT_CFG(QSERDES_V3_COM_HSCLK_SEL, 0x0c),
-> 
-> With this one:
-> #define QSERDES_V3_COM_HSCLK_SEL                     0x13c
-> 
-> To write this config qmp->dp_serdes gets used which is set at:
-> 	qmp->dp_serdes = base + offs->dp_serdes;
-> 
-> So if offs->dp_serdes is 0x2000, this write will go to 0x213c.
-> 
-> If we go back to msm-4.19 downstream the equivalent define is
-> #define USB3_DP_QSERDES_COM_HSCLK_SEL				0x113c
-> 
-> So there we are at offset 0x1000. And this define is used in
-> qcom,qmp-phy-init-seq which I already went to in detail in a previous
-> email in this thread.
+Files created by truncate have a size but no blocks, so
+they can be allowed to set compression option.
 
-From what I've heard, the PHY driver in the vendor kernel only deals
-with the USB part of the PHY, while some display driver accesses the DP
-part directly. So the fact that the Qualcomm USB PHY driver init
-sequences don't seem to use the DP regions (apart from that
-USB3_DP_PHY_DP_DP_PHY_PD_CTL register) is to be expected.
+Fixes: e1e8debec656 ("f2fs: add F2FS_IOC_SET_COMPRESS_OPTION ioctl")
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-IIRC the v3 layout was also used by the SoC for which DP support was
-first implemented. Presumably, the separate USB and DP regions do exist
-and you should include them also for SM6350 even if you can't test it
-currently.
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index b3bcb50490bd..fda04c37b48c 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3990,7 +3990,7 @@ static int f2fs_ioc_set_compress_option(struct file *filp, unsigned long arg,
+ 		goto out;
+ 	}
+ 
+-	if (inode->i_size != 0) {
++	if (F2FS_HAS_BLOCKS(inode)) {
+ 		ret = -EFBIG;
+ 		goto out;
+ 	}
+-- 
+2.25.1
 
-We'll convert the older platforms over to use the new binding scheme
-soon and then we'd need this anyway. And if it turns out later that this
-was all bogus, at least we only need to fix the driver (and not worry
-about dts backward compatibility as we had to with the old style
-bindings).
-
-Johan
