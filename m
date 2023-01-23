@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803B967771E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1588A6776FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjAWJME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S231671AbjAWJDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjAWJMD (ORCPT
+        with ESMTP id S230486AbjAWJDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:12:03 -0500
-X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 01:12:01 PST
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050:0:465::103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3521E2AE
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:12:01 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4P0kfR2wxZz9sQb;
-        Mon, 23 Jan 2023 10:03:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=espindo.la; s=MBO0001;
-        t=1674464607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B4q4UFMTfQGpIvSn7vHth/9oUEvpl/rgd9o5hNjpWU8=;
-        b=RZfGOlMtyqabGNKLLRw6HjpmMB1GotTnBYqF+D5eUOFFP0V/9T33x/NrsLoQyA6SP3v6aZ
-        EigaZM5rAAJwBqHzodp+7zGrnO1KJAR+ONqn8MB68dQuvkakk58f59/Vfw5QQYPf5g2f7n
-        D+0mXsNJT7rKrjfTZBqx2br64wYKqqzppWsCzzP1/an3/YAXDLK0zNWL7avxndA1sQ8AQm
-        +M59VlKembQoeiK5uP1nBXZfI9uLAFFkkXtg+ktCYEkn2OgtU+jBCUh8F5N0lESLWVM65o
-        IqyxKx0PIBkc0dqygYQVjEj5xo/FghbheTmVVJ862EtICbXKVd6Hf7BdgZb01Q==
-From:   Rafael =?utf-8?Q?=C3=81vila?= de =?utf-8?Q?Esp=C3=ADndola?= 
-        <rafael@espindo.la>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: amdgpu: suspend-to-idle on a 4350G desktop
-In-Reply-To: <MN0PR12MB6101F62407FB383609B2FB30E2CA9@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <87edrnu9mk.fsf@espindo.la>
- <MN0PR12MB6101F62407FB383609B2FB30E2CA9@MN0PR12MB6101.namprd12.prod.outlook.com>
-Date:   Mon, 23 Jan 2023 08:03:24 -0100
-Message-ID: <87bkmptyg3.fsf@espindo.la>
+        Mon, 23 Jan 2023 04:03:53 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719112F31;
+        Mon, 23 Jan 2023 01:03:52 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so5946996pjq.1;
+        Mon, 23 Jan 2023 01:03:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WESsZuzJV1dAx7+aN9jSf7iCBxgIoRzQOZDBKmCzdtw=;
+        b=RR3ViW5YU1+SQdjA4chAIWv7hcdqlUCrzpD9Xt9VqPnJoqMF9sECkRg45umfIKVfoA
+         ufED1owxsRzO0IXg+qGSedaqwcWHZqCwHzzrXvEOswlaox/DTwQbz3hm+tpti/DtXKkh
+         w8+WxmWFWiaNY+CT9+y/tEB0lpBrOyuJCLkF3wudp+2ZaVcf3IdVjDVAAku7QFWU6uUK
+         5wpsED6tsAtBksz5hYSAqKXrMmU2nUloDxu+CfMXdxLn2NsEJdF3tyZGqHKXrjlhJFJt
+         ipuPuI71hafA8F6a10RTUQdqKs7WcsKm9NI6YpDnRrinSr+QaOtpKxIfetv3XJ0wOeFz
+         HeJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WESsZuzJV1dAx7+aN9jSf7iCBxgIoRzQOZDBKmCzdtw=;
+        b=hYVOLoNOoyNigrPK9hO8Rfee+M9Hg5SHgyqwRKzqunJd2f2O26zrxlMPHQqdnHaT8h
+         b0MyX3EljvQjsxiHn+kfLZxGotQwg3NDfl5A5QUHjNBI1/ibJcPYO0LwPb+EPKOQmTUf
+         PLba/KPU8hK/U2mD0AhRV4j/qqy3A8mfNIuhvFCW9KGfB7vUWBKfZaOf5DRiCVibI5hK
+         5eq6oZWT67QpxjmqxMAX/EmeUJQgRC11LCBFGLSdINAdbvk8DPcdlC962z3qvD8pEiGe
+         LzlQcAnpiAGCmef4r+c3i906+Bd+DBYLIPjvj2uSiGpesP6H/Gk10SOiPLLz6lJ1bdVx
+         ppTA==
+X-Gm-Message-State: AFqh2kq7ebf4douJ8CLQh+1VnmR54rfOY78jxHXw11wptHtnidl/vPYv
+        +AibIlBYGmRqiJo8C5xJuV8=
+X-Google-Smtp-Source: AMrXdXuqFbGb1Mh2D0G/HFfZD7JQY2VbSVrp7/K5OHmhOpCnnOL6+m5uED29yN2dpwJ6c+aiZyWG6Q==
+X-Received: by 2002:a05:6a20:6913:b0:b8:8027:13bc with SMTP id q19-20020a056a20691300b000b8802713bcmr25021230pzj.8.1674464631967;
+        Mon, 23 Jan 2023 01:03:51 -0800 (PST)
+Received: from debian.me (subs32-116-206-28-53.three.co.id. [116.206.28.53])
+        by smtp.gmail.com with ESMTPSA id m7-20020a170902db0700b001947b3ec2d7sm17309364plx.307.2023.01.23.01.03.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 01:03:51 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id E61E710504D; Mon, 23 Jan 2023 16:03:47 +0700 (WIB)
+Date:   Mon, 23 Jan 2023 16:03:47 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
+Message-ID: <Y85Nc09Soi4VIj5Y@debian.me>
+References: <20230122150246.321043584@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 4P0kfR2wxZz9sQb
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zGnh1QnuMJs+SKK2"
+Content-Disposition: inline
+In-Reply-To: <20230122150246.321043584@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will do.
 
-Thanks,
-Rafael
+--zGnh1QnuMJs+SKK2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-"Limonciello, Mario" <Mario.Limonciello@amd.com> writes:
+On Sun, Jan 22, 2023 at 04:02:09PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.8 release.
+> There are 193 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-> [AMD Official Use Only - General]
->
-> Rafael,
->
-> Can you please open a bug report here
-> https://gitlab.freedesktop.org/drm/amd/-/issues
->
-> And attach the log from:
-> https://gitlab.freedesktop.org/drm/amd/-/blob/master/scripts/amd_s2idle.py
->
-> If it fails prerequisites please also include a full dmesg including a su=
-spend cycle.
->
-> Thanks,
-> ________________________________
-> From: Rafael =C3=81vila de Esp=C3=ADndola <rafael@espindo.la>
-> Sent: Saturday, January 21, 2023 10:37:23 AM
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
-> Subject: amdgpu: suspend-to-idle on a 4350G desktop
->
-> Hi,
->
-> I have a desktop that doubles as a NAS, and would like to suspend it
-> when not in use. It works, but when it comes back it is using about 7W
-> more than before going to sleep.
->
-> It looks like a6ed2035878e5ad2e43ed175d8812ac9399d6c40 is the
-> culprit. The system doesn't even support S3:
->
-> % cat /sys/power/mem_sleep
-> [s2idle]
->
-> And looks like the vendor decided that they should not define
-> ACPI_FADT_LOW_POWER_S0. The MB is a Gigabyte B550I AORUS PRO AX with
-> bios version F16e.
->
-> Which systems had crashes when ACPI_FADT_LOW_POWER_S0 was not defined?
-> Would it be possible to limit the check only to those systems or at
-> least only to systems that have S3?
->
-> I can build the amdgpu module without that check and see if the problem
-> goes away if that would help.
->
-> Thanks,
-> Rafael
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+=20
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--zGnh1QnuMJs+SKK2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY85NbwAKCRD2uYlJVVFO
+ow8AAP9JsIEYbc2FDcGb7BU9sSq7AxlqBDwy1eB0vaFt2MjpzgEAq3HCLRURsCbG
+4IJLuJ7bXZgwRGT+AZ8aWvfy+WFqOAQ=
+=yCuM
+-----END PGP SIGNATURE-----
+
+--zGnh1QnuMJs+SKK2--
