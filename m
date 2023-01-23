@@ -2,181 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D60A678C15
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFD8678C20
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjAWXiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S231836AbjAWXiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 18:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjAWXiN (ORCPT
+        with ESMTP id S232399AbjAWXik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:38:13 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE961204F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:38:12 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id 88so1597036pjo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PDHB0ODlMstmhFdpIes6JLYo5+ikO8l0oYaAPmmlt1c=;
-        b=VkzHwRGnuLzzOCe+jd2+aXAC1B0Pi316N1RkmUx4r6ANqJcx0x+5Q72Z8UUWxTdy1r
-         pG5SCyLEjYuMfqhsFLdkkFHinHiEydOUFzX+r5WNej9OPd87nM0d7yREV+Rq8DkVOrGV
-         NNXVLr+T0ZRr5iz2mMx1Z0IHdQwR/sXaSDOinZlAX/u9O36ljHgPvbEvKqpZSoiKL/Ql
-         2n5bBmNgSGwr5j9NkL7X+hI5ejHfVg7U5tPdlMMUlM5A7mUt0EJEbSqS9aevYAkYpR2i
-         P7CyNcMiBR5cvRjvE+wd+fhWDFEx7SAIHLLtgqKHLWXCd78gvhmYm3A32QaiqopBK3SZ
-         eGPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PDHB0ODlMstmhFdpIes6JLYo5+ikO8l0oYaAPmmlt1c=;
-        b=N3M19wU35YXEMrO5J69gHXBVSUUWIp4eNCjWh5AQkWifdoKvUF0xARm+0vu8r8cuuP
-         1sURjm7wRGQAy+yIz3QWzHR9YBDIbqEYCpChXCuHyCB/xORYg52AffolyW/BLkXKnXB+
-         AJqKGg/HZHmU8ti71IpmXnHv1HOfe0xaOX20i/UI++ghOmFNAKQr+4Hwa2xpLRa/Uy0Y
-         9xhyxs4U/Pdl9iWswMctiA1BLr/z8gOeww1BIwyp8Ykb/FQgP9LYImZtVmS4Cq6HsxFk
-         JPI38nFIMExk8wgv+Y6o1lfngBG+tCUzGVUnGuu6BqFXLL+kbSgsDkBF4TGxttRVGl+e
-         RTBg==
-X-Gm-Message-State: AFqh2krqsHcm/5+RBp+tjE27ar3NUq05foNqLjwN9bQGAbnyuSrXwrzA
-        EwwJG2rw8yfg2iqp6e3QXr1wng==
-X-Google-Smtp-Source: AMrXdXtrvJkyeLq8anFSJnOID4b9C3AaKf59uOM0fvrdASPfrf/mhyTzO8Q2iNKbj2o8vaNJGqEopA==
-X-Received: by 2002:a05:6a20:3ca7:b0:b8:c646:b0e2 with SMTP id b39-20020a056a203ca700b000b8c646b0e2mr1004683pzj.3.1674517091557;
-        Mon, 23 Jan 2023 15:38:11 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t6-20020a63b246000000b00499a90cce5bsm102181pgo.50.2023.01.23.15.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 15:38:10 -0800 (PST)
-Date:   Mon, 23 Jan 2023 23:38:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "tabba@google.com" <tabba@google.com>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dhildenb@redhat.com" <dhildenb@redhat.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "ddutile@redhat.com" <ddutile@redhat.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Annapurve, Vishal" <vannapurve@google.com>,
-        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
-        "hughd@google.com" <hughd@google.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "steven.price@arm.com" <steven.price@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <Y88aX+MIZeteDQju@google.com>
-References: <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
- <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
- <20221219075313.GB1691829@chaop.bj.intel.com>
- <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
- <20221220072228.GA1724933@chaop.bj.intel.com>
- <126046ce506df070d57e6fe5ab9c92cdaf4cf9b7.camel@intel.com>
- <20221221133905.GA1766136@chaop.bj.intel.com>
- <b898e28d7fd7182e5d069646f84b650c748d9ca2.camel@intel.com>
- <010a330c-a4d5-9c1a-3212-f9107d1c5f4e@suse.cz>
- <0959c72ec635688f4b6c1b516815f79f52543b31.camel@intel.com>
+        Mon, 23 Jan 2023 18:38:40 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DC2298F4;
+        Mon, 23 Jan 2023 15:38:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674517116; x=1706053116;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BL0KE40ebJXBQ5wLEALwSAqTSiRgt9HETelmZgjk12M=;
+  b=cGxLVgd+lLOioN43NYm00+I+XPRzV0QylX8mSY+v0D9+JaAs+iqyHHm3
+   DtcqI41mdJJf/aC1OhCHppj55PsSbMOHG2KmbKvIRvt3VRyJXmqJPjxw7
+   9Z6kl74vYxYH4CC7i/kZVKaSvpztAki2/0OCZAGGfnq8g/b9ZHPRHC4h8
+   KNsHKbA5FQ2pqBBsTQ/uU6Jp1+NMkHe5Q9YnO0QqlLb5NQMwdyBj3PLyT
+   4ghVsDuwOPH0qaJqphWYNyvnOzU01ZemPFjxGmXKvipGzcoOpzR8T0NC6
+   EKiUax+1CYb/IAv82clpE5s+NjJg8kpt1p4mj0lrjfQJUBQrHM1ljjVwE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="323881143"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="323881143"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 15:38:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="639380552"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="639380552"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 23 Jan 2023 15:38:27 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pK6OQ-0005xC-1T;
+        Mon, 23 Jan 2023 23:38:26 +0000
+Date:   Tue, 24 Jan 2023 07:38:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, quic_sbillaka@quicinc.com,
+        linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
+        linux-kernel@vger.kernel.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v1 02/14] drm/msm/dp: add dsc factor into calculation of
+ supported bpp
+Message-ID: <202301240748.RCxiAZH1-lkp@intel.com>
+References: <1674498274-6010-3-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0959c72ec635688f4b6c1b516815f79f52543b31.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1674498274-6010-3-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023, Huang, Kai wrote:
-> On Mon, 2023-01-23 at 15:03 +0100, Vlastimil Babka wrote:
-> > On 12/22/22 01:37, Huang, Kai wrote:
-> > > > > I argue that this page pinning (or page migration prevention) is not
-> > > > > tied to where the page comes from, instead related to how the page will
-> > > > > be used. Whether the page is restrictedmem backed or GUP() backed, once
-> > > > > it's used by current version of TDX then the page pinning is needed. So
-> > > > > such page migration prevention is really TDX thing, even not KVM generic
-> > > > > thing (that's why I think we don't need change the existing logic of
-> > > > > kvm_release_pfn_clean()). 
-> > > > > 
-> > > This essentially boils down to who "owns" page migration handling, and sadly,
-> > > page migration is kinda "owned" by the core-kernel, i.e. KVM cannot handle page
-> > > migration by itself -- it's just a passive receiver.
-> > > 
-> > > For normal pages, page migration is totally done by the core-kernel (i.e. it
-> > > unmaps page from VMA, allocates a new page, and uses migrate_pape() or a_ops-
-> > > > migrate_page() to actually migrate the page).
-> > > In the sense of TDX, conceptually it should be done in the same way. The more
-> > > important thing is: yes KVM can use get_page() to prevent page migration, but
-> > > when KVM wants to support it, KVM cannot just remove get_page(), as the core-
-> > > kernel will still just do migrate_page() which won't work for TDX (given
-> > > restricted_memfd doesn't have a_ops->migrate_page() implemented).
-> > > 
-> > > So I think the restricted_memfd filesystem should own page migration handling,
-> > > (i.e. by implementing a_ops->migrate_page() to either just reject page migration
-> > > or somehow support it).
-> > 
-> > While this thread seems to be settled on refcounts already, 
-> > 
-> 
-> I am not sure but will let Sean/Paolo to decide.
+Hi Kuogee,
 
-My preference is whatever is most performant without being hideous :-)
+Thank you for the patch! Perhaps something to improve:
 
-> > just wanted
-> > to point out that it wouldn't be ideal to prevent migrations by
-> > a_ops->migrate_page() rejecting them. It would mean cputime wasted (i.e.
-> > by memory compaction) by isolating the pages for migration and then
-> > releasing them after the callback rejects it (at least we wouldn't waste
-> > time creating and undoing migration entries in the userspace page tables
-> > as there's no mmap). Elevated refcount on the other hand is detected
-> > very early in compaction so no isolation is attempted, so from that
-> > aspect it's optimal.
-> 
-> I am probably missing something,
+[auto build test WARNING on next-20230123]
+[also build test WARNING on linus/master v6.2-rc5]
+[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.2-rc5 v6.2-rc4 v6.2-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Heh, me too, I could have sworn that using refcounts was the least efficient way
-to block migration.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuogee-Hsieh/drm-msm-dp-add-dpcd-read-of-both-dsc-and-fec-capability/20230124-022759
+patch link:    https://lore.kernel.org/r/1674498274-6010-3-git-send-email-quic_khsieh%40quicinc.com
+patch subject: [PATCH v1 02/14] drm/msm/dp: add dsc factor into calculation of supported bpp
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301240748.RCxiAZH1-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/745d7acf9ef8affe996fce2f0658a6d95ac151fd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kuogee-Hsieh/drm-msm-dp-add-dpcd-read-of-both-dsc-and-fec-capability/20230124-022759
+        git checkout 745d7acf9ef8affe996fce2f0658a6d95ac151fd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/gpu/drm/msm/
 
-> but IIUC the checking of refcount happens at very last stage of page migration too 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/msm/dp/dp_panel.c: In function 'dp_panel_get_supported_bpp':
+>> drivers/gpu/drm/msm/dp/dp_panel.c:125:34: warning: variable 'panel' set but not used [-Wunused-but-set-variable]
+     125 |         struct dp_panel_private *panel;
+         |                                  ^~~~~
+
+
+vim +/panel +125 drivers/gpu/drm/msm/dp/dp_panel.c
+
+   120	
+   121	static u32 dp_panel_get_supported_bpp(struct dp_panel *dp_panel,
+   122			u32 mode_edid_bpp, u32 mode_pclk_khz)
+   123	{
+   124		struct dp_link_info *link_info;
+ > 125		struct dp_panel_private *panel;
+   126		const u32 max_supported_bpp = 30;
+   127		u32 min_supported_bpp = 18;
+   128		u32 bpp = 0, link_bitrate = 0, mode_bitrate;
+   129		s64 rate_fp = 0;
+   130	
+   131		panel = container_of(dp_panel, struct dp_panel_private, dp_panel);
+   132	
+   133		if (dp_panel->dsc_en)
+   134			min_supported_bpp = 24;
+   135	
+   136		bpp = min_t(u32, mode_edid_bpp, max_supported_bpp);
+   137	
+   138		link_info = &dp_panel->link_info;
+   139	
+   140		rate_fp = drm_int2fixp(link_info->num_lanes * link_info->rate * 8);
+   141	
+   142		if (dp_panel->fec_en)
+   143			rate_fp = drm_fixp_div(rate_fp, dp_panel->fec_overhead_fp);
+   144	
+   145		link_bitrate = drm_fixp2int(rate_fp);
+   146	
+   147		for (; bpp > min_supported_bpp; bpp -= 6) {
+   148			if (dp_panel->dsc_en) {
+   149				if (bpp == 30 && !(dp_panel->sink_dsc_caps.color_depth & DP_DSC_10_BPC))
+   150					continue;
+   151				else if (bpp == 24 && !(dp_panel->sink_dsc_caps.color_depth & DP_DSC_8_BPC))
+   152					continue;
+   153	
+   154				mode_bitrate = mode_pclk_khz * DSC_TGT_BPP;
+   155			} else {
+   156				mode_bitrate = mode_pclk_khz * bpp;
+   157			}
+   158	
+   159			if (mode_bitrate <= link_bitrate)
+   160				break;
+   161		}
+   162	
+   163		if (bpp < min_supported_bpp)
+   164			DRM_ERROR("bpp %d is below minimum supported bpp %d\n", bpp,
+   165					min_supported_bpp);
+   166	
+   167		if (dp_panel->dsc_en && bpp != 24 && bpp != 30 && bpp != 36)
+   168			DRM_ERROR("bpp %d is not supported when dsc is enabled\n", bpp);
+   169	
+   170		return bpp;
+   171	}
+   172	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
