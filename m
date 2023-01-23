@@ -2,188 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C858677FF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E45677FED
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbjAWPiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S232723AbjAWPhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjAWPiB (ORCPT
+        with ESMTP id S232395AbjAWPhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:38:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0108E2941A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:37:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674488234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nrgSGGG2jivQORYVrLOlwmevh4Rgh/EU/neEY/ItRis=;
-        b=UezBIcQYjlrJANl9ydLaynFhxTNPh6Jk2LE9GljV+x1cyu6uWu5hxfzgj/YJX04AfuyXL2
-        3qUmGbMrQzH3iKTy2Lrer7w/ErTQcAcgEVRpDBQXgywXMc13afuqqKxR8AhkIrrAWYvWpu
-        XNJRz+ndYTSVB5ksvW87Y4orsS/0PRY=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-422-wLuWrwgOMlittuTKjWMYdw-1; Mon, 23 Jan 2023 10:37:12 -0500
-X-MC-Unique: wLuWrwgOMlittuTKjWMYdw-1
-Received: by mail-ed1-f69.google.com with SMTP id j10-20020a05640211ca00b0049e385d5830so8854813edw.22
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:37:12 -0800 (PST)
+        Mon, 23 Jan 2023 10:37:21 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569E52916B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:37:19 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id j17so9370283wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5cq6ayhJIiujuCk7dC1Dlzy/ufBwMT4etpRQGBEg7fw=;
+        b=t5PriCepxNWbx3CJFkfx8mWLYrTlYai55ZReEXgm7VuFu0YZ60muJdfQe0CJ5i5HK1
+         HfdV0S0tsNdQUI78o87AzuEtjxRHznyXDAJV5RhXQyeLus2P6zIComcp4nUv4yJuC58V
+         D7Ag06WtJBYy9kgp/eQMOSXERUFi3680TE83B5bWgFS1sVL5A/NRo7E7vWpObV8Pce0g
+         LPsydiuN+8uxRJNY6Cba0afWzlDerSQZrT4GOdKQixe+Stejugr3QdnJHrGPMPOY1RmT
+         kDUHxGs65AeI9PHGgAJ1JrqOd41VU+Vht3l9gYX8FQvn0K1A++/S6LJUBDl98YhNhd6i
+         228Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nrgSGGG2jivQORYVrLOlwmevh4Rgh/EU/neEY/ItRis=;
-        b=RzkvbilkGOZIdCBKt8C27qmZA8GmCYerFxrLa1sc0jwqmNe9Jx+ImkwaO7cJL7mnfg
-         qdk+GFoLR0Ezr6kttqyRlGQLLgtitm1FUBtLT8SmX+8wQ562opcWf4G9bYlzm6Domxuk
-         bvuMVGLuHPAW4Jql807MG7wNnbLK19e+MONpJjSSyt6GcONfIlBKe1Bz8IxC8YZGcJv9
-         nv7aFDDwtHgIdG3Ivwui6Y/1ZpANRb8eDQUYw9Ogfom3lQ36rbeu+4QlLarlFHsuYNkY
-         frww5Du+ta2FNMvH3/x5wn4AFZ7wqDBEV9BXcBXqsFff6ySy1t5hmHuQpWzjIQhKc+Pc
-         Yv+w==
-X-Gm-Message-State: AFqh2kr9NeWnh5er7o4iaKMTH4IWA57d+pE1z1EGylr2haXGZ52nH+iC
-        HfZaq0a/J/7JU8U+UGs/csgp9hZpi/9wtz6qCc5qG0Cww1jQX66r5KWcceFlWFwinVMlFgQ6ICe
-        ervcy3W4H1iwkTV/WIDgZTXhr
-X-Received: by 2002:a17:907:a601:b0:877:a7ec:5ff with SMTP id vt1-20020a170907a60100b00877a7ec05ffmr11987742ejc.10.1674488231733;
-        Mon, 23 Jan 2023 07:37:11 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtr1c6/aX5wLHbH7NQWaOi30A9xv9EkJz28AZBsNN6soWEYPWWpSZA9Zkp3Fm+NFpmtrXZwug==
-X-Received: by 2002:a17:907:a601:b0:877:a7ec:5ff with SMTP id vt1-20020a170907a60100b00877a7ec05ffmr11987725ejc.10.1674488231560;
-        Mon, 23 Jan 2023 07:37:11 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id kz22-20020a17090777d600b007c1633cea13sm22618884ejc.12.2023.01.23.07.37.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 07:37:11 -0800 (PST)
-Message-ID: <33c497ad-2279-ccf6-016b-52b8e1b4783f@redhat.com>
-Date:   Mon, 23 Jan 2023 16:37:10 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5cq6ayhJIiujuCk7dC1Dlzy/ufBwMT4etpRQGBEg7fw=;
+        b=T3H/02dFpFhW22nQ9VFZPro7jDSf6/bV+MuUVY5OnTfYapel6aZ9+aCISkxfTMIQxQ
+         CfYrIOFQd6xG+6xwG5TzZzl0EhL0/C7GyD7XuuDLgWGJsfe977OlFuSzRyC1PMkzxa5a
+         W/0r92V8VN25aAZTbDt/YGzTrULiLurgQTZjiG123IvmYw4If2i12Tump7XeE453vM+p
+         g73VkxtLXeOWn5xYVb2yP4fFoqwJzboB9d4P3ggLGTLyqZMQMTG6FQCRtu8inr6ANE2k
+         7Z2ujE23BgxMwLYvRcRRUto3olEdSoDbLXXIt/fdpPJkLR1Ufi383ayfxOMLBDK9qrF4
+         TkBg==
+X-Gm-Message-State: AFqh2koo0YAnrLHy5imoEJKCecWCGux7hEfQCrszp4GqJuFC6izd6OYV
+        XAiMeEuU2vAp3LfyvstuiFqbNMdt9dPRFvv0
+X-Google-Smtp-Source: AMrXdXtcZWKJ5j0oRc5YZzjtqWQUSggkx82WJfQ2d9BqVHEZ6eTWX69Z3Ae8Af4FxfHtaoxFpVIblw==
+X-Received: by 2002:a05:600c:4d91:b0:3da:fb96:53d with SMTP id v17-20020a05600c4d9100b003dafb96053dmr23424328wmp.4.1674488237771;
+        Mon, 23 Jan 2023 07:37:17 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l7-20020a7bc447000000b003dafa04ecc4sm10808395wmi.6.2023.01.23.07.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 07:37:17 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     linux-kernel@vger.kernel.org,
+        Markuss Broks <markuss.broks@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Correct inaccuracies in Exynos5420 and Exynos5800 device trees
+Date:   Mon, 23 Jan 2023 16:37:11 +0100
+Message-Id: <167448788767.376527.17795531099793665794.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230121201844.46872-1-markuss.broks@gmail.com>
+References: <20230121201844.46872-1-markuss.broks@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/9] platform/surface: aggregator: Improve target/source
- handling in SSH messages
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202223327.690880-1-luzmaximilian@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221202223327.690880-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 21 Jan 2023 22:18:41 +0200, Markuss Broks wrote:
+> Use the proper compatibles for the DSI host controller and MIPI
+> video phy, as the current ones are not compatible with the hardware.
+> 
+> While this fixes the kernel panic while trying to use DSI, I was still
+> unsuccessful to consistently produce image that isn't noise on S6E3FA2
+> panel of Samsung Galaxy S5. It seems to only work sometimes.
+> 
+> [...]
 
-On 12/2/22 23:33, Maximilian Luz wrote:
-> We have some new insights into the Serial Hub protocol, obtained through
-> reverse engineering. In particular, regarding the command structure. The
-> input/output target IDs actually represent source and target IDs of
-> (what looks like) physical entities (specifically: host, SAM EC, KIP EC,
-> debug connector, and SurfLink connector).
-> 
-> This series aims to improve handling of messages with regards to those
-> new findings and, mainly, improve clarity of the documentation and usage
-> around those fields.
-> 
-> See the discussion in
-> 
->     https://github.com/linux-surface/surface-aggregator-module/issues/64
-> 
-> for more details.
-> 
-> There are a couple of standouts:
-> 
-> - Patch 1 ensures that we only handle commands actually intended for us.
->   It's possible that we receive messages not intended for us when we
->   enable debugging. I've kept it intentionally minimal to simplify
->   backporting. The rest of the series patch 9 focuses more on clarity
->   and documentation, which is probably too much to backport.
-> 
-> - Patch 8 touches on multiple subsystems. The intention is to enforce
->   proper usage and documentation of target IDs in the SSAM_SDEV() /
->   SSAM_VDEV() macros. As it directly touches those macros I
->   unfortunately can't split it up by subsystem.
-> 
-> - Patch 9 is a loosely connected cleanup for consistency.
-> 
-> Hans, Jiri, Benjamin, Sebastian: While patch 8 ("platform/surface:
-> aggregator: Enforce use of target-ID enum in device ID macros") touches
-> multiple subsystems, it should be possible to take the whole series
-> through the pdx86 tree. The changes in other subsystems are fairly
-> limited.
+Applied, thanks!
 
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+[1/2] arm: dts: exynos5420: Use Exynos5420 compatible for the MIPI video phy
+      https://git.kernel.org/krzk/linux/c/bf5de14225625627a35d1acb6739068fc126326f
+[2/2] arm: dts: exynos5800: Use Exynos5422 compatible for the DSI controller
+      https://git.kernel.org/krzk/linux/c/234b8dac096d74e330ed1266956c756efddf3676
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-> 
-> 
-> Maximilian Luz (9):
->   platform/surface: aggregator: Ignore command messages not intended for
->     us
->   platform/surface: aggregator: Improve documentation and handling of
->     message target and source IDs
->   platform/surface: aggregator: Add target and source IDs to command
->     trace events
->   platform/surface: aggregator_hub: Use target-ID enum instead of
->     hard-coding values
->   platform/surface: aggregator_tabletsw: Use target-ID enum instead of
->     hard-coding values
->   platform/surface: dtx: Use target-ID enum instead of hard-coding
->     values
->   HID: surface-hid: Use target-ID enum instead of hard-coding values
->   platform/surface: aggregator: Enforce use of target-ID enum in device
->     ID macros
->   platform/surface: aggregator_registry: Fix target-ID of base-hub
-> 
->  .../driver-api/surface_aggregator/client.rst  |  4 +-
->  .../driver-api/surface_aggregator/ssh.rst     | 36 ++++-----
->  drivers/hid/surface-hid/surface_hid.c         |  2 +-
->  drivers/hid/surface-hid/surface_kbd.c         |  2 +-
->  .../platform/surface/aggregator/controller.c  | 12 +--
->  .../platform/surface/aggregator/ssh_msgb.h    |  4 +-
->  .../surface/aggregator/ssh_request_layer.c    | 15 ++++
->  drivers/platform/surface/aggregator/trace.h   | 73 +++++++++++++++++--
->  .../platform/surface/surface_aggregator_hub.c |  8 +-
->  .../surface/surface_aggregator_registry.c     |  2 +-
->  .../surface/surface_aggregator_tabletsw.c     | 10 +--
->  drivers/platform/surface/surface_dtx.c        | 20 ++---
->  .../surface/surface_platform_profile.c        |  2 +-
->  drivers/power/supply/surface_battery.c        |  4 +-
->  drivers/power/supply/surface_charger.c        |  2 +-
->  include/linux/surface_aggregator/controller.h |  4 +-
->  include/linux/surface_aggregator/device.h     | 50 ++++++-------
->  include/linux/surface_aggregator/serial_hub.h | 40 ++++++----
->  18 files changed, 191 insertions(+), 99 deletions(-)
-> 
-
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
