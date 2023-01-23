@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D48E678712
+	by mail.lfdr.de (Postfix) with ESMTP id E8D38678713
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbjAWUCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S233027AbjAWUCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbjAWUCe (ORCPT
+        with ESMTP id S232944AbjAWUCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:02:34 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5222430EBF;
-        Mon, 23 Jan 2023 12:02:31 -0800 (PST)
+        Mon, 23 Jan 2023 15:02:35 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90DD36089;
+        Mon, 23 Jan 2023 12:02:32 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 04DFC100007;
-        Mon, 23 Jan 2023 20:02:29 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id D10BAFF802;
+        Mon, 23 Jan 2023 20:02:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674504150;
+        t=1674504151;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bUMSKoIqoTY1ys3wlmeSnwP9pCI3vVCTlSO8cM9HZHU=;
-        b=jQ1/tQVVLTcCrf/Q0N71HrN+ndkglafDwHTNyQ1ynK1lm3amQGKK8o1dI3Elc/sqpP6VWU
-        7pmfnCXfMdA+W+zYl6u12ZyZXzLrf1J6jh74RNwudhNcoUaw9bVSiKHHA9Lk5Np6kP6KEb
-        OMKlR3NHKJ+ghDiDzrJne+VdVQ+/lmSBlg9EMbCvkclppJEmkp604/kQsVz1TpSN2RA5Ne
-        Qw0vraFLbyNTVG8HwU6OrEUTBcBeGIzThQXzy7SdhEdFf/FCRk+ZQBy8hfWQWx+bWaABPx
-        v+RiXYQ9+qZV7UrZjwxuFFtkWN3Xu6eR/xvJN/MrjUaM0S+++KNo4jAahdRJzw==
+        bh=Fmaqsb9kmO3TmJW/YFmsCtVyenih1v/2TVqIzrS5D/U=;
+        b=Kp8ChoOOzQ1KdfXtuD2S1zrT433O4l9CqSQQyRtDdfoQhGAzPulstnAfVzPyEXX51OGB6V
+        CDXbQmmgCReBshJHxahbHvyT8u+74XXT4cSA089gFgCjtrlnfqU8e5S9biJ6K8uQtjRVAg
+        1DnuoSqdg5lKF63yCF/xO9TXKSPT2KxLBOs46FcAYTxh/g1JzX8m85HjzocS2I3Zsxq+yA
+        AN8/R/oAy10ZqnSWGFJhTs7kkDN2vZan22zLnl7dA6g9xgnuFTEM2k9GRAAraQskV8YADr
+        f08uLRxnKctQYbyxLWiS23BzCnHu+lBYnyXbsPyRFoE04OrgHaWZ5pMp9yIvSw==
 From:   alexandre.belloni@bootlin.com
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/12] rtc: pcf85363: use IRQ flags obtained fromfwnode
-Date:   Mon, 23 Jan 2023 21:02:13 +0100
-Message-Id: <20230123200217.1236011-8-alexandre.belloni@bootlin.com>
+Subject: [PATCH 09/12] rtc: pcf8563: use IRQ flags obtained from fwnode
+Date:   Mon, 23 Jan 2023 21:02:14 +0100
+Message-Id: <20230123200217.1236011-9-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230123200217.1236011-1-alexandre.belloni@bootlin.com>
 References: <20230123200217.1236011-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,15 +60,15 @@ RTC and the IRQ controller.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-pcf85363.c | 7 ++++++-
+ drivers/rtc/rtc-pcf8563.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index c05b722f0060..5de323acd178 100644
---- a/drivers/rtc/rtc-pcf85363.c
-+++ b/drivers/rtc/rtc-pcf85363.c
-@@ -400,12 +400,17 @@ static int pcf85363_probe(struct i2c_client *client)
- 	clear_bit(RTC_FEATURE_ALARM, pcf85363->rtc->features);
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index 0a7fd9478465..7e720472213c 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -558,9 +558,14 @@ static int pcf8563_probe(struct i2c_client *client)
+ 	pcf8563->rtc->set_start_time = true;
  
  	if (client->irq > 0) {
 +		unsigned long irqflags = IRQF_TRIGGER_LOW;
@@ -75,16 +76,13 @@ index c05b722f0060..5de323acd178 100644
 +		if (dev_fwnode(&client->dev))
 +			irqflags = 0;
 +
- 		regmap_write(pcf85363->regmap, CTRL_FLAGS, 0);
- 		regmap_update_bits(pcf85363->regmap, CTRL_PIN_IO,
- 				   PIN_IO_INTA_OUT, PIN_IO_INTAPM);
- 		ret = devm_request_threaded_irq(&client->dev, client->irq,
- 						NULL, pcf85363_rtc_handle_irq,
--						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+						irqflags | IRQF_ONESHOT,
- 						"pcf85363", client);
- 		if (ret)
- 			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
+ 		err = devm_request_threaded_irq(&client->dev, client->irq,
+ 				NULL, pcf8563_irq,
+-				IRQF_SHARED | IRQF_ONESHOT | IRQF_TRIGGER_LOW,
++				IRQF_SHARED | IRQF_ONESHOT | irqflags,
+ 				pcf8563_driver.driver.name, client);
+ 		if (err) {
+ 			dev_err(&client->dev, "unable to request IRQ %d\n",
 -- 
 2.39.1
 
