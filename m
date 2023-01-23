@@ -2,173 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86629677DB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345BE677DB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjAWOMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S232216AbjAWOMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjAWOMM (ORCPT
+        with ESMTP id S231712AbjAWOMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:12:12 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F112102;
-        Mon, 23 Jan 2023 06:12:11 -0800 (PST)
-Received: from [192.168.1.103] (unknown [103.86.18.176])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9CB742B3;
-        Mon, 23 Jan 2023 15:12:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674483128;
-        bh=0BkzISxc757mMUBzOur30v3iTeT+G7HwVUzaxPxnOng=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IBTX7ZuChXncZZfQVB24ksq47UOaSCAFX4z/Nbx2zKKs3ngSNItefjN5IlJhUQkg0
-         fQPOcL1YV0McQHgRLHDz9L108lAkvag9s7p1dilxon5P/3QsZ6kEHWFoNGhRVZVjyZ
-         f/dioPspDHsEWpjJWmN6b+QkQXNo6Q9kvPyevHuc=
-Message-ID: <4e4215a7-c733-9ea6-dad8-9bf53dc9e891@ideasonboard.com>
-Date:   Mon, 23 Jan 2023 19:42:01 +0530
+        Mon, 23 Jan 2023 09:12:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F73173C;
+        Mon, 23 Jan 2023 06:12:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE34CB80DAD;
+        Mon, 23 Jan 2023 14:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39AEC433D2;
+        Mon, 23 Jan 2023 14:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674483159;
+        bh=xFLOnDtk94LbkRcvU27vXX6doFgrUITeWaNgk1986HA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jQq6YkkL4QqEs8PFGw3bcEihpcmRbNRanM32NBpqWFWdXh5Ehhz4b8G1VFErSpd5G
+         3mPltjvOIJm6Mkk2GBX6cH8SabBqpW0qqK8TV3C8xUdRiD7Qm0izf9YHWyaSYDX981
+         tOdyj8EXbYHIr0Dm1Bun/NlOhTdu6F/yfUcc9b7gw/jwoetUd6xtRilM12Drpx8zUP
+         fCBWyOp5AIPI1OrZXvR7uamLjREor/aShknMCc/Xik4qJIYp6+pNHHXhLiSl6RG7QA
+         mBWeauYkaOjPPE4qhLJK71c99GqGuztPiPWEwbH8SvYBOXG/dN38Z9P1s3kGB9dpi6
+         kdn5DCte2Iysg==
+Date:   Mon, 23 Jan 2023 07:12:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH] ARM: Reduce __thumb2__ definition to crypto files that
+ require it
+Message-ID: <Y86V1Ro+iQaa3IYe@dev-arch.thelio-3990X>
+References: <20221222193039.2267074-1-nathan@kernel.org>
+ <CAKwvOd=WQ5cAL74z+gbGgxG9WrOcDJtrGXJWxEEcWnmyoypu0w@mail.gmail.com>
+ <Y85l+E22PJ8lhmcN@shell.armlinux.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
- <786df750-221e-82fc-a324-d30261296974@i2se.com>
- <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
- <912601ba-c60d-8d69-f061-62b854c5d9ce@i2se.com>
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <912601ba-c60d-8d69-f061-62b854c5d9ce@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y85l+E22PJ8lhmcN@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan
+On Mon, Jan 23, 2023 at 10:48:24AM +0000, Russell King (Oracle) wrote:
+> On Thu, Dec 22, 2022 at 11:52:27AM -0800, Nick Desaulniers wrote:
+> > On Thu, Dec 22, 2022 at 11:30 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > Commit 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler") added
+> > > a __thumb2__ define to ASFLAGS to avoid build errors in the crypto code,
+> > > which relies on __thumb2__ for preprocessing. Commit 59e2cf8d21e0 ("ARM:
+> > > 9275/1: Drop '-mthumb' from AFLAGS_ISA") followed up on this by removing
+> > > -mthumb from AFLAGS so that __thumb2__ would not be defined when the
+> > > default target was ARMv7 or newer.
+> > >
+> > > Unfortunately, the second commit's fix assumes that the toolchain
+> > > defaults to -mno-thumb / -marm, which is not the case for Debian's
+> > > arm-linux-gnueabihf target, which defaults to -mthumb:
+> > >
+> > >   $ echo | arm-linux-gnueabihf-gcc -dM -E - | grep __thumb
+> > >   #define __thumb2__ 1
+> > >   #define __thumb__ 1
+> > 
+> > Interesting, that was hard to foresee in review of 1d2e9b67b001 and
+> > 59e2cf8d21e0.
+> > 
+> > FWIW, their non-hf target does not.
+> > $ echo | arm-linux-gnueabi-gcc -dM -E - | grep __thumb
+> > $
+> > 
+> > >
+> > > This target is used by several CI systems, which will still see
+> > > redefined macro warnings, despite '-mthumb' not being present in the
+> > > flags:
+> > >
+> > >   <command-line>: warning: "__thumb2__" redefined
+> > >   <built-in>: note: this is the location of the previous definition
+> > >
+> > > Remove the global AFLAGS __thumb2__ define and move it to the crypto
+> > > folder where it is required by the imported OpenSSL algorithms; the rest
+> > > of the kernel should use the internal CONFIG_THUMB2_KERNEL symbol to
+> > > know whether or not Thumb2 is being used or not. Be sure that __thumb2__
+> > > is undefined first so that there are no macro redefinition warnings.
+> > >
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1772
+> > > Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > 
+> > Thanks Nathan and Ard.
+> 
+> Shouldn't this also have a fixes tag?
 
-On 1/23/23 5:16 PM, Stefan Wahren wrote:
-> Hi Umang,
->
-> Am 23.01.23 um 08:48 schrieb Umang Jain:
->> Hi Stefan,
->>
->> Thank for the testing.
->>
->> On 1/23/23 5:04 AM, Stefan Wahren wrote:
->>> Hi Umang,
->>>
->>> Am 20.01.23 um 21:10 schrieb Umang Jain:
->>>> This series just introduces five extra patches for dropping include
->>>> directives from Makefiles (suggested by Greg KH) and rebased.
->>>>
->>>> The main patch (6/6) removes platform device/driver abuse and moves
->>>> things to standard device/driver model using a custom_bus. Specific
->>>> details are elaborated in the commit message.
->>>>
->>>> The patch series is based on top of d514392f17fd (tag: next-20230120)
->>>> of linux-next.
->>>
->>> applied this series on top of linux-next and build it with 
->>> arm/multi_v7_defconfig plus the following:
->>>
->>> CONFIG_BCM_VIDEOCORE=y
->>> CONFIG_BCM2835_VCHIQ=m
->>> CONFIG_VCHIQ_CDEV=y
->>> CONFIG_SND_BCM2835=m
->>> CONFIG_VIDEO_BCM2835=m
->>> CONFIG_BCM2835_VCHIQ_MMAL=m
->>>
->>> and the devices doesn't register on Raspberry Pi 3 B Plus:
->>>
->>> [   25.523337] vchiq: module is from the staging directory, the 
->>> quality is unknown, you have been warned.
->>> [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
->>> bcm2835_audio vchiq device
->>> [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
->>> bcm2835-camera vchiq device
->>
->> I was able to reproduce and it seems the issue here is the change 
->> mentioned in the cover
->>
->> - drop dma_set_mask_and_coherent
->>
->> in V6.
->>
->> (I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp 
->> applied so my branch has the DMA hunk included while I was testing V6)
->
-> just to avoid misunderstandings, did you read 
-> drivers/staging/vc04_services/interface/TESTING ?
+Ugh, yes, sorry about that :( would you kind taking these when you apply
+the patch or would you like me to resubmit?
 
-Yes, but it's not geared towards the hardware I have (Rpi Model 4B)
->
-> The Raspberry Pi 4 is currently not fully supported for VCHIQ in 
-> mainline. From my limited understanding the DMA controller driver 
-> needs 40 bit support, so VCHIQ on BCM2711 can use it. This part is 
-> currently only available in the vendor tree. The reason why the driver 
-> is unexpectedly probing is a historical issue in the devicetree :-(
->
-> Raspberry Pi 4 support is not considered as necessary for moving out 
-> of staging.
->
+Fixes: 59e2cf8d21e0 ("ARM: 9275/1: Drop '-mthumb' from AFLAGS_ISA")
+Fixes: 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler")
 
-While I am looking into what's the reason behind the hunk, without which 
-the devices cannot get registered... This is not related to the 40bit 
-support for DMA. I remember that it worked without it during the 
-bcm2835-isp development.
-
-Are you implying that I should not use RPi Model 4B for testing ? 
-Because that's the only RPi hardware I own.
->>
->> Below is the hunk which should resolve the issue.
->>
->> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
->> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
->> @@ -6,6 +6,7 @@
->>   */
->>
->>  #include <linux/device/bus.h>
->> +#include <linux/dma-mapping.h>
->>  #include <linux/slab.h>
->>  #include <linux/string.h>
->>
->> @@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent, 
->> const char *name)
->>         device->dev.type = &vchiq_device_type;
->>         device->dev.release = vchiq_device_release;
->>
->> +       ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
->> +       if (ret < 0) {
->> +               vchiq_device_release(&device->dev);
->> +               return ret;
->> +       }
->> +
->>         ret = device_register(&device->dev);
->>         if (ret) {
->>                 put_device(&device->dev);
->>
->> It seems we need to include the dma_set_mask_and_coherent() even if 
->> bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look 
->> into why is that/
->>
->>  Laurent, any thoughts on this please?
-
+Cheers,
+Nathan
