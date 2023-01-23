@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAF9678979
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C866467897F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbjAWVXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        id S232416AbjAWVYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjAWVX2 (ORCPT
+        with ESMTP id S230435AbjAWVYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:23:28 -0500
+        Mon, 23 Jan 2023 16:24:45 -0500
 Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541122BEEC;
-        Mon, 23 Jan 2023 13:23:27 -0800 (PST)
-Received: by mail-oo1-f43.google.com with SMTP id 123-20020a4a0681000000b004faa9c6f6b9so2330440ooj.11;
-        Mon, 23 Jan 2023 13:23:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CB32CC46;
+        Mon, 23 Jan 2023 13:24:45 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id u13-20020a4aa34d000000b004f5219f9424so2340542ool.5;
+        Mon, 23 Jan 2023 13:24:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8daWvhav3exVg13KsQMucbRN9RZn7I3X/4TrQdWi0uU=;
-        b=oKzqeq2DonEiWX+KjLz62z5xgbTGk32zm162dg84APBJ01PauLgRCOnX722BSlRpyr
-         /fMj/k65Cm21r/Nh7m5ar+mLFBf0sKlSLCxZuY9zZTq7V1StW8qXttzmHNoq3wxCxwYc
-         Fk3MuNPVkGt5zdjhGToECKQPYHHkvnDuE8+d6yC7g8RQw3WcM5s9eZtYG+5RSYZkYE/r
-         UQEIqNsZS3hO0pwKOlX+yLBHkOcCubUZ0vuK/ubyHze/guWYFchEaNJt6JzzxnbNIonL
-         1WU2bXalQeDKI19JrW+CX3eI7EjYR/LSfl/7tmgVRkgOqxJ1gTLXUMnJfOaVmSlO1xzu
-         u2WQ==
-X-Gm-Message-State: AFqh2koY6UoVkgYNTYZKXIeccHAQGfgf1r4ufSwWN3AX0heAqqak8+vY
-        2jxZEI7wZmiS7yrNDLViqg==
-X-Google-Smtp-Source: AMrXdXvz7wXg7GEnoByWzAIaEXjJ/g1Rl1Ua/Jfxd+Wd1LTEufTC97JjA23GJCSB5bHJ4a/7wSBkpA==
-X-Received: by 2002:a4a:370c:0:b0:4f2:a3c:e285 with SMTP id r12-20020a4a370c000000b004f20a3ce285mr13151556oor.4.1674509006545;
-        Mon, 23 Jan 2023 13:23:26 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WTo2Civtr2QVO0QmMkiTtI8Hm6awAgGtXfiZQj9J25s=;
+        b=CtvCWlyfJtWoUpczPL4xb8fs4/huzn4sBt7BjneQNOMEtxFYHaGtWs+J5kMGnVzq6m
+         NuDPGxXk6BGtv7JBNFBBOsFdr8+ZiEZKrxPq7bLyqZQLJVP4qKHyjGjZiXeAP+ucT2Qj
+         nWK9PuLHfC1tnSBM84Xubw/v9Iu4Dw064n8nyPj/GjPGMqiqCBQNIhw09hcwTm3JsAp1
+         qMQPNAOzh5ydXMCLMp20qtowkXVzMWd6AqSeRhx2U/5S88TiZlcs5clgWMjtqkpU0zL4
+         WRmv8bAQUsvEaUak/2AOPPaOVy1YUVuKzBSwUMnkowO8SAamVUgTYxqG/j0eZGocUlKg
+         i11A==
+X-Gm-Message-State: AFqh2krxxDU4xtHVTnyxUqCw3TyuHYloyyNyduszK/6R+fAigvO6Ds4F
+        EbPUpGGStZbAY5VHGRa2GF2+Vx/eVg==
+X-Google-Smtp-Source: AMrXdXuHRIk0mMrTrsgiK6iNy2iVP9v18/ze4mZc7AKHf+DC7Y4n3bKqAp8xpCojK85E/IrNOrm2Gg==
+X-Received: by 2002:a4a:8c6e:0:b0:4fa:325e:ebb0 with SMTP id v43-20020a4a8c6e000000b004fa325eebb0mr10844594ooj.5.1674509084541;
+        Mon, 23 Jan 2023 13:24:44 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p9-20020a4ad449000000b004fb2935d0e7sm47610oos.36.2023.01.23.13.23.25
+        by smtp.gmail.com with ESMTPSA id x1-20020a4aaa01000000b00499527def25sm38231oom.47.2023.01.23.13.24.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 13:23:26 -0800 (PST)
-Received: (nullmailer pid 2663747 invoked by uid 1000);
-        Mon, 23 Jan 2023 21:23:25 -0000
-Date:   Mon, 23 Jan 2023 15:23:25 -0600
+        Mon, 23 Jan 2023 13:24:44 -0800 (PST)
+Received: (nullmailer pid 2666082 invoked by uid 1000);
+        Mon, 23 Jan 2023 21:24:43 -0000
+Date:   Mon, 23 Jan 2023 15:24:43 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Miles Chen <miles.chen@mediatek.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: clock: add some compatible strings for
- MT7981
-Message-ID: <167450900448.2663686.2248170035264417570.robh@kernel.org>
-References: <cover.1674137304.git.daniel@makrotopia.org>
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: soc: socionext,uniphier-soc-glue: Make
+ child node names fixed names
+Message-ID: <167450908027.2665958.2479758029072350668.robh@kernel.org>
+References: <20230120020339.3223112-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230120020339.3223112-1-robh@kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -81,16 +69,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 19 Jan 2023 14:11:35 +0000, Daniel Golle wrote:
-> Add compatible strings for MT7981 to existing binding documenation
-> at mediatek,apmixedsys.yaml and mediatek,topckgen.yaml.
+On Thu, 19 Jan 2023 20:03:39 -0600, Rob Herring wrote:
+> The child nodes 'pinctrl', 'usb-hub', and 'clock-controller' in the
+> socionext,uniphier-soc-glue binding are not patterns, but the full node
+> name, so move them to 'properties'. As patterns, they were missing start
+> and end anchors so any prefix or suffix was allowed.
 > 
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Fixes: 0611adff8b3a ("dt-bindings: soc: socionext: Add UniPhier SoC-glue logic")
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml | 1 +
->  Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml   | 1 +
->  2 files changed, 2 insertions(+)
+>  .../bindings/soc/socionext/socionext,uniphier-soc-glue.yaml      | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
