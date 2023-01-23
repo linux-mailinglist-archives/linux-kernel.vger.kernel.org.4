@@ -2,274 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BACA6773EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51D76773ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 03:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjAWCFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 21:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S230236AbjAWCG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 21:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWCFE (ORCPT
+        with ESMTP id S229817AbjAWCGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 21:05:04 -0500
-X-Greylist: delayed 3135 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Jan 2023 18:04:59 PST
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 775DA10AB0;
-        Sun, 22 Jan 2023 18:04:59 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [112.254.167.99])
-        by mail-app3 (Coremail) with SMTP id cC_KCgAnnqk5681jFFkyDA--.9898S2;
-        Mon, 23 Jan 2023 10:04:52 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-media@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [RESEND PATCH] media: usb: siano: Fix use after free bugs caused by do_submit_urb
-Date:   Mon, 23 Jan 2023 10:04:38 +0800
-Message-Id: <20230123020438.25417-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgAnnqk5681jFFkyDA--.9898S2
-X-Coremail-Antispam: 1UD129KBjvJXoWfJr13Kw1fGr1Dtr13Zw18Zrb_yoWkGFy5pF
-        n3GrZ0krW8try7Ar4jyF18tw17GrZFy3W7tr40yw1xX3W29w45Xry8K3yjgr1UGr45AFy7
-        JF98JrWxtryqkaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYhF7UUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIDAVZdtdUtdwAtse
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 22 Jan 2023 21:06:54 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9050810AB0;
+        Sun, 22 Jan 2023 18:06:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674439613; x=1705975613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B+VMm9bQp6s4IiTU8jZ0r/14Ef7CmjxEBcL3TuqH830=;
+  b=MQ8UqXpOHVKVskXuLUp5Rg/V2E7tabnaOiKwRnQ/UUt5m3TD7CqOP9N8
+   Za7Hhu9WRdFVVYEiz3k5eJzDHareVcULV06hT+xMyEpJMSqh1mhgqbpzY
+   d2+N4E2BblxOmN1A8HITBfiJRAELVM5x4rOdQCHer0yzp3rpjDx1hagRi
+   yRfaqk6iHdrGSXNhnAhpo/0xXhUBwlXENfAsQg6AF0/sn3JBakcf14xeH
+   LGKJdOnQ/UUqb/MExrUDtFgwW32NlJlwgfQqrHsBhEz2VW2wsllDVNQgq
+   Byzob/tYipOa/qy7/g9jFsK9cBO024W5p4cJxlypgZUHpimkzOS+TtJyj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="327225354"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="327225354"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 18:06:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="661481336"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="661481336"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Jan 2023 18:06:49 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJmET-0005MC-0S;
+        Mon, 23 Jan 2023 02:06:49 +0000
+Date:   Mon, 23 Jan 2023 10:06:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH 2/8] eventfs: adding eventfs dir add functions
+Message-ID: <202301230913.1Wohch4k-lkp@intel.com>
+References: <1674407228-49109-2-git-send-email-akaher@vmware.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1674407228-49109-2-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are UAF bugs caused by do_submit_urb(). One of the KASan reports
-is shown below:
+Hi Ajay,
 
-[   36.403605] BUG: KASAN: use-after-free in worker_thread+0x4a2/0x890
-[   36.406105] Read of size 8 at addr ffff8880059600e8 by task kworker/0:2/49
-[   36.408316]
-[   36.408867] CPU: 0 PID: 49 Comm: kworker/0:2 Not tainted 6.2.0-rc3-15798-g5a41237ad1d4-dir8
-[   36.411696] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g15584
-[   36.416157] Workqueue:  0x0 (events)
-[   36.417654] Call Trace:
-[   36.418546]  <TASK>
-[   36.419320]  dump_stack_lvl+0x96/0xd0
-[   36.420522]  print_address_description+0x75/0x350
-[   36.421992]  print_report+0x11b/0x250
-[   36.423174]  ? _raw_spin_lock_irqsave+0x87/0xd0
-[   36.424806]  ? __virt_addr_valid+0xcf/0x170
-[   36.426069]  ? worker_thread+0x4a2/0x890
-[   36.427355]  kasan_report+0x131/0x160
-[   36.428556]  ? worker_thread+0x4a2/0x890
-[   36.430053]  worker_thread+0x4a2/0x890
-[   36.431297]  ? worker_clr_flags+0x90/0x90
-[   36.432479]  kthread+0x166/0x190
-[   36.433493]  ? kthread_blkcg+0x50/0x50
-[   36.434669]  ret_from_fork+0x22/0x30
-[   36.435923]  </TASK>
-[   36.436684]
-[   36.437215] Allocated by task 24:
-[   36.438289]  kasan_set_track+0x50/0x80
-[   36.439436]  __kasan_kmalloc+0x89/0xa0
-[   36.440566]  smsusb_probe+0x374/0xc90
-[   36.441920]  usb_probe_interface+0x2d1/0x4c0
-[   36.443253]  really_probe+0x1d5/0x580
-[   36.444539]  __driver_probe_device+0xe3/0x130
-[   36.446085]  driver_probe_device+0x49/0x220
-[   36.447423]  __device_attach_driver+0x19e/0x1b0
-[   36.448931]  bus_for_each_drv+0xcb/0x110
-[   36.450217]  __device_attach+0x132/0x1f0
-[   36.451470]  bus_probe_device+0x59/0xf0
-[   36.452563]  device_add+0x4ec/0x7b0
-[   36.453830]  usb_set_configuration+0xc63/0xe10
-[   36.455230]  usb_generic_driver_probe+0x3b/0x80
-[   36.456166] printk: console [ttyGS0] disabled
-[   36.456569]  usb_probe_device+0x90/0x110
-[   36.459523]  really_probe+0x1d5/0x580
-[   36.461027]  __driver_probe_device+0xe3/0x130
-[   36.462465]  driver_probe_device+0x49/0x220
-[   36.463847]  __device_attach_driver+0x19e/0x1b0
-[   36.465229]  bus_for_each_drv+0xcb/0x110
-[   36.466466]  __device_attach+0x132/0x1f0
-[   36.467799]  bus_probe_device+0x59/0xf0
-[   36.469010]  device_add+0x4ec/0x7b0
-[   36.470125]  usb_new_device+0x863/0xa00
-[   36.471374]  hub_event+0x18c7/0x2220
-[   36.472746]  process_one_work+0x34c/0x5b0
-[   36.474041]  worker_thread+0x4b7/0x890
-[   36.475216]  kthread+0x166/0x190
-[   36.476267]  ret_from_fork+0x22/0x30
-[   36.477447]
-[   36.478160] Freed by task 24:
-[   36.479239]  kasan_set_track+0x50/0x80
-[   36.480512]  kasan_save_free_info+0x2b/0x40
-[   36.481808]  ____kasan_slab_free+0x122/0x1a0
-[   36.483173]  __kmem_cache_free+0xc4/0x200
-[   36.484563]  smsusb_term_device+0xcd/0xf0
-[   36.485896]  smsusb_probe+0xc85/0xc90
-[   36.486976]  usb_probe_interface+0x2d1/0x4c0
-[   36.488303]  really_probe+0x1d5/0x580
-[   36.489498]  __driver_probe_device+0xe3/0x130
-[   36.491140]  driver_probe_device+0x49/0x220
-[   36.492475]  __device_attach_driver+0x19e/0x1b0
-[   36.493988]  bus_for_each_drv+0xcb/0x110
-[   36.495171]  __device_attach+0x132/0x1f0
-[   36.496617]  bus_probe_device+0x59/0xf0
-[   36.497875]  device_add+0x4ec/0x7b0
-[   36.498972]  usb_set_configuration+0xc63/0xe10
-[   36.500264]  usb_generic_driver_probe+0x3b/0x80
-[   36.501740]  usb_probe_device+0x90/0x110
-[   36.503084]  really_probe+0x1d5/0x580
-[   36.504241]  __driver_probe_device+0xe3/0x130
-[   36.505548]  driver_probe_device+0x49/0x220
-[   36.506766]  __device_attach_driver+0x19e/0x1b0
-[   36.508368]  bus_for_each_drv+0xcb/0x110
-[   36.509646]  __device_attach+0x132/0x1f0
-[   36.510911]  bus_probe_device+0x59/0xf0
-[   36.512103]  device_add+0x4ec/0x7b0
-[   36.513215]  usb_new_device+0x863/0xa00
-[   36.514736]  hub_event+0x18c7/0x2220
-[   36.516130]  process_one_work+0x34c/0x5b0
-[   36.517396]  worker_thread+0x4b7/0x890
-[   36.518591]  kthread+0x166/0x190
-[   36.519599]  ret_from_fork+0x22/0x30
-[   36.520851]
-[   36.521405] Last potentially related work creation:
-[   36.523143]  kasan_save_stack+0x3f/0x60
-[   36.524275]  kasan_record_aux_stack_noalloc+0x9d/0xb0
-[   36.525831]  insert_work+0x25/0x130
-[   36.527039]  __queue_work+0x4d4/0x620
-[   36.528236]  queue_work_on+0x72/0xb0
-[   36.529344]  __usb_hcd_giveback_urb+0x13f/0x1b0
-[   36.530819]  dummy_timer+0x350/0x1a40
-[   36.532149]  call_timer_fn+0x2c/0x190
-[   36.533567]  expire_timers+0x69/0x1f0
-[   36.534736]  __run_timers+0x289/0x2d0
-[   36.535841]  run_timer_softirq+0x2d/0x60
-[   36.537110]  __do_softirq+0x116/0x380
-[   36.538377]
-[   36.538950] Second to last potentially related work creation:
-[   36.540855]  kasan_save_stack+0x3f/0x60
-[   36.542084]  kasan_record_aux_stack_noalloc+0x9d/0xb0
-[   36.543592]  insert_work+0x25/0x130
-[   36.544891]  __queue_work+0x4d4/0x620
-[   36.546168]  queue_work_on+0x72/0xb0
-[   36.547328]  __usb_hcd_giveback_urb+0x13f/0x1b0
-[   36.548805]  dummy_timer+0x350/0x1a40
-[   36.550116]  call_timer_fn+0x2c/0x190
-[   36.551570]  expire_timers+0x69/0x1f0
-[   36.552762]  __run_timers+0x289/0x2d0
-[   36.553916]  run_timer_softirq+0x2d/0x60
-[   36.555118]  __do_softirq+0x116/0x380
-[   36.556239]
-[   36.556807] The buggy address belongs to the object at ffff888005960000
-[   36.556807]  which belongs to the cache kmalloc-4k of size 4096
-[   36.560652] The buggy address is located 232 bytes inside of
-[   36.560652]  4096-byte region [ffff888005960000, ffff888005961000)
-[   36.564791]
-[   36.565355] The buggy address belongs to the physical page:
-[   36.567212] page:000000004f0a0731 refcount:1 mapcount:0 mapping:0000000000000000 index:0x00
-[   36.570534] head:000000004f0a0731 order:3 compound_mapcount:0 subpages_mapcount:0 compound0
-[   36.573717] flags: 0x100000000010200(slab|head|node=0|zone=1)
-[   36.575481] raw: 0100000000010200 ffff888001042140 dead000000000122 0000000000000000
-[   36.577842] raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
-[   36.580175] page dumped because: kasan: bad access detected
-[   36.581994]
-[   36.582548] Memory state around the buggy address:
-[   36.583983]  ffff88800595ff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[   36.586240]  ffff888005960000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[   36.588884] >ffff888005960080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[   36.591071]                                                           ^
-[   36.593295]  ffff888005960100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[   36.595705]  ffff888005960180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[   36.598026] ==================================================================
-[   36.600224] Disabling lock debugging due to kernel taint
-[   36.602681] general protection fault, probably for non-canonical address 0x43600a000000060I
-[   36.607129] CPU: 0 PID: 49 Comm: kworker/0:2 Tainted: G    B              6.2.0-rc3-15798-8
-[   36.611115] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g15584
-[   36.615026] Workqueue: events do_submit_urb
-[   36.616290] RIP: 0010:_raw_spin_lock_irqsave+0x8a/0xd0
-[   36.618107] Code: 24 00 00 00 00 48 89 df be 04 00 00 00 e8 9e b5 c6 fe 48 89 ef be 04 00 5
-[   36.623522] RSP: 0018:ffff888004b6fcf0 EFLAGS: 00010046
-[   36.625072] RAX: 0000000000000000 RBX: 043600a000000060 RCX: ffffffff9fc0e0d7
-[   36.627206] RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffff888004b6fcf0
-[   36.629813] RBP: ffff888004b6fcf0 R08: dffffc0000000000 R09: ffffed100096df9f
-[   36.631974] R10: dfffe9100096dfa0 R11: 1ffff1100096df9e R12: ffff888005960020
-[   36.634285] R13: ffff8880059600f0 R14: 0000000000000246 R15: 0000000000000001
-[   36.636438] FS:  0000000000000000(0000) GS:ffff88806d600000(0000) knlGS:0000000000000000
-[   36.639092] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   36.640951] CR2: 00007f07476819a3 CR3: 0000000004a34000 CR4: 00000000000006f0
-[   36.643411] Call Trace:
-[   36.644215]  <TASK>
-[   36.644902]  smscore_getbuffer+0x3e/0x1e0
-[   36.646147]  do_submit_urb+0x4f/0x190
-[   36.647449]  process_one_work+0x34c/0x5b0
-[   36.648777]  worker_thread+0x4b7/0x890
-[   36.649984]  ? worker_clr_flags+0x90/0x90
-[   36.651166]  kthread+0x166/0x190
-[   36.652151]  ? kthread_blkcg+0x50/0x50
-[   36.653547]  ret_from_fork+0x22/0x30
-[   36.655051]  </TASK>
-[   36.655733] Modules linked in:
-[   36.656787] ---[ end trace 0000000000000000 ]---
-[   36.658328] RIP: 0010:_raw_spin_lock_irqsave+0x8a/0xd0
-[   36.660045] Code: 24 00 00 00 00 48 89 df be 04 00 00 00 e8 9e b5 c6 fe 48 89 ef be 04 00 5
-[   36.665730] RSP: 0018:ffff888004b6fcf0 EFLAGS: 00010046
-[   36.667448] RAX: 0000000000000000 RBX: 043600a000000060 RCX: ffffffff9fc0e0d7
-[   36.669675] RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffff888004b6fcf0
-[   36.672645] RBP: ffff888004b6fcf0 R08: dffffc0000000000 R09: ffffed100096df9f
-[   36.674921] R10: dfffe9100096dfa0 R11: 1ffff1100096df9e R12: ffff888005960020
-[   36.677034] R13: ffff8880059600f0 R14: 0000000000000246 R15: 0000000000000001
-[   36.679184] FS:  0000000000000000(0000) GS:ffff88806d600000(0000) knlGS:0000000000000000
-[   36.681655] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   36.683383] CR2: 00007f07476819a3 CR3: 0000000004a34000 CR4: 00000000000006f0
-[   36.685733] Kernel panic - not syncing: Fatal exception
-[   36.688585] Kernel Offset: 0x1d400000 from 0xffffffff81000000 (relocation range: 0xfffffff)
-[   36.692199] ---[ end Kernel panic - not syncing: Fatal exception ]---
+Thank you for the patch! Perhaps something to improve:
 
-When the siano device is plugged in, it may call the following functions
-to initialize the device.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc5 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-smsusb_probe()-->smsusb_init_device()-->smscore_start_device().
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+patch link:    https://lore.kernel.org/r/1674407228-49109-2-git-send-email-akaher%40vmware.com
+patch subject: [PATCH 2/8] eventfs: adding eventfs dir add functions
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230123/202301230913.1Wohch4k-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/db5e58a9349f39590a8fb39f0c3373c4c483e064
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+        git checkout db5e58a9349f39590a8fb39f0c3373c4c483e064
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
 
-When smscore_start_device() gets failed, the function smsusb_term_device()
-will be called and smsusb_device_t will be deallocated. Although we use
-usb_kill_urb() in smsusb_stop_streaming() to cancel transfer requests
-and wait for them to finish, the worker threads that are scheduled by
-smsusb_onresponse() may be still running. As a result, the UAF bugs
-could happen.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-We add cancel_work_sync() in smsusb_stop_streaming() in order that the
-worker threads could finish before the smsusb_device_t is deallocated.
+sparse warnings: (new ones prefixed by >>)
+>> fs/tracefs/event_inode.c:27:31: sparse: sparse: symbol 'eventfs_root_dir_inode_operations' was not declared. Should it be static?
 
-Fixes: dd47fbd40e6e ("[media] smsusb: don't sleep while atomic")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/media/usb/siano/smsusb.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/usb/siano/smsusb.c b/drivers/media/usb/siano/smsusb.c
-index fe9c7b3a950..6f443c542c6 100644
---- a/drivers/media/usb/siano/smsusb.c
-+++ b/drivers/media/usb/siano/smsusb.c
-@@ -179,6 +179,7 @@ static void smsusb_stop_streaming(struct smsusb_device_t *dev)
- 
- 	for (i = 0; i < MAX_URBS; i++) {
- 		usb_kill_urb(&dev->surbs[i].urb);
-+		cancel_work_sync(&dev->surbs[i].wq);
- 
- 		if (dev->surbs[i].cb) {
- 			smscore_putbuffer(dev->coredev, dev->surbs[i].cb);
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
