@@ -2,154 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF157677F8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FB3677F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjAWPXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
+        id S231766AbjAWPY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjAWPXb (ORCPT
+        with ESMTP id S232691AbjAWPYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:23:31 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCEF298E6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:22:34 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id n5so13464058ljc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:22:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xlQ4uFJF8luICaZz9X8rsfnPJTK43Q09mIidIvdivig=;
-        b=eGzk9GshCU7cFcuCxU4wS13X3ucoFt2bijXDYi7cpQFXb1i5pbtaTFdh2tAo3ktz7B
-         /E5y+EfEppTO62lNGUoqDDMB1QR9Ql6lxmPW9WQQCQ2apqofcaZIRqjJcI0Nd6Tsd1nz
-         URLLlNS2VJaW3e9vktdvBv634wmzQHST+ZGF0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xlQ4uFJF8luICaZz9X8rsfnPJTK43Q09mIidIvdivig=;
-        b=bEr7ruIg3p4kbFIV8uQWhaj+Nwffj4hhhAOfqE8YM1HFbtC+VrRN0sJSPqr27dzvg6
-         zbqDPEmoxYAGwmmQl72zKfAXgMGQYJBe69u5TmhTQv/5K6hZbZPaWRGSn5pCiyPhJ+1D
-         DrRgK5aKmqysg1EXhy2alz7ALG0DAwoRZoxMTPvuz3ymjO6iYSg6AYNghf3JVSW8JU7x
-         CbDtGyy2nGM7LcWCVydaaqyWdojMqJesudYgSHwu9+5J0yThB6CxFMVduPVCyqdZ57B3
-         qE9wwQxk2WwfCaleJWvFurhtGm30XGypC/ep4uSIGvtqN1SzKe0BpJd/2jyfZ0NHmMvx
-         9V6g==
-X-Gm-Message-State: AFqh2koi5GwjL5EJHJ0x9HcvaY4k+r5f5fSLyUI3m4a/cqkcHuVP6u7c
-        yD0hoDfpEqzWVSuuKQ5VajaE/U9sZ2XyAOzQM10jkw==
-X-Google-Smtp-Source: AMrXdXsOBFPqVmUsprncB4I98OFPJNh7h2zhsGDwtNxEsEMk1Pe4AQgHpa0VNMJ3KrWKDOsIJwYLTUJ0EhSfNIA0uvM=
-X-Received: by 2002:a2e:2e08:0:b0:28b:8253:1a32 with SMTP id
- u8-20020a2e2e08000000b0028b82531a32mr1676771lju.483.1674487350784; Mon, 23
- Jan 2023 07:22:30 -0800 (PST)
+        Mon, 23 Jan 2023 10:24:12 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3CE110439;
+        Mon, 23 Jan 2023 07:23:40 -0800 (PST)
+Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0D16B20E2D02;
+        Mon, 23 Jan 2023 07:23:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0D16B20E2D02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1674487385;
+        bh=7TNJ2WIfSIYuwj2O7qe++FA04VZR5MAYU2yAGmNDdFA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wj+eKekO/LSI+nhLw7leLdjlsN8jdoRSQw+pP90GAr0gW5aWiGqydq+tnXYvIQMBF
+         cXu+DGC8Pwlo8YXL9Ubh31tTkXueZYA6nUlxxNSdo11dg5F0956AJXbS3nHofvXzO+
+         vjEfEBB7gPaewIQLfLxzRd9XXQMG+/8LFq7RimDI=
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        "Brijesh Singh" <brijesh.singh@amd.com>,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: [PATCH v1 0/8] Support ACPI PSP on Hyper-V
+Date:   Mon, 23 Jan 2023 15:22:42 +0000
+Message-Id: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <PH0PR11MB5880A16045A842AB80A25C4BDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
- <B3E458A6-9279-4716-B242-873C77EC1E3A@joelfernandes.org> <Y8seE8Tr1w0UWf+m@lothringen>
-In-Reply-To: <Y8seE8Tr1w0UWf+m@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 23 Jan 2023 10:22:19 -0500
-Message-ID: <CAEXW_YTTk_zETWy=xpL-8wF8vh6s_U5z9UyS17uBMda1BYpvug@mail.gmail.com>
-Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action
- from rcu_report_qs_rdp()
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, quic_neeraju@quicinc.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederic,
+This patch series introduces support for discovering AMD's PSP from an ACPI
+table and extends the CCP driver to allow binding to that device on x86. This
+method of PSP discovery is used on Hyper-V when SNP isolation support is
+exposed to the guest. There is no ACPI node associated with this PSP, so after
+parsing the ASPT it is registered with the system as a platform_device.
 
-On Fri, Jan 20, 2023 at 6:04 PM Frederic Weisbecker <frederic@kernel.org> w=
-rote:
->
-> On Fri, Jan 20, 2023 at 08:27:03AM -0500, Joel Fernandes wrote:
-> >
-> > Sure, I know what the code currently does, I am asking why and it feels=
- wrong.
-> >
-> > I suggest you slightly change your approach to not assuming the code sh=
-ould be bonafide correct and then fixing it (which is ok once in a while), =
-and asking higher level questions to why things are the way they are in the=
- first place (that is just my suggestion and I am not in a place to provide=
- advice, far from it, but I am just telling you my approach =E2=80=94 I car=
-e more about the code than increasing my patch count :P).
-> >
-> > If you are in an intermediate state, part way to a !nocb state =E2=80=
-=94 you may have
-> > missed a nocb-related accel and wake, correct? Why does that matter? On=
-ce we
-> > transition to a !nocb state, we do not do a post-qs-report accel+wake a=
-nyway
-> > as we clearly know from the discussion.
->
-> I'm confused. We are doing that acceleration on qs report for !nocb CPU, =
-right?
->
-> > So why do we need to do it if we
-> > missed it for the intermediate stage? So, I am not fully sure yet what =
-that
-> > needac is doing and why it is needed.
->
-> To summarize:
->
-> * If the CPU is NOCB, all the callbacks advance and acceleration is perfo=
-rmed
->   by the rcuo/rcuog kthreads.
->
-> * If the CPU is not NOCB, all the callbacks acceleration is performed by =
-the
->   CPU, such as in the case of rcu_report_qs_rdp().
->
-> * If the CPU is transitionning from NOCB to !NOCB or from !NOCB to NOCB, =
-the
->   kthreads may not be available to do the advance/acceleration, so we mus=
-t do
->   it locally. That's the needacc path.
+I was not quite sure about where to place some of this code but opted for
+placing the ASPT parsing code in drivers/acpi/ and the platform device creation
+in arch/x86/ because configuring the irq for the PSP through the ACPI interface
+requires poking at bits from the architectural vector domain. This was also
+inspired by the sev-guest device.
 
-Sure, I agree it "must be done locally" for the benefit of the
-half-way transition.
+This series is a prerequisite for nested SNP-host support on Hyper-V but is
+independent of the SNP-host support patch set. Hyper-V only supports nested
+SEV-SNP (not SEV or SEV-ES) so the PSP only supports a subset of the full PSP
+command set. Without SNP-host support (which is not upstream yet), the only
+PSP command that will succeed is SEV_PLATFORM_STATUS.
 
-> What am I missing?
+Jeremi Piotrowski (8):
+  include/acpi: add definition of ASPT table
+  ACPI: ASPT: Add helper to parse table
+  x86/psp: Register PSP platform device when ASP table is present
+  x86/psp: Add IRQ support
+  crypto: cpp - Bind to psp platform device on x86
+  crypto: ccp - Add vdata for platform device
+  crypto: ccp - Skip DMA coherency check for platform psp
+  crypto: ccp - Allow platform device to be psp master device
 
-That the acceleration is also done by __note_gp_changes() once the
-grace period ends anyway, so if any acceleration was missed as you
-say, it will be done anyway.
+ arch/x86/kernel/Makefile          |   2 +-
+ arch/x86/kernel/psp.c             | 213 ++++++++++++++++++++++++++++++
+ drivers/acpi/Makefile             |   1 +
+ drivers/acpi/aspt.c               | 104 +++++++++++++++
+ drivers/crypto/ccp/sp-dev.c       |  67 +++++++++-
+ drivers/crypto/ccp/sp-dev.h       |  16 ++-
+ drivers/crypto/ccp/sp-pci.c       |  48 -------
+ drivers/crypto/ccp/sp-platform.c  |  73 +++++++++-
+ include/acpi/actbl1.h             |  46 +++++++
+ include/linux/platform_data/psp.h |  32 +++++
+ 10 files changed, 544 insertions(+), 58 deletions(-)
+ create mode 100644 arch/x86/kernel/psp.c
+ create mode 100644 drivers/acpi/aspt.c
+ create mode 100644 include/linux/platform_data/psp.h
 
-Also it is done by scheduler tick raising softirq:
+-- 
+2.25.1
 
-rcu_pending() does this:
-        /* Has RCU gone idle with this CPU needing another grace period? */
-        if (!gp_in_progress && rcu_segcblist_is_enabled(&rdp->cblist) &&
-            !rcu_rdp_is_offloaded(rdp) &&
-            !rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_TAIL))
-                return 1;
-
-and rcu_core():
-        /* No grace period and unregistered callbacks? */
-        if (!rcu_gp_in_progress() &&
-            rcu_segcblist_is_enabled(&rdp->cblist) && do_batch) {
-                rcu_nocb_lock_irqsave(rdp, flags);
-                if (!rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_T=
-AIL))
-                        rcu_accelerate_cbs_unlocked(rnp, rdp);
-                rcu_nocb_unlock_irqrestore(rdp, flags);
-        }
-
-So, I am not sure if you need needacc at all. Those CBs that have not
-been assigned grace period numbers will be taken care off :)
-
-Thanks!
-
-  -Joel
