@@ -2,272 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE04678098
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBFD67809A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbjAWPzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S232898AbjAWPzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbjAWPzD (ORCPT
+        with ESMTP id S232817AbjAWPzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:55:03 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3103B2D6F;
-        Mon, 23 Jan 2023 07:55:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ImVZ/G93+aQOYzXoMW+O/EXLBjNYr3fMyuFGMFnS2IA=; b=RiJGZlngYn9ccSseIPDL/llp+0
-        MMIAFxB6JjgzAEMRvm7cBafJZ96NT6t4Yfkp289H7YhE3cKywQ9nVS5Q1FTS+YqWXJBdZuYRp6YJy
-        Hnd+6Zn/ROlAXIV6WC/QI0uuUjqaZhEv2uNQno0jX8Tmn6Q/zt8zDk/tF+BqbPPZAkCc=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41486 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pJz9u-0002LT-0y; Mon, 23 Jan 2023 10:54:58 -0500
-Date:   Mon, 23 Jan 2023 10:54:57 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230123105457.4e08329422b7e51f870b7315@hugovil.com>
-In-Reply-To: <Y8rh2SByHp773UXu@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-3-hugo@hugovil.com>
-        <Y8rh2SByHp773UXu@mail.local>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Mon, 23 Jan 2023 10:55:21 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7FC30E5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:16 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id s3so9085594pfd.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sbuQ2eAJkHwKWpK2Z21TvfvZZsWUOmsMIR9vvLknpYs=;
+        b=WQmjabEAtB9BEkpn55XmcV9lxKiEMGiQ+erS4aRFrM/SvbEcUDMMvtLfa8JNjKhq/j
+         pAu0hnQtQSxV77MQTroBJpAM9Y+91ykFFaiXqzt4CXi/ulQIQJzKiYdMxm+AeACmyUhj
+         baNW0OfSe+Btw2l9eujUITCmMxR4YswB66UkI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sbuQ2eAJkHwKWpK2Z21TvfvZZsWUOmsMIR9vvLknpYs=;
+        b=nRj1Uyrcvu+qdlV/72Y75NAirwMdiOkwWF4P9tSA0tUOvHsvGxejlCUB1Hb58DWu/B
+         O6AGu+tSksORu4KJdD46WR/ZnCgSD1wzD9eBN3mNwoPr/S6TBe+1RcXn1g/0rYaSgmCP
+         489B5RInziSF7EGYe0EMhXILOAn94Cc4budhUtqD8unlK3HEB8Kba8fOAIjsgG/x+lIh
+         BNkVBtwWtiKhU7UIzVWKr2S511Zh02AodGAgVYD73aDT1pf/2UJMloTqtBJFzuvZDvzH
+         Wcd+a4IsKAb8L4kb804wyiC7hr5S0Ya4Pi8YKirCPzRp5bcJ9+oqkZzlTBzY7YdLJpwU
+         tdJQ==
+X-Gm-Message-State: AFqh2kq41BUSwA8RlxOB9goOmoxpRq20dXqk8/oqAdygWs72sYxSm39A
+        KW5uGdSlrgo0l0RkNGd4oVl+vpGkhDa8xTRT
+X-Google-Smtp-Source: AMrXdXsYF8pnS1Oc+L6hPOadVYAGJNXB7Ax/UA1bbadINLSBVjkFUQxNHuo2V1NUKNhamb5yQAPGtw==
+X-Received: by 2002:a62:830d:0:b0:58d:94f4:a8b9 with SMTP id h13-20020a62830d000000b0058d94f4a8b9mr28179365pfe.11.1674489316479;
+        Mon, 23 Jan 2023 07:55:16 -0800 (PST)
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com. [209.85.216.46])
+        by smtp.gmail.com with ESMTPSA id k17-20020aa79731000000b0058d97b624f0sm15895176pfg.75.2023.01.23.07.55.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 07:55:16 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso7002613pjp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:55:16 -0800 (PST)
+X-Received: by 2002:a17:90a:1:b0:225:cb85:673d with SMTP id
+ 1-20020a17090a000100b00225cb85673dmr2482344pja.184.1674489315288; Mon, 23 Jan
+ 2023 07:55:15 -0800 (PST)
+MIME-Version: 1.0
+References: <20230121134812.16637-1-mario.limonciello@amd.com>
+ <20230121134812.16637-3-mario.limonciello@amd.com> <CAMRc=Meeiix1BuPi81Ad08yePvd7U5S-AVNwU+vYUHv2VcDiEQ@mail.gmail.com>
+In-Reply-To: <CAMRc=Meeiix1BuPi81Ad08yePvd7U5S-AVNwU+vYUHv2VcDiEQ@mail.gmail.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Mon, 23 Jan 2023 08:55:02 -0700
+X-Gmail-Original-Message-ID: <CAHQZ30Dgs=ScuQ2MkNkuHyZNC1wwaBDkMhcvh9dt3oAppTKBbw@mail.gmail.com>
+Message-ID: <CAHQZ30Dgs=ScuQ2MkNkuHyZNC1wwaBDkMhcvh9dt3oAppTKBbw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpiolib-acpi: Don't set GPIOs for wakeup in S3 mode
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Smythe <ncsmythe@scruboak.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Hasemeyer <markhas@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 02/14] rtc: pcf2127: adapt for time/date registers at
- any offset
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 19:47:53 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-
-> On 15/12/2022 10:02:03-0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > This will simplify the implementation of new variants into this driver.
-> > 
-> > Some variants (PCF2131) have a 100th seconds register. This register is
-> > currently not supported in this driver.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Mon, Jan 23, 2023 at 8:03 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Sat, Jan 21, 2023 at 2:48 PM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+> >
+> > commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+> > adjusted the policy to enable wakeup by default if the ACPI tables
+> > indicated that a device was wake capable.
+> >
+> > It was reported however that this broke suspend on at least two System76
+> > systems in S3 mode and two Lenovo Gen2a systems, but only with S3.
+> > When the machines are set to s2idle, wakeup behaves properly.
+> >
+> > Configuring the GPIOs for wakeup with S3 doesn't work properly, so only
+> > set it when the system supports low power idle.
+> >
+> > Fixes: 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+> > Fixes: b38f2d5d9615c ("i2c: acpi: Use ACPI wake capability bit to set wake_irq")
+> > Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2357
+> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=2162013
+> > Reported-by: Nathan Smythe <ncsmythe@scruboak.org>
+> > Tested-by: Nathan Smythe <ncsmythe@scruboak.org>
+> > Suggested-by: Raul Rangel <rrangel@chromium.org>
+> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > > ---
-> >  drivers/rtc/rtc-pcf2127.c | 68 ++++++++++++++++++++++-----------------
-> >  1 file changed, 39 insertions(+), 29 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index b9a5d47a439f..fb0caacaabee 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -44,14 +44,17 @@
-> >  #define PCF2127_BIT_CTRL3_BF			BIT(3)
-> >  #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
-> >  /* Time and date registers */
-> > -#define PCF2127_REG_SC			0x03
-> > +#define PCF2127_REG_TIME_DATE_BASE	0x03
-> > +/* Time and date registers offsets (starting from base register) */
-> > +#define PCF2127_OFFSET_TD_SC		0
-> > +#define PCF2127_OFFSET_TD_MN		1
-> > +#define PCF2127_OFFSET_TD_HR		2
-> > +#define PCF2127_OFFSET_TD_DM		3
-> > +#define PCF2127_OFFSET_TD_DW		4
-> > +#define PCF2127_OFFSET_TD_MO		5
-> > +#define PCF2127_OFFSET_TD_YR		6
-> 
-> Same comment as for the alarms, I would simply remove the defines as
-> they don't really carry any useful information.
-
-Note that if I remove them, the patch for pcf2127_rtc_read_time() would look like this:
-
- 	/* Clock integrity is not guaranteed when OSF flag is set. */
--	if (buf[PCF2127_REG_SC] & PCF2127_BIT_SC_OSF) {
-+	if (buf[0] & PCF2127_BIT_SC_OSF) {
-...
--		__func__, buf[PCF2127_REG_CTRL3], buf[PCF2127_REG_SC],
--		buf[PCF2127_REG_MN], buf[PCF2127_REG_HR],
--		buf[PCF2127_REG_DM], buf[PCF2127_REG_DW],
--		buf[PCF2127_REG_MO], buf[PCF2127_REG_YR]);
--
--	tm->tm_sec = bcd2bin(buf[PCF2127_REG_SC] & 0x7F);
--	tm->tm_min = bcd2bin(buf[PCF2127_REG_MN] & 0x7F);
--	tm->tm_hour = bcd2bin(buf[PCF2127_REG_HR] & 0x3F); /* rtc hr 0-23 */
--	tm->tm_mday = bcd2bin(buf[PCF2127_REG_DM] & 0x3F);
--	tm->tm_wday = buf[PCF2127_REG_DW] & 0x07;
--	tm->tm_mon = bcd2bin(buf[PCF2127_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
--	tm->tm_year = bcd2bin(buf[PCF2127_REG_YR]);
-+		__func__, ctrl3, buf[0],
-+		buf[1], buf[2],
-+		buf[3], buf[4],
-+		buf[5], buf[PCF2127_OFFSET_TD_YR]);
-+
-+	tm->tm_sec = bcd2bin(buf[0] & 0x7F);
-+	tm->tm_min = bcd2bin(buf[1] & 0x7F);
-+	tm->tm_hour = bcd2bin(buf[2] & 0x3F); /* rtc hr 0-23 */
-+	tm->tm_mday = bcd2bin(buf[3] & 0x3F);
-+	tm->tm_wday = buf[4] & 0x07;
-+	tm->tm_mon = bcd2bin(buf[5] & 0x1F) - 1; /* rtc mn 1-12 */
-+	tm->tm_year = bcd2bin(buf[6]);
-
-Do you still want to remove the defines then?
+> >  drivers/gpio/gpiolib-acpi.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> > index 9ef0f5641b521..17c53f484280f 100644
+> > --- a/drivers/gpio/gpiolib-acpi.c
+> > +++ b/drivers/gpio/gpiolib-acpi.c
+> > @@ -1104,7 +1104,8 @@ int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name, in
+> >                                 dev_dbg(&adev->dev, "IRQ %d already in use\n", irq);
+> >                         }
+> >
+> > -                       if (wake_capable)
+> > +                       /* avoid suspend issues with GPIOs when systems are using S3 */
+> > +                       if (wake_capable && acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
+> >                                 *wake_capable = info.wake_capable;
+> >
+> >                         return irq;
+> > --
+> > 2.34.1
+> >
+>
+> Applied, thanks!
+>
+> Bart
 
 
-> > +/* Time and date registers bits */
-> >  #define PCF2127_BIT_SC_OSF			BIT(7)
-> > -#define PCF2127_REG_MN			0x04
-> > -#define PCF2127_REG_HR			0x05
-> > -#define PCF2127_REG_DM			0x06
-> > -#define PCF2127_REG_DW			0x07
-> > -#define PCF2127_REG_MO			0x08
-> > -#define PCF2127_REG_YR			0x09
-> >  /* Alarm registers */
-> >  #define PCF2127_REG_ALARM_SC		0x0A
-> >  #define PCF2127_REG_ALARM_MN		0x0B
-> > @@ -106,6 +109,7 @@ struct pcf21xx_config {
-> >  	int max_register;
-> >  	unsigned int has_nvmem:1;
-> >  	unsigned int has_bit_wd_ctl_cd0:1;
-> > +	u8 regs_td_base; /* Time/data base registers. */
-> >  };
-> >  
-> >  struct pcf2127 {
-> > @@ -125,27 +129,31 @@ struct pcf2127 {
-> >  static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> >  {
-> >  	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> > -	unsigned char buf[10];
-> > +	unsigned char buf[7];
-> > +	unsigned int ctrl3;
-> >  	int ret;
-> >  
-> >  	/*
-> >  	 * Avoid reading CTRL2 register as it causes WD_VAL register
-> >  	 * value to reset to 0 which means watchdog is stopped.
-> >  	 */
-> > -	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL3,
-> > -			       (buf + PCF2127_REG_CTRL3),
-> > -			       ARRAY_SIZE(buf) - PCF2127_REG_CTRL3);
-> > -	if (ret) {
-> > -		dev_err(dev, "%s: read error\n", __func__);
-> > +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &ctrl3);
-> > +	if (ret)
-> >  		return ret;
-> > -	}
-> >  
-> > -	if (buf[PCF2127_REG_CTRL3] & PCF2127_BIT_CTRL3_BLF)
-> > +	if (ctrl3 & PCF2127_BIT_CTRL3_BLF)
-> >  		dev_info(dev,
-> >  			"low voltage detected, check/replace RTC battery.\n");
-> >  
-> > +	ret = regmap_bulk_read(pcf2127->regmap, pcf2127->cfg->regs_td_base,
-> > +			       buf, sizeof(buf));
-> > +	if (ret) {
-> > +		dev_err(dev, "%s: read error\n", __func__);
-> > +		return ret;
-> > +	}
-> > +
-> >  	/* Clock integrity is not guaranteed when OSF flag is set. */
-> > -	if (buf[PCF2127_REG_SC] & PCF2127_BIT_SC_OSF) {
-> > +	if (buf[PCF2127_OFFSET_TD_SC] & PCF2127_BIT_SC_OSF) {
-> >  		/*
-> >  		 * no need clear the flag here,
-> >  		 * it will be cleared once the new date is saved
-> > @@ -158,18 +166,18 @@ static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> >  	dev_dbg(dev,
-> >  		"%s: raw data is cr3=%02x, sec=%02x, min=%02x, hr=%02x, "
-> >  		"mday=%02x, wday=%02x, mon=%02x, year=%02x\n",
-> > -		__func__, buf[PCF2127_REG_CTRL3], buf[PCF2127_REG_SC],
-> > -		buf[PCF2127_REG_MN], buf[PCF2127_REG_HR],
-> > -		buf[PCF2127_REG_DM], buf[PCF2127_REG_DW],
-> > -		buf[PCF2127_REG_MO], buf[PCF2127_REG_YR]);
-> > -
-> > -	tm->tm_sec = bcd2bin(buf[PCF2127_REG_SC] & 0x7F);
-> > -	tm->tm_min = bcd2bin(buf[PCF2127_REG_MN] & 0x7F);
-> > -	tm->tm_hour = bcd2bin(buf[PCF2127_REG_HR] & 0x3F); /* rtc hr 0-23 */
-> > -	tm->tm_mday = bcd2bin(buf[PCF2127_REG_DM] & 0x3F);
-> > -	tm->tm_wday = buf[PCF2127_REG_DW] & 0x07;
-> > -	tm->tm_mon = bcd2bin(buf[PCF2127_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
-> > -	tm->tm_year = bcd2bin(buf[PCF2127_REG_YR]);
-> > +		__func__, ctrl3, buf[PCF2127_OFFSET_TD_SC],
-> > +		buf[PCF2127_OFFSET_TD_MN], buf[PCF2127_OFFSET_TD_HR],
-> > +		buf[PCF2127_OFFSET_TD_DM], buf[PCF2127_OFFSET_TD_DW],
-> > +		buf[PCF2127_OFFSET_TD_MO], buf[PCF2127_OFFSET_TD_YR]);
-> > +
-> > +	tm->tm_sec = bcd2bin(buf[PCF2127_OFFSET_TD_SC] & 0x7F);
-> > +	tm->tm_min = bcd2bin(buf[PCF2127_OFFSET_TD_MN] & 0x7F);
-> > +	tm->tm_hour = bcd2bin(buf[PCF2127_OFFSET_TD_HR] & 0x3F); /* rtc hr 0-23 */
-> 
-> You can drop the comment
-
-Done
-
-> 
-> > +	tm->tm_mday = bcd2bin(buf[PCF2127_OFFSET_TD_DM] & 0x3F);
-> > +	tm->tm_wday = buf[PCF2127_OFFSET_TD_DW] & 0x07;
-> > +	tm->tm_mon = bcd2bin(buf[PCF2127_OFFSET_TD_MO] & 0x1F) - 1; /* rtc mn 1-12 */
-> 
-> This comment too.
-
-Done
-
-> 
-> > +	tm->tm_year = bcd2bin(buf[PCF2127_OFFSET_TD_YR]);
-> >  	tm->tm_year += 100;
-> >  
-> >  	dev_dbg(dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
-> > @@ -207,7 +215,7 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >  	buf[i++] = bin2bcd(tm->tm_year - 100);
-> >  
-> >  	/* write register's data */
-> > -	err = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_SC, buf, i);
-> > +	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
-> >  	if (err) {
-> >  		dev_err(dev,
-> >  			"%s: err=%d", __func__, err);
-> > @@ -650,11 +658,13 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >  		.max_register = 0x1d,
-> >  		.has_nvmem = 1,
-> >  		.has_bit_wd_ctl_cd0 = 1,
-> > +		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> >  	},
-> >  	[PCF2129] = {
-> >  		.max_register = 0x19,
-> >  		.has_nvmem = 0,
-> >  		.has_bit_wd_ctl_cd0 = 0,
-> > +		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> >  	},
-> >  };
-> >  
-> > -- 
-> > 2.30.2
-> > 
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+We still need to figure out a proper fix for this. If you read my post
+here: https://gitlab.freedesktop.org/drm/amd/-/issues/2357#note_1732372
+I think we misinterpreted what the SharedAndWake bit is used for. To
+me it sounds like it's only valid for HW Reduced ACPI platforms, and
+S0ix. My changes made it so we call `dev_pm_set_wake_irq` when the
+Wake bit is set. Does anyone have any additional context on the Wake
+bit? I think we either need to make `dev_pm_set_wake_irq` (or a
+variant) only enable the wake on S0i3, or we can teach the ACPI
+subsystem to manage arming the IRQ's wake bit. Kind of like we already
+manage the GPE events for the device.
