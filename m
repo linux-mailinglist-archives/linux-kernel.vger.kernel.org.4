@@ -2,183 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882B4677648
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD32D677650
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjAWI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
+        id S231658AbjAWIa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjAWI3b (ORCPT
+        with ESMTP id S231526AbjAWIay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:29:31 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F0216322
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:29:30 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3FF5B5C00E1;
-        Mon, 23 Jan 2023 03:29:27 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 23 Jan 2023 03:29:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674462567; x=1674548967; bh=ADDaCT7LRv
-        3SPIh6BoxXQg5cKChUVADCO5GhHss33LQ=; b=uM0NHdNbqPzET5M7qo4iHWWdtY
-        zuuwLn65XOoH7/Nn4MteHGuyTGWgz1LRMVbcwjARg5mgoT0KTqluIxNgwsDcnmSa
-        etYV0r45rxDr3R9jbkN/17KMiVX/VodOZgFusB3YktUG1wJ3eK2inMUtIQVKYlz2
-        hpdBqRrlikcy2QRUjm104sxOmuLPdx2ACWmm7UpXBud8IxsIziYClyDvpJ0CKvlL
-        PrK7Fv1u6DzzEOILA55jTshI/UwOyLJ0rpBp3Jn9UN7EuxMwvgPWY0TDn6VKIhBP
-        beZ06ohmMYio7jvTj7Wiiwm4f2v9OWSViNpSF9LG5bEOIUKXY10Yx6yTTR4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674462567; x=1674548967; bh=ADDaCT7LRv3SPIh6BoxXQg5cKChU
-        VADCO5GhHss33LQ=; b=TwnoHPvaHl9DX5lfgadGkxMSdygLGUf41zGRT1WUpMPH
-        zJ0SmxrCj+dOU5yVfY0Y268vLST0YUWZ44aVOsG4U6e1+/TNKQEuwQHUw4HJcC0z
-        TYieS73mpjrBwcnqpgnK9kCIfIbyl6rRTahYAQ3b0oZRNmq97cN4XdWgl7FQfRW6
-        uVfEFLjyiwURAzr/dNQtNAVczmsmdBMOPtqbCymJdiLlZXo48jhKTxwLAUbSHKuZ
-        FTO3Kc/fMPo8tOBRacaYhHLgyu+JkYY/ix1jL1XVrnCSCdjWq7F+KE6Nt51GpfY6
-        a6Ohqursr/UErKaawht0bfSzFwbTrTBdZnbqh6QECw==
-X-ME-Sender: <xms:ZkXOY4Yzyb9VA14m06-yOp1cO9BfjZA3V6pr2G_mLStYWIaU5Rxoow>
-    <xme:ZkXOYzZwc2hbUohax4nxqNBqpk3JUHu5a5RhqFET-xUvPUVQE2DmqPF-YtW-82V9y
-    pFRCTAu5Hpge7V56qk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddujedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ZkXOYy-jH22bzegBh-XsigdamWCSBAWxPU-4WPjEn7aH0o6jsrJ-Sw>
-    <xmx:ZkXOYyohTFnS84WkPDWOo_S87EgVwUoJfopgpNiLjHrGab6wYP6NPQ>
-    <xmx:ZkXOYzqfMaY7tP0e35FLhEY6Ao2LHfW2clmVaHsATVeyjrTrA1DDTQ>
-    <xmx:Z0XOY23gsyizSFQ3nSaDvYilZGKZfEfVY0xxx6F8uUVHNw1JWoHCPg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 085C2B60086; Mon, 23 Jan 2023 03:29:25 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <85b86d06-c63c-4481-a3dd-16b72572a5ee@app.fastmail.com>
-In-Reply-To: <20230123073305.149940-7-lchen@ambarella.com>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <20230123073305.149940-7-lchen@ambarella.com>
-Date:   Mon, 23 Jan 2023 09:29:06 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Li Chen" <lchen@ambarella.com>, "Li Chen" <me@linux.beauty>
-Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        "Lubomir Rintel" <lkundrak@v3.sk>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Sven Peter" <sven@svenpeter.dev>,
-        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
-        "Brian Norris" <briannorris@chromium.org>,
-        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Ambarella SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 06/15] soc: add Ambarella driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 03:30:54 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84E11A961;
+        Mon, 23 Jan 2023 00:30:51 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P0jld0Pd8z9xrpS;
+        Mon, 23 Jan 2023 16:22:53 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCXGwemRc5jxm+9AA--.10647S2;
+        Mon, 23 Jan 2023 09:30:38 +0100 (CET)
+Message-ID: <dfb387003ee50db5fe0d71bc825cc39df47f74ed.camel@huaweicloud.com>
+Subject: Re: [PATCH v2] security: Restore passing final prot to
+ ima_file_mmap()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Mon, 23 Jan 2023 09:30:15 +0100
+In-Reply-To: <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com>
+References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+         <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+         <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
+         <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
+         <a764acb285d0616c8608eaab8671ceb9c22cb390.camel@huaweicloud.com>
+         <058f1bdf4ba75c3a00918cefbf1be32477b51639.camel@linux.ibm.com>
+         <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
+         <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwCXGwemRc5jxm+9AA--.10647S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr18urWruw4UXry3JF1UWrg_yoW5WF4fpF
+        WUt3WUKr4kXF10yr1IqF17GF1Fk39xJryUXw4Dtryjvrn0qr1UKr1xJFWUurykXr1kCr1j
+        qF17K3y3CF1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj4PqXAAAsE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023, at 08:32, Li Chen wrote:
-> This driver add soc_id support for Ambarella,
-> which is stored inside "cpuid" AXI address mapping.
->
-> Also provide sys_config(POC, aka power on configuration)
-> for other drivers.
->
-> Signed-off-by: Li Chen <lchen@ambarella.com>
+On Fri, 2023-01-20 at 16:04 -0500, Paul Moore wrote:
+> On Fri, Jan 13, 2023 at 5:53 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Thu, 2023-01-12 at 12:45 -0500, Mimi Zohar wrote:
+> > > On Thu, 2023-01-12 at 13:36 +0100, Roberto Sassu wrote:
+> > > > On Wed, 2023-01-11 at 09:25 -0500, Paul Moore wrote:
+> > > > > On Wed, Jan 11, 2023 at 4:31 AM Roberto Sassu
+> > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
+> > > > > > > On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
+> > > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > 
+> > > > > > > > Commit 98de59bfe4b2f ("take calculation of final prot in
+> > > > > > > > security_mmap_file() into a helper") moved the code to update prot with the
+> > > > > > > > actual protection flags to be granted to the requestor by the kernel to a
+> > > > > > > > helper called mmap_prot(). However, the patch didn't update the argument
+> > > > > > > > passed to ima_file_mmap(), making it receive the requested prot instead of
+> > > > > > > > the final computed prot.
+> > > > > > > > 
+> > > > > > > > A possible consequence is that files mmapped as executable might not be
+> > > > > > > > measured/appraised if PROT_EXEC is not requested but subsequently added in
+> > > > > > > > the final prot.
+> > > > > > > > 
+> > > > > > > > Replace prot with mmap_prot(file, prot) as the second argument of
+> > > > > > > > ima_file_mmap() to restore the original behavior.
+> > > > > > > > 
+> > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > ---
+> > > > > > > >  security/security.c | 2 +-
+> > > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > > > 
+> > > > > > > > diff --git a/security/security.c b/security/security.c
+> > > > > > > > index d1571900a8c7..0d2359d588a1 100644
+> > > > > > > > --- a/security/security.c
+> > > > > > > > +++ b/security/security.c
+> > > > > > > > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+> > > > > > > >                                         mmap_prot(file, prot), flags);
+> > > > > > > >         if (ret)
+> > > > > > > >                 return ret;
+> > > > > > > > -       return ima_file_mmap(file, prot);
+> > > > > > > > +       return ima_file_mmap(file, mmap_prot(file, prot));
+> > > > > > > >  }
+> > > > > > > 
+> > > > > > > This seems like a reasonable fix, although as the original commit is
+> > > > > > > ~10 years old at this point I am a little concerned about the impact
+> > > > > > > this might have on IMA.  Mimi, what do you think?
+> 
+> So ... where do we stand on this patch, Mimi, Roberto?  I stand by my
+> original comment, but I would want to see an ACK from Mimi at the very
+> least before merging this upstream.  If this isn't ACK-able, do we
+> have a plan to resolve this soon?
 
-The soc_id support looks ok
+Sorry, I had business trips last week. Will send the patches this week.
 
-> Change-Id: I4869a3497366ac7779e792835f8e0309239036a8
+Roberto
 
-Please drop these lines in the submission, the IDs are
-not reachable outside of your own git, so we don't want
-these to show up in the public history.
-
-> +static struct ambarella_soc_id {
-> +	unsigned int id;
-> +	const char *name;
-> +	const char *family;
-> +} soc_ids[] = {
-> +	{ 0x00483245, "s6lm",  "10nm", },
-> +};
-
-I would suggest something more descriptive in the "family"
-field to let users know they are on an Ambarella SoC.
-
-Maybe just "Ambarella 10nm".
-
-> +static int __init ambarella_socinfo_init(void)
-> +{
-> +	struct soc_device_attribute *soc_dev_attr;
-> +	struct soc_device *soc_dev;
-> +	struct device_node *np;
-> +	struct regmap *cpuid_regmap;
-> +	unsigned int soc_id;
-> +
-> +	cpuid_regmap = syscon_regmap_lookup_by_compatible("ambarella,cpuid");
-> +	if (IS_ERR(cpuid_regmap))
-> +		return PTR_ERR(cpuid_regmap);
-
-Is there anything else in this syscon node? If the block
-of registers only contains the identification bits, you
-could just make this file a platform_driver that binds to
-the node instead of using a syscon.
-
-If there are other unrelated registers in there, the compatible
-string should probably be changed to better describe the
-entire area based on the name in the datasheet.
-
-> +static unsigned int ambsys_config;
-> +
-> +unsigned int ambarella_sys_config(void)
-> +{
-> +	return ambsys_config;
-> +}
-> +EXPORT_SYMBOL(ambarella_sys_config);
-
-Which drivers use this bit? Can they be changed to 
-use soc_device_match() instead to avoid the export?
-
-> +static int __init ambarella_soc_init(void)
-> +{
-> +	struct regmap *rct_regmap;
-> +	int ret;
-> +
-> +	rct_regmap = syscon_regmap_lookup_by_compatible("ambarella,rct");
-> +	if (IS_ERR(rct_regmap)) {
-> +		pr_err("failed to get ambarella rct regmap\n");
-> +		return PTR_ERR(rct_regmap);
-> +	}
-...
-> +arch_initcall(ambarella_soc_init);
-
-It is not an error to use a chip from another manufacturer,
-please drop the pr_err() and return success here.
-
-> +#ifndef __SOC_AMBARELLA_MISC_H__
-> +#define __SOC_AMBARELLA_MISC_H__
-> +
-> +extern unsigned int ambarella_sys_config(void);
-> +extern struct proc_dir_entry *ambarella_proc_dir(void);
-> +
-
-The ambarella_proc_dir looks like a stale entry that should be
-removed. Ideally you should not need a private header at all.
-
-    Arnd
