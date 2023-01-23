@@ -2,93 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F44677787
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2F967778D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjAWJjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S231597AbjAWJm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:42:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWJjj (ORCPT
+        with ESMTP id S229514AbjAWJmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:39:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBCD1630E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:38:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674466731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ixSJusIFQ4NVoWX42WPNCvu85KHc9tvBEAxhegQcVhQ=;
-        b=MWaRlY0pLtDIB2y+t5MY3lSE9UyE4vCbHfCO/4fk9Tk09nmYRN6nUTuFo2xf3jPuB7RhlA
-        o2/ZAQtsfn8o3hG2HKoBjzSyYVpzsHUACSgCCvoKLSyV7ayYtTWc+1KGlpjs1mM5jb+Wql
-        XhgsEvLx6xjDUb7sCllGcucfUB7r78w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-SYChFTcDOrG4mOHNetySMw-1; Mon, 23 Jan 2023 04:38:48 -0500
-X-MC-Unique: SYChFTcDOrG4mOHNetySMw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 98F61802BEE;
-        Mon, 23 Jan 2023 09:38:47 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1054A492C3C;
-        Mon, 23 Jan 2023 09:38:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y8vi8/sCvOxvLzzc@infradead.org>
-References: <Y8vi8/sCvOxvLzzc@infradead.org> <20230120175556.3556978-1-dhowells@redhat.com> <20230120175556.3556978-5-dhowells@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v7 4/8] block: Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED and invert the meaning
+        Mon, 23 Jan 2023 04:42:24 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF04916311
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:42:22 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso8062552wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=bb3ehCbsmnDNOeIeuOp9X6FACVdZxwB9flFsEny7tkU=;
+        b=dV+vmkhPJupVDkDKPKw/2uJe9dhCfz2931ZZfmSlTiTucpZhV2Dz+B6f9Fv3oiI5Qg
+         xdALFShfLxjvVlVQ2K1bLQ5/4uPa6Q7gCQlFkO7bDQBoW/r8L1iBLX9dM/ZknvefkDGC
+         6iJRk6CRvJJo7qipP+9FC4RrGHDwX//qae/qj8wJurKg8c+1OHYsm56cHw4p7MWRyk1K
+         nfquz3KQcfaO9EzCTs/SUKrcWz3tEvEos7SFv6WhgRiugJpJ3DnoGoOyT8+BCgVZIzQS
+         gVFXE4RIK7gcAlT4NdXcPy1iZVBPSkMbc+B1+QYLkW51SQ6p0ODeYa+m2ek55Zj8+RQZ
+         DWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bb3ehCbsmnDNOeIeuOp9X6FACVdZxwB9flFsEny7tkU=;
+        b=29AAohjH/+sgE1k3wDbESqwwYZhEcIQP4jZIgqoY3/4OiKOD4PQvsfThPfRYxGDFf1
+         gtZc7MZrqLfvcPZ6Rcvp6z4kAcLZbFSPNURuWC9beuOczvXZWOTs+XGSgiObFBc/s1PI
+         u7T0mA8v2aZEq37yQ2GsnJAgxYhx2nADKqAB9rCHmj7nxVmDin2sTpeEYNO3Z7X6rpS7
+         nJKmgQXzqrUoFtY5z33Dxy9l6Hg9m+7JKdoLu6R1yVdtA1ujWpAVIfS1D1QPHWNCU7mj
+         dYMU/E2Ang4xPk2Kz8CA1HVZJ5srrRckyKg4E5UOt/5l/mJzMXgQ5arJFTBxxDVXSqwd
+         IlRA==
+X-Gm-Message-State: AFqh2krlPbc9TxPEc+FFukkt4ofLTvRcO5syl5chwwjeO37KfcqZMnz+
+        tRteq2XaoPQsDWd3ZmD9wxMTCA==
+X-Google-Smtp-Source: AMrXdXsm6TcBoxPPxS02VMNxznfImdfA7EnRpT/eJPmFB8AVCLXvlWQuATnvGBXA13pmaGAeWzaHKQ==
+X-Received: by 2002:a05:600c:1d12:b0:3db:53f:baea with SMTP id l18-20020a05600c1d1200b003db053fbaeamr23030706wms.6.1674466941329;
+        Mon, 23 Jan 2023 01:42:21 -0800 (PST)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id t13-20020a1c770d000000b003db1ca20170sm9963482wmi.37.2023.01.23.01.42.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 01:42:20 -0800 (PST)
+Message-ID: <d8f78a24-398c-8bb0-8964-778d8a0e8998@linaro.org>
+Date:   Mon, 23 Jan 2023 10:42:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3668656.1674466725.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 23 Jan 2023 09:38:45 +0000
-Message-ID: <3668657.1674466725@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 04/11] dt-bindings: watchdog: convert meson-wdt.txt to
+ dt-schema
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-4-36ad050bb625@linaro.org>
+ <CAFBinCDd1MJEmSHR1XPsfBoRasBq+cV1F+66sCBXALtCCmoyUA@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CAFBinCDd1MJEmSHR1XPsfBoRasBq+cV1F+66sCBXALtCCmoyUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+On 10/01/2023 22:48, Martin Blumenstingl wrote:
+> Hi Neil,
+> 
+> On Mon, Jan 9, 2023 at 1:53 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+> [...]
+>> +  compatible:
+>> +    oneOf:
+>> +      - enum:
+>> +          - amlogic,meson6-wdt
+>> +          - amlogic,meson8-wdt
+> Technically this is not an identical representation of what we had
+> before which was:
+> -       "amlogic,meson8-wdt" and "amlogic,meson6-wdt" on Meson8 SoCs
+> 
+> We're not using the "amlogic,meson8-wdt" compatible anywhere at the moment.
+> In the meson_wdt driver it's defined with the same per-SoC data as
+> "amlogic,meson6-wdt".
+> 
+> Long story short: In my opinion there's no need to change what you
+> have right now.
+> If you have to re-spin this then maybe you can add a note to the patch
+> description.
+> Please add my:
+> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-> ... I've put together a version of this series that implements this and =
-my
-> other suggestions here:
-> =
+Sorry I was distracted, I'll add a node on the commit message.
 
-> http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/dio-pin-=
-pages
-> =
+Thanks,
+Neil
 
-> This also tests fine with xfs and btrfs and nvme passthrough I/O.
-
-That looks okay.  Do you need to put a Co-developed-by tag on the "block:
-invert BIO_NO_PAGE_REF" patch?
-
-Should I take that set of patches and send it on to Linus when the window
-opens?  Or should it go through the block tree?
-
-David
+> 
+> 
+> Best regards,
+> Martin
 
