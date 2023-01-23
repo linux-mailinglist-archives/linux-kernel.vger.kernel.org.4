@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E585667780B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B996B67781D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjAWJ7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S231636AbjAWKBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 05:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjAWJ7m (ORCPT
+        with ESMTP id S230081AbjAWKBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:59:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D55583EA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:59:20 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BBD49220BE;
-        Mon, 23 Jan 2023 09:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674467955; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RPUgUWLYFyzDTJWxeUhyD8C/Rk27j6KTINncM5ul7B8=;
-        b=j6fAAr3MXQF3Ag61iljXv6JHlPeeziIdplAnwUZmokoMW/gVtX233B/+80pEJK01C5GlkJ
-        EPzsRhAPlyG+3HBY8AjSiPzwO3AjfsTiqVjoPnDjgoPLncHoHzPgtbHjrCu+oUdXF8LEnw
-        3tP7uTNe6KPkoGsvMwkZiOP+TEPQb3k=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FFFC134F5;
-        Mon, 23 Jan 2023 09:59:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 09ywHnNazmOiCwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 23 Jan 2023 09:59:15 +0000
-Date:   Mon, 23 Jan 2023 10:59:14 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <Y85acuBFkGr03Qd7@dhcp22.suse.cz>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-40-surenb@google.com>
- <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
- <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
- <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
- <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+        Mon, 23 Jan 2023 05:01:48 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A474C0A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:01:46 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id q8so8521802wmo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:01:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HBW99nl/bxZsTE1SNWWJvTeEp3Nq/6dlA/kis96/OGU=;
+        b=utTGrb/3fg+7tKVMVMXYVYrKAKW0FRoIeNF1MdJG1DSB4hTuxJ8tO7TdOM/KYj+eOq
+         bt/gt2WC4QzDAwlOF8pO67FEmmCVTM0E11nD0utz17Q7jayfIAFYJidKi7PvN5vLOFP3
+         +T2o9zBcZxSXF/rfoFcLfATPe5gOxlm75dbV+OuFQ5juOAjCfsTqubQaFs3n4G/qEWsU
+         r4+obCpbDN+8CqWZ6VTOpxONRmVYLi7+xeBjKwM0KA8MnI+K7gmebwDLmERjOUUoHQ/E
+         OBgepXJLV48Gmwrtw/nvsWWzlqFoRkbs9woizoq3yAj1lCDmXhFr3ByqDdEFauk5V8LV
+         xn8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HBW99nl/bxZsTE1SNWWJvTeEp3Nq/6dlA/kis96/OGU=;
+        b=PZcrXNwSsIzhzGExcXNkzWONN5IEi4OBPMMK0j01vWuoDKC8jb6geidnfbeAzrdzIb
+         y+BBDgP1pk1HKEAWGXB2cbjNnAEuIEiHMJJr7+R8J8YQCpCvEwXO+zURJxUhhGWIWuwF
+         IJzPobq41Pm9FDsSe44WyXa4+pUWCMBQjF0xxAWi8kJSc1MMSv+vSorulZe0tBfQx4H8
+         hMtONhVH045yjcxn9Cb3b/egK1cqpZhcda26R1t2JJ1D4XcP5zeUliW/7VauMep5U5+f
+         GkvmOzPnHot/2VIV81QwHrChgZ00SB4VzJPFgFf9Aju2R+wQ3IRJlY3LH9v5Zdv8AGm4
+         BiiQ==
+X-Gm-Message-State: AFqh2kqDvgYlUidKkPvvDgWdYFE447K+1KJ/4IT1ajlUSwsLxsq7xgGl
+        YhZgXj4rrbhbHx+JIo+gyEmUmg==
+X-Google-Smtp-Source: AMrXdXtTrVcaPCCBSgFX/j5Ycf6bevTbzhzytfwtX7u/nET/Yox0ixtMdIVw19MyyI5EXWgbe2l5GQ==
+X-Received: by 2002:a05:600c:3545:b0:3c6:e60f:3f4a with SMTP id i5-20020a05600c354500b003c6e60f3f4amr23476158wmq.1.1674468105235;
+        Mon, 23 Jan 2023 02:01:45 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm11050831wmq.28.2023.01.23.02.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 02:01:44 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     linux-arm-kernel@lists.infradead.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>, Inki Dae <inki.dae@samsung.com>
+Cc:     phone-devel@vger.kernel.org, Henrik Grimler <henrik@grimler.se>,
+        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
+        ~postmarketos/upstreaming@lists.sr.ht, replicant@osuosl.org
+Subject: Re: [PATCH 00/11] ARM: dts: exynos: DT schema fixes
+Date:   Mon, 23 Jan 2023 11:01:37 +0100
+Message-Id: <167446806832.57213.6257020240038382720.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
+References: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 20-01-23 08:20:43, Suren Baghdasaryan wrote:
-> On Fri, Jan 20, 2023 at 12:52 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 19-01-23 10:52:03, Suren Baghdasaryan wrote:
-> > > On Thu, Jan 19, 2023 at 4:59 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Mon 09-01-23 12:53:34, Suren Baghdasaryan wrote:
-> > > > > call_rcu() can take a long time when callback offloading is enabled.
-> > > > > Its use in the vm_area_free can cause regressions in the exit path when
-> > > > > multiple VMAs are being freed. To minimize that impact, place VMAs into
-> > > > > a list and free them in groups using one call_rcu() call per group.
-> > > >
-> > > > After some more clarification I can understand how call_rcu might not be
-> > > > super happy about thousands of callbacks to be invoked and I do agree
-> > > > that this is not really optimal.
-> > > >
-> > > > On the other hand I do not like this solution much either.
-> > > > VM_AREA_FREE_LIST_MAX is arbitrary and it won't really help all that
-> > > > much with processes with a huge number of vmas either. It would still be
-> > > > in housands of callbacks to be scheduled without a good reason.
-> > > >
-> > > > Instead, are there any other cases than remove_vma that need this
-> > > > batching? We could easily just link all the vmas into linked list and
-> > > > use a single call_rcu instead, no? This would both simplify the
-> > > > implementation, remove the scaling issue as well and we do not have to
-> > > > argue whether VM_AREA_FREE_LIST_MAX should be epsilon or epsilon + 1.
-> > >
-> > > Yes, I agree the solution is not stellar. I wanted something simple
-> > > but this is probably too simple. OTOH keeping all dead vm_area_structs
-> > > on the list without hooking up a shrinker (additional complexity) does
-> > > not sound too appealing either.
-> >
-> > I suspect you have missed my idea. I do not really want to keep the list
-> > around or any shrinker. It is dead simple. Collect all vmas in
-> > remove_vma and then call_rcu the whole list at once after the whole list
-> > (be it from exit_mmap or remove_mt). See?
+On Fri, 20 Jan 2023 16:53:53 +0100, Krzysztof Kozlowski wrote:
+> With this set of fixes (and few other earlier), all Exynos ARMv7 boards
+> successfully pass DT Schema checks! All! Hurray!
 > 
-> Yes, I understood your idea but keeping dead objects until the process
-> exits even when the system is low on memory (no shrinkers attached)
-> seems too wasteful. If we do this I would advocate for attaching a
-> shrinker.
+> Please kindly test if I did not break any boards...
+> 
+> Best regards,
+> Krzysztof
+> 
+> [...]
 
-I am still not sure we are on the same page here. No, vmas shouldn't lay
-around un ntil the process exit. I am really suggesting queuing only for
-remove_vma paths. You can have a different rcu callback than the one
-used for trivial single vma removal paths.
+Applied, thanks!
 
+[01/11] ARM: dts: exynos: correct wr-active property in Exynos3250 Rinato
+        https://git.kernel.org/krzk/linux/c/d15d2a617499882971ddb773a583015bf36fa492
+[02/11] ARM: dts: exynos: drop unsupported desc-num in Exynos3250
+        https://git.kernel.org/krzk/linux/c/49434cd203ed3af220145f2e5e5791339dac347a
+[03/11] ARM: dts: exynos: correct cd-gpios property in Exynos4412 Itop Elite
+        https://git.kernel.org/krzk/linux/c/78b93ffef4ad1800f884e4892c1bd79ca5512cba
+[04/11] ARM: dts: exynos: align pin node names in Exynos4412
+        https://git.kernel.org/krzk/linux/c/f370a3d0fd16cd260248c387cc085dcb8a6d32b2
+[05/11] ARM: dts: exynos: add ports in HDMI bridge in Exynos4412 Midas
+        https://git.kernel.org/krzk/linux/c/74ac07e485bb01e232c7f3d67632ffc9b64604aa
+[06/11] ARM: dts: exynos: add panel supply in Tiny4412
+        https://git.kernel.org/krzk/linux/c/c2387ee9a318dfb7cb5a7a210e2825c62d4932cc
+[07/11] ARM: dts: exynos: add backlight supply in P4 Note
+        https://git.kernel.org/krzk/linux/c/f845ae570231bcaa677df65af620896fdf3c5705
+[08/11] ARM: dts: exynos: align HSOTG/USB node names
+        https://git.kernel.org/krzk/linux/c/eeb0fd23bc0fc823032dd2a2df22651ce8369aed
+[09/11] ARM: dts: exynos: correct SATA clocks in Exynos5250
+        https://git.kernel.org/krzk/linux/c/712c852a7b0dc0ac66fa6b89997f4f952483a5e4
+[10/11] ARM: dts: exynos: correct HS200 property in Exynos5260
+        https://git.kernel.org/krzk/linux/c/865b7ea364f892a3de7838eec04628efb945939e
+[11/11] ARM: dts: exynos: correct HSI2C properties in Exynos5410 Odroid XU
+        https://git.kernel.org/krzk/linux/c/5dd60c69047ee3fd92a9f64b28377f4819536d2f
+
+Best regards,
 -- 
-Michal Hocko
-SUSE Labs
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
