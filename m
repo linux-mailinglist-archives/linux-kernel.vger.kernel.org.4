@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96923677597
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5D167759A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjAWH2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S231538AbjAWHa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAWH2g (ORCPT
+        with ESMTP id S230023AbjAWHa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:28:36 -0500
+        Mon, 23 Jan 2023 02:30:26 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB411716A;
-        Sun, 22 Jan 2023 23:28:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DE417167;
+        Sun, 22 Jan 2023 23:30:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 098CDB80BFB;
-        Mon, 23 Jan 2023 07:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A767CC433B3;
-        Mon, 23 Jan 2023 07:28:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 612F3B808D5;
+        Mon, 23 Jan 2023 07:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1027AC4339E;
+        Mon, 23 Jan 2023 07:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674458912;
-        bh=tDZSyDGWUdOFrSfldiEN29lT3lN2KENZc5nb4MvHF78=;
+        s=k20201202; t=1674459023;
+        bh=yqHRmBM/5HKjzaBie8odadDl/b5Q4ya5gnQh2zFliW0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IsP0wjxDEnFHvne1OyWxEIrR+cVRvkUSvZAuvBG8Y5Lmf1q12/B3Yuyvtu3Hmv8G7
-         fZ9mRPHO7EjkX+faagLXYDpQENaQNOPKLEObyPSWVKHL/GA++/Iinh967Ae9l13reA
-         fQtMljmoylteB+aIC8v4oeuegX4gffeyea/7w/f0tgEAQIN4+zYhQNAPLUVZCWBCVd
-         E+83tMYuk7ZlzxR428SXUTG2znRE9vT98AlcRqnleOSiWxW/mJy2C5kKLDxhozm7fj
-         VZQokaquQNmMu4P+oFRNiwXVG5Qha9pYullUApeVyDfBSbsxpxRo7yqizZutKeyVZb
-         RJbbaaIP9gUNw==
-Received: by mail-lf1-f50.google.com with SMTP id o20so16837727lfk.5;
-        Sun, 22 Jan 2023 23:28:32 -0800 (PST)
-X-Gm-Message-State: AFqh2kq86YMNjTToSF/WXruVGLWYnleRzgO+xFSoYslkkoZcBh9vzm1G
-        F5hClmvsxWRGLy4oh3Ms7phJRfiFcQYLDOXVU4k=
-X-Google-Smtp-Source: AMrXdXuwSrrvsm09tpsZA2C2PMEHa2dTiiOyrGKO8XhtVl4LMbWCyJAWnz611NXzHAoNEMS28NhTboUYuypfamEuWXA=
-X-Received: by 2002:a05:6512:118a:b0:4cc:9d69:4703 with SMTP id
- g10-20020a056512118a00b004cc9d694703mr2418365lfr.110.1674458910440; Sun, 22
- Jan 2023 23:28:30 -0800 (PST)
+        b=iGq5+eY5tyMw6oahuiHN28IBRDzPcwah1Tj6QMnoc1/Er+SEnF1kUj3FyEewGhNAL
+         2oNaeTuCjq9wQ3S3cN+Qi8Ti9iMARl2TUxhxKLUgDjaq0Ips8RY8Rvz4gPVCo155uX
+         DxdsLaADc4afozv2jPJRMwYKItIWNsUWIoia9NUqTKLnegidJJXvHDXSchAiqXvk5a
+         3tuFLLfahb1o891CjD83Y6UCad/u+SmZyAfnsBOyFjiVOfUMZE39xhev/Zpcjye+ze
+         b09krGV86uoDA0XlqIxHr35Y2sao3CduQgPq6gK6B39SY9wjZbdPIsVbZrDHvqbhvd
+         2eWEn/ASR54ug==
+Received: by mail-lf1-f47.google.com with SMTP id f34so16823029lfv.10;
+        Sun, 22 Jan 2023 23:30:22 -0800 (PST)
+X-Gm-Message-State: AFqh2kq06hdaC/xvt1rFydBqwFQFLpmnJ/KW7rCAg2Ltglyt0vmr/y1A
+        dpNqG1G2p0DErYOzxROuBFhYKbb4ZODgzvoO3+k=
+X-Google-Smtp-Source: AMrXdXvLGWnD0SLJx80UTiS66Ijd6HhijiZdhKVE7te2RkGIhVL2UPwS2V4brcBlC75bspAFezet9YOtuuT2k/ow/ZA=
+X-Received: by 2002:a19:675e:0:b0:4b6:f37c:c123 with SMTP id
+ e30-20020a19675e000000b004b6f37cc123mr1643063lfj.539.1674459021083; Sun, 22
+ Jan 2023 23:30:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20230122150232.736358800@linuxfoundation.org> <CA+G9fYsEvpCj_vSFLxkKA6tzdNOhimqZYF+WCLKYAiNLtrMvsA@mail.gmail.com>
- <Y842R2KIhUL9XMUi@kroah.com>
-In-Reply-To: <Y842R2KIhUL9XMUi@kroah.com>
+References: <20221003112625.972646-1-ardb@kernel.org> <b18879e0329c785d35f2aa2164413bb56419c684.1674153153.git.demi@invisiblethingslab.com>
+In-Reply-To: <b18879e0329c785d35f2aa2164413bb56419c684.1674153153.git.demi@invisiblethingslab.com>
 From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 23 Jan 2023 08:28:18 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF02H87N4NsPWCdjdkGz-D_EQVMxbN3=btgzr5F=P0eRQ@mail.gmail.com>
-Message-ID: <CAMj1kXF02H87N4NsPWCdjdkGz-D_EQVMxbN3=btgzr5F=P0eRQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 23 Jan 2023 08:30:09 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXELH7+d5141yhBudrA0vtOOkCfVucwGBpag9u4mU4Q0iA@mail.gmail.com>
+Message-ID: <CAMj1kXELH7+d5141yhBudrA0vtOOkCfVucwGBpag9u4mU4Q0iA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] efi: Support ESRT under Xen
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,77 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 at 08:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, 19 Jan 2023 at 20:04, Demi Marie Obenour
+<demi@invisiblethingslab.com> wrote:
 >
-> On Mon, Jan 23, 2023 at 12:39:55PM +0530, Naresh Kamboju wrote:
-> > On Sun, 22 Jan 2023 at 20:46, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 5.15.90 release.
-> > > There are 117 patches in this series, all will be posted as a respons=
-e
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >
-> > > Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/pa=
-tch-5.15.90-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able-rc.git linux-5.15.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > Results from Linaro=E2=80=99s test farm.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Build regressions found on sh:
-> >    - build/gcc-8-dreamcast_defconfig
-> >    - build/gcc-8-microdev_defconfig
-> >
-> >
-> > Build error logs:
-> >
-> > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-> > defined in discarded section `.exit.text' of crypto/algboss.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/char/hw_random/core.o: defined in discarded section
-> > `.exit.text' of drivers/char/hw_random/core.o
-> > make[1]: *** [/builds/linux/Makefile:1218: vmlinux] Error 1
-> >
-> > Bisection points to this commit,
-> >     arch: fix broken BuildID for arm64 and riscv
-> >     commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
-> >
-> > Ref:
-> > upstream discussion thread,
-> > https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
+> This patch series fixes handling of EFI tables when running under Xen.
+> These fixes allow the ESRT to be loaded when running paravirtualized in
+> dom0, making the use of EFI capsule updates possible.
 >
-> Argh, what a mess.  Ok, let me rip out that commit (and the "fixes up
-> that commit") series from the trees and push out a -rc2 in a few hours
-> after I wake up.  I was worried about that one, and I should have
-> trusted my first instinct...
+> Demi Marie Obenour (5):
+>   efi: memmap: Disregard bogus entries instead of returning them
+>   efi: xen: Implement memory descriptor lookup based on hypercall
+>   efi: Apply allowlist to EFI configuration tables when running under
+>     Xen
+>   efi: Actually enable the ESRT under Xen
+>   efi: Warn if trying to reserve memory under Xen
 >
 
-The patch in question has
+I have given these a spin on a system with a dodgy ESRT (the region in
+question is not covered by the memory map at all), and things are
+exactly as broken before, which is good.
 
-    Fixes: 994b7ac1697b ("arm64: remove special treatment for the link
-order of head.o")
-    Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link
-order of head.o")
+I have queued these up in efi/next now, they should appear in -next tomorrow.
 
-both of which were introduced in the current v6.2 cycle.
 
-Neither of those are marked for stable, are obviously non-stable
-material, and were not queued up themselves.
-
-So how did we end up queuing these in the first place?
+>  drivers/firmware/efi/efi.c  | 22 ++++++++++++-
+>  drivers/firmware/efi/esrt.c | 15 +++------
+>  drivers/xen/efi.c           | 61 +++++++++++++++++++++++++++++++++++++
+>  include/linux/efi.h         |  3 ++
+>  4 files changed, 90 insertions(+), 11 deletions(-)
+>
+> --
+> Sincerely,
+> Demi Marie Obenour (she/her/hers)
+> Invisible Things Lab
