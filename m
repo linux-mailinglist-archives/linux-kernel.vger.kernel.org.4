@@ -2,171 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B58678B8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F7D678B3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjAWXAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:00:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S229514AbjAWW71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbjAWXAF (ORCPT
+        with ESMTP id S231916AbjAWW7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:00:05 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A897939B89;
-        Mon, 23 Jan 2023 14:59:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IDj1HHNS5kOrmbDS+OVRT4mu5FY6TPmI+6DPjKgfZvhu2UyUiVolCFAUdOtI61Ma/Bv6lZ7wMx5Zeb6grRJUbpU/LaWdDGJcrNRG57gULhaW3LXLqAR6iA8kmh+FFkXlBI3DoWmIBf0z/yfB+dI1mGes/8ZoMNKEzrhrqZkle/0qnBFhaHuZG67sGYK0dm/N40Wro5ypHoyBRUG04q+ohWGcJpyDQR50INfjsk125kG3wDJHpvxbuw6IIVd6i5/PpF/9HFMRgXorJiPiQilRoKGJq9QE5pGspj3bM1DS8fwZntBzC4himqBfSYQAOz717U7ddsJIMCVDVkoxY3T0fA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RPP217NhloKDoLSAeUYTREqWvKmuIsqoh8yDbZ4jU3I=;
- b=kzfinTU1Vnmh1MdJgJz+HyL/OSSpFisWdDCDRFtYk8ESj4VQ7BqJRoQrlGzootAJNnXG0n6CPddmvoc2EiGA4IKh4khHRV7oNdcFvKlG4Gin4xC3hE7D++7Ndmsu/pm/uYJ1cdp5buBjosezCw4+9q0GZ1WxqC5lrAABEpIzZRS7e/BJ+rLil2gqbxetb3gHVUj1OO9L/MRP9Yqz12KAuON2gk9ZzuWzOyEb4XKGaRhKxswviYwdxU16dmrO9YKGGGiRyCX+2nu4Utti8qfGU/QIVppbLc2VRsZ2hIGYPrqwOnjAS1Mg93282bTEP9NxnVe/nQwajzeh1rpkN5YFWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RPP217NhloKDoLSAeUYTREqWvKmuIsqoh8yDbZ4jU3I=;
- b=sSZfaoIHIcSxDrrFMgVHcVazgREtsiCPPNYnl6taRszRx1cEKrcicc7d0r/ArhUkoy0CmOUnyR1+Co7JAl2TET/Re5znqpD+ued6zGvBdupWNzwWxDiw6YVddW3lgoL6zYOBmETaQh3EMLc67iCeiDMpljfE4nwU0tUvN1HRit4=
-Received: from BN9P222CA0026.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::31)
- by SA1PR12MB7038.namprd12.prod.outlook.com (2603:10b6:806:24d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
- 2023 22:58:50 +0000
-Received: from BN8NAM11FT078.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10c:cafe::be) by BN9P222CA0026.outlook.office365.com
- (2603:10b6:408:10c::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
- Transport; Mon, 23 Jan 2023 22:58:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT078.mail.protection.outlook.com (10.13.176.251) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6023.16 via Frontend Transport; Mon, 23 Jan 2023 22:58:50 +0000
-Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 23 Jan
- 2023 16:58:49 -0600
-From:   Kim Phillips <kim.phillips@amd.com>
-To:     <x86@kernel.org>
-CC:     Kim Phillips <kim.phillips@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Alexey Kardashevskiy" <aik@amd.com>, <kvm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 8/8] x86/cpu, kvm: Propagate the AMD Automatic IBRS feature to the guest
-Date:   Mon, 23 Jan 2023 16:57:00 -0600
-Message-ID: <20230123225700.2224063-9-kim.phillips@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230123225700.2224063-1-kim.phillips@amd.com>
-References: <20230123225700.2224063-1-kim.phillips@amd.com>
+        Mon, 23 Jan 2023 17:59:25 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB8339BA2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:59:03 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so9713040wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IZpSsT6QI0rgCdyfZs7KnVG5ae2iXjgk88FXgcyzmRA=;
+        b=u5YeiB5rqWMAFD8zMzjvfbaFygIA9yFyCGmYqetLzBTxTDxda40pEo/CEnjcItlDxi
+         EAj9F/ALM4fpbpfTCjGzuGUf58H6DR1XjBJhxxFo0/sqp0g6FiEQ1VZew29eZ1WLqA5x
+         M2mlXycExKOVQSDPiNJ5G2yee9aX5VGK2Mp/IcjXQ5sr8nCsI9PT9wciXDwoTuhcYbNV
+         YW8nziM6jLvJBaWlWmQ5QWoprB1UJJ3E6tlIeeGhKOD0jmMDHxfSHTEaDxvzIVOZXtYz
+         oPWyPC9pbYyTrTDh3QQV2Bl05htN5LSILIbm5qXrQFMpZ36JnQWG0Rc3O9pzJlKeEizd
+         DUfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZpSsT6QI0rgCdyfZs7KnVG5ae2iXjgk88FXgcyzmRA=;
+        b=afBjHFP7tOuatw4tIHpeBsskOjTAAcVlDjssnC4MXzaj6TmCx+Y/dzJZ0z+KcZVJsb
+         64yqWs9UNsr/LWdePt9O4NTcseNZ6twtds1xqRjr4XYGMf0DixR3dT044FVMSA/vEkr0
+         AUrMnrl0ikh/Xmewyz/bHZWRHvExFVDyqOemBA+iwMDBkduPVWb5/uyirUgA5Zpv2bE/
+         lp9s3MYIfhpdetZftQerrq8dGJ8y/d3pnj6zd2UkdcyvzSZi/T+xfCZ9SuQEeyQW9JpG
+         Tq/Ai4DkHogxfdAlgwhYSxw7mGaRtkf7Hwr/NytqosOUwCHr5RzOGKR1OhlcgewGbSZS
+         CxTw==
+X-Gm-Message-State: AFqh2kpRuEFztbYlThDHkb+m7XZu+emH8QuayvhA3QChRrLuhnnEMG6Y
+        Lb1oNLE2NHGhxo2gf2B6miVbPA==
+X-Google-Smtp-Source: AMrXdXtHjG/WoKRMTL4vHHKw+QJOus1BHZT4nnfsCks4OXHZZWPMWOdEEOz5p7UVsK240vz5ky2+GA==
+X-Received: by 2002:a05:600c:3296:b0:3cf:82b9:2fe6 with SMTP id t22-20020a05600c329600b003cf82b92fe6mr26652326wmp.8.1674514730781;
+        Mon, 23 Jan 2023 14:58:50 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id k23-20020a05600c479700b003d9e74dd9b2sm389691wmo.9.2023.01.23.14.58.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 14:58:50 -0800 (PST)
+Message-ID: <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
+Date:   Mon, 23 Jan 2023 22:58:49 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT078:EE_|SA1PR12MB7038:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21fd28f6-104e-409b-0785-08dafd956498
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qHbdLWIsWQ3644MFjExlADefMb2+oVsK7NM+ygu+StdvUxQtcnErJPy1ycTHW4xayffOjdYUHSCJrZMx7yxjsTERQs7gzgTC3/S5kUfeJzjkahCNgEjapMzic5AZ1/Vu+hc4rQhRfTq3B7KTEtH7XFlBE0ITX2H8aE/sPCtfbUhrJ8CVzmGrScJoaW1Mu97o+wIHCQu1boE67s9fHqKhwutNUTmqQWXWRF6wTM4UXQo6zaqolwtpxENIf/t/rEikXGR61X3LWeElZ+hB89JmVv0yqVbtYM62lwOh45rLpZpAlD2YIQHZQ09vDBaAXD4c2traOLbHbJn7Gks7ZVA587zrSxArIVccx+/ORa6HO+hw4b/IjI83P0ZKld3eQqz0VwVa6jNFcQa+5HgSP2Za+QXElezzTcguyHEsA1w7fqgyJwoNdMjCihHlEof/8oPJF/61UoVhGqRofI5W0f8SRO3+4ErxZOOQgpR3JUZL+dKLt6ilHZ6doBjRz0q14PXeUFb3uO2OGCs4gjPfeBbdQb+frt0vthiHT0YK3tIIy+lsSwL6Pd3Qo/rjXZEeW7MTyAfZHg8gexPSfQhJOivuIdIC4ZB3a4TRKrB1mrfRQnhXbKMtWSyxHquFNWOJBDnrXA5C7gFHk+YqGpmaC3II/ftDaepAzaNn/JXomVZFcUG8TS3wA+bZlufag+wxnN7yLy+XjOhPMmHQsi3BHGGWNhrm7Um2K5lsi1zNG/fRkDU=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(36840700001)(46966006)(40470700004)(36756003)(86362001)(81166007)(2906002)(5660300002)(356005)(82310400005)(82740400003)(83380400001)(8936002)(7416002)(4326008)(44832011)(41300700001)(36860700001)(478600001)(7696005)(6916009)(16526019)(8676002)(186003)(40460700003)(40480700001)(26005)(2616005)(70586007)(316002)(70206006)(336012)(6666004)(54906003)(1076003)(47076005)(426003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 22:58:50.5517
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21fd28f6-104e-409b-0785-08dafd956498
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT078.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7038
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
+ zero
+Content-Language: en-US
+To:     Mike Tipton <quic_mdtipton@quicinc.com>,
+        Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
+Cc:     quic_okukatla@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "abel >> Philipp Zabel" <p.zabel@pengutronix.de>,
+        abelvesa@kernel.org, abel.vesa@linaro.org
+References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
+ <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
+ <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
+ <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
+ <35dcb764-e340-5fe7-6637-cdb5f84266ce@linaro.org>
+ <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the AMD Automatic IBRS feature bit to those being propagated to the guest,
-and enable the guest EFER bit.
+On 23/01/2023 20:37, Mike Tipton wrote:
+> 
+> This isn't actually changing it for all providers. Only for those that 
+> define the get_bw() callback. Right now that's only qcom/msm8974 and 
+> imx/imx. If get_bw() isn't defined, then icc_node_add() defaults to 
+> INT_MAX. So, the logical behavior in that case is unchanged. Which means 
+> this isn't even changing the behavior for rpmh yet, either.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Yes that adds up.
+
+Looking at the commit for get_bw() for the 8974, I think this change 
+would be OK with the intent of this commit
+
+commit 9caf2d956cfa254c6d89c5f4d7b3f8235d75b28f
+Author: Georgi Djakov <georgi.djakov@linaro.org>
+Date:   Mon Nov 9 14:45:12 2020 +0200
+
+@Abel what effect will skipping pre->aggregation() have on i.MX ?
+
 ---
- arch/x86/kvm/cpuid.c   | 2 +-
- arch/x86/kvm/svm/svm.c | 3 +++
- arch/x86/kvm/x86.c     | 3 +++
- 3 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 9ba75ad9d976..293ef07b34c3 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -743,7 +743,7 @@ void kvm_set_cpu_caps(void)
- 
- 	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
- 		F(NO_NESTED_DATA_BP) | F(LFENCE_RDTSC) | 0 /* SmmPgCfgLock */ |
--		F(NULL_SEL_CLR_BASE) | 0 /* PrefetchCtlMsr */
-+		F(NULL_SEL_CLR_BASE) | F(AUTOIBRS) | 0 /* PrefetchCtlMsr */
- 	);
- 	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
- 		kvm_cpu_cap_set(X86_FEATURE_LFENCE_RDTSC);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 9a194aa1a75a..60c7c880266b 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4969,6 +4969,9 @@ static __init int svm_hardware_setup(void)
- 
- 	tsc_aux_uret_slot = kvm_add_user_return_msr(MSR_TSC_AUX);
- 
-+	if (boot_cpu_has(X86_FEATURE_AUTOIBRS))
-+		kvm_enable_efer_bits(EFER_AUTOIBRS);
-+
- 	/* Check for pause filtering support */
- 	if (!boot_cpu_has(X86_FEATURE_PAUSEFILTER)) {
- 		pause_filter_count = 0;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index da4bbd043a7b..8dd0cb230ef5 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1685,6 +1685,9 @@ static int do_get_msr_feature(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
- 
- static bool __kvm_valid_efer(struct kvm_vcpu *vcpu, u64 efer)
- {
-+	if (efer & EFER_AUTOIBRS && !guest_cpuid_has(vcpu, X86_FEATURE_AUTOIBRS))
-+		return false;
-+
- 	if (efer & EFER_FFXSR && !guest_cpuid_has(vcpu, X86_FEATURE_FXSR_OPT))
- 		return false;
- 
--- 
-2.34.1
-
+bod
