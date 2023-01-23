@@ -2,195 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09534678318
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9836567831A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbjAWR2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
+        id S233723AbjAWR3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbjAWR2v (ORCPT
+        with ESMTP id S232481AbjAWR3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:28:51 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 65E805B8A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:28:50 -0800 (PST)
-Received: (qmail 133765 invoked by uid 1000); 23 Jan 2023 12:28:49 -0500
-Date:   Mon, 23 Jan 2023 12:28:49 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y87D0ekKCHFLjzeP@rowland.harvard.edu>
-References: <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
- <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
- <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
- <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
- <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
- <Y8rCBOkM/hY+Z27t@rowland.harvard.edu>
- <2f656643-deef-552e-e489-b7afd0dc777f@huaweicloud.com>
- <Y8xRe1Gr6LNjKD4S@rowland.harvard.edu>
- <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
+        Mon, 23 Jan 2023 12:29:07 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9662BF08
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:29:03 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h12so7530683wrv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NwTlvuJuAIghS26NnVpyyRvZGcuEOs61IaO+NF4nagQ=;
+        b=uhYIvcjkhXGu0oqqp+6e+ZBJPe7uq/YlhETV7dqCwosYuLYgrLpNHwHvCjyZ02X1e7
+         Ue879m3+ZfoWbgARPz2iBlihA1+FCgRYsItbUA3CZ9+stz00N2Sxu/fCCGbgI2H2/EVz
+         jDAbhTXBIKFJqaLY/JKav0H9VVnFxZcViXcqYnjIq3IB8/c6Jz0fEtSciklsodsxr8yL
+         zrNqKh6wxDG+sUX4KgTc+u5Q4NbLGII3NmfWtWUfDOcitF4E2b6Vb8RDC6Xoh2IFlo5M
+         fD/Tg3F1u+1tIZtMmDNTgcJq9zyPPKRFU7Jp9UKSwRbGhT9ibVCgopuJ1kW0v1xso7Sn
+         UKwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NwTlvuJuAIghS26NnVpyyRvZGcuEOs61IaO+NF4nagQ=;
+        b=VPK5q7zu1/D7KHWzHOO4vSOq6p6Sldunesb3SUyELnesyfWyT9Tl0MCLzWciIT9lfP
+         0WKdjy57D6JeeRovqzPQy76D0b4afL0aJfu0cUx7Rs5/mBKZ9dqhC1f5YlnGe+/qrQra
+         ud6gnsFOi6qUaqj3Thn6Ap6SsXMgkODnmxT2/701TnRc7wWShGbnfCT4kSt3pk4LD3JM
+         2AE7M/aKLborll4MSoKTdKOgTZYDhXo82klIZ8XldVJpyFcot+MYfImwnR2xVGqWqrWO
+         7uAN7XcjpzcxiPd1Mbexxb6NYFZTLtrUWPnk736v5ZmCI6nYFqNRXDXlOC/pFn6slhoT
+         /F6g==
+X-Gm-Message-State: AFqh2krD/zl0B7515HYtsPBIVuYySE4WKyE+n/ANmBctv/FE+QB41LTz
+        /qBCFo1qzEO3ObiDVWd1nbg65g==
+X-Google-Smtp-Source: AMrXdXudl+2yzwvw1jE0jM6FJ9tqi9H9sjhc16bH/xfVrnV+/acM7WhMX4jqg9wMdEYt+l6LXUQLuA==
+X-Received: by 2002:adf:f0c7:0:b0:2bd:e18d:c9e5 with SMTP id x7-20020adff0c7000000b002bde18dc9e5mr23003524wro.40.1674494941987;
+        Mon, 23 Jan 2023 09:29:01 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b002bdbde1d3absm6950014wrs.78.2023.01.23.09.29.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 09:29:01 -0800 (PST)
+Message-ID: <de7fec53-fe03-456a-8464-d60fdf32ee06@linaro.org>
+Date:   Mon, 23 Jan 2023 18:28:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 1/3] dt-bindings: arm: amlogic: document Odroid-N2L
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, Dongjin Kim <tobetter@gmail.com>
+References: <20230122-topic-odroid-n2l-upstream-initial-v1-0-1ce5e08039d0@linaro.org>
+ <20230122-topic-odroid-n2l-upstream-initial-v1-1-1ce5e08039d0@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230122-topic-odroid-n2l-upstream-initial-v1-1-1ce5e08039d0@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 02:59:37PM +0100, Jonas Oberhauser wrote:
+On 23/01/2023 15:07, Neil Armstrong wrote:
+> ODROID-N2L is a variant SBC in small form factor and some peripherals
+> are removed from ODROID-N2PLUS based on S922X SoC.
 > 
-> 
-> On 1/21/2023 9:56 PM, Alan Stern wrote:
-> > There is yet another level of fences in the hierarchy: those which order
-> > instruction execution but not propagation (smp_rmb() and acquire).  One
-> > of the important points about cumul-fence is that it excludes this
-> > level.
-> > 
-> > That's for a functional reason -- prop simply doesn't work for those
-> > fences, so it has to exclude them.  But it does work for strong fences,
-> > so excluding them would be an artificial restriction.
-> 
-> Hm, so could we say some fences order
-> 1) propagation with propagation (weak fences)
-> 2) execution with execution (rmb, acquire)
-> 3) propagation with execution (strong fences)
-> 
-> where ordering with execution implicitly orders with propagation as well
-> because things can only propagate after they execute.
-> However, the 4th possibility (execution with only propagation) happens not
-> to exist. I'm not sure if it would even be distinguishable from the second
-> type.
+> - On-board ethernet is removed
 
-Only in that such a memory barrier would order po-earlier anything 
-against po-later stores, whereas rmb orders loads against loads and 
-acquire orders loads against anything.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->  In the operational model, can you forward from stores that have not
-> executed yet?
+Best regards,
+Krzysztof
 
-Yes, it is explicitly allowed.  But forwarding doesn't apply in this 
-situation because stores can be forwarded only to po-later loads, not to 
-po-earlier ones.
-
-> > > Right now, both pb and cumul-fence deal with strong fences. And again, I
-> > I would say that cumul-fence _allows_ strong fences, or _can work with_
-> > strong fences.  And I would never want to say that cumul-fence and prop
-> > can't be used with strong fences.  In fact, if you find a situation
-> > where this happens, it might incline you to consider if the fence could
-> > be replaced with a weaker one.
-> 
-> Can you explain the latter part?
-> What does it mean to 'find a situation where this happens'?
-> As I understand the sentence, in current LKMM I don't think this is
-> possible.
-> Do you mean that if you find a case where you could make a cycle with
-> cumul-fence/prop using strong fences, you might just rely on a weaker fence
-> instead?
-
-Exactly.
-
-
-> > Not quite right.  A hypothetical non-A-cumulative case for pb would have
-> > to omit the cumul-fence term entirely.
-> 
-> Wouldn't that violate the transitivity of "X is required to propagate before
-> Y" ?
-> If I have
->    X ->cumul-fence+ Y ->weird-strong-fence Z
-> doesn't that mean that for every CPU C,
-> 1. X is required to propagate to C before Y propagates to C
-> 2. Y is required to propagate to C before any instruction po-after Z 
-> executes
-
-Not if Y is a load.
-
-> But then also X is required to pragate to C before any instruction po-after
-> Z  executes.
-> How is this enforced if there is no cumul-fence* in the new pb?
-
-You do have a point.  I guess one would have to put
-
-	(cumul-fence+ ; [W])?
-
-or something like it in the definition.
-
-> Thinking about prop and pb along these lines gives me a weird feeling.
-> Trying to pinpoint it down, it seems a little bit weird that A-cumul doesn't
-> appear around the strong-fence in pb.
-
-I think the reason it got left out was because all strong fences are 
-A-cumulative.  If some of them weren't, it would have to appear there in 
-some form.
-
->  Of course it should not appear after
-> prop which already has an rfe? at the end. Nevertheless, having the rfe? at
-> the end is clearly important to representing the idea behind prop. If it
-> weren't for the fact that A-cumul is needed to define prop, it almost makes
-> me think that it would be nice to express the difference between
-> A-cumulative and non-A-cumulative fences (that order propagation) by saying
-> that an A-cumulative fence has
->   prop ; a-cumul-fence;rfe? <= prop
-> while the non-A-cumulative fence has
->   prop-without-rfe ; non-a-cumul-fence <= prop-without-rfe
-
-Isn't this just a more complicated way of saying what the A-cumul() 
-macro expresses?
-
-
-> I'm not against this partially overlapping kind of redundancy, but I dislike
-> subsuming kind of redundancy where some branches of the logic just never
-> need to be used.
-
-Consider: Could we remove all propagation-ordering fences from ppo 
-because they are subsumed by prop?  (Or is that just wrong?)
-
-> > In fact, I wouldn't mind removing the happens-before, propagation, and
-> > rcu axioms from LKMM entirely, replacing them with the single
-> > executes-before axiom.
-> 
-> I was planning to propose the same thing, however, I would also propose to
-> redefine hb and rb by dropping the hb/pb parts at the end of these
-> relations.
-> 
->  hb = ....
->  pb = prop ; strong-fence ; [Marked]
->  rb = prop ; rcu-fence ; [Marked]
-> 
->  xb = hb|pb|rb
->  acyclic xb
-
-I'm not so sure that's a good idea.  For instance, it would require the 
-definitions of rcu-link and rb to be changed from having (hb* ; pb*) to 
-having (hb | pb)*.  Also, although it's not mentioned anywhere, the 
-definition of xbstar could be changed to hb* ; pb* ; rb* because each of 
-these relations absorbs a weaker one to its right.
-
-> > > I'm wondering a little if there's some way in the middle, e.g., by writting
-> > > short comments in the model wherever something is redundant. Something like
-> > > (* note: strong-fence is included here for completeness, and can be safely
-> > > ignored *).
-> > I have no objection to doing that.  It seems like a good idea.
-> > 
-> > Alan
-> 
-> Perhaps we can start a new thread then to discuss a few points where
-> redundancies might be annotated this way or eliminated.
-
-Sure, go ahead.
-
-Alan
