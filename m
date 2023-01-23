@@ -2,59 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDC06780A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846A16780A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbjAWP5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S232376AbjAWP6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjAWP5b (ORCPT
+        with ESMTP id S229989AbjAWP6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:57:31 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FFA2D6F;
-        Mon, 23 Jan 2023 07:57:29 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 79DBA82F69;
-        Mon, 23 Jan 2023 16:57:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1674489447;
-        bh=SLvgU234z0Ib/utCI2P4W9G7P3rxOL12bQuTeAqy2xA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GWytINUuM1EgKe60xxlQeAYWkEweDE263zdfENbvRlrjuAKeHSWGOcWc1EOhtce7L
-         6nQxr4vRC3hG5xvJxoKVXLbvrEZchnTmKclVmd7Dqh9JbuMdF26F2Yfvh8WSlFfr/k
-         QFprH1IV+HJIrAZ13QbZOYUtU3Mt6Pa7VMXof9o1oafvI6J0clSlqriyfKXD2ixv21
-         yOoikQP8df8+4M4uIlE2vDHXaSz2i9qbTu7dh/w+5+r+vhqqSAVyGEX4X/TMslf0JT
-         dKUCUR070WXpt5Udr8qqMmXI4kjY7hc7grw381kpWN7d1Kl1vnoBRuHxPDNAf0Wt84
-         qmvJ/nftu4fNg==
-Message-ID: <ace76615-533a-9295-8271-95262859d287@denx.de>
-Date:   Mon, 23 Jan 2023 16:57:25 +0100
+        Mon, 23 Jan 2023 10:58:36 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3937297
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:58:34 -0800 (PST)
+Received: (Authenticated sender: didi.debian@cknow.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id EA7801C0008;
+        Mon, 23 Jan 2023 15:58:32 +0000 (UTC)
+From:   Diederik de Haas <didi.debian@cknow.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Jan Kara <jack@suse.com>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] udf: Fix full name of the GPL
+Date:   Mon, 23 Jan 2023 16:58:22 +0100
+Message-ID: <2072706.5Xk3ikgrb0@prancing-pony>
+Organization: Connecting Knowledge
+In-Reply-To: <20230123154839.k3d6maptnxvb3fw3@quack3>
+References: <20230122191603.59359-1-didi.debian@cknow.org>
+ <20230123154839.k3d6maptnxvb3fw3@quack3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] drm: lcdif: Add i.MX93 LCDIF support
-Content-Language: en-US
-To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-References: <20230123072358.1060670-1-victor.liu@nxp.com>
- <20230123072358.1060670-3-victor.liu@nxp.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230123072358.1060670-3-victor.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; boundary="nextPart1908092.4UR3msx5RQ";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,19 +39,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 08:23, Liu Ying wrote:
-> The LCDIF embedded in i.MX93 SoC is essentially the same to those
-> in i.MX8mp SoC.  However, i.MX93 LCDIF may connect with MIPI DSI
-> controller through LCDIF cross line pattern(controlled by mediamix
-> blk-ctrl) or connect with LVDS display bridge(LDB) directly or a
-> parallel display(also through mediamix blk-ctrl), so add multiple
-> encoders(with DRM_MODE_ENCODER_NONE encoder type) support in the
-> LCDIF DRM driver and find a bridge to attach the relevant encoder's
-> chain when needed.  While at it, derive lcdif_crtc_state structure
-> from drm_crtc_state structure to introduce bus_format and bus_flags
-> states so that the next downstream bridges may use consistent bus
-> format and bus flags.
+--nextPart1908092.4UR3msx5RQ
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Diederik de Haas <didi.debian@cknow.org>
+To: Jan Kara <jack@suse.cz>
+Cc: Jan Kara <jack@suse.com>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] udf: Fix full name of the GPL
+Date: Mon, 23 Jan 2023 16:58:22 +0100
+Message-ID: <2072706.5Xk3ikgrb0@prancing-pony>
+Organization: Connecting Knowledge
+In-Reply-To: <20230123154839.k3d6maptnxvb3fw3@quack3>
+MIME-Version: 1.0
 
-Would it be possible to split this patch into preparatory clean up and 
-i.MX93 addition ? It seems like the patch is doing two things according 
-to the commit message.
+On Monday, 23 January 2023 16:48:39 CET Jan Kara wrote:
+> On Sun 22-01-23 20:16:03, Diederik de Haas wrote:
+> > Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+> > ---
+> > fs/udf/ecma_167.h | 2 +-
+> > fs/udf/osta_udf.h | 2 +-
+> > 2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Thanks. I've added the patch to my tree.
+
+While I initially saw it as a spelling error, I've since changed my view that 
+it would actually be changing the license and I'm not qualified to do that.
+See https://lore.kernel.org/lkml/2281101.Yu7Ql3qPJb@prancing-pony/
+
+While it seemed reasonable to *assume* that the GNU General Public License was 
+meant, I (now) think that is not sufficient when it comes to legal/license 
+material, which this is. I think, but I'm not a lawyer.
+
+So maybe it's better to remove/revert it from your tree?
+
+Sorry,
+  Diederik
+--nextPart1908092.4UR3msx5RQ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCY86ungAKCRDXblvOeH7b
+bq2GAP93Z5vEt/x/H0obP8AIjkCQ9OIopNH2ROfqDxbkMX5wnwEAgLn/6WmDytKG
+a4A6jw06nZy1c6IYt4Lge/heskaxAAw=
+=C50f
+-----END PGP SIGNATURE-----
+
+--nextPart1908092.4UR3msx5RQ--
+
+
+
