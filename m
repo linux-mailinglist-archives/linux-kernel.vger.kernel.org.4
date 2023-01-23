@@ -2,105 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB0E677759
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ADF67775F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbjAWJZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S231809AbjAWJ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbjAWJZT (ORCPT
+        with ESMTP id S229514AbjAWJ0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:25:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775E715547;
-        Mon, 23 Jan 2023 01:25:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B09060DEF;
-        Mon, 23 Jan 2023 09:25:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21629C433D2;
-        Mon, 23 Jan 2023 09:25:14 +0000 (UTC)
-Message-ID: <b947e565-950f-09a2-6c72-4162d7beed8a@xs4all.nl>
-Date:   Mon, 23 Jan 2023 10:25:12 +0100
+        Mon, 23 Jan 2023 04:26:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFD915549
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674465950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZMTy6Tq8SNpkRFs2YVhPz9j6sx3/BmqHI5EE4rEjczI=;
+        b=WYlase41I5o1Ru2ApBik6cacV4ezdB9dYjl0tmRyfZFXczKrx2rYcQFv90DJNDnldOISSg
+        bQdBis8Z9edK2gQHXotxnsP8p0/iGPZKoDkhngFy+oxzdkgFkRmFZBscUYx3QBxJmFnl1N
+        tlfGMMvFW/WRuZcwIBgI/54Y+YTZGks=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-TAZX67S_NZW6WRLTG8GYsg-1; Mon, 23 Jan 2023 04:25:49 -0500
+X-MC-Unique: TAZX67S_NZW6WRLTG8GYsg-1
+Received: by mail-qk1-f197.google.com with SMTP id bm30-20020a05620a199e00b007090f3c5ec0so6758212qkb.21
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:25:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMTy6Tq8SNpkRFs2YVhPz9j6sx3/BmqHI5EE4rEjczI=;
+        b=5VhiAxrMCRbF9fGHc1mSPQn0xb6edWUILBmCDS3c5rnXbtzbWTnbYsSvX+9/DuYOLJ
+         3qpjMM2UaN1rJnVrusX1Vucu/afzhmKwgUzJYofQ9+khorCznngf5RBtgPmiN1jwLeJ1
+         d891PJ6OCy1V4D7XxPkuaCBeenXEWRs6TLZLvc8gYfnuYdqtU5NA32imACgN/EGnvmER
+         0bJpvS5FJHYo+arIM7JSzw3gFA9kJpzO79SO6Nkuto/U3BGelVAYgoXx7PCy8pnzlnHE
+         jP74UyJ6NiPAH5iyKoZwvGxk99F/HXhMXO4UF569dD4riENRJEO8ct5F8OPbtNbMUlcL
+         wZew==
+X-Gm-Message-State: AFqh2kpMIwGZn2vUSvfK9BCW5Y1zA5sTXCtQuTa9eF3PxHuKw7+r2+eP
+        MQdyYTaEw6733nQnHlvfOT5YQTbjCB+yzt923OMoXMrLLRhgsF6lXowtNq91tdlW+PvXQWRD/oL
+        MVqYiXMAj5K1Baur81Jlt9Gjz
+X-Received: by 2002:ad4:5301:0:b0:535:5ff1:ccb2 with SMTP id y1-20020ad45301000000b005355ff1ccb2mr16731356qvr.4.1674465948714;
+        Mon, 23 Jan 2023 01:25:48 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtM8WdUzTuf3AICpDNA4CQh1qPmCAD0+RWVCzbet2oH+5JRFCvNifkrbn4tS6j0Ar1yAi0SvQ==
+X-Received: by 2002:ad4:5301:0:b0:535:5ff1:ccb2 with SMTP id y1-20020ad45301000000b005355ff1ccb2mr16731343qvr.4.1674465948492;
+        Mon, 23 Jan 2023 01:25:48 -0800 (PST)
+Received: from [192.168.100.30] ([82.142.8.70])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05620a16aa00b006cfc9846594sm21718471qkj.93.2023.01.23.01.25.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 01:25:47 -0800 (PST)
+Message-ID: <aa07f74e-ad9e-bc94-9ace-257db0aa5b4d@redhat.com>
+Date:   Mon, 23 Jan 2023 10:25:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: linux-next: manual merge of the v4l-dvb-next tree with the
- arm-soc tree
+Subject: Re: [PATCH 0/4] virtio_net: vdpa: update MAC address when it is
+ generated by virtio-net
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Olof Johansson <olof@lixom.net>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-References: <20230123100923.7899a60f@canb.auug.org.au>
- <ed0880bd-5c0a-4831-a440-2b1600890d35@app.fastmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <ed0880bd-5c0a-4831-a440-2b1600890d35@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eli Cohen <elic@nvidia.com>, Jason Wang <jasowang@redhat.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Cindy Lu <lulu@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>
+References: <20230122100526.2302556-1-lvivier@redhat.com>
+ <20230122052211-mutt-send-email-mst@kernel.org>
+From:   Laurent Vivier <lvivier@redhat.com>
+In-Reply-To: <20230122052211-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-On 23/01/2023 10:13, Arnd Bergmann wrote:
-> On Mon, Jan 23, 2023, at 00:09, Stephen Rothwell wrote:
->> Hi all,
+On 1/22/23 11:23, Michael S. Tsirkin wrote:
+> On Sun, Jan 22, 2023 at 11:05:22AM +0100, Laurent Vivier wrote:
+>> When the MAC address is not provided by the vdpa device virtio_net
+>> driver assigns a random one without notifying the device.
+>> The consequence, in the case of mlx5_vdpa, is the internal routing
+>> tables of the device are not updated and this can block the
+>> communication between two namespaces.
 >>
->> Today's linux-next merge of the v4l-dvb-next tree got conflicts in:
+>> To fix this problem, use virtnet_send_command(VIRTIO_NET_CTRL_MAC)
+>> to set the address from virtnet_probe() when the MAC address is
+>> randomly assigned from virtio_net.
 >>
->>   drivers/staging/media/Kconfig
->>   drivers/staging/media/Makefile
+>> While I was testing this change I found 3 other bugs in vdpa_sim_net:
 >>
->> between commit:
+>> - vdpa_sim_net sets the VIRTIO_NET_F_MAC even if no MAC address is
+>>    provided. So virtio_net doesn't generate a random MAC address and
+>>    the MAC address appears to be 00:00:00:00:00:00
 >>
->>   582603a95734 ("staging: media: remove davinci vpfe_capture driver")
+>> - vdpa_sim_net never processes the command and virtnet_send_command()
+>>    hangs in an infinite loop. To avoid a kernel crash add a timeout
+>>    in the loop.
 >>
->> from the arm-soc tree and commit:
->>
->>   d2a8e92f0b41 ("media: vpfe_capture: remove deprecated davinci drivers")
->>
->> from the v4l-dvb-next tree.
->>
->> These 2 commits removed the same driver but caused a conflict due to
->> other changes to these files.
->>
->> I fixed it up (I just used the latter version of these files) and can
->> carry the fix as necessary. This is now fixed as far as linux-next is
->> concerned, but any non trivial conflicts should be mentioned to your
->> upstream maintainer when your tree is submitted for merging.  You may
->> also want to consider cooperating with the maintainer of the conflicting
->> tree to minimise any particularly complex conflicts.
+>> - To allow vdpa_sim_net to process the command, replace the cpu_relax()
+>>    in the loop by a schedule(). vdpa_sim_net uses a workqueue to process
+>>    the queue, and if we don't allow the kernel to schedule, the queue
+>>    is not processed and the loop is infinite.
 > 
-> I can drop my copy of the patch, but from the diffstat I see that
-> there are a few other differences: Hans' version removes
-> include/media/davinci/ccdc_types.h, which I forgot, while my
-> version drops include/media/davinci/vpfe_capture.h (which
-> is still included in the v4l-dvb-next tree, but not in mine)
-> as well as the obsolete driver specific entries in MAINTAINERS
-> and Documentation/userspace-api/ioctl/ioctl-number.rst.
+> I'd split these things out as opposed to a series unless there's
+> a dependency I missed.
+
+We needed to fix virtio_net before fixing vdpa_sim_net otherwise the 
+virtnet_send_command() hangs when we define the vdpa device with "vdpa dev" but without a 
+MAC address.
+
+> All this reminds me of
+> https://lore.kernel.org/r/20221226074908.8154-5-jasowang%40redhat.com
 > 
-> Hans, any idea what we should do? I'd tend to leave both
-> patches where they are and let Linus figure out the merge.
-> If I drop mine we need a follow-up patch to remove
-> the include/media/davinci/vpfe_capture.h header, while
-> dropping yours would likely produce the same conflicts
-> against your tm6000/zr364xx removal patches.
+> how is this patch different/better?
+> Pls also CC people involved in that original discussion.
 
-I'd say, leave it to Linus. If anything remains of the davinci code
-after Linus is done with it, then you and/or I can make follow-up patches.
+I was not aware of the Jason's series.
 
-Regards,
+It seems to address better the problem, except it triggers the ASSERT_RTNL() in 
+virtnet_send_command() when it is called from virtnet_probe().
 
-	Hans
+I will remove patches 2 and 4 from my series.
+PATCH 3 can be sent on independently too.
+
+Thanks,
+Laurent
+
