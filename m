@@ -2,590 +2,1064 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FF3678C49
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7703F678C4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjAWX4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        id S232573AbjAWX40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 18:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjAWX4O (ORCPT
+        with ESMTP id S229569AbjAWX4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:56:14 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F992CFD8;
-        Mon, 23 Jan 2023 15:56:11 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pK6fO-0007oE-1l;
-        Tue, 24 Jan 2023 00:55:58 +0100
-Date:   Mon, 23 Jan 2023 23:55:51 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: add bindings for MT7981 SoC
-Message-ID: <Y88eMrwDmSZ2xovw@makrotopia.org>
-References: <cover.1674409777.git.daniel@makrotopia.org>
- <7c680bf2502ddfd2077306a46c69728d212386f9.1674409777.git.daniel@makrotopia.org>
- <20230123225943.GA2781371-robh@kernel.org>
+        Mon, 23 Jan 2023 18:56:23 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DEB34C22
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:56:17 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id y11so16477339edd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:56:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pPNhSAw/z7h70LdfhbtUBAIe8d37mc/gIRx5pLphU6I=;
+        b=MAsgP1dw4KHhIxYQUmXwrFq4MVNIy8u4J4xExkoLB09x0w4dtflvW7JD7+Ua21t1oG
+         zVTbkZDWT11QCQ4epWHAxnFse2/gmSkvQed8QTN7pKBINEmWsRmHJXLdWex+3VBhsoU8
+         Mdowza/2w2LGDAZDGbKvX1uRc+CNiUBi0N1jaGg0l3hCV9T7JtOjSqusG+ExKGEjICKE
+         zSaHhEnBm0sgIgvSUBF+OeOIH42c+gmJTihKz1bBTcxcZbJ1t0Pd5lA+RhYloQhtDba/
+         CeLeJQLft3IlKJpK2mtiQOZA53BtcS1mxvdQo9T7MOO+M7EoGUHew+IYkSA/CNXbbkMy
+         ITjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pPNhSAw/z7h70LdfhbtUBAIe8d37mc/gIRx5pLphU6I=;
+        b=xLfFyMF9fzoC8Ngwi5482i9bzoRoSpy/VCOkgTWLX/YDmIrttRnLS0RaKB9R37bu5r
+         7o0vsgWBUdAumn2pFMh4aj0yV573YQ5Dv9hSLg84U4xGYZhlri2IRQttttj9+G1a0AhU
+         gErOBjUX9rCkhnyM8WPU10GGbLm98Nv5PzlUZ5xahhBfM8mbsMqf3/U0AgcNg4FZ6wll
+         FdPiSS1FApDb25WA7qvdodPAi4ANx+rqkGGYMriR/xsrp4ZwDN3CRdl4TRVlmjdaoJsQ
+         4MY8ksmxwq2UhGXYyxdWqMBxICmnP+MUNtES1WdG61Nod/iQDVRVJMShnhGl+X6U3OEV
+         D9JQ==
+X-Gm-Message-State: AFqh2kpszxDMdohaGXEe3GEOU9CGdkp62sKazjsbu2f050NSBB9UXs9q
+        i0Sg+pQEmW7Qp9dkdak3dJqnbA==
+X-Google-Smtp-Source: AMrXdXvVBrGr66nSZlTYUbs+n++m5I2ZbPExy6nGJViDVip/hfUtVHHuljctV9faw7y+NU/zEdRz2g==
+X-Received: by 2002:a05:6402:3220:b0:49e:1d59:794f with SMTP id g32-20020a056402322000b0049e1d59794fmr34038753eda.22.1674518175873;
+        Mon, 23 Jan 2023 15:56:15 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id n22-20020aa7c796000000b004972644b19fsm339577eds.16.2023.01.23.15.56.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 15:56:15 -0800 (PST)
+Message-ID: <8447b199-1fe7-e67e-67d1-e6352df0df80@linaro.org>
+Date:   Tue, 24 Jan 2023 01:56:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123225943.GA2781371-robh@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 05/14] drm/msm/dp: upgrade tu calculation base on
+ newest algorithm
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
+ <1674498274-6010-6-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1674498274-6010-6-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 04:59:43PM -0600, Rob Herring wrote:
-> On Sun, Jan 22, 2023 at 06:23:55PM +0000, Daniel Golle wrote:
-> > Add bindings for the MT7981 pinctrl driver, based on existing MT7986
-> > pinctrl bindings.
+On 23/01/2023 20:24, Kuogee Hsieh wrote:
+> At display port, the pixel data is packed into TU (transfer units)
+> which is used to carry main video stream data during its horizontal active
+> period. TUs are mapping into the main-Link to facilitate the support of
+> various lane counts regardless of the pixel bit depth and colorimetry
+> format. Stuffing symbols are required if packed data rate less than link
+> symbol rate. TU size is calculated base on factors such as, pixel rate,
+> BPP, main link rate, main link lane and etc, and shall be 32 to 64
+> link symbols per lane. Each vendor has its own algorithm to calculate
+> TU size. This patch upgrade TU size calculation base on newest algorithm.
 > 
-> What existing bindings? A .txt file you need to remove, or undocumented, 
-> but in use somewhere (where?)?
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c | 702 +++++++++++++++++++++++----------------
+>   1 file changed, 416 insertions(+), 286 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index d0d1848..ae9c2b8 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -182,18 +182,24 @@ static void dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl)
+>    */
+>   struct tu_algo_data {
+>   	s64 lclk_fp;
+> +	s64 orig_lclk_fp;
+>   	s64 pclk_fp;
+> +	s64 orig_pclk_fp;
+>   	s64 lwidth;
+>   	s64 lwidth_fp;
+> +	int orig_lwidth;
+>   	s64 hbp_relative_to_pclk;
+>   	s64 hbp_relative_to_pclk_fp;
+>   	int nlanes;
+> +	int orig_hbp;
+>   	int bpp;
+>   	int pixelEnc;
+>   	int dsc_en;
+>   	int async_en;
+> +	int fec_en;
+>   	int bpc;
+>   
+> +	int rb2;
+>   	uint delay_start_link_extra_pixclk;
+>   	int extra_buffer_margin;
+>   	s64 ratio_fp;
+> @@ -250,19 +256,30 @@ struct tu_algo_data {
+>   	int even_distribution_BF;
+>   	int even_distribution_legacy;
+>   	int even_distribution;
+> +
+> +	int hbp_delayStartCheck;
+> +	int pre_tu_hw_pipe_delay;
+> +	int post_tu_hw_pipe_delay;
+> +	int link_config_hactive_time;
+> +	int delay_start_link_lclk;
+> +	int tu_active_cycles;
+> +	s64 parity_symbols;
+> +	int resolution_line_time;
+> +	int last_partial_lclk;
+> +
+>   	int min_hblank_violated;
+>   	s64 delay_start_time_fp;
+>   	s64 hbp_time_fp;
+>   	s64 hactive_time_fp;
+>   	s64 diff_abs_fp;
+> -
+> +	int second_loop_set;
+>   	s64 ratio;
+>   };
+>   
+>   static int _tu_param_compare(s64 a, s64 b)
+>   {
+> -	u32 a_sign;
+> -	u32 b_sign;
+> +	u32 a_int, a_frac, a_sign;
+> +	u32 b_int, b_frac, b_sign;
+>   	s64 a_temp, b_temp, minus_1;
+>   
+>   	if (a == b)
+> @@ -270,8 +287,12 @@ static int _tu_param_compare(s64 a, s64 b)
+>   
+>   	minus_1 = drm_fixp_from_fraction(-1, 1);
+>   
+> +	a_int = (a >> 32) & 0x7FFFFFFF;
+> +	a_frac = a & 0xFFFFFFFF;
+>   	a_sign = (a >> 32) & 0x80000000 ? 1 : 0;
+>   
+> +	b_int = (b >> 32) & 0x7FFFFFFF;
+> +	b_frac = b & 0xFFFFFFFF;
+>   	b_sign = (b >> 32) & 0x80000000 ? 1 : 0;
+>   
+>   	if (a_sign > b_sign)
+> @@ -295,6 +316,21 @@ static int _tu_param_compare(s64 a, s64 b)
+>   	}
+>   }
+>   
+> +static s64 fixp_subtract(s64 a, s64 b)
+> +{
+> +	s64 minus_1 = drm_fixp_from_fraction(-1, 1);
+> +
+> +	if (a >= b)
+> +		return a - b;
+> +
+> +	return drm_fixp_mul(b - a, minus_1);
+> +}
+> +
+> +static inline int fixp2int_ceil(s64 a)
+> +{
+> +	return a ? drm_fixp2int_ceil(a) : 0;
+> +}
+> +
+>   static void dp_panel_update_tu_timings(struct dp_tu_calc_input *in,
+>   					struct tu_algo_data *tu)
+>   {
+> @@ -305,6 +341,7 @@ static void dp_panel_update_tu_timings(struct dp_tu_calc_input *in,
+>   	s64 pclk_dsc_fp;
+>   	s64 dwidth_dsc_fp;
+>   	s64 hbp_dsc_fp;
+> +	s64 overhead_dsc;
+>   
+>   	int tot_num_eoc_symbols = 0;
+>   	int tot_num_hor_bytes   = 0;
+> @@ -315,16 +352,22 @@ static void dp_panel_update_tu_timings(struct dp_tu_calc_input *in,
+>   	s64 temp1_fp, temp2_fp, temp3_fp;
+>   
+>   	tu->lclk_fp              = drm_fixp_from_fraction(in->lclk, 1);
+> +	tu->orig_lclk_fp         = tu->lclk_fp;
+>   	tu->pclk_fp              = drm_fixp_from_fraction(in->pclk_khz, 1000);
+> +	tu->orig_pclk_fp         = tu->pclk_fp;
+>   	tu->lwidth               = in->hactive;
+>   	tu->hbp_relative_to_pclk = in->hporch;
+>   	tu->nlanes               = in->nlanes;
+>   	tu->bpp                  = in->bpp;
+>   	tu->pixelEnc             = in->pixel_enc;
+>   	tu->dsc_en               = in->dsc_en;
+> +	tu->fec_en               = in->fec_en;
+>   	tu->async_en             = in->async_en;
+>   	tu->lwidth_fp            = drm_fixp_from_fraction(in->hactive, 1);
+> +	tu->orig_lwidth          = in->hactive;
+>   	tu->hbp_relative_to_pclk_fp = drm_fixp_from_fraction(in->hporch, 1);
+> +	tu->orig_hbp             = in->hporch;
+> +	tu->rb2                  = (in->hporch <= 80) ? 1 : 0;
+>   
+>   	if (tu->pixelEnc == 420) {
+>   		temp1_fp = drm_fixp_from_fraction(2, 1);
+> @@ -378,6 +421,7 @@ static void dp_panel_update_tu_timings(struct dp_tu_calc_input *in,
+>   	dwidth_dsc_bytes = (tot_num_hor_bytes +
+>   				tot_num_eoc_symbols +
+>   				(eoc_bytes == 0 ? 0 : tot_num_dummy_bytes));
+> +	overhead_dsc     = dwidth_dsc_bytes / tot_num_hor_bytes;
+>   
+>   	dwidth_dsc_fp = drm_fixp_from_fraction(dwidth_dsc_bytes, 3);
+>   
+> @@ -409,12 +453,12 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	temp1_fp = drm_fixp_from_fraction(tu->tu_size, 1);
+>   	temp2_fp = drm_fixp_mul(tu->ratio_fp, temp1_fp);
+>   
+> -	tu->new_valid_boundary_link = drm_fixp2int_ceil(temp2_fp);
+> +	tu->new_valid_boundary_link = fixp2int_ceil(temp2_fp);
+>   
+>   	temp = (tu->i_upper_boundary_count *
+>   				tu->new_valid_boundary_link +
+>   				tu->i_lower_boundary_count *
+> -				(tu->new_valid_boundary_link-1));
+> +				(tu->new_valid_boundary_link - 1));
+>   	tu->average_valid2_fp = drm_fixp_from_fraction(temp,
+>   					(tu->i_upper_boundary_count +
+>   					tu->i_lower_boundary_count));
+> @@ -489,11 +533,11 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   
+>   	temp1_fp = drm_fixp_from_fraction(tu->tu_size, 1);
+>   	temp2_fp = drm_fixp_mul(tu->ratio_fp, temp1_fp);
+> -	tu->n_n_err_fp = tu->effective_valid_fp - temp2_fp;
+> +	tu->n_n_err_fp = fixp_subtract(tu->effective_valid_fp, temp2_fp);
+>   
+>   	temp1_fp = drm_fixp_from_fraction(tu->tu_size, 1);
+>   	temp2_fp = drm_fixp_mul(tu->ratio_fp, temp1_fp);
+> -	tu->n_err_fp = tu->average_valid2_fp - temp2_fp;
+> +	tu->n_err_fp = fixp_subtract(tu->average_valid2_fp, temp2_fp);
+>   
+>   	tu->even_distribution = tu->n_tus % tu->nlanes == 0 ? 1 : 0;
+>   
+> @@ -501,11 +545,7 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	temp2_fp = tu->lwidth_fp;
+>   	temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+>   	temp2_fp = drm_fixp_div(temp1_fp, tu->average_valid2_fp);
+> -
+> -	if (temp2_fp)
+> -		tu->n_tus_incl_last_incomplete_tu = drm_fixp2int_ceil(temp2_fp);
+> -	else
+> -		tu->n_tus_incl_last_incomplete_tu = 0;
+> +	tu->n_tus_incl_last_incomplete_tu = fixp2int_ceil(temp2_fp);
+>   
+>   	temp1 = 0;
+>   	temp1_fp = drm_fixp_from_fraction(tu->tu_size, 1);
+> @@ -513,9 +553,7 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	temp1_fp = tu->average_valid2_fp - temp2_fp;
+>   	temp2_fp = drm_fixp_from_fraction(tu->n_tus_incl_last_incomplete_tu, 1);
+>   	temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+> -
+> -	if (temp1_fp)
+> -		temp1 = drm_fixp2int_ceil(temp1_fp);
+> +	temp1 = fixp2int_ceil(temp1_fp);
+>   
+>   	temp = tu->i_upper_boundary_count * tu->nlanes;
+>   	temp1_fp = drm_fixp_from_fraction(tu->tu_size, 1);
+> @@ -524,32 +562,20 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	temp2_fp = temp1_fp - temp2_fp;
+>   	temp1_fp = drm_fixp_from_fraction(temp, 1);
+>   	temp2_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> +	temp2 = fixp2int_ceil(temp2_fp);
+>   
+> -	if (temp2_fp)
+> -		temp2 = drm_fixp2int_ceil(temp2_fp);
+> -	else
+> -		temp2 = 0;
+>   	tu->extra_required_bytes_new_tmp = (int)(temp1 + temp2);
+>   
+>   	temp1_fp = drm_fixp_from_fraction(8, tu->bpp);
+>   	temp2_fp = drm_fixp_from_fraction(
+>   	tu->extra_required_bytes_new_tmp, 1);
+>   	temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+> -
+> -	if (temp1_fp)
+> -		tu->extra_pclk_cycles_tmp = drm_fixp2int_ceil(temp1_fp);
+> -	else
+> -		tu->extra_pclk_cycles_tmp = 0;
+> +	tu->extra_pclk_cycles_tmp = fixp2int_ceil(temp1_fp);
+>   
+>   	temp1_fp = drm_fixp_from_fraction(tu->extra_pclk_cycles_tmp, 1);
+>   	temp2_fp = drm_fixp_div(tu->lclk_fp, tu->pclk_fp);
+>   	temp1_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> -
+> -	if (temp1_fp)
+> -		tu->extra_pclk_cycles_in_link_clk_tmp =
+> -						drm_fixp2int_ceil(temp1_fp);
+> -	else
+> -		tu->extra_pclk_cycles_in_link_clk_tmp = 0;
+> +	tu->extra_pclk_cycles_in_link_clk_tmp = fixp2int_ceil(temp1_fp);
+>   
+>   	tu->filler_size_tmp = tu->tu_size - tu->new_valid_boundary_link;
+>   
+> @@ -562,6 +588,57 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	temp1_fp = drm_fixp_from_fraction(tu->delay_start_link_tmp, 1);
+>   	tu->delay_start_time_fp = drm_fixp_div(temp1_fp, tu->lclk_fp);
+>   
+> +	if (tu->rb2) {
+> +		temp1_fp = drm_fixp_mul(tu->delay_start_time_fp, tu->lclk_fp);
+> +		tu->delay_start_link_lclk = fixp2int_ceil(temp1_fp);
+> +
+> +		if (tu->remainder_tus > tu->i_upper_boundary_count) {
+> +			temp = (tu->remainder_tus - tu->i_upper_boundary_count) *
+> +							(tu->new_valid_boundary_link - 1);
+> +			temp += (tu->i_upper_boundary_count * tu->new_valid_boundary_link);
+> +			temp *= tu->nlanes;
+> +		} else {
+> +			temp = tu->nlanes * tu->remainder_tus * tu->new_valid_boundary_link;
+> +		}
+> +
+> +		temp1 = tu->i_lower_boundary_count * (tu->new_valid_boundary_link - 1);
+> +		temp1 += tu->i_upper_boundary_count * tu->new_valid_boundary_link;
+> +		temp1 *= tu->paired_tus * tu->nlanes;
+> +		temp1_fp = drm_fixp_from_fraction(tu->n_symbols - temp1 - temp, tu->nlanes);
+> +		tu->last_partial_lclk = fixp2int_ceil(temp1_fp);
+> +
+> +		tu->tu_active_cycles = (int)((tu->n_tus_per_lane * tu->tu_size) +
+> +								tu->last_partial_lclk);
+> +		tu->post_tu_hw_pipe_delay = 4 /*BS_on_the_link*/ + 1 /*BE_next_ren*/;
+> +		temp = tu->pre_tu_hw_pipe_delay + tu->delay_start_link_lclk +
+> +					tu->tu_active_cycles + tu->post_tu_hw_pipe_delay;
+> +
+> +		if (tu->fec_en == 1) {
+> +			if (tu->nlanes == 1) {
+> +				temp1_fp = drm_fixp_from_fraction(temp, 500);
+> +				tu->parity_symbols = fixp2int_ceil(temp1_fp) * 12 + 1;
+> +			} else {
+> +				temp1_fp = drm_fixp_from_fraction(temp, 250);
+> +				tu->parity_symbols = fixp2int_ceil(temp1_fp) * 6 + 1;
+> +			}
+> +		} else { //no fec BW impact
+> +			tu->parity_symbols = 0;
+> +		}
+> +
+> +		tu->link_config_hactive_time = temp + tu->parity_symbols;
+> +
+> +		if (tu->resolution_line_time >= tu->link_config_hactive_time + 1 /*margin*/)
+> +			tu->hbp_delayStartCheck = 1;
+> +		else
+> +			tu->hbp_delayStartCheck = 0;
+> +	} else {
+> +		compare_result_3 = _tu_param_compare(tu->hbp_time_fp, tu->delay_start_time_fp);
+> +		if (compare_result_3 < 2)
+> +			tu->hbp_delayStartCheck = 1;
+> +		else
+> +			tu->hbp_delayStartCheck = 0;
+> +	}
+> +
+>   	compare_result_1 = _tu_param_compare(tu->n_n_err_fp, tu->diff_abs_fp);
+>   	if (compare_result_1 == 2)
+>   		compare_result_1 = 1;
+> @@ -574,13 +651,6 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	else
+>   		compare_result_2 = 0;
+>   
+> -	compare_result_3 = _tu_param_compare(tu->hbp_time_fp,
+> -					tu->delay_start_time_fp);
+> -	if (compare_result_3 == 2)
+> -		compare_result_3 = 0;
+> -	else
+> -		compare_result_3 = 1;
+> -
+>   	if (((tu->even_distribution == 1) ||
+>   			((tu->even_distribution_BF == 0) &&
+>   			(tu->even_distribution_legacy == 0))) &&
+> @@ -588,7 +658,7 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   			compare_result_2 &&
+>   			(compare_result_1 || (tu->min_hblank_violated == 1)) &&
+>   			(tu->new_valid_boundary_link - 1) > 0 &&
+> -			compare_result_3 &&
+> +			(tu->hbp_delayStartCheck == 1) &&
+>   			(tu->delay_start_link_tmp <= 1023)) {
+>   		tu->upper_boundary_count = tu->i_upper_boundary_count;
+>   		tu->lower_boundary_count = tu->i_lower_boundary_count;
+> @@ -607,342 +677,402 @@ static void _tu_valid_boundary_calc(struct tu_algo_data *tu)
+>   	}
+>   }
+>   
+> +static void _dp_calc_boundary(struct tu_algo_data *tu)
+> +{
+> +	s64 temp1_fp = 0, temp2_fp = 0;
+> +
+> +	do {
+> +		tu->err_fp = drm_fixp_from_fraction(1000, 1);
+> +
+> +		temp1_fp = drm_fixp_div(tu->lclk_fp, tu->pclk_fp);
+> +		temp2_fp = drm_fixp_from_fraction(
+> +				tu->delay_start_link_extra_pixclk, 1);
+> +		temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+> +		tu->extra_buffer_margin = fixp2int_ceil(temp1_fp);
+> +
+> +		temp1_fp = drm_fixp_from_fraction(tu->bpp, 8);
+> +		temp1_fp = drm_fixp_mul(tu->lwidth_fp, temp1_fp);
+> +		tu->n_symbols = fixp2int_ceil(temp1_fp);
+> +
+> +		for (tu->tu_size = 32; tu->tu_size <= 64; tu->tu_size++) {
+> +			for (tu->i_upper_boundary_count = 1;
+> +				tu->i_upper_boundary_count <= 15;
+> +				tu->i_upper_boundary_count++) {
+> +				for (tu->i_lower_boundary_count = 1;
+> +					tu->i_lower_boundary_count <= 15;
+> +					tu->i_lower_boundary_count++) {
+> +					_tu_valid_boundary_calc(tu);
+> +				}
+> +			}
+> +		}
+> +		tu->delay_start_link_extra_pixclk--;
+> +	} while (!tu->boundary_moderation_en &&
+> +		tu->boundary_mod_lower_err == 1 &&
+> +		tu->delay_start_link_extra_pixclk != 0 &&
+> +		((tu->second_loop_set == 0 && tu->rb2 == 1) || tu->rb2 == 0));
+> +}
+> +
+> +static void _dp_calc_extra_bytes(struct tu_algo_data *tu)
+> +{
+> +	u64 temp = 0;
+> +	s64 temp1_fp = 0, temp2_fp = 0;
+> +
+> +	temp1_fp = drm_fixp_from_fraction(tu->tu_size_desired, 1);
+> +	temp2_fp = drm_fixp_mul(tu->original_ratio_fp, temp1_fp);
+> +	temp1_fp = drm_fixp_from_fraction(tu->valid_boundary_link, 1);
+> +	temp2_fp = temp1_fp - temp2_fp;
+> +	temp1_fp = drm_fixp_from_fraction(tu->n_tus + 1, 1);
+> +	temp2_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> +
+> +	temp = drm_fixp2int(temp2_fp);
+> +	if (temp)
+> +		tu->extra_bytes = fixp2int_ceil(temp2_fp);
+> +	else
+> +		tu->extra_bytes = 0;
+> +
+> +	temp1_fp = drm_fixp_from_fraction(tu->extra_bytes, 1);
+> +	temp2_fp = drm_fixp_from_fraction(8, tu->bpp);
+> +	temp1_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> +	tu->extra_pclk_cycles = fixp2int_ceil(temp1_fp);
+> +
+> +	temp1_fp = drm_fixp_div(tu->lclk_fp, tu->pclk_fp);
+> +	temp2_fp = drm_fixp_from_fraction(tu->extra_pclk_cycles, 1);
+> +	temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+> +	tu->extra_pclk_cycles_in_link_clk = fixp2int_ceil(temp1_fp);
+> +}
+> +
+> +
+>   static void _dp_ctrl_calc_tu(struct dp_ctrl_private *ctrl,
+>   				struct dp_tu_calc_input *in,
+>   				struct dp_vc_tu_mapping_table *tu_table)
+>   {
+> -	struct tu_algo_data *tu;
+> +	struct tu_algo_data tu;
+>   	int compare_result_1, compare_result_2;
+> -	u64 temp = 0;
+> +	u64 temp = 0, temp1;
+>   	s64 temp_fp = 0, temp1_fp = 0, temp2_fp = 0;
+>   
+>   	s64 LCLK_FAST_SKEW_fp = drm_fixp_from_fraction(6, 10000); /* 0.0006 */
+> -	s64 const_p49_fp = drm_fixp_from_fraction(49, 100); /* 0.49 */
+> -	s64 const_p56_fp = drm_fixp_from_fraction(56, 100); /* 0.56 */
+>   	s64 RATIO_SCALE_fp = drm_fixp_from_fraction(1001, 1000);
+>   
+>   	u8 DP_BRUTE_FORCE = 1;
+>   	s64 BRUTE_FORCE_THRESHOLD_fp = drm_fixp_from_fraction(1, 10); /* 0.1 */
+>   	uint EXTRA_PIXCLK_CYCLE_DELAY = 4;
+> -	uint HBLANK_MARGIN = 4;
+> +	s64 HBLANK_MARGIN = drm_fixp_from_fraction(4, 1);
+> +	s64 HBLANK_MARGIN_EXTRA = 0;
+>   
+> -	tu = kzalloc(sizeof(*tu), GFP_KERNEL);
+> -	if (!tu)
+> -		return;
+>   
+> -	dp_panel_update_tu_timings(in, tu);
+> +	memset(&tu, 0, sizeof(tu));
+>   
+> -	tu->err_fp = drm_fixp_from_fraction(1000, 1); /* 1000 */
+> +	dp_panel_update_tu_timings(in, &tu);
+> +
+> +	tu.err_fp = drm_fixp_from_fraction(1000, 1); /* 1000 */
+>   
+>   	temp1_fp = drm_fixp_from_fraction(4, 1);
+> -	temp2_fp = drm_fixp_mul(temp1_fp, tu->lclk_fp);
+> -	temp_fp = drm_fixp_div(temp2_fp, tu->pclk_fp);
+> -	tu->extra_buffer_margin = drm_fixp2int_ceil(temp_fp);
+> +	temp2_fp = drm_fixp_mul(temp1_fp, tu.lclk_fp);
+> +	temp_fp = drm_fixp_div(temp2_fp, tu.pclk_fp);
+> +	tu.extra_buffer_margin = fixp2int_ceil(temp_fp);
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->bpp, 8);
+> -	temp2_fp = drm_fixp_mul(tu->pclk_fp, temp1_fp);
+> -	temp1_fp = drm_fixp_from_fraction(tu->nlanes, 1);
+> +	if (in->compress_ratio == 375 && tu.bpp == 30)
+> +		temp1_fp = drm_fixp_from_fraction(24, 8);
+> +	else
+> +		temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
+> +
+> +	temp2_fp = drm_fixp_mul(tu.pclk_fp, temp1_fp);
+> +	temp1_fp = drm_fixp_from_fraction(tu.nlanes, 1);
+>   	temp2_fp = drm_fixp_div(temp2_fp, temp1_fp);
+> -	tu->ratio_fp = drm_fixp_div(temp2_fp, tu->lclk_fp);
+> -
+> -	tu->original_ratio_fp = tu->ratio_fp;
+> -	tu->boundary_moderation_en = false;
+> -	tu->upper_boundary_count = 0;
+> -	tu->lower_boundary_count = 0;
+> -	tu->i_upper_boundary_count = 0;
+> -	tu->i_lower_boundary_count = 0;
+> -	tu->valid_lower_boundary_link = 0;
+> -	tu->even_distribution_BF = 0;
+> -	tu->even_distribution_legacy = 0;
+> -	tu->even_distribution = 0;
+> -	tu->delay_start_time_fp = 0;
+> -
+> -	tu->err_fp = drm_fixp_from_fraction(1000, 1);
+> -	tu->n_err_fp = 0;
+> -	tu->n_n_err_fp = 0;
+> -
+> -	tu->ratio = drm_fixp2int(tu->ratio_fp);
+> -	temp1_fp = drm_fixp_from_fraction(tu->nlanes, 1);
+> -	div64_u64_rem(tu->lwidth_fp, temp1_fp, &temp2_fp);
+> -	if (temp2_fp != 0 &&
+> -			!tu->ratio && tu->dsc_en == 0) {
+> -		tu->ratio_fp = drm_fixp_mul(tu->ratio_fp, RATIO_SCALE_fp);
+> -		tu->ratio = drm_fixp2int(tu->ratio_fp);
+> -		if (tu->ratio)
+> -			tu->ratio_fp = drm_fixp_from_fraction(1, 1);
+> +	tu.ratio_fp = drm_fixp_div(temp2_fp, tu.lclk_fp);
+> +
+> +	tu.original_ratio_fp = tu.ratio_fp;
+> +	tu.boundary_moderation_en = false;
+> +	tu.upper_boundary_count = 0;
+> +	tu.lower_boundary_count = 0;
+> +	tu.i_upper_boundary_count = 0;
+> +	tu.i_lower_boundary_count = 0;
+> +	tu.valid_lower_boundary_link = 0;
+> +	tu.even_distribution_BF = 0;
+> +	tu.even_distribution_legacy = 0;
+> +	tu.even_distribution = 0;
+> +	tu.hbp_delayStartCheck = 0;
+> +	tu.pre_tu_hw_pipe_delay = 0;
+> +	tu.post_tu_hw_pipe_delay = 0;
+> +	tu.link_config_hactive_time = 0;
+> +	tu.delay_start_link_lclk = 0;
+> +	tu.tu_active_cycles = 0;
+> +	tu.resolution_line_time = 0;
+> +	tu.last_partial_lclk = 0;
+> +	tu.delay_start_time_fp = 0;
+> +	tu.second_loop_set = 0;
+> +
+> +	tu.err_fp = drm_fixp_from_fraction(1000, 1);
+> +	tu.n_err_fp = 0;
+> +	tu.n_n_err_fp = 0;
+> +
+> +	temp = drm_fixp2int(tu.lwidth_fp);
+> +	if ((((u32)temp % tu.nlanes) != 0) && (_tu_param_compare(tu.ratio_fp, DRM_FIXED_ONE) == 2)
+> +			&& (tu.dsc_en == 0)) {
+> +		tu.ratio_fp = drm_fixp_mul(tu.ratio_fp, RATIO_SCALE_fp);
+> +		if (_tu_param_compare(tu.ratio_fp, DRM_FIXED_ONE) == 1)
+> +			tu.ratio_fp = DRM_FIXED_ONE;
+>   	}
+>   
+> -	if (tu->ratio > 1)
+> -		tu->ratio = 1;
+> +	if (_tu_param_compare(tu.ratio_fp, DRM_FIXED_ONE) == 1)
+> +		tu.ratio_fp = DRM_FIXED_ONE;
+>   
+> -	if (tu->ratio == 1)
+> -		goto tu_size_calc;
+> -
+> -	compare_result_1 = _tu_param_compare(tu->ratio_fp, const_p49_fp);
+> -	if (!compare_result_1 || compare_result_1 == 1)
+> -		compare_result_1 = 1;
+> -	else
+> -		compare_result_1 = 0;
+> -
+> -	compare_result_2 = _tu_param_compare(tu->ratio_fp, const_p56_fp);
+> -	if (!compare_result_2 || compare_result_2 == 2)
+> -		compare_result_2 = 1;
+> -	else
+> -		compare_result_2 = 0;
+> -
+> -	if (tu->dsc_en && compare_result_1 && compare_result_2) {
+> -		HBLANK_MARGIN += 4;
+> -		drm_dbg_dp(ctrl->drm_dev,
+> -			"increase HBLANK_MARGIN to %d\n", HBLANK_MARGIN);
+> +	if (HBLANK_MARGIN_EXTRA != 0) {
+> +		HBLANK_MARGIN += HBLANK_MARGIN_EXTRA;
+> +		DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
+> +			HBLANK_MARGIN_EXTRA);
 
-What I meant to express is that I used the existing
-mediatek,mt7986-pinctrl.yaml file as the template to create a similar
-document for MT7981. I guess my English was not clear enough.
+This code results in format string warnings.
 
-Maybe better like this?
+>   	}
+>   
+> -tu_size_calc:
+> -	for (tu->tu_size = 32; tu->tu_size <= 64; tu->tu_size++) {
+> -		temp1_fp = drm_fixp_from_fraction(tu->tu_size, 1);
+> -		temp2_fp = drm_fixp_mul(tu->ratio_fp, temp1_fp);
+> -		temp = drm_fixp2int_ceil(temp2_fp);
+> +	for (tu.tu_size = 32; tu.tu_size <= 64; tu.tu_size++) {
+> +		temp1_fp = drm_fixp_from_fraction(tu.tu_size, 1);
+> +		temp2_fp = drm_fixp_mul(tu.ratio_fp, temp1_fp);
+> +		temp = fixp2int_ceil(temp2_fp);
+>   		temp1_fp = drm_fixp_from_fraction(temp, 1);
+> -		tu->n_err_fp = temp1_fp - temp2_fp;
+> +		tu.n_err_fp = temp1_fp - temp2_fp;
+>   
+> -		if (tu->n_err_fp < tu->err_fp) {
+> -			tu->err_fp = tu->n_err_fp;
+> -			tu->tu_size_desired = tu->tu_size;
+> +		if (tu.n_err_fp < tu.err_fp) {
+> +			tu.err_fp = tu.n_err_fp;
+> +			tu.tu_size_desired = tu.tu_size;
+>   		}
+>   	}
+>   
+> -	tu->tu_size_minus1 = tu->tu_size_desired - 1;
+> +	tu.tu_size_minus1 = tu.tu_size_desired - 1;
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->tu_size_desired, 1);
+> -	temp2_fp = drm_fixp_mul(tu->ratio_fp, temp1_fp);
+> -	tu->valid_boundary_link = drm_fixp2int_ceil(temp2_fp);
+> +	temp1_fp = drm_fixp_from_fraction(tu.tu_size_desired, 1);
+> +	temp2_fp = drm_fixp_mul(tu.ratio_fp, temp1_fp);
+> +	tu.valid_boundary_link = fixp2int_ceil(temp2_fp);
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->bpp, 8);
+> -	temp2_fp = tu->lwidth_fp;
+> +	temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
+> +	temp2_fp = tu.lwidth_fp;
+>   	temp2_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->valid_boundary_link, 1);
+> +	temp1_fp = drm_fixp_from_fraction(tu.valid_boundary_link, 1);
+>   	temp2_fp = drm_fixp_div(temp2_fp, temp1_fp);
+> -	tu->n_tus = drm_fixp2int(temp2_fp);
+> +	tu.n_tus = drm_fixp2int(temp2_fp);
+>   	if ((temp2_fp & 0xFFFFFFFF) > 0xFFFFF000)
+> -		tu->n_tus += 1;
+> -
+> -	tu->even_distribution_legacy = tu->n_tus % tu->nlanes == 0 ? 1 : 0;
+> -
+> -	drm_dbg_dp(ctrl->drm_dev,
+> -			"n_sym = %d, num_of_tus = %d\n",
+> -			tu->valid_boundary_link, tu->n_tus);
+> -
+> -	temp1_fp = drm_fixp_from_fraction(tu->tu_size_desired, 1);
+> -	temp2_fp = drm_fixp_mul(tu->original_ratio_fp, temp1_fp);
+> -	temp1_fp = drm_fixp_from_fraction(tu->valid_boundary_link, 1);
+> -	temp2_fp = temp1_fp - temp2_fp;
+> -	temp1_fp = drm_fixp_from_fraction(tu->n_tus + 1, 1);
+> -	temp2_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> -
+> -	temp = drm_fixp2int(temp2_fp);
+> -	if (temp && temp2_fp)
+> -		tu->extra_bytes = drm_fixp2int_ceil(temp2_fp);
+> -	else
+> -		tu->extra_bytes = 0;
+> -
+> -	temp1_fp = drm_fixp_from_fraction(tu->extra_bytes, 1);
+> -	temp2_fp = drm_fixp_from_fraction(8, tu->bpp);
+> -	temp1_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> +		tu.n_tus += 1;
+>   
+> -	if (temp && temp1_fp)
+> -		tu->extra_pclk_cycles = drm_fixp2int_ceil(temp1_fp);
+> -	else
+> -		tu->extra_pclk_cycles = drm_fixp2int(temp1_fp);
+> +	tu.even_distribution_legacy = tu.n_tus % tu.nlanes == 0 ? 1 : 0;
+> +	DRM_DEBUG("Info: n_sym = %d, num_of_tus = %d\n",
+> +		tu.valid_boundary_link, tu.n_tus);
+>   
+> -	temp1_fp = drm_fixp_div(tu->lclk_fp, tu->pclk_fp);
+> -	temp2_fp = drm_fixp_from_fraction(tu->extra_pclk_cycles, 1);
+> -	temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+> +	_dp_calc_extra_bytes(&tu);
+>   
+> -	if (temp1_fp)
+> -		tu->extra_pclk_cycles_in_link_clk = drm_fixp2int_ceil(temp1_fp);
+> -	else
+> -		tu->extra_pclk_cycles_in_link_clk = drm_fixp2int(temp1_fp);
+> +	tu.filler_size = tu.tu_size_desired - tu.valid_boundary_link;
+>   
+> -	tu->filler_size = tu->tu_size_desired - tu->valid_boundary_link;
+> +	temp1_fp = drm_fixp_from_fraction(tu.tu_size_desired, 1);
+> +	tu.ratio_by_tu_fp = drm_fixp_mul(tu.ratio_fp, temp1_fp);
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->tu_size_desired, 1);
+> -	tu->ratio_by_tu_fp = drm_fixp_mul(tu->ratio_fp, temp1_fp);
+> -
+> -	tu->delay_start_link = tu->extra_pclk_cycles_in_link_clk +
+> -				tu->filler_size + tu->extra_buffer_margin;
+> +	tu.delay_start_link = tu.extra_pclk_cycles_in_link_clk +
+> +				tu.filler_size + tu.extra_buffer_margin;
+>   
+> -	tu->resulting_valid_fp =
+> -			drm_fixp_from_fraction(tu->valid_boundary_link, 1);
+> +	tu.resulting_valid_fp =
+> +			drm_fixp_from_fraction(tu.valid_boundary_link, 1);
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->tu_size_desired, 1);
+> -	temp2_fp = drm_fixp_div(tu->resulting_valid_fp, temp1_fp);
+> -	tu->TU_ratio_err_fp = temp2_fp - tu->original_ratio_fp;
+> +	temp1_fp = drm_fixp_from_fraction(tu.tu_size_desired, 1);
+> +	temp2_fp = drm_fixp_div(tu.resulting_valid_fp, temp1_fp);
+> +	tu.TU_ratio_err_fp = temp2_fp - tu.original_ratio_fp;
+>   
+> -	temp1_fp = drm_fixp_from_fraction(HBLANK_MARGIN, 1);
+> -	temp1_fp = tu->hbp_relative_to_pclk_fp - temp1_fp;
+> -	tu->hbp_time_fp = drm_fixp_div(temp1_fp, tu->pclk_fp);
+> +	temp1_fp = drm_fixp_from_fraction((tu.hbp_relative_to_pclk - HBLANK_MARGIN), 1);
+> +	tu.hbp_time_fp = drm_fixp_div(temp1_fp, tu.pclk_fp);
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->delay_start_link, 1);
+> -	tu->delay_start_time_fp = drm_fixp_div(temp1_fp, tu->lclk_fp);
+> +	temp1_fp = drm_fixp_from_fraction(tu.delay_start_link, 1);
+> +	tu.delay_start_time_fp = drm_fixp_div(temp1_fp, tu.lclk_fp);
+>   
+> -	compare_result_1 = _tu_param_compare(tu->hbp_time_fp,
+> -					tu->delay_start_time_fp);
+> -	if (compare_result_1 == 2) /* if (hbp_time_fp < delay_start_time_fp) */
+> -		tu->min_hblank_violated = 1;
+> +	compare_result_1 = _tu_param_compare(tu.hbp_time_fp,
+> +					tu.delay_start_time_fp);
+> +	if (compare_result_1 == 2) /* hbp_time_fp < delay_start_time_fp */
+> +		tu.min_hblank_violated = 1;
+>   
+> -	tu->hactive_time_fp = drm_fixp_div(tu->lwidth_fp, tu->pclk_fp);
+> +	tu.hactive_time_fp = drm_fixp_div(tu.lwidth_fp, tu.pclk_fp);
+>   
+> -	compare_result_2 = _tu_param_compare(tu->hactive_time_fp,
+> -						tu->delay_start_time_fp);
+> +	compare_result_2 = _tu_param_compare(tu.hactive_time_fp,
+> +						tu.delay_start_time_fp);
+>   	if (compare_result_2 == 2)
+> -		tu->min_hblank_violated = 1;
+> -
+> -	tu->delay_start_time_fp = 0;
+> +		tu.min_hblank_violated = 1;
+>   
+>   	/* brute force */
+>   
+> -	tu->delay_start_link_extra_pixclk = EXTRA_PIXCLK_CYCLE_DELAY;
+> -	tu->diff_abs_fp = tu->resulting_valid_fp - tu->ratio_by_tu_fp;
+> +	tu.delay_start_link_extra_pixclk = EXTRA_PIXCLK_CYCLE_DELAY;
+> +	tu.diff_abs_fp = tu.resulting_valid_fp - tu.ratio_by_tu_fp;
+>   
+> -	temp = drm_fixp2int(tu->diff_abs_fp);
+> -	if (!temp && tu->diff_abs_fp <= 0xffff)
+> -		tu->diff_abs_fp = 0;
+> +	temp = drm_fixp2int(tu.diff_abs_fp);
+> +	if (!temp && tu.diff_abs_fp <= 0xffff)
+> +		tu.diff_abs_fp = 0;
+>   
+>   	/* if(diff_abs < 0) diff_abs *= -1 */
+> -	if (tu->diff_abs_fp < 0)
+> -		tu->diff_abs_fp = drm_fixp_mul(tu->diff_abs_fp, -1);
+> +	if (tu.diff_abs_fp < 0)
+> +		tu.diff_abs_fp = drm_fixp_mul(tu.diff_abs_fp, -1);
+> +
+> +	tu.boundary_mod_lower_err = 0;
+> +
+> +	temp1_fp = drm_fixp_div(tu.orig_lclk_fp, tu.orig_pclk_fp);
+> +
+> +	temp2_fp = drm_fixp_from_fraction(tu.orig_lwidth + tu.orig_hbp, 2);
+> +	temp_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> +	tu.resolution_line_time = drm_fixp2int(temp_fp);
+> +	tu.pre_tu_hw_pipe_delay = fixp2int_ceil(temp1_fp) + 2 /*cdc fifo write jitter+2*/
+> +				+ 3 /*pre-delay start cycles*/
+> +				+ 3 /*post-delay start cycles*/ + 1 /*BE on the link*/;
+> +	tu.post_tu_hw_pipe_delay = 4 /*BS_on_the_link*/ + 1 /*BE_next_ren*/;
+> +
+> +	temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
+> +	temp1_fp = drm_fixp_mul(tu.lwidth_fp, temp1_fp);
+> +	tu.n_symbols = fixp2int_ceil(temp1_fp);
+> +
+> +	if (tu.rb2) {
+> +		temp1_fp = drm_fixp_mul(tu.delay_start_time_fp, tu.lclk_fp);
+> +		tu.delay_start_link_lclk = fixp2int_ceil(temp1_fp);
+> +
+> +		tu.new_valid_boundary_link = tu.valid_boundary_link;
+> +		tu.i_upper_boundary_count = 1;
+> +		tu.i_lower_boundary_count = 0;
+> +
+> +		temp1 = tu.i_upper_boundary_count * tu.new_valid_boundary_link;
+> +		temp1 += tu.i_lower_boundary_count * (tu.new_valid_boundary_link - 1);
+> +		tu.average_valid2_fp = drm_fixp_from_fraction(temp1,
+> +				(tu.i_upper_boundary_count + tu.i_lower_boundary_count));
+> +
+> +		temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
+> +		temp1_fp = drm_fixp_mul(tu.lwidth_fp, temp1_fp);
+> +		temp2_fp = drm_fixp_div(temp1_fp, tu.average_valid2_fp);
+> +		tu.n_tus = drm_fixp2int(temp2_fp);
+> +
+> +		tu.n_tus_per_lane = tu.n_tus / tu.nlanes;
+> +		tu.paired_tus = (int)((tu.n_tus_per_lane) /
+> +				(tu.i_upper_boundary_count + tu.i_lower_boundary_count));
+> +
+> +		tu.remainder_tus = tu.n_tus_per_lane - tu.paired_tus *
+> +				(tu.i_upper_boundary_count + tu.i_lower_boundary_count);
+> +
+> +		if (tu.remainder_tus > tu.i_upper_boundary_count) {
+> +			temp = (tu.remainder_tus - tu.i_upper_boundary_count) *
+> +							(tu.new_valid_boundary_link - 1);
+> +			temp += (tu.i_upper_boundary_count * tu.new_valid_boundary_link);
+> +			temp *= tu.nlanes;
+> +		} else {
+> +			temp = tu.nlanes * tu.remainder_tus * tu.new_valid_boundary_link;
+> +		}
+>   
+> -	tu->boundary_mod_lower_err = 0;
+> -	if ((tu->diff_abs_fp != 0 &&
+> -			((tu->diff_abs_fp > BRUTE_FORCE_THRESHOLD_fp) ||
+> -			 (tu->even_distribution_legacy == 0) ||
+> -			 (DP_BRUTE_FORCE == 1))) ||
+> -			(tu->min_hblank_violated == 1)) {
+> -		do {
+> -			tu->err_fp = drm_fixp_from_fraction(1000, 1);
+> +		temp1 = tu.i_lower_boundary_count * (tu.new_valid_boundary_link - 1);
+> +		temp1 += tu.i_upper_boundary_count * tu.new_valid_boundary_link;
+> +		temp1 *= tu.paired_tus * tu.nlanes;
+> +		temp1_fp = drm_fixp_from_fraction(tu.n_symbols - temp1 - temp, tu.nlanes);
+> +		tu.last_partial_lclk = fixp2int_ceil(temp1_fp);
+> +
+> +		tu.tu_active_cycles = (int)((tu.n_tus_per_lane * tu.tu_size) +
+> +								tu.last_partial_lclk);
+> +
+> +		temp = tu.pre_tu_hw_pipe_delay + tu.delay_start_link_lclk +
+> +						tu.tu_active_cycles + tu.post_tu_hw_pipe_delay;
+> +
+> +		if (tu.fec_en == 1) {
+> +			if (tu.nlanes == 1) {
+> +				temp1_fp = drm_fixp_from_fraction(temp, 500);
+> +				tu.parity_symbols = fixp2int_ceil(temp1_fp) * 12 + 1;
+> +			} else {
+> +				temp1_fp = drm_fixp_from_fraction(temp, 250);
+> +				tu.parity_symbols = fixp2int_ceil(temp1_fp) * 6 + 1;
+> +			}
+> +		} else { //no fec BW impact
+> +			tu.parity_symbols = 0;
+> +		}
+>   
+> -			temp1_fp = drm_fixp_div(tu->lclk_fp, tu->pclk_fp);
+> -			temp2_fp = drm_fixp_from_fraction(
+> -					tu->delay_start_link_extra_pixclk, 1);
+> -			temp1_fp = drm_fixp_mul(temp2_fp, temp1_fp);
+> +		tu.link_config_hactive_time = temp + tu.parity_symbols;
+>   
+> -			if (temp1_fp)
+> -				tu->extra_buffer_margin =
+> -					drm_fixp2int_ceil(temp1_fp);
+> -			else
+> -				tu->extra_buffer_margin = 0;
+> +		if (tu.link_config_hactive_time + 1 /*margin*/ >= tu.resolution_line_time)
+> +			tu.min_hblank_violated = 1;
+> +	}
+>   
+> -			temp1_fp = drm_fixp_from_fraction(tu->bpp, 8);
+> -			temp1_fp = drm_fixp_mul(tu->lwidth_fp, temp1_fp);
+> +	tu.delay_start_time_fp = 0;
+>   
+> -			if (temp1_fp)
+> -				tu->n_symbols = drm_fixp2int_ceil(temp1_fp);
+> -			else
+> -				tu->n_symbols = 0;
+> -
+> -			for (tu->tu_size = 32; tu->tu_size <= 64; tu->tu_size++) {
+> -				for (tu->i_upper_boundary_count = 1;
+> -					tu->i_upper_boundary_count <= 15;
+> -					tu->i_upper_boundary_count++) {
+> -					for (tu->i_lower_boundary_count = 1;
+> -						tu->i_lower_boundary_count <= 15;
+> -						tu->i_lower_boundary_count++) {
+> -						_tu_valid_boundary_calc(tu);
+> -					}
+> -				}
+> -			}
+> -			tu->delay_start_link_extra_pixclk--;
+> -		} while (tu->boundary_moderation_en != true &&
+> -			tu->boundary_mod_lower_err == 1 &&
+> -			tu->delay_start_link_extra_pixclk != 0);
+> +	if ((tu.diff_abs_fp != 0 &&
+> +			((tu.diff_abs_fp > BRUTE_FORCE_THRESHOLD_fp) ||
+> +			 (tu.even_distribution_legacy == 0) ||
+> +			 (DP_BRUTE_FORCE == 1))) ||
+> +			(tu.min_hblank_violated == 1)) {
+> +		_dp_calc_boundary(&tu);
+>   
+> -		if (tu->boundary_moderation_en == true) {
+> +		if (tu.boundary_moderation_en) {
+>   			temp1_fp = drm_fixp_from_fraction(
+> -					(tu->upper_boundary_count *
+> -					tu->valid_boundary_link +
+> -					tu->lower_boundary_count *
+> -					(tu->valid_boundary_link - 1)), 1);
+> +					(tu.upper_boundary_count *
+> +					tu.valid_boundary_link +
+> +					tu.lower_boundary_count *
+> +					(tu.valid_boundary_link - 1)), 1);
+>   			temp2_fp = drm_fixp_from_fraction(
+> -					(tu->upper_boundary_count +
+> -					tu->lower_boundary_count), 1);
+> -			tu->resulting_valid_fp =
+> +					(tu.upper_boundary_count +
+> +					tu.lower_boundary_count), 1);
+> +			tu.resulting_valid_fp =
+>   					drm_fixp_div(temp1_fp, temp2_fp);
+>   
+>   			temp1_fp = drm_fixp_from_fraction(
+> -					tu->tu_size_desired, 1);
+> -			tu->ratio_by_tu_fp =
+> -				drm_fixp_mul(tu->original_ratio_fp, temp1_fp);
+> +					tu.tu_size_desired, 1);
+> +			tu.ratio_by_tu_fp =
+> +				drm_fixp_mul(tu.original_ratio_fp, temp1_fp);
+>   
+> -			tu->valid_lower_boundary_link =
+> -				tu->valid_boundary_link - 1;
+> +			tu.valid_lower_boundary_link =
+> +				tu.valid_boundary_link - 1;
+>   
+> -			temp1_fp = drm_fixp_from_fraction(tu->bpp, 8);
+> -			temp1_fp = drm_fixp_mul(tu->lwidth_fp, temp1_fp);
+> +			temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
+> +			temp1_fp = drm_fixp_mul(tu.lwidth_fp, temp1_fp);
+>   			temp2_fp = drm_fixp_div(temp1_fp,
+> -						tu->resulting_valid_fp);
+> -			tu->n_tus = drm_fixp2int(temp2_fp);
+> +						tu.resulting_valid_fp);
+> +			tu.n_tus = drm_fixp2int(temp2_fp);
+>   
+> -			tu->tu_size_minus1 = tu->tu_size_desired - 1;
+> -			tu->even_distribution_BF = 1;
+> +			tu.tu_size_minus1 = tu.tu_size_desired - 1;
+> +			tu.even_distribution_BF = 1;
+>   
+>   			temp1_fp =
+> -				drm_fixp_from_fraction(tu->tu_size_desired, 1);
+> +				drm_fixp_from_fraction(tu.tu_size_desired, 1);
+>   			temp2_fp =
+> -				drm_fixp_div(tu->resulting_valid_fp, temp1_fp);
+> -			tu->TU_ratio_err_fp = temp2_fp - tu->original_ratio_fp;
+> +				drm_fixp_div(tu.resulting_valid_fp, temp1_fp);
+> +			tu.TU_ratio_err_fp = temp2_fp - tu.original_ratio_fp;
+>   		}
+>   	}
+>   
+> -	temp2_fp = drm_fixp_mul(LCLK_FAST_SKEW_fp, tu->lwidth_fp);
+> +	if (tu.async_en) {
+> +		temp2_fp = drm_fixp_mul(LCLK_FAST_SKEW_fp, tu.lwidth_fp);
+> +		temp = fixp2int_ceil(temp2_fp);
+>   
+> -	if (temp2_fp)
+> -		temp = drm_fixp2int_ceil(temp2_fp);
+> -	else
+> -		temp = 0;
+> -
+> -	temp1_fp = drm_fixp_from_fraction(tu->nlanes, 1);
+> -	temp2_fp = drm_fixp_mul(tu->original_ratio_fp, temp1_fp);
+> -	temp1_fp = drm_fixp_from_fraction(tu->bpp, 8);
+> -	temp2_fp = drm_fixp_div(temp1_fp, temp2_fp);
+> -	temp1_fp = drm_fixp_from_fraction(temp, 1);
+> -	temp2_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> -	temp = drm_fixp2int(temp2_fp);
+> +		temp1_fp = drm_fixp_from_fraction(tu.nlanes, 1);
+> +		temp2_fp = drm_fixp_mul(tu.original_ratio_fp, temp1_fp);
+> +		temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
+> +		temp2_fp = drm_fixp_div(temp1_fp, temp2_fp);
+> +		temp1_fp = drm_fixp_from_fraction(temp, 1);
+> +		temp2_fp = drm_fixp_mul(temp1_fp, temp2_fp);
+> +		temp = drm_fixp2int(temp2_fp);
+>   
+> -	if (tu->async_en)
+> -		tu->delay_start_link += (int)temp;
+> +		tu.delay_start_link += (int)temp;
+> +	}
+>   
+> -	temp1_fp = drm_fixp_from_fraction(tu->delay_start_link, 1);
+> -	tu->delay_start_time_fp = drm_fixp_div(temp1_fp, tu->lclk_fp);
+> +	temp1_fp = drm_fixp_from_fraction(tu.delay_start_link, 1);
+> +	tu.delay_start_time_fp = drm_fixp_div(temp1_fp, tu.lclk_fp);
+>   
+>   	/* OUTPUTS */
+> -	tu_table->valid_boundary_link       = tu->valid_boundary_link;
+> -	tu_table->delay_start_link          = tu->delay_start_link;
+> -	tu_table->boundary_moderation_en    = tu->boundary_moderation_en;
+> -	tu_table->valid_lower_boundary_link = tu->valid_lower_boundary_link;
+> -	tu_table->upper_boundary_count      = tu->upper_boundary_count;
+> -	tu_table->lower_boundary_count      = tu->lower_boundary_count;
+> -	tu_table->tu_size_minus1            = tu->tu_size_minus1;
+> -
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: valid_boundary_link: %d\n",
+> -				tu_table->valid_boundary_link);
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: delay_start_link: %d\n",
+> -				tu_table->delay_start_link);
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: boundary_moderation_en: %d\n",
+> +	tu_table->valid_boundary_link       = tu.valid_boundary_link;
+> +	tu_table->delay_start_link          = tu.delay_start_link;
+> +	tu_table->boundary_moderation_en    = tu.boundary_moderation_en;
+> +	tu_table->valid_lower_boundary_link = tu.valid_lower_boundary_link;
+> +	tu_table->upper_boundary_count      = tu.upper_boundary_count;
+> +	tu_table->lower_boundary_count      = tu.lower_boundary_count;
+> +	tu_table->tu_size_minus1            = tu.tu_size_minus1;
+> +
+> +	DRM_DEBUG("TU: valid_boundary_link: %d\n", tu_table->valid_boundary_link);
+> +	DRM_DEBUG("TU: delay_start_link: %d\n", tu_table->delay_start_link);
+> +	DRM_DEBUG("TU: boundary_moderation_en: %d\n",
+>   			tu_table->boundary_moderation_en);
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: valid_lower_boundary_link: %d\n",
+> +	DRM_DEBUG("TU: valid_lower_boundary_link: %d\n",
+>   			tu_table->valid_lower_boundary_link);
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: upper_boundary_count: %d\n",
+> +	DRM_DEBUG("TU: upper_boundary_count: %d\n",
+>   			tu_table->upper_boundary_count);
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: lower_boundary_count: %d\n",
+> +	DRM_DEBUG("TU: lower_boundary_count: %d\n",
+>   			tu_table->lower_boundary_count);
+> -	drm_dbg_dp(ctrl->drm_dev, "TU: tu_size_minus1: %d\n",
+> -			tu_table->tu_size_minus1);
+> -
+> -	kfree(tu);
+> +	DRM_DEBUG("TU: tu_size_minus1: %d\n", tu_table->tu_size_minus1);
+>   }
+>   
+>   static void dp_ctrl_calc_tu_parameters(struct dp_ctrl_private *ctrl,
+> -		struct dp_vc_tu_mapping_table *tu_table)
+> +				struct dp_vc_tu_mapping_table *tu_table)
+>   {
+>   	struct dp_tu_calc_input in;
+>   	struct drm_display_mode *drm_mode;
 
-"Add bindings for the MT7981 pinctrl driver. As MT7981 is simiar to
-MT7986, the existing mediatek,mt7986-pinctrl.yaml was used as an example
-to create a similar document covering MT7981."
+-- 
+With best wishes
+Dmitry
 
-
-> 
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> >  .../pinctrl/mediatek,mt7981-pinctrl.yaml      | 475 ++++++++++++++++++
-> >  1 file changed, 475 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
-> > new file mode 100644
-> > index 0000000000000..e76fe0d5083a3
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
-> > @@ -0,0 +1,475 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/pinctrl/mediatek,mt7981-pinctrl.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek MT7981 Pin Controller
-> > +
-> > +maintainers:
-> > +  - Daniel Golle <daniel@makrotopia.org>
-> > +
-> > +description: |+
-> 
-> Don't need '|+' unless there are line endings to preserve.
-> 
-> > +  The MediaTek's MT7981 Pin controller is used to control SoC pins.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt7981-pinctrl
-> > +
-> > +  reg:
-> > +    minItems: 9
-> > +    maxItems: 9
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: gpio
-> > +      - const: iocfg_rt
-> > +      - const: iocfg_rm
-> > +      - const: iocfg_rb
-> > +      - const: iocfg_lb
-> > +      - const: iocfg_bl
-> > +      - const: iocfg_tm
-> > +      - const: iocfg_tl
-> > +      - const: eint
-> > +
-> > +  gpio-controller: true
-> > +
-> > +  "#gpio-cells":
-> > +    const: 2
-> > +    description: |
-> > +      Number of cells in GPIO specifier. Since the generic GPIO
-> > +      binding is used, the amount of cells must be specified as 2. See the below
-> > +      mentioned gpio binding representation for description of particular cells.
-> > +
-> > +  gpio-ranges:
-> > +    minItems: 1
-> > +    maxItems: 5
-> > +    description: |
-> > +      GPIO valid number range.
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  "#interrupt-cells":
-> > +    const: 2
-> > +
-> > +allOf:
-> > +  - $ref: "pinctrl.yaml#"
-> 
-> Drop quotes
-> 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - gpio-controller
-> > +  - "#gpio-cells"
-> > +
-> > +patternProperties:
-> > +  '-pins$':
-> > +    type: object
-> > +    additionalProperties: false
-> > +
-> > +    patternProperties:
-> > +      '.*mux.*':
-> 
-> Just to be really clear: '^.*mux.*$'
-> 
-> Really, if not already in use, it would be preferred if this was either 
-> a prefix or a suffix.
-> 
-> > +        type: object
-> > +        additionalProperties: false
-> > +        description: |
-> > +          pinmux configuration nodes.
-> > +
-> > +          The following table shows the effective values of "group", "function"
-> > +          properties and chip pinout pins
-> > +
-> > +          groups                 function    pins (in pin#)
-> > +          ---------------------------------------------------------------------
-> > +          "wa_aice1"             "wa_aice"   0, 1
-> > +          "wa_aice2"             "wa_aice"   0, 1
-> > +          "wm_uart_0"            "uart"      0, 1
-> > +          "dfd"                  "dfd"       0, 1, 4, 5
-> > +          "watchdog"             "watchdog"  2
-> > +          "pcie_pereset"         "pcie"      3
-> > +          "jtag"                 "jtag"      4, 5, 6, 7, 8
-> > +          "wm_jtag_0"            "jtag"      4, 5, 6, 7, 8
-> > +          "wo0_jtag_0"           "jtag"      9, 10, 11, 12, 13
-> > +          "uart2_0"              "uart"      4, 5, 6, 7
-> > +          "gbe_led0"             "led"       8
-> > +          "pta_ext_0"            "pta"       4, 5, 6
-> > +          "pwm2"                 "pwm"       7
-> > +          "net_wo0_uart_txd_0"   "uart"      8
-> > +          "spi1_0"               "spi"       4, 5, 6, 7
-> > +          "i2c0_0"               "i2c"       6, 7
-> > +          "dfd_ntrst"            "dfd"       8
-> > +          "wm_aice1"             "wa_aice"   9, 10
-> > +          "pwm0_0"               "pwm"       13
-> > +          "pwm0_1"               "pwm"       15
-> > +          "pwm1_0"               "pwm"       14
-> > +          "pwm1_1"               "pwm"       15
-> > +          "net_wo0_uart_txd_1"   "uart"      14
-> > +          "net_wo0_uart_txd_2"   "uart"      15
-> > +          "gbe_led1"             "led"       13
-> > +          "pcm"                  "pcm"       9, 10, 11, 12, 13, 25
-> > +          "watchdog1"            "watchdog"  13
-> > +          "udi"                  "udi"       9, 10, 11, 12, 13
-> > +          "drv_vbus"             "usb"       14
-> > +          "emmc_45"              "flash"     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
-> > +          "snfi"                 "flash"     16, 17, 18, 19, 20, 21
-> > +          "spi0"                 "spi"       16, 17, 18, 19
-> > +          "spi0_wp_hold"         "spi"       20, 21
-> > +          "spi1_1"               "spi"       22, 23, 24, 25
-> > +          "spi2"                 "spi"       26, 27, 28, 29
-> > +          "spi2_wp_hold"         "spi"       30, 31
-> > +          "uart1_0"              "uart"      16, 17, 18, 19
-> > +          "uart1_1"              "uart"      26, 27, 28, 29
-> > +          "uart2_1"              "uart"      22, 23, 24, 25
-> > +          "pta_ext_1"            "pta"       22, 23, 24
-> > +          "wm_aurt_1"            "uart"      20, 21
-> > +          "wm_aurt_2"            "uart"      30, 31
-> > +          "wm_jtag_1"            "jtag"      20, 21, 22, 23, 24
-> > +          "wo0_jtag_1"           "jtag"      25, 26, 27, 28, 29
-> > +          "wa_aice3"             "wa_aice"   28, 20
-> > +          "wm_aice2"             "wa_aice"   30, 31
-> > +          "i2c0_1"               "i2c"       30, 31
-> > +          "u2_phy_i2c"           "i2c"       30, 31
-> > +          "uart0"                "uart"      32, 33
-> > +          "sgmii1_phy_i2c"       "i2c"       32, 33
-> > +          "u3_phy_i2c"           "i2c"       32, 33
-> > +          "sgmii0_phy_i2c"       "i2c"       32, 33
-> > +          "pcie_clk"             "pcie"      34
-> > +          "pcie_wake"            "pcie"      35
-> > +          "i2c0_2"               "i2c"       36, 37
-> > +          "smi_mdc_mdio"         "eth"       36, 37
-> > +          "gbe_ext_mdc_mdio"     "eth"       36, 37
-> > +          "wf0_mode1"            "eth"       40, 41, 42, 43, 44, 45, 46, 47, 48,
-> > +                                             49, 50, 51, 52, 53, 54, 55, 56
-> > +
-> > +          "wf0_mode3"            "eth"       45, 46, 47, 48, 49, 51
-> > +          "wf2g_led0"            "led"       30
-> > +          "wf2g_led1"            "led"       34
-> > +          "wf5g_led0"            "led"       31
-> > +          "wf5g_led1"            "led"       35
-> > +          "mt7531_int"           "eth"       38
-> > +          "ant_sel"              "ant"       14, 15, 16, 17, 18, 19, 20, 21, 22
-> > +                                             23, 24, 25, 34, 35
-> > +
-> > +        $ref: "/schemas/pinctrl/pinmux-node.yaml"
-> 
-> Drop quotes.
-> 
-> > +        properties:
-> > +          function:
-> > +            description: |
-> 
-> Don't need '|'.
-> 
-> > +              A string containing the name of the function to mux to the group.
-> > +            enum: [wa_aice, dfd, jtag, pta, pcm, udi, usb, ant, eth, i2c, led,
-> > +                   pwm, spi, uart, watchdog, flash, pcie]
-> > +          groups:
-> > +            description: |
-> > +              An array of strings. Each string contains the name of a group.
-> 
-> Blank line.
-> 
-> > +        required:
-> > +          - function
-> > +          - groups
-> > +
-> > +        allOf:
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: wa_aice
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [wa_aice1, wa_aice2, wm_aice1_1, wa_aice3, wm_aice1_2]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: dfd
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [dfd, dfd_ntrst]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: jtag
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [jtag, wm_jtag_0, wo0_jtag_0, wo0_jtag_1, wm_jtag_1]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: pta
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [pta_ext_0, pta_ext_1]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: pcm
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [pcm]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: udi
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [udi]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: usb
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [drv_vbus]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: ant
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [ant_sel]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: eth
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [smi_mdc_mdio, gbe_ext_mdc_mdio, wf0_mode1, wf0_mode3,
-> > +                         mt7531_int]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: i2c
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [i2c0_0, i2c0_1, u2_phy_i2c, sgmii1_phy_i2c, u3_phy_i2c,
-> > +                         sgmii0_phy_i2c, i2c0_2]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: led
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [gbe_led0, gbe_led1, wf2g_led0, wf2g_led1, wf5g_led0, wf5g_led1]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: pwm
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  items:
-> > +                    enum: [pwm2, pwm0_0, pwm0_1, pwm1_0, pwm1_1]
-> > +                  maxItems: 3
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: spi
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  items:
-> > +                    enum: [spi1_0, spi0, spi0_wp_hold, spi1_1, spi2, spi2_wp_hold]
-> > +                  maxItems: 4
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: uart
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  items:
-> > +                    enum: [wm_uart_0, uart2_0, net_wo0_uart_txd_0,
-> > +                           net_wo0_uart_txd_1, net_wo0_uart_txd_2, uart1_0,
-> > +                           uart1_1, uart2_1, wm_aurt_1, wm_aurt_2, uart0]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: watchdog
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  enum: [watchdog]
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: flash
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  items:
-> > +                    enum: [emmc_45, snfi]
-> > +                  maxItems: 1
-> > +          - if:
-> > +              properties:
-> > +                function:
-> > +                  const: pcie
-> > +            then:
-> > +              properties:
-> > +                groups:
-> > +                  items:
-> > +                    enum: [pcie_clk, pcie_wake, pcie_pereset]
-> > +                  maxItems: 3
-> > +      '.*conf.*':
-> 
-> Same comments as 'mux'.
-> 
-> > +        type: object
-> > +        additionalProperties: false
-> > +        description: |
-> > +          pinconf configuration nodes.
-> > +        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-> 
-> Drop quotes.
-> 
-> > +
-> > +        properties:
-> > +          pins:
-> > +            description: |
-> > +              An array of strings. Each string contains the name of a pin.
-> > +            items:
-> > +              enum: [GPIO_WPS, GPIO_RESET, SYS_WATCHDOG, PCIE_PERESET_N,
-> > +                     JTAG_JTDO, JTAG_JTDI, JTAG_JTMS, JTAG_JTCLK, JTAG_JTRST_N,
-> > +                     WO_JTAG_JTDO, WO_JTAG_JTDI, WO_JTAG_JTMS, WO_JTAG_JTCLK,
-> > +                     WO_JTAG_JTRST_N, USB_VBUS, PWM0, SPI0_CLK, SPI0_MOSI,
-> > +                     SPI0_MISO, SPI0_CS, SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI,
-> > +                     SPI1_MISO, SPI1_CS, SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS,
-> > +                     SPI2_HOLD, SPI2_WP, UART0_RXD, UART0_TXD, PCIE_CLK_REQ,
-> > +                     PCIE_WAKE_N, SMI_MDC, SMI_MDIO, GBE_INT, GBE_RESET,
-> > +                     WF_DIG_RESETB, WF_CBA_RESETB, WF_XO_REQ, WF_TOP_CLK,
-> > +                     WF_TOP_DATA, WF_HB1, WF_HB2, WF_HB3, WF_HB4, WF_HB0,
-> > +                     WF_HB0_B, WF_HB5, WF_HB6, WF_HB7, WF_HB8, WF_HB9, WF_HB10]
-> > +            maxItems: 57
-> > +
-> > +          bias-disable: true
-> > +
-> > +          bias-pull-up:
-> > +            oneOf:
-> > +              - type: boolean
-> > +                description: normal pull up.
-> > +              - enum: [100, 101, 102, 103]
-> > +                description: |
-> > +                  PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
-> > +                  dt-bindings/pinctrl/mt65xx.h.
-> > +
-> > +          bias-pull-down:
-> > +            oneOf:
-> > +              - type: boolean
-> > +                description: normal pull down.
-> > +              - enum: [100, 101, 102, 103]
-> > +                description: |
-> > +                  PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
-> > +                  dt-bindings/pinctrl/mt65xx.h.
-> > +
-> > +          input-enable: true
-> > +
-> > +          input-disable: true
-> > +
-> > +          output-enable: true
-> > +
-> > +          output-low: true
-> > +
-> > +          output-high: true
-> > +
-> > +          input-schmitt-enable: true
-> > +
-> > +          input-schmitt-disable: true
-> > +
-> > +          drive-strength:
-> > +            enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> > +
-> > +          mediatek,pull-up-adv:
-> > +            description: |
-> > +              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
-> > +              Pull up setings for 2 pull resistors, R0 and R1. Valid arguments
-> > +              are described as below:
-> > +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-> > +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-> > +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-> > +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
-> > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > +            enum: [0, 1, 2, 3]
-> > +
-> > +          mediatek,pull-down-adv:
-> > +            description: |
-> > +              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
-> > +              Pull down setings for 2 pull resistors, R0 and R1. Valid arguments
-> > +              are described as below:
-> > +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-> > +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-> > +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-> > +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
-> > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > +            enum: [0, 1, 2, 3]
-> > +
-> > +        required:
-> > +          - pins
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/pinctrl/mt65xx.h>
-> > +
-> > +    soc {
-> > +      #address-cells = <2>;
-> > +      #size-cells = <2>;
-> > +      pio: pinctrl@11d00000 {
-> > +        compatible = "mediatek,mt7981-pinctrl";
-> > +        reg = <0 0x11d00000 0 0x1000>,
-> > +              <0 0x11c00000 0 0x1000>,
-> > +              <0 0x11c10000 0 0x1000>,
-> > +              <0 0x11d20000 0 0x1000>,
-> > +              <0 0x11e00000 0 0x1000>,
-> > +              <0 0x11e20000 0 0x1000>,
-> > +              <0 0x11f00000 0 0x1000>,
-> > +              <0 0x11f10000 0 0x1000>,
-> > +              <0 0x1000b000 0 0x1000>;
-> > +        reg-names = "gpio", "iocfg_rt", "iocfg_rm",
-> > +                    "iocfg_rb", "iocfg_lb", "iocfg_bl",
-> > +                    "iocfg_tm", "iocfg_tl", "eint";
-> > +        gpio-controller;
-> > +        #gpio-cells = <2>;
-> > +        gpio-ranges = <&pio 0 0 56>;
-> > +        interrupt-controller;
-> > +        interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
-> > +        interrupt-parent = <&gic>;
-> > +        #interrupt-cells = <2>;
-> > +
-> > +        mdio_pins: mdio-pins {
-> > +          mux {
-> > +            function = "eth";
-> > +            groups = "smi_mdc_mdio";
-> > +          };
-> > +        };
-> > +
-> > +        spi0_flash_pins: spi0-pins {
-> > +          mux {
-> > +            function = "spi";
-> > +            groups = "spi0", "spi0_wp_hold";
-> > +          };
-> > +
-> > +          conf-pu {
-> > +            pins = "SPI0_CS", "SPI0_HOLD", "SPI0_WP";
-> > +            drive-strength = <MTK_DRIVE_8mA>;
-> > +            bias-pull-up = <MTK_PUPD_SET_R1R0_11>;
-> > +          };
-> > +
-> > +          conf-pd {
-> > +            pins = "SPI0_CLK", "SPI0_MOSI", "SPI0_MISO";
-> > +            drive-strength = <MTK_DRIVE_8mA>;
-> > +            bias-pull-down = <MTK_PUPD_SET_R1R0_11>;
-> > +          };
-> > +        };
-> > +
-> > +        pcie_pins: pcie-pins {
-> > +          mux {
-> > +            function = "pcie";
-> > +            groups = "pcie_clk", "pcie_wake", "pcie_pereset";
-> > +          };
-> > +        };
-> > +
-> > +      };
-> > +    };
-> > -- 
-> > 2.39.1
-> > 
