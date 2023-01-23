@@ -2,129 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE08E67805A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5A567805C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbjAWPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S232904AbjAWPsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjAWPsb (ORCPT
+        with ESMTP id S232255AbjAWPse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:48:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18D811EA9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:48:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KFAbC6/LnUvhZt2KUIpbaDNLUdiCloSuFSNDg9tXQCg=; b=s7Az+tKooxnLkQ/AMW4/LRGZmh
-        hI6KbpM+sJzFESK7oBd+4KtibzqEg0r7zsWPPKroNyV038yFtHBqNLYmg+kh8Lsbc1hVSZBZTOps3
-        CRHxyQTGmAUDU84tqz7wTIUe9KA8kZxmR5VwFz9k2x9+X22REj+3dnrHotCr6Tw0sWJUszx47Zus5
-        3O1CWDPO5qSoJWXj5B06oeLfAgXg2SWeTQEwC7c3wNGambyIkbSQt8iIkAWdav4ql7q6dCo/97FKK
-        KjP+nnVA+0c63lN5Ndo9kILtTMfEQ2+yYQfjbNcLzIV3gsph8S+wRXF4muW5IDtvs9UHK45hJ1V/R
-        IyFoJEZw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pJz3W-004L3V-By; Mon, 23 Jan 2023 15:48:22 +0000
-Date:   Mon, 23 Jan 2023 15:48:22 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        sidhartha.kumar@oracle.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] mm/migrate: Convert isolate_movable_page() to use
- folios
-Message-ID: <Y86sRiKAAOz2myNe@casper.infradead.org>
-References: <20230121005622.57808-1-vishal.moola@gmail.com>
- <20230121005622.57808-3-vishal.moola@gmail.com>
- <Y80wKtc22eHApjEN@casper.infradead.org>
+        Mon, 23 Jan 2023 10:48:34 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409EBEC4B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:48:33 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so14790895pjq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:48:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=79zz21d93rosXhCHk+UtsCaN0zcr+E49ORMLW7ABZQw=;
+        b=IVYnhU2i0SWRMhhUGw/JcLPqKoaX9v5kgL+O6i0Anxid8V31nd+JNdqf7WGaWve+Ov
+         6co3BfBCQtoxiXViNgIe17blkI9gSzEfb3aZQqgjBPfAO+xuXFTzkgMwuVPKPQufRkFE
+         Enoq+oODNuk1UbSXSA4OBJU+xnXLVb0Kn7Csf0qWqLnuTteQ9NcN8sCJfGLTetwO0NsX
+         ktJVjgNXBd6G4H7x+cyA+RHW1YJazqMU7gqmm4S+Jz/J2sRmMIf9IyqkTPu4E8tkXBWV
+         LSICp/e0CsZPkhbpzqzLxw+q5cRiBxISSrefqB3Spesm6byOunKkgqTQvVbDGsIDtOdt
+         6CAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=79zz21d93rosXhCHk+UtsCaN0zcr+E49ORMLW7ABZQw=;
+        b=4x/ooVateN2jx86H8cdEz+8n4OjNiUSFNxS2P4vx++e+7QcB1N1iFC/Se8BVC3uJkG
+         bR3RW7WiqQcoadRuUQTpMCy22cieYFKws6Jxx3h5ALvL4IvPaUpIhx9g0zf1TADBhzG2
+         ALLYQYD3SW6Pn3Jyh5IAxxprBa82jhE4Alz2egfgzw1uef+JcWy1KPe64C71ngYk577d
+         QlkaNnTsrpw60MYMUxy9V1c6br9VB47z1g42OAvJzqmiTqo8qGe82icPJGnj5JKchXEj
+         E8ATcOuGceUIHbvpKVxOr8mNzvwsafW2Zi41R5r47Ms8rcGrX5MdVNODFySM1VsmR5Mg
+         X1AA==
+X-Gm-Message-State: AO0yUKUHdqGNv4UtS9cKdafQUKmOwLMt45dneuO2bOMA1EpjbcJy4NgU
+        oHPbmweYkryro0Lu4QXgi6U=
+X-Google-Smtp-Source: AK7set9YrXeJZMX+IyKBeKOJFuPWRH6Qpv+eq6XUyBQWUuT/GqssZsH/dtCsFGcfxh8s8dy8ti5U0A==
+X-Received: by 2002:a17:902:da81:b0:196:e77:f07b with SMTP id j1-20020a170902da8100b001960e77f07bmr242552plx.39.1674488912600;
+        Mon, 23 Jan 2023 07:48:32 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id t6-20020a170902bc4600b00196065e8d78sm1976697plz.50.2023.01.23.07.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 07:48:32 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Steven Price <steven.price@arm.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3] drm/shmem: Cleanup drm_gem_shmem_create_with_handle()
+Date:   Mon, 23 Jan 2023 07:48:31 -0800
+Message-Id: <20230123154831.3191821-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y80wKtc22eHApjEN@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 12:46:34PM +0000, Matthew Wilcox wrote:
-> On Fri, Jan 20, 2023 at 04:56:21PM -0800, Vishal Moola (Oracle) wrote:
-> >  int isolate_movable_page(struct page *page, isolate_mode_t mode)
-> >  {
-> > +	struct folio *folio = page_folio(page);
-> >  	const struct movable_operations *mops;
-> >  
-> >  	/*
-> > @@ -71,11 +72,11 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
-> >  	 * the put_page() at the end of this block will take care of
-> >  	 * release this page, thus avoiding a nasty leakage.
-> >  	 */
-> > -	if (unlikely(!get_page_unless_zero(page)))
-> > +	if (unlikely(!folio_try_get(folio)))
-> 
-> This changes behaviour.  Previously when called on a tail page, the
-> call failed.  Now it succeeds, getting a ref on something that at
-> least was the folio head at some point.
-> 
-> If you're going to do this, you need to recheck that the page is still
-> part of the folio after getting the ref (see gup.c for an example).
-> But I think we should probably maintain the behaviour of failing on
-> tail pages.
-> 
-> Maybe something like ...
-> 
-> 	if (unlikely(!get_page_unless_zero(page)))
-> 		goto out;
-> 	/* Refcount is zero on tail pages, so we must have a head */
-> 	folio = (struct folio *)page;
+From: Rob Clark <robdclark@chromium.org>
 
-I've been thinking about this some more as I don't like doing these
-kinds of casts (except in the helper functions).  What do you think
-to adding:
+Once we create the handle, the handle owns the reference.  Currently
+nothing was doing anything with the shmem ptr after the handle was
+created, but let's change drm_gem_shmem_create_with_handle() to not
+return the pointer, so-as to not encourage problematic use of this
+function in the future.  As a bonus, it makes the code a bit cleaner.
 
-struct folio *folio_get_nontail_page(struct page *)
-{
-	if unlikely(!get_page_unless_zero(page))
-		return NULL;
-	return (struct folio *)page;
-}
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/drm_gem_shmem_helper.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-and then isolate_movable_page() looks like:
+diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+index f21f47737817..42c496c5f92c 100644
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c
++++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -415,7 +415,7 @@ void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
+ }
+ EXPORT_SYMBOL(drm_gem_shmem_vunmap);
+ 
+-static struct drm_gem_shmem_object *
++static int
+ drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
+ 				 struct drm_device *dev, size_t size,
+ 				 uint32_t *handle)
+@@ -425,7 +425,7 @@ drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
+ 
+ 	shmem = drm_gem_shmem_create(dev, size);
+ 	if (IS_ERR(shmem))
+-		return shmem;
++		return PTR_ERR(shmem);
+ 
+ 	/*
+ 	 * Allocate an id of idr table where the obj is registered
+@@ -434,10 +434,8 @@ drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
+ 	ret = drm_gem_handle_create(file_priv, &shmem->base, handle);
+ 	/* drop reference from allocate - handle holds it now. */
+ 	drm_gem_object_put(&shmem->base);
+-	if (ret)
+-		return ERR_PTR(ret);
+ 
+-	return shmem;
++	return ret;
+ }
+ 
+ /* Update madvise status, returns true if not purged, else
+@@ -520,7 +518,6 @@ int drm_gem_shmem_dumb_create(struct drm_file *file, struct drm_device *dev,
+ 			      struct drm_mode_create_dumb *args)
+ {
+ 	u32 min_pitch = DIV_ROUND_UP(args->width * args->bpp, 8);
+-	struct drm_gem_shmem_object *shmem;
+ 
+ 	if (!args->pitch || !args->size) {
+ 		args->pitch = min_pitch;
+@@ -533,9 +530,7 @@ int drm_gem_shmem_dumb_create(struct drm_file *file, struct drm_device *dev,
+ 			args->size = PAGE_ALIGN(args->pitch * args->height);
+ 	}
+ 
+-	shmem = drm_gem_shmem_create_with_handle(file, dev, args->size, &args->handle);
+-
+-	return PTR_ERR_OR_ZERO(shmem);
++	return drm_gem_shmem_create_with_handle(file, dev, args->size, &args->handle);
+ }
+ EXPORT_SYMBOL_GPL(drm_gem_shmem_dumb_create);
+ 
+-- 
+2.38.1
 
-	struct folio *folio;
-[...]
-
-	folio = folio_get_nontail_page(page);
-	if (!folio)
-		goto out;
-
-I keep thinking about how this is all going to work when we get to
-one-pointer-per-page.  Telling tail pages from head pages becomes hard.
-This probably becomes an out-of-line function that looks something like ..
-
-	struct memdesc *memdesc = READ_ONCE(page->memdesc);
-	struct folio *folio;
-
-	if (!memdesc_is_folio(memdesc))
-		return NULL;
-	folio = memdesc_folio(memdesc);
-	if (!folio_try_get(folio))
-		return NULL;
-	if (READ_ONCE(page->memdesc) != memdesc ||
-	    folio->pfn != page_pfn(page)) {
-		folio_put(folio);
-		return NULL;
-	}
-
-	return folio;
-
-(note: We need to check that page->memdesc still points to this folio after 
-getting the refcount on it.  we could loop around if it fails, but
-failing the entire get is OK; if memdesc changed then either before this
-function was called, after this function was called or while this
-function was called, the refcount on the memdesc it was pointing to
-was zero)
