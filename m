@@ -2,95 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F98677ECA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6189677ECE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjAWPKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S232100AbjAWPLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjAWPKt (ORCPT
+        with ESMTP id S231547AbjAWPK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:10:49 -0500
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D96B13521;
-        Mon, 23 Jan 2023 07:10:48 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-50112511ba7so116666447b3.3;
-        Mon, 23 Jan 2023 07:10:48 -0800 (PST)
+        Mon, 23 Jan 2023 10:10:59 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E28022A2E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:10:58 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id k6so13221850vsk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MSTeF4AD/TCqkmt4+n+FwyprF1UzqWNEBlBaNmQU3f8=;
+        b=2WGGAjVqpUARb+tCJkVD1RicUIUMBaedPFyBrJUsw3o+C3oot3OGVDWKD9me0EM70h
+         fZ/9w89H/5tBDspiP3vs/asey/L3kJm+wRc14MhK8aslLOhHu7RkCWsZskoycAnN3Su8
+         NUN6jVvd0jZPzSjSjTcYJNZoRBGNeFFreQp2wiYNlU3nlj/ojMJDVA+2VFFQt0XOaG/H
+         bOOdYYXZPoWlvTlgnE7voCGEpr0weoDHXQRlk7t/Op4h412/eGl64amzy9D8QdrOdSam
+         K+jv4a+havoZCPZtypNuEPh9k6I4GEYUeo0WlGNIM+JIiSy7AIejLXMPjHPTCb506Xqe
+         SNkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h/bqJof5MO3pbg3UYX8cTuwpn5Rti6iDINf4SN3BEsI=;
-        b=S6dHBNTjgSrKbwbzKP6W65/OZ46qhS5oT7a6g8lmY3rxVi+FuXO3TDXs/2SMtaoxCs
-         s4U1ng/9R+a4IA4hI/+ASzollNZirnfhCIlHrIJUYMgIVsyiCf4kvYi02O43WsULwKpO
-         32kyuidA7cm4HdD33Hu2lU/IBB33db6gJ92Oey/VrmMB+XgNsmOiV1BFxSOyaExrMEgu
-         ZC9ynux3AygJqPPU+4P3Ql4IybHX9DA/1Q3fvx6tmNa1inDHKBBn6EDcvItkfvnSRzzK
-         VetiTuqYrhEnifjrEh8ATmyvcjZYkGsr0WbMs2hVGWj9gG6a/G/Xgl6cLdJiFL+dWwTX
-         acEQ==
-X-Gm-Message-State: AFqh2krnlmt+oXIcEuMsSjs8pyx9luOI0wNwk+Yj7b2a7GR1yOKwrKVB
-        NCLjawinTfYk9bwevU1zHK4M5GFGKsPVDQ==
-X-Google-Smtp-Source: AMrXdXuByoLCN6ljNUdv0ZqdUQ6MDymJvPowrThRFf9GPZtY4cNLskM6vvV1DIAAKTXvG3G+CsQHYQ==
-X-Received: by 2002:a05:7500:20ce:b0:f1:c647:cb45 with SMTP id u14-20020a05750020ce00b000f1c647cb45mr1869449gau.44.1674486647057;
-        Mon, 23 Jan 2023 07:10:47 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id g16-20020a05620a40d000b006fc3fa1f589sm10371803qko.114.2023.01.23.07.10.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 07:10:46 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-4b718cab0e4so175660097b3.9;
-        Mon, 23 Jan 2023 07:10:46 -0800 (PST)
-X-Received: by 2002:a0d:e657:0:b0:4d9:3858:392 with SMTP id
- p84-20020a0de657000000b004d938580392mr2080328ywe.502.1674486646123; Mon, 23
- Jan 2023 07:10:46 -0800 (PST)
+        bh=MSTeF4AD/TCqkmt4+n+FwyprF1UzqWNEBlBaNmQU3f8=;
+        b=Gzoz2uTSnluCqP9wogK61IZVfVwn+O1Ndh90zdpI04UMReVsD4xEIB+oaNSw7BIAiJ
+         WnR5exyzgNJqTqxBots1brLf0ix+7pOOnU3b3Zir/Ome4T1K/SAiP4WGhCNo4dvazJxb
+         kAYCus30rkXikg+5nxt7lwt2HglCArHvlvEifzB7Xxb99N4fBU3JZwmJqdxQ438R8bGL
+         h007wpqZxy+4vdo4v6jofIYOUGT/SiG+Mc1R243mvWEHNgdFZ5w5r4j7AIXJQ8+cmmTU
+         JKpQQQDsq8a0p2v5IhMiVpR0+4DK/Ni8CQTTmWF2RAMjMQw6PWzLkCoSJkH9rjBGBaeU
+         S6Uw==
+X-Gm-Message-State: AFqh2kqU03eO0aUPP0wiBRp2LcftfxGowfTzU002Oh4bpBHAcG/UEv0/
+        JFHXZGoPJC6+6+CgV+m8S5My2ZYD82w5qLL3rLct4lQQ0kUvLQ==
+X-Google-Smtp-Source: AMrXdXtn4ifMqXCmD01CaAEteO1OfBwpSN4Ang7Ze+ebLtoy1xJ6zzmPXQJWXL9WKy4fqmcu4nwk8336GaykDbHz10Q=
+X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
+ a26-20020a67f2da000000b003d3d90c5ef2mr3977791vsn.17.1674486657309; Mon, 23
+ Jan 2023 07:10:57 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1669406380.git.geert@linux-m68k.org> <a9883a81-d909-09c5-708b-d598e030380e@physik.fu-berlin.de>
-In-Reply-To: <a9883a81-d909-09c5-708b-d598e030380e@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 Jan 2023 16:10:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWHUnWBN7ddBow+fqmt8W--9wFe5x_YMeRg7GQ=BNAL2Q@mail.gmail.com>
-Message-ID: <CAMuHMdWHUnWBN7ddBow+fqmt8W--9wFe5x_YMeRg7GQ=BNAL2Q@mail.gmail.com>
-Subject: Re: [PATCH/RFC 0/3] Atari DRM driver
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230121001845.32592-1-pierluigi.p@variscite.com>
+In-Reply-To: <20230121001845.32592-1-pierluigi.p@variscite.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 23 Jan 2023 16:10:46 +0100
+Message-ID: <CAMRc=MfXDeV7gus97Ba4FeuaP4sKtF87DrV4gCbiBR+rGFY6XA@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: fix linker errors when GPIOLIB is disabled
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc:     linus.walleij@linaro.org, yamada.masahiro@socionext.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.passaro@gmail.com,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
-
-On Mon, Jan 23, 2023 at 4:09 PM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On 11/25/22 21:31, Geert Uytterhoeven wrote:
-> > This RFC patch series adds a DRM driver for the good old Atari
-> > ST/TT/Falcon hardware.  It was developed and tested (only) on the ARAnyM
-> > emulator.
+On Sat, Jan 21, 2023 at 1:19 AM Pierluigi Passaro
+<pierluigi.p@variscite.com> wrote:
 >
-> I just remembered this WIP driver. Has there been any progress?
+> Both the functions gpiochip_request_own_desc and
+> gpiochip_free_own_desc are exported from
+>     drivers/gpio/gpiolib.c
+> but this file is compiled only when CONFIG_GPIOLIB is enabled.
+> Move the protototypes under "#ifdef CONFIG_GPIOLIB" and provide
+> reasonable definitions in the "#else" branch.
+>
+> Fixes: 9091373ab7ea ("gpio: remove less important #ifdef around declarations")
+> Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
 
-So far no further progress.
+Applied, thanks. In the future please list changes between patch
+versions when submitting new iterations.
 
-Gr{oetje,eeting}s,
+Bart
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  include/linux/gpio/driver.h | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index 44783fc16125..ed77c6fc0beb 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -758,6 +758,8 @@ gpiochip_remove_pin_ranges(struct gpio_chip *gc)
+>
+>  #endif /* CONFIG_PINCTRL */
+>
+> +#ifdef CONFIG_GPIOLIB
+> +
+>  struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+>                                             unsigned int hwnum,
+>                                             const char *label,
+> @@ -765,8 +767,6 @@ struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+>                                             enum gpiod_flags dflags);
+>  void gpiochip_free_own_desc(struct gpio_desc *desc);
+>
+> -#ifdef CONFIG_GPIOLIB
+> -
+>  /* lock/unlock as IRQ */
+>  int gpiochip_lock_as_irq(struct gpio_chip *gc, unsigned int offset);
+>  void gpiochip_unlock_as_irq(struct gpio_chip *gc, unsigned int offset);
+> @@ -776,6 +776,22 @@ struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc);
+>
+>  #else /* CONFIG_GPIOLIB */
+>
+> +static inline struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+> +                                           unsigned int hwnum,
+> +                                           const char *label,
+> +                                           enum gpio_lookup_flags lflags,
+> +                                           enum gpiod_flags dflags)
+> +{
+> +       /* GPIO can never have been requested */
+> +       WARN_ON(1);
+> +       return ERR_PTR(-ENODEV);
+> +}
+> +
+> +static inline void gpiochip_free_own_desc(struct gpio_desc *desc)
+> +{
+> +       WARN_ON(1);
+> +}
+> +
+>  static inline struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc)
+>  {
+>         /* GPIO can never have been requested */
+> --
+> 2.37.2
+>
