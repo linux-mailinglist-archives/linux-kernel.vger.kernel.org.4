@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB2A678101
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEE9678103
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjAWQLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S232330AbjAWQLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjAWQLW (ORCPT
+        with ESMTP id S233072AbjAWQLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:11:22 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F3F2A176;
-        Mon, 23 Jan 2023 08:11:16 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 03ED134142;
-        Mon, 23 Jan 2023 16:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674490275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8yYf8wXkZ38Zo4et7x7UJVytFRxZegivrpGgXCLUEzE=;
-        b=OjaJjWOMfa0hg31leW1LGDU+0Ur2Xa4pcr/1cTfws0QY+wjl28J7ppK3+B57yYzHMs11WR
-        1jEHwwpTNHF8LtxJ+SSOpZvDlYk5FW++u93lbPeW04mO0l25VquT9F+WaPJMnh/WQEzd9m
-        Pa3pu7bpwaQGTb2Puu9WhSXQZTvOk/k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674490275;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8yYf8wXkZ38Zo4et7x7UJVytFRxZegivrpGgXCLUEzE=;
-        b=NGI+aSwtmD7fxvxgKZD0kKf6SuwPMFO33eaGBuSv6+IzKQzxG/cDju0/uoVWrGKk5mUeJ1
-        yM7OxKxIcpbZG5DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF660134F5;
-        Mon, 23 Jan 2023 16:11:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kZOCNqKxzmMNbgAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 23 Jan 2023 16:11:14 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 47543A06B5; Mon, 23 Jan 2023 17:11:14 +0100 (CET)
-Date:   Mon, 23 Jan 2023 17:11:14 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     David Howells <dhowells@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
-Subject: Re: [PATCH v7 2/8] iov_iter: Add a function to extract a page list
- from an iterator
-Message-ID: <20230123161114.4jv6hnnbckqyrurs@quack3>
-References: <c742e47b-dcc0-1fef-dc8c-3bf85d26b046@redhat.com>
- <7bbcccc9-6ebf-ffab-7425-2a12f217ba15@redhat.com>
- <246ba813-698b-8696-7f4d-400034a3380b@redhat.com>
- <20230120175556.3556978-1-dhowells@redhat.com>
- <20230120175556.3556978-3-dhowells@redhat.com>
- <3814749.1674474663@warthog.procyon.org.uk>
- <3903251.1674479992@warthog.procyon.org.uk>
- <3911637.1674481111@warthog.procyon.org.uk>
+        Mon, 23 Jan 2023 11:11:39 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A9732B2AF;
+        Mon, 23 Jan 2023 08:11:29 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DCFCEC14;
+        Mon, 23 Jan 2023 08:12:10 -0800 (PST)
+Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BFD903F5A1;
+        Mon, 23 Jan 2023 08:11:26 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     linux-kernel@vger.kernel.org, James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] perf: cs-etm: Improve missing sink warning message
+Date:   Mon, 23 Jan 2023 16:11:14 +0000
+Message-Id: <20230123161114.261255-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3911637.1674481111@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 23-01-23 13:38:31, David Howells wrote:
-> David Hildenbrand <david@redhat.com> wrote:
-> 
-> > That would be the ideal case: whenever intending to access page content, use
-> > FOLL_PIN instead of FOLL_GET.
-> > 
-> > The issue that John was trying to sort out was that there are plenty of
-> > callsites that do a simple put_page() instead of calling
-> > unpin_user_page(). IIRC, handling that correctly in existing code -- what was
-> > pinned must be released via unpin_user_page() -- was the biggest workitem.
-> > 
-> > Not sure how that relates to your work here (that's why I was asking): if you
-> > could avoid FOLL_GET, that would be great :)
-> 
-> Well, it simplifies things a bit.
-> 
-> I can make the new iov_iter_extract_pages() just do "pin" or "don't pin" and
-> do no ref-getting at all.  Things can be converted over to "unpin the pages or
-> doing nothing" as they're converted over to using iov_iter_extract_pages()
-> from iov_iter_get_pages*().
-> 
-> The block bio code then only needs a single bit of state: pinned or not
-> pinned.
+Make the sink error message more similar to the event error message that
+reminds about missing kernel support. The available sinks are also
+determined by the hardware so mention that too.
 
-I'm all for using only pin/unpin in the end. But you'd still need to handle
-the 'put' for the intermediate time when there are still FOLL_GET users of
-the bio infrastructure, wouldn't you?
+Also, usually it's not necessary to specify the sink, so add that as a
+hint.
 
-> For cifs RDMA, do I need to make it pass in FOLL_LONGTERM?  And does that need
-> a special cleanup?
+Now the error for a made up sink looks like this:
 
-FOLL_LONGTERM doesn't need a special cleanup AFAIK. It should be used
-whenever there isn't reasonably bound time after which the page is
-unpinned. So in case CIFS sets up RDMA and then it is up to userspace how
-long the RDMA is going to be running it should be using FOLL_LONGTERM. The
-thing is that pins can block e.g. truncate for DAX inodes and so longterm
-pins are not supported for DAX backed pages.
+  $ perf record -e cs_etm/@abc/
+  Couldn't find sink "abc" on event cs_etm/@abc/.
+  Missing kernel or device support? Errno: 2 (No such file or directory)
 
-								Honza
+  Hint: An appropriate sink will picked automatically if none is specified.
+
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/arch/arm/util/cs-etm.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+index 481e170cd3f1..c6195a7a3cbf 100644
+--- a/tools/perf/arch/arm/util/cs-etm.c
++++ b/tools/perf/arch/arm/util/cs-etm.c
+@@ -283,7 +283,9 @@ static int cs_etm_set_sink_attr(struct perf_pmu *pmu,
+ 
+ 		ret = perf_pmu__scan_file(pmu, path, "%x", &hash);
+ 		if (ret != 1) {
+-			pr_err("failed to set sink \"%s\" on event %s with %d (%s)\n",
++			pr_err("Couldn't find sink \"%s\" on event %s\n"
++			       "Missing kernel or device support? errno: %d (%s)\n\n"
++			       "Hint: An appropriate sink will picked automatically if one isn't specified.\n",
+ 			       sink, evsel__name(evsel), errno,
+ 			       str_error_r(errno, msg, sizeof(msg)));
+ 			return ret;
+
+base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.39.1
+
