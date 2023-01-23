@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DDA677A0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833BA677A0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjAWLU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S231836AbjAWLWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjAWLUY (ORCPT
+        with ESMTP id S230139AbjAWLW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:20:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA32366A;
-        Mon, 23 Jan 2023 03:20:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E512AB80D36;
-        Mon, 23 Jan 2023 11:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8083DC433EF;
-        Mon, 23 Jan 2023 11:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674472817;
-        bh=gvu8MOwX+WDMn+kwuopZOpUipzUb8AzPeT4Cc+3zxmQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IHFsXpFmh0Ue7xGiQwjc4gOoN5dyAFKHonwiuuSr9lzbtUua94zf+KmBL5CAgEg0V
-         IU5aswmY2ciX+IqmeckWzTU5iAD6F6adb6hQbaha6Ib4TQ/QvwBKiqYkLDysSx9UOq
-         ouH2ctfMEvbgY8XukYGjeVByXn3pv9roGYwzPL4ws9oyDZKj/MRmjJYtWQclrP/GMd
-         9Hvjr8zvrRJIEwsXL2YKlfp/r4ZTpFpUWWw8CQTvrgeuD34fZjobpWHbmTnn58uJ1z
-         4ftAgK4ipC0YL7Nrx6SdpmcvJVrnC+WRvFhrglpOocI2o8ZgeUiUklfxHKyDpXgyP6
-         ctvENKRerWAVg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 63882F83ECD;
-        Mon, 23 Jan 2023 11:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 23 Jan 2023 06:22:29 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998BA7692;
+        Mon, 23 Jan 2023 03:22:26 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pJusC-0007Mj-85; Mon, 23 Jan 2023 12:20:24 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-riscv@lists.infradead.org
+Cc:     Guo Ren <ren_guo@c-sky.com>, Guo Ren <guoren@linux.alibaba.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Chris Stillson <stillson@rivosinc.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Dao Lu <daolu@rivosinc.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Nick Knight <nick.knight@sifive.com>,
+        Han-Kuan Chen <hankuan.chen@sifive.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Alexander Graf <graf@amazon.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Myrtle Shah <gatecat@ds0.me>,
+        Ruinland Tsai <ruinland.tsai@sifive.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Colin Cross <ccross@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Barret Rhoden <brho@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Chris Stillson <stillson@rivosinc.com>
+Subject: Re: [PATCH v12 01/17] riscv: Rename __switch_to_aux -> fpu
+Date:   Mon, 23 Jan 2023 12:20:22 +0100
+Message-ID: <5335635.Sb9uPGUboI@diego>
+In-Reply-To: <20220921214439.1491510-1-stillson@rivosinc.com>
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 net-next 00/12] ethtool support for IEEE 802.3 MAC Merge
- layer
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167447281740.14272.16385016041138908700.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 Jan 2023 11:20:17 +0000
-References: <20230119122705.73054-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230119122705.73054-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mkubecek@suse.cz, claudiu.manoil@nxp.com,
-        vinicius.gomes@intel.com, xiaoliang.yang_1@nxp.com,
-        kurt@linutronix.de, rui.sousa@nxp.com, ferenc.fejes@ericsson.com,
-        pranavi.somisetty@amd.com, harini.katakam@amd.com,
-        colin.foster@in-advantage.com, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, andrew@lunn.ch, f.fainelli@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 19 Jan 2023 14:26:52 +0200 you wrote:
-> Change log
-> ----------
+Am Mittwoch, 21. September 2022, 23:43:43 CET schrieb Chris Stillson:
+> From: Guo Ren <ren_guo@c-sky.com>
 > 
-> v3->v4:
-> - add missing opening bracket in ocelot_port_mm_irq()
-> - moved cfg.verify_time range checking so that it actually takes place
->   for the updated rather than old value
-> v3 at:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20230117085947.2176464-1-vladimir.oltean@nxp.com/
+> The name of __switch_to_aux is not clear and rename it with the
+> determine function: __switch_to_fpu. Next we could add other regs'
+> switch.
 > 
-> [...]
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Here is the summary with links:
-  - [v4,net-next,01/12] net: ethtool: netlink: introduce ethnl_update_bool()
-    https://git.kernel.org/netdev/net/c/7c494a7749a7
-  - [v4,net-next,02/12] net: ethtool: add support for MAC Merge layer
-    (no matching commit)
-  - [v4,net-next,03/12] docs: ethtool-netlink: document interface for MAC Merge layer
-    (no matching commit)
-  - [v4,net-next,04/12] net: ethtool: netlink: retrieve stats from multiple sources (eMAC, pMAC)
-    (no matching commit)
-  - [v4,net-next,05/12] docs: ethtool: document ETHTOOL_A_STATS_SRC and ETHTOOL_A_PAUSE_STATS_SRC
-    (no matching commit)
-  - [v4,net-next,06/12] net: ethtool: add helpers for aggregate statistics
-    (no matching commit)
-  - [v4,net-next,07/12] net: ethtool: add helpers for MM fragment size translation
-    (no matching commit)
-  - [v4,net-next,08/12] net: dsa: add plumbing for changing and getting MAC merge layer state
-    (no matching commit)
-  - [v4,net-next,09/12] net: mscc: ocelot: allow ocelot_stat_layout elements with no name
-    (no matching commit)
-  - [v4,net-next,10/12] net: mscc: ocelot: hide access to ocelot_stats_layout behind a helper
-    (no matching commit)
-  - [v4,net-next,11/12] net: mscc: ocelot: export ethtool MAC Merge stats for Felix VSC9959
-    (no matching commit)
-  - [v4,net-next,12/12] net: mscc: ocelot: add MAC Merge layer support for VSC9959
-    (no matching commit)
+Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
