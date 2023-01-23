@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E9C678BE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E445D678BE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbjAWXMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S231915AbjAWXOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 18:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjAWXMW (ORCPT
+        with ESMTP id S231510AbjAWXO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:12:22 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FDD2F78A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:12:21 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id f8so6746285ilj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wdlyZ9rT2ydR7flNpHZe1XEeAgVGxlcAPT5DY/7RdGw=;
-        b=Wcbdmjpc2+Zezt9SjzJhaAPjgE2kW6y4jYLHi9sguPEdt0tjlwq4HdTgn3QnAXlzB9
-         l72VgiQ4dWTTCRi9hOoKf2s5iftOWIRrlaieyH44J9AhIALimt3a/vdSItHKKvpsi1oX
-         +Yjv505GMY3JttHLuddbN41Wyu+UC+wAR6F38=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wdlyZ9rT2ydR7flNpHZe1XEeAgVGxlcAPT5DY/7RdGw=;
-        b=XU6thts+932l2UvW/pC3ywV6gwZMADTt37Eo3mvi/LEC2xzpJPQca7s/ylVpKpmDMO
-         lKkzLZv66DV6FhVU30QH5F0MBY9aZwMPnYXe0tO1ZLRDNYzEe3kn/RLr4lNfnIZLsuIv
-         lMvv6czaT1UWSA0Q5wV/Cm5MajIHH75gLNL7Lmf/0Q8SnGZ4j7Tj/61OV0H0irEMFOAz
-         0Z3KkJOQVFXIZUorYp8qJGcVokxSgxAUsM6ctBvOjvXsvjtgezNnpAC6fX0v6kwgZ3Y9
-         wqyjvCIWfUtMZ6H8aE4oNDcFzmSV3Pg7g4LnTCI5h6AIeBJBX6rcufMAUSnqMAUlq8VF
-         08YQ==
-X-Gm-Message-State: AFqh2kp9RPEOSibfDSdLB84A+tPowlQee36E+AVvlUFy6d/lnWWMZmQR
-        OyfNXaUjkBtGBTsEtuUckdPMENi0Sje46FLJ
-X-Google-Smtp-Source: AMrXdXsS30eOI42vEp2AlZHiAsojEPZ7jw9kaxGJX+UPsuty5mVvR0m7IoUj8UVgMLf9xhRAGLXylQ==
-X-Received: by 2002:a92:cf4c:0:b0:30e:d7f3:216b with SMTP id c12-20020a92cf4c000000b0030ed7f3216bmr19368408ilr.8.1674515540654;
-        Mon, 23 Jan 2023 15:12:20 -0800 (PST)
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com. [209.85.166.41])
-        by smtp.gmail.com with ESMTPSA id b1-20020a05663801a100b0038a76772e0esm158567jaq.42.2023.01.23.15.12.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 15:12:18 -0800 (PST)
-Received: by mail-io1-f41.google.com with SMTP id c66so924090iof.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:12:18 -0800 (PST)
-X-Received: by 2002:a05:6638:378c:b0:3a7:dd8b:54e5 with SMTP id
- w12-20020a056638378c00b003a7dd8b54e5mr1388544jal.8.1674515537964; Mon, 23 Jan
- 2023 15:12:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118100623.42255-1-andriy.shevchenko@linux.intel.com>
- <20230122172441.4f8d75f5@jic23-huawei> <22fa80f5-0cf0-85bd-03a4-e1eb80272420@linaro.org>
-In-Reply-To: <22fa80f5-0cf0-85bd-03a4-e1eb80272420@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 23 Jan 2023 15:12:06 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WVEfi2u-uHcZAoMd4HXPcZrwb95HQzTE8V6YmAW9mhPA@mail.gmail.com>
-Message-ID: <CAD=FV=WVEfi2u-uHcZAoMd4HXPcZrwb95HQzTE8V6YmAW9mhPA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 18:14:29 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB0B22796
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:14:27 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id B6A725C01EE;
+        Mon, 23 Jan 2023 18:14:24 -0500 (EST)
+Received: from imap46 ([10.202.2.96])
+  by compute3.internal (MEProxy); Mon, 23 Jan 2023 18:14:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verbum.org; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674515664; x=1674602064; bh=wJGVOVt/uj
+        SEWyLvw0hzGlE/QWLNGWdfnk+AykWDgxs=; b=EpshgA7iogLUehYMkUDZDgM0ZP
+        iw6iLg0dIiPIjC2XKjbCsgvsLfnt1YDCCCjCfUHw7RamloVVNwHpb2053eHPqHYs
+        g9FM+QJF/zoI9wGUsm+/5V19B83KHpi/Tdfqag2SOujMK28QiGrEKEsF5VbXsUmu
+        J+FUGDf07uhKj/a72l6gAXTKNaR04aJwV37RIS6IZCYFozw9NrUmN31yobYdTFde
+        3U3zRkMYF5fr67kgR57XtJ1p0agv9oXwM6oKFLHnHm0eU2QwaQx/sSWsomsR/h94
+        eKZ2/X/5spZ5HhDBrVMvxYzwGCmrm8k/q+fiUEh3gihQDaKTmgCw0M42vltg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674515664; x=1674602064; bh=wJGVOVt/ujSEWyLvw0hzGlE/QWLN
+        GWdfnk+AykWDgxs=; b=R+6PMwId3FiUT1leKU/qBUHp7rqGmd+EhSiIkSC3tSm8
+        C4trrSDXvKXpUmM+s02wiD/9pfPfreNWCs1HnMkKqWLPumV6fTJo7bKQKSuJXc5p
+        vw8dvjO0aF4Au1A84RUa3xPRIa0xcI1BtbvaZbmfDBnu/pRqIHO27fcmeqciP0Tz
+        uS6oJuVT/qWl8ySu3Yq2MUA+OKQC59DI/tBJLulZZPIYLfsbSXQIcX0PV2y3H7l4
+        vovA+UzRSFKcjDM07o5b62qfbaRQCxnKdyAv18yYrHrOeJdNEBRtv6//A0AETktA
+        wcklyUvmznbL/H1qlXkhEL31X9fxh6po3rKj+NfgbQ==
+X-ME-Sender: <xms:0BTPY2y7oTOajlyeehrIykkW7pN4VvLP5yUrvKjwtrjZMjPz3Apk8g>
+    <xme:0BTPYyTxxQFICTla9mdJHf1jgTOn0g_WjMvQ5lc5K1AvYKL7IiHiocyUpBQ1438pn
+    IY-wfx33VeY9_cp>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduledgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfveho
+    lhhinhcuhggrlhhtvghrshdfuceofigrlhhtvghrshesvhgvrhgsuhhmrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefhjedutdehtdfgueeuledtkeefkedvgfevieefudetkeehffej
+    gfeiheehkeegteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpeifrghlthgvrhhssehvvghrsghumhdrohhrgh
+X-ME-Proxy: <xmx:0BTPY4VcfhS4EZg0WdDqa856RBI8QfsO_aDVXn5lr2fQrZ5-STIsZA>
+    <xmx:0BTPY8hObCZ9xdHkJUlzsYKu7urzPMHkF-LJ-VjJmcLvEQ1UfXJJJQ>
+    <xmx:0BTPY4D_iPfXps8Du1-wOywDFFpfm-c6yvKQkgGG4rul6ThWl-AnKw>
+    <xmx:0BTPY01wwTQit6EfX4LB33ZGuw3zgOOGAlR61vQfVtTERDkIwNl2Jg>
+Feedback-ID: ibe7c40e9:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3AC762A20080; Mon, 23 Jan 2023 18:14:24 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <70950159-11e4-40c8-a498-04971b7a4ada@app.fastmail.com>
+In-Reply-To: <87mt68dfpb.fsf@redhat.com>
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+ <db72efdd-5cb2-4578-a322-bf894fcf6066@app.fastmail.com>
+ <874jshdpl3.fsf@redhat.com>
+ <3839bced-74f7-4afb-8068-c1cdde7b61fe@app.fastmail.com>
+ <87mt68dfpb.fsf@redhat.com>
+Date:   Mon, 23 Jan 2023 18:14:03 -0500
+From:   "Colin Walters" <walters@verbum.org>
+To:     "Giuseppe Scrivano" <gscrivan@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, "Kees Cook" <keescook@chromium.org>,
+        bristot@redhat.com, "Eric W. Biederman" <ebiederm@xmission.com>,
+        brauner@kernel.org, "Aleksa Sarai" <cyphar@cyphar.com>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Alexander Larsson" <alexl@redhat.com>, peterz@infradead.org,
+        bmasney@redhat.com
+Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, Jan 23, 2023 at 8:35 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+
+On Mon, Jan 23, 2023, at 5:54 PM, Giuseppe Scrivano wrote:
 >
-> On 22.01.2023 18:24, Jonathan Cameron wrote:
-> > On Wed, 18 Jan 2023 12:06:23 +0200
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> >> The node name can contain an address part which is unused
-> >> by the driver. Moreover, this string is propagated into
-> >> the userspace label, sysfs filenames *and breaking ABI*.
-> >>
-> >> Cut the address part out before assigning the channel name.
-> >>
-> >> Fixes: 4f47a236a23d ("iio: adc: qcom-spmi-adc5: convert to device properties")
-> >> Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >
-> > LGTM, but given it will have ABI impact, I'd like to hear from
-> > Andy, Bjorn or Konrad as maintainers and /or Dmitry as someone
-> > who has touched this driver fairly recently.
-> + Doug
+> I realize it seems like a one-off fix, but it is done only for backward
+> compatibility.
 >
-> Unless the Chromium folks relied on the old names (they're the
-> only ones I can think of that actually could have tapped into
-> this), I say green light!
+> Other paths under /proc/self/map_files require CAP_SYS_ADMIN in the
+> initial user namespace, or have CAP_CHECKPOINT_RESTORE in the user
+> namespace.  Sure, it is not future-proof, but it would look weird if
+> after CVE-2019-19814 there will be more ways to access files from the
+> host without requiring some capabilities.
 
-Thanks for the CC. I _think_ the only place we use these ADCs is for
-certain thermistors and I think that those are all just hooked up in
-the device tree, so the channel name doesn't matter. I'll also note
-that no Qualcomm Chromebooks are shipping with anything newer than
-kernel 5.15 right now, and (I checked) the ChromeOS 5.15 tree doesn't
-have commit 4f47a236a23d ("iio: adc: qcom-spmi-adc5: convert to device
-properties"). Thus, even if I'm wrong and the name is used someplace
-hidden then the "old" name would be better for us. I haven't tested
-the patch myself, but it sounds as if ${SUBJECT} patch is actually
-moving us back to the old name.
+I think a way to rephrase what I'm saying is that it feels like this should be about making /proc/self/exe and /proc/self/map_files consistent.
 
-+Matthias to keep me honest since he's spent more time with the ADCs.
+> With the prctl a runtime would just need to do the following and live
+> happily ever after:
+>
+> __attribute__ ((constructor)) static void hide_self_exe (void)
+> {
+> 	if (prctl(PR_SET_HIDE_SELF_EXE, 1, 0, 0, 0) == 0)
+> 		return;
+>
+> 	/* ...reexec as we do today... */
+> }
+>
+> and we won't have to worry about what mount options are supported or
+> used by proc.
 
-> Konrad
-> >
-> > Mostly I want to be sure they know this exists before it causes surprise.
-> >
-> > Jonathan
-> >
-> >> ---
-> >> v2: rephrased commit message (Marijn), fixed compilation issue (Marijin)
-> >>  drivers/iio/adc/qcom-spmi-adc5.c | 10 +++++++++-
-> >>  1 file changed, 9 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
-> >> index e90c299c913a..c2d5e06f137a 100644
-> >> --- a/drivers/iio/adc/qcom-spmi-adc5.c
-> >> +++ b/drivers/iio/adc/qcom-spmi-adc5.c
-> >> @@ -628,12 +628,20 @@ static int adc5_get_fw_channel_data(struct adc5_chip *adc,
-> >>                                  struct fwnode_handle *fwnode,
-> >>                                  const struct adc5_data *data)
-> >>  {
-> >> -    const char *name = fwnode_get_name(fwnode), *channel_name;
-> >> +    const char *channel_name;
-> >> +    char *name;
-> >>      u32 chan, value, varr[2];
-> >>      u32 sid = 0;
-> >>      int ret;
-> >>      struct device *dev = adc->dev;
-> >>
-> >> +    name = devm_kasprintf(dev, GFP_KERNEL, "%pfwP", fwnode);
-> >> +    if (!name)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    /* Cut the address part */
-> >> +    name[strchrnul(name, '@') - name] = '\0';
-> >> +
-> >>      ret = fwnode_property_read_u32(fwnode, "reg", &chan);
-> >>      if (ret) {
-> >>              dev_err(dev, "invalid channel number %s\n", name);
-> >
+Yeah, OK - having the logical operation be on the process and not the view into it (procfs) definitely is more robust.
+
+But how about calling this PR_SET_PROCFS_RESTRICTED or so, and then *also* changing the /proc/self/map_files lookup to deny if this is set?  Yes, it'd be mostly redundant, but it'd help clarify things for any future changes since it'd be clear that the logic *should* be consistent for /proc/self/exe and /proc/self/map_files.  And actually as a bonus, it would make the case of e.g. `podman run --cap-add=checkpoint_restore` secure right?  (Though honestly I don't know how common that is or whether one can practically use checkpoint_restore without other caps)
