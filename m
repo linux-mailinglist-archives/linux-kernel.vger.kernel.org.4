@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F350B677FF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EEC678005
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbjAWPhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S232749AbjAWPiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbjAWPho (ORCPT
+        with ESMTP id S232748AbjAWPiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:37:44 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF76C1713;
-        Mon, 23 Jan 2023 07:37:42 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so14763597pjq.0;
-        Mon, 23 Jan 2023 07:37:42 -0800 (PST)
+        Mon, 23 Jan 2023 10:38:18 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68EC2333C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:38:14 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id o17-20020a05600c511100b003db021ef437so8861967wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:38:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bqm/b4+IUdS1MqzQZf17cD89gtcHvfXYnuA2GMItHy8=;
-        b=BeoLm0GehG2RTvXfpa3TJlY/SMshWzp1bpns58/nwqsEifYxf7ekkD81AfXJagIOB+
-         UwAIUci/GqYTsUdXnuChLkVGcn4T3p+5uaKqwcLNqvnWDcMrSJANvtyZBCbtN2jWDxf5
-         xPZJKPW9mL/HwXGKP1o6XJmkUxIkmAUXgz3uArCcSb3MCMl9GJ96KThvVJTuhP8c7mwi
-         KGxfbUstxf/dJP4hjJttF8HclYAjm1Fh54CnnMfMaNXpNjc3okJlYaBi6GcVQ23E2OFA
-         seXpNS0ZQYAJ/7latTNsL3P9YxlsQLnB6SXm1OyZuvUJQyK1ZWD1h3fdozu7KQjgIOt/
-         7Yxg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1fGEa7pia/vjFjDOTPETCQ2V9Ir9MaJJODSdKTEO+fM=;
+        b=C7i+aByjflUQRwyoqonJtGDwQtJAjnW5nQyslS4wEtv/erfjBha/wFh8sCc86PyI2h
+         3m06BkuOUIGbws+uxEKADu5tvoK6FZapkR9GyaWbxIYIx+wIMDfwZqlqDe6mIvuYcdvU
+         oLiSQi/MiIuJubSiIwFUdM9Y8apXYQ3p80XsvuNrcoqADoJlStG43XunxvDk4K+1o2Fe
+         G6cxOXoaLx0LBb5MD5IJtZBBG34qpB4OxeFnrvfN9p7tBlH+IgODPWlf7VL2PNLm82Zp
+         u5ZHMj/ITc7eziHLgj4pTnmDDOiEAFWlzlj9U2tB1TA20SVvpkb6oYWJiGqTxaf9+mCf
+         U4HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bqm/b4+IUdS1MqzQZf17cD89gtcHvfXYnuA2GMItHy8=;
-        b=gdXK/dQERksXnjWeR+oYVPgnylkdpNajhJS7jBgzy20zTXIDeqsi8jZAbCdDmqgAH2
-         vAtKEYDM+XMF4lziwZFbTu1AzV9AMpxvhD3WdsUl8vX0tMlUYcy4PwRXao0a9mWvVDHc
-         GnOaEYoQ3MFrxQNXMi6FoVefhotQcf+Dbv+dGzcjTZIFaBb70DLrhwkiTwaYrOefIE+/
-         o5aiM5Ojmye3MjghzmSI+y+63Cp+/9hLaIE4lMeF6rL7PKnJ7fTmS2tppSGOKQwj2lAO
-         g+AXz2Ep3TDx+9SegvTxGIxJiYo2GrMNQ4yNmu4efYD0VeaVVi66vKnjjF/+OlFrXlkf
-         w8sA==
-X-Gm-Message-State: AFqh2koe4YgWD7qN4h9yD8kZzZSJI+cnsbVcGtsXiaKr7HF8Lnil2oMN
-        Wka6JILc9WXwbWJiqAE6cFHuewBgHe0=
-X-Google-Smtp-Source: AMrXdXse4poj4j7/kfYLEJ+8471w5Y524fdoIV5ZbcJvP4IGR3j2MuWF5o0LGi9ty84jgW5rm9vbvg==
-X-Received: by 2002:a17:902:e403:b0:194:3dd0:e332 with SMTP id m3-20020a170902e40300b001943dd0e332mr21920673ple.69.1674488262052;
-        Mon, 23 Jan 2023 07:37:42 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id m3-20020a170902db0300b0018963b8e131sm10333712plx.290.2023.01.23.07.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 07:37:41 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] PM / devfreq: Fix build issues with devfreq disabled
-Date:   Mon, 23 Jan 2023 07:37:45 -0800
-Message-Id: <20230123153745.3185032-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1fGEa7pia/vjFjDOTPETCQ2V9Ir9MaJJODSdKTEO+fM=;
+        b=S1LAruG6/0oOHXpCMNm1Yw6a8/n2lL2md3aJOTYlXkz+ZVGsbVTdlM3epIw2Z/vrUn
+         s0xKem5fb7R3LAtbUskUJO5qjkHIlAbvUZHeE+Fk527WEXE+yiuBceknGEY3UxHEHpcr
+         48AxAdjunGTWwTXl9Vmg5WBn5fBkZWBE4rXf6LkcuPibQG20mYAgKtSBV2sU3ZiAKlLm
+         T1vZ1tXXglcmvOe6PdDgGZdChPbKzTbtenuX3RVD88bZXbcKq+RC8VOD1Bbo+lQ7lWo7
+         BtGeWx0sjDNv5RcuidyZOxSWxyjf7/r7xF1VP1HHRnqfeKYVlVDCqhBQWBvcJn9LcoyJ
+         zBXA==
+X-Gm-Message-State: AFqh2krsuJ9/jVC1Nzwnd6gK7ffCTIXEbO3dMTySTKXQWce9iRRwJl2Z
+        o7H96ap4T2V+HeEUWmu03fgDxw==
+X-Google-Smtp-Source: AMrXdXt9PUKswvYKFpgGGZCt3zs+1orNLPpP5m8QoLlwhrfwhzx7XCSGw3gCQehVYX+vHWyZjKZh/w==
+X-Received: by 2002:a05:600c:3d8d:b0:3d2:bca5:10a2 with SMTP id bi13-20020a05600c3d8d00b003d2bca510a2mr24167140wmb.22.1674488293482;
+        Mon, 23 Jan 2023 07:38:13 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id x15-20020a05600c188f00b003db122d5ac2sm10494913wmp.15.2023.01.23.07.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 07:38:13 -0800 (PST)
+Message-ID: <88f64463-51e6-aee4-c542-a3cff5406405@linaro.org>
+Date:   Mon, 23 Jan 2023 16:38:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFT 05/11] ARM: dts: exynos: add ports in HDMI bridge in
+ Exynos4412 Midas
+Content-Language: en-US
+To:     Henrik Grimler <henrik@grimler.se>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        replicant@osuosl.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>
+References: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
+ <20230120155404.323386-6-krzysztof.kozlowski@linaro.org>
+ <Y86pA6xo9EttJJ6g@L14.lan>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y86pA6xo9EttJJ6g@L14.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 23/01/2023 16:34, Henrik Grimler wrote:
+> Hi,
+> 
+> I see you have already merged this, but FWIW HDMI works as well as
+> before on exynos4412-i9300, so:
+> 
+> Tested-by: Henrik Grimler <henrik@grimler.se>
 
-The existing no-op shims for when PM_DEVFREQ (or an individual governor)
-only do half the job.  The governor specific config/tuning structs need
-to be available to avoid compile errors in drivers using devfreq.
+Great, thanks! I'll add your tag.
 
-Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-Assuming this doesn't conflict with anything else landing via another
-tree, an a-b to land this via drm/msm-next would let us un-break builds.
-(And also start removing "select DEVFREQ_GOV_SIMPLE_ONDEMAND"s added in
-various places to try to work around this issue.)
+> 
+> Longer explanation: HDMI output only works on i9300 if MHL cable is
+> attached before device boots, so probably bootloader sets up some
+> settings that the sii9234 driver does not handle (correctly) if cable
+> is hot plugged.
 
- include/linux/devfreq.h | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 4dc7cda4fd46..7fd704bb8f3d 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -273,8 +273,8 @@ void devm_devfreq_unregister_notifier(struct device *dev,
- struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node);
- struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
- 				const char *phandle_name, int index);
-+#endif /* CONFIG_PM_DEVFREQ */
- 
--#if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)
- /**
-  * struct devfreq_simple_ondemand_data - ``void *data`` fed to struct devfreq
-  *	and devfreq_add_device
-@@ -292,9 +292,7 @@ struct devfreq_simple_ondemand_data {
- 	unsigned int upthreshold;
- 	unsigned int downdifferential;
- };
--#endif
- 
--#if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
- enum devfreq_parent_dev_type {
- 	DEVFREQ_PARENT_DEV,
- 	CPUFREQ_PARENT_DEV,
-@@ -337,9 +335,8 @@ struct devfreq_passive_data {
- 	struct notifier_block nb;
- 	struct list_head cpu_data_list;
- };
--#endif
- 
--#else /* !CONFIG_PM_DEVFREQ */
-+#if !defined(CONFIG_PM_DEVFREQ)
- static inline struct devfreq *devfreq_add_device(struct device *dev,
- 					struct devfreq_dev_profile *profile,
- 					const char *governor_name,
--- 
-2.38.1
+Best regards,
+Krzysztof
 
