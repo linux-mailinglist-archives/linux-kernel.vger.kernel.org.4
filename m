@@ -2,112 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E0F678A31
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1288678A3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjAWWEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 17:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S232207AbjAWWF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjAWWEp (ORCPT
+        with ESMTP id S232399AbjAWWFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 17:04:45 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A0A4489;
-        Mon, 23 Jan 2023 14:04:44 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id p133so11667977oig.8;
-        Mon, 23 Jan 2023 14:04:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d2FPhlsZpXvRIxsuYUUigEHlfXrVhve1sVEzIAaA+Cw=;
-        b=YVHJaPyQ5lJp9NdfFLQWiw2pwu4nEY/q4L8Ibq9+QmFoEV/yLLq+VXl74L9N8v6+TF
-         bh54g56m5KmIrFL8fgYnYrW3tIcROmgveflJVYV0f1Yq90LEU5mUu0ioFR43dVQfQ+Vm
-         albsPxmY1AU9+BJLxFV+veYSfACRWzHvNYyOSH4a2JJgKQu66MhjmXbOG6Fy94nxU3hW
-         jNMGfdtHjWm5qwqSKH4uA9yJnagloAE0l2qleRFjPxTVt5gc0t3yQL86TwR+ce4Ey1Q4
-         RgoS4KLykYiEl2xhKHDn92IlUJJiN3z84cv9/vaEpjaHcooWMDhFPwWpRNlpWqSV8lhj
-         XfeQ==
-X-Gm-Message-State: AFqh2krk4t5EUbESe+srXuK176Ad9GEA8UTAVRV77tN6AglCL3e4uO54
-        De2mjlMIY35Em0XZgKYyfg==
-X-Google-Smtp-Source: AMrXdXuGzJhztAkRQDsZ89yb/Lz0gtcYbKO+RHg3d611kAIBMg0f22sl2cvcT8k/mjqlrQMTyAnItw==
-X-Received: by 2002:a05:6808:3a5:b0:35e:214f:11c1 with SMTP id n5-20020a05680803a500b0035e214f11c1mr11706700oie.45.1674511483912;
-        Mon, 23 Jan 2023 14:04:43 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r184-20020acac1c1000000b0035c21f1a570sm273111oif.6.2023.01.23.14.04.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 14:04:43 -0800 (PST)
-Received: (nullmailer pid 2720043 invoked by uid 1000);
-        Mon, 23 Jan 2023 22:04:42 -0000
-Date:   Mon, 23 Jan 2023 16:04:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        ", Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-actions@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>,
-        linux-amlogic@lists.infradead.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Markus Pargmann <mpa@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] dt-bindings: mmc: correct pwrseq node names
-Message-ID: <167451148159.2720004.9395844039645158729.robh@kernel.org>
-References: <20230120085722.171965-1-krzysztof.kozlowski@linaro.org>
- <20230120085722.171965-2-krzysztof.kozlowski@linaro.org>
+        Mon, 23 Jan 2023 17:05:21 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900B637B65
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:05:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674511514; x=1706047514;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5O7hqmNJ1lFPSSuT0JsuOLetVB0FETfr4/UVBwOA4ME=;
+  b=Rr1OQpHVOvm1BEnkFcXOqnVmMJSowu2Ie1WMHZ7FA4gwb1EAeNJGtyR/
+   vz1TKL1EaC3EBSk99UMQ2vzYyB5JsAAYJCyOZ/cttlz/8FEOg7H4vtKzm
+   3cC97FUrcVB21DLXIvWLK8raTtfuLRFrC+tBTELQQLg3gv7kIeVxrG7Bp
+   qYv/Z5FwBepw5hOou3EXS9mzHBjJ3TmhHNWwDNY3LhvXr/1Jo7vNF4oEm
+   IdcUy9pglRunCy99T+bkY15HGP6PWVwkXzIZjoJsyKWB383Zf9ouTNLEV
+   dV0fYaqJckDp7qOcyVq2/z+07RJOoqW9IfodVTpji9kB0W+gV2pS5w6Hg
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327421904"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="327421904"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 14:05:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="661878089"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="661878089"
+Received: from ssauty-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.46.171])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 14:05:07 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 1B42C10942C; Tue, 24 Jan 2023 01:05:03 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv15 00/17] Linear Address Masking enabling
+Date:   Tue, 24 Jan 2023 01:04:43 +0300
+Message-Id: <20230123220500.21077-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120085722.171965-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linear Address Masking[1] (LAM) modifies the checking that is applied to
+64-bit linear addresses, allowing software to use of the untranslated
+address bits for metadata.
 
-On Fri, 20 Jan 2023 09:57:22 +0100, Krzysztof Kozlowski wrote:
-> Node names should be generic and should not contain underscores.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml   | 2 +-
->  Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml | 2 +-
->  Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
+The capability can be used for efficient address sanitizers (ASAN)
+implementation and for optimizations in JITs and virtual machines.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
+this time.
+
+Please review and consider applying.
+
+git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+
+v15:
+  - Replace static branch in untagged_addr() with alternative;
+  - Drop unneeded READ_ONCE();
+  - Acks from Peter;
+v14:
+  - Rework address range check in get_user() and put_user();
+  - Introduce CONFIG_ADDRESS_MASKING;
+  - Cache untag masking in per-CPU variable;
+  - Reject LAM enabling via PTRACE_ARCH_PRCTL;
+  - Fix locking around untagged_addr_remote();
+  - Fix typo in MM_CONTEXT_ conversion patch;
+  - Fix selftest;
+v13:
+  - Fix race between untagged_addr() and LAM enabling:
+    + Do not allow to enable LAM after the process spawned the second thread;
+    + untagged_addr() untags the address according to rules of the current
+      process;
+    + untagged_addr_remote() can be used for untagging addresses for foreign
+      process. It requires mmap lock for the target process to be taken;
+v12:
+  - Rebased onto tip/x86/mm;
+  - Drop VM_WARN_ON() that may produce false-positive on race between context
+    switch and LAM enabling;
+  - Adjust comments explain possible race;
+  - User READ_ONCE() in mm_lam_cr3_mask();
+  - Do not assume &init_mm == mm in initialize_tlbstate_and_flush();
+  - Ack by Andy;
+v11:
+  - Move untag_mask to /proc/$PID/status;
+  - s/SVM/SVA/g;
+  - static inline arch_pgtable_dma_compat() instead of macros;
+  - Replace pasid_valid() with mm_valid_pasid();
+  - Acks from Ashok and Jacob (forgot to apply from v9);
+v10:
+  - Rebased to v6.1-rc1;
+  - Add selftest for SVM vs LAM;
+v9:
+  - Fix race between LAM enabling and check that KVM memslot address doesn't
+    have any tags;
+  - Reduce untagged_addr() overhead until the first LAM user;
+  - Clarify SVM vs. LAM semantics;
+  - Use mmap_lock to serialize LAM enabling;
+v8:
+  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
+  - Cleanup code around build_cr3();
+  - Fix commit messages;
+  - Selftests updates;
+  - Acked/Reviewed/Tested-bys from Alexander and Peter;
+v7:
+  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
+  - Cleanup code around build_cr3();
+  - Fix commit message;
+  - Fix indentation;
+v6:
+  - Rebased onto v6.0-rc1
+  - LAM_U48 excluded from the patchet. Still available in the git tree;
+  - add ARCH_GET_MAX_TAG_BITS;
+  - Fix build without CONFIG_DEBUG_VM;
+  - Update comments;
+  - Reviewed/Tested-by from Alexander;
+v5:
+  - Do not use switch_mm() in enable_lam_func()
+  - Use mb()/READ_ONCE() pair on LAM enabling;
+  - Add self-test by Weihong Zhang;
+  - Add comments;
+v4:
+  - Fix untagged_addr() for LAM_U48;
+  - Remove no-threads restriction on LAM enabling;
+  - Fix mm_struct access from /proc/$PID/arch_status
+  - Fix LAM handling in initialize_tlbstate_and_flush()
+  - Pack tlb_state better;
+  - Comments and commit messages;
+v3:
+  - Rebased onto v5.19-rc1
+  - Per-process enabling;
+  - API overhaul (again);
+  - Avoid branches and costly computations in the fast path;
+  - LAM_U48 is in optional patch.
+v2:
+  - Rebased onto v5.18-rc1
+  - New arch_prctl(2)-based API
+  - Expose status of LAM (or other thread features) in
+    /proc/$PID/arch_status
+
+[1] ISE, Chapter 10. https://cdrdv2.intel.com/v1/dl/getContent/671368
+Kirill A. Shutemov (12):
+  x86/mm: Rework address range check in get_user() and put_user()
+  x86: Allow atomic MM_CONTEXT flags setting
+  x86: CPUID and CR3/CR4 flags for Linear Address Masking
+  x86/mm: Handle LAM on context switch
+  mm: Introduce untagged_addr_remote()
+  x86/uaccess: Provide untagged_addr() and remove tags before address
+    check
+  x86/mm: Reduce untagged_addr() overhead for systems without LAM
+  x86/mm: Provide arch_prctl() interface for LAM
+  mm: Expose untagging mask in /proc/$PID/status
+  iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
+  x86/mm/iommu/sva: Make LAM and SVA mutually exclusive
+  selftests/x86/lam: Add test cases for LAM vs thread creation
+
+Weihong Zhang (5):
+  selftests/x86/lam: Add malloc and tag-bits test cases for
+    linear-address masking
+  selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address
+    masking
+  selftests/x86/lam: Add io_uring test cases for linear-address masking
+  selftests/x86/lam: Add inherit test cases for linear-address masking
+  selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for
+    linear-address masking
+
+ arch/arm64/include/asm/mmu_context.h        |    6 +
+ arch/sparc/include/asm/mmu_context_64.h     |    6 +
+ arch/sparc/include/asm/uaccess_64.h         |    2 +
+ arch/x86/Kconfig                            |   11 +
+ arch/x86/entry/vsyscall/vsyscall_64.c       |    2 +-
+ arch/x86/include/asm/cpufeatures.h          |    1 +
+ arch/x86/include/asm/disabled-features.h    |    8 +-
+ arch/x86/include/asm/mmu.h                  |   18 +-
+ arch/x86/include/asm/mmu_context.h          |   49 +-
+ arch/x86/include/asm/processor-flags.h      |    2 +
+ arch/x86/include/asm/tlbflush.h             |   48 +-
+ arch/x86/include/asm/uaccess.h              |   58 +-
+ arch/x86/include/uapi/asm/prctl.h           |    5 +
+ arch/x86/include/uapi/asm/processor-flags.h |    6 +
+ arch/x86/kernel/process.c                   |    6 +
+ arch/x86/kernel/process_64.c                |   66 +-
+ arch/x86/kernel/traps.c                     |    6 +-
+ arch/x86/lib/getuser.S                      |   83 +-
+ arch/x86/lib/putuser.S                      |   54 +-
+ arch/x86/mm/init.c                          |    5 +
+ arch/x86/mm/tlb.c                           |   53 +-
+ drivers/iommu/iommu-sva.c                   |    8 +-
+ drivers/vfio/vfio_iommu_type1.c             |    2 +-
+ fs/proc/array.c                             |    6 +
+ fs/proc/task_mmu.c                          |    9 +-
+ include/linux/ioasid.h                      |    9 -
+ include/linux/mm.h                          |   11 -
+ include/linux/mmu_context.h                 |   14 +
+ include/linux/sched/mm.h                    |    8 +-
+ include/linux/uaccess.h                     |   22 +
+ mm/debug.c                                  |    1 +
+ mm/gup.c                                    |    4 +-
+ mm/madvise.c                                |    5 +-
+ mm/migrate.c                                |   11 +-
+ tools/testing/selftests/x86/Makefile        |    2 +-
+ tools/testing/selftests/x86/lam.c           | 1241 +++++++++++++++++++
+ 36 files changed, 1699 insertions(+), 149 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/lam.c
+
+-- 
+2.39.1
+
