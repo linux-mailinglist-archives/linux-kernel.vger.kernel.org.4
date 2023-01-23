@@ -2,140 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4106677629
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594E8677632
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjAWINt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S230234AbjAWIT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjAWINr (ORCPT
+        with ESMTP id S230492AbjAWITx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:13:47 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB581717C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:13:44 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id b7so9977052wrt.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:13:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SBM3bwQWzykO2B1JQ+ipvskwHKEQ4WdxVib/Qyi51ug=;
-        b=AT9Iq0xSCEqZpmKDW/Ox7GmeyX5AuNSRJunHvXTae3PtaTzXAaVeLJiUNCqlOyzZPw
-         33iOZHMkSml012eGVJ/IICOryeb3/C3pOsn3g1PIhUPamMcb4uBeWg9efJVUXjxl+bFp
-         0zW+bAj0q6l1Gj2h+11m2yuUu0cuj22N/4GRjtmdTOPLeMUNixJ7BsuSeM7+xQ1PijzC
-         GLqz/JxaSPW1s+RVlRp0DnWuxcQ3xeON8gI1oYo374UIcxoaNTFJ1q2hEzgNcEZzaFEi
-         564qfpA2fPIkm25jO5xQ6Obq7Kvks5lEJy0N0yf7xANOgqqn2qRJM07bm+JBKp265V+M
-         HqTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBM3bwQWzykO2B1JQ+ipvskwHKEQ4WdxVib/Qyi51ug=;
-        b=Xsmwmlx+sfEGJOIewnJ2kY8ncrOC1GyC6A2sQV6wweN18gdeVyHnNXGyUZbLc3+D6H
-         NJ12VsEsqUWOcV1PxiWcmBX0U6UVhMNQr4Wr+45LY+33WHNMHyBv6OZ3nMZTB8ftePjV
-         OYkEw2C7RbgreHLRb0Gm/1xOQud1mP/E8LqhRm59gW1DsY3xIzgxK1HHWTJ5pgjK0EK1
-         4WBmzgalFc2txxybmrfsXoxksg2pNrUiNsau65acGSzj12zu2UfMvPgxk+VTweml7gpI
-         H+LBuHMjeMj46CCjGX8H+QNXAa4a0LeqykpAbBify4I8JjDqY9KwhDNkOttLOT8sOkdc
-         ntJg==
-X-Gm-Message-State: AFqh2kqRP987YLn6WCacvfByNCqxU4ZNSVUcwFZcC32hrDHh55KUdk3T
-        Z5CGuUEQDssPLrKqbL8UBrvSqQ==
-X-Google-Smtp-Source: AMrXdXvEE2+iNOHYDBXMmjnnlnEeh6QweQ/hJDMmk245CtGSpc/zmfvz+73u+L3+2RYwpIRt3IDSbQ==
-X-Received: by 2002:adf:fa08:0:b0:2bc:aa57:7f35 with SMTP id m8-20020adffa08000000b002bcaa577f35mr20792170wrr.52.1674461623286;
-        Mon, 23 Jan 2023 00:13:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b9-20020adff909000000b002be5401ef5fsm7588216wrr.39.2023.01.23.00.13.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 00:13:42 -0800 (PST)
-Message-ID: <c317762c-4471-36c1-24fc-0982eee9192d@linaro.org>
-Date:   Mon, 23 Jan 2023 09:13:41 +0100
+        Mon, 23 Jan 2023 03:19:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1FC1A947;
+        Mon, 23 Jan 2023 00:19:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76C4660CF3;
+        Mon, 23 Jan 2023 08:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54E7C433EF;
+        Mon, 23 Jan 2023 08:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674461991;
+        bh=MxoEHRPfARVZoKWI3tfsB6o+VliindXdGwA1/dGoFLw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o6WXCShzzPUWx39NFGbagruYE7QduyykGQ5QEU7bSSCNJiaa3rOgskPunB0yO4Gs+
+         LIwQlP5merhS9pjGgCenxKrtjYQTYjGHgpgBho8+fu05+GwBZtakgfWqnU2PfmrEbm
+         E1fhBbD+VvR/IMTMV/tLsh6CvXJMTLQl4Xumz4ysOmwRkmG5HbyY1ZE1Dn5/7uNxmb
+         9WUmeR0VH/s3gwuEQKrpJyTjuC9LIwniWgB0ck2iUMvltfAw0DfxCosFPY3o54492s
+         tVp9ZPN/+hm3lT6P2mMoZkdLDkXU0kc3sZpqj8oYMHfOb5QWjpFZyo3ppyGkh4WJy+
+         9DyYdkhYoem0A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pJs3P-00076g-V3; Mon, 23 Jan 2023 09:19:48 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>, linux-efi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2] efi: drop obsolete efivars sysfs documentation
+Date:   Mon, 23 Jan 2023 09:19:05 +0100
+Message-Id: <20230123081905.27283-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 13/15] dt-bindings: pinctrl: add support for Ambarella
-Content-Language: en-US
-To:     Li Chen <lchen@ambarella.com>, Li Chen <me@linux.beauty>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "moderated list:ARM/Ambarella SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <20230123073305.149940-14-lchen@ambarella.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123073305.149940-14-lchen@ambarella.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 08:32, Li Chen wrote:
-> Add a Ambarella compatible.
-> 
-> Signed-off-by: Li Chen <lchen@ambarella.com>
-> Change-Id: I8bcab3b763bdc7e400a04cc46589f0f694028a66
-> ---
->  .../bindings/pinctrl/ambarella,pinctrl.yaml   | 160 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 161 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml
-> new file mode 100644
-> index 000000000000..51f5a9cc4714
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml
-> @@ -0,0 +1,160 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/ambarella,pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ambarella PIN controller
-> +
-> +maintainers:
-> +  - Li Chen <lchen@ambarella.org>
-> +
-> +description: |
-> +  The pins controlled by Ambarella SoC chip are organized in banks, each bank
-> +  has 32 pins.  Each pin has at least 2 multiplexing functions, and generally,
-> +  the first function is GPIO.
-> +
-> +  The PINCTRL node acts as a container for an arbitrary number of subnodes. And
-> +  these subnodes will fall into two categories.
-> +
-> +  One is for GPIO, please see the "GPIO node" section for detail, and another one
-> +  is to set up a group of pins for a function, both pin configurations and mux
-> +  selection, and it's called group node in the binding document.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: ambarella,pinctrl
-> +
-> +  reg:
-> +    minItems: 4
-> +    maxItems: 4
-> +
+The efivars sysfs interface was removed by commit 0f5b2c69a4cb ("efi:
+vars: Remove deprecated 'efivars' sysfs interface").
 
-Same problems as with other patches. You need to fix all of my previous
-comments.
+Remove also the corresponding sysfs ABI documentation.
 
-Best regards,
-Krzysztof
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+
+Changes in v2
+ - drop reference in gsmi sysfs documentation
+ - drop reference in efivarfs.rst (kernel test robot)
+
+
+ .../ABI/stable/sysfs-firmware-efi-vars        | 79 -------------------
+ Documentation/ABI/testing/sysfs-firmware-gsmi |  8 --
+ Documentation/filesystems/efivarfs.rst        |  1 -
+ 3 files changed, 88 deletions(-)
+ delete mode 100644 Documentation/ABI/stable/sysfs-firmware-efi-vars
+
+diff --git a/Documentation/ABI/stable/sysfs-firmware-efi-vars b/Documentation/ABI/stable/sysfs-firmware-efi-vars
+deleted file mode 100644
+index 46ccd233e359..000000000000
+--- a/Documentation/ABI/stable/sysfs-firmware-efi-vars
++++ /dev/null
+@@ -1,79 +0,0 @@
+-What:		/sys/firmware/efi/vars
+-Date:		April 2004
+-Contact:	Matt Domsch <Matt_Domsch@dell.com>
+-Description:
+-		This directory exposes interfaces for interactive with
+-		EFI variables.  For more information on EFI variables,
+-		see 'Variable Services' in the UEFI specification
+-		(section 7.2 in specification version 2.3 Errata D).
+-
+-		In summary, EFI variables are named, and are classified
+-		into separate namespaces through the use of a vendor
+-		GUID.  They also have an arbitrary binary value
+-		associated with them.
+-
+-		The efivars module enumerates these variables and
+-		creates a separate directory for each one found.  Each
+-		directory has a name of the form "<key>-<vendor guid>"
+-		and contains the following files:
+-
+-		=============== ========================================
+-		attributes:	A read-only text file enumerating the
+-				EFI variable flags.  Potential values
+-				include:
+-
+-				EFI_VARIABLE_NON_VOLATILE
+-				EFI_VARIABLE_BOOTSERVICE_ACCESS
+-				EFI_VARIABLE_RUNTIME_ACCESS
+-				EFI_VARIABLE_HARDWARE_ERROR_RECORD
+-				EFI_VARIABLE_AUTHENTICATED_WRITE_ACCESS
+-
+-				See the EFI documentation for an
+-				explanation of each of these variables.
+-
+-		data:		A read-only binary file that can be read
+-				to attain the value of the EFI variable
+-
+-		guid:		The vendor GUID of the variable.  This
+-				should always match the GUID in the
+-				variable's name.
+-
+-		raw_var:	A binary file that can be read to obtain
+-				a structure that contains everything
+-				there is to know about the variable.
+-				For structure definition see "struct
+-				efi_variable" in the kernel sources.
+-
+-				This file can also be written to in
+-				order to update the value of a variable.
+-				For this to work however, all fields of
+-				the "struct efi_variable" passed must
+-				match byte for byte with the structure
+-				read out of the file, save for the value
+-				portion.
+-
+-				**Note** the efi_variable structure
+-				read/written with this file contains a
+-				'long' type that may change widths
+-				depending on your underlying
+-				architecture.
+-
+-		size:		As ASCII representation of the size of
+-				the variable's value.
+-		=============== ========================================
+-
+-
+-		In addition, two other magic binary files are provided
+-		in the top-level directory and are used for adding and
+-		removing variables:
+-
+-		=============== ========================================
+-		new_var:	Takes a "struct efi_variable" and
+-				instructs the EFI firmware to create a
+-				new variable.
+-
+-		del_var:	Takes a "struct efi_variable" and
+-				instructs the EFI firmware to remove any
+-				variable that has a matching vendor GUID
+-				and variable key name.
+-		=============== ========================================
+diff --git a/Documentation/ABI/testing/sysfs-firmware-gsmi b/Documentation/ABI/testing/sysfs-firmware-gsmi
+index 7a558354c1ee..60fe880b5b44 100644
+--- a/Documentation/ABI/testing/sysfs-firmware-gsmi
++++ b/Documentation/ABI/testing/sysfs-firmware-gsmi
+@@ -16,14 +16,6 @@ Description:
+ 
+ 		Layout:
+ 
+-		/sys/firmware/gsmi/vars:
+-
+-			This directory has the same layout (and
+-			underlying implementation as /sys/firmware/efi/vars.
+-			See `Documentation/ABI/*/sysfs-firmware-efi-vars`
+-			for more information on how to interact with
+-			this structure.
+-
+ 		/sys/firmware/gsmi/append_to_eventlog - write-only:
+ 
+ 			This file takes a binary blob and passes it onto
+diff --git a/Documentation/filesystems/efivarfs.rst b/Documentation/filesystems/efivarfs.rst
+index 0551985821b8..164611ce6f2c 100644
+--- a/Documentation/filesystems/efivarfs.rst
++++ b/Documentation/filesystems/efivarfs.rst
+@@ -40,4 +40,3 @@ accidentally.
+ *See also:*
+ 
+ - Documentation/admin-guide/acpi/ssdt-overlays.rst
+-- Documentation/ABI/stable/sysfs-firmware-efi-vars
+-- 
+2.39.1
 
