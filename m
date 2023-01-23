@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601CE678542
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE305678544
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbjAWSsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S231679AbjAWStI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjAWSsd (ORCPT
+        with ESMTP id S232336AbjAWStD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:48:33 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFFB10A9A;
-        Mon, 23 Jan 2023 10:48:28 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id y8so9694470qvn.11;
-        Mon, 23 Jan 2023 10:48:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k5MyD6fIRFKu+jhSA4qPFQumxMz6XFXiYHlIS1K9ueo=;
-        b=nNd2c50bWIb/VvPLRKyytvcpbBE6zq2q0EPxAQ46KXTQhunMO1RhKP5ReRTFxLLvA8
-         DPzLDZ82Y0olNflTqV1DmEMf1HWJjqz2AjxHsUjnRuH93ODYjEWb37vnZ74to8DOwVLj
-         znf2dM9Q9LLvx9GHC61DUh6YQyyg4sDLncteGzqds0Ucb14xenBMdc+MTPzAi+rqODDz
-         ZorGZTHhU6UvT7OToLGPZT7S2juM72BVHZgCokrPnYkwnMVdY8QCs6VxK0V7SKeJErt8
-         m/O4rrXX5N4XNmqh8ve29y6tlt9XyA3sWxIcutjra5fp8FQfFJLJgwxTuEGgDKjUe/GM
-         0W6g==
-X-Gm-Message-State: AFqh2kqGTEf/jOI9xcK8Zw9DNAX3f8BjKK+RweTYxOiJOcgiFr0o9UAu
-        M1fJvjUt1iahfYtSVA9kjf8=
-X-Google-Smtp-Source: AMrXdXvAn3suxRRTmSY5JV+xXVEwuN5YGro9JvhukSOj6j3T7x7TY9t4ZSSpNStVF+sNERsgKkedCA==
-X-Received: by 2002:a0c:fc03:0:b0:537:4b09:670f with SMTP id z3-20020a0cfc03000000b005374b09670fmr18245525qvo.25.1674499707443;
-        Mon, 23 Jan 2023 10:48:27 -0800 (PST)
-Received: from maniforge.lan ([2620:10d:c091:480::1:93a0])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05620a28ce00b007062139ecb3sm20778988qkp.95.2023.01.23.10.48.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 10:48:27 -0800 (PST)
-Date:   Mon, 23 Jan 2023 12:48:27 -0600
-From:   David Vernet <void@manifault.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        memxor@gmail.com
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
- definitions
-Message-ID: <Y87We/92xiv5/+g+@maniforge.lan>
-References: <20230123171506.71995-1-void@manifault.com>
- <20230123171506.71995-4-void@manifault.com>
- <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
+        Mon, 23 Jan 2023 13:49:03 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D0C10A90;
+        Mon, 23 Jan 2023 10:49:01 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <mkarcher@zedat.fu-berlin.de>)
+          id 1pK1sJ-003mag-PP; Mon, 23 Jan 2023 19:48:59 +0100
+Received: from pd9f631ca.dip0.t-ipconnect.de ([217.246.49.202] helo=[192.168.144.87])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <kernel@mkarcher.dialup.fu-berlin.de>)
+          id 1pK1sJ-00024b-JI; Mon, 23 Jan 2023 19:48:59 +0100
+Message-ID: <b41ea008-d9c4-fd76-a5ce-00fe435deed5@mkarcher.dialup.fu-berlin.de>
+Date:   Mon, 23 Jan 2023 19:48:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+Subject: [PATCH v4 1/1] arch/sh: avoid spurious sizeof-pointer-div warning
+To:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: kernel@mkarcher.dialup.fu-berlin.de
+X-Originating-IP: 217.246.49.202
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:33:05AM -0800, Alexei Starovoitov wrote:
-> On Mon, Jan 23, 2023 at 11:15:06AM -0600, David Vernet wrote:
-> > -void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> > +BPF_KFUNC(void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign))
-> >  {
-> >  	struct btf_struct_meta *meta = meta__ign;
-> >  	u64 size = local_type_id__k;
-> > @@ -1790,7 +1786,7 @@ void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> >  	return p;
-> >  }
-> >  
-> > -void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
-> > +BPF_KFUNC(void bpf_obj_drop_impl(void *p__alloc, void *meta__ign))
-> >  {
-> 
-> The following also works:
-> -BPF_KFUNC(void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign))
-> +BPF_KFUNC(
-> +void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
-> +)
-> 
-> and it looks little bit cleaner to me.
-> 
-> git grep -A1 BPF_KFUNC
-> can still find all instances of kfuncs.
-> 
-> wdyt?
+Gcc warns about the pattern sizeof(void*)/sizeof(void), as it looks like
+the abuse of a pattern to calculate the array size. This pattern appears
+in the unevaluated part of the ternary operator in _INTC_ARRAY if the
+parameter is NULL.
 
-I'm fine with putting it on its own line if that's your preference.
-Agreed that it might be a bit cleaner, especially for functions with the
-return type on its own line, so we'd have e.g.:
+The replacement uses an alternate approach to return 0 in case of NULL
+which does not generate the pattern sizeof(void*)/sizeof(void), but still
+emits the warning if _INTC_ARRAY is called with a nonarray parameter.
 
-BPF_KFUNC(
-struct nf_conn *
-bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
-		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
-) {
+This patch is required for successful compilation with -Werror enabled.
 
-// ...
+The idea to use _Generic for type distinction is taken from Comment #7
+in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483 by Jakub Jelinek
 
-}
+Signed-off-by: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+---
+This edition of the mail has the correct "v4" designation in the subject.
 
-Note the presence of the { on the closing paren. Are you ok with that?
-Otherwise I think it will look a bit odd:
+History:
+v4:
+   - Put the case distinction into the numerator instead of the denominator
+   - Refactor the case disctinction into a second macro
+v3:
+   - I had a stern discussion with Thunderbird about not mangling the
+     space characters in my email, and I hope spaces get sent as standard
+     spaces now
+v2:
+   - improve title and remove mostly redundant first sentence of the
+     description
+   - adjust formatting of the _Generic construction
 
-BPF_KFUNC(
-struct nf_conn *
-bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
-		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
-)
-{
+diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
+index c255273b0281..98d1da0d8e36 100644
+--- a/include/linux/sh_intc.h
++++ b/include/linux/sh_intc.h
+@@ -97,7 +97,9 @@ struct intc_hw_desc {
+      unsigned int nr_subgroups;
+  };
 
-}
+-#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
++#define _INTC_SIZEOF_OR_ZERO(a) (_Generic(a,                 \
++                                 typeof(NULL):  0,           \
++                                 default:       sizeof(a)))
++#define _INTC_ARRAY(a) a, _INTC_SIZEOF_OR_ZERO(a)/sizeof(*a)
 
-Thanks,
-David
+  #define INTC_HW_DESC(vectors, groups, mask_regs,    \
+               prio_regs,    sense_regs, ack_regs)    \
+
+
