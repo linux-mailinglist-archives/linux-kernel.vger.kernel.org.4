@@ -2,108 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C493A6779CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D20A6779D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjAWLG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S231587AbjAWLIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjAWLGz (ORCPT
+        with ESMTP id S231512AbjAWLH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:06:55 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2160234D0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:06:54 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id d62so14245153ybh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:06:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uPjqicpT5Bjj+0xFow7d0lAjazsxJymEfQfty9QBpI4=;
-        b=VYuiitzB0pXpcp5ssg3YxsJNwYAZ5uk3Ya+ixMP1MbO9LCAa5iwUDUmUwtTcDW7C+O
-         11yLQwGl/KsB395AImq0qTntzxowxu28bp5oirfKiF+C8gOcW8T202mp9N7cwX/9JLmL
-         r8JpKXNvrSXVAtd4pxQof5+pO8tUqzdA5SA572wZUuHP9q+fuu8Cq19VjU2Yw/vhJq2W
-         AA80z3qDvr3wVR92NuW0tkAJt9Rk6Hv32Jfzk0paklrmxhwp5GEfXMK12xt69pjrSjcl
-         OObRE4SRy14z4ZfEy8zz95o/50R6zMjpJnat9XyFDykUJWnmuWB9Sx0M3JuWstFjA6mv
-         Zh6g==
+        Mon, 23 Jan 2023 06:07:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5FD222EF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:07:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674472030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dHJj6GHCp84olcE9Bo8DHZkNV+HuFj5W3aT+4JQhb/A=;
+        b=PdujOcIgBeVPKSQBddmbeaBky8sDhUZkj+csduj8hK98kTIOXQZyzBJI3Nh76EgcAPVL85
+        smbc3JEH2XM8FZEPHlmpVlo6yR7W0ZsmSFP3d5Oc3vbx3AjG4oVEeB6HqrzZLMOI2P68sA
+        dm8GUiKRPLbv4e8WE1VS4G0J6u1dy3I=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-271-fPH9G_M8MkC2DZ_41vVspg-1; Mon, 23 Jan 2023 06:07:08 -0500
+X-MC-Unique: fPH9G_M8MkC2DZ_41vVspg-1
+Received: by mail-wr1-f71.google.com with SMTP id m12-20020adfa3cc000000b002b881cb0cb4so1879930wrb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:07:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uPjqicpT5Bjj+0xFow7d0lAjazsxJymEfQfty9QBpI4=;
-        b=1UNdAUkvx9CfrkyO/qIFtxhIVQRsdCgRv95N9jxuh2sjoAA96fu7gMpZT3Wie5u5sd
-         S+srLdjwTIlDd1fKY+m7I67ndoe8lQsJfzwbE35nTYYCSeEPAIIYu2uxOFnniV5JE9O2
-         0bGBISrMa0kWRyYrAx+hQncUJw67Z2eLXLYtw4V3gdht2bzNVFGoHjYu+19MLvdcrCHE
-         mYntds9NnZ/VPpzv570ndjAJkXz2WxS97AxPqfwn3tfY4y5J379sMrKI5Bb2OvI5n5ru
-         qZK5y3OOWnQ1jweVLd3RrL2gWlE2BTU0sO/r0kT1UD6gribnmhe9CeRqL27zvb23yaCv
-         LpTw==
-X-Gm-Message-State: AFqh2krgPgpubejaE0DnpkzZdaQWoru9X61JcTR4ZL35hs3g5yg3PI8h
-        taUkLRO8ylhePLtNxwnSi6Llrr0puJPcQVItZKy027mRYIaKH3zn
-X-Google-Smtp-Source: AMrXdXsXCiRgpfZshFYU4XS/DBhWQV7E5Jfh7ZFyaTHTy6vEPLWQEBXPSUZy4ALLbuNRSli/+SE9CWoVeNvlkukPrMs=
-X-Received: by 2002:a25:2514:0:b0:7f5:14a4:1fb7 with SMTP id
- l20-20020a252514000000b007f514a41fb7mr2307250ybl.625.1674472013721; Mon, 23
- Jan 2023 03:06:53 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dHJj6GHCp84olcE9Bo8DHZkNV+HuFj5W3aT+4JQhb/A=;
+        b=ofio1MmUjfNDxjdu5dz+xl9MSnrBWykDjTQQUGSr5NRGgbK1KhIVKtruJQ0mKm0Wfu
+         1DYJVGVURz1SP2pNr6OIceDWo5RSOxb+Vs08DB1AYyRjGkMAZ2jmq/DmE5i68j9xnh23
+         f5vo3lSCpteIhvrsWOHfXHWUGRX3NJjtDRwr65haa7LdkGUFPYK9A+Uqu1h2Xyq9WFpH
+         lE6EYnFz4mI53n8MT1iDfCyaPULeByW5qd9XBL3U+47vvlu1f5dQuwDSLbzbbuVvs86A
+         RurXarZEfdTzdqQZZNX+M13oCwgJLUdN5MauTSip2m/0oXBSRpdUHLDGHVbgiLzMFfdQ
+         guew==
+X-Gm-Message-State: AFqh2krdlTkS7J8RZ2T7BBGLNkL4aMkR//8rjD6uBjpw4pK0MqrSsXwv
+        snrE9vnXi8jRB3GvlbQEzJh36ScV8VJVcvj1HD7yJtk2W2YwcT/xyhZSliiDoqCcoNvozJaQSK2
+        58O4unjrP4siIoTgWAhJKfhHR
+X-Received: by 2002:a05:600c:4256:b0:3da:1d51:ef9e with SMTP id r22-20020a05600c425600b003da1d51ef9emr23420609wmm.17.1674472027581;
+        Mon, 23 Jan 2023 03:07:07 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu0Cg92QjtLeNk1itjVppuG2H1v/jszHJB9+YOuh2PaEWkxGDrwwwcVA8mXq9v9fdlxS4T6LA==
+X-Received: by 2002:a05:600c:4256:b0:3da:1d51:ef9e with SMTP id r22-20020a05600c425600b003da1d51ef9emr23420580wmm.17.1674472027274;
+        Mon, 23 Jan 2023 03:07:07 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
+        by smtp.gmail.com with ESMTPSA id he11-20020a05600c540b00b003d9b89a39b2sm10206202wmb.10.2023.01.23.03.07.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 03:07:06 -0800 (PST)
+Message-ID: <1b8696ec-e2be-7b7b-705c-e2dcabb2e8e5@redhat.com>
+Date:   Mon, 23 Jan 2023 12:07:05 +0100
 MIME-Version: 1.0
-Reply-To: tjcw@cantab.net
-From:   Chris Ward <tjcw01@gmail.com>
-Date:   Mon, 23 Jan 2023 11:06:43 +0000
-Message-ID: <CAC=wTOhhyaoyCcAbX1xuBf5v-D=oPjjo1RLUmit=Uj9y0-3jrw@mail.gmail.com>
-Subject: eBPF verifier does not load libxdp dispatcher eBPF program
-To:     linux-kernel@vger.kernel.org
-Cc:     Chris Ward <tjcw@uk.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>
+References: <20230111133351.807024-1-jannh@google.com>
+ <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
+ <CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com>
+ <20230115190654.mehtlyz2rxtg34sl@box.shutemov.name>
+ <CAG48ez2zeQ4+g1=B4eyrrvZRYMr1S1xKBh2_eAhCjVjhj7Lpfg@mail.gmail.com>
+ <20230116123403.fiyv22esqgh7bzp3@box.shutemov.name>
+ <5a7fdfa7-5b25-0ed4-2479-661d387b397b@redhat.com>
+ <20230116134710.n4dgtrutt6rqif62@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230116134710.n4dgtrutt6rqif62@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am trying to use the 'bleeding edge' kernel to determine whether a
-problem I see has already been fixed, but with this kernel the eBPF
-verifier will not load the dispatcher program that is contained within
-libxdp. I am testing kernel commit hash 2475bf0 which fails, and the
-kernel in Ubuntu 22.04 (5.15.0-58-generic) works properly. I am
-running the test case from
-https://github.com/tjcw/bpf-examples/tree/tjcw-explore-sameeth ; to
-build it go to the AF_XDP-filter directory and type 'make', and to run
-it go to the AF_XDP-filter/runscripts/iperf3-namespace directory and
-type 'sudo FILTER=af_xdp_kern PORT=50000 ./run.sh' .
-The lines from the run output indicating the failure are
-libbpf: prog 'xdp_dispatcher': BPF program load failed: Invalid argument
-libbpf: prog 'xdp_dispatcher': -- BEGIN PROG LOAD LOG --
-Func#11 is safe for any args that match its prototype
-btf_vmlinux is malformed
-reg type unsupported for arg#0 function xdp_dispatcher#29
-0: R1=ctx(off=0,imm=0) R10=fp0
-; int xdp_dispatcher(struct xdp_md *ctx)
-0: (bf) r6 = r1                       ; R1=ctx(off=0,imm=0)
-R6_w=ctx(off=0,imm=0)
-1: (b7) r0 = 2                        ; R0_w=2
-; __u8 num_progs_enabled = conf.num_progs_enabled;
-2: (18) r8 = 0xffffb2f6c06d8000       ; R8_w=map_value(off=0,ks=4,vs=84,imm=0)
-4: (71) r7 = *(u8 *)(r8 +0)           ; R7=1
-R8=map_value(off=0,ks=4,vs=84,imm=0)
-; if (num_progs_enabled < 1)
-5: (15) if r7 == 0x0 goto pc+141      ; R7=1
-; ret = prog0(ctx);
-6: (bf) r1 = r6                       ; R1_w=ctx(off=0,imm=0)
-R6=ctx(off=0,imm=0)
-7: (85) call pc+140
-btf_vmlinux is malformed
-R1 type=ctx expected=fp
-Caller passes invalid args into func#1
-processed 84 insns (limit 1000000) max_states_per_insn 0 total_states
-9 peak_states 9 mark_read 1
--- END PROG LOAD LOG --
-libbpf: prog 'xdp_dispatcher': failed to load: -22
-libbpf: failed to load object 'xdp-dispatcher.o'
-libxdp: Failed to load dispatcher: Invalid argument
-libxdp: Falling back to loading single prog without dispatcher
+On 16.01.23 14:47, Kirill A. Shutemov wrote:
+> On Mon, Jan 16, 2023 at 02:07:41PM +0100, David Hildenbrand wrote:
+>> On 16.01.23 13:34, Kirill A. Shutemov wrote:
+>>> On Mon, Jan 16, 2023 at 01:06:59PM +0100, Jann Horn wrote:
+>>>> On Sun, Jan 15, 2023 at 8:07 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>>>>> On Fri, Jan 13, 2023 at 08:28:59PM +0100, Jann Horn wrote:
+>>>>>> No, that lockdep assert has to be there. Page table traversal is
+>>>>>> allowed under any one of the mmap lock, the anon_vma lock (if the VMA
+>>>>>> is associated with an anon_vma), and the mapping lock (if the VMA is
+>>>>>> associated with a mapping); and so to be able to remove page tables,
+>>>>>> we must hold all three of them.
+>>>>>
+>>>>> Okay, that's fair. I agree with the patch now. Maybe adjust the commit
+>>>>> message a bit?
+>>>>
+>>>> Just to make sure we're on the same page: Are you suggesting that I
+>>>> add this text?
+>>>> "Page table traversal is allowed under any one of the mmap lock, the
+>>>> anon_vma lock (if the VMA is associated with an anon_vma), and the
+>>>> mapping lock (if the VMA is associated with a mapping); and so to be
+>>>> able to remove page tables, we must hold all three of them."
+>>>> Or something else?
+>>>
+>>> Looks good to me.
+>>>
+>>>>> Anyway:
+>>>>>
+>>>>> Acked-by: Kirill A. Shutemov <kirill.shutemov@intel.linux.com>
+>>>>
+>>>> Thanks!
+>>>>
+>>>>> BTW, I've noticied that you recently added tlb_remove_table_sync_one().
+>>>>> I'm not sure why it is needed. Why IPI in pmdp_collapse_flush() in not
+>>>>> good enough to serialize against GUP fast?
+>>>>
+>>>> If that sent an IPI, it would be good enough; but
+>>>> pmdp_collapse_flush() is not guaranteed to send an IPI.
+>>>> It does a TLB flush, but on some architectures (including arm64 and
+>>>> also virtualized x86), a remote TLB flush can be done without an IPI.
+>>>> For example, arm64 has some fancy hardware support for remote TLB
+>>>> invalidation without IPIs ("broadcast TLB invalidation"), and
+>>>> virtualized x86 has (depending on the hypervisor) things like TLB
+>>>> shootdown hypercalls (under Hyper-V, see hyperv_flush_tlb_multi) or
+>>>> TLB shootdown signalling for preempted CPUs through shared memory
+>>>> (under KVM, see kvm_flush_tlb_multi).
+>>>
+>>> I think such architectures must provide proper pmdp_collapse_flush()
+>>> with the required serialization. Power and S390 already do that.
+>>>
+>>
+>> The plan is to eventually move away from (ab)using IPI to synchronize with
+>> GUP-fast. Moving further into that direction a is wrong.
+>>
+>> The flush was added as a quick fix for all architectures by Jann, until
+>> we can do better.
+>>
+>> Even for ppc64, see:
+>>
+>> commit bedf03416913d88c796288f9dca109a53608c745
+>> Author: Yang Shi <shy828301@gmail.com>
+>> Date:   Wed Sep 7 11:01:44 2022 -0700
+>>
+>>      powerpc/64s/radix: don't need to broadcast IPI for radix pmd collapse flush
+>>      The IPI broadcast is used to serialize against fast-GUP, but fast-GUP will
+>>      move to use RCU instead of disabling local interrupts in fast-GUP.  Using
+>>      an IPI is the old-styled way of serializing against fast-GUP although it
+>>      still works as expected now.
+>>      And fast-GUP now fixed the potential race with THP collapse by checking
+>>      whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
+>>      flush is not necessary anymore.  But it is still needed for hash TLB.
+> 
+> Okay. But I think tlb_remove_table_sync_one() belongs inside
+> pmdp_collapse_flush(). Collapsing pmd table into huge page without
+> serialization is a bug. They should not be separate.
 
-Can this regression be fixed before kernel 6.2 ships ?
+Agreed. But I wonder if it should be moved into a generic 
+pmdp_collapse_flush(), that calls an arch specific __pmdp_collapse_flush().
+
+-- 
+Thanks,
+
+David / dhildenb
+
