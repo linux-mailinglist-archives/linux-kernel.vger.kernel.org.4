@@ -2,100 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F876789D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E176789D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbjAWVmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S231892AbjAWVnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWVmn (ORCPT
+        with ESMTP id S231789AbjAWVnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:42:43 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6F610429;
-        Mon, 23 Jan 2023 13:42:42 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso12244615pjf.1;
-        Mon, 23 Jan 2023 13:42:42 -0800 (PST)
+        Mon, 23 Jan 2023 16:43:35 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D467430C3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:43:33 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id x36so16212413ede.13
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:43:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDD135jW/NyYj2u2IXG8tYJYPCEObqA6m9pB/saDvpQ=;
-        b=h8PZTgkFjfM/+itkxqzflz2j/csRwrYZs15LZXlAf7S3MFY1Dpf3pqxTtPr11x3mKk
-         ipO5imVlWqmtemuf3Bzb8gukFpMF6Z3/hHV1xFpQGdi33mYVYPchDlzh++ovQkAY7s8w
-         5PomO59Db2Vnv9C6oMRj36uPUZG14J2JZnbf1B5MTfBhjOATos6kZv+O0VAbtDhJ/gdu
-         iX+hVLULXGIW0prqblDWT97b7+K3PSK5GQrqDVw5bJghl/OucQ7xqH3YF6yo9Ia94ync
-         EIhCOGGVQhP5K8PurZ/rkPMGxVxGl7z0Sisc+ci0qzvfZz4IV+n81f52ueoXD3JWDnh5
-         335w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W3r6B64DZuMFwwix3N4n4XzbmENfbpW+Xzcs7S01Th4=;
+        b=EWwdaEn4uzAm+RZhH/JN2bAoeEswIMXVe5x8cvWSi5FsYfKXuNkUWXim62A0NWvaK2
+         1iR2uaagFG4D8GXvUdt1XBaMxT1FvVvNU8pC19vLCPyiZCgNK0rozotfALycjVUK41aP
+         vVAWfHI37bPLo3YB+WYeyti0TmyNQZ0SuRR2wT65IS3RcAjZkKBs/3phMIhYVp18Vi20
+         YQVMIdKij1oveSpbaDruXExrQGgMHlIBsZp5kjMhePMRKyZmLtFBuUDpG1vPIc6GbOnA
+         BFaMUb9iKEVLLRGG4ywOvLS/gW8qx5FTN4tgczgcIh+neHVZz5ATktWdSFcdA4eKbwJI
+         hseQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FDD135jW/NyYj2u2IXG8tYJYPCEObqA6m9pB/saDvpQ=;
-        b=vZpUIDc7EolHW8yq5pkBdIh1IA/hDOMVqTnI3m4Vm/48M5csMuSSPlSGbRPC6Gdj72
-         1ZeNSV/i3JGaBN8F7GCYp4erM/umypRkdR5D1HmJxJEisZ+GyBdDiG49x3AlMm5UHUb0
-         gPAZQKOZzpjtYbVwv2LPCkNU6jzexkhPgjVWY2o52Cd4nJBjam/UUv96GNKtYeEcEsZm
-         Q7TLcJNPM60rjKXIrvV71DbpYIgRrA7LTdSWvEt2s71IpLugnUicheHTmrtkIurF4B6s
-         VsTcv42cPpZq5hk7WMBKoFF8hwcME/xwzdrnhH4DcBF9Xc3XUkcX+4w9eiBgFVnye0zQ
-         ml+g==
-X-Gm-Message-State: AFqh2kpNQhHAaDH6kfVUIyLKESBqUr6uoEL8Epuu2YhyA0L1BzzqqjCS
-        FWN6RM8NZ1QfsAssiG6HLi0=
-X-Google-Smtp-Source: AMrXdXs6R9T9aXKiTKwaa8gr76eWk3lG3Wi81m7YS3XqJInGMqZJLxglThM2t/EbLDK4zherRNsD3g==
-X-Received: by 2002:a17:90b:2347:b0:226:d727:4045 with SMTP id ms7-20020a17090b234700b00226d7274045mr27326599pjb.24.1674510161818;
-        Mon, 23 Jan 2023 13:42:41 -0800 (PST)
-Received: from rishit-OMEN-Laptop-15-en0xxx ([171.76.81.196])
-        by smtp.gmail.com with ESMTPSA id 12-20020a17090a08cc00b0020dc318a43esm110190pjn.25.2023.01.23.13.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 13:42:41 -0800 (PST)
-From:   Rishit Bansal <rishitbansal0@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rishit Bansal <rishitbansal0@gmail.com>
-Subject: [PATCH] platform/x86: hp-wmi: Ignore Win-Lock key events
-Date:   Tue, 24 Jan 2023 03:11:50 +0530
-Message-Id: <20230123214150.62597-1-rishitbansal0@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W3r6B64DZuMFwwix3N4n4XzbmENfbpW+Xzcs7S01Th4=;
+        b=keyR9A7TV3snEm16a1m3Twfx0Kinth9ezqYsp/bm39QZrRym9U5FPfy438rP5fMt7N
+         RP01CXtrf110lMf8IRQWUkuT6IXAqDusyaJ+zwq96KCyIekj6duANYbLkbUS2NaRpFMp
+         6JVswGdqZOUUhyjvcGCtgQSEquExYjrWZscgm8X2R8d1Bkumax8VKVvbx6S3zc6SiIfP
+         Mh0JfZmR9Hzu1SqtYbdG00XcOX17xqwv003a/LOT1w0foZsNdE3FH5biK6sfK+fTE5hi
+         wwNXwJ1qff8lOd/ZqzgCF97RtGfZA4yZ1jQR2xhrFCGpWVwSMNHwHcHsj6TrH7gBfFhV
+         tsAw==
+X-Gm-Message-State: AFqh2kpklIGdY3WJL/F8pNs/gsCE5Vv7rzOcSG6HEijHIgZ57mxr9x1X
+        9e712GxTu0N06+DS4YXvxoMbIA==
+X-Google-Smtp-Source: AMrXdXsoy0vnuRmmzM8s80srmTtOvZEQu9MroLlG3m2s1HTM6nQz1sHzw5EKlmcnKvE51i8rh+LpuA==
+X-Received: by 2002:a05:6402:4305:b0:49c:7aa2:55de with SMTP id m5-20020a056402430500b0049c7aa255demr35515771edc.1.1674510212240;
+        Mon, 23 Jan 2023 13:43:32 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id q28-20020a056402033c00b0048789661fa2sm223597edw.66.2023.01.23.13.43.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 13:43:31 -0800 (PST)
+Message-ID: <e79fd723-a522-5ad2-12c9-14085fe30b8a@linaro.org>
+Date:   Mon, 23 Jan 2023 23:43:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 11/14] drm/msm/disp/dpu1: add supports of new flush
+ mechanism
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
+ <1674498274-6010-12-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1674498274-6010-12-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Follow up from https://lore.kernel.org/all/20230120221214.24426-1-rishitbansal0@gmail.com/
+On 23/01/2023 20:24, Kuogee Hsieh wrote:
+> A new flushing mechanism is introduced to decouple peripheral metadata
+> flushing from timing engine related flush. This patch add peripheral
+> flushing functions.
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 24 ++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h   |  2 +
+>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  7 ++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         | 43 ++++++++++++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         | 21 +++++++++++
+>   5 files changed, 91 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 901e317..d2625b3 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1472,6 +1472,12 @@ static void _dpu_encoder_trigger_flush(struct drm_encoder *drm_enc,
+>   	if (extra_flush_bits && ctl->ops.update_pending_flush)
+>   		ctl->ops.update_pending_flush(ctl, extra_flush_bits);
+>   
+> +	if (phys->hw_intf->cap->type == INTF_DP &&
+> +		phys->comp_type == MSM_DISPLAY_COMPRESSION_DSC &&
+> +						phys->comp_ratio) {
 
-There is a "Win-Lock" key on HP Omen Laptops which supports
-enabling and disabling the Windows key, which trigger commands 0x21a4
-and 0x121a4 respectively. Currently the hp-wmi driver throws warnings
-for this event. These can be ignored using KE_IGNORE as the
-functionality is handled by the keyboard firmware itself.
+Do you really need to know comp_ratio here? And the comp_type?
 
-Signed-off-by: Rishit Bansal <rishitbansal0@gmail.com>
----
- drivers/platform/x86/hp/hp-wmi.c | 2 ++
- 1 file changed, 2 insertions(+)
+> +		ctl->ops.update_pending_flush_periph(ctl, phys->hw_intf->idx);
+> +	}
+> +
+>   	ctl->ops.trigger_flush(ctl);
+>   
+>   	if (ctl->ops.get_pending_flush)
+> @@ -1814,12 +1820,18 @@ dpu_encoder_dsc_initial_line_calc(struct drm_dsc_config *dsc,
+>   	return DIV_ROUND_UP(total_pixels, dsc->slice_width);
+>   }
+>   
+> -static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+> +static void dpu_encoder_dsc_pipe_cfg(struct dpu_encoder_virt *dpu_enc,
+> +				     struct dpu_hw_dsc *hw_dsc,
+>   				     struct dpu_hw_pingpong *hw_pp,
+>   				     struct drm_dsc_config *dsc,
+>   				     u32 common_mode,
+>   				     u32 initial_lines)
+>   {
+> +	struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
+> +	struct dpu_hw_ctl *ctl;
+> +
+> +	ctl = cur_master->hw_ctl;
+> +
+>   	if (hw_dsc->ops.dsc_config)
+>   		hw_dsc->ops.dsc_config(hw_dsc, dsc, common_mode, initial_lines, false);
+>   
+> @@ -1834,6 +1846,10 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+>   
+>   	if (hw_pp->ops.enable_dsc)
+>   		hw_pp->ops.enable_dsc(hw_pp);
+> +
+> +	if (ctl->ops.update_pending_flush_dsc)
+> +		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
+> +
+>   }
+>   
+>   static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
+> @@ -1877,8 +1893,10 @@ static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
+>   	enc_ip_w = intf_ip_w / 2;
+>   	initial_lines = dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
+>   
+> -	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
+> -		dpu_encoder_dsc_pipe_cfg(hw_dsc[i], hw_pp[i], dsc, dsc_common_mode, initial_lines);
+> +	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
+> +		dpu_encoder_dsc_pipe_cfg(dpu_enc, hw_dsc[i], hw_pp[i], dsc,
+> +					dsc_common_mode, initial_lines);
+> +	}
+>   }
+>   
+>   void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> index 1d434b2..0569b36 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> @@ -200,6 +200,8 @@ struct dpu_encoder_phys {
+>   	atomic_t pending_kickoff_cnt;
+>   	wait_queue_head_t pending_kickoff_wq;
+>   	int irq[INTR_IDX_MAX];
+> +	enum msm_display_compression_type comp_type;
+> +	u32 comp_ratio;
+>   };
+>   
+>   static inline int dpu_encoder_phys_inc_pending(struct dpu_encoder_phys *phys)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> index 48c4810..2d864f9 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> @@ -1,5 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /* Copyright (c) 2015-2018, 2020-2021 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>    */
+>   
+>   #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
+> @@ -427,6 +428,12 @@ static void dpu_encoder_phys_vid_enable(struct dpu_encoder_phys *phys_enc)
+>   	if (ctl->ops.update_pending_flush_merge_3d && phys_enc->hw_pp->merge_3d)
+>   		ctl->ops.update_pending_flush_merge_3d(ctl, phys_enc->hw_pp->merge_3d->idx);
+>   
+> +	if (phys_enc->hw_intf->cap->type == INTF_DP &&
+> +		phys_enc->comp_type == MSM_DISPLAY_COMPRESSION_DSC &&
+> +					phys_enc->comp_ratio) {
+> +		ctl->ops.update_pending_flush_periph(ctl, phys_enc->hw_intf->idx);
+> +	}
+> +
+>   skip_flush:
+>   	DPU_DEBUG_VIDENC(phys_enc,
+>   		"update pending flush ctl %d intf %d\n",
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> index b88a2f3..1891c57 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> @@ -33,6 +33,7 @@
+>   #define   CTL_DSC_FLUSH                0x104
+>   #define   CTL_WB_FLUSH                  0x108
+>   #define   CTL_INTF_FLUSH                0x110
+> +#define   CTL_PERIPH_FLUSH              0x128
+>   #define   CTL_INTF_MASTER               0x134
+>   #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
+>   
+> @@ -42,11 +43,13 @@
+>   #define DPU_REG_RESET_TIMEOUT_US        2000
+>   #define  MERGE_3D_IDX   23
+>   #define  DSC_IDX        22
+> +#define  PERIPH_IDX     30
+>   #define  INTF_IDX       31
+>   #define WB_IDX          16
+>   #define CTL_INVALID_BIT                 0xffff
+>   #define CTL_DEFAULT_GROUP_ID		0xf
+>   
+> +
 
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 0a99058be813..009cf0bda756 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -216,6 +216,8 @@ static const struct key_entry hp_wmi_keymap[] = {
- 	{ KE_KEY, 0x213b,  { KEY_INFO } },
- 	{ KE_KEY, 0x2169,  { KEY_ROTATE_DISPLAY } },
- 	{ KE_KEY, 0x216a,  { KEY_SETUP } },
-+	{ KE_IGNORE, 0x21a4, }, /* Win Lock On */
-+	{ KE_IGNORE, 0x121a4, }, /* Win Lock Off */
- 	{ KE_KEY, 0x21a9,  { KEY_TOUCHPAD_OFF } },
- 	{ KE_KEY, 0x121a9, { KEY_TOUCHPAD_ON } },
- 	{ KE_KEY, 0x231b,  { KEY_HELP } },
+No extra empty lines please.
+
+>   static const u32 fetch_tbl[SSPP_MAX] = {CTL_INVALID_BIT, 16, 17, 18, 19,
+>   	CTL_INVALID_BIT, CTL_INVALID_BIT, CTL_INVALID_BIT, CTL_INVALID_BIT, 0,
+>   	1, 2, 3, CTL_INVALID_BIT, CTL_INVALID_BIT};
+> @@ -123,6 +126,7 @@ static inline void dpu_hw_ctl_update_pending_flush(struct dpu_hw_ctl *ctx,
+>   	trace_dpu_hw_ctl_update_pending_flush(flushbits,
+>   					      ctx->pending_flush_mask);
+>   	ctx->pending_flush_mask |= flushbits;
+> +
+>   }
+>   
+>   static u32 dpu_hw_ctl_get_pending_flush(struct dpu_hw_ctl *ctx)
+> @@ -142,6 +146,15 @@ static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
+>   		DPU_REG_WRITE(&ctx->hw, CTL_WB_FLUSH,
+>   				ctx->pending_wb_flush_mask);
+>   
+> +	if (ctx->pending_flush_mask & BIT(PERIPH_IDX))
+> +		DPU_REG_WRITE(&ctx->hw, CTL_PERIPH_FLUSH,
+> +				ctx->pending_periph_flush_mask);
+> +
+> +	if (ctx->pending_flush_mask & BIT(DSC_IDX)) {
+> +		DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH,
+> +				ctx->pending_dsc_flush_mask);
+> +	}
+> +
+>   	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
+>   }
+>   
+> @@ -281,6 +294,13 @@ static void dpu_hw_ctl_update_pending_flush_intf_v1(struct dpu_hw_ctl *ctx,
+>   	ctx->pending_flush_mask |= BIT(INTF_IDX);
+>   }
+>   
+> +static void dpu_hw_ctl_update_pending_flush_periph(struct dpu_hw_ctl *ctx,
+> +		enum dpu_intf intf)
+> +{
+> +	ctx->pending_periph_flush_mask |= BIT(intf - INTF_0);
+> +	ctx->pending_flush_mask |= BIT(PERIPH_IDX);
+> +}
+> +
+>   static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
+>   		enum dpu_merge_3d merge_3d)
+>   {
+> @@ -288,6 +308,13 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
+>   	ctx->pending_flush_mask |= BIT(MERGE_3D_IDX);
+>   }
+>   
+> +static void dpu_hw_ctl_update_pending_flush_dsc_v1(struct dpu_hw_ctl *ctx,
+> +		enum dpu_dsc dsc_num)
+> +{
+> +	ctx->pending_dsc_flush_mask |= BIT(dsc_num - DSC_0);
+> +	ctx->pending_flush_mask |= BIT(DSC_IDX);
+> +}
+> +
+>   static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+>   	enum dpu_dspp dspp)
+>   {
+> @@ -472,6 +499,7 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>   	u32 intf_active = 0;
+>   	u32 wb_active = 0;
+>   	u32 mode_sel = 0;
+> +	u32 dsc_active = 0;
+>   
+>   	/* CTL_TOP[31:28] carries group_id to collate CTL paths
+>   	 * per VM. Explicitly disable it until VM support is
+> @@ -502,9 +530,11 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>   	if (cfg->merge_3d)
+>   		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+>   			      BIT(cfg->merge_3d - MERGE_3D_0));
+> -	if (cfg->dsc) {
+> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+> -		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+> +
+> +	if (cfg->dsc_num) {
+> +		dsc_active = DPU_REG_READ(c, CTL_DSC_ACTIVE);
+> +		dsc_active |= BIT(cfg->dsc_num - DSC_0);
+> +		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, dsc_active);
+
+This deserves a separate patch with Fixed tag.
+
+>   	}
+>   }
+>   
+> @@ -605,9 +635,16 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+>   		ops->reset_intf_cfg = dpu_hw_ctl_reset_intf_cfg_v1;
+>   		ops->update_pending_flush_intf =
+>   			dpu_hw_ctl_update_pending_flush_intf_v1;
+> +
+> +		ops->update_pending_flush_periph =
+> +			dpu_hw_ctl_update_pending_flush_periph;
+> +
+>   		ops->update_pending_flush_merge_3d =
+>   			dpu_hw_ctl_update_pending_flush_merge_3d_v1;
+>   		ops->update_pending_flush_wb = dpu_hw_ctl_update_pending_flush_wb_v1;
+> +
+> +		ops->update_pending_flush_dsc =
+> +			dpu_hw_ctl_update_pending_flush_dsc_v1;
+>   	} else {
+>   		ops->trigger_flush = dpu_hw_ctl_trigger_flush;
+>   		ops->setup_intf_cfg = dpu_hw_ctl_intf_cfg;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> index 96c012e..d3faa0b1 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> @@ -48,6 +48,7 @@ struct dpu_hw_intf_cfg {
+>   	enum dpu_3d_blend_mode mode_3d;
+>   	enum dpu_merge_3d merge_3d;
+>   	enum dpu_ctl_mode_sel intf_mode_sel;
+> +	enum dpu_dsc dsc_num;
+>   	int stream_sel;
+>   	unsigned int dsc;
+>   };
+> @@ -121,6 +122,15 @@ struct dpu_hw_ctl_ops {
+>   		enum dpu_intf blk);
+>   
+>   	/**
+> +	 * OR in the given flushbits to the cached pending_(periph_)flush_mask
+> +	 * No effect on hardware
+> +	 * @ctx       : ctl path ctx pointer
+> +	 * @blk       : interface block index
+> +	 */
+> +	void (*update_pending_flush_periph)(struct dpu_hw_ctl *ctx,
+> +		enum dpu_intf blk);
+> +
+> +	/**
+>   	 * OR in the given flushbits to the cached pending_(merge_3d_)flush_mask
+>   	 * No effect on hardware
+>   	 * @ctx       : ctl path ctx pointer
+> @@ -156,6 +166,15 @@ struct dpu_hw_ctl_ops {
+>   	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
+>   		enum dpu_dspp blk);
+>   	/**
+> +	 * OR in the given flushbits to the cached pending_(dsc_)flush_mask
+> +	 * No effect on hardware
+> +	 * @ctx       : ctl path ctx pointer
+> +	 * @blk       : interface block index
+> +	 */
+> +	void (*update_pending_flush_dsc)(struct dpu_hw_ctl *ctx,
+> +		enum dpu_dsc blk);
+> +
+> +	/**
+>   	 * Write the value of the pending_flush_mask to hardware
+>   	 * @ctx       : ctl path ctx pointer
+>   	 */
+> @@ -241,7 +260,9 @@ struct dpu_hw_ctl {
+>   	u32 pending_flush_mask;
+>   	u32 pending_intf_flush_mask;
+>   	u32 pending_wb_flush_mask;
+> +	u32 pending_periph_flush_mask;
+>   	u32 pending_merge_3d_flush_mask;
+> +	u32 pending_dsc_flush_mask;
+>   
+>   	/* ops */
+>   	struct dpu_hw_ctl_ops ops;
+
 -- 
-2.37.2
+With best wishes
+Dmitry
 
