@@ -2,144 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152006788CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107CE67897D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjAWUzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S232387AbjAWVX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjAWUys (ORCPT
+        with ESMTP id S230435AbjAWVXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:54:48 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E9E38B68
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:22 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id t7so10180798qvv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:54:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jxFW990Hc2ogEB5SgKM/RiBrX6sbxaco4YvfU6sLwas=;
-        b=kHTF4rra0X9wvs4ewR1ZAZotmFoe7ZdPcwJCEdEsHqOxkNKGwZNmOejgzdSYA4Qivi
-         JS+snJV5pTVj5W6O2crOYaLC+AlbRDNdJ7/KP8jICevpl5M3VRbe+k8mfo6eNKOg02Ek
-         xV4njFSi9CG6Jw+cdazj0MtTgMuCbtxwlc7kE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jxFW990Hc2ogEB5SgKM/RiBrX6sbxaco4YvfU6sLwas=;
-        b=h4a56DAniPTpUibFjRBIFN6t/Jmylz/1B3g4JAQJH2mPCPJlJz6QQNlUn0ai4Snr43
-         QxyzNCM+vkeKZPpNAzIh1jTtVqi4W6lH7W6jQaAjH8Wrqp81IWS2u3HdU/+E0pfAAxaB
-         3qTmIX7N3/KJHNpujTSJiH9oIZ9sw3eIV06TcnjbZGn3xXXCKtgpoJZhXOqrXM79TAqz
-         u8wJo3BO4Zk0LZ+cAcJarQh3PvhMr7L6wgt8vWa2GQLiMRtIDHFJonsPMQrS+85lNQsq
-         x/NjQYAtc3CF9dMHTgzYM9SdlDD06FGs3IkjSpkN8oYIQA1HNr6VkjQ5yGTTEEkkQccI
-         V5Eg==
-X-Gm-Message-State: AFqh2krOlcyprf7Hlk0YnO/ciCq+M8znJPaJ0NZFxV/9OQ82V9DBkbA0
-        KLLZ4unEuCRsnhgLV7ndcuQ8ku2GbWPOiHnP
-X-Google-Smtp-Source: AMrXdXv2U7i31SNfUc+tzeUyxRfzaT+4wn43+5OzzVKoLFewQqVYwHrHYuOgHHqby/yT1AmlRu8JOg==
-X-Received: by 2002:a0c:ef04:0:b0:535:2692:ef65 with SMTP id t4-20020a0cef04000000b005352692ef65mr36919461qvr.33.1674507261217;
-        Mon, 23 Jan 2023 12:54:21 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id i184-20020a3786c1000000b00705c8cce5dcsm122080qkd.111.2023.01.23.12.54.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 12:54:18 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] rcu: Remove impossible wakeup rcu GP kthread action from rcu_report_qs_rdp()
-Date:   Mon, 23 Jan 2023 15:54:07 -0500
-Message-Id: <375EBA2F-F47A-4BC6-B4D4-2E96D5D15AB6@joelfernandes.org>
-References: <Y861Xuoa+CrZt9PB@lothringen>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, quic_neeraju@quicinc.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <Y861Xuoa+CrZt9PB@lothringen>
-To:     Frederic Weisbecker <frederic@kernel.org>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 23 Jan 2023 16:23:55 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA9830B15;
+        Mon, 23 Jan 2023 13:23:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=17xF72TkOudZ1GH2KkrHuQYUcqBX4WbXM/q285Cqrn4=; b=XnQVbU04G+ibmyCKDQvP0W/GEB
+        rihr8unbovHcUxwXBhjEJUVsCn46FK+HKV0ITvrF1CbDz0bfVHFkjz8k2YcDbyMdZZbmJlZ3t+e2v
+        oo9rlBLWBPbv206BCcoZFy7MzmIAvU/92OwtsYWKntnyWM/m1NfjN6bToeeOoN9/ZXSY=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41506 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pK3qb-0004rC-35; Mon, 23 Jan 2023 15:55:23 -0500
+Date:   Mon, 23 Jan 2023 15:55:20 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230123155520.22a20149745dcbd536536e8f@hugovil.com>
+In-Reply-To: <CAH+2xPBD4ezWPzMj4YzF63duWnw3_af6KkC7eq1EWS=5F_5NGw@mail.gmail.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-12-hugo@hugovil.com>
+        <CAH+2xPBD4ezWPzMj4YzF63duWnw3_af6KkC7eq1EWS=5F_5NGw@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
+ sequence for PCF2131
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 7 Jan 2023 19:44:23 +0100
+Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+
+> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
+> >
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >
+> > The sequence for updating the time/date registers is slightly
+> > different between PCF2127/29 and PCF2131.
+> >
+> > For PCF2127/29, during write operations, the time counting
+> > circuits (memory locations 03h through 09h) are automatically blocked.
+> >
+> > For PCF2131, time/date registers write access requires setting the
+> > STOP bit and sending the clear prescaler instruction (CPR). STOP then
+> > needs to be released once write operation is completed.
+> >
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 37 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index e4b78b9c03f9..11fbdab6bf01 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -39,6 +39,7 @@
+> >  #define PCF2127_REG_CTRL1              0x00
+> >  #define PCF2127_BIT_CTRL1_POR_OVRD             BIT(3)
+> >  #define PCF2127_BIT_CTRL1_TSF1                 BIT(4)
+> > +#define PCF2127_BIT_CTRL1_STOP                 BIT(5)
+> >  /* Control register 2 */
+> >  #define PCF2127_REG_CTRL2              0x01
+> >  #define PCF2127_BIT_CTRL2_AIE                  BIT(1)
+> > @@ -70,6 +71,7 @@
+> >  #define PCF2131_REG_SR_RESET           0x05
+> >  #define PCF2131_SR_RESET_READ_PATTERN  0b00100100 /* Fixed pattern. */
+> >  #define PCF2131_SR_RESET_RESET_CMD     0x2C /* SR is bit 3. */
+> > +#define PCF2131_SR_RESET_CPR_CMD       0xA4 /* CPR is bit 7. */
+> 
+> Replace 0xA4 with (BIT(2) | BIT(5) | BIT(7)) or
+> (PCF2131_SR_RESET_READ_PATTERN | BIT(7))
+
+Done.
+
+ 
+> >  /* Time and date registers */
+> >  #define PCF2127_REG_TIME_DATE_BASE     0x03
+> >  #define PCF2131_REG_TIME_DATE_BASE     0x07 /* Register 0x06 is 100th seconds,
+> > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >         /* year */
+> >         buf[i++] = bin2bcd(tm->tm_year - 100);
+> >
+> > -       /* write register's data */
+> > +       /* Write access to time registers:
+> > +        * PCF2127/29: no special action required.
+> > +        * PCF2131:    requires setting the STOP bit. STOP bit needs to
+> > +        *             be cleared after time registers are updated.
+> > +        *             It is also recommended to set CPR bit, although
+> > +        *             write access will work without it.
+> > +        */
+> > +       if (pcf2127->cfg->has_reset_reg) {
+> > +               err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +                                        PCF2127_BIT_CTRL1_STOP,
+> > +                                        PCF2127_BIT_CTRL1_STOP);
+> > +               if (err) {
+> > +                       dev_err(dev, "setting STOP bit failed\n");
+> > +                       return err;
+> > +               }
+> > +
+> > +               err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
+> > +                                  PCF2131_SR_RESET_CPR_CMD);
+> > +               if (err) {
+> > +                       dev_err(dev, "sending CPR cmd failed\n");
+> > +                       return err;
+> > +               }
+> > +       }
+> > +
+> > +       /* write time register's data */
+> >         err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
+> >         if (err) {
+> >                 dev_err(dev,
+> > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >                 return err;
+> >         }
+> >
+> > +       if (pcf2127->cfg->has_reset_reg) {
+> > +               /* Clear STOP bit (PCF2131 only) after write is completed. */
+> > +               err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +                                        PCF2127_BIT_CTRL1_STOP, 0);
+> > +               if (err) {
+> > +                       dev_err(dev, "clearing STOP bit failed\n");
+> > +                       return err;
+> > +               }
+> > +       }
+> > +
+> >         return 0;
+> >  }
+> >
+> > --
+> > 2.30.2
+> >
+> 
 
 
-> On Jan 23, 2023, at 11:27 AM, Frederic Weisbecker <frederic@kernel.org> wr=
-ote:
->=20
-> =EF=BB=BFOn Mon, Jan 23, 2023 at 10:22:19AM -0500, Joel Fernandes wrote:
->>> What am I missing?
->>=20
->> That the acceleration is also done by __note_gp_changes() once the
->> grace period ends anyway, so if any acceleration was missed as you
->> say, it will be done anyway.
->>=20
->> Also it is done by scheduler tick raising softirq:
->>=20
->> rcu_pending() does this:
->>        /* Has RCU gone idle with this CPU needing another grace period? *=
-/
->>        if (!gp_in_progress && rcu_segcblist_is_enabled(&rdp->cblist) &&
->>            !rcu_rdp_is_offloaded(rdp) &&
->>            !rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_TAIL))
->>                return 1;
->>=20
->> and rcu_core():
->>        /* No grace period and unregistered callbacks? */
->>        if (!rcu_gp_in_progress() &&
->>            rcu_segcblist_is_enabled(&rdp->cblist) && do_batch) {
->>                rcu_nocb_lock_irqsave(rdp, flags);
->>                if (!rcu_segcblist_restempty(&rdp->cblist, RCU_NEXT_READY_=
-TAIL))
->>                        rcu_accelerate_cbs_unlocked(rnp, rdp);
->>                rcu_nocb_unlock_irqrestore(rdp, flags);
->>        }
->>=20
->> So, I am not sure if you need needacc at all. Those CBs that have not
->> been assigned grace period numbers will be taken care off :)
->=20
-> But that's only when there is no grace period pending, so it can't happen w=
-hile
-> we report a QS.
->=20
-> OTOH without the needacc, those callbacks waiting to be accelerated would b=
-e
-> eventually processed but only on the next tick following the end of a grac=
-e
-> period...if none has started since then. So if someone else starts a new G=
-P
-> before the current CPU, we must wait another GP, etc...
->=20
-> That's potentially dangerous.
-
-Waiting for just one more GP cannot be dangerous IMO. Anyway there is no gua=
-rantee that callback will run immediately at end of GP, there may be one or m=
-ore GPs before callback can run, if I remember correctly. That is by design.=
-. but please correct me if my understanding is different from yours.
-
->=20
-> And unfortunately we can't do the acceleration from __note_gp_changes() du=
-e
-> to lock ordering restrictions: nocb_lock -> rnp_lock
->=20
-
-Ah. This part I am not sure. Appreciate if point me to any old archive links=
- or documentation detailing that, if possible=E2=80=A6=20
-
-Thanks!
-
-- Joel
-
->>=20
->> Thanks!
->>=20
->> -Joel
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
