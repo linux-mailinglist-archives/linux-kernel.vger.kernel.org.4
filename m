@@ -2,74 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACA4678ACC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770E5678AD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbjAWWe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 17:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S233253AbjAWWfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjAWWey (ORCPT
+        with ESMTP id S229956AbjAWWfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 17:34:54 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3DE1EFFB;
-        Mon, 23 Jan 2023 14:34:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=o0pPKD/IbB/HNSCzL2tiBGfNTOYtSkdPG1+hbf5GZhc=; b=A5yTpWjNJ2Qe86pBskFLIrJeTi
-        VwVI554DVVwoBllRnDJtdQNFLx8vrRbpOAywUh/w9l0vajcSLTwTvTnw1r1juVzYs3nDn10/M3570
-        lIQr12g9rYWw/W0/WTU1W6t50/t5k7eyP4oH966OzC6OioQ1gGs1t+7BKBgW17Fomz2WlWMzFZ+B7
-        xsjF165Z/O1tm+9jzyLbzmsDyobpx5OykEIMVZ5GUkvx9n+FKzk6+Pu8lV6PTioMuMz/wpFJxhpnR
-        PdV33rUSVI6mjgsfzUbGTQi6s2TBDaRxA8NKIXkIOxP0BcNaM5CV9wJJjjoE9KJPfjQYbGw0jtOBo
-        Nzz6VT8w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pK5Os-001j83-DK; Mon, 23 Jan 2023 22:34:50 +0000
-Date:   Mon, 23 Jan 2023 14:34:50 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     corbet@lwn.net, gregkh@linuxfoundation.org,
-        javier.gonz@samsung.com, linux-doc@vger.kernel.org,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     a.manzanares@samsung.com, dave@stgolabs.net,
-        darren@os.amperecomputing.com, catalin.marinas@arm.com,
-        ndesaulniers@google.com, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org,
-        David Collins <collinsd@codeaurora.org>
-Subject: Re: [RFC] docs: embargoed-hardware-issues: drop stale embargoed HW
- contact for Qualcomm
-Message-ID: <Y88Lim2toVwE1wzC@bombadil.infradead.org>
-References: <20230123222220.405622-1-mcgrof@kernel.org>
+        Mon, 23 Jan 2023 17:35:02 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976ED38EAE
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:34:59 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id hw16so34378294ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YxnLY9crCokdRJwZ1cSyxopWXEnHeRFdvQXqwCq/JLg=;
+        b=tlHGHNwXhG+d5/P861oREM5anvoPyhHVNbQdTZhui7wQRHSLeHzXxAzhIstobqhjLi
+         rtvJ/pYgXb/cWnA8QL9zqz7qNX3uUBtEwrLXdSZM0CwL8YOyILW1I8Fkka2BFU+fjrL4
+         r4SrZVpSe36iCMJZampFAbqQ98LvGdnYttfjMbOFqJNrV9DY+YQyfBnjc5xms84mFp7f
+         Ob8zx1W0G+/M9br4mDKl9YriKhBdS0TGzujgoKDsr8gK7uE5uBXqlk251bWLKIVuSzec
+         bE2TI55hnDDU0nY/+Fg10l1nkR0UWAyHA0oRyPdN7o11CUWS8L4HHdKCWFOW23y75G6p
+         bFew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YxnLY9crCokdRJwZ1cSyxopWXEnHeRFdvQXqwCq/JLg=;
+        b=exPqshf4MSXbG0lKYSrCKmNN1IMQZZnEOnx6dhMg2SJ33bswxBhOpM2sgJswkPq5ri
+         L1mdYXBlkjy2iWDTcZhr4Zwk0ghylN3teBIt3pOeBUF++jafhgYx6PWLDLN9NANt7p1q
+         pIWh34zI6nYj/5krz7BaB/IwduXmDRqKAaiPyyIp6hYY0MnLIEFRLG7dR047O+gE5IAg
+         +mraaHhskUAFjX/vCXGkAksQ4XqURj5QcbTMkyVAbjcjkcyK5OJbRJ3kNK+UHTI/XVoZ
+         SHQIicwvQtBQppQDgMuCtYzL+vX5hNOg/0fZcO0tsux6b+HbRku91LPjzxjIChLw/eKy
+         FSwg==
+X-Gm-Message-State: AFqh2kqWCslnt/x3LSBeuNfAWdVWS42h4VN97Kst1/Iibr8BbwpNo3iS
+        5OBmm/jd/SzqEOwtu8ijmnYX/Q==
+X-Google-Smtp-Source: AMrXdXs/q0SN2iTlfURXLknICueUeQ2KL3YOpAmOmOXhaGSs4EPeAlgu1yjr23YTa3tVLndJjW/kEQ==
+X-Received: by 2002:a17:906:5f82:b0:871:45b2:19fb with SMTP id a2-20020a1709065f8200b0087145b219fbmr26131003eju.25.1674513298028;
+        Mon, 23 Jan 2023 14:34:58 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id l15-20020a170906a40f00b00877961fbaffsm46173ejz.15.2023.01.23.14.34.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 14:34:57 -0800 (PST)
+Message-ID: <b09871f5-820b-2e1f-7b56-f31786c492bc@linaro.org>
+Date:   Tue, 24 Jan 2023 00:34:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123222220.405622-1-mcgrof@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 03/14] drm/msm/dp: add configure mainlink_levels base
+ on lane number
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
+ <1674498274-6010-4-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1674498274-6010-4-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 02:22:20PM -0800, Luis Chamberlain wrote:
-> Emails to tsoni@codeaurora.org bounce from different systems I've used
-> and LinkedIn tells me he's now at Linaro since 2019. That's a 4 year
-> gap where embargo stuff goes to /dev/null for Qualcomm if the first
-> bounce happened in 2019, but I have no way of knowing when that account
-> was disactivated for sure.
+On 23/01/2023 20:24, Kuogee Hsieh wrote:
+> Mainlink_levels determined when two actions to take place by hardware,
+> a new BS sequence due to start of video and a static HW MVID is sent
+> to panel. This patch add function to configure mainlink level properly
+> base on lane number.
 > 
-> Cc: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 > ---
+>   drivers/gpu/drm/msm/dp/dp_catalog.c | 37 ++++++++++++++++++++++++++++++++++++-
+>   drivers/gpu/drm/msm/dp/dp_catalog.h |  4 +++-
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c    |  4 ++++
+>   3 files changed, 43 insertions(+), 2 deletions(-)
 > 
-> David, should we apply this for now until you guys figure out a proper contact?
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> index 676279d..7ac37d8 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /*
+> - * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2017-2023, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2021. Qualcomm Innovation Center, Inc. All rights reserved
+>    */
+>   
+>   #define pr_fmt(fmt)	"[drm-dp] %s: " fmt, __func__
+> @@ -359,6 +360,40 @@ void dp_catalog_ctrl_lane_mapping(struct dp_catalog *dp_catalog)
+>   			ln_mapping);
+>   }
+>   
+> +void dp_catalog_ctrl_mainlink_levels(struct dp_catalog *dp_catalog,
+> +					u8 lane_cnt)
+> +{
+> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +				struct dp_catalog_private, dp_catalog);
+> +
+> +	u32 mainlink_levels, safe_to_exit_level = 14;
+> +
+> +	switch (lane_cnt) {
+> +	case 1:
+> +		safe_to_exit_level = 14;
+> +		break;
+> +	case 2:
+> +		safe_to_exit_level = 8;
+> +		break;
+> +	case 4:
+> +		safe_to_exit_level = 5;
+> +		break;
+> +	default:
+> +		drm_dbg_dp(catalog->drm_dev, "setting the default safe_to_exit_level=%u\n",
+> +				safe_to_exit_level);
 
-collinsd bounced too. Wee. Maybe Kalle might know what the appropriate
-contact is now or can figure it out for us.
+So, set it here rather than somewhere at the top of the function.
 
-  Luis
+> +		break;
+> +	}
+> +
+> +	mainlink_levels = dp_read_link(catalog, REG_DP_MAINLINK_LEVELS);
+> +	mainlink_levels &= 0xFE0;
+> +	mainlink_levels |= safe_to_exit_level;
+> +
+> +	drm_dbg_dp(catalog->drm_dev, "mainlink_level=0x%x, safe_to_exit_level=0x%x\n",
+> +		mainlink_levels, safe_to_exit_level);
+> +
+> +	dp_write_link(catalog, REG_DP_MAINLINK_LEVELS, mainlink_levels);
+> +}
+> +
+>   void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog,
+>   						bool enable)
+>   {
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> index 1f717f4..990c162 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> @@ -1,6 +1,7 @@
+>   /* SPDX-License-Identifier: GPL-2.0-only */
+>   /*
+> - * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2017-2023, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2021. Qualcomm Innovation Center, Inc. All rights reserved
+>    */
+>   
+>   #ifndef _DP_CATALOG_H_
+> @@ -92,6 +93,7 @@ u32 dp_catalog_aux_get_irq(struct dp_catalog *dp_catalog);
+>   void dp_catalog_ctrl_state_ctrl(struct dp_catalog *dp_catalog, u32 state);
+>   void dp_catalog_ctrl_config_ctrl(struct dp_catalog *dp_catalog, u32 config);
+>   void dp_catalog_ctrl_lane_mapping(struct dp_catalog *dp_catalog);
+> +void dp_catalog_ctrl_mainlink_levels(struct dp_catalog *dp_catalog, u8 lane_cnt);
+>   void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog, bool enable);
+>   void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
+>   void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index dd26ca6..959a78c 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -161,6 +161,8 @@ static void dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl)
+>   	u32 cc, tb;
+>   
+>   	dp_catalog_ctrl_lane_mapping(ctrl->catalog);
+> +	dp_catalog_ctrl_mainlink_levels(ctrl->catalog,
+> +				ctrl->link->link_params.num_lanes);
+>   	dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, true);
+>   
+>   	dp_ctrl_config_ctrl(ctrl);
+> @@ -1296,6 +1298,8 @@ static int dp_ctrl_setup_main_link(struct dp_ctrl_private *ctrl,
+>   {
+>   	int ret = 0;
+>   
+> +	dp_catalog_ctrl_mainlink_levels(ctrl->catalog,
+> +				ctrl->link->link_params.num_lanes);
+>   	dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, true);
+>   
+>   	if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN)
+
+-- 
+With best wishes
+Dmitry
+
