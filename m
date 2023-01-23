@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345BE677DB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0222677DC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjAWOMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S232221AbjAWOPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjAWOMn (ORCPT
+        with ESMTP id S231650AbjAWOPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:12:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F73173C;
-        Mon, 23 Jan 2023 06:12:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE34CB80DAD;
-        Mon, 23 Jan 2023 14:12:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39AEC433D2;
-        Mon, 23 Jan 2023 14:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674483159;
-        bh=xFLOnDtk94LbkRcvU27vXX6doFgrUITeWaNgk1986HA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jQq6YkkL4QqEs8PFGw3bcEihpcmRbNRanM32NBpqWFWdXh5Ehhz4b8G1VFErSpd5G
-         3mPltjvOIJm6Mkk2GBX6cH8SabBqpW0qqK8TV3C8xUdRiD7Qm0izf9YHWyaSYDX981
-         tOdyj8EXbYHIr0Dm1Bun/NlOhTdu6F/yfUcc9b7gw/jwoetUd6xtRilM12Drpx8zUP
-         fCBWyOp5AIPI1OrZXvR7uamLjREor/aShknMCc/Xik4qJIYp6+pNHHXhLiSl6RG7QA
-         mBWeauYkaOjPPE4qhLJK71c99GqGuztPiPWEwbH8SvYBOXG/dN38Z9P1s3kGB9dpi6
-         kdn5DCte2Iysg==
-Date:   Mon, 23 Jan 2023 07:12:37 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH] ARM: Reduce __thumb2__ definition to crypto files that
- require it
-Message-ID: <Y86V1Ro+iQaa3IYe@dev-arch.thelio-3990X>
-References: <20221222193039.2267074-1-nathan@kernel.org>
- <CAKwvOd=WQ5cAL74z+gbGgxG9WrOcDJtrGXJWxEEcWnmyoypu0w@mail.gmail.com>
- <Y85l+E22PJ8lhmcN@shell.armlinux.org.uk>
+        Mon, 23 Jan 2023 09:15:20 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368B52102;
+        Mon, 23 Jan 2023 06:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674483319; x=1706019319;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IqakT/2J0dDhvy2SNVfHSHZL1lUMq/nSz9xNQeZG9Pk=;
+  b=Jy7LDTxzwCEU2ZXcf2xP/D0w/9IjXknnPTXroGback4/kSUhbIezDutZ
+   2B1CjqCabB2kTizksM3MVU7CcHoTxYS0p4TgypquuWL8TMqqMKZ2QEqTL
+   PvqmlSlkSVPGZ+pGJciiZtLpBjzJ0ywu++AuUSQk9t+8gjbGxNf/OibaA
+   FW1sALw8GHs+4nloq42Dll0cqku7Q2eJmoq8bE1mb5fXEGKPEfZusZhpH
+   hvJInNmLm8MydE9/7BkPvKrG8SVV6G+U6cDmaqseLyD9MV6mnxP3JTodk
+   B8V0AVU8TdLrVcTL2ECtsWSSU4pZSav3S9NfcO291DH/nUt3VE0aq4DHu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="305706207"
+X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
+   d="scan'208";a="305706207"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 06:15:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="692167646"
+X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
+   d="scan'208";a="692167646"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jan 2023 06:15:15 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJxbJ-0005gZ-0q;
+        Mon, 23 Jan 2023 14:15:09 +0000
+Date:   Mon, 23 Jan 2023 22:14:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH 8/8] eventfs: moving tracing/events to eventfs
+Message-ID: <202301232157.pdReWpfg-lkp@intel.com>
+References: <1674407228-49109-8-git-send-email-akaher@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y85l+E22PJ8lhmcN@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1674407228-49109-8-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:48:24AM +0000, Russell King (Oracle) wrote:
-> On Thu, Dec 22, 2022 at 11:52:27AM -0800, Nick Desaulniers wrote:
-> > On Thu, Dec 22, 2022 at 11:30 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Commit 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler") added
-> > > a __thumb2__ define to ASFLAGS to avoid build errors in the crypto code,
-> > > which relies on __thumb2__ for preprocessing. Commit 59e2cf8d21e0 ("ARM:
-> > > 9275/1: Drop '-mthumb' from AFLAGS_ISA") followed up on this by removing
-> > > -mthumb from AFLAGS so that __thumb2__ would not be defined when the
-> > > default target was ARMv7 or newer.
-> > >
-> > > Unfortunately, the second commit's fix assumes that the toolchain
-> > > defaults to -mno-thumb / -marm, which is not the case for Debian's
-> > > arm-linux-gnueabihf target, which defaults to -mthumb:
-> > >
-> > >   $ echo | arm-linux-gnueabihf-gcc -dM -E - | grep __thumb
-> > >   #define __thumb2__ 1
-> > >   #define __thumb__ 1
-> > 
-> > Interesting, that was hard to foresee in review of 1d2e9b67b001 and
-> > 59e2cf8d21e0.
-> > 
-> > FWIW, their non-hf target does not.
-> > $ echo | arm-linux-gnueabi-gcc -dM -E - | grep __thumb
-> > $
-> > 
-> > >
-> > > This target is used by several CI systems, which will still see
-> > > redefined macro warnings, despite '-mthumb' not being present in the
-> > > flags:
-> > >
-> > >   <command-line>: warning: "__thumb2__" redefined
-> > >   <built-in>: note: this is the location of the previous definition
-> > >
-> > > Remove the global AFLAGS __thumb2__ define and move it to the crypto
-> > > folder where it is required by the imported OpenSSL algorithms; the rest
-> > > of the kernel should use the internal CONFIG_THUMB2_KERNEL symbol to
-> > > know whether or not Thumb2 is being used or not. Be sure that __thumb2__
-> > > is undefined first so that there are no macro redefinition warnings.
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1772
-> > > Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > 
-> > Thanks Nathan and Ard.
-> 
-> Shouldn't this also have a fixes tag?
+Hi Ajay,
 
-Ugh, yes, sorry about that :( would you kind taking these when you apply
-the patch or would you like me to resubmit?
+Thank you for the patch! Perhaps something to improve:
 
-Fixes: 59e2cf8d21e0 ("ARM: 9275/1: Drop '-mthumb' from AFLAGS_ISA")
-Fixes: 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler")
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc5 next-20230123]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+patch link:    https://lore.kernel.org/r/1674407228-49109-8-git-send-email-akaher%40vmware.com
+patch subject: [PATCH 8/8] eventfs: moving tracing/events to eventfs
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230123/202301232157.pdReWpfg-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/be995c36ba2232edcd4fa64e4581b9a6763c75e6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+        git checkout be995c36ba2232edcd4fa64e4581b9a6763c75e6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> fs/tracefs/inode.c:390:32: sparse: sparse: symbol 'tracefs_dentry_operations' was not declared. Should it be static?
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
