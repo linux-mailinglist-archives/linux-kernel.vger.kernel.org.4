@@ -2,91 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC6567796B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D76677970
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjAWKoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 05:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S231544AbjAWKov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 05:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjAWKog (ORCPT
+        with ESMTP id S232005AbjAWKon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 05:44:36 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3592512F17;
-        Mon, 23 Jan 2023 02:44:33 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 9E6F641;
-        Mon, 23 Jan 2023 11:44:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1674470670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DFxG+3+AuEwK9dzCd11bJRVbzf/YkEZyr1PAY32IkjE=;
-        b=VdV5rc8IrJMFjBa6mto/mGtQoXEGtCUqj8STBbOoayWmrEWIXIX88kYqpel7XFP2/KZel/
-        36ppyAyqN1vpFgVr6YlGgYvLtfh2CpDJrOEkQFva0MEUflK4LsbL014Btz1/LN4I22+jvl
-        l3Bkzz2K0VLMFH+8mBXQsLAW9uYsyOePaVgjB+zHj4Xcle7Dlf9gNTqpHgKeAU9GBHBAhL
-        nKQFX61FWp9SiyEpdF7Ol8W8WqyZOdg9/R+rcpxDeVVqPp2E53pYMvrq74N9ulW1nkVcmi
-        KDdXDCulaWhYCGpaesZFCzQkWH0BBiBPO0NREK33biEnVUjNCwZ6R3PrCIEUwg==
+        Mon, 23 Jan 2023 05:44:43 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C57723339
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:44:40 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so10274375wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 02:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2PRs0X+3aZkUyAyZNInl6XM4TEd14eiJLS0plPeBy28=;
+        b=K88Go0c9RwpYrCjd8bPLO6/yvB177d2ERGGqVyjrBtJ9Opnop6J7vSn8s/U2vk6XVn
+         DKQRsPLphOjXmo+4O6Xf6J/AwvIM8Hw+9mrA0s4gXs8L/Cu8icK2ei4FJgqP0QHd2lwm
+         OXna9tNDOkThjGrHlLYolglciahMV3QqY6i33rWAugKCUJYjfgOU4JIyKwnpXXmiDBgL
+         Ex7Cw/DFsPEVJ3IoTrJPpq5+ceTj/wUEOf5HA5jM4U4/Nl7q2TK3XLM5fyTumzMQD7nH
+         dnh7Wk8vrbvt4os3AlADxQHlUjrTD74altfFZCn+98LHTlUKNv/cV14Hc6LuvyOR2ouH
+         Fp6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2PRs0X+3aZkUyAyZNInl6XM4TEd14eiJLS0plPeBy28=;
+        b=CLxb8ay/LYKvlyxxAQXUBxsis+3huH7DYgg3BtZ++vm4or6bpieDqSXpCtYRiDBP2G
+         qGdeNe8caufdwbSCa58wHqXmkL0EBzolo5lG0YNnBzu2GhXx/qyotL6Hm47cmuGWaui/
+         D9sKI70Ye/cKwPe8dg41GCxY31K66k9kUmlHKuAQaFTvHnYOwzU9Hx0poMcEjDb234XQ
+         UWqaWq7tNFmIGNVfSRcR4jRx5P99/4mgM0zDaKYRz8gk8qFLOtZTeXYb/qe0phuJdT4+
+         k/xaFLWckGu4rXKwerbGbZyU0tyrRpIOxrlDHcqhznlllMm+vNhCzSYvXD/DuvJxtrZ3
+         BB8w==
+X-Gm-Message-State: AFqh2koLQ944xV4D8ObZ4ZITl3rOEtvPVnFk1/WgIFMR6mQMZQ20M8Zw
+        Ie1tRXGilOvcqJkJw4Gr+2Yz1g==
+X-Google-Smtp-Source: AMrXdXtYXhgiuVMLRok6DEndR280kFs7XZ1T15tjO8fChaM2EuvZ84f0IK3TKrrf3jQLDOppc2V2uw==
+X-Received: by 2002:a05:600c:24ce:b0:3da:18c5:e48b with SMTP id 14-20020a05600c24ce00b003da18c5e48bmr31515548wmu.18.1674470678999;
+        Mon, 23 Jan 2023 02:44:38 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id k9-20020a5d6d49000000b002bc8130cca7sm34107744wri.23.2023.01.23.02.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 02:44:38 -0800 (PST)
+Date:   Mon, 23 Jan 2023 12:44:36 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 09/12] dt-bindings: PCI: qcom: Add SM8550 compatible
+Message-ID: <Y85lFD3m5pdpNtdR@linaro.org>
+References: <20230119140453.3942340-1-abel.vesa@linaro.org>
+ <20230119140453.3942340-10-abel.vesa@linaro.org>
+ <7af21247-a44e-cb46-7461-204fa6b4fcab@linaro.org>
 MIME-Version: 1.0
-Date:   Mon, 23 Jan 2023 11:44:30 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Subject: Re: [PATCH 2/2] spi: spidev: add new mediatek support
-In-Reply-To: <CAFGrd9qXL-u4XzG9MLK2zbKoDudhTYpr-gJaZPjbysJ9Fo2gnQ@mail.gmail.com>
-References: <20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com>
- <20230120082054.610626-1-michael@walle.cc>
- <CAFGrd9qXL-u4XzG9MLK2zbKoDudhTYpr-gJaZPjbysJ9Fo2gnQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <2aa2ff64cfd3b5ccd1342873fffa6cb4@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7af21247-a44e-cb46-7461-204fa6b4fcab@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 23-01-22 15:10:59, Krzysztof Kozlowski wrote:
+> On 19/01/2023 15:04, Abel Vesa wrote:
+> > Add the SM8550 platform to the binding.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> > 
+> > The v3 of this patchset is:
+> > https://lore.kernel.org/all/20230119112453.3393911-1-abel.vesa@linaro.org/
+> > 
+> > Changes since v3:
+> >  * renamed noc_aggr to noc_aggr_4, as found in the driver
+> > 
+> > Changes since v2:
+> >  * dropped the pipe from clock-names
+> >  * removed the pcie instance number from aggre clock-names comment
+> >  * renamed aggre clock-names to noc_aggr
+> >  * dropped the _pcie infix from cnoc_pcie_sf_axi
+> >  * renamed pcie_1_link_down_reset to simply link_down
+> >  * added enable-gpios back, since pcie1 node will use it
+> > 
+> > Changes since v1:
+> >  * Switched to single compatible for both PCIes (qcom,pcie-sm8550)
+> >  * dropped enable-gpios property
+> >  * dropped interconnects related properties, the power-domains
+> >  * properties
+> >    and resets related properties the sm8550 specific allOf:if:then
+> >  * dropped pipe_mux, phy_pipe and ref clocks from the sm8550 specific
+> >    allOf:if:then clock-names array and decreased the minItems and
+> >    maxItems for clocks property accordingly
+> >  * added "minItems: 1" to interconnects, since sm8550 pcie uses just
+> >  * one,
+> >    same for interconnect-names
+> > 
+> > 
+> >  .../devicetree/bindings/pci/qcom,pcie.yaml    | 44 +++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > index a5859bb3dc28..58f926666332 100644
+> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > @@ -34,6 +34,7 @@ properties:
+> >        - qcom,pcie-sm8250
+> >        - qcom,pcie-sm8450-pcie0
+> >        - qcom,pcie-sm8450-pcie1
+> > +      - qcom,pcie-sm8550
+> >        - qcom,pcie-ipq6018
+> >  
+> >    reg:
+> > @@ -65,9 +66,11 @@ properties:
+> >    dma-coherent: true
+> >  
+> >    interconnects:
+> > +    minItems: 1
+> >      maxItems: 2
+> >  
+> 
+> I don't see my concerns from v3 answered.
 
-Am 2023-01-23 10:37, schrieb Alexandre Mergnat:
-> Le ven. 20 janv. 2023 à 09:20, Michael Walle <michael@walle.cc> a écrit 
-> :
->> 
->> From: Alexandre Mergnat <amergnat@baylibre.com>
->> 
->> > Add the "mediatek,genio" compatible string to support Mediatek
->> > SPI controller on the genio boards.
->> 
->> What is the use case of having the spidev? What if I want to
->> connect a device with a linux driver to it? It seems like you
->> just want to expose the SPI bus on the pin header. There was a
->> similar discussion for a mikrobus connector [1].
->> 
-> Yes I want to expose the SPI on the pin header for two reasons:
+Check the dates for v4 and your reply to v3.
 
-Then "mediatek,genio" doesn't really describe the hardware, does it?
-If you read that linked thread, NXP was also trying exposing the SPI
-bus on a pin header. IMHO this is just misusing the userspace spi-dev.
+v4 was sent a day before you sent your v3 comments. :)
 
-That being said, exposing something on a pinheader (or on a standardized
-connector) seems like a common thing and we should be working towards
-a good solution. I still think Robs proposal for the mikrobus connector
-makes also sense for your case.
+> 
+> This is a friendly reminder during the review process.
+> 
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
 
--michael
+Will address your comments in next version.
+
+> 
+> Thank you.
+> 
+> Best regards,
+> Krzysztof
+> 
