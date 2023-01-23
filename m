@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C2D6774C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 06:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 063736774C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 06:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjAWFLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 00:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S230094AbjAWFMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 00:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjAWFLC (ORCPT
+        with ESMTP id S230024AbjAWFMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 00:11:02 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DFB17CF8;
-        Sun, 22 Jan 2023 21:11:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674450660; x=1705986660;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G0T9CBQMm3M05NepIpVoxbviDZVhyd2lAZttRFNTUkc=;
-  b=fG1LH4aTYxbAbPm2OtP2R4L1MVkAhxhAQlyZE4qWgSEQ5mZcdZ6qudrS
-   s0dNgxjoKLMtZgJtKBGBhi6mPjZftHUwecXvAh+YNNvsAOQpQa8+5qzKw
-   CZjkxDhjMO3I9HCBygGQSTPuk+w4eUT8Eqhe5M6XjnzozuEI4dD94ovvq
-   UnjYWTaVf9AxoYheNop+dBZlox5lyFKgkU+cL4X/IkoGYOBIKLi50QRuo
-   UEbo8Y3GPqtqXEhy999zogg3jaSKWv95UunIoLH7lfCWSWo5j+Z2QOmXV
-   lvbioIK6KuKJSlTqIIvEgucOMw4tJHNFTNxs5ORvi2+/krjSS76u6YLsW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="305633840"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="305633840"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 21:11:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="692009289"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="692009289"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Jan 2023 21:10:58 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJp6f-0005RU-0e;
-        Mon, 23 Jan 2023 05:10:57 +0000
-Date:   Mon, 23 Jan 2023 13:10:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v2] thermal: int340x_thermal: Add production mode
- attribute
-Message-ID: <202301231218.inlZXxdA-lkp@intel.com>
-References: <20230123024040.337866-1-srinivas.pandruvada@linux.intel.com>
+        Mon, 23 Jan 2023 00:12:01 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6A17CFA;
+        Sun, 22 Jan 2023 21:11:59 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id y19so13244063edc.2;
+        Sun, 22 Jan 2023 21:11:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sWioUiHkjNJu+qFD0c7stZaNR29l77ssapWjZeRh5zw=;
+        b=L+Abc93j8hf8PGkpz2K1amYZkyIZ0U8J2kqQpf9Jle5sLJzmqYDLWihTwnQ+qAtY3e
+         LdQxfusjChLBsrBeTFLG3xEWt7QEIn6Y/SUhhnkTUWtpy6ntmaeo9zEhr97i4E4fuEdm
+         RUouQGeLiyTCbHjs+HJ8kcpLsOOldAmgf41sk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sWioUiHkjNJu+qFD0c7stZaNR29l77ssapWjZeRh5zw=;
+        b=qOpUwr4uLJEWzGoaHZZ7xcTXKz2fIaWPlZ5VWYNbr9yyWElAWAtmLGxntQrixUslZ0
+         /qylV0GqkIXjx5vtz5xsPrCr9jBEAoUCiNQGsb/a0FkwZRCCDEHK7n5aeWMs+H2MrT47
+         Bd5Tv/p+61C2/rneDrwbGFlUbvpl3oue38n7D18DrRaKdMXgebxkGmov5wLAz5Oi2Cz8
+         wVgwByzxUktCb1FiY/vPVX/0KGTJtK532doHzBgJWKIHHi/gys5n7/cA/Fk1eDi96RPY
+         0Z3NXArVorNydBNjZdNOTp9z9GMjX4BYBxGKVnxrguPTP1rkGrrs1Vjt7tbQiScBegPz
+         GJxg==
+X-Gm-Message-State: AFqh2kqUjdI+02qwDMDc7sFx6/t7Ak4TIqrCKvzCrVYN008FO2si1I4t
+        X0gKQI0Yh6zcNyQ7vcsDsqISpzecet4Nt8WVtlk=
+X-Google-Smtp-Source: AMrXdXsPVC66oPNni93hPdj3sCljs/LtZOEps1r4t9jmIAGlnws/huj/ohwTtulkMAqHa1SeXH3p2vbViEYi1hHQSh8=
+X-Received: by 2002:a05:6402:524f:b0:497:233d:3eee with SMTP id
+ t15-20020a056402524f00b00497233d3eeemr3118354edd.92.1674450717581; Sun, 22
+ Jan 2023 21:11:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123024040.337866-1-srinivas.pandruvada@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230120190159.23459-1-nick.hawkins@hpe.com> <20230120190159.23459-2-nick.hawkins@hpe.com>
+In-Reply-To: <20230120190159.23459-2-nick.hawkins@hpe.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 23 Jan 2023 05:11:45 +0000
+Message-ID: <CACPK8Xe46F4Rk1jkLzXdzHE8t_HePe83teTrwUoV4wMvOn4_CQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] i2c: hpe: Add GXP SoC I2C Controller
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivas,
+On Fri, 20 Jan 2023 at 19:04, <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 
-I love your patch! Perhaps something to improve:
+> +static int gxp_i2c_remove(struct platform_device *pdev)
+> +{
+> +       struct gxp_i2c_drvdata *drvdata = platform_get_drvdata(pdev);
+> +
+> +       disable_irq(drvdata->irq);
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The i2c core calls disable_irq for us (see i2c_device_shutdown) so you
+don't need that here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Pandruvada/thermal-int340x_thermal-Add-production-mode-attribute/20230123-104105
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20230123024040.337866-1-srinivas.pandruvada%40linux.intel.com
-patch subject: [PATCH v2] thermal: int340x_thermal: Add production mode attribute
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230123/202301231218.inlZXxdA-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/2c4e5f536a8e523a9f48701629806ecb63346cc0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Srinivas-Pandruvada/thermal-int340x_thermal-Add-production-mode-attribute/20230123-104105
-        git checkout 2c4e5f536a8e523a9f48701629806ecb63346cc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/intel/int340x_thermal/
+In my review I wondered if you needed to do something like this:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
++               regmap_update_bits(i2cg_map, GXP_I2CINTEN, 0x00000FFF, 0);
 
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/intel/int340x_thermal/int3400_thermal.c:351:6: warning: no previous prototype for 'production_mode_exit' [-Wmissing-prototypes]
-     351 | void production_mode_exit(struct int3400_thermal_priv *priv)
-         |      ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +/production_mode_exit +351 drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-
-   350	
- > 351	void production_mode_exit(struct int3400_thermal_priv *priv)
-   352	{
-   353		if (priv->production_mode >= 0)
-   354			sysfs_remove_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
-   355	}
-   356	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +       i2c_del_adapter(&drvdata->adapter);
+> +
+> +       return 0;
+> +}
+> +
