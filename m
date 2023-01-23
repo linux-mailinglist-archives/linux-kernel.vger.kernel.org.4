@@ -2,288 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C556785DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0766785DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjAWTMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S231826AbjAWTMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjAWTMQ (ORCPT
+        with ESMTP id S231584AbjAWTMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:12:16 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5D13AA2;
-        Mon, 23 Jan 2023 11:12:15 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NINpbK020610;
-        Mon, 23 Jan 2023 19:11:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
- bh=D9BsJFQGE+gDPlb3wyiHp9TaMDyg6F2gY4c5eaeYYnc=;
- b=V9WovIIoWu01EX79kGJsRiSSltrVQYECXfqaYnW2X/fzsRtF03y5SIMpvf4DZLgqoYVZ
- LTdTwT0uqEIInI+mapJaHUEaIkinSrrnwsEZypzifdkPe4onshArIpp55Wj61JHYDaeX
- d5DJDlyuswkhYg09QHaMDHTXR61Dpvg/ZW104jVA+e4ELyNmf3kIv1ADtJ/gDYdHjoDf
- 5HiTLkIUB1bt2n5MyEx/woh1Gtt8Cp0FSt7ufSmdg/TtDze8uoIEnmLMohzbpPMK4Tdx
- xYE+9diSG8hDS1GVOGKbr1a4LH9Nk6W6OihSchrqOyRAfgdmxtR4ZTzKGggaKouqZ7bK mg== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n87nt3mhk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Jan 2023 19:11:35 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30NJA4LX023264;
-        Mon, 23 Jan 2023 19:11:34 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g47vxk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Jan 2023 19:11:34 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DwjbNCDTs+o2UqY8+4N+g4Je6N5vtVQr3hYvIvnS0CNS3po19CqwPk4EkKWRtQzYBD0i/fRLbOcFUKPIrV3I4LvWJ3wuqXrr9jrvwDrPb+kb1P8iNWP0M9HKMhIA8Tto56eE3pTDMHFxWNQzZHFs6kWCEYuU2ZEzV5saZO24wX7Igw2A7dawoCbEtR4qv4oE/Yjz8JAji5s2NPMegKSsDPVgwS3eQ1SOTed6czKb8e/Ualwy0a4qKmPXkoxbvZEF63HagTcDwT6yASjIF3Ia9W22Dme5d8QqDbhyQLuqwAvorCjO/D5tOUcx8GxKTgVSd1ytDFTIx3V3YSLIaMTCmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D9BsJFQGE+gDPlb3wyiHp9TaMDyg6F2gY4c5eaeYYnc=;
- b=ocl/VQTH2VXfsYUoj9arPyM4rjabXQJ5E4gGkFBr+inBQc9bhxxyn+cF98X2grC2g/+Xp4rcMr7thMo5/Nf7ehnEfRMNy9AZASpWNSTl6z0p/0AuhMzb6iW/IHXayspxvrj9L5IIBjwUU0JJ+bvY7Me+pb2YrMiBIhxITgADUswzl9TzT+krbSSqKxmNeUXK9eAeLxQoP/gO5PAhH/7aHu+2GjjwqdZ3S53W7AKdcZTzUINXM8Vh+xZ4IvaiOxmmI5LFjGE5WVpbySMt0PqcQK65JY0KkFm5NJFG0zUVyWqddpeE1mawDjCns6ibkf5uPI+AoGjKUDUJf2Wk23ueRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D9BsJFQGE+gDPlb3wyiHp9TaMDyg6F2gY4c5eaeYYnc=;
- b=YU1qbml4j35hrG5UpufMI5WwMxDjVJxqS881dRFBVHrZz7TLKekMkMiLlzPbNV6ECaUD8W6Or7cZa6mFuIzBQqh9W/GKkgKv44RS2nH/h28mDe5rs4vHu2q17bcU/MppHo6MJ80h0UNwSG+KOXJV2QZgSBmGkxS5mNJCp0kwqWs=
-Received: from BY5PR10MB3794.namprd10.prod.outlook.com (2603:10b6:a03:1b2::30)
- by DM4PR10MB7426.namprd10.prod.outlook.com (2603:10b6:8:183::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.12; Mon, 23 Jan
- 2023 19:11:32 +0000
-Received: from BY5PR10MB3794.namprd10.prod.outlook.com
- ([fe80::f37e:ad45:7d9e:d84d]) by BY5PR10MB3794.namprd10.prod.outlook.com
- ([fe80::f37e:ad45:7d9e:d84d%6]) with mapi id 15.20.6043.014; Mon, 23 Jan 2023
- 19:11:32 +0000
-Date:   Mon, 23 Jan 2023 13:11:28 -0600
-From:   Tom Saeger <tom.saeger@oracle.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
-Message-ID: <20230123191128.ewfyc5cdbbdx5gtl@oracle.com>
-References: <20230122150246.321043584@linuxfoundation.org>
- <CA+G9fYsS1GLzMoeh-jz8eOMbomJ=XBg_3FjQ+4w_=Dw1Mwr3rQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYsS1GLzMoeh-jz8eOMbomJ=XBg_3FjQ+4w_=Dw1Mwr3rQ@mail.gmail.com>
-X-ClientProxiedBy: BY5PR16CA0020.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::33) To BY5PR10MB3794.namprd10.prod.outlook.com
- (2603:10b6:a03:1b2::30)
+        Mon, 23 Jan 2023 14:12:32 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5123AB9;
+        Mon, 23 Jan 2023 11:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674501148; x=1706037148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e+2xrBm5Oxa6stADMb/R8rAt5gik8DAnbKt0wQFfI+8=;
+  b=TZVzTMxrIVTyUmZxSLEHoWZ+at+yViyCd8stR8NxaFAF8IXyviljnnVo
+   Aj78Q29WlewhJZaYJ8qMpYqeOUPW26hLBlN0zR5k4z1htI+hbof+Xa1YX
+   IuZyNfwFahoxUwyoLOjcSgzir+MA86tSzfgLKtkcHB2Mlx4Ggb30I4vxC
+   PdhmsGWjzDuNA34w+EicGZkJb1QfwI88c4jGD54uSZXCMBT8BeLg+GDVP
+   ZWdx6O9gs6QivoLoPB68C/99+9T/OSe6651saBDqeG96R64hWuSpgo62d
+   ieNw73NHT0dt5h3ng9cDmUXZsntIKDOMvmZ2jUEMNI0uhgLe6P0J8EJ0M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="390628612"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="390628612"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:12:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804317588"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="804317588"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Jan 2023 11:12:18 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pK2Er-0005q8-2N;
+        Mon, 23 Jan 2023 19:12:17 +0000
+Date:   Tue, 24 Jan 2023 03:12:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, memxor@gmail.com
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
+ definitions
+Message-ID: <202301240259.xwHsyJl4-lkp@intel.com>
+References: <20230123171506.71995-4-void@manifault.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB3794:EE_|DM4PR10MB7426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d8f4b9b-f5de-49dd-d267-08dafd75a35b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yP+rt8lS8Rzd9ryO63HF3Dz1zqOC5gybX+azoUjh809+ejDVOSC/sgyeF2f8WWSfFf5+W1ZM8R2heoOooQGFkiL2UXqUTgpBHqXj6rN39XTRWFWlpQVL5PiWmttoZxxWGZyjUkmUYqtsdUMIzjjM+1bBH0LZ+hwESRcTB9QPL4RrWY+/nHoeq/yRtHb5mDFTiErHl7EmAA8i/w3PIGCwe5J8AU7hZzkIIWLV7bUdURbwqhWJUhII2oDMQoiYgvvIEOQjZvTgHGr/jX1DKdFwspnhzMi/tpRQcvlCqip1tL24rsavHX35v2EZWPHE8h/BjIuXsKjGVnTIwzYyH//rC6od1g/mfuIPbMUSTuTRek+GOgdNcjL80oRgFOBmxhUuZK63ELbUX+2pvL+qNhTarZtm0jdbjCCEt1JD18aw8cMI7zqXuggZnrRwWnYKyZlP75MOVj9zyLGhW/nhyx9wPh0sqoL1OAYDQ58mx6hiYD1Tm0SK+6U1LRWUWPdZQmoyZHnagKbcxDIDeFDNHUwPfjAwAowTjmd07MrNhuRhnQSK/KTBKLIlXT3xxZUnLsDl6XGYaUE0j+Vnc4H9FngaekzUVU2FqEfXnRWaVnarXEiC8r6armc1MZY3JEMDHH1tJkM3OMwcRSKaSVRSUGxkqLwIS+K3LGYebLHN+yndF1nXFbWAlkyKuA4ef5pFWgETWTKEm9u0y+jl5tBm/7Rjhw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3794.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199015)(36756003)(8936002)(66946007)(86362001)(8676002)(66556008)(4326008)(44832011)(6916009)(66476007)(2906002)(7416002)(5660300002)(38100700002)(6486002)(478600001)(966005)(316002)(54906003)(6666004)(41300700001)(6506007)(26005)(186003)(6512007)(1076003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YWkrV0gxdnhxT1JWZWI0amhJOUJhMW40ZkQ3N2s5eXdOb1RJcDlHM0FrTlJI?=
- =?utf-8?B?Um0yL0oyWldCSGxzSGN0MlpxNUNpeDNVV2JmazIzeStraWZDOE9GTk5UZ0pD?=
- =?utf-8?B?ZWZJeG1vTkhBQVl3U1pabUlSOGhNZUVFWk1OSS9WMUZ0Y0FpalQvMXNoQ0dU?=
- =?utf-8?B?NDlzTHIzK3FaNkNLQ2djOUpBZkFXajJwbXhNaTRKK1ZqVHlvMWFJdGUrNE03?=
- =?utf-8?B?L3dob3NoRW1jNm9aN1VQTnlPeDJwekcxdlpZUHQ0UWpXNlNHaS9JSmhKaW5D?=
- =?utf-8?B?d1NVZUJBWGN5dEhWR29NZkpQdEZGNERpZk1SR2haU1ZIRTVhVTBlcUp0a2tm?=
- =?utf-8?B?MDFRVDFTN29UUjJmc2tnTjNvQ2V1YlNocHJxRTVtYUFXZ1ViazFGQWFGTWlN?=
- =?utf-8?B?TTI5b1FTdnRFVDVkSXN1OHYzN2w2ZWo5NmRkVjNnd2Q5d09wUUdweDVZc25P?=
- =?utf-8?B?Ly9sVGNPbXR0QXNxeFhTUUl3cU5SM2hocEtUZy9RWElCV3BxSU1IaFd6T2Iv?=
- =?utf-8?B?WlF3M052TVlVMkRlUlZHai9EUUxqbWYxdWFxQ2JvbDNKcTQ2UUFNMDFPQ21B?=
- =?utf-8?B?Uk11L0MyaEpaTXRGZHBnT2JIS25taFdBS29vQmdhcnhnVG9lNUt4UDFpNDFK?=
- =?utf-8?B?TmVEcHNMSmhZdENublJUL2I3TlBOYnl6L3ZoZUdrYkhnMVdlbHpTUnBPaHpQ?=
- =?utf-8?B?cHliZVQ1TjZucy9IcWpJMUxwYnM2dzVkVk12MDZhUEtSUXVjcUFzamZKMml1?=
- =?utf-8?B?QlNoWVduL09qVlFFSkJkWSthK2x5WjJOdDY5M0YvQWt4NjM4dzVaOTZZaWVu?=
- =?utf-8?B?TDR6ZjFQZXloUHBTZm4wR0todmd0cW1FY0N4NzErOUk2S1U4eFJqWW9jdzFv?=
- =?utf-8?B?czBwcjZ0Zk9NMnNSQm0zSjBHNUxFaSt2V1UxbTFZOVUrdHlzUjFVZUladVVw?=
- =?utf-8?B?MGxjTGY3REhRWGlpRlBWWVo2SGNRemVJRXY3WEU2ZUhobEFzQU5VNWxrZVpD?=
- =?utf-8?B?U0NPalh4clJPT1hRTExhMTdadUJWdmFTOGFtM2tJQ0FEY3MrNXFUZEFabjht?=
- =?utf-8?B?dU1HcVVibjN5WUluN2FKOXppVWhHYkIvYTdLQmJxR0hIRERQMk9qbnM4blJ3?=
- =?utf-8?B?Tk5RaTVXMG1hSS9xZWxsaWc4Snh5S3EzUXgzR0hzTWk1WXk5UDV4QllMSHcv?=
- =?utf-8?B?bVZkWExtY1RFQ2p0MTg0YXZGZFR1a2p5RlU2QVFTczlqRG9qdkxEQ3AyT3lt?=
- =?utf-8?B?RVZnM1grTTc5bEJIRitUYzVBMEtEQ09tU3BhT0M1YUhKbnRnRnhucGk1S2dX?=
- =?utf-8?B?bkVtUHN3WkhMSUt2UTdoVUp6cTJ4cG1URlZYR3NpdWxoMGM4WVRzRWFSY3Ay?=
- =?utf-8?B?dU1kbjlpdEZsL2lueVJTUnR0Rkx0REdOUXVZUGZTaFBKRmh6b3FReS8zbWVJ?=
- =?utf-8?B?UDduZko1cnNaT2FBamNyY0dqam9saEFUQXRIUUwyVG5wMU1rRkZOWVUwbGNB?=
- =?utf-8?B?QjJlY3NYNDE4dHEvS1NaUjJUY0FlUjl3a280VFFacDZKc0VZZE5IVFRYbm13?=
- =?utf-8?B?MlZXRkVGdldqZTdnbjV4d3dtd2RuQlhNcEJubWxONU41dTBXNU5pRkNXRmc2?=
- =?utf-8?B?TjVGUnByOGlZcUdtTUd1Q0NScFArQTA3Uk9laExDb1R3bXo1Q2JYWUpiekRu?=
- =?utf-8?B?anJxNlUxQTF4Ym5ENlRPYXo3NmEvMElrZEduTE8zQmhKSk16anpyNTlweExm?=
- =?utf-8?B?ZXN5VXlIbndSeEdLUm9PdHF6bTBURjlSYi9FQlp3cmlLMXpiTDd5R0NFTkR4?=
- =?utf-8?B?aUFnY2FqeEtXUmt2citTQVQ2MW51aFVyMUpWRE9FS1h6bmZqcnhad0wwNlNM?=
- =?utf-8?B?d0VZK2RTNUJJV2YzMDc4M1NVQ0VmN1FHWTJxRkRjSzdHQXZVRnEvZUpRc0I2?=
- =?utf-8?B?dXdMQVRyZ3E4ZVhyWUlvbG9Mb0hKd21oN2RGa3c5akJ5ejZyZXo0TkE1aWZz?=
- =?utf-8?B?bTFhdk5WRjJLMmF5OVNMVkVoTFJETjNYdDh2VjFPeFF5TVEvM2FGS2UvSElS?=
- =?utf-8?B?YWpIMWhZTTZ4aHF0OHFYdGNLTzFQdHRUNmZwT1lzZTdPRHcrYTlTYzBDZFAz?=
- =?utf-8?Q?EpU88tsu560qg5n1jozSFbcf1?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?cldOQ1FyNmpMTkJLd0hTbnNEd2tDRXFDb0pGS3QyK25JemY3NXV6R2MzMi9N?=
- =?utf-8?B?d2dZV0JkdnFOdFNRYTFWWVZWWHgrNXVzcGZlUmNDWFdnK3pwZkdZT3Y2RzJ2?=
- =?utf-8?B?Y3MyODhjNEFFYzhmV1hRc3phejRUalF1cFFRUjMyUUNPNitZQVRaM21ZdTZL?=
- =?utf-8?B?dHpUdzdJU0JoTnBtakxLTnpwcFlIVFFKN2RvM2E3a05qemJGeFYwdjl6K1kr?=
- =?utf-8?B?TXl6WmFiVnZNRzdjd0V2MEw0Z2tPVXlqSWpSVmw0dXdXdTlra2ZmMlJGY0U1?=
- =?utf-8?B?UXNVOERta2liZFVZaUJaU09DZ0ZzUFZpQUNZblp0SXFWblFXdUdYcXpqUWhp?=
- =?utf-8?B?eWtGYUtzQ1RJRzhjbWtXMjAyZEZoUm41aktFdVh5TmRFYTh4NnZ3SGZzOGxo?=
- =?utf-8?B?UFRBc2s2alIzTVRxL0I4YTd4b3dBc2UzZkNJTFdPUDhDVTJ5OFRNM1pnVUZs?=
- =?utf-8?B?QXhxeWF6NnlOVE50L1M3M3EwN2RPS2RtdGk0bSsyR1RFV2pZa1p2a2cxZnpi?=
- =?utf-8?B?ck1MQ1R1RTlLOVpJSUF6eWxOYzRxR2JLekNhS0prWjFudC9qTEVvQTM5aGpV?=
- =?utf-8?B?VlM4UTJudDBBMGVHbjR2ZEhPdDFUUzA4RkQ4TjV1eWMyN3NGRDVrK3hkVEJh?=
- =?utf-8?B?eVJEMDlld254aTZVV21YSU05SThDdmQ4bXJ4WmZpK1VFRzk1Y2FVL2Q3MXJW?=
- =?utf-8?B?OXYzTWE5aTVRM2ZxRC90TEJaaVBmRCs3YnJzaDkrT3hCZHA0SXFCQ3RSTFJ4?=
- =?utf-8?B?NVM1aE1keEJNM2dSS0YzSTBOUWFXaDMwR0JISXZUZlJ3UktXNTZvRlFSZVVl?=
- =?utf-8?B?N2tsWFYvN21zbCtKRHN2NTMwdUo5TEdYUzZvdkhIUC9nV1loWGQwTGJoR0tm?=
- =?utf-8?B?d2xsM01jSjNSRG1FMVJjd0FKTy96bEpUblg5V3cra2JKV1NhU2R5R3N5b1I3?=
- =?utf-8?B?SVZpanFKZmNuUFI4aDhVL213cythbjh6Nm91WUZSSUczSFRsYmtrZjFUWDlM?=
- =?utf-8?B?SWZIVlJhN2I5OERDTTBKUjliOXBPTU5wc2g5RlBZQ1R0MU8zQlljR0ZPTFBQ?=
- =?utf-8?B?cEFVV2xrY1lpWFFNUURReXN6MjN3Q0x1amxFbmM1blpBZjZCQ2hyTnI4cmJQ?=
- =?utf-8?B?eTBiU2h4SHUyb1cxN2kyMjh5UXVrQ1MzdXBrVDQreENNZlY3aGJxTFA3cVRO?=
- =?utf-8?B?N1R5T2JuTEswbFgxQ1dpcWtublNXNWtzSERndll5SmZWVllyek80bnI4d0NK?=
- =?utf-8?B?K3FOY09EZEFwd013a1NPYlBJZkxYN0dIeFNVU2tFMFB3U3NVWXNZdjF6cGxj?=
- =?utf-8?B?UlZZZ214VnQrdTJCMGFtTUQxRW9pSU9VM2tDbUw5QVdBNWM2TnVWTjF0NUJG?=
- =?utf-8?B?cVp6b25menpqNldkYm51cWF0ZnE1WHBRYXI3YVpPMHNHMW53cng0MVkvZVBT?=
- =?utf-8?B?NENJV0VmQVZkUlNXdlI5U1l2NHdhSUloZmY1V2QydzVISlpwYmJ1bnA2MXhI?=
- =?utf-8?B?RVZ5ajVhb01RRzJLWWZlMnpaLzRKOU1HQ2dBZHBWN04vNWZsanRHajhJc2Vt?=
- =?utf-8?B?R2plRjFLbVpnaElhT2FmOWt0dFlCcWdqbU1CZzNVakw2TWl1ZEhqVC9ET2Iw?=
- =?utf-8?B?eVRIaDRBT05iU29zeENOWTBkYUZhV05BbzJxWWpsYkZuVkp5SmgxYU5RaHFV?=
- =?utf-8?B?WFR3L3MyYm1EOXRzajAzdWM5NkQ1VGJnd1Q1SER2UlZ1a3hCdUhzaFd5QXRW?=
- =?utf-8?Q?C5i33qHjHMSl0i6t74=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d8f4b9b-f5de-49dd-d267-08dafd75a35b
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3794.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 19:11:32.2863
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cH5/jTYxlD2vJYx5bvuvBxgoH4YRUAnDLRh72NBoHOK77W6y/+/w7MeNTTf1a+EHPLoEy1BWh4imarYobi/qsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB7426
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301230184
-X-Proofpoint-ORIG-GUID: _GX37GoGzHjrMNnUsfds2riH8kh_gxOo
-X-Proofpoint-GUID: _GX37GoGzHjrMNnUsfds2riH8kh_gxOo
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123171506.71995-4-void@manifault.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:39:11PM +0530, Naresh Kamboju wrote:
-> On Sun, 22 Jan 2023 at 20:51, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.1.8 release.
-> > There are 193 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.8-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> 
-> Results from Linaro’s test farm.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> * sh, build
->   - gcc-8-dreamcast_defconfig
->   - gcc-8-microdev_defconfig
+Hi David,
 
-Naresh, any chance you could test again adding the following:
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/arch/sh/kernel/vmlinux.lds.S b/arch/sh/kernel/vmlinux.lds.S
-index 3161b9ccd2a5..b6276a3521d7 100644
---- a/arch/sh/kernel/vmlinux.lds.S
-+++ b/arch/sh/kernel/vmlinux.lds.S
-@@ -4,6 +4,7 @@
-  * Written by Niibe Yutaka and Paul Mundt
-  */
- OUTPUT_ARCH(sh)
-+#define RUNTIME_DISCARD_EXIT
- #include <asm/thread_info.h>
- #include <asm/cache.h>
- #include <asm/vmlinux.lds.h>
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Add-BPF_KFUNC-macro-for-defining-kfuncs/20230124-011804
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230123171506.71995-4-void%40manifault.com
+patch subject: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc definitions
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301240259.xwHsyJl4-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/760b15a8e5d45d6e9925d2439e0d052de969b361
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Add-BPF_KFUNC-macro-for-defining-kfuncs/20230124-011804
+        git checkout 760b15a8e5d45d6e9925d2439e0d052de969b361
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/bpf_trace.c:1233: warning: expecting prototype for bpf_lookup_user_key(). Prototype was for BPF_KFUNC() instead
+>> kernel/trace/bpf_trace.c:1282: warning: expecting prototype for bpf_lookup_system_key(). Prototype was for BPF_KFUNC() instead
+>> kernel/trace/bpf_trace.c:1306: warning: expecting prototype for bpf_key_put(). Prototype was for BPF_KFUNC() instead
+>> kernel/trace/bpf_trace.c:1328: warning: expecting prototype for bpf_verify_pkcs7_signature(). Prototype was for BPF_KFUNC() instead
 
 
-My guess is build environment is using ld < 2.36??
-and this is probably similar to:
-a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36")
-4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
+vim +1233 kernel/trace/bpf_trace.c
 
+f92c1e183604c2 Jiri Olsa     2021-12-08  1205  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1206  #ifdef CONFIG_KEYS
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1207  /**
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1208   * bpf_lookup_user_key - lookup a key by its serial
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1209   * @serial: key handle serial number
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1210   * @flags: lookup-specific flags
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1211   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1212   * Search a key with a given *serial* and the provided *flags*.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1213   * If found, increment the reference count of the key by one, and
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1214   * return it in the bpf_key structure.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1215   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1216   * The bpf_key structure must be passed to bpf_key_put() when done
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1217   * with it, so that the key reference count is decremented and the
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1218   * bpf_key structure is freed.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1219   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1220   * Permission checks are deferred to the time the key is used by
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1221   * one of the available key-specific kfuncs.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1222   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1223   * Set *flags* with KEY_LOOKUP_CREATE, to attempt creating a requested
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1224   * special keyring (e.g. session keyring), if it doesn't yet exist.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1225   * Set *flags* with KEY_LOOKUP_PARTIAL, to lookup a key without waiting
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1226   * for the key construction, and to retrieve uninstantiated keys (keys
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1227   * without data attached to them).
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1228   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1229   * Return: a bpf_key pointer with a valid key pointer if the key is found, a
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1230   *         NULL pointer otherwise.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1231   */
+760b15a8e5d45d David Vernet  2023-01-23  1232  BPF_KFUNC(struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags))
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20 @1233  {
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1234  	key_ref_t key_ref;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1235  	struct bpf_key *bkey;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1236  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1237  	if (flags & ~KEY_LOOKUP_ALL)
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1238  		return NULL;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1239  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1240  	/*
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1241  	 * Permission check is deferred until the key is used, as the
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1242  	 * intent of the caller is unknown here.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1243  	 */
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1244  	key_ref = lookup_user_key(serial, flags, KEY_DEFER_PERM_CHECK);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1245  	if (IS_ERR(key_ref))
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1246  		return NULL;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1247  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1248  	bkey = kmalloc(sizeof(*bkey), GFP_KERNEL);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1249  	if (!bkey) {
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1250  		key_put(key_ref_to_ptr(key_ref));
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1251  		return NULL;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1252  	}
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1253  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1254  	bkey->key = key_ref_to_ptr(key_ref);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1255  	bkey->has_ref = true;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1256  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1257  	return bkey;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1258  }
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1259  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1260  /**
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1261   * bpf_lookup_system_key - lookup a key by a system-defined ID
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1262   * @id: key ID
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1263   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1264   * Obtain a bpf_key structure with a key pointer set to the passed key ID.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1265   * The key pointer is marked as invalid, to prevent bpf_key_put() from
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1266   * attempting to decrement the key reference count on that pointer. The key
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1267   * pointer set in such way is currently understood only by
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1268   * verify_pkcs7_signature().
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1269   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1270   * Set *id* to one of the values defined in include/linux/verification.h:
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1271   * 0 for the primary keyring (immutable keyring of system keys);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1272   * VERIFY_USE_SECONDARY_KEYRING for both the primary and secondary keyring
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1273   * (where keys can be added only if they are vouched for by existing keys
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1274   * in those keyrings); VERIFY_USE_PLATFORM_KEYRING for the platform
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1275   * keyring (primarily used by the integrity subsystem to verify a kexec'ed
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1276   * kerned image and, possibly, the initramfs signature).
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1277   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1278   * Return: a bpf_key pointer with an invalid key pointer set from the
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1279   *         pre-determined ID on success, a NULL pointer otherwise
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1280   */
+760b15a8e5d45d David Vernet  2023-01-23  1281  BPF_KFUNC(struct bpf_key *bpf_lookup_system_key(u64 id))
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20 @1282  {
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1283  	struct bpf_key *bkey;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1284  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1285  	if (system_keyring_id_check(id) < 0)
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1286  		return NULL;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1287  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1288  	bkey = kmalloc(sizeof(*bkey), GFP_ATOMIC);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1289  	if (!bkey)
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1290  		return NULL;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1291  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1292  	bkey->key = (struct key *)(unsigned long)id;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1293  	bkey->has_ref = false;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1294  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1295  	return bkey;
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1296  }
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1297  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1298  /**
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1299   * bpf_key_put - decrement key reference count if key is valid and free bpf_key
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1300   * @bkey: bpf_key structure
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1301   *
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1302   * Decrement the reference count of the key inside *bkey*, if the pointer
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1303   * is valid, and free *bkey*.
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1304   */
+760b15a8e5d45d David Vernet  2023-01-23  1305  BPF_KFUNC(void bpf_key_put(struct bpf_key *bkey))
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20 @1306  {
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1307  	if (bkey->has_ref)
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1308  		key_put(bkey->key);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1309  
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1310  	kfree(bkey);
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1311  }
+f3cf4134c5c6c4 Roberto Sassu 2022-09-20  1312  
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1313  #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1314  /**
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1315   * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1316   * @data_ptr: data to verify
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1317   * @sig_ptr: signature of the data
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1318   * @trusted_keyring: keyring with keys trusted for signature verification
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1319   *
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1320   * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1321   * with keys in a keyring referenced by *trusted_keyring*.
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1322   *
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1323   * Return: 0 on success, a negative value on error.
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1324   */
+760b15a8e5d45d David Vernet  2023-01-23  1325  BPF_KFUNC(int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1326  					 struct bpf_dynptr_kern *sig_ptr,
+760b15a8e5d45d David Vernet  2023-01-23  1327  					 struct bpf_key *trusted_keyring))
+865b0566d8f1a0 Roberto Sassu 2022-09-20 @1328  {
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1329  	int ret;
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1330  
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1331  	if (trusted_keyring->has_ref) {
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1332  		/*
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1333  		 * Do the permission check deferred in bpf_lookup_user_key().
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1334  		 * See bpf_lookup_user_key() for more details.
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1335  		 *
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1336  		 * A call to key_task_permission() here would be redundant, as
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1337  		 * it is already done by keyring_search() called by
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1338  		 * find_asymmetric_key().
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1339  		 */
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1340  		ret = key_validate(trusted_keyring->key);
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1341  		if (ret < 0)
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1342  			return ret;
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1343  	}
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1344  
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1345  	return verify_pkcs7_signature(data_ptr->data,
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1346  				      bpf_dynptr_get_size(data_ptr),
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1347  				      sig_ptr->data,
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1348  				      bpf_dynptr_get_size(sig_ptr),
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1349  				      trusted_keyring->key,
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1350  				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1351  				      NULL);
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1352  }
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1353  #endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
+865b0566d8f1a0 Roberto Sassu 2022-09-20  1354  
 
-Regards,
-
---Tom
-
-> 
-> 
-> Build error logs:
-> `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-> defined in discarded section `.exit.text' of crypto/algboss.o
-> `.exit.text' referenced in section `__bug_table' of
-> drivers/char/hw_random/core.o: defined in discarded section
-> `.exit.text' of drivers/char/hw_random/core.o
-> make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> 
-> Bisection points to this commit,
->     arch: fix broken BuildID for arm64 and riscv
->     commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
-> 
-> Ref:
-> upstream discussion thread,
-> https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
-> 
-> Steps to reproduce:
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
-> 
-> tuxmake --runtime podman --target-arch sh --toolchain gcc-8 --kconfig
-> microdev_defconfig
-> 
-> Build log links,
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2KgeCQc3ZdltaEFoi0CwyJlUcuk/
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
