@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEB4678A3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58553678A3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjAWWFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 17:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S232296AbjAWWFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjAWWFa (ORCPT
+        with ESMTP id S232284AbjAWWFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 17:05:30 -0500
+        Mon, 23 Jan 2023 17:05:36 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFA638035
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:05:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58394B774
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:05:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674511523; x=1706047523;
+  t=1674511525; x=1706047525;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=focBDCcui25Nna3zw6dN8ZwvWQ0ckdMqYvOG7S60BQo=;
-  b=IdwpCIghC1+YrAHNrn+4T4mrad+Qvpxu5DkiFDxDkxo5TPGqqmNPSYlR
-   bsZEVM9Q8vRKx0lNu7BxtETUTmgThzv7OOkkEvjaSGLcm8kYzdAt9P1M3
-   m4wWm5Dv3Tze7hn4xFTulzvE8m/TaH0PRX0vShBI0HMYQbj800l+60Wo7
-   pAlvBslQuvIcEHk4aRbivU+j45hqQYcj/Ul0HjmIgaro1oroLrcPYrGot
-   mAH9Jnk39sRFrbUUdwce80hFysL7du3pXdIxH+PN0Q/zAzQ3i1JmgqIN3
-   3tkKNBDZfNLxLI2m9E38+abfbn3R4bwzuqlQnKYR0h2cBEbaKXGW8Qs87
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327421936"
+  bh=goQpwLMTaN14VQUbpuKQyEVCPJNPBRQVQcckNmVxg+o=;
+  b=S+EL+mq/K+fGAkpJXFolcKoG+HY7YnlwjOODdz7/rvzwEd8r56GS1rEh
+   7k0g3QCSOvRJze8l3Itt3UUkMCZk9BHEFxAZYFX5ep5oTUaPJ/DrEQZKv
+   ksUPwa6G6XvO6O0An6Eb4QmLbBcxhH7QxYzifryu71d6nDNA6oYc1guGt
+   RzkfIKYpn7AJE/hT8sKKvh6roVWz+NkozCPvHIja8W5GPT9w3MK7xbJT0
+   Kmi54TU2MVU2vMEbK/RiQJhG5Yr2KnLkc004XY/GEAKcgM3ASaq+5VBV6
+   bw9925/qwf8NaaP70KAoXdXxWE/Vo3MU9i6aiim78tVNzpHgjW074AQKv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327421946"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="327421936"
+   d="scan'208";a="327421946"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 14:05:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="661878108"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="661878110"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="661878108"
+   d="scan'208";a="661878110"
 Received: from ssauty-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.46.171])
   by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 14:05:17 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 6779A109478; Tue, 24 Jan 2023 01:05:03 +0300 (+03)
+        id 6EBC3109479; Tue, 24 Jan 2023 01:05:03 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv15 07/17] x86/mm: Reduce untagged_addr() overhead for systems without LAM
-Date:   Tue, 24 Jan 2023 01:04:50 +0300
-Message-Id: <20230123220500.21077-8-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv15 08/17] x86/mm: Provide arch_prctl() interface for LAM
+Date:   Tue, 24 Jan 2023 01:04:51 +0300
+Message-Id: <20230123220500.21077-9-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230123220500.21077-1-kirill.shutemov@linux.intel.com>
 References: <20230123220500.21077-1-kirill.shutemov@linux.intel.com>
@@ -77,108 +77,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use alternatives to reduce untagged_addr() overhead.
+Add a few of arch_prctl() handles:
+
+ - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+   of tag bits. It is rounded up to the nearest LAM mode that can
+   provide it. For now only LAM_U57 is supported, with 6 tag bits.
+
+ - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+   bits located in the address.
+
+ - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
+   Zero if LAM is not supported.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/disabled-features.h |  8 ++++-
- arch/x86/include/asm/uaccess.h           | 41 +++++++++++++++++-------
- 2 files changed, 37 insertions(+), 12 deletions(-)
+ arch/x86/include/asm/mmu.h        |  2 ++
+ arch/x86/include/uapi/asm/prctl.h |  4 +++
+ arch/x86/kernel/process.c         |  3 ++
+ arch/x86/kernel/process_64.c      | 55 ++++++++++++++++++++++++++++++-
+ 4 files changed, 63 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index c44b56f7ffba..3f0c31044f02 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -75,6 +75,12 @@
- # define DISABLE_CALL_DEPTH_TRACKING	(1 << (X86_FEATURE_CALL_DEPTH & 31))
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 9cac8c45a647..e80762e998ce 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -12,6 +12,8 @@
+ #define MM_CONTEXT_UPROBE_IA32		0
+ /* vsyscall page is accessible on this MM */
+ #define MM_CONTEXT_HAS_VSYSCALL		1
++/* Do not allow changing LAM mode */
++#define MM_CONTEXT_LOCK_LAM		2
+ 
+ /*
+  * x86 has arch-specific MMU state beyond what lives in mm_struct.
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..a31e27b95b19 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -20,4 +20,8 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
+ 
++#define ARCH_GET_UNTAG_MASK		0x4001
++#define ARCH_ENABLE_TAGGED_ADDR		0x4002
++#define ARCH_GET_MAX_TAG_BITS		0x4003
++
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index ef6bde1d40d8..cc0677f58f42 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -162,6 +162,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+ 
+ 	savesegment(es, p->thread.es);
+ 	savesegment(ds, p->thread.ds);
++
++	if (p->mm && (clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM)
++		set_bit(MM_CONTEXT_LOCK_LAM, &p->mm->context.flags);
+ #else
+ 	p->thread.sp0 = (unsigned long) (childregs + 1);
+ 	savesegment(gs, p->thread.gs);
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 8b06034e8c70..88aae519c8f8 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -743,6 +743,48 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+ }
  #endif
  
 +#ifdef CONFIG_ADDRESS_MASKING
-+# define DISABLE_LAM		0
-+#else
-+# define DISABLE_LAM		(1 << (X86_FEATURE_LAM & 31))
++
++#define LAM_U57_BITS 6
++
++static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_LAM))
++		return -ENODEV;
++
++	/* PTRACE_ARCH_PRCTL */
++	if (current->mm != mm)
++		return -EINVAL;
++
++	if (mmap_write_lock_killable(mm))
++		return -EINTR;
++
++	if (test_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags)) {
++		mmap_write_unlock(mm);
++		return -EBUSY;
++	}
++
++	if (!nr_bits) {
++		mmap_write_unlock(mm);
++		return -EINVAL;
++	} else if (nr_bits <= LAM_U57_BITS) {
++		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
++		mm->context.untag_mask =  ~GENMASK(62, 57);
++	} else {
++		mmap_write_unlock(mm);
++		return -EINVAL;
++	}
++
++	write_cr3(__read_cr3() | mm->context.lam_cr3_mask);
++	set_tlbstate_lam_mode(mm);
++	set_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags);
++
++	mmap_write_unlock(mm);
++
++	return 0;
++}
 +#endif
 +
- #ifdef CONFIG_INTEL_IOMMU_SVM
- # define DISABLE_ENQCMD		0
- #else
-@@ -115,7 +121,7 @@
- #define DISABLED_MASK10	0
- #define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET| \
- 			 DISABLE_CALL_DEPTH_TRACKING)
--#define DISABLED_MASK12	0
-+#define DISABLED_MASK12	(DISABLE_LAM)
- #define DISABLED_MASK13	0
- #define DISABLED_MASK14	0
- #define DISABLED_MASK15	0
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index fd9182951084..6450a2723bcd 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -9,6 +9,7 @@
- #include <linux/kasan-checks.h>
- #include <linux/mm_types.h>
- #include <linux/string.h>
-+#include <linux/mmap_lock.h>
- #include <asm/asm.h>
- #include <asm/page.h>
- #include <asm/smap.h>
-@@ -30,26 +31,44 @@ static inline bool pagefault_disabled(void);
-  * Magic with the 'sign' allows to untag userspace pointer without any branches
-  * while leaving kernel addresses intact.
-  */
--static inline unsigned long __untagged_addr(unsigned long addr,
--					    unsigned long mask)
-+static inline unsigned long __untagged_addr(unsigned long addr)
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
  {
--	long sign = addr >> 63;
-+	long sign;
-+
-+	/*
-+	 * Refer tlbstate_untag_mask directly to avoid RIP-relative relocation
-+	 * in alternative instructions. The relocation gets wrong when gets
-+	 * copied to the target place.
-+	 */
-+	asm (ALTERNATIVE("",
-+			 "sar $63, %[sign]\n\t" /* user_ptr ? 0 : -1UL */
-+			 "or %%gs:tlbstate_untag_mask, %[sign]\n\t"
-+			 "and %[sign], %[addr]\n\t", X86_FEATURE_LAM)
-+	     : [addr] "+r" (addr), [sign] "=r" (sign)
-+	     : "m" (tlbstate_untag_mask), "[sign]" (addr));
- 
--	addr &= mask | sign;
- 	return addr;
- }
- 
- #define untagged_addr(addr)	({					\
--	u64 __addr = (__force u64)(addr);				\
--	__addr = __untagged_addr(__addr, current_untag_mask());		\
--	(__force __typeof__(addr))__addr;				\
-+	unsigned long __addr = (__force unsigned long)(addr);		\
-+	(__force __typeof__(addr))__untagged_addr(__addr);		\
- })
- 
-+static inline unsigned long __untagged_addr_remote(struct mm_struct *mm,
-+						   unsigned long addr)
-+{
-+	long sign = addr >> 63;
-+
-+	mmap_assert_locked(mm);
-+	addr &= (mm)->context.untag_mask | sign;
-+
-+	return addr;
-+}
-+
- #define untagged_addr_remote(mm, addr)	({				\
--	u64 __addr = (__force u64)(addr);				\
--	mmap_assert_locked(mm);						\
--	__addr = __untagged_addr(__addr, (mm)->context.untag_mask);	\
--	(__force __typeof__(addr))__addr;				\
-+	unsigned long __addr = (__force unsigned long)(addr);		\
-+	(__force __typeof__(addr))__untagged_addr_remote(mm, __addr);	\
- })
- 
- #else
+ 	int ret = 0;
+@@ -830,7 +872,18 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 	case ARCH_MAP_VDSO_64:
+ 		return prctl_map_vdso(&vdso_image_64, arg2);
+ #endif
+-
++#ifdef CONFIG_ADDRESS_MASKING
++	case ARCH_GET_UNTAG_MASK:
++		return put_user(task->mm->context.untag_mask,
++				(unsigned long __user *)arg2);
++	case ARCH_ENABLE_TAGGED_ADDR:
++		return prctl_enable_tagged_addr(task->mm, arg2);
++	case ARCH_GET_MAX_TAG_BITS:
++		if (!cpu_feature_enabled(X86_FEATURE_LAM))
++			return put_user(0, (unsigned long __user *)arg2);
++		else
++			return put_user(LAM_U57_BITS, (unsigned long __user *)arg2);
++#endif
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
 -- 
 2.39.1
 
