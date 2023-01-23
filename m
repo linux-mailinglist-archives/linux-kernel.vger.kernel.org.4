@@ -2,54 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF96678144
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D95678145
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjAWQWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S231440AbjAWQXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjAWQWV (ORCPT
+        with ESMTP id S230128AbjAWQXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:22:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6549EB5A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:22:19 -0800 (PST)
+        Mon, 23 Jan 2023 11:23:04 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97C226BD;
+        Mon, 23 Jan 2023 08:23:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEC81B80DCC
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74EA8C433EF;
-        Mon, 23 Jan 2023 16:22:14 +0000 (UTC)
-Date:   Mon, 23 Jan 2023 16:22:11 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
-Subject: Re: [PATCH v2 1/2] mm: Implement memory-deny-write-execute as a prctl
-Message-ID: <Y860MziGHLafTjOU@arm.com>
-References: <20230119160344.54358-1-joey.gouly@arm.com>
- <20230119160344.54358-2-joey.gouly@arm.com>
- <4a1faf67-178e-c9ba-0db1-cf90408b0d7d@redhat.com>
- <Y857Uoq7fjO0lZ12@arm.com>
- <8b4e31cf-de20-703c-4b53-ad86d4282a37@redhat.com>
- <Y86wA0s/HRVtqLru@arm.com>
- <e07d958a-1400-3630-8a24-154850f41fb7@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 213EECE1398;
+        Mon, 23 Jan 2023 16:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9249AC433D2;
+        Mon, 23 Jan 2023 16:22:55 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 11:22:52 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH] ftrace/scripts: Update the instructions for
+ ftrace-bisect.sh
+Message-ID: <20230123112252.022003dd@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e07d958a-1400-3630-8a24-154850f41fb7@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -59,30 +44,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 05:10:08PM +0100, David Hildenbrand wrote:
-> On 23.01.23 17:04, Catalin Marinas wrote:
-> > On Mon, Jan 23, 2023 at 01:53:46PM +0100, David Hildenbrand wrote:
-> > > That at least would be then similar to how we handle mmaped files: if the
-> > > file is not executable, we clear VM_MAYEXEC. If the file is not writable, we
-> > > clear VM_MAYWRITE.
-> > 
-> > We still allow VM_MAYWRITE for private mappings, though we do clear
-> > VM_MAYEXEC if not executable.
-> > 
-> > It would be nice to use VM_MAY* flags for this logic but we can only
-> > emulate MDWE if we change the semantics of 'MAY': only check the 'MAY'
-> > flags for permissions being changed (e.g. allow PROT_EXEC if the vma is
-> > already VM_EXEC even if !VM_MAYEXEC). Another issue is that we end up
-> > with some weird combinations like having VM_EXEC without VM_MAYEXEC
-> > (maybe that's fine).
-> 
-> No, we wouldn't want VM_EXEC if VM_MAYEXEC is not set. I don't immediately
-> see how that would happen.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-You are right, this shouldn't happen. What I had in mind was the current
-MDWE model where after an mmap(PROT_EXEC), any mprotect(PROT_EXEC) is
-denied. But this series departs slightly from this since we want to
-allow PROT_EXEC if already executable.
+The instructions for the ftrace-bisect.sh script, which is used to find
+what function is being traced that is causing a kernel crash, and possibly
+a triple fault reboot, uses the old method. In 5.1, a new feature was
+added that let the user write in the index into available_filter_functions
+that maps to the function a user wants to set in set_ftrace_filter (or
+set_ftrace_notrace). This takes O(1) to set, as suppose to writing a
+function name, which takes O(n) (where n is the number of functions in
+available_filter_functions).
 
+The ftrace-bisect.sh requires setting half of the functions in
+available_filter_functions, which is O(n^2) using the name method to enable
+and can take several minutes to complete. The number method is O(n) which
+takes less than a second to complete. Using the number method for any
+kernel 5.1 and after is the proper way to do the bisect.
+
+Update the usage to reflect the new change, as well as using the
+/sys/kernel/tracing path instead of the obsolete debugfs path.
+
+Cc: stable@vger.kernel.org
+Fixes: f79b3f338564e ("ftrace: Allow enabling of filters via index of available_filter_functions")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ scripts/tracing/ftrace-bisect.sh | 33 ++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
+
+diff --git a/scripts/tracing/ftrace-bisect.sh b/scripts/tracing/ftrace-bisect.sh
+index 926701162bc8..94ca73930f8a 100755
+--- a/scripts/tracing/ftrace-bisect.sh
++++ b/scripts/tracing/ftrace-bisect.sh
+@@ -12,7 +12,7 @@
+ #   (note, if this is a problem with function_graph tracing, then simply
+ #    replace "function" with "function_graph" in the following steps).
+ #
+-#  # cd /sys/kernel/debug/tracing
++#  # cd /sys/kernel/tracing
+ #  # echo schedule > set_ftrace_filter
+ #  # echo function > current_tracer
+ #
+@@ -20,22 +20,39 @@
+ #
+ #  # echo nop > current_tracer
+ #
+-#  # cat available_filter_functions > ~/full-file
++# Starting with v5.1 this can be done with numbers, making it much faster:
++#
++# The old (slow) way, for kernels before v5.1.
++#
++# [old-way] # cat available_filter_functions > ~/full-file
++#
++# [old-way] *** Note *** this will take several minutes. Setting multiple
++# [old-way] functions is an O(n^2) operation, and we are dealing with thousands
++# [old-way] of functions. So go have  coffee, talk with your coworkers, read
++# [old-way] facebook. And eventually, this operation will end.
++#
++# The new way (using numbers) is an O(n) operation, and usually takes less than a second.
++#
++# seq `wc -l available_filter_functions | cut -d' ' -f1` > ~/full-file
++#
++# This will create a sequence of numbers that match the functions in
++# available_filter_functions, and when echoing in a number into the
++# set_ftrace_filter file, it will enable the corresponding function in
++# O(1) time. Making enabling all functions O(n) where n is the number of
++# functions to enable.
++#
++# For either the new or old way, the rest of the operations remain the same.
++#
+ #  # ftrace-bisect ~/full-file ~/test-file ~/non-test-file
+ #  # cat ~/test-file > set_ftrace_filter
+ #
+-# *** Note *** this will take several minutes. Setting multiple functions is
+-# an O(n^2) operation, and we are dealing with thousands of functions. So go
+-# have  coffee, talk with your coworkers, read facebook. And eventually, this
+-# operation will end.
+-#
+ #  # echo function > current_tracer
+ #
+ # If it crashes, we know that ~/test-file has a bad function.
+ #
+ #   Reboot back to test kernel.
+ #
+-#     # cd /sys/kernel/debug/tracing
++#     # cd /sys/kernel/tracing
+ #     # mv ~/test-file ~/full-file
+ #
+ # If it didn't crash.
 -- 
-Catalin
+2.39.0
+
