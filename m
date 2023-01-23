@@ -2,123 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C0B67873C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1FC67873F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbjAWUHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S232933AbjAWUIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbjAWUHe (ORCPT
+        with ESMTP id S232824AbjAWUIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:07:34 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1767281
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:07:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P11CS2Bvfz9v7ZH
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:59:32 +0800 (CST)
-Received: from [10.81.216.232] (unknown [10.81.216.232])
-        by APP2 (Coremail) with SMTP id GxC2BwBHG2Lg6M5j5sa9AA--.11637S2;
-        Mon, 23 Jan 2023 21:07:07 +0100 (CET)
-Message-ID: <d1a576ee-4af4-6053-8ae2-dc04fdd1b73b@huaweicloud.com>
-Date:   Mon, 23 Jan 2023 21:06:54 +0100
+        Mon, 23 Jan 2023 15:08:37 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B177A9C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:08:36 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id k16so9941490wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xx0+AS/R5cTFxTer1KPJhFwelUzEZqlaudVJ4C5UqlM=;
+        b=RyYyVfXdy0EOGXtjgeoYEX0CSfXeDuawJy3LtwRKGEXH7xPRUd7FzH5vM0ZD/5/uNP
+         fWBSe/Vuek0fbxHy7ulBo2tzxgjytQXIhDoKjaRk3SO4pUlWanXPzUwdk9sCfPJMgGQV
+         p18xwdky3Y0ZFWjj2oRsWB1r8iCofsyuM+DRRi3eBUWKYZ0nN2FXeurkdZEHXIwEXyHo
+         0hKaiu62QCi9O+hzr1ZvTjmsOHLWnqe2N/6m1fgfhTobQv9HYlX2hUiV/odvHm54lxez
+         NCc0aIPRkybQcRORZZdU5UX7FU9qwPmbIdE06KG8aUUiUZFG2ePpUffvAsR6tWHeElFT
+         rYKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xx0+AS/R5cTFxTer1KPJhFwelUzEZqlaudVJ4C5UqlM=;
+        b=CNTyybfjS8U+APbUmqCYi0KdEOs/q8dz/nLGfCMhVi787SF1+Et9hfUdE51/3jrCFK
+         kQwWf4IsxPTAHytBw9lYucgXk6ZD2X6eXGz6zz3ZPcMbml9m0s4MQhECwi4/N0tPelch
+         TgAI+rAqu9DN4BoDh8Y0Mh2OJ6jcwxaUw91P1e5czdlWybBErrORBlfFiFw63ZwPBLzr
+         8XMXyUTu2dvxodU0SvG/0K0ckv4wG8rdOe6/cTg05jqG1dg+EMo8pkX88gWY3jBcLCzz
+         DQ0waeIjRbUduZNNesDsJmolZME9X2N4UFEOwobQAQyb+r0k/7aWAP9kOVLPD0LLzWfy
+         qWNw==
+X-Gm-Message-State: AFqh2krVOPgYayMCLCrW76kFgTzyWrcHOIm9gcf3fY0rxEMxYTH4uAyS
+        VPkW7xtMNXz5E50hAcqDE7MnB/ZPb+d9o/D+gBgVOQ==
+X-Google-Smtp-Source: AMrXdXsAYItHDpk4yH6h+tdfdbjpmDtWUNcVfzcOaPv8ocdm14en5egjG3x9mr/LGbfmiQJ1437Ba8Qp+R4Oyn+yujs=
+X-Received: by 2002:a05:600c:3412:b0:3d0:a619:c445 with SMTP id
+ y18-20020a05600c341200b003d0a619c445mr1027494wmp.17.1674504514768; Mon, 23
+ Jan 2023 12:08:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
- <YytfFiMT2Xsdwowf@rowland.harvard.edu>
- <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
- <114ECED5-FED1-4361-94F7-8D9BC02449B7> <Y87m5KcSaieYZyeM@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y87m5KcSaieYZyeM@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBHG2Lg6M5j5sa9AA--.11637S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww43ZFWrAFy7tr1xWrW5Awb_yoW8XrWkpF
-        yvkay3tF97Aryq9a1kCrWIq3ZrZ393tryktF48C3yfG3sYqrna9F4ftrWrua43Jr4fuw1j
-        vw4Yq3WkXF1UuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UuBT5UUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
+ <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz> <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
+ <Y868Fadajv27QMXh@dhcp22.suse.cz> <CAJuCfpGSCHpnZwwVV_922fmMBpFPZL0HAHMABuDzMfuURF2sWg@mail.gmail.com>
+ <Y87A2CEKAugfgfHC@dhcp22.suse.cz> <CAJuCfpGJRZATfc8eUurvV5kGkSNkG=vK=sfwJbU72PESOyATSw@mail.gmail.com>
+ <Y87QjHH2aDG5XCGv@casper.infradead.org> <Y87djZwQpXazRd00@dhcp22.suse.cz>
+ <Y87gY7fhi5OJ35WQ@casper.infradead.org> <Y87nVydD7oF9BGMb@dhcp22.suse.cz>
+In-Reply-To: <Y87nVydD7oF9BGMb@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 23 Jan 2023 12:08:21 -0800
+Message-ID: <CAJuCfpEz_Qm3BeY5a0O+OBgZTTLSgvkqDE4XieCYyGMMv3Hykw@mail.gmail.com>
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in vm_area_free
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/23/2023 8:58 PM, Alan Stern wrote:
-> On Mon, Jan 23, 2023 at 05:16:27PM +0100, Jonas Oberhauser wrote:
->> On 1/19/2023 5:41 PM, Alan Stern wrote:
->>
->>> But when you're comparing grace periods or critical sections to each other,
->>> things get a little ambiguous.  Should G1 be considered to come before
->>> G2 when t1(G1) < t1(G2), when t2(G1) < t2(G2), or when t2(G1) < t1(G2)?
->>> Springing for (po ; rcu-order ; po?) amounts to choosing the second
->>> alternative.
->> Aha, I see! Powerful notation indeed.
->> Keeping that in mind, wouldn't it make sense for pb also be changed to
->> `...;po?` ?
-> You mean changing the definition of pb to either:
+On Mon, Jan 23, 2023 at 12:00 PM Michal Hocko <mhocko@suse.com> wrote:
 >
-> 	prop ; strong-fence ; hb* ; po? ; [Marked]
+> On Mon 23-01-23 19:30:43, Matthew Wilcox wrote:
+> > On Mon, Jan 23, 2023 at 08:18:37PM +0100, Michal Hocko wrote:
+> > > On Mon 23-01-23 18:23:08, Matthew Wilcox wrote:
+> > > > On Mon, Jan 23, 2023 at 09:46:20AM -0800, Suren Baghdasaryan wrote:
+> > > [...]
+> > > > > Yes, batching the vmas into a list and draining it in remove_mt() and
+> > > > > exit_mmap() as you suggested makes sense to me and is quite simple.
+> > > > > Let's do that if nobody has objections.
+> > > >
+> > > > I object.  We *know* nobody has a reference to any of the VMAs because
+> > > > you have to have a refcount on the mm before you can get a reference
+> > > > to a VMA.  If Michal is saying that somebody could do:
+> > > >
+> > > >   mmget(mm);
+> > > >   vma = find_vma(mm);
+> > > >   lock_vma(vma);
+> > > >   mmput(mm);
+> > > >   vma->a = b;
+> > > >   unlock_vma(mm, vma);
+> > > >
+> > > > then that's something we'd catch in review -- you obviously can't use
+> > > > the mm after you've dropped your reference to it.
+> > >
+> > > I am not claiming this is possible now. I do not think we want to have
+> > > something like that in the future either but that is really hard to
+> > > envision. I am claiming that it is subtle and potentially error prone to
+> > > have two different ways of mass vma freeing wrt. locking. Also, don't we
+> > > have a very similar situation during last munmaps?
+> >
+> > We shouldn't have two ways of mass VMA freeing.  Nobody's suggesting that.
+> > There are two cases; there's munmap(), which typically frees a single
+> > VMA (yes, theoretically, you can free hundreds of VMAs with a single
+> > call which spans multiple VMAs, but in practice that doesn't happen),
+> > and there's exit_mmap() which happens on exec() and exit().
 >
-> or
->
-> 	prop ; strong-fence ; hb* ; [Marked] ; po? ; [Marked]
+> This requires special casing remove_vma for those two different paths
+> (exit_mmap and remove_mt).  If you ask me that sounds like a suboptimal
+> code to even not handle potential large munmap which might very well be
+> a rare thing as you say. But haven't we learned that sooner or later we
+> will find out there is somebody that cares afterall? Anyway, this is not
+> something I care about all that much. It is just weird to special case
+> exit_mmap, if you ask me. Up to Suren to decide which way he wants to
+> go. I just really didn't like the initial implementation of batching
+> based on a completely arbitrary batch limit and lazy freeing.
 
-Oh no, not at all!
+I would prefer to go with the simplest sufficient solution. A
+potential issue with a large munmap might prove to be real but I think
+we know how to easily fix that with batching if the issue ever
+materializes (I'll have a fix ready implementing Michal's suggestion).
+So, I suggest going with Liam's/Matthew's solution and converting to
+Michal's solution if regression shows up anywhere else. Would that be
+acceptable?
 
-I mean that
-     pb = prop ; po ; {strong ordering-operation} ; po ; hb* ; [Marked]
-could instead be
-     pb = prop ; po ; {strong ordering-operation} ; po? ; hb* ; [Marked]
-
-(note that the po ; ... ; po part is actually folded inside the actual 
-definition of strong fence).
-
-> rcu-fence is different because rcu-order has to begin and end with
-> either a grace period or a critical section, and both of these restrict
-> the execution order of surrounding events:
->
-> 	If X is a synchronize_rcu() or rcu_read_unlock() then events
-> 	po-before X must execute before X;
->
-> 	If X is a synchronize_rcu() or rcu_read_lock() then events
-> 	po-after X must execute after X.
->
-I believe so do the strong ordering-operations in pb.
-best wishes, jonas
-
+> --
+> Michal Hocko
+> SUSE Labs
