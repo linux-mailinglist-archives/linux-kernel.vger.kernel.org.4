@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A29A677EA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB386677EAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjAWPE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S232211AbjAWPFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjAWPE5 (ORCPT
+        with ESMTP id S231778AbjAWPFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:04:57 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A1A3ABA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:04:56 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5063029246dso7558787b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:04:56 -0800 (PST)
+        Mon, 23 Jan 2023 10:05:02 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C9728D0E;
+        Mon, 23 Jan 2023 07:05:01 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x40so18602104lfu.12;
+        Mon, 23 Jan 2023 07:05:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6pjfHLMmBjNY6T/mBZSnp+2P1707+ePDiok6c2uTdrk=;
-        b=EFcmRXddnK3Uvd27jzqlfFpQB2mja0UqUQDtbRoqd98tvU5/GOw9qX1T8+DKWoEX0/
-         aLJ54Sg9xHf6gl4P1x1h4hHNMO66SHMKMh1iFSiR+SpcX17DsP7LY4UDczaY6J4igXed
-         tNZ8HCYx+Bs9MUAhwEJcGEBUvWUdPRP94xmA4zN2PAtZJE1yKtrVb8CfXLo3DYWD4slf
-         ccFLYRU6qU+TQHbFaTf8jNsoqpkqZil9viWvtvodfdvG/DiCHKqf5+YN09eCtFOVdSwy
-         ZKmHTkXDJ30CxiOgWXNQ3VUxcvlyNTa+A9QCu2/Eq25HB+jjAGfCmUVjgPKKiqJVwP9e
-         d0kQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P3rqFJi0wYIMyx4eFEnrANXBYlUWFGjnlOrB4sJY0mc=;
+        b=VSvjd1+J+2hfVE0rK2aWfDA0OVUPFITcaGU/EEk+ovd3PB+LZoSIbLXjg/6O4g0QkX
+         wQSOdPQHW8ShVOvuv6K4ehak+/FUBZ6bBjlKapxHcHQImaA7q7t1gEwYZmwObqGrP/PP
+         CuO1Q1/NA1X4wba91SbkMkbJ02vBgbwFgxkUGAZz0utThM5EFRk4Y/dHFQrqiTC3T8XY
+         pxEaA9cykcbArWN/Q14sLzrf2oqArLVwTmvV0IHeWZXjaXfjdJS++GDWvaf9CtXKja5B
+         /+o8WCQ6Z8OG5i90gfUfiXJhw6rQk2gldlIFYsb4njbrpXyfD3NMkTBxEGrhoTwav/UE
+         HUzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6pjfHLMmBjNY6T/mBZSnp+2P1707+ePDiok6c2uTdrk=;
-        b=Lm/0O/H22FW4b60DgjayJFW3jwBIDMXML5VLNo3Ry7WoUHLYUsBsoMFy8xPQf8H2z6
-         1Dckqru30C87CxYe4RKeRcWE8gaSCiHrjqkhRFB0qjLUnvvIlpBkTw+0Y/mJyYrK6x0I
-         kw2fP8U+WGikGHYbrVL5/Q0g/RANTaFTJLlWAhBltCByfjdIlw5ukVaG7+ELi6FJ7TC7
-         efKP3uOnr5nIjCB0DX7KN/TeKKKi1+IryRDkgxzqCzYjOA+YOoXuEmH+MxXLEdUEk0Vk
-         cZ4ySYtYEWQO2Kq4fH2i7nrJSho60isYwjEJq6ExLD8I6wr9UFIsFqluat3FVPZgFR3f
-         koIg==
-X-Gm-Message-State: AFqh2kpXQGbAzR7OlAzFlB1vdC0ZoulLNBsQ0y9pnRJsLCGyZUPoRBYJ
-        JIS2R+OU6+z8XgpAlKKAeSsPOKc8DQg/e/p0aPU=
-X-Google-Smtp-Source: AMrXdXuMkHxZzw+uaVePcjgZjXlHuhOnTkyG7C3h/BaggOkywUOMaV5/i5UlFpDKxOOC0nGgSdSH6C6hvlobFK78kd4=
-X-Received: by 2002:a81:690b:0:b0:4fa:906d:b925 with SMTP id
- e11-20020a81690b000000b004fa906db925mr1805642ywc.69.1674486295555; Mon, 23
- Jan 2023 07:04:55 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P3rqFJi0wYIMyx4eFEnrANXBYlUWFGjnlOrB4sJY0mc=;
+        b=RXKXSeDWVED+HTRoYIVS3h1Kg/2Xiwsf6GLEeVRsELkNLw7N+TVP54n2nL5vSwxCd+
+         ge4q+NmxOeiCFmZ+E6D6dgCb2EB9dI7stkmIXIUXfGbuY60MTiNTiYkjT592Yis2nkWw
+         ge8anLLBKkO9wJ/L6eZEW9r4xGHS2qTnecRrzHOuCTpTkVxcJBmW7maQR5JgnstmWh70
+         TBXpDsKLokpLyawQpAf4mNSiAXxObo7ctOoO9s6FitJqtmhsc8yITJhF1btrN4ddApCA
+         RO89iMg9380Zi/cFnk6MhT4uJkZCu8YQEUpHwtJTUw51Vt+xHZ8KivybTNN8eCJqQwCG
+         n2PA==
+X-Gm-Message-State: AFqh2kpF1iGzmvy+cExxcY7VfLFck5DoMWF7ZhxATtKKUZ9sKGUUjpi/
+        EYOwfb3jvVI7arcLAg75UkI=
+X-Google-Smtp-Source: AMrXdXuHnINfpXEMI/5P6IHfO27xMrOaiT1cQnmYVDzQ2npYaq/u8eUakJKoBBnDu0eFJD/hs2QaqA==
+X-Received: by 2002:a05:6512:340a:b0:4d2:551e:3838 with SMTP id i10-20020a056512340a00b004d2551e3838mr7464162lfr.29.1674486299330;
+        Mon, 23 Jan 2023 07:04:59 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id b8-20020a0565120b8800b004d593f218absm1011508lfv.108.2023.01.23.07.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 07:04:58 -0800 (PST)
+Date:   Mon, 23 Jan 2023 18:04:56 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     broonie@kernel.org, miquel.raynal@bootlin.com,
+        linus.walleij@linaro.org, krzysztof.kozlowski@linaro.org,
+        vireshk@kernel.org, gregkh@linuxfoundation.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, kernel@pengutronix.de,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2 02/13] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
+Message-ID: <20230123145953.ytaaq3x4tetgepyf@mobilestation>
+References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
+ <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-References: <20230118150703.4024-1-ubizjak@gmail.com> <20230118131825.c6daea81ea1e2dc6aa014f38@linux-foundation.org>
- <CAFULd4ZQGG+N3f7xDuoiNG1jY128pqaH0F4eLKO+fhvSNAbKfA@mail.gmail.com>
- <CAFULd4b5szcTHTVbGJ9WiciG_+8kANiPZYP_pkEZUhnz_HHy-g@mail.gmail.com> <913c01d41f824fa8b3400384437fa0d8@AcuMS.aculab.com>
-In-Reply-To: <913c01d41f824fa8b3400384437fa0d8@AcuMS.aculab.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Mon, 23 Jan 2023 16:04:43 +0100
-Message-ID: <CAFULd4aDORSrq7zf_LcAZRP8HOHcrq2-rGMaroKyG2zQDHNpOA@mail.gmail.com>
-Subject: Re: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mateusz Guzik <mjguzik@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,39 +91,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 1:47 PM David Laight <David.Laight@aculab.com> wrot=
-e:
->
-> > BTW: Recently, it was determined [1] that the usage of cpu_relax()
-> > inside the cmpxchg loop can be harmful for performance. We actually
-> > have the same situation here, so perhaps cpu_relax() should be removed
-> > in the same way it was removed from the lockref.
->
-> I'm not sure you can ever want a cpu_relax() in a loop that
-> is implementing an atomic operation.
-> Even the ia64 (die...) issue was with a loop that was waiting
-> for another cpu to change the location (eg a spinlock).
->
-> For an atomic operation an immediate retry is likely to succeed.
-> Any kind of deferral to an another cpu can only make it worse.
->
-> Clearly if you have 100s of cpu looping doing atomic operation
-> on the same cache line it is likely that some get starved.
-> But to fix that you need to increase the time between successful
-> operations, not delay on failure.
+On Fri, Jan 20, 2023 at 12:23:31AM +0530, Amit Kumar Mahapatra wrote:
+> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
+> members of struct spi_device to be an array. But changing the type of these
+> members to array would break the spi driver functionality. To make the
+> transition smoother introduced four new APIs to get/set the
+> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
+> spi->cs_gpiod references with get or set API calls.
+> While adding multi-cs support in further patches the chip_select & cs_gpiod
+> members of the spi_device structure would be converted to arrays & the
+> "idx" parameter of the APIs would be used as array index i.e.,
+> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
+> 
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
 
-I would like to point out that the wikipedia article on
-compare-and-swap claims [1] that:
+[nip]
 
-Instead of immediately retrying after a CAS operation fails,
-researchers have found that total system performance can be improved
-in multiprocessor systems=E2=80=94where many threads constantly update some
-particular shared variable=E2=80=94if threads that see their CAS fail use
-exponential backoff=E2=80=94in other words, wait a little before retrying t=
-he
-CAS [2].
+>  drivers/spi/spi-dw-core.c         |  2 +-
+>  drivers/spi/spi-dw-mmio.c         |  4 ++--
 
-[1] https://en.wikipedia.org/wiki/Compare-and-swap#Overview
-[2] https://arxiv.org/pdf/1305.5800.pdf
+[nip]
 
-Uros.
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 99edddf9958b..4fd1aa800cc3 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -103,7 +103,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+>  	 * support active-high or active-low CS level.
+>  	 */
+>  	if (cs_high == enable)
+> -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+> +		dw_writel(dws, DW_SPI_SER, BIT(spi_get_chipselect(spi, 0)));
+>  	else
+>  		dw_writel(dws, DW_SPI_SER, 0);
+>  }
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index 26c40ea6dd12..d511da766ce8 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -65,7 +65,7 @@ static void dw_spi_mscc_set_cs(struct spi_device *spi, bool enable)
+>  	struct dw_spi *dws = spi_master_get_devdata(spi->master);
+>  	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
+>  	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
+> -	u32 cs = spi->chip_select;
+> +	u32 cs = spi_get_chipselect(spi, 0);
+>  
+>  	if (cs < 4) {
+>  		u32 sw_mode = MSCC_SPI_MST_SW_MODE_SW_PIN_CTRL_MODE;
+> @@ -138,7 +138,7 @@ static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
+>  	struct dw_spi *dws = spi_master_get_devdata(spi->master);
+>  	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
+>  	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
+> -	u8 cs = spi->chip_select;
+> +	u8 cs = spi_get_chipselect(spi, 0);
+>  
+>  	if (!enable) {
+>  		/* CS override drive enable */
+
+For the DW SSI part:
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
+[nip]
