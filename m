@@ -2,107 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CF5677AD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F0B677AE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjAWMZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
+        id S231535AbjAWM03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjAWMZN (ORCPT
+        with ESMTP id S230399AbjAWM00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:25:13 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70F7ED5;
-        Mon, 23 Jan 2023 04:25:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674476712; x=1706012712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iImm6JHQKgIeZCj3fq8kdp17FmAD/Yf9LjaaakF/0fg=;
-  b=M/9UDFd5A1eRSooGcD6yj/lrrk9UdI0QcGXb2qUtOx0YIGMerUXCyBbp
-   9rT+kRLj2EO7nCcGQyU95F8eL/KBC1ijwtfI/XL7c6pGtMLJDiiDS51Iq
-   SYVEwIocGIwUvzo6PhVk6wRs6Zehk8CnVobZvMervANxA3zEpLKNycT4h
-   M8qDEEDa2smkmZjoeLdH4cQMQSH5pHdq/4BgzowIAmB9Q2Ta9grv4UNIO
-   xk7We8h/xJJph8hK2/CWqrAc4NG+dLrASjkhnXaqfYDrMSn1VaR1wuhnQ
-   wpO+DcyLzO6cycIftBFL75WIfW3BXJ6wHftQ8GnxlWFJM2PrpL4VDpDA8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="328114602"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="328114602"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 04:25:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="990389526"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="990389526"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jan 2023 04:25:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pJvso-00DjJQ-1q;
-        Mon, 23 Jan 2023 14:25:06 +0200
-Date:   Mon, 23 Jan 2023 14:25:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Luca Ellero <luca.ellero@brickedbrain.com>
-Cc:     Luca Ellero <l.ellero@asem.it>, dmitry.torokhov@gmail.com,
-        daniel@zonque.org, m.felsch@pengutronix.de,
-        u.kleine-koenig@pengutronix.de, mkl@pengutronix.de,
-        miquel.raynal@bootlin.com, imre.deak@nokia.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] Input: ads7846 - don't report pressure for ads7845
-Message-ID: <Y858otTEDM1ugI0k@smile.fi.intel.com>
-References: <20230120124544.5993-1-l.ellero@asem.it>
- <20230120124544.5993-2-l.ellero@asem.it>
- <Y8qwQM2zLbboTeth@smile.fi.intel.com>
- <74c917ce-a67c-7b4a-023b-2f2f4fb365b5@brickedbrain.com>
+        Mon, 23 Jan 2023 07:26:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4D67ED5;
+        Mon, 23 Jan 2023 04:26:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0027BB80D6F;
+        Mon, 23 Jan 2023 12:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE4CC433EF;
+        Mon, 23 Jan 2023 12:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674476782;
+        bh=REoMVUQMRQ2NqLzeaiL5wyh/jcsd+1lc+rqBF3lyNhI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LHsq9/PkpIkw75FgfUuG1EIIdCoJVjwC39dTgrQRU3/1NLhnsJZHSG+zO6YdI5J6J
+         2R3NtqhZBQFcQux1h/PCdWFkEcR7U4DBQZzwKuhA2ifHp2TUi+zJZp4VqO29Wvg6cN
+         CyWlyusH99nGl0q8d82hvSaFo22bTWXVMFW8KY3ewVdbiOGWQtJspAeTXmr9IvkXGx
+         HBObGWRU+KXeCE6+56CsCcSwCpt2ULoWSwvLvo25xnaUwUkA5QHwJClRaB6tE07zNp
+         1cIt/k3PJl9leiuJe33HEalzElpZDu7WnTmDtekmK3XbZWy/RYQAn4kgItXePvM4x/
+         TLU5aEbLTqbpw==
+Date:   Mon, 23 Jan 2023 13:26:19 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        quic_neeraju@quicinc.com, Uladzislau Rezki <urezki@gmail.com>
+Subject: [PATCH v3] rcu: Further comment and explain the state space of GP
+ sequences
+Message-ID: <Y85868Pei9VutSiW@lothringen>
+References: <20230119141134.686626-1-frederic@kernel.org>
+ <Y8lQjKKDd0G2zt3F@lothringen>
+ <CAEXW_YRhYHZRudo5ano+K4-k54Ts+y2_npcXJNaT28SPCmqNnw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <74c917ce-a67c-7b4a-023b-2f2f4fb365b5@brickedbrain.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YRhYHZRudo5ano+K4-k54Ts+y2_npcXJNaT28SPCmqNnw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 09:27:37AM +0100, Luca Ellero wrote:
-> On 20/01/2023 16:16, Andy Shevchenko wrote:
-> > On Fri, Jan 20, 2023 at 01:45:42PM +0100, Luca Ellero wrote:
-> > > ADS7845 doesn't support pressure.
-> > > This patch avoids the following error reported by libinput-list-devices:
-> > 
-> > s/This patch avoids/Avoid/
-> > 
-> > (This rule is written in Submitting Patches documentation.)
-> > 
-> > > "ADS7845 Touchscreen: kernel bug: device has min == max on ABS_PRESSURE".
-> > 
-> > Do you need a Fixes tag?
-> > 
+On Thu, Jan 19, 2023 at 05:06:27PM +0000, Joel Fernandes wrote:
+> On Thu, Jan 19, 2023 at 2:15 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> >
+> > On Thu, Jan 19, 2023 at 03:11:35PM +0100, Frederic Weisbecker wrote:
+> > > The state space of the GP sequence number isn't documented and the
+> > > definitions of its special values are scattered. Try to gather some
+> > > common knowledge near the GP seq headers.
+> > >
+> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > ---
+> > >  kernel/rcu/rcu.h | 33 +++++++++++++++++++++++++++++++++
+> > >  1 file changed, 33 insertions(+)
+> > >
+> > > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> > > index 115616ac3bfa..fb95de039596 100644
+> > > --- a/kernel/rcu/rcu.h
+> > > +++ b/kernel/rcu/rcu.h
+> > > @@ -14,6 +14,39 @@
+> > >
+> > >  /*
+> > >   * Grace-period counter management.
+> > > + *
+> > > + * The two lowest significant bits gather the control flags.
+> > > + * The higher bits form the RCU sequence counter.
+> > > + *
+> > > + * About the control flags, a common value of 0 means that no GP is in progress.
+> > > + * A value of 1 means that a grace period has started and is in progress. When
+> > > + * the grace period completes, the control flags are reset to 0 and the sequence
+> > > + * counter is incremented.
+> > > + *
+> > > + * However some specific RCU usages make use of custom values.
+> > > + *
+> > > + * SRCU special control values:
+> > > + *
+> > > + *   SRCU_SNP_INIT_SEQ       :       Invalid/init value set when SRCU node
+> > > + *                                                   is initialized.
+> > > + *
+> > > + *   SRCU_STATE_IDLE         :       No SRCU gp is in progress
+> > > + *
+> > > + *   SRCU_STATE_SCAN1        :       State set by rcu_seq_start(). Indicates
+> > > + *                                                           we are scanning the inactive readers
+> > > + *                                                           index.
 > 
-> Hi Andy,
-> thank you for your reply.
-> I haven't found a specific bug report to apply to this patches.
-> Could you kindly provide a "Fixes:" tag that I can apply?
+> The term "inactive reader" is confusing. The readers can very much be
+> active during scans. During a scan stage, there might be a reader on
+> any of the 2 indexes that can be right in the middle of their critical
+> section (and we don't know which index because they could have got
+> preempted, right after sampling idx). Maybe "inactive slot" is a
+> better term? And define "inactive slot" as the slot which is no longer
+> going to be sampled by new readers.
 
-The Fixes tag in accordance with the documentation should refer to the commit
-in the Git history which brought the problem (regression).
+That's why I used "inactive readers index".
+I guess I should have written "inactive readers' index" to disambiguate
+the fact that inactive refers to "index" and not "readers" but I almost
+never observe plural genitive written that way these days.
 
-> It's more like this driver has never been tested with ADS7845.
-> Maybe the patches should be considered as a new implementation instead than
-> a bug fix?
+As for the gory details of "inactive" being actually "bound to become
+inactive", I'm not sure that belongs here but here is what I can do:
 
-If it's indeed from day 1, then the initial commit can be considered as Fixes
-tag, but I leave it to maintainer to decide.
+---
+From: Frederic Weisbecker <frederic@kernel.org>
+Date: Thu, 19 Jan 2023 14:29:34 +0100
+Subject: [PATCH] rcu: Further comment and explain the state space of GP
+ sequences
 
+The state space of the GP sequence number isn't documented and the
+definitions of its special values are scattered. Try to gather some
+common knowledge near the GP seq headers.
+
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+---
+ kernel/rcu/rcu.h | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index 115616ac3bfa..5be983598b5a 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -14,6 +14,43 @@
+ 
+ /*
+  * Grace-period counter management.
++ *
++ * The two lowest significant bits gather the control flags.
++ * The higher bits form the RCU sequence counter.
++ *
++ * About the control flags, a common value of 0 means that no GP is in progress.
++ * A value of 1 means that a grace period has started and is in progress. When
++ * the grace period completes, the control flags are reset to 0 and the sequence
++ * counter is incremented.
++ *
++ * However some specific RCU usages make use of custom values.
++ *
++ * SRCU special control values:
++ *
++ *	SRCU_SNP_INIT_SEQ	:	Invalid/init value set when SRCU node
++ *					is initialized.
++ *
++ *	SRCU_STATE_IDLE		:	No SRCU gp is in progress
++ *
++ *	SRCU_STATE_SCAN1	:	State set by rcu_seq_start(). Indicates
++ *					we are scanning the readers on the slot
++ *					defined as inactive (though there might
++ *					be pending readers there but their number
++ *					is bound).
++ *
++ *	SRCU_STATE_SCAN2	:	State set manually via rcu_seq_set_state()
++ *					Indicates we are flipping the readers
++ *					index and then scanning the readers on the
++ *					slot newly set as inactive (again there
++ *					might remain a bound amount of pending
++ *					readers there).
++ *
++ * RCU polled GP special control value:
++ *
++ *	RCU_GET_STATE_COMPLETED :	State value indicating that a polled GP
++ *					has completed. It's an absolute value
++ *					covering both the state and the counter of
++ *					the GP sequence.
+  */
+ 
+ #define RCU_SEQ_CTR_SHIFT	2
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
