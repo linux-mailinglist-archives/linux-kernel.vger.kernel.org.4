@@ -2,87 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BBE678A05
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF1B678A0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjAWV4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S231716AbjAWV5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAWV4b (ORCPT
+        with ESMTP id S229551AbjAWV52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:56:31 -0500
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEED30B13;
-        Mon, 23 Jan 2023 13:56:31 -0800 (PST)
-Received: by mail-ot1-f48.google.com with SMTP id cc13-20020a05683061cd00b00684b8cf2f4dso8132515otb.12;
-        Mon, 23 Jan 2023 13:56:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qRGcBcFExkgiQlPILZm8yierOUGy2T61UQrgAg+vNvI=;
-        b=wwcmxVLWBJSjsaNuqra0ZRqc0qgePs5vW+zmEdQIhe88rPbeP9egByvDQO0Ru6YHgT
-         A9d5AfATrQCWOX7QdwxuddcUy04Oq8otRRnMBDqjFj//fBDqm6yCkQLmE2O9Ah1+qKY3
-         51i7gUXIQo8lS1RNNDwGWI6/B0Ia5b7yJFJ9SdAahff93TXm3pcfm+c2822mkp9WymZc
-         haakdkDKEitKCHQKwa9ZH8+EgpmBB+T0lKbdxE7BLx8st0wPkQmS+/usMFTbg2L453Nw
-         WqonVdEIxTP9WbGvEngU+Gz+KQ3WXyBlR+HS4E8OLMJsxxjfaAaUQAy9YHLn3uo7o56A
-         bRJg==
-X-Gm-Message-State: AFqh2krx0sjj7UuQEjH0NRsdu6UfGo86hjl02ZkNdXHtsoNFvFhuTbWN
-        Y7c30Lvr2xjqEnW4z0AXJK6mlP/bVg==
-X-Google-Smtp-Source: AMrXdXuiFoseVsNeQ6kz8MZHNhsiu9ndrbi3zKJ6ucozFrmExZHvq29A+xB4DbUKUuSbj+3zBhMGwA==
-X-Received: by 2002:a9d:3c5:0:b0:684:d418:573b with SMTP id f63-20020a9d03c5000000b00684d418573bmr12432987otf.29.1674510990511;
-        Mon, 23 Jan 2023 13:56:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o33-20020a0568301c6100b006865223e532sm171918otg.51.2023.01.23.13.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 13:56:30 -0800 (PST)
-Received: (nullmailer pid 2708213 invoked by uid 1000);
-        Mon, 23 Jan 2023 21:56:29 -0000
-Date:   Mon, 23 Jan 2023 15:56:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 1/3] dt-bindings: power: fsl,imx-gpc: document
- fsl,imx6ul-gpc compatible
-Message-ID: <167451098887.2708155.10295452383611628333.robh@kernel.org>
-References: <20230120071717.138188-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120071717.138188-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 16:57:28 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7108930B17;
+        Mon, 23 Jan 2023 13:57:27 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0D6ED5C01C9;
+        Mon, 23 Jan 2023 16:57:25 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 23 Jan 2023 16:57:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674511045; x=1674597445; bh=rM1uu1HEvN
+        wQPTLE5y8gAs73Yfp4O0scV92/kLTrA9M=; b=bEo0WdkcF5JUhEJ+dPriyLYcC7
+        tK6ZGGaAtd5K3JkxEmF0jV9jhBO/xcl90wuCYjEWm58ausz8LC4y8/oyk7Iq+Rw4
+        dHXBq1A+35ArdA6XZyYqltJyQUdEhuwtgx/c18+AAktOafp/LCv0SUBFynyGyzul
+        wdZU9KhfNUI8FkK7A0Yz+c0oCQkFlBASU1HK4cZA7oxNwYs4Hu/qo4WehQ4llrwE
+        k+bT3Z5j6irBYhNhl0LCRabeqleesT0JUalQtJcATaelzjrYzkiPY5MhetMNZ02N
+        57lRHkj4REkQGzKYd6NJiVe6UUxYrkJDfYXD3BXkOizGijs90AQrGr0tbhJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674511045; x=1674597445; bh=rM1uu1HEvNwQPTLE5y8gAs73Yfp4
+        O0scV92/kLTrA9M=; b=hcH/0Ak8+DxSXPQ5FxRWebWm90lT34xmyoSgwYY9GekX
+        cIsNzlW8V89g7KiToDHSelL3Z6PhicyO2aYz7H9c1kCXHpu+n28vcfG25i8zKDOw
+        fHYRyFNhNDxtIvTLk8QFeAneSW7KF4v0nz7ebY03rIxr1brocyXfH94RT9cF0/Ne
+        j5RcDxr8qB67jr+Z/Sfyl7eSfTDLxk9zuWcSLeWN936xYymkc19pZh+3ydb4gQq9
+        fyhIaMgcGvE6V0/wzLAyAeCSCP/6CgbGbe+1Chtzo7Od3q4YhIt2hExushi0qn8x
+        V+7V56YcKEgbFLCRdbsJ+zkPtni0T1iUz3o22Ph7VA==
+X-ME-Sender: <xms:xALPYwUzVt8ol6F_DBwfGhqv5wwBkFZH7r9eZI9Nt2lWqpppFefaGw>
+    <xme:xALPY0lTHDAH0QrIwcbEzeZD_879LXZZAy1Vml89S3cE3yZdL3RgiGCUt8YywHaEY
+    VRrb-2lnTlo_-BugCk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedgudeggecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:xALPY0Zkj_sZ0wzTa3u_sRnDiRN9JrzYSdhzlsLCK7Hq_woyzafRlQ>
+    <xmx:xALPY_UBkFkXojYi_M6STB_wRQHvhYnA4Ou7NCzRwJgzijS0iJhl9A>
+    <xmx:xALPY6m3MgSWGuaT9EEl3UOj5e0cjSPXI3bnCP9yv5lLoyRj0qPFvg>
+    <xmx:xQLPY07ql-WaeUMSLU_60FmetuIve8cOKC7RGkJQzm8pMT96Q_1E7g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A96BCB60086; Mon, 23 Jan 2023 16:57:24 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <f8922fbc-13cc-4f08-a8e8-08d39ab7d63c@app.fastmail.com>
+In-Reply-To: <20230123214924.27476-1-afd@ti.com>
+References: <20230123214924.27476-1-afd@ti.com>
+Date:   Mon, 23 Jan 2023 22:57:05 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andrew Davis" <afd@ti.com>, "Lee Jones" <lee@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Daniel Tang" <dt.tangr@gmail.com>,
+        "Fabian Vogt" <fabian@ritter-vogt.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/9] TI-Nspire cleanups
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 23, 2023, at 22:49, Andrew Davis wrote:
+> Hello all,
+>
+> This series is an extended version of the series started here[0]
+> and here[1].
+>
+> We break out what was the first patch into one for DTS change and
+> one for code changes as suggested by Krzysztof. Those are now patches
+> 2 and 8 of this series (I kept the ACKs, hope that is okay).
+>
+> As also pointed out by Krzysztof syscon nodes need a specific
+> compatible, add that as patch 1.
+>
+> While I was adding that, I noticed some other dtbs_check issues,
+> so while here fixed some of those up too (patches 3-6).
 
-On Fri, 20 Jan 2023 08:17:15 +0100, Krzysztof Kozlowski wrote:
-> Document existing fsl,imx6ul-gpc compatible used with fsl,imx6q-gpc
-> fallback:
-> 
->   imx6sl-evk.dtb: gpc@20dc000: compatible: ['fsl,imx6sl-gpc', 'fsl,imx6q-gpc'] is too long
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/power/fsl,imx-gpc.yaml    | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
+Looks all good to me, if there are no final comments within the
+next few days, can you send this all to:soc@kernel.org, either as
+separate patches or as two pull requests (dts and code) based
+on 6.2-rc-1?
 
-Acked-by: Rob Herring <robh@kernel.org>
+I think I previously commented on the lack of an entry in
+the MAINTAINERS. It would be nice to have one more patch to
+add this, whichever way you want to split this with Daniel,
+adding one or both of you as maintainer and/or reviewer.
+I'd keep that separate from this series though, to not hold
+it up any longer.
+
+     Arnd
