@@ -2,135 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0413267770C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF53767770F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjAWJHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S231721AbjAWJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjAWJHU (ORCPT
+        with ESMTP id S231664AbjAWJH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:07:20 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AB01C33D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:07:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D703E3369B;
-        Mon, 23 Jan 2023 09:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674464837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dqIdmqDHu5lFw+I1bu61tqy0auXjE2ZRRFUiRmSC9UU=;
-        b=ZJcVqFjmIkdh86VEX3Bu0Ep5+ZUYHT05GgskJytKUFcF9tzKFAkACN58sfiz7Fdxzf2O0c
-        xc0SjoVorO5bqjy2pPN1P9t1ltv2W+T7VpFzTagNRAR+ekIuTzw2cEMJ42337gXVkzLvrN
-        JwUA4b+y7ZUHcjFBiJzQfbfmGDHfKJc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674464837;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dqIdmqDHu5lFw+I1bu61tqy0auXjE2ZRRFUiRmSC9UU=;
-        b=+0yxH0dvCgQacflrSVN5PhUGM9dN0umtjpX3hGMaqsh20PAB84Dh9f7IAQ0S0Mji4SoORh
-        BmWOO4WbmsN0GcCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C32F01357F;
-        Mon, 23 Jan 2023 09:07:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8fyXLkVOzmNNagAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 23 Jan 2023 09:07:17 +0000
-Message-ID: <e0637ab4-5165-6aa9-e85c-7b451db4c598@suse.de>
-Date:   Mon, 23 Jan 2023 10:07:17 +0100
+        Mon, 23 Jan 2023 04:07:27 -0500
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1661E5EB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:07:26 -0800 (PST)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id AC0291004819E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:07:25 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id JsnVppdtEvm7MJsnVpRJ1O; Mon, 23 Jan 2023 09:07:25 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=T4lJ89GQ c=1 sm=1 tr=0 ts=63ce4e4d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=CTAK37LMT9sX1YELjOMA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fJNKXsf2XCjdUYzXIo2MahyNH27PGpZbn6EGeGemAAY=; b=NCCA8SdTSJPHB/sRVclDxMBGiG
+        VmJx4+6wXYvnLJ7JM/Dqv5MWeFzolbpnYQNKCvl4/hCN1PKJfWQg8zPzPI5n5rOzwHCw2ISP+0MmO
+        SQYcJ01w8vB2wPIjFhsN8C3f2T1UmoDSnROhBh+zkzOFh90AKJlo8cEcNUgRFmAIPoIdRKehNM2m2
+        lvMWx4xnQm6t0aX1c/xQDgG47E915MvmGxunCSX78Ve2K+CAguN9Ik/HH3wVWQYQHK8myKySTPdOE
+        xq9KJ7T9Xxwi4L8k22YyrxARaRLbsmpAHswmKD4gNgEJSsjqz599e5KATl0d1+BCZCcJfs0YKqkhN
+        cRyLyajA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:52456 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pJsnU-002Y1r-CN;
+        Mon, 23 Jan 2023 02:07:24 -0700
+Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230122150246.321043584@linuxfoundation.org>
+In-Reply-To: <20230122150246.321043584@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <7afd6674-b105-cb77-2260-b93e13e5da00@w6rz.net>
+Date:   Mon, 23 Jan 2023 01:07:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Removal of mga driver from Linux 6.3
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-To:     Chris Rankin <rankincj@gmail.com>, daniel@ffwll.ch
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <CAK2bqVK1s2BLcR+HOnTn=i9s60GsREnVXWz2T9uUjYfQawUH9w@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAK2bqVK1s2BLcR+HOnTn=i9s60GsREnVXWz2T9uUjYfQawUH9w@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------DpyR0FzmlQZLup4nDfEtrH6T"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pJsnU-002Y1r-CN
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:52456
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------DpyR0FzmlQZLup4nDfEtrH6T
-Content-Type: multipart/mixed; boundary="------------LMUb6yo1TSLaWsvuxrXzTRPU";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Chris Rankin <rankincj@gmail.com>, daniel@ffwll.ch
-Cc: LKML <linux-kernel@vger.kernel.org>
-Message-ID: <e0637ab4-5165-6aa9-e85c-7b451db4c598@suse.de>
-Subject: Re: Removal of mga driver from Linux 6.3
-References: <CAK2bqVK1s2BLcR+HOnTn=i9s60GsREnVXWz2T9uUjYfQawUH9w@mail.gmail.com>
-In-Reply-To: <CAK2bqVK1s2BLcR+HOnTn=i9s60GsREnVXWz2T9uUjYfQawUH9w@mail.gmail.com>
+On 1/22/23 7:02 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.8 release.
+> There are 193 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.8-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---------------LMUb6yo1TSLaWsvuxrXzTRPU
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-SGkNCg0KQW0gMjEuMDEuMjMgdW0gMjM6Mjggc2NocmllYiBDaHJpcyBSYW5raW46DQo+IEhp
-LA0KPiANCj4gV2l0aCByZWZlcmVuY2UgdG8gdGhlIHJlY2VudCBkZWxldGlvbiBvZiB0aGUg
-bWdhIGRyaXZlciBmcm9tIExpbnV4IDYuMzoNCj4gDQo+IEkgYWN0dWFsbHkgb3duIGFuIG9s
-ZCBtYWNoaW5lIHRoYXQgc3RpbGwgY29udGFpbnMgYSBNYXRyb3ggTWlsbGVuaXVtIElJIA0K
-PiBncmFwaGljcyBjYXJkLiBUaGlzIG1hY2hpbmUgaGFzIG5vdCBydW4gWCBmb3Igc2V2ZXJh
-bCB5b25rcywgYW5kIHNvIHRoZSANCj4gbG9zcyBvZiBEUk0gc3VwcG9ydCBkb2Vzbid0IGNv
-bmNlcm4gbWUuDQo+IA0KPiBXaGF0IHdvdWxkIGNvbmNlcm4gbWUgd291bGQgYmUgbG9zaW5n
-IHRoZSBncmFwaGljcyBmcmFtZSBidWZmZXIgZGV2aWNlIA0KPiAobWF0cm94ZmIpLCBiZWNh
-dXNlIGEgVkdBIGNvbnNvbGUgaXMganVzdCB0b28gc21hbGw7DQoNCk5vIHdvcnJpZXMuIFRo
-ZSBtYXRyb3hmYiBkcml2ZXIgaXMgc3RpbGwgdGhlcmUgYW5kIHdpbGwgcmVtYWluLiBFdmVu
-IA0KWG9yZyBzaG91bGQgd29yayBpbiBwcmluY2lwbGUuDQoNCldoYXQgaGFzIGJlZW4gcmVt
-b3ZlZCBpcyB0aGUga2VybmVsIHNpZGUgZm9yIDNkIHN1cHBvcnQuIEJ1dCB0aGlzIGhhcyAN
-CmJlZW4gbm9uLWZ1bmN0aW9uYWwgYW55d2F5LCBhcyB0aGUgcnNwIGNvZGUgaW4gTWVzYSBo
-YWQgYmVlbiByZW1vdmVkIA0KbG9uZyBhZ28uDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoN
-Cj4gDQo+IENPTkZJR19GQl9NQVRST1g9eQ0KPiBDT05GSUdfRkJfTUFUUk9YX01JTExFTklV
-TT15DQo+ICMgQ09ORklHX0ZCX01BVFJPWF9NWVNUSVFVRSBpcyBub3Qgc2V0DQo+ICMgQ09O
-RklHX0ZCX01BVFJPWF9HIGlzIG5vdCBzZXQNCj4gQ09ORklHX0ZCX01BVFJPWF9JMkM9eQ0K
-PiANCj4gQ2hlZXJzLA0KPiBDaHJpcw0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0K
-R3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2Vy
-bWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihI
-UkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYN
-Cg==
+Tested-by: Ron Economos <re@w6rz.net>
 
---------------LMUb6yo1TSLaWsvuxrXzTRPU--
-
---------------DpyR0FzmlQZLup4nDfEtrH6T
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPOTkUFAwAAAAAACgkQlh/E3EQov+CM
-7hAAidSiJjIGiBuHrzVuWXLfyAw37fn8vI/kblE7TW+9Vb5uwj9LZEt8IQFWYJw3KSnCFcfguC7t
-2CXRgWP3fZA7Svgz9hdXCmal8qmz7+CxQmm2ZHth7LxPzFyH4BS3r11jKnxm2izDDojNmtiVwUOt
-XUUyGVr/kEaBtb4L8qY0tyUY8tHf8+hJA09H6oiK9ih36kHzanZYpknDnRXr6Fd8xVV4iEwAZYkZ
-Q7+DsPdKCkHsIRChqmjXIH1oLM/WwB46Kgw6tgKSVwZG9ltFsUl2Sgp22kh23gUuYTIqUhmltbOd
-BRBxaMXiORGihD4caCv4KYT32vUnGzbWI467nYQEYQo9ZhuTHd8B1i7dkdOXH5lJ1iy2eLcPnRvJ
-zhinALJjQpOwGNkuFnreN9oOmPo/Vkyu6hCxnN2qFINFoPCsm+CFJIMfHeHrUGpcleyltd6qqZoj
-X5zkSOqIU5YMlBOq9jHPHw/e/Ff66uHNT8GG88KL1O7jUEDB8lJMhiODQ3F5OeUka2bNK4DVGkxE
-P3m/KvYyZhrxbiBRFx2vsfiecR/7Y3BsWxDmqZEamAgQt901lX6HYW+O6jUvKYdI1Z+qUfX9EFaI
-kqXvu2XgryOYRdx4xMqnneUVEX7YSuwYRO0kiuEF4ewRUqMQAQWbrBT6vXSNMfxNKty/R2CiOEyi
-u0Q=
-=TyHg
------END PGP SIGNATURE-----
-
---------------DpyR0FzmlQZLup4nDfEtrH6T--
