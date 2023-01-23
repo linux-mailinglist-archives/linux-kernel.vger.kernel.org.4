@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F326785CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1332F6785D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjAWTHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S232452AbjAWTHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbjAWTHS (ORCPT
+        with ESMTP id S232338AbjAWTHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:07:18 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92C34C37;
-        Mon, 23 Jan 2023 11:06:57 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id z9so10578640qtv.5;
-        Mon, 23 Jan 2023 11:06:57 -0800 (PST)
+        Mon, 23 Jan 2023 14:07:17 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9F430196;
+        Mon, 23 Jan 2023 11:06:52 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id tz11so33275787ejc.0;
+        Mon, 23 Jan 2023 11:06:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=noM6rQKbS9rfagFoqhc7Ies1urqmhdKV4jSItScOuqI=;
-        b=HBBmQd0BJxU9q/tAIGHkTvaclkPb0Bz6jjQpmWpbYtHl8dj6OI6EYw/444y7zuq3Ow
-         lQld+mPf7cazTuH4l9gXZzq+mYhjdr/DDUsXUMqVbmesOYD7Kb5Q96Uxrcqp15HZMyFq
-         XkMTO125djQVni8xbyc4cpJHQWnms/wUQCvkXL0LwS4PxMpddg7TL4qwf3d1qqMMk6Rq
-         KoijGK8aEEm4KZJ1n6OE5336oKjdLd3rA31vnhfpZK7LCXgH/ndgVqMrkSRQ6JgksGqM
-         A7ssVJrz2addZGoz0ypFywFMS71AlnaIRqI2qa9gU0UA7iCmK1Kx6MoJR0ZIMdur9Zqd
-         2aQg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VzT+/AAnkcNZ8TZfovdetYrpqGaxSCI5k19hUgFzi3Y=;
+        b=TNjwf8YflAqXrcr8PaPdRr4zx93XtnlZQT65pkJo0YQGBSJ1y52WHiq2IEOYVpUkli
+         yp76QIPr5BSRWmdfb8k6cYOPqXz70pO7/einBq3Yv+8HVPjpg2lg2J8/Cj0LpjwuZUqX
+         8E3U0av6UGKSGk5HiBSBZK/KSQhjXsm/9Nn9rJw38Wslo680mo5beenccI6Qnak2Bxbs
+         dsql/nBBd8HCdXFZRAxe0aNZcbG6N52z5H9eO6my27PoHPI/XwJzDPkDqPiX29uMzU+j
+         M9jpkpqpAAfhIY3Iujy5ajvgBNRf+dmdmnOT4E0EZWrUSqs2iRGZd8i43HokQZ4kh9sp
+         57fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=noM6rQKbS9rfagFoqhc7Ies1urqmhdKV4jSItScOuqI=;
-        b=RgUkO4i3K0PuLpZOhx165Eg1wMjhyBhaaGvN5w8ibrTlvmos1BAX1dFL+O8UK1uJxT
-         Smhvu80MrqmTbDDxtnfBPv6iQNwVGI5OusXYUH2k44FmZYgLrTqUMetdeSwlMi3TucES
-         +zOh7doupz5u8wbXgTpigfPMOqUmk+rFsZae57CXoZTUndz1L3oinDX4snbBxE0FxXBJ
-         G8bkK/M4NmoQdu9kopP3Sgtrz36qL06jPlVZg3ZsPfU4hoAvSiRbpVVdxHd3Xyn1s4mU
-         azYdeh+A9URyNiMMZHTMO5hy6RpYHeeMqAfP93Kgw/lc/qzTa0yEXX+q0rodTTK8l2iw
-         uklw==
-X-Gm-Message-State: AFqh2kopPP7F22ZlgegOF8TIsYVN494kjnooaudvBPqxxm7aaNLMxQtS
-        vXR1ntFhsqlV/sZPWr7sQxU=
-X-Google-Smtp-Source: AMrXdXulvEger+xu05aPBZkCIImnQTYIqCn1bCrjyOr9BWHW/59NUZkTVw/U1axrlaA3MTHJm1onbQ==
-X-Received: by 2002:ac8:4906:0:b0:3b6:2b76:d7a6 with SMTP id e6-20020ac84906000000b003b62b76d7a6mr38078070qtq.57.1674500817008;
-        Mon, 23 Jan 2023 11:06:57 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c6-20020ac84e06000000b003a97a71c906sm10216172qtw.78.2023.01.23.11.06.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 11:06:56 -0800 (PST)
-Message-ID: <bf6c5407-5026-b87e-b771-e2f1d92fb8fe@gmail.com>
-Date:   Mon, 23 Jan 2023 11:06:46 -0800
+        bh=VzT+/AAnkcNZ8TZfovdetYrpqGaxSCI5k19hUgFzi3Y=;
+        b=wAkDgmB1r3beNZRPEje0YOcPTCU9Wx1aF3ix9OJYMfXfMoxrnypp2Os8y8lCBcY2+4
+         ipCYohmjQV5RzSc1JzwlmSGFPTv708tULF6Cq6jh9qquuigWAl6Kjovbu7txb9FpbMS7
+         F920cV3xTNKWIYBATDiOklgGOeUYQ0DP31a2bA3ddzz2vD1AWfyh2pX69pCDteHKN8D7
+         gmtCX3Ejdk2uBJokQi+tZMxaTROWaALnemso04Z0QPpS9nxmhNuoqo7ng0hT+yLJ2XY9
+         Uv9407YOVkCxBY/xg6uYju/pZiFM47/KX6WrYbcfGBq9mq4FeNPdF6DeMbMdUCvuo3Km
+         J2hA==
+X-Gm-Message-State: AFqh2kp0rm5idKqa5kOU+C5DQTQ9PJ/c+QgxVH1X5rWdZHs7mNd7dPC6
+        EHCURtVLCj2ptmm5SQgWDTo=
+X-Google-Smtp-Source: AMrXdXv1j+KQ6JCKEI7eBFjPkPTxbdbaHeHhec7tdZZIh2iRYdZCvb1FJYylLyqEhRhPgvIX2G4o/w==
+X-Received: by 2002:a17:906:514:b0:7c1:1ada:5e1e with SMTP id j20-20020a170906051400b007c11ada5e1emr26505336eja.26.1674500810545;
+        Mon, 23 Jan 2023 11:06:50 -0800 (PST)
+Received: from skbuf ([188.27.184.249])
+        by smtp.gmail.com with ESMTPSA id dn28-20020a05640222fc00b0049148f6461dsm66537edb.65.2023.01.23.11.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 11:06:50 -0800 (PST)
+Date:   Mon, 23 Jan 2023 21:06:47 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH] net: dsa: mt7530: fix tristate and help description
+Message-ID: <20230123190647.vcnv3wrrzljnuhzy@skbuf>
+References: <20230123170853.400977-1-arinc.unal@arinc9.com>
+ <6d44b799-1843-e233-39ea-ff62d2d64065@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.4 00/51] 5.4.230-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230123094907.292995722@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230123094907.292995722@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6d44b799-1843-e233-39ea-ff62d2d64065@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,28 +79,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 01:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.230 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.230-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Jan 23, 2023 at 08:15:07PM +0300, Arınç ÜNAL wrote:
+> Just to make sure, the limit for a line is 80 columns for kconfig too, is
+> that right? A tab character is 8 columns.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit, build tested on BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+I guess so, yes.
