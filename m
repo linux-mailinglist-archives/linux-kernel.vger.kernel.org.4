@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9EC6773BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 02:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8B16773BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 02:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjAWBM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 20:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
+        id S230109AbjAWBMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 20:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWBMz (ORCPT
+        with ESMTP id S229817AbjAWBMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 20:12:55 -0500
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F2F70EB7C;
-        Sun, 22 Jan 2023 17:12:50 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [112.254.167.99])
-        by mail-app4 (Coremail) with SMTP id cS_KCgB3nN_63s1jv4NmCg--.22122S2;
-        Mon, 23 Jan 2023 09:12:37 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, maximlevitsky@gmail.com,
-        sean@mess.org, mchehab@kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] media: rc: Fix use-after-free bugs caused by ene_tx_irqsim()
-Date:   Mon, 23 Jan 2023 09:12:23 +0800
-Message-Id: <20230123011223.23804-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgB3nN_63s1jv4NmCg--.22122S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFyrJF17Kw1rAw4xuF17Jrb_yoW8JFW8pr
-        W8GFWSkFyUGw12gFnrXw4ku3W5Xws3Ja4UW342g3y0vwn5GFy3JF90qa4jvay8AF95AFZF
-        vr45Xw43CFsxuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6w4l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUg4SOUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIDAVZdtdUtdwAqsZ
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 22 Jan 2023 20:12:52 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1421EB78;
+        Sun, 22 Jan 2023 17:12:49 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P0XCM6MQcz4y0L;
+        Mon, 23 Jan 2023 12:12:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674436368;
+        bh=KUHJVBb0Qq22/V85zvNZ0qTQgnpqraZ8hupOkBaj0L4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JoFyBxpQ0tA1Q82JkMLHzvvxF+yfVdqVJsoqHsH22+0QBj7YYa5Dm16ZgMUIpEMVp
+         QHngTuCiMShLpGGmu762I4bkxl8XTFG8dnQhE6eKcdD18frkE/sjJQFF+z3qz3ekqE
+         uGuIx5R/j8xPyc6fX3thPShXO9NTzdLftWK/dftuPVVuFMCdqfrZrFeeSngxSLbYjp
+         Akt7JVBoxHxrPzZJEZcQK+46g6bgzQ0jsJR1HkPnH1pv5pxe5XvZVCCkHmMYYkGU+5
+         7MvXbcpTeB8TpXOfMgoGDd8OLN71fLgjZb0/lqYlkeQHa3qPusrti+gtd/1jhcbnpn
+         PvvU4ZkGh58tA==
+Date:   Mon, 23 Jan 2023 12:12:45 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tony Krowiak <akrowiak@linux.ibm.com>
+Subject: linux-next: manual merge of the kvms390 tree with the s390 tree
+Message-ID: <20230123121245.526d262b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ZBDOGty0f.AH1xSSNea2MlZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the ene device is detaching, function ene_remove() will
-be called. But there is no function to cancel tx_sim_timer
-in ene_remove(), the timer handler ene_tx_irqsim() could race
-with ene_remove(). As a result, the UAF bugs could happen,
-the process is shown below.
+--Sig_/ZBDOGty0f.AH1xSSNea2MlZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-    (cleanup routine)          |        (timer routine)
-                               | mod_timer(&dev->tx_sim_timer, ..)
-ene_remove()                   | (wait a time)
-  kfree(dev) //FREE            |
-                               | ene_tx_irqsim()
-                               |   dev->hw_lock //USE
-                               |   ene_tx_sample(dev) //USE
+Hi all,
 
-Fix by adding del_timer_sync(&dev->tx_sim_timer) in ene_remove(),
-The tx_sim_timer could stop before ene device is deallocated.
+Today's linux-next merge of the kvms390 tree got a conflict in:
 
-This problem is found by static analysis.
+  drivers/s390/crypto/vfio_ap_ops.c
 
-Fixes: 9ea53b74df9c ("V4L/DVB: STAGING: remove lirc_ene0100 driver")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/media/rc/ene_ir.c | 1 +
- 1 file changed, 1 insertion(+)
+between commit:
 
-diff --git a/drivers/media/rc/ene_ir.c b/drivers/media/rc/ene_ir.c
-index e09270916fb..716b72a048f 100644
---- a/drivers/media/rc/ene_ir.c
-+++ b/drivers/media/rc/ene_ir.c
-@@ -1114,6 +1114,7 @@ static void ene_remove(struct pnp_dev *pnp_dev)
- 	free_irq(dev->irq, dev);
- 	release_region(dev->hw_io, ENE_IO_SIZE);
- 	rc_unregister_device(dev->rdev);
-+	del_timer_sync(&dev->tx_sim_timer);
- 	kfree(dev);
- }
- 
--- 
-2.17.1
+  0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for qu=
+eue reset")
 
+from the s390 tree and commit:
+
+  bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for qu=
+eue reset")
+
+from the kvms390 tree.
+
+They seem to do the same thing, so I used the version of this file from
+the s390 tree as it's commit is much newer and has other changes to this
+file i.e. I effectively dropped the kvms390 tree commit.
+
+I fixed it up (see above) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZBDOGty0f.AH1xSSNea2MlZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPN3w0ACgkQAVBC80lX
+0GzFKAf8DGGQvV9nsbrruM4/LONJm5CZd7KHpYggx/9OSh9s5WPkaH4l7M4VEtDL
+Hdp1yh1TbIdVphz7UgjfAeN/pDYiDzR04+X3EJtEdJ+QbXKF0qAtFrr62r4ULNbY
+sjJnoHEiVtB4ikYCvMn/eA+mXVHMf4F/6TQk3xmwOMvJapr1jJs0Zy2Hjl6r0VfF
+RYD4NPovHrlujQqlwv8IILiKXl/sThdYPGGRpE8EciBBtpbc9pEV3w91QhZRfEOX
+ohGYWeZ8u7FPFCv3mLI7HYVV3nnBez5ozl/N6wdq/hmEXo0cH8TsDQxXO0rudifd
+72o4wnqXluD1SEeWXYsYjTALbgw9Og==
+=XWEZ
+-----END PGP SIGNATURE-----
+
+--Sig_/ZBDOGty0f.AH1xSSNea2MlZ--
