@@ -2,164 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E24167853C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601CE678542
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjAWSsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S231952AbjAWSsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbjAWSsD (ORCPT
+        with ESMTP id S231877AbjAWSsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:48:03 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792C610425;
-        Mon, 23 Jan 2023 10:47:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=L17bWBvpLq9LtsScoCNuHVlJn5sZdLtTGDRid/gmFMo=; b=lXfJ/CZoABaZ3xsAHT2PM0f77N
-        yvlfRbnstflT7++4dUj4JiCHHTLrc+Uik63/Yih4icHxZuAm1yCpoDFH2Q9RyTL12mCxrwJdJYE/k
-        /FfMAn504rEflDu89txkQ7V4KA/R7AK/quTJ8MuOStdcI3Wa10eDaKm1+3wOCd7nPZumkaIvm9y3V
-        i4oIGT2AGWxNLkyg2GbOQqn9dzz0aBuOq5eCrwKpZTEKZuk19AdnQOWiO1YZkYsnT/owqiwnsDqX1
-        LHc6gXnRCwoauWklpi3G98EqKNMkMeAvHg8zNSwwVa8RPx54/n0QzuRiIX0PZnHmCrPajogJwQXXG
-        bcXHrPyQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36270)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pK1r2-00055P-JU; Mon, 23 Jan 2023 18:47:40 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pK1qx-0004Xj-DY; Mon, 23 Jan 2023 18:47:35 +0000
-Date:   Mon, 23 Jan 2023 18:47:35 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Walle <michael@walle.cc>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] net: phy: C45-over-C22 access
-Message-ID: <Y87WR/T395hKmgKm@shell.armlinux.org.uk>
-References: <20230120224011.796097-1-michael@walle.cc>
- <Y87L5r8uzINALLw4@lunn.ch>
+        Mon, 23 Jan 2023 13:48:33 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFFB10A9A;
+        Mon, 23 Jan 2023 10:48:28 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id y8so9694470qvn.11;
+        Mon, 23 Jan 2023 10:48:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k5MyD6fIRFKu+jhSA4qPFQumxMz6XFXiYHlIS1K9ueo=;
+        b=nNd2c50bWIb/VvPLRKyytvcpbBE6zq2q0EPxAQ46KXTQhunMO1RhKP5ReRTFxLLvA8
+         DPzLDZ82Y0olNflTqV1DmEMf1HWJjqz2AjxHsUjnRuH93ODYjEWb37vnZ74to8DOwVLj
+         znf2dM9Q9LLvx9GHC61DUh6YQyyg4sDLncteGzqds0Ucb14xenBMdc+MTPzAi+rqODDz
+         ZorGZTHhU6UvT7OToLGPZT7S2juM72BVHZgCokrPnYkwnMVdY8QCs6VxK0V7SKeJErt8
+         m/O4rrXX5N4XNmqh8ve29y6tlt9XyA3sWxIcutjra5fp8FQfFJLJgwxTuEGgDKjUe/GM
+         0W6g==
+X-Gm-Message-State: AFqh2kqGTEf/jOI9xcK8Zw9DNAX3f8BjKK+RweTYxOiJOcgiFr0o9UAu
+        M1fJvjUt1iahfYtSVA9kjf8=
+X-Google-Smtp-Source: AMrXdXvAn3suxRRTmSY5JV+xXVEwuN5YGro9JvhukSOj6j3T7x7TY9t4ZSSpNStVF+sNERsgKkedCA==
+X-Received: by 2002:a0c:fc03:0:b0:537:4b09:670f with SMTP id z3-20020a0cfc03000000b005374b09670fmr18245525qvo.25.1674499707443;
+        Mon, 23 Jan 2023 10:48:27 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:93a0])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05620a28ce00b007062139ecb3sm20778988qkp.95.2023.01.23.10.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 10:48:27 -0800 (PST)
+Date:   Mon, 23 Jan 2023 12:48:27 -0600
+From:   David Vernet <void@manifault.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        memxor@gmail.com
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
+ definitions
+Message-ID: <Y87We/92xiv5/+g+@maniforge.lan>
+References: <20230123171506.71995-1-void@manifault.com>
+ <20230123171506.71995-4-void@manifault.com>
+ <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y87L5r8uzINALLw4@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 07:03:18PM +0100, Andrew Lunn wrote:
-> On Fri, Jan 20, 2023 at 11:40:06PM +0100, Michael Walle wrote:
-> > After the c22 and c45 access split is finally merged. This can now be
-> > posted again. The old version can be found here:
-> > https://lore.kernel.org/netdev/20220325213518.2668832-1-michael@walle.cc/
-> > Although all the discussion was here:
-> > https://lore.kernel.org/netdev/20220323183419.2278676-1-michael@walle.cc/
-> > 
-> > The goal here is to get the GYP215 and LAN8814 running on the Microchip
-> > LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
-> > LAN8814 has a bug which makes it impossible to use C45 on that bus.
-> > Fortunately, it was the intention of the GPY215 driver to be used on a C22
-> > bus. But I think this could have never really worked, because the
-> > phy_get_c45_ids() will always do c45 accesses and thus gpy_probe() will
-> > fail.
-> > 
-> > Introduce C45-over-C22 support and use it if the MDIO bus doesn't support
-> > C45. Also enable it when a PHY is promoted from C22 to C45.
+On Mon, Jan 23, 2023 at 10:33:05AM -0800, Alexei Starovoitov wrote:
+> On Mon, Jan 23, 2023 at 11:15:06AM -0600, David Vernet wrote:
+> > -void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
+> > +BPF_KFUNC(void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign))
+> >  {
+> >  	struct btf_struct_meta *meta = meta__ign;
+> >  	u64 size = local_type_id__k;
+> > @@ -1790,7 +1786,7 @@ void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
+> >  	return p;
+> >  }
+> >  
+> > -void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
+> > +BPF_KFUNC(void bpf_obj_drop_impl(void *p__alloc, void *meta__ign))
+> >  {
 > 
-> I see this breaking up into two problems.
+> The following also works:
+> -BPF_KFUNC(void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign))
+> +BPF_KFUNC(
+> +void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
+> +)
 > 
-> 1) Scanning the bus and finding device, be it by C22, C45, or C45 over C22.
+> and it looks little bit cleaner to me.
 > 
-> 2) Allowing drivers to access C45 register spaces, without caring if
-> it is C45 transfers or C45 over C22.
+> git grep -A1 BPF_KFUNC
+> can still find all instances of kfuncs.
 > 
-> For scanning the bus we currently have:
-> 
-> 
->         if (bus->read) {
->                 err = mdiobus_scan_bus_c22(bus);
->                 if (err)
->                         goto error;
->         }
-> 
->         prevent_c45_scan = mdiobus_prevent_c45_scan(bus);
-> 
->         if (!prevent_c45_scan && bus->read_c45) {
->                 err = mdiobus_scan_bus_c45(bus);
->                 if (err)
->                         goto error;
->         }
-> 
-> I think we should be adding something like:
-> 
-> 	else {
-> 		if (bus->read) {
-> 	                err = mdiobus_scan_bus_c45_over_c22(bus);
-> 	                if (err)
-> 	                        goto error;
-> 	        }
-> 	}
-> 
-> That makes the top level pretty obvious what is going on.
-> 
-> But i think we need some more cleanup lower down. We now have a clean
-> separation in MDIO bus drivers between C22 bus transactions and C45
-> transactions bus. But further up it is less clear. PHY drivers should
-> be using phy_read_mmd()/phy_write_mmd() etc, which means access the
-> C45 address space, but says nothing about what bus transactions to
-> use. So that is also quite clean.
-> 
-> The problem is in the middle.  get_phy_c45_devs_in_pkg() uses
-> mdiobus_c45_read(). Does mdiobus_c45_read() mean perform a C45 bus
-> transaction, or access the C45 address space? I would say it means
-> perform a C45 bus transaction. It does not take a phydev, so we are
-> below the concept of PHYs, and so C45 over C22 does not exist at this
-> level.
+> wdyt?
 
-C45-over-C22 is a PHY thing, it isn't generic. We shouldn't go poking
-at the PHY C45-over-C22 registers unless we know for certain that the
-C22 device we are accessing is a PHY, otherwise we could be writing
-into e.g. a switch register or something else.
+I'm fine with putting it on its own line if that's your preference.
+Agreed that it might be a bit cleaner, especially for functions with the
+return type on its own line, so we'd have e.g.:
 
-So, the mdiobus_* API should be the raw bus API. If we want C45 bus
-cycles then mdiobus_c45_*() is the API that gives us that, vs C22 bus
-cycles through the non-C45 API.
+BPF_KFUNC(
+struct nf_conn *
+bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
+		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
+) {
 
-C45-over-C22 being a PHY thing is something that should be handled by
-phylib, and currently is. The phylib accessors there will use C45 or
-C45-over-C22 as appropriate.
+// ...
 
-The problem comes with PHYs that maybe don't expose C22 ID registers
-but do have C45-over-C22. These aren't detectable without probing
-using the C45-over-C22 PHY protocol, but doing that gratuitously will
-end up writing values to e.g. switch registers and disrupting their
-operation. So I regard that as a very dangerous thing to be doing.
+}
 
-Given that, it seems that such a case could not be automatically
-probed, and thus must be described in firmware.
+Note the presence of the { on the closing paren. Are you ok with that?
+Otherwise I think it will look a bit odd:
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+BPF_KFUNC(
+struct nf_conn *
+bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
+		  u32 tuple__sz, struct bpf_ct_opts *opts, u32 opts__sz)
+)
+{
+
+}
+
+Thanks,
+David
