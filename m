@@ -2,147 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E108678400
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA75678412
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbjAWSDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
+        id S233757AbjAWSFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232710AbjAWSDh (ORCPT
+        with ESMTP id S233726AbjAWSEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:03:37 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBBCCA0E;
-        Mon, 23 Jan 2023 10:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=e4d0VnsFAkiIRf6tSLOqqkKcGHjRyQzCc9X+2Ei+du4=; b=n2eQeEa+UitAEQbDS0EqKYH0M5
-        6NQtlr4FQbbO8m80g6LV7aAWpHpfh+RZq0ZmvWgXvgHy2ipYGvNYLH/mx6Kswqdf6UtHFjVRgoVAV
-        wIwXViPE8PJy+rV6/rpVdaVlS1SOB0++9q6h7+AfzDhGQpciUUWNoX9LFQ4dJH/aS7Ks=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pK1A6-002w00-QG; Mon, 23 Jan 2023 19:03:18 +0100
-Date:   Mon, 23 Jan 2023 19:03:18 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] net: phy: C45-over-C22 access
-Message-ID: <Y87L5r8uzINALLw4@lunn.ch>
-References: <20230120224011.796097-1-michael@walle.cc>
+        Mon, 23 Jan 2023 13:04:36 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2A814EB4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:04:31 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z3so9465032pfb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aurora.tech; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zi+iUdTui0eMYRh+bS6eQbXlcjJzEZc+EWZsqkgWXs0=;
+        b=i2Q2SnN2NOq0NB2gvTP0FhB41NgE/wUme9MAS0qjjsaLwc8klFOiguv772mawVvnQW
+         y8UosPW9CY8a6vpn5sP1miwwLOajE/uMgSfiKKtLyK9Bjz5R8WQholPJvIL8Q5VzqLWi
+         Z7gtBKgGkMMgfc2GRLlkn6+mZnxqB2I0AAeg5q7cATx1WV9YVPKlkEOzSl98KUrrUnG4
+         gAzE1wmK2NswL2xtr8/IxpHJhGvVPxDAZbFXZ+ZGe5GJ/0jktfEja3joiOFgBYbK4cgP
+         csukWuk4IUPvh0x9abzFi+8CL40mFGeDoCXjI/iH9DK6VeWzOdHV397vyZ8xg3vITGZF
+         5+xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zi+iUdTui0eMYRh+bS6eQbXlcjJzEZc+EWZsqkgWXs0=;
+        b=oEN6q6s39A1JL+b8mQmtgtG93Qls1S/yscLy4k3RZHPZwVW5iZz9zHllz2xXhuyKkx
+         Z63z6ISiGeOT6fTJyTapA7aJomMHAyVdr5Rd6up6XcehfMotW3Wb06+ffTbk7NKNF2PD
+         0unM/140U5SgjiRn7RGgbnx3JiaUUlQB9A5dMeU8x16KHhBXZD6a5CmuQ5PABBPdJ6op
+         1AR04k8ODeOpBWqkI3M91mxc/gaND4MbMLkr+N/kGSF18MbQP7KV8aSVqBSxPD0+2PzP
+         m2GqONJ88GJZrTMqd4S8pe2vxYwaOTmEb3a5i2lnfGZolvbrQtR+73kQTFKPyfEjgQi8
+         myVw==
+X-Gm-Message-State: AFqh2kra5In3Rdyt0rKvTvEecmM2Q0qKDZx9jbWp77oh56TGpNX5c0C/
+        ADkF6WYoo1cSjN/QySy1e6f+CJ+mk+gp0giwWSJQfA==
+X-Google-Smtp-Source: AMrXdXv/iZkG4aEOY0tAm5Pe8RQpzhFSGNbe/VHOdBJlj8n/e3z2TK0jIc/xskxrsvKD/lF81sJaEsZr/n0FCDbXJp8=
+X-Received: by 2002:a63:a5e:0:b0:4b4:e491:c331 with SMTP id
+ z30-20020a630a5e000000b004b4e491c331mr630573pgk.19.1674497071212; Mon, 23 Jan
+ 2023 10:04:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120224011.796097-1-michael@walle.cc>
+References: <20221208075604.811710-1-junxiao.chang@intel.com>
+ <BN9PR11MB5370BA8A506EB8519DC879C1ECEA9@BN9PR11MB5370.namprd11.prod.outlook.com>
+ <Y6H4zqr8bObRFE1g@linutronix.de>
+In-Reply-To: <Y6H4zqr8bObRFE1g@linutronix.de>
+From:   Alison Chaiken <achaiken@aurora.tech>
+Date:   Mon, 23 Jan 2023 10:04:20 -0800
+Message-ID: <CAFzL-7upCjPPyB-9tHf4E4=M+GFot2fnH9t7M5x9cKikUMxB+w@mail.gmail.com>
+Subject: Re: [PATCH] softirq: wake up ktimer thread in softirq context
+To:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>
+Cc:     "Chang, Junxiao" <junxiao.chang@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Peh, Hock Zhang" <hock.zhang.peh@intel.com>,
+        Glenn Elliott <glenn@aurora.tech>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 11:40:06PM +0100, Michael Walle wrote:
-> After the c22 and c45 access split is finally merged. This can now be
-> posted again. The old version can be found here:
-> https://lore.kernel.org/netdev/20220325213518.2668832-1-michael@walle.cc/
-> Although all the discussion was here:
-> https://lore.kernel.org/netdev/20220323183419.2278676-1-michael@walle.cc/
-> 
-> The goal here is to get the GYP215 and LAN8814 running on the Microchip
-> LAN9668 SoC. The LAN9668 suppports one external bus and unfortunately, the
-> LAN8814 has a bug which makes it impossible to use C45 on that bus.
-> Fortunately, it was the intention of the GPY215 driver to be used on a C22
-> bus. But I think this could have never really worked, because the
-> phy_get_c45_ids() will always do c45 accesses and thus gpy_probe() will
-> fail.
-> 
-> Introduce C45-over-C22 support and use it if the MDIO bus doesn't support
-> C45. Also enable it when a PHY is promoted from C22 to C45.
+On Tue, Dec 20, 2022 at 10:03 AM bigeasy@linutronix.de
+<bigeasy@linutronix.de> wrote:
+>
+> On 2022-12-20 10:44:07 [+0000], Chang, Junxiao wrote:
+> > Any comment? This patch is for 6.1-rt, issue could be reproduced with 5.19-rt kernel as well.
+>
+> Thanks for the ping. I did see the initial email and I didn't get to it
+> yet. I need to re-test, confirm and then apply.
+> The ktimer patch is not in v5.15 and this is currently the latest one
+> maintained by the stable team. I don't know which one will be the
+> following LTS kernel but this one needs to have this addressed. The
+> v5.19 is not receiving any updates.
+> Given the current timing, I will look into this in January.
+>
+> > Regards,
+> > Junxiao
+>
+> Sebastian
 
-I see this breaking up into two problems.
+Any further thoughts about Junxiao Chang's patch?    We backported
+ktimer patches from Sebastian and Frederic to 5.15 and would like this
+fix  it is sensible.
 
-1) Scanning the bus and finding device, be it by C22, C45, or C45 over C22.
-
-2) Allowing drivers to access C45 register spaces, without caring if
-it is C45 transfers or C45 over C22.
-
-For scanning the bus we currently have:
-
-
-        if (bus->read) {
-                err = mdiobus_scan_bus_c22(bus);
-                if (err)
-                        goto error;
-        }
-
-        prevent_c45_scan = mdiobus_prevent_c45_scan(bus);
-
-        if (!prevent_c45_scan && bus->read_c45) {
-                err = mdiobus_scan_bus_c45(bus);
-                if (err)
-                        goto error;
-        }
-
-I think we should be adding something like:
-
-	else {
-		if (bus->read) {
-	                err = mdiobus_scan_bus_c45_over_c22(bus);
-	                if (err)
-	                        goto error;
-	        }
-	}
-
-That makes the top level pretty obvious what is going on.
-
-But i think we need some more cleanup lower down. We now have a clean
-separation in MDIO bus drivers between C22 bus transactions and C45
-transactions bus. But further up it is less clear. PHY drivers should
-be using phy_read_mmd()/phy_write_mmd() etc, which means access the
-C45 address space, but says nothing about what bus transactions to
-use. So that is also quite clean.
-
-The problem is in the middle.  get_phy_c45_devs_in_pkg() uses
-mdiobus_c45_read(). Does mdiobus_c45_read() mean perform a C45 bus
-transaction, or access the C45 address space? I would say it means
-perform a C45 bus transaction. It does not take a phydev, so we are
-below the concept of PHYs, and so C45 over C22 does not exist at this
-level.
-
-So i think we need to review all calls to
-mdiobus_c45_read/mdiobus_c45_write() etc and see if they mean C45 bus
-transaction or C45 address space. Those meaning address space should
-be changed to phy_read_mmd()/phy_write_mmd().
-
-get_phy_device(), get_phy_c45_devs_in_pkg(), get_phy_c45_ids(),
-phy_c45_probe_present() however do not deal with phydev, so cannot use
-phy_read_mmd()/phy_write_mmd(). They probably need the bool is_c45
-replaced with an enum indicating what sort of bus transaction should
-be performed. Depending on that value, they can call
-mdiobus_c45_read() or mmd_phy_indirect() and __mdiobus_read().
-
-I don't have time at the moment, but i would like to dig more into
-phydev->is_c45. has_c45 makes sense to indicate it has c45 address
-space. But we need to see if it is every used to indicate to use c45
-transactions. But it is clear we need a new member to indicate if C45
-or C45 over C22 should be performed, and this should be set by how the
-PHY was found in the first place.
-
-    Andrew
+Thanks,
+Alison Chaiken
+Aurora Innovation
