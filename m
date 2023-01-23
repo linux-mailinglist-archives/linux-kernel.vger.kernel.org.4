@@ -2,158 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8930F6779D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5374B6779D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjAWLIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S231476AbjAWLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjAWLId (ORCPT
+        with ESMTP id S230255AbjAWLKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:08:33 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3195F23128
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:08:31 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d2so10406694wrp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:08:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bQhr3/JItD8hiN7B4W7XTXf1SnlTBU1RgIeCnQ3jPKA=;
-        b=cdX/kt69lIxdnoYMqHALGJ85P2JsDX7UIgix1qTebzlEAE4wFYkZRWuS6tr4Wg5RlQ
-         tpUsh7OAKuQYChuXpqsSkpUYZ5kpNjKktcQOU2RGepS8vQm3XZKDY3cfpefVlMvep76L
-         TQpLv2rwgTVzAHVATahafe9KB3kZYEqvPnCO9YAtw+NThIiHVHs1n2qGshd+5b+sPGeB
-         OS0RQ3UgUHb4zimpE/Vt9xX5zC48zjeMmZuxQmOPzcQWFNT9+47Igf+M6cAE78HBBpMa
-         IMfHfnsq3HJJ+PkfHQ6jovCLBKbaiBf0I1rQFXgVwVtjSnO5LDvuzWpGMuF/rbg0JPOl
-         AA/A==
+        Mon, 23 Jan 2023 06:10:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EF3222E9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:09:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674472166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aMnhh2FcKB6BDDZBKf1lz6P+s3DgCNA59AADk0H021Y=;
+        b=aC6L9FHYfS51ak5U5XHGbhObGjjr9PcRjg5BdSImYOCMwJAWZR/HZ5IvqUnonH5Ws34BeE
+        CyzKMb99AF647McYY9U96p5NY3C1Ceooq07AJ7NbPH1Iupd3BQiMSP17ssIRl8o38ZZ0t3
+        psXeqGhfWqTXrJwFnVkK5I7o7p+usYg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-651-1bW8ozM-PbaPzjfwCQ9ROw-1; Mon, 23 Jan 2023 06:09:25 -0500
+X-MC-Unique: 1bW8ozM-PbaPzjfwCQ9ROw-1
+Received: by mail-wm1-f69.google.com with SMTP id q19-20020a1cf313000000b003d96c95e2f9so2724360wmq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 03:09:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQhr3/JItD8hiN7B4W7XTXf1SnlTBU1RgIeCnQ3jPKA=;
-        b=zpLod/NMZKVpKqon1SdDlaeOLWaM7wwN5suUMkgpx2LUM5CRDMauWjedbp9cP8qMm/
-         0/8y3lhQG+JPktIZq05f+Y4Wc9Rsb4jJUQ6c4S5E3AaR8s72yumI8cM9h1YNlurin+GL
-         h2FF8zZNEZ4UCt2Szz/CuHh3H6NQ12Mg0knJa7F9rGHg/p76nvz6CfhKYyBvAdhoBzs7
-         1T/FD+L72NyeKk45aLyGXqoBSJ3/lEBcqEFNJg1F+2zacx6ZMfOgMlOSkj8tWGjS+iEG
-         h29H/OdDXMlqwB5aXg8HNza/0ap5o5DUU4ALfYc0NnIrUpMrSYY8/UPjG/THRhzwIugR
-         SOXg==
-X-Gm-Message-State: AFqh2koyDkLqEQOJkoC2axVBeXpM7eAHIJ2pSwdKmvY/T8H2YcolvDVB
-        UpuRDs5B/RXTyg9JgM9ddvhwEA==
-X-Google-Smtp-Source: AMrXdXt5O7dxKnG4Glq1alTML0xWLrojOeN5LDDkhRQ34p8sStaW4LtOUIFMQQKPT3KO6CtLnx/8tg==
-X-Received: by 2002:a5d:660a:0:b0:2be:5162:c8da with SMTP id n10-20020a5d660a000000b002be5162c8damr12676248wru.16.1674472109680;
-        Mon, 23 Jan 2023 03:08:29 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id bt14-20020a056000080e00b0027cb20605e3sm18488946wrb.105.2023.01.23.03.08.28
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aMnhh2FcKB6BDDZBKf1lz6P+s3DgCNA59AADk0H021Y=;
+        b=G/nDta7YmoPpBA1p8KrWoTNMqKqGFnN8Syge12MfHz303qDgtHg+S1fn8vQrYwfYQP
+         q/fupHPqQtEraABYN180hRKhawzT7UHcudPOrOWbWPo23Ekv2O2N2h+xUSABGD3j06Cu
+         DopxW9gzL2xa1yqk4GqmIbUwFl7wVPoyTSCFwUZNFZ6aaVqYNgk0vxqmxnmg+CG0fP4F
+         CoRTKI/56meIl8ZKrAMwW1vG1gzszVrDFRdvPuxv+YmAhJPQ7sVJI1mC7maNqD9RmCAD
+         RPPrMbXSMoWkxag6AIDfnEGWZDXorqtFWVeFub4aV6BfrE74Lk/EZAjLZNV96Xd6Mz6s
+         lTeA==
+X-Gm-Message-State: AFqh2kqARPesOf3yD0acKyMJ3q1A9N0n1FBKX8Q88njaOwuJ4m4Gx9CX
+        I8DvKBB4lpSXUJgzp3SnjoLgWC1r7arOaT8rh7+G37veaUUJ7gdc3eYELoDU100QssWKydvh/bF
+        abFH35En84cNheBAAWGJj6caa
+X-Received: by 2002:a05:600c:2056:b0:3db:ce8:6662 with SMTP id p22-20020a05600c205600b003db0ce86662mr21413153wmg.31.1674472164142;
+        Mon, 23 Jan 2023 03:09:24 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtt/tjHMcVlvz+Zt+gH+lDqjAnjU0u5PzIEnVLrwsbollUeNyOSRYjMSOkguLXSPFUAvP+xXg==
+X-Received: by 2002:a05:600c:2056:b0:3db:ce8:6662 with SMTP id p22-20020a05600c205600b003db0ce86662mr21413122wmg.31.1674472163770;
+        Mon, 23 Jan 2023 03:09:23 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
+        by smtp.gmail.com with ESMTPSA id q12-20020adff50c000000b002bc83b85180sm7289389wro.114.2023.01.23.03.09.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 03:08:29 -0800 (PST)
-Message-ID: <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
-Date:   Mon, 23 Jan 2023 11:08:28 +0000
+        Mon, 23 Jan 2023 03:09:23 -0800 (PST)
+Message-ID: <84effdd8-1b67-4451-0fc4-a9e39210e5f1@redhat.com>
+Date:   Mon, 23 Jan 2023 12:09:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] mm/khugepaged: fix collapse_pte_mapped_thp() to allow
+ anon_vma
 Content-Language: en-US
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        stephan@gerhold.net
-References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+To:     Zach O'Keefe <zokeefe@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>, Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jann Horn <jannh@google.com>, Song Liu <songliubraving@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <b740c9fb-edba-92ba-59fb-7a5592e5dfc@google.com>
+ <dc9f7bb0-77d4-8b0e-c6b6-ece3f77ed326@redhat.com>
+ <32be06f-f64-6632-4c36-bed7c0695a3b@google.com>
+ <7ff97950-b524-db06-9ad6-e98b80dcfefa@redhat.com>
+ <CAHbLzkqjooxnAwqK7vZoJpP2bSUTCUgv3UtWsZgo444jpGSfoA@mail.gmail.com>
+ <86d5f618-800d-9672-56c4-9309ef222a39@redhat.com>
+ <CAAa6QmSByYrWkp+8K0NK+pocKT0CVj83RaVUB1VqMPvuPHnpNQ@mail.gmail.com>
+ <d50eb6f2-0585-7441-081b-cadaa5901c6e@redhat.com>
+ <CAAa6QmR6KeCCMHGyR9jkwk-KCwb_FTcEfnKeHRJ2U7+3SVz7hg@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAAa6QmR6KeCCMHGyR9jkwk-KCwb_FTcEfnKeHRJ2U7+3SVz7hg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 02:31, Bryan O'Donoghue wrote:
-> V4:
-> - Adds Krzysztof's RB to snoc-mm
-> - Re-orders alphabetically missed nodes in previous iteration - Bjorn
-> - Adds LK address/size cells comment - Bjorn
+On 18.01.23 00:00, Zach O'Keefe wrote:
+> On Mon, Jan 9, 2023 at 12:50 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>>>>>>>>
+>>>>>>>> Side note: set_huge_pmd() wins the award of "ugliest mm function of early
+>>>>>>>> 2023". I was briefly concerned how do_set_pmd() decides whether the PMD can be
+>>>>>>>> writable or not. Turns out it's communicated via vm_fault->flags. Just
+>>>>>>>> horrible.
+>>>
 > 
-> - Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
-> - Uses qcom,ids.h and QCOM_ID_SOCNAME for qcom,msm-id - Bjorn
-> - Revises comment from "Regulator" to "Power supply" - Bjorn
-> - Leaves dummy power-domain reference in cpu defintion as this
+> Hey David,
 > 
-> - Relabels "cpu" to "CPU" to be more consistent with other dtsi - Bryan
-> - Moves msm8939 gcc to its own yaml file to capture 8939 specific form - Bryan
+> Sorry for the late response here.
 > 
->    is a required property and the dt checker complains - Stephan/Bryan
-> - Removes CPR entries from qfprom - Stephan
-> - Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
-> - power-domain in MDSS - dropped its not longer required after
->    commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix power-domain constraint") - Stephan
-> - Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
->    Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
->    GCC_BYTE1_CFG_RCGR : SRC_SEL
->    Root Source Select
->    000 : cxo
->    001 : dsi0_phy_pll_out_byteclk
->    010 : GPLL0_OUT_AUX
->    011 : gnd
->    100 : gnd
->    101 : gnd
->    110 : gnd
->    111 : reserved - Stephan/Bryan
+>>> My first Linux award! :) At least it's not "worst mm security issue of
+>>> early 2023". I'll take it!
+>>
+>> Good that you're not taking my words the wrong way.
+>>
+>> MADV_COLLAPSE is a very useful feature (especially also for THP tests
+>> [1]). I wish I could have looked at some of the patches earlier. But we
+>> cannot wait forever to get something merged, otherwise we'd never get
+>> bigger changes upstream.
+>>
+>> ... so there is plenty of time left in 2023 to cleanup khugepaged.c :P
+>>
+>>
+>> [1] https://lkml.kernel.org/r/20230104144905.460075-1-david@redhat.com
 > 
-> - pm8916_l16 -> pm8916_l6 in dsi definition, typo - Konrad
-> - Moved regulator_set_load location - Konrad
-> 
-> Previous:https://lore.kernel.org/lkml/20230118050948.bibhq26s6sgzullg@builder.lan/T/
-> Bootable:https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-23-msm8939-nocpr
+> Yes, thank you for these tests. I have them open in another tab along
+> with a mental TODO to take a closer look at them, and response
+> half-written. In-place collapse of anonymous memory *is* something
+> that I was interested in exploring later (I have a use-case for it;
+> hugepage-aware malloc() implementations). I'm taking so long on it
+> (sorry) b/c I need to review your point (2) (all PTE's mapping
+> exclusively). Hopefully I can get to it shortly.
 
-Let me translate my 2:30 am email to english, I meant to group this by 
-reviewer
+Cool, please let me know if you have any questions. Being able to 
+in-place collapse a PTE-mapped anon THP again would be nice.
 
-V4:
-- Adds Krzysztof's RB to snoc-mm
+-- 
+Thanks,
 
-- Re-orders alphabetically missed nodes in previous iteration - Bjorn
-- Adds LK address/size cells comment - Bjorn
-- Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
-- Uses qcom,ids.h and QCOM_ID_SOCNAME for qcom,msm-id - Bjorn
-- Revises comment from "Regulator" to "Power supply" - Bjorn
-- Leaves dummy power-domain reference in cpu defintion as this is a
-   required property and the dt checker complains - Stephan/Bryan
-
-- Relabels "cpu" to "CPU" to be more consistent with other dtsi - Bryan
-- Moves msm8939 gcc to its own yaml file to 8939 specifics -Bryan
-
-
-- Removes CPR entries from qfprom - Stephan
-- Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
-- power-domain in MDSS - dropped its not longer required after
-   commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix 
-power-domain constraint") - Stephan
-- Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
-   Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
-   GCC_BYTE1_CFG_RCGR : SRC_SEL
-   Root Source Select
-   000 : cxo
-   001 : dsi0_phy_pll_out_byteclk
-   010 : GPLL0_OUT_AUX
-   011 : gnd
-   100 : gnd
-   101 : gnd
-   110 : gnd
-   111 : reserved - Stephan/Bryan
-
-- pm8916_l16 -> pm8916_l6 in dsi definition, typo - Konrad
-- Moved regulator_set_load location - Konrad
+David / dhildenb
 
