@@ -2,140 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83ADF67775F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9288067775B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjAWJ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        id S231737AbjAWJ0Y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 23 Jan 2023 04:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWJ0g (ORCPT
+        with ESMTP id S229514AbjAWJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:26:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFD915549
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:25:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674465950;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZMTy6Tq8SNpkRFs2YVhPz9j6sx3/BmqHI5EE4rEjczI=;
-        b=WYlase41I5o1Ru2ApBik6cacV4ezdB9dYjl0tmRyfZFXczKrx2rYcQFv90DJNDnldOISSg
-        bQdBis8Z9edK2gQHXotxnsP8p0/iGPZKoDkhngFy+oxzdkgFkRmFZBscUYx3QBxJmFnl1N
-        tlfGMMvFW/WRuZcwIBgI/54Y+YTZGks=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-582-TAZX67S_NZW6WRLTG8GYsg-1; Mon, 23 Jan 2023 04:25:49 -0500
-X-MC-Unique: TAZX67S_NZW6WRLTG8GYsg-1
-Received: by mail-qk1-f197.google.com with SMTP id bm30-20020a05620a199e00b007090f3c5ec0so6758212qkb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:25:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZMTy6Tq8SNpkRFs2YVhPz9j6sx3/BmqHI5EE4rEjczI=;
-        b=5VhiAxrMCRbF9fGHc1mSPQn0xb6edWUILBmCDS3c5rnXbtzbWTnbYsSvX+9/DuYOLJ
-         3qpjMM2UaN1rJnVrusX1Vucu/afzhmKwgUzJYofQ9+khorCznngf5RBtgPmiN1jwLeJ1
-         d891PJ6OCy1V4D7XxPkuaCBeenXEWRs6TLZLvc8gYfnuYdqtU5NA32imACgN/EGnvmER
-         0bJpvS5FJHYo+arIM7JSzw3gFA9kJpzO79SO6Nkuto/U3BGelVAYgoXx7PCy8pnzlnHE
-         jP74UyJ6NiPAH5iyKoZwvGxk99F/HXhMXO4UF569dD4riENRJEO8ct5F8OPbtNbMUlcL
-         wZew==
-X-Gm-Message-State: AFqh2kpMIwGZn2vUSvfK9BCW5Y1zA5sTXCtQuTa9eF3PxHuKw7+r2+eP
-        MQdyYTaEw6733nQnHlvfOT5YQTbjCB+yzt923OMoXMrLLRhgsF6lXowtNq91tdlW+PvXQWRD/oL
-        MVqYiXMAj5K1Baur81Jlt9Gjz
-X-Received: by 2002:ad4:5301:0:b0:535:5ff1:ccb2 with SMTP id y1-20020ad45301000000b005355ff1ccb2mr16731356qvr.4.1674465948714;
-        Mon, 23 Jan 2023 01:25:48 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtM8WdUzTuf3AICpDNA4CQh1qPmCAD0+RWVCzbet2oH+5JRFCvNifkrbn4tS6j0Ar1yAi0SvQ==
-X-Received: by 2002:ad4:5301:0:b0:535:5ff1:ccb2 with SMTP id y1-20020ad45301000000b005355ff1ccb2mr16731343qvr.4.1674465948492;
-        Mon, 23 Jan 2023 01:25:48 -0800 (PST)
-Received: from [192.168.100.30] ([82.142.8.70])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a16aa00b006cfc9846594sm21718471qkj.93.2023.01.23.01.25.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 01:25:47 -0800 (PST)
-Message-ID: <aa07f74e-ad9e-bc94-9ace-257db0aa5b4d@redhat.com>
-Date:   Mon, 23 Jan 2023 10:25:44 +0100
+        Mon, 23 Jan 2023 04:26:23 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D511554E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:26:21 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-170-pWK5ZHwsNsOHzMuVCmnqRQ-1; Mon, 23 Jan 2023 09:26:18 +0000
+X-MC-Unique: pWK5ZHwsNsOHzMuVCmnqRQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Mon, 23 Jan
+ 2023 09:26:18 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Mon, 23 Jan 2023 09:26:18 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Javier Martinez Canillas' <javierm@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: RE: [PATCH] drm/ssd130x: Silence a `dubious: x & !y` warning
+Thread-Topic: [PATCH] drm/ssd130x: Silence a `dubious: x & !y` warning
+Thread-Index: AQHZLcwEpBlghOuKm0WPZwn3mEYKGa6rvUhg
+Date:   Mon, 23 Jan 2023 09:26:17 +0000
+Message-ID: <e5279ea9dfab400c8e6cd9346fb41a1d@AcuMS.aculab.com>
+References: <20230121190930.2804224-1-javierm@redhat.com>
+In-Reply-To: <20230121190930.2804224-1-javierm@redhat.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/4] virtio_net: vdpa: update MAC address when it is
- generated by virtio-net
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eli Cohen <elic@nvidia.com>, Jason Wang <jasowang@redhat.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        Cindy Lu <lulu@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>
-References: <20230122100526.2302556-1-lvivier@redhat.com>
- <20230122052211-mutt-send-email-mst@kernel.org>
-From:   Laurent Vivier <lvivier@redhat.com>
-In-Reply-To: <20230122052211-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/22/23 11:23, Michael S. Tsirkin wrote:
-> On Sun, Jan 22, 2023 at 11:05:22AM +0100, Laurent Vivier wrote:
->> When the MAC address is not provided by the vdpa device virtio_net
->> driver assigns a random one without notifying the device.
->> The consequence, in the case of mlx5_vdpa, is the internal routing
->> tables of the device are not updated and this can block the
->> communication between two namespaces.
->>
->> To fix this problem, use virtnet_send_command(VIRTIO_NET_CTRL_MAC)
->> to set the address from virtnet_probe() when the MAC address is
->> randomly assigned from virtio_net.
->>
->> While I was testing this change I found 3 other bugs in vdpa_sim_net:
->>
->> - vdpa_sim_net sets the VIRTIO_NET_F_MAC even if no MAC address is
->>    provided. So virtio_net doesn't generate a random MAC address and
->>    the MAC address appears to be 00:00:00:00:00:00
->>
->> - vdpa_sim_net never processes the command and virtnet_send_command()
->>    hangs in an infinite loop. To avoid a kernel crash add a timeout
->>    in the loop.
->>
->> - To allow vdpa_sim_net to process the command, replace the cpu_relax()
->>    in the loop by a schedule(). vdpa_sim_net uses a workqueue to process
->>    the queue, and if we don't allow the kernel to schedule, the queue
->>    is not processed and the loop is infinite.
+From: Javier Martinez Canillas
+> Sent: 21 January 2023 19:10
 > 
-> I'd split these things out as opposed to a series unless there's
-> a dependency I missed.
-
-We needed to fix virtio_net before fixing vdpa_sim_net otherwise the 
-virtnet_send_command() hangs when we define the vdpa device with "vdpa dev" but without a 
-MAC address.
-
-> All this reminds me of
-> https://lore.kernel.org/r/20221226074908.8154-5-jasowang%40redhat.com
+> The sparse tool complains with the following warning:
 > 
-> how is this patch different/better?
-> Pls also CC people involved in that original discussion.
+> $ make M=drivers/gpu/drm/solomon/ C=2
+>   CC [M]  drivers/gpu/drm/solomon/ssd130x.o
+>   CHECK   drivers/gpu/drm/solomon/ssd130x.c
+> drivers/gpu/drm/solomon/ssd130x.c:363:21: warning: dubious: x & !y
+> 
+> This seems to be a false positive in my opinion but still we can silence
+> the tool while making the code easier to read. Let's also add a comment,
+> to explain why the "com_seq" logical not is used rather than its value.
+> 
+> Reported-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
+> 
+>  drivers/gpu/drm/solomon/ssd130x.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+> index c3bf3a18302e..b16330a8b624 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+> @@ -81,7 +81,7 @@
+>  #define SSD130X_SET_PRECHARGE_PERIOD2_MASK	GENMASK(7, 4)
+>  #define SSD130X_SET_PRECHARGE_PERIOD2_SET(val)	FIELD_PREP(SSD130X_SET_PRECHARGE_PERIOD2_MASK, (val))
+>  #define SSD130X_SET_COM_PINS_CONFIG1_MASK	GENMASK(4, 4)
+> -#define SSD130X_SET_COM_PINS_CONFIG1_SET(val)	FIELD_PREP(SSD130X_SET_COM_PINS_CONFIG1_MASK, !(val))
+> +#define SSD130X_SET_COM_PINS_CONFIG1_SET(val)	FIELD_PREP(SSD130X_SET_COM_PINS_CONFIG1_MASK, (val))
 
-I was not aware of the Jason's series.
+How about just changing !(val) to (val) ? 0 : 1
+It should shut the compiler up and is probably more descriptive.
 
-It seems to address better the problem, except it triggers the ASSERT_RTNL() in 
-virtnet_send_command() when it is called from virtnet_probe().
+	David
 
-I will remove patches 2 and 4 from my series.
-PATCH 3 can be sent on independently too.
-
-Thanks,
-Laurent
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
