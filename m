@@ -2,571 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3A367749A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E8B67749F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjAWEV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 23:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S229989AbjAWEXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 23:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjAWEVy (ORCPT
+        with ESMTP id S230150AbjAWEXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 23:21:54 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BBC10258
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 20:21:51 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id e8so8887021qts.1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 20:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9yLPe5A/OH0qQh9U13ShH+6nwYY5lBKLhRA1/obM8Ck=;
-        b=W0pjs5K6lld0iPpeezGvN9rtsyMoc5WQvLdermcZO5BI/uZHjv+nIVyXfs7qsu4zr2
-         4RP5/POAhTSaCIW1u01hxIXtczN0iyOz/Z6l21iyepWDfRljLKt/+LD4EnBMYbuN7B07
-         gRy/LJR7zCT+NOvsJ94Mx3zIxXfgakiWGx3mc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yLPe5A/OH0qQh9U13ShH+6nwYY5lBKLhRA1/obM8Ck=;
-        b=JXp2m22piquleYwCGYkEVSmk/XfD1pQ73XyfsQNmT+vLcH2P8Gon9CRGAQA3eq4N3V
-         T5Bu/rF6Em20Jmo5WJHOAKrGe5tTOyJEtebaZ10xmg5+RK5BwQ7EZK1Gq6EGdU8CUSlV
-         9e4d4Y3Bkzp95PV2Ft+nDnMMenvqzhlNoZ7VXVd+2zSD4rNqzCFJvPD0t5Zl5Q0wCcaN
-         s+HW3qDio+O3W9Ov+uHU9Srq9O8q+TerVWnbuNmOUj6sRxHTIav98exohgY1WNoW9dI2
-         Tb+INPpzMQrun4cfkN/PBI7jyS2fDbN/wxv7uYQ9u9Tj1Qm02FfxnbCLlwepHM0on916
-         X49A==
-X-Gm-Message-State: AFqh2krhYz2Im69s893+idNd8ttS7tcz+bGKPLfKGv0HqgqxK0MEsc8L
-        THaDDgKANR+XS28xHD4MYyBorQ==
-X-Google-Smtp-Source: AMrXdXsb2VXs2CHuZPscdgPOWvtbSJEjiAsseRVzRIOvGwfbHf0/TQ5j1MkU8DevhbQ51xY/Ze77fw==
-X-Received: by 2002:ac8:478c:0:b0:3b6:3c0a:82e8 with SMTP id k12-20020ac8478c000000b003b63c0a82e8mr32140497qtq.1.1674447710810;
-        Sun, 22 Jan 2023 20:21:50 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id hj4-20020a05622a620400b003995f6513b9sm23953257qtb.95.2023.01.22.20.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 20:21:50 -0800 (PST)
-Date:   Mon, 23 Jan 2023 04:21:49 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc1 review
-Message-ID: <Y84LXRaSFoNefGSB@google.com>
-References: <20230122150232.736358800@linuxfoundation.org>
+        Sun, 22 Jan 2023 23:23:17 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Jan 2023 20:23:14 PST
+Received: from esa1.fujitsucc.c3s2.iphmx.com (esa1.fujitsucc.c3s2.iphmx.com [68.232.152.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A628E1042A;
+        Sun, 22 Jan 2023 20:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1674447796; x=1705983796;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ZHnizO3pRtmwfNqUZIqIL9owQjiQUdQDiY8jaOQtcf4=;
+  b=YFQ878RC0o8THtOxi0D79IXpXmiffiXh0B/FxXMJyQLj0CitUdjpmke4
+   bAfkBAAvRcWeyf8/53DqGYbim48ZeWyTlZ5cD82fZyJsdH/ExbLkaIcZb
+   JajD6Rf61Ky38nQBu2fTNqkXTcoy+B0I/N3TyNHh8tolti6Hd+mmeZf/K
+   BUKXFqqc62V7dIBiIVQuBm7X3mDvqnHtC92ApoHW5KomgZVJMCgpsRM90
+   ovEOWOg1MBT7/w06zX/6xSzy/OUpqMieFub14woBtCVcR12ihgrSbi8do
+   2PFsi3VUI+9DdXC2XbMmWE+18j0WnHREAf1GJjcbfcjnXklLW3rWGtsKB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="83326038"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669042800"; 
+   d="scan'208";a="83326038"
+Received: from mail-os0jpn01lp2107.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.107])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 13:22:08 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W1fbs8tbJ13U9xbQSpsHIJIR9bgymDCvNd5fSvCZA1PvO7N0g9cpFCcw3AQZcC6/urCCLiorsSZqU0O8P0Y8uE6OoRVJ0AhBSe8gdN1moebBtnULJw2bTB/frqdmD3zoH20RNmhJAcHDAF2yf/PtQl39AiLqEyBcebgP5RpOup2MiXyBmnhIl4l6fVHiITT9GxjMYTWSKhoqbk0VckkWw2yTeU02rFvzkOwzH0fqFtP+Wt/eIQDK9xuFzaHYBFXg0t1BF/UmcD6KpgBJ1RVxhLegYCcFMPaVbF4i6rAiHe9OSr/a5H34WLPKSUdjptj1IlB55+dY1eQcI/hXT1YgqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZHnizO3pRtmwfNqUZIqIL9owQjiQUdQDiY8jaOQtcf4=;
+ b=jUihFcw0VZJEx853rLDh/qysuOJtlhsKhXPTi4WqDW3QyUBiedhWe9E4nbV69G7pS0OVipfZps79HmAaCV1k3rYXbXOaao7Mm36ynSR1gMwDoPQmP5YE6VkDRUJfePALjFEJbm2FWiT6AyRlG+7ezA2RkSZ1hNd0wE+MVG7INDAOmY2GnBqEBcTsLsZAJDKKCNOAd1XDGkkG41EGL2ms/EBorUV4AYxriiPfYWzoyrLPMCCyJHeHb3Rn9b7k8yooBMV5U3pc/JWLysWW0qyhGfCKiftEwNjR0bS4YRMxn6kgMiAKpAZIJ11ovATaEXevfRXXms5njlCHiXc8m7suhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
+ by TYCPR01MB10841.jpnprd01.prod.outlook.com (2603:1096:400:26f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
+ 2023 04:22:03 +0000
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::2d81:9d85:cd8d:e41a]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::2d81:9d85:cd8d:e41a%8]) with mapi id 15.20.6002.031; Mon, 23 Jan 2023
+ 04:22:03 +0000
+From:   "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
+To:     'Reinette Chatre' <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH v5 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+Thread-Topic: [PATCH v5 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+Thread-Index: AQHZJZKjp+w/pOVQJUiMpclC502Bsa6k9uwAgAZ9LLA=
+Date:   Mon, 23 Jan 2023 04:22:03 +0000
+Message-ID: <TYAPR01MB6330B2248A693BD3170CC76B8BC89@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+References: <20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com>
+ <20230111075802.3556803-5-tan.shaopeng@jp.fujitsu.com>
+ <3201c461-2f46-f354-6019-94ce8978fb46@intel.com>
+In-Reply-To: <3201c461-2f46-f354-6019-94ce8978fb46@intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
+ =?utf-8?B?NTBfRW5hYmxlZD10cnVlOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJh?=
+ =?utf-8?B?Yy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRlPTIwMjMtMDEtMjNUMDQ6MDM6?=
+ =?utf-8?B?MTdaOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0?=
+ =?utf-8?B?ZmVjZTA1MF9NZXRob2Q9U3RhbmRhcmQ7IE1TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?utf-8?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX05hbWU9RlVKSVRTVS1SRVNU?=
+ =?utf-8?B?UklDVEVE4oCLOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
+ =?utf-8?B?LTNiMGY0ZmVjZTA1MF9TaXRlSWQ9YTE5ZjEyMWQtODFlMS00ODU4LWE5ZDgt?=
+ =?utf-8?B?NzM2ZTI2N2ZkNGM3OyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1h?=
+ =?utf-8?B?YjRkLTNiMGY0ZmVjZTA1MF9BY3Rpb25JZD04MTNlNTRhNi01ZDUzLTRjMDQt?=
+ =?utf-8?B?YWQyZC01ZWJhODNhYjc0MDI7IE1TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00?=
+ =?utf-8?B?MmFjLWFiNGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA=?=
+x-shieldmailcheckerpolicyversion: FJ-ISEC-20181130-VDI-enc
+x-shieldmailcheckermailid: 9c070f29aad446cea4b5e1f9589a5430
+x-securitypolicycheck: OK by SHieldMailChecker v2.6.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYAPR01MB6330:EE_|TYCPR01MB10841:EE_
+x-ms-office365-filtering-correlation-id: 9c234271-dd25-490a-2327-08dafcf96172
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: I3uiQ86ScJnUWKNKj8UHP7P9rahJ4SfwGN1Owh2jcgR6kQC/IfMxkEy4hhTSNltLeH241iAMsflsFjDmH56mz1QaxCAhWJkpHgBiqvYLb13LpKuq0Tcr9/lv02mxkMvQOPTGsclA1tFyI8KPcD7GYXl+3MtB1jZqnUgLCn3ltkc3yHVGs4YMw6Ay0bdbkn4S5umL0MQa7c6k3o00HeH4ZZjRFNoe+DUfHrZFE7oKfO7GjAvhKCUNDGrYcbWN0ZnoIqwOXKTqSdbkWGgBX6mNBeuyYZxmdSWv4vAZus6/eb12IWb32Lf8UyYz7/Bap+Y1p2nW5p16/MERHfFJZf9L73qojDDxuDwG4TYqL53RfWU2XCwh4OzXCHLpZR3Oeu4N/kWBeKVoP/oIn31UUpCts5FTVKCA7yD+/E6rPMIAZsDGWOhtu0r7mIBV0nX3eMPWTbqmXaPDYneC9HrThUokPqiJ/U6xXK9vdDzBl5ZglIzw2UMdosHhNZsS69QWXwRYQKSYCIBduupIE/WvqEqH7NX3yVKDV32/XCyhSCBINRHS007Eu8HzEcMrcZh7f4jGeKwWYKhh3MOzZ9exhSGD+qVZYpLwNAh0gd19dp6K2RvIY8fFPRTYtycrzrFTsF6Pt9/GOtcOqzyOblcMHStuQA+sesew/kEHVRhfxPpUWpXCq3zQL2yRtms4sTFzR7gWAAKOhjgvdcMcTWoE1Ce2bq8JKI5fda6ANX5Djxu4YiM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(346002)(39860400002)(396003)(1590799012)(451199015)(122000001)(38100700002)(82960400001)(1580799009)(33656002)(85182001)(55016003)(86362001)(110136005)(478600001)(316002)(38070700005)(54906003)(64756008)(66446008)(8676002)(76116006)(66946007)(66556008)(4326008)(66476007)(7696005)(71200400001)(2906002)(6506007)(53546011)(83380400001)(26005)(5660300002)(9686003)(41300700001)(186003)(52536014)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MVBWdmtmUDJ4MHpCS1JhaFd1Y1FTL1JMaTNYSGJtSjNuVHVrUXlDQmZRdWVs?=
+ =?utf-8?B?MUFZSkhKZklHalVyRklJYk9iWE1NcnZoZE1oVUtsVm9nV1o4aitLMzRhR3R4?=
+ =?utf-8?B?UWJoVm1lV1ZWTTNmWlRKNHFKN29YRzN4a2pvd2hRM1hoS1g5ZzRvbmpWUnVQ?=
+ =?utf-8?B?eGd5dWRycGlqcVNnV1hPSmxEVGRvaDVWemg5a2ZQWXY4UldKL1FaWXlYUVV5?=
+ =?utf-8?B?M2xWWjdCU0pNcUJ1Ulg1alQ1L2M0WVlKRzRTRUtUL0xJaGI4dUUxcDI5UVFn?=
+ =?utf-8?B?VVpuMDRRK2p1MGlLUFhSRENiMUh4T0xZL054ZjdPQllYRnFpUzV3bzlDMi91?=
+ =?utf-8?B?WjdWOStGQ2l6YjRheXZQam80QTV3VEJIdzdzTk9aRkRHbkhmTW15NVA5NUx5?=
+ =?utf-8?B?MThWSFd0MEwxZ1c0U2FXSVpZQTlwQmkwTmFJR0hoMnRSMDdLK3dtdDdJM1Ex?=
+ =?utf-8?B?aE9OWnBhcFhHTTBhYnFTaEFTbDEwRVY0YlUxZVFOcTRqMU5SUEwzcEFyNEpB?=
+ =?utf-8?B?RjVDSEMvNzZJNVRGSW9HZFllVWQyOXZ2bjFZcjcxaXZ5R0MvWHNwci9RT1RH?=
+ =?utf-8?B?QnltaWliVzV0eXNBcHNXaytlWWlrQXhKbWorK2Q3L3NkWkJ3SmxtVDBKeFhC?=
+ =?utf-8?B?dGE1K0ZnOUxkUC94SThqRjg1d1l0NCsxaG81VWhKTlkxQVVCM1F3TW5xUFVR?=
+ =?utf-8?B?c0FkTjZMRUdJOFlPYVlKaU9kNjZ1SUVvOHlkRTB5c0xtQVpMR2ZqU1pIWi93?=
+ =?utf-8?B?SUc3SnlYU1RHNmlCdVdpME1nWW9WcTJkY0pWek05c28xL2hIZEZ0RXdSMGJs?=
+ =?utf-8?B?eWlRdTZLQVgzamxvMVlpWnNpVGxFTVlJTmdQZE1rRnltcmlRR2xDU0JuaVJK?=
+ =?utf-8?B?aXVrWVNHWEVWUXlVZTZwanhVSUVySXp4V0xBTmFsUzQrbkttcDQ1UjZDajF1?=
+ =?utf-8?B?Sm8xanRRak8reElwUXBBSGNGS1lrclpRaUh1MkQ3THdQZm5RdHBCK2NRNjlD?=
+ =?utf-8?B?bE0xY0cvS3RGaXNPL0ZIdWdsN2RMZ2FySVphZER1bEhMczk2ckpscEU3bkJs?=
+ =?utf-8?B?ZWo3QUo5ZzNVck5WQlgrcThjaU9ITVBhd00yaWxzcHp5Q2k4ZjJ6M3NZeWpt?=
+ =?utf-8?B?VUlyenAxZGRKaHpqMk1JR2dQQ3ByVUp4M3ZjNitUR0NLVVM4UDJ1TzNtQTV4?=
+ =?utf-8?B?VFl0cEVkLytTVHl0VkRjRExMOHh3NDIzWkl5c3hBZmYvNW1YNG1hQldoMkNS?=
+ =?utf-8?B?MzcxRTc3c3VKc21UTlBMQlUwZ2wvTWdLRmFKR01lNk5LM0lXck5FYVJtQ1hX?=
+ =?utf-8?B?UnFWNXdrb1dEeTBHZllua29YdjMzeW9XWjhNK0piOUtJUTRES29oNXRxNFlS?=
+ =?utf-8?B?L0NvVkx2N2RURityNTV5aEM1ZnlnQWVpdHFENWNVdkVtdjlzajJxWlhIVHpJ?=
+ =?utf-8?B?aGNJa1R3WXZoZmJtcG9qdHEvbjR1dy93N1BpdWp4ME1VdGtNNUYzTnNZdSth?=
+ =?utf-8?B?Y3d3YU5PbjdndVhtSjl5QjVZekhUcmh5bitNaHpDN1A3N1czUm9CR2E3SjYr?=
+ =?utf-8?B?M21QR0QyaE81UVdoWWcxc1FmUTg1VitoTWF5SWVzY0xrMEdhQ3dleVk2OVI3?=
+ =?utf-8?B?TkFoYkhXd0NSOTlNLzdGUzZNM2FXdEJRWmFiUGpSRzNwT09GYVY3OUFQMzNS?=
+ =?utf-8?B?RjhDNm9GM05DemRic2t3RWNUSGtYRlovSDBZQ3BDSENpUmh4T29KT2JuZ0Rn?=
+ =?utf-8?B?M1llOGNKUWZmZXcyRVBtMkRYdmlsbnN2MFgwTlBNTnpKUXFxK29pTHF5Rncx?=
+ =?utf-8?B?UTNSb20yNC9WWnlhbVJqUFJBNW42UzdsY29tTkZMdzlhZXRqMk9nWk5TYVJn?=
+ =?utf-8?B?bmEvOG5sVjJTdktSNzlSMUtWTkk2cWxIak44N0N5UVVoVFpqNE9RY1lobE1I?=
+ =?utf-8?B?RzdyY0pkdWs3dHZnYmovS0ZCMnNXakNyLy9OUU4zSXhSZjZlb09DU0ZRVCtG?=
+ =?utf-8?B?VjlrY3NPS3BGcXlQYXZpUW84RFJsT29KZkl3azhUWmlCSjFEMXVNVGlUemN2?=
+ =?utf-8?B?VFhzSURXamFoYlR2WEpDdTNaVVBRbEJoTXZvNzFWd1JaVGdZNnBCTmtZVnhx?=
+ =?utf-8?B?eVlvR3gwb1N4ZXIvK1BpaEtKZDl3VzRvSndVTXNqSnNIa2REbkYxTmttOVA2?=
+ =?utf-8?B?S3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230122150232.736358800@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: Qsjv/PlTd3K94CofZ3SNkF8v64/uwan0eImphAF1aVRf7hga3jr+TWXRdsoc9XrtvAe2ai0gz88EcYikTsVIP4aDux2zZEsXWoSS1CHvbUGKTKtBP3y7TXC6GDwv5OLsojfFTpi07ue4iWFMFt3x24/F4x7RxGD3F6Q8m+D3b9h8DzcKSqAaZF64da8d5hTholxop6TFpygc3U2+ojFNU/3dfM8AY4Pm4u2SlJjuwfQr0M2FPNPw4QoNKQXwQ1+pzYh6hs9KtO2UekXZri8g5FfuM5JHW3rCHW9aibpadJQYYa/Py4PZW+2giSGIxvOwfRKTOuln7Z3aWIUepcFAe30WzQxoeOJveIHlUHt49S92kn/QGsQq+rmXP0BFLvfrZNrmz+912pED0lYXHNUSf3V+W2l54yRvBXiG59S2r8e/ZooZ/fUF/tXsWug2ssEs7f0gPKfudJTYX0ltJvJQo1C4QG9kvxHNeXRWWMZIyxrQNuEjrY6eBwVo9Nw50BNobx9KWgQn05QTRx6nRAC1u8JfsAe6wNF+56xYS3R+IecCc5r2dI2YC0Fa7HDj3b/4KmPmF0xTwu+XR3RCMQ2w/X0DaKuzjFCOalWFXmBrer1vz45Auq0ootWm+rVIvygXYKoQnBlw4GP+ATktpS7n1fKvqY0MxIBsk15/zz1ikgNP/Bjzv6iSZx6N1WFucs2tsfmiVlrhSi4h3BlghcEY9/m4oqBh6VNOnRsJgsFTJVQjQa1v0pfLOvySrsGa4r42AEr/aJzVfp4ctQNaCzISnVIT0Kpt+DivzJm5zc6F5q9kFEJlPy78wX6hct5BxkrJKldXymZkJfBm6nInjvhalQ==
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c234271-dd25-490a-2327-08dafcf96172
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2023 04:22:03.7647
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7C3h0FMfwchpTBF3M5WhyGraB34T5F22atCLFfgq9hdHESrSBTo5MFtbLoQT6vTMoCDnJoL7XeZmsBJKG1IF04lwUPCUBXLVRbmEkG4PrHM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10841
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 04:03:10PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.90 release.
-> There are 117 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.90-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-
-Passes all 19 rcutorture scenarios, each tested for 1 hour (in parallel).
-
-Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
-thanks,
-
- - Joel
-
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> -------------
-> Pseudo-Shortlog of commits:
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     Linux 5.15.90-rc1
-> 
-> Stephan Gerhold <stephan@gerhold.net>
->     soc: qcom: apr: Make qcom,protection-domain optional again
-> 
-> Eric Dumazet <edumazet@google.com>
->     Revert "wifi: mac80211: fix memory leak in ieee80211_if_add()"
-> 
-> Damien Le Moal <damien.lemoal@opensource.wdc.com>
->     block: mq-deadline: Rename deadline_is_seq_writes()
-> 
-> Yang Yingliang <yangyingliang@huawei.com>
->     net/mlx5: fix missing mutex_unlock in mlx5_fw_fatal_reporter_err_work()
-> 
-> Paolo Abeni <pabeni@redhat.com>
->     net/ulp: use consistent error code when blocking ULP
-> 
-> Stefan Metzmacher <metze@samba.org>
->     io_uring/net: fix fast_iov assignment in io_setup_async_msg()
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: io_kiocb_update_pos() should not touch file for non -1 offset
-> 
-> Michael Ellerman <mpe@ellerman.id.au>
->     powerpc/vmlinux.lds: Don't discard .comment
-> 
-> Michael Ellerman <mpe@ellerman.id.au>
->     powerpc/vmlinux.lds: Don't discard .rela* for relocatable builds
-> 
-> Michael Ellerman <mpe@ellerman.id.au>
->     powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT
-> 
-> Masahiro Yamada <masahiroy@kernel.org>
->     s390: define RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36
-> 
-> Masahiro Yamada <masahiroy@kernel.org>
->     arch: fix broken BuildID for arm64 and riscv
-> 
-> Steven Rostedt (Google) <rostedt@goodmis.org>
->     tracing: Use alignof__(struct {type b;}) instead of offsetof()
-> 
-> YingChi Long <me@inclyc.cn>
->     x86/fpu: Use _Alignof to avoid undefined behavior in TYPE_ALIGN
-> 
-> Alex Deucher <alexander.deucher@amd.com>
->     Revert "drm/amdgpu: make display pinning more flexible (v2)"
-> 
-> Ard Biesheuvel <ardb@kernel.org>
->     efi: rt-wrapper: Add missing include
-> 
-> Ard Biesheuvel <ardb@kernel.org>
->     arm64: efi: Execute runtime services from a dedicated stack
-> 
-> Alon Zahavi <zahavi.alon@gmail.com>
->     fs/ntfs3: Fix attr_punch_hole() null pointer derenference
-> 
-> Alex Deucher <alexander.deucher@amd.com>
->     drm/amdgpu: drop experimental flag on aldebaran
-> 
-> Joshua Ashton <joshua@froggi.es>
->     drm/amd/display: Fix COLOR_SPACE_YCBCR2020_TYPE matrix
-> 
-> Joshua Ashton <joshua@froggi.es>
->     drm/amd/display: Calculate output_color_space after pixel encoding adjustment
-> 
-> hongao <hongao@uniontech.com>
->     drm/amd/display: Fix set scaling doesn's work
-> 
-> Drew Davenport <ddavenport@chromium.org>
->     drm/i915/display: Check source height is > 0
-> 
-> Sasa Dragic <sasa.dragic@gmail.com>
->     drm/i915: re-disable RC6p on Sandy Bridge
-> 
-> Alexander Usyskin <alexander.usyskin@intel.com>
->     mei: me: add meteor lake point M DID
-> 
-> Khazhismel Kumykov <khazhy@chromium.org>
->     gsmi: fix null-deref in gsmi_get_variable
-> 
-> Tobias Schramm <t.schramm@manjaro.org>
->     serial: atmel: fix incorrect baudrate setup
-> 
-> Lino Sanfilippo <l.sanfilippo@kunbus.com>
->     serial: amba-pl011: fix high priority character transmission in rs486 mode
-> 
-> Reinette Chatre <reinette.chatre@intel.com>
->     dmaengine: idxd: Let probe fail when workqueue cannot be enabled
-> 
-> Mohan Kumar <mkumard@nvidia.com>
->     dmaengine: tegra210-adma: fix global intr clear
-> 
-> Peter Harliman Liem <pliem@maxlinear.com>
->     dmaengine: lgm: Move DT parsing after initialization
-> 
-> Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->     serial: pch_uart: Pass correct sg to dma_unmap_sg()
-> 
-> Heiner Kallweit <hkallweit1@gmail.com>
->     dt-bindings: phy: g12a-usb3-pcie-phy: fix compatible string documentation
-> 
-> Heiner Kallweit <hkallweit1@gmail.com>
->     dt-bindings: phy: g12a-usb2-phy: fix compatible string documentation
-> 
-> Juhyung Park <qkrwngud825@gmail.com>
->     usb-storage: apply IGNORE_UAS only for HIKSEMI MD202 on RTL9210
-> 
-> Maciej Żenczykowski <maze@google.com>
->     usb: gadget: f_ncm: fix potential NULL ptr deref in ncm_bitrate()
-> 
-> Daniel Scally <dan.scally@ideasonboard.com>
->     usb: gadget: g_webcam: Send color matching descriptor per frame
-> 
-> Prashant Malani <pmalani@chromium.org>
->     usb: typec: altmodes/displayport: Fix pin assignment calculation
-> 
-> Prashant Malani <pmalani@chromium.org>
->     usb: typec: altmodes/displayport: Add pin assignment helper
-> 
-> ChiYuan Huang <cy_huang@richtek.com>
->     usb: typec: tcpm: Fix altmode re-registration causes sysfs create fail
-> 
-> Alexander Stein <alexander.stein@ew.tq-group.com>
->     usb: host: ehci-fsl: Fix module alias
-> 
-> Pawel Laszczak <pawell@cadence.com>
->     usb: cdns3: remove fetched trb from cache before dequeuing
-> 
-> Michael Adler <michael.adler@siemens.com>
->     USB: serial: cp210x: add SCALANCE LPE-9000 device id
-> 
-> Alan Stern <stern@rowland.harvard.edu>
->     USB: gadgetfs: Fix race between mounting and unmounting
-> 
-> Gaosheng Cui <cuigaosheng1@huawei.com>
->     tty: fix possible null-ptr-defer in spk_ttyio_release
-> 
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->     tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buffer
-> 
-> Sergio Paracuellos <sergio.paracuellos@gmail.com>
->     staging: mt7621-dts: change some node hex addresses to lower case
-> 
-> Paul Moore <paul@paul-moore.com>
->     bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and PERF_BPF_EVENT_PROG_UNLOAD
-> 
-> Ben Dooks <ben.dooks@codethink.co.uk>
->     riscv: dts: sifive: fu740: fix size of pcie 32bit memory
-> 
-> Mika Westerberg <mika.westerberg@linux.intel.com>
->     thunderbolt: Use correct function to calculate maximum USB3 link rate
-> 
-> Enzo Matsumiya <ematsumiya@suse.de>
->     cifs: do not include page data when checking signature
-> 
-> Filipe Manana <fdmanana@suse.com>
->     btrfs: fix race between quota rescan and disable leading to NULL pointer deref
-> 
-> Filipe Manana <fdmanana@suse.com>
->     btrfs: do not abort transaction on failure to write log tree when syncing log
-> 
-> Haibo Chen <haibo.chen@nxp.com>
->     mmc: sdhci-esdhc-imx: correct the tuning start tap and step setting
-> 
-> Samuel Holland <samuel@sholland.org>
->     mmc: sunxi-mmc: Fix clock refcount imbalance during unbind
-> 
-> Ard Biesheuvel <ardb@kernel.org>
->     ACPI: PRM: Check whether EFI runtime is available
-> 
-> Ian Abbott <abbotti@mev.co.uk>
->     comedi: adv_pci1760: Fix PWM instruction handling
-> 
-> Flavio Suligoi <f.suligoi@asem.it>
->     usb: core: hub: disable autosuspend for TI TUSB8041
-> 
-> Ola Jeppsson <ola@snap.com>
->     misc: fastrpc: Fix use-after-free race condition for maps
-> 
-> Abel Vesa <abel.vesa@linaro.org>
->     misc: fastrpc: Don't remove map on creater_process and device_release
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     USB: misc: iowarrior: fix up header size for USB_DEVICE_ID_CODEMERCS_IOW100
-> 
-> Arnd Bergmann <arnd@arndb.de>
->     staging: vchiq_arm: fix enum vchiq_status return types
-> 
-> Duke Xin(辛安文) <duke_xinanwen@163.com>
->     USB: serial: option: add Quectel EM05CN modem
-> 
-> Duke Xin(辛安文) <duke_xinanwen@163.com>
->     USB: serial: option: add Quectel EM05CN (SG) modem
-> 
-> Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
->     USB: serial: option: add Quectel EC200U modem
-> 
-> Duke Xin(辛安文) <duke_xinanwen@163.com>
->     USB: serial: option: add Quectel EM05-G (RS) modem
-> 
-> Duke Xin(辛安文) <duke_xinanwen@163.com>
->     USB: serial: option: add Quectel EM05-G (CS) modem
-> 
-> Duke Xin(辛安文) <duke_xinanwen@163.com>
->     USB: serial: option: add Quectel EM05-G (GR) modem
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     prlimit: do_prlimit needs to have a speculation check
-> 
-> Mathias Nyman <mathias.nyman@linux.intel.com>
->     xhci: Detect lpm incapable xHC USB3 roothub ports from ACPI tables
-> 
-> Mathias Nyman <mathias.nyman@linux.intel.com>
->     usb: acpi: add helper to check port lpm capability using acpi _DSM
-> 
-> Mathias Nyman <mathias.nyman@linux.intel.com>
->     xhci: Add a flag to disable USB3 lpm on a xhci root port level.
-> 
-> Mathias Nyman <mathias.nyman@linux.intel.com>
->     xhci: Add update_hub_device override for PCI xHCI hosts
-> 
-> Mathias Nyman <mathias.nyman@linux.intel.com>
->     xhci: Fix null pointer dereference when host dies
-> 
-> Jimmy Hu <hhhuuu@google.com>
->     usb: xhci: Check endpoint is valid before dereferencing it
-> 
-> Ricardo Ribalda <ribalda@chromium.org>
->     xhci-pci: set the dma max_seg_size
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring/rw: defer fsnotify calls to task context
-> 
-> Dylan Yudaken <dylany@fb.com>
->     io_uring: do not recalculate ppos unnecessarily
-> 
-> Dylan Yudaken <dylany@fb.com>
->     io_uring: update kiocb->ki_pos at execution time
-> 
-> Dylan Yudaken <dylany@fb.com>
->     io_uring: remove duplicated calls to io_kiocb_ppos
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: ensure that cached task references are always put on exit
-> 
-> Dylan Yudaken <dylany@meta.com>
->     io_uring: fix async accept on O_NONBLOCK sockets
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: allow re-poll if we made progress
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: support MSG_WAITALL for IORING_OP_SEND(MSG)
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: add flag for disabling provided buffer recycling
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: ensure recv and recvmsg handle MSG_WAITALL correctly
-> 
-> Pavel Begunkov <asml.silence@gmail.com>
->     io_uring: improve send/recv error handling
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: pass in EPOLL_URING_WAKE for eventfd signaling and wakeups
-> 
-> Jens Axboe <axboe@kernel.dk>
->     eventfd: provide a eventfd_signal_mask() helper
-> 
-> Jens Axboe <axboe@kernel.dk>
->     eventpoll: add EPOLL_URING_WAKE poll wakeup flag
-> 
-> Jens Axboe <axboe@kernel.dk>
->     io_uring: don't gate task_work run on TIF_NOTIFY_SIGNAL
-> 
-> James Houghton <jthoughton@google.com>
->     hugetlb: unshare some PMDs when splitting VMAs
-> 
-> Sasha Levin <sashal@kernel.org>
->     drm/amd: Delay removal of the firmware framebuffer
-> 
-> Guchun Chen <guchun.chen@amd.com>
->     drm/amdgpu: disable runtime pm on several sienna cichlid cards(v2)
-> 
-> Jeremy Szu <jeremy.szu@canonical.com>
->     ALSA: hda/realtek: fix mute/micmute LEDs don't work for a HP platform
-> 
-> Andy Chi <andy.chi@canonical.com>
->     ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
-> 
-> Ding Hui <dinghui@sangfor.com.cn>
->     efi: fix userspace infinite retry read efivars after EFI runtime services page fault
-> 
-> Ryusuke Konishi <konishi.ryusuke@gmail.com>
->     nilfs2: fix general protection fault in nilfs_btree_insert()
-> 
-> Damien Le Moal <damien.lemoal@opensource.wdc.com>
->     zonefs: Detect append writes at invalid locations
-> 
-> Shawn.Shao <shawn.shao@jaguarmicro.com>
->     Add exception protection processing for vd in axi_chan_handle_err function
-> 
-> Alexander Wetzel <alexander@wetzel-home.de>
->     wifi: mac80211: sdata can be NULL during AMPDU start
-> 
-> Arend van Spriel <arend.vanspriel@broadcom.com>
->     wifi: brcmfmac: fix regression for Broadcom PCIe wifi devices
-> 
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->     Bluetooth: hci_qca: Fix driver shutdown on closed serdev
-> 
-> Arnd Bergmann <arnd@arndb.de>
->     fbdev: omapfb: avoid stack overflow warning
-> 
-> Chris Wilson <chris@chris-wilson.co.uk>
->     perf/x86/rapl: Treat Tigerlake like Icelake
-> 
-> Jaegeuk Kim <jaegeuk@kernel.org>
->     f2fs: let's avoid panic if extent_tree is not created
-> 
-> Mikulas Patocka <mpatocka@redhat.com>
->     x86/asm: Fix an assembler warning with current binutils
-> 
-> Qu Wenruo <wqu@suse.com>
->     btrfs: always report error in run_one_delayed_ref()
-> 
-> Jiri Slaby (SUSE) <jirislaby@kernel.org>
->     RDMA/srp: Move large values to a new enum for gcc13
-> 
-> Chunhao Lin <hau@realtek.com>
->     r8169: move rtl_wol_enable_rx() and rtl_prepare_power_down()
-> 
-> Daniil Tatianin <d-tatianin@yandex-team.ru>
->     net/ethtool/ioctl: return -EOPNOTSUPP if we have no phy stats
-> 
-> Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
->     vduse: Validate vq_num in vduse_validate_config()
-> 
-> Angus Chen <angus.chen@jaguarmicro.com>
->     virtio_pci: modify ENOENT to EINVAL
-> 
-> Ricardo Cañuelo <ricardo.canuelo@collabora.com>
->     tools/virtio: initialize spinlocks in vring_test.c
-> 
-> Hao Sun <sunhao.th@gmail.com>
->     selftests/bpf: check null propagation only neither reg is PTR_TO_BTF_ID
-> 
-> Olga Kornievskaia <olga.kornievskaia@gmail.com>
->     pNFS/filelayout: Fix coalescing test for single DS
-> 
-> Naohiro Aota <naohiro.aota@wdc.com>
->     btrfs: fix trace event name typo for FLUSH_DELAYED_REFS
-> 
-> 
-> -------------
-> 
-> Diffstat:
-> 
->  ...2a-usb2-phy.yaml => amlogic,g12a-usb2-phy.yaml} |   8 +-
->  ...ie-phy.yaml => amlogic,g12a-usb3-pcie-phy.yaml} |   6 +-
->  Makefile                                           |   4 +-
->  arch/arm64/include/asm/efi.h                       |   3 +
->  arch/arm64/kernel/efi-rt-wrapper.S                 |  14 +-
->  arch/arm64/kernel/efi.c                            |  27 +++
->  arch/powerpc/kernel/vmlinux.lds.S                  |   6 +-
->  arch/riscv/boot/dts/sifive/fu740-c000.dtsi         |   2 +-
->  arch/s390/kernel/vmlinux.lds.S                     |   2 +
->  arch/x86/events/rapl.c                             |   2 +
->  arch/x86/kernel/fpu/init.c                         |   7 +-
->  arch/x86/lib/iomap_copy_64.S                       |   2 +-
->  block/mq-deadline.c                                |   4 +-
->  drivers/accessibility/speakup/spk_ttyio.c          |   3 +
->  drivers/acpi/prmt.c                                |  10 +
->  drivers/bluetooth/hci_qca.c                        |   7 +
->  drivers/comedi/drivers/adv_pci1760.c               |   2 +-
->  drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |   6 +
->  drivers/dma/idxd/device.c                          |   3 +-
->  drivers/dma/lgm/lgm-dma.c                          |  10 +-
->  drivers/dma/tegra210-adma.c                        |   2 +-
->  drivers/firmware/efi/runtime-wrappers.c            |   1 +
->  drivers/firmware/google/gsmi.c                     |   7 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |   8 +
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  14 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  14 ++
->  drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   3 +-
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |   8 +-
->  .../gpu/drm/amd/display/dc/core/dc_hw_sequencer.c  |   4 +-
->  drivers/gpu/drm/i915/display/skl_universal_plane.c |   2 +-
->  drivers/gpu/drm/i915/i915_pci.c                    |   3 +-
->  drivers/infiniband/ulp/srp/ib_srp.h                |   8 +-
->  drivers/misc/fastrpc.c                             |  26 +--
->  drivers/misc/mei/hw-me-regs.h                      |   2 +
->  drivers/misc/mei/pci-me.c                          |   2 +
->  drivers/mmc/host/sdhci-esdhc-imx.c                 |  22 +-
->  drivers/mmc/host/sunxi-mmc.c                       |   8 +-
->  drivers/net/ethernet/mellanox/mlx5/core/health.c   |   1 +
->  drivers/net/ethernet/realtek/r8169_main.c          |  44 ++--
->  .../wireless/broadcom/brcm80211/brcmfmac/pcie.c    |   2 +-
->  drivers/soc/qcom/apr.c                             |   3 +-
->  drivers/staging/mt7621-dts/mt7621.dtsi             |  12 +-
->  .../include/linux/raspberrypi/vchiq.h              |   2 +-
->  .../vc04_services/interface/vchiq_arm/vchiq_arm.h  |   4 +-
->  drivers/thunderbolt/tunnel.c                       |   2 +-
->  drivers/tty/serial/amba-pl011.c                    |   8 +-
->  drivers/tty/serial/atmel_serial.c                  |   8 +-
->  drivers/tty/serial/pch_uart.c                      |   2 +-
->  drivers/tty/serial/qcom_geni_serial.c              |  18 +-
->  drivers/usb/cdns3/cdns3-gadget.c                   |  12 ++
->  drivers/usb/core/hub.c                             |  13 ++
->  drivers/usb/core/usb-acpi.c                        |  65 ++++++
->  drivers/usb/gadget/function/f_ncm.c                |   4 +-
->  drivers/usb/gadget/legacy/inode.c                  |  28 ++-
->  drivers/usb/gadget/legacy/webcam.c                 |   3 +
->  drivers/usb/host/ehci-fsl.c                        |   2 +-
->  drivers/usb/host/xhci-pci.c                        |  45 +++++
->  drivers/usb/host/xhci-ring.c                       |   5 +-
->  drivers/usb/host/xhci.c                            |  18 +-
->  drivers/usb/host/xhci.h                            |   5 +
->  drivers/usb/misc/iowarrior.c                       |   2 +-
->  drivers/usb/serial/cp210x.c                        |   1 +
->  drivers/usb/serial/option.c                        |  17 ++
->  drivers/usb/storage/uas-detect.h                   |  13 ++
->  drivers/usb/storage/unusual_uas.h                  |   7 -
->  drivers/usb/typec/altmodes/displayport.c           |  22 +-
->  drivers/usb/typec/tcpm/tcpm.c                      |   7 +-
->  drivers/vdpa/vdpa_user/vduse_dev.c                 |   3 +
->  drivers/video/fbdev/omap2/omapfb/dss/dsi.c         |  28 ++-
->  drivers/virtio/virtio_pci_modern.c                 |   2 +-
->  fs/btrfs/disk-io.c                                 |   9 +-
->  fs/btrfs/extent-tree.c                             |   7 +-
->  fs/btrfs/qgroup.c                                  |  25 ++-
->  fs/btrfs/tree-log.c                                |   2 -
->  fs/cifs/smb2pdu.c                                  |  15 +-
->  fs/eventfd.c                                       |  37 ++--
->  fs/eventpoll.c                                     |  18 +-
->  fs/f2fs/extent_cache.c                             |   3 +-
->  fs/nfs/filelayout/filelayout.c                     |   8 +
->  fs/nilfs2/btree.c                                  |  15 +-
->  fs/ntfs3/attrib.c                                  |   2 +-
->  fs/zonefs/super.c                                  |  22 ++
->  include/asm-generic/vmlinux.lds.h                  |   5 +
->  include/linux/eventfd.h                            |   7 +
->  include/linux/usb.h                                |   3 +
->  include/trace/events/btrfs.h                       |   2 +-
->  include/trace/trace_events.h                       |   2 +-
->  include/uapi/linux/eventpoll.h                     |   6 +
->  io_uring/io-wq.c                                   |   2 +-
->  io_uring/io_uring.c                                | 223 +++++++++++++++------
->  kernel/bpf/offload.c                               |   3 -
->  kernel/bpf/syscall.c                               |   6 +-
->  kernel/sys.c                                       |   2 +
->  mm/hugetlb.c                                       |  44 +++-
->  net/ethtool/ioctl.c                                |   3 +-
->  net/ipv4/tcp_ulp.c                                 |   2 +-
->  net/mac80211/agg-tx.c                              |   6 +-
->  net/mac80211/driver-ops.c                          |   3 +
->  net/mac80211/iface.c                               |   1 -
->  sound/pci/hda/patch_realtek.c                      |   3 +
->  .../selftests/bpf/prog_tests/jeq_infer_not_null.c  |   9 +
->  .../selftests/bpf/progs/jeq_infer_not_null_fail.c  |  42 ++++
->  tools/virtio/vringh_test.c                         |   2 +
->  103 files changed, 914 insertions(+), 295 deletions(-)
-> 
-> 
+SGkgUmVpbmV0dGUsDQoNCj4gT24gMS8xMC8yMDIzIDExOjU4IFBNLCBTaGFvcGVuZyBUYW4gd3Jv
+dGU6DQo+ID4gQWZ0ZXIgY3JlYXRpbmcgYSBjaGlsZCBwcm9jZXNzIHdpdGggZm9yaygpIGluIENB
+VCB0ZXN0LCBpZiB0aGVyZSBpcyBhbg0KPiANCj4gUGxlYXNlIGRlbGV0ZSB0aGUgInRoZXJlIGlz
+IiBzbyB0aGF0IGl0IHJlYWRzICAiaWYgYW4gZXJyb3Igb2NjdXJzIg0KDQpUaGFua3MuDQoNCj4g
+PiBlcnJvciBvY2N1cnMgb3IgYSBzaWduYWwgc3VjaCBhcyBTSUdJTlQgaXMgcmVjZWl2ZWQsIHRo
+ZSBwYXJlbnQNCj4gPiBwcm9jZXNzIHdpbGwgYmUgdGVybWluYXRlZCBpbW1lZGlhdGVseSwgYW5k
+IHRoZXJlZm9yIHRoZSBjaGlsZCBwcm9jZXNzDQo+ID4gd2lsbCBub3QgYmUga2lsbGVkIGFuZCBh
+bHNvIHJlc2N0cmxmcyBpcyBub3QgdW5tb3VudGVkLg0KPiA+DQo+ID4gVGhlcmUgaXMgYSBzaWdu
+YWwgaGFuZGxlciByZWdpc3RlcmVkIGluIENNVC9NQk0vTUJBIHRlc3RzLCB3aGljaCBraWxscw0K
+PiA+IGNoaWxkIHByb2Nlc3MsIHVubW91bnQgcmVzY3RybGZzLCBjbGVhbnVwcyByZXN1bHQgZmls
+ZXMsIGV0Yy4sIGlmIGENCj4gPiBzaWduYWwgc3VjaCBhcyBTSUdJTlQgaXMgcmVjZWl2ZWQuDQo+
+ID4NCj4gPiBDb21tb25pemUgdGhlIHNpZ25hbCBoYW5kbGVyIHJlZ2lzdGVyZWQgZm9yIENNVC9N
+Qk0vTUJBIHRlc3RzIGFuZA0KPiA+IHJldXNlIGl0IGluIENBVCB0b28uDQo+ID4NCj4gPiBUbyBy
+ZXVzZSB0aGUgc2lnbmFsIGhhbmRsZXIsIG1ha2UgdGhlIGNoaWxkIHByb2Nlc3MgaW4gQ0FUIHdh
+aXQgdG8gYmUNCj4gPiBraWxsZWQgYnkgcGFyZW50IHByb2Nlc3MgaW4gYW55IGNhc2UgKGFuIGVy
+cm9yIG9jY3VycmVkIG9yIGEgc2lnbmFsDQo+ID4gd2FzIHJlY2VpdmVkKSwgYW5kIHdoZW4ga2ls
+bGluZyBjaGlsZCBwcm9jZXNzIHVzZSBnbG9iYWwgYm1fcGlkDQo+ID4gaW5zdGVhZCBvZiBsb2Nh
+bCBibV9waWQuDQo+ID4NCj4gPiBBbHNvLCBzaW5jZSB0aGUgTUJBL01CQS9DTVQvQ0FUIGFyZSBy
+dW4gaW4gb3JkZXIsIHVucmVnaXN0ZXIgdGhlDQo+ID4gc2lnbmFsIGhhbmRsZXIgYXQgdGhlIGVu
+ZCBvZiBlYWNoIHRlc3Qgc28gdGhhdCB0aGUgc2lnbmFsIGhhbmRsZXINCj4gPiBjYW5ub3QgYmUg
+aW5oZXJpdGVkIGJ5IG90aGVyIHRlc3RzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogU2hhb3Bl
+bmcgVGFuIDx0YW4uc2hhb3BlbmdAanAuZnVqaXRzdS5jb20+DQo+ID4gLS0tDQo+ID4gIHRvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvY2F0X3Rlc3QuYyAgICB8IDI2ICsrKysrLS0tLQ0K
+PiA+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2ZpbGxfYnVmLmMgICAgfCAxNCAt
+LS0tLQ0KPiA+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL3Jlc2N0cmwuaCAgICAg
+fCAgMiArDQo+ID4gIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvcmVzY3RybF92YWwu
+YyB8IDU2DQo+ID4gKysrKysrKysrKysrKystLS0tLQ0KPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDU5
+IGluc2VydGlvbnMoKyksIDM5IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvY2F0X3Rlc3QuYw0KPiA+IGIvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvcmVzY3RybC9jYXRfdGVzdC5jDQo+ID4gaW5kZXggNmE4MzA2YjBhMTA5
+Li44NzMwMmI4ODI5MjkgMTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
+cmVzY3RybC9jYXRfdGVzdC5jDQo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVz
+Y3RybC9jYXRfdGVzdC5jDQo+ID4gQEAgLTEwMyw3ICsxMDMsNiBAQCBpbnQgY2F0X3BlcmZfbWlz
+c192YWwoaW50IGNwdV9ubywgaW50IG4sIGNoYXINCj4gKmNhY2hlX3R5cGUpDQo+ID4gIAl1bnNp
+Z25lZCBsb25nIGxfbWFzaywgbF9tYXNrXzE7DQo+ID4gIAlpbnQgcmV0LCBwaXBlZmRbMl0sIHNp
+YmxpbmdfY3B1X25vOw0KPiA+ICAJY2hhciBwaXBlX21lc3NhZ2U7DQo+ID4gLQlwaWRfdCBibV9w
+aWQ7DQo+ID4NCj4gPiAgCWNhY2hlX3NpemUgPSAwOw0KPiA+DQo+ID4gQEAgLTE4MSwyOCArMTgw
+LDI5IEBAIGludCBjYXRfcGVyZl9taXNzX3ZhbChpbnQgY3B1X25vLCBpbnQgbiwgY2hhcg0KPiAq
+Y2FjaGVfdHlwZSkNCj4gPiAgCQlzdHJjcHkocGFyYW0uZmlsZW5hbWUsIFJFU1VMVF9GSUxFX05B
+TUUxKTsNCj4gPiAgCQlwYXJhbS5udW1fb2ZfcnVucyA9IDA7DQo+ID4gIAkJcGFyYW0uY3B1X25v
+ID0gc2libGluZ19jcHVfbm87DQo+ID4gKwl9IGVsc2Ugew0KPiA+ICsJCXJldCA9IHNpZ25hbF9o
+YW5kbGVyX3JlZ2lzdGVyKCk7DQo+ID4gKwkJaWYgKHJldCkNCj4gPiArCQkJZ290byBvdXQ7DQo+
+IA0KPiBUaGUgImdvdG8iIHdpbGwgdW5yZWdpc3RlciB0aGUgc2lnbmFsIGhhbmRsZXIuIElzIHRo
+YXQgbmVjZXNzYXJ5IGlmIHRoZSByZWdpc3RyYXRpb24NCj4gZmFpbGVkPw0KPiANCj4gQWxzbywg
+aWYgc2lnbmFsX2hhbmRsZXJfcmVnaXN0ZXIoKSBmYWlscyB0aGVuIHRoZSBjaGlsZCB3aWxsIGtl
+ZXAgcnVubmluZyBhbmQgcnVuDQo+IGl0cyB0ZXN0IC4uLiB3b3VsZCBjaGlsZCBub3QgdGhlbiBy
+dW4gZm9yZXZlcj8NCg0KQSBzaWduYWwgaGFuZGxlciBpcyBuZWVkZWQgaGVyZSwgYnV0IGl0IGlz
+IHJhcmVseSB1c2VkLg0KQWxzbywgdGhlIHJlZ2lzdHJhdGlvbiByYXJlbHkgZmFpbHMuDQpUaGVy
+ZWZvcmUsIGlmIHJlZ2lzdHJhdGlvbiBmYWlsZWQsIA0KanVzdCBwcmludCBhIHdhcm5pbmcvaW5m
+byBtZXNzYWdlIGFzIGZvbGxvdy4NCmhvdyBhYm91dCB0aGlzIGlkZWE/DQoNCmtzZnRfcHJpbnRf
+bXNnKCJGYWlsZWQgdG8gcmVnaXN0ZXIgc2lnbmFsIGhhbmRsZXIsIHNpZ25hbHMgU0lHSU5UL1NJ
+R1RFUk0vU0lHSFVQIHdpbGwgbm90IGJlIGhhbmRsZWQgYXMgZXhwZWN0ZWQiKTsNCg0KPiA+ICAJ
+fQ0KPiA+DQo+ID4gIAlyZW1vdmUocGFyYW0uZmlsZW5hbWUpOw0KPiA+DQo+ID4gIAlyZXQgPSBj
+YXRfdmFsKCZwYXJhbSk7DQo+ID4gLQlpZiAocmV0KQ0KPiA+IC0JCXJldHVybiByZXQ7DQo+ID4g
+LQ0KPiA+IC0JcmV0ID0gY2hlY2tfcmVzdWx0cygmcGFyYW0pOw0KPiA+IC0JaWYgKHJldCkNCj4g
+PiAtCQlyZXR1cm4gcmV0Ow0KPiA+ICsJaWYgKHJldCA9PSAwKQ0KPiA+ICsJCXJldCA9IGNoZWNr
+X3Jlc3VsdHMoJnBhcmFtKTsNCj4gPg0KPiA+ICAJaWYgKGJtX3BpZCA9PSAwKSB7DQo+ID4gIAkJ
+LyogVGVsbCBwYXJlbnQgdGhhdCBjaGlsZCBpcyByZWFkeSAqLw0KPiA+ICAJCWNsb3NlKHBpcGVm
+ZFswXSk7DQo+ID4gIAkJcGlwZV9tZXNzYWdlID0gMTsNCj4gPiAgCQlpZiAod3JpdGUocGlwZWZk
+WzFdLCAmcGlwZV9tZXNzYWdlLCBzaXplb2YocGlwZV9tZXNzYWdlKSkgPA0KPiA+IC0JCSAgICBz
+aXplb2YocGlwZV9tZXNzYWdlKSkgew0KPiA+IC0JCQljbG9zZShwaXBlZmRbMV0pOw0KPiA+ICsJ
+CSAgICBzaXplb2YocGlwZV9tZXNzYWdlKSkNCj4gPiArCQkJLyoNCj4gPiArCQkJICogSnVzdCBw
+cmludCB0aGUgZXJyb3IgbWVzc2FnZS4NCj4gPiArCQkJICogTGV0IHdoaWxlKDEpIHJ1biBhbmQg
+d2FpdCBmb3IgaXRzZWxmIHRvIGJlIGtpbGxlZC4NCj4gPiArCQkJICovDQo+ID4gIAkJCXBlcnJv
+cigiIyBmYWlsZWQgc2lnbmFsaW5nIHBhcmVudCBwcm9jZXNzIik7DQo+ID4gLQkJCXJldHVybiBl
+cnJubzsNCj4gPiAtCQl9DQo+ID4NCj4gPiAgCQljbG9zZShwaXBlZmRbMV0pOw0KPiA+ICAJCXdo
+aWxlICgxKQ0KPiA+IEBAIC0yMjYsNSArMjI2LDcgQEAgaW50IGNhdF9wZXJmX21pc3NfdmFsKGlu
+dCBjcHVfbm8sIGludCBuLCBjaGFyDQo+ICpjYWNoZV90eXBlKQ0KPiA+ICAJaWYgKGJtX3BpZCkN
+Cj4gPiAgCQl1bW91bnRfcmVzY3RybGZzKCk7DQo+ID4NCj4gPiAtCXJldHVybiAwOw0KPiA+ICtv
+dXQ6DQo+ID4gKwlyZXQgPSBzaWduYWxfaGFuZGxlcl91bnJlZ2lzdGVyKCk7DQo+ID4gKwlyZXR1
+cm4gcmV0Ow0KPiANCj4gQmUgY2FyZWZ1bCBoZXJlIC4uLiBhbnkgZWFybGllciB2YWx1ZSBvZiAi
+cmV0IiB3aWxsIGJlIG92ZXJ3cml0dGVuIHdpdGggdGhlIHJlc3VsdCBvZg0KPiBzaWduYWxfaGFu
+ZGxlcl91bnJlZ2lzdGVyKCkuIEkgdGhpbmsgdGhlIHJldHVybiBvZg0KPiBzaWduYWxfaGFuZGxl
+cl91bnJlZ2lzdGVyKCkgY2FuIGJlIGlnbm9yZWQuIFRoZXJlIHdpbGwgYmUgYW4gZXJyb3IgbWVz
+c2FnZSBpZiBpdA0KPiBmYWlsZWQuDQoNClRoYW5rcyBmb3IgeW91ciBhZHZpY2UsIEkgd2lsbCBp
+Z25vcmUgdGhlIHJldHVybiBvZiBzaWduYWxfaGFuZGxlcl91bnJlZ2lzdGVyKCkuDQoNCj4gPiAg
+fQ0KPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2ZpbGxf
+YnVmLmMNCj4gPiBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvZmlsbF9idWYuYw0K
+PiA+IGluZGV4IDU2Y2NiZWFlMDYzOC4uMzIyYzY4MTJlMTVjIDEwMDY0NA0KPiA+IC0tLSBhL3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvZmlsbF9idWYuYw0KPiA+ICsrKyBiL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvZmlsbF9idWYuYw0KPiA+IEBAIC0zMywxNCArMzMs
+NiBAQCBzdGF0aWMgdm9pZCBzYih2b2lkKSAgI2VuZGlmICB9DQo+ID4NCj4gPiAtc3RhdGljIHZv
+aWQgY3RybF9oYW5kbGVyKGludCBzaWdubykNCj4gPiAtew0KPiA+IC0JZnJlZShzdGFydHB0cik7
+DQo+ID4gLQlwcmludGYoIlxuRW5kaW5nXG4iKTsNCj4gPiAtCXNiKCk7DQo+ID4gLQlleGl0KEVY
+SVRfU1VDQ0VTUyk7DQo+ID4gLX0NCj4gPiAtDQo+ID4gIHN0YXRpYyB2b2lkIGNsX2ZsdXNoKHZv
+aWQgKnApDQo+ID4gIHsNCj4gPiAgI2lmIGRlZmluZWQoX19pMzg2KSB8fCBkZWZpbmVkKF9feDg2
+XzY0KSBAQCAtMTk4LDEyICsxOTAsNiBAQCBpbnQNCj4gPiBydW5fZmlsbF9idWYodW5zaWduZWQg
+bG9uZyBzcGFuLCBpbnQgbWFsbG9jX2FuZF9pbml0X21lbW9yeSwNCj4gPiAgCXVuc2lnbmVkIGxv
+bmcgbG9uZyBjYWNoZV9zaXplID0gc3BhbjsNCj4gPiAgCWludCByZXQ7DQo+ID4NCj4gPiAtCS8q
+IHNldCB1cCBjdHJsLWMgaGFuZGxlciAqLw0KPiA+IC0JaWYgKHNpZ25hbChTSUdJTlQsIGN0cmxf
+aGFuZGxlcikgPT0gU0lHX0VSUikNCj4gPiAtCQlwcmludGYoIkZhaWxlZCB0byBjYXRjaCBTSUdJ
+TlQhXG4iKTsNCj4gPiAtCWlmIChzaWduYWwoU0lHSFVQLCBjdHJsX2hhbmRsZXIpID09IFNJR19F
+UlIpDQo+ID4gLQkJcHJpbnRmKCJGYWlsZWQgdG8gY2F0Y2ggU0lHSFVQIVxuIik7DQo+ID4gLQ0K
+PiA+ICAJcmV0ID0gZmlsbF9jYWNoZShjYWNoZV9zaXplLCBtYWxsb2NfYW5kX2luaXRfbWVtb3J5
+LCBtZW1mbHVzaCwgb3AsDQo+ID4gIAkJCSByZXNjdHJsX3ZhbCk7DQo+ID4gIAlpZiAocmV0KSB7
+DQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvcmVzY3Ry
+bC5oDQo+ID4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL3Jlc2N0cmwuaA0KPiA+
+IGluZGV4IGYwZGVkMzFmYjNjNy4uMTRhNWUyMTQ5N2UxIDEwMDY0NA0KPiA+IC0tLSBhL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvcmVzY3RybC5oDQo+ID4gKysrIGIvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvcmVzY3RybC9yZXNjdHJsLmgNCj4gPiBAQCAtMTA3LDYgKzEwNyw4IEBA
+IHZvaWQgbWJhX3Rlc3RfY2xlYW51cCh2b2lkKTsgIGludA0KPiA+IGdldF9jYm1fbWFzayhjaGFy
+ICpjYWNoZV90eXBlLCBjaGFyICpjYm1fbWFzayk7ICBpbnQNCj4gPiBnZXRfY2FjaGVfc2l6ZShp
+bnQgY3B1X25vLCBjaGFyICpjYWNoZV90eXBlLCB1bnNpZ25lZCBsb25nDQo+ID4gKmNhY2hlX3Np
+emUpOyAgdm9pZCBjdHJsY19oYW5kbGVyKGludCBzaWdudW0sIHNpZ2luZm9fdCAqaW5mbywgdm9p
+ZA0KPiA+ICpwdHIpOw0KPiA+ICtpbnQgc2lnbmFsX2hhbmRsZXJfcmVnaXN0ZXIodm9pZCk7DQo+
+ID4gK2ludCBzaWduYWxfaGFuZGxlcl91bnJlZ2lzdGVyKHZvaWQpOw0KPiA+ICBpbnQgY2F0X3Zh
+bChzdHJ1Y3QgcmVzY3RybF92YWxfcGFyYW0gKnBhcmFtKTsgIHZvaWQNCj4gPiBjYXRfdGVzdF9j
+bGVhbnVwKHZvaWQpOyAgaW50IGNhdF9wZXJmX21pc3NfdmFsKGludCBjcHVfbm8sIGludA0KPiA+
+IG5vX29mX2JpdHMsIGNoYXIgKmNhY2hlX3R5cGUpOyBkaWZmIC0tZ2l0DQo+ID4gYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL3Jlc2N0cmxfdmFsLmMNCj4gPiBiL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL3Jlc2N0cmwvcmVzY3RybF92YWwuYw0KPiA+IGluZGV4IDY5NDg4NDNiZjk5
+NS4uOTFhM2NmOGIzMDhiIDEwMDY0NA0KPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L3Jlc2N0cmwvcmVzY3RybF92YWwuYw0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L3Jlc2N0cmwvcmVzY3RybF92YWwuYw0KPiA+IEBAIC00NzYsNiArNDc2LDQ2IEBAIHZvaWQgY3Ry
+bGNfaGFuZGxlcihpbnQgc2lnbnVtLCBzaWdpbmZvX3QgKmluZm8sIHZvaWQNCj4gKnB0cikNCj4g
+PiAgCWV4aXQoRVhJVF9TVUNDRVNTKTsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0cnVjdCBzaWdhY3Rp
+b24gc2lnYWN0Ow0KPiA+ICsNCj4gPiArLyoNCj4gPiArICogUmVnaXN0ZXIgQ1RSTC1DIGhhbmRs
+ZXIgZm9yIHBhcmVudCwgYXMgaXQgaGFzIHRvIGtpbGwNCj4gPiArICogY2hpbGQgcHJvY2VzcyBi
+ZWZvcmUgZXhpdGluZw0KPiA+ICsgKi8NCj4gPiAraW50IHNpZ25hbF9oYW5kbGVyX3JlZ2lzdGVy
+KHZvaWQpDQo+ID4gK3sNCj4gPiArCWludCByZXQgPSAwOw0KPiA+ICsJc3RydWN0IHNpZ2FjdGlv
+biBzaWdhY3Q7DQo+IA0KPiBXaHkgaXMgdGhlcmUgYSBnbG9iYWwgc2lnYWN0IGFzIHdlbGwgYXMg
+YSBsb2NhbCBzaWdhY3Q/DQo+IA0KPiBBbHNvLCBwbGVhc2UgZG8ga2VlcCB1c2luZyByZXZlcnNl
+IGZpci10cmVlIGZvcm1hdC4NCg0KSSB3YXMgZ29pbmcgdG8gdXNlIGxvY2FsIHNpZ2FjdC4NCkkg
+d2lsbCBkZWxldGUgZ2xvYmFsIHNpZ2FjdCBhbmQga2VlcCB1c2luZyByZXZlcnNlIGZpci10cmVl
+IGZvcm1hdC4gDQorCXN0cnVjdCBzaWdhY3Rpb24gc2lnYWN0Ow0KKwlpbnQgcmV0ID0gMDsNCg0K
+PiA+ICsNCj4gPiArCXNpZ2FjdC5zYV9zaWdhY3Rpb24gPSBjdHJsY19oYW5kbGVyOw0KPiA+ICsJ
+c2lnZW1wdHlzZXQoJnNpZ2FjdC5zYV9tYXNrKTsNCj4gPiArCXNpZ2FjdC5zYV9mbGFncyA9IFNB
+X1NJR0lORk87DQo+ID4gKwlpZiAoc2lnYWN0aW9uKFNJR0lOVCwgJnNpZ2FjdCwgTlVMTCkgfHwN
+Cj4gPiArCSAgICBzaWdhY3Rpb24oU0lHVEVSTSwgJnNpZ2FjdCwgTlVMTCkgfHwNCj4gPiArCSAg
+ICBzaWdhY3Rpb24oU0lHSFVQLCAmc2lnYWN0LCBOVUxMKSkgew0KPiA+ICsJCXBlcnJvcigiIyBz
+aWdhY3Rpb24iKTsNCj4gPiArCQlyZXQgPSBlcnJubzsNCj4gDQo+IEkgdW5kZXJzdGFuZCB0aGF0
+IHlvdSBjb3BpZWQgZnJvbSB0aGUgb3JpZ2luYWwgY29kZSBoZXJlIGJ1dCBJIGRvIHRoaW5rIHRo
+ZXJlIGlzDQo+IGFuIGlzc3VlIGhlcmUgaW4gdGhhdCBlcnJubyBpcyB1bmRlZmluZWQgYWZ0ZXIg
+YSBsaWJyYXJ5IGNhbGwuIHBlcnJvcigpIHdpbGwgcHJpbnQNCj4gZXJybm8gbWVzc2FnZSBzbyBr
+ZWVwaW5nIGl0IChlcnJubykgYXJvdW5kIG1heSBub3QgYmUgdXNlZnVsLiBQbGVhc2UgZG8ga2Vl
+cA0KPiB0aGUgY3VzdG9tIG9mIHJldHVybmluZyBuZWdhdGl2ZSB2YWx1ZSBhcyBlcnJvciB0aG91
+Z2guIEkgdGhpbmsganVzdCByZXR1cm5pbmcgLTENCj4gd291bGQgd29yay4NCg0KVGhhbmtzIGZv
+ciB5b3VyIGFkdmljZS4gSSB3aWxsIHJldHVybiAtMSBoZXJlLg0KDQo+ID4gKwl9DQo+ID4gKwly
+ZXR1cm4gcmV0Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICsvKiByZXNldCBzaWduYWwgaGFuZGxlciB0
+byBTSUdfREZMLiAqLyBpbnQNCj4gPiArc2lnbmFsX2hhbmRsZXJfdW5yZWdpc3Rlcih2b2lkKSB7
+DQo+ID4gKwlpbnQgcmV0ID0gMDsNCj4gPiArCXN0cnVjdCBzaWdhY3Rpb24gc2lnYWN0Ow0KPiA+
+ICsNCj4gPiArCXNpZ2FjdC5zYV9oYW5kbGVyID0gU0lHX0RGTDsNCj4gPiArCXNpZ2VtcHR5c2V0
+KCZzaWdhY3Quc2FfbWFzayk7DQo+ID4gKwlpZiAoc2lnYWN0aW9uKFNJR0lOVCwgJnNpZ2FjdCwg
+TlVMTCkgfHwNCj4gPiArCSAgICBzaWdhY3Rpb24oU0lHVEVSTSwgJnNpZ2FjdCwgTlVMTCkgfHwN
+Cj4gPiArCSAgICBzaWdhY3Rpb24oU0lHSFVQLCAmc2lnYWN0LCBOVUxMKSkgew0KPiA+ICsJCXBl
+cnJvcigiIyBzaWdhY3Rpb24iKTsNCj4gPiArCQlyZXQgPSBlcnJubzsNCj4gDQo+IFNhbWUgY29t
+bWVudCBhYm91dCBlcnJubyBhbmQgcmV0dXJuaW5nIC0xIG9uIGZhaWx1cmUuDQoNCkkgd2lsbCBy
+ZXR1cm4gLTEgaGVyZS4NCg0KPiA+ICsJfQ0KPiA+ICsJcmV0dXJuIHJldDsNCj4gPiArfQ0KPiA+
+ICsNCj4gPiAgLyoNCj4gPiAgICogcHJpbnRfcmVzdWx0c19idzoJdGhlIG1lbW9yeSBiYW5kd2lk
+dGggcmVzdWx0cyBhcmUgc3RvcmVkIGluIGEgZmlsZQ0KPiA+ICAgKiBAZmlsZW5hbWU6CQlmaWxl
+IHRoYXQgc3RvcmVzIHRoZSByZXN1bHRzDQo+ID4gQEAgLTY3MSwyMCArNzExLDkgQEAgaW50IHJl
+c2N0cmxfdmFsKGNoYXIgKipiZW5jaG1hcmtfY21kLCBzdHJ1Y3QNCj4gPiByZXNjdHJsX3ZhbF9w
+YXJhbSAqcGFyYW0pDQo+ID4NCj4gPiAgCWtzZnRfcHJpbnRfbXNnKCJCZW5jaG1hcmsgUElEOiAl
+ZFxuIiwgYm1fcGlkKTsNCj4gPg0KPiA+IC0JLyoNCj4gPiAtCSAqIFJlZ2lzdGVyIENUUkwtQyBo
+YW5kbGVyIGZvciBwYXJlbnQsIGFzIGl0IGhhcyB0byBraWxsIGJlbmNobWFyaw0KPiA+IC0JICog
+YmVmb3JlIGV4aXRpbmcNCj4gPiAtCSAqLw0KPiA+IC0Jc2lnYWN0LnNhX3NpZ2FjdGlvbiA9IGN0
+cmxjX2hhbmRsZXI7DQo+ID4gLQlzaWdlbXB0eXNldCgmc2lnYWN0LnNhX21hc2spOw0KPiA+IC0J
+c2lnYWN0LnNhX2ZsYWdzID0gU0FfU0lHSU5GTzsNCj4gPiAtCWlmIChzaWdhY3Rpb24oU0lHSU5U
+LCAmc2lnYWN0LCBOVUxMKSB8fA0KPiA+IC0JICAgIHNpZ2FjdGlvbihTSUdURVJNLCAmc2lnYWN0
+LCBOVUxMKSB8fA0KPiA+IC0JICAgIHNpZ2FjdGlvbihTSUdIVVAsICZzaWdhY3QsIE5VTEwpKSB7
+DQo+ID4gLQkJcGVycm9yKCIjIHNpZ2FjdGlvbiIpOw0KPiA+IC0JCXJldCA9IGVycm5vOw0KPiA+
+ICsJcmV0ID0gc2lnbmFsX2hhbmRsZXJfcmVnaXN0ZXIoKTsNCj4gPiArCWlmIChyZXQpDQo+ID4g
+IAkJZ290byBvdXQ7DQo+ID4gLQl9DQo+ID4NCj4gPiAgCXZhbHVlLnNpdmFsX3B0ciA9IGJlbmNo
+bWFya19jbWQ7DQo+ID4NCj4gPiBAQCAtNzY0LDYgKzc5Myw3IEBAIGludCByZXNjdHJsX3ZhbChj
+aGFyICoqYmVuY2htYXJrX2NtZCwgc3RydWN0DQo+ID4gcmVzY3RybF92YWxfcGFyYW0gKnBhcmFt
+KQ0KPiA+ICBvdXQ6DQo+ID4gIAlraWxsKGJtX3BpZCwgU0lHS0lMTCk7DQo+ID4gIAl1bW91bnRf
+cmVzY3RybGZzKCk7DQo+ID4gKwlyZXQgPSBzaWduYWxfaGFuZGxlcl91bnJlZ2lzdGVyKCk7DQo+
+ID4NCj4gPiAgCXJldHVybiByZXQ7DQo+IA0KPiBTYW1lIGhlcmUgLi4uIGFueSBlYXJsaWVyIHZh
+bHVlIG9mIHJldCB3aWxsIGJlIG92ZXJ3cml0dGVuIHdpdGggcmVzdWx0IG9mDQo+IHNpZ25hbF9o
+YW5kbGVyX3VucmVnaXN0ZXIoKS4NCg0KSSB3aWxsIGlnbm9yZSB0aGUgcmV0dXJuIG9mIHNpZ25h
+bF9oYW5kbGVyX3VucmVnaXN0ZXIoKS4NCg0KQmVzdCByZWdhcmRzLA0KU2hhb3BlbmcgVEFODQoN
+Cg==
