@@ -2,93 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9836567831A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6AD678322
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbjAWR3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        id S231488AbjAWRbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbjAWR3H (ORCPT
+        with ESMTP id S232577AbjAWRbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:29:07 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9662BF08
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:29:03 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h12so7530683wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NwTlvuJuAIghS26NnVpyyRvZGcuEOs61IaO+NF4nagQ=;
-        b=uhYIvcjkhXGu0oqqp+6e+ZBJPe7uq/YlhETV7dqCwosYuLYgrLpNHwHvCjyZ02X1e7
-         Ue879m3+ZfoWbgARPz2iBlihA1+FCgRYsItbUA3CZ9+stz00N2Sxu/fCCGbgI2H2/EVz
-         jDAbhTXBIKFJqaLY/JKav0H9VVnFxZcViXcqYnjIq3IB8/c6Jz0fEtSciklsodsxr8yL
-         zrNqKh6wxDG+sUX4KgTc+u5Q4NbLGII3NmfWtWUfDOcitF4E2b6Vb8RDC6Xoh2IFlo5M
-         fD/Tg3F1u+1tIZtMmDNTgcJq9zyPPKRFU7Jp9UKSwRbGhT9ibVCgopuJ1kW0v1xso7Sn
-         UKwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwTlvuJuAIghS26NnVpyyRvZGcuEOs61IaO+NF4nagQ=;
-        b=VPK5q7zu1/D7KHWzHOO4vSOq6p6Sldunesb3SUyELnesyfWyT9Tl0MCLzWciIT9lfP
-         0WKdjy57D6JeeRovqzPQy76D0b4afL0aJfu0cUx7Rs5/mBKZ9dqhC1f5YlnGe+/qrQra
-         ud6gnsFOi6qUaqj3Thn6Ap6SsXMgkODnmxT2/701TnRc7wWShGbnfCT4kSt3pk4LD3JM
-         2AE7M/aKLborll4MSoKTdKOgTZYDhXo82klIZ8XldVJpyFcot+MYfImwnR2xVGqWqrWO
-         7uAN7XcjpzcxiPd1Mbexxb6NYFZTLtrUWPnk736v5ZmCI6nYFqNRXDXlOC/pFn6slhoT
-         /F6g==
-X-Gm-Message-State: AFqh2krD/zl0B7515HYtsPBIVuYySE4WKyE+n/ANmBctv/FE+QB41LTz
-        /qBCFo1qzEO3ObiDVWd1nbg65g==
-X-Google-Smtp-Source: AMrXdXudl+2yzwvw1jE0jM6FJ9tqi9H9sjhc16bH/xfVrnV+/acM7WhMX4jqg9wMdEYt+l6LXUQLuA==
-X-Received: by 2002:adf:f0c7:0:b0:2bd:e18d:c9e5 with SMTP id x7-20020adff0c7000000b002bde18dc9e5mr23003524wro.40.1674494941987;
-        Mon, 23 Jan 2023 09:29:01 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b002bdbde1d3absm6950014wrs.78.2023.01.23.09.29.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 09:29:01 -0800 (PST)
-Message-ID: <de7fec53-fe03-456a-8464-d60fdf32ee06@linaro.org>
-Date:   Mon, 23 Jan 2023 18:28:59 +0100
+        Mon, 23 Jan 2023 12:31:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF78E1285D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674495015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8oSJc7qflQsaqo5pVM66nCkz3C1DHL9Cg5Ei3RDEypo=;
+        b=EK2H120VQffvR36PH6RLTraHx+Riwj6E/CKcUY2ULue2tm4TeSljb7ShSN6CwetRRteWqW
+        1KkiOJCdm48aN/Aa95uepDiiRIIo8N1PUA70SyBgdXtWCr1fjA2lkDF2T5r0g4CQ4nI78p
+        mn9xLQf0l8LTPuzpXLAVLPP1yKGFob4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-231-3Ww5wXnnOzGDGVr7GzEBrw-1; Mon, 23 Jan 2023 12:30:14 -0500
+X-MC-Unique: 3Ww5wXnnOzGDGVr7GzEBrw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 301BB1C08971;
+        Mon, 23 Jan 2023 17:30:13 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D75851121330;
+        Mon, 23 Jan 2023 17:30:11 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v8 00/10] iov_iter: Improve page extraction (pin or just list)
+Date:   Mon, 23 Jan 2023 17:29:57 +0000
+Message-Id: <20230123173007.325544-1-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: arm: amlogic: document Odroid-N2L
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, Dongjin Kim <tobetter@gmail.com>
-References: <20230122-topic-odroid-n2l-upstream-initial-v1-0-1ce5e08039d0@linaro.org>
- <20230122-topic-odroid-n2l-upstream-initial-v1-1-1ce5e08039d0@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230122-topic-odroid-n2l-upstream-initial-v1-1-1ce5e08039d0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 15:07, Neil Armstrong wrote:
-> ODROID-N2L is a variant SBC in small form factor and some peripherals
-> are removed from ODROID-N2PLUS based on S922X SoC.
-> 
-> - On-board ethernet is removed
+Hi Al, Christoph,
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Here are patches to provide support for extracting pages from an iov_iter
+and to use this in the extraction functions in the block layer bio code.
 
-Best regards,
-Krzysztof
+The patches make the following changes:
+
+ (1) Add a function, iov_iter_extract_pages() to replace
+     iov_iter_get_pages*() that gets refs, pins or just lists the pages as
+     appropriate to the iterator type.
+
+     Add a function, iov_iter_extract_mode() that will indicate from the
+     iterator type how the cleanup is to be performed, returning FOLL_PIN
+     or 0.
+
+ (2) Add a function, folio_put_unpin(), and a wrapper, page_put_unpin(),
+     that take a page and the return from iov_iter_extract_mode() and do
+     the right thing to clean up the page.
+
+ (3) Make the bio struct carry a pair of flags to indicate the cleanup
+     mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (equivalent to
+     FOLL_GET) and BIO_PAGE_PINNED (equivalent to BIO_PAGE_PINNED) is
+     added.
+
+ (4) Add a function, bio_release_page(), to release a page appropriately to
+     the cleanup mode indicated by the BIO_PAGE_* flags.
+
+ (5) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
+     pages appropriately and clean them up later.
+
+ (6) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
+
+ (7) Renumber FOLL_PIN and FOLL_GET down so that they're at bits 0 and 1
+     and coincident with BIO_PAGE_PINNED and BIO_PAGE_REFFED.  The compiler
+     can then optimise on that.  Also, it's probably going to be necessary
+     to embed these in the page pointer in sk_buff fragments.  This patch
+     can go independently through the mm tree.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+
+David
+
+Changes:
+========
+ver #8)
+ - Import Christoph Hellwig's changes.
+   - Split the conversion-to-extraction patch.
+   - Drop the extract_flags arg from iov_iter_extract_mode().
+   - Don't default bios to BIO_PAGE_REFFED, but set explicitly.
+ - Switch FOLL_PIN and FOLL_GET when renumbering so PIN is at bit 0.
+ - Switch BIO_PAGE_PINNED and BIO_PAGE_REFFED so PINNED is at bit 0.
+ - We should always be using FOLL_PIN (not FOLL_GET) for DIO, so adjust the
+   patches for that.
+
+ver #7)
+ - For now, drop the parts to pass the I/O direction to iov_iter_*pages*()
+   as it turned out to be a lot more complicated, with places not setting
+   IOCB_WRITE when they should, for example.
+ - Drop all the patches that changed things other then the block layer's
+   bio handling.  The netfslib and cifs changes can go into a separate
+   patchset.
+ - Add support for extracting pages from KVEC-type iterators.
+ - When extracting from BVEC/KVEC, skip over empty vecs at the front.
+
+ver #6)
+ - Fix write() syscall and co. not setting IOCB_WRITE.
+ - Added iocb_is_read() and iocb_is_write() to check IOCB_WRITE.
+ - Use op_is_write() in bio_copy_user_iov().
+ - Drop the iterator direction checks from smbd_recv().
+ - Define FOLL_SOURCE_BUF and FOLL_DEST_BUF and pass them in as part of
+   gup_flags to iov_iter_get/extract_pages*().
+ - Replace iov_iter_get_pages*2() with iov_iter_get_pages*() and remove.
+ - Add back the function to indicate the cleanup mode.
+ - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+ - Provide a helper to clean up a page.
+ - Renumbered FOLL_GET and FOLL_PIN and made BIO_PAGE_REFFED/PINNED have
+   the same numerical values, enforced with an assertion.
+ - Converted AF_ALG, SCSI vhost, generic DIO, FUSE, splice to pipe, 9P and
+   NFS.
+ - Added in the patches to make CIFS do top-to-bottom iterators and use
+   various of the added extraction functions.
+ - Added a pair of work-in-progess patches to make sk_buff fragments store
+   FOLL_GET and FOLL_PIN.
+
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk/ # v5
+Link: https://lore.kernel.org/r/167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk/ # v6
+Link: https://lore.kernel.org/r/20230120175556.3556978-1-dhowells@redhat.com/ # v7
+
+Christoph Hellwig (2):
+  iomap: don't get an reference on ZERO_PAGE for direct I/O block
+    zeroing
+  block: Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED and invert the
+    meaning
+
+David Howells (8):
+  iov_iter: Define flags to qualify page extraction.
+  iov_iter: Add a function to extract a page list from an iterator
+  mm: Provide a helper to drop a pin/ref on a page
+  block: Fix bio_flagged() so that gcc can better optimise it
+  block: Switch to pinning pages.
+  block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+  block: convert bio_map_user_iov to use iov_iter_extract_pages
+  mm: Renumber FOLL_PIN and FOLL_GET down
+
+ block/bio.c               |  33 ++--
+ block/blk-map.c           |  25 ++-
+ block/blk.h               |  28 ++++
+ fs/direct-io.c            |   2 +
+ fs/iomap/direct-io.c      |   1 -
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/mm.h        |  35 ++--
+ include/linux/uio.h       |  29 +++-
+ lib/iov_iter.c            | 334 +++++++++++++++++++++++++++++++++++++-
+ mm/gup.c                  |  22 +++
+ 11 files changed, 461 insertions(+), 56 deletions(-)
 
