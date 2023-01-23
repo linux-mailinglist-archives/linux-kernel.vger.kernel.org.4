@@ -2,156 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8DE677665
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4106677629
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjAWIjQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 23 Jan 2023 03:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S231652AbjAWINt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjAWIjO (ORCPT
+        with ESMTP id S231389AbjAWINr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:39:14 -0500
-X-Greylist: delayed 1556 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 00:39:11 PST
-Received: from smtprelay02.ispgateway.de (smtprelay02.ispgateway.de [80.67.18.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED731CAFD;
-        Mon, 23 Jan 2023 00:39:11 -0800 (PST)
-Received: from [89.1.81.74] (helo=karo-electronics.de)
-        by smtprelay02.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <LW@KARO-electronics.de>)
-        id 1pJrxh-0005ss-PT; Mon, 23 Jan 2023 09:13:53 +0100
-Date:   Mon, 23 Jan 2023 09:13:07 +0100
-From:   Lothar =?UTF-8?B?V2HDn21hbm4=?= <LW@KARO-electronics.de>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Subject: Re: [PATCH 2/2] drm: lcdif: Add i.MX93 LCDIF support
-Message-ID: <20230123091307.46ace33f@karo-electronics.de>
-In-Reply-To: <20230123072358.1060670-3-victor.liu@nxp.com>
-References: <20230123072358.1060670-1-victor.liu@nxp.com>
-        <20230123072358.1060670-3-victor.liu@nxp.com>
-Organization: Ka-Ro electronics GmbH
+        Mon, 23 Jan 2023 03:13:47 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB581717C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:13:44 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id b7so9977052wrt.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SBM3bwQWzykO2B1JQ+ipvskwHKEQ4WdxVib/Qyi51ug=;
+        b=AT9Iq0xSCEqZpmKDW/Ox7GmeyX5AuNSRJunHvXTae3PtaTzXAaVeLJiUNCqlOyzZPw
+         33iOZHMkSml012eGVJ/IICOryeb3/C3pOsn3g1PIhUPamMcb4uBeWg9efJVUXjxl+bFp
+         0zW+bAj0q6l1Gj2h+11m2yuUu0cuj22N/4GRjtmdTOPLeMUNixJ7BsuSeM7+xQ1PijzC
+         GLqz/JxaSPW1s+RVlRp0DnWuxcQ3xeON8gI1oYo374UIcxoaNTFJ1q2hEzgNcEZzaFEi
+         564qfpA2fPIkm25jO5xQ6Obq7Kvks5lEJy0N0yf7xANOgqqn2qRJM07bm+JBKp265V+M
+         HqTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBM3bwQWzykO2B1JQ+ipvskwHKEQ4WdxVib/Qyi51ug=;
+        b=Xsmwmlx+sfEGJOIewnJ2kY8ncrOC1GyC6A2sQV6wweN18gdeVyHnNXGyUZbLc3+D6H
+         NJ12VsEsqUWOcV1PxiWcmBX0U6UVhMNQr4Wr+45LY+33WHNMHyBv6OZ3nMZTB8ftePjV
+         OYkEw2C7RbgreHLRb0Gm/1xOQud1mP/E8LqhRm59gW1DsY3xIzgxK1HHWTJ5pgjK0EK1
+         4WBmzgalFc2txxybmrfsXoxksg2pNrUiNsau65acGSzj12zu2UfMvPgxk+VTweml7gpI
+         H+LBuHMjeMj46CCjGX8H+QNXAa4a0LeqykpAbBify4I8JjDqY9KwhDNkOttLOT8sOkdc
+         ntJg==
+X-Gm-Message-State: AFqh2kqRP987YLn6WCacvfByNCqxU4ZNSVUcwFZcC32hrDHh55KUdk3T
+        Z5CGuUEQDssPLrKqbL8UBrvSqQ==
+X-Google-Smtp-Source: AMrXdXvEE2+iNOHYDBXMmjnnlnEeh6QweQ/hJDMmk245CtGSpc/zmfvz+73u+L3+2RYwpIRt3IDSbQ==
+X-Received: by 2002:adf:fa08:0:b0:2bc:aa57:7f35 with SMTP id m8-20020adffa08000000b002bcaa577f35mr20792170wrr.52.1674461623286;
+        Mon, 23 Jan 2023 00:13:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b9-20020adff909000000b002be5401ef5fsm7588216wrr.39.2023.01.23.00.13.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 00:13:42 -0800 (PST)
+Message-ID: <c317762c-4471-36c1-24fc-0982eee9192d@linaro.org>
+Date:   Mon, 23 Jan 2023 09:13:41 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 13/15] dt-bindings: pinctrl: add support for Ambarella
+Content-Language: en-US
+To:     Li Chen <lchen@ambarella.com>, Li Chen <me@linux.beauty>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+ <20230123073305.149940-14-lchen@ambarella.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230123073305.149940-14-lchen@ambarella.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Df-Sender: bHdAa2Fyby1lbGVjdHJvbmljcy5kb21haW5mYWN0b3J5LWt1bmRlLmRl
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, 23 Jan 2023 15:23:58 +0800 Liu Ying wrote:
-> The LCDIF embedded in i.MX93 SoC is essentially the same to those
-> in i.MX8mp SoC.  However, i.MX93 LCDIF may connect with MIPI DSI
-> controller through LCDIF cross line pattern(controlled by mediamix
-> blk-ctrl) or connect with LVDS display bridge(LDB) directly or a
-> parallel display(also through mediamix blk-ctrl), so add multiple
-> encoders(with DRM_MODE_ENCODER_NONE encoder type) support in the
-> LCDIF DRM driver and find a bridge to attach the relevant encoder's
-> chain when needed.  While at it, derive lcdif_crtc_state structure
-> from drm_crtc_state structure to introduce bus_format and bus_flags
-> states so that the next downstream bridges may use consistent bus
-> format and bus flags.
+On 23/01/2023 08:32, Li Chen wrote:
+> Add a Ambarella compatible.
 > 
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> Signed-off-by: Li Chen <lchen@ambarella.com>
+> Change-Id: I8bcab3b763bdc7e400a04cc46589f0f694028a66
 > ---
->  drivers/gpu/drm/mxsfb/lcdif_drv.c |  73 +++++++++--
->  drivers/gpu/drm/mxsfb/lcdif_drv.h |   6 +-
->  drivers/gpu/drm/mxsfb/lcdif_kms.c | 206 ++++++++++++++++++++----------
->  3 files changed, 208 insertions(+), 77 deletions(-)
+>  .../bindings/pinctrl/ambarella,pinctrl.yaml   | 160 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 161 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml
 > 
-> diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> index cc2ceb301b96..4d41f6b6eb14 100644
-> --- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> @@ -9,13 +9,16 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_graph.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  
->  #include <drm/drm_atomic_helper.h>
->  #include <drm/drm_bridge.h>
->  #include <drm/drm_drv.h>
-> +#include <drm/drm_encoder.h>
->  #include <drm/drm_fbdev_generic.h>
->  #include <drm/drm_gem_dma_helper.h>
->  #include <drm/drm_gem_framebuffer_helper.h>
-> @@ -38,21 +41,70 @@ static const struct drm_mode_config_helper_funcs lcdif_mode_config_helpers = {
->  	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
->  };
->  
-> +static const struct drm_encoder_funcs lcdif_encoder_funcs = {
-> +	.destroy = drm_encoder_cleanup,
-> +};
+> diff --git a/Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml
+> new file mode 100644
+> index 000000000000..51f5a9cc4714
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/ambarella,pinctrl.yaml
+> @@ -0,0 +1,160 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/ambarella,pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  static int lcdif_attach_bridge(struct lcdif_drm_private *lcdif)
->  {
-> -	struct drm_device *drm = lcdif->drm;
-> +	struct device *dev = lcdif->drm->dev;
-> +	struct device_node *ep;
->  	struct drm_bridge *bridge;
->  	int ret;
->  
-> -	bridge = devm_drm_of_get_bridge(drm->dev, drm->dev->of_node, 0, 0);
-> -	if (IS_ERR(bridge))
-> -		return PTR_ERR(bridge);
-> -
-> -	ret = drm_bridge_attach(&lcdif->encoder, bridge, NULL, 0);
-> -	if (ret)
-> -		return dev_err_probe(drm->dev, ret, "Failed to attach bridge\n");
-> -
-> -	lcdif->bridge = bridge;
-> +	for_each_endpoint_of_node(dev->of_node, ep) {
-> +		struct device_node *remote;
-> +		struct of_endpoint of_ep;
-> +		struct drm_encoder *encoder;
+> +title: Ambarella PIN controller
 > +
-> +		remote = of_graph_get_remote_port_parent(ep);
-> +		if (!remote || !of_device_is_available(remote)) {
-'!remote ||' is redundant, since of_device_is_available already checks
-for a NULL pointer.
-
-[...]
-
-> diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c b/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> index 262bc43b1079..ba36447ed900 100644
-> --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
-[...]
-> @@ -529,6 +580,46 @@ static void lcdif_crtc_atomic_disable(struct drm_crtc *crtc,
->  	pm_runtime_put_sync(drm->dev);
->  }
->  
-> +static void lcdif_crtc_reset(struct drm_crtc *crtc)
-> +{
-> +	struct lcdif_crtc_state *state;
+> +maintainers:
+> +  - Li Chen <lchen@ambarella.org>
 > +
-> +	if (crtc->state)
-> +		__drm_atomic_helper_crtc_destroy_state(crtc->state);
+> +description: |
+> +  The pins controlled by Ambarella SoC chip are organized in banks, each bank
+> +  has 32 pins.  Each pin has at least 2 multiplexing functions, and generally,
+> +  the first function is GPIO.
 > +
-> +	kfree(to_lcdif_crtc_state(crtc->state));
->
-If crtc-state can be NULL at this point, this will only work as long as
-'base' is the first member of the lcdif_crtc_state struct (which
-currently is the case, but there is no guarantee that this will always
-be this way), otherwise the if clause above is not needed.
+> +  The PINCTRL node acts as a container for an arbitrary number of subnodes. And
+> +  these subnodes will fall into two categories.
+> +
+> +  One is for GPIO, please see the "GPIO node" section for detail, and another one
+> +  is to set up a group of pins for a function, both pin configurations and mux
+> +  selection, and it's called group node in the binding document.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: ambarella,pinctrl
+> +
+> +  reg:
+> +    minItems: 4
+> +    maxItems: 4
+> +
 
+Same problems as with other patches. You need to fix all of my previous
+comments.
 
+Best regards,
+Krzysztof
 
-Lothar Waßmann
