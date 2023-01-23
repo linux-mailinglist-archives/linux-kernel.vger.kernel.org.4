@@ -2,217 +2,807 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBB3677AF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9016B677AF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjAWMak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S230163AbjAWMb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjAWMah (ORCPT
+        with ESMTP id S230354AbjAWMbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:30:37 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2050.outbound.protection.outlook.com [40.107.12.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7904ABB9A;
-        Mon, 23 Jan 2023 04:30:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fkW0ghAT6mDfmxvzfrpkhIw7ipUAJYRPd04vvIx/tk100H3Q31BVrPF7KUDj3+6l1h7s4o4BXYCFR4aXIvHpJiV1nlHrfs7OdDNnOM5+ACYZVJh8GPKWrjtNQNTdFIN7Nriqxma5x1aoew7GTdF7nGLW/q86kxEVIoC1OawttI77tUz6BT267u0PDkaiD5RJ3RRTOyrLfX0tW5UyIOkjQK6jNZl6CtDLwza9jb02RJg6vcKp8Y5q+WNLuTkZHe0vB1lsWN2g+RRZAeqp6ulbz4HxNgDEUrYcwaPeUp/EbjGbFVnjQhrbVU+OWrKNFCr7R8xYsFq/4JBv8CCYv8pg9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p86fTMgBo9Uu734RIo3lpca1qWg7ZKeHRlP4lILGrCI=;
- b=nAH/2ajtYVF9fxLeD8v85XdWBlbd87cjVRnI0pJF1PqVivpLy4EbSjwl0cqnc+LDI7l4pDhAWZCTadp5Jbtql8cKSyV5RtjSgkItdhnsiSDIRHr7qAPkgBpRh6lophwr4NQRrvXt/xQdRzDeHA9aDj0/LDJznvcqjeCGDdizhsRy7EbWoaQI7gMfqFLJE0jYiRAC/0LtlNnvgak5ikrl4oqXsbAQnYAEGxGm2zgQiBY6xAphhdCKiDVkfYoPaLi1HMFSLqQMpd6Z/Pg8bbWyt3UtWaPHAOIb7QvbbFEKC93qbc3PViD2ZsRvxa5C5/U/qZYxWzZrcqH2UFbuZkhMwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p86fTMgBo9Uu734RIo3lpca1qWg7ZKeHRlP4lILGrCI=;
- b=Pl3dWJqdBqjVE/6auo1znNJ0Imm2xWW+Zpe1R89hTaQvSptOYaBJ0rPUV3DzwfGE8FmfmcPFwjBsKmRnwKDRImx12SXdhT7bqnkHuU8fhBCudxfco8KRVHafdO17/iPoMZ34CADHodgL7cUzk0rqqgUJHwhh2R5XOHOAMTMQIMLgkWq6JPihofNMahhAytlTJnACRo+uFxeum2kNx4fv2JPIm1i3hvJT8xkwqPtruPumaqxlRQMhx9WxtyNpC0Psbb+OEFmbQyfHWB+0ex5SXbGsHbDdQF3uqUMHq5YGsLmIBYV7BcxC5wSgxBkNAe8fnBWsKrBPijppVreAg4hRlA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB3035.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:30::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
- 2023 12:30:32 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097%4]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
- 12:30:32 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Herve Codina <herve.codina@bootlin.com>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 2/3] ASoC: codecs: Add support for the Renesas
- IDT821034 codec
-Thread-Topic: [PATCH v2 2/3] ASoC: codecs: Add support for the Renesas
- IDT821034 codec
-Thread-Index: AQHZLLSvyotuf1YmL0q52bZzrUxZsa6rpj6AgAARhICAACY+gIAAEgiAgAADhYA=
-Date:   Mon, 23 Jan 2023 12:30:32 +0000
-Message-ID: <79b35117-98aa-dc7c-2a27-805cd4ac2c71@csgroup.eu>
-References: <20230120095036.514639-1-herve.codina@bootlin.com>
- <20230120095036.514639-3-herve.codina@bootlin.com>
- <d51b826b-e71f-393c-586b-6a1ca953f26f@csgroup.eu>
- <20230123095631.4aba35d6@bootlin.com>
- <eb20dc66-f564-ed7e-8873-65621e5970de@csgroup.eu>
- <20230123131755.1f5702be@bootlin.com>
-In-Reply-To: <20230123131755.1f5702be@bootlin.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB3035:EE_
-x-ms-office365-filtering-correlation-id: 0ed7244a-8816-40cb-6ce4-08dafd3d9eaa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5ClVQrEAlSUwsCTKl0AGsBRNtr9nOi+3OcPk8O0lMxkCU/7GBeQdb/Rx0EXITlfm7inQa1C514eUAsqcJAl27KhRBsHXMkep/1Bu/a2vtRQo1aDQbnDxBl66FPWrAzN4P/u2fEBLGfyC8iqDpqSQwdFHT/irWN+kE98I22WDCgJdY//CUc+fe8piP7luUrlNcH1yrNuGq7tICSS7tejs4GC0kvos4P5aBUL2OmZlbLzXTgNZY9wJ3AqDrkJTywRL+0m8+ht6kuiGjBi+mmHCARiuJCn/l2HMP7I+mK6buSXSvT9lR+NX3YdLYhc079HD1hk4S8aEVUumfrdR5GPbmE4uXnjhk2YYadHT5EkYsIT57ZTY96rhLPiR8n4D6ZdEk0+VqMR9DLi6TX8GmwKSCBnK45v3z8kIOwcIcCI04SjfgGhIVb156whXKQVThSo90oLy7T7MXGffRDYl2AdwWfZQsT56Cb04F6eaCMCMD9ZN1Pz89SMbT0YaL2LzIpnlrat+p3TkKzuo2WFdOWFp9h+B5Kz9/pbkFqeQl40c0uNATTxfNG4D0hRJFLlJ9+cQouB+9jC08Fs708xWRH5KT5KKhqZ60cKJUPb9CKTuLttXmbCmocQs7ap5G7X8So/nkmV4rI4acm/s8Y4ckNeJ3T2446YDZ+re9xJXU+sgg1IspybPd5WXVPrSxswmqfIIhcBnD9oE8hslGZuje+evfa6roJXaV9Az04kA5bUZlPGRGuA75nz7JZ2/4kEMySTpsaakhVx6LpJx2tI0nUs1aw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39850400004)(396003)(376002)(366004)(346002)(451199015)(122000001)(83380400001)(41300700001)(86362001)(31696002)(38100700002)(38070700005)(5660300002)(2906002)(44832011)(7416002)(8936002)(4326008)(6512007)(6916009)(26005)(8676002)(6506007)(186003)(66574015)(66556008)(316002)(54906003)(66946007)(2616005)(76116006)(66446008)(64756008)(91956017)(478600001)(71200400001)(6486002)(66476007)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VG9ZOVFQWGhkb3JRRUlGR2FRTjFiMHUvbFlncHlpVDVHV0hqZis2dm5lR21i?=
- =?utf-8?B?Ty9HdTUyZTMyckxRVWtHbzhWZEhxcjRHMGZPbzNTcWJIZFNXMDNvWkFQSmE2?=
- =?utf-8?B?M2pVcVZ4N2ZScjBrY2R4WmNCTkhzOUk1ajVScExoSndpZGxNTEppVW1CajhE?=
- =?utf-8?B?b0tyejlRNS9uWU9kN3EySTd2K2g5Y3lheVkvZFZ1TFBhb1BmbXBUamRrQ01y?=
- =?utf-8?B?WnVma3NBLzJtMmhUejNaQ2lOVFRKcXRQNHZtTFBYMlo2ZmpwV04wMVpxQ2dV?=
- =?utf-8?B?ekJ1SjNHUGJ0eXQvQW1rY09IM2pYalJ3aU84OHQwbzhEUVhTSmF4Z21VRFV5?=
- =?utf-8?B?OTJJYmUyRW40bkJLS2NwZ1VaU3Q4K3R5ZTcxdHAva2t6b1YvdnVaTkdSOWxp?=
- =?utf-8?B?aTlvbnNqTm1xUVNwTWRuMHVxL25LK284MTBFZFlKbmxmMGFEc2RSaVBXdHR1?=
- =?utf-8?B?cDVVNTZyL3FSdnpxWFpFSVUvd2ZQekd0Ny9XY0U5ZWhjeCtNbDV5SSt6OTAv?=
- =?utf-8?B?bGF2V2dxOXhEMENOdFRQQVBUeXlma1BHc3hVK0t3am5WUXltWE5PdkQ4Y3Fy?=
- =?utf-8?B?bzBwNTRqWmovaHdwU21rbWhDZ0srVStnN0w5UFZSTjQ0Ri9taHNZb0NXOXN2?=
- =?utf-8?B?ZVk3L3VKcTlMeUVoS3RVN1JRMnFjYWpMRVRiQ3cxcUx0emZGWFlXN25tVGsv?=
- =?utf-8?B?Z3ZOK0tMaDRHZDFPOVFNYWk1a3lkOFJYS1hKMS9kdDNkaHQ1bndNRVZtSnNj?=
- =?utf-8?B?UWxpS0RHUVZNZnFzNUZvdHRkOGVxK1Fod2t5L0xueC8wOWNjdC95WWNKVVBv?=
- =?utf-8?B?UEhEWDF2NDFka0NReFpHaEVaOVpyazBmTnUxZHpGU2tRUmJ4cVdqZThRdGUw?=
- =?utf-8?B?NzJRekNzWTN0KytJT21xdHRNQzdrQ2dXVmNaNlRFK3E1TGVSQ1ViWm51OWIv?=
- =?utf-8?B?QTg5VlNOQ0FPZjJEUEZpbmlDOHNsdWFaVzNMajRQMWRONmJCV1pSVWIyd0lE?=
- =?utf-8?B?YmQ3Z0JJbzlJaTFrdEhmR2xoODBmdzBXTjFSaWIwSkhYL0gxSSt6YVVLYkZJ?=
- =?utf-8?B?cTVaQ1h1NEVlRXgwU0N3dTFDWmkrditIMmNVSHQxZzJ5MlRWSTZKc0w0dURu?=
- =?utf-8?B?VStKNC9mT2JoeDFxS0lMcnVmMHFyNTNhZzJpN0kyME5UelBuZCtmNDhTcHZx?=
- =?utf-8?B?RzlFOEU1RjE2NHpxc0x6Q093UWpwZ21PZnB1Y0tqRENncnRibDVKMjVNMjBP?=
- =?utf-8?B?bHBoR2J2c2cvemd0UldlMkVmUGd0NXNRZjBhQVM1WXhQUndzcHFPS1EzZDIy?=
- =?utf-8?B?TDJXcUFEeHJDMENSZU0xWStGQUlmbmR2WDc2TEhpaC80SGZXVjB0V0ZLVVpC?=
- =?utf-8?B?OWExQVhMUjMvY3FjK0tFeEdHeTF6N3p1Nk5qUlI2ZnBoczVQcHVhMDZZcjBh?=
- =?utf-8?B?UUx6WXNBYWcrNkx3M2dKSGN2cjlIVDdBbjNIOU9oZ3hNLzVJZUdKZElBUFBK?=
- =?utf-8?B?SzRXR3FLMndGeVRFU05PMDdIc2VTOWU1YndKc2ZTOWZZVEpKTEpDbTBHM1dR?=
- =?utf-8?B?bnhNMmo3OXZzemRLc1BjUVdXM1hoMkQ2SDlTbmdTT3JJeEJPaitKdmVmT3p1?=
- =?utf-8?B?V0F1dVVJVGpKWHVOb2tkVlRqNVhxVGQvMjR1YlRaeDZLc1R1eGdkVnJpOEU4?=
- =?utf-8?B?NW1uYTdkZHlGdE9hQXoySnJTUzgwK1dpTWgwMlhYLzNxb3k2OVg5TEpUMjBK?=
- =?utf-8?B?ZlJ5NmhNeUF0V01sSEkxSkZ5bkJmNGdBMXEzVFByNHc4RXQ2K3crS2QyNjA4?=
- =?utf-8?B?VTlqdWJZdUZiekFPYUhTVkJWNU81Rnd2cG9aSXROdFlDNTRXaWVwVjA1R2NS?=
- =?utf-8?B?S1NsZE9IZ0c5TE94WE04a1N1QWd1ZHFDKzZjY0xOWitxMjlPS3ptUjgyOW9V?=
- =?utf-8?B?b3M1NFVMY2VFOU4wdWV2cVQrVTZvdi8zR0d2SzQ1MGg2QXhISDRxMC8venJK?=
- =?utf-8?B?TG82MytFbEswbTVhcDgxSHpvY1g1UzlXNFhSdDRXZFFsL3ZPeDNlQjE4NENW?=
- =?utf-8?B?TC9LU3VIc2dJZ25WTHNKandMUnA5RUJGcGVkeTB2WHZHMm5tSkJrcm83c1Yv?=
- =?utf-8?B?ZHVTb1dkZ2xyaWVmaU5zeE1UR2tvVCs3RTFiNWVpYjNtaHVQeG9SamY4L2ls?=
- =?utf-8?B?a1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E664E542C65B3B47885A49B7111D46B2@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 23 Jan 2023 07:31:52 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC1FCC34
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:31:49 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id tz11so30131898ejc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 04:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JJ1/pJcCxB8jbsuhUneUtAwDk8DVvkVecST68quKwrk=;
+        b=e2sdoB0UylfadEo4aEDHXtc7XPfYZBnjy0v4K9vji1vy6APxgKaMNT8zEKBUmJEKcE
+         WENdfJ9n1GEkLosGZmW/ckz8f+llJLZdRQ+N5vhIAOz8NpTjq/qJADaznoliGIgwFiMp
+         LN+Wovzo1YsWGSTWrbXGwSs0J+qilo1b7YFtIvWMDeUTEf7K7jbsmxKJQ/X+e7Gxj3HK
+         YLYOS15KqqRJ0Zj937DvfLwyBigd7Q4WAUXC/ayDrE15g/Nqot75FOyvrMbDKrdRfD6G
+         3cmP+6Fu+aZ6/I9WTJCZQUgUWImSU6eshThsZLfNCDj3V9yft0ayQjAAYAPrkOVWYmuc
+         BfTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JJ1/pJcCxB8jbsuhUneUtAwDk8DVvkVecST68quKwrk=;
+        b=b5azWlHVWLhrbWCEXTzx5u7D/DfvyvC7wBTerzrQnwreFer3o1SzjHUSjJhZi0wEeQ
+         WM9lJDlIFv23hO0bgnXIrBxILmUYy5R+R9HxpfS689+SlaS+UI7Z16MNY3lQ3j9AjbDg
+         bbyHl4DkSU0/HMW8chH20unZbYNRtPOCQHenp24nZS+6KoWd1Isyn4TP2/KhUprP3aiG
+         rzvcFD3hYBDe3vngyi6e4OZ6PMTJP4p5XW0tTfHww6SQE6oLhQWmxNCuNpLXAS4maMZ5
+         E63l3eY8zXTWVyIUPzyvKrE6k6zJNDmTyfrk2TsQ6MBcC3iJv3oVCUyK/d2BIFeE166m
+         TIbw==
+X-Gm-Message-State: AFqh2kqc8fIzD1WI487+m4u80yGC4VniA8vsl+8buSZFRhwfhjsi+WES
+        /wadt+z4UusZ0T9bbcVIG9utsQ==
+X-Google-Smtp-Source: AMrXdXuBJ/ACgEBv7F7i/mRontNtSa3ypvx6/wLCnVFLxQ5lfhqFxrIzZRUpGzGKUf3HOA27Pj1u7w==
+X-Received: by 2002:a17:906:6601:b0:877:a9d2:e5e9 with SMTP id b1-20020a170906660100b00877a9d2e5e9mr8568511ejp.42.1674477107600;
+        Mon, 23 Jan 2023 04:31:47 -0800 (PST)
+Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
+        by smtp.gmail.com with ESMTPSA id 11-20020a170906300b00b008675df83251sm15092887ejz.34.2023.01.23.04.31.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 04:31:47 -0800 (PST)
+Message-ID: <9cbbb9c3-f645-0066-a505-35cc7ae087bc@linaro.org>
+Date:   Mon, 23 Jan 2023 13:31:45 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ed7244a-8816-40cb-6ce4-08dafd3d9eaa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2023 12:30:32.2523
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: su9BNBULkkqLOxR5bTfHJM5lWGuRcSNuSLxpleHLTua/PhPeAELHjcWY8pKRjkpK3nfmzGYGPXkALZ5K3ugbzuBP44zd5K4vOxKasnGXqCY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB3035
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] clk: qcom: restrict drivers per ARM/ARM64
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230123094925.54824-1-krzysztof.kozlowski@linaro.org>
+ <20230123094925.54824-2-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230123094925.54824-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIzLzAxLzIwMjMgw6AgMTM6MTcsIEhlcnZlIENvZGluYSBhIMOpY3JpdMKgOg0KPiBI
-aSBDaHJpc3RvcGhlLA0KPiANCj4gT24gTW9uLCAyMyBKYW4gMjAyMyAxMToxMzoyMyArMDAwMA0K
-PiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0K
-PiANCj4+IEhpIEhlcnbDqSwNCj4+DQo+PiBMZSAyMy8wMS8yMDIzIMOgIDA5OjU2LCBIZXJ2ZSBD
-b2RpbmEgYSDDqWNyaXTCoDoNCj4+Pg0KPj4+IGdwaW9jaGlwX2dldF9kYXRhKCkgaXMgZGVmaW5l
-ZCBvbmx5IHdoZW4gQ09ORklHX0dQSU9MSUIgaXMgc2V0Lg0KPj4+IFRoYXQncyB3aHkgdGhlICNp
-ZiBzZWN0aW9uIGlzIHVzZWQuDQo+Pg0KPj4gZ3Bpb2NoaXBfZ2V0X2RhdGEoKSBpcyBzdGlsbCBk
-ZWNsYXJlZCB3aGVuIENPTkZJR19HUElPTElCIGlzIG5vdCBzZXQsIHNvDQo+PiBpdCBpcyBub3Qg
-YSBwcm9ibGVtLCB0aGUgY2FsbCB0byBpdCB3aWxsIGJlIGVsaW1pbmF0ZWQgYXQgYnVpbGR0aW1l
-Lg0KPj4NCj4+IEJ5IHRoZSB3YXksIGF0IHRoZSB0aW1lIGJlaW5nIEkgZ2V0IHRoZSBmb2xsb3dp
-bmcgd2FybmluZ3M6DQo+Pg0KPj4gICAgIENDICAgICAgc291bmQvc29jL2NvZGVjcy9pZHQ4MjEw
-MzQubw0KPj4gc291bmQvc29jL2NvZGVjcy9pZHQ4MjEwMzQuYzozMTA6MTI6IHdhcm5pbmc6ICdp
-ZHQ4MjEwMzRfcmVhZF9zbGljX3JhdycNCj4+IGRlZmluZWQgYnV0IG5vdCB1c2VkIFstV3VudXNl
-ZC1mdW5jdGlvbl0NCj4+ICAgICAzMTAgfCBzdGF0aWMgaW50IGlkdDgyMTAzNF9yZWFkX3NsaWNf
-cmF3KHN0cnVjdCBpZHQ4MjEwMzQgKmlkdDgyMTAzNCwNCj4+IHU4IGNoLCB1OCAqc2xpY19yYXcp
-DQo+PiAgICAgICAgIHwgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KPj4gc291
-bmQvc29jL2NvZGVjcy9pZHQ4MjEwMzQuYzozMDU6MTE6IHdhcm5pbmc6DQo+PiAnaWR0ODIxMDM0
-X2dldF93cml0dGVuX3NsaWNfcmF3JyBkZWZpbmVkIGJ1dCBub3QgdXNlZCBbLVd1bnVzZWQtZnVu
-Y3Rpb25dDQo+PiAgICAgMzA1IHwgc3RhdGljIHU4IGlkdDgyMTAzNF9nZXRfd3JpdHRlbl9zbGlj
-X3JhdyhzdHJ1Y3QgaWR0ODIxMDM0DQo+PiAqaWR0ODIxMDM0LCB1OCBjaCkNCj4+ICAgICAgICAg
-fCAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+PiBzb3VuZC9zb2Mv
-Y29kZWNzL2lkdDgyMTAzNC5jOjI3NjoxMjogd2FybmluZzogJ2lkdDgyMTAzNF93cml0ZV9zbGlj
-X3JhdycNCj4+IGRlZmluZWQgYnV0IG5vdCB1c2VkIFstV3VudXNlZC1mdW5jdGlvbl0NCj4+ICAg
-ICAyNzYgfCBzdGF0aWMgaW50IGlkdDgyMTAzNF93cml0ZV9zbGljX3JhdyhzdHJ1Y3QgaWR0ODIx
-MDM0DQo+PiAqaWR0ODIxMDM0LCB1OCBjaCwgdTggc2xpY19yYXcpDQo+PiAgICAgICAgIHwgICAg
-ICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4+IHNvdW5kL3NvYy9jb2RlY3MvaWR0
-ODIxMDM0LmM6MjcxOjExOiB3YXJuaW5nOiAnaWR0ODIxMDM0X2dldF9zbGljX2NvbmYnDQo+PiBk
-ZWZpbmVkIGJ1dCBub3QgdXNlZCBbLVd1bnVzZWQtZnVuY3Rpb25dDQo+PiAgICAgMjcxIHwgc3Rh
-dGljIHU4IGlkdDgyMTAzNF9nZXRfc2xpY19jb25mKHN0cnVjdCBpZHQ4MjEwMzQgKmlkdDgyMTAz
-NCwNCj4+IHU4IGNoKQ0KPj4gICAgICAgICB8ICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fg0KPj4gc291bmQvc29jL2NvZGVjcy9pZHQ4MjEwMzQuYzoyNTA6MTI6IHdhcm5pbmc6ICdp
-ZHQ4MjEwMzRfc2V0X3NsaWNfY29uZicNCj4+IGRlZmluZWQgYnV0IG5vdCB1c2VkIFstV3VudXNl
-ZC1mdW5jdGlvbl0NCj4+ICAgICAyNTAgfCBzdGF0aWMgaW50IGlkdDgyMTAzNF9zZXRfc2xpY19j
-b25mKHN0cnVjdCBpZHQ4MjEwMzQgKmlkdDgyMTAzNCwNCj4+IHU4IGNoLCB1OCBzbGljX2RpcikN
-Cj4+ICAgICAgICAgfCAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+Pg0KPj4N
-Cj4+IFdpdGggdGhlIGZvbGxvd2luZyBjaGFuZ2VzIEkgaGF2ZSBubyB3YXJuaW5nIGFuZCBhbiBv
-YmpkdW1wIC14IG9uDQo+PiBpZHQ4MjEwMzQubyBzaG93cyBubyByZWZlcmVuY2UgdG8gZ3Bpb2No
-aXBfZ2V0X2RhdGEoKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9zb3VuZC9zb2MvY29kZWNzL2lkdDgy
-MTAzNC5jIGIvc291bmQvc29jL2NvZGVjcy9pZHQ4MjEwMzQuYw0KPj4gaW5kZXggNWViOTNmZWM2
-MDQyLi44Yjc1Mzg4ZTIyY2UgMTAwNjQ0DQo+PiAtLS0gYS9zb3VuZC9zb2MvY29kZWNzL2lkdDgy
-MTAzNC5jDQo+PiArKysgYi9zb3VuZC9zb2MvY29kZWNzL2lkdDgyMTAzNC5jDQo+PiBAQCAtOTY4
-LDcgKzk2OCw2IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgc25kX3NvY19jb21wb25lbnRfZHJpdmVy
-DQo+PiBpZHQ4MjEwMzRfY29tcG9uZW50X2RyaXZlciA9IHsNCj4+ICAgIAkuZW5kaWFubmVzcwkJ
-PSAxLA0KPj4gICAgfTsNCj4+DQo+PiAtI2lmIElTX0VOQUJMRUQoQ09ORklHX0dQSU9MSUIpDQo+
-PiAgICAjZGVmaW5lIElEVDgyMTAzNF9HUElPX09GRlNFVF9UT19TTElDX0NIQU5ORUwoX29mZnNl
-dCkgKCgoX29mZnNldCkgLw0KPj4gNSkgJSA0KQ0KPj4gICAgI2RlZmluZSBJRFQ4MjEwMzRfR1BJ
-T19PRkZTRVRfVE9fU0xJQ19NQVNLKF9vZmZzZXQpICAgIEJJVCgoX29mZnNldCkgJSA1KQ0KPj4N
-Cj4+IEBAIC0xMTMzLDEyICsxMTMyLDYgQEAgc3RhdGljIGludCBpZHQ4MjEwMzRfZ3Bpb19pbml0
-KHN0cnVjdCBpZHQ4MjEwMzQNCj4+ICppZHQ4MjEwMzQpDQo+PiAgICAJcmV0dXJuIGRldm1fZ3Bp
-b2NoaXBfYWRkX2RhdGEoJmlkdDgyMTAzNC0+c3BpLT5kZXYsDQo+PiAmaWR0ODIxMDM0LT5ncGlv
-X2NoaXAsDQo+PiAgICAJCQkJICAgICAgaWR0ODIxMDM0KTsNCj4+ICAgIH0NCj4+IC0jZWxzZSAv
-KiBJU19FTkFCTEVEKENPTkZJR19HUElPTElCKSAqLw0KPj4gLXN0YXRpYyBpbnQgaWR0ODIxMDM0
-X2dwaW9faW5pdChzdHJ1Y3QgaWR0ODIxMDM0ICppZHQ4MjEwMzQpDQo+PiAtew0KPj4gLQlyZXR1
-cm4gMDsNCj4+IC19DQo+PiAtI2VuZGlmDQo+Pg0KPj4gICAgc3RhdGljIGludCBpZHQ4MjEwMzRf
-c3BpX3Byb2JlKHN0cnVjdCBzcGlfZGV2aWNlICpzcGkpDQo+PiAgICB7DQo+PiBAQCAtMTE2NSw2
-ICsxMTU4LDkgQEAgc3RhdGljIGludCBpZHQ4MjEwMzRfc3BpX3Byb2JlKHN0cnVjdCBzcGlfZGV2
-aWNlICpzcGkpDQo+PiAgICAJaWYgKHJldCkNCj4+ICAgIAkJcmV0dXJuIHJldDsNCj4+DQo+PiAr
-CWlmICghSVNfRU5BQkxFRChDT05GSUdfR1BJT0xJQikpDQo+PiArCQlyZXR1cm4gMDsNCj4+ICsN
-Cj4+ICAgIAlyZXQgPSBpZHQ4MjEwMzRfZ3Bpb19pbml0KGlkdDgyMTAzNCk7DQo+PiAgICAJaWYg
-KHJldCkNCj4+ICAgIAkJcmV0dXJuIHJldDsNCj4+DQo+Pg0KPj4gQ2hyaXN0b3BoZQ0KPiANCj4g
-UmlnaHQsIEkgZGlkIHRoZSB0ZXN0IHRvbyBhbmQgaW5kZWVkLCBJIGNhbiByZW1vdmUgdGhlICNp
-ZiBzZWN0aW9uLg0KPiANCj4gSSB3aWxsIHVzZSAoSSB0aGluayBpcyBjbGVhcmVyKSBhdCBpZHQ4
-MjEwMzRfc3BpX3Byb2JlKCk6DQo+IAlpZiAoIUlTX0VOQUJMRUQoQ09ORklHX0dQSU9MSUIpKSB7
-DQo+ICAgICAJCXJldCA9IGlkdDgyMTAzNF9ncGlvX2luaXQoaWR0ODIxMDM0KTsNCj4gCQlpZiAo
-cmV0KQ0KPiAgICAgCQkJcmV0dXJuIHJldDsNCj4gCX0NCj4gDQoNCg0KSSBndWVzcyB5b3UgbWVh
-biA6DQoNCglpZiAoSVNfRU5BQkxFRChDT05GSUdfR1BJT0xJQikpDQoNCg0KPiBJcyB0aGF0IG9r
-IGZvciB5b3UgPw0KDQoNCg0KV2hhdCBhYm91dDoNCg0KCWlmIChJU19FTkFCTEVEKENPTkZJR19H
-UElPTElCKSkNCgkJcmV0dXJuIGlkdDgyMTAzNF9ncGlvX2luaXQoaWR0ODIxMDM0KTsNCgllbHNl
-DQoJCXJldHVybiAwOw0KDQpDaHJpc3RvcGhlDQo=
+
+
+On 23.01.2023 10:49, Krzysztof Kozlowski wrote:
+> There is no point to allow selecting pin-controller drivers for Qualcomm
+> ARMv7 SoCs when building ARM64 kernel, and vice versa.  This makes
+> kernel configuration more difficult as many do not remember the Qualcomm
+> SoCs model names/numbers.  There won't be a single image for ARMv7 and
+> ARMv8/9 SoCs, so no features/options are lost.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Not sure about the newest of the newest SoCs with Cortex-X etc,
+but older ones, particularly including 8916 (as some vendors
+in their infinite wisdom decided that shipping a 32 bit tz is
+a good idea) having ARM || ARM64 would make sense.
+
+Konrad
+>  drivers/clk/qcom/Kconfig | 88 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 88 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 1c360eed72d7..3112ca762f4d 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -57,6 +57,7 @@ config QCOM_CLK_APCC_MSM8996
+>  config QCOM_CLK_APCS_SDX55
+>  	tristate "SDX55 and SDX65 APCS Clock Controller"
+>  	depends on QCOM_APCS_IPC || COMPILE_TEST
+> +	depends on ARM || COMPILE_TEST
+>  	help
+>  	  Support for the APCS Clock Controller on SDX55, SDX65 platforms. The
+>  	  APCS is managing the mux and divider which feeds the CPUs.
+> @@ -100,6 +101,7 @@ config QCOM_CLK_RPMH
+>  
+>  config APQ_GCC_8084
+>  	tristate "APQ8084 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on apq8084 devices.
+> @@ -108,6 +110,7 @@ config APQ_GCC_8084
+>  
+>  config APQ_MMCC_8084
+>  	tristate "APQ8084 Multimedia Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select APQ_GCC_8084
+>  	select QCOM_GDSC
+>  	help
+> @@ -116,6 +119,7 @@ config APQ_MMCC_8084
+>  	  graphics, video encode/decode, camera, etc.
+>  
+>  config IPQ_APSS_PLL
+> +	depends on ARM64 || COMPILE_TEST
+>  	tristate "IPQ APSS PLL"
+>  	help
+>  	  Support for APSS PLL on ipq devices. The APSS PLL is the main
+> @@ -127,6 +131,7 @@ config IPQ_APSS_6018
+>  	tristate "IPQ APSS Clock Controller"
+>  	select IPQ_APSS_PLL
+>  	depends on QCOM_APCS_IPC || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for APSS clock controller on IPQ platforms. The
+>  	  APSS clock controller manages the Mux and enable block that feeds the
+> @@ -143,6 +148,7 @@ config IPQ_GCC_4019
+>  
+>  config IPQ_GCC_6018
+>  	tristate "IPQ6018 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for global clock controller on ipq6018 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -151,6 +157,7 @@ config IPQ_GCC_6018
+>  
+>  config IPQ_GCC_806X
+>  	tristate "IPQ806x Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on ipq806x devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -158,6 +165,7 @@ config IPQ_GCC_806X
+>  
+>  config IPQ_LCC_806X
+>  	tristate "IPQ806x LPASS Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select IPQ_GCC_806X
+>  	help
+>  	  Support for the LPASS clock controller on ipq806x devices.
+> @@ -166,6 +174,7 @@ config IPQ_LCC_806X
+>  
+>  config IPQ_GCC_8074
+>  	tristate "IPQ8074 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for global clock controller on ipq8074 devices.
+> @@ -175,6 +184,7 @@ config IPQ_GCC_8074
+>  
+>  config MSM_GCC_8660
+>  	tristate "MSM8660 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on msm8660 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -182,6 +192,7 @@ config MSM_GCC_8660
+>  
+>  config MSM_GCC_8909
+>  	tristate "MSM8909 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on msm8909 devices.
+> @@ -206,6 +217,7 @@ config MSM_GCC_8939
+>  
+>  config MSM_GCC_8960
+>  	tristate "APQ8064/MSM8960 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on apq8064/msm8960 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -213,6 +225,7 @@ config MSM_GCC_8960
+>  
+>  config MSM_LCC_8960
+>  	tristate "APQ8064/MSM8960 LPASS Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select MSM_GCC_8960
+>  	help
+>  	  Support for the LPASS clock controller on apq8064/msm8960 devices.
+> @@ -221,6 +234,7 @@ config MSM_LCC_8960
+>  
+>  config MDM_GCC_9607
+>  	tristate "MDM9607 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on mdm9607 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -228,6 +242,7 @@ config MDM_GCC_9607
+>  
+>  config MDM_GCC_9615
+>  	tristate "MDM9615 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on mdm9615 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -235,6 +250,7 @@ config MDM_GCC_9615
+>  
+>  config MDM_LCC_9615
+>  	tristate "MDM9615 LPASS Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select MDM_GCC_9615
+>  	help
+>  	  Support for the LPASS clock controller on mdm9615 devices.
+> @@ -243,6 +259,7 @@ config MDM_LCC_9615
+>  
+>  config MSM_MMCC_8960
+>  	tristate "MSM8960 Multimedia Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select MSM_GCC_8960
+>  	help
+>  	  Support for the multimedia clock controller on msm8960 devices.
+> @@ -251,6 +268,7 @@ config MSM_MMCC_8960
+>  
+>  config MSM_GCC_8953
+>  	tristate "MSM8953 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on msm8953 devices.
+> @@ -259,6 +277,7 @@ config MSM_GCC_8953
+>  
+>  config MSM_GCC_8974
+>  	tristate "MSM8974 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on msm8974 devices.
+> @@ -267,6 +286,7 @@ config MSM_GCC_8974
+>  
+>  config MSM_MMCC_8974
+>  	tristate "MSM8974 Multimedia Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select MSM_GCC_8974
+>  	select QCOM_GDSC
+>  	help
+> @@ -276,6 +296,7 @@ config MSM_MMCC_8974
+>  
+>  config MSM_GCC_8976
+>  	tristate "MSM8956/76 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on msm8956/76 devices.
+> @@ -284,6 +305,7 @@ config MSM_GCC_8976
+>  
+>  config MSM_MMCC_8994
+>  	tristate "MSM8994 Multimedia Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select MSM_GCC_8994
+>  	select QCOM_GDSC
+>  	help
+> @@ -293,6 +315,7 @@ config MSM_MMCC_8994
+>  
+>  config MSM_GCC_8994
+>  	tristate "MSM8994 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on msm8994 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -300,6 +323,7 @@ config MSM_GCC_8994
+>  
+>  config MSM_GCC_8996
+>  	tristate "MSM8996 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on msm8996 devices.
+> @@ -308,6 +332,7 @@ config MSM_GCC_8996
+>  
+>  config MSM_MMCC_8996
+>  	tristate "MSM8996 Multimedia Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select MSM_GCC_8996
+>  	select QCOM_GDSC
+>  	help
+> @@ -317,6 +342,7 @@ config MSM_MMCC_8996
+>  
+>  config MSM_GCC_8998
+>  	tristate "MSM8998 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on msm8998 devices.
+> @@ -325,6 +351,7 @@ config MSM_GCC_8998
+>  
+>  config MSM_GPUCC_8998
+>  	tristate "MSM8998 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select MSM_GCC_8998
+>  	select QCOM_GDSC
+>  	help
+> @@ -334,6 +361,7 @@ config MSM_GPUCC_8998
+>  
+>  config MSM_MMCC_8998
+>  	tristate "MSM8998 Multimedia Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select MSM_GCC_8998
+>  	select QCOM_GDSC
+>  	help
+> @@ -351,6 +379,7 @@ config QCM_GCC_2290
+>  
+>  config QCM_DISPCC_2290
+>  	tristate "QCM2290 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCM_GCC_2290
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -360,6 +389,7 @@ config QCM_DISPCC_2290
+>  
+>  config QCS_GCC_404
+>  	tristate "QCS404 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on QCS404 devices.
+>  	  Say Y if you want to use multimedia devices or peripheral
+> @@ -367,6 +397,7 @@ config QCS_GCC_404
+>  
+>  config SC_CAMCC_7180
+>  	tristate "SC7180 Camera Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7180
+>  	help
+>  	  Support for the camera clock controller on Qualcomm Technologies, Inc
+> @@ -376,6 +407,7 @@ config SC_CAMCC_7180
+>  
+>  config SC_CAMCC_7280
+>  	tristate "SC7280 Camera Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7280
+>  	help
+>  	  Support for the camera clock controller on Qualcomm Technologies, Inc
+> @@ -385,6 +417,7 @@ config SC_CAMCC_7280
+>  
+>  config SC_DISPCC_7180
+>  	tristate "SC7180 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7180
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -394,6 +427,7 @@ config SC_DISPCC_7180
+>  
+>  config SC_DISPCC_7280
+>  	tristate "SC7280 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7280
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc.
+> @@ -403,6 +437,7 @@ config SC_DISPCC_7280
+>  
+>  config SC_DISPCC_8280XP
+>  	tristate "SC8280XP Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_8280XP
+>  	help
+>  	  Support for the two display clock controllers on Qualcomm
+> @@ -414,6 +449,7 @@ config SC_GCC_7180
+>  	tristate "SC7180 Global Clock Controller"
+>  	select QCOM_GDSC
+>  	depends on COMMON_CLK_QCOM
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on SC7180 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -423,6 +459,7 @@ config SC_GCC_7280
+>  	tristate "SC7280 Global Clock Controller"
+>  	select QCOM_GDSC
+>  	depends on COMMON_CLK_QCOM
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on SC7280 devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -432,6 +469,7 @@ config SC_GCC_8180X
+>  	tristate "SC8180X Global Clock Controller"
+>  	select QCOM_GDSC
+>  	depends on COMMON_CLK_QCOM
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on SC8180X devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -441,6 +479,7 @@ config SC_GCC_8280XP
+>  	tristate "SC8280XP Global Clock Controller"
+>  	select QCOM_GDSC
+>  	depends on COMMON_CLK_QCOM
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on SC8280XP devices.
+>  	  Say Y if you want to use peripheral devices such as UART, SPI,
+> @@ -448,6 +487,7 @@ config SC_GCC_8280XP
+>  
+>  config SC_GPUCC_7180
+>  	tristate "SC7180 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7180
+>  	help
+>  	  Support for the graphics clock controller on SC7180 devices.
+> @@ -456,6 +496,7 @@ config SC_GPUCC_7180
+>  
+>  config SC_GPUCC_7280
+>  	tristate "SC7280 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7280
+>  	help
+>  	  Support for the graphics clock controller on SC7280 devices.
+> @@ -464,6 +505,7 @@ config SC_GPUCC_7280
+>  
+>  config SC_GPUCC_8280XP
+>  	tristate "SC8280XP Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_8280XP
+>  	help
+>  	  Support for the graphics clock controller on SC8280XP devices.
+> @@ -472,6 +514,7 @@ config SC_GPUCC_8280XP
+>  
+>  config SC_LPASSCC_7280
+>  	tristate "SC7280 Low Power Audio Subsystem (LPASS) Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7280
+>  	help
+>  	  Support for the LPASS clock controller on SC7280 devices.
+> @@ -480,6 +523,7 @@ config SC_LPASSCC_7280
+>  
+>  config SC_LPASS_CORECC_7180
+>  	tristate "SC7180 LPASS Core Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7180
+>  	help
+>  	  Support for the LPASS(Low Power Audio Subsystem) core clock controller
+> @@ -489,6 +533,7 @@ config SC_LPASS_CORECC_7180
+>  
+>  config SC_LPASS_CORECC_7280
+>  	tristate "SC7280 LPASS Core & Audio Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7280
+>  	select QCOM_GDSC
+>  	help
+> @@ -499,6 +544,7 @@ config SC_LPASS_CORECC_7280
+>  
+>  config SC_MSS_7180
+>  	tristate "SC7180 Modem Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7180
+>  	help
+>  	  Support for the Modem Subsystem clock controller on Qualcomm
+> @@ -508,6 +554,7 @@ config SC_MSS_7180
+>  
+>  config SC_VIDEOCC_7180
+>  	tristate "SC7180 Video Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7180
+>  	help
+>  	  Support for the video clock controller on SC7180 devices.
+> @@ -516,6 +563,7 @@ config SC_VIDEOCC_7180
+>  
+>  config SC_VIDEOCC_7280
+>  	tristate "SC7280 Video Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SC_GCC_7280
+>  	help
+>  	  Support for the video clock controller on SC7280 devices.
+> @@ -524,6 +572,7 @@ config SC_VIDEOCC_7280
+>  
+>  config SDM_CAMCC_845
+>  	tristate "SDM845 Camera Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_845
+>  	help
+>  	  Support for the camera clock controller on SDM845 devices.
+> @@ -531,6 +580,7 @@ config SDM_CAMCC_845
+>  
+>  config SDM_GCC_660
+>  	tristate "SDM660 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SDM660 devices.
+> @@ -539,6 +589,7 @@ config SDM_GCC_660
+>  
+>  config SDM_MMCC_660
+>  	tristate "SDM660 Multimedia Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_660
+>  	select QCOM_GDSC
+>  	help
+> @@ -548,6 +599,7 @@ config SDM_MMCC_660
+>  
+>  config SDM_GPUCC_660
+>  	tristate "SDM660 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_660
+>  	select QCOM_GDSC
+>  	help
+> @@ -557,12 +609,14 @@ config SDM_GPUCC_660
+>  
+>  config QCS_TURING_404
+>  	tristate "QCS404 Turing Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the Turing Clock Controller on QCS404, provides clocks
+>  	  and resets for the Turing subsystem.
+>  
+>  config QCS_Q6SSTOP_404
+>  	tristate "QCS404 Q6SSTOP Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCS_GCC_404
+>  	help
+>  	  Support for the Q6SSTOP clock controller on QCS404 devices.
+> @@ -571,6 +625,7 @@ config QCS_Q6SSTOP_404
+>  
+>  config SDM_GCC_845
+>  	tristate "SDM845/SDM670 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SDM845 and SDM670 devices.
+> @@ -579,6 +634,7 @@ config SDM_GCC_845
+>  
+>  config SDM_GPUCC_845
+>  	tristate "SDM845 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_845
+>  	help
+>  	  Support for the graphics clock controller on SDM845 devices.
+> @@ -587,6 +643,7 @@ config SDM_GPUCC_845
+>  
+>  config SDM_VIDEOCC_845
+>  	tristate "SDM845 Video Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_845
+>  	select QCOM_GDSC
+>  	help
+> @@ -596,6 +653,7 @@ config SDM_VIDEOCC_845
+>  
+>  config SDM_DISPCC_845
+>  	tristate "SDM845 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_845
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -605,6 +663,7 @@ config SDM_DISPCC_845
+>  
+>  config SDM_LPASSCC_845
+>  	tristate "SDM845 Low Power Audio Subsystem (LPAAS) Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SDM_GCC_845
+>  	help
+>  	  Support for the LPASS clock controller on SDM845 devices.
+> @@ -613,6 +672,7 @@ config SDM_LPASSCC_845
+>  
+>  config SDX_GCC_55
+>  	tristate "SDX55 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SDX55 devices.
+> @@ -621,6 +681,7 @@ config SDX_GCC_55
+>  
+>  config SDX_GCC_65
+>  	tristate "SDX65 Global Clock Controller"
+> +	depends on ARM || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SDX65 devices.
+> @@ -629,6 +690,7 @@ config SDX_GCC_65
+>  
+>  config SM_CAMCC_6350
+>  	tristate "SM6350 Camera Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_6350
+>  	help
+>  	  Support for the camera clock controller on SM6350 devices.
+> @@ -636,6 +698,7 @@ config SM_CAMCC_6350
+>  
+>  config SM_CAMCC_8250
+>  	tristate "SM8250 Camera Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8250
+>  	help
+>  	  Support for the camera clock controller on SM8250 devices.
+> @@ -643,6 +706,7 @@ config SM_CAMCC_8250
+>  
+>  config SM_CAMCC_8450
+>  	tristate "SM8450 Camera Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8450
+>  	help
+>  	  Support for the camera clock controller on SM8450 devices.
+> @@ -650,6 +714,7 @@ config SM_CAMCC_8450
+>  
+>  config SM_DISPCC_6115
+>  	tristate "SM6115 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_6115
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -659,6 +724,7 @@ config SM_DISPCC_6115
+>  
+>  config SM_DISPCC_6125
+>  	tristate "SM6125 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_6125
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -668,6 +734,7 @@ config SM_DISPCC_6125
+>  
+>  config SM_DISPCC_8250
+>  	tristate "SM8150/SM8250/SM8350 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_8150 || SM_GCC_8250 || SM_GCC_8350
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -677,6 +744,7 @@ config SM_DISPCC_8250
+>  
+>  config SM_DISPCC_6350
+>  	tristate "SM6350 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_6350
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -686,6 +754,7 @@ config SM_DISPCC_6350
+>  
+>  config SM_DISPCC_6375
+>  	tristate "SM6375 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_6375
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -695,6 +764,7 @@ config SM_DISPCC_6375
+>  
+>  config SM_DISPCC_8450
+>  	tristate "SM8450 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_8450
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -704,6 +774,7 @@ config SM_DISPCC_8450
+>  
+>  config SM_DISPCC_8550
+>  	tristate "SM8550 Display Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	depends on SM_GCC_8550
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> @@ -713,6 +784,7 @@ config SM_DISPCC_8550
+>  
+>  config SM_GCC_6115
+>  	tristate "SM6115 and SM4250 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM6115 and SM4250 devices.
+> @@ -721,6 +793,7 @@ config SM_GCC_6115
+>  
+>  config SM_GCC_6125
+>  	tristate "SM6125 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on SM6125 devices.
+>  	  Say Y if you want to use peripheral devices such as UART,
+> @@ -728,6 +801,7 @@ config SM_GCC_6125
+>  
+>  config SM_GCC_6350
+>  	tristate "SM6350 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM6350 devices.
+> @@ -736,6 +810,7 @@ config SM_GCC_6350
+>  
+>  config SM_GCC_6375
+>  	tristate "SM6375 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM6375 devices.
+> @@ -744,6 +819,7 @@ config SM_GCC_6375
+>  
+>  config SM_GCC_8150
+>  	tristate "SM8150 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the global clock controller on SM8150 devices.
+>  	  Say Y if you want to use peripheral devices such as UART,
+> @@ -751,6 +827,7 @@ config SM_GCC_8150
+>  
+>  config SM_GCC_8250
+>  	tristate "SM8250 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM8250 devices.
+> @@ -759,6 +836,7 @@ config SM_GCC_8250
+>  
+>  config SM_GCC_8350
+>  	tristate "SM8350 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM8350 devices.
+> @@ -767,6 +845,7 @@ config SM_GCC_8350
+>  
+>  config SM_GCC_8450
+>  	tristate "SM8450 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM8450 devices.
+> @@ -775,6 +854,7 @@ config SM_GCC_8450
+>  
+>  config SM_GCC_8550
+>  	tristate "SM8550 Global Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the global clock controller on SM8550 devices.
+> @@ -783,6 +863,7 @@ config SM_GCC_8550
+>  
+>  config SM_GPUCC_6350
+>  	tristate "SM6350 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_6350
+>  	help
+>  	  Support for the graphics clock controller on SM6350 devices.
+> @@ -791,6 +872,7 @@ config SM_GPUCC_6350
+>  
+>  config SM_GPUCC_8150
+>  	tristate "SM8150 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8150
+>  	help
+>  	  Support for the graphics clock controller on SM8150 devices.
+> @@ -799,6 +881,7 @@ config SM_GPUCC_8150
+>  
+>  config SM_GPUCC_8250
+>  	tristate "SM8250 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8250
+>  	help
+>  	  Support for the graphics clock controller on SM8250 devices.
+> @@ -807,6 +890,7 @@ config SM_GPUCC_8250
+>  
+>  config SM_GPUCC_8350
+>  	tristate "SM8350 Graphics Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8350
+>  	help
+>  	  Support for the graphics clock controller on SM8350 devices.
+> @@ -815,6 +899,7 @@ config SM_GPUCC_8350
+>  
+>  config SM_TCSRCC_8550
+>  	tristate "SM8550 TCSR Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select QCOM_GDSC
+>  	help
+>  	  Support for the TCSR clock controller on SM8550 devices.
+> @@ -822,6 +907,7 @@ config SM_TCSRCC_8550
+>  
+>  config SM_VIDEOCC_8150
+>  	tristate "SM8150 Video Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8150
+>  	select QCOM_GDSC
+>  	help
+> @@ -831,6 +917,7 @@ config SM_VIDEOCC_8150
+>  
+>  config SM_VIDEOCC_8250
+>  	tristate "SM8250 Video Clock Controller"
+> +	depends on ARM64 || COMPILE_TEST
+>  	select SM_GCC_8250
+>  	select QCOM_GDSC
+>  	help
+> @@ -871,6 +958,7 @@ config KRAITCC
+>  
+>  config CLK_GFM_LPASS_SM8250
+>  	tristate "SM8250 GFM LPASS Clocks"
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Support for the Glitch Free Mux (GFM) Low power audio
+>            subsystem (LPASS) clocks found on SM8250 SoCs.
