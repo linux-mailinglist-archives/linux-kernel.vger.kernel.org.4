@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16EC678A85
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DA1678A83
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 23:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbjAWWNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 17:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S233114AbjAWWNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 17:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbjAWWNL (ORCPT
+        with ESMTP id S233151AbjAWWM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 17:13:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB84539BBA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 14:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674511896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lvUmurC9HOodDs2LaRkp+R+qT18zMiP3C2WK1UkBQdM=;
-        b=ItZgT6QPp68KTAVibaTP4znhV+bC7K013rBJRU8Yc/9zoj0lZg5cIdFm13DSBMJXJukJS3
-        uAVCm2eQ09oq83ymspjwbDMMM3+YJZf/S/N5FNV8s+79IsrJzYTsZ8sVK9tJpXWCSE/enQ
-        aRFFnzRnp534pTunriBH4AtJBDvxAhE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452--3poGQaqMM66JfqihUnbzw-1; Mon, 23 Jan 2023 17:11:33 -0500
-X-MC-Unique: -3poGQaqMM66JfqihUnbzw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 23 Jan 2023 17:12:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316B4392A0;
+        Mon, 23 Jan 2023 14:12:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DF1F3C22745;
-        Mon, 23 Jan 2023 22:11:32 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.206])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F2C8F492C3C;
-        Mon, 23 Jan 2023 22:11:31 +0000 (UTC)
-Date:   Mon, 23 Jan 2023 17:11:30 -0500
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, pbonzini@redhat.com, bcodding@redhat.com,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Nicholas Bellinger <nab@linux-iscsi.org>
-Subject: Re: [PATCH V2] vhost-scsi: unbreak any layout for response
-Message-ID: <Y88GEm63Tsg1AAu4@fedora>
-References: <20230119073647.76467-1-jasowang@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48F85B80DE1;
+        Mon, 23 Jan 2023 22:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DDAEC4339B;
+        Mon, 23 Jan 2023 22:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674511925;
+        bh=T4OUyD+gMfLi4t8TV225tN/XhFfB3kBwKhfR2EqDfhs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yoi5yYwgUE0ymFOJ1VSucmfsRg0usKoyceuEV9GVihlqvhT4KlLQpeJxjvfHBUfuV
+         lUYtSOA+6yT2GzMcuxA70lIyvs9FpfgCascM2kx6pPGdtaZxoSTV842ZbsQCXsvcTz
+         uAhwYAlNJaC6mW8bvw4NRibMBoJzrdi74v3URwlH37xT0lWKEiNgrsR8G7mGUe/Vuz
+         SPNC1EMaCc351AkUQurhLr3keaQrqWTdrXgNcbf6NFHOcGzL+V1An5Wo8XCBms9vJa
+         DRp42l22VsvfUH4jBtrDR1yn5OPzFD9p75c4l8lAqKRNe8IenOE1A7tpMEMrofmmpk
+         piS8ZcYSw9Lpw==
+Date:   Mon, 23 Jan 2023 23:12:00 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: qcom-cci: Document SM6350
+ compatible
+Message-ID: <Y88GMAjn6scr1DFv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221213-sm6350-cci-v2-0-15c2c14c34bb@fairphone.com>
+ <20221213-sm6350-cci-v2-1-15c2c14c34bb@fairphone.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vqhw79aaCtf0o+Pf"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="M5DjASHqtfqGSqrR"
 Content-Disposition: inline
-In-Reply-To: <20230119073647.76467-1-jasowang@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221213-sm6350-cci-v2-1-15c2c14c34bb@fairphone.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,86 +78,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---vqhw79aaCtf0o+Pf
+--M5DjASHqtfqGSqrR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 19, 2023 at 03:36:47PM +0800, Jason Wang wrote:
-> Al Viro said:
+On Fri, Jan 20, 2023 at 02:13:44PM +0100, Luca Weiss wrote:
+> Document the compatible for the CCI block found on SM6350 SoC.
 >=20
-> """
-> Since "vhost/scsi: fix reuse of &vq->iov[out] in response"
-> we have this:
->                 cmd->tvc_resp_iov =3D vq->iov[vc.out];
->                 cmd->tvc_in_iovs =3D vc.in;
-> combined with
->                 iov_iter_init(&iov_iter, ITER_DEST, &cmd->tvc_resp_iov,
->                               cmd->tvc_in_iovs, sizeof(v_rsp));
-> in vhost_scsi_complete_cmd_work().  We used to have ->tvc_resp_iov
-> _pointing_ to vq->iov[vc.out]; back then iov_iter_init() asked to
-> set an iovec-backed iov_iter over the tail of vq->iov[], with
-> length being the amount of iovecs in the tail.
->=20
-> Now we have a copy of one element of that array.  Fortunately, the members
-> following it in the containing structure are two non-NULL kernel pointers,
-> so copy_to_iter() will not copy anything beyond the first iovec - kernel
-> pointer is not (on the majority of architectures) going to be accepted by
-> access_ok() in copyout() and it won't be skipped since the "length" (in
-> reality - another non-NULL kernel pointer) won't be zero.
->=20
-> So it's not going to give a guest-to-qemu escalation, but it's definitely
-> a bug.  Frankly, my preference would be to verify that the very first iov=
-ec
-> is long enough to hold rsp_size.  Due to the above, any users that try to
-> give us vq->iov[vc.out].iov_len < sizeof(struct virtio_scsi_cmd_resp)
-> would currently get a failure in vhost_scsi_complete_cmd_work()
-> anyway.
-> """
->=20
-> However, the spec doesn't say anything about the legacy descriptor
-> layout for the respone. So this patch tries to not assume the response
-> to reside in a single separate descriptor which is what commit
-> 79c14141a487 ("vhost/scsi: Convert completion path to use") tries to
-> achieve towards to ANY_LAYOUT.
->=20
-> This is done by allocating and using dedicate resp iov in the
-> command. To be safety, start with UIO_MAXIOV to be consistent with the
-> limitation that we advertise to the vhost_get_vq_desc().
->=20
-> Testing with the hacked virtio-scsi driver that use 1 descriptor for 1
-> byte in the response.
->=20
-> Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Benjamin Coddington <bcodding@redhat.com>
-> Cc: Nicholas Bellinger <nab@linux-iscsi.org>
-> Fixes: a77ec83a5789 ("vhost/scsi: fix reuse of &vq->iov[out] in response")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
-> Changes since V1:
-> - tweak the changelog
-> - fix the allocation size for tvc_resp_iov (should be sizeof(struct iovec=
-))
-> ---
->  drivers/vhost/scsi.c | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+Applied to for-next, thanks!
 
---vqhw79aaCtf0o+Pf
+
+--M5DjASHqtfqGSqrR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmPPBhIACgkQnKSrs4Gr
-c8h2CQgAjfogTnTq3fYLEVF3lup+f3//rNwFv+dD9Nj1SS3Hb+2tSXDvQWYcimF0
-Rk2sqHjeU50pU/ne5Scqe1SadPjqZb+iigRq/M0aRUuE3fa4os5tBRRLXbLNzu+v
-iyxXAskl3d9DwbOE13uocY4ldeRqAutyvVrvezMxwyGA2C19yWtmCjsu4FHrA6Wo
-WsM4Xu7WtIiqkxeR5TpkEhQokoMaVU+7w80WR1OsUhT3u40sfSwoN6Ue4kknBBHe
-JC3z804whf97+HwQ062bfKNZGLYpx8xjid9HqseL8u/n4DLsZTl6XN75f4878FbK
-npQ3QkEwdpabVVUxLsYfNsvXyuTwNg==
-=1Jmd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPPBi0ACgkQFA3kzBSg
+KbbLwg//S0qCFdJcJKzs8y0lQOit1uSGRCIm5yWVdF+aF/DEDoeg+rAildQMvdRu
+feERgXqbEJUHtNLH1K7K9BwnhTAcvUIGYC79UFz3OWmZiMaX1Gl8HPTJXSc4Y9wy
+GWBGhl3QXUGDeyApIV33sLSauZe220PXg0Zw/X/5WTZo9R+KnkoL8JqvNJIQsQ5v
+PwQ3c6UJUjIuL/wmbqM7AYe45UOGmsPi87nTgbdJFbgMvXp2xD37e2Y2LcYMICh5
+M1iknYmk0FMC2E1rBAwsGjmgwyYtbIEGMJqK0qkR+cuTu1KD0Fv2Z2nGQJh4TcK1
+ftkGfPEKQAzvm1GqH5ExzpijZU9/c8lQIOaIiHul5CxPJEqBZgn2KBj+1OyErfbH
+nL0ymeXrDzp01/gqrVwv1RYpg+wAzuie/uxXjnAJ2vInvEVx2osOy2sykP1Bg8FZ
+3Q74VMCQJ+3kM+BXMh9sEinr8aGs8qGEUIXL32YQp2dG57T3V8teqDJamYOMXXpT
+U0d7ff1Cz1FPYKkNzX2b9HXgsEbjrBh1XGZaDjJZTwbJuXtnN12lER4u+PzKaGZa
+aUSZ8ugLTSbRxCAJTPARXUGBTsOKiuxGTvYS/tYe1Hm/zHVGORUeqlIcTHuxswdV
+4PYbYwEE1eFwVxhJBsxsxG7XA+3OYWR/4HKnkqcgGWksO7qf4b8=
+=3gYL
 -----END PGP SIGNATURE-----
 
---vqhw79aaCtf0o+Pf--
-
+--M5DjASHqtfqGSqrR--
