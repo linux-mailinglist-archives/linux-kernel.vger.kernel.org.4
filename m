@@ -2,151 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0E367819C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADF06781AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbjAWQhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S233230AbjAWQil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjAWQhN (ORCPT
+        with ESMTP id S233225AbjAWQii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:37:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A4228874;
-        Mon, 23 Jan 2023 08:37:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB20760FA8;
-        Mon, 23 Jan 2023 16:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBEDDC4339E;
-        Mon, 23 Jan 2023 16:37:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674491831;
-        bh=ygXrCk7lDXCPU5TBq4c9PYUWWb7/Dwti3oEPNHVlqjw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=n0/vgn+MbdfyrYca+Yykeer/Kv9KF0bqvzPYNixmggG9j1ZoqwuU7+Bf3OCL+nmgf
-         gbFUkhlZrsRudPEaqd0Q4/BpnHri3kmTZV3nXiKHoao2OQqeYRRYDsf9JkD+rz1eG/
-         6jjytERYhnhYslVn4dYCZc0D8XhHeTr1NvEJ9bBVHbuCMNk7Gj4QArcxJS/Bf+RV14
-         gAYDVDiC7auZKlDpNcCjhzrtAdYHzNDvKC6IceHYxw1vdm/JFtx7hXmCQLaI0hC4VU
-         yUhGJIBVwyycjVhiOJh48njecnHzKU3e95Q32LN2qgaay4o7N4cgMREXCDh7T+Obmh
-         +NOmWE5OMvodw==
-Date:   Mon, 23 Jan 2023 10:37:09 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 19/27] dmaengine: dw-edma: Use non-atomic io-64 methods
-Message-ID: <20230123163709.GA891421@bhelgaas>
+        Mon, 23 Jan 2023 11:38:38 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C296A193FF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:38:36 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id tz11so32159240ejc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:38:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImwX9kdkxyCrfSxchCRVxcHp/q4vXtkqJGNHQ8DEkjc=;
+        b=4far6+BsQeuVq4zWunDyumaobqqRyJHEgIeK3YLhZuroLjse6yoHs8JvXbmF/KqStg
+         rxnQhqZG9GFcdehTbyghgkiwxJ93Pb9M3tDf2TlghV/DYVS/COt7tR0621b3nBn6hwDN
+         fCokuOrFJ4eYLI0wThexPivBWg+hZXx/qnar0kNH+XWPhojhV+WdFwD+OgTEh/OCIlmc
+         srWpBYsWvgPJJM6MT1YWIhh2lNAYoAQMwz2lMr4PErN8gzHx7GKJwI7UGILIKg2kqUPw
+         Zs1f6CL1SMdLVl56CIIbUh/TVyG+bBRlhGabUBhfIhiFQ7DkrM7e+aeNcZkoAYNomyQ5
+         VaBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImwX9kdkxyCrfSxchCRVxcHp/q4vXtkqJGNHQ8DEkjc=;
+        b=xabDO5fqYQlekGiayAtxl9ndf/YTqG8XqK733AwEDucjqLZg9RSZY+b1qw8krvXEHl
+         IQmCcnSNXiscw4Rzs/e9YPihw254LKofbO8hv3k4TZbyqULL8O4LDWZHkbMn5vxKLw1z
+         a1W3BM4PdO4pkVcv1qeFG6M9++R93kayIW1NS4wX9cRi0aAaJ8qMhQarquyMrSdGGjpU
+         0b/ngc8XHYCuaB4JBZ1AOK1Y4TRdcY8Cq9pg6vHtVLtvCDSCZ5fQ4qUJgu5NYqBSBw/w
+         TCM31rQlirMQYjYh81XDfbba+I9jK4Jv4sowus5nrDbaaWtd/otSs+a760k7Pt5nVc/1
+         4iaw==
+X-Gm-Message-State: AFqh2kpr+zllLDvlp/nz6dpwgPy3vQ6KkEkOz9ceKDatH6KjBhRPSZK4
+        nlmCFzdvNO6vLsZpPnz7kG4gMA==
+X-Google-Smtp-Source: AMrXdXul5MwiqQPpuhaRDMh0z5iXKOLd18UX/Lh/JbvN2UZqcd23wEqRedFecww6DX+nHF1piP4TeQ==
+X-Received: by 2002:a17:906:4ed9:b0:7c1:7145:5b3c with SMTP id i25-20020a1709064ed900b007c171455b3cmr26822145ejv.46.1674491915346;
+        Mon, 23 Jan 2023 08:38:35 -0800 (PST)
+Received: from c64.fritz.box ([81.221.122.240])
+        by smtp.gmail.com with ESMTPSA id lb25-20020a170907785900b007c00323cc23sm22198562ejc.27.2023.01.23.08.38.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 08:38:34 -0800 (PST)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
+        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
+        angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
+        andrew@lunn.ch, gtk3@inbox.ru, sean.wang@mediatek.com,
+        zhiyong.tao@mediatek.com
+Subject: [PATCH v8 0/9] Add minimal MT8365 and MT8365-EVK support
+Date:   Mon, 23 Jan 2023 17:38:24 +0100
+Message-Id: <20230123163833.1007181-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230121230359.kqfm4kvwys2jdan6@mobilestation>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 02:03:59AM +0300, Serge Semin wrote:
-> On Fri, Jan 20, 2023 at 06:54:01PM -0600, Bjorn Helgaas wrote:
-> > On Fri, Jan 13, 2023 at 08:14:01PM +0300, Serge Semin wrote:
-> > > Instead of splitting the 64-bits IOs up into two 32-bits ones it's
-> > > possible to use the already available non-atomic readq/writeq methods
-> > > implemented exactly for such cases. They are defined in the dedicated
-> > > header files io-64-nonatomic-lo-hi.h/io-64-nonatomic-hi-lo.h. So in case
-> > > if the 64-bits readq/writeq methods are unavailable on some platforms at
-> > > consideration, the corresponding drivers can have any of these headers
-> > > included and stop locally re-implementing the 64-bits IO accessors taking
-> > > into account the non-atomic nature of the included methods. Let's do that
-> > > in the DW eDMA driver too. Note by doing so we can discard the
-> > > CONFIG_64BIT config ifdefs from the code.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > Acked-by: Vinod Koul <vkoul@kernel.org>
-> > > ---
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.c | 55 +++++++++------------------
-> > >  1 file changed, 18 insertions(+), 37 deletions(-)
-> > > 
-> > > diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
-> > > index 66f296daac5a..51a34b43434c 100644
-> > > --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
-> > > +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
-> > > @@ -8,6 +8,8 @@
-> > >  
-> > >  #include <linux/bitfield.h>
-> > >  
-> > > +#include <linux/io-64-nonatomic-lo-hi.h>
-> > > +
-> > >  #include "dw-edma-core.h"
-> > >  #include "dw-edma-v0-core.h"
-> > >  #include "dw-edma-v0-regs.h"
-> > > @@ -53,8 +55,6 @@ static inline struct dw_edma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
-> > >  		SET_32(dw, rd_##name, value);		\
-> > >  	} while (0)
-> > >  
-> > > -#ifdef CONFIG_64BIT
-> > > -
-> > >  #define SET_64(dw, name, value)				\
-> > >  	writeq(value, &(__dw_regs(dw)->name))
-> > >  
-> > > @@ -80,8 +80,6 @@ static inline struct dw_edma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
-> > >  		SET_64(dw, rd_##name, value);		\
-> > >  	} while (0)
-> > >  
-> > > -#endif /* CONFIG_64BIT */
-> > 
-> 
-> > Great to get rid of these #ifdefs!
-> > 
-> > Am I missing something?  It looks like SET_64 is used only by
-> > SET_RW_64 and SET_BOTH_64, and neither of *them is used at all.
-> > 
-> > Similarly for GET_64 and GET_RW_64.
-> > 
-> > So maybe we could get rid of everything inside the #ifdefs as well?
-> 
-> Even though these macros are indeed unused in the driver they are
-> still a part of the DW eDMA CSRs access interface. In particular they
-> are supposed to be used to access the 64-bit registers declared in the
-> dw_edma_v0_regs, dw_edma_v0_unroll and dw_edma_v0_ch_regs structures.
-> So until the interface is converted to a more preferable direct MMIO
-> usage without any packed-structures I'd rather leave these macros
-> be.
-> ...
+v8:
+  - Add binding descriptions for mediatek,mt8365-systimer and
+    mediatek,mt8365-uart
+  - Specify ranges with parameters for u3phy
 
-> As I said above I'd rather leave the 64-bit accessors be until the
-> packed structure-based interface is removed from the driver.
+v7:
+  - Update GIC information in mt8365.dtsi (thanks to Marc Zyngier for
+    pointing out the problem)
+  - Adjust the timer to match the updated GIC information
 
-I wouldn't bother polishing something that's unused since it can't be
-tested, it's easy to resurrect from the history if/when it becomes
-necessary, and it makes it much harder to connect the commit log with
-the code change.  But this isn't a drivers/pci change, so I'm fine
-with it since Vinod acked it.
+v6:
+  - Add systimer in mt8365.dtsi
+  - Add I/D caches and L2 cache details in mt8365.dtsi
+  - Move bl31_secmon_reserved from mt8365.dtsi to mt8365-evk.dts
+  - Fix inconsistent indentation in mt8365-pinctrl example
+  - Further mt8365.dtsi cleanups
+  - Submit to additional maintainers spotted by get_maintainer.pl
 
-I guess the point is that when !CONFIG_64BIT, there was no writeq() so
-we used SET_LL_32 twice.  linux/io-64-nonatomic-lo-hi.h provides that
-writeq() implementation, so we can define and use SET_LL_64 for that
-case.
+v5:
+  - Reorder top-level entries in mediatek,mt8365-pinctrl.yaml to match
+    example-schema
+  - Use consistent quotes
 
-Bjorn
+v4:
+  - Remove pins-are-numbered references that have been holding things up
+    now that the patches removing it from dt-bindings have landed in linux-next
+
+v3:
+  - Remove a number of components that are not yet supported (they will
+    come back alongside the corresponding drivers)
+  - Address issues found by dt_binding_check (mostly fixing pinctrl
+    bindings)
+  - Address issues pointed out in comments
+  - Reorder patches
+
+v2:
+  - Add missing dt-bindings documentation
+  - Small cleanups addressing issues in v1 pointed out by Krzysztof Kozlowski
+
+
+Bernhard Rosenkränzer (6):
+  dt-bindings: arm64: dts: mediatek: Add mt8365-evk board
+  dt-bindings: irq: mtk, sysirq: add support for mt8365
+  dt-bindings: mfd: syscon: Add mt8365-syscfg
+  dt-bindings: pinctrl: add bindings for Mediatek MT8365 SoC
+  dt-bindings: timer: mediatek,mtk-timer: add MT8365 SoC bindings
+  dt-bindings: serial: mediatek,uart: add MT8365 SoC bindings
+
+Fabien Parent (3):
+  dt-bindings: usb: mediatek,mtu3: add MT8365 SoC bindings
+  dt-bindings: usb: mediatek,mtk-xhci: add MT8365 SoC bindings
+  arm64: dts: mediatek: Initial mt8365-evk support
+
+ .../devicetree/bindings/arm/mediatek.yaml     |   4 +
+ .../interrupt-controller/mediatek,sysirq.txt  |   1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 197 +++++++++
+ .../bindings/serial/mediatek,uart.yaml        |   1 +
+ .../bindings/timer/mediatek,mtk-timer.txt     |   1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ .../bindings/usb/mediatek,mtu3.yaml           |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts   | 169 ++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 378 ++++++++++++++++++
+ 11 files changed, 755 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+
+-- 
+2.39.1
+
