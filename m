@@ -2,101 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE5F677446
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 04:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E705267744B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 04:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjAWDL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 22:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S230155AbjAWDTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 22:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWDLy (ORCPT
+        with ESMTP id S229514AbjAWDTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 22:11:54 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AA41042C;
-        Sun, 22 Jan 2023 19:11:51 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 67C755C009E;
-        Sun, 22 Jan 2023 22:11:47 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 22 Jan 2023 22:11:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674443507; x=
-        1674529907; bh=QScSxmRcZr3Sphkxe/Gr2K9Ozgkh2rX21xaMYFUcXeA=; b=X
-        Rz0FTrWqQ+EJ7yUY/O8AQsIdrId9wmVuXjNukkjOoso9OZRjLMMnCchrb2u/HhQO
-        rMTlmsnwdKLiDSmb3+vCXsxNvPzRAXcLsGQx8sjlzYZx08a1gP+9r5SvbfkoWqi/
-        KvRkklMQ2JvvzGrOkvfu0V3B50ysor7yALbKvsmXPejDi2DVeZk5b9YkARltmlZk
-        9R1HvZfc4I6azXVqIDuRhqIxxDxtw+k6qY98YKX1FqUdRCxsMA+hYfRY2bFsM+bZ
-        pKCfywJMP6xsuN4rvRcp+qVnDf2lvgXgPRPFTSA3xoM/lg6wLeLmbUJM3uIPVT5a
-        tqMX5H37k8okAos+3MYLA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674443507; x=
-        1674529907; bh=QScSxmRcZr3Sphkxe/Gr2K9Ozgkh2rX21xaMYFUcXeA=; b=L
-        J1aYcd0veWpTyt9ZaDOmd+ayRpsALvuz0UKGJT7VZGMiuyRYPbp+cBHAk4BZBiIJ
-        icG5IgT3/Jj0a6LAuHt6gHwOA7NO1giD4tHP/kc63UpA1BdgQAGcXZa6hW/armNP
-        7ll42iDkw7SD1j1WoKioBbLJ2ey8yltUts8SGptgBihLY3wNWwIU9kx5spdDLkhv
-        fn9sxp9Y2aRfM3jDEd7b988uXAM3rS01nmvZlv+axocWujSE++CzR8uodUTkVDHs
-        /j1B0IODckPnHTF2q1f6jfRYX2xA1/yTNybzIdd8VO/eDLeEieT1K0SMBb2jh5KK
-        w5xw8TLk7/0xyX+KQ2fyw==
-X-ME-Sender: <xms:8vrNY2VbbKHZ7pMNTIFRG8ko7aXjygSWEcp_0Fr_yQtyD4aksUaTGg>
-    <xme:8vrNYynEUTSuVqae64K8_WYEdtUDiS3tmKWlOj4aMs9ZItyQn5wTnphOlZ8_biqxe
-    bUmzzs14LsB>
-X-ME-Received: <xmr:8vrNY6azORiJtQnNEvxWnEl8PaosotNnL1fCZTslvkEms4HP41M5_ckiaVqEDbmtNa31F0uGgMJbNyKKwqWEMZTTo_IERs9qlPCevZAQrqT-Cwmptssd>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddujedgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffhvfevfhgjtgfgsehtkeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    epieevleekgfdtgedufedufedtleetjeetvdehueelvedvleeuhfdutdeigeevleeknecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnh
-    esthhhvghmrgifrdhnvght
-X-ME-Proxy: <xmx:8vrNY9UN5P3Q7A2aK-L6eBQCGxr1tzA9_5Xy4TzANpFbsfx7xXpdVA>
-    <xmx:8vrNYwkGJ7FpgrUCwr7nyiD0Vpmicdo_gL74ZZZJcRvRpM_xelyM9Q>
-    <xmx:8vrNYydEPFxLp-wFgtBjisQ6fMuofyjWI1Yd-UAefia7Vo2bwEBfjw>
-    <xmx:8_rNY6euF6RA2GxyQDcMWq2mZTslBnpYVyxsgn1Es78Ign8_VMoWGw>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 22 Jan 2023 22:11:41 -0500 (EST)
-Message-ID: <db933d76-1432-f671-8712-d94de35277d8@themaw.net>
-Date:   Mon, 23 Jan 2023 11:11:35 +0800
+        Sun, 22 Jan 2023 22:19:02 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5607212078
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 19:19:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 871ED43B81;
+        Mon, 23 Jan 2023 03:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1674443937;
+        bh=r/A9vCNnUeh8eXWcAofjOJ52TiQX6lXArC0u7z6naKc=;
+        h=From:To:Cc:Subject:Date;
+        b=mbdvDI6dk/FNTYDNwUSw+4d1FqAeKyPVktUm2H48CekcMfBdnq32vZ4y8hkFTuSvj
+         dfmBgACB1E83ChNMCbFlHMx62/JXedXP7MAhWny05FXP98WUPYObdW39U4OdyquY9g
+         aWOG7kDPXzldCaY/BQJbYondyHLNMVSihNYGKOSY8tRbvh6pCWKsKIGXeNk+kOFdZk
+         5daR15Pcd70ebPboJAm79Kv4Ghj29PrphHzJGPGAeYIRZFV3ECFZrQbS34Xse/PeDI
+         3xPgbmLngwMzF606OVfJuGerE0ECGFEhCNOKOHLGjW+92sTYincMz3aeeI2GeAbniH
+         0fF4rx6OJ4ltQ==
+From:   Asahi Lina <lina@asahilina.net>
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Asahi Lina <lina@asahilina.net>,
+        Eric Curtin <ecurtin@redhat.com>
+Subject: [PATCH v2] soc: apple: rtkit: Add register dump decoding to crashlog
+Date:   Mon, 23 Jan 2023 12:17:28 +0900
+Message-Id: <20230123031728.22515-1-lina@asahilina.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] kernfs: dont take i_lock on inode attr read
-From:   Ian Kent <raven@themaw.net>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Eric Sandeen <sandeen@sandeen.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        elver@google.com
-References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net>
- <166606036215.13363.1288735296954908554.stgit@donald.themaw.net>
- <Y2BMonmS0SdOn5yh@slm.duckdns.org> <20221221133428.GE69385@mutt>
- <7815c8da-7d5f-c2c5-9dfd-7a77ac37c7f7@themaw.net>
- <e25ee08c-7692-4042-9961-a499600f0a49@app.fastmail.com>
- <9e35cf66-79ef-1f13-dc6b-b013c73a9fc6@themaw.net>
-Content-Language: en-US
-In-Reply-To: <9e35cf66-79ef-1f13-dc6b-b013c73a9fc6@themaw.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,101 +53,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the coprocessor crashes, it's useful to get a proper register dump
+so we can find out what the firmware was doing. Add a decoder for this.
 
-On 29/12/22 21:07, Ian Kent wrote:
->
-> On 29/12/22 17:20, Arnd Bergmann wrote:
->> On Fri, Dec 23, 2022, at 00:11, Ian Kent wrote:
->>> On 21/12/22 21:34, Anders Roxell wrote:
->>>> On 2022-10-31 12:30, Tejun Heo wrote:
->>>>> On Tue, Oct 18, 2022 at 10:32:42AM +0800, Ian Kent wrote:
->>>>>> The kernfs write lock is held when the kernfs node inode attributes
->>>>>> are updated. Therefore, when either kernfs_iop_getattr() or
->>>>>> kernfs_iop_permission() are called the kernfs node inode attributes
->>>>>> won't change.
->>>>>>
->>>>>> Consequently concurrent kernfs_refresh_inode() calls always copy the
->>>>>> same values from the kernfs node.
->>>>>>
->>>>>> So there's no need to take the inode i_lock to get consistent values
->>>>>> for generic_fillattr() and generic_permission(), the kernfs read 
->>>>>> lock
->>>>>> is sufficient.
->>>>>>
->>>>>> Signed-off-by: Ian Kent <raven@themaw.net>
->>>>> Acked-by: Tejun Heo <tj@kernel.org>
->>>> Hi,
->>>>
->>>> Building an allmodconfig arm64 kernel on yesterdays next-20221220 and
->>>> booting that in qemu I see the following "BUG: KCSAN: data-race in
->>>> set_nlink / set_nlink".
->>>
->>> I'll check if I missed any places where set_link() could be
->>> called where the link count could be different.
->>>
->>>
->>> If there aren't any the question will then be can writing the
->>> same value to this location in multiple concurrent threads
->>> corrupt it?
->> I think the race that is getting reported for set_nlink()
->> is about this bit getting called simulatenously on multiple
->> CPUs with only the read lock held for the inode:
->>
->>       /* Yes, some filesystems do change nlink from zero to one */
->>       if (inode->i_nlink == 0)
->> atomic_long_dec(&inode->i_sb->s_remove_count);
->>       inode->__i_nlink = nlink;
->>
->> Since i_nlink and __i_nlink refer to the same memory location,
->> the 'inode->i_nlink == 0' check can be true for all of them
->> before the nonzero nlink value gets set, and this results in
->> s_remove_count being decremented more than once.
->
->
-> Thanks for the comment Arnd.
+Originally this had ESR decoding by reusing the ARM64 arch header for
+this, but that introduces some module linking and cross-arch compilation
+issues, so let's leave that out for now.
 
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+ drivers/soc/apple/rtkit-crashlog.c | 93 ++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-Hello all,
-
-
-I've been looking at this and after consulting Miklos and his pointing
-
-out that it looks like a false positive the urgency dropped off a bit. So
-
-apologies for taking so long to report back.
-
-
-Anyway it needs some description of conclusions reached so far.
-
-
-I'm still looking around but in short, kernfs will set directories to <# of
-
-directory entries> + 2 unconditionally for directories. I can't yet find
-
-any other places where i_nlink is set or changed and if there are none
-
-then i_nlink will never be set to zero so the race should not occur.
-
-
-Consequently my claim is this is a real false positive.
-
-
-There are the file system operations that may be passed at mount time
-
-but given the way kernfs sets i_nlink it pretty much dictates those 
-operations
-
-(if there were any that modify it and there don't appear to be any) leave it
-
-alone.
-
-
-So it just doesn't make sense for users of kernfs to fiddle with i_nlink ...
-
-
-Ian
-
-
-
-
+diff --git a/drivers/soc/apple/rtkit-crashlog.c b/drivers/soc/apple/rtkit-crashlog.c
+index 732deed64660..dfa74b32eda2 100644
+--- a/drivers/soc/apple/rtkit-crashlog.c
++++ b/drivers/soc/apple/rtkit-crashlog.c
+@@ -13,6 +13,17 @@
+ #define APPLE_RTKIT_CRASHLOG_VERSION FOURCC('C', 'v', 'e', 'r')
+ #define APPLE_RTKIT_CRASHLOG_MBOX FOURCC('C', 'm', 'b', 'x')
+ #define APPLE_RTKIT_CRASHLOG_TIME FOURCC('C', 't', 'i', 'm')
++#define APPLE_RTKIT_CRASHLOG_REGS FOURCC('C', 'r', 'g', '8')
++
++/* For COMPILE_TEST on non-ARM64 architectures */
++#ifndef PSR_MODE_EL0t
++#define PSR_MODE_EL0t	0x00000000
++#define PSR_MODE_EL1t	0x00000004
++#define PSR_MODE_EL1h	0x00000005
++#define PSR_MODE_EL2t	0x00000008
++#define PSR_MODE_EL2h	0x00000009
++#define PSR_MODE_MASK	0x0000000f
++#endif
+ 
+ struct apple_rtkit_crashlog_header {
+ 	u32 fourcc;
+@@ -31,6 +42,24 @@ struct apple_rtkit_crashlog_mbox_entry {
+ };
+ static_assert(sizeof(struct apple_rtkit_crashlog_mbox_entry) == 0x18);
+ 
++struct apple_rtkit_crashlog_regs {
++	u32 unk_0;
++	u32 unk_4;
++	u64 regs[31];
++	u64 sp;
++	u64 pc;
++	u64 psr;
++	u64 cpacr;
++	u64 fpsr;
++	u64 fpcr;
++	u64 unk[64];
++	u64 far;
++	u64 unk_X;
++	u64 esr;
++	u64 unk_Z;
++};
++static_assert(sizeof(struct apple_rtkit_crashlog_regs) == 0x350);
++
+ static void apple_rtkit_crashlog_dump_str(struct apple_rtkit *rtk, u8 *bfr,
+ 					  size_t size)
+ {
+@@ -94,6 +123,66 @@ static void apple_rtkit_crashlog_dump_mailbox(struct apple_rtkit *rtk, u8 *bfr,
+ 	}
+ }
+ 
++static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
++					   size_t size)
++{
++	struct apple_rtkit_crashlog_regs regs;
++	const char *el;
++	int i;
++
++	if (size < sizeof(regs)) {
++		dev_warn(rtk->dev, "RTKit: Regs section too small: 0x%zx", size);
++		return;
++	}
++
++	memcpy(&regs, bfr, sizeof(regs));
++
++	switch (regs.psr & PSR_MODE_MASK) {
++	case PSR_MODE_EL0t:
++		el = "EL0t";
++		break;
++	case PSR_MODE_EL1t:
++		el = "EL1t";
++		break;
++	case PSR_MODE_EL1h:
++		el = "EL1h";
++		break;
++	case PSR_MODE_EL2t:
++		el = "EL2t";
++		break;
++	case PSR_MODE_EL2h:
++		el = "EL2h";
++		break;
++	default:
++		el = "unknown";
++		break;
++	}
++
++	dev_warn(rtk->dev, "RTKit: Exception dump:");
++	dev_warn(rtk->dev, "  == Exception taken from %s ==", el);
++	dev_warn(rtk->dev, "  PSR    = 0x%llx", regs.psr);
++	dev_warn(rtk->dev, "  PC     = 0x%llx\n", regs.pc);
++	dev_warn(rtk->dev, "  ESR    = 0x%llx\n", regs.esr);
++	dev_warn(rtk->dev, "  FAR    = 0x%llx\n", regs.far);
++	dev_warn(rtk->dev, "  SP     = 0x%llx\n", regs.sp);
++	dev_warn(rtk->dev, "\n");
++
++	for (i = 0; i < 31; i += 4) {
++		if (i < 28)
++			dev_warn(rtk->dev,
++					 "  x%02d-x%02d = %016llx %016llx %016llx %016llx\n",
++					 i, i + 3,
++					 regs.regs[i], regs.regs[i + 1],
++					 regs.regs[i + 2], regs.regs[i + 3]);
++		else
++			dev_warn(rtk->dev,
++					 "  x%02d-x%02d = %016llx %016llx %016llx\n", i, i + 3,
++					 regs.regs[i], regs.regs[i + 1], regs.regs[i + 2]);
++	}
++
++	dev_warn(rtk->dev, "\n");
++}
++
+ void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+ {
+ 	size_t offset;
+@@ -140,6 +229,10 @@ void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+ 			apple_rtkit_crashlog_dump_time(rtk, bfr + offset + 16,
+ 						       section_size);
+ 			break;
++		case APPLE_RTKIT_CRASHLOG_REGS:
++			apple_rtkit_crashlog_dump_regs(rtk, bfr + offset + 16,
++						       section_size);
++			break;
+ 		default:
+ 			dev_warn(rtk->dev,
+ 				 "RTKit: Unknown crashlog section: %x",
+-- 
+2.35.1
 
