@@ -2,143 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4063D677655
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7265677657
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjAWIcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S231661AbjAWIdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjAWIcR (ORCPT
+        with ESMTP id S230107AbjAWIdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:32:17 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D901A961
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:32:15 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D5AB54000C;
-        Mon, 23 Jan 2023 08:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674462734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N5sr1+ft/o4KFGfy74z6A876hko9sf4WKrKKmi7Je/Y=;
-        b=KuoNAfOv2pzHTPxQdsQDTsRxDucuLyajao1IkRwSgW0PBw/AR0kYdXWOVgMFnNpsqGFx+h
-        41ejb8jbZap1x8ttBNzcXJZPqDSO9tXmdmnXaB4VoOySlL6kUZ7wLfT6iMnScmRCIGHzO6
-        PiMk5LexuK8SRkHyEYIiXIAcdE+W/dAEx6sv5T/d6EigOw8p5514TFKf1wFOg4lgoiUshk
-        0o8PJFBOlUK59cdoMz3N5rZsKV4c2N1Clgu/cPlgRXekCBEZJ2kiHF29ilWrDlZXYpxhAo
-        2DOnc9oStAtUweOC3GsaqSRs4hhn9v7ChZPIcSChth/FXjZuwv9ibKkUEgcC9w==
-Date:   Mon, 23 Jan 2023 09:32:09 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Li Chen <lchen@ambarella.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Li Chen <me@linux.beauty>, Roger Quadros <rogerq@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Andreas =?UTF-8?B?QsO2aGxlcg==?= <dev@aboehler.at>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Rickard x Andersson <rickaran@axis.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Ambarella SoC
-        support)
-Subject: Re: [PATCH 12/15] mtd: nand: add Ambarella nand support
-Message-ID: <20230123093209.770995cf@xps-13>
-In-Reply-To: <20230123073305.149940-13-lchen@ambarella.com>
-References: <20230123073305.149940-1-lchen@ambarella.com>
-        <20230123073305.149940-13-lchen@ambarella.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 23 Jan 2023 03:33:00 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A18E1CAFC;
+        Mon, 23 Jan 2023 00:32:58 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30N7MpYB005165;
+        Mon, 23 Jan 2023 08:32:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=vTAjVjUD2Bx8RbzMfrZSM1izm0jUPvkT5n1cgO3yShM=;
+ b=adw36Si9MumagBZ/6Ml+Xxz4gUVhUl9dXP9OgkP03pfBl4Zkge3bhIteH6C/H6TDaGR4
+ MZablMRy2v5TQdSof12JjOB44+84XgNQFowsig13IYGvoKyNlPGXpddZogZViTGuzR4t
+ AV7lfEpOi+MyNMbgah4gj+CYKhtuihduvyGDN9YnVGKkUobg7xOPurlNvl9QarLbVE+3
+ U/GLfxrfC0lQTJXXVITWFGfM3mGfVUHZYaF52sKRJIM1huc+S7F4/HwiZ5qtb2i7yPr4
+ Xk3nry5pxvBMYONYi1w0IsUZJ/p1/4Cal5gUKeH/LaZZ3qCdNq8Umij9HvM/AcFqno9d jw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n9nsyhcdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 08:32:49 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30N5Uh6d010402;
+        Mon, 23 Jan 2023 08:32:47 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6j12w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 08:32:47 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30N8WhdG22872482
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Jan 2023 08:32:44 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C67F620040;
+        Mon, 23 Jan 2023 08:32:43 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 98FAE20043;
+        Mon, 23 Jan 2023 08:32:42 +0000 (GMT)
+Received: from li-NotSettable.ibm.com (unknown [9.124.31.208])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 23 Jan 2023 08:32:42 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Disha Goel <disgoel@linux.vnet.ibm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+Subject: [PATCH] perf test: Switch basic bpf filtering test to use syscall tracepoint
+Date:   Mon, 23 Jan 2023 14:02:24 +0530
+Message-Id: <20230123083224.276404-1-naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dWMEpBmkTrARYmSKd-G7m-vXpKRLgCki
+X-Proofpoint-ORIG-GUID: dWMEpBmkTrARYmSKd-G7m-vXpKRLgCki
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_05,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 clxscore=1011 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301230080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+BPF filtering tests can sometime fail. Running the test in verbose mode
+shows the following:
+  $ sudo perf test 42
+  42: BPF filter                                                      :
+  42.1: Basic BPF filtering                                           : FAILED!
+  42.2: BPF pinning                                                   : Skip
+  42.3: BPF prologue generation                                       : Skip
+  $ perf --version
+  perf version 4.18.0-425.3.1.el8.ppc64le
+  $ sudo perf test -v 42
+  42: BPF filter                                                      :
+  42.1: Basic BPF filtering                                           :
+  --- start ---
+  test child forked, pid 711060
+  ...
+  bpf: config 'func=do_epoll_wait' is ok
+  Looking at the vmlinux_path (8 entries long)
+  Using /usr/lib/debug/lib/modules/4.18.0-425.3.1.el8.ppc64le/vmlinux for symbols
+  Open Debuginfo file: /usr/lib/debug/.build-id/81/56f5a07f92ccb62c5600ba0e4aacfb5f3a7534.debug
+  Try to find probe point from debuginfo.
+  Matched function: do_epoll_wait [4ef8cb0]
+  found inline addr: 0xc00000000061dbe4
+  Probe point found: __se_compat_sys_epoll_pwait+196
+  found inline addr: 0xc00000000061d9f4
+  Probe point found: __se_sys_epoll_pwait+196
+  found inline addr: 0xc00000000061d824
+  Probe point found: __se_sys_epoll_wait+36
+  Found 3 probe_trace_events.
+  Opening /sys/kernel/tracing//kprobe_events write=1
+  ...
+  BPF filter result incorrect, expected 56, got 56 samples
+  test child finished with -1
+  ---- end ----
+  BPF filter subtest 1: FAILED!
 
-I'm sorry, this is not going to work at all.
+The statement above about the result being incorrect looks weird, and it
+is due to that particular perf build missing commit 3e11300cdfd5f1
+("perf test: Fix bpf test sample mismatch reporting"). In reality, due
+to commit 4b04e0decd2518 ("perf test: Fix basic bpf filtering test"),
+perf expects there to be 56*3 samples.
 
-> +	ambarella_nand_init(host);
-> +
-> +	mtd =3D nand_to_mtd(&host->chip);
-> +	mtd->name =3D "amba_nand";
-> +
-> +	nand_controller_init(&host->controller);
-> +	nand_set_controller_data(&host->chip, host);
-> +	nand_set_flash_node(&host->chip, dev->of_node);
-> +
-> +	host->chip.controller =3D &host->controller;
-> +	host->chip.controller->ops =3D &ambarella_controller_ops;
-> +	host->chip.legacy.chip_delay =3D 0;
-> +	host->chip.legacy.read_byte =3D ambarella_nand_read_byte;
-> +	host->chip.legacy.write_buf =3D ambarella_nand_write_buf;
-> +	host->chip.legacy.read_buf =3D ambarella_nand_read_buf;
-> +	host->chip.legacy.select_chip =3D ambarella_nand_select_chip;
-> +	host->chip.legacy.cmd_ctrl =3D ambarella_nand_cmd_ctrl;
-> +	host->chip.legacy.dev_ready =3D ambarella_nand_dev_ready;
-> +	host->chip.legacy.waitfunc =3D ambarella_nand_waitfunc;
-> +	host->chip.legacy.cmdfunc =3D ambarella_nand_cmdfunc;
-> +	host->chip.legacy.set_features =3D nand_get_set_features_notsupp;
-> +	host->chip.legacy.get_features =3D nand_get_set_features_notsupp;
+However, the number of samples we receive is going to be dependent on
+where the probes are installed, which is dependent on where
+do_epoll_wait gets inlined. On s390x, it looks like probes at all the
+inlined locations are hit. But, that is not the case on ppc64le.
 
-Please be aware that we no longer accept legacy introductions upstream.
+Fix this by switching the test to instead use the syscall tracepoint.
+This ensures that we will only ever install a single event enabling us
+to reliably determine the sample count.
 
-You can look for ->exec_op() conversions using git-log.
+Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+---
+ tools/perf/tests/bpf-script-example.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +	host->chip.options |=3D NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA;
-> +
-> +	rval =3D nand_scan(&host->chip, 1);
-> +	if (rval < 0)
-> +		return rval;
-> +
-> +	rval =3D mtd_device_register(mtd, NULL, 0);
-> +	if (rval < 0)
-> +		nand_cleanup(&host->chip);
-> +
-> +	return rval;
-> +}
+diff --git a/tools/perf/tests/bpf-script-example.c b/tools/perf/tests/bpf-script-example.c
+index 7981c69ed1b456..b638cc99d5ae56 100644
+--- a/tools/perf/tests/bpf-script-example.c
++++ b/tools/perf/tests/bpf-script-example.c
+@@ -43,7 +43,7 @@ struct {
+ 	__type(value, int);
+ } flip_table SEC(".maps");
+ 
+-SEC("func=do_epoll_wait")
++SEC("syscalls:sys_enter_epoll_pwait")
+ int bpf_func__SyS_epoll_pwait(void *ctx)
+ {
+ 	int ind =0;
 
-[...]
+base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
+-- 
+2.39.1
 
-> diff --git a/drivers/mtd/nand/raw/nand_ids.c
-b/drivers/mtd/nand/raw/nand_ids.c
-> index dacc5529b3df..9f264e2a6484 100644
-> --- a/drivers/mtd/nand/raw/nand_ids.c
-> +++ b/drivers/mtd/nand/raw/nand_ids.c
-> @@ -62,6 +62,10 @@ struct nand_flash_dev nand_flash_ids[] =3D {
->  		{ .id =3D {0x98, 0xd3, 0x91, 0x26, 0x76} },
->  		  SZ_4K, SZ_1K, SZ_256K, 0, 5, 256, NAND_ECC_INFO(8, SZ_512)},
-> =20
-> +	{"MT29F2G01ABAGD SPINAND 2G 3.3V 8-bit",
-> +		{ .id =3D {0x2c, 0x24, 0x00, 0x00, 0x00} },
-> +		  SZ_2K, SZ_256, SZ_128K, 0, 2, 128},
-> +
-
-Raw NAND !=3D SPI-NAND. I don't get what you're doing here but either you
-want to drive SPI-NANDs and this is a SPI controller driver that
-implements spi-mem ops and should be located under drivers/spi/, or
-this is a plain raw NAND controller which is wired to a parallel NAND
-and this should be under drivers/mtd/nand/raw/.
-
-ECC controllers can be shared with the ECC engine abstraction though.
-
->  	LEGACY_ID_NAND("NAND 4MiB 5V 8-bit",   0x6B, 4, SZ_8K, SP_OPTIONS),
->  	LEGACY_ID_NAND("NAND 4MiB 3,3V 8-bit", 0xE3, 4, SZ_8K, SP_OPTIONS),
->  	LEGACY_ID_NAND("NAND 4MiB 3,3V 8-bit", 0xE5, 4, SZ_8K, SP_OPTIONS),
-
-
-Thanks,
-Miqu=C3=A8l
