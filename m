@@ -2,141 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF316775CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1002C6775CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjAWHsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:48:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S231530AbjAWHtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjAWHsp (ORCPT
+        with ESMTP id S229989AbjAWHtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:48:45 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ECFEB6C;
-        Sun, 22 Jan 2023 23:48:41 -0800 (PST)
-Received: from [192.168.1.103] (unknown [103.86.18.176])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 030D72B3;
-        Mon, 23 Jan 2023 08:48:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674460117;
-        bh=Yf7dMr2OR4TnIoULBmpOCg94iMGE3jqxfzU/ffcRV/I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o53JBhnbczTfiUKuw7d/YRbuRKZsbdnxanySZPPuDITzrsRJ6OWIziWZ8UPShIT6b
-         tst1WUj/iaYTDMKpeUvEfsFJKliwtX3q+L24qDzinypwhu5gbbdZJLhdOvIrpWYtG1
-         0ZGIBhdRHyXg7k29yVg1Zu0sqsu6HfFgruXgm2To=
-Message-ID: <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
-Date:   Mon, 23 Jan 2023 13:18:30 +0530
+        Mon, 23 Jan 2023 02:49:36 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE74EB5C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:49:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674460170; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=RTxESemQIBdB/vCeI1XAU0uzFUOirIKyt6ETh0OEaVDImmNShFxSWyLXLasnvWHGvl5/07gOuFKsCuR8j8+GngLEr72BADleEZkwnCalKI0uQg8hpJWy0ZW4fIojBgfsJwVtPiyHsMIlPV1G7blbnkv22VCFjHQlj+dNZJf8AQE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674460170; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=AdAQHBgh92BmGKcOYUV3872Rywh4hI6DQSTytonZ+dI=; 
+        b=X69cUIQle/cwcYTBBdVHf41VT5/HRwbM2LciTTqUbGsBnqbx8v40tSwaZsXIMTdOvT4QhQcnwU2tMR7+7msCet54UWXKmsdDCdYvIWPRmpWzWBvLR4kFyjTbIH8nD9fXq8QrvMEz7R4vx4XLv7x/qLPK9VR7VZdDRjffzhrXoFg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674460170;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=AdAQHBgh92BmGKcOYUV3872Rywh4hI6DQSTytonZ+dI=;
+        b=ORplW25AOxo+R65Fdyd4L4gF7Nde5reODy5nylGNXZSdhLpUf7JM6LsIk0H3PJQ3
+        KWUoyzZx2cCMoelCw5VKscj8OjgC2oTO0gjcmARiKSSlY7KxzcCS0mv3TzHk83vFsZT
+        zSjKOMAevpEmTOSutFO26AfUO7cFzbMTjpiQULj8=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1674460169506567.6772663530393; Sun, 22 Jan 2023 23:49:29 -0800 (PST)
+Date:   Mon, 23 Jan 2023 15:49:29 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "rafael j. wysocki" <rafael@kernel.org>,
+        "li chen" <lchen@ambarella.com>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <185dd9a850f.103424a4c958820.1375066060155911709@linux.beauty>
+In-Reply-To: <Y76UBsukAz+yQ9bW@kroah.com>
+References: <20230111072130.3885460-1-me@linux.beauty>
+ <Y75odDyZXMzigoaL@kroah.com>
+ <1859ff0ddb8.d9ed321d977156.553326609923116766@linux.beauty> <Y76UBsukAz+yQ9bW@kroah.com>
+Subject: Re: [PATCH v2] debugfs: allow to use regmap for print regs
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
- <786df750-221e-82fc-a324-d30261296974@i2se.com>
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <786df750-221e-82fc-a324-d30261296974@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+Hi Greg,
+ ---- On Wed, 11 Jan 2023 18:48:38 +0800  Greg Kroah-Hartman  wrote --- 
+ > On Wed, Jan 11, 2023 at 04:27:20PM +0800, Li Chen wrote:
+ > > Hi Greg,
+ > >  ---- On Wed, 11 Jan 2023 15:42:44 +0800  Greg Kroah-Hartman  wrote --- 
+ > >  > On Wed, Jan 11, 2023 at 03:21:29PM +0800, Li Chen wrote:
+ > >  > > From: Li Chen lchen@ambarella.com>
+ > >  > > 
+ > >  > > Currently, debugfs_regset32 only contains void __iomem *base,
+ > >  > > and it is not friendly to regmap user.
+ > >  > > 
+ > >  > > Let's add regmap to debugfs_regset32, and add debugfs_print_regmap_reg32
+ > >  > > to allow debugfs_regset32_show handle regmap.
+ > >  > > 
+ > >  > > Signed-off-by: Li Chen lchen@ambarella.com>
+ > >  > 
+ > >  > Do you have an actual in-kernel user for this new function?  We can't
+ > >  > accept new apis without users for obvious reasaons.
+ > > 
+ > > Actually, both the old debugfs_print_regs32 and the new debugfs_regmap_print_regs32
+ > > have only one user: debugfs_regset32_show located inside debugfs/file.c.
+ > 
+ > Yes, but that function is used by lots of drivers in the kernel today,
+ > which is fine.
+ > 
+ > > The difference is currently all users(device drivers) only use debugfs_regset32->base,
+ > > and none of them use debugfs_regset32->regmap, which is provided by this patch.
+ > > 
+ > > I'm not sure whether it violates the kernel's "no user, no new function" ruler or not.
+ > 
+ > Yes, you would have to have a user for this functionality for us to be
+ > able to take the change.
+ > 
+ > > I use this regmap locally on our SoC driver, but it is still not ready to upstream, really sorry for it,
+ > > and it is not a good idea to change existing non-regmap users to regmap haha.
+ > >  
+ > > If you think it does matter, please tell me and I will upload v3 with our SoC driver in the future.
+ > 
+ > Please add it to your SoC driver patch series instead and I will be glad
+ > to review it at that point in time.  But for now, this shouldn't be
+ > needed.
+ 
+This patch is integrated into this series now: http://lists.infradead.org/pipermail/linux-arm-kernel/2023-January/804858.html
 
-Thank for the testing.
+and its user is inside the first patch of the series, please help review it, thanks a lot!
 
-On 1/23/23 5:04 AM, Stefan Wahren wrote:
-> Hi Umang,
->
-> Am 20.01.23 um 21:10 schrieb Umang Jain:
->> This series just introduces five extra patches for dropping include
->> directives from Makefiles (suggested by Greg KH) and rebased.
->>
->> The main patch (6/6) removes platform device/driver abuse and moves
->> things to standard device/driver model using a custom_bus. Specific
->> details are elaborated in the commit message.
->>
->> The patch series is based on top of d514392f17fd (tag: next-20230120)
->> of linux-next.
->
-> applied this series on top of linux-next and build it with 
-> arm/multi_v7_defconfig plus the following:
->
-> CONFIG_BCM_VIDEOCORE=y
-> CONFIG_BCM2835_VCHIQ=m
-> CONFIG_VCHIQ_CDEV=y
-> CONFIG_SND_BCM2835=m
-> CONFIG_VIDEO_BCM2835=m
-> CONFIG_BCM2835_VCHIQ_MMAL=m
->
-> and the devices doesn't register on Raspberry Pi 3 B Plus:
->
-> [   25.523337] vchiq: module is from the staging directory, the 
-> quality is unknown, you have been warned.
-> [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
-> bcm2835_audio vchiq device
-> [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
-> bcm2835-camera vchiq device
-
-I was able to reproduce and it seems the issue here is the change 
-mentioned in the cover
-
-- drop dma_set_mask_and_coherent
-
-in V6.
-
-(I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp applied 
-so my branch has the DMA hunk included while I was testing V6)
-
-Below is the hunk which should resolve the issue.
-
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-@@ -6,6 +6,7 @@
-   */
-
-  #include <linux/device/bus.h>
-+#include <linux/dma-mapping.h>
-  #include <linux/slab.h>
-  #include <linux/string.h>
-
-@@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent, 
-const char *name)
-         device->dev.type = &vchiq_device_type;
-         device->dev.release = vchiq_device_release;
-
-+       ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
-+       if (ret < 0) {
-+               vchiq_device_release(&device->dev);
-+               return ret;
-+       }
-+
-         ret = device_register(&device->dev);
-         if (ret) {
-                 put_device(&device->dev);
-
-It seems we need to include the dma_set_mask_and_coherent() even if 
-bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look into 
-why is that/
-
-  Laurent, any thoughts on this please?
+Regards,
+Li
