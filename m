@@ -2,211 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69BD678082
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AD0678084
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbjAWPvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S232938AbjAWPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:51:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjAWPvQ (ORCPT
+        with ESMTP id S232934AbjAWPvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:51:16 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E225B15579;
-        Mon, 23 Jan 2023 07:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=NUL1k+cRqfVAdbMVsWp+Lo232x8JL5WAzfWWE9/fP8o=; b=x+88pgiTTsW88CDxMJkinwhpdT
-        r7r4SFelsD+8KbOwzNts5mMF+L6CY6xDwo7/az1VnoiaEoJXE7XK3mCZsgilH28sO1cSS9oCZWg6r
-        K5yBo3UfWOyOCZ4/Dtqm2Ya+/FvQWSDJrnaZHFNrGK1ZKSdgvgaqme5r8VzlwbgJpsyI=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41484 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pJz64-0002KT-Kc; Mon, 23 Jan 2023 10:51:01 -0500
-Date:   Mon, 23 Jan 2023 10:51:00 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230123105100.b799ad316f27396d62c88a89@hugovil.com>
-In-Reply-To: <Y8rl452Xm1FrnFfF@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <Y8rl452Xm1FrnFfF@mail.local>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 23 Jan 2023 10:51:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5DD13D65;
+        Mon, 23 Jan 2023 07:51:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D222BB80D39;
+        Mon, 23 Jan 2023 15:51:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129C6C433EF;
+        Mon, 23 Jan 2023 15:51:10 +0000 (UTC)
+Message-ID: <200db318-73e8-988c-7992-e529e332a6a1@xs4all.nl>
+Date:   Mon, 23 Jan 2023 16:51:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 00/12] Add support for multiple chips
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230113064104.22402-1-moudy.ho@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230113064104.22402-1-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 20:05:07 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-
-> Hello,
+On 13/01/2023 07:40, Moudy Ho wrote:
+> Changes since v4:
+> - Rebase on linux-next.
+> - Fix potential frame size overflow in "mtk-mdp3-regs.c".
+> - Fix OOB in MDP3 component clocks in "mtk-mdp3-comp.*".
+> - Reconfigure the shared memory between MDP3 kerenl and SCP.
 > 
-> I know I've been holding off on the review of this series for a while
-> and I'm sorry for that.
+> Changes since v3:
+> - Rebase on linux-next.
+> - In the file "mtk-mdp3-m2m.c", use the limited resolution defined by
+>   each platform to replace the default format.
+> - Add platform ID in driver data, and refine shared memory structure preprocessing.
+> - Simplify the way to get mutex ID in function "mdp_path_subfrm_require".
 > 
-> One of the main issue that is remaining is that the driver ends up being
-> 53% bigger and generaly less efficient for no added functionality for
-> the existing RTCs.
-
-Hi Alexandre,
-that is why before submitting my driver I sent an RFC on the RTC mailing list to ask what was the better approach for developping this driver (separate or merged into pcf2127), but I didn't got an answer from any of the maintainers.
-
-> I know performance is not a concern however, having more code in the
-> set/read time and irq paths means that it is more difficult to set an
-> get the time precisely.
-
-Just some ideas about that...
-
-Looking at pcf2127_rtc_read_time(), we now do a separate read operation of CTRL3 to check for a low voltage condition. And we only display a message if the battery is low (no abort of read time). Looking at pcf8523 driver for example, this check is done only when responding to an ioctl. Could we do the same in our driver?
-
-Another scheme I say is in rtc-ab-b5ze-s3 driver where this detection is done at startup and using the BLF interrupt flag...
-
-> I guess I'll take it as a merged driver but I took a different decision
-> for other RTCs.
-
-I'll address all the comments/issues Bruno and you found and submit a V4 soon then.
-
-Thank you, Hugo.
-
-
-> On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Hello,
-> > this patch series adds the driver for the PCF2131 real-time clock.
-> > 
-> > This RTC is very similar in functionality to the PCF2127/29 with the
-> > following differences:
-> >   -supports two new control registers at offsets 4 and 5
-> >   -supports a new reset register
-> >   -supports 4 tamper detection functions instead of 1
-> >   -has no nvmem (like the PCF2129)
-> >   -has two output interrupt pins instead of one
-> >   -has 1/100th seconds capabilities (not supported in this driver)
-> >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
-> >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
-> >   -watchdog value register cannot be read after being set
-> > 
-> > Most of the register addresses are very different, although they still
-> > follow the same layout. For example, the time/date and tamper registers
-> > have a different base address, but the offsets are all the same.
-> > Consequently, the source code of the PCF2127 driver can be easily adapted
-> > to support this new device.
-> > 
-> > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
-> > and able to support multiple variants, like the PCF2131. This is done
-> > mostly by using offsets instead of absolute hardcoded register addresses.
-> > 
-> > Patch 7 add actual support for the PCF2131.
-> > 
-> > Patch 8 configures all interrupt sources to go through the INT A pin.
-> > 
-> > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
-> >       are with the PCF2127/29 (different default values).
-> > 
-> > Patch 10 allow to confirm PCF2131 device presence by reading the reset
-> >       register fixed pattern.
-> > 
-> > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
-> >       CPR bits).
-> > 
-> > Patch 12 add support for generic watchdog timing configuration.
-> > 
-> > Patch 13 add a new flag to identify if device has read support for reading
-> >       watchdog register value.
-> >       Since the watchdog value register cannot be read on the PCF2131 after
-> >       being set, it seems that we cannot detect if watchdog timer was
-> >       started by bootloader. I am not sure what is the best way to handle
-> >       this situation, suggestions are welcomed.
-> > 
-> > Patch 14 add the dt-bindings for the PCF2131.
-> > 
-> > I have tested the driver using a PCF2131-ARD evaluation board connected to
-> > an NXP imx8mp evaluation board:
-> >   - Time get/set ok;
-> >   - Alarms get/set ok
-> >   - Timestamp 1 to 4 ok
-> >   - IRQ alarm ok
-> >   - Watchdog ok
-> >   - Also tested successfully with "RTC Driver Test Example" from
-> >     Documentation/rtc.txt
-> > 
-> > I have also tested the driver on a custom PCF2129 adapter board connected to a
-> > beaglebone black.
-> > 
-> > Thank you.
-> > 
-> > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
-> > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
-> > 
-> > Changes for V3:
-> > - Rebased for kernel v6.1
-> > 
-> > Changes for V2:
-> > - In general, fix and improvements after I have tested on real hardware
-> > - Fix alarm interrupt A/B mask setting for PCF2131:
-> >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
-> > - Remove low_reg validation: only check if TS interrupt flag is
-> >   defined, as low_reg is defined at address 0 for PCF2127/29.
-> > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
-> > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
-> > - Map all interrupt sources to INT A pin
-> > - Read and validate PCF2131 device presence from RESET register
-> > - Adapt watchdog configuration for PCF2131
-> > 
-> > Hugo Villeneuve (14):
-> >   rtc: pcf2127: add variant-specific configuration structure
-> >   rtc: pcf2127: adapt for time/date registers at any offset
-> >   rtc: pcf2127: adapt for alarm registers at any offset
-> >   rtc: pcf2127: adapt for WD registers at any offset
-> >   rtc: pcf2127: adapt for CLKOUT register at any offset
-> >   rtc: pcf2127: add support for multiple TS functions
-> >   rtc: pcf2127: add support for PCF2131 RTC
-> >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
-> >   rtc: pcf2127: set PWRMNG value for PCF2131
-> >   rtc: pcf2127: read and validate PCF2131 device signature
-> >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
-> >   rtc: pcf2127: support generic watchdog timing configuration
-> >   rtc: pcf2127: add flag for watchdog register value read support
-> >   dt-bindings: rtc: pcf2127: add PCF2131
-> > 
-> >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
-> >  drivers/rtc/Kconfig                           |   4 +-
-> >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
-> >  3 files changed, 752 insertions(+), 195 deletions(-)
-> > 
-> > -- 
-> > 2.30.2
-> > 
+> Changes since v2:
+> - Depend on :
+>   [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=687004
+> - Split the shared memory header(mtk-img-ipi.h) by preprocessing instead, and
+>   classify the generic parts into "mtk-mdp3-type.h", and move
+>   chip-specific parts to"mt8183/mdp3-comp-mt8183.h".
 > 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Changes since v1:
+> - Depend on :
+>   [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=687004
+> - For hardware-specific structures in the shared memory header(mtk-img-ipi.h),
+>   split the relevant functions and structure definitions.
+> 
+> Hi,
+> 
+> To support multiple chips, a chip configuration header file needs to be created
+> and the relevant information split and moved into it.
+
+FYI: compiling this series with smatch results in the following warnings and errors:
+
+drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c:285 mdp_vpu_process() warn: inconsistent returns 'vpu->lock'.
+drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c:43 is_output_disabled() error: uninitialized symbol 'dis_output'.
+drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c:43 is_output_disabled() error: uninitialized symbol 'dis_tile'.
+drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c:427 mdp_cmdq_send() warn: missing error code 'ret'
+drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:59 get_comp_public_id() error: 'mdp_dev' dereferencing possible ERR_PTR()
+
+Regards,
+
+	Hans
+
+> 
+> The v4l2-compliance test results list is as follows:
+> v4l2-compliance 1.23.0-4942, 32 bits, 32-bit time_t
+> v4l2-compliance SHA: 4cf258c24026 2022-07-28 15:43:45
+> 
+> Compliance test for mtk-mdp3 device /dev/video0:
+> 
+> Driver Info:
+> 	Driver name      : mtk-mdp3
+> 	Card type        : MediaTek MDP3
+> 	Bus info         : platform:14001000.mdp3-rdma0
+> 	Driver version   : 6.2.0
+> 	Capabilities     : 0x84204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x04204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 
+> Required ioctls:
+> 	test VIDIOC_QUERYCAP: OK
+> 	test invalid ioctls: OK
+> 
+> Allow for multiple opens:
+> 	test second /dev/video0 open: OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test VIDIOC_G/S_PRIORITY: OK
+> 	test for unlimited opens: OK
+> 
+> Debug ioctls:
+> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+> 	test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+> 	test VIDIOC_QUERYCTRL: OK
+> 	test VIDIOC_G/S_CTRL: OK
+> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+> 	Standard Controls: 4 Private Controls: 0
+> 
+> Format ioctls:
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+> 	test VIDIOC_G/S_PARM: OK (Not Supported)
+> 	test VIDIOC_G_FBUF: OK (Not Supported)
+> 	test VIDIOC_G_FMT: OK
+> 	test VIDIOC_TRY_FMT: OK
+> 	test VIDIOC_S_FMT: OK
+> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+> 	test Cropping: OK
+> 	test Composing: OK
+> 	test Scaling: OK
+> 
+> Codec ioctls:
+> 	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+> 	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls:
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+> 	test VIDIOC_EXPBUF: OK
+> 	test Requests: OK (Not Supported)
+> 	test TIME32/64: OK
+> 
+> Test input 0:
+> 
+> Streaming ioctls:
+> 	test read/write: OK (Not Supported)
+> 	test blocking wait: OK
+>     (snip)
+> 	test MMAP (no poll): OK
+> 	(snip)
+> 	test MMAP (select): OK
+>     (snip)
+> 	test MMAP (epoll): OK
+> 	test USERPTR (no poll): OK (Not Supported)
+> 	test USERPTR (select): OK (Not Supported)
+> 	test DMABUF: Cannot test, specify --expbuf-device
+> 
+> Stream using all formats:
+> 	(snip)
+> Total for mtk-mdp3 device /dev/video0: 1174, Succeeded: 1174, Failed: 0, Warnings: 0
+> 
+> Moudy Ho (12):
+>   media: platform: mtk-mdp3: fix potential frame size overflow in
+>     mdp_try_fmt_mplane()
+>   media: platform: mtk-mdp3: add chip configuration header file
+>   media: platform: mtk-mdp3: chip config split about component settings
+>   media: platform: mtk-mdp3: chip config split about subcomponents
+>   media: platform: mtk-mdp3: chip config split about color format
+>   media: platform: mtk-mdp3: chip config split about resolution
+>     limitations
+>   media: platform: mtk-mdp3: chip config split about pipe info
+>   media: platform: mtk-mdp3: extend mdp_color format for compressed mode
+>   media: platform: mtk-mdp3: dynamically allocate component clocks
+>   media: platform: mtk-mdp3: Split general definitions used in MDP3
+>   media: platform: mtk-mdp3: decompose hardware-related information in
+>     shared memory
+>   media: platform: mtk-mdp3: reconfigure shared memory
+> 
+>  .../mediatek/mdp3/mt8183/mdp3-comp-mt8183.h   | 144 +++++
+>  .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   | 409 +++++++++++++
+>  .../platform/mediatek/mdp3/mtk-img-ipi.h      | 188 +-----
+>  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 145 +++--
+>  .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 567 ++++++++++++------
+>  .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  27 +-
+>  .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  49 +-
+>  .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  18 +-
+>  .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  28 +-
+>  .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   1 -
+>  .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 287 +--------
+>  .../platform/mediatek/mdp3/mtk-mdp3-regs.h    | 214 +++----
+>  .../platform/mediatek/mdp3/mtk-mdp3-type.h    |  53 ++
+>  .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     | 194 +++---
+>  .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |  29 +-
+>  15 files changed, 1397 insertions(+), 956 deletions(-)
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
 > 
 
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
