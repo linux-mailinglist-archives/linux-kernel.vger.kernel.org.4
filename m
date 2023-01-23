@@ -2,142 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041556777DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11AB6777E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjAWJyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S231923AbjAWJ4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbjAWJyC (ORCPT
+        with ESMTP id S231877AbjAWJ4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:54:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494F522796
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:53:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674467582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 23 Jan 2023 04:56:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B192111
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:56:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D19401F461;
+        Mon, 23 Jan 2023 09:56:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674467793; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XGBr/F0XFzE0vVYozw1/BKRP3jPgyxC9gUjhQB9Xc7E=;
-        b=c7U7OZ+jrczNzreyjnvOkM8sMgpFeX6jNteXxCfp7KlwTy1izzKtSQPunhtGn4NS5fWLKj
-        3van3cy18e686LiQMDttW5LgkCEFXL+Dsq0DEgWC9VcYRu+933qe4p3CJ4q4nF4bYRbJfa
-        e5+WfW32OIN2I/6h4t2gd5wfzXkxJog=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-653-V1yfNBvWOCuQYPEEHeEh1A-1; Mon, 23 Jan 2023 04:53:01 -0500
-X-MC-Unique: V1yfNBvWOCuQYPEEHeEh1A-1
-Received: by mail-qt1-f198.google.com with SMTP id j14-20020ac874ce000000b003b6917d0731so3895451qtr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:53:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGBr/F0XFzE0vVYozw1/BKRP3jPgyxC9gUjhQB9Xc7E=;
-        b=oY5RfRBaEmhZLMhjaqT7M/lVedA87Vaa5FFW7n0ov+5a+MeY1L+3QS15wMJi2V9KBa
-         SEyjB7CpqjNMRG9RO/cUb0z3R3223/DGp9V+FAsbUP9xBBU5EDQY/blAIlcaIlRSG1hO
-         fuR2Xc3tA7j6ayipxV6Ge1jBN1uzjsfDYN9JxvW/v0yxjPeckhZGKo0k0rqNiS2EEGw7
-         1Xo/6s95IQ/PjT8gIrGAeIPbin2yLc4ki0xLiBBHIbhyN88dJiCWl7Rm6sDE8n7HM4AB
-         IJOUNRlkmDc1i+j1UKQUgdg9AgXI47zistPUHxyuGiHrbDv9zD7VBvGwta+FDSPi5Aqn
-         8Csw==
-X-Gm-Message-State: AFqh2kpgR8R70sNFoLhWngE0/u0jOp9G028xPybaorCJe+gM+6x7P0ys
-        GT8w3yijZFu/5OoDWrN/Tq8zEbQiVjqM+cqiai59kxsDaBFCyBMyf5nmWEo8bT53qT4tuLzfkEL
-        aZ07SIqOZU3mPxUIuEUdZ8cvt
-X-Received: by 2002:a05:6214:37c6:b0:532:35a1:af91 with SMTP id nj6-20020a05621437c600b0053235a1af91mr36780668qvb.27.1674467580908;
-        Mon, 23 Jan 2023 01:53:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtGVUKKbQfXcHL30rqUuIDlvGIgB5ckTck/POv0Vt/uPjVDeonGJ8IteOq2bZBAnoCEGaxYYg==
-X-Received: by 2002:a05:6214:37c6:b0:532:35a1:af91 with SMTP id nj6-20020a05621437c600b0053235a1af91mr36780656qvb.27.1674467580648;
-        Mon, 23 Jan 2023 01:53:00 -0800 (PST)
-Received: from [192.168.100.30] ([82.142.8.70])
-        by smtp.gmail.com with ESMTPSA id g8-20020ae9e108000000b006b5cc25535fsm5651738qkm.99.2023.01.23.01.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 01:53:00 -0800 (PST)
-Message-ID: <8b80ac91-cf60-f5ff-a5dd-c5247c9c8f64@redhat.com>
-Date:   Mon, 23 Jan 2023 10:52:57 +0100
+        bh=23+bxvlDHhv98+IF5/OMG/D6ucEV8Wbm0GFOsBS724w=;
+        b=FDU+Yu+yXPWSXaQUfLGbcbZhHPwb2qTY1gBoIfGCdb2MThCmusoz5gVarg1ZuhxgoeIHdz
+        RmIhY+0GxEm+RBG/DSo975FXvYL1fOFO37wRXzIf+4R8Z5kAtfhbMIi0k/TOcjSLCGwPBv
+        hGIJyY1EgNMwDPtsogvWoxt9MurAVsQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A9002134F5;
+        Mon, 23 Jan 2023 09:56:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zZHYKNFZzmMjCgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 23 Jan 2023 09:56:33 +0000
+Date:   Mon, 23 Jan 2023 10:56:32 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
+ vm_area_free
+Message-ID: <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
+References: <Y8k+syJu7elWAjRj@dhcp22.suse.cz>
+ <CAJuCfpEAL9y70KJ_a=Z_kJpJnNC-ge1aN2ofTupeQ5-FaKh84g@mail.gmail.com>
+ <Y8pWW9Am3mDP53qJ@dhcp22.suse.cz>
+ <CAJuCfpHeuckG8YuNTgdDcNHNzJ3sQExD_f1hwXG_xmS7Z-925g@mail.gmail.com>
+ <CAJuCfpF20nuP6Meib9h7NVrJv+wybYS==vZFQXxUW6n-ir9bvQ@mail.gmail.com>
+ <Y8rGJq8LvX2C+Cr7@casper.infradead.org>
+ <20230120170815.yuylbs27r6xcjpq5@revolver>
+ <CAJuCfpH4o-iCmzdUcYD9bKieJ6-k-MZYLuHFhH+bN9yE07sibw@mail.gmail.com>
+ <Y8rQNj5dVyuxRBOf@casper.infradead.org>
+ <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/4] virtio_net: notify MAC address change on device
- initialization
-Content-Language: en-US
-To:     Eli Cohen <elic@nvidia.com>, linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        Cindy Lu <lulu@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>
-References: <20230122100526.2302556-1-lvivier@redhat.com>
- <20230122100526.2302556-2-lvivier@redhat.com>
- <07a24753-767b-4e1e-2bcf-21ec04bc044a@nvidia.com>
-From:   Laurent Vivier <lvivier@redhat.com>
-In-Reply-To: <07a24753-767b-4e1e-2bcf-21ec04bc044a@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/22/23 14:47, Eli Cohen wrote:
+On Fri 20-01-23 09:50:01, Suren Baghdasaryan wrote:
+> On Fri, Jan 20, 2023 at 9:32 AM Matthew Wilcox <willy@infradead.org> wrote:
+[...]
+> > The page fault handler (or whatever other reader -- ptrace, proc, etc)
+> > should have a refcount on the mm_struct, so we can't be in this path
+> > trying to free VMAs.  Right?
 > 
-> On 22/01/2023 12:05, Laurent Vivier wrote:
->> In virtnet_probe(), if the device doesn't provide a MAC address the
->> driver assigns a random one.
->> As we modify the MAC address we need to notify the device to allow it
->> to update all the related information.
->>
->> The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
->> assign a MAC address by default. The virtio_net device uses a random
->> MAC address (we can see it with "ip link"), but we can't ping a net
->> namespace from another one using the virtio-vdpa device because the
->> new MAC address has not been provided to the hardware.
->>
->> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
->> ---
->>   drivers/net/virtio_net.c | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->> index 7723b2a49d8e..25511a86590e 100644
->> --- a/drivers/net/virtio_net.c
->> +++ b/drivers/net/virtio_net.c
->> @@ -3800,6 +3800,8 @@ static int virtnet_probe(struct virtio_device *vdev)
->>           eth_hw_addr_set(dev, addr);
->>       } else {
->>           eth_hw_addr_random(dev);
->> +        dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
->> +             dev->dev_addr);
->>       }
->>       /* Set up our device-specific information */
->> @@ -3956,6 +3958,18 @@ static int virtnet_probe(struct virtio_device *vdev)
->>       pr_debug("virtnet: registered device %s with %d RX and TX vq's\n",
->>            dev->name, max_queue_pairs);
->> +    /* a random MAC address has been assigned, notify the device */
->> +    if (dev->addr_assign_type == NET_ADDR_RANDOM &&
-> Maybe it's better to not count on addr_assign_type and use a local variable to indicate 
-> that virtnet_probe assigned random MAC. The reason is that the hardware driver might have 
-> done that as well and does not need notification.
+> Hmm. That sounds right. I checked process_mrelease() as well, which
+> operated on mm with only mmgrab()+mmap_read_lock() but it only unmaps
+> VMAs without freeing them, so we are still good. Michal, do you agree
+> this is ok?
 
-eth_hw_addr_random() sets explicitly NET_ADDR_RANDOM, while eth_hw_addr_set() doesn't 
-change addr_assign_type so it doesn't seem this value is set by the hardware driver.
+Don't we need RCU procetions for the vma life time assurance? Jann has
+already shown how rwsem is not safe wrt to unlock and free without RCU.
 
-So I guess it's the default value (NET_ADDR_PERM) in this case (even if it's a random 
-address from the point of view of the hardware).
-
-If you prefer I can replace it by "!virtio_has_feature(vdev, VIRTIO_NET_F_MAC)"?
-
-Thanks,
-Laurent
-
+-- 
+Michal Hocko
+SUSE Labs
