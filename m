@@ -2,104 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029226786E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7F96786E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbjAWTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S231993AbjAWTy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbjAWTyb (ORCPT
+        with ESMTP id S231468AbjAWTyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:54:31 -0500
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A49030EBD;
-        Mon, 23 Jan 2023 11:54:30 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id w14so15948651edi.5;
-        Mon, 23 Jan 2023 11:54:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7OnFmO9xTR9Xu/C+ebnyO395E7LnrsXHhVtvHZqLro4=;
-        b=OfUhXFjPcuBGN1Yp2tm+KNK24mlwVEF6HJ4K6Q0lkUE7srQSs02pBoovIGek5ySAfG
-         0kk4KazibhHQqORSxLKejOmpdAPQLeYGuxM8j/dcgo43wrngZGG0WiqmFh6FYj3TdhSu
-         J26ysP1CQ/j49U+rsJiJkXfsFr5kh/IVF3YOuveYO+56nfnDeFevu5qufGhL8IUwN8jd
-         37AsRJr2I9VtpiJm808wXcF6VsTyJ2OHgp7rrojRqXrFTSzUlg0ocHlk6SyEh7I5hvIQ
-         3mPsV7ZZK1IkQ6Wo4f+WpNMZJnYrXwxt5+98AD3NxbJvgpy3eMGuz1cV5VyewIyB9OXH
-         OEMw==
-X-Gm-Message-State: AO0yUKUoCNtRSs3YrVghaUn7wou4bLzcggCAENEgB/GRg0StG8MkpStD
-        1MEyWCXnq00R9UwUevnaSyaTiZ2dFWr4VZ8UkmI=
-X-Google-Smtp-Source: AK7set9cTilvBV+L5qo6TMmPzDimd8d6AOUOsy91hVUnjjLUoYABTMFOCbFaqCLdAWnKXOhc1HAxC/jEk9VOXmYMfpY=
-X-Received: by 2002:a50:ec8f:0:b0:49f:6dda:9e1f with SMTP id
- e15-20020a50ec8f000000b0049f6dda9e1fmr92431edr.251.1674503668936; Mon, 23 Jan
- 2023 11:54:28 -0800 (PST)
+        Mon, 23 Jan 2023 14:54:25 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEA259EE;
+        Mon, 23 Jan 2023 11:54:23 -0800 (PST)
+Date:   Mon, 23 Jan 2023 14:54:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1674503662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CdSQ03pYT6WirvAUNHMhKox0iGIyl9THQc3ark5MEwo=;
+        b=MkamxbSLfWCz3S94Q5h94SbVDr40BLxpRcAac8P8Ee03u4xFoqIBCzRC9uSRdPoQgdsehf
+        J+w7y+mpwDQ2EW3TxRGasOKRf1EP0ZVJRFEMg5YNlXpHKpnwMZAEzQT1Y4JFFcWtumFXDy
+        /HD8erIZYR3lCf3R2tVGCidNWzHlX1I=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jeff Moyer <jmoyer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] fs/aio: obey min_nr when doing wakeups
+Message-ID: <Y87l6sd9JRGa+qFw@moria.home.lan>
+References: <20230118152603.28301-1-kent.overstreet@linux.dev>
+ <20230120140347.2133611-1-kent.overstreet@linux.dev>
+ <x49cz7956ox.fsf@segfault.boston.devel.redhat.com>
+ <x491qnl5ioe.fsf@segfault.boston.devel.redhat.com>
 MIME-Version: 1.0
-References: <5916342.lOV4Wx5bFT@kreacher> <2882611.e9J7NaK4W3@kreacher>
- <3234230.44csPzL39Z@kreacher> <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
-In-Reply-To: <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 Jan 2023 20:54:17 +0100
-Message-ID: <CAJZ5v0gK_O-9_tPEVbmBbf+2vxVA2_C5tPGOo_qghyw86pohoA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2 drivers
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <x491qnl5ioe.fsf@segfault.boston.devel.redhat.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 8:26 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Mon, 2023-01-23 at 19:52 +0100, Rafael J. Wysocki wrote:
-> > On Monday, January 23, 2023 7:45:30 PM CET Rafael J. Wysocki wrote:
-> > > On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki wrote:
-> > > > Hi All,
-> > > >
-> > > > This is a new version of the series from Daniel posted as:
-> > > >
-> > > > https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
-> > > >
-> > > > The first patch has been reworked (see
-> > > > https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/)
-> > > > and the other two have been rebased on top of it.
-> > > >
-> > > > I have retained the R-by tags from Rui, because the changes in
-> > > > patches [2-3/3] are
-> > > > not essential, but I think that this new set needs to be tested
-> > > > again.
-> > > >
-> > > > Srinivas, can you test it please?
-> > >
-> > > Something's wrong, sorry.
-> > >
-> > > I get some invalid trip temperatures with this set.
+On Mon, Jan 23, 2023 at 11:17:53AM -0500, Jeff Moyer wrote:
+> Jeff Moyer <jmoyer@redhat.com> writes:
+> 
+> > Hi, Kent,
 > >
-> > Sorry, scratch this, I got confused by THERMAL_TEMP_INVALID showing
-> > up in
-> > sysfs, but it did show up before too.
+> > Kent Overstreet <kent.overstreet@linux.dev> writes:
 > >
-> > Please test!
+> >> I've been observing workloads where IPIs due to wakeups in
+> >> aio_complete() are ~15% of total CPU time in the profile. Most of those
+> >> wakeups are unnecessary when completion batching is in use in
+> >> io_getevents().
+> >>
+> >> This plumbs min_nr through via the wait eventry, so that aio_complete()
+> >> can avoid doing unnecessary wakeups.
+> >>
+> >> v2: This fixes a race in the first version of the patch. If we read some
+> >> events out after adding to the waitlist, we need to update wait.min_nr
+> >> call prepare_to_wait_event() again before scheduling.
 > >
->
+> > I like the idea of the patch, and I'll get some real world performance
+> > numbers soon.  But first, this version (and the previous version as
+> > well) fails test case 23 in the libaio regression test suite:
 > >
->
-> >
-> It will be easy if you have some test branch to avoid dependecies on
-> other patches.
+> > Starting cases/23.p
+> > FAIL: poll missed an event!
+> > FAIL: poll missed an event!
+> > test cases/23.t completed FAILED.
+> 
+> It turns out that this only fails on the (relatively) old kernel against
+> which I applied the patches.  When I apply both patches to the latest
+> tree, there is no test failure.
+> 
+> Sorry for the noise, I'll be sure to test on the latest going forward.
+> Now to figure out what changed elsewhere to fix this....
 
-Please see the thermal-intel-test branch in linux-pm.git.  It's this
-series on top of the core thermal stuff + ARM drivers.
+That's odd - let me know if you'd like me to take a look...
