@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064756776DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2616776E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjAWI6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S231508AbjAWI6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjAWI6d (ORCPT
+        with ESMTP id S231482AbjAWI6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:58:33 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E7A14EA8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:58:32 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E6A9B1F388;
-        Mon, 23 Jan 2023 08:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674464310; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gIYcLkIhHoIqMTHU7z0z+ani6y5ft7j45PE+7GKmbjU=;
-        b=t56Gdt2YqfMDFP9ycCDdRfCDH0nRp9TEdZr+wahpxuHv9wvnt5U5uEP+aR5NfLD1ItMmGG
-        NzRhTiJay4EawlaFHdnsWXwmjmjOeMDvptjwjENxtboarwYhULWQt3CQhuGojFUH5kBNw5
-        a9vFx/aDZNwt6NfUbkONweihqx8IENs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B97731357F;
-        Mon, 23 Jan 2023 08:58:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qRweLDZMzmMNZQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 23 Jan 2023 08:58:30 +0000
-Date:   Mon, 23 Jan 2023 09:58:30 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Mon, 23 Jan 2023 03:58:39 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74B5EB58;
+        Mon, 23 Jan 2023 00:58:38 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 047CC2B3;
+        Mon, 23 Jan 2023 09:58:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674464316;
+        bh=lw5ZoZGd0JjnnsdpQ85HbvHHq83hF6MA1T6umOobxfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HbUpt0++foq2zNyIboCH9YHJlz54AlYhOeFSKrs4wdTONGxn4EPdx4O80QLaVrJqm
+         8pjdhOlD1azPnFZmGkHhbGHbP8kmjEtYvNsOaLCSb4j+NGtCDN8bjX85sawYQ/LsVT
+         LQ4zPJSlEDeky41pnmmjxQjgeuy3aiuUo6AZFmqM=
+Date:   Mon, 23 Jan 2023 10:58:33 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH mm-unstable] lib/Kconfig.debug: do not enable
- DEBUG_PREEMPT by default
-Message-ID: <Y85MNmZDc5czMRUJ@dhcp22.suse.cz>
-References: <20230121033942.350387-1-42.hyeyoo@gmail.com>
- <86e68d3b-b029-5e82-5bbc-e0ccc2ae1d36@suse.cz>
- <Y8vSZ+gOFXWDKC8Z@hyeyoo>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>
+Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
+ with a custom bus_type
+Message-ID: <Y85MOdAVh/fv5HRt@pendragon.ideasonboard.com>
+References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
+ <786df750-221e-82fc-a324-d30261296974@i2se.com>
+ <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8vSZ+gOFXWDKC8Z@hyeyoo>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 21-01-23 20:54:15, Hyeonggon Yoo wrote:
-> On Sat, Jan 21, 2023 at 12:29:44PM +0100, Vlastimil Babka wrote:
-> > On 1/21/23 04:39, Hyeonggon Yoo wrote:
-> > > In workloads where this_cpu operations are frequently performed,
-> > > enabling DEBUG_PREEMPT may result in significant increase in
-> > > runtime overhead due to frequent invocation of
-> > > __this_cpu_preempt_check() function.
-> > > 
-> > > This can be demonstrated through benchmarks such as hackbench where this
-> > > configuration results in a 10% reduction in performance, primarily due to
-> > > the added overhead within memcg charging path.
-> > > 
-> > > Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
-> > > of its potential impact on performance in some workloads.
-> > > 
-> > > hackbench-process-sockets
-> > > 		      debug_preempt	 no_debug_preempt
-> > > Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
-> > > Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
-> > > Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
-> > > Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
-> > > Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
-> > > Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
-> > > Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
-> > > Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
-> > > Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
+On Mon, Jan 23, 2023 at 01:18:30PM +0530, Umang Jain wrote:
+> Hi Stefan,
+> 
+> Thank for the testing.
+> 
+> On 1/23/23 5:04 AM, Stefan Wahren wrote:
+> > Hi Umang,
+> >
+> > Am 20.01.23 um 21:10 schrieb Umang Jain:
+> >> This series just introduces five extra patches for dropping include
+> >> directives from Makefiles (suggested by Greg KH) and rebased.
+> >>
+> >> The main patch (6/6) removes platform device/driver abuse and moves
+> >> things to standard device/driver model using a custom_bus. Specific
+> >> details are elaborated in the commit message.
+> >>
+> >> The patch series is based on top of d514392f17fd (tag: next-20230120)
+> >> of linux-next.
+> >
+> > applied this series on top of linux-next and build it with 
+> > arm/multi_v7_defconfig plus the following:
+> >
+> > CONFIG_BCM_VIDEOCORE=y
+> > CONFIG_BCM2835_VCHIQ=m
+> > CONFIG_VCHIQ_CDEV=y
+> > CONFIG_SND_BCM2835=m
+> > CONFIG_VIDEO_BCM2835=m
+> > CONFIG_BCM2835_VCHIQ_MMAL=m
+> >
+> > and the devices doesn't register on Raspberry Pi 3 B Plus:
+> >
+> > [   25.523337] vchiq: module is from the staging directory, the quality is unknown, you have been warned.
+> > [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register bcm2835_audio vchiq device
+> > [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register bcm2835-camera vchiq device
+> 
+> I was able to reproduce and it seems the issue here is the change 
+> mentioned in the cover
+> 
+> - drop dma_set_mask_and_coherent
+> 
+> in V6.
+> 
+> (I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp applied 
+> so my branch has the DMA hunk included while I was testing V6)
+> 
+> Below is the hunk which should resolve the issue.
+> 
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> @@ -6,6 +6,7 @@
+>    */
+> 
+>   #include <linux/device/bus.h>
+> +#include <linux/dma-mapping.h>
+>   #include <linux/slab.h>
+>   #include <linux/string.h>
+> 
+> @@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent, 
+> const char *name)
+>          device->dev.type = &vchiq_device_type;
+>          device->dev.release = vchiq_device_release;
+> 
+> +       ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
+> +       if (ret < 0) {
+> +               vchiq_device_release(&device->dev);
+> +               return ret;
+> +       }
+> +
+>          ret = device_register(&device->dev);
+>          if (ret) {
+>                  put_device(&device->dev);
+> 
+> It seems we need to include the dma_set_mask_and_coherent() even if 
+> bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look into 
+> why is that/
+> 
+>   Laurent, any thoughts on this please?
 
-Do you happen to have any perf data collected during those runs? I
-would be interested in the memcg side of things. Maybe we can do
-something better there.
+Nothing that immediately springs to my mind. Can you investigate ?
+
 -- 
-Michal Hocko
-SUSE Labs
+Regards,
+
+Laurent Pinchart
