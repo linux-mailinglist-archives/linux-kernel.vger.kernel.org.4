@@ -2,545 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C5467738F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 00:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524316773A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 01:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjAVXvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 18:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S230008AbjAWAok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 19:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjAVXvI (ORCPT
+        with ESMTP id S229514AbjAWAoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 18:51:08 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102941351B;
-        Sun, 22 Jan 2023 15:51:05 -0800 (PST)
-Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1McY0L-1ogpK01CE1-00d2rb; Mon, 23 Jan 2023 00:50:49 +0100
-Message-ID: <4a609f3c-1153-124a-ed94-90c05a87285f@i2se.com>
-Date:   Mon, 23 Jan 2023 00:50:46 +0100
+        Sun, 22 Jan 2023 19:44:39 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F6AC677;
+        Sun, 22 Jan 2023 16:44:36 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 7so7868482pga.1;
+        Sun, 22 Jan 2023 16:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3RCWcIvL/2BqpEistR/pk1fEYWC8PuKRkeJFMaOklmU=;
+        b=CN8/icpWxNNFI0vVXK464SGC+sF87is7+R6voWl0bE3bNOQT0FRN+oZB7/LtuND7cp
+         ENl5Xxlg3o3TLP4ILjFNZpKOh+NRNWOFYgqhAuAEbvCSHmaK+ljhERXK5Ugi9t/jnI+/
+         mqpUOkwTVEQtvsbVQZVxNtS54kBlTSnPGSO8uVgoJdzsWoRaPV3zuswDC8oIQrTS/juU
+         rwgUSgO0ttGWgCSjLEcOTBJnVL/BZWa+g1OzAwfnw6xh00j3QCanwGnVpf2G5ltHHsty
+         XmZA3khsIGXkA2+Myald9aO5QWZMoerhzAhPbL8rcaUT9FiHnJ1QNQP52uxzXCL+k2oN
+         iRSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3RCWcIvL/2BqpEistR/pk1fEYWC8PuKRkeJFMaOklmU=;
+        b=eXpAauacDpTSMNIr9GM0pxOk87mqk5zxRmOkUvM/Tf71l4iU15z+29ITIcHgp98pbE
+         5unH6F4mEAuI0IC4XXqzo24ccV8UGP+j9QpE92TISsQtSFvZV40efhq5KMci8MAJyi0x
+         oh9Ap823PiRsjnyzD1o84+zJxpny2zW/BYg5yqZECGTodCEcpZlzuwALy/4T6kb2UMto
+         36WXKqypiuegIc4lGpnMYuGRL10VaihtM2SRZzhUuroUElojGXkPLFJJxnU4D33lHdn4
+         z3ENOzm88lPwQNty44XW8eCLzyywtDbncjBpNRmQwsGvFKkRSLiYtFxP+h+AbQxZ3Z/S
+         IS/g==
+X-Gm-Message-State: AFqh2kpJvnScAtt4mAcb/JJOoxMTh0OcoSMHj9tk+6fqBvg16asmX/or
+        XmNbCQWn3rZWWMG8FwTB7xSwW/KlI5P3N2NQWgqQI3oTFdOv3Q==
+X-Google-Smtp-Source: AMrXdXsGlpqOikKQbTT9bhVSnXxJrNIWNOS7on4GHluGRON0CVCAWyMaNdmDSsestCLWXqJRE5SbRISkc1yXoApS3YU=
+X-Received: by 2002:a63:585b:0:b0:492:23d4:fcb9 with SMTP id
+ i27-20020a63585b000000b0049223d4fcb9mr2059944pgm.18.1674434676044; Sun, 22
+ Jan 2023 16:44:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 6/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-Content-Language: en-US
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+References: <20221219052128.18190-1-zhouzhouyi@gmail.com> <Y7wN0TKU1jDyTZs5@lothringen>
+ <20230109152505.GA4070882@paulmck-ThinkPad-P17-Gen-1> <CAABZP2waOx0K=qLHmUoQZ2_g9q7LJQbCyYLaQRMPMGhiLTrcPQ@mail.gmail.com>
+In-Reply-To: <CAABZP2waOx0K=qLHmUoQZ2_g9q7LJQbCyYLaQRMPMGhiLTrcPQ@mail.gmail.com>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Mon, 23 Jan 2023 08:44:25 +0800
+Message-ID: <CAABZP2w0SGvKjbLXo2Ygm=xiXTcM0BGFfXBjYg6HscUQHGS=LQ@mail.gmail.com>
+Subject: Re: [PATCH linux-next] mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
+To:     paulmck@kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>, fweisbec@gmail.com,
+        tglx@linutronix.de, mingo@kernel.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
- <20230120201104.606876-7-umang.jain@ideasonboard.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230120201104.606876-7-umang.jain@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:iEzmCp1rbWF/cGR3w375qN2Wbv5TZMoIgVOhGmG43vkdxEitf1P
- Ay+xY7+HNl2hq2OloqUDWIA8EWrSO9xUe6jvfbvF5uSFuPqzon/DRG9SkwjYVOPXt9mqr6C
- r6fvKSvHv+3KOqQVYcfY5nUgUlEc30xh+5crJqxp51PCxqocnjMgjeTAuptExIrkGsTJgwC
- 90DPLxLy7yx//61QfSVUg==
-UI-OutboundReport: notjunk:1;M01:P0:+M6vUNInQ8I=;c4/OLedLCcqMm8DIRW99zQQpyVq
- X1eBW3/GzTqzdoawEVdU1nPgJPi0G+58e0tgYnpOaE4fdK7/aolnyk6YrLsrroLWnr/sjojX5
- z7illeHUQTiWIiCuzDB7m4b2fn2bbKz++0DVxgys4DYloK0MU986EKMmVLGYP/leRTH1et1+O
- Be/WjElCvdGRDaJQidPJc70s0ZV2hI91OaSK0Rg50z/fyPzJpBzXt+SJg0ICUUqFamvfHd/qI
- HQX//QPiU5iNQfsVUkejrVPdhevFbGkcAg7f/zgWbUGt9ee1oKg+UASmtEOB2VYbcswuW+5Gw
- 2NHjqKQ3XiFdmtdjT4Xioc2cUmE+QqiCS1FOh12vQ2kSxRrdm8tcGoWQqWlpjJ86LyoqbLtAK
- r/yvI1chwx+mJnOKSyFK6IwM85I4rvqzX848kIVuddsIcSCUvqr7xQFOfJK+tOERO2ndK8X8b
- tlErO8ChI6bt+KorVTAqFcpbAT5n2de/7g5kjY8dCm/B4fT3qpSwJtjt7NO7en7YkthmXJhl4
- eN1PtKrlE34qS18iASSw5qFnvGUdsmrIVfdeqXQ54dIj4VQtgo0LrAJtTEFlDKDaU7rGN66Ud
- jY3CMKYQsIzTwm8UV8PUjodUjKnlQS//faowSeZ3EgjB+15JZ0vp534T43HT7bpD03lkWOtjk
- qYDZ+mmhX+UAh6ME0Q71AGsTV3GzDYUVhPRh06qyHg==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+On Mon, Jan 9, 2023 at 11:59 PM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+>
+> On Mon, Jan 9, 2023 at 11:25 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Jan 09, 2023 at 01:51:29PM +0100, Frederic Weisbecker wrote:
+> > > On Mon, Dec 19, 2022 at 01:21:28PM +0800, Zhouyi Zhou wrote:
+> > > > mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE to fix concurrency bug
+> > > > reported by KCSAN.
+> > > >
+> > > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > ---
+> > > > During the rcutorture test on linux-next,
+> > > > ./tools/testing/selftests/rcutorture/bin/torture.sh --do-kcsan  --kcsan-kmake-arg "CC=clang-12"
+> > > > following KCSAN BUG is reported:
+> > > > [   35.397089] BUG: KCSAN: data-race in tick_nohz_idle_stop_tick / tick_nohz_next_event^M
+> > > > [   35.400593] ^M
+> > > > [   35.401377] write to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 3:^M
+> > > > [   35.405325]  tick_nohz_idle_stop_tick+0x14c/0x3e0^M
+> > > > [   35.407162]  do_idle+0xf3/0x2a0^M
+> > > > [   35.408016]  cpu_startup_entry+0x15/0x20^M
+> > > > [   35.409084]  start_secondary+0x8f/0x90^M
+> > > > [   35.410207]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> > > > [   35.411607] ^M
+> > > > [   35.412042] no locks held by swapper/3/0.^M
+> > > > [   35.413172] irq event stamp: 53048^M
+> > > > [   35.414175] hardirqs last  enabled at (53047): [<ffffffffb41f8404>] tick_nohz_idle_enter+0x104/0x140^M
+> > > > [   35.416681] hardirqs last disabled at (53048): [<ffffffffb41229f1>] do_idle+0x91/0x2a0^M
+> > > > [   35.418988] softirqs last  enabled at (53038): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> > > > [   35.421347] softirqs last disabled at (53029): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> > > > [   35.423685] ^M
+> > > > [   35.424119] read to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 0:^M
+> > > > [   35.425870]  tick_nohz_next_event+0x233/0x2b0^M
+> > > > [   35.427119]  tick_nohz_idle_stop_tick+0x8f/0x3e0^M
+> > > > [   35.428386]  do_idle+0xf3/0x2a0^M
+> > > > [   35.429265]  cpu_startup_entry+0x15/0x20^M
+> > > > [   35.430429]  rest_init+0x20c/0x210^M
+> > > > [   35.431382]  arch_call_rest_init+0xe/0x10^M
+> > > > [   35.432508]  start_kernel+0x544/0x600^M
+> > > > [   35.433519]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> > > >
+> > > > fix above bug by marking access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
+> > >
+> > > This has been discussed before with passion:
+> > >
+> > > http://archive.lwn.net:8080/linux-kernel/1C65422C-FFA4-4651-893B-300FAF9C49DE@lca.pw/T/
+> > >
+> > > To me data_race() would be more appropriate but that would need a changelog with
+> > > proper analysis of the tick_do_timer_cpu state machine.
+> >
+> > Please also an analysis of why the compiler cannot do any destructive
+> > optimizations in this case.  Maybe also comments.
+> I want to try the analysis above, as a newbie I have taught myself
+> LLVM for 3 years in my spare time ;-)
+I am continuing to study LLVM/Clang's optimization behaviour on
+tick_do_timer_cpu, it is very interesting and fascinating, but as a
+newbie, I still need 3-4 week to go, could you wait for me a little
+while? ;-)
 
-Am 20.01.23 um 21:11 schrieb Umang Jain:
-> The devices that the vchiq interface registers (bcm2835-audio,
-> bcm2835-camera) are implemented and exposed by the VC04 firmware.
-> The device tree describes the VC04 itself with the resources required
-> to communicate with it through a mailbox interface. However, the
-> vchiq interface registers these devices as platform devices. This
-> also means the specific drivers for these devices are getting
-> registered as platform drivers. This is not correct and a blatant
-> abuse of platform device/driver.
->
-> Replace the platform device/driver model with a standard device driver
-> model. A custom bus_type, vchiq_bus_type, is created in the vchiq
-> interface which matches the devices to their specific device drivers
-> thereby, establishing driver binding. A struct vchiq_device wraps the
-> struct device for each device being registered on the bus by the vchiq
-> interface. On the other hand, struct vchiq_driver wraps the struct
-> device_driver and the module_vchiq_driver() macro is provided for the
-> driver registration.
->
-> Each device registered will expose a 'name' read-only device attribute
-> in sysfs (/sys/bus/vchiq-bus/devices). New devices and drivers can be
-> added by registering on vchiq_bus_type and adding a corresponding
-> device name entry in the static list of devices, vchiq_devices. There
-> is currently no way to enumerate the VCHIQ devices that are available
-> from the firmware.
->
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->   drivers/staging/vc04_services/Makefile        |   1 +
->   .../vc04_services/bcm2835-audio/bcm2835.c     |  27 +++--
->   .../bcm2835-camera/bcm2835-camera.c           |  25 ++---
->   .../interface/vchiq_arm/vchiq_arm.c           |  52 +++++----
->   .../interface/vchiq_arm/vchiq_device.c        | 102 ++++++++++++++++++
->   .../interface/vchiq_arm/vchiq_device.h        |  39 +++++++
->   6 files changed, 192 insertions(+), 54 deletions(-)
->   create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
->   create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
->
-> diff --git a/drivers/staging/vc04_services/Makefile b/drivers/staging/vc04_services/Makefile
-> index 44794bdf6173..2d071e55e175 100644
-> --- a/drivers/staging/vc04_services/Makefile
-> +++ b/drivers/staging/vc04_services/Makefile
-> @@ -5,6 +5,7 @@ vchiq-objs := \
->      interface/vchiq_arm/vchiq_core.o  \
->      interface/vchiq_arm/vchiq_arm.o \
->      interface/vchiq_arm/vchiq_debugfs.o \
-> +   interface/vchiq_arm/vchiq_device.o \
->      interface/vchiq_arm/vchiq_connected.o \
->   
->   ifdef CONFIG_VCHIQ_CDEV
-> diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-> index 00bc898b0189..05118dafe62d 100644
-> --- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-> +++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
-> @@ -1,12 +1,12 @@
->   // SPDX-License-Identifier: GPL-2.0
->   /* Copyright 2011 Broadcom Corporation.  All rights reserved. */
->   
-> -#include <linux/platform_device.h>
-> -
->   #include <linux/init.h>
->   #include <linux/slab.h>
->   #include <linux/module.h>
->   
-> +#include "../interface/vchiq_arm/vchiq_arm.h"
-> +#include "../interface/vchiq_arm/vchiq_device.h"
->   #include "bcm2835.h"
->   
->   static bool enable_hdmi;
-> @@ -268,9 +268,8 @@ static int snd_add_child_devices(struct device *device, u32 numchans)
->   	return 0;
->   }
->   
-> -static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
-> +static int snd_bcm2835_alsa_probe(struct device *dev)
->   {
-> -	struct device *dev = &pdev->dev;
->   	int err;
->   
->   	if (num_channels <= 0 || num_channels > MAX_SUBSTREAMS) {
-> @@ -292,32 +291,32 @@ static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
->   
->   #ifdef CONFIG_PM
->   
-> -static int snd_bcm2835_alsa_suspend(struct platform_device *pdev,
-> +static int snd_bcm2835_alsa_suspend(struct device *pdev,
->   				    pm_message_t state)
->   {
->   	return 0;
->   }
->   
-> -static int snd_bcm2835_alsa_resume(struct platform_device *pdev)
-> +static int snd_bcm2835_alsa_resume(struct device *pdev)
->   {
->   	return 0;
->   }
->   
->   #endif
->   
-> -static struct platform_driver bcm2835_alsa_driver = {
-> -	.probe = snd_bcm2835_alsa_probe,
-> +static struct vchiq_driver bcm2835_alsa_driver = {
-> +	.driver	= {
-> +		.probe = snd_bcm2835_alsa_probe,
->   #ifdef CONFIG_PM
-> -	.suspend = snd_bcm2835_alsa_suspend,
-> -	.resume = snd_bcm2835_alsa_resume,
-> +		.suspend = snd_bcm2835_alsa_suspend,
-> +		.resume = snd_bcm2835_alsa_resume,
->   #endif
-> -	.driver = {
->   		.name = "bcm2835_audio",
-> -	},
-> +	}
->   };
-> -module_platform_driver(bcm2835_alsa_driver);
-> +module_vchiq_driver(bcm2835_alsa_driver);
->   
->   MODULE_AUTHOR("Dom Cobley");
->   MODULE_DESCRIPTION("Alsa driver for BCM2835 chip");
->   MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:bcm2835_audio");
-> +MODULE_ALIAS("bcm2835_audio");
-> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> index 4f81765912ea..57f053de53b9 100644
-> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> @@ -24,8 +24,9 @@
->   #include <media/v4l2-event.h>
->   #include <media/v4l2-common.h>
->   #include <linux/delay.h>
-> -#include <linux/platform_device.h>
->   
-> +#include "../interface/vchiq_arm/vchiq_arm.h"
-> +#include "../interface/vchiq_arm/vchiq_device.h"
->   #include "../vchiq-mmal/mmal-common.h"
->   #include "../vchiq-mmal/mmal-encodings.h"
->   #include "../vchiq-mmal/mmal-vchiq.h"
-> @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
->   	.fmt.pix.sizeimage = 1024 * 768,
->   };
->   
-> -static int bcm2835_mmal_probe(struct platform_device *pdev)
-> +static int bcm2835_mmal_probe(struct device *device)
->   {
->   	int ret;
->   	struct bcm2835_mmal_dev *dev;
-> @@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->   						       &camera_instance);
->   		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
->   		if (ret) {
-> -			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-> +			dev_err(device, "%s: could not register V4L2 device: %d\n",
->   				__func__, ret);
->   			goto free_dev;
->   		}
-> @@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
->   	return ret;
->   }
->   
-> -static int bcm2835_mmal_remove(struct platform_device *pdev)
-> +static int bcm2835_mmal_remove(struct device *device)
->   {
->   	int camera;
->   	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-> @@ -1990,17 +1991,17 @@ static int bcm2835_mmal_remove(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> -static struct platform_driver bcm2835_camera_driver = {
-> -	.probe		= bcm2835_mmal_probe,
-> -	.remove		= bcm2835_mmal_remove,
-> -	.driver		= {
-> -		.name	= "bcm2835-camera",
-> -	},
-> +static struct vchiq_driver bcm2835_camera_driver = {
-> +	.driver = {
-> +		.name		= "bcm2835-camera",
-> +		.probe          = bcm2835_mmal_probe,
-> +		.remove         = bcm2835_mmal_remove,
-> +	}
->   };
->   
-> -module_platform_driver(bcm2835_camera_driver)
-> +module_vchiq_driver(bcm2835_camera_driver)
->   
->   MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
->   MODULE_AUTHOR("Vincent Sanders");
->   MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:bcm2835-camera");
-> +MODULE_ALIAS("bcm2835-camera");
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index 22de23f3af02..4a57ff760106 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -12,6 +12,8 @@
->   #include <linux/cdev.h>
->   #include <linux/fs.h>
->   #include <linux/device.h>
-> +#include <linux/device/bus.h>
-> +#include <linux/string.h>
->   #include <linux/mm.h>
->   #include <linux/highmem.h>
->   #include <linux/pagemap.h>
-> @@ -34,6 +36,7 @@
->   #include "vchiq_ioctl.h"
->   #include "vchiq_arm.h"
->   #include "vchiq_debugfs.h"
-> +#include "vchiq_device.h"
->   #include "vchiq_connected.h"
->   #include "vchiq_pagelist.h"
->   
-> @@ -65,9 +68,6 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
->   DEFINE_SPINLOCK(msg_queue_spinlock);
->   struct vchiq_state g_state;
->   
-> -static struct platform_device *bcm2835_camera;
-> -static struct platform_device *bcm2835_audio;
-> -
->   struct vchiq_drvdata {
->   	const unsigned int cache_line_size;
->   	struct rpi_firmware *fw;
-> @@ -132,6 +132,11 @@ struct vchiq_pagelist_info {
->   	unsigned int scatterlist_mapped;
->   };
->   
-> +static const char *const vchiq_devices[] = {
-> +	"bcm2835_audio",
-> +	"bcm2835-camera",
-> +};
-> +
->   static void __iomem *g_regs;
->   /* This value is the size of the L2 cache lines as understood by the
->    * VPU firmware, which determines the required alignment of the
-> @@ -1763,33 +1768,13 @@ static const struct of_device_id vchiq_of_match[] = {
->   };
->   MODULE_DEVICE_TABLE(of, vchiq_of_match);
->   
-> -static struct platform_device *
-> -vchiq_register_child(struct platform_device *pdev, const char *name)
-> -{
-> -	struct platform_device_info pdevinfo;
-> -	struct platform_device *child;
-> -
-> -	memset(&pdevinfo, 0, sizeof(pdevinfo));
-> -
-> -	pdevinfo.parent = &pdev->dev;
-> -	pdevinfo.name = name;
-> -	pdevinfo.id = PLATFORM_DEVID_NONE;
-> -	pdevinfo.dma_mask = DMA_BIT_MASK(32);
-> -
-> -	child = platform_device_register_full(&pdevinfo);
-> -	if (IS_ERR(child)) {
-> -		dev_warn(&pdev->dev, "%s not registered\n", name);
-> -		child = NULL;
-> -	}
-> -
-> -	return child;
-> -}
->   
->   static int vchiq_probe(struct platform_device *pdev)
->   {
->   	struct device_node *fw_node;
->   	const struct of_device_id *of_id;
->   	struct vchiq_drvdata *drvdata;
-> +	unsigned int i;
->   	int err;
->   
->   	of_id = of_match_node(vchiq_of_match, pdev->dev.of_node);
-> @@ -1832,8 +1817,12 @@ static int vchiq_probe(struct platform_device *pdev)
->   		goto error_exit;
->   	}
->   
-> -	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
-> -	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
-> +	for (i = 0; i < ARRAY_SIZE(vchiq_devices); i++) {
-> +		err = vchiq_device_register(&pdev->dev, vchiq_devices[i]);
-> +		if (!err)
-> +			dev_err(&pdev->dev, "Failed to register %s vchiq device\n",
-> +				vchiq_devices[i]);
-I think it's helpful to log "err" here.
-> +	}
->   
->   	return 0;
->   
-> @@ -1845,8 +1834,8 @@ static int vchiq_probe(struct platform_device *pdev)
->   
->   static int vchiq_remove(struct platform_device *pdev)
->   {
-> -	platform_device_unregister(bcm2835_audio);
-> -	platform_device_unregister(bcm2835_camera);
-> +	bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_device_unregister);
-> +
->   	vchiq_debugfs_deinit();
->   	vchiq_deregister_chrdev();
->   
-> @@ -1866,6 +1855,12 @@ static int __init vchiq_driver_init(void)
->   {
->   	int ret;
->   
-> +	ret = bus_register(&vchiq_bus_type);
-> +	if (ret) {
-> +		pr_err("Failed to register %s\n", vchiq_bus_type.name);
-> +		return ret;
-> +	}
-> +
->   	ret = platform_driver_register(&vchiq_driver);
->   	if (ret)
->   		pr_err("Failed to register vchiq driver\n");
-Shouldn't we unregister the bus in this error case?
-> @@ -1876,6 +1871,7 @@ module_init(vchiq_driver_init);
->   
->   static void __exit vchiq_driver_exit(void)
->   {
-> +	bus_unregister(&vchiq_bus_type);
->   	platform_driver_unregister(&vchiq_driver);
->   }
->   module_exit(vchiq_driver_exit);
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> new file mode 100644
-> index 000000000000..ec542d6bc68a
-> --- /dev/null
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +/*
-> + * vchiq_device.c - VCHIQ generic device and bus-type
-> + *
-> + * Copyright (c) 2023 Ideas On Board Oy
-> + */
-> +
-> +#include <linux/device/bus.h>
-> +#include <linux/slab.h>
-> +#include <linux/string.h>
-> +
-> +#include "vchiq_device.h"
-> +
-> +static int vchiq_bus_type_match(struct device *dev, struct device_driver *drv);
-> +
-> +static ssize_t vchiq_dev_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	struct vchiq_device *device = container_of(dev, struct vchiq_device, dev);
-> +
-> +	return sprintf(buf, "%s", device->name);
-> +}
-> +
-> +static DEVICE_ATTR_RO(vchiq_dev);
-> +
-> +static struct attribute *vchiq_dev_attrs[] = {
-> +	&dev_attr_vchiq_dev.attr,
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(vchiq_dev);
-> +
-> +static const struct device_type vchiq_device_type = {
-> +	.groups         = vchiq_dev_groups
-> +};
-> +
-> +struct bus_type vchiq_bus_type = {
-> +	.name   = "vchiq-bus",
-> +	.match  = vchiq_bus_type_match,
-> +};
-> +EXPORT_SYMBOL_GPL(vchiq_bus_type);
-> +
-> +static int vchiq_bus_type_match(struct device *dev, struct device_driver *drv)
-> +{
-> +	if (dev->bus == &vchiq_bus_type &&
-> +	    strcmp(dev_name(dev), drv->name) == 0)
-> +		return 1;
-Please add a empty line here.
-> +	return 0;
-> +}
-> +
-> +static void vchiq_device_release(struct device *dev)
-> +{
-> +	struct vchiq_device *device;
-> +
-> +	device = container_of(dev, struct vchiq_device, dev);
-> +	kfree(device);
-> +}
-> +
-> +int vchiq_device_register(struct device *parent, const char *name)
-> +{
-> +	struct vchiq_device *device = NULL;
-> +	int ret;
-> +
-> +	device = kzalloc(sizeof(*device), GFP_KERNEL);
-> +	if (!device)
-> +		return -ENOMEM;
-> +
-> +	device->name = name;
-> +	device->dev.init_name = name;
-> +	device->dev.parent = parent;
-> +	device->dev.bus = &vchiq_bus_type;
-> +	device->dev.type = &vchiq_device_type;
-> +	device->dev.release = vchiq_device_release;
-> +
-> +	ret = device_register(&device->dev);
-> +	if (ret) {
-> +		put_device(&device->dev);
-> +		return -EINVAL;
-Why not returning "ret" here?
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int vchiq_device_unregister(struct device *dev, void *data)
-> +{
-> +	device_unregister(dev);
-> +	return 0;
-> +}
-> +
-> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv)
-> +{
-> +	vchiq_drv->driver.bus = &vchiq_bus_type;
-> +
-> +	return driver_register(&vchiq_drv->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(vchiq_driver_register);
-> +
-> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv)
-> +{
-> +	driver_unregister(&vchiq_drv->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(vchiq_driver_unregister);
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> new file mode 100644
-> index 000000000000..0848c1b353f8
-> --- /dev/null
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> @@ -0,0 +1,39 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
-> +/*
-> + * Copyright (c) 2023 Ideas On Board Oy
-> + */
-> +
-> +#ifndef _VCHIQ_DEVICE_H
-> +#define _VCHIQ_DEVICE_H
-> +
-> +#include <linux/device.h>
-> +
-> +struct vchiq_device {
-> +	struct device dev;
-> +	const char *name;
-> +};
-> +
-> +struct vchiq_driver {
-> +	struct device_driver driver;
-> +};
-> +
-> +extern struct bus_type vchiq_bus_type;
-> +
-> +int vchiq_device_register(struct device *parent, const char *name);
-> +int vchiq_device_unregister(struct device *dev, void *data);
-> +
-> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv);
-> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv);
-> +
-> +/**
-> + * module_vchiq_driver() - Helper macro for registering a vchiq driver
-> + * @__vchiq_driver: vchiq driver struct
-> + *
-> + * Helper macro for vchiq drivers which do not do anything special in
-> + * module init/exit. This eliminates a lot of boilerplate. Each module may only
-> + * use this macro once, and calling it replaces module_init() and module_exit()
-> + */
-> +#define module_vchiq_driver(__vchiq_driver) \
-> +	module_driver(__vchiq_driver, vchiq_driver_register, vchiq_driver_unregister)
-> +
-> +#endif /* _VCHIQ_DEVICE_H */
+Many Thanks
+Zhouyi
+> >
+> > > One more thing on my TODO list, but feel free to beat me at it :-)
+> Please take your time ;-)   Please don't look my next possible email
+> as a reminder ;-)
+> >
+> > I know that feeling!  ;-)
+> >
+> Thanx, Zhouyi
+> >                                                         Thanx, Paul
