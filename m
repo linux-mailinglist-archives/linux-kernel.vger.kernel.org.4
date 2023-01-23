@@ -2,124 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E445D678BE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9372678BE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjAWXOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S231582AbjAWXRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 18:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjAWXO3 (ORCPT
+        with ESMTP id S229469AbjAWXRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:14:29 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB0B22796
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:14:27 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id B6A725C01EE;
-        Mon, 23 Jan 2023 18:14:24 -0500 (EST)
-Received: from imap46 ([10.202.2.96])
-  by compute3.internal (MEProxy); Mon, 23 Jan 2023 18:14:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verbum.org; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1674515664; x=1674602064; bh=wJGVOVt/uj
-        SEWyLvw0hzGlE/QWLNGWdfnk+AykWDgxs=; b=EpshgA7iogLUehYMkUDZDgM0ZP
-        iw6iLg0dIiPIjC2XKjbCsgvsLfnt1YDCCCjCfUHw7RamloVVNwHpb2053eHPqHYs
-        g9FM+QJF/zoI9wGUsm+/5V19B83KHpi/Tdfqag2SOujMK28QiGrEKEsF5VbXsUmu
-        J+FUGDf07uhKj/a72l6gAXTKNaR04aJwV37RIS6IZCYFozw9NrUmN31yobYdTFde
-        3U3zRkMYF5fr67kgR57XtJ1p0agv9oXwM6oKFLHnHm0eU2QwaQx/sSWsomsR/h94
-        eKZ2/X/5spZ5HhDBrVMvxYzwGCmrm8k/q+fiUEh3gihQDaKTmgCw0M42vltg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674515664; x=1674602064; bh=wJGVOVt/ujSEWyLvw0hzGlE/QWLN
-        GWdfnk+AykWDgxs=; b=R+6PMwId3FiUT1leKU/qBUHp7rqGmd+EhSiIkSC3tSm8
-        C4trrSDXvKXpUmM+s02wiD/9pfPfreNWCs1HnMkKqWLPumV6fTJo7bKQKSuJXc5p
-        vw8dvjO0aF4Au1A84RUa3xPRIa0xcI1BtbvaZbmfDBnu/pRqIHO27fcmeqciP0Tz
-        uS6oJuVT/qWl8ySu3Yq2MUA+OKQC59DI/tBJLulZZPIYLfsbSXQIcX0PV2y3H7l4
-        vovA+UzRSFKcjDM07o5b62qfbaRQCxnKdyAv18yYrHrOeJdNEBRtv6//A0AETktA
-        wcklyUvmznbL/H1qlXkhEL31X9fxh6po3rKj+NfgbQ==
-X-ME-Sender: <xms:0BTPY2y7oTOajlyeehrIykkW7pN4VvLP5yUrvKjwtrjZMjPz3Apk8g>
-    <xme:0BTPYyTxxQFICTla9mdJHf1jgTOn0g_WjMvQ5lc5K1AvYKL7IiHiocyUpBQ1438pn
-    IY-wfx33VeY9_cp>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduledgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfveho
-    lhhinhcuhggrlhhtvghrshdfuceofigrlhhtvghrshesvhgvrhgsuhhmrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefhjedutdehtdfgueeuledtkeefkedvgfevieefudetkeehffej
-    gfeiheehkeegteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpeifrghlthgvrhhssehvvghrsghumhdrohhrgh
-X-ME-Proxy: <xmx:0BTPY4VcfhS4EZg0WdDqa856RBI8QfsO_aDVXn5lr2fQrZ5-STIsZA>
-    <xmx:0BTPY8hObCZ9xdHkJUlzsYKu7urzPMHkF-LJ-VjJmcLvEQ1UfXJJJQ>
-    <xmx:0BTPY4D_iPfXps8Du1-wOywDFFpfm-c6yvKQkgGG4rul6ThWl-AnKw>
-    <xmx:0BTPY01wwTQit6EfX4LB33ZGuw3zgOOGAlR61vQfVtTERDkIwNl2Jg>
-Feedback-ID: ibe7c40e9:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3AC762A20080; Mon, 23 Jan 2023 18:14:24 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <70950159-11e4-40c8-a498-04971b7a4ada@app.fastmail.com>
-In-Reply-To: <87mt68dfpb.fsf@redhat.com>
-References: <20230120102512.3195094-1-gscrivan@redhat.com>
- <db72efdd-5cb2-4578-a322-bf894fcf6066@app.fastmail.com>
- <874jshdpl3.fsf@redhat.com>
- <3839bced-74f7-4afb-8068-c1cdde7b61fe@app.fastmail.com>
- <87mt68dfpb.fsf@redhat.com>
-Date:   Mon, 23 Jan 2023 18:14:03 -0500
-From:   "Colin Walters" <walters@verbum.org>
-To:     "Giuseppe Scrivano" <gscrivan@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, "Kees Cook" <keescook@chromium.org>,
-        bristot@redhat.com, "Eric W. Biederman" <ebiederm@xmission.com>,
-        brauner@kernel.org, "Aleksa Sarai" <cyphar@cyphar.com>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
-        "Alexander Larsson" <alexl@redhat.com>, peterz@infradead.org,
-        bmasney@redhat.com
-Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 18:17:51 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51961D50D;
+        Mon, 23 Jan 2023 15:17:49 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id v6so34672381ejg.6;
+        Mon, 23 Jan 2023 15:17:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rGHQVT6OOGT/1kN7WFy1iuELzwSb3GW4ljiie40ssGc=;
+        b=bwIjx0/nDLuZ7FsuDbvsDQXX63weXAifErsOCvGlSgINo0kfaUVeJzkcUZ9UokIR9w
+         GU98gDLCoRP2xD/e4z/YjYgw/lPnlCOdp99e0ChZv/ZWIVDGkFD4ESs87JVKduEYm77k
+         dlRnAE50km6Yij9AOVzU02CG6HbrcwaRquG+e5ufQgAPbvcg2ttZ3RAu3AeCl0kR4+ax
+         2WTet5AtQLr/rTTJxUfcTad9pxrxRiy9gqQAd5zEcKnxRxg1qZcV6Alq9JvJiqIkOutO
+         Z9qKoy/ttJx5lnTvs4jA/dwb3SIMtWac/SLT9s/XEG8siOxmOhXJCMpVu0iWC7U0hfRz
+         kc7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rGHQVT6OOGT/1kN7WFy1iuELzwSb3GW4ljiie40ssGc=;
+        b=H4QESPWjg8VzLQPaMU1yZGgBLp1s3ZDkRahssVEQ3FF7ch2p0ej1e7HNchB+BahoYd
+         /D/SoBa7Vtfv740PwGSMM/lSJ7XJgrxFmH/TXOz6VXQuzYrA0m5R7N/g8j719WajWwVF
+         ZHc5VaycRnufyjwgsbiQwN/xpwCjjRyrvcnoG1bXEMFvbJ0tTwAe3ksdDv9ra1gS6b9S
+         lso3Nt9oqVHnPiTuBJclHctsw45ynQ/byxsSZ9f2hWFgmbsxZQHOB3t8FaXawsu5tCBA
+         N2W279hRBIdX6sQAIMpoiSdafOL1QS32gDOk2Sq7g1iF0IS/JEXGmntrIWKJ09e8HNYI
+         wuRw==
+X-Gm-Message-State: AFqh2koXY+FHPxqOIPjAOkuH6CZSIzC/sQpVEKR0oCt9KWjkXolXhAei
+        hSdeeX2X+7tDryMIAuYcBdbIB3ntF12wfTGPz4f1S3M5i8I=
+X-Google-Smtp-Source: AMrXdXu0pw3W2DXe7/rd+P1f3BnuChmYExdV7mrCu15SFPLmnT7xk2iiFgYqo7vEHuwgHAhY34tBKbgcyOWKEd+PGN8=
+X-Received: by 2002:a17:906:c09:b0:86e:9975:81e6 with SMTP id
+ s9-20020a1709060c0900b0086e997581e6mr2577122ejf.102.1674515867717; Mon, 23
+ Jan 2023 15:17:47 -0800 (PST)
+MIME-Version: 1.0
+References: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1674028604-7113-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 23 Jan 2023 15:17:35 -0800
+Message-ID: <CAEf4BzZfBb75smH0uTn4E36T6vk1xhZZ+5_ONtdh9aFQCMH2pw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix build errors if CONFIG_NF_CONNTRACK=m
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Mon, Jan 23, 2023, at 5:54 PM, Giuseppe Scrivano wrote:
+On Tue, Jan 17, 2023 at 11:57 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> I realize it seems like a one-off fix, but it is done only for backward
-> compatibility.
+> If CONFIG_NF_CONNTRACK=m, there are no definitions of NF_NAT_MANIP_SRC
+> and NF_NAT_MANIP_DST in vmlinux.h, build test_bpf_nf.c failed.
 >
-> Other paths under /proc/self/map_files require CAP_SYS_ADMIN in the
-> initial user namespace, or have CAP_CHECKPOINT_RESTORE in the user
-> namespace.  Sure, it is not future-proof, but it would look weird if
-> after CVE-2019-19814 there will be more ways to access files from the
-> host without requiring some capabilities.
-
-I think a way to rephrase what I'm saying is that it feels like this should be about making /proc/self/exe and /proc/self/map_files consistent.
-
-> With the prctl a runtime would just need to do the following and live
-> happily ever after:
+> $ make -C tools/testing/selftests/bpf/
 >
-> __attribute__ ((constructor)) static void hide_self_exe (void)
-> {
-> 	if (prctl(PR_SET_HIDE_SELF_EXE, 1, 0, 0, 0) == 0)
-> 		return;
+>   CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+>                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+>                                                        ^
+> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+>                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+>                                                        ^
+> 2 errors generated.
 >
-> 	/* ...reexec as we do today... */
-> }
+> Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c,
+> in order to avoid redefinitions if CONFIG_NF_CONNTRACK=y, rename them with
+> ___local suffix. This is similar with commit 1058b6a78db2 ("selftests/bpf:
+> Do not fail build if CONFIG_NF_CONNTRACK=m/n").
 >
-> and we won't have to worry about what mount options are supported or
-> used by proc.
+> Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  tools/testing/selftests/bpf/progs/test_bpf_nf.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e..9fc603c 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -34,6 +34,11 @@ __be16 dport = 0;
+>  int test_exist_lookup = -ENOENT;
+>  u32 test_exist_lookup_mark = 0;
+>
+> +enum nf_nat_manip_type___local {
+> +       NF_NAT_MANIP_SRC___local,
+> +       NF_NAT_MANIP_DST___local
+> +};
+> +
+>  struct nf_conn;
+>
+>  struct bpf_ct_opts___local {
+> @@ -58,7 +63,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
+> -                       int port, enum nf_nat_manip_type) __ksym;
+> +                       int port, enum nf_nat_manip_type___local) __ksym;
+>
+>  static __always_inline void
+>  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> @@ -157,10 +162,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>
+>                 /* snat */
+>                 saddr.ip = bpf_get_prandom_u32();
+> -               bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+> +               bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC___local);
+>                 /* dnat */
+>                 daddr.ip = bpf_get_prandom_u32();
+> -               bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+> +               bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST___local);
+>
 
-Yeah, OK - having the logical operation be on the process and not the view into it (procfs) definitely is more robust.
+it would be a bit more reliable if you used `bpf_core_enum_value(enum
+nf_nat_manip_type___local, NF_NAT_MANIP_DST___local)`. That would make
+libbpf substitute correct absolute value, if actual enum
+nf_nat_manip_type in kernel ever changed. Please consider a follow up
+patch for this.
 
-But how about calling this PR_SET_PROCFS_RESTRICTED or so, and then *also* changing the /proc/self/map_files lookup to deny if this is set?  Yes, it'd be mostly redundant, but it'd help clarify things for any future changes since it'd be clear that the logic *should* be consistent for /proc/self/exe and /proc/self/map_files.  And actually as a bonus, it would make the case of e.g. `podman run --cap-add=checkpoint_restore` secure right?  (Though honestly I don't know how common that is or whether one can practically use checkpoint_restore without other caps)
+>                 ct_ins = bpf_ct_insert_entry(ct);
+>                 if (ct_ins) {
+> --
+> 2.1.0
+>
