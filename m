@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AD567839E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4856783A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjAWRut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S232591AbjAWRwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjAWRus (ORCPT
+        with ESMTP id S230128AbjAWRwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:50:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A19F7ED7;
-        Mon, 23 Jan 2023 09:50:47 -0800 (PST)
+        Mon, 23 Jan 2023 12:52:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E280712078;
+        Mon, 23 Jan 2023 09:52:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC5BBB80E1A;
-        Mon, 23 Jan 2023 17:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16635C433EF;
-        Mon, 23 Jan 2023 17:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674496244;
-        bh=tyHf10drQO0OC929FqqeiYnnsDPHKJ/2AHK+MbGhFG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cDyetirEr/aj1JNa4OShwIAz4J9uX8gSMj4FRKi8mbGYieeYFGCFgcBTPyp/c89Zj
-         TzpCKu2tj2YGeoggACWsLB7IAnaAU1pVdGXUTdKIDa3oN6L/aR/axmzcTi1WgOUuHO
-         2a/apmCNEFoDIl2qeTpyxIE1K9HtjgjsCqgbt6M0=
-Date:   Mon, 23 Jan 2023 18:50:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] serial: fix recently introduced problems in tty-next
-Message-ID: <Y87I8TQ/MBiaXpWH@kroah.com>
-References: <20230123173857.40695-1-ilpo.jarvinen@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 884A660EA2;
+        Mon, 23 Jan 2023 17:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24CAC433D2;
+        Mon, 23 Jan 2023 17:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674496328;
+        bh=lRw+ACKdRGIp4Pmf5z8AONIl55+4MQVQLJVgA15h0/c=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=oBqcNhdR6mJh7m4Sd78XigmhpLQP/72V+b5+C5nYghsYLW6OELnTcFIazhIVFfsrZ
+         bPaB1XEeGLJ093IXgrSSsxqMb0hSf5LZlIu8xrtDElsnnD78hyPEk8pFPhowDQWyOS
+         jwn9YGPc3udSs+38EyfUUULxsS5M5iCLglqX57w3bBpxNp/bRTC/uDDBJZe00Lec1r
+         6+jUtHhtn3/AUoqeY5czg+dlR9jMxsWEcrGHVBCfnYwhOxYO1DfKvvmKp2vZLf4ACQ
+         LwBTQ8QucRq+kkLtF9Riz11+OfOXJZ4vxgtBf8+1lsMu+y86U0teg0y7M+bTJjmnhS
+         cYk6ja+t2VreA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7FCD05C0510; Mon, 23 Jan 2023 09:52:07 -0800 (PST)
+Date:   Mon, 23 Jan 2023 09:52:07 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Willy Tarreau <w@1wt.eu>, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] selftests/nolibc: small simplification of test
+ development phase
+Message-ID: <20230123175207.GW2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230121085320.11712-1-w@1wt.eu>
+ <20230121200038.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y87FM1yyZy6iOXcj@biznet-home.integral.gnuweeb.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230123173857.40695-1-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <Y87FM1yyZy6iOXcj@biznet-home.integral.gnuweeb.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,24 +59,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 07:38:55PM +0200, Ilpo Järvinen wrote:
-> One build fail due to tty-linus -> tty-next merge and one problem
-> smatch found.
+On Tue, Jan 24, 2023 at 12:34:43AM +0700, Ammar Faizi wrote:
+> On Sat, Jan 21, 2023 at 12:00:38PM -0800, Paul E. McKenney wrote:
+> > Nice, thank you!
+> > 
+> > I have these placed on top of the -rcu "dev" branch initially for further
+> > review and testing.  If things go well over the next week or so, I will
+> > set it up for the upcoming merge window.
+> > 
+> > One dependency is of course qemu-x86_64, so in the meantime I will figure
+> > out where I get that from.  ;-)
 > 
-> Ilpo Järvinen (2):
->   serial: qcom_geni: Fix variable naming
->   serial: liteuart: Use proper error rollback
+> Thank you all, I'll base my work on top of the -rcu "dev" branch.
 > 
->  drivers/tty/serial/liteuart.c         |  2 +-
->  drivers/tty/serial/qcom_geni_serial.c | 10 +++++-----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+> Tested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Oh nice, you beat me too it!
+I will apply this on my next rebase, thank you!
 
-thanks for these, I'll go queue them up right now.
-
-greg k-h
+							Thanx, Paul
