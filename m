@@ -2,88 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662BE677946
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C7A67794A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 11:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjAWKfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 05:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
+        id S231844AbjAWKgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 05:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjAWKfj (ORCPT
+        with ESMTP id S230489AbjAWKgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 05:35:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9C018A8E;
-        Mon, 23 Jan 2023 02:35:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D17B1B80CD9;
-        Mon, 23 Jan 2023 10:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F17C433D2;
-        Mon, 23 Jan 2023 10:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674470136;
-        bh=cwgjiZMHeWlRTUJMa1Sto/LlD87GW58nOIMtlWblOws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dVWOVXpxFMYdsKAMVDj2Nt7LFfqN1qd4uABeSArl2kw5YRXNKpzb3MMFZKplSPlqA
-         VpYQVrFyFWqjbj9JT6aTTmO4m+1e8zvJwlCZy0F6d0WaeTDxE7FERRHK5kB1ReeOcz
-         3hQe8Fya2d3/Tj4PuUR2rPC+iOFPigExWkQ366YAdmMZ4DZ8nH7KfNSaMXvMNB5Cvw
-         0w8GBhCPnDPInyOwh3k6zp5B/u6Fqx/cW/rZdM8J2Dq3EuNkCRmkQkO549xb8JOCwb
-         hG+7tqZrLG2vVFBparVGXPU19ICkwlz54vxJz5fjn62Fq6uFbC8+TsRgiY4JkTnuDC
-         MGff9eEy2Jk+g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pJuAn-0000oI-65; Mon, 23 Jan 2023 11:35:33 +0100
-Date:   Mon, 23 Jan 2023 11:35:33 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH] phy: qcom-qmp: Introduce Kconfig symbols for discrete
- drivers
-Message-ID: <Y85i9aZm7F7poXda@hovoldconsulting.com>
-References: <20230114000910.1256462-1-swboyd@chromium.org>
+        Mon, 23 Jan 2023 05:36:15 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B1B17176;
+        Mon, 23 Jan 2023 02:36:11 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P0mck3ssfz6J7f6;
+        Mon, 23 Jan 2023 18:32:06 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 23 Jan
+ 2023 10:36:08 +0000
+Date:   Mon, 23 Jan 2023 10:36:07 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Jonathan Cameron <jic23@kernel.org>, <phone-devel@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        <iio@vger.kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: adc: Require generic adc-chan
+ name for channel nodes
+Message-ID: <20230123103607.00001fcd@Huawei.com>
+In-Reply-To: <20230122233741.7jn2nzghfvhgoemr@SoMainline.org>
+References: <20230119212632.185881-1-marijn.suijten@somainline.org>
+        <20230119212632.185881-2-marijn.suijten@somainline.org>
+        <20230121170825.0d284151@jic23-huawei>
+        <20230122233741.7jn2nzghfvhgoemr@SoMainline.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230114000910.1256462-1-swboyd@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 04:09:10PM -0800, Stephen Boyd wrote:
-> Introduce a config option for each QMP PHY driver now that the QMP PHY
-> mega-driver has been split up into different modules. This allows kernel
-> configurators to limit the binary size of the kernel by only compiling
-> in the QMP PHY driver that they need, or to split the module up into one
-> per PHY driver instead of one module for all the QMP PHY drivers.
+On Mon, 23 Jan 2023 00:37:41 +0100
+Marijn Suijten <marijn.suijten@somainline.org> wrote:
 
-Nit: The drivers are already built as separate modules even if they can
-currently only be enabled together.
+> On 2023-01-21 17:08:25, Jonathan Cameron wrote:
+> > On Thu, 19 Jan 2023 22:26:31 +0100
+> > Marijn Suijten <marijn.suijten@somainline.org> wrote:
+> >   
+> > > As discussed in [1] it is more convenient to use a generic adc-chan node
+> > > name for ADC channels while storing a friendly - board-specific instead
+> > > of PMIC-specific - name in the label, if/when desired to overwrite the
+> > > channel description already contained (but previously unused) in the
+> > > driver [2].
+> > > 
+> > > Replace the .* name pattern with the adc-chan literal, but leave the
+> > > label property optional for bindings to choose to fall back a channel
+> > > label hardcoded in the driver [2] instead.
+> > > 
+> > > [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
+> > > [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
+> > > 
+> > > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>  
+> > Other than the use in the tm5 thermal example that Rob's bot found, this looks
+> > good to me.  
+> 
+> Yep, shouldn't have ran dt_binding_check and dtbs_check with
+> DT_SCHEMA_FILES=just/the/one/edited/here.
+> 
+> > I think ideal would be to fix that in a precursor patch then
+> > do this one.  
+> 
+> Can't that be part of the current one?  At least the change requested by
+> dt-bindings here is backwards-compatible; the adc-chan@xx format with
+> optional label property was already allowed.
 
-> Leave the old config QCOM_QMP in place and make it into a menuconfig so
-> that 'make olddefconfig' continues to work. Furthermore, set the default
-> of the new Kconfig symbols to be QCOM_QMP so that the transition is
-> smooth.
+Sure you can merge it in, or do it as a precursor. I'd split it though
+purely as it can be picked up by a different maintainer if that makes
+sense (at cost of some errors as things filter through the various
+trees).
 
-Perhaps this should go eventually.
- 
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> > Note that the existing two patches should be in the other order
+> > 1. Update the dtsi
+> > 2. Tighten the bounds to check they are right.  
+> 
+> Hmm, I'm never sure what goes first: drivers, bindings, or DT
+> (considering there's an ABI it shouldn't matter whether drivers or DT
+> go first, leaving just dt-bindings which could be used to TDD the DT...
+> or check adjustment after the fact).  Is this relationship - and the
+> order following from it - documented somewhere?
 
-Looks good otherwise:
+In this particular case we in theory want bisectability.  As you note
+the updated tighter naming is already allowed, so we can make that change
+first.
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Normally we are adding new bindings and it doesn't matter on order as
+we just have an undocumented binding if the driver goes first.
 
-Johan
+As noted it all become irrelevant when things go through different
+trees anyway!
+
+J
+> 
+> > Doesn't matter much though as the two patches will probably go through
+> > different trees.  
+> 
+> Should be right, indeed.
+> 
+> - Marijn
+
