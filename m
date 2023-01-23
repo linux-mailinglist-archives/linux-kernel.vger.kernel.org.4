@@ -2,74 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F47678882
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4AC678884
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjAWUlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:41:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S232193AbjAWUlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbjAWUlK (ORCPT
+        with ESMTP id S232711AbjAWUlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:41:10 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F2A3800B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0xN7hOPDsbgth1lPxi0MXO8fcKBUctMvHiKYNT0njNY=; b=iH2KtTEZUm2GCo5Ai3vYCcozMK
-        TyX8083e9g6tvTsF6AeH0yOASL2bZ0JdZWU64xjpxSEKQ4LzJA71SzJJK03Xvrccyz3sVNIIwzi6G
-        7kG5IxLqnM+cZqlr+aM66s/TkoEt51mnrkLwhqP8bDvnhU5zau0raV1WnX9TnIY4nA+RwRHIbJx5J
-        YPNcD/6LNhapgrxLz+Li6D/U6TG2D9ZtSjVf+Rm2hYt1HC0pWZytRs+tLtmW47P9L+465YyC0TjZ2
-        XIRL8IPJ7uK5ksS7FPnfs59Tf9Q3ya+cg32tG7G8O2XESIjA0t+uwonxGoA8DNRObprDN6cZ5xjW1
-        moP52f1Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pK3aj-001dch-0f;
-        Mon, 23 Jan 2023 20:38:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 402963001E7;
-        Mon, 23 Jan 2023 21:39:25 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 227F22077B1DE; Mon, 23 Jan 2023 21:39:25 +0100 (CET)
-Date:   Mon, 23 Jan 2023 21:39:25 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        namhyung@kernel.org, eranian@google.com, ak@linux.intel.com,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] perf/x86/intel/ds: Fix the conversion from TSC to perf
- time
-Message-ID: <Y87wfaMJ2HLchgap@hirez.programming.kicks-ass.net>
-References: <20230123172027.125385-1-kan.liang@linux.intel.com>
+        Mon, 23 Jan 2023 15:41:35 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AB5548A5B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:41:08 -0800 (PST)
+Received: (qmail 140283 invoked by uid 1000); 23 Jan 2023 15:41:08 -0500
+Date:   Mon, 23 Jan 2023 15:41:08 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y87w5KHZ2UP2aLLG@rowland.harvard.edu>
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <Y87m5KcSaieYZyeM@rowland.harvard.edu>
+ <d1a576ee-4af4-6053-8ae2-dc04fdd1b73b@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230123172027.125385-1-kan.liang@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d1a576ee-4af4-6053-8ae2-dc04fdd1b73b@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 09:20:27AM -0800, kan.liang@linux.intel.com wrote:
-> The TSC unstable case seems to be some corner cases (e.g., due to broken
-> BIOS). This patch doesn't support the conversion when the TSC is
-> unstable. The TSC in a PEBS record will be dropped and fallback to the
-> software perf time provided by the generic code.
+On Mon, Jan 23, 2023 at 09:06:54PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/23/2023 8:58 PM, Alan Stern wrote:
+> > On Mon, Jan 23, 2023 at 05:16:27PM +0100, Jonas Oberhauser wrote:
+> > > On 1/19/2023 5:41 PM, Alan Stern wrote:
+> > > 
+> > > > But when you're comparing grace periods or critical sections to each other,
+> > > > things get a little ambiguous.  Should G1 be considered to come before
+> > > > G2 when t1(G1) < t1(G2), when t2(G1) < t2(G2), or when t2(G1) < t1(G2)?
+> > > > Springing for (po ; rcu-order ; po?) amounts to choosing the second
+> > > > alternative.
+> > > Aha, I see! Powerful notation indeed.
+> > > Keeping that in mind, wouldn't it make sense for pb also be changed to
+> > > `...;po?` ?
+> > You mean changing the definition of pb to either:
+> > 
+> > 	prop ; strong-fence ; hb* ; po? ; [Marked]
+> > 
+> > or
+> > 
+> > 	prop ; strong-fence ; hb* ; [Marked] ; po? ; [Marked]
+> 
+> Oh no, not at all!
+> 
+> I mean that
+>     pb = prop ; po ; {strong ordering-operation} ; po ; hb* ; [Marked]
+> could instead be
+>     pb = prop ; po ; {strong ordering-operation} ; po? ; hb* ; [Marked]
+> 
+> (note that the po ; ... ; po part is actually folded inside the actual
+> definition of strong fence).
 
-:-(
+This goes back to the original herd models, before the LKMM came about: 
+The fencerel() macro uses po on both sides.  I believe the motivating 
+idea back then was that ordering should apply only to memory accesses 
+(which can in practice be observed), not to other types of events such 
+as memory barriers.
 
-You're saying there's modern systems (PEBS timestamps are fairly new)
-that trigger unstable TSC ?
+> > rcu-fence is different because rcu-order has to begin and end with
+> > either a grace period or a critical section, and both of these restrict
+> > the execution order of surrounding events:
+> > 
+> > 	If X is a synchronize_rcu() or rcu_read_unlock() then events
+> > 	po-before X must execute before X;
+> > 
+> > 	If X is a synchronize_rcu() or rcu_read_lock() then events
+> > 	po-after X must execute after X.
+> > 
+> I believe so do the strong ordering-operations in pb.
 
-What systems in specific have you observed this on -- we really need to
-name and shame them, this is fully unacceptable.
+But the beginning and end of a pb link (for example, overwrite and hb) 
+don't need to be strong-ordering operations.
+
+Alan
