@@ -2,248 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C291F677763
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A7B677768
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjAWJ1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S231827AbjAWJ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjAWJ1J (ORCPT
+        with ESMTP id S231777AbjAWJ3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:27:09 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF071EFEF;
-        Mon, 23 Jan 2023 01:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674466027; x=1706002027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NpUqyU6biI7wZgPzFh9DchqCbpASiYwHtB7RD6JPEm8=;
-  b=hgsM4aUCww8Nu/d5Q6nqPGG/IrIlKsBwh9rhfkOFX3jkl3YVHVlDuDQv
-   SyO0wkFzkRuzh3KfrzPWsHhrVmqamcFDZsKC44clCCYFaANZ2Ew9mjGuU
-   8llz0P7dioq+N3CG1yuiU0IiBZF0XGGwHX7v8MagCnnVhwfWH6/9xQMeV
-   xp3/7D/6mIvyMK4zdWHeJsjaqpcn/QMt2J559NQrpEO0YRemCVUf1faVA
-   HsVRUZEwgeUmOVczgoE0kqQ/ovpTyVRNacC/4utOPfjp82d6h43AGJ75b
-   x7r6ezwOMpJGcADOsi0zZw03PvDzRqge2M3r5L6SAzYdYxdaDzFai9Sog
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="313897170"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="313897170"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 01:27:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="804024045"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="804024045"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Jan 2023 01:27:03 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJt6U-0005Ya-2V;
-        Mon, 23 Jan 2023 09:27:02 +0000
-Date:   Mon, 23 Jan 2023 17:26:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
-        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH 5/8] eventfs: adding functions to create eventfs files
- and directories
-Message-ID: <202301231745.XMv1eJAp-lkp@intel.com>
-References: <1674407228-49109-5-git-send-email-akaher@vmware.com>
+        Mon, 23 Jan 2023 04:29:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3928D193DB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674466108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BrIFJvTmapK03tMxp/EwcaTsAgwZAa+tcZ42A86+Ees=;
+        b=QjwAbzyUNFnlQ9za3+Rkq99srmhiunAPMQYnky5oqLA3ICH9SaUVh/8KE540Ld+r51OaS1
+        /BlVeN9lx2LKM/NJoH0foxX9wnLvtMFtczItWpQCuEdF5LSaxitlVIqcmgcFP/Kx3K23qQ
+        tCrHG3xyhK43WqcgmHZuhNU1tWPwxGs=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-85-bhqpikuaNWeC29i-0ycm0Q-1; Mon, 23 Jan 2023 04:28:26 -0500
+X-MC-Unique: bhqpikuaNWeC29i-0ycm0Q-1
+Received: by mail-wr1-f72.google.com with SMTP id h21-20020adfaa95000000b002be47d1d79cso1733990wrc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:28:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BrIFJvTmapK03tMxp/EwcaTsAgwZAa+tcZ42A86+Ees=;
+        b=XwxUUwSjbpMSP9yRJRUU5z+xdEB9M70nCwj3fgv3v9zF6yWB2Lu2vSQpKMgUicD1D5
+         4gYqx83316qXl5rMyLb7+ecH8jexr+ce6DSMEB3UqZ+APygOtosem5T5GKtvPhj42+xG
+         Nm3sq1XKc7Nb0X4/bSzGE5sEY8PaEaFwmealZcm3Ff54lBv7g8xmppQq4Ra8txqpXs3+
+         ZLjOqhZ5XYFPepuHNvShh3M/zybaVMnwTK4xuwrHuVR+PmoPB9VOsPfj4veg6Mtl2HPS
+         4cFbzYqf2CSRMIdPdToHhlT8AbqvUSU8PIlSd87rZ8awNz1GFBPH2csTqk3PmsHBBsba
+         tHeg==
+X-Gm-Message-State: AFqh2kq/C5tEdZPsmwKWC0U+5kaSjUJXDMJmHwtIOTUdVVtbg7/gbNqE
+        APzNoaY7K/3gh1S4nnn3urwCTI7pqYTpYQHtHEFa22GQ9jHiOR2IH0wWwngIdNP+b/7QEmLrG2b
+        b5Tidhy1zoqa5pf/9Sp2kwk71
+X-Received: by 2002:a05:600c:4b9a:b0:3da:fcdc:cafd with SMTP id e26-20020a05600c4b9a00b003dafcdccafdmr22698485wmp.13.1674466105749;
+        Mon, 23 Jan 2023 01:28:25 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs/vdJO4rUgmUUDJGfJogv0+NRnslbNv9uG5arGuXj/93En31RKOdaZ76Y8MzQdaM5yO+HgXg==
+X-Received: by 2002:a05:600c:4b9a:b0:3da:fcdc:cafd with SMTP id e26-20020a05600c4b9a00b003dafcdccafdmr22698448wmp.13.1674466105328;
+        Mon, 23 Jan 2023 01:28:25 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
+        by smtp.gmail.com with ESMTPSA id b10-20020a05600c4e0a00b003db0cab0844sm10235533wmq.40.2023.01.23.01.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 01:28:24 -0800 (PST)
+Message-ID: <634aa365-1f51-8684-24ae-3b68aba1e12a@redhat.com>
+Date:   Mon, 23 Jan 2023 10:28:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674407228-49109-5-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 10/39] x86/mm: Introduce _PAGE_COW
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-11-rick.p.edgecombe@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230119212317.8324-11-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajay,
+On 19.01.23 22:22, Rick Edgecombe wrote:
+> Some OSes have a greater dependence on software available bits in PTEs than
+> Linux. That left the hardware architects looking for a way to represent a
+> new memory type (shadow stack) within the existing bits. They chose to
+> repurpose a lightly-used state: Write=0,Dirty=1. So in order to support
+> shadow stack memory, Linux should avoid creating memory with this PTE bit
+> combination unless it intends for it to be shadow stack.
+> 
+> The reason it's lightly used is that Dirty=1 is normally set by HW
+> _before_ a write. A write with a Write=0 PTE would typically only generate
+> a fault, not set Dirty=1. Hardware can (rarely) both set Dirty=1 *and*
+> generate the fault, resulting in a Write=0,Dirty=1 PTE. Hardware which
+> supports shadow stacks will no longer exhibit this oddity.
+> 
+> So that leaves Write=0,Dirty=1 PTEs created in software. To achieve this,
+> in places where Linux normally creates Write=0,Dirty=1, it can use the
+> software-defined _PAGE_COW in place of the hardware _PAGE_DIRTY. In other
+> words, whenever Linux needs to create Write=0,Dirty=1, it instead creates
+> Write=0,Cow=1 except for shadow stack, which is Write=0,Dirty=1.
+> Further differentiated by VMA flags, these PTE bit combinations would be
+> set as follows for various types of memory:
+> 
+> (Write=0,Cow=1,Dirty=0):
+>   - A modified, copy-on-write (COW) page. Previously when a typical
+>     anonymous writable mapping was made COW via fork(), the kernel would
+>     mark it Write=0,Dirty=1. Now it will instead use the Cow bit. This
+>     happens in copy_present_pte().
+>   - A R/O page that has been COW'ed. The user page is in a R/O VMA,
+>     and get_user_pages(FOLL_FORCE) needs a writable copy. The page fault
+>     handler creates a copy of the page and sets the new copy's PTE as
+>     Write=0 and Cow=1.
+>   - A shared shadow stack PTE. When a shadow stack page is being shared
+>     among processes (this happens at fork()), its PTE is made Dirty=0, so
+>     the next shadow stack access causes a fault, and the page is
+>     duplicated and Dirty=1 is set again. This is the COW equivalent for
+>     shadow stack pages, even though it's copy-on-access rather than
+>     copy-on-write.
+> 
+> (Write=0,Cow=0,Dirty=1):
+>   - A shadow stack PTE.
+>   - A Cow PTE created when a processor without shadow stack support set
+>     Dirty=1.
+> 
+> There are six bits left available to software in the 64-bit PTE after
+> consuming a bit for _PAGE_COW. No space is consumed in 32-bit kernels
+> because shadow stacks are not enabled there.
+> 
+> Implement only the infrastructure for _PAGE_COW. Changes to start
+> creating _PAGE_COW PTEs will follow once other pieces are in place.
+> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> ---
+> 
+> v5:
+>   - Fix log, comments and whitespace (Boris)
+>   - Remove capitalization on shadow stack (Boris)
+> 
+> v4:
+>   - Teach pte_flags_need_flush() about _PAGE_COW bit
+>   - Break apart patch for better bisectability
+> 
+> v3:
+>   - Add comment around _PAGE_TABLE in response to comment
+>     from (Andrew Cooper)
+>   - Check for PSE in pmd_shstk (Andrew Cooper)
+>   - Get to the point quicker in commit log (Andrew Cooper)
+>   - Clarify and reorder commit log for why the PTE bit examples have
+>     multiple entries. Apply same changes for comment. (peterz)
+>   - Fix comment that implied dirty bit for COW was a specific x86 thing
+>     (peterz)
+>   - Fix swapping of Write/Dirty (PeterZ)
+> 
+> v2:
+>   - Update commit log with comments (Dave Hansen)
+>   - Add comments in code to explain pte modification code better (Dave)
+>   - Clarify info on the meaning of various Write,Cow,Dirty combinations
+> 
+>   arch/x86/include/asm/pgtable.h       | 78 ++++++++++++++++++++++++++++
+>   arch/x86/include/asm/pgtable_types.h | 59 +++++++++++++++++++--
+>   arch/x86/include/asm/tlbflush.h      |  3 +-
+>   3 files changed, 134 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index b39f16c0d507..6d2f612c04b5 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -301,6 +301,44 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
+>   	return native_make_pte(v & ~clear);
+>   }
+>   
+> +/*
+> + * Normally COW memory can result in Dirty=1,Write=0 PTEs. But in the case
+> + * of X86_FEATURE_USER_SHSTK, the software COW bit is used, since the
+> + * Dirty=1,Write=0 will result in the memory being treated as shadow stack
+> + * by the HW. So when creating COW memory, a software bit is used
+> + * _PAGE_BIT_COW. The following functions pte_mkcow() and pte_clear_cow()
+> + * take a PTE marked conventionally COW (Dirty=1) and transition it to the
+> + * shadow stack compatible version of COW (Cow=1).
+> + */
 
-Thank you for the patch! Perhaps something to improve:
+TBH, I find that all highly confusing.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc5 next-20230123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Dirty=1,Write=0 does not indicate a COW page reliably. You could have 
+both, false negatives and false positives.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-patch link:    https://lore.kernel.org/r/1674407228-49109-5-git-send-email-akaher%40vmware.com
-patch subject: [PATCH 5/8] eventfs: adding functions to create eventfs files and directories
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230123/202301231745.XMv1eJAp-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/950ac8561471b622eac5555b4a7502bcd8c20663
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-        git checkout 950ac8561471b622eac5555b4a7502bcd8c20663
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
+False negative: fork() on a clean anon page.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+False positives: wrpotect() of a dirty anon page.
 
-sparse warnings: (new ones prefixed by >>)
->> fs/tracefs/event_inode.c:48:15: sparse: sparse: symbol 'eventfs_create_file' was not declared. Should it be static?
->> fs/tracefs/event_inode.c:117:15: sparse: sparse: symbol 'eventfs_create_dir' was not declared. Should it be static?
-   fs/tracefs/event_inode.c:162:31: sparse: sparse: symbol 'eventfs_root_dir_inode_operations' was not declared. Should it be static?
 
-vim +/eventfs_create_file +48 fs/tracefs/event_inode.c
-
-    23	
-    24	/**
-    25	 * eventfs_create_file - create a file in the tracefs filesystem
-    26	 * @name: a pointer to a string containing the name of the file to create.
-    27	 * @mode: the permission that the file should have.
-    28	 * @parent: a pointer to the parent dentry for this file.  This should be a
-    29	 *          directory dentry if set.  If this parameter is NULL, then the
-    30	 *          file will be created in the root of the tracefs filesystem.
-    31	 * @data: a pointer to something that the caller will want to get to later
-    32	 *        on.  The inode.i_private pointer will point to this value on
-    33	 *        the open() call.
-    34	 * @fops: a pointer to a struct file_operations that should be used for
-    35	 *        this file.
-    36	 *
-    37	 * This is the basic "create a file" function for tracefs.  It allows for a
-    38	 * wide range of flexibility in creating a file.
-    39	 *
-    40	 * This function will return a pointer to a dentry if it succeeds.  This
-    41	 * pointer must be passed to the tracefs_remove() function when the file is
-    42	 * to be removed (no automatic cleanup happens if your module is unloaded,
-    43	 * you are responsible here.)  If an error occurs, %NULL will be returned.
-    44	 *
-    45	 * If tracefs is not enabled in the kernel, the value -%ENODEV will be
-    46	 * returned.
-    47	 */
-  > 48	struct dentry *eventfs_create_file(const char *name, umode_t mode,
-    49					   struct dentry *parent, void *data,
-    50					   const struct file_operations *fop,
-    51					   bool anon)
-    52	{
-    53		struct tracefs_inode *ti;
-    54		struct dentry *dentry;
-    55		struct inode *inode;
-    56	
-    57		if (security_locked_down(LOCKDOWN_TRACEFS))
-    58			return NULL;
-    59	
-    60		if (!(mode & S_IFMT))
-    61			mode |= S_IFREG;
-    62	
-    63		if (WARN_ON_ONCE(!S_ISREG(mode)))
-    64			return NULL;
-    65	
-    66		dentry = eventfs_start_creating(name, parent);
-    67	
-    68		if (IS_ERR(dentry))
-    69			return dentry;
-    70	
-    71		inode = tracefs_get_inode(dentry->d_sb);
-    72		if (unlikely(!inode))
-    73			return eventfs_failed_creating(dentry);
-    74	
-    75		inode->i_mode = mode;
-    76		inode->i_fop = fop;
-    77		inode->i_private = data;
-    78	
-    79		ti = get_tracefs(inode);
-    80		ti->flags |= TRACEFS_EVENT_INODE;
-    81	
-    82		if (anon)
-    83			d_instantiate_anon(dentry, inode);
-    84		else
-    85			d_instantiate(dentry, inode);
-    86	
-    87		fsnotify_create(dentry->d_parent->d_inode, dentry);
-    88		return eventfs_end_creating(dentry);
-    89	}
-    90	
-    91	/**
-    92	 * eventfs_create_dir - create a dir in the tracefs filesystem
-    93	 * @name: a pointer to a string containing the name of the file to create.
-    94	 * @mode: the permission that the file should have.
-    95	 * @parent: a pointer to the parent dentry for this file.  This should be a
-    96	 *          directory dentry if set.  If this parameter is NULL, then the
-    97	 *          file will be created in the root of the tracefs filesystem.
-    98	 * @data: a pointer to something that the caller will want to get to later
-    99	 *        on.  The inode.i_private pointer will point to this value on
-   100	 *        the open() call.
-   101	 * @fop: a pointer to a struct file_operations that should be used for
-   102	 *        this dir.
-   103	 * @iop: a pointer to a struct inode_operations that should be used for
-   104	 *        this dir.
-   105	 *
-   106	 * This is the basic "create a dir" function for eventfs.  It allows for a
-   107	 * wide range of flexibility in creating a dir.
-   108	 *
-   109	 * This function will return a pointer to a dentry if it succeeds.  This
-   110	 * pointer must be passed to the tracefs_remove() function when the file is
-   111	 * to be removed (no automatic cleanup happens if your module is unloaded,
-   112	 * you are responsible here.)  If an error occurs, %NULL will be returned.
-   113	 *
-   114	 * If tracefs is not enabled in the kernel, the value -%ENODEV will be
-   115	 * returned.
-   116	 */
- > 117	struct dentry *eventfs_create_dir(const char *name, umode_t mode,
-   118					  struct dentry *parent, void *data,
-   119					  const struct file_operations *fop,
-   120					  const struct inode_operations *iop,
-   121					  bool anon)
-   122	{
-   123		struct tracefs_inode *ti;
-   124		struct dentry *dentry;
-   125		struct inode *inode;
-   126	
-   127		if (security_locked_down(LOCKDOWN_TRACEFS))
-   128			return NULL;
-   129	
-   130		WARN_ON(!S_ISDIR(mode));
-   131	
-   132		dentry = eventfs_start_creating(name, parent);
-   133	
-   134		if (IS_ERR(dentry))
-   135			return dentry;
-   136	
-   137		inode = tracefs_get_inode(dentry->d_sb);
-   138		if (unlikely(!inode))
-   139			return eventfs_failed_creating(dentry);
-   140	
-   141		inode->i_mode = mode;
-   142		inode->i_op = iop;
-   143		inode->i_fop = fop;
-   144		inode->i_private = data;
-   145	
-   146		ti = get_tracefs(inode);
-   147		ti->flags |= TRACEFS_EVENT_INODE;
-   148	
-   149		inc_nlink(inode);
-   150		if (anon)
-   151			d_instantiate_anon(dentry, inode);
-   152		else
-   153			d_instantiate(dentry, inode);
-   154		inc_nlink(dentry->d_parent->d_inode);
-   155		fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
-   156		return eventfs_end_creating(dentry);
-   157	}
-   158	
+I wonder if it really has to be that complicated: what you really want 
+to achieve is to disallow "Dirty=1,Write=0" if it's not a shadow stack 
+page, correct?
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
