@@ -2,116 +2,674 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B81677C86
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA32677C8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 14:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjAWNbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 08:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S231726AbjAWNbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 08:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjAWNbb (ORCPT
+        with ESMTP id S231727AbjAWNbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 08:31:31 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192DA22DF1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:31:15 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x10so14549920edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 05:31:15 -0800 (PST)
+        Mon, 23 Jan 2023 08:31:43 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E00222DC7;
+        Mon, 23 Jan 2023 05:31:24 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r9so10820305wrw.4;
+        Mon, 23 Jan 2023 05:31:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GkjxihmP/RRWK9VQjwwJeH+rgfGTtQy2RZ4I1GLbrDU=;
-        b=vHSNQV/7Cvxi6YzE+tqk87TGmEcBMgLct+Terv07pZF3n71NZN6mToSwaUAOYpTCga
-         pJy06uVoXqTFZnC/6UBpYWDt9F2xS20jLL1/fbBNf6PvUiIa2G48SkTlJ2oUujdd19i6
-         Bo6JAlZGxR92dinRojnEsD+8GSYo4FavkzLX/6x5a0RDgRy4e3BSoUn7F7iRbceS1dG9
-         t8M54LxReo40rfyoDI+fYKvpZ5adpC84aEbwymRhUVehut/facqPw2EMMGQqR6UTAe5N
-         2CCp0FIMYeVV25x2LKKoSid3BCYLbNMk5fi4mpN+j+FtXoV6aKoyL2FVOF2rc7YE0cFn
-         em4Q==
+        bh=e038SkAkBY6aiWrz8BbXTF7YMHVO6LW5C6DVaVQvG9k=;
+        b=HrDCcac+PF5TkanWVpt6IhtX9m477A1IJXYLrVGscRU8XyXsyYPK5VAYUEPB/pEL+g
+         jE1yBRGNzx+ix7DszhRBKN0kfbyiSTjbJKbFwO5R1QFofvC6ZZkUpdWbBjh2UaN6C9Gw
+         D1B3ZH3m6lc/G4HzGfsPnT9rf0XuFl2gnvkGrP4ZF9yIAqmoSVxDlDEF8FeZXZ87lW5j
+         BKIUXYLpvVL3Vxfuwn/zM0547nsNw/554KhRTpo0S2RgihKsyuB1YdoiE4eeAWjD6Ow3
+         mjBZTdfSSiBifxkCYyeOwa/5WcbcLg1PW6IgMIpl9RSyGlSWbvloRAeNklWLFV5VkSi5
+         3pJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GkjxihmP/RRWK9VQjwwJeH+rgfGTtQy2RZ4I1GLbrDU=;
-        b=K8r4C2gVrQaIbnNpL86bLXk01B91vUQEFkgHBVu6KSFQW45eY4QYaXQ3IJ9brpM2mn
-         OMBbmWtvpvkmUDIRUBJdF3Y4f5JiaG7qWfyUzWrWR6HcPIkxSEz455HAqM6lwZ60bR3A
-         yMIUCT12XkyHzox9s8tqnMt6LP+qfevpK/NRYyy2oAoyoh4V9/oGL9DZUw2+12Ltym8H
-         J45xbbT8MNNun7HSH+Z4fHdR7hlCV5RJiuNvxRedVY3X6YC+sayB5goZpzUm0RtSnGPb
-         ZV+D4kF1vaeISm7/9B80VIwkNBSce+9C8Jpl0bEmmHBcETgMX+snEIdBIKiy/lHdBqjV
-         YeZQ==
-X-Gm-Message-State: AFqh2kolPLV5MXJMwXrbU3eAc2xJ5NF6pExlF0SRZZlbfcfhD64v1wTm
-        uAwNcvCOZKvQaVPA4iYK6m+W5Q==
-X-Google-Smtp-Source: AMrXdXs57UGIVOWJpcsAwWfrPzF3LhZYGwEOq+MGAQpt7mZGi71TkrneWPjA9V5dUxH1xnOKP3ESHw==
-X-Received: by 2002:a05:6402:2315:b0:49e:6a70:d9a6 with SMTP id l21-20020a056402231500b0049e6a70d9a6mr15642326eda.25.1674480673013;
-        Mon, 23 Jan 2023 05:31:13 -0800 (PST)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906311200b0084b89c66eb5sm22003696ejx.4.2023.01.23.05.31.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 05:31:12 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 23 Jan 2023 14:31:11 +0100
-Message-Id: <CPZLUWRUS9F0.1JP84TJFB2SPQ@otso>
-Subject: Re: [PATCH v3 2/3] phy: qcom-qmp-combo: Add config for SM6350
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Johan Hovold" <johan@kernel.org>
-Cc:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Vinod Koul" <vkoul@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20221130081430.67831-2-luca.weiss@fairphone.com>
- <Y6xP4YRAp68TfxFi@hovoldconsulting.com> <Y8BIX+js1ircJyb9@matsya>
- <cf968a25-02f7-d402-530b-eb379b707e54@linaro.org>
- <CPR2LS3SJQ3I.Z7UY505COG3@otso>
- <CAA8EJpoOMMALHz7ysft6KvQaYhGWPD+xZiUjOTrC8CA_y81n-w@mail.gmail.com>
- <CPX2VVT5EUDV.2LH6VI2586F02@otso> <Y85WqDrGXAXp7gS/@hovoldconsulting.com>
- <a18359f8-6495-dbea-2323-8ab73bbfc472@linaro.org>
- <CPZJ4F39LES0.ANG4EP8EUFI7@otso> <Y853iEBf1e7uh/wX@hovoldconsulting.com>
-In-Reply-To: <Y853iEBf1e7uh/wX@hovoldconsulting.com>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e038SkAkBY6aiWrz8BbXTF7YMHVO6LW5C6DVaVQvG9k=;
+        b=zFrVvwgtUUUTH8vAZEKA4EUH9hqToL1c5n7Hy4Fx2Bj7t4I3hPjgnubWIhqjZCvuio
+         hHuHLElBjhoqQvcNHzlAo5xZtm06P158DjDWzwrcyBlQD29FdpRJBRP5cb8XkTMunUmg
+         NoqFfj7IDj/yNIVYm8xlHyJyWR3Ygr4q+sjxwf4Kd5a7JHzaYZWjvikPzipQsLAIHTSg
+         8uEDzmjNaXZ/7Mth7ALaVsMZeDMG4nDHw86JE5MO7cgyUmvNk4tz9IOuOcFncpsM/NKM
+         Qv6NuW50Hk/LrT4HGdTp4htPMo+0onRWjR9z5P4RWHUToV/l7V9Ftbo1fRJGiRUAqazj
+         TpUQ==
+X-Gm-Message-State: AFqh2kqlRK2+fusEjReFUiQI0oUHpLNvTCkz0J07mWuKAkYemcQ+n23h
+        HwaxO1Ioodn7bcWdkHtFkso=
+X-Google-Smtp-Source: AMrXdXv+/EnYJTOdRcqq5HvNaevAXquAplJyCByean4TfukA2gnId1/TA6gcjI5aG24V4lTATuzf6A==
+X-Received: by 2002:a5d:688c:0:b0:2be:4f2e:7447 with SMTP id h12-20020a5d688c000000b002be4f2e7447mr11223954wru.9.1674480681453;
+        Mon, 23 Jan 2023 05:31:21 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id d28-20020adfa41c000000b00286ad197346sm4199253wra.70.2023.01.23.05.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 05:31:21 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>,
+        Benjamin Roszak <benjamin545@gmail.com>
+Subject: [PATCH 1/2] media: meson: vdec: implement 10bit bitstream handling
+Date:   Mon, 23 Jan 2023 13:31:12 +0000
+Message-Id: <20230123133113.3254659-2-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230123133113.3254659-1-christianshewitt@gmail.com>
+References: <20230123133113.3254659-1-christianshewitt@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Jan 23, 2023 at 1:03 PM CET, Johan Hovold wrote:
-> On Mon, Jan 23, 2023 at 12:22:32PM +0100, Luca Weiss wrote:
-> > On Mon Jan 23, 2023 at 12:15 PM CET, Dmitry Baryshkov wrote:
->
-> > > There are two SERDES regions. One used by USB part of the PHY (at=20
-> > > 0x1000) and another SERDES region used for DP (at 0x2000). As Johan=
-=20
-> > > described below, vendor kernel handles the DP regions in the DP drive=
-r.=20
-> > > Possibly this caused a confusion on your side.
-> >=20
-> > Ack, I think I got it now. I also see the registers used downstream
-> > now, e.g.:
-> >=20
-> > techpack/display/pll/dp_pll_10nm_util.c:#define QSERDES_COM_LOCK_CMP2_M=
-ODE0             0x009C
-> >=20
-> > So now .dp_serdes should be 0x2000. Do I need to change anything else
-> > also? I think not?
->
-> You also need to add new dp_tx/rx pointers to the offset struct and use
-> those in favour of the current ones if set. I think we hashed that bit
-> out in one of the previous versions of this patch.
+From: Benjamin Roszak <benjamin545@gmail.com>
 
-Thanks for the persistent help, I've sent out v4 now, I hope that's good
-now and we can get this into v6.3 :)
+In order to support 10bit bitstream decoding, buffers and MMU
+handling must be cleaned up to support either downscale output
+from compressed 10bit decoding to uncompressed 8bit NV12 output
+or to compressed 10bit proprietary encoded frame format.
 
->
-> Johan
+For that, "am21c" name is moved to "amfbc" to reflect the upstream
+Amlogic Compressed framebuffer modifier naming.
+
+Compressed frame buffers allocation is also cleaned up so it
+can be shared with the HEVC decoder implementation.
+
+Signed-off-by: Benjamin Roszak <benjamin545@gmail.com>
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+---
+ drivers/staging/media/meson/vdec/codec_h264.c |   3 +-
+ .../media/meson/vdec/codec_hevc_common.c      | 161 +++++++++++-------
+ .../media/meson/vdec/codec_hevc_common.h      |   3 +-
+ drivers/staging/media/meson/vdec/codec_vp9.c  |  35 ++--
+ drivers/staging/media/meson/vdec/esparser.c   |   1 +
+ drivers/staging/media/meson/vdec/vdec.h       |   1 +
+ .../staging/media/meson/vdec/vdec_helpers.c   |  44 +++--
+ .../staging/media/meson/vdec/vdec_helpers.h   |  10 +-
+ 8 files changed, 161 insertions(+), 97 deletions(-)
+
+diff --git a/drivers/staging/media/meson/vdec/codec_h264.c b/drivers/staging/media/meson/vdec/codec_h264.c
+index c61128fc4bb9..d53c9a464bde 100644
+--- a/drivers/staging/media/meson/vdec/codec_h264.c
++++ b/drivers/staging/media/meson/vdec/codec_h264.c
+@@ -353,7 +353,8 @@ static void codec_h264_src_change(struct amvdec_session *sess)
+ 		frame_width, frame_height, crop_right, crop_bottom);
+ 
+ 	codec_h264_set_par(sess);
+-	amvdec_src_change(sess, frame_width, frame_height, h264->max_refs + 5);
++	amvdec_src_change(sess, frame_width, frame_height,
++			  h264->max_refs + 5, 8);
+ }
+ 
+ /*
+diff --git a/drivers/staging/media/meson/vdec/codec_hevc_common.c b/drivers/staging/media/meson/vdec/codec_hevc_common.c
+index 0315cc0911cd..1c74b4837dcb 100644
+--- a/drivers/staging/media/meson/vdec/codec_hevc_common.c
++++ b/drivers/staging/media/meson/vdec/codec_hevc_common.c
+@@ -30,8 +30,11 @@ const u16 vdec_hevc_parser_cmd[] = {
+ void codec_hevc_setup_decode_head(struct amvdec_session *sess, int is_10bit)
+ {
+ 	struct amvdec_core *core = sess->core;
+-	u32 body_size = amvdec_am21c_body_size(sess->width, sess->height);
+-	u32 head_size = amvdec_am21c_head_size(sess->width, sess->height);
++	u32 use_mmu = codec_hevc_use_mmu(core->platform->revision,
++					 sess->pixfmt_cap, is_10bit);
++	u32 body_size = amvdec_amfbc_body_size(sess->width, sess->height,
++					       is_10bit, use_mmu);
++	u32 head_size = amvdec_amfbc_head_size(sess->width, sess->height);
+ 
+ 	if (!codec_hevc_use_fbc(sess->pixfmt_cap, is_10bit)) {
+ 		/* Enable 2-plane reference read mode */
+@@ -39,9 +42,17 @@ void codec_hevc_setup_decode_head(struct amvdec_session *sess, int is_10bit)
+ 		return;
+ 	}
+ 
++	/* enable mem saving mode for 8-bit */
++	if (!is_10bit)
++		amvdec_write_dos_bits(core, HEVC_SAO_CTRL5, BIT(9));
++	else
++		amvdec_clear_dos_bits(core, HEVC_SAO_CTRL5, BIT(9));
++
+ 	if (codec_hevc_use_mmu(core->platform->revision,
+ 			       sess->pixfmt_cap, is_10bit))
+ 		amvdec_write_dos(core, HEVCD_MPP_DECOMP_CTL1, BIT(4));
++	else if (!is_10bit)
++		amvdec_write_dos(core, HEVCD_MPP_DECOMP_CTL1, BIT(3));
+ 	else
+ 		amvdec_write_dos(core, HEVCD_MPP_DECOMP_CTL1, 0);
+ 
+@@ -73,7 +84,7 @@ static void codec_hevc_setup_buffers_gxbb(struct amvdec_session *sess,
+ 
+ 		idx = vb->index;
+ 
+-		if (codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit))
++		if (codec_hevc_use_fbc(sess->pixfmt_cap, is_10bit))
+ 			buf_y_paddr = comm->fbc_buffer_paddr[idx];
+ 		else
+ 			buf_y_paddr = vb2_dma_contig_plane_dma_addr(vb, 0);
+@@ -114,8 +125,8 @@ static void codec_hevc_setup_buffers_gxl(struct amvdec_session *sess,
+ {
+ 	struct amvdec_core *core = sess->core;
+ 	struct v4l2_m2m_buffer *buf;
+-	u32 revision = core->platform->revision;
+ 	u32 pixfmt_cap = sess->pixfmt_cap;
++	const u32 revision = core->platform->revision;
+ 	int i;
+ 
+ 	amvdec_write_dos(core, HEVCD_MPP_ANC2AXI_TBL_CONF_ADDR,
+@@ -127,12 +138,14 @@ static void codec_hevc_setup_buffers_gxl(struct amvdec_session *sess,
+ 		dma_addr_t buf_uv_paddr = 0;
+ 		u32 idx = vb->index;
+ 
+-		if (codec_hevc_use_mmu(revision, pixfmt_cap, is_10bit))
+-			buf_y_paddr = comm->mmu_header_paddr[idx];
+-		else if (codec_hevc_use_downsample(pixfmt_cap, is_10bit))
+-			buf_y_paddr = comm->fbc_buffer_paddr[idx];
+-		else
++		if (codec_hevc_use_downsample(pixfmt_cap, is_10bit)) {
++			if (codec_hevc_use_mmu(revision, pixfmt_cap, is_10bit))
++				buf_y_paddr = comm->mmu_header_paddr[idx];
++			else
++				buf_y_paddr = comm->fbc_buffer_paddr[idx];
++		} else {
+ 			buf_y_paddr = vb2_dma_contig_plane_dma_addr(vb, 0);
++		}
+ 
+ 		amvdec_write_dos(core, HEVCD_MPP_ANC2AXI_TBL_DATA,
+ 				 buf_y_paddr >> 5);
+@@ -150,60 +163,67 @@ static void codec_hevc_setup_buffers_gxl(struct amvdec_session *sess,
+ 		amvdec_write_dos(core, HEVCD_MPP_ANC_CANVAS_DATA_ADDR, 0);
+ }
+ 
+-void codec_hevc_free_fbc_buffers(struct amvdec_session *sess,
++void codec_hevc_free_mmu_headers(struct amvdec_session *sess,
+ 				 struct codec_hevc_common *comm)
+ {
+ 	struct device *dev = sess->core->dev;
+-	u32 am21_size = amvdec_am21c_size(sess->width, sess->height);
+ 	int i;
+ 
+ 	for (i = 0; i < MAX_REF_PIC_NUM; ++i) {
+-		if (comm->fbc_buffer_vaddr[i]) {
+-			dma_free_coherent(dev, am21_size,
+-					  comm->fbc_buffer_vaddr[i],
+-					  comm->fbc_buffer_paddr[i]);
+-			comm->fbc_buffer_vaddr[i] = NULL;
++		if (comm->mmu_header_vaddr[i]) {
++			dma_free_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
++					  comm->mmu_header_vaddr[i],
++					  comm->mmu_header_paddr[i]);
++			comm->mmu_header_vaddr[i] = NULL;
+ 		}
+ 	}
+ }
+-EXPORT_SYMBOL_GPL(codec_hevc_free_fbc_buffers);
++EXPORT_SYMBOL_GPL(codec_hevc_free_mmu_headers);
+ 
+-static int codec_hevc_alloc_fbc_buffers(struct amvdec_session *sess,
++static int codec_hevc_alloc_mmu_headers(struct amvdec_session *sess,
+ 					struct codec_hevc_common *comm)
+ {
+ 	struct device *dev = sess->core->dev;
+ 	struct v4l2_m2m_buffer *buf;
+-	u32 am21_size = amvdec_am21c_size(sess->width, sess->height);
+ 
+ 	v4l2_m2m_for_each_dst_buf(sess->m2m_ctx, buf) {
+ 		u32 idx = buf->vb.vb2_buf.index;
+ 		dma_addr_t paddr;
+-		void *vaddr = dma_alloc_coherent(dev, am21_size, &paddr,
+-						 GFP_KERNEL);
++		void *vaddr = dma_alloc_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
++						 &paddr, GFP_KERNEL);
+ 		if (!vaddr) {
+-			codec_hevc_free_fbc_buffers(sess, comm);
++			codec_hevc_free_mmu_headers(sess, comm);
+ 			return -ENOMEM;
+ 		}
+ 
+-		comm->fbc_buffer_vaddr[idx] = vaddr;
+-		comm->fbc_buffer_paddr[idx] = paddr;
++		comm->mmu_header_vaddr[idx] = vaddr;
++		comm->mmu_header_paddr[idx] = paddr;
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-void codec_hevc_free_mmu_headers(struct amvdec_session *sess,
++void codec_hevc_free_fbc_buffers(struct amvdec_session *sess,
+ 				 struct codec_hevc_common *comm)
+ {
+ 	struct device *dev = sess->core->dev;
++	u32 use_mmu;
++	u32 am21_size;
+ 	int i;
+ 
++	use_mmu = codec_hevc_use_mmu(sess->core->platform->revision,
++				     sess->pixfmt_cap,
++				sess->bitdepth == 10 ? 1 : 0);
++
++	am21_size = amvdec_amfbc_size(sess->width, sess->height,
++				      sess->bitdepth == 10 ? 1 : 0, use_mmu);
++
+ 	for (i = 0; i < MAX_REF_PIC_NUM; ++i) {
+-		if (comm->mmu_header_vaddr[i]) {
+-			dma_free_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
+-					  comm->mmu_header_vaddr[i],
+-					  comm->mmu_header_paddr[i]);
+-			comm->mmu_header_vaddr[i] = NULL;
++		if (comm->fbc_buffer_vaddr[i]) {
++			dma_free_coherent(dev, am21_size,
++					  comm->fbc_buffer_vaddr[i],
++					  comm->fbc_buffer_paddr[i]);
++			comm->fbc_buffer_vaddr[i] = NULL;
+ 		}
+ 	}
+ 
+@@ -213,33 +233,50 @@ void codec_hevc_free_mmu_headers(struct amvdec_session *sess,
+ 				  comm->mmu_map_paddr);
+ 		comm->mmu_map_vaddr = NULL;
+ 	}
++
++	codec_hevc_free_mmu_headers(sess, comm);
+ }
+-EXPORT_SYMBOL_GPL(codec_hevc_free_mmu_headers);
++EXPORT_SYMBOL_GPL(codec_hevc_free_fbc_buffers);
+ 
+-static int codec_hevc_alloc_mmu_headers(struct amvdec_session *sess,
++static int codec_hevc_alloc_fbc_buffers(struct amvdec_session *sess,
+ 					struct codec_hevc_common *comm)
+ {
+ 	struct device *dev = sess->core->dev;
+ 	struct v4l2_m2m_buffer *buf;
++	u32 use_mmu;
++	u32 am21_size;
++	const u32 revision = sess->core->platform->revision;
++	const u32 is_10bit = sess->bitdepth == 10 ? 1 : 0;
++	int ret;
+ 
+-	comm->mmu_map_vaddr = dma_alloc_coherent(dev, MMU_MAP_SIZE,
+-						 &comm->mmu_map_paddr,
+-						 GFP_KERNEL);
+-	if (!comm->mmu_map_vaddr)
+-		return -ENOMEM;
++	use_mmu = codec_hevc_use_mmu(revision, sess->pixfmt_cap,
++				     is_10bit);
++
++	am21_size = amvdec_amfbc_size(sess->width, sess->height,
++				      is_10bit, use_mmu);
+ 
+ 	v4l2_m2m_for_each_dst_buf(sess->m2m_ctx, buf) {
+ 		u32 idx = buf->vb.vb2_buf.index;
+ 		dma_addr_t paddr;
+-		void *vaddr = dma_alloc_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
+-						 &paddr, GFP_KERNEL);
++
++		void *vaddr = dma_alloc_coherent(dev, am21_size, &paddr,
++						 GFP_KERNEL);
+ 		if (!vaddr) {
+-			codec_hevc_free_mmu_headers(sess, comm);
++			codec_hevc_free_fbc_buffers(sess, comm);
+ 			return -ENOMEM;
+ 		}
+ 
+-		comm->mmu_header_vaddr[idx] = vaddr;
+-		comm->mmu_header_paddr[idx] = paddr;
++		comm->fbc_buffer_vaddr[idx] = vaddr;
++		comm->fbc_buffer_paddr[idx] = paddr;
++	}
++
++	if (codec_hevc_use_mmu(revision, sess->pixfmt_cap, is_10bit) &&
++	    codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit)) {
++		ret = codec_hevc_alloc_mmu_headers(sess, comm);
++		if (ret) {
++			codec_hevc_free_fbc_buffers(sess, comm);
++			return ret;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -250,21 +287,24 @@ int codec_hevc_setup_buffers(struct amvdec_session *sess,
+ 			     int is_10bit)
+ {
+ 	struct amvdec_core *core = sess->core;
++	struct device *dev = core->dev;
+ 	int ret;
+ 
+-	if (codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit)) {
+-		ret = codec_hevc_alloc_fbc_buffers(sess, comm);
+-		if (ret)
+-			return ret;
++	if (codec_hevc_use_mmu(core->platform->revision,
++			       sess->pixfmt_cap, is_10bit)) {
++		comm->mmu_map_vaddr = dma_alloc_coherent(dev, MMU_MAP_SIZE,
++							 &comm->mmu_map_paddr,
++							 GFP_KERNEL);
++		if (!comm->mmu_map_vaddr)
++			return -ENOMEM;
+ 	}
+ 
+ 	if (codec_hevc_use_mmu(core->platform->revision,
+-			       sess->pixfmt_cap, is_10bit)) {
+-		ret = codec_hevc_alloc_mmu_headers(sess, comm);
+-		if (ret) {
+-			codec_hevc_free_fbc_buffers(sess, comm);
++			       sess->pixfmt_cap, is_10bit) ||
++	    codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit)) {
++		ret = codec_hevc_alloc_fbc_buffers(sess, comm);
++		if (ret)
+ 			return ret;
+-		}
+ 	}
+ 
+ 	if (core->platform->revision == VDEC_REVISION_GXBB)
+@@ -278,19 +318,24 @@ EXPORT_SYMBOL_GPL(codec_hevc_setup_buffers);
+ 
+ void codec_hevc_fill_mmu_map(struct amvdec_session *sess,
+ 			     struct codec_hevc_common *comm,
+-			     struct vb2_buffer *vb)
++			     struct vb2_buffer *vb,
++			     u32 is_10bit)
+ {
+-	u32 size = amvdec_am21c_size(sess->width, sess->height);
+-	u32 nb_pages = size / PAGE_SIZE;
++	u32 use_mmu;
++	u32 size;
++	u32 nb_pages;
+ 	u32 *mmu_map = comm->mmu_map_vaddr;
+ 	u32 first_page;
+ 	u32 i;
+ 
+-	if (sess->pixfmt_cap == V4L2_PIX_FMT_NV12M)
+-		first_page = comm->fbc_buffer_paddr[vb->index] >> PAGE_SHIFT;
+-	else
+-		first_page = vb2_dma_contig_plane_dma_addr(vb, 0) >> PAGE_SHIFT;
++	use_mmu = codec_hevc_use_mmu(sess->core->platform->revision,
++				     sess->pixfmt_cap, is_10bit);
++
++	size = amvdec_amfbc_size(sess->width, sess->height, is_10bit,
++				 use_mmu);
+ 
++	nb_pages = size / PAGE_SIZE;
++	first_page = comm->fbc_buffer_paddr[vb->index] >> PAGE_SHIFT;
+ 	for (i = 0; i < nb_pages; ++i)
+ 		mmu_map[i] = first_page + i;
+ }
+diff --git a/drivers/staging/media/meson/vdec/codec_hevc_common.h b/drivers/staging/media/meson/vdec/codec_hevc_common.h
+index cf072b8a9da2..13f9f1d90a94 100644
+--- a/drivers/staging/media/meson/vdec/codec_hevc_common.h
++++ b/drivers/staging/media/meson/vdec/codec_hevc_common.h
+@@ -64,6 +64,7 @@ int codec_hevc_setup_buffers(struct amvdec_session *sess,
+ 
+ void codec_hevc_fill_mmu_map(struct amvdec_session *sess,
+ 			     struct codec_hevc_common *comm,
+-			     struct vb2_buffer *vb);
++			     struct vb2_buffer *vb,
++			     u32 is_10bit);
+ 
+ #endif
+diff --git a/drivers/staging/media/meson/vdec/codec_vp9.c b/drivers/staging/media/meson/vdec/codec_vp9.c
+index 394df5761556..8e3bbf0db4b3 100644
+--- a/drivers/staging/media/meson/vdec/codec_vp9.c
++++ b/drivers/staging/media/meson/vdec/codec_vp9.c
+@@ -458,12 +458,6 @@ struct codec_vp9 {
+ 	struct list_head ref_frames_list;
+ 	u32 frames_num;
+ 
+-	/* In case of downsampling (decoding with FBC but outputting in NV12M),
+-	 * we need to allocate additional buffers for FBC.
+-	 */
+-	void      *fbc_buffer_vaddr[MAX_REF_PIC_NUM];
+-	dma_addr_t fbc_buffer_paddr[MAX_REF_PIC_NUM];
+-
+ 	int ref_frame_map[REF_FRAMES];
+ 	int next_ref_frame_map[REF_FRAMES];
+ 	struct vp9_frame *frame_refs[REFS_PER_FRAME];
+@@ -901,11 +895,8 @@ static void codec_vp9_set_sao(struct amvdec_session *sess,
+ 		buf_y_paddr =
+ 		       vb2_dma_contig_plane_dma_addr(vb, 0);
+ 
+-	if (codec_hevc_use_fbc(sess->pixfmt_cap, vp9->is_10bit)) {
+-		val = amvdec_read_dos(core, HEVC_SAO_CTRL5) & ~0xff0200;
+-		amvdec_write_dos(core, HEVC_SAO_CTRL5, val);
++	if (codec_hevc_use_fbc(sess->pixfmt_cap, vp9->is_10bit))
+ 		amvdec_write_dos(core, HEVC_CM_BODY_START_ADDR, buf_y_paddr);
+-	}
+ 
+ 	if (sess->pixfmt_cap == V4L2_PIX_FMT_NV12M) {
+ 		buf_y_paddr =
+@@ -920,8 +911,13 @@ static void codec_vp9_set_sao(struct amvdec_session *sess,
+ 
+ 	if (codec_hevc_use_mmu(core->platform->revision, sess->pixfmt_cap,
+ 			       vp9->is_10bit)) {
+-		amvdec_write_dos(core, HEVC_CM_HEADER_START_ADDR,
+-				 vp9->common.mmu_header_paddr[vb->index]);
++		dma_addr_t header_adr;
++
++		if (codec_hevc_use_downsample(sess->pixfmt_cap, vp9->is_10bit))
++			header_adr = vp9->common.mmu_header_paddr[vb->index];
++		else
++			header_adr = vb2_dma_contig_plane_dma_addr(vb, 0);
++		amvdec_write_dos(core, HEVC_CM_HEADER_START_ADDR, header_adr);
+ 		/* use HEVC_CM_HEADER_START_ADDR */
+ 		amvdec_write_dos_bits(core, HEVC_SAO_CTRL5, BIT(10));
+ 	}
+@@ -1148,9 +1144,13 @@ static void codec_vp9_set_mc(struct amvdec_session *sess,
+ {
+ 	struct amvdec_core *core = sess->core;
+ 	u32 scale = 0;
++	u32 use_mmu;
+ 	u32 sz;
+ 	int i;
+ 
++	use_mmu = codec_hevc_use_mmu(core->platform->revision,
++				     sess->pixfmt_cap, vp9->is_10bit);
++
+ 	amvdec_write_dos(core, HEVCD_MPP_ANC_CANVAS_ACCCONFIG_ADDR, 1);
+ 	codec_vp9_set_refs(sess, vp9);
+ 	amvdec_write_dos(core, HEVCD_MPP_ANC_CANVAS_ACCCONFIG_ADDR,
+@@ -1166,8 +1166,9 @@ static void codec_vp9_set_mc(struct amvdec_session *sess,
+ 		    vp9->frame_refs[i]->height != vp9->height)
+ 			scale = 1;
+ 
+-		sz = amvdec_am21c_body_size(vp9->frame_refs[i]->width,
+-					    vp9->frame_refs[i]->height);
++		sz = amvdec_amfbc_body_size(vp9->frame_refs[i]->width,
++					    vp9->frame_refs[i]->height,
++					    vp9->is_10bit, use_mmu);
+ 
+ 		amvdec_write_dos(core, VP9D_MPP_REFINFO_DATA,
+ 				 vp9->frame_refs[i]->width);
+@@ -1283,7 +1284,8 @@ static void codec_vp9_process_frame(struct amvdec_session *sess)
+ 	if (codec_hevc_use_mmu(core->platform->revision, sess->pixfmt_cap,
+ 			       vp9->is_10bit))
+ 		codec_hevc_fill_mmu_map(sess, &vp9->common,
+-					&vp9->cur_frame->vbuf->vb2_buf);
++					&vp9->cur_frame->vbuf->vb2_buf,
++					vp9->is_10bit);
+ 
+ 	intra_only = param->p.show_frame ? 0 : param->p.intra_only;
+ 
+@@ -2130,7 +2132,8 @@ static irqreturn_t codec_vp9_threaded_isr(struct amvdec_session *sess)
+ 
+ 	codec_vp9_fetch_rpm(sess);
+ 	if (codec_vp9_process_rpm(vp9)) {
+-		amvdec_src_change(sess, vp9->width, vp9->height, 16);
++		amvdec_src_change(sess, vp9->width, vp9->height, 16,
++				  vp9->is_10bit ? 10 : 8);
+ 
+ 		/* No frame is actually processed */
+ 		vp9->cur_frame = NULL;
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index 1904d58875ad..3cd29ab4f979 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -320,6 +320,7 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+ 		if (esparser_vififo_get_free_space(sess) < payload_size ||
+ 		    atomic_read(&sess->esparser_queued_bufs) >= num_dst_bufs)
+ 			return -EAGAIN;
++
+ 	} else if (esparser_vififo_get_free_space(sess) < payload_size) {
+ 		return -EAGAIN;
+ 	}
+diff --git a/drivers/staging/media/meson/vdec/vdec.h b/drivers/staging/media/meson/vdec/vdec.h
+index 0906b8fb5cc6..a48170fe4cff 100644
+--- a/drivers/staging/media/meson/vdec/vdec.h
++++ b/drivers/staging/media/meson/vdec/vdec.h
+@@ -244,6 +244,7 @@ struct amvdec_session {
+ 	u32 width;
+ 	u32 height;
+ 	u32 colorspace;
++	u32 bitdepth;
+ 	u8 ycbcr_enc;
+ 	u8 quantization;
+ 	u8 xfer_func;
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index 7d2a75653250..fef76142f0c5 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -50,32 +50,40 @@ void amvdec_write_parser(struct amvdec_core *core, u32 reg, u32 val)
+ }
+ EXPORT_SYMBOL_GPL(amvdec_write_parser);
+ 
+-/* 4 KiB per 64x32 block */
+-u32 amvdec_am21c_body_size(u32 width, u32 height)
++/* AMFBC body is made out of 64x32 blocks with varying block size */
++u32 amvdec_amfbc_body_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu)
+ {
+ 	u32 width_64 = ALIGN(width, 64) / 64;
+ 	u32 height_32 = ALIGN(height, 32) / 32;
++	u32 blk_size = 4096;
+ 
+-	return SZ_4K * width_64 * height_32;
++	if (!is_10bit) {
++		if (use_mmu)
++			blk_size = 3200;
++		else
++			blk_size = 3072;
++	}
++
++	return blk_size * width_64 * height_32;
+ }
+-EXPORT_SYMBOL_GPL(amvdec_am21c_body_size);
++EXPORT_SYMBOL_GPL(amvdec_amfbc_body_size);
+ 
+ /* 32 bytes per 128x64 block */
+-u32 amvdec_am21c_head_size(u32 width, u32 height)
++u32 amvdec_amfbc_head_size(u32 width, u32 height)
+ {
+ 	u32 width_128 = ALIGN(width, 128) / 128;
+ 	u32 height_64 = ALIGN(height, 64) / 64;
+ 
+ 	return 32 * width_128 * height_64;
+ }
+-EXPORT_SYMBOL_GPL(amvdec_am21c_head_size);
++EXPORT_SYMBOL_GPL(amvdec_amfbc_head_size);
+ 
+-u32 amvdec_am21c_size(u32 width, u32 height)
++u32 amvdec_amfbc_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu)
+ {
+-	return ALIGN(amvdec_am21c_body_size(width, height) +
+-		     amvdec_am21c_head_size(width, height), SZ_64K);
++	return ALIGN(amvdec_amfbc_body_size(width, height, is_10bit, use_mmu) +
++		     amvdec_amfbc_head_size(width, height), SZ_64K);
+ }
+-EXPORT_SYMBOL_GPL(amvdec_am21c_size);
++EXPORT_SYMBOL_GPL(amvdec_amfbc_size);
+ 
+ static int canvas_alloc(struct amvdec_session *sess, u8 *canvas_id)
+ {
+@@ -440,7 +448,7 @@ void amvdec_set_par_from_dar(struct amvdec_session *sess,
+ EXPORT_SYMBOL_GPL(amvdec_set_par_from_dar);
+ 
+ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+-		       u32 height, u32 dpb_size)
++		       u32 height, u32 dpb_size, u32 bitdepth)
+ {
+ 	static const struct v4l2_event ev = {
+ 		.type = V4L2_EVENT_SOURCE_CHANGE,
+@@ -448,25 +456,27 @@ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+ 
+ 	v4l2_ctrl_s_ctrl(sess->ctrl_min_buf_capture, dpb_size);
+ 
++	sess->bitdepth = bitdepth;
++
+ 	/*
+ 	 * Check if the capture queue is already configured well for our
+-	 * usecase. If so, keep decoding with it and do not send the event
++	 * usecase. If so, keep decoding with it.
+ 	 */
+ 	if (sess->streamon_cap &&
+ 	    sess->width == width &&
+ 	    sess->height == height &&
+ 	    dpb_size <= sess->num_dst_bufs) {
+ 		sess->fmt_out->codec_ops->resume(sess);
+-		return;
++	} else {
++		sess->status = STATUS_NEEDS_RESUME;
++		sess->changed_format = 0;
+ 	}
+ 
+-	sess->changed_format = 0;
+ 	sess->width = width;
+ 	sess->height = height;
+-	sess->status = STATUS_NEEDS_RESUME;
+ 
+-	dev_dbg(sess->core->dev, "Res. changed (%ux%u), DPB size %u\n",
+-		width, height, dpb_size);
++	dev_dbg(sess->core->dev, "Res. changed (%ux%u), DPB %u, bitdepth %u\n",
++		width, height, dpb_size, bitdepth);
+ 	v4l2_event_queue_fh(&sess->fh, &ev);
+ }
+ EXPORT_SYMBOL_GPL(amvdec_src_change);
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index 4bf3e61d081b..1a711679d26a 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -27,9 +27,10 @@ void amvdec_clear_dos_bits(struct amvdec_core *core, u32 reg, u32 val);
+ u32 amvdec_read_parser(struct amvdec_core *core, u32 reg);
+ void amvdec_write_parser(struct amvdec_core *core, u32 reg, u32 val);
+ 
+-u32 amvdec_am21c_body_size(u32 width, u32 height);
+-u32 amvdec_am21c_head_size(u32 width, u32 height);
+-u32 amvdec_am21c_size(u32 width, u32 height);
++/* Helpers for the Amlogic compressed framebuffer format */
++u32 amvdec_amfbc_body_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu);
++u32 amvdec_amfbc_head_size(u32 width, u32 height);
++u32 amvdec_amfbc_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu);
+ 
+ /**
+  * amvdec_dst_buf_done_idx() - Signal that a buffer is done decoding
+@@ -77,9 +78,10 @@ void amvdec_set_par_from_dar(struct amvdec_session *sess,
+  * @width: picture width detected by the hardware
+  * @height: picture height detected by the hardware
+  * @dpb_size: Decoded Picture Buffer size (= amount of buffers for decoding)
++ * @bitdepth: Bit depth (usually 10 or 8) of the coded content
+  */
+ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+-		       u32 height, u32 dpb_size);
++		       u32 height, u32 dpb_size, u32 bitdepth);
+ 
+ /**
+  * amvdec_abort() - Abort the current decoding session
+-- 
+2.34.1
 
