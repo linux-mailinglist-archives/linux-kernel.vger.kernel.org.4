@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530A5677A88
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AF1677A8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 13:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjAWMGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 07:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S230355AbjAWMGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 07:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjAWMGB (ORCPT
+        with ESMTP id S229436AbjAWMGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:06:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC319008;
-        Mon, 23 Jan 2023 04:06:01 -0800 (PST)
+        Mon, 23 Jan 2023 07:06:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72539008;
+        Mon, 23 Jan 2023 04:06:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5BEF0CE11AB;
-        Mon, 23 Jan 2023 12:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8900BC433D2;
-        Mon, 23 Jan 2023 12:05:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24DD4B80CB1;
+        Mon, 23 Jan 2023 12:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49BFC4339C;
+        Mon, 23 Jan 2023 12:06:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674475557;
-        bh=xomCv4fVScuMgRQPunTMEDlZt86y3oPZFGZ9j/BTOXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=USEasJXMz7HT7THL5/juE79zj86m04PeEMqm6Cf5U3n47ahStCAEKgrrzGxptY/gK
-         VPqDP+QaoSIt8m9HlZaiqvdjh73XDYAK2w0Oc5vE86Y8VYf0c4cTggAEsv4OrBq3hG
-         boCmwC3mBd7bdpOH+KBUsOCvuDKTW1m9q41N3PvEWnVKsr+n2sKqO0E5bGUBEGHIbQ
-         vBC+W1wHK98FZMZM+0bXxTC+WzrWlx9Mrk0EbUQEaAz8Azi/ELsN1w8gRgv4iXINA8
-         ZCqUzpStGzI7EIFPLtvQSLVk71io/fHAFoRx3O7WOKkWyPwt4tGSIBU8kqPB3ritj1
-         Pt7gKgm9eeWDw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pJvaF-000225-2P; Mon, 23 Jan 2023 13:05:55 +0100
-Date:   Mon, 23 Jan 2023 13:05:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Luca Weiss <luca.weiss@fairphone.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] phy: qcom-qmp-combo: Add config for SM6350
-Message-ID: <Y854Iz7gG6/APILo@hovoldconsulting.com>
-References: <20221130081430.67831-1-luca.weiss@fairphone.com>
- <20221130081430.67831-2-luca.weiss@fairphone.com>
- <Y6xP4YRAp68TfxFi@hovoldconsulting.com>
- <Y8BIX+js1ircJyb9@matsya>
- <cf968a25-02f7-d402-530b-eb379b707e54@linaro.org>
- <CPR2LS3SJQ3I.Z7UY505COG3@otso>
- <CAA8EJpoOMMALHz7ysft6KvQaYhGWPD+xZiUjOTrC8CA_y81n-w@mail.gmail.com>
- <CPX2VVT5EUDV.2LH6VI2586F02@otso>
- <Y85WqDrGXAXp7gS/@hovoldconsulting.com>
- <a18359f8-6495-dbea-2323-8ab73bbfc472@linaro.org>
+        s=k20201202; t=1674475579;
+        bh=YB38QU59UEOqm7ADbTysVzycOZ08uNvIpt0U3juErFU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sIyaIVk/xBEwPCDP/Aq1mufXGJlaMduvBrJjyPWiePqon65h33Hl+lhUihZn7vzbO
+         50JgV5hZhXnne3a+gATjY9clUimNx+fz9K3xoSjXfhVD4Np3ZzQt1n7STjuhSvEdL/
+         +hJqArUyhmxhbGLs3UkFFtqh6I58OYCtkTBJU1hNNzrvQu/yzR0Yb+2NQSKdJHdJ3z
+         A+2tcTZmsHUe21PYnkiCZawGoceIaoSukaJK4ytglsqH3jT9trWO0ltRzA1wMN+LMl
+         1mJAWQqD2T93lsTRzll91A2H7CBSo7UOyDqoD4Ai8CdPb3KY94ZxjizLCY/AVljyZE
+         ZgvnmvCdca6Qw==
+Received: by mail-lf1-f49.google.com with SMTP id g13so17801370lfv.7;
+        Mon, 23 Jan 2023 04:06:19 -0800 (PST)
+X-Gm-Message-State: AFqh2kpGrjI81R6CM/xL4iu4wM7ICnpHw420ZkF/QZ0hNGEMgXZvhTv3
+        KYDcCEMisPJibHNpIUxWidkKyactnxD1AwE1hbg=
+X-Google-Smtp-Source: AMrXdXv4bOFImaFVPX5qGqiZLtY3AlufsTuh/HuMtRDfAfpVxGs2BPHBw9l7n5BJIQc30rkhov5ScxpkqvUIqhDeY/0=
+X-Received: by 2002:ac2:4bd5:0:b0:4d5:76af:f890 with SMTP id
+ o21-20020ac24bd5000000b004d576aff890mr1248969lfq.228.1674475577848; Mon, 23
+ Jan 2023 04:06:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a18359f8-6495-dbea-2323-8ab73bbfc472@linaro.org>
+References: <20230119164255.28091-1-johan+linaro@kernel.org>
+In-Reply-To: <20230119164255.28091-1-johan+linaro@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 23 Jan 2023 13:06:06 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGpk9AF42TRPFbCBSWtsVj-0_YTnJiSd_QEpXC0ZDSQQg@mail.gmail.com>
+Message-ID: <CAMj1kXGpk9AF42TRPFbCBSWtsVj-0_YTnJiSd_QEpXC0ZDSQQg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] efi: verify that variable services are supported
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jeremy Kerr <jk@ozlabs.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,20 +62,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:15:52PM +0200, Dmitry Baryshkov wrote:
-> On 23/01/2023 11:43, Johan Hovold wrote:
+On Thu, 19 Jan 2023 at 17:45, Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> This series adds a sanity check to make sure that the variable services
+> are actually available before registering the generic efivar ops.
+>
+> This is used to address some potential races with custom efivars
+> implementation such as the Google SMI or upcoming Qualcomm SCM ones.
+>
+> Specifically, efivarfs currently requires that the efivar ops have been
+> registered before module init time even though the Google driver can be
+> built as a module. Instead, the driver has so far relied on the fact
+> that the generic ops have been registered by efi core only to later be
+> overridden by the custom implementation (or Google doesn't use
+> efivarfs).
+>
+> Instead, let's move the efivars sanity check to mount time to allow for
+> late registration of efivars.
+>
+> Note that requiring that all efivars implementation to always be
+> built-in and registered before module init time could be an alternative,
+> but we'd still need to make sure that the custom implementation is then
+> not overridden by the default (broken) one. To avoid such init call
+> games, allowing late registration seems preferable.
+>
+> This would however require any drivers that use efivars to probe defer
+> until it becomes available, which is also unfortunate, but possibly
+> still better than having generic kernels carry multiple built-in efivars
+> implementations.
+>
+> Note that there are currently no such (efivars consumer) drivers in-tree
+> except for the efivars_pstore driver, which currently do rely on
+> efivarfs being available at module init time (and hence may fail to
+> initialise with the custom efivar implementations).
+>
+> Johan
+>
+>
+> Johan Hovold (4):
+>   efi: efivars: add efivars printk prefix
+>   efivarfs: always register filesystem
+>   efi: verify that variable services are supported
+>   efi: efivars: prevent double registration
+>
 
-> > We'll convert the older platforms over to use the new binding scheme
-> > soon and then we'd need this anyway. And if it turns out later that this
-> > was all bogus, at least we only need to fix the driver (and not worry
-> > about dts backward compatibility as we had to with the old style
-> > bindings).
-> 
-> As you mentioned this. Do you have plans to work on this conversion? If 
-> not, I'll probably take a look during next development window.
+Queued up in efi/next - thanks.
 
-Yes, I was planning on looking at this after Luca's series is merged. I
-have some higher prio stuff to get out the door these next couple of
-weeks first, though.
-
-Johan
+>  drivers/firmware/efi/efi.c  | 22 ++++++++++++++++++++++
+>  drivers/firmware/efi/vars.c | 17 ++++++++++++++---
+>  fs/efivarfs/super.c         |  6 +++---
+>  3 files changed, 39 insertions(+), 6 deletions(-)
+>
+> --
+> 2.38.2
+>
