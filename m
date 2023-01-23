@@ -2,178 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D679677751
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434C0677756
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjAWJV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S231605AbjAWJY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWJVZ (ORCPT
+        with ESMTP id S231131AbjAWJYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:21:25 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A7313D74
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:21:24 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso7998143wmq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dfmvo5oeZS2mw9rYPDjdKBRJW58vjaeN+zBDMH5ZCpk=;
-        b=vB8o+1Ngxx65FLNG5N5XaT1T7oTp+DfMd3rA3AnVU3Rks2jxBLZN6NYYrcqia+VweW
-         lL7CUrvLvnIZElmtoH6Fqlw58jTOchGm+eOwkWQ/GGciIhOacCg743n96qEIWuQDyObf
-         n/Jr+eninp2o+WysIuS+6Zf4AubtFOV3KeAmZy2b1BJbIXCdQfID8NK4/inDKrRSgbT7
-         s5F6tZpT7dRgDqGYUSeVUmey8IHOmqfy2G6M02g9sUa2ZuPZrROFwaIof82Fvx3dTpLK
-         j2Qz5PPbw7JA9QNbh7r1ENz6/lxZAx1wnpFRg/cwmMF+/dgmqQ/lB2ChI3bzgHsaKq/X
-         tA/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dfmvo5oeZS2mw9rYPDjdKBRJW58vjaeN+zBDMH5ZCpk=;
-        b=g/tMZ0gQokSE+ayB5Rzl/B2ZWlgmeeMJPnYk928qgW8+oGwZyI9n7PIVE0/4u5nq81
-         NNIZerHM7toyy7IKAVphQ7DzKimoLb3s5w2FxFNQnua3ac32QSMv04SCM6upCBNGHItl
-         3MDdoJvcZ8EEHhSrEzmQO/o9K31i5zjeM+ZMNUb3k9gL2TdwxWhmad8GzBLfHKH1ERpL
-         PW/ON0CbDn7upwvFCrLC/tr41ScXMwc4iaOXgGmCOxPy8gRKEUIWk6o954P4BTiK8ATi
-         44wF00ZK7OCr3p/uRN7jTsIRT+l3+wxWD+nZz6uYrYIut+Fqvw0HM8IfabewRrzdetS8
-         rXAg==
-X-Gm-Message-State: AFqh2kobtBBWZpa9vuhdflcssQFxMXwsq6a/LKSDP6CfHji34ZOvdxg3
-        Otb/Ny88DYQcFIN1v3iEPR100A==
-X-Google-Smtp-Source: AMrXdXuqO6PMOyE0fxvWczF3BcWFU4eORgAdVy2kpa3ur1lCmv/eM+I7btGwcb/5Cv/Q1BtX6wUajg==
-X-Received: by 2002:a05:600c:1d85:b0:3db:1bc5:bbe7 with SMTP id p5-20020a05600c1d8500b003db1bc5bbe7mr16855715wms.0.1674465683132;
-        Mon, 23 Jan 2023 01:21:23 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id hg8-20020a05600c538800b003d974076f13sm10011878wmb.3.2023.01.23.01.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 01:21:22 -0800 (PST)
-Message-ID: <c6ef28cf-74cc-5912-d73f-822f57642038@linaro.org>
-Date:   Mon, 23 Jan 2023 10:21:21 +0100
+        Mon, 23 Jan 2023 04:24:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D1915547
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:24:23 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pJt3f-0000OC-Dl; Mon, 23 Jan 2023 10:24:07 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pJt3d-0000se-BA; Mon, 23 Jan 2023 10:24:05 +0100
+Date:   Mon, 23 Jan 2023 10:24:05 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: Re: [PATCH v2] staging: media: imx: change
+ imx_media_fim_set_stream() to return void
+Message-ID: <20230123092405.lwaosnsnlj7tvnmt@pengutronix.de>
+References: <Y7RoDHnyHNnlPV71@qemulion>
+ <Y82VVFFdUbww+BuS@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add SM7150 GCC clocks
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Wronek <davidwronek@gmail.com>
-References: <20230122192924.119636-1-danila@jiaxyga.com>
- <20230122192924.119636-2-danila@jiaxyga.com>
- <5f778c47-a1a3-70f2-78b8-107a11e31eeb@linaro.org>
-In-Reply-To: <5f778c47-a1a3-70f2-78b8-107a11e31eeb@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y82VVFFdUbww+BuS@ubun2204.myguest.virtualbox.org>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 10:11, Krzysztof Kozlowski wrote:
-> On 22/01/2023 20:29, Danila Tikhonov wrote:
->> Add device tree bindings for global clock subsystem clock
->> controller for Qualcomm Technology Inc's SM7150 SoCs.
->>
->> Co-developed-by: David Wronek <davidwronek@gmail.com>
->> Signed-off-by: David Wronek <davidwronek@gmail.com>
->> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
->> ---
->>  .../bindings/clock/qcom,sm7150-gcc.yaml       |  69 +++++++
->>  include/dt-bindings/clock/qcom,sm7150-gcc.h   | 193 ++++++++++++++++++
->>  2 files changed, 262 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
->>  create mode 100644 include/dt-bindings/clock/qcom,sm7150-gcc.h
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
->> new file mode 100644
->> index 000000000000..a0105e11fdb8
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
->> @@ -0,0 +1,69 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/qcom,sm7150-gcc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Global Clock & Reset Controller on SM7150
->> +
->> +maintainers:
->> +  - Bjorn Andersson <andersson@kernel.org>
->> +  - Danila Tikhonov <danila@jiaxyga.com>
->> +  - David Wronek <davidwronek@gmail.com>
->> +
->> +description: |
->> +  Qualcomm global clock control module provides the clocks, resets and power
->> +  domains on SM7150
->> +
->> +  See also:: include/dt-bindings/clock/qcom,sm7150-gcc.h
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,sm7150-gcc
->> +
->> +  clocks:
->> +    items:
->> +      - description: Board XO source
->> +      - description: Board XO Active-Only source
->> +      - description: Sleep clock source
->> +
-> 
-> If you started your work from the most recent bindings (e.g. sm8550) you
-> would have saved one iteration and one set of review...
-> 
->> +  '#clock-cells':
->> +    const: 1
-> 
-> Drop entire property, it's coming from gcc.yaml.
-> 
-> 
->> +  '#reset-cells':
->> +    const: 1
-> 
-> Ditto
-> 
->> +
->> +  '#power-domain-cells':
->> +    const: 1
-> 
-> Ditto
-> 
->> +
->> +  reg:
->> +    maxItems: 1
-> 
-> Ditto
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg
-> 
-> Drop reg
-> 
->> +  - clocks
->> +  - '#clock-cells'
->> +  - '#reset-cells'
->> +  - '#power-domain-cells'
-> 
-> Drop these three.
+Hi,
 
-BTW, all these changes above were not in your v1 so it is weird to see
-them here now...
+the patch lgtm.
 
-Best regards,
-Krzysztof
+On 23-01-23, Deepak R Varma wrote:
+> On Tue, Jan 03, 2023 at 11:08:20PM +0530, Deepak R Varma wrote:
+> > At present, the function imx_media_fim_set_stream() always returns 0.
+> > So, convert it to be a function returning void instead. Issue identified
+> > using the returnvar.cocci Coccinelle semantic patch.
+> > 
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
 
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+
+> > ---
+> > Changes in v2:
+> >    1. Convert the function return type from int to void. Suggested by
+> >       Fabio Estevam <festevam@gmail.com>
+> >    2. Update patch subject and log accordingly.
+> 
+> Hello,
+> May I request a review and feedback comment on this patch proposal please?
+> 
+> Thank you,
+> ./drv
+> 
+> > 
+> > 
+> >  drivers/staging/media/imx/imx-media-csi.c | 7 ++-----
+> >  drivers/staging/media/imx/imx-media-fim.c | 8 +++-----
+> >  drivers/staging/media/imx/imx-media.h     | 6 +++---
+> >  3 files changed, 8 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+> > index 5c3cc7de209d..44d87fe30d52 100644
+> > --- a/drivers/staging/media/imx/imx-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx-media-csi.c
+> > @@ -779,11 +779,8 @@ static int csi_start(struct csi_priv *priv)
+> >  		goto idmac_stop;
+> > 
+> >  	/* start the frame interval monitor */
+> > -	if (priv->fim && priv->dest == IPU_CSI_DEST_IDMAC) {
+> > -		ret = imx_media_fim_set_stream(priv->fim, output_fi, true);
+> > -		if (ret)
+> > -			goto idmac_stop;
+> > -	}
+> > +	if (priv->fim && priv->dest == IPU_CSI_DEST_IDMAC)
+> > +		imx_media_fim_set_stream(priv->fim, output_fi, true);
+> > 
+> >  	ret = ipu_csi_enable(priv->csi);
+> >  	if (ret) {
+> > diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
+> > index fb6590dcfc36..f456751f100a 100644
+> > --- a/drivers/staging/media/imx/imx-media-fim.c
+> > +++ b/drivers/staging/media/imx/imx-media-fim.c
+> > @@ -368,12 +368,11 @@ void imx_media_fim_eof_monitor(struct imx_media_fim *fim, ktime_t timestamp)
+> >  }
+> > 
+> >  /* Called by the subdev in its s_stream callback */
+> > -int imx_media_fim_set_stream(struct imx_media_fim *fim,
+> > -			     const struct v4l2_fract *fi,
+> > -			     bool on)
+> > +void imx_media_fim_set_stream(struct imx_media_fim *fim,
+> > +			      const struct v4l2_fract *fi,
+> > +			      bool on)
+> >  {
+> >  	unsigned long flags;
+> > -	int ret = 0;
+> > 
+> >  	v4l2_ctrl_lock(fim->ctrl[FIM_CL_ENABLE]);
+> > 
+> > @@ -393,7 +392,6 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+> >  	fim->stream_on = on;
+> >  out:
+> >  	v4l2_ctrl_unlock(fim->ctrl[FIM_CL_ENABLE]);
+> > -	return ret;
+> >  }
+> > 
+> >  int imx_media_fim_add_controls(struct imx_media_fim *fim)
+> > diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> > index f679249d82e4..6f9a46573edd 100644
+> > --- a/drivers/staging/media/imx/imx-media.h
+> > +++ b/drivers/staging/media/imx/imx-media.h
+> > @@ -246,9 +246,9 @@ int imx_media_dev_notifier_register(struct imx_media_dev *imxmd,
+> >  /* imx-media-fim.c */
+> >  struct imx_media_fim;
+> >  void imx_media_fim_eof_monitor(struct imx_media_fim *fim, ktime_t timestamp);
+> > -int imx_media_fim_set_stream(struct imx_media_fim *fim,
+> > -			     const struct v4l2_fract *frame_interval,
+> > -			     bool on);
+> > +void imx_media_fim_set_stream(struct imx_media_fim *fim,
+> > +			      const struct v4l2_fract *frame_interval,
+> > +			      bool on);
+> >  int imx_media_fim_add_controls(struct imx_media_fim *fim);
+> >  struct imx_media_fim *imx_media_fim_init(struct v4l2_subdev *sd);
+> >  void imx_media_fim_free(struct imx_media_fim *fim);
+> > --
+> > 2.34.1
+> > 
+> 
+> 
+> 
+> 
