@@ -2,147 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944B2677576
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85ECB677578
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjAWHRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S231379AbjAWHRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAWHRA (ORCPT
+        with ESMTP id S229817AbjAWHRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:17:00 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8D815C9A
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:16:59 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id q141so5493213vkb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:16:59 -0800 (PST)
+        Mon, 23 Jan 2023 02:17:16 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239AD1A480;
+        Sun, 22 Jan 2023 23:17:14 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id n7so9853438wrx.5;
+        Sun, 22 Jan 2023 23:17:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w/nTmDIKe+CVQP0G3n4sHN1YN0YVxf/pwrE7R3XBahY=;
-        b=j0DuOHuWM+7i161REIceXJtlyGe6lPzVV83om8dv7HIdjBqtObgcqD7vyxgSi0kCqS
-         L6vnZ3zskyNDsHwcEDPGqMgFcSotUTM+KOlv5uKgsF71dozfHHnXplumhn+OrLFKR6ZQ
-         gT2+ihJZiTQMDOSZC4DXuorDglpsrCncRhUkw+dFhodRIcFgAKJlWhZY5gahNZuH0/eB
-         N5u67mwj0P+/AqC4TuZNX+W2aND1zFecRIHowMxje0VQhq0LKgbxl7wRJQp44Ci8A1rU
-         2xEZ4i3VsJ7cyiL21qDmxd7HyybDEL6paFqan8T3bBIVMsAnNjh+WCQFkSLt6TYPb1nh
-         4SzQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=orgUUcijT9HAApybCZNzBbAQbGQJs54lfazjlNmvor4=;
+        b=WRCsLiXIOEL4Z1N86sUMV6M5XLpBKylpzBAmHT2JzYCDncyvy3j/2S4bjMMfg7qFKA
+         0t/8RMvcLyZ7Hm9n96j07NCQiO0W+kmPVRWXVr+h89ghY/sTHrxYPc+OS8d29zTk5YkL
+         R2V99J6yTedGvuffOXjjSPdOzMpw3ulfv1FGRRhKw+rs9DPPR/2HHXTGbaAE8VEord0k
+         L1jrrYxn0HpQiAaH7N57dxlP7Mota1QnShp2jTLcf6hdindbQiKhv+eA9iTK69PNKT6+
+         1Tc1h4oL75lIoqP1tBYZeVCtVO81vEHJyaCuYYKfsOCbx7toPCmVdZmurYF1CZhOdZGC
+         XtgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w/nTmDIKe+CVQP0G3n4sHN1YN0YVxf/pwrE7R3XBahY=;
-        b=NQ+dzSwQ7L8XIGfDTdKj/Mi/xUP7p78LQagiehLZBNEsBrtQstO60G7ZVZds7+plPi
-         y30HiK5ZukrPZo1zL89vqt21YlyM9jMMnWVzmg+ohlqqJTQapg80LaTXyNeNtjaZsgJb
-         BEIgg+L51qyRi661D+0Y+OTVGn55f91AGnM9VVCvmtfL2rLPZ22nUPxgNAnRD2Vfh+Cq
-         OWbwpgBC+3XMwp3NCMdHHBrEVtTyHy3o3WQX/sbsWNivuzK3o4PA5gVxntXuyCgAwtBc
-         FFSuaA+gMuCtBQAzPf6W6OctR2rqOWgbMbBAdZsjZatqCA7QfffbKf1yy3EPBIDk4tVL
-         h7mA==
-X-Gm-Message-State: AFqh2koPj6GoMoXMSnNCRSE4Ta+NLFkfyYSH7dppbepMbmsBWCkc+H9m
-        25TH5U2s7Y7VR7X26kNvzSPT6lvcZ9mW06pULU3VTg==
-X-Google-Smtp-Source: AMrXdXtMlHG8p50ItK9g4I4f9Rz4TM/4HtgzphmZKhBxXNfUZkMl+Lv2xogcqWcFaaPZQky0COP8Q34qHkT7TYmy1z8=
-X-Received: by 2002:a1f:ab92:0:b0:3d5:63ee:dae1 with SMTP id
- u140-20020a1fab92000000b003d563eedae1mr3077115vke.9.1674458217943; Sun, 22
- Jan 2023 23:16:57 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=orgUUcijT9HAApybCZNzBbAQbGQJs54lfazjlNmvor4=;
+        b=3x8q3qxrFr8WJIDbdvfIV3E4pv2MvNIcghNoddNLjDL8mHiPRjGLnRfLvF8Lwh5y1H
+         MRwnpds4zPfuZX8t58mi3cniLAtgMTtrTTaBJEeJNr26/memcN6va8NP5aKRtiqSvQDS
+         dZKWyfWHntx/+QPu/4WFVuEFw1G7x3vYsEmY84pHIjpGHWmBry4hA1So4TP+GRgxdU3U
+         i4MlZivFeU5pmBTLc6Irnmw0R7KluI/onQnfOIEXvRjR9030gEItOaX3Bwc/aaxDwkx8
+         MKp5Tiox021kbB0zQlvqVVt2A5ovTP+Qb/1C7GOntbwx1i0X2hAvpVdTYeoWktXEA0zE
+         u4Ow==
+X-Gm-Message-State: AFqh2kogrDYTEqCyXElrKFAOiHzWWIm+bAADexP6i8joGuFYdp2lRw4h
+        9++gizEGWvrxkW9US6dqWoI=
+X-Google-Smtp-Source: AMrXdXvWh4N79aN3+Zbpk2+4tvBaV8mZGbORgIeWR2mMNB6qANbMFGt0GeFzVFZKjCoaUSqoZ0vkbg==
+X-Received: by 2002:adf:f790:0:b0:2bd:ebc0:6f79 with SMTP id q16-20020adff790000000b002bdebc06f79mr20538950wrp.46.1674458232520;
+        Sun, 22 Jan 2023 23:17:12 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id f2-20020adff982000000b002bde537721dsm23713801wrr.20.2023.01.22.23.17.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 23:17:12 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>,
+        Benjamin Roszak <benjamin545@gmail.com>
+Subject: [PATCH] media: meson: vdec: remove redundant if statement
+Date:   Mon, 23 Jan 2023 07:17:08 +0000
+Message-Id: <20230123071708.2670751-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230122150229.351631432@linuxfoundation.org>
-In-Reply-To: <20230122150229.351631432@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 23 Jan 2023 12:46:47 +0530
-Message-ID: <CA+G9fYtQ9SLrGt0TtW5d3ctZBHEpQpau_+pNzho=qHve8QiDaA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/98] 5.10.165-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 Jan 2023 at 20:41, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.165 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.165-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Benjamin Roszak <benjamin545@gmail.com>
 
-Results from Linaro=E2=80=99s test farm.
+Checking if sess->fmt_out->pixfmt is V4L2_PIX_FMT_VP9 was already done as a
+condition to enter the if statement where this additional check is made.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Benjamin Roszak <benjamin545@gmail.com>
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+---
+ drivers/staging/media/meson/vdec/esparser.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Build regressions found on sh:
-   - build/gcc-8-dreamcast_defconfig
-   - build/gcc-8-microdev_defconfig
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index 86ccc8937afc..7b15fc54efe4 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -314,8 +314,7 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+ 			num_dst_bufs = codec_ops->num_pending_bufs(sess);
+ 
+ 		num_dst_bufs += v4l2_m2m_num_dst_bufs_ready(sess->m2m_ctx);
+-		if (sess->fmt_out->pixfmt == V4L2_PIX_FMT_VP9)
+-			num_dst_bufs -= 3;
++		num_dst_bufs -= 3;
+ 
+ 		if (esparser_vififo_get_free_space(sess) < payload_size ||
+ 		    atomic_read(&sess->esparser_queued_bufs) >= num_dst_bufs)
+-- 
+2.34.1
 
-
-Build error logs:
-
-`.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-defined in discarded section `.exit.text' of crypto/algboss.o
-`.exit.text' referenced in section `__bug_table' of
-drivers/char/hw_random/core.o: defined in discarded section
-`.exit.text' of drivers/char/hw_random/core.o
-make[1]: *** [/builds/linux/Makefile:1194: vmlinux] Error 1
-
-Bisection points to this commit,
-    arch: fix broken BuildID for arm64 and riscv
-    commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
-
-Ref:
-upstream discussion thread,
-https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
-
-Steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch sh --toolchain gcc-8 --kconfig
-microdev_defconfig
-
-
-Build log links,
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2Kgdn5w5X9wlz0EVgtSZ=
-bTFuRYy/
-
---
-Linaro LKFT
-https://lkft.linaro.org
