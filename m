@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81F567893A
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6BF678939
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjAWVHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
+        id S232959AbjAWVHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbjAWVHP (ORCPT
+        with ESMTP id S232599AbjAWVHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:07:15 -0500
+        Mon, 23 Jan 2023 16:07:14 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C2638675
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060A938667
         for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:07:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=43U4bn0+EhRePAQFEfIEHYSWEzea++Rs3FkcHjx/rv8=; b=GNpOpTvJ2abtxz1GuR6oDPbBFH
-        gRKJX5F+/8CQ8hBkc06D7Df/ATaLdINRo44g2Pk0aJKTHl5l9YD8P8daAyP/ByYwM3uBZ5RTwrCOX
-        BxFj52kR1hNUkdjf90+2jhrY4snrl5Kl55XqFBR50utZdC/3a8a8wUnOtWoRIaC3SeuLvEbvvP2nK
-        4pJ8WqWKt3CaixdXdRXb940NueJDrWXM3Dgl4K5h9E2+vIMV1Rnik6UP6rcf6xLjTsJrwQTq72GRh
-        LE5wmnndzETgilE+jRoElqNMIoM3TGpi3wOopZd0g4LKFPX5F268UTdE0YW4dnT3Hff6Z6Y5tKG29
-        VcxQsalg==;
+        bh=KKXDnmc2Es+6ZmW+DV2eYtRfLFf2Gu02YvShw/3lB4Y=; b=PT4NpcyeoJrAlUFkM+JxIKvOzE
+        wat/l+Lls2OmdG/RSotNTpPyBaTs30NSFT3/OKTFTFQwWiMnNzcxsP2g8kVvUaBDZZQFUfFcby1DU
+        HDyhwUB2Huqfc6yTcFDqh4mpzpV21524uoQ4mVDXvKYdQWV7zBd5uyoOACAuO5EAjrg8OtgbUIebV
+        9vA8P000to1tKOp8gWyG8+fQswPZhYiJjr0CFD7hOWlXGxFJM6HNCCAFcJXEg7zHUzErZ7FWw/Kci
+        1ZVm89rNWAv/Od7R1wtLVfUR3Nj+5Of6XgWxgfOt+XO4/L/HMrI7DnNX9TwiNBm7ftLk/TFJsCDPn
+        cYfx0lKg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pK41C-001e3s-06;
+        id 1pK41C-001e3t-05;
         Mon, 23 Jan 2023 21:06:19 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 64A43300747;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D84B30008D;
         Mon, 23 Jan 2023 22:06:45 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 2C7C72038B0DA; Mon, 23 Jan 2023 22:06:45 +0100 (CET)
-Message-ID: <20230123210607.115718513@infradead.org>
+        id 300842038B0DB; Mon, 23 Jan 2023 22:06:45 +0100 (CET)
+Message-ID: <20230123210607.173715335@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 23 Jan 2023 21:59:17 +0100
+Date:   Mon, 23 Jan 2023 21:59:18 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     mingo@kernel.org
 Cc:     tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -48,7 +48,7 @@ Cc:     tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
         ardb@kernel.org, linux-kernel@vger.kernel.org,
         erhard_f@mailbox.org, ndesaulniers@google.com, mhiramat@kernel.org,
         sandipan.das@amd.com
-Subject: [PATCH 2/3] x86/alternative: Teach text_poke_bp() to patch Jcc.d32 instructions
+Subject: [PATCH 3/3] x86/static_call: Add support for Jcc tail-calls
 References: <20230123205915.751729592@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,178 +61,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to re-write Jcc.d32 instructions text_poke_bp() needs to be
-taught about them.
+Clang likes to create conditional tail calls like:
 
-The biggest hurdle is that the whole machinery is currently made for 5
-byte instructions and extending this would grow struct text_poke_loc
-which is currently a nice 16 bytes and used in an array.
+0000000000000350 <amd_pmu_add_event>:
+350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
+355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
+35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
+363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
 
-However, since text_poke_loc contains a full copy of the (s32)
-displacement, it is possible to map the Jcc.d32 2 byte opcodes to
-Jcc.d8 1 byte opcode for the int3 emulation.
+Teach the in-line static call text patching about this.
 
-This then leaves the replacement bytes; fudge that by only storing the
-last 5 bytes and adding the rule that 'length == 6' instruction will
-be prefixed with a 0x0f byte.
+Notably, since there is no conditional-ret, in that caes patch the Jcc
+to point at an empty stub function that does the ret -- or the return
+thunk when needed.
 
+Reported-by: "Erhard F." <erhard_f@mailbox.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- arch/x86/kernel/alternative.c |   62 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 47 insertions(+), 15 deletions(-)
+ arch/x86/kernel/static_call.c |   50 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 47 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -338,6 +338,12 @@ void __init_or_module noinline apply_alt
- 	}
- }
- 
-+static inline bool is_jcc32(struct insn *insn)
-+{
-+	/* Jcc.d32 second opcode byte is in the range: 0x80-0x8f */
-+	return insn->opcode.bytes[0] == 0x0f && (insn->opcode.bytes[1] & 0xf0) == 0x80;
-+}
-+
- #if defined(CONFIG_RETPOLINE) && defined(CONFIG_OBJTOOL)
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -9,6 +9,7 @@ enum insn_type {
+ 	NOP = 1,  /* site cond-call */
+ 	JMP = 2,  /* tramp / site tail-call */
+ 	RET = 3,  /* tramp / site cond-tail-call */
++	JCC = 4,
+ };
  
  /*
-@@ -376,12 +382,6 @@ static int emit_indirect(int op, int reg
- 	return i;
- }
+@@ -25,12 +26,40 @@ static const u8 xor5rax[] = { 0x2e, 0x2e
  
--static inline bool is_jcc32(struct insn *insn)
--{
--	/* Jcc.d32 second opcode byte is in the range: 0x80-0x8f */
--	return insn->opcode.bytes[0] == 0x0f && (insn->opcode.bytes[1] & 0xf0) == 0x80;
--}
--
- static int emit_call_track_retpoline(void *addr, struct insn *insn, int reg, u8 *bytes)
- {
- 	u8 op = insn->opcode.bytes[0];
-@@ -1770,6 +1770,11 @@ void text_poke_sync(void)
- 	on_each_cpu(do_sync_core, NULL, 1);
- }
+ static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
  
-+/*
-+ * NOTE: crazy scheme to allow patching Jcc.d32 but not increase the size of
-+ * this thing. When len == 6 everything is prefixed with 0x0f and we map
-+ * opcode to Jcc.d8, using len to distinguish.
-+ */
- struct text_poke_loc {
- 	/* addr := _stext + rel_addr */
- 	s32 rel_addr;
-@@ -1891,6 +1896,10 @@ noinstr int poke_int3_handler(struct pt_
- 		int3_emulate_jmp(regs, (long)ip + tp->disp);
- 		break;
- 
-+	case 0x70 ... 0x7f: /* Jcc */
-+		int3_emulate_jcc(regs, tp->opcode & 0xf, (long)ip, tp->disp);
-+		break;
++static u8 __is_Jcc(u8 *insn) /* Jcc.d32 */
++{
++	u8 ret = 0;
 +
- 	default:
- 		BUG();
- 	}
-@@ -1964,16 +1973,26 @@ static void text_poke_bp_batch(struct te
- 	 * Second step: update all but the first byte of the patched range.
- 	 */
- 	for (do_sync = 0, i = 0; i < nr_entries; i++) {
--		u8 old[POKE_MAX_OPCODE_SIZE] = { tp[i].old, };
-+		u8 old[POKE_MAX_OPCODE_SIZE+1] = { tp[i].old, };
-+		u8 _new[POKE_MAX_OPCODE_SIZE+1];
-+		const u8 *new = tp[i].text;
- 		int len = tp[i].len;
- 
- 		if (len - INT3_INSN_SIZE > 0) {
- 			memcpy(old + INT3_INSN_SIZE,
- 			       text_poke_addr(&tp[i]) + INT3_INSN_SIZE,
- 			       len - INT3_INSN_SIZE);
-+
-+			if (len == 6) {
-+				_new[0] = 0x0f;
-+				memcpy(_new + 1, new, 5);
-+				new = _new;
-+			}
-+
- 			text_poke(text_poke_addr(&tp[i]) + INT3_INSN_SIZE,
--				  (const char *)tp[i].text + INT3_INSN_SIZE,
-+				  new + INT3_INSN_SIZE,
- 				  len - INT3_INSN_SIZE);
-+
- 			do_sync++;
- 		}
- 
-@@ -2001,8 +2020,7 @@ static void text_poke_bp_batch(struct te
- 		 * The old instruction is recorded so that the event can be
- 		 * processed forwards or backwards.
- 		 */
--		perf_event_text_poke(text_poke_addr(&tp[i]), old, len,
--				     tp[i].text, len);
-+		perf_event_text_poke(text_poke_addr(&tp[i]), old, len, new, len);
- 	}
- 
- 	if (do_sync) {
-@@ -2019,10 +2037,15 @@ static void text_poke_bp_batch(struct te
- 	 * replacing opcode.
- 	 */
- 	for (do_sync = 0, i = 0; i < nr_entries; i++) {
--		if (tp[i].text[0] == INT3_INSN_OPCODE)
-+		u8 byte = tp[i].text[0];
-+
-+		if (tp[i].len == 6)
-+			byte = 0x0f;
-+
-+		if (byte == INT3_INSN_OPCODE)
- 			continue;
- 
--		text_poke(text_poke_addr(&tp[i]), tp[i].text, INT3_INSN_SIZE);
-+		text_poke(text_poke_addr(&tp[i]), &byte, INT3_INSN_SIZE);
- 		do_sync++;
- 	}
- 
-@@ -2040,9 +2063,11 @@ static void text_poke_loc_init(struct te
- 			       const void *opcode, size_t len, const void *emulate)
- {
- 	struct insn insn;
--	int ret, i;
-+	int ret, i = 0;
- 
--	memcpy((void *)tp->text, opcode, len);
-+	if (len == 6)
-+		i = 1;
-+	memcpy((void *)tp->text, opcode+i, len-i);
- 	if (!emulate)
- 		emulate = opcode;
- 
-@@ -2053,6 +2078,13 @@ static void text_poke_loc_init(struct te
- 	tp->len = len;
- 	tp->opcode = insn.opcode.bytes[0];
- 
-+	if (is_jcc32(&insn)) {
-+		/*
-+		 * Map Jcc.d32 onto Jcc.d8 and use len to distinguish.
-+		 */
-+		tp->opcode = insn.opcode.bytes[1] - 0x10;
++	if (insn[0] == 0x0f) {
++		u8 tmp = insn[1];
++		if ((tmp & 0xf0) == 0x80)
++			ret = tmp;
 +	}
 +
- 	switch (tp->opcode) {
- 	case RET_INSN_OPCODE:
- 	case JMP32_INSN_OPCODE:
-@@ -2069,7 +2101,6 @@ static void text_poke_loc_init(struct te
- 		BUG_ON(len != insn.length);
++	return ret;
++}
++
++extern void __static_call_return(void);
++
++asm (".global __static_call_return\n\t"
++     ".type __static_call_return, @function\n\t"
++     ASM_FUNC_ALIGN "\n\t"
++     "__static_call_return:\n\t"
++     ANNOTATE_NOENDBR
++     ANNOTATE_RETPOLINE_SAFE
++     "ret; int3\n\t"
++     ".size __static_call_return, . - __static_call_return \n\t");
++
+ static void __ref __static_call_transform(void *insn, enum insn_type type,
+ 					  void *func, bool modinit)
+ {
+ 	const void *emulate = NULL;
+ 	int size = CALL_INSN_SIZE;
+ 	const void *code;
++	u8 op, buf[6];
++
++	if ((type == JMP || type == RET) && (op = __is_Jcc(insn)))
++		type = JCC;
+ 
+ 	switch (type) {
+ 	case CALL:
+@@ -57,6 +86,20 @@ static void __ref __static_call_transfor
+ 		else
+ 			code = &retinsn;
+ 		break;
++
++	case JCC:
++		if (!func) {
++			func = __static_call_return;
++			if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
++				func = x86_return_thunk;
++		}
++
++		buf[0] = 0x0f;
++		__text_gen_insn(buf+1, op, insn+1, func, 5);
++		code = buf;
++		size = 6;
++
++		break;
  	}
  
--
- 	switch (tp->opcode) {
- 	case INT3_INSN_OPCODE:
- 	case RET_INSN_OPCODE:
-@@ -2078,6 +2109,7 @@ static void text_poke_loc_init(struct te
- 	case CALL_INSN_OPCODE:
- 	case JMP32_INSN_OPCODE:
- 	case JMP8_INSN_OPCODE:
-+	case 0x70 ... 0x7f: /* Jcc */
- 		tp->disp = insn.immediate.value;
- 		break;
+ 	if (memcmp(insn, code, size) == 0)
+@@ -68,9 +111,9 @@ static void __ref __static_call_transfor
+ 	text_poke_bp(insn, code, size, emulate);
+ }
  
+-static void __static_call_validate(void *insn, bool tail, bool tramp)
++static void __static_call_validate(u8 *insn, bool tail, bool tramp)
+ {
+-	u8 opcode = *(u8 *)insn;
++	u8 opcode = insn[0];
+ 
+ 	if (tramp && memcmp(insn+5, tramp_ud, 3)) {
+ 		pr_err("trampoline signature fail");
+@@ -79,7 +122,8 @@ static void __static_call_validate(void
+ 
+ 	if (tail) {
+ 		if (opcode == JMP32_INSN_OPCODE ||
+-		    opcode == RET_INSN_OPCODE)
++		    opcode == RET_INSN_OPCODE ||
++		    __is_Jcc(insn))
+ 			return;
+ 	} else {
+ 		if (opcode == CALL_INSN_OPCODE ||
 
 
