@@ -2,104 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FA36774A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753226774A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjAWE2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 23:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S230097AbjAWEbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 23:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjAWE2b (ORCPT
+        with ESMTP id S231490AbjAWEbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 23:28:31 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4A12069
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 20:28:28 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id m17so2592830uap.7
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 20:28:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pefoley.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vjjHK/TOmoBm6O8k+2N7BkktCx3pSWAVz7qW+oPVNVE=;
-        b=hPpsuvAwLZh1RRCrs7FTPeEjeZ1bFN6J74cr1RlkEBHsUWLp1jcyckOkVISwJOsUJd
-         ocwNmh7jSMAxjyZr95W33Vdo0HkqHvnUYFOqLpAwJBZASXSAMVc+L8dHPjYvGMrJac7t
-         hGiweTAlxha7IXjucOyG1O4TnBDS1rqatTJ7o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vjjHK/TOmoBm6O8k+2N7BkktCx3pSWAVz7qW+oPVNVE=;
-        b=G1vpTOFCOLS7o3cyjEMl1upmg5ZmvCVTyF2XS1o9yNvQAC9ohLCw/sJQ9yJtscBeOp
-         lreECMDt7dRq3TLkBrQA0QjzCAWB8VxCQQxpJkK7mSfn55SxNveLUgRRorDlnLLYpdmV
-         31/xLtGmezh/dRdse6Md2CSdV6xhtnl4BE8IhmYrmq8dByjhf7R1SJlb8eYLvqWA1+iU
-         U89BF/M8202TYseknXE5tGqHqfWFmappmV7arBCKVx994WGJJ6ue3S1AdFIqaeCMovks
-         vjXFh1UfI/tOKKlW/mb2lWOWGjxCVHZb+RPZevBkAT1NbRBQiV1LLq17+YdYkHNC8CJv
-         nXWg==
-X-Gm-Message-State: AFqh2kqUXyFLbJIY2LSA++UlWVtISpS+gNm/vPZVWWiNMTHAsY/JNMmh
-        snYCFyAqW5O3S6GvMAQOPYGvbar/XOFvS7dfu0FqeA==
-X-Google-Smtp-Source: AMrXdXsdoh8iqfsdbvQAPcLKMxmJ8Wx/zLXGK4/3eZvXbxxCNwT+oiDSGJknhi0DYvFAGaxJ3CyQrZHmh0JrQHnX4I0=
-X-Received: by 2002:ab0:1427:0:b0:5f7:89e9:d714 with SMTP id
- b36-20020ab01427000000b005f789e9d714mr2463881uae.0.1674448107340; Sun, 22 Jan
- 2023 20:28:27 -0800 (PST)
+        Sun, 22 Jan 2023 23:31:38 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D651A949;
+        Sun, 22 Jan 2023 20:31:27 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30N4TMlU009887;
+        Mon, 23 Jan 2023 04:31:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RGnWmcYmRpDUDAVXudOkcEb+Itdsk4WK80t8GliST8Q=;
+ b=iIwSV7A9feszg8qUXHbCenTTe+MIYaa18YSWyvj87cnqp0YN3q9EHlN28iHWYakcvID6
+ 1ZSW9fH157DrFUuD1C1DbSmRfhBcJJzkcfioBkG9XrdZfFLDcWTM5KwOWw1zx6sW8dgz
+ uqojws1YEp0SLwc+YqQILEYoan25jIr8thNfgUBdHhzG1wbvP7aBQEPaPEt2M1eig/hW
+ v/sRu3XsPYeF424e3tKCglgudG6cmucdaqUujTBmzmS0361g65mTRQrRUhSblOBHK15N
+ cuiafT1htcqQ9JkJDt75S6q0oi0+bwYBhpoThag31pZPNXmk3IbTF3c8EL29U2pJ+Noi Vg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89f5a8f8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 04:31:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30N4V9XX022834
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 04:31:09 GMT
+Received: from [10.131.116.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 22 Jan
+ 2023 20:31:04 -0800
+Message-ID: <5c2442d3-1f65-9106-2ef4-d6beec159538@quicinc.com>
+Date:   Mon, 23 Jan 2023 10:00:55 +0530
 MIME-Version: 1.0
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com> <701abf4bbf5b7957a24d2f164c643e1d9f586fad.camel@gmail.com>
- <4dc6a571-8564-b38c-31df-0d9741dfc592@meta.com>
-In-Reply-To: <4dc6a571-8564-b38c-31df-0d9741dfc592@meta.com>
-From:   Peter Foley <pefoley2@pefoley.com>
-Date:   Sun, 22 Jan 2023 20:28:15 -0800
-Message-ID: <CAOFdcFOh_rNt3pfkNHPPeK=Kojro==Kpgmmu-VnLuaMYfFoiwg@mail.gmail.com>
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Eduard Zingerman <eddyz87@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
+ support
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <mka@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <johan+linaro@kernel.org>, <quic_kriskura@quicinc.com>,
+        <dianders@chromium.org>, <linux-clk@vger.kernel.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <~postmarketos/upstreaming@lists.sr.ht>
+References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+ <5897497.lOV4Wx5bFT@g550jk>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <5897497.lOV4Wx5bFT@g550jk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jnjnRNsqrBfqY-7WRewipyXRPIjLc5va
+X-Proofpoint-GUID: jnjnRNsqrBfqY-7WRewipyXRPIjLc5va
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_02,2023-01-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ clxscore=1011 mlxscore=0 spamscore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301230042
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:34 PM Yonghong Song <yhs@meta.com> wrote:
-> On 1/18/23 11:28 AM, Eduard Zingerman wrote:
-> >
-> > While working on clang patch to disable stack protector
-> > for BPF target I've noticed that there is an option to
-> > disable default configuration file altogether [1]:
-> >
-> >    --no-default-config
-> >
-> > Should we consider it instead of -fno-stack-protector
-> > to shield ourselves from any potential distro-specific
-> > changes?
->
-> Peter, could you help check whether adding --no-default-config works
-> in your environment or not?
->
-> >
-> > [1] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-no-default-config
 
-I guess I could, but I'm not convinced that's the right thing to do.
-Ideally problems with distro-specific configs would cause loud
-failures (like this one) and result in fixes like the changes being
-made to upstream clang/gcc.
-Simply unconditionally disabling distro configs seems to be the wrong
-way to approach this and makes it less likely that future problems
-will be reported in the first place.
+On 1/22/2023 5:45 AM, Luca Weiss wrote:
+> Hi Rajendra,
+> 
+> On Dienstag, 20. September 2022 13:15:15 CET Rajendra Nayak wrote:
+>> GDSCs cannot be transitioned into a Retention state in SW.
+>> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
+>> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
+>> takes care of retaining the memory/logic for the domain when
+>> the parent domain transitions to power collapse/power off state.
+>>
+>> On some platforms where the parent domains lowest power state
+>> itself is Retention, just leaving the GDSC in ON (without any
+>> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
+>> it to Retention.
+>>
+>> The existing logic handling the PWRSTS_RET seems to set the
+>> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
+>> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
+>> Fix that by leaving the GDSC in ON state.
+>>
+>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+>> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>> v3:
+>> Updated changelog
+>>
+>> There are a few existing users of PWRSTS_RET and I am not
+>> sure if they would be impacted with this change
+>>
+>> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
+>> gdsc is actually transitioning to OFF and might be left
+>> ON as part of this change, atleast till we hit system wide
+>> low power state.
+>> If we really leak more power because of this
+>> change, the right thing to do would be to update .pwrsts for
+>> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
+>> I dont have a msm8974 hardware, so if anyone who has can report
+>> any issues I can take a look further on how to fix it.
+> 
+> Unfortunately indeed this patch makes problems on msm8974, at least on
+> fairphone-fp2 hardware.
+> 
+> With this patch in place, the screen doesn't initialize correctly in maybe 80%
+> of boots and is stuck in weird states, mostly just becomes completely blue.
+> 
+> Kernel log at least sometimes includes messages like this:
+> [   25.847541] dsi_cmds2buf_tx: cmd dma tx failed, type=0x39, data0=0x51,
+> len=8, ret=-110
+> 
+> Do you have anything I can try on msm8974? For now, reverting this patch makes
+> display work again on v6.1
+
+hmm, I was really expecting this to leak more power than break anything functionally,
+Did you try moving to PWRSTS_OFF_ON instead of PWRSTS_RET_ON for mdss_gdsc?
+
+> 
+> Regards
+> Luca
+> 
+>>
+>> 2. gpu_gx_gdsc in gpucc-msm8998.c and
+>>     gpu_gx_gdsc in gpucc-sdm660.c
+>> Both of these seem to add support for 3 power state
+>> OFF, RET and ON, however I dont see any logic in gdsc
+>> driver to handle 3 different power states.
+>> So I am expecting that these are infact just transitioning
+>> between ON and OFF and RET state is never really used.
+>> The ideal fix for them would be to just update their resp.
+>> .pwrsts to PWRSTS_OFF_ON only.
+>>
+>>   drivers/clk/qcom/gdsc.c | 10 ++++++++++
+>>   drivers/clk/qcom/gdsc.h |  5 +++++
+>>   2 files changed, 15 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+>> index d3244006c661..ccf63771e852 100644
+>> --- a/drivers/clk/qcom/gdsc.c
+>> +++ b/drivers/clk/qcom/gdsc.c
+>> @@ -368,6 +368,16 @@ static int _gdsc_disable(struct gdsc *sc)
+>>   	if (sc->pwrsts & PWRSTS_OFF)
+>>   		gdsc_clear_mem_on(sc);
+>>
+>> +	/*
+>> +	 * If the GDSC supports only a Retention state, apart from ON,
+>> +	 * leave it in ON state.
+>> +	 * There is no SW control to transition the GDSC into
+>> +	 * Retention state. This happens in HW when the parent
+>> +	 * domain goes down to a Low power state
+>> +	 */
+>> +	if (sc->pwrsts == PWRSTS_RET_ON)
+>> +		return 0;
+>> +
+>>   	ret = gdsc_toggle_logic(sc, GDSC_OFF);
+>>   	if (ret)
+>>   		return ret;
+>> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+>> index 5de48c9439b2..981a12c8502d 100644
+>> --- a/drivers/clk/qcom/gdsc.h
+>> +++ b/drivers/clk/qcom/gdsc.h
+>> @@ -49,6 +49,11 @@ struct gdsc {
+>>   	const u8			pwrsts;
+>>   /* Powerdomain allowable state bitfields */
+>>   #define PWRSTS_OFF		BIT(0)
+>> +/*
+>> + * There is no SW control to transition a GDSC into
+>> + * PWRSTS_RET. This happens in HW when the parent
+>> + * domain goes down to a low power state
+>> + */
+>>   #define PWRSTS_RET		BIT(1)
+>>   #define PWRSTS_ON		BIT(2)
+>>   #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
+> 
+> 
+> 
+> 
