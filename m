@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E855167828D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3769467828E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjAWRFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S233355AbjAWRFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjAWRF1 (ORCPT
+        with ESMTP id S233254AbjAWRFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:05:27 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7B727D6E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:18 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id s124so10949773oif.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:18 -0800 (PST)
+        Mon, 23 Jan 2023 12:05:33 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A44FF38
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:21 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id f5-20020a9d5f05000000b00684c0c2eb3fso7679808oti.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:05:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=enfabrica.net; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f2GRRNrDhCrnlwVW91CW9FSUCR/cr5m9HywrBeRIIiU=;
-        b=finZTNj1eGWaV2AmpSJfvqcxLGxQU2fTE9yH9iw/wQIpHK0AtwI358OYChnUXm/8iJ
-         885GsZ7L+Qd2HsByw4673Ec8W+rPwybrY8NNH9uVdmzttMMGB3crZ6X3JaWMwMfvVtZ5
-         Kat9fNB7+JiCO6EMl4pHgb/8bzTiYCfgU5JtHk2K5dkGGaEJs7DbGIxeER6UUFvFSuBS
-         gyV74PLOidorQhN12tk9QB59wPIuufCpu3l30daIVWeu9BC3GItN8Y5FYyuJDN1xy7xZ
-         Dw46z8YRHz0afNEvAByA6Aq4wWLUJrJAEcTazwhOgd3Fof5IFs50ES3tOmcCZL68xZil
-         mneg==
+        bh=6ru6CLB0URVzEwIi8l9mzpkjbwVXFEWjh4LnzIwtBgg=;
+        b=eRHkK9RSp5RdUPbYzc2ONDyMk1JVlFNsVwUGHf/NxgfjQtB2EguW9rSon5vUJDEQcR
+         csImBlv1J/8eJb0qw56nUOkalGbV3a9x7Y+1iaTyUJQzHKwhtDEC6PfRxanAeXV8m/hK
+         nTV9ZRDqUFiBL5abS70FxjIdsRGoYa90GQtfcK5xG7MVLKvFuzLiCfhSXpOsVNqfGowy
+         yaZpYooq8OyDfvz1AP5wzOv1luRGdwp9M89VSrRpL+BaQ2XkmmKQ86jTzfYdyjLqmp4z
+         KGg5dcZYHnUHIh/GT9M4dDHpW67G6ZesHaPm+nvGRaQp/gfK7aqKufdBPwIZeV8GR0OF
+         sltA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=f2GRRNrDhCrnlwVW91CW9FSUCR/cr5m9HywrBeRIIiU=;
-        b=wtJAjAu6kTq6tzVtqGEecOsSO4HtCatwlLSjJVnfrFBpeaNpaeo7N51zWtUyJ4Tfg/
-         UpdCSDnJCD4c/qR835Jdf2M+eeBjVMOgsHp3MbT/bT0+sxsmcw8dj8+oBjHkjpAZBlUS
-         +wj6fZn0TxydNfsMJP5MiLuxCpqPkdiNWZd4+Dt4EIy9MUitdGFTckzVaFOksZNzezVA
-         Hgfcv1tnhM/x3rCYd3XU6yEqviGZicgmDyuY/LZPwoIgWI9ft0bfmmmceEwxcARJk6pt
-         gteOlDniMfnFERgiulOjfkWhNTihPd8x9W8HuyJtKlxf73GPU5TQxr7sFh7gL/BeiOtB
-         caSw==
-X-Gm-Message-State: AFqh2ko+MqRxjn2snaNbo5c8UCZo6WOsBNXJRw/ZjgXIANVS2vJiuskL
-        aPUJFpHySW3mIwfqYSWOSJZTTy3kyfvLpyD2ieeeOzKJL5wQ/ViS9HJsUjKeAab2vgCck8KsIL8
-        CpMCWNOE+403AKNcKTYwdApFYCrbN35pHNibirLvo1mkM4S+QCL9hD3f0Bj/4pm7hanuQig33ub
-        xRnYB62CQPzA==
-X-Google-Smtp-Source: AMrXdXtf3m6tswAwu4JAcP7eCbHkFbal+Boirz42qiwEY8KwjUMPKGRMWdR5Ardxhr7Hb+ZCseEe/g==
-X-Received: by 2002:a05:6808:1414:b0:363:b9af:ec89 with SMTP id w20-20020a056808141400b00363b9afec89mr15920247oiv.1.1674493518413;
-        Mon, 23 Jan 2023 09:05:18 -0800 (PST)
+        bh=6ru6CLB0URVzEwIi8l9mzpkjbwVXFEWjh4LnzIwtBgg=;
+        b=qyFn0cokiwG6tnsbWW3wGmeY5v1fakQKLz8w4U87uNQp0L7L0l1446b+MUa7jEM0o3
+         w4PND+o8UnpaxOpLb50WTUrq1JlQ3ti7zt/bR1NPX6a1QKEGygZt1PvqPQ96gD1saEOM
+         Uud2iJwi6kW4in/8ENZZu6WUTJjeT5bCWYAIVVVo4ydbdWEjhM0prC3cqR2OPQy44yxe
+         +PBvNLAqsAt+Shjn5mqQMgY4oBrE/oeT8OGbToHTSnGrfFLZi42A0RSAd/l6XchH/w8q
+         /WRd+ddqfEdivxEhB15znBeimfVaFo2V4t6LhUjOvEqKHWH1Qk+Oh7yRT0w1pJWPrhzk
+         3KSg==
+X-Gm-Message-State: AFqh2kpJVlm/2+qsvD8VQUXgmwVEVpeAXY+dcK1RsLNxl2qs0Jz8kzcR
+        LzzlbDM435IpUQ/a41MNcksXbQ3s4aQZfwZGVnLlfff3IlvS7evw2tXPvqTCv9+gN/bH2Lpm6sI
+        txfCyYvs7hbKUjlQVIGMRnLmsmPjWhCO1LLKEiZhxxx5IAw9B15xOKnLE9E9ZxrRdU6n6GO1f1f
+        XIxfIn77Zrxg==
+X-Google-Smtp-Source: AMrXdXvByCWK7YSdHMdSB0mW02MoC6pySSXn6CG8IdG7KukUbpOeHf13LuBKC6y/KYQF7TZq9bxuGw==
+X-Received: by 2002:a05:6830:1358:b0:670:9f08:2c48 with SMTP id r24-20020a056830135800b006709f082c48mr12522432otq.9.1674493520590;
+        Mon, 23 Jan 2023 09:05:20 -0800 (PST)
 Received: from DESKTOP-B7RB26P.localdomain (cpe-70-114-202-97.austin.res.rr.com. [70.114.202.97])
-        by smtp.gmail.com with ESMTPSA id 2-20020aca0502000000b0035ec1384c9esm23160163oif.23.2023.01.23.09.05.17
+        by smtp.gmail.com with ESMTPSA id 2-20020aca0502000000b0035ec1384c9esm23160163oif.23.2023.01.23.09.05.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 09:05:18 -0800 (PST)
+        Mon, 23 Jan 2023 09:05:20 -0800 (PST)
 From:   George Prekas <george@enfabrica.net>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -72,9 +72,9 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Andrei Vagin <avagin@gmail.com>,
         George Prekas <george@enfabrica.net>
-Subject: [PATCH 6/9] mm: kmemleak: do not scan cpu_cache of struct kmem_cache
-Date:   Mon, 23 Jan 2023 11:04:16 -0600
-Message-Id: <20230123170419.7292-7-george@enfabrica.net>
+Subject: [PATCH 7/9] mm: kmemleak: erase page->s_mem in slab_destroy
+Date:   Mon, 23 Jan 2023 11:04:17 -0600
+Message-Id: <20230123170419.7292-8-george@enfabrica.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230123170419.7292-1-george@enfabrica.net>
 References: <20230123170419.7292-1-george@enfabrica.net>
@@ -89,55 +89,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code already makes sure that kmemleak will not scan similar caches:
-array_cache and alien_cache. For the cpu_cache, the code takes a
-different approach using kmemleak_erase. This approach handles object
-allocations but does not handle transfers to other caches and leads to
-undetected leaks.
+The field s_mem of struct page is initialized with the virtual address
+of the page in function alloc_slabmgmt. If kmalloc allocates an object
+that starts on this page, then kmemleak knows that this object has 2
+references. On slab_destroy, s_mem should not continue referring to any
+allocated object in the future.
 
-According to the comment in alloc_arraycache: [...] when such objects
-are allocated or transferred to another cache the pointers are not
-cleared and they could be counted as valid references during a kmemleak
-scan. Therefore, kmemleak must not scan such objects.
+Specifically, assume that initially the 4KB cache uses page[5] and its
+s_mem = 0x5000. Then assume that this cache releases page[5] and the 8KB
+cache allocates page[4] and page[5]. Subsequently, kmalloc returns an
+8KB object at address 0x4000 which will have 3 references: the returned
+pointer from kmalloc, page[4].s_mem = 0x4000, and page[5].s_mem. This
+object can leak without detection.
 
 Signed-off-by: George Prekas <george@enfabrica.net>
 ---
- mm/slab.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ mm/slab.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/mm/slab.c b/mm/slab.c
-index 29300fc1289a..a927e1a285d1 100644
+index a927e1a285d1..aa5eb725ee9c 100644
 --- a/mm/slab.c
 +++ b/mm/slab.c
-@@ -1744,6 +1744,7 @@ static struct array_cache __percpu *alloc_kmem_cache_cpus(
- 	for_each_possible_cpu(cpu) {
- 		init_arraycache(per_cpu_ptr(cpu_cache, cpu),
- 				entries, batchcount);
-+		kmemleak_no_scan(per_cpu_ptr(cpu_cache, cpu));
- 	}
+@@ -1611,6 +1611,9 @@ static void slab_destroy(struct kmem_cache *cachep, struct slab *slab)
+ {
+ 	void *freelist;
  
- 	return cpu_cache;
-@@ -3023,20 +3024,8 @@ static inline void *____cache_alloc(struct kmem_cache *cachep, gfp_t flags)
- 
- 	STATS_INC_ALLOCMISS(cachep);
- 	objp = cache_alloc_refill(cachep, flags);
--	/*
--	 * the 'ac' may be updated by cache_alloc_refill(),
--	 * and kmemleak_erase() requires its correct value.
--	 */
--	ac = cpu_cache_get(cachep);
- 
- out:
--	/*
--	 * To avoid a false negative, if an object that is in one of the
--	 * per-CPU caches is leaked, we need to make sure kmemleak doesn't
--	 * treat the array pointers as a reference to the object.
--	 */
--	if (objp)
--		kmemleak_erase(&ac->entry[ac->avail]);
- 	return objp;
- }
- 
++	/* Erase the page's virtual address from s_mem */
++	kmemleak_erase(&slab->s_mem);
++
+ 	freelist = slab->freelist;
+ 	slab_destroy_debugcheck(cachep, slab);
+ 	if (unlikely(cachep->flags & SLAB_TYPESAFE_BY_RCU))
 -- 
 2.37.1
 
