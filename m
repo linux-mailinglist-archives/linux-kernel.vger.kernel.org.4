@@ -2,300 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EA167830E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD16B678313
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbjAWR02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S232453AbjAWR0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbjAWR0Z (ORCPT
+        with ESMTP id S233703AbjAWR0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:26:25 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFD36590
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:26:24 -0800 (PST)
+        Mon, 23 Jan 2023 12:26:50 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324182E0C9;
+        Mon, 23 Jan 2023 09:26:45 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NEHPYF030291;
+        Mon, 23 Jan 2023 09:26:31 -0800
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3n8e9swpft-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 09:26:31 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ghVXmnR+gkDkraqZSAGhSTTIapsSy71UwToX/RAgW9XpWt+jqZFMEZVMx+k+8/Dl0RI1VWDfy0HDe2qJOEbxbnKs5podQ4JVDB5Z1LXmHOk+aGrCL2XIcXGaDdNEnf2kCm5ihUZ8aCVp9ySr7BfQEvfvEv80LK2/+yV3wz+3kwKWvU5fMdENqJHtKMuSY35VG/DtC/eA1aG1rk43Xio6hF0lYweEo/yfGLdGnZQ7nQ+OTQpd945WyuMsK8oVSacr17bbmHBxTTKnahY/6/rsmB8X0S5IG4X2nXSptE2xU0N1vOpouXIEP507GhjahBwcp4FTaPlDBZGjJPqj0Tdzxg==
+ b=EZUIMvP570AQCaEAVYcJs+XuENu/RYYCGqQ2Qbpfi1WtYd8yUaeMdshc+edB2wjvWy2Prs66drm1cx4+joV5f5+wJoSqpzfwks7CXLseQXYOHeBX76+MzPQ31VUnQrXGJyMaDT2yTEAtbnP2azxCv1rfQqrjqXCYzvfITqm8wqkwqdJs5qA4Jt4TIVh0zoNIRBcL2McEUauSy1dSWDRLp6sz8WXVhwdq3EpfUWOxk45saZgGCaaEu42lBpfdnwHqxFCOom7yJ+cPtGYiCneOPABLX0HkZVH3+NcAqyADp1qs+zR3OY1kCEkHycGazRdoIOwnb0s6VLw6zGkjIownxA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sZ08OtxY7DaAhRg5UDkW6dubvK3Xtq8Ke1SB3vz7R7Y=;
- b=hgh0Jv7gAxvd157iZ3N/1lip6OSfXIuTxh9o9Vs2lT3vNgyLUrojvd62eOmGXwwSlS8YUwX8N7JJ2p926OsnTY4Ey3RF7FK3+ooScq+4zaycS++uZWAPF9s8Z+H5C4IW+0+lrP4rM8QV0kEx/VgFTkl1ZTbwdfGb9bGe3bHurN3WBGqgA3hwyR99kh7i7TgNESl9roQOysPHEg7Dw7cVo9AR92bhm63XSIpXfka1lLDqcovV5Rn+sxvDByFkvh7vGYMqSlYnVy1fFJ1lnHaPGLvnCadh9N8yPa6hC13ZGZfpDTa+S74vdCA/HgP801HuuiH6L4TTs2CwL83EjUsBCg==
+ bh=tTRIbxAf9zLjEaHSl5LgFu5j6YfD21IuU8Gb+tLtkG4=;
+ b=GHLKmREckb38XeC1IkpQbaUnoBig5tJI5ek69e7+Dc5MmoZCdrHbNBptCxcTbIB92rjxrqfPJR5NQF18+ELVP2wNyZokvqK1iXB3MMUWJ7GY4mrtr2GjKSUjSmxVRyJxd4KgvWXzb2Qj7mgELZ98IEIPxL8z13PhIbFLqmKZ7LoZT2C+tO8HQn274UWlQk7SJvSh6LweySbfKbZknD8MApIF9RmLHcAntnX3CUkAjsvtXwWnGEr+J1ji71IXFgnvbrhoApLQFVwbH08xZQBFYe43C6kcb1nfkjRuP1icwHVtwoKGMSoxWZo3dqlGoFi9FrC0/hFkNnlohFFD01aLrQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sZ08OtxY7DaAhRg5UDkW6dubvK3Xtq8Ke1SB3vz7R7Y=;
- b=S1zeQ+dNra9YWX5AckPq4AA4eI/oHrQs94GtQLh0sfHsz69uzvxHU7LbmG4Hq0yiShQo+r8pRxELLQs+9fu2XmC3/idNhm2fF6Qyd66O33MRjZ2b1JfjBKuVyQBYuXSyiQeVknVj0y/V1IDPjtSTVibyJkcxCLTFhdoIqQDhcydaWHFR4Vzsm8sYFQdRdOhUYbZ4k8o2AY4NVx0AS3ScDcg7tW9gKiOOLc2EH9AZtl49n4b1TI/X/f1xIHnExhEVIy4lTUHzbTihbHBEIBkzKr/B6ETaxbJ6XyayaWfn/ntrCJXUT2vfTSyrjctsg0Y6YqzEkhB0jGv0xFX0bb8/7g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM8PR12MB5413.namprd12.prod.outlook.com (2603:10b6:8:3b::8) by
- MN2PR12MB4504.namprd12.prod.outlook.com (2603:10b6:208:24f::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.33; Mon, 23 Jan 2023 17:26:22 +0000
-Received: from DM8PR12MB5413.namprd12.prod.outlook.com
- ([fe80::f76a:b86b:c6a:b4c0]) by DM8PR12MB5413.namprd12.prod.outlook.com
- ([fe80::f76a:b86b:c6a:b4c0%5]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
- 17:26:22 +0000
-Date:   Mon, 23 Jan 2023 18:26:13 +0100
-From:   Thierry Reding <treding@nvidia.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mohan Kumar D <mkumard@nvidia.com>, will@kernel.org,
-        dmitry.baryshkov@linaro.org, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com
-Subject: Re: [PATCH v2] arm64: defconfig: Enable HDA INTEL config for ARM64
-Message-ID: <Y87DNf1tnB8aaKJS@orome>
-References: <20230117181658.17010-1-mkumard@nvidia.com>
- <e871dae2-58ac-7ad9-c198-c4e90d26c69b@linaro.org>
- <1afa38ad-716f-49f8-efd1-ed37bd8dbf6e@nvidia.com>
- <ec440deb-2970-69b8-e54d-6519c95875a8@linaro.org>
- <35eb1396-b91b-8a7f-6585-30d2f2adcf85@nvidia.com>
- <cfb9b0f2-a8fa-9bee-a04d-d195d69e4918@linaro.org>
- <Y8rHzJpEg7bMzYM6@arm.com>
- <fbeff3da-e03b-aa82-1a53-d92f95b63770@linaro.org>
- <Y86uw7QF/hMrIvbs@orome>
- <2c6deeff-bf5f-24e5-4cf2-2640ea1e7402@linaro.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="O//JUppp0jKn8+fa"
-Content-Disposition: inline
-In-Reply-To: <2c6deeff-bf5f-24e5-4cf2-2640ea1e7402@linaro.org>
-X-NVConfidentiality: public
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-ClientProxiedBy: BEXP281CA0015.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10::25)
- To DM8PR12MB5413.namprd12.prod.outlook.com (2603:10b6:8:3b::8)
+ bh=tTRIbxAf9zLjEaHSl5LgFu5j6YfD21IuU8Gb+tLtkG4=;
+ b=XwIPWLIm7tFeEAa6Iry8t3wROPLlm/5EOZEDXVZyHUumwYi4uSVE5whzT8BBuugxSUT3bpvUCCj+KKt9vNguHesos6ZqNT2M0BS7JSdwb7KxsGk9Bvv8V3jssE8pgBBrf293krwt5TKExrcLifhmNA2b+tsE1fGBe80GmvjsdFo=
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com (2603:10b6:510:ea::22)
+ by CO6PR18MB3810.namprd18.prod.outlook.com (2603:10b6:5:347::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
+ 2023 17:26:27 +0000
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::e6ca:f949:a109:b83e]) by PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::e6ca:f949:a109:b83e%2]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
+ 17:26:27 +0000
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geethasowjanya Akula <gakula@marvell.com>,
+        Jerin Jacob Kollanukkaran <jerinj@marvell.com>,
+        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
+        "jhs@mojatatu.com" <jhs@mojatatu.com>,
+        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        "saeedm@nvidia.com" <saeedm@nvidia.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "tariqt@nvidia.com" <tariqt@nvidia.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "maxtram95@gmail.com" <maxtram95@gmail.com>,
+        Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: Re: [net-next Patch v2 2/5] octeontx2-pf: qos send queues management
+Thread-Topic: [net-next Patch v2 2/5] octeontx2-pf: qos send queues management
+Thread-Index: AQHZL0/S7zsZxEsHj0aeZHreC7VI4Q==
+Date:   Mon, 23 Jan 2023 17:26:27 +0000
+Message-ID: <PH0PR18MB4474BE62B79C293DFA866967DEC89@PH0PR18MB4474.namprd18.prod.outlook.com>
+References: <20230118105107.9516-1-hkelam@marvell.com>
+ <20230118105107.9516-3-hkelam@marvell.com> <Y81oeTZiSTOCXsoK@corigine.com>
+In-Reply-To: <Y81oeTZiSTOCXsoK@corigine.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-rorf: true
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcaGtlbGFtXGFw?=
+ =?us-ascii?Q?cGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
+ =?us-ascii?Q?OWUzNWJcbXNnc1xtc2ctMGQ3YzhlYWItOWI0My0xMWVkLWI2ZDMtZDQzYjA0?=
+ =?us-ascii?Q?N2UyYjlkXGFtZS10ZXN0XDBkN2M4ZWFkLTliNDMtMTFlZC1iNmQzLWQ0M2Iw?=
+ =?us-ascii?Q?NDdlMmI5ZGJvZHkudHh0IiBzej0iMzUxMSIgdD0iMTMzMTg5NjgzODE5OTg5?=
+ =?us-ascii?Q?OTc3IiBoPSIxRWc3NHJMS0FJaU9jdlRTM0NISlVaOGZrdUE9IiBpZD0iIiBi?=
+ =?us-ascii?Q?bD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFOZ0hBQURa?=
+ =?us-ascii?Q?UzliUFR5L1pBWjdSWkh3UVRtalBudEZrZkJCT2FNOE1BQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBSEFBQUFCb0J3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?RUFBUUFCQUFBQTNUekZBQUFBQUFBQUFBQUFBQUFBQUo0QUFBQmhBR1FBWkFC?=
+ =?us-ascii?Q?eUFHVUFjd0J6QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFF?=
+ =?us-ascii?Q?QUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdNQWRRQnpBSFFBYndCdEFGOEFjQUJs?=
+ =?us-ascii?Q?QUhJQWN3QnZBRzRBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFB?=
+ =?us-ascii?Q?QUFDZUFBQUFZd0IxQUhNQWRBQnZBRzBBWHdCd0FHZ0Fid0J1QUdVQWJnQjFB?=
+ =?us-ascii?Q?RzBBWWdCbEFISUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCakFIVUFj?=
+ =?us-ascii?Q?d0IwQUc4QWJRQmZBSE1BY3dCdUFGOEFaQUJoQUhNQWFBQmZBSFlBTUFBeUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-refone: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR01B?=
+ =?us-ascii?Q?ZFFCekFIUUFid0J0QUY4QWN3QnpBRzRBWHdCckFHVUFlUUIzQUc4QWNnQmtB?=
+ =?us-ascii?Q?SE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQVl3QjFBSE1BZEFCdkFHMEFY?=
+ =?us-ascii?Q?d0J6QUhNQWJnQmZBRzRBYndCa0FHVUFiQUJwQUcwQWFRQjBBR1VBY2dCZkFI?=
+ =?us-ascii?Q?WUFNQUF5QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUlBQUFBQUFKNEFBQUJqQUhVQWN3QjBBRzhBYlFCZkFITUFjd0J1QUY4QWN3?=
+ =?us-ascii?Q?QndBR0VBWXdCbEFGOEFkZ0F3QURJQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFH?=
+ =?us-ascii?Q?UUFiQUJ3QUY4QWN3QnJBSGtBY0FCbEFGOEFZd0JvQUdFQWRBQmZBRzBBWlFC?=
+ =?us-ascii?Q?ekFITUFZUUJuQUdVQVh3QjJBREFBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQVFBQUFBQUFBQUFDQUFBQUFBQ2VBQUFBWkFCc0FIQUFYd0J6QUd3?=
+ =?us-ascii?Q?QVlRQmpBR3NBWHdCakFHZ0FZUUIwQUY4QWJRQmxBSE1BY3dCaEFHY0FaUUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-reftwo: QUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQmtBR3dBY0FCZkFIUUFaUUJoQUcwQWN3QmZBRzhBYmdCbEFHUUFjZ0JwQUhZQVpRQmZBR1lBYVFCc0FHVUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdVQWJRQmhBR2tBYkFCZkFHRUFaQUJrQUhJQVpRQnpBSE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFiUUJoQUhJQWRnQmxBR3dBYkFCZkFIUUFaUUJ5QUcwQWFRQnVBSFVBY3dBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg==
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR18MB4474:EE_|CO6PR18MB3810:EE_
+x-ms-office365-filtering-correlation-id: 1c5eaaad-82ec-4a44-6482-08dafd66f571
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: G4+UHtF3ZO3JXIw+eNCxVaTlVbIeoxrAELPyHNai0eiHkUsKXPnFAiW6NZ1QqQh7uECzEjQ/oAbvY6TKBH8tjR0Ys75AxTVzoN78/0Q4sbKZVgi63NknfLgVDBO17XcR+1hpPp43ymyiWiUK51ImMgI/EuxQA4J137JkVc6gQh0SUkNMiWXxllDZje5ZY0ljbnmO6X6dcG4N2sajeIDYV8wxYm2DlDjl1Z88vKkD4bikXPOftIHxO35ABhxFOOebvXc/5zOhXyMhULnd5iL2a/WUowF7ewhxGPcB9HFBPz+fozqerNz5GmLoenRhXOV4dr5R1t25yfYuMSK5g5SF5ZMnqeGoQlRSuGSD/Rg8XQ01DS72JhOxxCtjXjgB4wpv30XksQgjiLttFp2/B3bvqKV0INQPwtmg6yRLeehkSBw0X8PFAVga+iAQxOWg+lteH0JX/R76TCj7Ijzzh14ju3oLZhvQusXXJz8+45atPO1/oPO5seI1mesu5d8RxdOYT2EYgKysgi4QW89yJnO2AHtYxro5GQJ8LDZ5EyYvQRw2lm0MtvAcFfZ16SBkKTtj+qyfU4HFs30ibVNTu6U6OLvzPJiJyPpl5e0EGR3ZZLtB//VCODIhkK1E7pEtTyoorHq02snJPKSX/Xfxka4if28Clv3Do1IQsXDyHyhBWdOxjYylQ3Lba/Am6jFnUowFcgMIM/IYp0sOkNsmDtIBkA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB4474.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(39850400004)(136003)(376002)(396003)(451199015)(66899015)(38070700005)(38100700002)(2906002)(7416002)(52536014)(8936002)(4326008)(5660300002)(41300700001)(122000001)(83380400001)(33656002)(86362001)(26005)(478600001)(71200400001)(7696005)(66476007)(8676002)(6916009)(6506007)(186003)(55016003)(66446008)(9686003)(66946007)(54906003)(76116006)(316002)(107886003)(66556008)(64756008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uDzIKrFJGILim+c6uWa4BXH9BT/GgferFQ7wadp2NX0qRtONVhNaxqHz44R/?=
+ =?us-ascii?Q?kNJKWYzTYR5wCVWAZTE/1kUXU38NAB4LNh6PKP/gRVoGZH4Gn+BiegnuBeC8?=
+ =?us-ascii?Q?M5KgLQIe0ZM1+yaeJJQjh7goXJWrmtNBQ6bnAztmPI30U/6/d+Gy6UUZdu/Y?=
+ =?us-ascii?Q?KX+/Iss4u4VkYkAuq0/rXYprlJFuzlGJBcvBBPsEDoSdgP4lXApYQYNnoZEe?=
+ =?us-ascii?Q?ra8F54Sz5IDm3L5YWm/2wYH4mvYhoEJzQboVcGUgPGtmOxM00HxUcIA2kspt?=
+ =?us-ascii?Q?XvhofUAFFTp/7TJ5OApdP2Xb/GxozM8bF+G1Re3/lc+CyMvUqwOa9B+xFoc7?=
+ =?us-ascii?Q?kczBLtmmhztCbxpjrfbSVc1cYmFZ8fdtVgFGfFWO1qOqkbq1f4pEdeuX9ymR?=
+ =?us-ascii?Q?g3rXmP0lcNU1Rt+wnrZkDTCd6bpNq8LxQ1WYsGh9ucwoyo+3FfF0Q/0EgLms?=
+ =?us-ascii?Q?c82fXaXrPTrID8lxP64XTkoBYwPX/mfWeHmtZ8UHQm3XOPsSJHL9qVcL9AnW?=
+ =?us-ascii?Q?v+UMNYNw8CGsm12L1D6ji9gdrRcv5udj5DpzlAvl1FtbjuLhMBRetHfVZjil?=
+ =?us-ascii?Q?7R3LvuSWzIvgISt43ozRCBmmb4IYPUgg6Ecc7at9W+yYoD/r02IsFDCWvgkB?=
+ =?us-ascii?Q?CSqelTAbgOex/EyiKJXZdOnheHyIJIXmeRQmfq1Knt2RTFcP7goeUzeOvJpS?=
+ =?us-ascii?Q?2pdJfRryS+oYXwRfuZBxaIdzGggBCTX6HneTkKV5xeeupcHzjEmHNExSslbb?=
+ =?us-ascii?Q?1WsiaRLo74Zz1ZRT1kECnbrF31elZ0xnmqInW3LYJ9S3kgxOu7F2Te4/lHxU?=
+ =?us-ascii?Q?xqrbFoFtCrHzQ3S9XGEyViH6JDh2U7NPmsWSzR8YNN2slDOKqVRGGqfcKbND?=
+ =?us-ascii?Q?cVxRMU7WQiyy4nlxxTxjCEKPC0i9tR5McXwK/UtrSmfzJHcBvj+qkluw6esM?=
+ =?us-ascii?Q?XcoTcRXl/M+x+3KKFPrCeGgFoXiGSELur2S9IUpnVRUjU0gTU6j/ldr5wehT?=
+ =?us-ascii?Q?ZopER30ZUieQY1fiivhdBoItKiyLC5j1WZrYOBCK5WD945a5tI1MQQTSb0bn?=
+ =?us-ascii?Q?gfgtj5jRabrl+lds0wf4SSLj4byh7jr9nhODejDipxq/IZjLBOAA8tYjOwvk?=
+ =?us-ascii?Q?LNeslt4C32p+2tFCspPXqcB4CYP8zzeJ8to8HnSEH09wuOq4wX6c94y7mf6B?=
+ =?us-ascii?Q?OnuQomXHrUEnvTe49kbsvPOBX90q0ln5nht+nZh6p+IrwmK+chCcYBswdXRP?=
+ =?us-ascii?Q?Kx/LDzUqhYVNvSYIXYVhWErs2jmMoUi4ku7ImsKHcnYqMsJBLWLgtpbA8Cvv?=
+ =?us-ascii?Q?4hVAYCZuGyZUMJDY0i0jCQm9rOHY5cf3voHweUrj7Z7K3LZtvITna4YSaHWK?=
+ =?us-ascii?Q?WW1PgdJMewhEG59L99G3nStqF1i9BQXVbK4EAXfVPZ2kmJsq+7uyUzeLplO2?=
+ =?us-ascii?Q?sM3+eJcNkMJcQPLLYeYa34ZJbpQW0f94tYee81fJtHKm7Uk1mVf4Q6nkKTIY?=
+ =?us-ascii?Q?R29uaSOyttWe2pF/UcaQzfoI21KPF/OGak8PkEtdFXKfpcZZVp861/QKRD6i?=
+ =?us-ascii?Q?wGDV86r3hv5nWu+6tdQJXvfaQhujxB9vvbNfD5wR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR12MB5413:EE_|MN2PR12MB4504:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea24a584-766c-4098-6b83-08dafd66f25b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yeQcfXHme+A5E9BL9RHmELo8xSdTKROkya9QJdDX8eQMvl+E1FdfGoHs03872uRZQW5hmb5/95J3JmhW29uXR7/0CFuMlNar0EAnTm3VCUo6xFVCkyEWALoiQiLCQgwtMoC6jWdCgMS2hOrtMlkeww03FwGeS2OQjJKmLisnKW0ZprMc0J2b4M9nuxxFaNCZvCaRd66qTITDunC27LL5SKE7ivGtvDsyhEERLLohM84YdqNxwh5+ThtY0vMjcKYhVJx61whG1ISb0kLd4vXzGXXenmik4KPk/Fb8x0IDuLfHEc+8FCCCFL0J1t5dbtUkJevbTUGdf1Xbg6TDifIa6VSgXBsHRPyNztf9pLgK1c3BJgpW2+wHUZTeBr7kGOvlPiA+Mz3Eh2fh7esKV82Ha1XQPwrB92P9rDdFtsigLZHR2y7+q471pd1Rpuc0fVCnMqOQTUTOp1/u1mnPs7a2KUlJbJ1eMJvSdkqkUKzxoMwD0GRQGMRay4CQSSpUaTZtwau+tibxkfdeIxObUx6xI93C+BUmzFriOQe7EPYpS5nByTiPX///PGonZ+RCRSJSyY91LjGgdnEeRwmg/eT6Odpa+19jiyQMhYiqX3r7tcvl1JFLRA7GAEFLIYpgX8FpN++6rHG7f7MyqAFDxeLcvrFGMOjdJdam6GnMZEDGUJ8eUJTs8+2KT+wX4gZ/RB/I5IHrtgewVMM+c0w+ppvmFQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5413.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(136003)(376002)(346002)(396003)(366004)(451199015)(41300700001)(86362001)(5660300002)(8936002)(4326008)(2906002)(83380400001)(38100700002)(478600001)(6486002)(8676002)(6916009)(53546011)(44144004)(6506007)(9686003)(186003)(6512007)(33716001)(316002)(66946007)(54906003)(107886003)(6666004)(21480400003)(66476007)(66556008)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bkjUdoJryVc/r4mm0y+SVGqhKtYCJM9VCGnvJQLZbdYnol6aEH7svJYuZ0it?=
- =?us-ascii?Q?aAOZscu4Wk2+zKwJtFxFsSqdAq+X5uTR9VyuSoOLnpeDDeV6HS6eC3u//uQF?=
- =?us-ascii?Q?1R0VJo4ed/nrYvWKuVjVacpdlOAwef0GV1d9eyasBuLQhOMF2/lqFjtj2H44?=
- =?us-ascii?Q?kbVHEw3WdFqUmCjmIBIKiYfFWHrC0FAIW9DJUMPe8A0rk7oLimFnJpM0XDEN?=
- =?us-ascii?Q?VbUfqDKBAZdlaLh/mycJqwxLg83nzXsDoJYNToSCJMmAfQioK0TBR+RvfSHo?=
- =?us-ascii?Q?RnD+z6cnHWSAgdjn+5XW82QCQUSeGRe0fZZfUCSg9mYaYPbhsH6QELra8IjA?=
- =?us-ascii?Q?+edyAqCm++5WO4YDqKElNR3640JiP8RIuAfidInWPjVrUD//90yBp/3Zsu1C?=
- =?us-ascii?Q?uBh8MARYos7VnkTE/JMDjAvf4FhANRm+Icrwzwq8uuENRiCR/E7rPIkmsX7L?=
- =?us-ascii?Q?Y8HQ309GTvjFOG028G6upoD9H3iap63xIS9fzcuf4pcSrIX6GQGrVs/BqOEm?=
- =?us-ascii?Q?U3kAz9h8hsVsDcGkqJ1RdR9CpWs32Zb7ydEX6pTVipxxs8DpsjW4CIjemVxG?=
- =?us-ascii?Q?XCJMXk32zJ8GtOwDUHZY3EenwEAma3M1aKBrBJqKSK7dN/6TJJpYS2Cpf+5k?=
- =?us-ascii?Q?4SxMIypyMyTDxHFqSfVi7RZ1/XVkxX3tm7q4Jge8NAgBG8Gy1xTkmekMGhEb?=
- =?us-ascii?Q?68gB6RwIXgmmkrY3g64tMvQ79kwt1iHP5wv9CEimswrnYhepb+uoh0uW4ekw?=
- =?us-ascii?Q?NVIWiMBXEDapO1sjHamLiyn6emaNtZwQrQt5eslk4000EdXe6ZKJsUnZHdrB?=
- =?us-ascii?Q?LZk9SzH6E2F++Y2cl3jzW7zk/u77DZK8X5np80fU0mbSAR4I8lxkjPiFSBQ0?=
- =?us-ascii?Q?8QNwbjdIrvmtjpj/Xh9mvT79N1nj4doecBJTHjGHGnJAfY6qkmQpKYZnElPV?=
- =?us-ascii?Q?8HyCGY6MsgUrdRDVbbdTOopGajWrUzqM1zVhbPrc0qRKXYZZa+9by7fe/oIo?=
- =?us-ascii?Q?eFV4tmJNpDx0z3bh3JRXIKagK9er7u214AUvLEESnXj2mf9z2HSM8ocw/NX9?=
- =?us-ascii?Q?4umK2lRwuH+31f2Hd6NLXmPUXrlg6EmXhR0mRuabxCL/sFPrQGnb7IVmP5xB?=
- =?us-ascii?Q?Drt8JpQkKYg8KaWJOekam2VhqNAduZ0G8e9QrgsQaXG3/QeE+4pL+HaD86DT?=
- =?us-ascii?Q?ddDtqamj6LbPBEYIZwB8uGhrTMU41wPYAm3bzpBAd56KulrxvRb41m4POUNU?=
- =?us-ascii?Q?lIZifQIMPBpIcKN+/dM0fAmqoZLp1Z4hOQ/eYG/MGAXFsDz6+0apGkz2Ihjd?=
- =?us-ascii?Q?bIOuekwp4EbOyVgB513pwr0+Im4qExRlcxeUZOCPaISERj5XAhz1kT3XF9mI?=
- =?us-ascii?Q?sk8fMxKflSqj+8D3C528PYBh2LKZCpmUW9bcXeqMkmSCYYNIRkVQ2AnAqf+k?=
- =?us-ascii?Q?FX4GcdAbF39fUrlD9+M0s/tjCaN3cV1MC5aOQnd3AEDmSMzsJPfrWHXVW1wj?=
- =?us-ascii?Q?xwhRk8PwhaDwcNFuBF9xX7GkzRoGvku51GwlpqQZaDYdJdZToKXL3eEIhre3?=
- =?us-ascii?Q?ef+8LlBK4W1d3hTwVdRI+qTXA4tiEozqRGyYGTh9USyJmTTO8ATUzc0ZUHur?=
- =?us-ascii?Q?83m++CKAmG/7ctY82k5RCEnvv8CAo0DEUrAMrYqA1uXP?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea24a584-766c-4098-6b83-08dafd66f25b
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5413.namprd12.prod.outlook.com
+X-OriginatorOrg: marvell.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 17:26:22.3571
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB4474.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c5eaaad-82ec-4a44-6482-08dafd66f571
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2023 17:26:27.2374
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BP8E1kozszrAA3qA6WRvKVHuvQoYaGRYjgwy+2OMjeP3GwGVAFkf6KqAZi+9G05lqsPZv2bPx90XZ8iva4RQsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4504
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0/IK6eSfyF0XYL5NsX95+7F5pLwASchGXbG6eNc2ZytGXIfWkxLObeK1V0rCDgzvVx1+M5/vAwJX6U74T8KAEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR18MB3810
+X-Proofpoint-ORIG-GUID: FGy5x3uL78oshGqztjSwa3uXWV8Dqi--
+X-Proofpoint-GUID: FGy5x3uL78oshGqztjSwa3uXWV8Dqi--
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---O//JUppp0jKn8+fa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the inputs, will address the review comments in the next version=
+.
 
-On Mon, Jan 23, 2023 at 05:05:08PM +0100, Krzysztof Kozlowski wrote:
-> On 23/01/2023 16:58, Thierry Reding wrote:
-> > On Fri, Jan 20, 2023 at 06:00:25PM +0100, Krzysztof Kozlowski wrote:
-> >> On 20/01/2023 17:56, Catalin Marinas wrote:
-> >>> On Fri, Jan 20, 2023 at 07:20:01AM +0100, Krzysztof Kozlowski wrote:
-> >>>> On 20/01/2023 06:48, Mohan Kumar D wrote:
-> >>>>> On 18-01-2023 18:06, Krzysztof Kozlowski wrote:
-> >>>>>> External email: Use caution opening links or attachments
-> >>>>>> On 18/01/2023 12:46, Mohan Kumar D wrote:
-> >>>>>>> On 18-01-2023 13:04, Krzysztof Kozlowski wrote:
-> >>>>>>>> External email: Use caution opening links or attachments
-> >>>>>>>> On 17/01/2023 19:16, Mohan Kumar wrote:
-> >>>>>>>>> Enable CONFIG_SND_HDA_INTEL for NVIDIA PCI based graphics sound=
- card for
-> >>>>>>>>> ARM64 based platforms as Intel PCI driver was used for register=
-ing the
-> >>>>>>>>> sound card.
-> >>>>>>>> It's not a part of SoC, not a common device used during debuggin=
-g or
-> >>>>>>>> development, so I don't think it is reasonable to enable it. We =
-do not
-> >>>>>>>> enable driver just because someone uses them. Otherwise please c=
-larify
-> >>>>>>>> which board has this device embedded (not pluggable by user, but=
- embedded).
-> >>>>>>> This change is required for enabling HDA sound registration for N=
-vidia
-> >>>>>>> discrete GPU cards based on PCI and pluggable to Nvidia Jetson Pl=
-atforms.
-> >>>>>> You can plug anything to PCI slot and we do not enable every such =
-PCI
-> >>>>>> adapter.
-> >>>>> Without this config enabled, the Intel hda audio driver won't be bu=
-ilt=20
-> >>>>> and dGPU won't be able to register sound card. Do you have any=20
-> >>>>> suggestion here?
-> >>>>
-> >>>> Without hundreds of other drivers they also won't be built and won't=
- be
-> >>>> usable. Anyway, this is just defconfig, so it does not matter. You c=
-an
-> >>>> always enable it in your setup, why is this a problem?
-> >>>>
-> >>>> Again, we do not enable drivers for every PCI card.
-> >>>
-> >>> I don't think we have any set rules for what goes in a defconfig. If =
-one
-> >>> has a real use-case, we tend to enable stuff in defconfig, especially=
- if
-> >>> it's a module.
-> >>
-> >> There will be always an use case for every PCI and USB card. It's not
-> >> related to storage or networking which could justify device bringup
-> >> (rootfs). It's really not needed for any board operation. defconfig is
-> >> not for marketing products but for our development and reference platf=
-orms.
-> >=20
-> > If defconfig were only for boot-critical drivers, it's terribly bloated
+Thanks,
+Hariprasad k
+
+On Wed, Jan 18, 2023 at 04:21:04PM +0530, Hariprasad Kelam wrote:
+> From: Subbaraya Sundeep <sbhatta@marvell.com>
 >=20
-> We enable drivers for devices present in our platforms. Everything which
-> is on such platforms. For pluggable USB/PCI/whatever third-party
-> devices, then comes the argument as boot-related.
+> Current implementation is such that the number of Send queues (SQs)=20
+> are decided on the device probe which is equal to the number of online=20
+> cpus. These SQs are allocated and deallocated in interface open and c=20
+> lose calls respectively.
 >=20
-> > as it is. We enable things like multimedia, infrared and audio. None of
-> > those are critical to booting a system. Heck, we also enable most of
-> > DRM/KMS, which are useful for boot on consumer devices, but are rarely
-> > critical on development and reference platforms.
-> >=20
-> > Besides, a PCI board can be considered a development platform depending
-> > on who you are.
-> >=20
-> > I've always looked at defconfig as more of a guideline as to what's a
-> > useful baseline configuration for an architecture.
+> This patch defines new APIs for initializing and deinitializing Send=20
+> queues dynamically and allocates more number of transmit queues for=20
+> QOS feature.
 >=20
-> Yep and this one here is nowhere near that architecture. It's pluggable
-> card, not related to hardware nor arm64 (If I understood correctly). Why
-> you do not enable it on x86? Or multi_v7? or hundreds of other defconfigs?
+> Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
 
-My understanding is that the code behind SND_HDA_INTEL, despite the
-name, is in fact generic PCI HDA code and is compatible with a number of
-non-Intel devices. It's also nothing x86-specific because this code
-works on any PCI-enabled platform (it's for driving generic PCI HDA
-controllers).
+...
 
-It's quite common for people to hook up PCI cards on NVIDIA Jetson
-platforms (which are arm64). Often these will be NVIDIA GPUs, but they
-can be any brand of GPU, really (SND_HDA_INTEL supports hardware from a
-large number of vendors).
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c=20
+> b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index 88f8772a61cd..0868ae825736 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -758,11 +758,16 @@ int otx2_txschq_stop(struct otx2_nic *pfvf) =20
+> void otx2_sqb_flush(struct otx2_nic *pfvf)  {
+>  	int qidx, sqe_tail, sqe_head;
+> +	struct otx2_snd_queue *sq;
+>  	u64 incr, *ptr, val;
+>  	int timeout =3D 1000;
+> =20
+>  	ptr =3D (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
+> -	for (qidx =3D 0; qidx < pfvf->hw.tot_tx_queues; qidx++) {
+> +	for (qidx =3D 0; qidx < pfvf->hw.tot_tx_queues +=20
+> +pfvf->hw.tc_tx_queues;
 
-> >> The only argument behind this change is "I have a PCI card and I want =
-it
-> >> in defconfig", but why it has to be in defconfig in the first place?
-> >> There is no reason. This is not distro...
-> >=20
-> > That's highly subjective and honestly that argument can go in both
-> > directions. People can, after all, start from an allnoconfig and then
-> > work their way up to something that's usable on their particular device.
-> > Or they could start from an allmodconfig and work their way down.
->=20
-> I am sorry, but adding new stuff does not require arguments against.
-> Adding new stuff requires argument for it. You reverse the argumentation
-> that I need to find proves that we do not need it in mainline platforms,
-> if I got your response correctly.
+nit:
 
-Adding new stuff also doesn't require arguments in favour. At least
-that's not been my experience in kernel development. If somebody spends
-the time to write a driver, we don't tend to ask proof of why it's
-useful, we trust that they wouldn't have spent the effort if they didn't
-think it worth it.
+It seems awkward that essentially this is saying that the total tx queues i=
+s 'tot_tx_queues' + 'tc_tx_queues'.
+As I read 'tot' as being short for 'total'.
 
-Besides, this is to enable support for these various HDA controllers
-that can be plugged into Jetson platforms, which very well are mainline
-platforms.
+Also, the pfvf->hw.tot_tx_queues + pfvf->hw.tc_tx_queues pattern is rather =
+verbose and repeated often. Perhaps a helper would... help.
 
-> > The point of defconfig is to give you something that's somewhere between
-> > the two extremes. Obviously if we start enabling everything, it defeats
-> > that purpose. If we prohibit the enablement of new options, we equally
-> > limit its usefulness.
->=20
-> I don't think we discuss the same thing. There are no extremes here at
-> all. The patch is about enabling arm64-unrelated PCI pluggable device,
-> just because it came from @nvidia.com author. If you think some PCI
+Will add these changes in   next version.
 
-I think you're making this into something it's not. What would be the
-benefit for NVIDIA to enable something that is unused? If there's
-consensus that only boot-critical pieces should go into defconfig, then
-that's fine with me. Currently that's not the case, so painting this as
-some sort of marketing stunt is hardly fair.
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c=20
+> b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> index c1ea60bc2630..3acda6d289d3 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
 
-> pluggable 3rd party device is suitable for defconfig, I will bring
-> hundreds of other drivers I am also plugging over PCI to my boards, just
-> because I want some audio.
->=20
-> It's not reasonable path...
+...
 
-Well, then what is a reasonable path? We've had per-platform defconfigs
-on 32-bit ARM and people weren't happy about those. But if the single
-defconfig on 64-bit ARM doesn't generate a configuration that is useful
-for many people, then we don't need it. People could then just keep
-their own, local default configurations.
+> @@ -1688,11 +1693,13 @@ int otx2_open(struct net_device *netdev)
+> =20
+>  	netif_carrier_off(netdev);
+> =20
+> -	pf->qset.cq_cnt =3D pf->hw.rx_queues + pf->hw.tot_tx_queues;
+>  	/* RQ and SQs are mapped to different CQs,
+>  	 * so find out max CQ IRQs (i.e CINTs) needed.
+>  	 */
+>  	pf->hw.cint_cnt =3D max(pf->hw.rx_queues, pf->hw.tx_queues);
+> +	pf->hw.cint_cnt =3D max_t(u8, pf->hw.cint_cnt, pf->hw.tc_tx_queues);
 
-Surely I'm not the only one that gets annoyed if I have to tweak config
-and rebuild multiple times until I have the right configuration.
+nit: maybe this is nicer? *completely untested!*
 
-Thierry
+	pf->hw.cint_cnt =3D max3(pf->hw.rx_queues, pf->hw.tx_queues),
+			       pf->hw.tc_tx_queues);
 
---O//JUppp0jKn8+fa
-Content-Type: application/pgp-signature; name="signature.asc"
+Will add these changes in   next version.
 
------BEGIN PGP SIGNATURE-----
+...
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPOwzMACgkQ3SOs138+
-s6HVRBAAnqpWg5tTvmv0jzdT0+wr3ICHoVNHkx80os6Y5EdOvAeWJhz/tTJup6fH
-rNHKYtnyRV1Eewot7s9QAS0cEz/gXL7GiHHP7QF5bGdKcio39BMNV8tgj5l1bKz2
-XwcDFY+nJ9X9HwTum5qxmFlYNqAbNtCnlAXdFUjFoRvl26N9b8kK/1XNVXWZzmkR
-dhvLtAY9Hp+qsnn6noMphC/XYYTxTCU8RiFnSaju6BnKcckwM0+bqUykpYwSCvwW
-AupQbgjftDKquGX5nM4r3bMIF5WfGkPRdnTLug07hujFKl88K7MjjHijcyEzu1My
-v/GSKlD8Z5KEqEAVm4GbYC9cZQRPHQyW57Bom5j/aeiH5GSvZCgtApKxJv3wAj+5
-HfI0WL9cnTbJxp6CedWi37v8+M7mB/Xn0sVqXgmYLc43q9E3Hi0LI4pYJp8OWQq8
-Y7TUqoiihoB9Kqc5IUIpdPqSxV1loEgXuWu8AEDe0xpnzPCNCkD8yxrGlGM4L9bd
-DwE3N3GhA7YEs3X93Gu7kX2f5rVSVFLjIQxj820qy20Mzi7HET3Nd8EMdJGnrxeM
-jsT7fUkDkWogQaQCejZ+SdVBr7YzjLL9ym2dP44nYNwrkZS+SRVjsjzJA7ecU6GE
-tt2oAkSfJJD9rJFDiOeMOVVhABsOzwk7xyveyAaeoxRSPnOaQVk=
-=+gIA
------END PGP SIGNATURE-----
+> @@ -735,7 +741,10 @@ static void otx2_sqe_add_hdr(struct otx2_nic *pfvf, =
+struct otx2_snd_queue *sq,
+>  		sqe_hdr->aura =3D sq->aura_id;
+>  		/* Post a CQE Tx after pkt transmission */
+>  		sqe_hdr->pnc =3D 1;
+> -		sqe_hdr->sq =3D qidx;
+> +		if (pfvf->hw.tx_queues =3D=3D qidx)
+> +			sqe_hdr->sq =3D qidx + pfvf->hw.xdp_queues;
+> +		else
+> +			sqe_hdr->sq =3D qidx;
 
---O//JUppp0jKn8+fa--
+nit: maybe this is nicer? *completely untested!*
+
+		sqe_hdr =3D pfvf->hw.tx_queues !=3D qidx ?
+			  qidx + pfvf->hw.xdp_queues : qidx;
+Will add these changes in   next version.
+...
