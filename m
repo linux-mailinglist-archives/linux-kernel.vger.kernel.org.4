@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AEF678363
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71CF678361
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjAWRga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S233017AbjAWRgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 12:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbjAWRgI (ORCPT
+        with ESMTP id S232139AbjAWRfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:36:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E85D279B2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 09:35:33 -0800 (PST)
+        Mon, 23 Jan 2023 12:35:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ECC2F7A9;
+        Mon, 23 Jan 2023 09:35:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57548B80E2C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:35:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F303C433D2;
-        Mon, 23 Jan 2023 17:35:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D60CE60F1F;
+        Mon, 23 Jan 2023 17:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37001C433D2;
+        Mon, 23 Jan 2023 17:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674495319;
-        bh=R1iHUceZscWCXtjqIe/AspeQ1sp5BCJevKW61MSxvQ8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IyPOgwjTQkEDZPcEngMzjP1Vl3nBVJ6i7eZCZ4HUM7PSodh4fi4bNM19N7hgTOBuM
-         FbhgPRNGZgmjs2fu7tMrnAPCkNhvqKQOyB++ScQbJNsRLu3MAxDerB+xjECz8DjysA
-         hYtqNJQr4OBRi4G0JZJPw0nRRebAMm+UmDtWAxWwJ4dlKgJQSVKKOz6i2MmXNYchi+
-         zRenD7ld33yxG/VoTl2gVsQVD/3cYFlf5+YZs/NhflIu/uR1pt+D7PfPW3/NFAS7jU
-         4E1VJ5S+/lg0+tyG0YsEKds/Bmgxi2V/ZJrvu15ClIS0xMF/9fqzM1eKe5hzS+wYnj
-         HRahyXTwwY6aQ==
+        s=k20201202; t=1674495323;
+        bh=5rFr3SK8NODbiJMIO/96EQdPoWvC7ZvX1aJKeqYjDiY=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=sPxYAymZ9Tt2y/BXso8iv2pMXw1qhfMO0HXPxTGO5Rfqwc4g7ioAeFp62SKn5jTXw
+         VHzS27tf2mxXWueYQ3c6QImZzIrz4AIitgk3njoX8d5flmZMQztm5ZOOXpHYUk++88
+         Ba6KuNMbuzDk3lNP41b66CCtu/4Ls3GN25MJX9whiha8d6BcOSifXKB5Ke3E8J+1dM
+         kGSW8O4Pcr0i0R7esTok4xIn/Ed+QJnWIm9oIAidISpuVgPMDdqbGaYwr6Stph+Uar
+         oSJZyeyt4F/szJyC1DiBATsdzrFfVljEAn90HbqO0VKchN0QWvrg/xFdNhntyiXnhr
+         56GEAr0MDLxfw==
 From:   Mark Brown <broonie@kernel.org>
-To:     fengwk <fengwk94@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <Y8wmCutc74j/tyHP@arch>
-References: <Y8wmCutc74j/tyHP@arch>
-Subject: Re: [PATCH] ASoC: amd: yc: Add Xiaomi Redmi Book Pro 15 2022 into
- DMI table
-Message-Id: <167449531821.1496007.16660083935853354591.b4-ty@kernel.org>
-Date:   Mon, 23 Jan 2023 17:35:18 +0000
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230120075618.153664-1-krzysztof.kozlowski@linaro.org>
+References: <20230120075618.153664-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: vendor-prefixes: document
+ lineartechnology
+Message-Id: <167449532192.1496106.533312216560053841.b4-ty@kernel.org>
+Date:   Mon, 23 Jan 2023 17:35:21 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -54,21 +56,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 Jan 2023 01:51:06 +0800, fengwk wrote:
-> This model requires an additional detection quirk to enable the
-> internal microphone - BIOS doesn't seem to support AcpDmicConnected
-> (nothing in acpidump output).
+On Fri, 20 Jan 2023 08:56:17 +0100, Krzysztof Kozlowski wrote:
+> Document lineartechnology vendor prefix, already used in SPI dev.
 > 
 > 
 
 Applied to
 
-   broonie/sound.git for-next
+   broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: amd: yc: Add Xiaomi Redmi Book Pro 15 2022 into DMI table
-      commit: dcff8b7ca92d724bdaf474a3fa37a7748377813a
+[2/2] dt-bindings: trivial-devices: document SPI dev compatibles
+      commit: 025aea27732d3354b9bb797df8158a439f143bf4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
