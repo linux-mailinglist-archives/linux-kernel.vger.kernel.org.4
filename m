@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB17677614
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED65677616
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjAWIJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S231630AbjAWIKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjAWIJZ (ORCPT
+        with ESMTP id S230131AbjAWIKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:09:25 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A4413D7F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:09:23 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id k6so12057351vsk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:09:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7c/pdOExCcpLLZUD6UA3m2abu2a1/Ie4TH52nAygB5A=;
-        b=U33m8q0XyJQsgPxNmhR8Dj4rfbqxHdDFumhoFfPeYGnu3vV1RYXFseHMwdEKUqImxL
-         y3drzFDspZvSXPdG2IalmZs792vA9OP4TABizj6X4wY6lQTG0cO7VSw/HDS80+6R4Klp
-         FU6q55BEIMSjagGZTknunhScijwjxCYsP3RupTzKmfbrIhAaVrUFNsm8U28U0jeacgQL
-         iocDYOeJEkXMqR6KECJ2pFFNh82qv2cfRdo6xbtIEv7qVNj1ytkrP/BcajaLp8HLGwv1
-         Hcdo6ccu3AB1scChpieAUCJSOjkKNyR5ERKe2fGpqX4lzy1BMMo84aiF+2Cymf/V9n/I
-         iUcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7c/pdOExCcpLLZUD6UA3m2abu2a1/Ie4TH52nAygB5A=;
-        b=I6pfkhqp1ut5MKKCKoyjaBPNHIo2mFF1UauiAR4RdlsJrMNXhbc+xbHHmbrC9Mr0xo
-         SXc8AgkWauG1PLiglQEKlxnHnxH1RUmB7pstdLaZm1bdjX2914tgnt0Wbk5MhLpNztmQ
-         mg4zhpkgUfDh1yu/zD3aBlPvWIk7CcNZQUHtHYvFNTKLNqcPk5r4N2aw/aWbe3TI+y0N
-         A6RIQd40s1/3e97Txjym1IJmRAe+vOrWdJW/JWGnGb6RN7HCezAbYao/1oLC4QgnvU4L
-         BDRYOiHAC0OmyMkbRyNi0CvioGIFubdCDrxmDHx+hDjfWtFPEgnZrzbMfggxvNWKcPZy
-         /A1A==
-X-Gm-Message-State: AFqh2krxzjI3rpM1ZPMw7kv5cJjg9LW7pSBenN4Hk/QqWHEeywblD9hC
-        68E0mlXLL/mNnZl6+NkLPlTImv8ObrLxZM5kSBBEvg==
-X-Google-Smtp-Source: AMrXdXvpdjWNCIvZ712IPqqtV40RJsW2ntvWQWa078Hd7TKDuvhollsWd5E60URXbG01RNQeUmXiZ9lf9HUm3Q4FQ8k=
-X-Received: by 2002:a05:6102:4425:b0:3c8:c513:197 with SMTP id
- df37-20020a056102442500b003c8c5130197mr3009317vsb.9.1674461362523; Mon, 23
- Jan 2023 00:09:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20230122150246.321043584@linuxfoundation.org>
-In-Reply-To: <20230122150246.321043584@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 23 Jan 2023 13:39:11 +0530
-Message-ID: <CA+G9fYsS1GLzMoeh-jz8eOMbomJ=XBg_3FjQ+4w_=Dw1Mwr3rQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>, tom.saeger@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 23 Jan 2023 03:10:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5971759F8;
+        Mon, 23 Jan 2023 00:10:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9B1D01F388;
+        Mon, 23 Jan 2023 08:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674461449; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5VoBW3IYDW8+n8dbX4lAv1TdoB1Gu8ExhR4mxgHRBhg=;
+        b=DYn9tEj2gW856z+p+xj/gdx90U9nrvHGnmD0ivIEzDdV4n96rhgFr+s2vjzxQZeTwZwyvT
+        SceyNhS1TUu/1jWRHGm8V9heqKzgSm/kWNXxQwnJZNEUtpETMMiUIxfsZQSU3Okmvt52h/
+        vokCMvjTOleiBYBF5oE96rhF+dpLTck=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674461449;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5VoBW3IYDW8+n8dbX4lAv1TdoB1Gu8ExhR4mxgHRBhg=;
+        b=JNKCHDnxHBUz7+kfNKvSofs+LJpms2uAh7EOEh+xtFprY6Wm9J2KmqEiR+3oTiOhIOANhP
+        jTf9wXFHsz3aoECw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 760941357F;
+        Mon, 23 Jan 2023 08:10:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wBQfHAlBzmP1SQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 23 Jan 2023 08:10:49 +0000
+Date:   Mon, 23 Jan 2023 09:10:48 +0100
+Message-ID: <875ycxr7qv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] Docs/sound/index: Add missing SPDX License Identifier
+In-Reply-To: <20230122213650.187710-9-sj@kernel.org>
+References: <20230122213650.187710-1-sj@kernel.org>
+        <20230122213650.187710-9-sj@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 Jan 2023 at 20:51, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.8 release.
-> There are 193 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.8-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sun, 22 Jan 2023 22:36:50 +0100,
+SeongJae Park wrote:
+> 
+> Add missing SPDX License Identifier for sound documentation index file.
+> 
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+
+Acked-by: Takashi Iwai <tiwai@suse.de>
 
 
-Results from Linaro=E2=80=99s test farm.
+thanks,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Takashi
 
-* sh, build
-  - gcc-8-dreamcast_defconfig
-  - gcc-8-microdev_defconfig
-
-
-Build error logs:
-`.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-defined in discarded section `.exit.text' of crypto/algboss.o
-`.exit.text' referenced in section `__bug_table' of
-drivers/char/hw_random/core.o: defined in discarded section
-`.exit.text' of drivers/char/hw_random/core.o
-make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-
-Bisection points to this commit,
-    arch: fix broken BuildID for arm64 and riscv
-    commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
-
-Ref:
-upstream discussion thread,
-https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
-
-Steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch sh --toolchain gcc-8 --kconfig
-microdev_defconfig
-
-Build log links,
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2KgeCQc3ZdltaEFoi0Cw=
-yJlUcuk/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> ---
+>  Documentation/sound/index.rst | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/sound/index.rst b/Documentation/sound/index.rst
+> index 5abed5fc6485..7e67e12730d3 100644
+> --- a/Documentation/sound/index.rst
+> +++ b/Documentation/sound/index.rst
+> @@ -1,3 +1,5 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+>  =============================
+>  Sound Subsystem Documentation
+>  =============================
+> -- 
+> 2.25.1
+> 
