@@ -2,588 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCB5678A0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E160C678A0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 22:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjAWV5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 16:57:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S231773AbjAWV5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 16:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAWV5n (ORCPT
+        with ESMTP id S231788AbjAWV5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 16:57:43 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7223D30B1E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 13:57:41 -0800 (PST)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NLWaYw032531;
-        Mon, 23 Jan 2023 21:57:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=hmmkeNYttLmi5ho6xibf8qStzUO6n4sSFBDu3nMvfgo=;
- b=TUMnZNrMG8sZ1JgQaIvETexsFKmLX6urdKRj0DkxcTqHFuGso9MC2dAwBBrL7mdMrRa8
- 7oDMxSVW473XCjrVJrFJNytZlKWrvnYq7ULl2uWBTnx0z6v6J/wCb7P2emQFHC6SD1d8
- EOF225hboMr1wToMxmLJjllaYvrRVWXyZq4FFvnrnVRpp5fODZpNxYeyaRh7e9GR/oMN
- ddXnUe3Uzt4oCjAuRLrQBgbgXB9BCkdquLGK2DlSdR3DH79BfUJR+NH2vHq5OAmoR/GL
- E+ZWnG6j5hBLqi9u8DJqrHRw9nXcTamwS5JB/xPr9uj8tpX+UjCcxIgFi+65bQE5LH81 hw== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3na28705yg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 21:57:24 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id DB873802B88;
-        Mon, 23 Jan 2023 21:57:22 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 1646980172D;
-        Mon, 23 Jan 2023 21:57:22 +0000 (UTC)
-Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 200934)
-        id 92261300B55B7; Mon, 23 Jan 2023 15:57:21 -0600 (CST)
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Steve Wahl <steve.wahl@hpe.com>, Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] UV support for sub-NUMA clustering
-Date:   Mon, 23 Jan 2023 15:57:21 -0600
-Message-Id: <20230123215721.3757264-1-steve.wahl@hpe.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: DBPfH3JJlx4J-FWmSqQjvuM3YB_z2YmM
-X-Proofpoint-ORIG-GUID: DBPfH3JJlx4J-FWmSqQjvuM3YB_z2YmM
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 suspectscore=0 spamscore=0 clxscore=1011 mlxlogscore=999
- bulkscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301230208
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 16:57:51 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F417A8A;
+        Mon, 23 Jan 2023 13:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=QvnJUYBAAf6yHh2I0qs12OTqtrhXe/po+uAsx+ieTLc=; b=j5WKCjBiYdM+iNLcNlZZFFpQub
+        25ECzKsMfvhIKmPJW4+Ossi48R192YWe7m/mA03MCbT5FmTdpupwKh45oOJfllaavJFbZtw+jK0Lt
+        3oQK2mQxyvwGI/cHSwZ0TO9wR+ARP5/0Bbp0+4FSOlqKKdprKY2wVZsCA6wJm+Us4+EY=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41508 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pK4ov-0005jk-I7; Mon, 23 Jan 2023 16:57:42 -0500
+Date:   Mon, 23 Jan 2023 16:57:41 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
+In-Reply-To: <Y8rK1dgpNJaSy/Gb@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-12-hugo@hugovil.com>
+        <Y8rK1dgpNJaSy/Gb@mail.local>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
+ sequence for PCF2131
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sub-NUMA clustering (SNC) invalidates previous assumptions of a 1:1
-relationship between blades, sockets, and nodes.  Fix these
-assumptions and build tables correctly when SNC is enabled.
+On Fri, 20 Jan 2023 18:09:41 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-Also replace uses of BUG() and BUG_ON() with WARN_ON() and recovery.
+> On 15/12/2022 10:02:12-0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > The sequence for updating the time/date registers is slightly
+> > different between PCF2127/29 and PCF2131.
+> > 
+> > For PCF2127/29, during write operations, the time counting
+> > circuits (memory locations 03h through 09h) are automatically blocked.
+> > 
+> > For PCF2131, time/date registers write access requires setting the
+> > STOP bit and sending the clear prescaler instruction (CPR). STOP then
+> > needs to be released once write operation is completed.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 37 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index e4b78b9c03f9..11fbdab6bf01 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -39,6 +39,7 @@
+> >  #define PCF2127_REG_CTRL1		0x00
+> >  #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
+> >  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
+> > +#define PCF2127_BIT_CTRL1_STOP			BIT(5)
+> >  /* Control register 2 */
+> >  #define PCF2127_REG_CTRL2		0x01
+> >  #define PCF2127_BIT_CTRL2_AIE			BIT(1)
+> > @@ -70,6 +71,7 @@
+> >  #define PCF2131_REG_SR_RESET		0x05
+> >  #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
+> >  #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
+> > +#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
+> >  /* Time and date registers */
+> >  #define PCF2127_REG_TIME_DATE_BASE	0x03
+> >  #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
+> > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >  	/* year */
+> >  	buf[i++] = bin2bcd(tm->tm_year - 100);
+> >  
+> > -	/* write register's data */
+> > +	/* Write access to time registers:
+> > +	 * PCF2127/29: no special action required.
+> > +	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
+> > +	 *             be cleared after time registers are updated.
+> > +	 *             It is also recommended to set CPR bit, although
+> > +	 *             write access will work without it.
+> > +	 */
+> > +	if (pcf2127->cfg->has_reset_reg) {
+> 
+> This should probably be tied to the actual rtc model rather than the
+> presence of the reset register.
+> You MUST clear CPR to be able to set the time precisely.
 
-Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
----
- arch/x86/include/asm/uv/uv_hub.h   |  32 ++--
- arch/x86/kernel/apic/x2apic_uv_x.c | 245 ++++++++++++++++-------------
- 2 files changed, 160 insertions(+), 117 deletions(-)
+In fact you must actually SET the CPR bit to clear the prescaler, confusing!
 
-diff --git a/arch/x86/include/asm/uv/uv_hub.h b/arch/x86/include/asm/uv/uv_hub.h
-index d3e3197917be..5fa76c2ced51 100644
---- a/arch/x86/include/asm/uv/uv_hub.h
-+++ b/arch/x86/include/asm/uv/uv_hub.h
-@@ -177,6 +177,7 @@ struct uv_hub_info_s {
- 	unsigned short		nr_possible_cpus;
- 	unsigned short		nr_online_cpus;
- 	short			memory_nid;
-+	unsigned short		*node_to_socket;
- };
- 
- /* CPU specific info with a pointer to the hub common info struct */
-@@ -519,25 +520,30 @@ static inline int uv_socket_to_node(int socket)
- 	return _uv_socket_to_node(socket, uv_hub_info->socket_to_node);
- }
- 
-+static inline int uv_pnode_to_socket(int pnode)
-+{
-+	unsigned short *p2s = uv_hub_info->pnode_to_socket;
-+
-+	return p2s ? p2s[pnode - uv_hub_info->min_pnode] : pnode;
-+}
-+
- /* pnode, offset --> socket virtual */
- static inline void *uv_pnode_offset_to_vaddr(int pnode, unsigned long offset)
- {
- 	unsigned int m_val = uv_hub_info->m_val;
- 	unsigned long base;
--	unsigned short sockid, node, *p2s;
-+	unsigned short sockid;
- 
- 	if (m_val)
- 		return __va(((unsigned long)pnode << m_val) | offset);
- 
--	p2s = uv_hub_info->pnode_to_socket;
--	sockid = p2s ? p2s[pnode - uv_hub_info->min_pnode] : pnode;
--	node = uv_socket_to_node(sockid);
-+	sockid = uv_pnode_to_socket(pnode);
- 
- 	/* limit address of previous socket is our base, except node 0 is 0 */
--	if (!node)
-+	if (sockid == 0)
- 		return __va((unsigned long)offset);
- 
--	base = (unsigned long)(uv_hub_info->gr_table[node - 1].limit);
-+	base = (unsigned long)(uv_hub_info->gr_table[sockid - 1].limit);
- 	return __va(base << UV_GAM_RANGE_SHFT | offset);
- }
- 
-@@ -644,7 +650,7 @@ static inline int uv_cpu_blade_processor_id(int cpu)
- /* Blade number to Node number (UV2..UV4 is 1:1) */
- static inline int uv_blade_to_node(int blade)
- {
--	return blade;
-+	return uv_socket_to_node(blade);
- }
- 
- /* Blade number of current cpu. Numnbered 0 .. <#blades -1> */
-@@ -656,23 +662,27 @@ static inline int uv_numa_blade_id(void)
- /*
-  * Convert linux node number to the UV blade number.
-  * .. Currently for UV2 thru UV4 the node and the blade are identical.
-- * .. If this changes then you MUST check references to this function!
-+ * .. UV5 needs conversion when sub-numa clustering is enabled.
-  */
- static inline int uv_node_to_blade_id(int nid)
- {
--	return nid;
-+	unsigned short *n2s = uv_hub_info->node_to_socket;
-+
-+	return n2s ? n2s[nid] : nid;
- }
- 
- /* Convert a CPU number to the UV blade number */
- static inline int uv_cpu_to_blade_id(int cpu)
- {
--	return uv_node_to_blade_id(cpu_to_node(cpu));
-+	return uv_cpu_hub_info(cpu)->numa_blade_id;
- }
- 
- /* Convert a blade id to the PNODE of the blade */
- static inline int uv_blade_to_pnode(int bid)
- {
--	return uv_hub_info_list(uv_blade_to_node(bid))->pnode;
-+	unsigned short *s2p = uv_hub_info->socket_to_pnode;
-+
-+	return s2p ? s2p[bid] : bid;
- }
- 
- /* Nid of memory node on blade. -1 if no blade-local memory */
-diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
-index 482855227964..57bfc40470eb 100644
---- a/arch/x86/kernel/apic/x2apic_uv_x.c
-+++ b/arch/x86/kernel/apic/x2apic_uv_x.c
-@@ -546,7 +546,6 @@ unsigned long sn_rtc_cycles_per_second;
- EXPORT_SYMBOL(sn_rtc_cycles_per_second);
- 
- /* The following values are used for the per node hub info struct */
--static __initdata unsigned short		*_node_to_pnode;
- static __initdata unsigned short		_min_socket, _max_socket;
- static __initdata unsigned short		_min_pnode, _max_pnode, _gr_table_len;
- static __initdata struct uv_gam_range_entry	*uv_gre_table;
-@@ -554,6 +553,7 @@ static __initdata struct uv_gam_parameters	*uv_gp_table;
- static __initdata unsigned short		*_socket_to_node;
- static __initdata unsigned short		*_socket_to_pnode;
- static __initdata unsigned short		*_pnode_to_socket;
-+static __initdata unsigned short		*_node_to_socket;
- 
- static __initdata struct uv_gam_range_s		*_gr_table;
- 
-@@ -617,7 +617,9 @@ static __init void build_uv_gr_table(void)
- 
- 	bytes = _gr_table_len * sizeof(struct uv_gam_range_s);
- 	grt = kzalloc(bytes, GFP_KERNEL);
--	BUG_ON(!grt);
-+	WARN_ON_ONCE(!grt);
-+	if (!grt)
-+		return;
- 	_gr_table = grt;
- 
- 	for (; gre->type != UV_GAM_RANGE_TYPE_UNUSED; gre++) {
-@@ -1292,6 +1294,7 @@ static void __init uv_init_hub_info(struct uv_hub_info_s *hi)
- 	hi->nasid_shift		= uv_cpuid.nasid_shift;
- 	hi->min_pnode		= _min_pnode;
- 	hi->min_socket		= _min_socket;
-+	hi->node_to_socket	= _node_to_socket;
- 	hi->pnode_to_socket	= _pnode_to_socket;
- 	hi->socket_to_node	= _socket_to_node;
- 	hi->socket_to_pnode	= _socket_to_pnode;
-@@ -1490,16 +1493,56 @@ static __init void boot_init_possible_blades(struct uv_hub_info_s *hub_info)
- 	pr_info("UV: number nodes/possible blades %d\n", uv_pb);
- }
- 
-+static int __init alloc_conv_table(int num_elem, unsigned short **table)
-+{
-+	int i;
-+	size_t bytes;
-+
-+	bytes = num_elem * sizeof(*table[0]);
-+	*table = kmalloc(bytes, GFP_KERNEL);
-+	WARN_ON_ONCE(!*table);
-+	if (!*table)
-+		return -ENOMEM;
-+	for (i = 0; i < num_elem; i++)
-+		((unsigned short *)*table)[i] = SOCK_EMPTY;
-+	return 0;
-+}
-+
-+/* Remove conversion table if it's 1:1 */
-+#define FREE_1_TO_1_TABLE(tbl, min, max, max2) free_1_to_1_table(&tbl, #tbl, min, max, max2)
-+
-+static void __init free_1_to_1_table(unsigned short **tp, char *tname, int min, int max, int max2)
-+{
-+	int i;
-+	unsigned short *table = *tp;
-+
-+	if (table == NULL)
-+		return;
-+	if (max != max2)
-+		return;
-+	for (i = 0; i < max; i++) {
-+		if (i != table[i])
-+			return;
-+	}
-+	kfree(table);
-+	*tp = NULL;
-+	pr_info("UV: %s is 1:1, conversion table removed\n", tname);
-+}
-+
-+/*
-+ * Build Socket Tables
-+ * If the number of nodes is >1 per socket, socket to node table will
-+ * contain lowest node number on that socket.
-+ */
- static void __init build_socket_tables(void)
- {
- 	struct uv_gam_range_entry *gre = uv_gre_table;
--	int num, nump;
-+	int nums, numn, nump;
- 	int cpu, i, lnid;
- 	int minsock = _min_socket;
- 	int maxsock = _max_socket;
- 	int minpnode = _min_pnode;
- 	int maxpnode = _max_pnode;
--	size_t bytes;
- 
- 	if (!gre) {
- 		if (is_uv2_hub() || is_uv3_hub()) {
-@@ -1507,39 +1550,36 @@ static void __init build_socket_tables(void)
- 			return;
- 		}
- 		pr_err("UV: Error: UVsystab address translations not available!\n");
--		BUG();
-+		WARN_ON_ONCE(!gre);
-+		return;
- 	}
- 
--	/* Build socket id -> node id, pnode */
--	num = maxsock - minsock + 1;
--	bytes = num * sizeof(_socket_to_node[0]);
--	_socket_to_node = kmalloc(bytes, GFP_KERNEL);
--	_socket_to_pnode = kmalloc(bytes, GFP_KERNEL);
--
-+	numn = num_possible_nodes();
- 	nump = maxpnode - minpnode + 1;
--	bytes = nump * sizeof(_pnode_to_socket[0]);
--	_pnode_to_socket = kmalloc(bytes, GFP_KERNEL);
--	BUG_ON(!_socket_to_node || !_socket_to_pnode || !_pnode_to_socket);
-+	nums = maxsock - minsock + 1;
- 
--	for (i = 0; i < num; i++)
--		_socket_to_node[i] = _socket_to_pnode[i] = SOCK_EMPTY;
-+	/* Allocate and clear tables */
-+	if (alloc_conv_table(nump, &_pnode_to_socket) < 0)
-+		return;
-+	if (alloc_conv_table(nums, &_socket_to_pnode) < 0)
-+		return;
- 
--	for (i = 0; i < nump; i++)
--		_pnode_to_socket[i] = SOCK_EMPTY;
-+	if (alloc_conv_table(numn, &_node_to_socket) < 0)
-+		return;
-+	if (alloc_conv_table(nums, &_socket_to_node) < 0)
-+		return;
- 
- 	/* Fill in pnode/node/addr conversion list values: */
--	pr_info("UV: GAM Building socket/pnode conversion tables\n");
- 	for (; gre->type != UV_GAM_RANGE_TYPE_UNUSED; gre++) {
- 		if (gre->type == UV_GAM_RANGE_TYPE_HOLE)
- 			continue;
- 		i = gre->sockid - minsock;
--		/* Duplicate: */
--		if (_socket_to_pnode[i] != SOCK_EMPTY)
--			continue;
--		_socket_to_pnode[i] = gre->pnode;
-+		if (_socket_to_pnode[i] == SOCK_EMPTY)
-+			_socket_to_pnode[i] = gre->pnode;
- 
- 		i = gre->pnode - minpnode;
--		_pnode_to_socket[i] = gre->sockid;
-+		if (_pnode_to_socket[i] == SOCK_EMPTY)
-+			_pnode_to_socket[i] = gre->sockid;
- 
- 		pr_info("UV: sid:%02x type:%d nasid:%04x pn:%02x pn2s:%2x\n",
- 			gre->sockid, gre->type, gre->nasid,
-@@ -1549,66 +1589,39 @@ static void __init build_socket_tables(void)
- 
- 	/* Set socket -> node values: */
- 	lnid = NUMA_NO_NODE;
--	for_each_present_cpu(cpu) {
-+	for_each_possible_cpu(cpu) {
- 		int nid = cpu_to_node(cpu);
- 		int apicid, sockid;
- 
- 		if (lnid == nid)
- 			continue;
- 		lnid = nid;
-+
- 		apicid = per_cpu(x86_cpu_to_apicid, cpu);
- 		sockid = apicid >> uv_cpuid.socketid_shift;
--		_socket_to_node[sockid - minsock] = nid;
--		pr_info("UV: sid:%02x: apicid:%04x node:%2d\n",
--			sockid, apicid, nid);
--	}
- 
--	/* Set up physical blade to pnode translation from GAM Range Table: */
--	bytes = num_possible_nodes() * sizeof(_node_to_pnode[0]);
--	_node_to_pnode = kmalloc(bytes, GFP_KERNEL);
--	BUG_ON(!_node_to_pnode);
-+		if (_socket_to_node[sockid - minsock] == SOCK_EMPTY)
-+			_socket_to_node[sockid - minsock] = nid;
- 
--	for (lnid = 0; lnid < num_possible_nodes(); lnid++) {
--		unsigned short sockid;
-+		if (_node_to_socket[nid] == SOCK_EMPTY)
-+			_node_to_socket[nid] = sockid;
- 
--		for (sockid = minsock; sockid <= maxsock; sockid++) {
--			if (lnid == _socket_to_node[sockid - minsock]) {
--				_node_to_pnode[lnid] = _socket_to_pnode[sockid - minsock];
--				break;
--			}
--		}
--		if (sockid > maxsock) {
--			pr_err("UV: socket for node %d not found!\n", lnid);
--			BUG();
--		}
-+		pr_info("UV: sid:%02x: apicid:%04x socket:%02d node:%03x s2n:%03x\n",
-+			sockid,
-+			apicid,
-+			_node_to_socket[nid],
-+			nid,
-+			_socket_to_node[sockid - minsock]);
- 	}
- 
- 	/*
--	 * If socket id == pnode or socket id == node for all nodes,
-+	 * If e.g. socket id == pnode for all pnodes,
- 	 *   system runs faster by removing corresponding conversion table.
- 	 */
--	pr_info("UV: Checking socket->node/pnode for identity maps\n");
--	if (minsock == 0) {
--		for (i = 0; i < num; i++)
--			if (_socket_to_node[i] == SOCK_EMPTY || i != _socket_to_node[i])
--				break;
--		if (i >= num) {
--			kfree(_socket_to_node);
--			_socket_to_node = NULL;
--			pr_info("UV: 1:1 socket_to_node table removed\n");
--		}
--	}
--	if (minsock == minpnode) {
--		for (i = 0; i < num; i++)
--			if (_socket_to_pnode[i] != SOCK_EMPTY &&
--				_socket_to_pnode[i] != i + minpnode)
--				break;
--		if (i >= num) {
--			kfree(_socket_to_pnode);
--			_socket_to_pnode = NULL;
--			pr_info("UV: 1:1 socket_to_pnode table removed\n");
--		}
--	}
-+	FREE_1_TO_1_TABLE(_socket_to_node, _min_socket, nums, numn);
-+	FREE_1_TO_1_TABLE(_node_to_socket, _min_socket, nums, numn);
-+	FREE_1_TO_1_TABLE(_socket_to_pnode, _min_pnode, nums, nump);
-+	FREE_1_TO_1_TABLE(_pnode_to_socket, _min_pnode, nums, nump);
- }
- 
- /* Check which reboot to use */
-@@ -1692,12 +1705,13 @@ static __init int uv_system_init_hubless(void)
- static void __init uv_system_init_hub(void)
- {
- 	struct uv_hub_info_s hub_info = {0};
--	int bytes, cpu, nodeid;
-+	int bytes, cpu, nodeid, bid;
- 	unsigned short min_pnode = 9999, max_pnode = 0;
- 	char *hub = is_uv5_hub() ? "UV500" :
- 		    is_uv4_hub() ? "UV400" :
- 		    is_uv3_hub() ? "UV300" :
- 		    is_uv2_hub() ? "UV2000/3000" : NULL;
-+	struct uv_hub_info_s **uv_hub_info_list_blade;
- 
- 	if (!hub) {
- 		pr_err("UV: Unknown/unsupported UV hub\n");
-@@ -1720,9 +1734,12 @@ static void __init uv_system_init_hub(void)
- 	build_uv_gr_table();
- 	set_block_size();
- 	uv_init_hub_info(&hub_info);
--	uv_possible_blades = num_possible_nodes();
--	if (!_node_to_pnode)
-+	/* If UV2 or UV3 may need to get # blades from HW */
-+	if (is_uv(UV2|UV3) && !uv_gre_table)
- 		boot_init_possible_blades(&hub_info);
-+	else
-+		/* min/max sockets set in decode_gam_rng_tbl */
-+		uv_possible_blades = (_max_socket - _min_socket) + 1;
- 
- 	/* uv_num_possible_blades() is really the hub count: */
- 	pr_info("UV: Found %d hubs, %d nodes, %d CPUs\n", uv_num_possible_blades(), num_possible_nodes(), num_possible_cpus());
-@@ -1731,79 +1748,92 @@ static void __init uv_system_init_hub(void)
- 	hub_info.coherency_domain_number = sn_coherency_id;
- 	uv_rtc_init();
- 
-+	/*
-+	 * __uv_hub_info_list[] is indexed by node, but there is only one hub_info
-+	 * structure per blade.  First, allocate one structure per blade.
-+	 */
-+
- 	bytes = sizeof(void *) * uv_num_possible_blades();
--	__uv_hub_info_list = kzalloc(bytes, GFP_KERNEL);
--	BUG_ON(!__uv_hub_info_list);
-+	uv_hub_info_list_blade = kzalloc(bytes, GFP_KERNEL);
-+	WARN_ON_ONCE(!uv_hub_info_list_blade);
-+	if (!uv_hub_info_list_blade)
-+		return;
- 
- 	bytes = sizeof(struct uv_hub_info_s);
--	for_each_node(nodeid) {
-+	for_each_possible_blade(bid) {
- 		struct uv_hub_info_s *new_hub;
- 
--		if (__uv_hub_info_list[nodeid]) {
--			pr_err("UV: Node %d UV HUB already initialized!?\n", nodeid);
--			BUG();
--		}
--
--		/* Allocate new per hub info list */
--		new_hub = (nodeid == 0) ?  &uv_hub_info_node0 : kzalloc_node(bytes, GFP_KERNEL, nodeid);
--		BUG_ON(!new_hub);
--		__uv_hub_info_list[nodeid] = new_hub;
--		new_hub = uv_hub_info_list(nodeid);
--		BUG_ON(!new_hub);
-+		/* Allocate & fill new per hub info list */
-+		new_hub = (bid == 0) ?  &uv_hub_info_node0
-+			: kzalloc_node(bytes, GFP_KERNEL, uv_blade_to_node(bid));
-+		WARN_ON_ONCE(!new_hub);
-+		if (!new_hub)
-+			return;
-+		uv_hub_info_list_blade[bid] = new_hub;
- 		*new_hub = hub_info;
- 
- 		/* Use information from GAM table if available: */
--		if (_node_to_pnode)
--			new_hub->pnode = _node_to_pnode[nodeid];
-+		if (uv_gre_table)
-+			new_hub->pnode = uv_blade_to_pnode(bid);
- 		else /* Or fill in during CPU loop: */
- 			new_hub->pnode = 0xffff;
- 
--		new_hub->numa_blade_id = uv_node_to_blade_id(nodeid);
-+		new_hub->numa_blade_id = bid;
- 		new_hub->memory_nid = NUMA_NO_NODE;
- 		new_hub->nr_possible_cpus = 0;
- 		new_hub->nr_online_cpus = 0;
- 	}
- 
-+	/*
-+	 * Now populate __uv_hub_info_list[] for each node with the
-+	 * pointer to the struct for the blade it resides on.
-+	 */
-+
-+	bytes = sizeof(void *) * num_possible_nodes();
-+	__uv_hub_info_list = kzalloc(bytes, GFP_KERNEL);
-+	WARN_ON_ONCE(!__uv_hub_info_list);
-+	if (!__uv_hub_info_list)
-+		return;
-+
-+	for_each_node(nodeid) {
-+		__uv_hub_info_list[nodeid] = uv_hub_info_list_blade[uv_node_to_blade_id(nodeid)];
-+	}
-+
- 	/* Initialize per CPU info: */
- 	for_each_possible_cpu(cpu) {
--		int apicid = per_cpu(x86_cpu_to_apicid, cpu);
--		int numa_node_id;
-+		int apicid = early_per_cpu(x86_cpu_to_apicid, cpu);
-+		unsigned short bid;
- 		unsigned short pnode;
- 
--		nodeid = cpu_to_node(cpu);
--		numa_node_id = numa_cpu_node(cpu);
- 		pnode = uv_apicid_to_pnode(apicid);
-+		bid = uv_pnode_to_socket(pnode) - _min_socket;
- 
--		uv_cpu_info_per(cpu)->p_uv_hub_info = uv_hub_info_list(nodeid);
-+		uv_cpu_info_per(cpu)->p_uv_hub_info = uv_hub_info_list_blade[bid];
- 		uv_cpu_info_per(cpu)->blade_cpu_id = uv_cpu_hub_info(cpu)->nr_possible_cpus++;
- 		if (uv_cpu_hub_info(cpu)->memory_nid == NUMA_NO_NODE)
- 			uv_cpu_hub_info(cpu)->memory_nid = cpu_to_node(cpu);
- 
--		/* Init memoryless node: */
--		if (nodeid != numa_node_id &&
--		    uv_hub_info_list(numa_node_id)->pnode == 0xffff)
--			uv_hub_info_list(numa_node_id)->pnode = pnode;
--		else if (uv_cpu_hub_info(cpu)->pnode == 0xffff)
-+		if (uv_cpu_hub_info(cpu)->pnode == 0xffff)
- 			uv_cpu_hub_info(cpu)->pnode = pnode;
- 	}
- 
--	for_each_node(nodeid) {
--		unsigned short pnode = uv_hub_info_list(nodeid)->pnode;
-+	for_each_possible_blade(bid) {
-+		unsigned short pnode = uv_hub_info_list_blade[bid]->pnode;
- 
- 		/* Add pnode info for pre-GAM list nodes without CPUs: */
- 		if (pnode == 0xffff) {
- 			unsigned long paddr;
- 
--			paddr = node_start_pfn(nodeid) << PAGE_SHIFT;
-+			paddr = node_start_pfn(uv_blade_to_node(bid)) << PAGE_SHIFT;
- 			pnode = uv_gpa_to_pnode(uv_soc_phys_ram_to_gpa(paddr));
--			uv_hub_info_list(nodeid)->pnode = pnode;
-+			uv_hub_info_list_blade[bid]->pnode = pnode;
- 		}
- 		min_pnode = min(pnode, min_pnode);
- 		max_pnode = max(pnode, max_pnode);
--		pr_info("UV: UVHUB node:%2d pn:%02x nrcpus:%d\n",
--			nodeid,
--			uv_hub_info_list(nodeid)->pnode,
--			uv_hub_info_list(nodeid)->nr_possible_cpus);
-+		pr_info("UV: HUB:%2d pn:%02x nrcpus:%d\n",
-+			bid,
-+			uv_hub_info_list_blade[bid]->pnode,
-+			uv_hub_info_list_blade[bid]->nr_possible_cpus);
- 	}
- 
- 	pr_info("UV: min_pnode:%02x max_pnode:%02x\n", min_pnode, max_pnode);
-@@ -1811,6 +1841,9 @@ static void __init uv_system_init_hub(void)
- 	map_mmr_high(max_pnode);
- 	map_mmioh_high(min_pnode, max_pnode);
- 
-+	kfree(uv_hub_info_list_blade);
-+	uv_hub_info_list_blade = NULL;
-+
- 	uv_nmi_setup();
- 	uv_cpu_init();
- 	uv_setup_proc_files(0);
+I was already setting the CPR bit (clearing prescaler), so I modified the confusing comment.
+
+The CPR bit is only present IF the reset register is also present, that is why I simply used the presence of the reset register to take the correct action. This avoids to define a new bit or matching on a device model for that functionality (adding newer models could potentially mean modifying the model match).
+
+But if you absolutely want to match on the model, I would like to know how you would like to practically do it (maybe an example)?
+
+
+
+> 
+> > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +					 PCF2127_BIT_CTRL1_STOP,
+> > +					 PCF2127_BIT_CTRL1_STOP);
+> > +		if (err) {
+> > +			dev_err(dev, "setting STOP bit failed\n");
+> 
+> This really needs to be less verbose. There is nothing a user can really
+> do after having seen this message. Having an error in userspace will
+> anyway prompt the user to retry the operation which is the only action
+> it can do.
+
+I converted the dev_err messages to dev_dbg.
+
+In the original driver and in the same function, there is also a dev_err to handle regmap_bulk_write() failure. Do you suggest that we also make it less verbose:
+
+err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->reg_time_base, buf, i);
+ 	if (err) {
+ 		dev_err(dev,
+
+???
+
+
+> > +			return err;
+> > +		}
+> > +
+> > +		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
+> > +				   PCF2131_SR_RESET_CPR_CMD);
+> > +		if (err) {
+> > +			dev_err(dev, "sending CPR cmd failed\n");
+> > +			return err;
+> > +		}
+> > +	}
+> > +
+> > +	/* write time register's data */
+> >  	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
+> >  	if (err) {
+> >  		dev_err(dev,
+> > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >  		return err;
+> >  	}
+> >  
+> > +	if (pcf2127->cfg->has_reset_reg) {
+> > +		/* Clear STOP bit (PCF2131 only) after write is completed. */
+> > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +					 PCF2127_BIT_CTRL1_STOP, 0);
+> > +		if (err) {
+> > +			dev_err(dev, "clearing STOP bit failed\n");
+> > +			return err;
+> > +		}
+> > +	}
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.30.2
+> > 
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+
+
 -- 
-2.26.2
-
+Hugo Villeneuve <hugo@hugovil.com>
