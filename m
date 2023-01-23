@@ -2,97 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B912678638
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CA6678639
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbjAWTYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S231969AbjAWTZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjAWTYk (ORCPT
+        with ESMTP id S232629AbjAWTY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:24:40 -0500
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB57AD;
-        Mon, 23 Jan 2023 11:24:39 -0800 (PST)
-Received: by mail-ed1-f49.google.com with SMTP id x36so15797194ede.13;
-        Mon, 23 Jan 2023 11:24:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MMyITVm+spjaFdC/IumAxOobxC1X+PgdKWLIddSsFt0=;
-        b=OJbDJk3KA7BosEIKc/4POpMnEIpK4WR3My12xD8GI7GDLei/lwXGyMo5FOmAeFVuHQ
-         urywQrtom8E8zxgyYOG023dAxf+92dKJqLqC7blximBV3CJEJu5QWFkbfzYOXscE1bfD
-         zxsLCXlC2zC5f8PQCiWhFST1YDudGy/L3Npmo2k8Fnb6CPeZbmcAauwjahEYlaMzv+3J
-         48RD7PLKohtfRmGYVr+3rNdRxayE0CjGmq9ITK2B3dlBEcZzdIeS3Fm66QuEMFkf77Xg
-         sLhsYX79AEZiTXq0gqcbSBD7jxtyv4LlxCfa1MtrhjdAQGd83qTKCZcYTU8+dOYX1wwA
-         XnAg==
-X-Gm-Message-State: AO0yUKW5ED2HC8OF0ygxHc56Qx0ouel029FyzOEsidTP7PUO1Iek2oG8
-        R84DaDjnw/y8BPGtuT8PwbizNBLSWuxpJB4egvg=
-X-Google-Smtp-Source: AK7set+pgGjO2z6T4jo0KvY4uPUpTFbOgaSe2C/ypWs655SYgHtZ+FgxoBULQuHLIk/LsJlAw5rpTPUERdpojCGHhjU=
-X-Received: by 2002:a50:ec8f:0:b0:49f:6dda:9e1f with SMTP id
- e15-20020a50ec8f000000b0049f6dda9e1fmr78914edr.251.1674501878356; Mon, 23 Jan
- 2023 11:24:38 -0800 (PST)
+        Mon, 23 Jan 2023 14:24:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B5D30F2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:24:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B0B6B80DCC
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 19:24:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B45C433D2;
+        Mon, 23 Jan 2023 19:24:50 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 19:24:48 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RESEND PATCH v2 2/2] mm/kmemleak: Fix UAF bug in kmemleak_scan()
+Message-ID: <Y87fAFIxd+NMFouM@arm.com>
+References: <20230119040111.350923-1-longman@redhat.com>
+ <20230119040111.350923-3-longman@redhat.com>
+ <Y8ro6DxR1v0XlDs3@arm.com>
+ <55978b11-5e7e-4b10-dff1-398275ec68b3@redhat.com>
 MIME-Version: 1.0
-References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
- <9e24156c-65fc-d38b-317a-9cc8fb2201b9@redhat.com> <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
-In-Reply-To: <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 Jan 2023 20:24:27 +0100
-Message-ID: <CAJZ5v0g_WmbCwcqvy_VwZZNDbX48c84vmkqUdGvjX3-w24GCwg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] ACPI: video: Fix refcounting in apple_gmux_backlight_present()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55978b11-5e7e-4b10-dff1-398275ec68b3@redhat.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 7:18 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Jan 23, 2023 at 06:46:44PM +0100, Hans de Goede wrote:
-> > On 1/23/23 18:10, Andy Shevchenko wrote:
-> > > acpi_dev_get_first_match_dev() gets ACPI device with the bumped
-> > > refcount. The caller must drop it when it's done.
-> > >
-> > > Fix ACPI device refcounting in apple_gmux_backlight_present().
->
-> ...
->
-> > Thank you for your work on this, much appreciated and I like
-> > the new acpi_get_first_match_physical_node().
-> >
-> > But I don't think this patch is a good idea. There is a
-> > regression related to apple_gmux_backlight_present()
-> > with a patch-set fixing it pending.
-> >
-> > And that patch-set actually removes this function. Adding
-> > a fix for this real, but not really important leak now,
-> > will just make backporting the actual fix harder.
-> >
-> > So I would prefer for this patch to not go in and to
-> > go for (a to be submitted v2) of the patch-set fixing
-> > the regression right away instead.
->
-> Maybe I missed something, but I noticed that you actually moved (not killed)
-> the code which is currently in this function. If it's the case, I prefer my
-> fix to be imported first.
+On Fri, Jan 20, 2023 at 05:54:28PM -0500, Waiman Long wrote:
+> On 1/20/23 14:18, Catalin Marinas wrote:
+> > >   /*
+> > > @@ -633,6 +642,7 @@ static void __create_object(unsigned long ptr, size_t size,
+> > >   	object->count = 0;			/* white color initially */
+> > >   	object->jiffies = jiffies;
+> > >   	object->checksum = 0;
+> > > +	object->del_state = 0;
+> > >   	/* task information */
+> > >   	if (in_hardirq()) {
+> > > @@ -1470,9 +1480,22 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
+> > >   	if (!get_object(object))
+> > >   		return;	/* Try next object */
+> > > +	raw_spin_lock_irq(&kmemleak_lock);
+> > > +	if (object->del_state & DELSTATE_REMOVED)
+> > > +		goto unlock_put;	/* Object removed */
+> > > +	object->del_state |= DELSTATE_NO_DELETE;
+> > > +	raw_spin_unlock_irq(&kmemleak_lock);
+> > > +
+> > >   	rcu_read_unlock();
+> > >   	cond_resched();
+> > >   	rcu_read_lock();
+> > > +
+> > > +	raw_spin_lock_irq(&kmemleak_lock);
+> > > +	if (object->del_state & DELSTATE_REMOVED)
+> > > +		list_del_rcu(&object->object_list);
+> > > +	object->del_state &= ~DELSTATE_NO_DELETE;
+> > > +unlock_put:
+> > > +	raw_spin_unlock_irq(&kmemleak_lock);
+> > >   	put_object(object);
+> > >   }
+> > I'm not sure this was the only problem. We do have the problem that the
+> > current object may be removed from the list, solved above, but another
+> > scenario I had in mind is the next object being released during this
+> > brief resched period. The RCU relies on object->next->next being valid
+> > but, with a brief rcu_read_unlock(), the object->next could be freed,
+> > reallocated, so object->next->next invalid.
+> 
+> Looking at the following scenario,
+> 
+> object->next => A (removed)
+> A->next => B (removed)
+> 
+> As object->next is pointing to A, A must still be allocated and not freed
+> yet. Now if B is also removed, there are 2 possible case.
+> 
+> 1) B is removed from the list after the removal of A. In that case, it is
+> not possible that A is allocated, but B is freed.
+> 
+> 2) B is removed before A. A->next can't pointed to B when it is being
+> removed. Due to weak memory ordering, it is possible that another cpu can
+> see A->next still pointing to B. In that case, I believe that it is still
+> within the grace period where neither A or B is freed.
+> 
+> In fact, it is no different from a regular scanning of the object list
+> without ever called cond_resched().
 
-Well, what about making the new code not leak?
+More like thinking out loud:
 
-That way the separate fix won't be necessary any more, will it?
+The lockless RCU loop relies on object->next->next being valid within
+the grace period (A not freed). Due to weak memory ordering, the looping
+CPU may not observe the object->next update (removal of A) by another
+CPU, so it continues to loop over it. But since we do an
+rcu_read_unlock() in the middle of the loop, I don't think these
+assumptions are still valid, so A may be freed.
+
+What we need is that object->next reading for the following iteration
+either sees the updated object->next (B) or it sees A but the latter
+still around. I think this holds with the proposed
+kmemleak_cond_resched() since we now start a new grace period with
+rcu_read_lock() followed by taking and releasing kmemleak_lock. The
+latter would give us the memory ordering required since removing object
+A from the list does take the lock.
+
+So yeah, you are probably right, I just find it hard to get my head
+around ;). I still think it would be simpler with a single kmemleak_lock
+(no object->lock) but that's more involved than a simple fix.
+
+Assuming your (and my) reasoning above is correct:
+
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
