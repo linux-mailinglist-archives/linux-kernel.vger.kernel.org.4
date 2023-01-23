@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B8D677A2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E03B677A2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 12:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjAWLa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 06:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S231629AbjAWLbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 06:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjAWLaU (ORCPT
+        with ESMTP id S230081AbjAWLbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 06:30:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1718A11174;
-        Mon, 23 Jan 2023 03:30:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADBE160DBB;
-        Mon, 23 Jan 2023 11:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 128B5C4339B;
-        Mon, 23 Jan 2023 11:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674473416;
-        bh=20/FKvWs3D1OgmK/Ipby3rnpT21aHPODDhRIBm9Agjc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LEW2sgFdQofpm36gzlO+LZSJrkgt6WNi4h4SEpDQ1OLlhSGxBS+GZpZt+CGA5QXRO
-         2KuQyzvMQrXNTi9xHd9+oaxArd+F3QfXYTH/FY6ImK4uRPc3ojOCcSNCs6TSGz5YSY
-         C8q1l4UutrwA33DfFIi02H0HAhkeayn2mdSof/moqpeLzc7ICcKlQchJhL7Nsw5aIy
-         i+bZvEvKDuhQSn/RLnOOONLWVpaUGL2riC/ajgn3KzNrfQ0D4kVirasnrjAa+MDnPo
-         YuHBJWuNoLbqqZ3JJ/M9BHcl7Jw/xweH8s6FapBvZp1PW4dsOcZSEAUr2E6Ol69Fuq
-         t+n5enENeceeA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E980DC395CA;
-        Mon, 23 Jan 2023 11:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 23 Jan 2023 06:31:36 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8611117B;
+        Mon, 23 Jan 2023 03:31:34 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id E40F01C09F4; Mon, 23 Jan 2023 12:31:31 +0100 (CET)
+Date:   Mon, 23 Jan 2023 12:31:31 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/98] 5.10.165-rc1 review
+Message-ID: <Y85wE2OBrVvwUlLp@duo.ucw.cz>
+References: <20230122150229.351631432@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7] net/sock: Introduce trace_sk_data_ready()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167447341595.18489.6607326024797331487.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 Jan 2023 11:30:15 +0000
-References: <20230120004516.3944-1-yepeilin.cs@gmail.com>
-In-Reply-To: <20230120004516.3944-1-yepeilin.cs@gmail.com>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        peilin.ye@bytedance.com, cong.wang@bytedance.com, leon@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="EO3ICQiYStspkriT"
+Content-Disposition: inline
+In-Reply-To: <20230122150229.351631432@linuxfoundation.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+--EO3ICQiYStspkriT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 19 Jan 2023 16:45:16 -0800 you wrote:
-> From: Peilin Ye <peilin.ye@bytedance.com>
-> 
-> As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
-> callback implementations.  For example:
-> 
-> <...>
->   iperf-609  [002] .....  70.660425: sk_data_ready: family=2 protocol=6 func=sock_def_readable
->   iperf-609  [002] .....  70.660436: sk_data_ready: family=2 protocol=6 func=sock_def_readable
-> <...>
-> 
-> [...]
+Hi!
 
-Here is the summary with links:
-  - [net-next,v7] net/sock: Introduce trace_sk_data_ready()
-    https://git.kernel.org/netdev/net-next/c/40e0b0908142
+> This is the start of the stable review cycle for the 5.10.165 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Hmm. Interesting.
+
+We tested
+
+commit 9096aabfe9e099a5af5d13bb0fb36e98bb623398
+Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Mon Jan 23 10:49:12 2023 +0100
+
+    Linux 5.10.165-rc2
+
+and found no problems there, but that is -rc2 and you announced -rc1.
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
+
+Best regards,
+                                                                Pavel
 
 
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--EO3ICQiYStspkriT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY85wEwAKCRAw5/Bqldv6
+8mELAKC6XYVXnYoGaUEg3jUIDWP0zLMmfQCgnddfsEF0EEw3PXbjyldM7S6vsb0=
+=WREq
+-----END PGP SIGNATURE-----
+
+--EO3ICQiYStspkriT--
