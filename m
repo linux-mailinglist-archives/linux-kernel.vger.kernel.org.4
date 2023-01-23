@@ -2,211 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4344E6784E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D902E6784E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbjAWS24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S232443AbjAWS3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjAWS2y (ORCPT
+        with ESMTP id S232149AbjAWS3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:28:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3582432530
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:28:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3A8DB80E69
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 18:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EEAC433EF;
-        Mon, 23 Jan 2023 18:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674498454;
-        bh=mh/07EAyt5o/j5dDg4UMKVY3kmQ7MRm/LYTxrDgU2Uk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jZC1H/Vss1UeUdvRwQbJpuOJf/LrZ0IBiMyKX3nTGjSyere/ujjTMZlYu/0i9k4gY
-         TbYe8wiobWfaLNxqJ9UVbRG5KyyjOg5p9pw+Z6y6TR6eebVbXpDL7JoZjXZNFa+H/b
-         Hh6h8zqa5W0Lc+dTlW1oE9RiB+83iLPZQSZ71rZh8hyBPOeNFzmq25OpDHpIe7o+R9
-         vTpL7cf35GAEPlq7yj2aF5HhGTIpGj1wKHm4TGSyQ9R+CewxdXytigBheKGTRAz5cA
-         uaJHgW3w17mANf6KQlrRbmj3UIOceOZnvrNsKnF4XUVKYMF8si0hS74gg83zOT9M3c
-         jgBEus/P9twuA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     SeongJae Park <sj@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: Linux 6.2-rc2
-Date:   Mon, 23 Jan 2023 18:27:32 +0000
-Message-Id: <20230123182732.188863-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAK7LNATRpc3F6OKiRGsH0iLWRyykeoMy9EazPRPGWHH1T_2cUA@mail.gmail.com>
-References: 
+        Mon, 23 Jan 2023 13:29:43 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689EC32533;
+        Mon, 23 Jan 2023 10:29:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B9TUek+8erOgKfzpSbI85WEiOfkYrm+nz4R0eQYVnJY6/D8muRWOFOGWhWcyq+l08Rpi0LHkXSEzr+vPnKMXdFjIyOuuEcSQ97vljnueAIlz9a/UNbxO9MyswsqJ34Fv6EMBeAHnElBGJziGZ9t8woe/nQhwq51JncptQi8XixLGtzQaDveilvtAPbKNynNyGBBRRWCc1r+vO/6+H3WeCF4kWRUJA8W6U1EAUKLsUqv1OuNTYDshUlwnE4Ib9ADZ2TlfD9hPeYmaSNnZn438ARCGA9YTPGP1+V5Aj094RrK6HUUStYs4rfM1obaRdn0gz571lcckIDmnqTKRLHqKfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RvUtbck8/uCkZ6XxQAQMf9HHd2X0EDJ3wSN7FyWtW1Y=;
+ b=EAXwGiJ78D4aM7kg1pGT2XX7tYgJ+4Y3MkG2yVkAIE1/myuD4MQhehLrgLH9/hKQM/VXAWA7qYD+9uwSLM6jagN7EdbapJI2l89LlmtniJyL0+Ayf4RoBfRN/+areSJn/xFM+P/C3aRib7PM2eUjme7bQtjGPH/LfLUWln2208vbYC7uBE13eikqQq7xq5sV4VM/jrdVrzJXpB0z0f2eLPQ7XZqcTtO7sy2o/H5VEAtDexIIMGkbiHd97JmFcowPLi9fCYBCqeZZHrNdw7RdEIXe1+cbsiiBt2DhMIUrd9owLOUjXB8KD9AzqOyIbkyubVFCiIIZq3DYgof1j3rZmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RvUtbck8/uCkZ6XxQAQMf9HHd2X0EDJ3wSN7FyWtW1Y=;
+ b=SILtexqbHNTNRIRwiRrD0fMT3rtW+yXEAUfL5lyTUdmULKVXoKFmhRYeXMtPg3YPeUnz5q2uxybsJll+XFmxvVcV+1ytlQ3qJMfVVBC6B92lid16luHw8z0LHnBg0R5mds4OLSAqFKQoyTz7mfEy68RLTD/8C1aHCsGFPxlR+9fyAMaqn2eSbcYrqjoO5H4d6VU1jP5sn/i0vq4qgbCjpLlzOBd/uSqFMPybH9sDkVBL03YoS8Lz33UzgOojyalO5SS08cJfO6bD3RXzhgJSAZsnv3jxbPYJfO4+t9oNSwEE/4sH1XwiRSZOvgYv0DQp62F+1Ud92LNmbQr5w8hrjA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB5985.namprd12.prod.outlook.com (2603:10b6:8:68::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Mon, 23 Jan
+ 2023 18:28:33 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
+ 18:28:32 +0000
+Date:   Mon, 23 Jan 2023 14:28:31 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     kevin.tian@intel.com, shuah@kernel.org, yi.l.liu@intel.com,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: iommu: Fix test_cmd_destroy_access() call in
+ user_copy
+Message-ID: <Y87Rzy9oNKx9BWWx@nvidia.com>
+References: <20230120074204.1368-1-nicolinc@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120074204.1368-1-nicolinc@nvidia.com>
+X-ClientProxiedBy: BL1P222CA0004.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c7::9) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5985:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7326fdc5-25ec-4d66-579b-08dafd6fa1fe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IfGhtT9m7HrO9U+C/v/aI3H+Rde+kNj4nVoca7hwavQMKY5SthMEFtMwfLP3/+fJhgoYiJhjM45XFTfdkboucOpf49ZhogNJsZflN6mf387pcFSjrwSFh0Vd1e4aCxWnXRUgtVatm8GlaAPDMBRcmZjrH9pPTHF1MNB+U4xX1EW5wceEMCUjzoDvaAWz865CqIT2B8izVJNGALpTm4o6k+W31PQAV7tYctMvNqpMldfMH8E+mN5PxjYwLBL9wTb4ooZ0yh9eCNY6aALiB4OgQmp9YaGf2oM9F133Xh2nZz1CDBdmCzy3m8vBGtDlJ7iR8t0WJI25rh04YiszktX+rzV9vcgExHLViFVA0wYWt8R26FBiyCmHayY640WCuY2DNSW9x6rhRKZ7qwDO0mrEBsuHGglrLEID2KuKhuh6w2yx1Vm6AusjMZW546Z2N1dfoUPym/ho+cilS2JFiclpy3aE2ffwNRv2fyk3AHx+YEzu0eFrL/UYinP4anSpEudqHEG76WnsUu5V+QGMEuaQgzLxzaF8iBs/XIllxaVce0kPT+yNVgw1Nn3brQnsM+r+cLfE9Vw30tVoFUOetcLspR/b9Xwj7idDjUeHe3IuXbmR2x7EM1WO+igwEjQXkQplk4QfWDxx6hvfwaHkdnUYN6NdZ6drmPqDy4Qs4Dmwbsy7/Smns8JcMSjLKV85P7Mi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199015)(36756003)(66476007)(4326008)(66946007)(86362001)(4744005)(5660300002)(8676002)(6862004)(66556008)(2906002)(8936002)(38100700002)(316002)(478600001)(37006003)(6636002)(6486002)(41300700001)(83380400001)(186003)(6506007)(6512007)(26005)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dL24uyY4SJo0+jaZSTSqsAxfVpYvVEteUXU4a4v8YdMpo5v/LUEeF/rHcqCa?=
+ =?us-ascii?Q?q82thaAviAUWHGrI/+CMGLU7tfZNvyfrvdocNvtWtQUucI0hFaUGjlmBdfTo?=
+ =?us-ascii?Q?68RoBbAM8QcHAFLMfHrfRiAJC3bat68jcJOPBNCtyXdufhLwE+KgRKx5XVkH?=
+ =?us-ascii?Q?D1NvhwtczhXVCHIbHW8YjXRkS8rcKmEupIOQjHw1iazDr92vhlIisnWLgGa5?=
+ =?us-ascii?Q?7gZXt+GOz9MUFSiJBATNXrXv4LSAD2hrL9LEcIisjBjRgd+u/CRpKyDzvms3?=
+ =?us-ascii?Q?UpxV+lfqor+qIZJ9q6czgAO6V595Wx87OC2v659Cifn2gfLqlqa22FwXHZ36?=
+ =?us-ascii?Q?LzQxo/meuMWuROHjodEFdMSrn4DtfNQdAyF0pGK6E9UwQpFTHWy/XNi8ASJe?=
+ =?us-ascii?Q?h58K4DOy65h5u95XwCmQie2N2QfINEmsi5pVKK/0dDVe9OGa5KWAzJR1ETex?=
+ =?us-ascii?Q?pd8jRR/aFWOoRhASJ77ezVcz6Yu7sUaAGzJiSfFgd6PcRnEnBRYwK3aY4N0N?=
+ =?us-ascii?Q?mDgdCt19PR4uwF4GThOHWMe/pzodJ/P/EpqVQY+T0nQMPup8cTzuk7OXnEnZ?=
+ =?us-ascii?Q?VYncNsLif8HrSda3QFt94jCYPib+FRa7uKaTLU76Ppkrp+MeG16fIfHAKX9X?=
+ =?us-ascii?Q?UPUxIrwPWHPcXOU+db9weOGU5d9nSJ5U+GEhHyM+A8z5YYklYveqsZk4Bd9v?=
+ =?us-ascii?Q?XuWgNWUFsob9zpPn6JAxyepUMsQNkHHyzYbAMRL1TgCZik9+dumRqpuJ9IL7?=
+ =?us-ascii?Q?tcpGFN5o9XzddmX0pgeHDBaitkW+VrOZVM5TGjRkIAIWBSunv7gYascKZX3F?=
+ =?us-ascii?Q?tNccFldKiPGy38LDr973SBM7TTZVuKbG75aZTl7nzpAovzze7gF4mayyPn6D?=
+ =?us-ascii?Q?iql+hI57wUWhqafVk1hHzT8dMNjnUUmrrr3IiDhIb1nZrhNrZ4Alvpkq2eN2?=
+ =?us-ascii?Q?XHv9yv2zDN9pPuX7OO0Xe9zhG1uXK1x+NzSCw7nodTMAIF5XIgxizui6XUev?=
+ =?us-ascii?Q?F3T0KnhcylxyljrMGkO4/ODZePk5ZFyuTgwUhSgQYD/rxuwba5InvPgmg0ts?=
+ =?us-ascii?Q?0IBWq4VbVn7vXrmlrPNla0eDtTIifneBdJiR1Wu1miUV8EtJhyETNspJZ7YP?=
+ =?us-ascii?Q?4cILChX3taVgSXxku1yWLV3zDvYFvSR+aauHdj6N17+HaGLQUNXwpHInWCrP?=
+ =?us-ascii?Q?bX5rrQdc+WyE/Pfot+GBeHCVSoxU78N4NJhvj9jUWedfejoDbPgNOqnEyfE6?=
+ =?us-ascii?Q?U6W8ib9dz4ZV0/O1EgSe2jrXValXBgGcfNO0R9QSf8nzNFxn3L6ItGMy7G+P?=
+ =?us-ascii?Q?RrYFnZ/LCE+N/qEzG4WKiD1mBEVIOyV5JiQ+6Ylc/0c0Jud+WtlESYOoN5zl?=
+ =?us-ascii?Q?Ng3ewFBY+Im1QSEDhJORerSnJ4JfC8o56Vx6Two9UZKj1hm7oxTviuvE+J4Z?=
+ =?us-ascii?Q?KES4gwNklWn8cuuoHg0t8gjk0mAELTwBT/HU53r9D+2VSKZm52rYY/7k+mx4?=
+ =?us-ascii?Q?vw3cBk87QtMhDVAfR6QfwpDw0XU9Kja7hhGx5SDaZ18N3JVNOM7wLCuPPF+W?=
+ =?us-ascii?Q?qrSo2yTRIvXoSBww4kgVdTgYgnRYUDQITMaWkQEI?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7326fdc5-25ec-4d66-579b-08dafd6fa1fe
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 18:28:32.8906
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iZIo3Wlw2JfXkQAsdS/pqee4Je2xPdLc8x6hWSX6hEn76v/kOMO66ax3Qq371504
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5985
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 18:09:27 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Thu, Jan 19, 2023 at 11:42:04PM -0800, Nicolin Chen wrote:
+> The test_cmd_destroy_access() should end with a semicolon, so add one.
+> There is a test_ioctl_destroy(ioas_id) following already, so drop one.
+> 
+> Fixes: 57f0988706fe ("iommufd: Add a selftest")
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  tools/testing/selftests/iommu/iommufd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On Wed, Jan 11, 2023 at 4:14 AM SeongJae Park <sj@kernel.org> wrote:
-> >
-> > Hi Masahiro,
-> >
-> > On Wed, 11 Jan 2023 03:39:58 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > > On Tue, Jan 10, 2023 at 9:32 AM SeongJae Park <sj@kernel.org> wrote:
-> > > >
-> > > > On Tue, 3 Jan 2023 11:58:48 +0100 Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > >
-> > > > > On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
-> > > > > <torvalds@linux-foundation.org> wrote:
-> > > > > >
-> > > > > > On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > >
-> > > > [...]
-> > > > > --- a/include/asm-generic/vmlinux.lds.h
-> > > > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > > > @@ -896,7 +896,7 @@
-> > > > >   * Otherwise, the type of .notes section would become PROGBITS
-> > > > > instead of NOTES.
-> > > > >   */
-> > > > >  #define NOTES                                                          \
-> > > > > -       /DISCARD/ : { *(.note.GNU-stack) }                              \
-> > > > > +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
-> > > > >         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
-> > > > >                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
-> > > > >         } NOTES_HEADERS                                                 \
-> > > > >
-> > > > > The .note.GNU-stack has zero size, so the result should be the same.
-> > > > >
-> > > >
-> > > > This also fixes ARCH=um build error on my system.
-> > > >
-> > > > Tested-by: SeongJae Park <sj@kernel.org>
-> > >
-> > >
-> > >
-> > > I am able to build ARCH=um defconfig at least.
-> > >
-> > > Can you provide the steps to reproduce the build error?
-> >
-> > I do the build for kunit test, like below.
-> >
-> >     mkdir ../kunit.out
-> >     echo "
-> >         CONFIG_KUNIT=y
-> >
-> >         CONFIG_DAMON=y
-> >         CONFIG_DAMON_KUNIT_TEST=y
-> >
-> >         CONFIG_DAMON_VADDR=y
-> >         CONFIG_DAMON_VADDR_KUNIT_TEST=y
-> >
-> >         CONFIG_DEBUG_FS=y
-> >         CONFIG_DAMON_DBGFS=y
-> >         CONFIG_DAMON_DBGFS_KUNIT_TEST=y
-> >     CONFIG_DAMON_PADDR=y" > ../kunit.out/.kunitconfig
-> >     ./tools/testsing/kunit/kunit.py run --build_dir ../kunit.out
-> >     [19:12:37] Configuring KUnit Kernel ...
-> >     [19:12:37] Building KUnit Kernel ...
-> >     Populating config with:
-> >     $ make ARCH=um O=../kunit.out/ olddefconfig
-> >     Building with:
-> >     $ make ARCH=um O=../kunit.out/ --jobs=36
-> >     ERROR:root:`.exit.text' referenced in section `.uml.exitcall.exit' of arch/um/drivers/virtio_uml.o: defined in discarded section `.exit.text' of arch/um/drivers/virtio_uml.o
-> >     collect2: error: ld returned 1 exit status
-> >     make[2]: *** [/home/sjpark/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> >     make[1]: *** [/home/sjpark/linux/Makefile:1252: vmlinux] Error 2
-> >     make: *** [Makefile:242: __sub-make] Error 2
-> >
-> >
-> > Thanks,
-> > SJ
-> >
-> 
-> 
-> I did not see the error, though.
-> 
-> The test seems to have succeeded.
-> 
-> 
-> 
-> 
-> masahiro@zoe:~/ref/linux(master)$ cat ../kunit.out/.kunitconfig
-> CONFIG_KUNIT=y
-> 
-> CONFIG_DAMON=y
-> CONFIG_DAMON_KUNIT_TEST=y
-> 
-> CONFIG_DAMON_VADDR=y
-> CONFIG_DAMON_VADDR_KUNIT_TEST=y
-> 
-> CONFIG_DEBUG_FS=y
-> CONFIG_DAMON_DBGFS=y
-> CONFIG_DAMON_DBGFS_KUNIT_TEST=y
-> CONFIG_DAMON_PADDR=y
-> masahiro@zoe:~/ref/linux(master)$ ./tools/testing/kunit/kunit.py run
-> --build_dir ../kunit.out
-> [18:05:19] Configuring KUnit Kernel ...
-> Regenerating .config ...
-> Populating config with:
-> $ make ARCH=um O=../kunit.out olddefconfig
-> [18:05:22] Building KUnit Kernel ...
-> Populating config with:
-> $ make ARCH=um O=../kunit.out olddefconfig
-> Building with:
-> $ make ARCH=um O=../kunit.out --jobs=16
-> [18:05:47] Starting KUnit Kernel (1/1)...
-> [18:05:47] ============================================================
-> [18:05:47] ==================== damon (9 subtests) ====================
-> [18:05:47] [PASSED] damon_test_target
-> [18:05:47] [PASSED] damon_test_regions
-> [18:05:47] [PASSED] damon_test_aggregate
-> [18:05:47] [PASSED] damon_test_split_at
-> [18:05:47] [PASSED] damon_test_merge_two
-> [18:05:47] [PASSED] damon_test_merge_regions_of
-> [18:05:47] [PASSED] damon_test_split_regions_of
-> [18:05:47] [PASSED] damon_test_ops_registration
-> [18:05:47] [PASSED] damon_test_set_regions
-> [18:05:47] ====================== [PASSED] damon ======================
-> [18:05:47] ============== damon-operations (6 subtests) ===============
-> [18:05:47] [PASSED] damon_test_three_regions_in_vmas
-> [18:05:47] [PASSED] damon_test_apply_three_regions1
-> [18:05:47] [PASSED] damon_test_apply_three_regions2
-> [18:05:47] [PASSED] damon_test_apply_three_regions3
-> [18:05:47] [PASSED] damon_test_apply_three_regions4
-> [18:05:47] [PASSED] damon_test_split_evenly
-> [18:05:47] ================ [PASSED] damon-operations =================
-> [18:05:47] ================= damon-dbgfs (3 subtests) =================
-> [18:05:47] [PASSED] damon_dbgfs_test_str_to_ints
-> [18:05:47] [PASSED] damon_dbgfs_test_set_targets
-> [18:05:47] [PASSED] damon_dbgfs_test_set_init_regions
-> [18:05:47] =================== [PASSED] damon-dbgfs ===================
-> [18:05:47] ============================================================
-> [18:05:47] Testing complete. Ran 18 tests: passed: 18
-> [18:05:47] Elapsed time: 28.194s total, 3.017s configuring, 25.058s
-> building, 0.086s running
+Applied thanks
 
-Thank you for sharing your results.  I think it may depend on the compiler
-version, because I use a quite old compiler.
-
-    $ gcc --version
-    gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-
-Thanks,
-SJ
-
-[...]
+Jason
