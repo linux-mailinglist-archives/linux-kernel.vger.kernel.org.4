@@ -2,133 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F22678693
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6E3678698
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbjAWTlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S232736AbjAWTl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbjAWTlD (ORCPT
+        with ESMTP id S232710AbjAWTlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:41:03 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8716D977A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:41:01 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P10cr4Pq5z9xGYB
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:33:00 +0800 (CST)
-Received: from [10.81.216.232] (unknown [10.81.216.232])
-        by APP2 (Coremail) with SMTP id GxC2BwBn7mSq4s5j8bG9AA--.51816S2;
-        Mon, 23 Jan 2023 20:40:38 +0100 (CET)
-Message-ID: <dc535472-eb7f-9b73-bd9b-3ec282e90478@huaweicloud.com>
-Date:   Mon, 23 Jan 2023 20:40:24 +0100
+        Mon, 23 Jan 2023 14:41:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6457DA6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:40:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674502832;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NjaS7acAKguGX9J/sL7TrgKaT9d72gve0LYaOvny/RI=;
+        b=f2uWvGYSXj0Y1spPvaKJtFxs0ASP+IV4viHcwykigcnbCJhJURXpFn3AbpLlcxEOZYC4ug
+        SJWPSOJLMCpNHZo/g8KD9lKbPevDY71Kn+McWUUBGz/A2FXP1Y4z4WcSdHMUFhY2UfGjKZ
+        CcHG0GTC051TPf0AoI0vZA9y8lLuS1Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-7X0GtWCYNv-CM1Sjn3LXtQ-1; Mon, 23 Jan 2023 14:40:27 -0500
+X-MC-Unique: 7X0GtWCYNv-CM1Sjn3LXtQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 170BE3C38FE0;
+        Mon, 23 Jan 2023 19:40:27 +0000 (UTC)
+Received: from [10.22.34.140] (unknown [10.22.34.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C76092166B32;
+        Mon, 23 Jan 2023 19:40:26 +0000 (UTC)
+Message-ID: <cee8151d-97f3-b1e3-ee7a-ce78516e5090@redhat.com>
+Date:   Mon, 23 Jan 2023 14:40:26 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     paulmck@kernel.org, Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20230118211201.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <09f084d2-6128-7f83-b2a5-cbe236b1678d@huaweicloud.com>
- <20230119001147.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <0fae983b-2a7c-d44e-8881-53d5cc053f09@huaweicloud.com>
- <20230119184107.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <64b48a7b-624c-26bd-be9b-0522fc490b28@huaweicloud.com>
- <Y8q+u09ynxnvjVi5@rowland.harvard.edu>
- <ea37d3d9-4ed3-872a-aed9-f34c4553f6f1@huaweicloud.com>
- <Y8wimpMpajLudrYb@rowland.harvard.edu>
- <1e77c538-d04b-62b7-a859-1589bab0ddef@huaweicloud.com>
- <Y86t5ST3TcUl/rQd@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y86t5ST3TcUl/rQd@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RESEND PATCH v2 2/2] mm/kmemleak: Fix UAF bug in kmemleak_scan()
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20230119040111.350923-1-longman@redhat.com>
+ <20230119040111.350923-3-longman@redhat.com> <Y8ro6DxR1v0XlDs3@arm.com>
+ <55978b11-5e7e-4b10-dff1-398275ec68b3@redhat.com> <Y87fAFIxd+NMFouM@arm.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y87fAFIxd+NMFouM@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwBn7mSq4s5j8bG9AA--.51816S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urW8tw1UWw1xJF4fCw45Wrg_yoW8CF17pF
-        yftay0kr4DJr4a9rnFvr10gryxt3yrXFy5Wwn8Jw1xXF90qF98Gw4Skrs8C3sxXr13Ja1j
-        vrWjqay3Ja4UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU1rMa5UUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/23/2023 4:55 PM, Alan Stern wrote:
-> On Mon, Jan 23, 2023 at 12:48:42PM +0100, Jonas Oberhauser wrote:
+On 1/23/23 14:24, Catalin Marinas wrote:
+> On Fri, Jan 20, 2023 at 05:54:28PM -0500, Waiman Long wrote:
+>> On 1/20/23 14:18, Catalin Marinas wrote:
+>>>>    /*
+>>>> @@ -633,6 +642,7 @@ static void __create_object(unsigned long ptr, size_t size,
+>>>>    	object->count = 0;			/* white color initially */
+>>>>    	object->jiffies = jiffies;
+>>>>    	object->checksum = 0;
+>>>> +	object->del_state = 0;
+>>>>    	/* task information */
+>>>>    	if (in_hardirq()) {
+>>>> @@ -1470,9 +1480,22 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
+>>>>    	if (!get_object(object))
+>>>>    		return;	/* Try next object */
+>>>> +	raw_spin_lock_irq(&kmemleak_lock);
+>>>> +	if (object->del_state & DELSTATE_REMOVED)
+>>>> +		goto unlock_put;	/* Object removed */
+>>>> +	object->del_state |= DELSTATE_NO_DELETE;
+>>>> +	raw_spin_unlock_irq(&kmemleak_lock);
+>>>> +
+>>>>    	rcu_read_unlock();
+>>>>    	cond_resched();
+>>>>    	rcu_read_lock();
+>>>> +
+>>>> +	raw_spin_lock_irq(&kmemleak_lock);
+>>>> +	if (object->del_state & DELSTATE_REMOVED)
+>>>> +		list_del_rcu(&object->object_list);
+>>>> +	object->del_state &= ~DELSTATE_NO_DELETE;
+>>>> +unlock_put:
+>>>> +	raw_spin_unlock_irq(&kmemleak_lock);
+>>>>    	put_object(object);
+>>>>    }
+>>> I'm not sure this was the only problem. We do have the problem that the
+>>> current object may be removed from the list, solved above, but another
+>>> scenario I had in mind is the next object being released during this
+>>> brief resched period. The RCU relies on object->next->next being valid
+>>> but, with a brief rcu_read_unlock(), the object->next could be freed,
+>>> reallocated, so object->next->next invalid.
+>> Looking at the following scenario,
 >>
->> On 1/21/2023 6:36 PM, Alan Stern wrote:
->>> On Fri, Jan 20, 2023 at 10:41:14PM +0100, Jonas Oberhauser wrote:
->>>> On 1/20/2023 5:18 PM, Alan Stern wrote:
->>>>> On Fri, Jan 20, 2023 at 11:13:00AM +0100, Jonas Oberhauser wrote:
->>>>>> Perhaps we could say that reading an index without using it later is
->>>>>> forbidden?
->>>>>>
->>>>>> flag ~empty [Srcu-lock];data;rf;[~ domain(data;[Srcu-unlock])] as
->>>>>> thrown-srcu-cookie-on-floor
->>>>> We already flag locks that don't have a matching unlock.
->>>> Of course, but as you know this is completely orthogonal.
->>> Yeah, okay.  It doesn't hurt to add this check, but the check isn't
->>> complete.  For example, it won't catch the invalid usage here:
->>>
->>> P0(srcu_struct *ss)
->>> {
->>> 	int r1, r2;
->>>
->>> 	r1 = srcu_read_lock(ss);
->>> 	srcu_read_unlock(&ss, r1);
->>> 	r2 = srcu_read_lock(ss);
->>> 	srcu_read_unlock(&ss, r2);
->>> }
->>>
->>> exists (~0:r1=0:r2)
->>>
->>> On the other hand, how often will people make this sort of mistake in
->>> their litmus tests?  My guess is not very.
->> I currently don't care too much about the incorrect usage of herd (by
->> inspecting some final state incorrectly), only incorrect usage in the code.
-> I'm inclined to add this check to the memory model.  Would you prefer to
-> submit it yourself as a separate patch?  Or are you happy to have it
-> merged with my patch, and if so, do you have a final, preferred form for
-> the check?
+>> object->next => A (removed)
+>> A->next => B (removed)
+>>
+>> As object->next is pointing to A, A must still be allocated and not freed
+>> yet. Now if B is also removed, there are 2 possible case.
+>>
+>> 1) B is removed from the list after the removal of A. In that case, it is
+>> not possible that A is allocated, but B is freed.
+>>
+>> 2) B is removed before A. A->next can't pointed to B when it is being
+>> removed. Due to weak memory ordering, it is possible that another cpu can
+>> see A->next still pointing to B. In that case, I believe that it is still
+>> within the grace period where neither A or B is freed.
+>>
+>> In fact, it is no different from a regular scanning of the object list
+>> without ever called cond_resched().
+> More like thinking out loud:
+>
+> The lockless RCU loop relies on object->next->next being valid within
+> the grace period (A not freed). Due to weak memory ordering, the looping
+> CPU may not observe the object->next update (removal of A) by another
+> CPU, so it continues to loop over it. But since we do an
+> rcu_read_unlock() in the middle of the loop, I don't think these
+> assumptions are still valid, so A may be freed.
+>
+> What we need is that object->next reading for the following iteration
+> either sees the updated object->next (B) or it sees A but the latter
+> still around. I think this holds with the proposed
+> kmemleak_cond_resched() since we now start a new grace period with
+> rcu_read_lock() followed by taking and releasing kmemleak_lock. The
+> latter would give us the memory ordering required since removing object
+> A from the list does take the lock.
+>
+> So yeah, you are probably right, I just find it hard to get my head
+> around ;). I still think it would be simpler with a single kmemleak_lock
+> (no object->lock) but that's more involved than a simple fix.
+>
+> Assuming your (and my) reasoning above is correct:
+>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
-After clearing my confusion, I'm no longer sure if it should be added. 
-If you're still inclined to have it, I would prefer to submit the patch, 
-but I'd like to define the use-cookie relation (= 
-(data|[~Srcu-unlock];rfe)+) and use it also to clarify the srcu match 
-definition (I almost would like to do that anyways :D).
-Is that ok?
+I should have mentioned the fact that taking the kmemleak_lock will post 
+some ordering guarantee since it is done after a new rcu_read_lock(). So 
+yes, even if both A and B are removed from the object_list, they should 
+still be around and not freed yet.
 
-jonas
+Thanks for your review.
+
+Cheers,
+Longman
 
