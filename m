@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B520678629
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D07678633
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjAWTVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S232214AbjAWTW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjAWTVI (ORCPT
+        with ESMTP id S230267AbjAWTW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:21:08 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4403C3D;
-        Mon, 23 Jan 2023 11:21:07 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id o5so10639848qtr.11;
-        Mon, 23 Jan 2023 11:21:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2hDWT4R3evnKcGBTHLEy6CPS3Ves2RMswyJb5mXghec=;
-        b=JJbcjiGwPMwZwsZF48ECa0ORaxgpnlaK5tp74HwW20bfuoUECJtltCzfCrkqRPzGGu
-         OVfAK8urpYVOmfX2ujO+8uvtcWHWHvUcULcYdmqWDljQl1WVFOc142PUKIlzgEErRLjO
-         7F5XxxTXPea+tZK01hpeZTbnBvxwGriKvd4J09QNAlWHpNpeN9nhAly1j3lXRQTwocFJ
-         Vxb+EV5UB81DIQB8atKerehrbqMjbNfchC61/GDVmaYdHVTOSpDBqKNF6fjWpNkfatie
-         CfMoDRp7y+C2G4WYujGfktWtG/abkZgAGhzzCVd2bVpChyu8Hr4Qu+qmkblDHAKripau
-         ReRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2hDWT4R3evnKcGBTHLEy6CPS3Ves2RMswyJb5mXghec=;
-        b=KuSQZD6He4VA7S8q4n7edEvNlV7/fLnhZHpT4UJZqOKZTUo5arBcOewKV7f2wzNy35
-         yda3KhcNBfdJ9ARlWamvyvDHUJ+aj58TeSndZtcjLvoPVHkANZrLvoI6BP9mbju+T/Q3
-         ehBQGs4HLg3n4zTn7/53huJbjnPXhfJw4XRnilhkxvEEG+u+TzS+6qbqjFWxu9Fv4+BX
-         N+JMNjn+2cDYO0vP6ZIDYmN3pFTl9oSfEkpBpdFQKYOgoPDXYk+RaDDWw1ctmHf+xMJ/
-         CuhDOHsclIA0UA793xXgX1XHc84+/KkzFOFpQgKh+2R+HfxvwM4VpKapTWaIkhUmLSQj
-         5fHg==
-X-Gm-Message-State: AFqh2kpNmVSXzPanBFu8JAovZRWVjUljwJTUEBIaU+71sWyxcRESCCCJ
-        Mc7mVdc0/es6B0VD9Yc5fJU=
-X-Google-Smtp-Source: AMrXdXuwlvmWS4km19SGclC3Wu8j1GaOgKpCgYnLUkHTKCa1Vknzq6OZyLPgIdgdqBBdJWeNgU4txQ==
-X-Received: by 2002:ac8:4e39:0:b0:3b6:3af6:f2e1 with SMTP id d25-20020ac84e39000000b003b63af6f2e1mr35523447qtw.59.1674501666721;
-        Mon, 23 Jan 2023 11:21:06 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u24-20020ac87518000000b003b2365c9aa6sm16501554qtq.14.2023.01.23.11.20.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 11:21:05 -0800 (PST)
-Message-ID: <4509fb17-f73d-c8f8-081f-584d2d177f8e@gmail.com>
-Date:   Mon, 23 Jan 2023 11:20:55 -0800
+        Mon, 23 Jan 2023 14:22:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1536E3A6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:21:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674501695;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VoLWFoU5Ka+9eiPFeoaokFUcKGu+X2NTTidRF6e7o44=;
+        b=UvuZ+ypZvOUyYkYeGy2hynmJX+THbS0q+HtFznvClFq6TTdPxAvGfuQT8IhCOMV7MayL0t
+        DGOmrMgZB68dsYhO0lR41xR2dlxne5gcfI/+O4pK+02fS1uuKAQutw7qshEIQkKg22A5RJ
+        uuyPFNU/7bxrz6ipcZ6wRvUulHCN++0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-75-Q3dPMICPNrOrMwafxUiUBA-1; Mon, 23 Jan 2023 14:21:31 -0500
+X-MC-Unique: Q3dPMICPNrOrMwafxUiUBA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A82C380664C;
+        Mon, 23 Jan 2023 19:21:31 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7CF7CC15BA0;
+        Mon, 23 Jan 2023 19:21:30 +0000 (UTC)
+From:   Giuseppe Scrivano <gscrivan@redhat.com>
+To:     "Colin Walters" <walters@verbum.org>
+Cc:     linux-kernel@vger.kernel.org, "Kees Cook" <keescook@chromium.org>,
+        bristot@redhat.com, "Eric W. Biederman" <ebiederm@xmission.com>,
+        brauner@kernel.org, "Aleksa Sarai" <cyphar@cyphar.com>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Alexander Larsson" <alexl@redhat.com>, peterz@infradead.org,
+        bmasney@redhat.com
+Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+        <db72efdd-5cb2-4578-a322-bf894fcf6066@app.fastmail.com>
+Date:   Mon, 23 Jan 2023 20:21:28 +0100
+In-Reply-To: <db72efdd-5cb2-4578-a322-bf894fcf6066@app.fastmail.com> (Colin
+        Walters's message of "Mon, 23 Jan 2023 13:41:04 -0500")
+Message-ID: <874jshdpl3.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/6] rtc: brcmstb-waketimer: non-functional code changes
-Content-Language: en-US
-To:     Doug Berger <opendmb@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Brian Norris <computersforpeace@gmail.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230120190147.718976-1-opendmb@gmail.com>
- <20230120190147.718976-3-opendmb@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230120190147.718976-3-opendmb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,23 +66,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/23 11:01, Doug Berger wrote:
-> These changes are not intended to affect functionality, but
-> simplify the source code. They are performed here to simplify
-> review and reduce confusion with other changes in this set.
-> 
-> Since set_alarm includes the alarm_irq_enable functionality call
-> it directly from that function for simplicity (even though it
-> does nothing at the moment). The order of the declarations is
-> changed to prevent the need for a prototype.
-> 
-> The function device_init_wakeup() is used to replace the
-> functions device_set_wakeup_capable() and device_wakeup_enable()
-> since it is equivalent.
-> 
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
+"Colin Walters" <walters@verbum.org> writes:
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> On Fri, Jan 20, 2023, at 5:25 AM, Giuseppe Scrivano wrote:
+>> This patch adds a new prctl called PR_HIDE_SELF_EXE which allows
+>> processes to hide their own /proc/*/exe file. When this prctl is
+>> used, every access to /proc/*/exe for the calling process will
+>> fail with ENOENT.
+>
+> How about a mount option for procfs like `mount -t procfs procfs /proc -o rw,nosuid,nodev,magiclink-no-xdev`
+>
+> Where `magiclink-no-xdev` would cause all magic links to fail to cross a pid namespace or so?
+
+wouldn't that break also stuff like "/proc/self/fd/$FD" after you join a
+different PID namespace?
 
