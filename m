@@ -2,352 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A73967773E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4738677745
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbjAWJR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S231803AbjAWJTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjAWJR1 (ORCPT
+        with ESMTP id S231556AbjAWJTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:17:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F456EA0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674465403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k8JcC6eIt+iMfSq8qeJsa8sN2OBxI65CeQDKnD44YXg=;
-        b=AYBf8vU+Xd7/EoOazxC8CWHn+8OgsIE6PrFgpnKQk21C50K6H0SIY5ZE/kbLcklQOwHAkg
-        J3sfC9nfJAwOCxd3NPcTf/gNWnIduNcgPC37RPjOZFRlnguy39cLtn1KVAho2X1N2i3wcj
-        e+q+LVwtjUcrPMRyusP6Eu07u8zXqPo=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-B6uBeVH_PsK4ae_nqJaLRw-1; Mon, 23 Jan 2023 04:16:42 -0500
-X-MC-Unique: B6uBeVH_PsK4ae_nqJaLRw-1
-Received: by mail-wr1-f72.google.com with SMTP id v15-20020adfe4cf000000b002bf9413bc50so1010749wrm.16
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:16:41 -0800 (PST)
+        Mon, 23 Jan 2023 04:19:08 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119D813D76;
+        Mon, 23 Jan 2023 01:19:08 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id v6so5688640ilq.3;
+        Mon, 23 Jan 2023 01:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=khbEyLQVzE+wEgtx4xTJNiAeXhs9nRut8aUoBD868I4=;
+        b=c5CCjblE7nqmKdY2/9z9j+8xM213QIM8+77v4+/hLB3r6tGuhE6Dz9ESZKrkBTtCUs
+         GeaM3CXq3ic+V4UiJqOYGkjMcauo+Yj4bxRvdaQPlVWopNUUDLGQpxTD3u71cJZR6I7T
+         va5/jkgO4k/sgyAyKgDUDFeUogsJ/Yxdtr1mC4YiSvdQh/VywnU5+ERFhYpiudO3M1GW
+         Q3VU2j/56mzbk8rkkQ6rY670pCPCOxcRwOVAFB4daLKOa9CjiWBiImtKLGw2/0CSiKNE
+         iWlNeqmWoxGulN8un4DfKJMLV3VYCIvE/N9mmuaIdozVab8fItWQqxFeJge5PjvUzSOF
+         /Y3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k8JcC6eIt+iMfSq8qeJsa8sN2OBxI65CeQDKnD44YXg=;
-        b=J4/PtF2LMviV7TZU79Ufv906PUYSX7nSspaxpuO+e0OoPh6xWWCD/48rQycPAmGkzf
-         DMiiClKceA7A0IhMJEGO8vvP5KJW7fDjIWCcnyPOSXGW6SDJwA/vz4PywzEkhqElZx81
-         N3/2QjJimbx/ms1HLHDab50B/wKgzTGo2FHRawrUL9WoJhIgt/6U+aA1j2ACOJAEDJKW
-         D+idyrO/0GBCaqsKXGyvwcKq9JqRK9/9SZBxw4VmszJd+dHkLQSqJwWlrrUY1tb6rOMT
-         xoNcGjaE95rJ8hO9kf3Wr5jpRGeh9MeDsjDokqjMXpAI01Ui6wCHTLn6LZxNjKxCFhSh
-         xMrQ==
-X-Gm-Message-State: AFqh2kofmcmosskMGOpig79uOuV4DWAif9xvcNS0sHTZVqq882nBRqOv
-        dKvIfpyAV1leGO3AFF6keBSyPdkDchjdYPHNI2Rxq3Yzq+naFrtsVRHhimtQ3GOO3N0cZMypczc
-        r4HvO+/Fj6UAV4GF1wIuHgUcJ
-X-Received: by 2002:a05:600c:1c86:b0:3da:fa75:ce58 with SMTP id k6-20020a05600c1c8600b003dafa75ce58mr26719021wms.21.1674465400462;
-        Mon, 23 Jan 2023 01:16:40 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuupSrdeuharN/DJudQsmcwvHAen3BCVSbfnv8VMnK/LetCsRFdTz9vm9krb5wqXvP+aX6kLg==
-X-Received: by 2002:a05:600c:1c86:b0:3da:fa75:ce58 with SMTP id k6-20020a05600c1c8600b003dafa75ce58mr26718979wms.21.1674465400042;
-        Mon, 23 Jan 2023 01:16:40 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
-        by smtp.gmail.com with ESMTPSA id bi13-20020a05600c3d8d00b003daf98d7e35sm10026313wmb.14.2023.01.23.01.16.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 01:16:39 -0800 (PST)
-Message-ID: <5ddbd710-1b4d-71ed-8dfe-928449a6f635@redhat.com>
-Date:   Mon, 23 Jan 2023 10:16:37 +0100
+        bh=khbEyLQVzE+wEgtx4xTJNiAeXhs9nRut8aUoBD868I4=;
+        b=R8AtiV/xUY1VZQifggkwhh41K2gBKjDzRTrfUOG53VVt7xjazwNp4hMV0N/H+jG7Fg
+         MspwQPFW1YOPSR6HYlffop98VZptGelf9COhyJ2awRQQfQpXJ+z1lpDL8tpBPlgzOjSD
+         WVM9he8SRybhY0xek8XBtoSwuldCU9vMJH0Jhzo3uDdNZv4+qbnBHpYuoGu0Y3Dw0QmM
+         3F9y9B3+Ae8MVV2WPB4rb713VO0d+j9s2Y75b46A2Pq9Mty3kCBfSWkCx11FWxvvLCSm
+         bX5VBCtUx7C/z/Uk750eCp4Hl1so6yG1ZcwEDPtCllK6JFi0TYMwefsLK2N1iYLiLrqG
+         au0g==
+X-Gm-Message-State: AFqh2kpAGTdM8W/55b1ZroYN8NvEWoEcfX4RCHDm7CQ9dFHB7n8io+7Z
+        rpxbbqanDZaoeRFTSLYUbNA=
+X-Google-Smtp-Source: AMrXdXvHdP4NczA/igMGEEpX6VwKUZSVKU5LDJyYypxGA3qxDRcW+ssoSEIwPM9ZiuhZGygXpEq3jw==
+X-Received: by 2002:a92:ce8f:0:b0:30f:48ea:3554 with SMTP id r15-20020a92ce8f000000b0030f48ea3554mr10222882ilo.16.1674465547351;
+        Mon, 23 Jan 2023 01:19:07 -0800 (PST)
+Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a02ccf2000000b003a5f25b1888sm5575587jaq.35.2023.01.23.01.19.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 01:19:06 -0800 (PST)
+From:   Sungwoo Kim <happiness.sung.woo@gmail.com>
+X-Google-Original-From: Sungwoo Kim <git@sung-woo.kim>
+Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org (open list:BLUETOOTH SUBSYSTEM),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        linux-kernel@vger.kernel.org (open list)
+Subject: Bluetooth: L2cap: use-after-free in l2cap_sock_kill
+Date:   Mon, 23 Jan 2023 04:17:09 -0500
+Message-Id: <20230123091708.4112735-1-git@sung-woo.kim>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 10/39] x86/mm: Introduce _PAGE_COW
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-11-rick.p.edgecombe@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230119212317.8324-11-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.01.23 22:22, Rick Edgecombe wrote:
-> Some OSes have a greater dependence on software available bits in PTEs than
-> Linux. That left the hardware architects looking for a way to represent a
-> new memory type (shadow stack) within the existing bits. They chose to
-> repurpose a lightly-used state: Write=0,Dirty=1. So in order to support
-> shadow stack memory, Linux should avoid creating memory with this PTE bit
-> combination unless it intends for it to be shadow stack.
-> 
-> The reason it's lightly used is that Dirty=1 is normally set by HW
-> _before_ a write. A write with a Write=0 PTE would typically only generate
-> a fault, not set Dirty=1. Hardware can (rarely) both set Dirty=1 *and*
-> generate the fault, resulting in a Write=0,Dirty=1 PTE. Hardware which
-> supports shadow stacks will no longer exhibit this oddity.
-> 
-> So that leaves Write=0,Dirty=1 PTEs created in software. To achieve this,
-> in places where Linux normally creates Write=0,Dirty=1, it can use the
-> software-defined _PAGE_COW in place of the hardware _PAGE_DIRTY. In other
-> words, whenever Linux needs to create Write=0,Dirty=1, it instead creates
-> Write=0,Cow=1 except for shadow stack, which is Write=0,Dirty=1.
-> Further differentiated by VMA flags, these PTE bit combinations would be
-> set as follows for various types of memory:
-> 
-> (Write=0,Cow=1,Dirty=0):
->   - A modified, copy-on-write (COW) page. Previously when a typical
->     anonymous writable mapping was made COW via fork(), the kernel would
->     mark it Write=0,Dirty=1. Now it will instead use the Cow bit. This
->     happens in copy_present_pte().
->   - A R/O page that has been COW'ed. The user page is in a R/O VMA,
->     and get_user_pages(FOLL_FORCE) needs a writable copy. The page fault
->     handler creates a copy of the page and sets the new copy's PTE as
->     Write=0 and Cow=1.
->   - A shared shadow stack PTE. When a shadow stack page is being shared
->     among processes (this happens at fork()), its PTE is made Dirty=0, so
->     the next shadow stack access causes a fault, and the page is
->     duplicated and Dirty=1 is set again. This is the COW equivalent for
->     shadow stack pages, even though it's copy-on-access rather than
->     copy-on-write.
-> 
-> (Write=0,Cow=0,Dirty=1):
->   - A shadow stack PTE.
->   - A Cow PTE created when a processor without shadow stack support set
->     Dirty=1.
-> 
-> There are six bits left available to software in the 64-bit PTE after
-> consuming a bit for _PAGE_COW. No space is consumed in 32-bit kernels
-> because shadow stacks are not enabled there.
-> 
-> Implement only the infrastructure for _PAGE_COW. Changes to start
-> creating _PAGE_COW PTEs will follow once other pieces are in place.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> ---
-> 
-> v5:
->   - Fix log, comments and whitespace (Boris)
->   - Remove capitalization on shadow stack (Boris)
-> 
-> v4:
->   - Teach pte_flags_need_flush() about _PAGE_COW bit
->   - Break apart patch for better bisectability
-> 
-> v3:
->   - Add comment around _PAGE_TABLE in response to comment
->     from (Andrew Cooper)
->   - Check for PSE in pmd_shstk (Andrew Cooper)
->   - Get to the point quicker in commit log (Andrew Cooper)
->   - Clarify and reorder commit log for why the PTE bit examples have
->     multiple entries. Apply same changes for comment. (peterz)
->   - Fix comment that implied dirty bit for COW was a specific x86 thing
->     (peterz)
->   - Fix swapping of Write/Dirty (PeterZ)
-> 
-> v2:
->   - Update commit log with comments (Dave Hansen)
->   - Add comments in code to explain pte modification code better (Dave)
->   - Clarify info on the meaning of various Write,Cow,Dirty combinations
-> 
->   arch/x86/include/asm/pgtable.h       | 78 ++++++++++++++++++++++++++++
->   arch/x86/include/asm/pgtable_types.h | 59 +++++++++++++++++++--
->   arch/x86/include/asm/tlbflush.h      |  3 +-
->   3 files changed, 134 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index b39f16c0d507..6d2f612c04b5 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -301,6 +301,44 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
->   	return native_make_pte(v & ~clear);
->   }
->   
-> +/*
-> + * Normally COW memory can result in Dirty=1,Write=0 PTEs. But in the case
-> + * of X86_FEATURE_USER_SHSTK, the software COW bit is used, since the
-> + * Dirty=1,Write=0 will result in the memory being treated as shadow stack
-> + * by the HW. So when creating COW memory, a software bit is used
-> + * _PAGE_BIT_COW. The following functions pte_mkcow() and pte_clear_cow()
-> + * take a PTE marked conventionally COW (Dirty=1) and transition it to the
-> + * shadow stack compatible version of COW (Cow=1).
-> + */
-> +static inline pte_t pte_mkcow(pte_t pte)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return pte;
-> +
-> +	pte = pte_clear_flags(pte, _PAGE_DIRTY);
-> +	return pte_set_flags(pte, _PAGE_COW);
-> +}
-> +
-> +static inline pte_t pte_clear_cow(pte_t pte)
-> +{
-> +	/*
-> +	 * _PAGE_COW is unnecessary on !X86_FEATURE_USER_SHSTK kernels, since
-> +	 * the HW dirty bit can be used without creating shadow stack memory.
-> +	 * See the _PAGE_COW definition for more details.
-> +	 */
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return pte;
-> +
-> +	/*
-> +	 * PTE is getting copied-on-write, so it will be dirtied
-> +	 * if writable, or made shadow stack if shadow stack and
-> +	 * being copied on access. Set the dirty bit for both
-> +	 * cases.
-> +	 */
-> +	pte = pte_set_flags(pte, _PAGE_DIRTY);
-> +	return pte_clear_flags(pte, _PAGE_COW);
-> +}
-> +
->   #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
->   static inline int pte_uffd_wp(pte_t pte)
->   {
-> @@ -413,6 +451,26 @@ static inline pmd_t pmd_clear_flags(pmd_t pmd, pmdval_t clear)
->   	return native_make_pmd(v & ~clear);
->   }
->   
-> +/* See comments above pte_mkcow() */
-> +static inline pmd_t pmd_mkcow(pmd_t pmd)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return pmd;
-> +
-> +	pmd = pmd_clear_flags(pmd, _PAGE_DIRTY);
-> +	return pmd_set_flags(pmd, _PAGE_COW);
-> +}
-> +
-> +/* See comments above pte_mkcow() */
-> +static inline pmd_t pmd_clear_cow(pmd_t pmd)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return pmd;
-> +
-> +	pmd = pmd_set_flags(pmd, _PAGE_DIRTY);
-> +	return pmd_clear_flags(pmd, _PAGE_COW);
-> +}
-> +
->   #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
->   static inline int pmd_uffd_wp(pmd_t pmd)
->   {
-> @@ -484,6 +542,26 @@ static inline pud_t pud_clear_flags(pud_t pud, pudval_t clear)
->   	return native_make_pud(v & ~clear);
->   }
->   
-> +/* See comments above pte_mkcow() */
-> +static inline pud_t pud_mkcow(pud_t pud)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return pud;
-> +
-> +	pud = pud_clear_flags(pud, _PAGE_DIRTY);
-> +	return pud_set_flags(pud, _PAGE_COW);
-> +}
-> +
-> +/* See comments above pte_mkcow() */
-> +static inline pud_t pud_clear_cow(pud_t pud)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return pud;
-> +
-> +	pud = pud_set_flags(pud, _PAGE_DIRTY);
-> +	return pud_clear_flags(pud, _PAGE_COW);
-> +}
-> +
->   static inline pud_t pud_mkold(pud_t pud)
->   {
->   	return pud_clear_flags(pud, _PAGE_ACCESSED);
-> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> index 0646ad00178b..5c3f942865d9 100644
-> --- a/arch/x86/include/asm/pgtable_types.h
-> +++ b/arch/x86/include/asm/pgtable_types.h
-> @@ -21,7 +21,8 @@
->   #define _PAGE_BIT_SOFTW2	10	/* " */
->   #define _PAGE_BIT_SOFTW3	11	/* " */
->   #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
-> -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
->   #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
->   #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
->   #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
-> @@ -34,6 +35,15 @@
->   #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
->   #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
->   
-> +/*
-> + * Indicates a copy-on-write page.
-> + */
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#define _PAGE_BIT_COW		_PAGE_BIT_SOFTW5 /* copy-on-write */
-> +#else
-> +#define _PAGE_BIT_COW		0
-> +#endif
-> +
->   /* If _PAGE_BIT_PRESENT is clear, we use these: */
->   /* - if the user mapped it with PROT_NONE; pte_present gives true */
->   #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
-> @@ -117,6 +127,40 @@
->   #define _PAGE_SOFTW4	(_AT(pteval_t, 0))
->   #endif
->   
-> +/*
-> + * The hardware requires shadow stack to be read-only and Dirty.
-> + * _PAGE_COW is a software-only bit used to separate copy-on-write PTEs
-> + * from shadow stack PTEs:
+It is a racy bug between l2cap_chan_timeout() and l2cap_sock_release()
+cause by SIGKILL.
+Sorry for the less context and no fix here.
+For the l2cap_sock.c in the stack trace, please refer this file
+for your convenience:
+https://gist.github.com/swkim101/5c3b8cb7c7d7172aef23810c9412f323
 
-Is that really required?
+This is discovered by FuzzBT on top of Syzkaller with Sungwoo Kim (me).
+Other contributors for FuzzBT project are Ruoyu Wu(wuruoyu@me.com)
+and Hui Peng(benquike@gmail.com).
 
-For anon pages, we have PG_anon_exclusive, that can tell you whether the 
-page is "certainly exclusive" (now cow necessary) vs. "maybe shared" 
-(cow maybe necessary).
+==================================================================
+BUG: KASAN: use-after-free in l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
+Read of size 8 at addr ffff88800f7f4060 by task l2cap-server/1764
+CPU: 0 PID: 1764 Comm: l2cap-server Not tainted 6.1.0-rc2 #129
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+dump_stack_lvl (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/lib/dump_stack.c:105) 
+print_address_description+0x7e/0x360 
+print_report (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:187 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:389) 
+? __virt_addr_valid (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/mmzone.h:1855 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/mm/physaddr.c:65) 
+? kasan_complete_mode_report_info (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report_generic.c:104 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report_generic.c:127 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report_generic.c:136) 
+? l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
+kasan_report (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:? /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:484) 
+? l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
+kasan_check_range (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:85 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:115 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:128 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:159 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:180 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:189) 
+__kasan_check_read (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/shadow.c:31) 
+l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
+l2cap_sock_teardown_cb (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/bluetooth.h:304 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1475 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1612) 
+l2cap_chan_close (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:885) 
+? __kasan_check_write (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/shadow.c:37) 
+l2cap_sock_shutdown (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/kcsan-checks.h:231 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:2470 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1321 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1377) 
+? _raw_write_unlock (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/asm-generic/qrwlock.h:122 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/rwlock_api_smp.h:225 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/locking/spinlock.c:342) 
+l2cap_sock_release (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1453) 
+sock_close (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/socket.c:1382) 
+? sock_mmap (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/socket.c:?) 
+__fput (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/fsnotify.h:? /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/fsnotify.h:99 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/fsnotify.h:341 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/fs/file_table.c:306) 
+____fput (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/fs/file_table.c:348) 
+task_work_run (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/task_work.c:165) 
+do_exit (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/exit.c:?) 
+do_group_exit (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/exit.c:943) 
+? __kasan_check_write (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/shadow.c:37) 
+get_signal (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/signal.c:2863) 
+? _raw_spin_unlock (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/spinlock_api_smp.h:142 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/locking/spinlock.c:186) 
+? finish_task_switch (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./arch/x86/include/asm/current.h:15 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/sched/core.c:5065) 
+arch_do_signal_or_restart (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/kernel/signal.c:869) 
+exit_to_user_mode_prepare (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:383) 
+syscall_exit_to_user_mode (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./arch/x86/include/asm/current.h:15 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:261 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:283 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:296) 
+do_syscall_64 (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/common.c:50 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/common.c:80) 
+? sysvec_apic_timer_interrupt (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/kernel/apic/apic.c:1107) 
+entry_SYSCALL_64_after_hwframe (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/entry_64.S:120) 
+RIP: 0033:0x7f66c14db970
+Code: Unable to access opcode bytes at 0x7f66c14db946.
 
-Why isn't that sufficient to make the same decisions here?
-
--- 
-Thanks,
-
-David / dhildenb
-
+Code starting with the faulting instruction
+===========================================
+RSP: 002b:00007ffe166a5508 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: 0000000000000013 RBX: 0000000000000013 RCX: 00007f66c14db970
+RDX: 0000000000000013 RSI: 00007ffe166a56d0 RDI: 0000000000000002
+RBP: 00007ffe166a56d0 R08: 00007f66c1a28440 R09: 0000000000000013
+R10: 0000000000000078 R11: 0000000000000246 R12: 0000000000000013
+R13: 0000000000000001 R14: 00007f66c179a520 R15: 0000000000000013
+ </TASK>
+Allocated by task 77:
+kasan_set_track (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:51) 
+kasan_save_alloc_info (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:432 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:498) 
+__kasan_kmalloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:356) 
+__kmalloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slab_common.c:943 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slab_common.c:968) 
+sk_prot_alloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2028) 
+sk_alloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2083) 
+l2cap_sock_alloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1903) 
+l2cap_sock_new_connection_cb (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1504) 
+l2cap_connect (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:102 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:4277) 
+l2cap_bredr_sig_cmd (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:5634 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:5927) 
+l2cap_recv_frame (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:7851 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:7919) 
+l2cap_recv_acldata (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:8601 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:8631) 
+hci_rx_work (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/hci_core.h:1121 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/hci_core.c:3937 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/hci_core.c:4189) 
+process_one_work (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2225) 
+worker_thread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:816 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2107 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2159 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2408) 
+kthread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/kthread.c:361) 
+ret_from_fork (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/entry_64.S:306) 
+Freed by task 52:
+kasan_set_track (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:51) 
+kasan_save_free_info (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:508) 
+____kasan_slab_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/slub_def.h:164 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:214) 
+__kasan_slab_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:244) 
+slab_free_freelist_hook (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:381 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:1747) 
+__kmem_cache_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:3656 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:3674) 
+kfree (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slab_common.c:1007) 
+__sk_destruct (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/cred.h:288 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2147) 
+__sk_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/sock_diag.h:87 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2175) 
+sk_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/instrumented.h:? /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/atomic/atomic-instrumented.h:176 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/refcount.h:272 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/refcount.h:315 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/refcount.h:333 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2188) 
+l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/bluetooth.h:286 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1284) 
+l2cap_sock_close_cb (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1576) 
+l2cap_chan_timeout (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/bluetooth.h:296 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:462) 
+process_one_work (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2225) 
+worker_thread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:816 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2107 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2159 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2408) 
+kthread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/kthread.c:361) 
+ret_from_fork (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/entry_64.S:306) 
+The buggy address belongs to the object at ffff88800f7f4000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 96 bytes inside of
+ 1024-byte region [ffff88800f7f4000, ffff88800f7f4400)
+The buggy address belongs to the physical page:
+page:00000000b8d65c1d refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88800f7f6800 pfn:0xf7f4
+head:00000000b8d65c1d order:2 compound_mapcount:0 compound_pincount:0
+flags: 0xfffffc0010200(slab|head|node=0|zone=1|lastcpupid=0x1fffff)
+raw: 000fffffc0010200 ffffea0000993408 ffffea0000991308 ffff888005841dc0
+raw: ffff88800f7f6800 0000000000080002 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+Memory state around the buggy address:
+ ffff88800f7f3f00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88800f7f3f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88800f7f4000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                       ^
+ ffff88800f7f4080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88800f7f4100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
