@@ -2,101 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FF8677DDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3904B677DDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbjAWOXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S232279AbjAWOXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjAWOXJ (ORCPT
+        with ESMTP id S232267AbjAWOXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:23:09 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA871B573;
-        Mon, 23 Jan 2023 06:23:08 -0800 (PST)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D9DF024000D;
-        Mon, 23 Jan 2023 14:23:04 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH] docs: rv: Fix full name of the GPL
-Date:   Mon, 23 Jan 2023 15:22:54 +0100
-Message-ID: <2983169.1Ym2AYXvDY@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <c9d6291f-8b50-bd37-f48c-d96834d990dd@gmail.com>
-References: <20230122181224.53996-1-didi.debian@cknow.org>
- <111677351.cJcasWOL3y@prancing-pony>
- <c9d6291f-8b50-bd37-f48c-d96834d990dd@gmail.com>
+        Mon, 23 Jan 2023 09:23:21 -0500
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149EA241E6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 06:23:17 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4P0slJ6RQJz9stZ;
+        Mon, 23 Jan 2023 15:23:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=espindo.la; s=MBO0001;
+        t=1674483788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJZQPl+8YM9aYTXyc52ANO0tZ6cNxJJJ337qhtH4sgk=;
+        b=zTTcJYCJAouY+K7/bgxnieZEnVJS5hT7j9VL0oGGJ9YqpViaLW14G447i7Bcymf2ZxIN5l
+        A86D1NZsSb54nhMHMFrSU2Fl0kaXCEGU5BzwQyFYyU3UV7OkkP8o8eJOlpaAaoAO5O29zY
+        e64gpA4cWXvswvGs+uU6Hn62HT/RrqM05mWuiKNr8laVU2Botp2ivoBPtI5Ny4nsm9Bwus
+        iXCvvDgbpdYOIicMpvvb6TZX5gYK9/548QGrBYbweb0mIXquUGd0M9e7GqlA7mS30H6pJs
+        w7/xFxlky26qy2ImhnA/Zy2nRf2Oujrs2zuC/FRGlJQKjx/zEepCyAft0Vlk3A==
+From:   Rafael =?utf-8?Q?=C3=81vila?= de =?utf-8?Q?Esp=C3=ADndola?= 
+        <rafael@espindo.la>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: amdgpu: suspend-to-idle on a 4350G desktop
+In-Reply-To: <MN0PR12MB6101F62407FB383609B2FB30E2CA9@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <87edrnu9mk.fsf@espindo.la>
+ <MN0PR12MB6101F62407FB383609B2FB30E2CA9@MN0PR12MB6101.namprd12.prod.outlook.com>
+Date:   Mon, 23 Jan 2023 13:23:05 -0100
+Message-ID: <878rhttjna.fsf@espindo.la>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart29946975.ZdcXGsBOl3";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4P0slJ6RQJz9stZ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart29946975.ZdcXGsBOl3
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-Subject: Re: [PATCH] docs: rv: Fix full name of the GPL
-Date: Mon, 23 Jan 2023 15:22:54 +0100
-Message-ID: <2983169.1Ym2AYXvDY@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <c9d6291f-8b50-bd37-f48c-d96834d990dd@gmail.com>
-MIME-Version: 1.0
 
-On Monday, 23 January 2023 14:51:57 CET Bagas Sanjaya wrote:
-> > Please disregard this patch.
-> > I'm now sending a similar response as I'm sending to my other patch
-> > submissions, which is the following:
-> > 
-> > I now consider my initial view of the issue as a spelling error,
-> > incorrect. I would be changing the license and IANAL. I'm also not the
-> > copyright holder which I believe is needed to change the license.
-> > 
-> > Apologies for the noise.
-> 
-> Glad to reply, but I see your reply above as if it is written by
-> a bot. Care to vary your sentences?
+"Limonciello, Mario" <Mario.Limonciello@amd.com> writes:
 
-I already got a bounce as I am now considered a spammer :-/
+> [AMD Official Use Only - General]
+>
+> Rafael,
+>
+> Can you please open a bug report here
+> https://gitlab.freedesktop.org/drm/amd/-/issues
 
-So now I got to figure out how to fix this clusterfsck, without being seen as
-a spammer/bot, while also trying to minimize the burden on others.
+I reported the bug:
+https://gitlab.freedesktop.org/drm/amd/-/issues/2364
 
-I couldn't agree more with (the first paragraph of)
-https://lore.kernel.org/lkml/ad99d227-ce82-319b-6323-b70ac009d0e7@roeck-us.net/
-and I therefor consider this a legal issue and not a spelling one.
-I can't answer the legal issue, hence the request for retraction.
-
-Regards,
-  Diederik
---nextPart29946975.ZdcXGsBOl3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCY86YPgAKCRDXblvOeH7b
-bsCRAQD7mgoKq9JseacjVuQ39RrGup/WWvtBQbwASorFvZdvCQD/UGXX77KwcSU6
-Seoy7iz/yZhQqyeUwp9cPWk4AIQupwc=
-=T6ZA
------END PGP SIGNATURE-----
-
---nextPart29946975.ZdcXGsBOl3--
-
-
-
+Cheers,
+Rafael
