@@ -2,255 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A3D677FA1
+	by mail.lfdr.de (Postfix) with ESMTP id CF91E677FA2
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjAWPZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S231879AbjAWPZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbjAWPYx (ORCPT
+        with ESMTP id S232834AbjAWPY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:24:53 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 622AC29421;
+        Mon, 23 Jan 2023 10:24:58 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052472A9AA;
+        Mon, 23 Jan 2023 07:24:32 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id rl14so28096304ejb.2;
+        Mon, 23 Jan 2023 07:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=quFutVDzXOuiGFOnAIlXrcYj/4FfLNEimxfsbTCP31g=;
+        b=casY42fp0CPsxMpDebmQUR6sYU5KhJU1Dyv0pYM4Y1JmNEFcoiTmZm5cwTHNGJc3R3
+         ty3pD1p43EHIPGwphlwumHC3o6XpXJ14ityW2AQk2dCZ3idvZ1t8Q1MBLl04n1nYy6Ov
+         uqoPh27+B6vzYNUtCsJxicjfc5yIQt80MoP80a+E5W9IxgSyUx0sdbj5RTOh/qbmlj/U
+         GIQFkgaFJpCQzf2rOTCH8PV8mjg/YOHgKcoK73ucH7g7NUbGXL8aSYvK7uhvaQJrOdIo
+         18RxGduHZxG++UFh4uSyQFLxTVgBjNrDEGtaHRl3Oz0jgwIjiBvNNTvQ7SZlmI2mPF9o
+         D+/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=quFutVDzXOuiGFOnAIlXrcYj/4FfLNEimxfsbTCP31g=;
+        b=d2LC9hB2tR2z64L8OSy9nWjKK7BT7gTNbaKVGdhv4Q+p69NxPP2J/w9tg1GydBCubC
+         WRAsVkTWNUP8VU109bRg8pDVbvqIdYtMlT0sxo0+cipqUESNfZAaNpTS5pOH1DsD7Gdx
+         I+QIxp2QmvW3X4Yk9F2HAfLdN9FdKDVymmvjkWFr4iU+vTR7AAL7bMftVKlHztw93k+7
+         o7grD7Z2yb0tZJ7sh2+293YR7Y5edm1v14DlCy4m956G+z2SbVwx2ewCw9XwDJhGooQh
+         PNU5w+4YCMNHzleblUDprNum8wFsHLL8WEBtvt5/t4wusrBU38Gyqnf/KXlMGmuVYr2c
+         Lq8Q==
+X-Gm-Message-State: AFqh2kp3s7cOGp+rDp9Riu+QDsJXZDA8A4zo8i8Fw9IN8s2oH8cHwaQ0
+        LXkzHExUf0mEfXj8n5DeDg0=
+X-Google-Smtp-Source: AMrXdXsNXZAjwBSF2rV5p0/d14xBhorkGt2j6MBSzb7IRXW1/AvdX71aI7knW2abe2geUXIw0Crd+A==
+X-Received: by 2002:a17:906:79d8:b0:877:a2d1:7560 with SMTP id m24-20020a17090679d800b00877a2d17560mr12044853ejo.27.1674487469938;
         Mon, 23 Jan 2023 07:24:29 -0800 (PST)
-Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C4AF320E2D1F;
-        Mon, 23 Jan 2023 07:23:42 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C4AF320E2D1F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1674487423;
-        bh=TrLo/S0rk6Ec9OVAJQe83mx0kjEtr7wV5wMozg+JQxQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nmeWfYa2vEbWklGBzPiHYHhjEEEmLaf5LUEnJ+k9NO+TxBuyZm/XzOA4TojJiLNcE
-         RdZIMa1zNeUGkZjjBoNtO5wGBlRxvCAjgMEP0Vxp4nL4hmoEBXMx1XLWo1mOL7iXCY
-         L4n6y/X0HCXNKWXoqkEYustu1F4tn8mOS/tWvFGs=
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        "Brijesh Singh" <brijesh.singh@amd.com>,
-        "Tom Lendacky" <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH v1 8/8] crypto: ccp - Allow platform device to be psp master device
-Date:   Mon, 23 Jan 2023 15:22:50 +0000
-Message-Id: <20230123152250.26413-9-jpiotrowski@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
-References: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
+Received: from [192.168.3.54] ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id i20-20020a1709064ed400b00872a726783dsm9878482ejv.217.2023.01.23.07.24.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 07:24:29 -0800 (PST)
+Message-ID: <ecfc1831-6500-e9fc-efec-b4574c3a61bb@gmail.com>
+Date:   Mon, 23 Jan 2023 17:24:27 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/2] Add support for Samsung Galaxy S5 (Exynos)
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230121201926.46990-1-markuss.broks@gmail.com>
+ <703ad169-fb10-651c-96fe-22d2eae959b6@linaro.org>
+Content-Language: en-US
+From:   Markuss Broks <markuss.broks@gmail.com>
+In-Reply-To: <703ad169-fb10-651c-96fe-22d2eae959b6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the getters/setters to sp-dev.c, so that they can be accessed from
-sp-pci.c and sp-platform.c. This makes it possible for the psp
-platform_device to set the function pointers and be assigned the role of
-master device by psp_dev_init().
+Hi Krzysztof,
 
-While the case of a system having both a PCI and ACPI PSP is not
-supported (and not known to occur in the wild), it makes sense to have a
-single static global to assign to. Should such a system occur, the logic
-in psp_set_master() is that the pci device is preferred.
-
-Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
----
- drivers/crypto/ccp/sp-dev.c      | 59 ++++++++++++++++++++++++++++++++
- drivers/crypto/ccp/sp-dev.h      |  4 +++
- drivers/crypto/ccp/sp-pci.c      | 48 --------------------------
- drivers/crypto/ccp/sp-platform.c |  6 ++++
- 4 files changed, 69 insertions(+), 48 deletions(-)
-
-diff --git a/drivers/crypto/ccp/sp-dev.c b/drivers/crypto/ccp/sp-dev.c
-index 52b8d957d0f6..04b77d640f62 100644
---- a/drivers/crypto/ccp/sp-dev.c
-+++ b/drivers/crypto/ccp/sp-dev.c
-@@ -14,6 +14,8 @@
- #include <linux/kthread.h>
- #include <linux/sched.h>
- #include <linux/interrupt.h>
-+#include <linux/pci.h>
-+#include <linux/platform_device.h>
- #include <linux/spinlock.h>
- #include <linux/spinlock_types.h>
- #include <linux/types.h>
-@@ -39,6 +41,8 @@ static LIST_HEAD(sp_units);
- /* Ever-increasing value to produce unique unit numbers */
- static atomic_t sp_ordinal;
- 
-+static struct sp_device *sp_dev_master;
-+
- static void sp_add_device(struct sp_device *sp)
- {
- 	unsigned long flags;
-@@ -250,6 +254,61 @@ struct sp_device *sp_get_psp_master_device(void)
- 	return ret;
- }
- 
-+static bool sp_pci_is_master(struct sp_device *sp)
-+{
-+	struct device *dev_cur, *dev_new;
-+	struct pci_dev *pdev_cur, *pdev_new;
-+
-+	dev_new = sp->dev;
-+	dev_cur = sp_dev_master->dev;
-+
-+	pdev_new = to_pci_dev(dev_new);
-+	pdev_cur = to_pci_dev(dev_cur);
-+
-+	if (pdev_new->bus->number < pdev_cur->bus->number)
-+		return true;
-+
-+	if (PCI_SLOT(pdev_new->devfn) < PCI_SLOT(pdev_cur->devfn))
-+		return true;
-+
-+	if (PCI_FUNC(pdev_new->devfn) < PCI_FUNC(pdev_cur->devfn))
-+		return true;
-+
-+	return false;
-+}
-+
-+void psp_set_master(struct sp_device *sp)
-+{
-+	struct device *dev_cur, *dev_new;
-+
-+	if (!sp_dev_master) {
-+		sp_dev_master = sp;
-+		return;
-+	}
-+
-+	dev_new = sp->dev;
-+	dev_cur = sp_dev_master->dev;
-+
-+	if (dev_is_pci(dev_new) && dev_is_pci(dev_cur) && sp_pci_is_master(sp))
-+		sp_dev_master = sp;
-+	if (dev_is_pci(dev_new) && dev_is_platform(dev_cur))
-+		sp_dev_master = sp;
-+}
-+
-+struct sp_device *psp_get_master(void)
-+{
-+	return sp_dev_master;
-+}
-+
-+void psp_clear_master(struct sp_device *sp)
-+{
-+	if (sp == sp_dev_master) {
-+		sp_dev_master = NULL;
-+		dev_dbg(sp->dev, "Cleared sp_dev_master\n");
-+	}
-+}
-+
-+
- static int __init sp_mod_init(void)
- {
- #ifdef CONFIG_X86
-diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
-index aaa651364425..083e57652c7b 100644
---- a/drivers/crypto/ccp/sp-dev.h
-+++ b/drivers/crypto/ccp/sp-dev.h
-@@ -129,6 +129,10 @@ int sp_request_psp_irq(struct sp_device *sp, irq_handler_t handler,
- void sp_free_psp_irq(struct sp_device *sp, void *data);
- struct sp_device *sp_get_psp_master_device(void);
- 
-+void psp_set_master(struct sp_device *sp);
-+struct sp_device *psp_get_master(void);
-+void psp_clear_master(struct sp_device *sp);
-+
- #ifdef CONFIG_CRYPTO_DEV_SP_CCP
- 
- int ccp_dev_init(struct sp_device *sp);
-diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
-index 792d6da7f0c0..f9be8aba0acf 100644
---- a/drivers/crypto/ccp/sp-pci.c
-+++ b/drivers/crypto/ccp/sp-pci.c
-@@ -30,7 +30,6 @@ struct sp_pci {
- 	int msix_count;
- 	struct msix_entry msix_entry[MSIX_VECTORS];
- };
--static struct sp_device *sp_dev_master;
- 
- #define attribute_show(name, def)						\
- static ssize_t name##_show(struct device *d, struct device_attribute *attr,	\
-@@ -168,53 +167,6 @@ static void sp_free_irqs(struct sp_device *sp)
- 	sp->psp_irq = 0;
- }
- 
--static bool sp_pci_is_master(struct sp_device *sp)
--{
--	struct device *dev_cur, *dev_new;
--	struct pci_dev *pdev_cur, *pdev_new;
--
--	dev_new = sp->dev;
--	dev_cur = sp_dev_master->dev;
--
--	pdev_new = to_pci_dev(dev_new);
--	pdev_cur = to_pci_dev(dev_cur);
--
--	if (pdev_new->bus->number < pdev_cur->bus->number)
--		return true;
--
--	if (PCI_SLOT(pdev_new->devfn) < PCI_SLOT(pdev_cur->devfn))
--		return true;
--
--	if (PCI_FUNC(pdev_new->devfn) < PCI_FUNC(pdev_cur->devfn))
--		return true;
--
--	return false;
--}
--
--static void psp_set_master(struct sp_device *sp)
--{
--	if (!sp_dev_master) {
--		sp_dev_master = sp;
--		return;
--	}
--
--	if (sp_pci_is_master(sp))
--		sp_dev_master = sp;
--}
--
--static struct sp_device *psp_get_master(void)
--{
--	return sp_dev_master;
--}
--
--static void psp_clear_master(struct sp_device *sp)
--{
--	if (sp == sp_dev_master) {
--		sp_dev_master = NULL;
--		dev_dbg(sp->dev, "Cleared sp_dev_master\n");
--	}
--}
--
- static int sp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	struct sp_device *sp;
-diff --git a/drivers/crypto/ccp/sp-platform.c b/drivers/crypto/ccp/sp-platform.c
-index b74f16e0e963..d56b34255b97 100644
---- a/drivers/crypto/ccp/sp-platform.c
-+++ b/drivers/crypto/ccp/sp-platform.c
-@@ -231,6 +231,12 @@ static int sp_platform_probe(struct platform_device *pdev)
- 
- 	dev_set_drvdata(dev, sp);
- 
-+	if (sp_platform->is_platform) {
-+		sp->set_psp_master_device = psp_set_master;
-+		sp->get_psp_master_device = psp_get_master;
-+		sp->clear_psp_master_device = psp_clear_master;
-+	}
-+
- 	ret = sp_init(sp);
- 	if (ret)
- 		goto e_err;
--- 
-2.25.1
-
+On 1/23/23 11:59, Krzysztof Kozlowski wrote:
+> On 21/01/2023 21:19, Markuss Broks wrote:
+>> Samsung Galaxy S5 (Exynos) is a mobile phone released in 2014.
+>> It has an Exynos5422 platform. This version of Galaxy S5 is only
+>> capable of 3G communication using the Intel modem, while the
+>> LTE version of the device (klte) has a Qualcomm Snapdragon SoC.
+>>
+>> Currently, internal eMMC, USB, regulators on a PMIC, and touchscreen
+>> are enabled in the device-tree.
+>>
+>> It also has the following peripherals:
+>>
+>> - 5" 1080p S6E3FA2 DSI display,
+>> - Cypress StreetFighter touch buttons,
+>> - Broadcom BCM4354 wireless connectivity module,
+>> - Intel XMM6360 3G modem,
+>> - STM32F401 serving as a sensor hub,
+>> - Validify Solutions VFS61 series fingerprint sensor,
+>> - Lattice ICE401M FPGA as an IRDA controller,
+>> - Maxim MAX86900 heart rate sensor,
+>> - NXP PN547 NFC controller,
+>> - Wolfson WM5110 Audio DSP,
+>> - Broadcom BCM4753 GPS radio,
+>> - Maxim MAX77804 PMIC,
+>> - Silicon Image SII8240 MHL controller,
+>> - TI LP5562 LED driver
+>>
+>> Cc: Mark Brown <broonie@kernel.org>
+>>
+>> v1 -> v2:
+>> - use better subject prefixes
+>> - rename Galaxy S5 (Exynos) to Galaxy S5 (SM-G900H)
+>> - align the compatibles and clock output names
+>> - reorder the includes
+>> - generic node name for regulator-tsp-vdd-en
+>> - GPIO flag for regulator
+>> - rename all the regulators, leaving the voltage values only where
+>>    it makes sense (e.g. on 3V3 and 1V8 supplies for the HRM)
+> I got two v2 patchsets from you. No clue which one is correct. Please
+> send v3 if there were differences. Otherwise please annotate somehow...
+Sorry about that, the first time I sent v2 it lacked the v2 tag in 
+actual patch letters, but contained the tag in the cover letter, so I 
+thought it would make confusion, so I fixed it and sent it properly. The 
+patchsets are identical otherwise.
+>
+> Best regards,
+> Krzysztof
+>
+- Markuss
