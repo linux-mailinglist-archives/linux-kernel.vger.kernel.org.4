@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D29677546
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 07:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569E067754A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 07:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjAWGzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 01:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S231379AbjAWGzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 01:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjAWGzM (ORCPT
+        with ESMTP id S229455AbjAWGzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 01:55:12 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC628196AE;
-        Sun, 22 Jan 2023 22:55:10 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso4019761wmb.0;
-        Sun, 22 Jan 2023 22:55:10 -0800 (PST)
+        Mon, 23 Jan 2023 01:55:17 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB0B193EB;
+        Sun, 22 Jan 2023 22:55:13 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r2so9797111wrv.7;
+        Sun, 22 Jan 2023 22:55:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DJ7pZzP7l4POQysOuFD6RXLwFmeQ64kf4EXzL/9/vCM=;
-        b=SZB5f+BslCr+6rnD0bGuhWHfYC/po5PbklRCKScbGHMO0v/+I0mDslXhXkgAcZmBnH
-         72IEMHTBkvjUwP93/p28l8dU0+rVyWttiSgV5PpcNryp+ZTeaLSONqb5ZlBKP79CwMeg
-         5ZS+6HdQEJyGFviao39g0tKfGHu5gz5yrD23BvA/VaxZCl05v0d/efDW9xjrfSGioF/j
-         dOErQb/eVijdT0UGYROqjN7uwaAAYjnfXYkmX+dbCzei+x8MDEubZi2vqyb4HqTcLWW0
-         galk8SpP/h/Ofb/i7stpeFlE1NGhVhBfRe0z5lStBk6ntYjKZ4OEYG5lxYO5nVbLRauf
-         uTQA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LugQgmyfqJAZM5MfDwY/veKinnwsgbPTEKVFTK+HiPA=;
+        b=hfnH8EWTZxl/73vw/86Qzx02JPFf/H9VA4qPbkFVVCxMaKkrnld8AgUnT/Q71LGo+8
+         pJwoDDxA/chFkenXnlg2+iv6Of3oqA+vvC85iLnQl24JDALfPmddCIoT/pvDZCmba42e
+         aLg0qsV0d/ZcDIzN1caw/7h5OhoZ+J/5900q5WIz9qjhFB/V+3m433Y/C+KeEVXVXfB2
+         906RjPZzqT52pA+U95AVEzBXinmEl60QMpJSSTIm0etYag8/HNtvGTUUKcp5+iZRvVGK
+         PX2CY6VlxOz6YYPwm+NYD5shLB8q5+170gE38J/O3b9uacxt3zwIVhJsPI9QcqEGPIsO
+         5azA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DJ7pZzP7l4POQysOuFD6RXLwFmeQ64kf4EXzL/9/vCM=;
-        b=zH6XI2gdichbndsckJsYshG3jCQuBaxj51648BxvFRTfe5r8hMZewca0hsablFmWf6
-         i46+Su6pGuTwZl+J9uvddvMvPuKo0quOekrgjN3kMh/EepJpSq5+zMI62Cvww1I6KJ0H
-         yqDWNj2HxFNrumWLgPwJf/5x4ebMCBmvRzESpFv6l2Ttxm779vLaOPSBetC7JOyZVnUg
-         znrkiSuS9yggWFfhGtXs4iZAkfnxI/kkxBFpEIZPcpe2IMwghZZvqjrpJychfo59cBcL
-         6/FdhgsLtdYOXkbscrUm/idTHwRUBy7x8Z4F848G3lkyU1QfuLZzOzHog8cBcyTskY7x
-         PH9w==
-X-Gm-Message-State: AFqh2krifXPXd9UcMiafozHGjf8lrMn65SI7zvI4uN6QrGpzY14PpUXk
-        ald6Cc96Og7q5r4uMhj1ILU=
-X-Google-Smtp-Source: AMrXdXsRjRl9GgZhb5JHClnfyLweMYqjELAUA0MevSUcuGPjcWZEwb2kQp0JOjfWeEDMV8jXZ95J8w==
-X-Received: by 2002:a7b:c4d0:0:b0:3d1:f6b3:2ce3 with SMTP id g16-20020a7bc4d0000000b003d1f6b32ce3mr23724781wmk.35.1674456909143;
-        Sun, 22 Jan 2023 22:55:09 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LugQgmyfqJAZM5MfDwY/veKinnwsgbPTEKVFTK+HiPA=;
+        b=hi0moXZq0fZHbsMVAL9uIg8TQ10D50ES7aO9gcPMBcZi1i9l0SNbn7WXGbVQjCXb8D
+         tL8tlCdx9fXBE62tg5qAm3yhDdZ9URdjFnzLHkWkE3V5zTZXvKwHteXIliw+vc09ikMj
+         yRSBybhJQhRXYJkCUuCUZC67X1MGHJFkYLF7TxgsFLC15q8VJxEvA+juZLPNDdtLV+8W
+         rGMbReQ25pAUJ+VHvDuuW8XJiA+39s0okFqIB/630X8pnMvJbzyKnVaLvrMa22IK9BDz
+         3fJRt+Bv6GbUUW/INiVSE+iO1tZrTTebmpt3awLp4I7x1G75mntoA1z6Iv6rXPrMnyZn
+         st5Q==
+X-Gm-Message-State: AFqh2kozrY6qtGKm045vNOUrcGdFou+F8WmA5/qlkPivrx/oOD25Lm4i
+        kwLc1175jj66kfg6AJLalsE=
+X-Google-Smtp-Source: AMrXdXvIp8ELatgU7oKdVRfUKO7qM5zVf4fqydlUFyU9ZXRmcrvc7eR8SpDf/crtuX1Xonz1xqKjaQ==
+X-Received: by 2002:a5d:5608:0:b0:2b6:daf8:52ad with SMTP id l8-20020a5d5608000000b002b6daf852admr14347847wrv.52.1674456911675;
+        Sun, 22 Jan 2023 22:55:11 -0800 (PST)
 Received: from toolbox.. ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id az22-20020adfe196000000b002bddaea7a0bsm25948365wrb.57.2023.01.22.22.55.06
+        by smtp.gmail.com with ESMTPSA id az22-20020adfe196000000b002bddaea7a0bsm25948365wrb.57.2023.01.22.22.55.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 22:55:08 -0800 (PST)
+        Sun, 22 Jan 2023 22:55:11 -0800 (PST)
 From:   Christian Hewitt <christianshewitt@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,10 +60,12 @@ To:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH 0/3] arm64: dts: meson: add WiFi to P212 and cleanup VIM1
-Date:   Mon, 23 Jan 2023 06:55:01 +0000
-Message-Id: <20230123065504.2669769-1-christianshewitt@gmail.com>
+Subject: [PATCH 1/3] arm64: dts: meson: add Broadcom WiFi to P212 dtsi
+Date:   Mon, 23 Jan 2023 06:55:02 +0000
+Message-Id: <20230123065504.2669769-2-christianshewitt@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230123065504.2669769-1-christianshewitt@gmail.com>
+References: <20230123065504.2669769-1-christianshewitt@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,19 +78,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This small series adds WiFi support to the P212 dtsi then removes the
-corresponding node from the VIM1 dts (as it's now inherited). Also
-move the pwm_ef node in the dtsi to alpha-sort correctly.
+The P212 has a combined WiFi/BT module. The BT side is already enabled
+in the dtsi but the WiFi side is not. Let's enable the WiFi module.
 
-Christian Hewitt (3):
-  arm64: dts: meson: add Broadcom WiFi to P212 dtsi
-  arm64: dts: meson: move pwm_ef node in P212 dtsi
-  arm64: dts: meson: remove WiFi/BT nodes from Khadas VIM1
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+---
+ arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- .../amlogic/meson-gxl-s905x-khadas-vim.dts    | 15 -------------
- .../dts/amlogic/meson-gxl-s905x-p212.dtsi     | 21 ++++++++++++-------
- 2 files changed, 13 insertions(+), 23 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
+index 05cb2f5e5c36..7055057d7942 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtsi
+@@ -125,6 +125,11 @@ &sd_emmc_a {
+ 
+ 	vmmc-supply = <&vddao_3v3>;
+ 	vqmmc-supply = <&vddio_boot>;
++
++	brcmf: wifi@1 {
++		reg = <1>;
++		compatible = "brcm,bcm4329-fmac";
++	};
+ };
+ 
+ /* SD card */
 -- 
 2.34.1
 
