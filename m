@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B64B6776F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803B967771E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjAWJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S230186AbjAWJME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjAWJCb (ORCPT
+        with ESMTP id S229839AbjAWJMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:02:31 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC221C33D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:02:30 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id DDEBE81845;
-        Mon, 23 Jan 2023 09:02:25 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674464549;
-        bh=wZOMSDg+jl87+2LzvkXD4c/jHXkK/mccaqoYTgmhBqE=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=g2hQg9QCJ8cqZmHPPAhW8H+qH0P+JONEuTIXJKEycOOg+4C4+Ivkn0oZM74MBNR2W
-         qIHmDIjqGWFnODMFTFckr6YJ2S8i/JmXOzW0ExZNI8/hs/etfJxwSGGnlTnNcHppu+
-         Igr3T6n2xRfQBqsoDq4MxfpF1IlksRY+/00pGSeZOmJLlvFtuGcgOGy9Cmt2pZNdj2
-         u0odfkqvm85I6zxIyFca/+7H5XOO5NCTsK1/08+QS+kdEq0v3ZrM9qpOVg6rejkV94
-         YKGhrzodMx27poQaDnFFj8uRBKHktz4alG/9BUW52Pe/wp3713Je3JChyiDGMa4goA
-         32s8sAm4Whm1w==
-Message-ID: <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
-Date:   Mon, 23 Jan 2023 16:02:22 +0700
+        Mon, 23 Jan 2023 04:12:03 -0500
+X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 01:12:01 PST
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050:0:465::103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3521E2AE
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:12:01 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4P0kfR2wxZz9sQb;
+        Mon, 23 Jan 2023 10:03:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=espindo.la; s=MBO0001;
+        t=1674464607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B4q4UFMTfQGpIvSn7vHth/9oUEvpl/rgd9o5hNjpWU8=;
+        b=RZfGOlMtyqabGNKLLRw6HjpmMB1GotTnBYqF+D5eUOFFP0V/9T33x/NrsLoQyA6SP3v6aZ
+        EigaZM5rAAJwBqHzodp+7zGrnO1KJAR+ONqn8MB68dQuvkakk58f59/Vfw5QQYPf5g2f7n
+        D+0mXsNJT7rKrjfTZBqx2br64wYKqqzppWsCzzP1/an3/YAXDLK0zNWL7avxndA1sQ8AQm
+        +M59VlKembQoeiK5uP1nBXZfI9uLAFFkkXtg+ktCYEkn2OgtU+jBCUh8F5N0lESLWVM65o
+        IqyxKx0PIBkc0dqygYQVjEj5xo/FghbheTmVVJ862EtICbXKVd6Hf7BdgZb01Q==
+From:   Rafael =?utf-8?Q?=C3=81vila?= de =?utf-8?Q?Esp=C3=ADndola?= 
+        <rafael@espindo.la>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: amdgpu: suspend-to-idle on a 4350G desktop
+In-Reply-To: <MN0PR12MB6101F62407FB383609B2FB30E2CA9@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <87edrnu9mk.fsf@espindo.la>
+ <MN0PR12MB6101F62407FB383609B2FB30E2CA9@MN0PR12MB6101.namprd12.prod.outlook.com>
+Date:   Mon, 23 Jan 2023 08:03:24 -0100
+Message-ID: <87bkmptyg3.fsf@espindo.la>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Li, Xin3" <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
- <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com>
- <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
- <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
- <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: the x86 sysret_rip test fails on the Intel FRED architecture
-In-Reply-To: <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 4P0kfR2wxZz9sQb
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 6:45 AM, H. Peter Anvin wrote:
-> static enum regs_ok check_regs_syscall(int syscall,
->      unsigned long arg1, unsigned long arg2)
-> {
-> 
->      register unsigned long r11 asm("%r11");
->      unsigned long rcx, rbx, tmp;
+Will do.
 
-tmp is unused.
+Thanks,
+Rafael
 
->      r11 = r11_sentinel;
->      rcx = rcx_sentinel;
-> 
->      asm volatile("push %3; popf; "
->               "lea 1f(%%rip),%2; "
->               "syscall; "
->               "1:"
->               : "+r" (r11), "+c" (rcx), "=b" (rbx)
->               : "g" (rflags_sentinel),
->                 "a" (syscall), "D" (arg1), "S" (arg2));
+"Limonciello, Mario" <Mario.Limonciello@amd.com> writes:
 
-BTW, I just realized this "push" is unsafe for userspace code if the
-compiler decides to inline this inside a leaf function that uses the
-redzone.
-
-Reason: Because this "push;" clobbers redzone.
-
-It doesn't always happen, but when that happens it can be confusing to
-debug.
-
-A simple workaround is: just compile it with "-mno-red-zone" flag.
-
-Alternative, without using that flag, maybe preserve the value like:
-
-     movq    -8(%rsp), %r12
-     pushq   %[rflags_sentinel]
-     popf
-     movq    %r12, -8(%rsp)
-     syscall
-
-with "r12" and "memory" added to the clobber list.
-
-What do you think?
-
--- 
-Ammar Faizi
+> [AMD Official Use Only - General]
+>
+> Rafael,
+>
+> Can you please open a bug report here
+> https://gitlab.freedesktop.org/drm/amd/-/issues
+>
+> And attach the log from:
+> https://gitlab.freedesktop.org/drm/amd/-/blob/master/scripts/amd_s2idle.py
+>
+> If it fails prerequisites please also include a full dmesg including a su=
+spend cycle.
+>
+> Thanks,
+> ________________________________
+> From: Rafael =C3=81vila de Esp=C3=ADndola <rafael@espindo.la>
+> Sent: Saturday, January 21, 2023 10:37:23 AM
+> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
+> Subject: amdgpu: suspend-to-idle on a 4350G desktop
+>
+> Hi,
+>
+> I have a desktop that doubles as a NAS, and would like to suspend it
+> when not in use. It works, but when it comes back it is using about 7W
+> more than before going to sleep.
+>
+> It looks like a6ed2035878e5ad2e43ed175d8812ac9399d6c40 is the
+> culprit. The system doesn't even support S3:
+>
+> % cat /sys/power/mem_sleep
+> [s2idle]
+>
+> And looks like the vendor decided that they should not define
+> ACPI_FADT_LOW_POWER_S0. The MB is a Gigabyte B550I AORUS PRO AX with
+> bios version F16e.
+>
+> Which systems had crashes when ACPI_FADT_LOW_POWER_S0 was not defined?
+> Would it be possible to limit the check only to those systems or at
+> least only to systems that have S3?
+>
+> I can build the amdgpu module without that check and see if the problem
+> goes away if that would help.
+>
+> Thanks,
+> Rafael
