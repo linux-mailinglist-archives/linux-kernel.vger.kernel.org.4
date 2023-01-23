@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CA6678639
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1F867863E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjAWTZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S232417AbjAWTZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbjAWTY4 (ORCPT
+        with ESMTP id S232383AbjAWTZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:24:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B5D30F2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:24:54 -0800 (PST)
+        Mon, 23 Jan 2023 14:25:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262A6559F;
+        Mon, 23 Jan 2023 11:25:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B0B6B80DCC
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 19:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B45C433D2;
-        Mon, 23 Jan 2023 19:24:50 +0000 (UTC)
-Date:   Mon, 23 Jan 2023 19:24:48 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [RESEND PATCH v2 2/2] mm/kmemleak: Fix UAF bug in kmemleak_scan()
-Message-ID: <Y87fAFIxd+NMFouM@arm.com>
-References: <20230119040111.350923-1-longman@redhat.com>
- <20230119040111.350923-3-longman@redhat.com>
- <Y8ro6DxR1v0XlDs3@arm.com>
- <55978b11-5e7e-4b10-dff1-398275ec68b3@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A47866101C;
+        Mon, 23 Jan 2023 19:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049FCC433EF;
+        Mon, 23 Jan 2023 19:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674501941;
+        bh=CQO8sAt05z7HNpCiygP6X5/bkrbsFXfz4htbMDsLKr4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JCpubCMxBXCgZgZrqd16Lo5/KeyXxxf4JEYejAE0MrSkmNjjGw3onmRw3d5tfh44Y
+         nEZntg9SqGEdUmNztK3xrw4ibZhZRK0HBzOBo4tfiKSvSc3hKzlVJMdusZUGc4EKiA
+         gbH1Nj6H3eLOzweNFcYYMzwcrlPMz/PEXi4Y3YeZk5VSvEoAxc+qcpATjapDl07cb4
+         affT7597qVXEgwvPNtmNJPi2LOYLx0u0jc4/vj0HuGDMDRz5iRbsG9/Bh4AJ2tIlHr
+         r9Y5cSfpq+v5PkfESaZAH4NUTGp/ASSgn0hmpuTDp8V+57shikW5TNhV4q+SJdIDKw
+         IxgVKztKk1Ojw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8A4DC5C043A; Mon, 23 Jan 2023 11:25:40 -0800 (PST)
+Date:   Mon, 23 Jan 2023 11:25:40 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] selftests/nolibc: small simplification of test
+ development phase
+Message-ID: <20230123192540.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230121085320.11712-1-w@1wt.eu>
+ <20230121200038.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230121213455.GA16121@1wt.eu>
+ <Y868lIin0bLM9HfM@biznet-home.integral.gnuweeb.org>
+ <20230123172016.GB13172@1wt.eu>
+ <Y87EVVt431Wx2zXk@biznet-home.integral.gnuweeb.org>
+ <20230123174003.GU2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230123191250.GD13172@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55978b11-5e7e-4b10-dff1-398275ec68b3@redhat.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230123191250.GD13172@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 05:54:28PM -0500, Waiman Long wrote:
-> On 1/20/23 14:18, Catalin Marinas wrote:
-> > >   /*
-> > > @@ -633,6 +642,7 @@ static void __create_object(unsigned long ptr, size_t size,
-> > >   	object->count = 0;			/* white color initially */
-> > >   	object->jiffies = jiffies;
-> > >   	object->checksum = 0;
-> > > +	object->del_state = 0;
-> > >   	/* task information */
-> > >   	if (in_hardirq()) {
-> > > @@ -1470,9 +1480,22 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
-> > >   	if (!get_object(object))
-> > >   		return;	/* Try next object */
-> > > +	raw_spin_lock_irq(&kmemleak_lock);
-> > > +	if (object->del_state & DELSTATE_REMOVED)
-> > > +		goto unlock_put;	/* Object removed */
-> > > +	object->del_state |= DELSTATE_NO_DELETE;
-> > > +	raw_spin_unlock_irq(&kmemleak_lock);
-> > > +
-> > >   	rcu_read_unlock();
-> > >   	cond_resched();
-> > >   	rcu_read_lock();
-> > > +
-> > > +	raw_spin_lock_irq(&kmemleak_lock);
-> > > +	if (object->del_state & DELSTATE_REMOVED)
-> > > +		list_del_rcu(&object->object_list);
-> > > +	object->del_state &= ~DELSTATE_NO_DELETE;
-> > > +unlock_put:
-> > > +	raw_spin_unlock_irq(&kmemleak_lock);
-> > >   	put_object(object);
-> > >   }
-> > I'm not sure this was the only problem. We do have the problem that the
-> > current object may be removed from the list, solved above, but another
-> > scenario I had in mind is the next object being released during this
-> > brief resched period. The RCU relies on object->next->next being valid
-> > but, with a brief rcu_read_unlock(), the object->next could be freed,
-> > reallocated, so object->next->next invalid.
+On Mon, Jan 23, 2023 at 08:12:50PM +0100, Willy Tarreau wrote:
+> On Mon, Jan 23, 2023 at 09:40:03AM -0800, Paul E. McKenney wrote:
+> > Except that when I install Ubuntu 20.04's version, I get this:
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > $ sudo make run-user
+> >   MKDIR   sysroot/x86/include
+> > make[1]: Entering directory '/home/git/linux-rcu/tools/include/nolibc'
+> > make[2]: Entering directory '/home/git/linux-rcu'
+> > make[2]: Leaving directory '/home/git/linux-rcu'
+> > make[2]: Entering directory '/home/git/linux-rcu'
+> >   INSTALL /home/git/linux-rcu/tools/testing/selftests/nolibc/sysroot/sysroot/include
+> > make[2]: Leaving directory '/home/git/linux-rcu'
+> > make[1]: Leaving directory '/home/git/linux-rcu/tools/include/nolibc'
+> >   CC      nolibc-test
+> > 32 gettimeofday_null = -1 EFAULT        [FAIL]
+> > See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > I have attached run.out.
+> > 
+> > In contrast, with my hand-built qemu-x86_64, all tests passed.
+> > 
+> > This might be just a version-related bug, but figured I should let you
+> > guys know.
 > 
-> Looking at the following scenario,
-> 
-> object->next => A (removed)
-> A->next => B (removed)
-> 
-> As object->next is pointing to A, A must still be allocated and not freed
-> yet. Now if B is also removed, there are 2 possible case.
-> 
-> 1) B is removed from the list after the removal of A. In that case, it is
-> not possible that A is allocated, but B is freed.
-> 
-> 2) B is removed before A. A->next can't pointed to B when it is being
-> removed. Due to weak memory ordering, it is possible that another cpu can
-> see A->next still pointing to B. In that case, I believe that it is still
-> within the grace period where neither A or B is freed.
-> 
-> In fact, it is no different from a regular scanning of the object list
-> without ever called cond_resched().
+> Interesting. Maybe something differs in the way it passes expectedly
+> invalid pointers to some syscalls. Keep in mind that it's using your
+> local kernel also, that could make a difference. I'm not that much keen
+> on trying to investigate that one to be honest, given that this user
+> mode is really meant to ease the life of test developers like Ammar
+> and myself who just want to focus on the correctness of the test they're
+> adding and not that much on the validity of the test itself in this
+> context. I suggest we keep this one in mind without putting too much
+> effort on it for now.
 
-More like thinking out loud:
+Indeed, it is easy for me to remove qemu-user and re-install my
+hand-built version.  In fact, I just now did this and verified that
+everything now passes.  ;-)
 
-The lockless RCU loop relies on object->next->next being valid within
-the grace period (A not freed). Due to weak memory ordering, the looping
-CPU may not observe the object->next update (removal of A) by another
-CPU, so it continues to loop over it. But since we do an
-rcu_read_unlock() in the middle of the loop, I don't think these
-assumptions are still valid, so A may be freed.
-
-What we need is that object->next reading for the following iteration
-either sees the updated object->next (B) or it sees A but the latter
-still around. I think this holds with the proposed
-kmemleak_cond_resched() since we now start a new grace period with
-rcu_read_lock() followed by taking and releasing kmemleak_lock. The
-latter would give us the memory ordering required since removing object
-A from the list does take the lock.
-
-So yeah, you are probably right, I just find it hard to get my head
-around ;). I still think it would be simpler with a single kmemleak_lock
-(no object->lock) but that's more involved than a simple fix.
-
-Assuming your (and my) reasoning above is correct:
-
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+							Thanx, Paul
