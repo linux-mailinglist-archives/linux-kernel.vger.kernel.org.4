@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F26D6784E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D851F6784E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbjAWS3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
+        id S232990AbjAWSaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjAWS3k (ORCPT
+        with ESMTP id S233779AbjAWS36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:29:40 -0500
+        Mon, 23 Jan 2023 13:29:58 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC18D504
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:29:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2278C32505
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:29:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674498558; x=1706034558;
+  t=1674498580; x=1706034580;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JuOqPB3b9j39khhHERV2tl4VPEWAjvZVB/vliTmGgeo=;
-  b=a+XwckuhDqdd1U61mlLqBb9D330VUgNCl3lTy8THdJgYiQ1cb3uP7wTt
-   OtshmA5xpB42X+AKEep/qaVf2ZDeg9ADOUnL68yeb4camjpSA3+/2NWkH
-   wdnWbEneK2W+SSsJWBRseDC+lcgl9IszwicXr6tlFMYYyp1h2kEa9TtsJ
-   NB4GnHLriTnTI7t6nWHjk5Iul0+NKDaJbQvDsbqxex549EKeoymiOyUNT
-   GdlVxn29OGlUGWY0qDFexIXQukEwM5PlfkP4fcNDMOAe6OgHsNyvQ4jO8
-   pI3ymo3s979jM6L99NRioLv/a401yS9kaMCX2c5coHEmVxBxHgEPkR35N
+  bh=GZL6mJd0i/S3LDHYVmccNX0nbILU1PkbcQaWVCINBiI=;
+  b=O+A/WkcN5NEe5ldFwySfx/NTAlM7baocoTTsoe/Mb1HAtMqsUMyJJRR4
+   tcC+n5q6J5B6VZ95SktEIMzDetvGf+11a6xeIYMj7DYFABajg3uD6ThRu
+   2UZGB0/9v+EwjrRPQF9THQNk7WCHRHQf2GKNattzY8/qRcicEugld07T4
+   6EG24kruXpBR6R8S1HFcgL+G3xrVAak1nMPKZES5s5/0TggMav+OBvAoD
+   RMVx5TeXoE6OVKqH0J9zNMksb0IqVD47OPBuR392Rs+k0i7+vyxLksKmp
+   H+Xpao3yQVt1AozvCIqLZq5u6T2QMNFc2JMPNRmx0qmTGw3m+eTzbKohO
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328201782"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328201788"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="328201782"
+   d="scan'208";a="328201788"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 10:27:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="661812073"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="661812074"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="661812073"
+   d="scan'208";a="661812074"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
   by orsmga002.jf.intel.com with ESMTP; 23 Jan 2023 10:27:42 -0800
 From:   kan.liang@linux.intel.com
@@ -44,9 +44,9 @@ To:     peterz@infradead.org, mingo@redhat.com, tglx@linutronix.de,
         jstultz@google.com, sboyd@kernel.org, linux-kernel@vger.kernel.org
 Cc:     eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 1/3] timekeeping: NMI safe converter from a given time to monotonic
-Date:   Mon, 23 Jan 2023 10:27:26 -0800
-Message-Id: <20230123182728.825519-2-kan.liang@linux.intel.com>
+Subject: [PATCH 2/3] x86/tsc: Add set_tsc_system_counterval
+Date:   Mon, 23 Jan 2023 10:27:27 -0800
+Message-Id: <20230123182728.825519-3-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230123182728.825519-1-kan.liang@linux.intel.com>
 References: <20230123182728.825519-1-kan.liang@linux.intel.com>
@@ -63,140 +63,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-It's useful to provide a NMI safe function to convert a given time to
-monotonic. For example, the perf_event subsystem wants to convert a TSC
-of a PEBS record to a monotonic clock in a NMI handler.
-
-Considered the below two existing functions, but none of them fulfill
-the above requirements.
-- The ktime_get_mono_fast_ns() is NMI safe, but it can only return the
-  current clock monotonic rather than a given time's monotonic.
-- The get_device_system_crosststamp() can calculate the system time from
-  a given device time. But it's not fast and NMI safe.
-
-The new function is a combination of the two existing functions. Use the
-tk_fast_mono timekeeper to make the new function fast and NMI safe. Use
-the get_time_fn callback to retrieve the given timestamp and its
-clocksource. The history is not supported, since the perf case doesn't
-really need it. It can be added later once there is a use case.
+The perf_event subsystem wants to convert a TSC of a PEBS record to a
+monotonic clock. Introduce a new function to provide both the TSC
+value and TSC clocksource information with the format required by the
+callback function from the timekeeping code.
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- include/linux/timekeeping.h |  9 +++++
- kernel/time/timekeeping.c   | 68 +++++++++++++++++++++++++++++++++++--
- 2 files changed, 74 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/tsc.h | 1 +
+ arch/x86/kernel/tsc.c      | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/include/linux/timekeeping.h b/include/linux/timekeeping.h
-index fe1e467ba046..234fa87a846b 100644
---- a/include/linux/timekeeping.h
-+++ b/include/linux/timekeeping.h
-@@ -289,6 +289,15 @@ extern int get_device_system_crosststamp(
- 			struct system_time_snapshot *history,
- 			struct system_device_crosststamp *xtstamp);
+diff --git a/arch/x86/include/asm/tsc.h b/arch/x86/include/asm/tsc.h
+index fbdc3d951494..45aac88b5ce4 100644
+--- a/arch/x86/include/asm/tsc.h
++++ b/arch/x86/include/asm/tsc.h
+@@ -29,6 +29,7 @@ static inline cycles_t get_cycles(void)
  
-+/*
-+ * Fast NMI safe way to convert a given timestamp to clock monotonic
-+ */
-+extern int get_mono_fast_from_given_time(int (*get_time_fn)
-+					      (struct system_counterval_t *sys_counterval,
-+					      void *ctx),
-+					 void *ctx,
-+					 u64 *mono_ns);
-+
- /*
-  * Simultaneously snapshot realtime and monotonic raw clocks
-  */
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index 5579ead449f2..5bd32b2981fd 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -431,14 +431,19 @@ static void update_fast_timekeeper(const struct tk_read_base *tkr,
- 	memcpy(base + 1, base, sizeof(*base));
+ extern struct system_counterval_t convert_art_to_tsc(u64 art);
+ extern struct system_counterval_t convert_art_ns_to_tsc(u64 art_ns);
++extern struct system_counterval_t set_tsc_system_counterval(u64 tsc);
+ 
+ extern void tsc_early_init(void);
+ extern void tsc_init(void);
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a78e73da4a74..45803e65630e 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1311,6 +1311,12 @@ struct system_counterval_t convert_art_ns_to_tsc(u64 art_ns)
  }
+ EXPORT_SYMBOL(convert_art_ns_to_tsc);
  
--static __always_inline u64 fast_tk_get_delta_ns(struct tk_read_base *tkr)
-+static __always_inline u64 fast_tk_get_delta_ns_from_cycles(struct tk_read_base *tkr,
-+							    u64 cycles)
- {
--	u64 delta, cycles = tk_clock_read(tkr);
-+	u64 delta = clocksource_delta(cycles, tkr->cycle_last, tkr->mask);
- 
--	delta = clocksource_delta(cycles, tkr->cycle_last, tkr->mask);
- 	return timekeeping_delta_to_ns(tkr, delta);
- }
- 
-+static __always_inline u64 fast_tk_get_delta_ns(struct tk_read_base *tkr)
++struct system_counterval_t set_tsc_system_counterval(u64 tsc)
 +{
-+	return fast_tk_get_delta_ns_from_cycles(tkr, tk_clock_read(tkr));
++	return (struct system_counterval_t) { .cs = &clocksource_tsc,
++					      .cycles = tsc};
 +}
-+
- static __always_inline u64 __ktime_get_fast_ns(struct tk_fast *tkf)
- {
- 	struct tk_read_base *tkr;
-@@ -1303,6 +1308,63 @@ int get_device_system_crosststamp(int (*get_time_fn)
- }
- EXPORT_SYMBOL_GPL(get_device_system_crosststamp);
++EXPORT_SYMBOL(set_tsc_system_counterval);
  
-+/**
-+ * get_mono_fast_from_given_time - Fast NMI safe access to convert a given
-+ *				    timestamp to clock monotonic
-+ * @get_time_fn:	Callback to get the given time and its clocksource
-+ * @ctx:		Context passed to get_time_fn()
-+ * @mono_ns:		The monotonic time of the given time
-+ */
-+int notrace get_mono_fast_from_given_time(int (*get_time_fn)
-+						(struct system_counterval_t *sys_counterval,
-+						void *ctx),
-+					  void *ctx,
-+					  u64 *mono_ns)
-+{
-+	struct system_counterval_t system_counterval;
-+	struct tk_fast *tkf = &tk_fast_mono;
-+	u64 cycles, now, interval_start;
-+	struct tk_read_base *tkr;
-+	unsigned int seq;
-+	int ret;
-+
-+	do {
-+		seq = raw_read_seqcount_latch(&tkf->seq);
-+		tkr = tkf->base + (seq & 0x01);
-+
-+		ret = get_time_fn(&system_counterval, ctx);
-+		if (ret)
-+			return ret;
-+
-+		/*
-+		 * Verify that the clocksource associated with the given
-+		 * timestamp is the same as the currently installed
-+		 * timekeeper clocksource
-+		 */
-+		if (tkr->clock != system_counterval.cs)
-+			return -EOPNOTSUPP;
-+		cycles = system_counterval.cycles;
-+
-+		/*
-+		 * Check whether the given timestamp is on the current
-+		 * timekeeping interval.
-+		 */
-+		now = tk_clock_read(tkr);
-+		interval_start = tkr->cycle_last;
-+		if (!cycle_between(interval_start, cycles, now))
-+			return -EOPNOTSUPP;
-+
-+		now = ktime_to_ns(tkr->base);
-+		now += fast_tk_get_delta_ns_from_cycles(tkr, cycles);
-+
-+	} while (read_seqcount_latch_retry(&tkf->seq, seq));
-+
-+	*mono_ns = now;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(get_mono_fast_from_given_time);
-+
- /**
-  * do_settimeofday64 - Sets the time of day.
-  * @ts:     pointer to the timespec64 variable containing the new time
+ static void tsc_refine_calibration_work(struct work_struct *work);
+ static DECLARE_DELAYED_WORK(tsc_irqwork, tsc_refine_calibration_work);
 -- 
 2.35.1
 
