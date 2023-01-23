@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E86774B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF596774B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 05:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjAWEok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 Jan 2023 23:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S231497AbjAWEsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 Jan 2023 23:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjAWEoi (ORCPT
+        with ESMTP id S229549AbjAWEr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 Jan 2023 23:44:38 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EA313501;
-        Sun, 22 Jan 2023 20:44:37 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30N4djeL005120;
-        Mon, 23 Jan 2023 04:44:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OacOLlrKZ8JwK9orVXA8AsmjPvwSvOiWb+YQJupZdHc=;
- b=pyw1F8UUN/si4ysc9TlU/weUAtxSbN2tsrg8LrHldbCzwTWvyeA1ggYohxtjU9RXNYZ1
- HGH5wYMqCoKuL2j19CDVbaojaouSh269rOV7Ah5Vo1YCo6u77i1oJJreo6YjUBwt7oLl
- fHIaeQgIP0Ob1/o6vSnSCTT5yJ3KGUV6y/c51F9MI1IPPwWO5iYaq1UmtQMLgOsLKalO
- tioMWhq45zTQxxl010pK5aRWo/ForE5Q/902Eh1b5U6hH20Sc6GJzkWnxniusEtjYLDN
- nYw+yiVzjBpRVeQ8Oke4Qe5q81LW5MPT8SqaZ/m+f2OgH5I5CAP6qTFHGSBm3tIRVIx9 nw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89htt6u9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 04:44:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30N4iW9E025702
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 04:44:32 GMT
-Received: from [10.50.40.120] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 22 Jan
- 2023 20:44:29 -0800
-Message-ID: <0b224700-4774-0c34-7ce1-0a984b62b3c0@quicinc.com>
-Date:   Mon, 23 Jan 2023 10:14:26 +0530
+        Sun, 22 Jan 2023 23:47:58 -0500
+X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Jan 2023 20:47:54 PST
+Received: from p3plwbeout22-04.prod.phx3.secureserver.net (p3plsmtp22-04-2.prod.phx3.secureserver.net [68.178.252.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A74A113F9
+        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 20:47:54 -0800 (PST)
+Received: from mailex.mailcore.me ([94.136.40.143])
+        by :WBEOUT: with ESMTP
+        id JohfpsT2sGmD8JohgpceGa; Sun, 22 Jan 2023 21:45:08 -0700
+X-CMAE-Analysis: v=2.4 cv=SdUyytdu c=1 sm=1 tr=0 ts=63ce10d4
+ a=EhJYbXVJKsomWlz4CTV+qA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=RvmDmJFTN0MA:10 a=1RTuLK3dAAAA:8
+ a=07d9gI8wAAAA:8 a=OVIqzpK4FF8QeQ2kMcwA:9 a=QEXdDO2ut3YA:10
+ a=kRpfLKi8w9umh8uBmg1i:22 a=e2CUPOnPG4QKp8I52DXD:22
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  JohfpsT2sGmD8
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp03.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1pJohb-0001kd-HF; Mon, 23 Jan 2023 04:45:04 +0000
+Message-ID: <47e9f2c3-aeea-4d3a-f27f-8ace15cb9a21@squashfs.org.uk>
+Date:   Mon, 23 Jan 2023 04:45:04 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: add QFPROM node
-To:     Robert Marko <robimarko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <srinivas.kandagatla@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230121112358.52216-1-robimarko@gmail.com>
- <20230121112358.52216-2-robimarko@gmail.com>
- <ebdd9932-e251-0cd7-6c98-3c735ecb74a6@quicinc.com>
- <CAOX2RU7p-0ZTx8fkY4hOk=Zmx6RT+1PwVL+CQxkjzVadm0ehTA@mail.gmail.com>
- <29d9de45-1ce7-d6e5-bf02-052e911a067b@quicinc.com>
- <CAOX2RU7BfESmsUdZ5jBfYjWXUnDWmFizT8UiPwgzb_SsrT0jnA@mail.gmail.com>
-Content-Language: en-US
-From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-In-Reply-To: <CAOX2RU7BfESmsUdZ5jBfYjWXUnDWmFizT8UiPwgzb_SsrT0jnA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DThyUDSLr-WQp1k0nFCb0SapXD4m6Acz
-X-Proofpoint-GUID: DThyUDSLr-WQp1k0nFCb0SapXD4m6Acz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_02,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 mlxlogscore=952 suspectscore=0 clxscore=1015 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301230044
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.6.1
+Subject: Re: [PATCH linux-next] Squashfs: use strscpy() to instead of
+ strncpy()
+To:     yang.yang29@zte.com.cn
+Cc:     linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
+References: <202301091937558399800@zte.com.cn>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <202301091937558399800@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfNOMadNzTuGi4rn76f82q47chcIviOpnmzRcD6/78WhT4rJ1oq83PtFYTPACHapK4R242DHCY5AaGmJC9vAK3LDuXdwg7se8NFhxDH2a3N7neA2EEbuV
+ aPYViL09knAA4yJ8hr+cAaqdhZbzxh+sjgxOW5C+DnF4JT+I2nWURvNBZ/zmP84ZGVj0vpS2A9Lr/RDykiZ2+JYjTRSmC6FedII=
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/01/2023 11:37, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+> 
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
+> 
 
-On 1/22/2023 10:39 PM, Robert Marko wrote:
-> On Sun, 22 Jan 2023 at 18:05, Kathiravan Thirumoorthy
-> <quic_kathirav@quicinc.com> wrote:
->>
->> On 1/22/2023 10:29 PM, Robert Marko wrote:
->>> On Sun, 22 Jan 2023 at 17:57, Kathiravan Thirumoorthy
->>> <quic_kathirav@quicinc.com> wrote:
->>>> On 1/21/2023 4:53 PM, Robert Marko wrote:
->>>>> IPQ8074 has efuses like other Qualcomm SoC-s that are required for
->>>>> determining various HW quirks which will be required later for CPR etc,
->>>>> so lets add the QFPROM node for start.
->>>>>
->>>>> Individidual fuses will be added as they are required.
->>>>>
->>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>>>> ---
->>>>>     arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 +++++++
->>>>>     1 file changed, 7 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
->>>>> index 8eba586065a3..f29491f647fe 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
->>>>> @@ -301,6 +301,13 @@ mdio: mdio@90000 {
->>>>>                         status = "disabled";
->>>>>                 };
->>>>>
->>>>> +             qfprom: efuse@a4000 {
->>>>> +                     compatible = "qcom,ipq8074-qfprom", "qcom,qfprom";
->>>>> +                     reg = <0x000a4000 0x1000>;
->>>>    From the HW document, I see the overall size of this region is 0x2000,
->>>> any reason to stick with 0x1000?
->>> Like always, I dont have access to docs and 0x1000 is all I could find
->>> downstream
->>> being used.
->>>
->>> Any chance you can share the regions inside of QFPROM, it would be great to use
->>> the ECC corrected one if available.
->> Sorry, What do you refer by "ECC corrected" here?
-> Isnt there a corrected region in the QFPROM meant for reading?
-> As far as I understand it's protected by FEC.
+NACK.
 
+I have spent quite some time reviewing this patch, and the reasons
+are below.
 
-Yes, there are two regions for the QFPROM, the region which you used 
-here is the one used for reading and there is a error correction logic 
-for it and it is size is 8KB not 4KB.
+The source name (from the dentry) is passed as pointer and length,
+and the code should not assume it is NUL terminated.
 
-Thanks, Kathiravan T.
+Strscpy() will always access len + 1 bytes from the source string,
+to check for the NUL terminator and return either the number of
+characters copied or -E2BIG if no NUL terminator was found at
+name[len].
 
->
-> Regards,
-> Robert
->> Thanks, Kathiravan T.
->>
->>
->>> Regards,
->>> Robert
->>>> Thanks, Kathiravan T.
->>>>
->>>>
->>>>> +                     #address-cells = <1>;
->>>>> +                     #size-cells = <1>;
->>>>> +             };
->>>>> +
->>>>>                 prng: rng@e3000 {
->>>>>                         compatible = "qcom,prng-ee";
->>>>>                         reg = <0x000e3000 0x1000>;
+This means Strscpy() will perform an out of bounds access on the
+source string if it is not NUL terminated.  This is incorrect in
+itself, and there are no guarantees it won't fail, for example
+it might cross a page boundary and the next page may not be
+mapped.
+
+The current code is actually a lot safer because it does not assume
+the string is NUL terminated.
+
+See the LWN article "strscpy() and the hazards of improved interfaces"
+for a discussion of the dangers of conversion patches.
+
+https://lwn.net/Articles/659214/
+
+In particular a quote from Linus Torvalds.
+
+"So why did I waffle about this for so long?
+
+Every time we introduce a new-and-improved interface, people start doing 
+these interminable series of trivial conversion patches.
+
+And every time that happens, somebody does some silly mistake, and the 
+conversion patch to the improved interface actually makes things worse. 
+Because the patch is mindnumbing and trivial, nobody has the attention 
+span to look at it carefully, and it's usually done over large swatches 
+of source code which means that not every conversion gets tested."
+
+and to quote from the article itself
+
+"It is there to be used with new code, but existing code should not be 
+converted without some compelling reason to do so — or without a high 
+level of attention to the possible implications of the change."
+
+Which is why I'm wary of these apparently trivial changes, and I have 
+spent quite some time reviewing this patch.
+
+Phillip
+
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> ---
+>   fs/squashfs/namei.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/squashfs/namei.c b/fs/squashfs/namei.c
+> index 11e4539b9eae..6c4704ba8f42 100644
+> --- a/fs/squashfs/namei.c
+> +++ b/fs/squashfs/namei.c
+> @@ -80,8 +80,7 @@ static int get_dir_index_using_name(struct super_block *sb,
+>   	}
+> 
+>   	str = &index->name[SQUASHFS_NAME_LEN + 1];
+> -	strncpy(str, name, len);
+> -	str[len] = '\0';
+> +	strscpy(str, name, len + 1);
+> 
+>   	for (i = 0; i < i_count; i++) {
+>   		err = squashfs_read_metadata(sb, index, &index_start,
+
