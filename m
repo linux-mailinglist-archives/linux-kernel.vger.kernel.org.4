@@ -2,91 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EB067802F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E45678034
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbjAWPmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        id S232845AbjAWPnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjAWPm2 (ORCPT
+        with ESMTP id S232862AbjAWPnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:42:28 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342182B0BB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:42:21 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id az20so31647418ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 07:42:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xVr3vB2hzZ3F0yO7EPlpiTN2lX/kuFDnddqTHol07pA=;
-        b=YX0hdTjGa8dEyzk23hSWQZWrLFyzO+cJSSiGYizMp06adkWCiZGSdj7UVSEeHkGadw
-         dlj7MMWWozp3X5fXVmjnsXq/desS5mdDxMIy94tbGuar96qpDBWfq6Og0b6ta/+8ngbo
-         hz3b4TtiXIYy+lXd8AIfFl3lbNltYkR8tt6WaE4KXxm5HiqwgZsHqGtFAir7gHi4rRxj
-         G7LNlow5tNKNLrEaJxwo7VKaB+xgDN62kPYGgng5j6Ctg2Sdf/kAW2DPBvBt/M3YmY1E
-         C8NhuwqnHDStB+R7VKIXGIEsr8S2E7eZJszEAE9u3ZvTJoCgtW/V7M/oZjDzvssqth1/
-         x5zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xVr3vB2hzZ3F0yO7EPlpiTN2lX/kuFDnddqTHol07pA=;
-        b=ycRYmDw82+EExJYDMifsGYCFNxaeF1R5/PXB2/DG10d2eX/J97Fq41O52n3di0O/W+
-         XBoPajQKo9sMneWvw5nKUNCmIbSzWdgjhcFiwLQiggCjMZI2oF1PenfpBygSUIuhw2cd
-         0/VuOhd2W5z1JGxaDv2VeAt4WOilWFMYsLeXvKCQcddxhRGTfc0vOuzt5BbE58Mb3+Bo
-         UeNc0M0ifeTHGP4eehPgF7XVo9xVeYkmClXvKtls7pi9QRy89NAp4DTF7L6kfOJsIAj5
-         GNqlhKo/045pqokTlFCiRa6HoQBMYbh0fNFscDNULmduEsEEoQhobeEY0wFvJb1gjg0l
-         4O2A==
-X-Gm-Message-State: AFqh2krIGVZJsGoAf9x2qv6ClaAe+AegAkwCiIhxkw+EuPa5G2lCJLcT
-        0FsluvN9CTF5dBEAXPzKN/qaxqYvmBK8l3PWltpZP7eXE1aoqw==
-X-Google-Smtp-Source: AMrXdXsBgqjTnRSztvCW0oWV43HFQpfHDgSAdrJdaM2m4Pgp4mPeLCStLGJudP2CP5l+vRWe9Hv8+4SewYLmgxsZ+xA=
-X-Received: by 2002:a17:906:cf9a:b0:84d:347f:1522 with SMTP id
- um26-20020a170906cf9a00b0084d347f1522mr2305675ejb.319.1674488538878; Mon, 23
- Jan 2023 07:42:18 -0800 (PST)
+        Mon, 23 Jan 2023 10:43:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45725592;
+        Mon, 23 Jan 2023 07:42:42 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 78F42339C7;
+        Mon, 23 Jan 2023 15:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674488561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=55apZeYnu6RO07C6lWHKMqZeQ9QD+dZi2oV45IYgqR8=;
+        b=NwZHaPnSdW0sTqWIpW2Ep2zUuQal9AFNwBLp9xUmbUjAfDGelZ/xsCQDuUGJM72HmTIzWD
+        OVGHfd0I8eI2RL5CanevYwNgICrTG+L9yMtGcFVikSQMyfesIE/B6sHkF1jegMTYHs7TtI
+        KIBufBqOPxkvvdIyiJwOXwaUEQXgNhs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 236FB1357F;
+        Mon, 23 Jan 2023 15:42:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Gh6oB/GqzmNMXgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 23 Jan 2023 15:42:41 +0000
+Date:   Mon, 23 Jan 2023 16:42:39 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: Re: [RFC v3 00/12] DRM scheduling cgroup controller
+Message-ID: <20230123154239.GA24348@blackbody.suse.cz>
+References: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a50:4d1:0:b0:1f2:a072:bdb7 with HTTP; Mon, 23 Jan 2023
- 07:42:18 -0800 (PST)
-Reply-To: georgebrown0004@gmail.com
-From:   george brown <georgebrown00005@gmail.com>
-Date:   Mon, 23 Jan 2023 16:42:18 +0100
-Message-ID: <CA+CaFy0UOuw6DNDYJqFG2YMVKCP4_zcCLcORsxGHOX7fRpsqtA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="sdtB3X0nJg68CQEu"
+Content-Disposition: inline
+In-Reply-To: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BBuna ziua
 
-Numele meu este George Brown. Sunt avocat de profesie. vreau sa va ofer
-rudele apropiate clientului meu. Ve=C8=9Bi mo=C8=99teni suma de (8,5 milioa=
-ne USD)
-dolari pe care clientul meu i-a l=C4=83sat =C3=AEn banc=C4=83 =C3=AEnainte =
-de moartea lui.
+--sdtB3X0nJg68CQEu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Clientul meu este un cet=C4=83=C8=9Bean al =C8=9B=C4=83rii dumneavoastr=C4=
-=83 care a murit
-=C3=AEntr-un accident de ma=C8=99in=C4=83 =C3=AEmpreun=C4=83 cu so=C8=9Bia =
-sa
-si singurul fiu. Voi avea dreptul la 50% din fondul total, =C3=AEn timp ce
-50% va avea
-fie pentru tine.
-V=C4=83 rug=C4=83m s=C4=83 contacta=C8=9Bi e-mailul meu privat aici pentru =
-mai multe
-detalii: georgebrown0004@gmail.com
+Hello Tvrtko.
 
-Multe mul=C8=9Bumiri in avans,
-Domnule George Brown,
+Interesting work.
+
+On Thu, Jan 12, 2023 at 04:55:57PM +0000, Tvrtko Ursulin <tvrtko.ursulin@li=
+nux.intel.com> wrote:
+> Because of the heterogenous hardware and driver DRM capabilities, soft li=
+mits
+> are implemented as a loose co-operative (bi-directional) interface betwee=
+n the
+> controller and DRM core.
+
+IIUC, this periodic scanning, calculating and applying could be partly
+implemented with userspace utilities. (As you write, these limits are
+best effort only, so it sounds to me such a total implementation is
+unnecessary.)
+
+I think a better approach would be to avoid the async querying and
+instead require implementing explicit foo_charge_time(client, dur) API
+(similar to how other controllers achieve this).
+Your argument is the heterogenity of devices -- does it mean there are
+devices/drivers that can't implement such a synchronous charging?=20
+
+> DRM core provides an API to query per process GPU utilization and 2nd API=
+ to
+> receive notification from the cgroup controller when the group enters or =
+exits
+> the over budget condition.
+
+The return value of foo_charge_time() would substitute such a
+notification synchronously. (By extension all clients in an affected
+cgroup could be notified to achieve some broader actions.)
+
+> Individual DRM drivers which implement the interface are expected to act =
+on this
+> in the best-effort manner only. There are no guarantees that the soft lim=
+its
+> will be respected.
+
+Back to original concern -- must all code reside in the kernel when it's
+essentially advisory resource control?
+
+>  * DRM core is required to track all DRM clients belonging to processes s=
+o it
+>    can answer when asked how much GPU time is a process using.
+>  [...]
+>  * Individual drivers need to implement two similar hooks, but which work=
+ for
+>    a single DRM client. Over budget callback and GPU utilisation query.
+
+This information is eventually aggregated for each process in a cgroup.
+(And the action is carried on a single client, not a process.)
+The per-process tracking seems like an additional indirection.
+Could be the clients associated directly with DRM cgroup? [1]
+
+
+Regards,
+Michal
+
+[1] I understand the sending a fd of a client is a regular operation, so
+    I'm not sure how cross-cg migrations would have to be handled in any
+    case.
+
+--sdtB3X0nJg68CQEu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY86q5AAKCRAkDQmsBEOq
+ueEGAQDI5fZQTAIasuzhXqvhso/sSZM6kjJABNN/jGexID1/AgEA7ESyKCV82koM
+JsjtlGG3kRl/Y0LhTvA4J7akVFgGdQo=
+=vAYz
+-----END PGP SIGNATURE-----
+
+--sdtB3X0nJg68CQEu--
