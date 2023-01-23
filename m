@@ -2,132 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD32D677650
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DB0677651
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjAWIa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S231655AbjAWIbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjAWIay (ORCPT
+        with ESMTP id S230218AbjAWIba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:30:54 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84E11A961;
-        Mon, 23 Jan 2023 00:30:51 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P0jld0Pd8z9xrpS;
-        Mon, 23 Jan 2023 16:22:53 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCXGwemRc5jxm+9AA--.10647S2;
-        Mon, 23 Jan 2023 09:30:38 +0100 (CET)
-Message-ID: <dfb387003ee50db5fe0d71bc825cc39df47f74ed.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] security: Restore passing final prot to
- ima_file_mmap()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Mon, 23 Jan 2023 09:30:15 +0100
-In-Reply-To: <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com>
-References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
-         <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
-         <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
-         <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
-         <a764acb285d0616c8608eaab8671ceb9c22cb390.camel@huaweicloud.com>
-         <058f1bdf4ba75c3a00918cefbf1be32477b51639.camel@linux.ibm.com>
-         <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
-         <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 23 Jan 2023 03:31:30 -0500
+Received: from mail.groupteam.pl (mail.groupteam.pl [51.75.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1655B166E6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:31:29 -0800 (PST)
+Received: by mail.groupteam.pl (Postfix, from userid 1002)
+        id D24E7A3B8E; Mon, 23 Jan 2023 08:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=groupteam.pl; s=mail;
+        t=1674462686; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
+        h=Date:From:To:Subject:From;
+        b=Lkd0DnmvCmMMpPXw29Jo37pkDjUrI2LJt8YX6DWjruhCSK50sHnfJHkZVf1bevAWX
+         WLNQwv8bcQ8h0laDSPBYe/9+yr9TvZfcVNN80kDwrzynQyzhBAbPKYNBI3U1AVAYRf
+         1RDFq1ytWf/6whmZ+teQ83/5u7idgn6UOmKWn6TUrxXQJ60Mqbh8FWDzDrC0vyY7Ch
+         +j8SShzk1/VkLI6wOb03Mr8agtGHEUvdm9yZ08xZkOede2hl2vWSHjc3SlxDGjT0d7
+         bS3gvKzQxPABA16cefuFZhKJ5DkGd4rlj5hFI6QZj//TDW3pU+Uk5ihYsLNfbDEm8L
+         u8/tLFG3qKDVA==
+Received: by mail.groupteam.pl for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:30:24 GMT
+Message-ID: <20230123074500-0.1.7y.358n1.0.bhb2hbvoaa@groupteam.pl>
+Date:   Mon, 23 Jan 2023 08:30:24 GMT
+From:   "Krzysztof Maj" <krzysztof.maj@groupteam.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Biznesowy angielski
+X-Mailer: mail.groupteam.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwCXGwemRc5jxm+9AA--.10647S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr18urWruw4UXry3JF1UWrg_yoW5WF4fpF
-        WUt3WUKr4kXF10yr1IqF17GF1Fk39xJryUXw4Dtryjvrn0qr1UKr1xJFWUurykXr1kCr1j
-        qF17K3y3CF1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj4PqXAAAsE
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_ABUSE_SURBL,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: groupteam.pl]
+        *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
+        *      blocklist
+        *      [URIs: groupteam.pl]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [51.75.73.133 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: groupteam.pl]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-20 at 16:04 -0500, Paul Moore wrote:
-> On Fri, Jan 13, 2023 at 5:53 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Thu, 2023-01-12 at 12:45 -0500, Mimi Zohar wrote:
-> > > On Thu, 2023-01-12 at 13:36 +0100, Roberto Sassu wrote:
-> > > > On Wed, 2023-01-11 at 09:25 -0500, Paul Moore wrote:
-> > > > > On Wed, Jan 11, 2023 at 4:31 AM Roberto Sassu
-> > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
-> > > > > > > On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
-> > > > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > > 
-> > > > > > > > Commit 98de59bfe4b2f ("take calculation of final prot in
-> > > > > > > > security_mmap_file() into a helper") moved the code to update prot with the
-> > > > > > > > actual protection flags to be granted to the requestor by the kernel to a
-> > > > > > > > helper called mmap_prot(). However, the patch didn't update the argument
-> > > > > > > > passed to ima_file_mmap(), making it receive the requested prot instead of
-> > > > > > > > the final computed prot.
-> > > > > > > > 
-> > > > > > > > A possible consequence is that files mmapped as executable might not be
-> > > > > > > > measured/appraised if PROT_EXEC is not requested but subsequently added in
-> > > > > > > > the final prot.
-> > > > > > > > 
-> > > > > > > > Replace prot with mmap_prot(file, prot) as the second argument of
-> > > > > > > > ima_file_mmap() to restore the original behavior.
-> > > > > > > > 
-> > > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
-> > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > > ---
-> > > > > > > >  security/security.c | 2 +-
-> > > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/security/security.c b/security/security.c
-> > > > > > > > index d1571900a8c7..0d2359d588a1 100644
-> > > > > > > > --- a/security/security.c
-> > > > > > > > +++ b/security/security.c
-> > > > > > > > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
-> > > > > > > >                                         mmap_prot(file, prot), flags);
-> > > > > > > >         if (ret)
-> > > > > > > >                 return ret;
-> > > > > > > > -       return ima_file_mmap(file, prot);
-> > > > > > > > +       return ima_file_mmap(file, mmap_prot(file, prot));
-> > > > > > > >  }
-> > > > > > > 
-> > > > > > > This seems like a reasonable fix, although as the original commit is
-> > > > > > > ~10 years old at this point I am a little concerned about the impact
-> > > > > > > this might have on IMA.  Mimi, what do you think?
-> 
-> So ... where do we stand on this patch, Mimi, Roberto?  I stand by my
-> original comment, but I would want to see an ACK from Mimi at the very
-> least before merging this upstream.  If this isn't ACK-able, do we
-> have a plan to resolve this soon?
+Dzie=C5=84 dobry,=20
 
-Sorry, I had business trips last week. Will send the patches this week.
+czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
+swoich pracownik=C3=B3w?
 
-Roberto
+Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
+w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
+ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
+=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
 
+Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
+=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
+re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
+o=C5=BCliwo=C5=9Bci biznesowe.=20
+
+Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
+ kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
+za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
+=2E
+
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
+w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
+
+
+Pozdrawiam
+Krzysztof Maj
