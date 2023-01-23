@@ -2,101 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0B0677FBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E9A677FCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 16:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbjAWP30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 10:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S232260AbjAWPbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 10:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjAWP3W (ORCPT
+        with ESMTP id S232213AbjAWPbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:29:22 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E109F27D41;
-        Mon, 23 Jan 2023 07:29:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T+bLlWhxraIB24/FPxicbLBvjKYyf1uyDj4VccpINmU=; b=r5HrQTNhoJx6N4BbieyQTWTPQl
-        UMv0gwM+K1ovK/S89t26NhXkIbuXXN6FrmP07g/aW4cmBQLzxJAXtFZE5Nm9PTixvUKUmaaR9F19n
-        uyVGe14G939AigCOrwCgZmRaoxbTQg2HyEinry/ahiCinXTciyr19ze6oSlbPbXSHRdkahfm5HRx9
-        bWX1zLDQNmtYlzpE1zZBnTupNEGF9rDfwLZeR5cS9mfVHFAdOPlst1Q/DM7D4kMtopRlGW3tPo7Y9
-        Cu9Q7khPsEgpi9qJXbWs/MKUt5mwe64MRVZkzqo36hSi1h61CLZceNf0JTnF09HEDhs6oUz4WOt20
-        FwwZrmsw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pJykk-004KC3-Nf; Mon, 23 Jan 2023 15:29:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4AE1630008D;
-        Mon, 23 Jan 2023 16:28:58 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 32179202441DC; Mon, 23 Jan 2023 16:28:58 +0100 (CET)
-Date:   Mon, 23 Jan 2023 16:28:58 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [perf] lockdep warning between cpu_add_remove_lock and
- &dev->mutex.
-Message-ID: <Y86nuqyUwXUWchQs@hirez.programming.kicks-ass.net>
-References: <8c3fc3d1-8fed-be22-e0e7-ef1e1ea723ce@I-love.SAKURA.ne.jp>
- <Y85yadQes4fSwCZm@hirez.programming.kicks-ass.net>
- <b7bc63c8-bb28-d21d-7c3f-97e4e79a9292@I-love.SAKURA.ne.jp>
+        Mon, 23 Jan 2023 10:31:12 -0500
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2668F2659B;
+        Mon, 23 Jan 2023 07:31:09 -0800 (PST)
+Received: from SOPL295.local (unknown [IPv6:2a01:e0a:a6a:5f90:f8ca:19b4:6313:bc3])
+        (Authenticated sender: robert.jarzmik@free.fr)
+        by smtp5-g21.free.fr (Postfix) with ESMTPSA id A3A4E5FF93;
+        Mon, 23 Jan 2023 16:30:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1674487867;
+        bh=0mLGiFxXL934+MnA0bzTBcB0yjt9RF2xQOgM+iaYjPY=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=oPO+odbfKIZ6vir9Tfwk80gwYeCsjrxxt/HC4veBDAcxRTbn32Hs1FVVwspQw+XTx
+         TEwEjOTHoHRFYjk/FTqepQNXfG6fe4LvGbcIp7GMCqGyXTgk0xAgiA6rNg8fFtKIT7
+         kGiJm1PSp6I0o0IUUkpqbj/3jYcNTQxD+B4ZLAiPvPpph0SfQSyMi1y9/BDJoopR5v
+         P+it0gg99oexQHK4cI2hFcHGdFrFglUrt1YbdIsg/ou6JC9P6tbkwgMeT2LPC1/QDN
+         HdZDTYqFs8WdawsswDBQzFFeKNtwwgZ+wpWS7JPeT/l+dTZobZjsGw7dB2UjMFf0HX
+         sV8iwf0BLXhig==
+References: <20230109161636.512203-1-arnd@kernel.org>
+ <20230109161636.512203-2-arnd@kernel.org>
+User-agent: mu4e 1.8.11; emacs 28.1
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 1/3] ARM: pxa: enable PXA310/PXA320 for DT-only build
+Date:   Mon, 23 Jan 2023 16:30:17 +0100
+In-reply-to: <20230109161636.512203-2-arnd@kernel.org>
+Message-ID: <m2bkmpgteb.fsf@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7bc63c8-bb28-d21d-7c3f-97e4e79a9292@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:10:57PM +0900, Tetsuo Handa wrote:
-> On 2023/01/23 20:41, Peter Zijlstra wrote:
-> > On Mon, Jan 23, 2023 at 07:39:24PM +0900, Tetsuo Handa wrote:
-> >> Hello.
-> >>
-> >> I tried to apply below patch, and hit lockdep warning during boot.
-> >> Can you break this dependency?
-> > 
-> >   cpu_add_remove_lock
-> >     cpu_hotplug_lock
-> >       pmus_lock
-> >         dev->mutex		(pmu_dev_alloc)
-> > 
-> > vs
-> > 
-> >   dev->mutex
-> >     cpu_add_remove_lock		(pci_device_probe)
-> > 
-> > 
-> > Possibly something like this might do -- I'm not entirely sure it's
-> > fully correct, needs a bit of auditing.
-> > 
-> 
-> After applying your diff, lockdep message changed like below. Is this
-> the reason commit 1704f47b50b5 ("lockdep: Add novalidate class for
-> dev->mutex conversion") was applied?
 
-*sigh*, clearly I should have actually read the slat and not assumed it
-was another perf splat.
+Arnd Bergmann <arnd@kernel.org> writes:
 
-Yes, something along these lines is why it was done. I think it was this
-thread, but there might have been more:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> After commit b5aaaa666a85 ("ARM: pxa: add Kconfig dependencies 
+> for
+> ATAGS based boards"), the default PXA build no longer includes 
+> support
+> for the board files that are considered unused.
+>
+> As a side-effect of this, the PXA310 and PXA320 support is not 
+> built
+> into the kernel any more, even though it should work in 
+> principle as
+> long as the symbols are enabled. As Robert points out, there are 
+> dts
+> files for zylonite and cm-x300, though those have not made it 
+> into the
+> mainline kernel.
+>
+> Link: 
+> https://lore.kernel.org/linux-arm-kernel/m2sfglh02h.fsf@free.fr/
+> Reported-by: Robert Jarzmik <robert.jarzmik@free.fr>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-  https://lore.kernel.org/all/Pine.LNX.4.44L0.0804171117450.18040-100000@iolanthe.rowland.org/
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+
+Cheers.
+
+--
+Robert
