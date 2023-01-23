@@ -2,149 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3BB677DD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9E3677DE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 15:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjAWOVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 09:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S232287AbjAWOYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 09:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbjAWOVn (ORCPT
+        with ESMTP id S232267AbjAWOYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:21:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB7418B29
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 06:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674483654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Qw6OoQIblD+SHFIDSF3ygbKeoxmTzUe8MMuhcikIz8=;
-        b=N270oJ5X+YSZ26Ic9zPu28OhqgmqolL26CO4uwS37+Mqp3RuUur8xbw7ApqTuM63zowGuj
-        rKbzOggQTJblaHRJkb/pWE0Pm+gDHHoV6JYk88+bTi4uju6FZBfW4DzawpgWcLz6FpoAjk
-        q7cl0lbBrjzuxMq4YJzWpqxKF8yXSvM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-609-a8byMG8TPQO0ska7UDeWAw-1; Mon, 23 Jan 2023 09:20:46 -0500
-X-MC-Unique: a8byMG8TPQO0ska7UDeWAw-1
-Received: by mail-wr1-f71.google.com with SMTP id m12-20020adfa3cc000000b002b881cb0cb4so2018431wrb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 06:20:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Qw6OoQIblD+SHFIDSF3ygbKeoxmTzUe8MMuhcikIz8=;
-        b=lEDlk1C+ksd0k/wk3939PEALTr4Y+zCg2C/DrXDz+lv3N+p+HZaRYs+NEZ3yFfcQOB
-         8dr+p0zO4Ev8EPGopVdtdby8Rv3ZyvpK5k7xBdNDd7IBKJceSNIcOzMZkcgQ5TqQ7Z/q
-         TJIFr+7ekha/F1A3KvHn08zby5ffg+g4QMo6RC9Opu8c2E8v6U6rHR+YhUAsHptaHnBb
-         wLnxVYLM9ufwqmrVIGKjghI3EW4NAU1tdSnkh+VuN7Eiid2xipahiy6PTVUiWGMIpdpz
-         iq7rzVIue7f+7WavWTjSPZNNJmKQTda7zysSy5XfCVbnEZkswmH7puv3QUrIelvzBes3
-         VQ1A==
-X-Gm-Message-State: AFqh2kol4aLpHg8lASkUjSxlY1ul+hVg2tkYd8Si3wKuvl6vK6zmKFNx
-        OM2gzsXDeBJp3NeE0SWMqQaoeb3q09+a2a0cCxOHFNiOznLZYs0RGv/uQYTFtKl0j1TsuzT+D+l
-        jO1eN8hnhIyrvbs9Hs3jHZbN/
-X-Received: by 2002:a05:600c:3083:b0:3da:e4d:e6ba with SMTP id g3-20020a05600c308300b003da0e4de6bamr23672671wmn.14.1674483643852;
-        Mon, 23 Jan 2023 06:20:43 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtA0SmMxGfIXBjxWwrkcsAPkrTFymy9qeDOZWk2TkY+Bo+QqROnDkmX5yaFF9e6G40kzNARmg==
-X-Received: by 2002:a05:600c:3083:b0:3da:e4d:e6ba with SMTP id g3-20020a05600c308300b003da0e4de6bamr23672641wmn.14.1674483643563;
-        Mon, 23 Jan 2023 06:20:43 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:1100:65a0:c03a:142a:f914? (p200300cbc704110065a0c03a142af914.dip0.t-ipconnect.de. [2003:cb:c704:1100:65a0:c03a:142a:f914])
-        by smtp.gmail.com with ESMTPSA id 21-20020a05600c26d500b003d9b87296a9sm10216753wmv.25.2023.01.23.06.20.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 06:20:43 -0800 (PST)
-Message-ID: <77f3fc56-05d8-def0-e518-0906c729e7df@redhat.com>
-Date:   Mon, 23 Jan 2023 15:20:41 +0100
+        Mon, 23 Jan 2023 09:24:09 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE15624108;
+        Mon, 23 Jan 2023 06:24:07 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30NELWIe048974;
+        Mon, 23 Jan 2023 08:21:32 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674483692;
+        bh=BlwQD0ARUqblb48RoEOI25OrVzMPGwg0R8vqptzkpJg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=FvdWBlHevL+XhAXaPy6/J5HISPF/VxUYp4ghd1OWL43dNVfYvXx7g2ekBT5wQUebb
+         Z/07W4YvJKF6TF7RTc4RvQAKzkBGhqILEYF+bDhNVaut9uibJTMsoi4PzBJtGFNdxQ
+         U3G4OdSkYHOE3bCY4gA0ok7R5fHJd+5EAWcvuU0g=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30NELWpG001905
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 23 Jan 2023 08:21:32 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 23
+ Jan 2023 08:21:31 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 23 Jan 2023 08:21:31 -0600
+Received: from [10.250.234.171] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30NEKpI9018755;
+        Mon, 23 Jan 2023 08:20:53 -0600
+Message-ID: <90084f5f-6e9d-7b17-5487-3b4b01bd5e7d@ti.com>
+Date:   Mon, 23 Jan 2023 19:50:50 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v7 2/8] iov_iter: Add a function to extract a page list
- from an iterator
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 02/13] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
-References: <c742e47b-dcc0-1fef-dc8c-3bf85d26b046@redhat.com>
- <7bbcccc9-6ebf-ffab-7425-2a12f217ba15@redhat.com>
- <246ba813-698b-8696-7f4d-400034a3380b@redhat.com>
- <20230120175556.3556978-1-dhowells@redhat.com>
- <20230120175556.3556978-3-dhowells@redhat.com>
- <3814749.1674474663@warthog.procyon.org.uk>
- <3903251.1674479992@warthog.procyon.org.uk>
- <3911637.1674481111@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <3911637.1674481111@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        <broonie@kernel.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <jic23@kernel.org>,
+        <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
+        <sanju.mehta@amd.com>, <chin-ting_kuo@aspeedtech.com>,
+        <clg@kaod.org>, <kdasu.kdev@gmail.com>, <f.fainelli@gmail.com>,
+        <rjui@broadcom.com>, <sbranden@broadcom.com>,
+        <eajames@linux.ibm.com>, <olteanv@gmail.com>, <han.xu@nxp.com>,
+        <john.garry@huawei.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <narmstrong@baylibre.com>,
+        <khilman@baylibre.com>, <matthias.bgg@gmail.com>,
+        <haibo.chen@nxp.com>, <linus.walleij@linaro.org>,
+        <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
+        <robert.jarzmik@free.fr>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <heiko@sntech.de>,
+        <krzysztof.kozlowski@linaro.org>, <andi@etezian.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <masahisa.kojima@linaro.org>, <jaswinder.singh@linaro.org>,
+        <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <l.stelmach@samsung.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <alex.aring@gmail.com>, <stefan@datenfreihafen.org>,
+        <kvalo@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <skomatineni@nvidia.com>,
+        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
+        <j.neuschaefer@gmx.net>, <vireshk@kernel.org>, <rmfrfs@gmail.com>,
+        <johan@kernel.org>, <elder@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <git@amd.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <radu_nicolae.pirea@upb.ro>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>,
+        <bcm-kernel-feedback-list@broadcom.com>, <fancer.lancer@gmail.com>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
+        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <yogeshgaur.83@gmail.com>,
+        <konrad.dybcio@somainline.org>, <alim.akhtar@samsung.com>,
+        <ldewangan@nvidia.com>, <michal.simek@amd.com>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+        <libertas-dev@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
+        <linux-iio@vger.kernel.org>, <michael@walle.cc>,
+        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <greybus-dev@lists.linaro.org>, <linux-staging@lists.linux.dev>,
+        <amitrkcian2002@gmail.com>
+References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
+ <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 14:38, David Howells wrote:
-> David Hildenbrand <david@redhat.com> wrote:
-> 
->> That would be the ideal case: whenever intending to access page content, use
->> FOLL_PIN instead of FOLL_GET.
->>
->> The issue that John was trying to sort out was that there are plenty of
->> callsites that do a simple put_page() instead of calling
->> unpin_user_page(). IIRC, handling that correctly in existing code -- what was
->> pinned must be released via unpin_user_page() -- was the biggest workitem.
->>
->> Not sure how that relates to your work here (that's why I was asking): if you
->> could avoid FOLL_GET, that would be great :)
-> 
-> Well, it simplifies things a bit.
-> 
-> I can make the new iov_iter_extract_pages() just do "pin" or "don't pin" and
-> do no ref-getting at all.  Things can be converted over to "unpin the pages or
-> doing nothing" as they're converted over to using iov_iter_extract_pages()
-> from iov_iter_get_pages*().
-> 
-> The block bio code then only needs a single bit of state: pinned or not
-> pinned.
+Hi Amit,
 
-Unfortunately, I'll have to let BIO experts comment on that :) I only 
-know the MM side of things here.
+On 20/01/23 00:23, Amit Kumar Mahapatra wrote:
+> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
+> members of struct spi_device to be an array. But changing the type of these
+> members to array would break the spi driver functionality. To make the
+> transition smoother introduced four new APIs to get/set the
+> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
+> spi->cs_gpiod references with get or set API calls.
+> While adding multi-cs support in further patches the chip_select & cs_gpiod
+> members of the spi_device structure would be converted to arrays & the
+> "idx" parameter of the APIs would be used as array index i.e.,
+> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
+>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+> [...]
+>  drivers/spi/spi-cadence-quadspi.c |  5 +++--
+>  drivers/spi/spi-cadence-xspi.c    |  4 ++--
+>  drivers/spi/spi-cadence.c         |  4 ++--
+[...]
 
-> 
-> For cifs RDMA, do I need to make it pass in FOLL_LONGTERM?  And does that need
-> a special cleanup?
-
-Anything that holds pins "possibly forever" should that. vmsplice() is 
-another example that should use it, once properly using FOLL_PIN. 
-[FOLL_GET | FOLL_LONGTERM is not really used/defined with semantics]
-
-> 
-> sk_buff fragment handling could still be tricky.  I'm thinking that in that
-> code I'll need to store FOLL_GET/PIN in the bottom two bits of the frag page
-> pointer.  Sometimes it allocates a new page and attaches it (have ref);
-> sometimes it does zerocopy to/from a page (have pin) and sometimes it may be
-> pointing to a kernel buffer (don't pin or ref).
-> 
-> David
-> 
+For SPI Cadence QSPI,
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
 -- 
-Thanks,
-
-David / dhildenb
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
