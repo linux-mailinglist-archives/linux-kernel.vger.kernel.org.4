@@ -2,192 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594E8677632
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305FE677635
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjAWIT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S231352AbjAWIUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjAWITx (ORCPT
+        with ESMTP id S230355AbjAWIT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:19:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1FC1A947;
-        Mon, 23 Jan 2023 00:19:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76C4660CF3;
-        Mon, 23 Jan 2023 08:19:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54E7C433EF;
-        Mon, 23 Jan 2023 08:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674461991;
-        bh=MxoEHRPfARVZoKWI3tfsB6o+VliindXdGwA1/dGoFLw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o6WXCShzzPUWx39NFGbagruYE7QduyykGQ5QEU7bSSCNJiaa3rOgskPunB0yO4Gs+
-         LIwQlP5merhS9pjGgCenxKrtjYQTYjGHgpgBho8+fu05+GwBZtakgfWqnU2PfmrEbm
-         E1fhBbD+VvR/IMTMV/tLsh6CvXJMTLQl4Xumz4ysOmwRkmG5HbyY1ZE1Dn5/7uNxmb
-         9WUmeR0VH/s3gwuEQKrpJyTjuC9LIwniWgB0ck2iUMvltfAw0DfxCosFPY3o54492s
-         tVp9ZPN/+hm3lT6P2mMoZkdLDkXU0kc3sZpqj8oYMHfOb5QWjpFZyo3ppyGkh4WJy+
-         9DyYdkhYoem0A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pJs3P-00076g-V3; Mon, 23 Jan 2023 09:19:48 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        kernel test robot <lkp@intel.com>, linux-efi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2] efi: drop obsolete efivars sysfs documentation
-Date:   Mon, 23 Jan 2023 09:19:05 +0100
-Message-Id: <20230123081905.27283-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Mon, 23 Jan 2023 03:19:58 -0500
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EF21A947;
+        Mon, 23 Jan 2023 00:19:55 -0800 (PST)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 333D31024B98;
+        Mon, 23 Jan 2023 11:19:51 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 333D31024B98
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1674461991; bh=UYNvFu2ftjGj1CHXawVAguz9o1/cVkuIuyh3pOYpg2I=;
+        h=From:To:CC:Subject:Date:From;
+        b=InXeXHydVPLRaKk1T4TlO/mNi9rAChZhaC3nlv5bkKz/JFD9Rp95fXBinAyhTAOjr
+         KqWHB0JvgeXY4b/lfYTPb9KCLBZFAWQcburvkjp5FynnVGx4Gvyjm+XkD44hNcjgSF
+         76AFRDW10C3A/aKD3Bb8Hz+AZXuVlvFMg0ncPHQ8=
+Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 2F0EE316973F;
+        Mon, 23 Jan 2023 11:19:51 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+CC:     Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Joe Perches" <joe@perches.com>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: [PATCH] netfilter: conntrack: remote a return value of the
+ 'seq_print_acct' function.
+Thread-Topic: [PATCH] netfilter: conntrack: remote a return value of the
+ 'seq_print_acct' function.
+Thread-Index: AQHZLwN2IudSa+yU30iWUXYGCT8Rrg==
+Date:   Mon, 23 Jan 2023 08:19:50 +0000
+Message-ID: <20230123081957.1380790-1-Ilia.Gavrilov@infotecs.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 174913 [Jan 23 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;infotecs.ru:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/01/23 07:22:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/23 00:37:00 #20794104
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The efivars sysfs interface was removed by commit 0f5b2c69a4cb ("efi:
-vars: Remove deprecated 'efivars' sysfs interface").
+The static 'seq_print_acct' function always returns 0.
 
-Remove also the corresponding sysfs ABI documentation.
+Change the return value to 'void' and remove unnecessary checks.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
+
+Fixes: 1ca9e41770cb ("netfilter: Remove uses of seq_<foo> return values")
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
 ---
+ net/netfilter/nf_conntrack_standalone.c | 26 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
 
-Changes in v2
- - drop reference in gsmi sysfs documentation
- - drop reference in efivarfs.rst (kernel test robot)
-
-
- .../ABI/stable/sysfs-firmware-efi-vars        | 79 -------------------
- Documentation/ABI/testing/sysfs-firmware-gsmi |  8 --
- Documentation/filesystems/efivarfs.rst        |  1 -
- 3 files changed, 88 deletions(-)
- delete mode 100644 Documentation/ABI/stable/sysfs-firmware-efi-vars
-
-diff --git a/Documentation/ABI/stable/sysfs-firmware-efi-vars b/Documentation/ABI/stable/sysfs-firmware-efi-vars
-deleted file mode 100644
-index 46ccd233e359..000000000000
---- a/Documentation/ABI/stable/sysfs-firmware-efi-vars
-+++ /dev/null
-@@ -1,79 +0,0 @@
--What:		/sys/firmware/efi/vars
--Date:		April 2004
--Contact:	Matt Domsch <Matt_Domsch@dell.com>
--Description:
--		This directory exposes interfaces for interactive with
--		EFI variables.  For more information on EFI variables,
--		see 'Variable Services' in the UEFI specification
--		(section 7.2 in specification version 2.3 Errata D).
+diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_con=
+ntrack_standalone.c
+index 0250725e38a4..bee99d4bcf36 100644
+--- a/net/netfilter/nf_conntrack_standalone.c
++++ b/net/netfilter/nf_conntrack_standalone.c
+@@ -275,22 +275,18 @@ static const char* l4proto_name(u16 proto)
+ 	return "unknown";
+ }
+=20
+-static unsigned int
++static void
+ seq_print_acct(struct seq_file *s, const struct nf_conn *ct, int dir)
+ {
+-	struct nf_conn_acct *acct;
+-	struct nf_conn_counter *counter;
++	struct nf_conn_acct *acct =3D nf_conn_acct_find(ct);
+=20
+-	acct =3D nf_conn_acct_find(ct);
+-	if (!acct)
+-		return 0;
 -
--		In summary, EFI variables are named, and are classified
--		into separate namespaces through the use of a vendor
--		GUID.  They also have an arbitrary binary value
--		associated with them.
--
--		The efivars module enumerates these variables and
--		creates a separate directory for each one found.  Each
--		directory has a name of the form "<key>-<vendor guid>"
--		and contains the following files:
--
--		=============== ========================================
--		attributes:	A read-only text file enumerating the
--				EFI variable flags.  Potential values
--				include:
--
--				EFI_VARIABLE_NON_VOLATILE
--				EFI_VARIABLE_BOOTSERVICE_ACCESS
--				EFI_VARIABLE_RUNTIME_ACCESS
--				EFI_VARIABLE_HARDWARE_ERROR_RECORD
--				EFI_VARIABLE_AUTHENTICATED_WRITE_ACCESS
--
--				See the EFI documentation for an
--				explanation of each of these variables.
--
--		data:		A read-only binary file that can be read
--				to attain the value of the EFI variable
--
--		guid:		The vendor GUID of the variable.  This
--				should always match the GUID in the
--				variable's name.
--
--		raw_var:	A binary file that can be read to obtain
--				a structure that contains everything
--				there is to know about the variable.
--				For structure definition see "struct
--				efi_variable" in the kernel sources.
--
--				This file can also be written to in
--				order to update the value of a variable.
--				For this to work however, all fields of
--				the "struct efi_variable" passed must
--				match byte for byte with the structure
--				read out of the file, save for the value
--				portion.
--
--				**Note** the efi_variable structure
--				read/written with this file contains a
--				'long' type that may change widths
--				depending on your underlying
--				architecture.
--
--		size:		As ASCII representation of the size of
--				the variable's value.
--		=============== ========================================
--
--
--		In addition, two other magic binary files are provided
--		in the top-level directory and are used for adding and
--		removing variables:
--
--		=============== ========================================
--		new_var:	Takes a "struct efi_variable" and
--				instructs the EFI firmware to create a
--				new variable.
--
--		del_var:	Takes a "struct efi_variable" and
--				instructs the EFI firmware to remove any
--				variable that has a matching vendor GUID
--				and variable key name.
--		=============== ========================================
-diff --git a/Documentation/ABI/testing/sysfs-firmware-gsmi b/Documentation/ABI/testing/sysfs-firmware-gsmi
-index 7a558354c1ee..60fe880b5b44 100644
---- a/Documentation/ABI/testing/sysfs-firmware-gsmi
-+++ b/Documentation/ABI/testing/sysfs-firmware-gsmi
-@@ -16,14 +16,6 @@ Description:
- 
- 		Layout:
- 
--		/sys/firmware/gsmi/vars:
--
--			This directory has the same layout (and
--			underlying implementation as /sys/firmware/efi/vars.
--			See `Documentation/ABI/*/sysfs-firmware-efi-vars`
--			for more information on how to interact with
--			this structure.
--
- 		/sys/firmware/gsmi/append_to_eventlog - write-only:
- 
- 			This file takes a binary blob and passes it onto
-diff --git a/Documentation/filesystems/efivarfs.rst b/Documentation/filesystems/efivarfs.rst
-index 0551985821b8..164611ce6f2c 100644
---- a/Documentation/filesystems/efivarfs.rst
-+++ b/Documentation/filesystems/efivarfs.rst
-@@ -40,4 +40,3 @@ accidentally.
- *See also:*
- 
- - Documentation/admin-guide/acpi/ssdt-overlays.rst
--- Documentation/ABI/stable/sysfs-firmware-efi-vars
--- 
-2.39.1
-
+-	counter =3D acct->counter;
+-	seq_printf(s, "packets=3D%llu bytes=3D%llu ",
+-		   (unsigned long long)atomic64_read(&counter[dir].packets),
+-		   (unsigned long long)atomic64_read(&counter[dir].bytes));
++	if (acct) {
++		struct nf_conn_counter *counter =3D acct->counter;
+=20
+-	return 0;
++		seq_printf(s, "packets=3D%llu bytes=3D%llu ",
++			   (unsigned long long)atomic64_read(&counter[dir].packets),
++			   (unsigned long long)atomic64_read(&counter[dir].bytes));
++	}
+ }
+=20
+ /* return 0 on success, 1 in case of error */
+@@ -342,8 +338,7 @@ static int ct_seq_show(struct seq_file *s, void *v)
+ 	if (seq_has_overflowed(s))
+ 		goto release;
+=20
+-	if (seq_print_acct(s, ct, IP_CT_DIR_ORIGINAL))
+-		goto release;
++	seq_print_acct(s, ct, IP_CT_DIR_ORIGINAL);
+=20
+ 	if (!(test_bit(IPS_SEEN_REPLY_BIT, &ct->status)))
+ 		seq_puts(s, "[UNREPLIED] ");
+@@ -352,8 +347,7 @@ static int ct_seq_show(struct seq_file *s, void *v)
+=20
+ 	ct_show_zone(s, ct, NF_CT_ZONE_DIR_REPL);
+=20
+-	if (seq_print_acct(s, ct, IP_CT_DIR_REPLY))
+-		goto release;
++	seq_print_acct(s, ct, IP_CT_DIR_REPLY);
+=20
+ 	if (test_bit(IPS_HW_OFFLOAD_BIT, &ct->status))
+ 		seq_puts(s, "[HW_OFFLOAD] ");
+--=20
+2.30.2
