@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A6067872D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8289678730
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 21:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbjAWUGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 15:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S232456AbjAWUGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 15:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbjAWUF5 (ORCPT
+        with ESMTP id S232295AbjAWUGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 15:05:57 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDC85270;
-        Mon, 23 Jan 2023 12:05:54 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id q10so9972228qvt.10;
-        Mon, 23 Jan 2023 12:05:54 -0800 (PST)
+        Mon, 23 Jan 2023 15:06:00 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A5210F0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:05:58 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x10so15964836edd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 12:05:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvuJ8A4IlyfXCsyYan/KpC79RkPAFCYwtl7xuTdER9c=;
-        b=KT2e53XUOUdDix7v7jXQ2Ki4M+qfO0LAqdqBru4J1aGtMklMemvUw6pw4WFM6LCL7/
-         mgNvDMwgOQ/WXi5Kf4bbWjoEZaRUR07h6h3kUGjGy/Cz33ouBfJhm6tkoE2NQU4o/krB
-         uYSMtpYcZFLw+yyRr5KvCRXmQeHSuOWZKFGZh6npLnGHnwZZ4BVDS3Wq/qSGrWcfPDCS
-         qimzJRxrbj8pNmN+CatdxigzvU3HwjExluKUjiFEP6DUMbnoMxi+7pv/XdCFBZBcRYd/
-         3DGlfLOXzuaKauYj18kZzuivS9cIvKXpW3/+dCfxybEi+yq+152XSBBFBbsnb6k+h1JO
-         nPUQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5MC6KGc3cRiZF9BcIVjcLfOK28zR5T5Wv5X79abU14w=;
+        b=huNXA4bfb5melawHGwOTU1BeN6ATBg/ACreBHcGB3M6Ro+YxvIJLEIhFKVsQSu8ODN
+         XgzMz6yYFq9je3iV0dpeVQHyyklZJX7NBNzGVg16Kjc9D/McZrKz0xYjezIwf872RTWy
+         ku4pAxm43upIiMMJI554Dls8jmbviWVHSpXmS0+3tLvBGogsOCVUXFXnAAFzL8r/kjvg
+         uIvH8SS/QsVGvaDcU6AFJiOTCwOSPque/ZTmp69WTwi6zWpe23E5vJvYQ8MJ/ITVzOs7
+         mbpr/9IoHlMgpVusBg0LiZMzY0Nfb9+jlnF1zed5XdVeafN9mLYIFJ5V6G4TxzpwoBr0
+         Zx1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rvuJ8A4IlyfXCsyYan/KpC79RkPAFCYwtl7xuTdER9c=;
-        b=pM40QrRnGLaTN3HtcaQcBRaJHC5aJc2i9zT97Qg+e7zc/LWrz4ZDECW0Ah3ALgznux
-         lc1XyoFewCcyKQXaeI7JANrAtZm8UmLsnHljx/znrN0jQYw2X+/1y/isYEvS225DBY9k
-         ixCGCY3NyPdCSHo8c9G+5kFlpIGQZ9Z0Yh4PpaVcg0+6+O/Uas/UlVQyueQlklJX3kII
-         EJ5aXFahn+e0IY6a5zD5QHutztBObLFJ9qbyD7gl1qqkiSI2SBq+QrVvFtcgH4q/wcKE
-         Y99ckJYf6pDXZXRsOa6s9FcaUXL/YD5DLcynZOoX07g2I0X4Aaoa3gBVYUyDMpv1CO69
-         zUeQ==
-X-Gm-Message-State: AFqh2krSV13b4kFAXfA0DxuNyc2kiihuEHv20QBC9NpxJsfkoCv7lgl1
-        YB2s6IY0y2wVw+9K/T9vG22o4PGZZaHtwg==
-X-Google-Smtp-Source: AMrXdXuSQ0q2Qr9Qof3A6qdsGO16cHNphtT4ih0Fr99dpzSra6Tv0sC1wUjjkxtPImruqRvkPeX5uA==
-X-Received: by 2002:a05:6214:3312:b0:535:2264:7437 with SMTP id mo18-20020a056214331200b0053522647437mr39171914qvb.5.1674504353599;
-        Mon, 23 Jan 2023 12:05:53 -0800 (PST)
-Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
-        by smtp.gmail.com with ESMTPSA id j10-20020a05620a0a4a00b00706a452c074sm56604qka.104.2023.01.23.12.05.52
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5MC6KGc3cRiZF9BcIVjcLfOK28zR5T5Wv5X79abU14w=;
+        b=Ub57KF2ffupmErY+DlQ/Ntv5I4c8s3KHYz9Ot7TOfKNuqqYYLbqxNSjFeG4088XeEO
+         jJdBCYr80RMXKinzHT7MQlUm0qZ94HKvfmdiWykjaOOHR/3ek8cuJ/F/L8XSJfsuoYdK
+         0SIaGjoPHfU1sUOO+EiPmqJhskmAcejg+ECfYxHqbSyL3zjA/P599hVEwvPsWcIQRd50
+         jHdesJ7KtQVtxDTLnzV7soOAqoJ90fQu5xUtQGel7f2W/pwoDoE8ujGI9zzaZsGCBkFp
+         aLwtCh+7CKKlndJC7ezvJF83eclH5uvKd+9jFs54XK1gQTLxaHiFIXxygNhaL3+YuGSg
+         iIjA==
+X-Gm-Message-State: AFqh2koi8RhWTE8H9wTd/96Dmo4n1mKOtvbRoca9dnMnJYCb3oP+ZWxC
+        uvvgJbk4zEzCPX9oIZUDJLKuuzrqA6cYePye
+X-Google-Smtp-Source: AMrXdXsHfZHaGMQ/BCp8uUyimW37lMTfF3CI256IDoEWA98mNXMTJ4DB2O4dsnEwNGZprTWa37Ymcg==
+X-Received: by 2002:a05:6402:2207:b0:49d:f444:ed04 with SMTP id cq7-20020a056402220700b0049df444ed04mr23903120edb.17.1674504357472;
+        Mon, 23 Jan 2023 12:05:57 -0800 (PST)
+Received: from localhost.localdomain (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
+        by smtp.gmail.com with ESMTPSA id cq9-20020a056402220900b004610899742asm146081edb.13.2023.01.23.12.05.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 12:05:53 -0800 (PST)
-Date:   Mon, 23 Jan 2023 15:05:51 -0500
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v1 1/1] serial: liteuart: Don't mix devm_*() with
- non-devm_*() calls
-Message-ID: <Y87on7jISJMV0CpX@errol.ini.cmu.edu>
-References: <20230123191741.79751-1-andriy.shevchenko@linux.intel.com>
+        Mon, 23 Jan 2023 12:05:57 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm8450: Fix DSIn PHY compatible
+Date:   Mon, 23 Jan 2023 21:05:52 +0100
+Message-Id: <20230123200552.553181-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123191741.79751-1-andriy.shevchenko@linux.intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 09:17:41PM +0200, Andy Shevchenko wrote:
-> In the probe we need to call all devm_*() first followed by
-> non-devm_*() calls. This is due to reversed clean up that
-> may happen in a wrong order otherwise. The driver currently
-> allocates xarray before calling
-> devm_platform_get_and_ioremap_resource(). While it's not an
-> issue in this certain case, it's still better to be pedantic.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/tty/serial/liteuart.c | 32 +++++++++++++++-----------------
->  1 file changed, 15 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index 192ad681de35..562892395570 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -286,37 +286,35 @@ static int liteuart_probe(struct platform_device *pdev)
->  	struct xa_limit limit;
->  	int dev_id, ret;
->  
-> -	/* look for aliases; auto-enumerate for free index if not found */
-> -	dev_id = of_alias_get_id(pdev->dev.of_node, "serial");
-> -	if (dev_id < 0)
-> -		limit = XA_LIMIT(0, CONFIG_SERIAL_LITEUART_MAX_PORTS);
-> -	else
-> -		limit = XA_LIMIT(dev_id, dev_id);
-> -
->  	uart = devm_kzalloc(&pdev->dev, sizeof(struct liteuart_port), GFP_KERNEL);
->  	if (!uart)
->  		return -ENOMEM;
->  
-> -	ret = xa_alloc(&liteuart_array, &dev_id, uart, limit, GFP_KERNEL);
-> -	if (ret)
-> -		return ret;
-> -
-> -	uart->id = dev_id;
->  	port = &uart->port;
->  
->  	/* get membase */
->  	port->membase = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-> -	if (IS_ERR(port->membase)) {
-> -		ret = PTR_ERR(port->membase);
-> -		goto err_erase_id;
-> -	}
-> +	if (IS_ERR(port->membase))
-> +		return PTR_ERR(port->membase);
->  
->  	ret = platform_get_irq_optional(pdev, 0);
->  	if (ret < 0 && ret != -ENXIO)
-> -		goto err_erase_id;
-> +		return ret;
->  	if (ret > 0)
->  		port->irq = ret;
->  
-> +	/* look for aliases; auto-enumerate for free index if not found */
-> +	dev_id = of_alias_get_id(pdev->dev.of_node, "serial");
-> +	if (dev_id < 0)
-> +		limit = XA_LIMIT(0, CONFIG_SERIAL_LITEUART_MAX_PORTS);
-> +	else
-> +		limit = XA_LIMIT(dev_id, dev_id);
-> +
-> +	ret = xa_alloc(&liteuart_array, &dev_id, uart, limit, GFP_KERNEL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	uart->id = dev_id;
->  	/* values not from device tree */
->  	port->dev = &pdev->dev;
->  	port->iotype = UPIO_MEM;
+Use the correct compatible so that the driver can probe properly.
 
-Reviewed-by: Gabriel Somlo <somlo@cmu.edu>
+Fixes: a6dd1206e45a ("arm64: dts: qcom: sm8450: add display hardware devices")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
---Gabriel
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index d66dcd8fe61f..8d85a3139849 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -2873,7 +2873,7 @@ opp-358000000 {
+ 			};
+ 
+ 			mdss_dsi0_phy: phy@ae94400 {
+-				compatible = "qcom,dsi-phy-5nm-8450";
++				compatible = "qcom,sm8450-dsi-phy-5nm";
+ 				reg = <0 0x0ae94400 0 0x200>,
+ 				      <0 0x0ae94600 0 0x280>,
+ 				      <0 0x0ae94900 0 0x260>;
+@@ -2946,7 +2946,7 @@ mdss_dsi1_out: endpoint {
+ 			};
+ 
+ 			mdss_dsi1_phy: phy@ae96400 {
+-				compatible = "qcom,dsi-phy-5nm-8450";
++				compatible = "qcom,sm8450-dsi-phy-5nm";
+ 				reg = <0 0x0ae96400 0 0x200>,
+ 				      <0 0x0ae96600 0 0x280>,
+ 				      <0 0x0ae96900 0 0x260>;
+-- 
+2.39.1
 
-> -- 
-> 2.39.0
-> 
