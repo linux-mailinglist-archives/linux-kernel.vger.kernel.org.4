@@ -2,265 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06ADA678439
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E6E67843F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbjAWSLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        id S233761AbjAWSMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjAWSLO (ORCPT
+        with ESMTP id S233860AbjAWSMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:11:14 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052A513B;
-        Mon, 23 Jan 2023 10:11:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0CE55CE16CF;
-        Mon, 23 Jan 2023 18:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE715C433D2;
-        Mon, 23 Jan 2023 18:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674497469;
-        bh=2OmojGSly4Xbo9BDz0Gflavvyg4ZZ2ht6xo7TdaAadw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u6n3ZqThl4yLZ1MS+9R0c1B7Pn65KULnEhIG+UkdIDy0jh72ChRYzcprAZg5Fbk26
-         mf+yy+PVPa+iOErqWy3pc6LG12G/uD1YoU6zm/rR6mr7nBPxudGSWYSFOCb9kJzeae
-         5cWVexpNt9iwWmTTeqzZ4zcQLPgT9o4xVKgqTKro=
-Date:   Mon, 23 Jan 2023 19:11:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-Subject: Re: [PATCH v6 6/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-Message-ID: <Y87Nup39ahtymV8n@kroah.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
- <20230120201104.606876-7-umang.jain@ideasonboard.com>
-MIME-Version: 1.0
+        Mon, 23 Jan 2023 13:12:49 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2051.outbound.protection.outlook.com [40.107.93.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E596A199;
+        Mon, 23 Jan 2023 10:12:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Str78asDM7PW5IzE+9aEvtGQwzW2I8zBP76VXV2Erb/klydhEWNKSiKe+evX0saX1lQiXQxfIAbVKujg+lVVLBd/90jUQkaj+t75ZPrBTziYXgtEVuWFfCS4dmu9Zf4xdMvrgbqROdrskfD5xuTa05852/PlZOG437pOEuD/7uRxL70lrQ+A2w1KnjsX8pOduSB2gTkMo0DBtxqy3RrB7Ukb3zOx7jqXI45yhj8rBLKo37TZhRkbSsNDvU3ALhgefQ1flsMlWHGW3fiEAe1ORWvwi1RgFDsGmY7E82OXEjPY6PhT8vvCrCmhQ9f4ThjAJmDb5FzvUggcZmY0PitsRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mUYPshG0lkASZ8zUrp0OY0kzq7mZQ1AzAnrnBcMoPrE=;
+ b=BiSFEBTbjJVbm6Y6Gs23P5YLktLuEwNMBrKqmXNtgmV89GCENuOmWZr99CVqQaHV5DxWah0MhpKZ7QxGtFBczOKF2Tu+cZIlYem+mgM2/q2arE8A5ehBHY4+nKeNs42Prq97c6Ogo8bUvu8mOJB8PwqmaET4+Pist7X0GWCs/fs8rpA5ZVZoeL+wEZfuTisiBALo0R2++qHzZZRpUc9tiRGqdMmjB9qtFjZQdWwFrEmeEWBONG5/I/q/EkVLbcl936hBEVj+ULwbfzT+SqmrZhE2GFBocCa+UB4HGV97SFmGNCEoXpjQFcA1akWJn7vlkRYDhO5x+msFQHn1lW4N0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
+ dkim=pass header.d=memverge.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mUYPshG0lkASZ8zUrp0OY0kzq7mZQ1AzAnrnBcMoPrE=;
+ b=weRtu+zPdrfVmaeKfT7mfT757bZpW4ZqLFJ3veK9Ogv7vifw+b3zqjNedIkzU1kwv7gyuEuyjCgWKB+OotBxevImRJLmVURQcShO5Rx2JoV2OJiTXZgSwW2roI/znZJ6IXJNDpfgt8TFpQwfKS3J+10LJFl4n2f4IXQ5s3aJP3Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=memverge.com;
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
+ by BY1PR17MB6831.namprd17.prod.outlook.com (2603:10b6:a03:524::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
+ 2023 18:12:40 +0000
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
+ 18:12:39 +0000
+Date:   Mon, 23 Jan 2023 13:12:33 -0500
+From:   Gregory Price <gregory.price@memverge.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+Message-ID: <Y87OEdDXwZG8pmmE@memverge.com>
+References: <20230123032942.18263-1-gregory.price@memverge.com>
+ <20230123032942.18263-4-gregory.price@memverge.com>
+ <20230123154101.GA6268@redhat.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230120201104.606876-7-umang.jain@ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230123154101.GA6268@redhat.com>
+X-ClientProxiedBy: BYAPR11CA0038.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::15) To BN6PR17MB3121.namprd17.prod.outlook.com
+ (2603:10b6:405:7c::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|BY1PR17MB6831:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e9271c4-6c06-4b96-ee10-08dafd6d695d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aqxCvm6O6Igft/keIbQgGr5CdAcrl7bdQcTPPS7JeQwfagJhmjVBkcYK4JTk6gc+hHAykOXUqIp1ex5wcAkVMRlF/MMaZ3M24mYa1Tlc8bDPTv+WxMwu2QQQcNFmQ/pEKmDglE/GMroDiq10qafyD+U0pEI4tA6WGOZf7BDTMqV+5g1ATlZAsQpSs3UaO1k4LHvVMJgI3yj0h/TqS5PfzS+q3QJevSVbn+JQEQ9xtEXZORmQe4QRzydHNA34qZwt2QWO08ZsmZjfb6ZDxzyX/PsGdpn38YTvU7/2jIJNUCdD2pLs42FAdgbvIeBhBaG7T2AJCafEdLK9cXG/MUqNXT9ML9Ih3qwotA5VGh24u1HgDmpeyKtppduL5CaKrHTdHJbhJUvjO13+WGwr1YkLlxHE6mz97HqLnS0pHMc1vdyPfAxigQKlYRhmaWndOQ+dElXBku8heuf9INIv3w9w4UFvTgmm4XfBwkdmDZhw1xZAf+F+Ntqz8XFqyP9fJgXN4tvN0AOr847qxFDMqlHOI4Ojxgwcwu6+0XkZV3QwLm/F1DbDb/9OIVnurFtpzzWe9xAgmosDda+5eqMzDMzMdhLJm3GKoOcC/oByNSpxhXEBfJ+bjzP4PsMBt13TbGsjs7de7/GLxzJQnaVbL4rwEg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39830400003)(366004)(346002)(376002)(136003)(451199015)(38100700002)(83380400001)(7416002)(41300700001)(86362001)(2906002)(44832011)(8936002)(5660300002)(4326008)(6512007)(26005)(8676002)(6916009)(186003)(6506007)(6666004)(66476007)(66556008)(316002)(2616005)(66946007)(478600001)(6486002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SaBStsA41s3/laouuDYsr/GCYG9/ryGXPnWvKT2zNRktCSJneHUoqI+FohPP?=
+ =?us-ascii?Q?V/5mRIHC5rxuW2hLvnWrV3xClDxhKxusVMmzBqU122jGF6teDyRHTn59yKdp?=
+ =?us-ascii?Q?UK1XBVye1h43qRuqKn/9aHxOeb/0Unr7dpPT8LIddXCQxoLJtwkYyUBJz/6t?=
+ =?us-ascii?Q?OgEvcaPpuNG+zdiqOeWGgavGJyH6pJTEj1ZHwQFvNXKdP50vT3O6X45ib5QP?=
+ =?us-ascii?Q?Ux70GP9hs1TjizPH8/0olUyxIKTg1irq67GKeqJRNwBqhbz350qktx+gqBcV?=
+ =?us-ascii?Q?+wierXbESt6wm5EKtgcMnx4yfIN3mja+9rLdbUDIVyoKX7zJ50owDdayNEFe?=
+ =?us-ascii?Q?gzhnygJMCkPpr1UkXOTZLxtJfRQ106VO4v4WIBe9RQRSG3BH4G9I2iZsYvpP?=
+ =?us-ascii?Q?30YPRndSh7klLO98qbrjfbLalkgjCIqmE7fZirlltfxPi3OyCSaVoeHLUw/4?=
+ =?us-ascii?Q?D3YlZ+JRD4nqFxVX4Y2yhZYUOwsUeDeho4VgKAlranqest3s7SVvnddwUT23?=
+ =?us-ascii?Q?syMuiejrOllwvIOPvNhrIbtEXNyJmd+/MicChF1evFysiF3cfxZMgJrpAgTs?=
+ =?us-ascii?Q?6Wy/Wryffz2NI0v3Lz+8b3OH0GbR9Th2XNWTgTrdWJfnUYhO70dlUADoVY4I?=
+ =?us-ascii?Q?XfPU7XSrhtm6fp/fiQcSof7spChn1HFPY72fUhNjKFRwuvuB95kfyBxPjkbH?=
+ =?us-ascii?Q?cfFJu87ApkZ3FzKgk8yyUHZX0jjAfE94GksvHEf2yVTRjcErRe8/QOIubUmn?=
+ =?us-ascii?Q?8Li2je+P6zG3/eLuMLufKGEQeNKgP63J5w2VNQ9ifdhBLDxxZAAbSWWgCwHq?=
+ =?us-ascii?Q?rx6QGhIKL8VuVpGdDO5G8garZdhBYNIKX8s8Ai8WcgnrlIve5wwNx0TcSufv?=
+ =?us-ascii?Q?nmqksDneOHcdlmhpDjUGlNnGe4dCXyvj7ir0ptojAhwobfW8wRYyeU9TNcsP?=
+ =?us-ascii?Q?sDYoPmCYfNWCEdxIA06u1uAQPVBogfYWTqg4CXxcUvJDUHUD303S976vDrZ7?=
+ =?us-ascii?Q?CZT10GBeMDKEGDYHnjjKMV2rA4V3r7xtvnl7MUU3jEACr0ASYjz+SHHqtwyx?=
+ =?us-ascii?Q?wUP6LYR+3I9IQbj1e1v1cYyqpQT0Y5qU+1YtzDeXbcjjQoSL0xRxHtxU9nTP?=
+ =?us-ascii?Q?LIqMS4AollFnDNIUzJi5EgqMfbU4npWFmYlQqhWX3fs440INz17Pa53WUfae?=
+ =?us-ascii?Q?oiolgvPeAYSaSbbnThTagtysN7umkyQ/BKrbg/Or3LYKDEYLlbezmLmAcJX5?=
+ =?us-ascii?Q?x4oGyrcxtfcstprh5ZixYgKqCT2vVG4LOWHC3lOK2yfhggcWIa9jP9JultxX?=
+ =?us-ascii?Q?o83+M2L6uYIHrHY0Sc5Rco/X5qLHtWbWgX2dzRlARfg/egsXb1HPyBApJeGN?=
+ =?us-ascii?Q?0voMoeR91raHkpBnW4gbQ+2bOoMsJt20ozYh8N87fLfdDlkrEwJ0YARil97d?=
+ =?us-ascii?Q?3Y5sBIucyiK89c8qdzwZtsMWj6tvEGv0runwQ650DF0dFkKPiWiT4kFFjEjE?=
+ =?us-ascii?Q?EO72pxtF8g/mh1CeDPX3dxEOhoUdnTLKm0+a80xiPJ86VSMQGV9kGu26W4BE?=
+ =?us-ascii?Q?uhaIMAWowtlq15e3XfA1ZSAy7rI+wliG4oUa4bI7gHCLQvW+ZqwL/+t1uI+P?=
+ =?us-ascii?Q?GQ=3D=3D?=
+X-OriginatorOrg: memverge.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e9271c4-6c06-4b96-ee10-08dafd6d695d
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 18:12:39.0966
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6Mm7bqF6L7R0zNC3FOEcmT+Dv57okheyF2bJkb+GXZaX7xA0PWK/2vkijH0lqiDUOS2TH0/u/eoWSC49JEvSDUBeItwsYP4xnPMqchpQTWw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR17MB6831
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 01:41:04AM +0530, Umang Jain wrote:
-> The devices that the vchiq interface registers (bcm2835-audio,
-> bcm2835-camera) are implemented and exposed by the VC04 firmware.
-> The device tree describes the VC04 itself with the resources required
-> to communicate with it through a mailbox interface. However, the
-> vchiq interface registers these devices as platform devices. This
-> also means the specific drivers for these devices are getting
-> registered as platform drivers. This is not correct and a blatant
-> abuse of platform device/driver.
+On Mon, Jan 23, 2023 at 04:41:02PM +0100, Oleg Nesterov wrote:
+> On 01/22, Gregory Price wrote:
+> >
+> > +int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+> > +		void __user *data)
+> > +{
+> > +	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
+> > +	struct syscall_user_dispatch_config config;
+> > +
+> > +	if (size != sizeof(struct syscall_user_dispatch_config))
+> > +		return -EINVAL;
+> > +
+> > +	if (test_syscall_work(SYSCALL_USER_DISPATCH))
+> > +		config.mode = PR_SYS_DISPATCH_ON;
+> > +	else
+> > +		config.mode = PR_SYS_DISPATCH_OFF;
 > 
-> Replace the platform device/driver model with a standard device driver
-> model. A custom bus_type, vchiq_bus_type, is created in the vchiq
-> interface which matches the devices to their specific device drivers
-> thereby, establishing driver binding. A struct vchiq_device wraps the
-> struct device for each device being registered on the bus by the vchiq
-> interface. On the other hand, struct vchiq_driver wraps the struct
-> device_driver and the module_vchiq_driver() macro is provided for the
-> driver registration.
+> Stupid question...
 > 
-> Each device registered will expose a 'name' read-only device attribute
-> in sysfs (/sys/bus/vchiq-bus/devices). New devices and drivers can be
-> added by registering on vchiq_bus_type and adding a corresponding
-> device name entry in the static list of devices, vchiq_devices. There
-> is currently no way to enumerate the VCHIQ devices that are available
-> from the firmware.
+> Why do we need 2/3 (which reports SYSCALL_USER_DISPATCH in proc/pid/status) then?
+> 
+> Oleg.
+>
 
-I took the first 5 patches in this series, but stopped here.
+Actually a good question.
 
-This one needs to be broken up into much smaller pieces.  I suggest
-creating the bus, and then move the existing code over to the new
-interfaces instead of doing it all at once.  This way is much harder to
-review and problems do not stand out very well.
+My original though was: CRIU uses proc/status to determine whether to
+use seccomp dumping, so i may as well implement the same thing.
 
-Some minor questions:
+On further thought, I think you're right.  We can just always read and
+set these settings regardless of the original state because SUD is not
+seccomp.
 
-> -static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
-> +static int snd_bcm2835_alsa_probe(struct device *dev)
+1. if GENERIC_ENTRY is not compiled, and TIF_SYSCALL_USER_DISPATCH is
+   not available, these settings get ignored anyway.
+2. if disabled, offset/len/selector is guaranteed to be off
+3. if you try to set something other than the above then this will fail
+   anyway (see: set_syscall_user_dispatch)
 
-probe functions (and all bus functions) should take your new device
-type, not a generic device type, as that's not what they are working
-with here at all.
+ergo
+4. It's always say to read/write these settings.  As with anything else
+   you can certainly cause the user program to crash by setting garbage
+	 but that's to be expected.
 
 
->  {
-> -	struct device *dev = &pdev->dev;
->  	int err;
->  
->  	if (num_channels <= 0 || num_channels > MAX_SUBSTREAMS) {
-> @@ -292,32 +291,32 @@ static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
->  
->  #ifdef CONFIG_PM
->  
-> -static int snd_bcm2835_alsa_suspend(struct platform_device *pdev,
-> +static int snd_bcm2835_alsa_suspend(struct device *pdev,
->  				    pm_message_t state)
-
-Same here, use your real device type.
-
-> -static int snd_bcm2835_alsa_resume(struct platform_device *pdev)
-> +static int snd_bcm2835_alsa_resume(struct device *pdev)
-
-And here, a real device type please.
-
->  MODULE_AUTHOR("Dom Cobley");
->  MODULE_DESCRIPTION("Alsa driver for BCM2835 chip");
->  MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:bcm2835_audio");
-> +MODULE_ALIAS("bcm2835_audio");
-
-Why do you need this module alias now?  Are you sure it still works?  If
-so, why is it created by hand like this?
-
-> +static const char *const vchiq_devices[] = {
-> +	"bcm2835_audio",
-> +	"bcm2835-camera",
-> +};
-
-A list of device names?  That's really odd, so please really really
-document it.
-
-> +static ssize_t vchiq_dev_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	struct vchiq_device *device = container_of(dev, struct vchiq_device, dev);
-> +
-> +	return sprintf(buf, "%s", device->name);
-
-sysfs_emit() please.
-
-But why do you have the device name as a sysfs file?  It's the name of
-the directory in sysfs already, why have it repeated?
-
-> +}
-> +
-> +static DEVICE_ATTR_RO(vchiq_dev);
-> +
-> +static struct attribute *vchiq_dev_attrs[] = {
-> +	&dev_attr_vchiq_dev.attr,
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(vchiq_dev);
-> +
-> +static const struct device_type vchiq_device_type = {
-> +	.groups         = vchiq_dev_groups
-> +};
-> +
-> +struct bus_type vchiq_bus_type = {
-> +	.name   = "vchiq-bus",
-> +	.match  = vchiq_bus_type_match,
-> +};
-> +EXPORT_SYMBOL_GPL(vchiq_bus_type);
-
-Why is this exported?
-
-> +
-> +static int vchiq_bus_type_match(struct device *dev, struct device_driver *drv)
-> +{
-> +	if (dev->bus == &vchiq_bus_type &&
-> +	    strcmp(dev_name(dev), drv->name) == 0)
-> +		return 1;
-> +	return 0;
-> +}
-> +
-> +static void vchiq_device_release(struct device *dev)
-> +{
-> +	struct vchiq_device *device;
-> +
-> +	device = container_of(dev, struct vchiq_device, dev);
-> +	kfree(device);
-> +}
-> +
-> +int vchiq_device_register(struct device *parent, const char *name)
-> +{
-> +	struct vchiq_device *device = NULL;
-> +	int ret;
-> +
-> +	device = kzalloc(sizeof(*device), GFP_KERNEL);
-> +	if (!device)
-> +		return -ENOMEM;
-> +
-> +	device->name = name;
-> +	device->dev.init_name = name;
-> +	device->dev.parent = parent;
-> +	device->dev.bus = &vchiq_bus_type;
-> +	device->dev.type = &vchiq_device_type;
-> +	device->dev.release = vchiq_device_release;
-> +
-> +	ret = device_register(&device->dev);
-> +	if (ret) {
-> +		put_device(&device->dev);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int vchiq_device_unregister(struct device *dev, void *data)
-> +{
-> +	device_unregister(dev);
-> +	return 0;
-> +}
-> +
-> +int vchiq_driver_register(struct vchiq_driver *vchiq_drv)
-> +{
-> +	vchiq_drv->driver.bus = &vchiq_bus_type;
-> +
-> +	return driver_register(&vchiq_drv->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(vchiq_driver_register);
-> +
-> +void vchiq_driver_unregister(struct vchiq_driver *vchiq_drv)
-> +{
-> +	driver_unregister(&vchiq_drv->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(vchiq_driver_unregister);
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> new file mode 100644
-> index 000000000000..0848c1b353f8
-> --- /dev/null
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> @@ -0,0 +1,39 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
-> +/*
-> + * Copyright (c) 2023 Ideas On Board Oy
-> + */
-> +
-> +#ifndef _VCHIQ_DEVICE_H
-> +#define _VCHIQ_DEVICE_H
-> +
-> +#include <linux/device.h>
-> +
-> +struct vchiq_device {
-> +	struct device dev;
-> +	const char *name;
-
-Why do you need another name for your device?  What's wrong with the
-name field in struct device?
-
-thanks,
-
-greg k-h
+So i think dropping 2/3 in the list is good.  If you concur i'll do
+that.
