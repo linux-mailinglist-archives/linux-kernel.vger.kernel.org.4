@@ -2,193 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4738677745
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC6167774A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbjAWJTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S231556AbjAWJTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjAWJTI (ORCPT
+        with ESMTP id S231741AbjAWJTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:19:08 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119D813D76;
-        Mon, 23 Jan 2023 01:19:08 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id v6so5688640ilq.3;
-        Mon, 23 Jan 2023 01:19:08 -0800 (PST)
+        Mon, 23 Jan 2023 04:19:46 -0500
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10C413D7A;
+        Mon, 23 Jan 2023 01:19:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=khbEyLQVzE+wEgtx4xTJNiAeXhs9nRut8aUoBD868I4=;
-        b=c5CCjblE7nqmKdY2/9z9j+8xM213QIM8+77v4+/hLB3r6tGuhE6Dz9ESZKrkBTtCUs
-         GeaM3CXq3ic+V4UiJqOYGkjMcauo+Yj4bxRvdaQPlVWopNUUDLGQpxTD3u71cJZR6I7T
-         va5/jkgO4k/sgyAyKgDUDFeUogsJ/Yxdtr1mC4YiSvdQh/VywnU5+ERFhYpiudO3M1GW
-         Q3VU2j/56mzbk8rkkQ6rY670pCPCOxcRwOVAFB4daLKOa9CjiWBiImtKLGw2/0CSiKNE
-         iWlNeqmWoxGulN8un4DfKJMLV3VYCIvE/N9mmuaIdozVab8fItWQqxFeJge5PjvUzSOF
-         /Y3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=khbEyLQVzE+wEgtx4xTJNiAeXhs9nRut8aUoBD868I4=;
-        b=R8AtiV/xUY1VZQifggkwhh41K2gBKjDzRTrfUOG53VVt7xjazwNp4hMV0N/H+jG7Fg
-         MspwQPFW1YOPSR6HYlffop98VZptGelf9COhyJ2awRQQfQpXJ+z1lpDL8tpBPlgzOjSD
-         WVM9he8SRybhY0xek8XBtoSwuldCU9vMJH0Jhzo3uDdNZv4+qbnBHpYuoGu0Y3Dw0QmM
-         3F9y9B3+Ae8MVV2WPB4rb713VO0d+j9s2Y75b46A2Pq9Mty3kCBfSWkCx11FWxvvLCSm
-         bX5VBCtUx7C/z/Uk750eCp4Hl1so6yG1ZcwEDPtCllK6JFi0TYMwefsLK2N1iYLiLrqG
-         au0g==
-X-Gm-Message-State: AFqh2kpAGTdM8W/55b1ZroYN8NvEWoEcfX4RCHDm7CQ9dFHB7n8io+7Z
-        rpxbbqanDZaoeRFTSLYUbNA=
-X-Google-Smtp-Source: AMrXdXvHdP4NczA/igMGEEpX6VwKUZSVKU5LDJyYypxGA3qxDRcW+ssoSEIwPM9ZiuhZGygXpEq3jw==
-X-Received: by 2002:a92:ce8f:0:b0:30f:48ea:3554 with SMTP id r15-20020a92ce8f000000b0030f48ea3554mr10222882ilo.16.1674465547351;
-        Mon, 23 Jan 2023 01:19:07 -0800 (PST)
-Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
-        by smtp.googlemail.com with ESMTPSA id l18-20020a02ccf2000000b003a5f25b1888sm5575587jaq.35.2023.01.23.01.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 01:19:06 -0800 (PST)
-From:   Sungwoo Kim <happiness.sung.woo@gmail.com>
-X-Google-Original-From: Sungwoo Kim <git@sung-woo.kim>
-Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org (open list:BLUETOOTH SUBSYSTEM),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        linux-kernel@vger.kernel.org (open list)
-Subject: Bluetooth: L2cap: use-after-free in l2cap_sock_kill
-Date:   Mon, 23 Jan 2023 04:17:09 -0500
-Message-Id: <20230123091708.4112735-1-git@sung-woo.kim>
-X-Mailer: git-send-email 2.25.1
+  d=axis.com; q=dns/txt; s=axis-central1; t=1674465570;
+  x=1706001570;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=r74AIdkoJ4RDCTCAngh1FA6xEROMey3oogGF7pMxEoQ=;
+  b=NnXglGkI5SbZWOq8ew71OrtzPbOy5SmdWv5F8eS3fIWezAnyjPvYfh5j
+   +dCzElYSN9QslZalb2RUTRE33DxcMQw2/H28k9q5r/Tp9leE19Tj8ju+C
+   TownBFezjVbNEE/WPAY2g6IxNOEM3J/F8u8m+hMfiZxljy0jHOPqRqL+R
+   fFw7jLj9Z6MeWagB2EFtQffstyvBrf5XyVQSOKa9j9xqWfoxPFbupIYCD
+   jqV4sFWwBihf5JHa9VMEK49Y3hsnTNGY6C15JbWIdnfQIT1ybSp0OSxhS
+   PSeog+WZgcQZ9QKGcp7HO2infTE8mV6ze1ZgAWqVbpzkY3/Xolg6xtLaD
+   w==;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Wm2mjtFjdaqqRRiDoO1euhfEfeA4p1dgav/4M2Em7MNjLGiPsa52YT4p2Ga6hT4oojKaTv4+APy5IopeYVAF6PW9COZ7KX+p4tZ+oPD07pv9AbXm68IbuZhzCASsOBYGJ2v8Olat6ZjLQ+nSL7/8D5KHUbZE2oyJyhcqh+Ch23oaXADOqBMCuRLL3ev5v3/2003S2vyaaC45GZwrWe8Mni3GvFDqqQ1T0GHjfGuF0qAedUPWOZ6BQk/8OoOowrxtqSkuJDRuFDY4OczM9Sy/xompcXHHNLJySXQN2V3s3dmnFqohEjNW8pFYrO46wbnyl+f1iXEjM+IMGCOoagegTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r74AIdkoJ4RDCTCAngh1FA6xEROMey3oogGF7pMxEoQ=;
+ b=J28Eu9A8vuLHiGnrKTLZT/uhprWdlELN/CJq1DzBLCRuV9BQ83s5EIvelBTjnQP9eDHxkBmth/+iUTNBjUYV/4KqRkKdlx7yvALtBq6CAWBIXKLeevsd1meWu4E0hTJRsnVe2z0BBuQ2BPdOllfWH3/PD1LR+CkZlssED+7nM6jyqs5Herzfe5AvzmSW9K9kkn7oh8H/w5pYwRDY+gymuuwBbddLrbaFDeuVQw8WWtTs6L4bYLfUsMJ3aecr/0sjOsYQtdZ/F0wXi/4h3qU7xiMCn90tMEWLJdJaoNcB7xzPbPPGiEUDmsDIMZUVCJqQQHAYRGYU8oen/Ox3uDxTBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r74AIdkoJ4RDCTCAngh1FA6xEROMey3oogGF7pMxEoQ=;
+ b=E0gKCApPRt5dK4es2W/CgKQOSEQ0KD8vJ3lnla4cYIlfOy5osceAPoJLA+vNtADekaQU6ZToob/WHFqz7IFoZyFtcx9Fqvmj1uN8b19tsrO1/J23wP9i9XMOch44+ybEKrc0h4NOktCgr3BCEiQxDBHSURQ1veTp98fqgVK3cR4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Message-ID: <50af77ad-d12f-a6b3-7864-e8c9a5a7756e@axis.com>
+Date:   Mon, 23 Jan 2023 10:19:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 4/4] ASoC: dt-bindings: ti,ts3a227e.yaml: add jack-type
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Astrid Rost <astrid.rost@axis.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dylan Reid <dgreid@chromium.org>
+CC:     <kernel@axis.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20230120102555.1523394-1-astrid.rost@axis.com>
+ <20230120102555.1523394-5-astrid.rost@axis.com>
+ <2d05a943-3510-5ee9-9906-247a6344190a@linaro.org>
+ <0b0c0030-3587-5501-c7b2-eccbbe4551e0@axis.com>
+ <21ea0402-c4f3-1344-d084-9f3138713abb@linaro.org>
+From:   Astrid Rost <astridr@axis.com>
+In-Reply-To: <21ea0402-c4f3-1344-d084-9f3138713abb@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MM0P280CA0113.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:9::19) To DU0PR02MB9467.eurprd02.prod.outlook.com
+ (2603:10a6:10:41b::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR02MB9467:EE_|GV2PR02MB8652:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4149c2b2-796c-4a0c-4641-08dafd22ea97
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ftjRBtgiKbaUcyEH3xqJM6UrA0TmH6qyzCBCWiuz26il9GI90TvpUBkN3fIh02t3S3Qf8iWqsuzyaDTnz8BXN2qSc60+js/xSNuhalVR9edkPGv2xnrUsIYeaxJY3NoLa6mobysgdY28w4rGthAHN4fjNJjlh3zlGSQLNZ2p/H3b2VcRtDLtP/AeLmTp4nOTmI8u1oVr2dmnfK6IbzVeuDT0DtPYLtYEhF8xKEwP233B/kP84qiKFsQ87goQaYXA2UMf/jcAVEFF/2t4cqgNsdQqsh1nU0PlPQ6Bcrzp/vuzkekZEs5zsE7tuF/L3u7veDQ+fr8+BHEaonFRAeOczEv3WENQZmxveAr7BhLbJn1VSUcMoySZUFeCKC8wYFzWfMio+H6pkOglmivtn9xnNRmzUIFFZiFHw8wkVrKiwLfYM3+JLPNkj4Qg4EtSzJY7B/BLB1sXO2pG4Dmkfaz7BQzut9o2vyOliNiv9GaUfdXp4bcG5tr/DWMLCtw5rHy1bSzR5bySV78ttN4aUwwunryvfrOyNDmMDBNECpDGniyJdtQNRt4DabgGjJi1aDorf5DpDs73L4siUaSsL8G0tfqi/L05FQ04UY3MgifizXJ0kepQkaoJ7ALxtcdAacvH9bT0DJ+ew4XMT5dxb5ABNmcknb9FPKEqzvOfhTa1eMdFaAWgH64rTc1f1XmfQcPxcPR5OG+hNHp/VuV7g7Ni97QBn0vMTFd1umHv4baWnTI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB9467.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(376002)(346002)(39850400004)(451199015)(38100700002)(36756003)(31696002)(478600001)(316002)(110136005)(6486002)(8676002)(66946007)(66556008)(66476007)(4326008)(2616005)(31686004)(53546011)(2906002)(6506007)(8936002)(41300700001)(186003)(26005)(6512007)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OVV4YlAxUTdSem1xaEp6bE9vUThEbEsrd0RWOUYxbElwZGZjUS8xaUlVREM2?=
+ =?utf-8?B?d0hmQ1NzSG5EUVRPVnVQZ2RVdU9CMG5jSmU0SXBBUFl0ZlNBeEFqL0lFNTBx?=
+ =?utf-8?B?VWZKdUJOWU5zRU1maVFuRnhucjBob3FPemdhMUFNRGFwcjBxUm41Y1l3ZFdx?=
+ =?utf-8?B?dDQ3dkpXL2RXR2xQUFFTaGtBaHdId1ZyZ3BEKzAzNHlSeldnVW9FSnVrVW1l?=
+ =?utf-8?B?R1NYUXBUckk2L2lSWGlMd2taUzJNUFNtbUZWN2dYVHpGV1QrTm5WQVQrdXNW?=
+ =?utf-8?B?cWVNdXlmdEpycHJrNzk3YWY2WmVhWE1XVFhmVnB4Wkl3Z3lML2hucUdhbjFP?=
+ =?utf-8?B?UnNyZkZTQzZaN2E1eEI1K3lDYUgvVHJMN1BMbHc2ZlBKM0VHVFVJZEFkRlAr?=
+ =?utf-8?B?Z25ZbWY1b000N05DZnhzWlJRNWpkeGIzTmxTVlBsZEJoMDRCQTlIZUwwWVp2?=
+ =?utf-8?B?RDg1MFZGT1hWcXFjQlcrUzFjeVFjdzA5M1cwN2VrUFhYY1BJQWFJMDRBS0ph?=
+ =?utf-8?B?cFlCOGc5UHBJK0J4ZExiNUdUL1NjSWNRT0R6Q2tTam9ZbUlEZ0p1Vi8zT1JP?=
+ =?utf-8?B?V2RCNDkxNHZaT1hXbEtpN1lBU2dISlRUNUhFS1ZtN1kydUF0L2xrU0ppczFU?=
+ =?utf-8?B?L2E3WlQ4N3VFRDFJVWhuTEFBWjRFemliZFFBUkNUUE4wd0dibTZMS0l6UXBx?=
+ =?utf-8?B?bzJnVFkwclFVVUJFYTVLRGVHTjlzcUVDY1QzMGM5OFN3eDF4K3JlTCtsWHkz?=
+ =?utf-8?B?S0JZa2l0eWMxS1NFRXRhbWxheDFKVHltVmRtTUxzWTZyNldJc3RxRXZKck55?=
+ =?utf-8?B?eVFnN2RlQnlDNnAwcUdZeDB4ZmJIcnBGeEYwbkJBWlIya1hkeDUvVzVITnB6?=
+ =?utf-8?B?QjB1clN0ajlHTGlpU3lSUndyVERqeUR5WHl2NjVOVmRLaEsrVmdDQlhpVFpt?=
+ =?utf-8?B?VWNWei9tNDlrc1UxYTlXYlpnZDZYM0pMZkFpTXI3Wi91WFU4WnNQRnhGRU5l?=
+ =?utf-8?B?ZnpjaUlGTXk4ajN0QkFDUHBKdXF0S3lVZVhjUzlDMEFsa2lENFNQT1BMVUM4?=
+ =?utf-8?B?eXVrQS9BdDhJVndLaTBhUUN0aWZqSzlINllzcXhFNlhyM0l1aDIzOGVZZTRD?=
+ =?utf-8?B?TTBna09KbEVvek93Q3lKa21TY1pWeXdMelFOTmI0Q1FjVHp2RXBIOXNKVG5n?=
+ =?utf-8?B?WUNhakp2blZvRnFaM1V1VWxJR1pXR0dRc2psMnhpS09kQkhCOG9kckdQU2xV?=
+ =?utf-8?B?VzN0N0RtMUpZWWJqTWRMalhMSFc3aFRDYkFhTmI3WWswODcrTy8zTlkxUFB0?=
+ =?utf-8?B?YjY2Uk9uZ1ZkczdiZjIzMWo4a1o3bkZLZnVpOTUxSmVvTGVJR250NXNmT1Vr?=
+ =?utf-8?B?cTVkbWZLV3NCcEJGbTl4bFdxNk9pZTBScWZ3dTBVRGFMd2ZwSWlvUlJMV051?=
+ =?utf-8?B?OGVGb2Z0bVF4ZDRlUUM5RzZzQy9Uckk3OGdUQ1k4Um0yZUlqdGFVNUtQZmc3?=
+ =?utf-8?B?bTNyZWthRHUyYkZWaUUyeSsrZVp5bVBrTU9vb0xsK0Zlcnc3SGVVUUE4SndN?=
+ =?utf-8?B?TWZWa21NNEVnNElhNjZsUmtPUmhGQlIwNENHaUdKQVlMOHRGazJQUGp0TnJT?=
+ =?utf-8?B?eGdzcEJiYUprOE0xcHBIam10aFNrTjBwK3VzbGxXdTEwcWFsdFhwNlhwQXRC?=
+ =?utf-8?B?Ri9RSmFHV2hHbXhrc05KK2FQTndPeHJ6VDd6ZGNYRWxMWmtQczNMUERMZFdM?=
+ =?utf-8?B?ZEVkQ1dmTnZ3WFQ5OURnUnVRajVyVUNYM09rS0JtTWZ4ditKV2p6QUhUbXBl?=
+ =?utf-8?B?cGFoOUxMNEgzdEJISUQwc05KdTJUZlR3STdqVDBWeks1SGtYK2xQSkE5VjZF?=
+ =?utf-8?B?c29nS2pTMkdPY2RYKzJJMzlvdUphczJUdWxaSjBHOWx3QXNPQW5icDFHaDhB?=
+ =?utf-8?B?RDU5WWlpZklsUmVNMS9JNXlGWlFFdEtVSzhFL1FHNEthNWZ4MkphcU1IejNa?=
+ =?utf-8?B?NUZhSEJPaHovMFpxZTF1eERhRXdLSHRkTmtNUkwzNWRPbTVnTVg1OU9rNlo0?=
+ =?utf-8?B?NFZFc1R0MDJIaCtod0RLRzh0R29PUk9YQ3pNWUlnTlZzV0pNM1QyTkFoeFNn?=
+ =?utf-8?Q?mT0sGKQLPtEl+f1bR0LnsOEyy?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4149c2b2-796c-4a0c-4641-08dafd22ea97
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB9467.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 09:19:23.4094
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X46inwF5e6mevEKFxiFCLS/peQTdQeHTE5+DzQW490Uot7bY8aBGOvWfgKews0dDz7wvIPFigidazv6pwXQF+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR02MB8652
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is a racy bug between l2cap_chan_timeout() and l2cap_sock_release()
-cause by SIGKILL.
-Sorry for the less context and no fix here.
-For the l2cap_sock.c in the stack trace, please refer this file
-for your convenience:
-https://gist.github.com/swkim101/5c3b8cb7c7d7172aef23810c9412f323
+Hello,
 
-This is discovered by FuzzBT on top of Syzkaller with Sungwoo Kim (me).
-Other contributors for FuzzBT project are Ruoyu Wu(wuruoyu@me.com)
-and Hui Peng(benquike@gmail.com).
+On 1/23/23 10:05, Krzysztof Kozlowski wrote:
+> On 23/01/2023 09:39, Astrid Rost wrote:
+>> Hello Krzysztof,
+>>
+>> On 1/22/23 15:16, Krzysztof Kozlowski wrote:
+>>> On 20/01/2023 11:25, Astrid Rost wrote:
+>>>> Add jack-type: Bitmap value of snd_jack_type to allow combining
+>>>> card drivers to create a jack for it.
+>>>
+>>> Subject: drop "yaml". We do not filename extensions to subject prefix.
+>>> Nowhere.
+>>>
+>>
+>> yes, true.
+>>
+>>>>
+>>>> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+>>>> ---
+>>>>    Documentation/devicetree/bindings/sound/ti,ts3a227e.yaml | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/sound/ti,ts3a227e.yaml b/Documentation/devicetree/bindings/sound/ti,ts3a227e.yaml
+>>>> index 785930658029..1d949b805f98 100644
+>>>> --- a/Documentation/devicetree/bindings/sound/ti,ts3a227e.yaml
+>>>> +++ b/Documentation/devicetree/bindings/sound/ti,ts3a227e.yaml
+>>>> @@ -27,6 +27,14 @@ properties:
+>>>>      interrupts:
+>>>>        maxItems: 1
+>>>>    
+>>>> +  jack-type:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    description: Bitmap value of snd_jack_type to allow combining
+>>>> +      card drivers to create a jack for it. Supported is
+>>>
+>>> Why the device would once support (allow) headphone and once not? Device
+>>> either always supports them or never...
+>>>
+>>
+>> If a device has two connectors (pink and green), one for the microphone
+>> and one for the headset.
+> 
+> We talk about "ts3a227" here, which has always two connectors (pins)...
+> unless you refer to the case when these are e.g. grounded?
+> 
 
-==================================================================
-BUG: KASAN: use-after-free in l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
-Read of size 8 at addr ffff88800f7f4060 by task l2cap-server/1764
-CPU: 0 PID: 1764 Comm: l2cap-server Not tainted 6.1.0-rc2 #129
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
-dump_stack_lvl (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/lib/dump_stack.c:105) 
-print_address_description+0x7e/0x360 
-print_report (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:187 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:389) 
-? __virt_addr_valid (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/mmzone.h:1855 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/mm/physaddr.c:65) 
-? kasan_complete_mode_report_info (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report_generic.c:104 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report_generic.c:127 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report_generic.c:136) 
-? l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
-kasan_report (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:? /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/report.c:484) 
-? l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
-kasan_check_range (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:85 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:115 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:128 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:159 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:180 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:189) 
-__kasan_check_read (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/shadow.c:31) 
-l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:986 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1281) 
-l2cap_sock_teardown_cb (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/bluetooth.h:304 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1475 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1612) 
-l2cap_chan_close (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:885) 
-? __kasan_check_write (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/shadow.c:37) 
-l2cap_sock_shutdown (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/kcsan-checks.h:231 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/sock.h:2470 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1321 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1377) 
-? _raw_write_unlock (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/asm-generic/qrwlock.h:122 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/rwlock_api_smp.h:225 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/locking/spinlock.c:342) 
-l2cap_sock_release (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1453) 
-sock_close (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/socket.c:1382) 
-? sock_mmap (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/socket.c:?) 
-__fput (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/fsnotify.h:? /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/fsnotify.h:99 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/fsnotify.h:341 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/fs/file_table.c:306) 
-____fput (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/fs/file_table.c:348) 
-task_work_run (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/task_work.c:165) 
-do_exit (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/exit.c:?) 
-do_group_exit (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/exit.c:943) 
-? __kasan_check_write (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/shadow.c:37) 
-get_signal (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/signal.c:2863) 
-? _raw_spin_unlock (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/spinlock_api_smp.h:142 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/locking/spinlock.c:186) 
-? finish_task_switch (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./arch/x86/include/asm/current.h:15 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/sched/core.c:5065) 
-arch_do_signal_or_restart (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/kernel/signal.c:869) 
-exit_to_user_mode_prepare (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:383) 
-syscall_exit_to_user_mode (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./arch/x86/include/asm/current.h:15 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:261 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:283 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/entry/common.c:296) 
-do_syscall_64 (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/common.c:50 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/common.c:80) 
-? sysvec_apic_timer_interrupt (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/kernel/apic/apic.c:1107) 
-entry_SYSCALL_64_after_hwframe (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/entry_64.S:120) 
-RIP: 0033:0x7f66c14db970
-Code: Unable to access opcode bytes at 0x7f66c14db946.
+yes, that is what I meant.
+I push a version, where I remove this.
 
-Code starting with the faulting instruction
-===========================================
-RSP: 002b:00007ffe166a5508 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: 0000000000000013 RBX: 0000000000000013 RCX: 00007f66c14db970
-RDX: 0000000000000013 RSI: 00007ffe166a56d0 RDI: 0000000000000002
-RBP: 00007ffe166a56d0 R08: 00007f66c1a28440 R09: 0000000000000013
-R10: 0000000000000078 R11: 0000000000000246 R12: 0000000000000013
-R13: 0000000000000001 R14: 00007f66c179a520 R15: 0000000000000013
- </TASK>
-Allocated by task 77:
-kasan_set_track (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:51) 
-kasan_save_alloc_info (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:432 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:498) 
-__kasan_kmalloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:356) 
-__kmalloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slab_common.c:943 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slab_common.c:968) 
-sk_prot_alloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2028) 
-sk_alloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2083) 
-l2cap_sock_alloc (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1903) 
-l2cap_sock_new_connection_cb (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1504) 
-l2cap_connect (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:102 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:4277) 
-l2cap_bredr_sig_cmd (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:5634 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:5927) 
-l2cap_recv_frame (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:7851 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:7919) 
-l2cap_recv_acldata (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:8601 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:8631) 
-hci_rx_work (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/hci_core.h:1121 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/hci_core.c:3937 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/hci_core.c:4189) 
-process_one_work (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2225) 
-worker_thread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:816 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2107 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2159 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2408) 
-kthread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/kthread.c:361) 
-ret_from_fork (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/entry_64.S:306) 
-Freed by task 52:
-kasan_set_track (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:51) 
-kasan_save_free_info (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/generic.c:508) 
-____kasan_slab_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/slub_def.h:164 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:214) 
-__kasan_slab_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/kasan/common.c:244) 
-slab_free_freelist_hook (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:381 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:1747) 
-__kmem_cache_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:3656 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slub.c:3674) 
-kfree (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/mm/slab_common.c:1007) 
-__sk_destruct (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/cred.h:288 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2147) 
-__sk_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/sock_diag.h:87 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2175) 
-sk_free (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/instrumented.h:? /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/atomic/atomic-instrumented.h:176 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/refcount.h:272 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/refcount.h:315 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/linux/refcount.h:333 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/core/sock.c:2188) 
-l2cap_sock_kill (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/bluetooth.h:286 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1284) 
-l2cap_sock_close_cb (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_sock.c:1576) 
-l2cap_chan_timeout (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/./include/net/bluetooth/bluetooth.h:296 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/net/bluetooth/l2cap_core.c:462) 
-process_one_work (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2225) 
-worker_thread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:816 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2107 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2159 /home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/workqueue.c:2408) 
-kthread (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/kernel/kthread.c:361) 
-ret_from_fork (/home/sungwoo/fuzzbt/v6.1-rc2-bzimage/arch/x86/entry/entry_64.S:306) 
-The buggy address belongs to the object at ffff88800f7f4000
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 96 bytes inside of
- 1024-byte region [ffff88800f7f4000, ffff88800f7f4400)
-The buggy address belongs to the physical page:
-page:00000000b8d65c1d refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88800f7f6800 pfn:0xf7f4
-head:00000000b8d65c1d order:2 compound_mapcount:0 compound_pincount:0
-flags: 0xfffffc0010200(slab|head|node=0|zone=1|lastcpupid=0x1fffff)
-raw: 000fffffc0010200 ffffea0000993408 ffffea0000991308 ffff888005841dc0
-raw: ffff88800f7f6800 0000000000080002 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-Memory state around the buggy address:
- ffff88800f7f3f00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88800f7f3f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff88800f7f4000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                       ^
- ffff88800f7f4080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88800f7f4100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+> 
+>> It would be easier to see from the available
+>> events, which is which. But of course it is possible to give it good names.
+>> My first approach was, that it returned all supported types, so no
+>> devicetree change needed. But by colleges agreed that it would be nice
+>> to remove unused flags. I am happy to remove it and someone who requires
+>> it can add it.
+>>
+>>>> +        1 SND_JACK_HEADPHONE
+>>>> +        2 SND_JACK_MICROPHONE
+>>>
+>>> minimum and maximum
+>>
+>> I do not understand this? It is a bitmap. I can put it as an
+>> enum:
+>>    - 1 # SND_JACK_HEADPHONE
+>>    - 2 # SND_JACK_MICROPHONE
+>>    - 3 # SND_JACK_HEADPHONE | SND_JACK_MICROPHONE
+> 
+> 
+> Then maximum is OR of them, isn't it?
+
+yes 1-3
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Astrid
