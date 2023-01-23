@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C15678556
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8243167855C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 19:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbjAWSxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 13:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
+        id S232336AbjAWSxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 13:53:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbjAWSxB (ORCPT
+        with ESMTP id S232470AbjAWSxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:53:01 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA0E2ED5F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:52:59 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so11296415wml.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:52:59 -0800 (PST)
+        Mon, 23 Jan 2023 13:53:36 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4842C3252F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:53:22 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o13so12555726pjg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 10:53:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lr5MPaX+CPbj+uvLPSPuq0twot1PyuqJGLrkh8HJM0I=;
-        b=xBqRe6fEn+YI8ZmpAsJ+mDYVaEfFQmDshTw9/SjuAUTRT+O5TmYv12ERKaxeqsO8PQ
-         gkAmIjYGjk9UFYHwzHx7cJScZbISnCINuUppUbX9dpx+bWL6KNfbSxDtge00SKu7P0Mf
-         38xeqLn7nAaBGxSitBCxrhN/DiaA1WJW4yPi1DkmgG0gCtlShBuxLdiYIpWvv4mtHkci
-         6Enmd8efhtrU/63NgFCq8OKyzjasErOyl5Zw2GT/Kz4I9vW6rgmUJpsePZH45GfDTEbv
-         1FYjz1zOtaqMEK6BUz1AaFaiMvgs33Q039xxvOZEDI9gMmpwlnwcko6t3xwtbAit6zT+
-         4TFA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbeqNDwM7PguRoxu1uJ4BvBe4RnoeTrJq9+Dcu44bdY=;
+        b=oqZ8GYVYMPss17svQQtt4WX28PkyYNlkKpMlDYe/MKVnswV3wPPOpbEdTr+qFxuhtO
+         91xcY14FmY7BCWgQzRFp2gP9cgHuvS5xGGBJQ3kZ7u+mQBzqAe2ubnIpkIZiZIKziX2B
+         aBMZxyeXZLqWuXx0xcu88+eHyALbAYaBrcw13Vh2kBP0bL/Kzfe+GkJdettkc5hJaCap
+         zyrmf1Spj8As97ZiUqpnmnF+wattpXxCdaBgiitxbCQHlK/vQ7MG3v4FsYy1Dc/cX1YH
+         y7Vjz8RNUj0M0cMN44Ei8uzADy+gmLn/xw0d94cz/N+8bgix9Y6cFeJktiR4go+x5FMP
+         0AmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lr5MPaX+CPbj+uvLPSPuq0twot1PyuqJGLrkh8HJM0I=;
-        b=xis8JhzxYlHTU4DOJ6E0eiUbOwSQ3s5YRVDSyiraFrisgDweoy7NSZLxuMoeK8u0Dk
-         U7cZfioWHnFaToibUFdfLNORkPwdkM9l1FBoQKLoNMHUVEvPItjYzOTU7SItg5Lnsvql
-         TMdJJXlKBI80f3os/zquY6pG3/keLt8Ag75sgpYw3Y3BqEOOTCqi/iCwNjAy0GVnQtgb
-         0eSCuxkyIPfyv/qq8f06bQHmt/GrSJfhP7XOao5A5DemAfd+wTGlcIT0EENaeb1zzNab
-         S0BcOHIsmgQVBO72ekFv1G1J8sFfWT+Op4wt2dPhkIFeuxnzwhF5Uifj/V7A2b7dcVka
-         OCqg==
-X-Gm-Message-State: AFqh2ko7zXxwZjPW/wUQ3brg+xLuosWvzzfpDYv5SxlcspDV/V7MD6xt
-        mR8id20lBfz/DhDGo9WqCGHm6S/UdlhJifkN
-X-Google-Smtp-Source: AMrXdXuHygLwV0w4vccurHokoLTMYfXYMC3RwpOQYEmkkxITUtYbU06E92YaCyZXbM0xv/VucMgR4g==
-X-Received: by 2002:a05:600c:1e1f:b0:3db:2063:425d with SMTP id ay31-20020a05600c1e1f00b003db2063425dmr17101085wmb.2.1674499979190;
-        Mon, 23 Jan 2023 10:52:59 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003d1e1f421bfsm12568074wmq.10.2023.01.23.10.52.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 10:52:58 -0800 (PST)
-Message-ID: <e75e5e1b-e7aa-e62d-1f12-f1543b6dbc25@linaro.org>
-Date:   Mon, 23 Jan 2023 19:52:56 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XbeqNDwM7PguRoxu1uJ4BvBe4RnoeTrJq9+Dcu44bdY=;
+        b=8OjTiOI8ZioT0Dthgy2jpPVFYESv41+MtYNh+rsmoH5NQBf1W7WJCysSfaBEXUWgdE
+         LXgNgQJZefZd1MupfR0sJU65v7O7gI7myrPPSqPx02DVofNrGfjsqV0D7OVUvf8A4Y8K
+         B2KtgkVoQ+A6CQUhK47p+o7Cl7fmq1RMDO0lC76Lcs8Kb2JYkzLuGrFQjlbOTA/WwBdB
+         J7z9S4LjKIAQoqu+rAs39CNhdud/4GPXKVnJMI/L3DT3h+1yD/j408jo/8wjKU5O8MX2
+         XF/Wd1SHJReqmyeMNi/aNRoaz8GL7uxAPW3RRFKrYZ/F5SpIYws74tGD6u7SGQ9hS4h/
+         H1cg==
+X-Gm-Message-State: AFqh2kq5mhU9NNAm/yQ3RAVKh2DGXfqrTcsmG0xL06aT8NQCheosmLHS
+        gtzie9NuMTq8lLl2jc/ls+gl3Q==
+X-Google-Smtp-Source: AMrXdXvMENwzNtkH6xTfJJGQ8EMJjEv4Ar7wzDxyyqftcYtq70Nxs3pSACwmfFb80I3zNA7Fk+aTgA==
+X-Received: by 2002:a05:6a20:be05:b0:b8:c859:7fc4 with SMTP id ge5-20020a056a20be0500b000b8c8597fc4mr625799pzb.1.1674500001550;
+        Mon, 23 Jan 2023 10:53:21 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id ml21-20020a17090b361500b0022bb9f05753sm5732668pjb.48.2023.01.23.10.53.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 10:53:20 -0800 (PST)
+Date:   Mon, 23 Jan 2023 18:53:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Erdem Aktas <erdemaktas@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
+        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
+        maz@kernel.org, bgardon@google.com, jmattson@google.com,
+        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
+        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
+        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
+        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
+        pshier@google.com, axelrasmussen@google.com,
+        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
+ stacks on function entry
+Message-ID: <Y87XnYZx1qzZOLKR@google.com>
+References: <20230121001542.2472357-1-ackerleytng@google.com>
+ <20230121001542.2472357-9-ackerleytng@google.com>
+ <Y8sxjppvEnm4IBWG@google.com>
+ <CAAYXXYy7=ZTCZ1LQ3_Sy39ju_xG5++dTrxi+DKGcbpJ5VJ3OuQ@mail.gmail.com>
+ <99a36eed-e4e5-60ec-0f88-a33d1842a0d6@maciej.szmigiero.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v8 8/9] dt-bindings: serial: mediatek,uart: add MT8365 SoC
- bindings
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
-        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
-        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
-        andrew@lunn.ch, gtk3@inbox.ru, sean.wang@mediatek.com,
-        zhiyong.tao@mediatek.com
-References: <20230123163833.1007181-1-bero@baylibre.com>
- <20230123163833.1007181-9-bero@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123163833.1007181-9-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99a36eed-e4e5-60ec-0f88-a33d1842a0d6@maciej.szmigiero.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 17:38, Bernhard Rosenkränzer wrote:
-> Add binding description for mediatek,mt8365-uart
-
-Subject: drop second/last, redundant "bindings". The "dt-bindings"
-prefix is already stating that these are bindings.
-
+On Mon, Jan 23, 2023, Maciej S. Szmigiero wrote:
+> On 23.01.2023 19:30, Erdem Aktas wrote:
+> > On Fri, Jan 20, 2023 at 4:28 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > 
+> > > On Sat, Jan 21, 2023, Ackerley Tng wrote:
+> > > > Some SSE instructions assume a 16-byte aligned stack, and GCC compiles
+> > > > assuming the stack is aligned:
+> > > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838. This combination
+> > > > results in a #GP in guests.
+> > > > 
+> > > > Adding this compiler flag will generate an alternate prologue and
+> > > > epilogue to realign the runtime stack, which makes selftest code
+> > > > slower and bigger, but this is okay since we do not need selftest code
+> > > > to be extremely performant.
+> > > 
+> > > Huh, I had completely forgotten that this is why SSE is problematic.  I ran into
+> > > this with the base UPM selftests and just disabled SSE.  /facepalm.
+> > > 
+> > > We should figure out exactly what is causing a misaligned stack.  As you've noted,
+> > > the x86-64 ABI requires a 16-byte aligned RSP.  Unless I'm misreading vm_arch_vcpu_add(),
+> > > the starting stack should be page aligned, which means something is causing the
+> > > stack to become unaligned at runtime.  I'd rather hunt down that something than
+> > > paper over it by having the compiler force realignment.
+> > 
+> > Is not it due to the 32bit execution part of the guest code at boot
+> > time. Any push/pop of 32bit registers might make it a 16-byte
+> > unaligned stack.
 > 
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-> ---
+> 32-bit stack needs to be 16-byte aligned, too (at function call boundaries) -
+> see [1] chapter 2.2.2 "The Stack Frame"
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+And this showing up in the non-TDX selftests rules that out as the sole problem;
+the selftests stuff 64-bit mode, i.e. don't have 32-bit boot code.
