@@ -2,114 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1BE677608
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F30F67760E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 09:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjAWIEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 03:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S231623AbjAWIHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 03:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjAWIEN (ORCPT
+        with ESMTP id S230218AbjAWIHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 03:04:13 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA489125A1;
-        Mon, 23 Jan 2023 00:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674461050; x=1705997050;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CXt4xHUGCEc11v2dBCdYnBfm6ITSIKvpYk+Zn/u7vWM=;
-  b=Py5XZCNflwzMWTTC64gQvXFdjKZn7AooDEo60MoRFS4KWwL9bZ1DNyzZ
-   dombmisJKygLjZxiBhGs9mvrMgbZyo2AJKSck3a/3ashjhZEgfz7dXjVh
-   FdTrwBv1eFoWOs/ucgreTOjrcCyWtwsbyMZldOpMMd+Wca5Kx/TRvqbGY
-   3gWOByOFf4wEs7T/FH97ancd3aExxqdXWQ2xqJMJVL4Cu3Sj7Naq4mqVI
-   f/RPOhonBWhL0/9HRTCo5lNO60yg+3qnJFsMe9F4MS1kQEqJl+LvDPcmY
-   jeoX8ToTcjE6Wp+f8JxQtQdaPf+BCg0oqf7mDACIH4AxuTeyTGYq/F4OT
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,239,1669100400"; 
-   d="asc'?scan'208";a="193408657"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jan 2023 01:04:08 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 23 Jan 2023 01:04:04 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 23 Jan 2023 01:04:02 -0700
-Date:   Mon, 23 Jan 2023 08:03:38 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
-Message-ID: <Y84/WnTNfDibXSy7@wendy>
-References: <20230122150246.321043584@linuxfoundation.org>
+        Mon, 23 Jan 2023 03:07:37 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C21125AD
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:07:35 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so7868145wmc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 00:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nVQ5axIJVwuSAYvhI9ZqbYDfSY4qZw3+ju4l505nmSM=;
+        b=YDMGPSSgTkWlWhATwYx5t55ztqz0WtMY/+rw9TD/xNR6r0uLpNh3+PQ6r+GWv7jvCO
+         bsbj2uPKR+zF8z141GMP77eFA+lPPMZcCAnpDcXcHUU1Wyy3MmCKq2zoGoOTGlqgWs2F
+         kBzNCju4oy3pfI80WDiPFUSCn7o8hHcf++hNcn6Am45wITw568oqWUkrvAElLUhlrk9h
+         GaRzoAujd5JSsTFqBpY/YPCB5lrlnMxjX/Ms2HdkYVH5n6YOWTZ4to5CkkGdQY7AgBrv
+         deFmVSpLbFaeov5WOTSQ0Z43IZVaSP1aJB9z0TUi7KhZIRQVD67HknmmThmci7KMrZDj
+         Nm9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nVQ5axIJVwuSAYvhI9ZqbYDfSY4qZw3+ju4l505nmSM=;
+        b=lQFGdOeZyty6lB0bianp8RR+6MvxMW5NByiX+WbYC3Ef29MPYOm7+lBao+7ppvD7zB
+         4HqiePlTYg7hpTkJEYX4OT/TZvYPxcWv/mpkaOhXkq64jMv5hrRgI8GCcEqCzJrHtFjy
+         PZT9Lqq7wEmiL4x383Rt82NCvaLUgEbow9g+1SyDKTBkQ/exwWdTxLeIZl8rWAquglqL
+         H11JCg01zKedBNn5q2l6U/W3aztZVz7/vZ2rNFo9QMuDpEr88YsFn3q+3SCeZH/IGcwf
+         RDkA2QOqqnmFIfUH4QBWbwlF4yErMp73Z5Mi+b1wMunvs+HcoTR5Q6Ej3ge1H1h2MqPl
+         5VAA==
+X-Gm-Message-State: AFqh2kqQ+znevbfMJWjKoog0iqsKGHFZLhSD5RRUuMM+sef60l9YbZEK
+        tOIYjGMGk3PxxjAFV0gFju2GIw==
+X-Google-Smtp-Source: AMrXdXtu2wzIhO70Sk+2krkLKVQM9Z9xPAVVSe0gI8P3VO5rhnqBm/JSnP57nxnU7W6zhLt7W07VOA==
+X-Received: by 2002:a05:600c:21c4:b0:3da:fcf1:d4cc with SMTP id x4-20020a05600c21c400b003dafcf1d4ccmr22816261wmj.30.1674461254499;
+        Mon, 23 Jan 2023 00:07:34 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v7-20020a5d6787000000b0025e86026866sm5603695wru.0.2023.01.23.00.07.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 00:07:34 -0800 (PST)
+Message-ID: <7d191871-1025-43a3-20bf-8fc6b3f92c89@linaro.org>
+Date:   Mon, 23 Jan 2023 09:07:32 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+15ijdafIi6o+7kF"
-Content-Disposition: inline
-In-Reply-To: <20230122150246.321043584@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 04/15] dt-bindings: arm: add support for Ambarella SoC
+Content-Language: en-US
+To:     Li Chen <lchen@ambarella.com>, Li Chen <me@linux.beauty>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+ <20230123073305.149940-5-lchen@ambarella.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230123073305.149940-5-lchen@ambarella.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---+15ijdafIi6o+7kF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 23/01/2023 08:32, Li Chen wrote:
+> Create a vendor directory for Ambarella, and add
+> cpuid, rct, scratchpad documents.
+> 
+> Signed-off-by: Li Chen <lchen@ambarella.com>
+> Change-Id: I2c29e45c08666489b0d9b588ac37d713f5b723d1
 
-Hey Greg,
+Please run scripts/checkpatch.pl and fix reported warnings.
 
-On Sun, Jan 22, 2023 at 04:02:09PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.8 release.
-> There are 193 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.8-r=
-c1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
- linux-6.1.y
-> and the diffstat can be found below.
+Applies to all your patches. Also test them... I have doubts that you
+tested if you actually ignored checkpatch :/
 
-For our RISC-V stuff, LGTM.
+> ---
+>  .../arm/ambarella/ambarella,cpuid.yaml        | 24 +++++++++++++++++++
+>  .../bindings/arm/ambarella/ambarella,rct.yaml | 24 +++++++++++++++++++
+>  .../arm/ambarella/ambarella,scratchpad.yaml   | 24 +++++++++++++++++++
+>  .../bindings/arm/ambarella/ambarella.yaml     | 22 +++++++++++++++++
+>  MAINTAINERS                                   |  4 ++++
+>  5 files changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
+> new file mode 100644
+> index 000000000000..1f4d9cec8f92
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,cpuid.yaml
 
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+This goes to soc
 
-Thanks,
-Conor.
+> @@ -0,0 +1,24 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/ambarella,cpuid.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ambarella SoC ID
+> +
+> +maintainers:
+> +  - Li Chen <lchen@ambarella.com>
+
+Missing description.
+
+> +
+> +properties:
+> +  compatible:
+> +    const: "ambarella,cpuid", "syscon"
+
+Drop quotes (applies to all your patches)
+
+Missing SoC specific compatible.
+
+> +
+> +  reg:
+> +    maxItems: 1
+
+Missing additionalProperties. sorry, start from scratch from some
+existing recent bindings or better example-schema.
+
+> +
+> +examples:
+> +  - |
+> +    cpuid_syscon: cpuid@e0000000 {
+> +        compatible = "ambarella,cpuid", "syscon";
+> +        reg = <0xe0000000 0x1000>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
+> new file mode 100644
+> index 000000000000..7279bab17d9e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,rct.yaml
+> @@ -0,0 +1,24 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/ambarella,rct.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ambarella RCT module
+> +
+> +maintainers:
+> +  - Li Chen <lchen@ambarella.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: "ambarella,rct", "syscon"
+
+All the same problems.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +examples:
+> +  - |
+> +		rct_syscon: rct_syscon@ed080000 {
+
+Really? Just take a look and you will see wrong indentation. Also drop
+underscores in node names and "rct". Node names should be generic.
 
 
---+15ijdafIi6o+7kF
-Content-Type: application/pgp-signature; name="signature.asc"
+> +        compatible = "ambarella,rct", "syscon";
+> +        reg = <0xed080000 0x1000>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
+> new file mode 100644
+> index 000000000000..5d2bd243b5c9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella,scratchpad.yaml
+> @@ -0,0 +1,24 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/ambarella,scratchpad.yaml#
 
------BEGIN PGP SIGNATURE-----
+That's not a clock controller!
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY84/SQAKCRB4tDGHoIJi
-0sKnAQD5dGnbA0TVPGkUxviLq0FRQFKxiLgUSO5FogKv3mmv6gD+Jo3zYWpLTKPZ
-8ZUcTtmNWVh2/Fe2kDVBdmeGDqYA8Ag=
-=ryn4
------END PGP SIGNATURE-----
 
---+15ijdafIi6o+7kF--
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ambarella Scratchpad
+> +
+> +maintainers:
+> +  - Li Chen <lchen@ambarella.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: "ambarella,scratchpad", "syscon"
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +examples:
+> +  - |
+> +    scratchpad_syscon: scratchpad_syscon@e0022000 {
+
+All the same problems.
+
+> +        compatible = "ambarella,scratchpad", "syscon";
+> +        reg = <0xe0022000 0x100>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml b/Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
+> new file mode 100644
+> index 000000000000..5991bd745c05
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/ambarella/ambarella.yaml
+> @@ -0,0 +1,22 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/ambarella.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ambarella SoC Device Tree Bindings
+> +
+> +maintainers:
+> +  - Li Chen <lchen@ambarella.com>
+> +
+> +properties:
+> +  $nodename:
+> +    const: "/"
+> +  compatible:
+> +    oneOf:
+> +      - description: Ambarella SoC based platforms
+> +        items:
+> +          - enum:
+> +              - ambarella,s6lm
+
+What is this? How do you expect it to apply? Can you try by yourself?
+
+
+Best regards,
+Krzysztof
+
