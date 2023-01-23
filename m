@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7E46782A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4666782A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 18:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbjAWROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 12:14:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbjAWROR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233116AbjAWROR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 23 Jan 2023 12:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231974AbjAWROP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 23 Jan 2023 12:14:15 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FFF2313C;
-        Mon, 23 Jan 2023 09:14:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FFE227BA;
+        Mon, 23 Jan 2023 09:14:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674494056; x=1706030056;
+  t=1674494054; x=1706030054;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=F+6/rhKyOwDW70Iv9nyCUCzqIJXspwIUmmViGKg5jXI=;
-  b=EwTWsP9L3bK1s7K/FsVxeHXS9au6fKNUX47pfD2/0EWd84bCZRT4+3fc
-   HVaNW/Zszgm9TFiLo4n127duyby6Qcyle1IP3pMx0SEShVPKtS8qJIR4L
-   HDDU+lsz0T4pVmFp9Lem4lkld50AB1XYj2gOkUfXZpAqHG1VOvESKFJXa
-   s5ZaQ+GUSqt5Tz61+miFN8etjXL1FwJGdw7wH9tLI3CwX4EdzvT/AQrdT
-   Ib5Aop29pZnwbcILUABiri3NF9sqwIx+OUdGOukPnHcuR7LMdxxSdNhk7
-   f+xNUNLOHnOCSBJBbQJXdY6KciFgfPF5vFhfwdARepiUbL1Kyx3k+Ckr1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="324773374"
+  bh=0U79zkIHIxmyTykAVQHhm+4844Ljl83bqkEvLyMecqU=;
+  b=fYMdyCKRwJlhtKoKpc2crZWXpZRb94yxXdWPMTYIqaHCFTOeU7sg7MHr
+   xtnNXiS3z07dXq6/0M3pyM+LIX25DT35+R0p7c6fa5I8yOvjAC2sMO8h/
+   trkOayi2NrSbARMv3CMxZKR8AU+ReW56u1IpfqJU4LAyXW0I7H6uGsmwD
+   PFBgv4O6VzwIeKuI/wl488Ty5wz7pC8O0mhyH1tVjOIrbKBlcLgSCYVWE
+   juE5+UKtMi1nfqdjzmrbIo5Cm8SyiaW5iSjNU1EeV+1GOuFjxrggyfa4O
+   vvFJ8/zEFHaPsS3l1S+x6oPyMmJcLEPTyyh7lIeQg+3ayFBRsjb/xHZeR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="324773379"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="324773374"
+   d="scan'208";a="324773379"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 09:09:42 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 09:09:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="694006131"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="694006139"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="694006131"
+   d="scan'208";a="694006139"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jan 2023 09:09:39 -0800
+  by orsmga001.jf.intel.com with ESMTP; 23 Jan 2023 09:09:40 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 536C2154; Mon, 23 Jan 2023 19:10:15 +0200 (EET)
+        id D30A1165; Mon, 23 Jan 2023 19:10:15 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -50,9 +50,9 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
         Robert Moore <robert.moore@intel.com>
-Subject: [PATCH v1 2/3] ACPI: utils: Add acpi_get_first_match_physical_node()
-Date:   Mon, 23 Jan 2023 19:10:05 +0200
-Message-Id: <20230123171006.58274-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 3/3] ACPI: video: Switch to use acpi_get_first_match_physical_node()
+Date:   Mon, 23 Jan 2023 19:10:06 +0200
+Message-Id: <20230123171006.58274-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
 References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
@@ -67,88 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are drivers that are using a logic that is combined in the offered
-acpi_get_first_match_physical_node(). The rationale to have this helper
-not only redunction of the lines of code, but improving the robustness
-by properly handling the reference counters on the error paths.
+Refactor the code to use acpi_get_first_match_physical_node(),
+which is currently open coded.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/acpi/utils.c    | 28 ++++++++++++++++++++++++++++
- include/acpi/acpi_bus.h |  3 +++
- include/linux/acpi.h    |  6 ++++++
- 3 files changed, 37 insertions(+)
+ drivers/acpi/video_detect.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-index 2ea14648a661..052e263d2246 100644
---- a/drivers/acpi/utils.c
-+++ b/drivers/acpi/utils.c
-@@ -965,6 +965,34 @@ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
- }
- EXPORT_SYMBOL(acpi_dev_get_first_match_dev);
+diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+index 0ccde0d4c527..b23773347e67 100644
+--- a/drivers/acpi/video_detect.c
++++ b/drivers/acpi/video_detect.c
+@@ -112,16 +112,10 @@ static bool nvidia_wmi_ec_supported(void)
  
-+/**
-+ * acpi_get_first_match_physical_node - Return the physical node of the first match of ACPI device
-+ * @hid: Hardware ID of the device.
-+ * @uid: Unique ID of the device, pass NULL to not check _UID
-+ * @hrv: Hardware Revision of the device, pass -1 to not check _HRV
-+ *
-+ * Return the physical node of the first match of ACPI device if a matching
-+ * device was present at the moment of invocation, or NULL otherwise.
-+ *
-+ * The caller is responsible for invoking put_device() on the returned device.
-+ *
-+ * See additional information in acpi_dev_present() as well.
-+ */
-+struct device *acpi_get_first_match_physical_node(const char *hid, const char *uid, s64 hrv)
-+{
-+	struct acpi_device *adev;
-+	struct device *dev;
-+
-+	adev = acpi_dev_get_first_match_dev(hid, uid, hrv);
-+	if (!adev)
-+		return NULL;
-+
-+	dev = get_device(acpi_get_first_physical_node(adev));
-+	acpi_dev_put(adev);
-+	return dev;
-+}
-+EXPORT_SYMBOL(acpi_get_first_match_physical_node);
-+
- /**
-  * acpi_reduced_hardware - Return if this is an ACPI-reduced-hw machine
-  *
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index 0584e9f6e339..e62af2f71362 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -777,6 +777,9 @@ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv);
- 	     adev;							\
- 	     adev = acpi_dev_get_next_match_dev(adev, hid, uid, hrv))
- 
-+struct device *
-+acpi_get_first_match_physical_node(const char *hid, const char *uid, s64 hrv);
-+
- static inline struct acpi_device *acpi_dev_get(struct acpi_device *adev)
+ static bool apple_gmux_backlight_present(void)
  {
- 	return adev ? to_acpi_device(get_device(&adev->dev)) : NULL;
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 4b12dad5a8a4..29bae77d819a 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -814,6 +814,12 @@ acpi_dev_get_first_match_dev(const char *hid, const char *uid, s64 hrv)
- 	return NULL;
- }
+-	struct acpi_device *adev;
+ 	struct device *dev;
+ 	bool ret;
  
-+static inline struct device *
-+acpi_get_first_match_physical_node(const char *hid, const char *uid, s64 hrv)
-+{
-+	return NULL;
-+}
-+
- static inline bool acpi_reduced_hardware(void)
- {
- 	return false;
+-	adev = acpi_dev_get_first_match_dev(GMUX_ACPI_HID, NULL, -1);
+-	if (!adev)
+-		return false;
+-
+-	dev = get_device(acpi_get_first_physical_node(adev));
+-	acpi_dev_put(adev);
++	dev = acpi_get_first_match_physical_node(GMUX_ACPI_HID, NULL, -1);
+ 	if (!dev)
+ 		return false;
+ 
 -- 
 2.39.0
 
