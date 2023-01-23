@@ -2,136 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE039678C0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D60A678C15
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjAWXah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
+        id S232383AbjAWXiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 18:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjAWXaf (ORCPT
+        with ESMTP id S229502AbjAWXiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:30:35 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88EB17174
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:30:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1674516634; x=1706052634;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3lBUQWNnwjuiaJATRUvrlUmP//VbNgiTH5V5gmyopKM=;
-  b=Q1gfpzSLdmB5G+YwtUPZd/Vvbu17HtsvNxmnQD4prvS1Kl0f627ld/3H
-   NbUZSb1VjB1uJiZ4qbm7sPjihjLBkYHvhwlFrZcNdlHPAxH1ZeJ6jFquW
-   e6Ol4o88HYxJ8dI9x24JsQJa4u/Tzid01JYGxaIf2zmOSpUPZaOb3b6e1
-   C6eYJzCY3D0M1zyoGi7P8LtlNLm/va31RT7jY30Tnxj08aTaU6HBbozTo
-   NW82XRmK7j1OlUoX6GCCt1igwJyMggegvvwYt8fudoIrcKK7w4VXoJLDw
-   2EHPQPqew8CGbhLw6xqMB/hdVc9dIPQ5xXjwwxGtAU5Ea/TrwpfZH2XsZ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,240,1669046400"; 
-   d="scan'208";a="221656609"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Jan 2023 07:30:32 +0800
-IronPort-SDR: 3LQFxRub2mdYa9mPbgiPS/4AnZdhfCs2/93WhbPYQZFdxiFaDqotnT+8eD/rGwK1G4fOnKgpn7
- Z3z7Ha2PF04ZKJABPVAo0UKhFluqnp+XqLvCklfBvCSbLhHjm1yrawKXFDaqAVaiZ0ZHWZ2OT8
- 89KxLuf8hUuTxm5GvarfS0Yu/C+Yepem7mek/LaWMdl0meOSyWLSD8XLKcTMGIcXQIlV2+KAiu
- iPrAlQm/X1gFclYW0nmkIw5R3CzmJSQVrpovkOCAmcLjWxVAhU8C6ZHpJbwUJv6ijQkvyW/3uG
- HVU=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 14:42:21 -0800
-IronPort-SDR: a1dkJQ4d/zpUA7fgJHws9szDK2GdpyyEkXiLKXwNJ8AHuYmFNTmjbeA5bBgqaTw2Pcu0b9hR+s
- XYl7hJKkhjN2RxyeZWg1vHVpGGtHxHwV39SsNXZobg00Bac2Q9yS1zn9i7iyspCkeLEc/Ggdjx
- cUBjdtijz5+B3T+hYkTUH/sdiz+JyH3+nHp3aGVVwS8Qmm3S99MWjV4/qUquAzX+zCSJ5YDx/4
- xkjKAQvPz+urSGXhg6oWYe0aooXstyjW21N21R7IU09YeTrZy8jXS74bYBtp3Oju5Bk+3gcHpd
- PVw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 15:30:33 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P15tw3W3Pz1Rwt8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:30:32 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1674516631; x=1677108632; bh=3lBUQWNnwjuiaJATRUvrlUmP//VbNgiTH5V
-        5gmyopKM=; b=VVOLmqsei+FhMOs3bMvMEY6jTbthYjyoMB81T+7vTWyoEjz7caQ
-        J23eitrBN63MNPz129Wyk6k2r7VSXmSu/onUW1sTuVmehqV8fTL/3D2MHZJeyVwi
-        VCcRc9ph0D0DOCIXMbq3CESnk7QhFjWS6rH/xxQs9BhAa03lyci7/UFB7Fj3OJrQ
-        86lRwEeW5UeJXBTGMTZ6OWFVxGYwFybMRU/s/9mh62Qf43N/ox7YCDBb7WjoN9fE
-        o9RmhQSJBFxjb3aiDmBaNw6hrDF+K5oGzl8+fHGnrnWVHtDyy+mCDcUmhAtkWDld
-        tfI7jfE1Zerpx2NGCvrQbvlINZJkMK2t5YA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9OWvaFaFOIZ3 for <linux-kernel@vger.kernel.org>;
-        Mon, 23 Jan 2023 15:30:31 -0800 (PST)
-Received: from [10.225.163.51] (unknown [10.225.163.51])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P15tt5cKgz1RvLy;
-        Mon, 23 Jan 2023 15:30:30 -0800 (PST)
-Message-ID: <87958074-baa4-b6c9-da0c-d654e4009611@opensource.wdc.com>
-Date:   Tue, 24 Jan 2023 08:30:29 +0900
+        Mon, 23 Jan 2023 18:38:13 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE961204F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:38:12 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id 88so1597036pjo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 15:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PDHB0ODlMstmhFdpIes6JLYo5+ikO8l0oYaAPmmlt1c=;
+        b=VkzHwRGnuLzzOCe+jd2+aXAC1B0Pi316N1RkmUx4r6ANqJcx0x+5Q72Z8UUWxTdy1r
+         pG5SCyLEjYuMfqhsFLdkkFHinHiEydOUFzX+r5WNej9OPd87nM0d7yREV+Rq8DkVOrGV
+         NNXVLr+T0ZRr5iz2mMx1Z0IHdQwR/sXaSDOinZlAX/u9O36ljHgPvbEvKqpZSoiKL/Ql
+         2n5bBmNgSGwr5j9NkL7X+hI5ejHfVg7U5tPdlMMUlM5A7mUt0EJEbSqS9aevYAkYpR2i
+         P7CyNcMiBR5cvRjvE+wd+fhWDFEx7SAIHLLtgqKHLWXCd78gvhmYm3A32QaiqopBK3SZ
+         eGPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDHB0ODlMstmhFdpIes6JLYo5+ikO8l0oYaAPmmlt1c=;
+        b=N3M19wU35YXEMrO5J69gHXBVSUUWIp4eNCjWh5AQkWifdoKvUF0xARm+0vu8r8cuuP
+         1sURjm7wRGQAy+yIz3QWzHR9YBDIbqEYCpChXCuHyCB/xORYg52AffolyW/BLkXKnXB+
+         AJqKGg/HZHmU8ti71IpmXnHv1HOfe0xaOX20i/UI++ghOmFNAKQr+4Hwa2xpLRa/Uy0Y
+         9xhyxs4U/Pdl9iWswMctiA1BLr/z8gOeww1BIwyp8Ykb/FQgP9LYImZtVmS4Cq6HsxFk
+         JPI38nFIMExk8wgv+Y6o1lfngBG+tCUzGVUnGuu6BqFXLL+kbSgsDkBF4TGxttRVGl+e
+         RTBg==
+X-Gm-Message-State: AFqh2krqsHcm/5+RBp+tjE27ar3NUq05foNqLjwN9bQGAbnyuSrXwrzA
+        EwwJG2rw8yfg2iqp6e3QXr1wng==
+X-Google-Smtp-Source: AMrXdXtrvJkyeLq8anFSJnOID4b9C3AaKf59uOM0fvrdASPfrf/mhyTzO8Q2iNKbj2o8vaNJGqEopA==
+X-Received: by 2002:a05:6a20:3ca7:b0:b8:c646:b0e2 with SMTP id b39-20020a056a203ca700b000b8c646b0e2mr1004683pzj.3.1674517091557;
+        Mon, 23 Jan 2023 15:38:11 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t6-20020a63b246000000b00499a90cce5bsm102181pgo.50.2023.01.23.15.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 15:38:10 -0800 (PST)
+Date:   Mon, 23 Jan 2023 23:38:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Hocko, Michal" <mhocko@suse.com>,
+        "tabba@google.com" <tabba@google.com>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dhildenb@redhat.com" <dhildenb@redhat.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "ddutile@redhat.com" <ddutile@redhat.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Annapurve, Vishal" <vannapurve@google.com>,
+        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
+        "hughd@google.com" <hughd@google.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "steven.price@arm.com" <steven.price@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
+Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <Y88aX+MIZeteDQju@google.com>
+References: <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
+ <20221219075313.GB1691829@chaop.bj.intel.com>
+ <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
+ <20221220072228.GA1724933@chaop.bj.intel.com>
+ <126046ce506df070d57e6fe5ab9c92cdaf4cf9b7.camel@intel.com>
+ <20221221133905.GA1766136@chaop.bj.intel.com>
+ <b898e28d7fd7182e5d069646f84b650c748d9ca2.camel@intel.com>
+ <010a330c-a4d5-9c1a-3212-f9107d1c5f4e@suse.cz>
+ <0959c72ec635688f4b6c1b516815f79f52543b31.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: linux-next: manual merge of the zonefs tree with the
- vfs-idmapping tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230124085951.59eb8da3@canb.auug.org.au>
- <1631b427-9efd-cd26-5dbc-0143097f859b@opensource.wdc.com>
- <20230124102535.1e21a533@canb.auug.org.au>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230124102535.1e21a533@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0959c72ec635688f4b6c1b516815f79f52543b31.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 08:25, Stephen Rothwell wrote:
-> Hi Damien,
+On Mon, Jan 23, 2023, Huang, Kai wrote:
+> On Mon, 2023-01-23 at 15:03 +0100, Vlastimil Babka wrote:
+> > On 12/22/22 01:37, Huang, Kai wrote:
+> > > > > I argue that this page pinning (or page migration prevention) is not
+> > > > > tied to where the page comes from, instead related to how the page will
+> > > > > be used. Whether the page is restrictedmem backed or GUP() backed, once
+> > > > > it's used by current version of TDX then the page pinning is needed. So
+> > > > > such page migration prevention is really TDX thing, even not KVM generic
+> > > > > thing (that's why I think we don't need change the existing logic of
+> > > > > kvm_release_pfn_clean()). 
+> > > > > 
+> > > This essentially boils down to who "owns" page migration handling, and sadly,
+> > > page migration is kinda "owned" by the core-kernel, i.e. KVM cannot handle page
+> > > migration by itself -- it's just a passive receiver.
+> > > 
+> > > For normal pages, page migration is totally done by the core-kernel (i.e. it
+> > > unmaps page from VMA, allocates a new page, and uses migrate_pape() or a_ops-
+> > > > migrate_page() to actually migrate the page).
+> > > In the sense of TDX, conceptually it should be done in the same way. The more
+> > > important thing is: yes KVM can use get_page() to prevent page migration, but
+> > > when KVM wants to support it, KVM cannot just remove get_page(), as the core-
+> > > kernel will still just do migrate_page() which won't work for TDX (given
+> > > restricted_memfd doesn't have a_ops->migrate_page() implemented).
+> > > 
+> > > So I think the restricted_memfd filesystem should own page migration handling,
+> > > (i.e. by implementing a_ops->migrate_page() to either just reject page migration
+> > > or somehow support it).
+> > 
+> > While this thread seems to be settled on refcounts already, 
+> > 
 > 
-> On Tue, 24 Jan 2023 07:31:18 +0900 Damien Le Moal <damien.lemoal@opensource.wdc.com> wrote:
->>
->> Thanks for that. Do you want me to rebase my for-6.3/for-next branch on
->> these patches ? I need to retest everything anyway, so I might as well do
->> that.
+> I am not sure but will let Sean/Paolo to decide.
+
+My preference is whatever is most performant without being hideous :-)
+
+> > just wanted
+> > to point out that it wouldn't be ideal to prevent migrations by
+> > a_ops->migrate_page() rejecting them. It would mean cputime wasted (i.e.
+> > by memory compaction) by isolating the pages for migration and then
+> > releasing them after the callback rejects it (at least we wouldn't waste
+> > time creating and undoing migration entries in the userspace page tables
+> > as there's no mmap). Elevated refcount on the other hand is detected
+> > very early in compaction so no isolation is attempted, so from that
+> > aspect it's optimal.
 > 
-> You can only rebase on top of the vfs-idmapping tree if you get a
-> guarantee that it is immutable.  In any case, it may be better to merge
-> (an immutable subset) of the vfs-idmapping tree (and fix up the
-> conflicts) rather than rebasing on top of it.
+> I am probably missing something,
 
-OK. I think I will merge the 3 patches that create the conflict and rebase
-the patches. I need that for retesting at least. But given the size of the
-conflict resolution, I may push that as an update to my for-6.3/for-next
-branch. Let me see...
+Heh, me too, I could have sworn that using refcounts was the least efficient way
+to block migration.
 
-> Alternatively, just leave the fix up to Linus (but mention it to him
-> when you send your pull requests).
-
-Understood. Let me retest first :)
-
-Thanks !
-
--- 
-Damien Le Moal
-Western Digital Research
-
+> but IIUC the checking of refcount happens at very last stage of page migration too 
