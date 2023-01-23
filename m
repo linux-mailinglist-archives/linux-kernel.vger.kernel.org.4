@@ -2,103 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB03767779F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE076777A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbjAWJqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S231789AbjAWJrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjAWJqU (ORCPT
+        with ESMTP id S231149AbjAWJrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:46:20 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A362F1BAE3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:46:18 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id y1so5692637wru.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:46:18 -0800 (PST)
+        Mon, 23 Jan 2023 04:47:02 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E6722007
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:46:40 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 203so13996623yby.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:46:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=60INGmxwRr+8yD/I9JtxQHZJy+MthHAPjebxgVXSq4A=;
-        b=F1RmlI6Jr+ymKyy8lqwEzZBkmqqB13nNXYBYvHtOeWRGeqsuz7xzXBmaWhSw3I8Ebm
-         TcBhF+tktlNXSXYa7GGd+4cSp7Mx1MA292zlI/YBhsesf8m2OPtOBU4CzkRYYDY+VJKD
-         rZKktCGYO6MieFBnhFrnXP96yNjjCazN4NtubEGY3US83//z/ammPRj/L4Pxrc2Z6tmr
-         QKPZ+KdqFIhF4uxc434VoygrrqrdBU0wTWSgMlQyI+fyCqgR08BCpwX5nBT4NXsRkGFu
-         8nu27yExklJVwN9h22VU1oVuSZqcQ+pTlG/IoT6VZa6i92mv0KfUGLb3dqJ4/aHoExHh
-         cArg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xIUym0fwoqVcnwrLqJ1dlH8RrGoqDxVxxRatMQes/zo=;
+        b=RIrwFUKSI6+/6BixY/Sn4gTt4tJf6xuoCzVJnDNttT5Q+udEOvN2bgHKspTZfMba7S
+         RCIDaCwVUu+rkXHlmp2N9hl9ZTJuqBnvklJRNSRV7So6fwW2X5Pi3bnrCCXlbUk689lJ
+         zMrGOlEkBnsfAX0S4+fjy3feuJ7p3+YrYOAfSuxintjQKnYgdUFXNmcbZYwPW30lYiqN
+         KQFPd/Xgjw1k6Uc8T6UOY3o0D6kRfjUs8mUKldJjhmNDOjjTs6kMAfXcnPntwHzhR7Zw
+         t+0msTOqgEDzTjj0IM0o54sMFks29mL7pJFkATDWWP+M0/9Ds/5buAkXREknfRUNUvT4
+         jrwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=60INGmxwRr+8yD/I9JtxQHZJy+MthHAPjebxgVXSq4A=;
-        b=zlzyRYSoXxhXzxJnUYF3C5h2kV8sarxvB4q3PFrFnCP59D+QhF0R19MyKS/xgidCFf
-         +TqwMIxpeC+t488rWKa8ZtmIWOqMAFPrs9Ki7f+9uDuTgyEeHTDb6jqK0F2udTtb/Cau
-         rMxwNIEttmHjdohQtPx4dbVYbbBvlJ0/mzmwgZ2RpLFots7qbAq4BDwTdTYhRhDUkW/S
-         As9dOQNsAiYG5jyajD7mW/4BX6rMtiXLx2Z855Z+736jpy2eB3M3GxmOpO6tyvAAAIGQ
-         04HlcnsB0AQsR0bxbPlD4cvBwIyb+E41Oa10201UyHvyUCJZstOCs05VZma+VU2zQ1h5
-         mecA==
-X-Gm-Message-State: AFqh2koV4+J0w/ObIDwlGVo07WAUkNCEcBo2Oi3bELtmJs38W2M59OU5
-        jFgQcZaWUcZ65bovuMwwCJWnCw==
-X-Google-Smtp-Source: AMrXdXuHEVHo54bmjGJT3gC7SenPuHW6sVZSyn52AJ8UqKixwTSKOJoGk+qB0zPe/lhc1Ohi58pW5Q==
-X-Received: by 2002:a05:6000:98d:b0:2bd:c6ce:7bfb with SMTP id by13-20020a056000098d00b002bdc6ce7bfbmr23917833wrb.28.1674467177213;
-        Mon, 23 Jan 2023 01:46:17 -0800 (PST)
-Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id q12-20020adff50c000000b002bc83b85180sm7139415wro.114.2023.01.23.01.46.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 01:46:16 -0800 (PST)
-Message-ID: <c590a842-0074-8f19-6bc7-5de101a88661@linaro.org>
-Date:   Mon, 23 Jan 2023 10:46:15 +0100
+        bh=xIUym0fwoqVcnwrLqJ1dlH8RrGoqDxVxxRatMQes/zo=;
+        b=Txtna/GcyPcw/nDMe0hpwcq5P5fZBJKeoeXoAz6nrfiXbiNrVCxHPdcQ6tCY1ZnaBK
+         mzCP/jh2KQGUs+8r5v5r+2+fc/7iMK1kRRR4xnhP+q7Jf/0Pm628QhRM2Yl1AdU3S3/i
+         iszBRvWAXQbgzbEgvKk7mVs7Gz0wffdaqB0RqTd6GVXqdX7WvcUScQWMAcSUcwfcJo+0
+         p9JsQA9Mq7KReRZ9eA2EqKjk2iaoUhX6gl6MRcUqpn/QBbJ7lVEwbhjW+nSRDpjuw6Vo
+         gdfULwP+I8+Hktbz9ft425J1dQuFGVOK1cjpyFTqmmIR8r92vXhkgGCdEBAsVBmzXRwn
+         WKkw==
+X-Gm-Message-State: AFqh2kpMbwzGL5ZoW8/0/KUbCtSjrcP5RnZXEYWC+ei3mhcGZ7QP7Ylc
+        zhxGjKnCVN/xIJHJqhu9YRTRTetpAtAvOzTOexnOKr/qkD7/XsDm
+X-Google-Smtp-Source: AMrXdXtHFLlW73/xuckMMv/yxYwQVv1nWZWllzQ5qLA6qr9QRZGiS6Mkz2Jv0QYmNSpT6jxees3XdM6V4SxIwO7jwfw=
+X-Received: by 2002:a05:6902:4cc:b0:7ca:f229:4642 with SMTP id
+ v12-20020a05690204cc00b007caf2294642mr2772765ybs.233.1674467199574; Mon, 23
+ Jan 2023 01:46:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 10/11] dt-bindings: PCI: convert amlogic,meson-pcie.txt
- to dt-schema
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230110150328.GA1502381@bhelgaas>
-Organization: Linaro Developer Services
-In-Reply-To: <20230110150328.GA1502381@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230123131818.2785f4e8@canb.auug.org.au>
+In-Reply-To: <20230123131818.2785f4e8@canb.auug.org.au>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Mon, 23 Jan 2023 10:46:28 +0100
+Message-ID: <CACMJSevdzO7QuYqQ8B1QoAPC5CUW--+AeDm2dHbf1TGGL0=aMA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tty tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,57 +69,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 16:03, Bjorn Helgaas wrote:
-> Is this the same sort of conversion done by one of these?
-> 
->    e4dffb674cfd ("dt-bindings: PCI: tegra194: Convert to json-schema")
->    075a9d55932e ("dt-bindings: PCI: qcom: Convert to YAML")
-> 
-> It's helpful to non-experts like me if the subject lines use similar
-> style (capitalized) and similar terminology ("dt-schema" vs
-> "json-schema" vs "YAML").
+On Mon, 23 Jan 2023 at 03:18, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the tty tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>
+> drivers/tty/serial/qcom_geni_serial.c: In function 'setup_fifos':
+> drivers/tty/serial/qcom_geni_serial.c:1058:17: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+>  1058 |         if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+>       |                 ^~
+> drivers/tty/serial/qcom_geni_serial.c:1059:21: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+>  1059 |                 port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
+>       |                     ^~
+> drivers/tty/serial/qcom_geni_serial.c:1059:63: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+>  1059 |                 port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
+>       |                                                               ^~
+> drivers/tty/serial/qcom_geni_serial.c:1062:26: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+>  1062 |                 if (!port->rx_fifo)
+>       |                          ^~
+>
+> Caused by commit
+>
+>   2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
+>
+> interacting with commit
+>
+>   b8caf69a6946 ("tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buffer")
+>
+> from Linus' tree.
+>
+> I have applied the following merge fix patch for today (I am not sure
+> if it is actually correct, but it builds).
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 23 Jan 2023 13:09:27 +1100
+> Subject: [PATCH] tty: fix up for "tty: serial: qcom-geni-serial: add support
+>  for serial engine DMA"
+>
+> interacting with "tty: serial: qcom-geni-serial: fix slab-out-of-bounds
+> on RX FIFO buffer".
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index d98e0a8aae7c..61350007bf1c 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -1055,11 +1055,11 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
+>         uport->fifosize =
+>                 (port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
+>
+> -       if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> -               port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
+> +       if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> +               port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
+>                                               port->rx_fifo_depth * sizeof(u32),
+>                                               GFP_KERNEL);
+> -               if (!port->rx_fifo)
+> +               if (!port->rx_buf)
+>                         return -ENOMEM;
+>         }
+>
+> --
+> 2.35.1
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Yes and honestly, I don't know what's the right name to use.
+This looks fine and works fine:
 
-I use dt-schema since it's the "official" name of the tool
-used to validate those.
-
-> 
-> On Mon, Jan 09, 2023 at 01:53:34PM +0100, Neil Armstrong wrote:
->> Convert the Amlogic Meson AXG DWC PCIE SoC controller bindings to
->> dt-schema.
-> 
-> Some references here and below are "PCIE" (inherited from the
-> original) and others are "PCIe".  Could be made consistent here.
-
-Ack
-
-> 
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 134 +++++++++++++++++++++
->>   .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
->>   2 files changed, 134 insertions(+), 70 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
->> new file mode 100644
->> index 000000000000..a08f15fe9a9a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
->> @@ -0,0 +1,134 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/pci/amlogic,axg-pcie.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Amlogic Meson AXG DWC PCIE SoC controller
->> +
->> +maintainers:
->> +  - Neil Armstrong <neil.armstrong@linaro.org>
->> +
->> +description:
->> +  Amlogic Meson PCIe host controller is based on the Synopsys DesignWare PCI core.
->> ...
-
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Tested-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
