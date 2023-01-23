@@ -2,149 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698816777AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592AC6777B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 10:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjAWJrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 04:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S231720AbjAWJsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 04:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjAWJrL (ORCPT
+        with ESMTP id S231149AbjAWJsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 04:47:11 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE7321A18;
-        Mon, 23 Jan 2023 01:46:58 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id z3so8338158pfb.2;
-        Mon, 23 Jan 2023 01:46:58 -0800 (PST)
+        Mon, 23 Jan 2023 04:48:00 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BFC126D0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:47:59 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so10139335wml.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 01:47:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNVBQzYKvaOsqX4tRiNZzz8ZPdnvV/rsuJuQmq+/ajI=;
-        b=Uc/8qzIHjHoClILDsnW/XzarmHzWCdK4Bov43AZp8h9efxDKt93QLkupqBBWUGtdRI
-         ZM5XF15VShg1LM3PhHQ8MSP85m4tgDqB80QWYVhD02BC8qBOSWBI4wLcXZE7fKVwet3/
-         GYIpBceIx6r6rJVxM7CcfiYE7otQrNs6bQWnguKynuubNfNNwmCuHZM9AAjRACEATSlz
-         Q0Nr3OogD7Mpi1G9mrFNHvlpJ4mD55Zb5rWeMcVEHaanVjYqYG5wh6sTyc1x/pt2+Rda
-         kztN6lnz4o+ELB5oII4dcLP3vSk/lhkKJN0A3HKhqJhs7DI5lREORM8oXsESaG51xg1T
-         lkrw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iIfSs1QU1y62hh19vUyf32vrywpZMGQTYBDrvO1iiAw=;
+        b=SgDrQSwGjXxTU2UClar2sLKGiAclP9O53rWoeJS/htmHdHmj221R1PfCZvV6sxhIoM
+         scZnK8u5Fdu++gqz0qBCFSrK8mAAy5IlNSbApeKcNbbBtydSs8h0XPMlMdR2wQ9fc327
+         smRhFO1m+aKBuYbA6906CKaewlaoExJxuRrJazRjmq9evys+5Hx+KZchZKGmuP4zZfJs
+         BhHGYp3fXsjvdZiCRuOrLUYAOdC4UHUtnpmCoknonMdD7vDSaYQnxYWTegPJ0bA+xSNN
+         BQjVmTifXvQoK6mmzJFGaRTQS79LcU0U8KO7DZW0pfEYqd5MCg/Wz4tjHkO1bVkQMiO5
+         bCpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mNVBQzYKvaOsqX4tRiNZzz8ZPdnvV/rsuJuQmq+/ajI=;
-        b=s2LUObusCb2SRjqmN4MWwIb4kbFqsh3qtqWDFepSMYzsuM0M7E0KdOsGB/vARm7uPN
-         zrRyRlDU+uDGwD8t9IZjkmL/NGVdCzDps8nQ86iDvrQyzzH2Hqc1IUXKoOCIj0CXDKmf
-         nBtIg+LF9dZE4+IKKG1W76gx+mTA7jOL1AKBK0/gUTo6j3QbT/bX3rSj2l7l5tj9+QMC
-         PfcQZUOu7IcaSK7KAA5tVoeYszJDwr7WWVBDSZjR+YXjWUH74uOcrkySznIBQSjCuQOS
-         jAKw4OyJvXBP83z8J1hLJfTPnA3/8g+ck2CCGURs3BeSaMhCkVEEKgPQx+TcabJ2IDv6
-         rqFQ==
-X-Gm-Message-State: AFqh2kpHcBlpzqGY9l/ojS2zKkjaGGRBma63sZp7gDCYgvhDnjrSdsQJ
-        RJEZtk4aWUjCGdrYma+ynacOP5vhw7zVBaqsrj4=
-X-Google-Smtp-Source: AMrXdXuovTbBXeXg8I+9+vyt9mizydIvPf196uiVN42cD6gdZP+kuDBCMbqAnhRsIAjDDDQCRzBhpSQOXiG92c3JuzY=
-X-Received: by 2002:a05:6a00:13a3:b0:58d:973f:e2f1 with SMTP id
- t35-20020a056a0013a300b0058d973fe2f1mr2446981pfg.10.1674467218360; Mon, 23
- Jan 2023 01:46:58 -0800 (PST)
+        bh=iIfSs1QU1y62hh19vUyf32vrywpZMGQTYBDrvO1iiAw=;
+        b=iZ3cxNzU3BM9PgkvaNexPqUbVnmDdWKoVg12kbnbaHU/Z78dXYAp40rrtBTf4yv2a0
+         Lyhk+mj7pnMRuO3lB37lsQ5IRRuQRacFRHOV5janQaV5cfoVmxK7Uff/D5xUTsDPx2z5
+         FUmstlCChKpoY16TNDgeX/4btBYwcYWRBXTVVFX8q3VGlORq8FTewXs7S93DEeyJChFu
+         bh8V3hlREtlKi3OcCwG9cfegGC+cLosyQKYmv+ty9YYdOl6X02M3YSVkqrwx6WT9/BM3
+         /6eA2sTMIjATCLEadQLIXPjrGz6lwy9kdM/rw71GmtFa23495GiWxM+r1pE8p6wyj4Vg
+         ezog==
+X-Gm-Message-State: AFqh2krHDs57RtVHSwsLAFqGbwI/z5WJvmpZksp4AzYG/eN1V4qqd6PT
+        tZXA805+fCFuTZg3Qc7cH+icGoi5zIc7oXJd1NQ=
+X-Google-Smtp-Source: AMrXdXstCCqiov4SnLO9YPRF6ilbaVnOwBM7iOZselENPe8gfNIr7OzYice+0ciH9jM+ocDeKZ2tgA==
+X-Received: by 2002:a05:600c:21c4:b0:3da:fcf1:d4cc with SMTP id x4-20020a05600c21c400b003dafcf1d4ccmr23134268wmj.30.1674467278075;
+        Mon, 23 Jan 2023 01:47:58 -0800 (PST)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id ba9-20020a0560001c0900b002b57bae7174sm4078111wrb.5.2023.01.23.01.47.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 01:47:57 -0800 (PST)
+Message-ID: <3a3d9fc5-0f61-8da7-dc4c-7b57b0272230@linaro.org>
+Date:   Mon, 23 Jan 2023 10:47:56 +0100
 MIME-Version: 1.0
-References: <20230121112358.52216-1-robimarko@gmail.com> <20230121112358.52216-2-robimarko@gmail.com>
- <ebdd9932-e251-0cd7-6c98-3c735ecb74a6@quicinc.com> <CAOX2RU7p-0ZTx8fkY4hOk=Zmx6RT+1PwVL+CQxkjzVadm0ehTA@mail.gmail.com>
- <29d9de45-1ce7-d6e5-bf02-052e911a067b@quicinc.com> <CAOX2RU7BfESmsUdZ5jBfYjWXUnDWmFizT8UiPwgzb_SsrT0jnA@mail.gmail.com>
- <0b224700-4774-0c34-7ce1-0a984b62b3c0@quicinc.com>
-In-Reply-To: <0b224700-4774-0c34-7ce1-0a984b62b3c0@quicinc.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 23 Jan 2023 10:46:47 +0100
-Message-ID: <CAOX2RU4JaVTTrroG1RZw=Lnj76_2P2Xfgg5u7iTgDFuA3DKZQA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq8074: add QFPROM node
-To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] media: meson: vdec: esparser: check parsing state with
+ hardware write pointer
+Content-Language: en-US
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>
+References: <20230123094300.2816812-1-christianshewitt@gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230123094300.2816812-1-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 at 05:44, Kathiravan Thirumoorthy
-<quic_kathirav@quicinc.com> wrote:
->
->
-> On 1/22/2023 10:39 PM, Robert Marko wrote:
-> > On Sun, 22 Jan 2023 at 18:05, Kathiravan Thirumoorthy
-> > <quic_kathirav@quicinc.com> wrote:
-> >>
-> >> On 1/22/2023 10:29 PM, Robert Marko wrote:
-> >>> On Sun, 22 Jan 2023 at 17:57, Kathiravan Thirumoorthy
-> >>> <quic_kathirav@quicinc.com> wrote:
-> >>>> On 1/21/2023 4:53 PM, Robert Marko wrote:
-> >>>>> IPQ8074 has efuses like other Qualcomm SoC-s that are required for
-> >>>>> determining various HW quirks which will be required later for CPR etc,
-> >>>>> so lets add the QFPROM node for start.
-> >>>>>
-> >>>>> Individidual fuses will be added as they are required.
-> >>>>>
-> >>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >>>>> ---
-> >>>>>     arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 +++++++
-> >>>>>     1 file changed, 7 insertions(+)
-> >>>>>
-> >>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >>>>> index 8eba586065a3..f29491f647fe 100644
-> >>>>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >>>>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >>>>> @@ -301,6 +301,13 @@ mdio: mdio@90000 {
-> >>>>>                         status = "disabled";
-> >>>>>                 };
-> >>>>>
-> >>>>> +             qfprom: efuse@a4000 {
-> >>>>> +                     compatible = "qcom,ipq8074-qfprom", "qcom,qfprom";
-> >>>>> +                     reg = <0x000a4000 0x1000>;
-> >>>>    From the HW document, I see the overall size of this region is 0x2000,
-> >>>> any reason to stick with 0x1000?
-> >>> Like always, I dont have access to docs and 0x1000 is all I could find
-> >>> downstream
-> >>> being used.
-> >>>
-> >>> Any chance you can share the regions inside of QFPROM, it would be great to use
-> >>> the ECC corrected one if available.
-> >> Sorry, What do you refer by "ECC corrected" here?
-> > Isnt there a corrected region in the QFPROM meant for reading?
-> > As far as I understand it's protected by FEC.
->
->
-> Yes, there are two regions for the QFPROM, the region which you used
-> here is the one used for reading and there is a error correction logic
-> for it and it is size is 8KB not 4KB.
+On 23/01/2023 10:43, Christian Hewitt wrote:
+> From: Neil Armstrong <narmstrong@baylibre.com>
+> 
+> Also check the hardware write pointer to check if ES Parser has stalled.
+> 
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> ---
+>   drivers/staging/media/meson/vdec/esparser.c | 15 +++++++++++----
+>   1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+> index df5956c6141d..41b705f999b2 100644
+> --- a/drivers/staging/media/meson/vdec/esparser.c
+> +++ b/drivers/staging/media/meson/vdec/esparser.c
+> @@ -300,6 +300,7 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+>   	u32 num_dst_bufs = 0;
+>   	u32 offset;
+>   	u32 pad_size;
+> +	u32 wp, wp2;
+>   
+>   	/*
+>   	 * When max ref frame is held by VP9, this should be -= 3 to prevent a
+> @@ -354,15 +355,21 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+>   	}
+>   
+>   	pad_size = esparser_pad_start_code(core, vb, payload_size);
+> +	wp = amvdec_read_parser(core, PARSER_VIDEO_WP);
+>   	ret = esparser_write_data(core, phy, payload_size + pad_size);
+> +	wp2 = amvdec_read_parser(core, PARSER_VIDEO_WP);
+>   
+>   	if (ret <= 0) {
+> -		dev_warn(core->dev, "esparser: input parsing error\n");
+> -		amvdec_remove_ts(sess, vb->timestamp);
+> -		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
+>   		amvdec_write_parser(core, PARSER_FETCH_CMD, 0);
+>   
+> -		return 0;
+> +		if (ret < 0 || wp2 == wp) {
+> +			dev_err(core->dev, "esparser: input parsing error ret %d (%x <=> %x)\n",
+> +				ret, wp, wp2);
+> +			amvdec_remove_ts(sess, vb->timestamp);
+> +			v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
+> +
+> +			return 0;
+> +		}
+>   	}
+>   
+>   	atomic_inc(&sess->esparser_queued_bufs);
 
-Ok, thanks for the info, I will expand the size to 0x2000 then in v2.
+It's weird, but:
 
-Regards,
-Robert
->
-> Thanks, Kathiravan T.
->
-> >
-> > Regards,
-> > Robert
-> >> Thanks, Kathiravan T.
-> >>
-> >>
-> >>> Regards,
-> >>> Robert
-> >>>> Thanks, Kathiravan T.
-> >>>>
-> >>>>
-> >>>>> +                     #address-cells = <1>;
-> >>>>> +                     #size-cells = <1>;
-> >>>>> +             };
-> >>>>> +
-> >>>>>                 prng: rng@e3000 {
-> >>>>>                         compatible = "qcom,prng-ee";
-> >>>>>                         reg = <0x000e3000 0x1000>;
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+Thanks Christian for handling those changes
+
+Neil
