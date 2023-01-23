@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BA26775C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458466775C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 08:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjAWHm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 02:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S230492AbjAWHp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 02:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjAWHm2 (ORCPT
+        with ESMTP id S229989AbjAWHp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 02:42:28 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A7B5B80
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:42:27 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so8305540pgr.12
-        for <linux-kernel@vger.kernel.org>; Sun, 22 Jan 2023 23:42:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IptttD0zrwJVBHp5bq7+qjBs5ITPKtnNpW0l4jsQDD8=;
-        b=Y/Y3FQZLk+38WgNCmQ2OEds8uRmKp8aAxAXLlryFng7Rd1c0zkOatiPk9MVWHg1BSj
-         hIdSrzm7kOd4b7Zhy/dL1Wow5ZGv8JYLa6ixF/PUcbb89KtIPMW5d7tsvUkW7g8JnCLU
-         hzi2Ot7NA4GUrDD41EutU3IfEywqwovLxNahs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IptttD0zrwJVBHp5bq7+qjBs5ITPKtnNpW0l4jsQDD8=;
-        b=Glp1Eir3tLy2oBLCk+Awf0cRKBgo3sLU7ybIB8CCIVu5CQPK3+n0qRukPdmTpEK7/z
-         y7A7RQzn0gikQCy5dJrtLjVBrjeAUx2S8jRQYgUxQGedrOOsP2hIKjrPZabfoLmi4Z8I
-         /y5SvKmmoewZ3hT3TlA+4Qg/WThfcmzDVbbNn5ozc+0upTreKJ4nN8oHP+UXbLVv//r9
-         el68oEYvbhuaCaYeLWoknN0siZnFvmvzjqO+zWUN496b0PthtoLSAeYQFuJqt3bC4RAv
-         iNRURHq9IAG7zrz+EMzAC8rweQDxfbyh/TG4Wy7czCB3HyB+fnYiDTlvB+kPqeUl5qdH
-         LMkA==
-X-Gm-Message-State: AFqh2kpHLkWBqmCM0nczqQetKPG3exzC68oPud1UxGt3sBj/9zBmFFgW
-        8/i60JvHE3myixMWKRr+wIqJLA==
-X-Google-Smtp-Source: AMrXdXs/81TXfWznGLnO9cWhRlZliwMffE/3OQvySFgG0JWO27eatGQvjwmpdBdxcRxyDX+HKcQTOg==
-X-Received: by 2002:a62:1488:0:b0:586:b33c:be2 with SMTP id 130-20020a621488000000b00586b33c0be2mr25117581pfu.26.1674459746487;
-        Sun, 22 Jan 2023 23:42:26 -0800 (PST)
-Received: from 939e86c225aa (124-148-239-102.tpgi.com.au. [124.148.239.102])
-        by smtp.gmail.com with ESMTPSA id a10-20020a62bd0a000000b0058837da69edsm397042pff.128.2023.01.22.23.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 23:42:25 -0800 (PST)
-Date:   Mon, 23 Jan 2023 07:42:18 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
-Message-ID: <20230123074218.GA219043@939e86c225aa>
-References: <20230122150246.321043584@linuxfoundation.org>
+        Mon, 23 Jan 2023 02:45:26 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD6FA5E3;
+        Sun, 22 Jan 2023 23:45:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674459925; x=1705995925;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KIyndeexdTHv4RNt0zG8sPiItU4fljUQ7URxmJcbYtE=;
+  b=Nlfqa6uqejgMA3SOfxCjS8GvP2FhAcLK9tLfTzTSPSaTzoa+85c/z6Tu
+   BJLyHFmJjYAxo/VQcBIVXSwzICBnXKi76ETvQH5eLpMiOWA2Z7tT7f+fB
+   b4WFSOnJA0etXDXQaYA4NubxGqC/tx9m1geIBzNhIAQ3pFQew3WrmHblj
+   nK4C5oKiRzmiJPLnv3LvxcVeOTLOXkAU92hKzal03kQdNnmF0bRKwMjtY
+   YRvcphggNZvtO6bm8MHidgZIELxXOZ59llpWK4hCJx8HPYA4M20bn3QcA
+   rtTopNfUKy4a921rqVsQo5+Fh82TQ+/LeUdpaL9tNkhDkYoekyU3a6+9z
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="390492209"
+X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
+   d="scan'208";a="390492209"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 23:45:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="785499743"
+X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
+   d="scan'208";a="785499743"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jan 2023 23:45:00 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJrVk-0005VE-0k;
+        Mon, 23 Jan 2023 07:45:00 +0000
+Date:   Mon, 23 Jan 2023 15:44:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, chinglinyu@google.com,
+        namit@vmware.com, srivatsab@vmware.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, tkundu@vmware.com,
+        er.ajay.kaher@gmail.com, Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH 2/8] eventfs: adding eventfs dir add functions
+Message-ID: <202301231550.WxxxHvcl-lkp@intel.com>
+References: <1674407228-49109-2-git-send-email-akaher@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230122150246.321043584@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1674407228-49109-2-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 04:02:09PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.8 release.
-> There are 193 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Ajay,
 
-Hi Greg,
+Thank you for the patch! Perhaps something to improve:
 
-6.1.8-rc1 tested.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc5 next-20230123]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Run tested on:
-- Allwinner H6 (Tanix TX6)
-- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+patch link:    https://lore.kernel.org/r/1674407228-49109-2-git-send-email-akaher%40vmware.com
+patch subject: [PATCH 2/8] eventfs: adding eventfs dir add functions
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230123/202301231550.WxxxHvcl-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/db5e58a9349f39590a8fb39f0c3373c4c483e064
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+        git checkout db5e58a9349f39590a8fb39f0c3373c4c483e064
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+sparse warnings: (new ones prefixed by >>)
+>> fs/tracefs/event_inode.c:27:31: sparse: sparse: symbol 'eventfs_root_dir_inode_operations' was not declared. Should it be static?
+
+vim +/eventfs_root_dir_inode_operations +27 fs/tracefs/event_inode.c
+
+    26	
+  > 27	const struct inode_operations eventfs_root_dir_inode_operations = {
+    28	};
+    29	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
