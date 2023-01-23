@@ -2,139 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADC3678215
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130FB678218
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 17:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbjAWQpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 11:45:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S233413AbjAWQqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 11:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjAWQpN (ORCPT
+        with ESMTP id S233373AbjAWQqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 11:45:13 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A164C06
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:44:51 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id rl14so28774796ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:44:51 -0800 (PST)
+        Mon, 23 Jan 2023 11:46:19 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E442BEED
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:46:07 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so9424772pgh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 08:46:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8+MQluqn9nt7RD71EHDttjyHlEpDdbP4AXW0/Pi9N4o=;
-        b=AsFqEHjp2PSwAXOyGhhhUK4qFRmPxRek5DXJD+ka9zxyw39v6E0qGm93e1fTloHbzg
-         m+AbQbcQ8L/dWEGUoybVvPKvCmYdSzDSCJw3/uYpgu8lnee8rOTCYMiVOTGzR+tVxpvT
-         BkN3iBJCy5H1GBDA5CsRmqq6YeuUeeyQmvrCfhSSc//6SX2hnAtpcM2teUE2kolvkCVL
-         ox9G2lBiPAZurPL+ecT6KAY+8/oKT1lg0YH27sH4rkUcMeUydiGsq+BBtpzIL/OsGAyB
-         bgtfB6v6fw/bl9figdWuulaxYRFFxY/xzUX5etLjEKg0KkF7+gGGOxfWJFJ9RC/AblfQ
-         g2/g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vWGUNu0aGu5ZM4nyV44fizskyQNi5DbrMxpX2Ig+Ym0=;
+        b=FkGh1e+e+kjmYgxeHIOpPR0smd+Hn+zSiA4GrNpQusE8nr/j+vrFqzlYAfpQ7IW4hm
+         8WOzAQgge0j/Ut+H1FgBqptleHuq7+YN0+QlDFIbyDlUPni+mFzGIWcs0xzqP7iN3TBf
+         kRXng9JNa+RTACtqP4Fca/6/zMwktjVlLgZr01aynq6KceUvpwV+mm2L7URcaxR+jS7k
+         9+TnwgRGhNmflN//ylTlNoSRZyuj8dQ8kDz+iTYZyNdBnunnNXoBF40vMxYN1GiuHti5
+         F6CsgLJRUFIfrXjjxYyGGaaDUVUAPUSLSaDEecu9U6eWHAdviJNM9cCOqtfTiUYdu9Qe
+         NN2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8+MQluqn9nt7RD71EHDttjyHlEpDdbP4AXW0/Pi9N4o=;
-        b=4oECOjLdgcdsxDfBl/HgC+ryU7TBxUEOn7SJOnm2NgY8tCUazfWj/5wTzJTm6cQn6e
-         mGdo8jWAtwQ0BgCEWr9i36V06givdO97qXBTOreMt4N8cckGjD5tN++c03Xhl+v60Drc
-         v0DVN5FvCzBqF4JjLsWuP2c0N3/pmXDwkd0Y/Yzp6orWiQMkQwabLaa9YqBG2tHyivMZ
-         jX/wQt9y6UJoufKviDRJISxKtoO7bCxv7nvVSvqc3fqOuWcUWq004A7BmS7GF4y1SRBo
-         DsCsKExIubDsOeFxMxj7/MjiwOwphhJUKPDH2thCPy66SyUblpKE7pd7+CXbuMyAHSo3
-         DsQw==
-X-Gm-Message-State: AFqh2krRdVKgGFVuvCGw86U/JpfjyvNvfGKJp0B/Ir4LbtcHHwsBEiwA
-        jE/RZc0Z/eWGTkGnWnXz0icIzQ==
-X-Google-Smtp-Source: AMrXdXvQtB0ZWiGkDZiL9MK9IWIwnHOO3JLmXSKr2tzZrBLjkFBjqCvTjHBnHf1KxzAW+Y+scytgGg==
-X-Received: by 2002:a17:907:340f:b0:872:db7f:80b4 with SMTP id ab15-20020a170907340f00b00872db7f80b4mr22527807ejc.38.1674492288754;
-        Mon, 23 Jan 2023 08:44:48 -0800 (PST)
-Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id vo16-20020a170907a81000b0086dc174caf2sm13108255ejc.220.2023.01.23.08.44.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 08:44:48 -0800 (PST)
-Message-ID: <0c63f37d-a6a9-4cb0-39c8-ebf302945ad2@linaro.org>
-Date:   Mon, 23 Jan 2023 17:44:46 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vWGUNu0aGu5ZM4nyV44fizskyQNi5DbrMxpX2Ig+Ym0=;
+        b=NWcLU1Oz2sit96nvKI8l8EDM7U611F/ffgJ/gI84O72gef5cwgoVrHd9xhGs2AhfqR
+         eGbWoRfel406Ep432b23SE6j6mCIAztaXt/C4yvgdeNMin6iCZCzML5fhBwEB+tbFgBx
+         nkRBXBr3YviqoA8G6frQsVebuFk0G0/nTFoDy50ojJYjeJ++Pj5CjiJA5ELaCCtghtPt
+         PJA/jfnzXIRt0R5YMm9RKZMkeMvwgW6JGF+e9PNvDU7apYiFuOHILF0pcd/SQw8ZPTJ8
+         5DaLyS7O2jpWR6TQT0EzJx3/EkII9G/wCEtka2cfuILHA8jTJcESS6FF0yoVvBz/5Fv1
+         89hA==
+X-Gm-Message-State: AFqh2krvxQeW40Jok+1nelw+8KVmNz78jnjOX+7alvJJcel9h7Ms1OAH
+        gl+n/Fr+o7HI39W6CkeEPTVmNad8HLO3Itb7T74=
+X-Google-Smtp-Source: AMrXdXtEqhov+LMDDloobzn/rd+ub4SI1+JMziNrVcRSofW/tbjs9MRtJuPnmrs4Yf4JQH3CrHN4qlTAqDPV024jDPk=
+X-Received: by 2002:aa7:8046:0:b0:58d:b5d2:fce1 with SMTP id
+ y6-20020aa78046000000b0058db5d2fce1mr2622294pfm.21.1674492366745; Mon, 23 Jan
+ 2023 08:46:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 5/5] ARM: dts: qcom: msm8974-oneplus-bacon: Add
- notification LED
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230122-msm8974-bacon-features-v1-0-4049f565c24c@z3ntu.xyz>
- <20230122-msm8974-bacon-features-v1-5-4049f565c24c@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230122-msm8974-bacon-features-v1-5-4049f565c24c@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230117163543.1049025-1-jannh@google.com>
+In-Reply-To: <20230117163543.1049025-1-jannh@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 23 Jan 2023 17:45:55 +0100
+Message-ID: <CA+fCnZfTrxvmQqVd5zo8jo3JY5YqpvQJGx=PSuUvzb8J+KNG3Q@mail.gmail.com>
+Subject: Re: [PATCH] fork, vmalloc: KASAN-poison backing pages of vmapped stacks
+To:     Jann Horn <jannh@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22.01.2023 17:48, Luca Weiss wrote:
-> Add the node describing the sn3193 that's used to provide notification
-> LED.
-> 
-> Unfortunately the driver currently supports neither multicolor API nor
-> using the properties function & color, so we use label instead.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On Tue, Jan 17, 2023 at 5:35 PM Jann Horn <jannh@google.com> wrote:
+>
+> KASAN (except in HW_TAGS mode) tracks memory state based on virtual
+> addresses. The mappings of kernel stack pages in the linear mapping are
+> currently marked as fully accessible.
+> Since stack corruption issues can cause some very gnarly errors, let's be
+> extra careful and tell KASAN to forbid accesses to stack memory through the
+> linear mapping.
+>
+> Signed-off-by: Jann Horn <jannh@google.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> I wrote this after seeing
+> https://lore.kernel.org/all/Y8W5rjKdZ9erIF14@casper.infradead.org/
+> and wondering about possible ways that this kind of stack corruption
+> could be sneaking past KASAN.
+> That's proooobably not the explanation, but still...
 
-Konrad
->  .../arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts | 28 ++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-> index ffb486ceb6a6..a672c45d7070 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-> +++ b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-> @@ -114,6 +114,34 @@ led@0 {
->  			default-brightness = <80>;
->  		};
->  	};
-> +
-> +	led-controller@68 {
-> +		compatible = "si-en,sn3193";
-> +		reg = <0x68>;
-> +
-> +		shutdown-gpios = <&tlmm 45 GPIO_ACTIVE_HIGH>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		led@1 {
-> +			reg = <1>;
-> +			label = "red:status";
-> +			led-max-microamp = <17500>;
-> +		};
-> +
-> +		led@2 {
-> +			reg = <2>;
-> +			label = "green:status";
-> +			led-max-microamp = <17500>;
-> +		};
-> +
-> +		led@3 {
-> +			reg = <3>;
-> +			label = "blue:status";
-> +			led-max-microamp = <17500>;
-> +		};
-> +	};
->  };
->  
->  &blsp1_i2c6 {
-> 
+Hi Jann,
+
+if you decide to keep KASAN poisoning after addressing Dmitry's
+comments, please add a KASAN KUnit test for this.
+
+Thank you!
