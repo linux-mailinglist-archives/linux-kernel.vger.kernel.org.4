@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B8E678662
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303486785F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 Jan 2023 20:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjAWTbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 14:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S231839AbjAWTRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 14:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjAWTbp (ORCPT
+        with ESMTP id S230088AbjAWTRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 14:31:45 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515B9A254
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 11:31:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m/podwHds7JxQLCbcR8/xZsYC7Zym4+9Li/7t1BsGAU=; b=EzNI5XQFHCKDI4RmxwK5H85qS0
-        6UAEG1u2YhqEZ87tlBlzCqJnVMUhWcWNWEIKOR/n5FWz2FECNBJSBX0T8LiwDOfVkvDYHlmiaPbxA
-        4I/NbsDKV69v/QZwp9chVKa6zvOlWvAcU51xz5THZAKzOW/kh/weKydSwnigbjDrrWctKg42H6QPk
-        b1fzz6huv7hyG/nqC1cXlZD4V7JGafLOwoac5ND3ZEtCCpvvv3o0wmwA1NBTWfWCQfT97un1xUw+c
-        wkk8l8Ds+GtkptnTWKsm5oeLn7+gHZ3CXmNzIXOxvw9rV/pPUz82oqXeKmYZVB9H5pLDaFgnSfOVz
-        eCAQhGqg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pK2Wh-004TK7-Jr; Mon, 23 Jan 2023 19:30:43 +0000
-Date:   Mon, 23 Jan 2023 19:30:43 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        peterz@infradead.org, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 39/41] kernel/fork: throttle call_rcu() calls in
- vm_area_free
-Message-ID: <Y87gY7fhi5OJ35WQ@casper.infradead.org>
-References: <Y8rQNj5dVyuxRBOf@casper.infradead.org>
- <CAJuCfpG3YaExGkzsSSm0tXjMiSoM6rVf0JQgfrWu4UY5gsw=-w@mail.gmail.com>
- <Y85Z0Ovl68o4cz2j@dhcp22.suse.cz>
- <CAJuCfpG86qc4odkpUbzuROb+jThQgXGWjcFXb0e-c2i0wEGg4g@mail.gmail.com>
- <Y868Fadajv27QMXh@dhcp22.suse.cz>
- <CAJuCfpGSCHpnZwwVV_922fmMBpFPZL0HAHMABuDzMfuURF2sWg@mail.gmail.com>
- <Y87A2CEKAugfgfHC@dhcp22.suse.cz>
- <CAJuCfpGJRZATfc8eUurvV5kGkSNkG=vK=sfwJbU72PESOyATSw@mail.gmail.com>
- <Y87QjHH2aDG5XCGv@casper.infradead.org>
- <Y87djZwQpXazRd00@dhcp22.suse.cz>
+        Mon, 23 Jan 2023 14:17:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD140FA;
+        Mon, 23 Jan 2023 11:17:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B00A60FE5;
+        Mon, 23 Jan 2023 19:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F2FC433EF;
+        Mon, 23 Jan 2023 19:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674501433;
+        bh=WPTo/AYSSV3PH4rx0T+DOwWymx0lq8Uby5njTsynD3g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qIFZNkae57YPCdDiHeWgTq101KzsRoV+P2dV6cJUNu1D2ZQ402vEvlIWyw6mkvYyQ
+         UaKffvML6hJ3wu0fM2fp0Xh6YKog6GAMDyYeedSYB1Awoa6Wt7GrvnSjrgxfM/XpH/
+         EyCj9dEe0/Bf72NrD9R7ZFdGLieFfEgELTvlZ0FQQZIrOxBLTqz7tAf5iYms9kjrwu
+         17Fh9DexQVSjGUumyhFEMXBviNypDoLvIeMsnXmCuZzHejl9Trl8PlNtXukzlKW1LW
+         BmhkE2H9QotRtoDzc2stXSym2If9OHO46gHD/9U+SWP+JgeBFrycI8p3iZN/glzmGY
+         p9mmm5Rv5BNRA==
+Date:   Mon, 23 Jan 2023 19:30:59 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 1/1] iio: adc: qcom-spmi-adc5: Fix the channel name
+Message-ID: <20230123193059.27a1c1a7@jic23-huawei>
+In-Reply-To: <Y853a5jr4rfrDHfd@smile.fi.intel.com>
+References: <20230118100623.42255-1-andriy.shevchenko@linux.intel.com>
+        <20230122172441.4f8d75f5@jic23-huawei>
+        <Y853a5jr4rfrDHfd@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y87djZwQpXazRd00@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 08:18:37PM +0100, Michal Hocko wrote:
-> On Mon 23-01-23 18:23:08, Matthew Wilcox wrote:
-> > On Mon, Jan 23, 2023 at 09:46:20AM -0800, Suren Baghdasaryan wrote:
-> [...]
-> > > Yes, batching the vmas into a list and draining it in remove_mt() and
-> > > exit_mmap() as you suggested makes sense to me and is quite simple.
-> > > Let's do that if nobody has objections.
+On Mon, 23 Jan 2023 14:02:51 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> On Sun, Jan 22, 2023 at 05:24:41PM +0000, Jonathan Cameron wrote:
+> > On Wed, 18 Jan 2023 12:06:23 +0200
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >   
+> > > The node name can contain an address part which is unused
+> > > by the driver. Moreover, this string is propagated into
+> > > the userspace label, sysfs filenames *and breaking ABI*.
+> > > 
+> > > Cut the address part out before assigning the channel name.
+> > > 
+> > > Fixes: 4f47a236a23d ("iio: adc: qcom-spmi-adc5: convert to device properties")
+> > > Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
 > > 
-> > I object.  We *know* nobody has a reference to any of the VMAs because
-> > you have to have a refcount on the mm before you can get a reference
-> > to a VMA.  If Michal is saying that somebody could do:
-> > 
-> > 	mmget(mm);
-> > 	vma = find_vma(mm);
-> > 	lock_vma(vma);
-> > 	mmput(mm);
-> > 	vma->a = b;
-> > 	unlock_vma(mm, vma);
-> > 
-> > then that's something we'd catch in review -- you obviously can't use
-> > the mm after you've dropped your reference to it.
+> > LGTM, but given it will have ABI impact, I'd like to hear from 
+> > Andy, Bjorn or Konrad as maintainers and /or Dmitry as someone
+> > who has touched this driver fairly recently.  
 > 
-> I am not claiming this is possible now. I do not think we want to have
-> something like that in the future either but that is really hard to
-> envision. I am claiming that it is subtle and potentially error prone to
-> have two different ways of mass vma freeing wrt. locking. Also, don't we
-> have a very similar situation during last munmaps?
+> Hmm... But this is to fix the ABI breakage. It means that the previous series
+> by Nuno had broken it.
+Absolutely agree. I plan to take the change. The risk that someone needs
+to fix up their use of the broken ABI makes it worth a little more shouting
+about than if we had caught it sooner.
 
-We shouldn't have two ways of mass VMA freeing.  Nobody's suggesting that.
-There are two cases; there's munmap(), which typically frees a single
-VMA (yes, theoretically, you can free hundreds of VMAs with a single
-call which spans multiple VMAs, but in practice that doesn't happen),
-and there's exit_mmap() which happens on exec() and exit().
+Jonathan
 
-For the munmap() case, just RCU-free each one individually.  For the
-exit_mmap() case, there's no need to use RCU because nobody should still
-have a VMA pointer after calling mmdrop() [1]
+> 
+> > Mostly I want to be sure they know this exists before it causes surprise.  
+> 
 
-[1] Sorry, the above example should have been mmgrab()/mmdrop(), not
-mmget()/mmput(); you're not allowed to look at the VMA list with an
-mmget(), you need to have grabbed.
