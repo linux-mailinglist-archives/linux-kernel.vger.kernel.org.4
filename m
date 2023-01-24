@@ -2,173 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3EA67A029
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F5967A02B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjAXRak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S234137AbjAXRao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjAXRaj (ORCPT
+        with ESMTP id S234121AbjAXRal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:30:39 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B25D146149;
-        Tue, 24 Jan 2023 09:30:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2BC44B3;
-        Tue, 24 Jan 2023 09:31:18 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.11.85])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B1023F64C;
-        Tue, 24 Jan 2023 09:30:32 -0800 (PST)
-Date:   Tue, 24 Jan 2023 17:30:29 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
-        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
-        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
-        boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
-Message-ID: <Y9AVtUY8bnF3WjQr@FVFF77S0Q05N>
-References: <20230123205009.790550642@infradead.org>
- <Y9AIj1s5iPPki3dK@FVFF77S0Q05N>
+        Tue, 24 Jan 2023 12:30:41 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B69B49411;
+        Tue, 24 Jan 2023 09:30:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TNWxMSKVjtnyVfBpd9ErkEQYs3f7ES2pRrabVGAE0EVsvIrhvNfrDeeIJwWqH1mdcS719eRE7m5O8Hg99wwTCTOa/lc174+AFpjeyLYs05VXdih69M4XdIgli7qBTVjPLy34vcphufXvlb3nplKlo6BYAu2bRiu5eyojBA/6G16igDWe+4KI5REc+x7kgzfpzwZnkzN/aaq437G8881+kJeYVjO9tNrVFA5yt+qjcnFEyhP0Ys/cN8owhlH5Mmm9Vd7+NA3dGU6S26f36dE/x2q3F3x8gbuQDtCFN6isVE/mx63PexlOufOCEQAI+IW5L7j9zwGT7FYIfCWfp586Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p67DC0kOZDRcI2ojCMWghYseFe7ALBJJrsqCdf7BoFs=;
+ b=FLozAOmNoDgOe0rCMWL+RcjqMLtKiFVtz4bz/iu25tFzIf+F8jP9+pDypzWNGsVZXNAahJKBt0dYB4Mzm89VOcTHp2lfptKKlzmeRqeMRX/d9ddGEw63UWPVmFcyBHpPD1GOhYuY5k6Nv7hMQCEPP8/4MgDQo+rHOLWBSxve2HODSA84KGk6qglUNvuD6msAWrsZt3ysYxCwN4frklgyQcn0dcBEP68BARLT5WdK5nPg1IJOiamJ3s9twfyegxhcvnulfdRTJI3b9NSCu9r9dIfoZ201egKG1RG3SLpr81hQ+XeJEtQWfph98aMr8h80mpEy9/plxk9o4bdmto6wDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p67DC0kOZDRcI2ojCMWghYseFe7ALBJJrsqCdf7BoFs=;
+ b=u/itdHUvj7OMdZszb8MT8cC1gWscTwgj9VB5KrQwIYzXCVpovlRkN4b+uR+MrSuNF0dH1VFq7ALUfnajRsU7/r6VHGlCwBQlHe01SrcU7L61FXfEqNZKXoDChiDoX5JIGoQREqgBbQdl1gewVgq9F7mgBbue9si+RZjn0VolcbE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by DM6PR12MB4578.namprd12.prod.outlook.com (2603:10b6:5:2a9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 17:30:37 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098%9]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 17:30:37 +0000
+Message-ID: <12f98b80-38ce-5912-fa10-33d6b8a2fa81@amd.com>
+Date:   Tue, 24 Jan 2023 11:30:31 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v11 04/13] x86/cpufeatures: Add Bandwidth Monitoring Event
+ Configuration feature flag
+Content-Language: en-US
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "Das1, Sandipan" <Sandipan.Das@amd.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "Hunter, Adrian" <adrian.hunter@intel.com>,
+        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
+        "peternewman@google.com" <peternewman@google.com>
+References: <20230109164405.569714-5-babu.moger@amd.com>
+ <Y7xjxUj+KnOEJssZ@zn.tnic> <5afd0a7c-3fbe-dfea-f1b4-2fc35fbb4f13@amd.com>
+ <Y7yCCNANVBnOOmxM@zn.tnic>
+ <SJ1PR11MB608321F26D729A082BFC6FAEFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <ecf0abf0-59fe-3898-762c-d9d883925550@amd.com> <Y7yMbQ8hI9MGl1w3@zn.tnic>
+ <MW3PR12MB455384130AF0BDE3AF88BCF095FE9@MW3PR12MB4553.namprd12.prod.outlook.com>
+ <Y8/CSrU8Bo298VzO@zn.tnic> <72cdefc5-1601-5c43-9ea4-4b637f5fafa5@amd.com>
+ <Y8/07cV+t0PrqWX9@zn.tnic> <4ac38b77-77aa-f2c0-36e4-5e482013091d@amd.com>
+ <1e662209-93d7-2247-4212-8c78748c69bd@intel.com>
+From:   "Moger, Babu" <babu.moger@amd.com>
+In-Reply-To: <1e662209-93d7-2247-4212-8c78748c69bd@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR19CA0024.namprd19.prod.outlook.com
+ (2603:10b6:610:4d::34) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9AIj1s5iPPki3dK@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|DM6PR12MB4578:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41bac11d-d06f-44e2-6d33-08dafe30b48f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8KbdBvt4Z0msQLhSLUEhNWKvxg8ZreEuW9ssz3pONdIEuQlEOlAyNIJeqm5z0RaIKlS0XMKD5CifK10/oth9fNj+yzq3MBkRc9ld2061AJ4aqAX/s8D5PhoaB3treyMBtdQGd5qBVEKZBmGcX34qVR8u8AdXEaZVKsd4S5V1cgapcAS6HVQB72U8kHAmsV48ud+mfssDmbIaq++U+pGrf/u6Qn6E9KaHhWponwagKpcwqFQG6mrrjrtFnW8/F6jwN9POnF+mjnYDkHo1AimArUQHQz6ROL3vkuDaGeQAs56aqf4exvvsQyIhEwvioO8PXvRSGHRsaACrz7ybrocEwM8f9ew1yhaUJHwE8/9vXmIukXtInAZkOHovVJptZdAJJNsfVmufOhoBFORJlGKjqdidHAmwYnzwOlRP031qO0EjpD2ojpadEJNpQ4cfVXUrmViRdCmxL/i6kU5Fw/lvZdPKtx++i3Jb55hHV0NHHK2wsW/04/Aay0pNHdgnq/swotWy+Smd7GAkq1uwCYvYFHoN/bbZddvvT+nrQJIKhue/TWrGYxtE81aRxmRIEw6U20G6oJiBLwDwSumGImTk3RzkPujMl52RpZYFsu9R12n0KsggprXytEIfYsQwTO1zydHUZ6zrLDcM5nCIn3lOGgBfTVsDKeSV74n2BSL6r2njyByctI8tVebDSYuztU+H4pyI4cDtE9uQbKOO74U7G6JrM/SRqk516kxWUgtw8aA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199015)(31696002)(36756003)(3450700001)(41300700001)(86362001)(7416002)(5660300002)(8936002)(7406005)(4326008)(2906002)(38100700002)(83380400001)(110136005)(478600001)(6486002)(31686004)(66946007)(53546011)(26005)(6512007)(6506007)(8676002)(186003)(316002)(6666004)(54906003)(2616005)(66476007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TkJHNGRVK3VtdlR6T3ZNS09iU3FYTTJjQVVKV2x2aUk5Y3Njc0VvRlkvNnhT?=
+ =?utf-8?B?bkI3N0NISUhYY3ptNFhUODBVUWpVNm41VUJYellLUTFET0FOaU5UTGZlbmha?=
+ =?utf-8?B?ckpQeGRFZE03MkNRUGUvc0YzUUovTm9JT1F2K3ArVC9ya1FjaUpuSjNPbGor?=
+ =?utf-8?B?aytlY3dKZDN5ZDRodnVubWRubTAvdzZhTEU4TUdvWmFub1VJSGNndUVHdjh2?=
+ =?utf-8?B?VlRVR0JhVmNNQld0bUQzWkJDSTZSQmI2aUdaWkZwekkvQnVuWW0zNzZxU2lt?=
+ =?utf-8?B?OEh5TCtWU2hJTmJYK1Z2cEZJenhkZWcydnl2MHRuQWdkNjJlbnNSSmJXZzg5?=
+ =?utf-8?B?RTJCZHZ6YkxqOVBnbS8rSEtTUjBRNzNIcUlOVndVRGsvR05OL01lNlJVT0kw?=
+ =?utf-8?B?NGNaemVudTJva0VPcThOMXJzV0UzcWdsOVlZd0JYWC96RkQxYTYxZG9PTjZo?=
+ =?utf-8?B?NnphS3AvS3ZKNmdWRk5HVWYra29ma1hiM0hsbGpnZ2MzTS9YdHdCRE1HcFhR?=
+ =?utf-8?B?bmFuZTZvUkk2dEI2RzhNSjYxYmpTRVVNWWJ4aWxuMEJub3NWVDExb1Mzb0hr?=
+ =?utf-8?B?SVZGYmNFdmV6bWRmVHFac2NpRk8vVEcxSTNHbXpPN29PRkltdm44K3h0UjhF?=
+ =?utf-8?B?aE1CRUZNN0JkV3B3dDBQUUtQL2NUc1N6OCtWeFdoU3Z6NWRpSGcyd1hPeUpj?=
+ =?utf-8?B?dU4wbFFyTGFkOEs3ekpBNFZicThXTFpJQ0lCc2plL0dHN1lYbDhYV2ZlNERx?=
+ =?utf-8?B?eXordW1jS05JcG5wOWhncDBJV0NWRHl6QkFpVEpJMVRxRjBWeERNYUZKcm1M?=
+ =?utf-8?B?eHdHa0tDOGRHNHhNcEhmSjZrcVBqTzRxQjJ6TmVVSmdGczdWbDZrb094aEVq?=
+ =?utf-8?B?SkEycjhsOVllTDRBYzRQMThDSlJVc3ZDZElHTE1NNFpUUGI0aHhhcEt5WnJw?=
+ =?utf-8?B?UzVBSnEybWgyZHNYYWhWTDFrN0E2ZHZxdXhIK0NIZzlOaHpwTzlGcm9Kc1V2?=
+ =?utf-8?B?bjVaaGZ1VzJVL3BDSmtvL3IyT0ZLUzA3c3lXNExvY1F3OGxPQTduenRGbnlz?=
+ =?utf-8?B?SmdWeDhVZm9FUHZMYzJydTBRVmt0YzRmeW1DREtDbHFicjA0TlMxNkkwS1Rx?=
+ =?utf-8?B?aXE3VEpWRWsxeXVQSElubHM3UzhLTm44SlNjK25JN2s1UmZqczBQQXoxMnAy?=
+ =?utf-8?B?TkxFanB0WVNhMXhHQjlyNnpHSCtwOUZteGUwalI4dmdyOU9jdWlQbDdkdHE3?=
+ =?utf-8?B?alpZVHl2SE52M05IWngxbmhiWDQxdTZBL2NTUjBJSWt0RXJQeWtmRzJ2dDNC?=
+ =?utf-8?B?akJqZFp0aTBsekhmZVdYcWQvR3N0emtkNlVJMndNR2RkdHhFRjdMMVdoNk1X?=
+ =?utf-8?B?WkxsL0VmaVFyWVFBYlBVQ3dyY2VCRi91WmpMclQ3bDY3Ky9NajhrdGpKNXFs?=
+ =?utf-8?B?d291ZWNpVFlOc2tSYXpmSldrMXBxL3Z1eGgydHBPZzFzVWZCdnFqSTdtYXJE?=
+ =?utf-8?B?cVpRa0laNlZaUUd0NzE4aWY5T1c0bWZKOWJYcm9OSjVhWW9WTFVoWlVucXI5?=
+ =?utf-8?B?TDBaYzhoYjcvUGpQWW5XN1kzVDRLOXVtWkdSOE9TTmhjTU9kRXpMd3dDanhz?=
+ =?utf-8?B?bjZhY3RmYy9qNFNDTHJveit0NjhmODVaajMvZzBWZ3B2Y2lEK21LVHBRTlho?=
+ =?utf-8?B?ZFZoQlNYNUdZWDh6WTBRSXlVUlU1djAwTTVWek45NjkxTjRhWkhBVkQxeWRO?=
+ =?utf-8?B?ZlRYaExydkF5WGtMTzFWOG1FNG5CQ3o3cTF5ZWkyWFNVS1NjSlNLZE1YT2ts?=
+ =?utf-8?B?Q3AwL1BVUWMyMmliZytueDFhcFVVOGdGeXdSTFBYUzUrRHh6Z1VWa1hibG5G?=
+ =?utf-8?B?U2M2Nkp2Y3BHUVA0YWcxdEU4VjkySlE5VmFFckYxREM5V1l4SFVuOENwUmt6?=
+ =?utf-8?B?WnZNZ0Z5dDF5N3NML2p6YXBDeXVrSDhtV1Y4dkJTNVBSZ2ZidDhoSSs0akh1?=
+ =?utf-8?B?R1ZjOElTZHJQYmF4NUdDYWdjWXFYOEY5blhHMlVhSmlqTCt4NkNtREY2MlVY?=
+ =?utf-8?B?RlJTZTl2ZnhEU01BUUJLVmgveVVVQVVud2ovb256cjd4RkUxOW83dVhPSFli?=
+ =?utf-8?Q?hd/ejwWZ8UEFbouB4PBm2hEYa?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41bac11d-d06f-44e2-6d33-08dafe30b48f
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 17:30:36.9561
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5noZRDXLcneUXnvowoaxGJbkRldxqEDa3D49DcbZYI5zYbKHhp1Iz1NVPNCl1rzx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4578
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 04:34:23PM +0000, Mark Rutland wrote:
-> Hi Peter,
-> 
-> On Mon, Jan 23, 2023 at 09:50:09PM +0100, Peter Zijlstra wrote:
-> > 0-day robot reported graph-tracing made the cpuidle-vs-rcu rework go splat.
-> 
-> Do you have a link toe the splat somewhere?
-> 
-> I'm assuming that this is partially generic, and I'd like to make sure I test
-> the right thing on arm64. I'll throw my usual lockdep options at the ftrace
-> selftests...
 
-Hmm... with the tip sched/core branch, with or without this series applied atop
-I see a couple of splats which I don't see with v6.2-rc1 (which seems to be
-entirely clean). I'm not seeing any other splats.
+On 1/24/23 10:59, Reinette Chatre wrote:
+> Hi Babu,
+>
+> On 1/24/2023 8:06 AM, Moger, Babu wrote:
+>> On 1/24/23 09:10, Borislav Petkov wrote:
+>>> On Tue, Jan 24, 2023 at 08:11:21AM -0600, Moger, Babu wrote:
+>>>> Understood. I am planning to add resctrl feature list inside
+>>>> /sys/fs/resctrl/info/ in my next series.
+>>> Maybe I wasn't as clear as I hoped for:
+>>>
+>>> so you have a couple of flags in /proc/cpuinfo which are actively being used by
+>>> tools.
+>> Those flags will be there. Not planning to remove them.
+>>> Why would you want to move the flags somewhere else and do the extra work for no
+>>> apparent reason?
+>> With this series(v12) we have added two new cpuid features(SMBA and BMEC).
+>>
+>> But these features are not visible in /proc/cpuinfo. Planning to add them
+>> in /sys/fs/resctrl/info.
+>>
+>> So, users can see them here. 
+> Could you please elaborate what you are planning to do? 
 
-I can trigger those reliably with the 'toplevel-enable.tc' ftrace test:
+Yes. It is sort of available. But, I wanted to add them explicit using the
+already available function rdt_cpu_has().
 
-  ./ftracetest test.d/event/toplevel-enable.tc
+Something like.
 
-Splats below; I'll dig into this a bit more tomorrow.
+#cat /sys/fs/resctrl/info/features
 
-[   65.729252] ------------[ cut here ]------------
-[   65.730397] WARNING: CPU: 3 PID: 1162 at include/trace/events/preemptirq.h:55 trace_preempt_on+0x68/0x70
-[   65.732450] Modules linked in:
-[   65.733204] CPU: 3 PID: 1162 Comm: ftracetest Not tainted 6.2.0-rc1-00100-g1066815869f5 #2
-[   65.735165] Hardware name: linux,dummy-virt (DT)
-[   65.736278] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   65.737929] pc : trace_preempt_on+0x68/0x70
-[   65.738962] lr : preempt_count_sub+0xb4/0xf0
-[   65.739998] sp : ffff80000e03ba70
-[   65.740818] x29: ffff80000e03ba70 x28: ffff80000add07e8 x27: ffff800009d0b548
-[   65.742531] x26: ffff00000742dd10 x25: ffff00000742dd00 x24: ffff80000ade11d0
-[   65.744246] x23: ffff80000e03bb80 x22: ffff80000a99abb0 x21: ffff8000080a5cf4
-[   65.745957] x20: ffff8000080a5cf4 x19: 0000000000000001 x18: 0000000000000000
-[   65.747677] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-[   65.749388] x14: 0000000000000028 x13: 00000000000042d7 x12: 000000000000035f
-[   65.751105] x11: 000000000000035f x10: 000000000004035f x9 : ffff8000080a5cf4
-[   65.752820] x8 : ffff80000ae31a18 x7 : 0000000000000000 x6 : 0000000000000001
-[   65.754526] x5 : ffff80000a8e14e8 x4 : 0000000000000003 x3 : 0000000000000000
-[   65.756244] x2 : 0000000000000001 x1 : ffff8000080a5cf4 x0 : ffff8000080a5cf4
-[   65.757957] Call trace:
-[   65.758572]  trace_preempt_on+0x68/0x70
-[   65.759520]  preempt_count_sub+0xb4/0xf0
-[   65.760477]  percpu_up_read.constprop.0+0xc4/0x180
-[   65.761639]  cpus_read_unlock+0x18/0x24
-[   65.762579]  static_key_enable+0x2c/0x40
-[   65.763572]  tracepoint_add_func+0x330/0x3dc
-[   65.764611]  tracepoint_probe_register+0x74/0xc0
-[   65.765725]  trace_event_reg+0x8c/0xa0
-[   65.766642]  __ftrace_event_enable_disable+0x174/0x4d0
-[   65.767884]  __ftrace_set_clr_event_nolock+0xe0/0x150
-[   65.769109]  ftrace_set_clr_event+0x90/0x13c
-[   65.770143]  ftrace_event_write+0xd4/0x120
-[   65.771145]  vfs_write+0xcc/0x2f0
-[   65.771964]  ksys_write+0x78/0x110
-[   65.772803]  __arm64_sys_write+0x24/0x30
-[   65.773763]  invoke_syscall+0x50/0x120
-[   65.774681]  el0_svc_common.constprop.0+0x68/0x124
-[   65.775848]  do_el0_svc+0x40/0xbc
-[   65.776669]  el0_svc+0x48/0xc0
-[   65.777426]  el0t_64_sync_handler+0xf4/0x120
-[   65.778459]  el0t_64_sync+0x190/0x194
-[   65.779365] irq event stamp: 69686
-[   65.780199] hardirqs last  enabled at (69685): [<ffff8000092d5664>] _raw_spin_unlock_irqrestore+0x80/0xa0
-[   65.782457] hardirqs last disabled at (69686): [<ffff8000092c3fd4>] el1_dbg+0x24/0x90
-[   65.784315] softirqs last  enabled at (69622): [<ffff800008010b08>] __do_softirq+0x448/0x5bc
-[   65.786309] softirqs last disabled at (69613): [<ffff800008017288>] ____do_softirq+0x18/0x24
-[   65.788332] ---[ end trace 0000000000000000 ]---
-[   65.789588] ------------[ cut here ]------------
-[   65.790622] WARNING: CPU: 3 PID: 1162 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x68/0xb0
-[   65.792698] Modules linked in:
-[   65.793465] CPU: 3 PID: 1162 Comm: ftracetest Tainted: G        W          6.2.0-rc1-00100-g1066815869f5 #2
-[   65.795780] Hardware name: linux,dummy-virt (DT)
-[   65.796898] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   65.798555] pc : trace_preempt_off+0x68/0xb0
-[   65.799602] lr : preempt_count_add+0xa0/0xc0
-[   65.800646] sp : ffff80000e03ba80
-[   65.801465] x29: ffff80000e03ba80 x28: ffff80000add07e8 x27: ffff800009d0b558
-[   65.803185] x26: ffff00000742dd90 x25: ffff00000742dd80 x24: ffff80000ade1188
-[   65.804900] x23: ffff80000e03bb80 x22: ffff80000a99abb0 x21: ffff80000b8b7d18
-[   65.806612] x20: ffff8000080a5c68 x19: ffff8000080a5c68 x18: 0000000000000000
-[   65.808334] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-[   65.810041] x14: 0000000000000028 x13: 00000000000042d7 x12: 000000000000035f
-[   65.811755] x11: 000000000000035f x10: 000000000004035f x9 : ffff8000080a5c68
-[   65.813460] x8 : ffff80000ae31a18 x7 : 0000000000000000 x6 : 0000000000000003
-[   65.815174] x5 : 0000000030b5c3ca x4 : 0000000000000003 x3 : 0000000000000000
-[   65.816886] x2 : 0000000000000001 x1 : ffff8000080a5c68 x0 : ffff8000080a5c68
-[   65.818592] Call trace:
-[   65.819216]  trace_preempt_off+0x68/0xb0
-[   65.820171]  preempt_count_add+0xa0/0xc0
-[   65.821131]  percpu_up_read.constprop.0+0x38/0x180
-[   65.822288]  cpus_read_unlock+0x18/0x24
-[   65.823236]  static_key_enable+0x2c/0x40
-[   65.824194]  tracepoint_add_func+0x330/0x3dc
-[   65.825236]  tracepoint_probe_register+0x74/0xc0
-[   65.826351]  trace_event_reg+0x8c/0xa0
-[   65.827276]  __ftrace_event_enable_disable+0x174/0x4d0
-[   65.828506]  __ftrace_set_clr_event_nolock+0xe0/0x150
-[   65.829721]  ftrace_set_clr_event+0x90/0x13c
-[   65.830769]  ftrace_event_write+0xd4/0x120
-[   65.831766]  vfs_write+0xcc/0x2f0
-[   65.832581]  ksys_write+0x78/0x110
-[   65.833422]  __arm64_sys_write+0x24/0x30
-[   65.834376]  invoke_syscall+0x50/0x120
-[   65.835300]  el0_svc_common.constprop.0+0x68/0x124
-[   65.836451]  do_el0_svc+0x40/0xbc
-[   65.837290]  el0_svc+0x48/0xc0
-[   65.838054]  el0t_64_sync_handler+0xf4/0x120
-[   65.839102]  el0t_64_sync+0x190/0x194
-[   65.840006] irq event stamp: 69710
-[   65.840845] hardirqs last  enabled at (69709): [<ffff8000092c4028>] el1_dbg+0x78/0x90
-[   65.842699] hardirqs last disabled at (69710): [<ffff8000092c3fd4>] el1_dbg+0x24/0x90
-[   65.844568] softirqs last  enabled at (69694): [<ffff800008010b08>] __do_softirq+0x448/0x5bc
-[   65.846573] softirqs last disabled at (69689): [<ffff800008017288>] ____do_softirq+0x18/0x24
-[   65.848578] ---[ end trace 0000000000000000 ]---
+ cmt, mbmtotal, mbmlocal, l3cat, mba, smba, bmec
 
-Thanks,
-Mark.
+
+Some of these features can be disabled using boot parameter options. So,
+this will show only the features which enabled. 
+
+Thanks
+
+Babu
+
+>
+> Existence and support for SMBA and BMEC is already visible to user space
+> in your current series:
+> * On a system that supports SMBA with the needed kernel support users will
+>   find the /sys/fs/resctrl/info/SMBA directory with enumerated properties
+>   as well as SMBA within the schemata file.
+> * On a system that supports BMEC with the needed kernel support users will
+>   find the relevant files listed within /sys/fs/resctrl/info/L3_MON/mon_features.
+>
+> Reinette
+
+-- 
+Thanks
+Babu Moger
+
