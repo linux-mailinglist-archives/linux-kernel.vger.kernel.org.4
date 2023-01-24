@@ -2,153 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7164D679E50
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBF6679E59
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbjAXQMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S233030AbjAXQO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjAXQMS (ORCPT
+        with ESMTP id S229670AbjAXQOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:12:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925A145F6D;
-        Tue, 24 Jan 2023 08:12:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC43612AF;
-        Tue, 24 Jan 2023 16:12:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E9EC433D2;
-        Tue, 24 Jan 2023 16:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674576731;
-        bh=s1R7NoV2ya/D81mpK5OG28/EQSy+HDOHhZykgAIMQNs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=RnLU0HcX0MqCRCjZPmcIIk2zH95eQiiQwGjVzWdtKFBbnAX9+Zqk/ZJgjsP5pEnzC
-         BYghRRlAca+hFeEAJehfhguShs170UltUu9IznDs8GQEIkwBwl69vHTOCSLsdZz6Ou
-         PzEodOA1kdcj66pmGiugJOJMFdT8rL2M48NEc2ro0u3aoZIkPqf0N2Flm/SwSpX9P7
-         ID/bKz2DBG+w4l25a0yvidlrSZ/j6T/ArD+7oQ7XsuUAdF2L3nKCgYEJg94tIS684e
-         rU74oSgRBn5Kg2C9NIpE7eo4Fg266LQno9RwGNBKCh0d/u7ZUcnXtXKXUMQiRtRhRn
-         VCCqQ1VmhFzbg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 10BC35C06D0; Tue, 24 Jan 2023 08:12:11 -0800 (PST)
-Date:   Tue, 24 Jan 2023 08:12:11 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-Cc:     Arjan van de Ven <arjan@linux.intel.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, akpm@osdl.org, tglx@linutronix.de,
-        joel@joelfernandes.org, stern@rowland.harvard.edu,
-        diogo.behrens@huawei.com, jonas.oberhauser@huawei.com,
-        linux-kernel@vger.kernel.org,
-        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
-Message-ID: <20230124161211.GK2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
- <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
- <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
- <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
+        Tue, 24 Jan 2023 11:14:55 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538132BF23;
+        Tue, 24 Jan 2023 08:14:54 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id g16so11400935qtu.2;
+        Tue, 24 Jan 2023 08:14:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JX2JBJxQ8wkqLQs9Y080UKEGGFV8tzJcSA1x25jIm98=;
+        b=ZTy6MDFsWoLrf7AviSCmOJVym00gpvpWV96kViedjIqDheDmCY1tVtm4kIfLT67lhW
+         TRFh7dKwWHQoM/ZPtmqbR7Gu6W6ydj6Rh66FLWFULlmuotbd6FoNWq2EjeZeCN8Mpo/e
+         yEwTWp5vQTVQIJ0EVFAQA4yubNy27IyeQoWJSWw4TPR/F5ZJu7CpuhKWCCvVhGNJ9AEh
+         JsrdHEZ8M+F8Q+jUqjjm5+G+caraZvUZshIwigyvFxY7B7211iq00KagTndfdVwbOVm9
+         F44/3TIajjGxg4pwGr9Ov+NELSshmk8Dh/zdfyMgdRzYaApehz94FzxQfP5hwylAMRme
+         iaPw==
+X-Gm-Message-State: AFqh2kqF2ztkQpSACOi1vE2UxruYjwQvo/3IRVkP6x95/8aAXO0SYk/b
+        z4IWQ/YZrsVmgR5wrdz0pxh9Oc2hOJeUKA==
+X-Google-Smtp-Source: AMrXdXvBgAFkrJ9Ra7GbeiDBFmKr3xQHrKX+/h8iWfiLpEVD9H21wt3LrVDRZISI61uPQvJQiD+2eg==
+X-Received: by 2002:ac8:7ec2:0:b0:3b4:7efb:36a7 with SMTP id x2-20020ac87ec2000000b003b47efb36a7mr55377748qtj.27.1674576893289;
+        Tue, 24 Jan 2023 08:14:53 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id n6-20020ac81e06000000b003b7ea9814b9sm1513687qtl.10.2023.01.24.08.14.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 08:14:52 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id t16so14827678ybk.2;
+        Tue, 24 Jan 2023 08:14:52 -0800 (PST)
+X-Received: by 2002:a25:37d4:0:b0:80b:8602:f3fe with SMTP id
+ e203-20020a2537d4000000b0080b8602f3femr106304yba.36.1674576892426; Tue, 24
+ Jan 2023 08:14:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJZ5v0j4m-=twN3oH-Q_MDHLi-VnktMhFcGbGbGCC-x+0TXM_w@mail.gmail.com>
+ <20230124150558.GA1061961@bhelgaas>
+In-Reply-To: <20230124150558.GA1061961@bhelgaas>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 Jan 2023 17:14:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXjQqC41i5iJPNuOFdMYYgq+DOjaOGBn9uEG6heVCCKfA@mail.gmail.com>
+Message-ID: <CAMuHMdXjQqC41i5iJPNuOFdMYYgq+DOjaOGBn9uEG6heVCCKfA@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 03:57:55PM +0100, Hernan Ponce de Leon wrote:
-> On 1/23/2023 5:40 PM, Paul E. McKenney wrote:
-> > On Sun, Jan 22, 2023 at 04:24:21PM +0100, Hernan Ponce de Leon wrote:
-> > > On 1/20/2023 4:54 PM, Paul E. McKenney wrote:
-> > > > On Fri, Jan 20, 2023 at 06:58:20AM -0800, Arjan van de Ven wrote:
-> > > > > On 1/20/2023 5:55 AM, Hernan Ponce de Leon wrote:
-> > > > > > From: Hernan Ponce de Leon <hernanl.leon@huawei.com>
-> > > > > > 
-> > > > > 
-> > > > > >     kernel/locking/rtmutex.c | 2 +-
-> > > > > >     1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > 
-> > > > > > diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> > > > > > index 010cf4e6d0b8..7ed9472edd48 100644
-> > > > > > --- a/kernel/locking/rtmutex.c
-> > > > > > +++ b/kernel/locking/rtmutex.c
-> > > > > > @@ -235,7 +235,7 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
-> > > > > >     	unsigned long owner, *p = (unsigned long *) &lock->owner;
-> > > > > >     	do {
-> > > > > > -		owner = *p;
-> > > > > > +		owner = READ_ONCE(*p);
-> > > > > >     	} while (cmpxchg_relaxed(p, owner,
-> > > > > 
-> > > > > 
-> > > > > I don't see how this makes any difference at all.
-> > > > > *p can be read a dozen times and it's fine; cmpxchg has barrier semantics for compilers afaics
-> > > > 
-> > > > Doing so does suppress a KCSAN warning.  You could also use data_race()
-> > > > if it turns out that the volatile semantics would prevent a valuable
-> > > > compiler optimization.
-> > > 
-> > > I think the import question is "is this a harmful data race (and needs to be
-> > > fixed as proposed by the patch) or a harmless one (and we should use
-> > > data_race() to silence tools)?".
-> > > 
-> > > In https://lkml.org/lkml/2023/1/22/160 I describe how this data race can
-> > > affect important ordering guarantees for the rest of the code. For this
-> > > reason I consider it a harmful one. If this is not the case, I would
-> > > appreciate some feedback or pointer to resources about what races care to
-> > > avoid spamming the mailing list in the future.
-> > 
-> > In the case, the value read is passed into cmpxchg_relaxed(), which
-> > checks the value against memory.  In this case, as Arjan noted, the only
-> > compiler-and-silicon difference between data_race() and READ_ONCE()
-> > is that use of data_race() might allow the compiler to do things like
-> > tear the load, thus forcing the occasional spurious cmpxchg_relaxed()
-> > failure.  In contrast, LKMM (by design) throws up its hands when it sees
-> > a data race.  Something about not being eager to track the idiosyncrasies
-> > of many compiler versions.
-> > 
-> > My approach in my own code is to use *_ONCE() unless it causes a visible
-> > performance regression or if it confuses KCSAN.  An example of the latter
-> > can be debug code, in which case use of data_race() avoids suppressing
-> > KCSAN warnings (and also false positives, depending).
-> 
-> I understand that *_ONCE() might avoid some compiler optimization and reduce
-> performance in the general case. However, if I understand your first
-> paragraph correctly, in this particular case data_race() could allow the CAS
-> to fail more often, resulting in more spinning iterations and degraded
-> performance. Am I right?
+Hi Bjorn,
 
-In theory, yes.  The overall effect on performance will depend on the
-hardware, the compiler, the compiler version, the flags passed to that
-compiler, and who knows what all else.
+On Tue, Jan 24, 2023 at 4:06 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> On Tue, Jan 24, 2023 at 03:45:50PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Jan 24, 2023 at 3:37 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Tue, Jan 24, 2023 at 3:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > On Tue, Jan 24, 2023 at 12:20 PM Geert Uytterhoeven
+> > > > <geert@linux-m68k.org> wrote:
+> > > > > On Thu, Dec 15, 2022 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > > > > >
+> > > > > > Simplify __rpm_get_callback() slightly by returning as soon as the return
+> > > > > > value is known.  No functional change intended.
+> > > > > >
+> > > > > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > > >
+> > > > > Thanks for your patch, which is now commit 650bdddb6b311705 ("PM:
+> > > > > runtime: Simplify __rpm_get_callback()") in pm/linux-next.
+> > > > >
+> > > > > > --- a/drivers/base/power/runtime.c
+> > > > > > +++ b/drivers/base/power/runtime.c
+> > > > > > @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
+> > > > > >
+> > > > > >  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+> > > > > >  {
+> > > > > > -       pm_callback_t cb;
+> > > > > > -       const struct dev_pm_ops *ops;
+> > > > > > +       const struct dev_pm_ops *ops = NULL;
+> > > > > >
+> > > > > >         if (dev->pm_domain)
+> > > > > >                 ops = &dev->pm_domain->ops;
+> > > > > > @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+> > > > > >                 ops = dev->class->pm;
+> > > > > >         else if (dev->bus && dev->bus->pm)
+> > > > > >                 ops = dev->bus->pm;
+> > > > > > -       else
+> > > > > > -               ops = NULL;
+> > > > > >
+> > > > > >         if (ops)
+> > > > > > -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> > > > > > -       else
+> > > > > > -               cb = NULL;
+> > > > > > +               return *(pm_callback_t *)((void *)ops + cb_offset);
+> > > > >
+> > > > > This is a change in behavior in case the callback turns out to be NULL:
+> > > > >   - before, it would fall back to the driver-specific callback below,
+> > > > >   - after, it always returns NULL.
+> > > >
+> > > > Good point and sorry for missing this!
+> > > >
+> > > > > >
+> > > > > > -       if (!cb && dev->driver && dev->driver->pm)
+> > > > > > -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> > > > > > +       if (dev->driver && dev->driver->pm)
+> > > > > > +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> > > > > >
+> > > > > > -       return cb;
+> > > > > > +       return NULL;
+> > > > > >  }
+> > > > >
+> > > >
+> > > > Something like the patch below (modulo gmail-induced whitespace
+> > > > breakage) should restore the previous behavior if I'm not mistaken:
+> > > >
+> > > > ---
+> > > >  drivers/base/power/runtime.c |    9 +++++++--
+> > > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > > >
+> > > > Index: linux-pm/drivers/base/power/runtime.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/base/power/runtime.c
+> > > > +++ linux-pm/drivers/base/power/runtime.c
+> > > > @@ -31,8 +31,13 @@ static pm_callback_t __rpm_get_callback(
+> > > >      else if (dev->bus && dev->bus->pm)
+> > > >          ops = dev->bus->pm;
+> > > >
+> > > > -    if (ops)
+> > > > -        return *(pm_callback_t *)((void *)ops + cb_offset);
+> > > > +    if (ops) {
+> > > > +        pm_callback_t cb;
+> > > > +
+> > > > +        cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> > > > +        if (cb)
+> > > > +            return cb;
+> > > > +    }
+> > > >
+> > > >      if (dev->driver && dev->driver->pm)
+> > > >          return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> > >
+> > > Which is now more complex than the original?
+> >
+> > Arguably so.
+> >
+> > OK, I'll drop the commit in question then, sorry Bjorn.
+>
+> Really sorry about this.  Think I'm all out of brown paper bags :(
+> Thanks for catching this, Geert, and sorry for all the time you had to
 
-> > Except that your other email seems to also be arguing that additional
-> > ordering is required.  So is https://lkml.org/lkml/2023/1/20/702 really
-> > sufficient just by itself, or is additional ordering required?
-> 
-> I do not claim that we need to mark the read to add the ordering that is
-> needed for correctness (mutual exclusion). What I claim in this patch is
-> that there is a data race, and since it can affect ordering constrains in
-> subtle ways, I consider it harmful and thus I want to fix it.
-> 
-> What I explain in the other email is that if we fix the data race, either
-> the fence or the acquire store might be relaxed (because marking the read
-> gives us some extra ordering guarantees). If the race is not fixed, both the
-> fence and the acquire are needed according to LKMM. The situation is
-> different wrt hardware models. In that case the tool cannot find any
-> violation even if we don't fix the race and we relax the store / remove the
-> fence.
+Np, no time was wasted on debugging.
+I just noticed because I have some local debug code on top, which no
+longer applied 8^)
 
-Plus there might be other options, as Waiman and Peter are discussing.
+Gr{oetje,eeting}s,
 
-							Thanx, Paul
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
