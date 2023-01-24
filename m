@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A2E6790C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D06F6790C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjAXGUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 01:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S233245AbjAXGUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 01:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjAXGUV (ORCPT
+        with ESMTP id S233232AbjAXGUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 01:20:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F88630E98;
-        Mon, 23 Jan 2023 22:20:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52018B8109E;
-        Tue, 24 Jan 2023 06:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03747C4339B;
-        Tue, 24 Jan 2023 06:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674541218;
-        bh=htIej7QYbhaOPD6v4mD8j1CKCVcA0sBQZVK/BHROMs0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UGD5Oe7NPaWwdH3E2KQwACkUb39Ax6GbapOc6isw3Djo0eTNBcdLXPMRxN7TJnVb8
-         bzQ03yRRnguO26oCkQXQ7pznSHvPYUzaxqhnmAzDKjVOFZ7P9biAkD+cNOl42gAayz
-         mtYveuF+KEL7oMjXiBiUKlJSslAoQqk38GfQgT/gAipfbWrqN5Y5s/6Q3LPRl0oIhn
-         5MKq98UHHwMuUa+MQwzmk1FtKDv3ozb9pyAtGSV2wpJra5o9Ydsp0JyMqx8f6wznQe
-         OmoyRc8pepNVloWYG8893owUpobAtwWvrwPUid3RG4jdlAc1EOfx0yeBOLxvM40sFa
-         ng5NoeW1vidbg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0961E4522B;
-        Tue, 24 Jan 2023 06:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 24 Jan 2023 01:20:36 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC6E3B0F0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 22:20:32 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4a263c4ddbaso204879487b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 22:20:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dyXFn2lup2sLjbD/KpbuX1CCPdcq3g2m2cieMlwaGx8=;
+        b=dRGgaBE05wZKoyL6PoURa8kyaU0QE4JoRH+/PrGTgBN+7o02KYKA8AEGY4JbFuQi3W
+         ysgjKlaBLsGOf3ixLDGZDE5TgKPszGZmyXMhx9S2usD4SDjnzOGBKXEIfpZOOEWxY4Tf
+         d7qUCDjs+If7k+yg1zW58iaoJX17+YlkX5GrhA4fBjuh2FMNxKxmumklwY345oy6FOGh
+         Jx1ZACuiHso9surRyTdhrNqFjWt7Brel0z4VK0LSmV1SjkN8XBePXOHMm/jmncozW+aJ
+         07ufrYX9ZKBfR1Vd0XbIPLedajv3eaUDv4UGm1C1SGeKKh/2lW7XT5FYToHiuYY0ik9a
+         6dyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dyXFn2lup2sLjbD/KpbuX1CCPdcq3g2m2cieMlwaGx8=;
+        b=N1lE7B2uGya1dlF5BH+TCWU53ihyvbWEDIBRc6xx0ujz8NwNaQBMRddLqWBNmMhkXu
+         2IZvlL4WAKJ0Nx1KZOj9jjbEmp2tdcBR4vRhR7wWs2mHgPgivypBc/ZXMrfq2C/kpZ2Y
+         sKyZt+/2AEVrN0bwansguyuC3cstFwJlexGCODefZxu/PeLb5jVFZIb9HwtWkYZv18xa
+         BzuOO3y8EQeLBoPQCQrK0h42uZukW+LzJATm4bK1Tv/dZIaAtcD/ldVTj8nCiBxlmt7L
+         UUSnNGAa0FbmK8Jk34XFGN5CbVJTr3oZFbDx4b1n+ZGZB6VJmIAw0JmWL28f2kOgGzUx
+         2Rlg==
+X-Gm-Message-State: AFqh2kpKpsRWawemGMR0EV/jEaq5a5yTKRuEatQwfloZtVlqyQcntTpi
+        FZuD9u7ci5ZGtq1uLclykeR/iWpVvvNt/tCAZjUVGw==
+X-Google-Smtp-Source: AMrXdXvGtDAQmrtie+iMu2/Hn6KcrJFz14ydW887zzDi0fPPgxvoTr6yfqaCAuiC9XOCVbWlCvMM0j/FL50aLD4Ks2U=
+X-Received: by 2002:a81:351:0:b0:36c:aaa6:e571 with SMTP id
+ 78-20020a810351000000b0036caaa6e571mr2408773ywd.467.1674541231962; Mon, 23
+ Jan 2023 22:20:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch net-next v2 0/2] net: dsa: microchip: add support for credit
- based shaper
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167454121791.18672.15309097312124008848.git-patchwork-notify@kernel.org>
-Date:   Tue, 24 Jan 2023 06:20:17 +0000
-References: <20230120052135.32120-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20230120052135.32120-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230119122705.73054-1-vladimir.oltean@nxp.com> <20230119122705.73054-5-vladimir.oltean@nxp.com>
+In-Reply-To: <20230119122705.73054-5-vladimir.oltean@nxp.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 24 Jan 2023 07:20:20 +0100
+Message-ID: <CANn89i+-Vp3Za=T8kgU6o_RuQHoT7sC=-i_EZCHcsUoJKqeG9g@mail.gmail.com>
+Subject: Re: [PATCH v4 net-next 04/12] net: ethtool: netlink: retrieve stats
+ from multiple sources (eMAC, pMAC)
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Jan 19, 2023 at 1:27 PM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+...
 
-On Fri, 20 Jan 2023 10:51:33 +0530 you wrote:
-> LAN937x switch family, KSZ9477, KSZ9567, KSZ9563 and KSZ8563 supports
-> the credit based shaper. But there were few difference between LAN937x and KSZ
-> switch like
-> - number of queues for LAN937x is 8 and for others it is 4.
-> - size of credit increment register for LAN937x is 24 and for other is 16-bit.
-> This patch series add the credit based shaper with common implementation for
-> LAN937x and KSZ swithes.
-> 
-> [...]
+>  static int pause_prepare_data(const struct ethnl_req_info *req_base,
+>                               struct ethnl_reply_data *reply_base,
+>                               struct genl_info *info)
+>  {
+> +       const struct pause_req_info *req_info = PAUSE_REQINFO(req_base);
+>         struct pause_reply_data *data = PAUSE_REPDATA(reply_base);
+> +       enum ethtool_mac_stats_src src = req_info->src;
+> +       struct netlink_ext_ack *extack = info->extack;
 
-Here is the summary with links:
-  - [net-next,v2,1/2] net: dsa: microchip: enable port queues for tc mqprio
-    https://git.kernel.org/netdev/net-next/c/e30f33a5f5c7
-  - [net-next,v2,2/2] net: dsa: microchip: add support for credit based shaper
-    https://git.kernel.org/netdev/net-next/c/71d7920fb2d1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+info can be NULL when called from ethnl_default_dump_one()
