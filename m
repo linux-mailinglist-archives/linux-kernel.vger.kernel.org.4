@@ -2,130 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1186791D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238FB679222
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbjAXHVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S232932AbjAXHi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjAXHVI (ORCPT
+        with ESMTP id S232226AbjAXHiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:21:08 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B5A7ED6;
-        Mon, 23 Jan 2023 23:21:06 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30O6xe2l023429;
-        Tue, 24 Jan 2023 07:20:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8g7RbTttaL7ha3Ce8e9aBztnaF3yrIRQQJN0M0h3IvA=;
- b=G2Kh8PT/pALW6C8575DGfB6y4lxUpIOLhb5wNgGESgF8dHxCNgjtd+sA8Vci/UjnsqmH
- jcyZrlTA6ZZNpik8DMlXDuwTH7tU3PhdQGEKFf4z4j49+sWsbcOQs8q5H4q+JkwQDUBy
- OdVMsjvGb+3e1nsiKqrpUqwkTW6cd0lcFSRTDWKygk1ASkl+wAHcgdf7BPg9Ds/cDMwD
- TsG1k5FU7wfxsRuyqlM2PFMqYGRu09XsMm6N4gM/zP1YDJyrX2ojSlliz4hsZrlE4Ios
- kE869tJbNQSrg6+NLkz42pLzAc+Fki/LlePksE64Bij53kfIvIvowefiqh+Mms1KDXKa 2w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89k9cj2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 07:20:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30O7K7C3003086
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 07:20:07 GMT
-Received: from [10.216.24.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 23 Jan
- 2023 23:19:56 -0800
-Message-ID: <278a2e6e-69e0-81b0-f476-571edea950ff@quicinc.com>
-Date:   Tue, 24 Jan 2023 12:49:53 +0530
+        Tue, 24 Jan 2023 02:38:55 -0500
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 23:38:45 PST
+Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [IPv6:2001:67c:2050:101:465::107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953D43EFCD;
+        Mon, 23 Jan 2023 23:38:45 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4P1JMh2Hqbz9sSb;
+        Tue, 24 Jan 2023 08:22:40 +0100 (CET)
+Message-ID: <85e3080a-3d7b-6071-eb08-91248d2de804@denx.de>
+Date:   Tue, 24 Jan 2023 08:22:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
+Subject: Re: [PATCH 1/9] PCI/AER: Remove redundant Device Control Error
+ Reporting Enable
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-7-quic_devipriy@quicinc.com>
- <f6ef1834-b629-b76c-9cde-55af56320665@linaro.org>
- <7f157b73-f856-04d2-1b39-e1f8861d0439@quicinc.com>
- <84aa79c3-b793-0d0e-d6a5-035aff5a17b4@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <84aa79c3-b793-0d0e-d6a5-035aff5a17b4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: p3i6Ue8nP7RVr6YJKd1ainlBOXIIHVIl
-X-Proofpoint-GUID: p3i6Ue8nP7RVr6YJKd1ainlBOXIIHVIl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=700 spamscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- phishscore=0 bulkscore=0 mlxscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301240066
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Keith Busch <kbusch@kernel.org>
+References: <20230118234612.272916-1-helgaas@kernel.org>
+ <20230118234612.272916-2-helgaas@kernel.org>
+From:   Stefan Roese <sr@denx.de>
+In-Reply-To: <20230118234612.272916-2-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NEUTRAL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/19/23 00:46, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> The following bits in the PCIe Device Control register enable sending of
+> ERR_COR, ERR_NONFATAL, or ERR_FATAL Messages (or reporting internally in
+> the case of Root Ports):
+> 
+>    Correctable Error Reporting Enable
+>    Non-Fatal Error Reporting Enable
+>    Fatal Error Reporting Enable
+>    Unsupported Request Reporting Enable
+> 
+> These enable bits are set by pci_enable_pcie_error_reporting(), and since
+> f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"), we
+> do that in this path during enumeration:
+> 
+>    pci_init_capabilities
+>      pci_aer_init
+>        pci_enable_pcie_error_reporting
+> 
+> Previously, the AER service driver also traversed the hierarchy when
+> claiming a Root Port, enabling error reporting for downstream devices, but
+> this is redundant.
+> 
+> Remove the code that enables this error reporting in the AER .probe() path.
+> Also remove similar code that disables error reporting in the AER .remove()
+> path.
+> 
+> Note that these Device Control Reporting Enable bits do not control
+> interrupt generation.  That's done by the similarly-named bits in the AER
+> Root Error Command register, which are still set by aer_probe() and cleared
+> by aer_remove(), since the AER service driver handles those interrupts.
+> See PCIe r6.0, sec 6.2.6.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Stefan Roese <sr@denx.de>
+> Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Cc: Ashok Raj <ashok.raj@intel.com>
+> Cc: Keith Busch <kbusch@kernel.org>
 
+Reviewed-by: Stefan Roese <sr@denx.de>
 
-On 1/13/2023 7:50 PM, Krzysztof Kozlowski wrote:
-> On 13/01/2023 14:29, Devi Priya wrote:
->>>> +
->>>> +	soc: soc@0 {
->>>> +		#address-cells = <1>;
->>>> +		#size-cells = <1>;
->>>> +		ranges = <0 0 0 0xffffffff>;
->>>> +		compatible = "simple-bus";
->>>> +
->>>> +		tlmm: pinctrl@1000000 {
->>>> +			compatible = "qcom,ipq9574-tlmm";
->>>> +			reg = <0x01000000 0x300000>;
->>>> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->>>> +			gpio-controller;
->>>> +			#gpio-cells = <2>;
->>>> +			gpio-ranges = <&tlmm 0 0 65>;
->>>> +			gpio-reserved-ranges = <59 1>;
->>>
->>> Hm, why reserved ranges are in SoC?
->> As the gpio is forbidden on all ipq9574 boards, we have added it in SoC
+Thanks,
+Stefan
+
+> ---
+>   drivers/pci/pcie/aer.c | 48 ------------------------------------------
+>   1 file changed, 48 deletions(-)
 > 
-> Why it is forbidden on all boards? I guess it depends on the firmware
-> and this can differ, can't it?
-> 
-This GPIO is protected and used by the TZ firmware and is forbidden on 
-all the boards & firmware
-> Best regards,
-> Krzysztof
-> 
-Regards,
-Devi Priya
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 625f7b2cafe4..b7b69e0c778c 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -1224,42 +1224,6 @@ static irqreturn_t aer_irq(int irq, void *context)
+>   	return IRQ_WAKE_THREAD;
+>   }
+>   
+> -static int set_device_error_reporting(struct pci_dev *dev, void *data)
+> -{
+> -	bool enable = *((bool *)data);
+> -	int type = pci_pcie_type(dev);
+> -
+> -	if ((type == PCI_EXP_TYPE_ROOT_PORT) ||
+> -	    (type == PCI_EXP_TYPE_RC_EC) ||
+> -	    (type == PCI_EXP_TYPE_UPSTREAM) ||
+> -	    (type == PCI_EXP_TYPE_DOWNSTREAM)) {
+> -		if (enable)
+> -			pci_enable_pcie_error_reporting(dev);
+> -		else
+> -			pci_disable_pcie_error_reporting(dev);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -/**
+> - * set_downstream_devices_error_reporting - enable/disable the error reporting  bits on the root port and its downstream ports.
+> - * @dev: pointer to root port's pci_dev data structure
+> - * @enable: true = enable error reporting, false = disable error reporting.
+> - */
+> -static void set_downstream_devices_error_reporting(struct pci_dev *dev,
+> -						   bool enable)
+> -{
+> -	set_device_error_reporting(dev, &enable);
+> -
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC)
+> -		pcie_walk_rcec(dev, set_device_error_reporting, &enable);
+> -	else if (dev->subordinate)
+> -		pci_walk_bus(dev->subordinate, set_device_error_reporting,
+> -			     &enable);
+> -
+> -}
+> -
+>   /**
+>    * aer_enable_rootport - enable Root Port's interrupts when receiving messages
+>    * @rpc: pointer to a Root Port data structure
+> @@ -1289,12 +1253,6 @@ static void aer_enable_rootport(struct aer_rpc *rpc)
+>   	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
+>   	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
+>   
+> -	/*
+> -	 * Enable error reporting for the root port device and downstream port
+> -	 * devices.
+> -	 */
+> -	set_downstream_devices_error_reporting(pdev, true);
+> -
+>   	/* Enable Root Port's interrupt in response to error messages */
+>   	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+>   	reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
+> @@ -1313,12 +1271,6 @@ static void aer_disable_rootport(struct aer_rpc *rpc)
+>   	int aer = pdev->aer_cap;
+>   	u32 reg32;
+>   
+> -	/*
+> -	 * Disable error reporting for the root port device and downstream port
+> -	 * devices.
+> -	 */
+> -	set_downstream_devices_error_reporting(pdev, false);
+> -
+>   	/* Disable Root's interrupt in response to error messages */
+>   	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+>   	reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
+
+Viele Grüße,
+Stefan Roese
+
+-- 
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
