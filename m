@@ -2,145 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9024367A02E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9009167A034
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbjAXRbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S233979AbjAXRbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234109AbjAXRbO (ORCPT
+        with ESMTP id S234544AbjAXRbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:31:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51484DCE4;
-        Tue, 24 Jan 2023 09:30:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74083B81607;
-        Tue, 24 Jan 2023 17:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28194C4339C;
-        Tue, 24 Jan 2023 17:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674581456;
-        bh=0PUujmICPIJ4qI/mGnq+QbTGNX31uN+Dte58FS+GCZk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XiAhhNMTeIwX3Q2ZJ5MAXvgGofkFoj+IiHgGFnGWh1jfJ9C1CezHSCoU8DxkQbfrq
-         PF8HEQj7hbdL68ZVxnN8qn0K+V4EYgh/NDtWKz1uqRHojFW1HBUsUQ7YYdX6hvvsJZ
-         lmvZ2y9UOIZCbnpp8cyqNzRC3E5cb2fqys6b8d4etHLswerrg89yb6wRL0985EMBkw
-         3HQuVYatEIQOe6U2kKqHt9eabenhfVPkNqpbKWFpKi74bUch2o3jY0GaWlRVmIsinn
-         gLBX6RvfaVkQ3gvBvA7ptQjLQ8wxD7Ti1c8p8kpRUWrCi/4odwG+3iE7dof0PHhlMI
-         NfAt3h7vmtabA==
-Received: by mail-lf1-f54.google.com with SMTP id b3so24606091lfv.2;
-        Tue, 24 Jan 2023 09:30:56 -0800 (PST)
-X-Gm-Message-State: AFqh2krVuZTDuZoLI1SzzBbbzNWwclxfcpm1Ebjble6hh3ogqhVhkXuT
-        mq0TLlP3UP9qGzYFFQUcYgBCK5KFa27PLWsC830=
-X-Google-Smtp-Source: AMrXdXurnFIKkuIZZCSXZSkiuJ7u17gWP0ONOMnwETHZLD0mxlFz1B5ZQrOPHPbuj0GWymiipN7xWTL6+dJYcLp7MAg=
-X-Received: by 2002:a05:6512:96d:b0:4c7:6601:e3b1 with SMTP id
- v13-20020a056512096d00b004c76601e3b1mr1323111lft.548.1674581454151; Tue, 24
- Jan 2023 09:30:54 -0800 (PST)
+        Tue, 24 Jan 2023 12:31:44 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DD94E522
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:31:36 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id t2so7961451vkk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QxC8g2x7UGo1iIB34KSAj3wYyngwomKHsPwBL9NxZa8=;
+        b=KfrA5Bb0OO3a9PdjN+skVpLoXDxc0nIfU6VmYVEyRX2iUjwYvf6ObVP96UCWp57YgY
+         hYimpfA/fLUMfX1ab8HNx3qqtuXZAJp1mnSCfbvrt63wwLugnSO2Vrc8HuHQqBvZoJPt
+         2OPlwOX0QaDtXErT9GVLWQJXIqnTVA4I/ba6o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QxC8g2x7UGo1iIB34KSAj3wYyngwomKHsPwBL9NxZa8=;
+        b=EIWz+CO8Rl+8fd+qRmC2bzgTcXuz7jsNOx0YEYXMz0hxT8cuS2sn+oarx1m9Sbi/CI
+         l0Xmh2an88HuRSY1fVs7IWKnfjFbSPV9ggODWobWEyyhnrafdTNX8dIOw2rMAmr3Q8F7
+         au/nJE2bGY99oXtoLWh6eoFjrMiTl4l3xMyVyjt8BfHFBKhCcFVQa8/SX3iGUrl/CqI4
+         7DH49XTOXZpex4qKhaxzWnl4qcb5l3vGSetIH0asG6NTYocI0EcHVlZAs5tbo3KESt1F
+         nXs6hvzdRn806SJC73/EPTKQP0rqPiT7ep0uhIJzjhE5ox3sBrEq3TUBJbelVU+jtzV/
+         /Tcg==
+X-Gm-Message-State: AFqh2kr4Cr8SsKG0W6I41zpQKZhxslKBUjnb/lauWzDvBwJ3nnwgbHRk
+        v5F29DTGpcBi7Lnk6z3HeW1O8z8CdXL17TEc
+X-Google-Smtp-Source: AMrXdXv5lMS/CscQi0t3d+FmX/xFLCu8Y+vtGjBQ4HAyjwu4yOvlWL1wtz5Tq1t9XnuxRCl2HKclRw==
+X-Received: by 2002:ac5:cb7a:0:b0:3e1:69c4:65e7 with SMTP id l26-20020ac5cb7a000000b003e169c465e7mr17790577vkn.14.1674581494792;
+        Tue, 24 Jan 2023 09:31:34 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id x11-20020a05620a098b00b007055dce4cecsm1741073qkx.97.2023.01.24.09.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 09:31:34 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        rcu <rcu@vger.kernel.org>, stable@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH v2 RESEND] tick/nohz: Fix cpu_is_hotpluggable() by checking with nohz subsystem
+Date:   Tue, 24 Jan 2023 17:31:26 +0000
+Message-Id: <20230124173126.3492345-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
 MIME-Version: 1.0
-References: <20230121004945.697003-1-song@kernel.org> <20230121004945.697003-2-song@kernel.org>
- <Y8/N7zMLUnMh259N@alley> <20230124172313.extovg6ig7dimpgb@treble>
-In-Reply-To: <20230124172313.extovg6ig7dimpgb@treble>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 24 Jan 2023 09:30:41 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7Wo1amPn2fdZHB9MAZB=iUMTQW13gu0Pj=0-N9EkRVvQ@mail.gmail.com>
-Message-ID: <CAPhsuW7Wo1amPn2fdZHB9MAZB=iUMTQW13gu0Pj=0-N9EkRVvQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/2] livepatch,x86: Clear relocation targets on a
- module removal
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
-        x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 9:23 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Tue, Jan 24, 2023 at 01:24:15PM +0100, Petr Mladek wrote:
-> > On Fri 2023-01-20 16:49:45, Song Liu wrote:
-> > > Josh reported a bug:
-> > >
-> > >   When the object to be patched is a module, and that module is
-> > >   rmmod'ed and reloaded, it fails to load with:
-> > >
-> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > >
-> > >   The livepatch module has a relocation which references a symbol
-> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > >   tries to replace the old relocation with a new one, it sees that
-> > >   the previous one is nonzero and it errors out.
-> > >
-> > > He also proposed three different solutions. We could remove the error
-> > > check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> > > ("x86/module: Detect and skip invalid relocations"). However the check
-> > > is useful for detecting corrupted modules.
-> > >
-> > > We could also deny the patched modules to be removed. If it proved to be
-> > > a major drawback for users, we could still implement a different
-> > > approach. The solution would also complicate the existing code a lot.
-> > >
-> > > We thus decided to reverse the relocation patching (clear all relocation
-> > > targets on x86_64). The solution is not
-> > > universal and is too much arch-specific, but it may prove to be simpler
-> > > in the end.
-> > >
-> > > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> > > Originally-by: Miroslav Benes <mbenes@suse.cz>
-> > > Signed-off-by: Song Liu <song@kernel.org>
-> > > Acked-by: Miroslav Benes <mbenes@suse.cz>
-> > >
-> > > --- a/arch/x86/kernel/module.c
-> > > +++ b/arch/x86/kernel/module.c
-> > > @@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
-> > >     return 0;
-> > >  }
-> > >  #else /*X86_64*/
-> > > -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
-> > > +static int __write_relocate_add(Elf64_Shdr *sechdrs,
-> > >                const char *strtab,
-> > >                unsigned int symindex,
-> > >                unsigned int relsec,
-> > >                struct module *me,
-> > > -              void *(*write)(void *dest, const void *src, size_t len))
-> > > +              void *(*write)(void *dest, const void *src, size_t len),
-> > > +              bool apply)
-> > >  {
-> > >     unsigned int i;
-> > >     Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
-> > >     Elf64_Sym *sym;
-> > >     void *loc;
-> > >     u64 val;
-> > > +   u64 zero = 0ULL;
-> > >
-> > > -   DEBUGP("Applying relocate section %u to %u\n",
-> > > +   DEBUGP("%s relocate section %u to %u\n",
-> > > +          apply ? "Applying" : "Clearing",
-> > >            relsec, sechdrs[relsec].sh_info);
-> > >     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
-> > > +           int size = 0;
-> >
-> > The value 0 should never be used. It is better to do not initialize
-> > it at all so that the compiler would warn when the variable might be
-> > used uninitialized.
->
-> Yes.  Also it can be unsigned, i.e. size_t.
+For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
+However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
+torture tests that do offlining to end up trying to offline this CPU causing
+test failures. Such failure happens on all architectures.
 
-Will fix this in the next version.
+Fix it by asking the opinion of the nohz subsystem on whether the CPU can
+be hotplugged.
 
-I guess we still need an Acked-by from x86 maintainers.
+[ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(). ]
 
-Thanks,
-Song
+For drivers/base/ portion:
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: rcu <rcu@vger.kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest of the kernel")
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+Sorry, resending with CC to stable.
+
+ drivers/base/cpu.c       |  3 ++-
+ include/linux/tick.h     |  2 ++
+ kernel/time/tick-sched.c | 11 ++++++++---
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index 55405ebf23ab..450dca235a2f 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -487,7 +487,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
+ bool cpu_is_hotpluggable(unsigned int cpu)
+ {
+ 	struct device *dev = get_cpu_device(cpu);
+-	return dev && container_of(dev, struct cpu, dev)->hotpluggable;
++	return dev && container_of(dev, struct cpu, dev)->hotpluggable
++		&& tick_nohz_cpu_hotpluggable(cpu);
+ }
+ EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+ 
+diff --git a/include/linux/tick.h b/include/linux/tick.h
+index bfd571f18cfd..9459fef5b857 100644
+--- a/include/linux/tick.h
++++ b/include/linux/tick.h
+@@ -216,6 +216,7 @@ extern void tick_nohz_dep_set_signal(struct task_struct *tsk,
+ 				     enum tick_dep_bits bit);
+ extern void tick_nohz_dep_clear_signal(struct signal_struct *signal,
+ 				       enum tick_dep_bits bit);
++extern bool tick_nohz_cpu_hotpluggable(unsigned int cpu);
+ 
+ /*
+  * The below are tick_nohz_[set,clear]_dep() wrappers that optimize off-cases
+@@ -280,6 +281,7 @@ static inline void tick_nohz_full_add_cpus_to(struct cpumask *mask) { }
+ 
+ static inline void tick_nohz_dep_set_cpu(int cpu, enum tick_dep_bits bit) { }
+ static inline void tick_nohz_dep_clear_cpu(int cpu, enum tick_dep_bits bit) { }
++static inline bool tick_nohz_cpu_hotpluggable(unsigned int cpu) { return true; }
+ 
+ static inline void tick_dep_set(enum tick_dep_bits bit) { }
+ static inline void tick_dep_clear(enum tick_dep_bits bit) { }
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 9c6f661fb436..63e3e8ebcd64 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -510,7 +510,7 @@ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
+ 	tick_nohz_full_running = true;
+ }
+ 
+-static int tick_nohz_cpu_down(unsigned int cpu)
++bool tick_nohz_cpu_hotpluggable(unsigned int cpu)
+ {
+ 	/*
+ 	 * The tick_do_timer_cpu CPU handles housekeeping duty (unbound
+@@ -518,8 +518,13 @@ static int tick_nohz_cpu_down(unsigned int cpu)
+ 	 * CPUs. It must remain online when nohz full is enabled.
+ 	 */
+ 	if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
+-		return -EBUSY;
+-	return 0;
++		return false;
++	return true;
++}
++
++static int tick_nohz_cpu_down(unsigned int cpu)
++{
++	return tick_nohz_cpu_hotpluggable(cpu) ? 0 : -EBUSY;
+ }
+ 
+ void __init tick_nohz_init(void)
+-- 
+2.39.1.405.gd4c25cc71f-goog
+
