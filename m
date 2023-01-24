@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4278679C4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E538E679C53
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbjAXOpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S234921AbjAXOqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjAXOpf (ORCPT
+        with ESMTP id S233937AbjAXOqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:45:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE69F1BDB;
-        Tue, 24 Jan 2023 06:45:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eA3jWjQCsaXuex737PYn1zrT0M5qTbaDIBSPCUlVDsw=; b=i0YMl4H0Tpp+J+qXHd3MZ+ZHEI
-        hs/7dJiIdRGD0/TiQGg0NFONmko92fDUJ4AubYMGqa6gc0agQlfzopu+pWMdZnnzKxwccufwMIYrU
-        ClpQiGyv6OLZGvM7WorTpI/EaX1kSWeiy/6PEw75g19P1+p2e6RSfFbOotaQ06+fX2/cgL/FtfbtZ
-        aiAcxPawZOuKyHHRyVYxomM3UzUeqHVNlOnHa7540fgMhqgZs2d7+jxX3LOwTmArB7v7VySuvOcaW
-        jCAUeGZxAuKc46C/X36RB0qw19xOwBay+soy3RV1jEhInSalJCtjqI1VOajgawdVUvrJNFvucjDHQ
-        zMyhMRrQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKKXO-0057eL-0Z; Tue, 24 Jan 2023 14:44:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 415DE30036B;
-        Tue, 24 Jan 2023 15:44:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 26A232C217298; Tue, 24 Jan 2023 15:44:35 +0100 (CET)
-Date:   Tue, 24 Jan 2023 15:44:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
-        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
- is disabled
-Message-ID: <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
-References: <20230123205009.790550642@infradead.org>
- <20230123205515.059999893@infradead.org>
- <20230123165304.370121e7@gandalf.local.home>
- <20230123170753.7ac9419e@gandalf.local.home>
+        Tue, 24 Jan 2023 09:46:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED3D1BF2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:45:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674571558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fYiLuIxDhxiPph2V06Yyb1fMH7liPtcXmyWu5UVVaS4=;
+        b=DooRxtOzmK1q6lEaXp5wGAaLnbNvteEsHxBdQVGbBq7MWQOqah73/Q0gyEUJRBf4cOibYP
+        GmrE3eb6FsqANHj3E48j1FXrvbhqrbjJMfoF0ODsRZ8XA7nCL2EMYb9YyADdgY19mTQ+HI
+        xq1vugM1Q48T6LOg1FqhSfOwPa+VHsU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-187-LK_sA-vOO2-ScuK82JjlNQ-1; Tue, 24 Jan 2023 09:45:52 -0500
+X-MC-Unique: LK_sA-vOO2-ScuK82JjlNQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 512D21C07587;
+        Tue, 24 Jan 2023 14:45:51 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B1C7C53A0;
+        Tue, 24 Jan 2023 14:45:49 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <5bc85aff-e21e-ab83-d47a-e7b7c1081ab0@redhat.com>
+References: <5bc85aff-e21e-ab83-d47a-e7b7c1081ab0@redhat.com> <1b1eb3d8-c6b4-b264-1baa-1b3eb088173d@redhat.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-3-dhowells@redhat.com> <874093.1674570959@warthog.procyon.org.uk>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
+Subject: Re: [PATCH v8 02/10] iov_iter: Add a function to extract a page list from an iterator
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123170753.7ac9419e@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <874736.1674571549.1@warthog.procyon.org.uk>
+Date:   Tue, 24 Jan 2023 14:45:49 +0000
+Message-ID: <874737.1674571549@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
+David Hildenbrand <david@redhat.com> wrote:
 
-> Actually, perhaps we can just add this, and all you need to do is create
-> and set CONFIG_NO_RCU_TRACING (or some other name).
+> At least reduces the occurrences of FOLL_PIN :)
 
-Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
+I don't see where the problem is in letting people supply FOLL_PIN or
+FOLL_GET.  Why even have pin_user_pages() and get_user_pages() since they end
+up at the same place.  They should be inline wrappers, if separate functions
+at all.
 
-Anyway, I took it for a spin and it .... doesn't seems to do the job.
+David
 
-With my patch the first splat is
-
-  "RCU not on for: cpuidle_poll_time+0x0/0x70"
-
-While with yours I seems to get the endless:
-
-  "WARNING: suspicious RCU usage"
-
-thing. Let me see if I can figure out where it goes side-ways.
