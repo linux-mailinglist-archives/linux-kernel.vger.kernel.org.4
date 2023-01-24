@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C862167983F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA6F679841
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbjAXMml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S233950AbjAXMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjAXMmi (ORCPT
+        with ESMTP id S229753AbjAXMnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:42:38 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B84A2BF13;
-        Tue, 24 Jan 2023 04:42:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674564153; x=1706100153;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=azRAjyHYATG0pAS/puvlhaA3TL8JqYMWIj5+ISxcN20=;
-  b=g1AiOTAB0H4Q7Iv1LzRRHtjeX8ZtTkL4tMJ2b8U7h3zMZH8zXae4hMlA
-   1B8jBStnFdaLzJjY5/9gaNff9q9yaDvIYPxMJUj/3YY/0CzfkBaiIosyk
-   wqNz/1g4WyLqtMr3gwjADz5Yh2uStcv8RDTpqeYD1AUrsrj9ihZN59Ckg
-   OleA3fkHs6bENWVbb3vlNKjHscsaG9eVXdrRIHXND8nObt1/jQRGLDItT
-   ie5wp/VGiafK2uHMUCRP9wW92BWflvIUGKRZRUzaXHEv5cnqfLCLShuwI
-   fKtvYJx6Gl/jqhbFktoUw4wL2T2GPBFbWywpuKW17SQXEWoArlyCFbsXx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="314184931"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="314184931"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 04:42:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="612034493"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="612034493"
-Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
-  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2023 04:42:12 -0800
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, darwi@linutronix.de,
-        elena.reshetova@intel.com, kirill.shutemov@linux.intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        stable@vger.kernel.org, alexander.shishkin@linux.intel.com
-Subject: Re: [PATCH 1/2] PCI/MSI: Cache the MSIX table size
-In-Reply-To: <Y8/Kyzh+stow83lQ@unreal>
-References: <20230119170633.40944-1-alexander.shishkin@linux.intel.com>
- <20230119170633.40944-2-alexander.shishkin@linux.intel.com>
- <Y8z7FPcuDXDBi+1U@unreal> <87v8kwp2t6.fsf@ubik.fi.intel.com>
- <Y8/Kyzh+stow83lQ@unreal>
-Date:   Tue, 24 Jan 2023 14:42:11 +0200
-Message-ID: <87pmb4p0ik.fsf@ubik.fi.intel.com>
+        Tue, 24 Jan 2023 07:43:15 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD2918D;
+        Tue, 24 Jan 2023 04:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=227WHg8XMGQOt5KWOZSFB1DzK0nKdtSPwCgG4ajgWvs=; b=Nvz7q52sqs+Bbdxp8QJF6I0a8M
+        Hhs2Tq9vGJ49O1cZGfviIlb97ywW92QOBWOHADpjuyVF0KVnbMfJTZeW5I+UZrYv5IaHHQ2T0pwO3
+        LNj0inHaTg7UyDqGnYjq3iGJz2SJ8LP9yPrmrbq6GKToCPtfi6Dv/s0oEZlmrq7QjVgc=;
+Received: from p4ff1378e.dip0.t-ipconnect.de ([79.241.55.142] helo=Maecks.lan)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1pKIdk-00218F-4b; Tue, 24 Jan 2023 13:43:04 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: page_pool: fix refcounting issues with fragmented allocation
+Date:   Tue, 24 Jan 2023 13:43:00 +0100
+Message-Id: <20230124124300.94886-1-nbd@nbd.name>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +52,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Leon Romanovsky <leon@kernel.org> writes:
+While testing fragmented page_pool allocation in the mt76 driver, I was able
+to reliably trigger page refcount underflow issues, which did not occur with
+full-page page_pool allocation.
+It appears to me, that handling refcounting in two separate counters
+(page->pp_frag_count and page refcount) is racy when page refcount gets
+incremented by code dealing with skb fragments directly, and
+page_pool_return_skb_page is called multiple times for the same fragment.
 
-> On Tue, Jan 24, 2023 at 01:52:37PM +0200, Alexander Shishkin wrote:
->> Leon Romanovsky <leon@kernel.org> writes:
->> 
->> > I'm not security expert here, but not sure that this protects from anything.
->> > 1. Kernel relies on working and not-malicious HW. There are gazillion ways
->> > to cause crashes other than changing MSI-X.
->> 
->> This particular bug was preventing our fuzzing from going deeper into
->> the code and reaching some more of the aforementioned gazillion bugs.
->
-> Your commit message says nothing about fuzzing, but talks about
-> malicious device. 
+Dropping page->pp_frag_count and relying entirely on the page refcount makes
+these underflow issues and crashes go away.
 
-A malicious device is what the fuzzing is aiming to simulate. The fact
-of fuzzing process itself didn't seem relevant to the patch, so I didn't
-include it, going instead for the problem statement and proposed
-solution. Will the commit message benefit from mentioning fuzzing?
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+---
+ include/linux/mm_types.h | 17 +++++------------
+ include/net/page_pool.h  | 19 ++++---------------
+ net/core/page_pool.c     | 12 ++++--------
+ 3 files changed, 13 insertions(+), 35 deletions(-)
 
-> Do you see "gazillion bugs" for devices which don't change their MSI-X
-> table size under the hood, which is main kernel assumption?
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 9757067c3053..96ec3b19a86d 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -125,18 +125,11 @@ struct page {
+ 			struct page_pool *pp;
+ 			unsigned long _pp_mapping_pad;
+ 			unsigned long dma_addr;
+-			union {
+-				/**
+-				 * dma_addr_upper: might require a 64-bit
+-				 * value on 32-bit architectures.
+-				 */
+-				unsigned long dma_addr_upper;
+-				/**
+-				 * For frag page support, not supported in
+-				 * 32-bit architectures with 64-bit DMA.
+-				 */
+-				atomic_long_t pp_frag_count;
+-			};
++			/**
++			 * dma_addr_upper: might require a 64-bit
++			 * value on 32-bit architectures.
++			 */
++			unsigned long dma_addr_upper;
+ 		};
+ 		struct {	/* Tail pages of compound page */
+ 			unsigned long compound_head;	/* Bit zero is set */
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index 813c93499f20..28e1fdbdcd53 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -279,14 +279,14 @@ void page_pool_put_defragged_page(struct page_pool *pool, struct page *page,
+ 
+ static inline void page_pool_fragment_page(struct page *page, long nr)
+ {
+-	atomic_long_set(&page->pp_frag_count, nr);
++	page_ref_add(page, nr);
+ }
+ 
+ static inline long page_pool_defrag_page(struct page *page, long nr)
+ {
+ 	long ret;
+ 
+-	/* If nr == pp_frag_count then we have cleared all remaining
++	/* If nr == page_ref_count then we have cleared all remaining
+ 	 * references to the page. No need to actually overwrite it, instead
+ 	 * we can leave this to be overwritten by the calling function.
+ 	 *
+@@ -295,22 +295,14 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
+ 	 * especially when dealing with a page that may be partitioned
+ 	 * into only 2 or 3 pieces.
+ 	 */
+-	if (atomic_long_read(&page->pp_frag_count) == nr)
++	if (page_ref_count(page) == nr)
+ 		return 0;
+ 
+-	ret = atomic_long_sub_return(nr, &page->pp_frag_count);
++	ret = page_ref_sub_return(page, nr);
+ 	WARN_ON(ret < 0);
+ 	return ret;
+ }
+ 
+-static inline bool page_pool_is_last_frag(struct page_pool *pool,
+-					  struct page *page)
+-{
+-	/* If fragments aren't enabled or count is 0 we were the last user */
+-	return !(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
+-	       (page_pool_defrag_page(page, 1) == 0);
+-}
+-
+ static inline void page_pool_put_page(struct page_pool *pool,
+ 				      struct page *page,
+ 				      unsigned int dma_sync_size,
+@@ -320,9 +312,6 @@ static inline void page_pool_put_page(struct page_pool *pool,
+ 	 * allow registering MEM_TYPE_PAGE_POOL, but shield linker.
+ 	 */
+ #ifdef CONFIG_PAGE_POOL
+-	if (!page_pool_is_last_frag(pool, page))
+-		return;
+-
+ 	page_pool_put_defragged_page(pool, page, dma_sync_size, allow_direct);
+ #endif
+ }
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index 9b203d8660e4..0defcadae225 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -25,7 +25,7 @@
+ #define DEFER_TIME (msecs_to_jiffies(1000))
+ #define DEFER_WARN_INTERVAL (60 * HZ)
+ 
+-#define BIAS_MAX	LONG_MAX
++#define BIAS_MAX(pool)	(PAGE_SIZE << ((pool)->p.order))
+ 
+ #ifdef CONFIG_PAGE_POOL_STATS
+ /* alloc_stat_inc is intended to be used in softirq context */
+@@ -619,10 +619,6 @@ void page_pool_put_page_bulk(struct page_pool *pool, void **data,
+ 	for (i = 0; i < count; i++) {
+ 		struct page *page = virt_to_head_page(data[i]);
+ 
+-		/* It is not the last user for the page frag case */
+-		if (!page_pool_is_last_frag(pool, page))
+-			continue;
+-
+ 		page = __page_pool_put_page(pool, page, -1, false);
+ 		/* Approved for bulk recycling in ptr_ring cache */
+ 		if (page)
+@@ -659,7 +655,7 @@ EXPORT_SYMBOL(page_pool_put_page_bulk);
+ static struct page *page_pool_drain_frag(struct page_pool *pool,
+ 					 struct page *page)
+ {
+-	long drain_count = BIAS_MAX - pool->frag_users;
++	long drain_count = BIAS_MAX(pool) - pool->frag_users;
+ 
+ 	/* Some user is still using the page frag */
+ 	if (likely(page_pool_defrag_page(page, drain_count)))
+@@ -678,7 +674,7 @@ static struct page *page_pool_drain_frag(struct page_pool *pool,
+ 
+ static void page_pool_free_frag(struct page_pool *pool)
+ {
+-	long drain_count = BIAS_MAX - pool->frag_users;
++	long drain_count = BIAS_MAX(pool) - pool->frag_users;
+ 	struct page *page = pool->frag_page;
+ 
+ 	pool->frag_page = NULL;
+@@ -724,7 +720,7 @@ struct page *page_pool_alloc_frag(struct page_pool *pool,
+ 		pool->frag_users = 1;
+ 		*offset = 0;
+ 		pool->frag_offset = size;
+-		page_pool_fragment_page(page, BIAS_MAX);
++		page_pool_fragment_page(page, BIAS_MAX(pool));
+ 		return page;
+ 	}
+ 
+-- 
+2.39.0
 
-Not so far.
-
-> If yes, you should fix these bugs.
-
-That's absolutely the intention.
-
->> > 2. Device can report large table size, kernel will cache it and
->> > malicious device will reduce it back. It is not handled and will cause
->> > to kernel crash too.
->> 
->> How would that happen? If the device decides to have fewer vectors,
->> they'll all still fit in the ioremapped MSIX table. The worst thing that
->> can happen is 0xffffffff reads from the mmio space, which a device can
->> do anyway. But that shouldn't trigger a page fault or otherwise
->> crash. Or am I missing something?
->
-> Like I said, I'm no expert. You should tell me if it safe for all
-> callers of pci_msix_vec_count().
-
-Well, since you stated that the reverse will cause a kernel crash, I had
-to ask how. I'll include some version of the above paragraph in the
-commit message to indicate that we reverse situation has been considered.
-
-Regards,
---
-Alex
