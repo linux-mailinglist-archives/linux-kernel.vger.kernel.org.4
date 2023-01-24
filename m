@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142E2679E22
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AF6679E28
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbjAXQBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
+        id S233698AbjAXQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjAXQBn (ORCPT
+        with ESMTP id S233279AbjAXQDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:01:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5372716
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Hkh5K4jyAqgzmiFmFW2WqeTxVkkPEbaiESIFph5SX84=; b=VTgexlACJsRFoRVYF+HcNVD6vI
-        Jfq7HG/1/yy9FJxu+FsgoHh7PziiZO+mPlmav5vO3e19WDSCFjNteLwdBwMeGdYO0ysTqJyWn4eSR
-        DFec/qTuOJXWGal4t/DjpOVR5div5KjuaCpSOmR5YeQxuIYtJR4ceJyA5bgcyCp2EXjChcav2bzEG
-        0I8oGuiQnacigcIPfuKwySh7rE9jCdCBAho0lzxIPK+svC5i9BYNQoHDw1ZPhqyplJ+StoWxzF4sa
-        NLrgKl7Oytdpn/7WK/wGtMydRkurhykTTccY90Nj95Sg0DwDzdCVHlSJ4bJnBR8BP+0Y/oPoZJx72
-        MJ+u+NXg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKLjl-005AlI-Tb; Tue, 24 Jan 2023 16:01:30 +0000
-Date:   Tue, 24 Jan 2023 16:01:29 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, markhemm@googlemail.com,
-        hughd@google.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND V5,2/2] mm: shmem: implement
- POSIX_FADV_[WILL|DONT]NEED for shmem
-Message-ID: <Y9AA2cJf+J2MHRKN@casper.infradead.org>
-References: <cover.1648706231.git.quic_charante@quicinc.com>
- <c2f7242faffd41f46120f82079256ece26b92bf0.1648706231.git.quic_charante@quicinc.com>
+        Tue, 24 Jan 2023 11:03:52 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 326ED470B6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:03:50 -0800 (PST)
+Received: (qmail 170309 invoked by uid 1000); 24 Jan 2023 11:03:49 -0500
+Date:   Tue, 24 Jan 2023 11:03:49 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9ABZQ81oXTmggcY@rowland.harvard.edu>
+References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
+ <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
+ <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
+ <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
+ <1180fe22-5e1d-ec8b-8012-b6578b1ca7c0@huaweicloud.com>
+ <Y87tHNcvb5E+t3da@rowland.harvard.edu>
+ <6f8575f3-f8b9-7738-24f0-5e390b50ac40@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c2f7242faffd41f46120f82079256ece26b92bf0.1648706231.git.quic_charante@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6f8575f3-f8b9-7738-24f0-5e390b50ac40@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 12:08:21PM +0530, Charan Teja Kalla wrote:
-> +static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
-> +				loff_t end, struct list_head *list)
-> +{
-> +	XA_STATE(xas, &mapping->i_pages, start);
-> +	struct page *page;
-> +
-> +	rcu_read_lock();
-> +	xas_for_each(&xas, page, end) {
-> +		if (xas_retry(&xas, page))
-> +			continue;
-> +		if (xa_is_value(page))
-> +			continue;
-> +
-> +		if (!get_page_unless_zero(page))
-> +			continue;
-> +		if (isolate_lru_page(page)) {
-> +			put_page(page);
-> +			continue;
-> +		}
-> +		put_page(page);
-> +
-> +		if (PageUnevictable(page) || page_mapcount(page) > 1) {
-> +			putback_lru_page(page);
-> +			continue;
-> +		}
-> +
-> +		/*
-> +		 * Prepare the page to be passed to the reclaim_pages().
-> +		 * VM couldn't reclaim the page unless we clear PG_young.
-> +		 * Also, to ensure that the pages are written before
-> +		 * reclaiming, page is set to dirty.
-> +		 * Since we are not clearing the pte_young in the mapped
-> +		 * page pte's, its reclaim may not be attempted.
-> +		 */
-> +		ClearPageReferenced(page);
-> +		test_and_clear_page_young(page);
-> +		list_add(&page->lru, list);
-> +		if (need_resched()) {
-> +			xas_pause(&xas);
-> +			cond_resched_rcu();
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +}
+On Tue, Jan 24, 2023 at 01:54:14PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/23/2023 9:25 PM, Alan Stern wrote:
+> > On Mon, Jan 23, 2023 at 07:25:48PM +0100, Jonas Oberhauser wrote:
+> > > Alright, after some synchronization in the other parts of this thread I am
+> > > beginning to prepare the next iteration of the patch.
+> > > 
+> > > On 1/19/2023 4:13 AM, Alan Stern wrote:
+> > > > On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
+> > > > > On 1/18/2023 8:52 PM, Alan Stern wrote:
+> > > > > > On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
+> > > > > > > -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> > > > > > > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> > > > > > > -		fencerel(After-unlock-lock) ; [M])
+> > > > > > > +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
+> > > > > > Shouldn't the po case of (co | po) remain intact here?
+> > > > > You can leave it here, but it is already covered by two other parts: the
+> > > > > ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
+> > > > > ppo, and the ordering given through pb is covered by its inclusion in
+> > > > > strong-order.
+> > > > What about the ordering given through
+> > > > A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
+> > > > superseded by pb as well, but it seems odd not to have it in hb.
+> > > How should we resolve this?
+> > > My current favorite (compromise :D) solution would be to
+> > > 1. still eliminate both po and co cases from first definition of
+> > > strong-fence which is used in ppo,
+> > > 2. define a relation equal to the strong-order in this patch (with po|rf)
+> > Wouldn't it need to have po|co?  Consider:
+> > 
+> > 	Wx=1	Rx=1		Ry=1		Rz=1
+> > 		lock(s)		lock(s)		lock(s)
+> > 		unlock(s)	unlock(s)	unlock(s)
+> > 		Wy=1		Wz=1		smp_mb__after_unlock_lock
+> > 						Rx=0
+> > 
+> > With the co term this is forbidden.  With only the rf term it is
+> > allowed, because po-unlock-lock-po isn't A-cumulative.
+> No, but unlock() is ( https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/tree/tools/memory-model/lock.cat?h=dev.2023.01.19a#n67
+> ). So you get
 
-This entire function needs to be converted to use folios instead of
-pages if you're refreshing this patchset for current kernels.
+So it is.  I had forgotten about that.  The model is getting too 
+complicated to fit entirely in my mind...
 
+>   Rx=0 ->overwrite Wx=1  ->rfe Rx1 ->po-rel  T1:unlock(s) ->rfe T2:lock(s)
+> ->po-unlock-lock-po;after ... fence;po Rx=0
+> which is
+>   Rx=0          ->prop ;                           po-unlock-lock-po;after
+> ... fence;po Rx=0
+> 
+> Are you ok going forward like this then?
+
+I guess so, provided we mention somewhere in the code or documentation 
+that this relation extends beyond a single rf.
+
+Alan
