@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3875D679AA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F12679AA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbjAXNxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 08:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S234541AbjAXNxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 08:53:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbjAXNx2 (ORCPT
+        with ESMTP id S234671AbjAXNx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:53:28 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC99649549
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:51:22 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m15so11481935wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:51:22 -0800 (PST)
+        Tue, 24 Jan 2023 08:53:29 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824E34957A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:51:23 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so12859233wml.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:51:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KdNKBm9dCMT5uwH0jJSmOk/S2BVD6poXI4UEU8hMcS4=;
-        b=lx/21U8jUJGqSVM9i0svqPlaaG3+0DuV1wZ6usLlLKooLymgkn2yujl6xNPqW7Zvh9
-         9hfPkIDo7UW9c/xCwVawPbhZTYmVHn297MrmAjg3e7bTVZ/MUPZ19JsmjUOH+uwW4mzI
-         hY8Z3E6rV1ybpHQTapr7tWZUA0mgoYr9XmGQ0JLN0DwMfpXyUcjD0fhSNT4/nmbY2Xtz
-         uM7Xf9/FUp7LVaikISToWjm5fFb284ZeSj6pxXs0I4/ZraPjaxf2+xuyEGGeMgrK5bLo
-         LTc2rAIlHhQ6Z8Eo6cg6HKsoGZ7bKEhOEr9OxSpQbFuhj0TFRVsOVYcSgVxb9TV7Jwq6
-         NFNw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7KeFsLzGCqHOmLoq3WaiVqhzSWU0bcZhMSI7GPr+4hM=;
+        b=kiPlOFixsP6261tglxcomRwMECun5vCh3UCI9DA5wkN0ooI8SqUUURqeyQJs2RtI/t
+         r3JwBy678qo4rOFmyog+Os1f8DbELQYZBlBkbCUikbnaAGwxhVs0DodpIxj6ku3mv2lZ
+         d3f+QR/d/AGRfNkjo8ivadBLxcXHn2kiUrsskJfCbCjLmmAsrDLiWYrOl/OyVf+3bP0Y
+         Av833Q9KawSnvsgdSHJk1Fs5iJg05ciW7jeAqAC/rgQKNQVVPY/MHx6SMoHk3UfWAaTm
+         mmA/aRHv31o8VbAR7phtlYCLQ46YEboe+PcDt3SgaNGJEkttwLWgvKTZ+jDzP7zQOCMC
+         4avA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KdNKBm9dCMT5uwH0jJSmOk/S2BVD6poXI4UEU8hMcS4=;
-        b=2lOgiYsZmZkEs+dUMyu3WXaiYJkW/KswC67RpOHytwNuRNRBt24mhVWArTb+I0GEVR
-         vSdOp+Cb7ISXXMShuMN7F6h+l4uu7s9iJylBOYxBpd7fPZm6UujiL/4BXhvfyeXq9hGt
-         5GLuoMnq0vzDsiXvNuLpQ5E2FDXJhYwROiDvN53WeMseg9PZr7ZTpw8rtasM2lwvB/OU
-         GkyLSbhki+FEEHWHGBzbyX/tFRcF4H1MhqYg4bSM3uqtjeKzGAcgeGimLJjV9YqkDY//
-         /WKPZTnNXXNGuso8+CV3aLkOtu4hg9dIdcatXlJhH2q5lHPuyphlPj71pz/qML79FkPU
-         1yZw==
-X-Gm-Message-State: AFqh2kp1BeFDIPSDJEvCQZg+S88xUe+UXJyNtVU7KVPpDJUzhARCIQ5m
-        UmNaS/5arZUrvmJnaCrciy3qxGq0F+qYJ//9
-X-Google-Smtp-Source: AMrXdXunikjcS9s0xgheXf7NKMfZtNWludHny4GcAoKNgTN3yRN01dPUYcB1LKn6hvPPJlC32/KJQQ==
-X-Received: by 2002:a05:600c:5108:b0:3d3:49db:d84 with SMTP id o8-20020a05600c510800b003d349db0d84mr27336962wms.20.1674568235876;
-        Tue, 24 Jan 2023 05:50:35 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7KeFsLzGCqHOmLoq3WaiVqhzSWU0bcZhMSI7GPr+4hM=;
+        b=Kzv5+HsLMRZeiH0Ko7cyQHxHBHoo4pKYqXEKqDY+ilz7OnSJ9/enX4sDYzNtYrHZjG
+         tssxZvGFGFIlwAf183HEv6PzGj8ud41QdlivFJDnsRdTxG3ME1brfm5WXAptinkL1y/e
+         FjQXzd4zo6viwo4Z+EusQOiL/kGp5/6kpShmAxkiOKREaL7waqOy9MEVy1Viy9Tmh1ND
+         JDi5m1sVRTnh8w5PNnmL6rnMbV5yhmXv4wIgMC5Y/cLfsfuH7MpaaLoyg7xhcNWoF1Mh
+         iv9ZRxFS0Xs61rRydahzlE8tgUMUpEFBNo5bVdQ6vuoOEAkcjB7xUlpktgfSVC1CaN9q
+         karw==
+X-Gm-Message-State: AFqh2kqMWMJD9XR8rm7kKqMARiXSe1cZZmXFIJUCIpgNQi4z7bbgvXEG
+        CIk8980GDJwyW2tz0+0vCwMhQg==
+X-Google-Smtp-Source: AMrXdXsDT+iit7s0CkWteKjN4rmdKAwLV0C7kklLnqQ22Hh8uuQwD9YXbjPaSt5L9HD9kP5hLfjByw==
+X-Received: by 2002:a05:600c:1c8b:b0:3d9:f492:f25f with SMTP id k11-20020a05600c1c8b00b003d9f492f25fmr27372163wms.16.1674568237200;
+        Tue, 24 Jan 2023 05:50:37 -0800 (PST)
 Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id j4-20020a05600c42c400b003db1ca20170sm1972507wme.37.2023.01.24.05.50.34
+        by smtp.gmail.com with ESMTPSA id j4-20020a05600c42c400b003db1ca20170sm1972507wme.37.2023.01.24.05.50.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 05:50:35 -0800 (PST)
+        Tue, 24 Jan 2023 05:50:36 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -61,10 +62,12 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
         / MXC ARM ARCHITECTURE)
-Subject: [PATCH 1/3] thermal/drivers/imx: Remove get_trip_temp ops
-Date:   Tue, 24 Jan 2023 14:50:21 +0100
-Message-Id: <20230124135024.366486-1-daniel.lezcano@linaro.org>
+Subject: [PATCH 2/3] thermal/drivers/imx: Use the thermal framework for the trip point
+Date:   Tue, 24 Jan 2023 14:50:22 +0100
+Message-Id: <20230124135024.366486-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230124135024.366486-1-daniel.lezcano@linaro.org>
+References: <20230124135024.366486-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,42 +81,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX thermal sensor uses the generic trip points. The thermal
-framework can return the critical temperature directly.
+The thermal framework provides an API to get the trip related to a
+trip point id. We want to consolidate the generic trip points code,
+thus preventing the different drivers to deal with the trip points
+after they registered them.
 
-Remove the pointless get_trip_temp ops.
+The set_trip_temp ops will be changed regarding the above changes but
+first we need to rework a bit the different implementation in the
+drivers.
+
+The goal is to prevent using the trip id but use a trip point passed
+as parameter which will contain all the needed information.
+
+As we don't have the trip point passed as parameter yet, we get the
+trip point using the generic trip thermal framewrok APIs and use it to
+take exactly the same decisions.
+
+The difference with this change and the previous code is from where we
+get the thermal trip point (which is the same).
+
+No functional change intended.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/imx_thermal.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/thermal/imx_thermal.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index fb0d5cab70af..0d94d4baea33 100644
+index 0d94d4baea33..c115a696e83f 100644
 --- a/drivers/thermal/imx_thermal.c
 +++ b/drivers/thermal/imx_thermal.c
-@@ -332,13 +332,6 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+@@ -332,26 +332,29 @@ static int imx_change_mode(struct thermal_zone_device *tz,
  	return 0;
  }
  
--static int imx_get_crit_temp(struct thermal_zone_device *tz, int *temp)
--{
--	*temp = trips[IMX_TRIP_CRITICAL].temperature;
--
--	return 0;
--}
--
- static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+-static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
++static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip_id,
  			     int temp)
  {
-@@ -406,7 +399,6 @@ static struct thermal_zone_device_ops imx_tz_ops = {
- 	.unbind = imx_unbind,
- 	.get_temp = imx_get_temp,
- 	.change_mode = imx_change_mode,
--	.get_crit_temp = imx_get_crit_temp,
- 	.set_trip_temp = imx_set_trip_temp,
- };
+ 	struct imx_thermal_data *data = tz->devdata;
++	struct thermal_trip trip;
+ 	int ret;
  
+ 	ret = pm_runtime_resume_and_get(data->dev);
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
++	if (ret)
++		return ret;
++
+ 	/* do not allow changing critical threshold */
+-	if (trip == IMX_TRIP_CRITICAL)
++	if (trip.type == THERMAL_TRIP_CRITICAL)
+ 		return -EPERM;
+-
++	
+ 	/* do not allow passive to be set higher than critical */
+ 	if (temp < 0 || temp > trips[IMX_TRIP_CRITICAL].temperature)
+ 		return -EINVAL;
+ 
+-	trips[IMX_TRIP_PASSIVE].temperature = temp;
+-
+ 	imx_set_alarm_temp(data, temp);
+ 
+ 	pm_runtime_put(data->dev);
 -- 
 2.34.1
 
