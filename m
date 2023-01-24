@@ -2,134 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6EC6795DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EA76795DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbjAXK57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        id S233097AbjAXK6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjAXK5z (ORCPT
+        with ESMTP id S232776AbjAXK62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:57:55 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14C67A85;
-        Tue, 24 Jan 2023 02:57:52 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so10612809wmc.1;
-        Tue, 24 Jan 2023 02:57:52 -0800 (PST)
+        Tue, 24 Jan 2023 05:58:28 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93977DA5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:58:27 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id b81so7404697vkf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l+iRy96huUwX2AjRH5KAl7czXmDMKHIrTrxrrNsvynA=;
-        b=aOCwvkEPfoRLVBjW+3cFQRXN4J5/Qll7A+x2Mr5eLvdDV4AV54vgZgH3Dzzzxbzkmc
-         gByGVJAPIUjdRtPzwS/Uv6MyfKjuVD3g61lKXfpp410UBlp+6KUflItzfVb2SMI6JV1P
-         ZucTaDFDAw18NVdOguzmR7GDHKwZvBbqx/u1Nq1MCvj5RhghPpD6Qi71zIP6mzAffUzC
-         LsqDLJp3MQgSCi63aznlgALlRiNdfDAlS+BKmelVyarfM3fi5172Iw+5e3G06hkEEU1I
-         dniQrLsXJRq9+fESsGwjaLOZzzf2264h9NCuGZHFjLdTNIBDXZEIZqq8aw6zjY4f/Hhv
-         a8kQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3AN0CZj1or5oyCoIIviJcOK3a+NvicCbaz4Rv9urqNc=;
+        b=vRhWh+Fgiqu9tk/Q+CB5dp1yislUK717FuGM/E4mxRr8C3/E3466AGjMQtKI1JFN2F
+         dimH1VrYKI1rHnbxvw/Om6ye5e44IRCvRmcv5j11uqLL9mbe1Tk5u1VCUA5+85NfNTO4
+         o8gq65eOigTJbcUzIXu8T0r9GrbLO9xB0piha75W0YAcouWqWLM+dZ/Fdyi3XxfIMmoK
+         m4RNx81MXoCwGvQi4aKSYdslTjQy2HC3Gv3Hm6gVR83ps+9sC1dmtaaj7yMFBHGMRPvf
+         +O+c4h3oJGUUjOCmR6dLLUDogfT5FHQl3PCdqn6ZLBWjp9Or2bDeYQlp5CU/9giOaWYn
+         nstg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l+iRy96huUwX2AjRH5KAl7czXmDMKHIrTrxrrNsvynA=;
-        b=IqZVvHEqr0AWLaNTIkBvfz4PPqn33CEUzUf/uVSST85STpyRBqCYueA0yBfUsyKF5V
-         phWaJGqG2+uZjxAtoj5e/mJWwUXaEBAg7misWi5QXqxXXF89ZatzNAfoJuyU8n4tMcoE
-         CS2xa9aepb/6Lnrh4HIwtN2ZrhKJPBB+UsNt6zr+Aj53tqIgq0Mk7qAI6i3EZi6q+1Ue
-         DH5AjCfZ7N6C2ABjbgHOyE7X4rPNj9t0wn8Hw2GwvKVd4UjmAi5F90g6DDc9w4H2CbTo
-         cpqR3HK5pbDPLthSaEafmZtH/c959WfDec3V3iBJ5O0KV3p+Eyq8qZFyE4JN68EMn2Oy
-         KfTw==
-X-Gm-Message-State: AFqh2kqPHdpvTqhTA5fXaw8OTYmqG2nXlIqPLgcW2vXzmplx+awkkKt4
-        JQjzVHYDScBjkIIOzJMCzFw=
-X-Google-Smtp-Source: AMrXdXu5Lz/MfGUfhZbnIJQqqA72u5WFJMgCe7lhHAOqOSEVdYZdIkX3liGkp8sUr3h/1Z8WciF3Dw==
-X-Received: by 2002:a05:600c:198a:b0:3d9:cb4c:af5a with SMTP id t10-20020a05600c198a00b003d9cb4caf5amr28500368wmq.33.1674557870628;
-        Tue, 24 Jan 2023 02:57:50 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v1-20020a05600c4d8100b003dc175c09c1sm232010wmp.27.2023.01.24.02.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 02:57:50 -0800 (PST)
-Date:   Tue, 24 Jan 2023 13:57:45 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH net-next v2 0/8] Adding Sparx5 IS0 VCAP support
-Message-ID: <Y8+5qSgbSupca1bu@kadam>
-References: <20230124104511.293938-1-steen.hegelund@microchip.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3AN0CZj1or5oyCoIIviJcOK3a+NvicCbaz4Rv9urqNc=;
+        b=wzVh5iGVajdqMisqnEzsXVjWFJbRCI2I1kzyktk/HqvDt1FLC554nTlS9H7uPmVfdj
+         U6r8C0LhAnyyyfMZMhbLssgz075YqL7KQfwz5FVwWzNnBCyA72zGpeWeilyltKtRUbz8
+         c6UXTo/cO4lSkMzFF5AUHSFmSp2gPpM2aWMmIdZEYZxNo7qECuF1oDVV4kv4N1vTI7pe
+         WqWBO19DMV8e1vmigQhltjyR8AQ/tB62xHsR8xAm8Wamk1ycCNOAU2dVBnLbvW8oPl2+
+         /rf9nGPMmIQkS8SPjHJGCceA8hpw9dLAsn79XlfPCs6/MkubWQao2EuQ/U4vJDtaDxDJ
+         Ur8w==
+X-Gm-Message-State: AFqh2koXKhLyjMBJZ7UoHDwNp950xMLALqAuU3ld6cVq/SYqeB48RDut
+        1tuH/9JUKxmU7V2vLwa5k9VAJ3bXDeqvXLU6/uLoYw==
+X-Google-Smtp-Source: AMrXdXtNASeAksMLwvaG7RnZsQaQpwgnqfOR9+W+mZyQmfARh+TUKh5vgCVrtPK90D8OaknMuiu+o7bR+9w4kIs+bag=
+X-Received: by 2002:a1f:5dc1:0:b0:3e1:9fdf:7740 with SMTP id
+ r184-20020a1f5dc1000000b003e19fdf7740mr3558952vkb.20.1674557906633; Tue, 24
+ Jan 2023 02:58:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124104511.293938-1-steen.hegelund@microchip.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230123094907.292995722@linuxfoundation.org>
+In-Reply-To: <20230123094907.292995722@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 24 Jan 2023 16:28:15 +0530
+Message-ID: <CA+G9fYto2Z1UogmgUSWR0cbQjicQL2qi6S+CD=yK=HwBcefWNw@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/51] 5.4.230-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 11:45:03AM +0100, Steen Hegelund wrote:
-> This provides the Ingress Stage 0 (IS0) VCAP (Versatile Content-Aware
-> Processor) support for the Sparx5 platform.
-> 
-> The IS0 VCAP (also known in the datasheet as CLM) is a classifier VCAP that
-> mainly extracts frame information to metadata that follows the frame in the
-> Sparx5 processing flow all the way to the egress port.
-> 
-> The IS0 VCAP has 4 lookups and they are accessible with a TC chain id:
-> 
-> - chain 1000000: IS0 Lookup 0
-> - chain 1100000: IS0 Lookup 1
-> - chain 1200000: IS0 Lookup 2
-> - chain 1300000: IS0 Lookup 3
-> - chain 1400000: IS0 Lookup 4
-> - chain 1500000: IS0 Lookup 5
-> 
-> Each of these lookups have their own port keyset configuration that decides
-> which keys will be used for matching on which traffic type.
-> 
-> The IS0 VCAP has these traffic classifications:
-> 
-> - IPv4 frames
-> - IPv6 frames
-> - Unicast MPLS frames (ethertype = 0x8847)
-> - Multicast MPLS frames (ethertype = 0x8847)
-> - Other frame types than MPLS, IPv4 and IPv6
-> 
-> The IS0 VCAP has an action that allows setting the value of a PAG (Policy
-> Association Group) key field in the frame metadata, and this can be used
-> for matching in an IS2 VCAP rule.
-> 
-> This allow rules in the IS0 VCAP to be linked to rules in the IS2 VCAP.
-> 
-> The linking is exposed by using the TC "goto chain" action with an offset
-> from the IS2 chain ids.
-> 
-> As an example a "goto chain 8000001" will use a PAG value of 1 to chain to
-> a rule in IS2 Lookup 0.
-> 
-> Version History:
-> ================
-> v2      Added corrections suggested by Dan Carpenter.
+On Mon, 23 Jan 2023 at 15:22, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.230 release.
+> There are 51 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.230-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks!
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-regards,
-dan carpenter
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.4.230-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: c4ab8d7671d5c73e2b9882577257409b6364ba7a
+* git describe: v5.4.228-675-gc4ab8d7671d5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+28-675-gc4ab8d7671d5
+
+## Test Regressions (compared to v5.4.228-623-g11f7238df0b4)
+
+## Metric Regressions (compared to v5.4.228-623-g11f7238df0b4)
+
+## Test Fixes (compared to v5.4.228-623-g11f7238df0b4)
+
+## Metric Fixes (compared to v5.4.228-623-g11f7238df0b4)
+
+## Test result summary
+total: 131200, pass: 103770, fail: 3090, skip: 23968, xfail: 372
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 150 total, 149 passed, 1 failed
+* arm64: 48 total, 44 passed, 4 failed
+* i386: 28 total, 22 passed, 6 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 16 total, 13 passed, 3 failed
+* s390: 8 total, 8 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 41 total, 39 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
