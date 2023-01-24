@@ -2,159 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1018B67A041
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CF467A047
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbjAXRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S234012AbjAXRgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbjAXRfN (ORCPT
+        with ESMTP id S232166AbjAXRgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:35:13 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9DB10AB0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674581712; x=1706117712;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7r5ZpnZ5uUluW9VPhXKSqRskXeDpgnhQA3hkFO3z6Ms=;
-  b=hNtSxji507W/RpFmjwVewzygyTktwSI+QNyCTPDi+xsKwJQMc+lcR6dF
-   y5Fs2YA+27W2S6GXqJYAwNU6nxyHS2a7MJlrdyW2RSSZTxJ8JTQcOqKCo
-   IodXI8H9YiVDAJbpbjAk1UbpF6sh+Nabj6uK7gIQ/6Hr/H6HnkxTja2AH
-   BtUqbi6zXwDrJZHPRkQjpEw5yS7uLVaKD7/ULvNcYinr6pwz7refKyGbR
-   zxEpnYrCowl71gt0yd/zoUY1g8IR+QXud54UbM2NFOD4YFTiDIwR3yNd8
-   g6zCTAmUfIPm7j//J0kQibT59yHPqvlV/7JZANtg17rwgu4MQ/bVTHiB1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="412587009"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="412587009"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 09:35:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="730758636"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="730758636"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Jan 2023 09:35:10 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKNCP-0006f9-2P;
-        Tue, 24 Jan 2023 17:35:09 +0000
-Date:   Wed, 25 Jan 2023 01:34:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 42020f3dda80d4d199cffc2618310be5d131ce47
-Message-ID: <63d016ac.krXUTMHWrx6b/wUx%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 24 Jan 2023 12:36:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335FC4B776;
+        Tue, 24 Jan 2023 09:36:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=P0UVVZ/T20C+FbphTkl6yWazQ/wHn2ipLQ/Uu2/aGjU=; b=V+zU+rnXkFyARYvB30wRXlaD6k
+        mjgxQYZl8jahXZn+6uSXGFzw8fnxRpQj0BEJxlkV9cT2ZKoGDto+BUZ6AR5i9K5ZYe99rbDkUjAT1
+        SmU3PX7YsUwgTbTVmT/eYAKB+X/hsz3lkZTZf9zng+l1DnZPj+04exZcgb3wZNPodkiTplhsV2dSE
+        DIDtDHcNA8U0ULPUdvwyjldirdcsOtKjxc1bcaccaFgfsZry45/p1INOBK9wNYkmwMOUFtHU6ojHS
+        N4Ti1nsN5vCvl+RpQzeejCCOHDNmo2ksidkalhwCYUYnAHxDDEnubT3dXjXppKuV9tglte4xzK1Gd
+        G1UaJWpw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKNDH-004qKN-J9; Tue, 24 Jan 2023 17:36:03 +0000
+Date:   Tue, 24 Jan 2023 09:36:03 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Diederik de Haas <didi.debian@cknow.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
+        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH] module.h: Fix full name of the GPL
+Message-ID: <Y9AXA/d+7wK5U5YA@bombadil.infradead.org>
+References: <20230122193443.60267-1-didi.debian@cknow.org>
+ <Y89HHtQQ4/pvsOut@debian.me>
+ <3145585.5fSG56mABF@bagend>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <3145585.5fSG56mABF@bagend>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 42020f3dda80d4d199cffc2618310be5d131ce47  tools/nolibc: Add gitignore to avoid git complaints about sysroot
+On Tue, Jan 24, 2023 at 02:32:26PM +0100, Diederik de Haas wrote:
+> On Tuesday, 24 January 2023 03:49:02 CET Bagas Sanjaya wrote:
+> > On Sun, Jan 22, 2023 at 08:34:43PM +0100, Diederik de Haas wrote:
+> > > Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+> >=20
+> > No patch description, really?
+>=20
 
-elapsed time: 722m
+<some odd rationale to describe why your commit log is empty>
 
-configs tested: 77
-configs skipped: 4
+> So I could've added "The full name of the GPL is not GNU Public License, =
+but=20
+> GNU *General* Public License." to/as the explanation body, but I didn't=
+=20
+> consider that to provide extra (needed) info which wasn't clear from the=
+=20
+> Subject and diff.
+>=20
+> My only previous patch submission (to the linux kernel) did contain a ful=
+l=20
+> explanation body: 7074b39d83f5d71fa4f0521b28bd4fb3a22152c1
+>=20
+> *) I made a clusterfsck of similar patch submissions where I replaced "GN=
+U=20
+> Public License" with "GNU General Public License", and got the exact same=
+=20
+> comment from Bagas to several of them.
+> I've (now) retracted all of those patches, except this one. In those othe=
+r=20
+> ones, I later realized I would actually be changing the license, not mere=
+ly=20
+> fixing a spelling error.
+> See https://lore.kernel.org/lkml/2281101.Yu7Ql3qPJb@prancing-pony/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+We use SPDX for precise langauges for the license used. Patches like
+these and the one you just sent are otherwise not adding more.
 
-gcc tested configs:
-x86_64                            allnoconfig
-arc                                 defconfig
-um                             i386_defconfig
-s390                             allmodconfig
-um                           x86_64_defconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-arc                  randconfig-r043-20230123
-i386                                defconfig
-arm                  randconfig-r046-20230123
-x86_64                              defconfig
-x86_64                               rhel-8.3
-arm                                 defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-x86_64                           rhel-8.3-syz
-sh                               allmodconfig
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a005-20230123
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-kvm
-arm                              allyesconfig
-x86_64               randconfig-a001-20230123
-m68k                             allyesconfig
-x86_64               randconfig-a006-20230123
-m68k                             allmodconfig
-x86_64                           rhel-8.3-bpf
-arc                              allyesconfig
-x86_64               randconfig-a004-20230123
-arm64                            allyesconfig
-i386                             allyesconfig
-x86_64               randconfig-a003-20230123
-alpha                            allyesconfig
-i386                 randconfig-a004-20230123
-i386                 randconfig-a003-20230123
-i386                 randconfig-a002-20230123
-i386                 randconfig-a001-20230123
-i386                 randconfig-a005-20230123
-i386                 randconfig-a006-20230123
-ia64                             allmodconfig
-m68k                        m5407c3_defconfig
-arm                             rpc_defconfig
-s390                          debug_defconfig
-arc                    vdk_hs38_smp_defconfig
-openrisc                       virt_defconfig
-i386                 randconfig-c001-20230123
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
+> AFAICT, for this patch I'm not changing the actual license, only referenc=
+es to=20
+> that license, so that can still be considered spelling fixes.
+> That's why I haven't requested to ignore this patch (too).
 
-clang tested configs:
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a012-20230123
-hexagon              randconfig-r041-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a015-20230123
-hexagon              randconfig-r045-20230123
-x86_64               randconfig-a014-20230123
-s390                 randconfig-r044-20230123
-riscv                randconfig-r042-20230123
-i386                 randconfig-a012-20230123
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a013-20230123
-i386                 randconfig-a015-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-i386                 randconfig-a016-20230123
-mips                          rb532_defconfig
-arm                            qcom_defconfig
-x86_64               randconfig-k001-20230123
+The only reference we care for is the SPDX one and that work is already don=
+e.
+As such minor fixes in spelling like yours won't do any good but just
+noise at this point. That's exactly why SPDX license tags were
+embraced, to make this simple and let us move on with life while having
+one simple codified reference to the license so we don't need to deal
+with redundant patches fixing grammar on license many times.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+As such this changes is not needed.
+
+  Luis
