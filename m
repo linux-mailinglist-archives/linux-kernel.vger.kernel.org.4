@@ -2,120 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39483679AF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223CA679AAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbjAXOBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S234346AbjAXNyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 08:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234488AbjAXOBf (ORCPT
+        with ESMTP id S234664AbjAXNy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:01:35 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C4DE470B5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:01:14 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 142C04B3;
-        Tue, 24 Jan 2023 05:51:31 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A732A3F71E;
-        Tue, 24 Jan 2023 05:50:47 -0800 (PST)
-Date:   Tue, 24 Jan 2023 13:50:45 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        kernel test robot <lkp@intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH -next] cacheinfo: Correctly handle new
- acpi_get_cache_info() prototype
-Message-ID: <20230124135045.ntl2nhf2oehdc7mu@bogus>
-References: <20230124123450.321852-1-pierre.gondois@arm.com>
- <Y8/dmlR7p5rIbRLF@wendy>
+        Tue, 24 Jan 2023 08:54:27 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8954A207
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:52:24 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 59D7F1EC0622;
+        Tue, 24 Jan 2023 14:51:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674568295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=/pJZBw8CRojdPq618JMkjSIeI3qg1shOl5uYNyFA14I=;
+        b=Hyk4GkiAh+TJ+n03P9B9VcolXL9wmrHehJSqlnpISZvqS2MKukFFvRob1sRz3a85lNNYXz
+        DZaoPUK5dIutokMizzrB1pNhBdgXV8Yx7TmTY71fiFkVkYJLRiMvI2Tki3eqxNEmZuxbvJ
+        kvq9L4hPqGXvJIhlNhIj3Ih/8me4IKU=
+Date:   Tue, 24 Jan 2023 14:51:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michael Sterritt <sterritt@google.com>
+Subject: Re: [PATCH v12 2/3] x86/sev: Change snp_guest_issue_request's fw_err
+Message-ID: <Y8/iYyGHiPow20NX@zn.tnic>
+References: <20230120214857.835931-1-dionnaglaze@google.com>
+ <20230120214857.835931-3-dionnaglaze@google.com>
+ <Y87s95WNc0QLZ7fn@zn.tnic>
+ <CAAH4kHai7oebzWvkKXOU5UatuqF=CiWN32r9bM3Scxnx4P9nhw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y8/dmlR7p5rIbRLF@wendy>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAH4kHai7oebzWvkKXOU5UatuqF=CiWN32r9bM3Scxnx4P9nhw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 01:31:06PM +0000, Conor Dooley wrote:
-> Hey!
+On Mon, Jan 23, 2023 at 01:22:07PM -0800, Dionna Amalie Glaze wrote:
+> This isn't the primary problem that needs fixing, although it is part
+> of it.
+
+I'm replying to the 2/3 patch which is addressing this part.
+
+> The problem is that the host can provide a throttling error and
+> the guest will need to continue trying the exact same request or else
+> end up locking themself out of the vmpck due to the IV reuse patch
+> Peter sent.
 > 
-> On Tue, Jan 24, 2023 at 01:34:46PM +0100, Pierre Gondois wrote:
-> > commit bd500361a937 ("ACPI: PPTT: Update acpi_find_last_cache_level()
-> > to acpi_get_cache_info()")
-> > updates the function acpi_get_cache_info().
-> > 
-> > If CONFIG_ACPI_PPTT is not defined, acpi_get_cache_info() doesn't
-> > update its *levels and *split_levels parameters and returns 0.
-> > This can lead to a faulty behaviour.
-> > 
-> > Make acpi_get_cache_info() return an error code if CONFIG_ACPI_PPTT
-> > is not defined. Initialize levels and split_levels before passing
-> > their address to acpi_get_cache_info().
-> > 
-> > Also, in init_cache_level():
-> 
-> Hmm...
-> 
-> > - commit e75d18cecbb3 ("arm64: cacheinfo: Fix incorrect
-> >   assignment of signed error value to unsigned fw_level")
-> >   checks the fw_level value in init_cache_level() in case
-> >   the value is negative. Remove this check as the error code
-> >   is not returned through fw_level anymore.
-> > - if no PPTT is present or CONFIG_ACPI_PPTT is not defined,
-> >   it is still possible to use the cache information from clidr_el1.
-> >   Instead of aborting if acpi_get_cache_info() returns an error
-> >   code, just continue.
-> 
-> To be honest, these feel like entirely separate things that should be
-> in different patches. You've got:
-> - Dan's smatch fixes
-> - a redundant check being removed
-> - a behaviour change for if acpi_get_cache_info() returns an error
->
+> I think Sean's request to keep throttling a host problem in user space
 
-I am not too fussy about it, but for sure it would be cleaner for sure.
++ Sean.
 
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> How about Link: to the LKP/Dan's report?
-> Link: https://lore.kernel.org/all/Y86iruJPuwNN7rZw@kili/
->
-> I did a quick check but didn't don't see the LKP report...
->
+> is not the right one in this case. That would avoid scheduling the
+> whole vCPU, but the guest code I'm proposing can do other useful work
+> while waiting. There will be no other code that depends on that
+> particular control flow.
 
-Yes, LKP dropped all the cc when reported, even I saw after merging the
-changes. I think this is the one:
+I know there's another issue but my angle is this:
 
-https://lore.kernel.org/all/202301052307.JYt1GWaJ-lkp@intel.com/
+You have a patch with Fixes tags and they all are fixing some shortcomings. Now,
+those are good candidates for stable.
 
-> Also a Fixes: tag too, no?
->
+In order to be backportable to stable, those fixes should be as minimal as
+possible so that a stable backport does not turn into a nightmare. By the looks
+of it, your patches could be simplified to the bare minimum fixes. Cleanups and
+improvements can go ontop.
 
-+1, if you split make sure you tag fixes to the right one(mainly one
-that changes return from acpi_get_cache_info())
+That is, provided we want them in stable and by the looks of it, we probably do.
 
-> Thanks,
-> Conor.
+Which then means, you could do the minimal fixes first and then the cleanups
+ontop.
 
+Then, please try to structure your commit messages in a format close to:
 
+Problem is A.
+
+It happens because of B.
+
+Fix it by doing C.
+
+(Potentially do D).
+
+I'm having hard time parsing
+
+https://lore.kernel.org/all/20230120214857.835931-4-dionnaglaze@google.com/
+
+Only in the second paragraph it is talking about what the problem is. And by the
+looks of it, if the host throttles, then the guest should not return from that
+request.
+
+And adding module params for this are most of the time the wrong solution
+because then people would have to *know* how to use them.
+
+And before we add module params, the kernel should try to solve this without any
+user interaction, if possible.
+
+But I'm not 100% clear on what exactly we're fixing here so let's start first,
+please, with a proper description of what the exact issue is and how it happens.
+
+Thx.
 
 -- 
-Regards,
-Sudeep
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
