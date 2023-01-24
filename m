@@ -2,188 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D374A679EFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F881679EFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbjAXQlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S234388AbjAXQlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbjAXQlM (ORCPT
+        with ESMTP id S234494AbjAXQlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:41:12 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BB04B757
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:41:03 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id a184so11579439pfa.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:41:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uIiZYluQMdBDmvpbXKh0chNKaPyLFMc0XwqCd43cT0I=;
-        b=DIuOlcj9s/pDf00YmHwnX8M7Y2o5EMrXd/jlt1Vt+FMdUFDabkK0hrXtX/ZzfOcJy8
-         ym2hZeaGkXkeYF7dYYllyUEj72Zqj32i1v6nnSNJfXiOqWa1Nq4xdNomZ9gYUUATZ4iQ
-         FVH4XPqslJFTfysp5THa7KZbZCsH+HJQNZUWs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uIiZYluQMdBDmvpbXKh0chNKaPyLFMc0XwqCd43cT0I=;
-        b=a97MP/g5yPxktQeSI36Ht6VXAX7tGFgws/qmbU3mhM6tQjvJiizA+VaD0F6kHGdjj6
-         JfezGVfyna90caZN7LVNMmdXwIpMkE1JtZeUowU0pYv0RgKMv2o/sDHMHov0pNgoUTlI
-         ZVzczSIUJMoTt0UpxTE/LqUYIOPtbnwZiICrTYqVRnp3HmjugLnScVkcWYsTyGthuPzY
-         UIgYzMCdi5+R/aKbvrsNR1H0n/TbxaHK244qgx7syGOJus4mxT3zdFYJGWC6NrrNGjL0
-         YWAOnoCcUqN7UUtBJ6BUMJKVv/rS4xdyzKM9to/N8vSdySzG4NY9y2eHYmi5K1lB2naW
-         exow==
-X-Gm-Message-State: AFqh2koHAvcNargQ41pERcwAAMrJ+zx2irKhChbv4mwjSbmjfFDJhdFf
-        Ks+u4vraSotVdlS+A8AKrwKduWh1NxwbMO0DY9gaJg==
-X-Google-Smtp-Source: AMrXdXvTyPGL75HlaoYc5Lf+J9LBjWQMwYDmGpcL5hpMuAd++iyD6imIWLpbSwW6Pf3xh73dmzsTTMRBdw2p/tPIb5Q=
-X-Received: by 2002:a62:e317:0:b0:588:cb81:9221 with SMTP id
- g23-20020a62e317000000b00588cb819221mr3337801pfh.69.1674578462877; Tue, 24
- Jan 2023 08:41:02 -0800 (PST)
+        Tue, 24 Jan 2023 11:41:09 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2122.outbound.protection.outlook.com [40.107.241.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59F249020
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:41:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LMm4Dl4UVIHfu+iZhufNxmzDeBcUGIf0GsWQyq2jdtpW/Ln2Gt2f6H6tImkF4egJh9w256jpFeWmt3GfNpM1LYorz+3xQk68mxDXP5LzXsWjjFHYd7bHPc9GNSg2SZXvuaJI72RjJiopPR9nassUbX/IRveJpdCVVLuUzKyD5XHtlnhg/UUFq+/OhwihPMz0Q4UFjYlpOLZF46HM1Dny9YX6BoFOcW3uAzcJxgIDT+almE3Wur+vsWr11GrDiLmyxdf7+nCVOqvGH/b2KR4TVk+JNjGxA58DfM6lTXy3fR2SzJdpADK4/+jPsSj7oDDfgIzBBUStQxF185mjU4jlwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PGGzLFLmfnBZaHGdccMyfAmnrSmSHgOf2zOPUT8XUpY=;
+ b=hgCtvsgqvFb5Nz/9Z1lpByYsx6GzhQHRymykOCgHhfl5fXa7d5m+Rx3OkcqDOqVty5RMEbLWbaT5JY1ePaVpuHmRUcUggShnr8MAPCb5wLAJH5lAEcCbKF+buxp6YEKiwJQ/rqh+XAWe4GZr6dTHa3LnPyHtCEbG4nLcUTBL40V/nNUKRr3uemtKhgRLa+RUFtIQW6PSYIuB3YKHD/2KuzyDUW3s8pzXDVbx0sDYsMmJvt7OQCV6KHLbtkTiGsBXtoQC+iHMF7diihGYzDpNEVB++9SvzhbRXxnrwbB8FxHwvMliLv7jood/2rB1Vp2vLP+FZBnlhtbMTPmMo0FK1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
+ header.d=mt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PGGzLFLmfnBZaHGdccMyfAmnrSmSHgOf2zOPUT8XUpY=;
+ b=RV/ZVv9Kb6UknLqjQKOZxl1YTgsgZrcnqOnjRC8AcPp6THzV/rvm9F8hk5DZac+123KboOtOxQx50URjT93NXEcX4cFNTZQSDx1ABEr+94LuPHLSnhv7zqo/t+kI+J7vTnJGg/wsnYEBauyfF3e1jOEGViMIKQ88dgtwK79DuU6jBEqG42fBWobcLSoXWxBFPWqysObXCB21X9ONOwwKBqVdFRxzFFJ1nQTMfxOsaodU6qB+uL0Uy/LHMwAcyKDP+wM5sV9HsqOJTUSub+ZoDka+aVmuN48qXFU1Hbd7sSMXlPsXqrn6cbkQ5PADqAW6kehOqt2dPQJlWoff96HT9A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mt.com;
+Received: from AS8PR03MB7621.eurprd03.prod.outlook.com (2603:10a6:20b:345::20)
+ by PAVPR03MB9848.eurprd03.prod.outlook.com (2603:10a6:102:31c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 16:40:58 +0000
+Received: from AS8PR03MB7621.eurprd03.prod.outlook.com
+ ([fe80::b42f:82f8:24cb:a225]) by AS8PR03MB7621.eurprd03.prod.outlook.com
+ ([fe80::b42f:82f8:24cb:a225%5]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 16:40:58 +0000
+Date:   Tue, 24 Jan 2023 17:40:56 +0100
+From:   Manuel Traut <manuel.traut@mt.com>
+To:     linux-kernel@vger.kernel.org
+Subject: [PATCH 2/5 v7] input: pwm-beeper: add feature to set volume via sysfs
+Message-ID: <Y9AKGLELrPEnw1jd@mt.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-ClientProxiedBy: FR0P281CA0104.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a9::15) To AS8PR03MB7621.eurprd03.prod.outlook.com
+ (2603:10a6:20b:345::20)
 MIME-Version: 1.0
-References: <20230124145127.189221-1-ivecera@redhat.com>
-In-Reply-To: <20230124145127.189221-1-ivecera@redhat.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 24 Jan 2023 22:10:51 +0530
-Message-ID: <CALs4sv2JF+xksLCFmBefWp7hu2+Mq_pcSO-dDjQrO+9cvD4upQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] docs: networking: Fix bridge documentation URL
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000740b4a05f3052e38"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR03MB7621:EE_|PAVPR03MB9848:EE_
+X-MS-Office365-Filtering-Correlation-Id: 52c29732-d1ed-420a-0e23-08dafe29c556
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Set//yFatKlcQRM7AkteKHBS6uuptFZhILhlAtc3WC2dxrlnc29F8+KA+4vZftPWPmFKXsT9dBNZ0QDeKMWHsvSOK4fEzDMwShd/Ccl4nTNSdfxA7A4w78bc3Ek0HepuKdQn2Q3/HwFm18XMVpchTSPs+blOdwO6qeClxjZ6uE7Yk0n3CKueGPJTuuUkem1d9m73dzotkt7YTamhL//xsvwMboSwpM07HERHG16n0c3yHQvZjrAr8yzz7O4UZOf4DQYOhpb7dt8eoEhNIefbl67TAxMMAI9sTms74/rvZrvSGv7/Wzk4e1DfWCAkbsgCtnFW9SCwERgtiSQjSRMTPwYWxDuLBF6VVbCXxjIrYXp2mzO/oIEBBa5xseOUi2KD9JWA1kNkLOk/tBtnlFaz6BlqcbpxuusfPEjVvmyQgZQbnl4V80AnVzYODK1r53RLz/+JG+MQxL3ypaiYD8xJxBhBUJVN3sVPxBPMcPhMWl8sopM8YkMVY+TcVQDjdOnlS4tfpLHb1cZS+hRaIoMzETvol5ryzj+3SXfdlnwEw09R3xREOJJofRZGm8p6LDCqNEOqyXZkV+GHX/C6GfATjqalfRP7uSnSbWZU+Kv2SINBsHY48cqrrUV7PpAlqzFCUJRH9hw03FpXB8ze8CQ5isHPgT6zTVElisqraLo68K7J1rRn0by9KuRoWSS1Qdr1pkiFWBXFraDmbtgwKmHKLw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB7621.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(376002)(136003)(346002)(39860400002)(451199015)(38350700002)(38100700002)(83380400001)(41300700001)(86362001)(44832011)(2906002)(8936002)(5660300002)(316002)(6916009)(26005)(6512007)(6506007)(8676002)(186003)(66476007)(66556008)(2616005)(478600001)(52116002)(6486002)(66946007)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmRPTTE2WUdjQVlWcmQ5dVh1OUQrdnhNNmFTSFF5MFNSN2xlNysvWmVobE9j?=
+ =?utf-8?B?S0lxcTI5cnpCOERRYkdvZnJoZlFxZDRFL3QrMUpXbEtoR0p1S3ZPb2luNU9w?=
+ =?utf-8?B?Vk5tcGl3aDdIUHBWYjBSN2hDcDN1VzgwbTFCeGd5d0F4cGp0ZlBvRE9idUxC?=
+ =?utf-8?B?U0ViU0JTMENyZ2RwemtVMS9tcnVSREdBM01KUkNKdlowY1p5TXFqend1SmM2?=
+ =?utf-8?B?eHFFSjAxMmNSSW82Mkh4YktZNlJOTDcwZkNtSThMMFBoZGRwVWdDNlZRa2JF?=
+ =?utf-8?B?Z0tYVk1INDFGcVBHaUxhdyt1R29WdmV3UHQ0djdmaXhaMmc0SFF4aVFVeXRY?=
+ =?utf-8?B?Y254Q2c3bXBuR2RWbUt4NU5mSkw2WFVmN2FhWEtOcDBDVDlvY1cxNnNFMHF6?=
+ =?utf-8?B?QjJLanBLS2xOSjZySXRJYXllN2lDUUFZUERTc1FGcmUyR1k4aE1DLzh2d2VI?=
+ =?utf-8?B?TTVpYVp1a1lkbUk1enU1SlRTK3o2Q0JPU0ZwMFhLSmVRalJrZnhmeFJEVTN4?=
+ =?utf-8?B?Z200Mys4Q0diWjBvaE5tczh4aHcvUGgzVEhOK2lSWXJOeWZPTVo2cHRqUXor?=
+ =?utf-8?B?aWQ0S3lQV2ZZOWxuMDJ4TUlvL1RtUU5MSmgwcU9OTlJrWVN5YUJSZzNzYmZQ?=
+ =?utf-8?B?MWJWb2llKzFid2p4K2F4VTdOWEV0UmhXUXVJWktvU2lJUlNNeW1RTVlWelRu?=
+ =?utf-8?B?dnhtMWZJenFzUDExUy8xVHFnOGVDWmQ2KzMvM01EaEV3OHZURkpUOFNWWTg2?=
+ =?utf-8?B?K1lQRCtnMlVhMzBSekI2anF1YjFFUFM5c3kvYTBuMWFSWFA1RHY5QU16NXNT?=
+ =?utf-8?B?ODljanVqK3R0YlVqZ0VVUWpJSjhJekl5NlpLRDM0dXo4UjNNSnBjT1oxQmd1?=
+ =?utf-8?B?Q0JZRG1QV01DZVEwbG1pdnlmOVdWV3ZKZStTMEZLNjl4K1VpcG1vYkc5b2sz?=
+ =?utf-8?B?cTVocG1sNnlXSGIxQVJkZDNLWWFvM2hxK0YwLzl6dWJmdkUvNVUzNG8vMTJx?=
+ =?utf-8?B?QWpUUzhjdWpmYzlnVWQ3czgvSnNNSUpYZDhkY3M2L0VkQzdXWERYL3pmaWkw?=
+ =?utf-8?B?ZXVtNE0zclNQbGJnaHRFYllHYzdySjZXUUQySFJqWjRqdW5ZTUVlSTk3NUhQ?=
+ =?utf-8?B?UHJQcEtFL29pZmZSSEFFLzVobGJ0REpueW45ckQ3OWI2aU9VUDJ1UEVwYnlk?=
+ =?utf-8?B?dERocmx4SCtNRXVBUFBBa1c2MDZIRXhId2Y0MUx1NVNsQ2R5UHBMRE9WTHZE?=
+ =?utf-8?B?eWl3RWY4Mzg0M1I4a1ZyTzBjeEMzUDVvaCtKN2Exc2R4czJ1TldaYW5URnJs?=
+ =?utf-8?B?UC9CVjBYWmxGZ3owT2M5REM0UWtOSEhQZHVwek9QSytEaUhHSWcvTHljaW9w?=
+ =?utf-8?B?dEhZN3lrZmNHUlVtaDVRVExyUlpRTEExdU1GSFp0RmRNZnhUSldETUpGUTVN?=
+ =?utf-8?B?RHhMakJjYmkrUEFXYkZSb3ZUeXh4T0ZMZERRNFVDb1ladm1Wd1Q4M09QbkUz?=
+ =?utf-8?B?RHRQUXYySGhHUXNGQ1JKbklBRWlSWHJKZkRZL016UVorRkJaTDQ2N2hoZytK?=
+ =?utf-8?B?amhwS0hKRnVrc2szNnJQZERLYzltU1hvQTJPUk5ob2JYRHZEWW9RR0sxN0R4?=
+ =?utf-8?B?QTdwbTR5dVlYbU1oNmZBNStsdjJZeGNxMDhCeGE4cXh4MGZ3R1g3M3B3NnlC?=
+ =?utf-8?B?YUEwQytzS2pHZUJlN2dXRGZMQnVxTkhXaFB6TC9ScTdFeVduUndYRDh2NStE?=
+ =?utf-8?B?WVB5d2lLUzRvUk5uSW10VVY0M2UyZmc1Rk02aU9qVW10czJjdXc3cnVOTXdT?=
+ =?utf-8?B?ZHZmSjZaeHpsa0duTzVkbjNqUzBsVS90RkU1RGRIMWhBNk5zb1gwWFVQZkRM?=
+ =?utf-8?B?U1ZTczcvTXJtMXZEQVZCRk1MNlh2SFBHelhSQ082VzdRZXVpbUNrbkVLNEd2?=
+ =?utf-8?B?M0N2eWptMUNNMnRzYzlwU2JqQWJuWFg1S0MvVi9JamtXUnArRXg3d0dLTlQx?=
+ =?utf-8?B?Z0tFVVo2bWJHdGg5bzl4UFpub3pXSGZ4S1NDVnljY0Z4emVvOStOOTNSYndv?=
+ =?utf-8?B?ZHJyNVYxRXpMa3RtVTlMQjA5UTJ0L1gxR05wc3lPODNCM2R5YU54dStsUTJj?=
+ =?utf-8?Q?4yqzx6NxqiCcJ8Id+crG4uXrP?=
+X-OriginatorOrg: mt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52c29732-d1ed-420a-0e23-08dafe29c556
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB7621.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 16:40:58.4993
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cX/88pO4yUnSUtVTBjJspqTZmq0XN0RULndfJ70ABazVBtpCeDZ+y/o713jz+voKXC3H+rY44D2SNSIzFfEeIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR03MB9848
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000740b4a05f3052e38
-Content-Type: text/plain; charset="UTF-8"
+Make the driver accept switching volume levels via sysfs.
+This can be helpful if the beep/bell sound intensity needs
+to be adapted to the environment of the device.
 
-On Tue, Jan 24, 2023 at 8:22 PM Ivan Vecera <ivecera@redhat.com> wrote:
->
-> Current documentation URL [1] is no longer valid.
->
-> [1] https://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
->
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> ---
->  Documentation/networking/bridge.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/networking/bridge.rst b/Documentation/networking/bridge.rst
-> index 4aef9cddde2f..c859f3c1636e 100644
-> --- a/Documentation/networking/bridge.rst
-> +++ b/Documentation/networking/bridge.rst
-> @@ -8,7 +8,7 @@ In order to use the Ethernet bridging functionality, you'll need the
->  userspace tools.
->
->  Documentation for Linux bridging is on:
-> -   http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
-> +   https://wiki.linuxfoundation.org/networking/bridge
+The volume adjustment is done by changing the duty cycle of
+the pwm signal.
 
-Maybe there is a reason I don't know why this patch is for net-next and not net.
-Change looks good to me.
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+This patch adds the sysfs interface with 5 default volume
+levels (0 - mute, 4 - max. volume).
 
->
->  The bridge-utilities are maintained at:
->     git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git
-> --
-> 2.38.2
->
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Signed-off-by: Manuel Traut <manuel.traut@mt.com>
+Tested-by: Manuel Traut <manuel.traut@mt.com>
+---
+ .../ABI/testing/sysfs-devices-pwm-beeper      | 17 ++++
+ drivers/input/misc/pwm-beeper.c               | 84 ++++++++++++++++++-
+ 2 files changed, 100 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-pwm-beeper
 
---000000000000740b4a05f3052e38
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIL+wyJdfArN9ZUTnjoBxxIG3KseI1oE7
-xQWEZOg+F/R3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDEy
-NDE2NDEwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAgtmhpBrRXO/6EQcw6jUwUwgRLdspCf7ZANMOhMYWlMwpx8375
-CpLKaFSs6ut0Uv0WW9rS4P7uQ/PMY5+NiZfmsCV2xELzKBpT7nFOdZwy1liUVyz1S7LpPPMv9i6k
-AReQ8oLi3CmHm8sJvTjuUvFP/6jD3BBEfGhhrKNHp9tT7zB9KmXX2+d3xuM+tsdJLLWwHS9Hu80i
-YYY0hSQ+cs/lO3SBBbjX1ikjqi1APxxLwOoSi6TS/o2yxq8OmSiTzZcvFqkWB2yL+3f1oeEvp8Qi
-bfUFnt/MPY7s7Sxh0D3A66BCkGGH1VOeKwQRHsFTiX3LD0xdMvlqlRVd+BFj5lQ2
---000000000000740b4a05f3052e38--
+diff --git a/Documentation/ABI/testing/sysfs-devices-pwm-beeper b/Documentation/ABI/testing/sysfs-devices-pwm-beeper
+new file mode 100644
+index 000000000000..8424b6776ca9
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-devices-pwm-beeper
+@@ -0,0 +1,17 @@
++What:		/sys/devices/.../pwm-beeper/volume
++Date:		February 2017
++KernelVersion:
++Contact:	Frieder Schrempf <frieder.schrempf@kontron.de>
++Description:
++		Control the volume of this pwm-beeper. Values
++		are between 0 and max_volume. This file will also
++		show the current volume level stored in the driver.
++
++What:		/sys/devices/.../pwm-beeper/max_volume
++Date:		February 2017
++KernelVersion:
++Contact:	Frieder Schrempf <frieder.schrempf@kontron.de>
++Description:
++		This file shows the maximum volume level that can be
++		assigned to volume.
++
+diff --git a/drivers/input/misc/pwm-beeper.c b/drivers/input/misc/pwm-beeper.c
+index d6b12477748a..fb7b377fee6a 100644
+--- a/drivers/input/misc/pwm-beeper.c
++++ b/drivers/input/misc/pwm-beeper.c
+@@ -1,9 +1,14 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+  *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
++ *
++ *  Copyright (C) 2016, Frieder Schrempf <frieder.schrempf@kontron.de>
++ *  (volume support)
++ *
+  *  PWM beeper driver
+  */
+ 
++#include <linux/device.h>
+ #include <linux/input.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/module.h>
+@@ -24,10 +29,61 @@ struct pwm_beeper {
+ 	unsigned int bell_frequency;
+ 	bool suspended;
+ 	bool amplifier_on;
++	unsigned int volume;
++	unsigned int *volume_levels;
++	unsigned int max_volume;
+ };
+ 
+ #define HZ_TO_NANOSECONDS(x) (1000000000UL/(x))
+ 
++static ssize_t volume_show(struct device *dev,
++		struct device_attribute *attr, char *buf)
++{
++	struct pwm_beeper *beeper = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%d\n", beeper->volume);
++}
++
++static ssize_t max_volume_show(struct device *dev,
++		struct device_attribute *attr, char *buf)
++{
++	struct pwm_beeper *beeper = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%d\n", beeper->max_volume);
++}
++
++static ssize_t volume_store(struct device *dev,
++		struct device_attribute *attr, const char *buf, size_t count)
++{
++	int rc;
++	struct pwm_beeper *beeper = dev_get_drvdata(dev);
++	unsigned int volume;
++
++	rc = kstrtouint(buf, 0, &volume);
++	if (rc)
++		return rc;
++
++	if (volume > beeper->max_volume)
++		return -EINVAL;
++	pr_debug("set volume to %u\n", volume);
++	beeper->volume = volume;
++
++	return count;
++}
++
++static DEVICE_ATTR_RW(volume);
++static DEVICE_ATTR_RO(max_volume);
++
++static struct attribute *pwm_beeper_attributes[] = {
++	&dev_attr_volume.attr,
++	&dev_attr_max_volume.attr,
++	NULL,
++};
++
++static struct attribute_group pwm_beeper_attribute_group = {
++	.attrs = pwm_beeper_attributes,
++};
++
+ static int pwm_beeper_on(struct pwm_beeper *beeper, unsigned long period)
+ {
+ 	struct pwm_state state;
+@@ -37,7 +93,8 @@ static int pwm_beeper_on(struct pwm_beeper *beeper, unsigned long period)
+ 
+ 	state.enabled = true;
+ 	state.period = period;
+-	pwm_set_relative_duty_cycle(&state, 50, 100);
++
++	pwm_set_relative_duty_cycle(&state, beeper->volume_levels[beeper->volume], 1000);
+ 
+ 	error = pwm_apply_state(beeper->pwm, &state);
+ 	if (error)
+@@ -126,6 +183,7 @@ static int pwm_beeper_probe(struct platform_device *pdev)
+ 	struct pwm_state state;
+ 	u32 bell_frequency;
+ 	int error;
++	size_t size;
+ 
+ 	beeper = devm_kzalloc(dev, sizeof(*beeper), GFP_KERNEL);
+ 	if (!beeper)
+@@ -171,6 +229,24 @@ static int pwm_beeper_probe(struct platform_device *pdev)
+ 
+ 	beeper->bell_frequency = bell_frequency;
+ 
++	beeper->max_volume = 4;
++
++	size = sizeof(*beeper->volume_levels) *
++		(beeper->max_volume + 1);
++
++	beeper->volume_levels = devm_kzalloc(&(pdev->dev), size,
++		GFP_KERNEL);
++	if (!beeper->volume_levels)
++		return -ENOMEM;
++
++	beeper->volume_levels[0] = 0;
++	beeper->volume_levels[1] = 8;
++	beeper->volume_levels[2] = 20;
++	beeper->volume_levels[3] = 40;
++	beeper->volume_levels[4] = 500;
++
++	beeper->volume = beeper->max_volume;
++
+ 	beeper->input = devm_input_allocate_device(dev);
+ 	if (!beeper->input) {
+ 		dev_err(dev, "Failed to allocate input device\n");
+@@ -192,6 +268,12 @@ static int pwm_beeper_probe(struct platform_device *pdev)
+ 
+ 	input_set_drvdata(beeper->input, beeper);
+ 
++	error = sysfs_create_group(&pdev->dev.kobj, &pwm_beeper_attribute_group);
++	if (error) {
++		dev_err(&pdev->dev, "Failed to create sysfs group: %d\n", error);
++		return error;
++	}
++
+ 	error = input_register_device(beeper->input);
+ 	if (error) {
+ 		dev_err(dev, "Failed to register input device: %d\n", error);
+-- 
+2.39.0
