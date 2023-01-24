@@ -2,169 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E568767A3A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D952D67A3B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjAXUM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S230212AbjAXUPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjAXUMz (ORCPT
+        with ESMTP id S229879AbjAXUOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:12:55 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F5F18144
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674591174; x=1706127174;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kuoQvFSDe8ByIQVr7QxfdKQgTjZUPEth+kg/QH/tNbo=;
-  b=QOLRc+i183KnIfclGOKRAj6teRHQL1lxsk/z/ZWI/+H6+SCd5UhqU+X5
-   jMWTOJmHGPAkvZJ7/G1UKYY9f+8Npf14g55Ok3YODnieJOYvzsB3YjFJH
-   MSj6FgG0vg/+jY5fxDz7QG9zz9jDVJNvENpb87wj11ELZtTg+rYno0dWo
-   Rk1ADYXhKrTkI8tyxh7Q1/wwe15sw2D79bNxqBk5ecLRcHIUPo0xvVGSp
-   eJ+AO9crB1R34TYP6/uyXBbjLXNyW/Y2mRo9SLXL1cbHMsrB3ZARYA7Ze
-   JqjRbzi3buaLJoxEbAxwn3tmhxTMABIsTLzDhwrVjO0fx/1Sbo2fz6V+k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="309969072"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="309969072"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 12:12:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="770456028"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="770456028"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2023 12:12:53 -0800
-Received: from [10.251.2.31] (kliang2-mobl1.ccr.corp.intel.com [10.251.2.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 35486580691;
-        Tue, 24 Jan 2023 12:12:51 -0800 (PST)
-Message-ID: <1fb59dfa-1ab9-51ad-98c6-89431aa56918@linux.intel.com>
-Date:   Tue, 24 Jan 2023 15:12:50 -0500
+        Tue, 24 Jan 2023 15:14:53 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B8221967;
+        Tue, 24 Jan 2023 12:14:50 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o13so16266027pjg.2;
+        Tue, 24 Jan 2023 12:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C5m32FiMKqXgrZPIOI8wdtUKGLB4QIDnS37F9FnvXXw=;
+        b=emoiTIhY0FSD928012exLT6mCVErO1zRatzTHxSx6mzkBx8K5JEC23e1PHEDe8IyfK
+         Ens8RhvdraodZJVRsXXaRG0uQkYtyKR5BsM4AO09LRhQP9IrS38qTCCG2CZETFa6gfcq
+         l1ch8AIBbUbjYEgf5mK+ccOIs+YP4MUmSMWq4ya+2N4fYZHcifTZ9vRopToCQEqnaoL7
+         HJURR7f7UeQ75RI+F/d50HlFEnF2XT9aRqapekU3zaynvfyZz3d6NxezZ2S6dsOpFCcC
+         Qjr/Ns+r2l1qtA66HXf3vR9VVlt7QDUByL/BB5nIX3JEGaVbuThy+SaDe00F1KRqckvd
+         fhqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C5m32FiMKqXgrZPIOI8wdtUKGLB4QIDnS37F9FnvXXw=;
+        b=tB6XtMNlFiFh1xhd7/UJtmq443NGgCc9z5tJ+1gzfM7eYnlkFJDZbq9Oob3qLFfwmS
+         gDX5GvVyK55B7SRRqrcTSb8xSWUuBTOacFMkzrwoWOSRQ/5Dxaernn56oDDBE9oE+0wV
+         1MUWyHmWJP7T1bjZkE0j7UeGna0dgWvYCRaX8XxT/Fw93QwMFYQaTRejRKYGRAoVWp7i
+         BBU7k3vbFMokCw6MKLMHA5rXqinILcA9PGwRzwjLejvI8K8wvaXXK/xRzyhxmrI4rQxl
+         pgdisfqonKdKJFPG9sIg5mopohcQHsv4aGxDHtqSg02G3sIEhJRXklefmmY+djQZMfvG
+         qW1A==
+X-Gm-Message-State: AFqh2kpFYsinsoFp1vWikc6DLiP5bmP9xP/YtpcdtfO1X6Vj8GbS88w3
+        FhdclIQFTq+1OlG3mC0+IyA=
+X-Google-Smtp-Source: AMrXdXsNjG5/QwjlMPDVD2ZxE/odHTNO/N9Li057a3kIE7Pft4N2cloLCNONh19BMoOkIT1MoFqfug==
+X-Received: by 2002:a17:902:f789:b0:192:9550:339a with SMTP id q9-20020a170902f78900b001929550339amr32208745pln.52.1674591289938;
+        Tue, 24 Jan 2023 12:14:49 -0800 (PST)
+Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170902728d00b00174f61a7d09sm2057824pll.247.2023.01.24.12.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 12:14:49 -0800 (PST)
+From:   Doug Berger <opendmb@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Brian Norris <computersforpeace@gmail.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
+Subject: [PATCH v2 0/2] rtc: brcmstb-waketimer: add RTC alarm irq
+Date:   Tue, 24 Jan 2023 12:14:28 -0800
+Message-Id: <20230124201430.2502371-1-opendmb@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] timekeeping: NMI safe converter from a given time to
- monotonic
-Content-Language: en-US
-To:     John Stultz <jstultz@google.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, tglx@linutronix.de,
-        sboyd@kernel.org, linux-kernel@vger.kernel.org, eranian@google.com,
-        namhyung@kernel.org, ak@linux.intel.com
-References: <20230123182728.825519-1-kan.liang@linux.intel.com>
- <20230123182728.825519-2-kan.liang@linux.intel.com>
- <CANDhNCpWwxXM8DD9h4zOW+bygshkOg9TWO9Z7wJO_B7bDtgEHw@mail.gmail.com>
- <9c17d6be-e532-84e1-4d35-77b9bd3051dc@linux.intel.com>
- <CANDhNCp_0Os+e0A0LZ7yKw16mWai9MAPMPYL0p1NkcVxifh88w@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CANDhNCp_0Os+e0A0LZ7yKw16mWai9MAPMPYL0p1NkcVxifh88w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Support is added for an interrupt that can be triggered from the
+brcmstb-waketimer hardware while the system is awake.
 
+This interrupt allows the driver to pass the rtctest selftest.
 
-On 2023-01-24 1:43 p.m., John Stultz wrote:
-> On Tue, Jan 24, 2023 at 7:09 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->> On 2023-01-24 2:01 a.m., John Stultz wrote:
->>> On Mon, Jan 23, 2023 at 10:27 AM <kan.liang@linux.intel.com> wrote:
->>>> +               /*
->>>> +                * Check whether the given timestamp is on the current
->>>> +                * timekeeping interval.
->>>> +                */
->>>> +               now = tk_clock_read(tkr);
->>>> +               interval_start = tkr->cycle_last;
->>>> +               if (!cycle_between(interval_start, cycles, now))
->>>> +                       return -EOPNOTSUPP;
->>>
->>> So. I've not fully thought this out, but it seems like it would be
->>> quite likely that you'd run into the case where the cycle_last value
->>> is updated and your earlier TSC timestamp isn't valid for the current
->>> interval. The get_device_system_crosststamp() logic has a big chunk of
->>> complex code to try to handle this case by interpolating the cycle
->>> value back in time. How well does just failing in this case work out?
->>>
->>
->> For the case, perf fallback to the time captured in the NMI handler, via
->> ktime_get_mono_fast_ns().
-> 
-> This feels like *very* subtle behavior. Maybe I'm misunderstanding,
-> but the goal seems to be to have more accurate timestamps on the hw
-> events, and using the captured tsc timestamp avoids the measuring
-> latency reading the time again. But if every timekeeping update
-> interval (~tick) you transparently get a delayed value due to the
-> fallback, it makes it hard to understand which timestamps are better
-> or worse. The latency between two reads may be real or it may be just
-> bad luck. This doesn't intuitively seem like a great benefit over more
-> consistent latency of just using the ktime_get_mono_fast()
-> timestamping.
+Changes in v2:
+  - Squashed examples in the bindings document.
+  - Added Ack from Florian
 
-Your understand is correct. We want a more accurate timestamp for the
-analysis work.
+Doug Berger (2):
+  dt-bindings: rtc: brcm,brcmstb-waketimer: add alarm interrupt
+  rtc: brcmstb-waketimer: allow use as non-wake alarm
 
-As my understanding, the timekeeping update should not be very often. If
-I read the code correctly, it should happen only when adjusting NTP or
-suspending/resuming. If so, I think the drawback should not impact the
-normal analysis work. I will call out the drwabacks in the comments
-where the function is used.
+ .../bindings/rtc/brcm,brcmstb-waketimer.yaml  | 21 ++++---
+ drivers/rtc/rtc-brcmstb-waketimer.c           | 55 ++++++++++++++++++-
+ 2 files changed, 66 insertions(+), 10 deletions(-)
 
-> 
->> The TSC in PEBS is captured by HW when the sample was generated. There
->> should be a small delta compared with the time captured in the NMI
->> handler. But I think the delta should be acceptable as a backup solution
->> for the most analysis cases. Also, I don't think the case (the
->> cycle_last value is updated during the monitoring) should occur very
->> often either. So I drop the history support to simplify the function.
-> 
-> So the reads and this function are *always* used in NMI context?   Has
-> this been stressed with things like SMIs to see how it does if
-> interrupted in those cases?
-
-Yes, it's *always* and only used in NMI context.
-
-> 
-> My worry is that (as I bored everyone earlier), the
-> ktime_get_*_fast_ns() interfaces already have some sharp edges and
-> need a fair amount of thought as to when they should be used. This is
-> sort of compounding that adding an interface that has further special
-> cases where it can fail, making it difficult to fully understand and
-> easier to accidentally misuse.
-> 
-> My other concern is that interfaces always get stretched and used
-> beyond anything they were initially planned for (see the
-> ktime_get_*fast_ns() interfaces here as an example! :), and in this
-> case the logic seems to have lots of implicit dependencies on the
-> facts of your specific use case, so it seems a bit fragile should
-> folks on other architectures with other constraints try to use it.
-> 
-> So I just want to push a bit to think how you might be able to
-> extend/generalize the existing get_system_crosststamp for your
-> purposes, or alternatively find a way to simplify the logic's behavior
-> so its less tied to specific constraints ("this works most of the time
-> from NMI, but otherwise no promises").  Or at least some better
-> documentation around the code, its uses and its constraints? ( "NMI
-> safe" is not the same as "Only safe to use from NMI" :)
-
-Since our usage is fixed (only in NMI), I prefer the latter. I think
-extending/generalizing the existing function only makes the function
-extremely complex and low efficient. The new function should have the
-same constraints as the existing ktime_get_mono_fast_ns(). Since perf
-can live with the ktime_get_mono_fast_ns(), there should be no problem
-with the new function for the constraints. I will add more comments to
-clarify the usage and constraints to avoid the abuse of the new function.
-
-Thanks,
-Kan
+-- 
+2.25.1
 
