@@ -2,79 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA80F67938F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF5E67939D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbjAXI5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S233237AbjAXJFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjAXI5S (ORCPT
+        with ESMTP id S231483AbjAXJE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:57:18 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25DC3D08C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:57:17 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id b21-20020a5d8d95000000b006fa39fbb94eso8459300ioj.17
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:57:17 -0800 (PST)
+        Tue, 24 Jan 2023 04:04:58 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8933D0BC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:04:55 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id n7so13165141wrx.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:04:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1juhkmhpvx2lT4x4u+c5+9s9S4X54bhJYPvzt6ZWnE=;
+        b=8R7UGXzogpSZH3Cp+NSSbVCzzvNbQcxPAtX9ECF9aLa/JCykl+NcPb3t87f5F09V9T
+         GlKkIG22mHuVpzNgOc5H81+jPFAEQrCnF6t6ztL/4c6kzf1nt6f5q8JpIx5qFKQnLxzQ
+         vS1KF/8gU3eJylhbeMxZoN3xd/Cxl/agoR5NJSvUG+L9vIeFR3jVjb4JdBtB9kMCZi/k
+         ZTC42UPjHAw3DZe3NYlMzhNOVX/mXw4aXZu3GX9wp/x6GOHuN05aX2g5j4gmEz/eqUqr
+         v9m2xdFf3T/xSN3o1YMKqlfxtFaR5rm5DkgEWhLmz5R3Un6nlmPhfD+xDdKvmi84TW9w
+         rXSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TlqNjgd3eRIYDTKHlZ6hEp0r6nIEjM/F53EV9FU/n5g=;
-        b=LpzB5NhEJVs9dbQdHtUWTwLbaxTsMfdvGjStlX1wdCOOceO2t587k8eMGxVBCjOSCf
-         KbNzXqOnBmwQVCCWWpL73iW1fALiOQtEO5sy3YKqFPa2S68TMxUXfKV0w9ImoCZE/JsC
-         u1K4DjTf273cVu5vPbPG8Kb4EzQrgjvWZouJZSluKjI/gLI69Ft8t+XaEv75aFhFKInA
-         3q3TBeRWkALRWEvKRh7ckOiVgXgH7seIiwKTdBBndXCginQClreepCary7t1bEWl7x3f
-         Iky96XBgBfbKzS1uypJFYoFj7lBUJVsjcOKBfI+rhMdiC1UKC77F4Kv49Y1pdf9LFKsi
-         sWNg==
-X-Gm-Message-State: AFqh2krvE9N8bDiTkxUldBRxToFQJ9J6KnNpNpsRzM6ndjOfGnrqEYaO
-        L6bf9RlHZ26f1DRuwA2JKRWDpMvdcpd+RrKoDYpH/v3cE2Oe
-X-Google-Smtp-Source: AMrXdXsUCkXvgb7fvzNjYB6vnqz4sxeezDwrNKweS81JCSIk15mqbkNS22G0WGDO5DzSrUWEHro13o0p3tgMObQkCGbbSKHQrrHp
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i1juhkmhpvx2lT4x4u+c5+9s9S4X54bhJYPvzt6ZWnE=;
+        b=i/+5bQ9sEimbbdKnYSmcHcOS+HlWx3gf0LANCPqARYpQUwgDAQlR9PViWjLuaAVCtV
+         2/umQ/cRf90NNHFWT2Ec5KeUCwPpufkp1Cfgvzkb1qs/xN8pZcxqBDJQZGAhrR3cnfiS
+         C9aE8TSnj4JWIum54d1TKzSWKZOIv4HcNNX1SIFypyU4UlnLrwZ9HaxYxscyfcWl1AqY
+         Fr9oOGxoBrrYN8aFF0/8Vb6pKqjr/eF9vAYcyM5WYqzugnIUZAGCD7eW26UMsdyJInMo
+         C1FmmLa8AUHSD9U1RzLLyTL4N4XXI+jwlMNTjQctKzgxNt7Jvfxom9SnqBKAdzsEMKXF
+         IkEA==
+X-Gm-Message-State: AFqh2kqdNmXB5OdfK8VMipF3jdb46CBoEIdRd4bSEojKN8LArCf4cTqF
+        38ga9mUDdq6YIcIemjrkN9e3aaqcDXSUFcA5Bqjq5A==
+X-Google-Smtp-Source: AMrXdXslWzyBPl6qN6lfBta/ufChiJMu2Y2CiUL1C94ZCECbF4eI9FFmR8w/ZsdDLVJkOVp28ufLm8pcdg8HVQLMWtk=
+X-Received: by 2002:a5d:5190:0:b0:2bd:d6bc:e35c with SMTP id
+ k16-20020a5d5190000000b002bdd6bce35cmr1227921wrv.144.1674551093678; Tue, 24
+ Jan 2023 01:04:53 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d99:b0:30f:11bc:cc6e with SMTP id
- h25-20020a056e021d9900b0030f11bccc6emr2638812ila.87.1674550636901; Tue, 24
- Jan 2023 00:57:16 -0800 (PST)
-Date:   Tue, 24 Jan 2023 00:57:16 -0800
-In-Reply-To: <000000000000e4630c05e974c1eb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000defd4b05f2feb35c@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in evict
-From:   syzbot <syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com>
-To:     feldsherov@google.com, hirofumi@mail.parknet.co.jp, jack@suse.cz,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu,
-        viro@zeniv.linux.org.uk
+References: <20230123112803.817534-1-alexghiti@rivosinc.com> <Y88F808GULoKFOVJ@spud>
+In-Reply-To: <Y88F808GULoKFOVJ@spud>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Tue, 24 Jan 2023 10:04:42 +0100
+Message-ID: <CAHVXubh=SQ0fS2FCpdB-TD5n=DHUHAaRqDazHWDMv3fWqwpjcA@mail.gmail.com>
+Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Hi Conor,
 
-commit 4e3c51f4e805291b057d12f5dda5aeb50a538dc4
-Author: Svyatoslav Feldsherov <feldsherov@google.com>
-Date:   Tue Nov 15 20:20:01 2022 +0000
+On Mon, Jan 23, 2023 at 11:11 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
+> > During the early page table creation, we used to set the mapping for
+> > PAGE_OFFSET to the kernel load address: but the kernel load address is
+> > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> > PAGE_OFFSET is).
+> >
+> > But actually we don't have to establish this mapping (ie set va_pa_offset)
+> > that early in the boot process because:
+> >
+> > - first, setup_vm installs a temporary kernel mapping and among other
+> >   things, discovers the system memory,
+> > - then, setup_vm_final creates the final kernel mapping and takes
+> >   advantage of the discovered system memory to create the linear
+> >   mapping.
+> >
+> > During the first phase, we don't know the start of the system memory and
+> > then until the second phase is finished, we can't use the linear mapping at
+> > all and phys_to_virt/virt_to_phys translations must not be used because it
+> > would result in a different translation from the 'real' one once the final
+> > mapping is installed.
+> >
+> > So here we simply delay the initialization of va_pa_offset to after the
+> > system memory discovery. But to make sure noone uses the linear mapping
+> > before, we add some guard in the DEBUG_VIRTUAL config.
+> >
+> > Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+> > in a better TLB utilization.
+> >
+> > Note that we rely on the firmware to protect itself using PMP.
+> >
+> > Acked-by: Rob Herring <robh@kernel.org> # DT bits
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>
+> No good on !MMU unfortunately Alex:
+> ../arch/riscv/mm/init.c:222:2: error: use of undeclared identifier 'riscv_pfn_base'
+>         riscv_pfn_base = PFN_DOWN(phys_ram_base);
+>         ^
+>
+> Reproduces with nommu_virt_defconfig.
 
-    fs: do not update freeing inode i_io_list
+Thanks, fixed locally, I'll push the v5 soon.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=111208cd480000
-start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=6b74cf8fcd7378d8be7c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1353a3e2880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16163dce880000
+Thanks again,
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Alex
 
-#syz fix: fs: do not update freeing inode i_io_list
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>
+> Thanks,
+> Conor.
