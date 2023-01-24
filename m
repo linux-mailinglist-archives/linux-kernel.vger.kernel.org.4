@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAE167A03A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F8E679FD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbjAXRb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S231975AbjAXRLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234717AbjAXRbp (ORCPT
+        with ESMTP id S233806AbjAXRLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:31:45 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7C74ED08
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:31:41 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5063029246dso60633607b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:31:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAWZNKWNBnz2nm7fG3oJ2Ondshli1quuAhafNezlm2I=;
-        b=vmOWgr9rkUwzXlseFVsT2j864QAGrD36dNV6+hb9Z7hRLYJ8B5WeRZdEpjer9y7ZXe
-         y3QrwhGV4pSrb3uagpnMn9m7/R87CzSOQh1IMiI/Ze8ueXecFpmJdcSaN8I9jtsmCAcN
-         xFYH9X4OMx83uCjY9yqRshrNksPwFYRMa4Rny8507wYI6TRGrzwtgTMuGK5om09FRo3V
-         6GUQgPGuq8fDJDIGNIxBaQExAtH7HCjVd4U5z+9I7stqOeHP6HY3Rrp7zHrkLvvLyufq
-         4YKtIX9+fDcRiCAKfOkz6LlWFxlJr9Mq0SgSh5ihV8KN0m2O18EeAPFxR8riEi+Popz0
-         7gyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QAWZNKWNBnz2nm7fG3oJ2Ondshli1quuAhafNezlm2I=;
-        b=2eOf16UT57A8XLGxo09H+YNWVmrfHXPq/AJ0clpODCIPN5JOt2B9cs9SzdRyCZb1we
-         mKnH1aErsXTtdxUiaK24yP2xK2hxUrESjle1YqVH5STki/Vk7RMEnrkYo/sELmV1mN1v
-         Xqsj7Jx2zoq7FQtx0wCLpFFdp8zwcSZORUxdIRkZHq/wBpDo/kziurJg2E896L31BqyM
-         bIDQeWyhVOqpej2jeMJqffh2GJvhJ2AdAfOqNKiZUh88k+bDUVW9kz70UJthqjaq/ExW
-         4QsxK5TprJVgi9QlCO9AUO/yJpldME2Hm+r9ZnX90K2Y+DJVjwcJnJn31yZt2ypcmmBv
-         Fzig==
-X-Gm-Message-State: AFqh2kowyvjiVBuG7Cj+GwG/5BsMf26yWoIo3GM5DLmv4Ma/2kWZd3qN
-        g1afzZ/9FHRemtSOzeitxJu1yMAMrtRff1C1QQf6fA==
-X-Google-Smtp-Source: AMrXdXsZAyRHAzMydmJt0v6Zl159VWuKM4IasufLzc1VlCjkIdzuHw0AHwiN22tOlj83E3v3X9dDNJNrvuw/U/DjuBY=
-X-Received: by 2002:a81:6d8d:0:b0:490:89c3:21b0 with SMTP id
- i135-20020a816d8d000000b0049089c321b0mr3916907ywc.132.1674581500991; Tue, 24
- Jan 2023 09:31:40 -0800 (PST)
+        Tue, 24 Jan 2023 12:11:48 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C185D4C2C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:11:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674580307; x=1706116307;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=5rPRxziFRlIVlHQ3JuhXOuLds1hFr2+bLman/mjKsh8=;
+  b=ZXVo6QpTZ89VHVPWQHEnCb5wyIUjupznilV9GBghxm4Gv3e1mirwvjxD
+   Sq8VuFk4qVFQBHFTNOgV4oJ1oPqPiKhswgIcyaRp2fqerY3rS3VQ/IhQm
+   63tTcZu4AineSA3ilCtmdJY7QhB6YjuQxrvUqGM0T9yuJHBdsYmK9Z4rZ
+   +yQar6FUG6EtjYFOJaLwiOrQOYiTN4OptNDIT7Y1tiJyDja3ptBJfCoz3
+   o0VMTRpAB2uomVFc858kJ3YVo1xAJb7KTe7EAXZn/z0L7+2tU5PRdpNgP
+   vs2rNiJ9XFPFesHvqsVPseF098jD02tue4366803towOHHTKuLKm5FU8a
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306700300"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="306700300"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 09:11:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="907585507"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="907585507"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.55])
+  by fmsmga006.fm.intel.com with SMTP; 24 Jan 2023 09:11:40 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 24 Jan 2023 19:11:39 +0200
+Date:   Tue, 24 Jan 2023 19:11:39 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Klaus Jensen <its@irrelevant.dk>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: regression on aarch64? panic on boot
+Message-ID: <Y9ARS0qwEXz/bhPc@intel.com>
+References: <Y8XINx8fpGPKudW6@cormorant.local>
+ <20230117055819.GB13795@lst.de>
+ <Y8ZA30EoAFaFPwVC@cormorant.local>
+ <20230117063735.GA14468@lst.de>
+ <Y8l0ePagRXDHQByr@kbusch-mbp>
 MIME-Version: 1.0
-References: <20230124141541.8290-1-quic_devipriy@quicinc.com> <20230124141541.8290-8-quic_devipriy@quicinc.com>
-In-Reply-To: <20230124141541.8290-8-quic_devipriy@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 24 Jan 2023 19:11:00 +0200
-Message-ID: <CAA8EJpoHqpo=QWHwO=LEbT-Mk4gr7F1X4ecL0Y+kbG8Ow6cGiQ@mail.gmail.com>
-Subject: Re: [PATCH V1 7/8] arm64: dts: qcom: Add ipq9574 SoC and AL02 board support
-To:     devi priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
-        marcel.ziswiler@toradex.com, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com,
-        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8l0ePagRXDHQByr@kbusch-mbp>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 at 16:17, devi priya <quic_devipriy@quicinc.com> wrote:
->
-> From: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
->
-> Add initial device tree support for Qualcomm IPQ9574 SoC
-> and AL02 board
->
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+On Thu, Jan 19, 2023 at 09:48:56AM -0700, Keith Busch wrote:
+> On Tue, Jan 17, 2023 at 07:37:35AM +0100, Christoph Hellwig wrote:
+> > On Tue, Jan 17, 2023 at 07:31:59AM +0100, Klaus Jensen wrote:
+> > > Good morning Christoph,
+> > > 
+> > > Yep, the above works.
+> > 
+> > Context for the newly added: This is dropping the newly added
+> > PROBE_PREFER_ASYNCHRONOUS in nvme, which causes Klaus' arm64 (but not
+> > other boot tests) to fail.  Any idea what could be going wrong there
+> > probably in userspace?
+> 
+> Prior to 6.2, the driver would do it's own async_schedule, and that
+> async probe function would flush the first scan work.
+> wait_for_device_probe() was then forced to wait for the scan_work to
+> complete, which brings up the root device.
+> 
+> We're not flushing the scan_work anymore from our probe, so this should
+> fix it for 6.2:
 
+Appears to fix my Tigerlake Thinkpad T14 gen2.
 
-I suspect that the order of sign-offs is incorrect here. Your sign-off
-should be the last one, as you are the person sending the patch.
+Tested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
+> 
+> ---
+> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+> index b294b41a149a7..ff97426749976 100644
+> --- a/drivers/nvme/host/pci.c
+> +++ b/drivers/nvme/host/pci.c
+> @@ -3046,6 +3046,7 @@ static int nvme_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> 
+>         nvme_start_ctrl(&dev->ctrl);
+>         nvme_put_ctrl(&dev->ctrl);
+> +       flush_work(&dev->ctrl.scan_work);
+>         return 0;
+> 
+>  out_disable:
+> --
+> 
 
 -- 
-With best wishes
-Dmitry
+Ville Syrjälä
+Intel
