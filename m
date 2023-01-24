@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64AC679509
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3DA67950B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbjAXKTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
+        id S233158AbjAXKT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjAXKTk (ORCPT
+        with ESMTP id S233453AbjAXKTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:19:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA533D08C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:18:53 -0800 (PST)
+        Tue, 24 Jan 2023 05:19:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF4F2E0D3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674555532;
+        s=mimecast20190719; t=1674555547;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GDZ2X6v9gZZjw/mylSeu05Q/SHm7XIRiCSfNoQKcE4s=;
-        b=IrTaEO8b0t6KUBDYMvG20sfER7pUo/QBK3ILhY1ZCc4Gnk+SwhZa0EvEjBk6SfVDm8tkh9
-        wxqgqJFhdsMwMUKKgb9tFcfmcoFNqHHKr4d7kxvYcu2sPcl+nGAg5yU0bgjlgkyuDppkLT
-        Lhir3ZkpN1ZWWK3JmWwB7Hd46n8lOCg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=KyCqz+q1FOAw1TQY7+/YLob/l7GyndY1wuroRx7I9oY=;
+        b=VUm+YzCPR0mESmCx0LTOQCGUHFtmHcoCbDp2lOhniyXT3dE9li3RhghkPyuTnv/cjvkhOQ
+        axH9Sb8Joqy1nUiItjJ/mwN75XRDFhma2s/Dkr4F6B9BaX31q0+xHBo/VYmu4rDpHb7gXI
+        vecYimSw3Sw3qQwGjlr+oGMRL3rFQPE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-12-g5UD9PdvNkOt98y9Lkl1Ag-1; Tue, 24 Jan 2023 05:18:51 -0500
-X-MC-Unique: g5UD9PdvNkOt98y9Lkl1Ag-1
-Received: by mail-wm1-f69.google.com with SMTP id j8-20020a05600c190800b003db2dc83dafso7549931wmq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:18:51 -0800 (PST)
+ us-mta-367-a23sxNM2OiOOINvyQNA30Q-1; Tue, 24 Jan 2023 05:19:06 -0500
+X-MC-Unique: a23sxNM2OiOOINvyQNA30Q-1
+Received: by mail-wr1-f72.google.com with SMTP id by12-20020a056000098c00b002bfb325c0edso106952wrb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:19:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GDZ2X6v9gZZjw/mylSeu05Q/SHm7XIRiCSfNoQKcE4s=;
-        b=oE3+6H8EQB6u6suliefoFKoVq/k5VFE8X2hQWkx51gtSV5fNReRxAqkPemVwws8m1y
-         uy8OFzVIiikvo8YVJvNKIUucxjGAtENjSlvg2EmKeLjg3ma18ukItnZ65v3rYI/Cs+77
-         Z7r+H1uG/wQRMqd7/RPKEU5SNV7BYL3Tvzuh5Xib0peO85Tc1xL45Z8nHgPkbEBMubrN
-         YH/73dUbf338ulUzTkKr3qu8RJOTSQal/8bF9SYzsrkmqUpviqzGhLoFr+V/YzGMr4iS
-         URQZWr0UR65CTiGf6EG6NtS9ZjkXZ0KEqIpha8icgLFEWaTdCDHDm4proU2/rpoks9JX
-         GOmg==
-X-Gm-Message-State: AFqh2kpZm2CP6UyzcZUL5/WBbH0RgbJq5lRZwwbiRq3yDjavRf7l5cse
-        vMJVFUpqhnKqBBm+qQp7Qsc870pZEdnFQgkdb3q41/HSwKd5/4n5Nx9B+v0dQwt9gijD9sWhcfT
-        ZJSZaxaxRBUVERV6NAw34MjrrNF70xbCV042qbRMSoFj2omsUQFHFLvEuBS9lovCSZhEaRNS0gL
-        Q=
-X-Received: by 2002:a05:600c:3d9b:b0:3db:1afd:ac36 with SMTP id bi27-20020a05600c3d9b00b003db1afdac36mr20999548wmb.32.1674555529894;
-        Tue, 24 Jan 2023 02:18:49 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu8zqFziGgSNsVTa/vJxE+MIl3zeqyq4trWRM1k2BTskMl0Qm00LweTGrV0W3Enfm9oMajDIA==
-X-Received: by 2002:a05:600c:3d9b:b0:3db:1afd:ac36 with SMTP id bi27-20020a05600c3d9b00b003db1afdac36mr20999525wmb.32.1674555529610;
-        Tue, 24 Jan 2023 02:18:49 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1c770d000000b003db0ee277b2sm12997027wmi.5.2023.01.24.02.18.48
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KyCqz+q1FOAw1TQY7+/YLob/l7GyndY1wuroRx7I9oY=;
+        b=f2mPcHePpmlLPisTHmNwqKFOJD+qOGanR29A44fPsIkdAtoYivVFyh2bur+tIdF/us
+         TwegoxS8UtHITW7EcfOjsQ7R7cPZb2vDjv/x4UO3M6z8zXsQXAa1j59oDg9L/grJHNGU
+         jmHxkiZggj/JRtufJbXyPnTi3NLIGaXBxjwjhRsLKrmPALNuTo+kQIB2zWhDRaSjqZZK
+         xZKLBlhKzXwXp9gUzBtXfz7NKIEQ1W5gCt18JhoLkznVnbKiktmNBQwaYwpCuVXk15Ok
+         znpD2HtsuH7wkb44a/rowgV2gakg+Il1Xnkw1gl23tyrLB8xxsjq1cIuxKrZQblAGYHB
+         eETg==
+X-Gm-Message-State: AFqh2ko4wPMtO9Yie9RWUqQ54QFW6zK1WcQ+Fa+b/Xq15yx3jR+sAZ/S
+        +yLg2D+pLjsgnruvqCENWcy9d9+UGNv2Spv7HS4JvMAHM17OMs62h0jUz0mSN0rp96Y4Kfo3ld7
+        +tteK+NhrKdkjU3Y/Agsj7aD6
+X-Received: by 2002:a05:600c:5386:b0:3da:f670:a199 with SMTP id hg6-20020a05600c538600b003daf670a199mr27171187wmb.36.1674555544841;
+        Tue, 24 Jan 2023 02:19:04 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtpI+7NIxjA7yuHHkcSvFk74BBjIJ5+hNyfA7Zktc92gQIn7UM3QCwxgY5Up5wD22djWNwTqQ==
+X-Received: by 2002:a05:600c:5386:b0:3da:f670:a199 with SMTP id hg6-20020a05600c538600b003daf670a199mr27171162wmb.36.1674555544546;
+        Tue, 24 Jan 2023 02:19:04 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id c3-20020a1c3503000000b003dc0b0e1e47sm2405844wma.48.2023.01.24.02.19.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 02:18:49 -0800 (PST)
-Message-ID: <1ae9b489-4afe-d6ce-e055-9a6fd518745e@redhat.com>
-Date:   Tue, 24 Jan 2023 11:18:48 +0100
+        Tue, 24 Jan 2023 02:19:04 -0800 (PST)
+Message-ID: <4cb68043-1c06-6589-b83e-74847a06f457@redhat.com>
+Date:   Tue, 24 Jan 2023 11:19:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/3] drm/fb-helper: Check fb_deferred_io_init() return
- value
+Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230121192418.2814955-1-javierm@redhat.com>
- <20230121192418.2814955-3-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230121192418.2814955-3-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>, g@box.shutemov.name
+Cc:     Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>
+References: <20230111133351.807024-1-jannh@google.com>
+ <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
+ <CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com>
+ <20230115190654.mehtlyz2rxtg34sl@box.shutemov.name>
+ <CAG48ez2zeQ4+g1=B4eyrrvZRYMr1S1xKBh2_eAhCjVjhj7Lpfg@mail.gmail.com>
+ <20230116123403.fiyv22esqgh7bzp3@box.shutemov.name>
+ <5a7fdfa7-5b25-0ed4-2479-661d387b397b@redhat.com>
+ <20230116134710.n4dgtrutt6rqif62@box.shutemov.name>
+ <1b8696ec-e2be-7b7b-705c-e2dcabb2e8e5@redhat.com>
+ <20230124005102.ow33h7tfmj5eqyr3@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230124005102.ow33h7tfmj5eqyr3@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -89,23 +95,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/23 20:24, Javier Martinez Canillas wrote:
-> The fb_deferred_io_init() can fail and return an errno code but currently
-> there is no check for its return value.
+On 24.01.23 01:51, Kirill A. Shutemov wrote:
+> On Mon, Jan 23, 2023 at 12:07:05PM +0100, David Hildenbrand wrote:
+>>>> commit bedf03416913d88c796288f9dca109a53608c745
+>>>> Author: Yang Shi <shy828301@gmail.com>
+>>>> Date:   Wed Sep 7 11:01:44 2022 -0700
+>>>>
+>>>>       powerpc/64s/radix: don't need to broadcast IPI for radix pmd collapse flush
+>>>>       The IPI broadcast is used to serialize against fast-GUP, but fast-GUP will
+>>>>       move to use RCU instead of disabling local interrupts in fast-GUP.  Using
+>>>>       an IPI is the old-styled way of serializing against fast-GUP although it
+>>>>       still works as expected now.
+>>>>       And fast-GUP now fixed the potential race with THP collapse by checking
+>>>>       whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
+>>>>       flush is not necessary anymore.  But it is still needed for hash TLB.
+>>>
+>>> Okay. But I think tlb_remove_table_sync_one() belongs inside
+>>> pmdp_collapse_flush(). Collapsing pmd table into huge page without
+>>> serialization is a bug. They should not be separate.
+>>
+>> Agreed. But I wonder if it should be moved into a generic
+>> pmdp_collapse_flush(), that calls an arch specific __pmdp_collapse_flush().
 > 
-> Fix that and propagate to errno to the caller in the case of a failure.
-> 
-> Fixes: d536540f304c ("drm/fb-helper: Add generic fbdev emulation .fb_probe function")
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
+> Um? There's no __pmdp_collapse_flush().
 
-Pushed this to drm-misc (drm-misc-fixes). Thanks!
+Did I imply that there is already one? ;)
 
 -- 
-Best regards,
+Thanks,
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+David / dhildenb
 
