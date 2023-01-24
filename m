@@ -2,296 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40583679EA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A68679EAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbjAXQ37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        id S234015AbjAXQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjAXQ3t (ORCPT
+        with ESMTP id S229546AbjAXQa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:29:49 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD87134
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:29:47 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id vw16so40466217ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BOTYemAdqciiYIvAqJE2GsTaqj5FuuO8ZTKcaekuk6M=;
-        b=RuATYPMe1mCqWxlvPqCHDER7+kVtKUI+JIrDt43qJiD0THXUgWMffDPQlpUhbBDtVj
-         ekd+or4fJfbWSWxzXtD7KGptV8+wQOKUbiVR0/2i3C2j2Lf/PVhGH0QP8ckwLjbnSYTj
-         3u+aF23pkd2SEZFEjRz2uqeBksVizdklbX9AQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BOTYemAdqciiYIvAqJE2GsTaqj5FuuO8ZTKcaekuk6M=;
-        b=jTT5s7M/HlCEWKugtrr+CePgVWRB9uEMsDtG/0opTeIPAEVHLi9QU0CY4vTllHa/SJ
-         vsxtJJswyE0onFBAlv69F3/1YflSqZGOjwnvXyYNpxpPsjtSAUEekV0DtoxHFMgg4alI
-         OTCE9Y7O2OrUZHWwnND4NwodtcJ+YJHs1oHxPSu7l8c0WcR9MfiKzYs5DmveDWn1/OHh
-         MJeUN4UREIO0Gchgvg/CMGEBR8E7PHTTmkBMEW8E96/6ci++715kAAxtCSgil3yxfEeH
-         M9idUlySq01qngw+SRzCECPQz1UYLSR3auY2MFFWLKnjEG81U/6dZnMOzfcpv27QUawR
-         DaaA==
-X-Gm-Message-State: AFqh2kqh6UAxuvhXfKiqvaWzTWKvCvdNmK8umKREpiYWRHHrMELFU2ze
-        8NwkLSSv0eW7lMpMBCy8HesG028nfZTEr4e/1k1ivGznkEk+LJvo
-X-Google-Smtp-Source: AMrXdXucss0qGqNGdTo8WigLjsv5u9qE4+RJ9x3z/jYYFnG3BCPhoYVnjt7Dmi0xU6rO4SEElM2pw6Qp/DEoe8Uq+8A=
-X-Received: by 2002:a17:907:9620:b0:7c1:10b4:4741 with SMTP id
- gb32-20020a170907962000b007c110b44741mr2881422ejc.8.1674577786060; Tue, 24
- Jan 2023 08:29:46 -0800 (PST)
+        Tue, 24 Jan 2023 11:30:58 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2084.outbound.protection.outlook.com [40.107.8.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779CE11EA1;
+        Tue, 24 Jan 2023 08:30:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dfIh6JNpiUm0Puxa1OFBkpxr49M/+uX5wd6fDzyjApSO06Y47ua9ci2g3csuT8tb8ks9H4jNT5c+doN8vvNgcR+gZQA1WoJguviMPbPajXLw0615MDuKAkp+fXyAd6FrdgPG8jpoNEFVWacXWES8G1dawqrdA4JtYVBs6LS46SXoHr/Ag4fdWsUEM08Ug3I+ma82rwiumiKso1Gx58YJCXfQRMZsG19UeanMKBuFRddzY32QLRpOkRawf7HY0B+VVWaJO8TInNp+aWlM3PuyR7Ww35JoFItqOqOFJZZH26YYzc8LkAZN72zIb2+0t/vjVmVGF2dE17xtYxaymyn+3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9UgTGLBhEQVscQNBG4YCWvYiYDlgp001c0bxw//T5Y0=;
+ b=K3S/DqbqDCDZ5MUEOTqQd46T2NqUcvrNcO2Aiuj0jIJIY6eBu9Y4V8SgEyPRj52AX/Nmj1AlXMSQKWOfzU8UgSfxMggQ3jTF8AOXv5doSmrHgxx5Mr9aPerQ1f5l4bxXesqBt55+AYCe4AleqCPTSwkgWq7Hv1e/se3J/o9Zy2NbnXmsnzEEZPTpG4SCNWXv4XKlTpFsBEwP38iZJ1QqSsOBwlif+fDvQMXfGYVbgnmcdHyOhm4YX1jwOa335ZVQ12x1Zmu0dh8DdG2TTGUHLNCjM36NfaJts+RN5jFI2jlcgptgigsMX9IcZfq4TG/2XOHDpRccoYc39LjDErqOPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9UgTGLBhEQVscQNBG4YCWvYiYDlgp001c0bxw//T5Y0=;
+ b=iHsIiIZ3Os0ujjdYYltFsxpnBxGS2S+Bu3qE7XgI8BJmHbNb0eEA7i+f4ayy+7bNhihVRLLQXPW9BmzBIQ+T3p7LuHwyz4Vh3PCYu4IcgFSaOJjDi47XnQzpjlg6rIGFa8Uz2Cbxo+ghavZOd4vO0fyYR6J0Xy9sZSOtRxsBZjpFt+NfV2Mwv3+x+KsCxqKw6Uc3eSXJpGC107KyhUgBzwzjaiWgOH3zJxmi3dmK+FRu8fzHzWJ3Y6QJo0npMUiErSq0ujvv6c/XkD7iDmaabFpSLVLEb8i7T8bA/1AhZDTJKvyUSMbskkN46hEuuH3vBKLxOGhIf8XLvZeeyw68PA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by DU2PR03MB9999.eurprd03.prod.outlook.com (2603:10a6:10:490::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 16:30:54 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::6b03:ac16:24b5:9166]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::6b03:ac16:24b5:9166%2]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 16:30:54 +0000
+Message-ID: <5cc63796-fd46-98d6-fd01-54a8281cf995@seco.com>
+Date:   Tue, 24 Jan 2023 11:30:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 0/8] generic command line v5
+Content-Language: en-US
+To:     Daniel Walker <danielwa@cisco.com>, Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Cc:     xe-linux-external@cisco.com, linux-efi@vger.kernel.org
+References: <20220929023301.3344694-1-danielwa@cisco.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <20220929023301.3344694-1-danielwa@cisco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR20CA0005.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::18) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-References: <000000000000bac7df05f260d220@google.com>
-In-Reply-To: <000000000000bac7df05f260d220@google.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 24 Jan 2023 17:29:35 +0100
-Message-ID: <CAJfpegteWVfJ8CLATjhk7==iLmqyZT_ao8Hs2JaNKdbgceXZYw@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in fuse_dev_poll
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+d3b704fabd7f02206294@syzkaller.appspotmail.com>,
-        io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DU2PR03MB9999:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f9b0c36-b9fc-4457-fae2-08dafe285d09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1Hxp6HmeF/ueRYPWUFjY/p9TAhlgUzb5DzMUFrynG7B7LDdgyEGSYlv8T2QY99/2/CARY6nFFBZC7ga32Q3+JNSovFqYjpuy7G9gG7Gogkr4ymt9ujES94QJCU5lbKdbiZzwOhHfN6xuwpHGaBulXMEV8gpfPLViiVNRONK+pzEUtvPe7g4aW3tVzSLa0mUNMYS/Jb+K95/XOS/F7AtFshDKK/Ad44QeJhtnQghNqiMGEwLNmDVmBk8SZsSgDRyJGm6CWYCTzg+UhbhqTHzffc3XT3rL5i2L2f7VBFrvbn45LALbseKEROqrxohgtFrdgzH6sxeJPaaDJXAjVfJD6vGiDTCBSFxZwx3KgPQ6WRL3wonAlIJ1xGj+usm9t17Sy69Xq38TfbTM8ZVBFOA0MpTA30AX1aZFI5IG55Q7gIFyIRoaHTrX4oIptMzNWoLX8mMx/HiDrprtIN8oLEQFK3HeF/iYhg5eyFf8s6JQD2zkPwNasACTZzGcJLNjKJSjiE6uc2LLR0LTBjg9ytGVrX0mnSzHVa6EvXf7+MYrUM4jSZZzobFYkIVWMa29jtR5RXCIqdRwOA5KdQ0ECqXFQR3tkKDJPThyCzWFZ1OWYCNRtv76aTFTcRtlqeU4nxI8My3EZytrGOWMjFFXUFhciirKNA5g/4lBGM5B0cwVlFV07AXVwQ7nesUI8c/DmFPgUAXvF6KxsRoFg44NFHjxlUlMa8AfrRMB/36ICZojGlT91Y2sLMBBlaJhRoacClr/co5VsfqltAqrJN1k+GwxgJuddR3RurkZIOAPlg8/3S0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39850400004)(136003)(396003)(376002)(346002)(451199015)(31686004)(31696002)(316002)(110136005)(478600001)(52116002)(36756003)(86362001)(2616005)(38100700002)(921005)(38350700002)(83380400001)(26005)(186003)(53546011)(6512007)(5660300002)(2906002)(6666004)(44832011)(6486002)(6506007)(41300700001)(7416002)(66476007)(8936002)(8676002)(66946007)(66556008)(4326008)(41533002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGpTVEhNd1ZrK0xrdnJRWHdsMVM4M1A4MVhWYVk3VE9uVUNxNytMS2ZTSGJl?=
+ =?utf-8?B?NjRXWEVsLytYMnYzK3dZQUhqZnZPTUhoZm54bFlzeGhWUjVWa0tPQmoyMDZ5?=
+ =?utf-8?B?aG9xT004NnZkUjZFR1p6NzRmL1Q4UVFGTGZvSTZlN0NMUU9WR0t0ZXJ0amRG?=
+ =?utf-8?B?K3NWKzdISmRXaDFHYTlvai8xWUlFOHlxREFibTNSSWE5THIrUGdpOGVxYlpJ?=
+ =?utf-8?B?amtEY3RCaEhpNE5TdjFIelQ1YjBEaHBLTlJtTkJoZVI5aWJRelA4TkZtL2cz?=
+ =?utf-8?B?b1lGQmhYNTF6eitHc2ZFalQ0YU1NV3Fpejc0OExQUms1N2RucWplUHVLOWg3?=
+ =?utf-8?B?TnRnODYrN3hFMjQ0T1FlOU5OUkVhQjZFcDBlRG9ITXpTamZZT3BtY2Y0M0J3?=
+ =?utf-8?B?S2Z0VGFxSEJ5NHVCSFZFZllXNHJmVTEvc1ZCN0hMZzdoZ3BQcFF2N0NqT0tt?=
+ =?utf-8?B?N0VsOGFkclhGR3hLdDZCMjRJYzh5ZGpmaC9pRHpEajAzOEV0Q0RsRHhab2hB?=
+ =?utf-8?B?cjk2Zm9nOEc5a3dwQ1llaE9JbU05ZWwyOVV6anBWUTcrY3RESGpxWkhhNDJp?=
+ =?utf-8?B?NklWaVkzUldxbWxDVkFiZ3RoY3hpSThQUklnYzlYS00wUlB1WmVrbEpzcXg2?=
+ =?utf-8?B?Y2lIYjF2NFRlWW1xWVQ4b082QmRqeVJIMXR4K1NGWHF6aGM2RjlqR2xHWFU3?=
+ =?utf-8?B?WFpSL0x0WmtoZmQ4Q09xR1RGMzdzRDU3dTgxalRkVnFQZHNuaXhpdDc5RkpE?=
+ =?utf-8?B?ZHBscmFzOFNtaFJsWWdOMFh5cWZSVURKdXpVNFFKbGQzczNGUlA4UWhPb1VB?=
+ =?utf-8?B?RzRTNWVCTitpZzBOZktMa3l6a0wzTkNVejZVcUd2L0plTGZBdGNsNE9ubGxj?=
+ =?utf-8?B?WktIY1A5UENtYThKL3BvUDFuYU1SVjRsSFUvV0xrcUk0ZG94VHBVeThCZmJt?=
+ =?utf-8?B?aFNGK3lEWjc0NkhVc21FQUQ1UGk2Y3ltSnFyTzdDVmk0V3RCL1dLVTVWeVFE?=
+ =?utf-8?B?clVkTk82VHV1eDVrMDJ2SWRodXpEZ1ZyT0hRaEpPS0lvMHYwU1Mxem5iZlpW?=
+ =?utf-8?B?a0I2bGt1dG1lSkIwNFN2c1NPL2RJTC8zaUVTeFE0OGt2TVlBVmpodk9HSmxo?=
+ =?utf-8?B?VFV4NlU0aWdvMmFsMG9DV3dGN1l1VGx4Tnc4blMxa1Z2WGt4UUM0dVUySVJ1?=
+ =?utf-8?B?MjArNXFCbHJGejRPSE40N3FvOFk4T1poN25EcFdQbFB2bFVLdWFnWUVXazdO?=
+ =?utf-8?B?dGxRWVRDSDBXN3BZWUhHVFpldVRPd29SZFFsZ3ZZaXYzOEdJcmdwdjJFMnFm?=
+ =?utf-8?B?QVJzRVVVSG5TN2NwQkw3VG9YNTBkaFhBTWMwUi9HeTJMZFdHajkvc1pCdmd5?=
+ =?utf-8?B?a3k4OVlleHpObWs0cHNqaWRaN0JZT05UaGNoZkk1d004azFuZUVvMjlLdVo1?=
+ =?utf-8?B?akJCakRMc0E3TkMwVmNqcEFzUmorWDhMYWV4TEcvZjFheVlGdmRvaTEwNUxE?=
+ =?utf-8?B?eDNNL1JHemdoKzRWWTVnZ0dnaFE2enRzZW5PQklOcFZlblhJWVFyV2xVK3pC?=
+ =?utf-8?B?SW90WWZjVHRDQ0hwZXhLSENOUFNTNkxSY3JKVC93OXQyT09ubkVpWm9GYnpK?=
+ =?utf-8?B?Ny9uMEplV05RQlk3b3VRMGExZGlwVTZERjJydXZBUFNUSzBoQy90QURQQjM3?=
+ =?utf-8?B?NDhMUWlXd1R6KzZGcmIzREhiWW5YODZKTXNpeGQwWnBJTC9pTVRmY294MnQ3?=
+ =?utf-8?B?UWtFNjdWZTZRZ0p2UHZzSis5eHFWQm9oRDc2TFZYVkhMdm5HbnQ5YmtzdW5h?=
+ =?utf-8?B?TUpiQ1hOc091ZU45QnBOVkI3Si83OFZuU0pFem9CdFdRUVZ5cDM0M3p0QS9M?=
+ =?utf-8?B?YkwxQW4xcjFKWXRhQ2xYOWNOOVBJeFZ5L2t2c2kzblJtTmVXQ1NrMHFScnNM?=
+ =?utf-8?B?UUxaektWaTlGWHZsVk1zWW1LRDZ3NlJWSTdHT1RxbkRIMEtBZ1dmZkZ4Tmd4?=
+ =?utf-8?B?QmNDb2ozRll3MU5WQ3Qyd1lWbXJSMGZLMzllTHdRcXRnWnR3TzRPWnZVUjZK?=
+ =?utf-8?B?bU8rTXFacE5jNHQ1Z1hhM3JZZGM1SE1pNUhwWFdxa3dxVGQ5QUJUcDBzREk4?=
+ =?utf-8?B?US9FczVYYW40Uk1jTXY3ZFEvbEpyLzQ5aitSU0FueTZ6SnBXN1ZQOFJMUTBO?=
+ =?utf-8?B?VUE9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f9b0c36-b9fc-4457-fae2-08dafe285d09
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 16:30:54.1616
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xND+A2DB21t/vPRp6zi3b+cLTiMXbvUbW+dRhVMH0Lf0BLAqcYhuNQ2o1+fKgZsDYZpbH7KcsGmRnx46tAuxvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR03MB9999
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+On 9/28/22 22:32, Daniel Walker wrote:
+> v5 release changes. Generally a rebase from v4.
+> 
+> * Modified OF changes to move the ugly code into the cmdline.h
+> 
+> * Minor compliation update in arm64. Added ifndef __ASSEMBLY__ in
+>   a few places.
+> 
+> * Worked around arm64 kaslr_early.c.
+> 
+> 	This code needs some additional review and consideration. 
+> 	It appears this code is missing the opposite option to nokaslr
+> 	which is kaslr.disabled=1/0 which would allow kaslr to be turn
+> 	back on later in the command line. For example,
+> 
+> 	console=ttyS0 nokaslr root=/dev/ram0 nosmp kaslr.disabled=0 loglevel=7
+> 	
+> 	On arm64 in arch/arm64/kernel/idreg-override.c this is parsed correctly
+> 	to turn on kaslr, but the kaslr_early.c is missing this logic.
+> 	Doing this results in kaslr getting disabled with the following message,
+> 
+> 	KASLR disabled due to lack of seed
+> 
+> 	Even when there is a seed in the device tree.	
+> 
+> 	So change to the generic command line would leave built in command
+> 	lines with nokaslr with no option to re-enable kaslr in in the bootloader
+> 	arguments.
+> 
+> 
+> Daniel Walker (8):
+>   CMDLINE: add generic builtin command line
+>   scripts: insert-sys-cert: add command line insert capability
+>   scripts: insert-sys-cert: change name to insert-symbol
+>   CMDLINE: mips: convert to generic builtin command line
+>   drivers: firmware: efi: libstub: enable generic commandline
+>   CMDLINE: x86: convert to generic builtin command line
+>   of: replace command line handling
+>   CMDLINE: arm64: convert to generic builtin command line
+> 
+>  arch/arm64/Kconfig                            |  33 +--
+>  arch/arm64/include/asm/setup.h                |   4 +
+>  arch/arm64/include/uapi/asm/setup.h           |   2 +
+>  arch/arm64/kernel/idreg-override.c            |   9 +-
+>  arch/arm64/kernel/pi/kaslr_early.c            |  14 +-
+>  arch/mips/Kconfig                             |   4 +-
+>  arch/mips/Kconfig.debug                       |  44 ----
+>  arch/mips/configs/ar7_defconfig               |   9 +-
+>  arch/mips/configs/bcm47xx_defconfig           |   8 +-
+>  arch/mips/configs/bcm63xx_defconfig           |  15 +-
+>  arch/mips/configs/bmips_be_defconfig          |  11 +-
+>  arch/mips/configs/bmips_stb_defconfig         |   6 +-
+>  arch/mips/configs/ci20_defconfig              |   9 +-
+>  arch/mips/configs/cu1000-neo_defconfig        |  10 +-
+>  arch/mips/configs/cu1830-neo_defconfig        |  10 +-
+>  arch/mips/configs/generic_defconfig           |   6 +-
+>  arch/mips/configs/gpr_defconfig               |  18 +-
+>  arch/mips/configs/loongson3_defconfig         |  12 +-
+>  arch/mips/include/asm/setup.h                 |   2 +
+>  arch/mips/kernel/relocate.c                   |  17 +-
+>  arch/mips/kernel/setup.c                      |  36 +--
+>  arch/mips/pic32/pic32mzda/early_console.c     |   2 +-
+>  arch/mips/pic32/pic32mzda/init.c              |   3 +-
+>  arch/x86/Kconfig                              |  44 +---
+>  arch/x86/kernel/setup.c                       |  18 +-
+>  .../firmware/efi/libstub/efi-stub-helper.c    |  29 +++
+>  drivers/firmware/efi/libstub/efi-stub.c       |   9 +
+>  drivers/firmware/efi/libstub/efistub.h        |   1 +
+>  drivers/firmware/efi/libstub/x86-stub.c       |  13 +-
+>  drivers/of/fdt.c                              |  22 +-
+>  include/linux/cmdline.h                       | 137 ++++++++++
+>  init/Kconfig                                  |  78 ++++++
+>  lib/Kconfig                                   |   4 +
+>  lib/Makefile                                  |   3 +
+>  lib/generic_cmdline.S                         |  53 ++++
+>  lib/test_cmdline1.c                           | 139 ++++++++++
+>  scripts/Makefile                              |   2 +-
+>  .../{insert-sys-cert.c => insert-symbol.c}    | 243 ++++++++++++------
+>  38 files changed, 724 insertions(+), 355 deletions(-)
+>  create mode 100644 include/linux/cmdline.h
+>  create mode 100644 lib/generic_cmdline.S
+>  create mode 100644 lib/test_cmdline1.c
+>  rename scripts/{insert-sys-cert.c => insert-symbol.c} (72%)
+> 
 
-Forwarding, since it looks like io_uring is the culprit: vfs_poll() is
-called by io_poll_check_events() on an already released file.
+For arm64:
 
-Thanks,
-Miklos
+Tested-by: Sean Anderson <sean.anderson@seco.com>
 
-On Mon, 16 Jan 2023 at 13:35, syzbot
-<syzbot+d3b704fabd7f02206294@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1485ee86480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d3b704fabd7f02206294
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+d3b704fabd7f02206294@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in fuse_dev_poll+0x1fe/0x240 fs/fuse/dev.c:2066
-> Read of size 8 at addr ffff8880185fc500 by task syz-executor.4/7813
->
-> CPU: 0 PID: 7813 Comm: syz-executor.4 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:306 [inline]
->  print_report+0x15e/0x45d mm/kasan/report.c:417
->  kasan_report+0xc0/0xf0 mm/kasan/report.c:517
->  fuse_dev_poll+0x1fe/0x240 fs/fuse/dev.c:2066
->  vfs_poll include/linux/poll.h:88 [inline]
->  io_poll_check_events io_uring/poll.c:279 [inline]
->  io_poll_task_func+0x3a6/0x1220 io_uring/poll.c:327
->  handle_tw_list+0xa8/0x460 io_uring/io_uring.c:1169
->  tctx_task_work+0x12e/0x530 io_uring/io_uring.c:1224
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  get_signal+0x1c7/0x24f0 kernel/signal.c:2635
->  arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
->  exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
->  exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f5c53a8c0c9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f5c5481c218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-> RAX: fffffffffffffe00 RBX: 00007f5c53babf88 RCX: 00007f5c53a8c0c9
-> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f5c53babf88
-> RBP: 00007f5c53babf80 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f5c53babf8c
-> R13: 00007fff46acb32f R14: 00007f5c5481c300 R15: 0000000000022000
->  </TASK>
->
-> Allocated by task 7813:
->  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->  kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->  ____kasan_kmalloc mm/kasan/common.c:371 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:330 [inline]
->  __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:380
->  kmalloc include/linux/slab.h:580 [inline]
->  kzalloc include/linux/slab.h:720 [inline]
->  fuse_dev_alloc+0x48/0x270 fs/fuse/inode.c:1336
->  fuse_dev_alloc_install fs/fuse/inode.c:1366 [inline]
->  fuse_fill_super_common+0x472/0x10b0 fs/fuse/inode.c:1558
->  fuse_fill_super+0x1fb/0x2e0 fs/fuse/inode.c:1641
->  vfs_get_super+0xea/0x280 fs/super.c:1128
->  fuse_get_tree+0x277/0x640 fs/fuse/inode.c:1716
->  vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
->  do_new_mount fs/namespace.c:3145 [inline]
->  path_mount+0x132a/0x1e20 fs/namespace.c:3475
->  do_mount fs/namespace.c:3488 [inline]
->  __do_sys_mount fs/namespace.c:3697 [inline]
->  __se_sys_mount fs/namespace.c:3674 [inline]
->  __x64_sys_mount+0x283/0x300 fs/namespace.c:3674
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> Freed by task 7807:
->  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->  kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->  kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
->  ____kasan_slab_free mm/kasan/common.c:236 [inline]
->  ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
->  kasan_slab_free include/linux/kasan.h:162 [inline]
->  slab_free_hook mm/slub.c:1781 [inline]
->  slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
->  slab_free mm/slub.c:3787 [inline]
->  __kmem_cache_free+0xaf/0x2d0 mm/slub.c:3800
->  fuse_dev_release+0x2ac/0x3f0 fs/fuse/dev.c:2220
->  __fput+0x27c/0xa90 fs/file_table.c:321
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> Last potentially related work creation:
->  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->  __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
->  kvfree_call_rcu+0x70/0xad0 kernel/rcu/tree.c:3315
->  kernfs_unlink_open_file+0x3a4/0x4a0 fs/kernfs/file.c:633
->  kernfs_fop_release+0xeb/0x1e0 fs/kernfs/file.c:805
->  __fput+0x27c/0xa90 fs/file_table.c:321
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> Second to last potentially related work creation:
->  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->  __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
->  kvfree_call_rcu+0x70/0xad0 kernel/rcu/tree.c:3315
->  kernfs_unlink_open_file+0x3a4/0x4a0 fs/kernfs/file.c:633
->  kernfs_fop_release+0xeb/0x1e0 fs/kernfs/file.c:805
->  __fput+0x27c/0xa90 fs/file_table.c:321
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> The buggy address belongs to the object at ffff8880185fc500
->  which belongs to the cache kmalloc-128 of size 128
-> The buggy address is located 0 bytes inside of
->  128-byte region [ffff8880185fc500, ffff8880185fc580)
->
-> The buggy address belongs to the physical page:
-> page:ffffea0000617f00 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8880185fc700 pfn:0x185fc
-> anon flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-> raw: 00fff00000000200 ffff8880124418c0 0000000000000000 dead000000000001
-> raw: ffff8880185fc700 000000008010000e 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5935, tgid 5934 (syz-executor.0), ts 311717359180, free_ts 231319442393
->  prep_new_page mm/page_alloc.c:2549 [inline]
->  get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
->  __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
->  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
->  alloc_slab_page mm/slub.c:1851 [inline]
->  allocate_slab+0x25f/0x350 mm/slub.c:1998
->  new_slab mm/slub.c:2051 [inline]
->  ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
->  __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
->  __slab_alloc_node mm/slub.c:3345 [inline]
->  slab_alloc_node mm/slub.c:3442 [inline]
->  __kmem_cache_alloc_node+0x136/0x330 mm/slub.c:3491
->  __do_kmalloc_node mm/slab_common.c:966 [inline]
->  __kmalloc_node_track_caller+0x4b/0xc0 mm/slab_common.c:987
->  kmemdup+0x2c/0x60 mm/util.c:130
->  kmemdup include/linux/fortify-string.h:702 [inline]
->  mpls_dev_sysctl_register+0xaa/0x2d0 net/mpls/af_mpls.c:1406
->  mpls_add_dev net/mpls/af_mpls.c:1472 [inline]
->  mpls_dev_notify+0x46d/0x990 net/mpls/af_mpls.c:1612
->  notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
->  call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1944
->  call_netdevice_notifiers_extack net/core/dev.c:1982 [inline]
->  call_netdevice_notifiers net/core/dev.c:1996 [inline]
->  register_netdevice+0xfb4/0x1640 net/core/dev.c:10078
->  __ip_tunnel_create+0x398/0x570 net/ipv4/ip_tunnel.c:267
->  ip_tunnel_init_net+0x1f9/0x5a0 net/ipv4/ip_tunnel.c:1073
-> page last free stack trace:
->  reset_page_owner include/linux/page_owner.h:24 [inline]
->  free_pages_prepare mm/page_alloc.c:1451 [inline]
->  free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
->  free_unref_page_prepare mm/page_alloc.c:3387 [inline]
->  free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
->  qlink_free mm/kasan/quarantine.c:168 [inline]
->  qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
->  kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
->  __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
->  kasan_slab_alloc include/linux/kasan.h:186 [inline]
->  slab_post_alloc_hook mm/slab.h:769 [inline]
->  slab_alloc_node mm/slub.c:3452 [inline]
->  slab_alloc mm/slub.c:3460 [inline]
->  __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
->  kmem_cache_alloc+0x175/0x320 mm/slub.c:3476
->  vm_area_alloc+0x20/0x100 kernel/fork.c:458
->  mmap_region+0x44c/0x1e50 mm/mmap.c:2605
->  do_mmap+0x831/0xf60 mm/mmap.c:1411
->  vm_mmap_pgoff+0x1af/0x280 mm/util.c:542
->  ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1457
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> Memory state around the buggy address:
->  ffff8880185fc400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->  ffff8880185fc480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >ffff8880185fc500: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                    ^
->  ffff8880185fc580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff8880185fc600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks!
