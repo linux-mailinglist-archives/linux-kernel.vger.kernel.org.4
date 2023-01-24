@@ -2,186 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1450B67A6A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BED67A6A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbjAXXFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 18:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S233931AbjAXXGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 18:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjAXXFE (ORCPT
+        with ESMTP id S229879AbjAXXGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:05:04 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04984AA63;
-        Tue, 24 Jan 2023 15:05:02 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id vw16so43131833ejc.12;
-        Tue, 24 Jan 2023 15:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LFmKISUEP4KMKksliNnDW8AAbwgCUx4p8IWA7pxHiq8=;
-        b=pYl9Sv/vilxPNHDWR0TOktdrbscAf7wTpiE/As+ZQ+8c2it13bdNN7Ddyk+Y7JI1oQ
-         QVVyf4ZME0aXFz+NUUphEnBxEOObUuOeJgZGqRWa+7FOgDJM8rJ41sdw/LHgtnfTAArO
-         /iuFRe3off73GWeK7x6LwojsnO+jbwf0fycgy5Z4y68oNfPA8NZzBy9QJkrlz+Fpkh7L
-         Kkg3ji3izc5KkKHh/ZRgmM0r2ce11j7xfqMKPVXGO92YA5iwo9fxze5ZRjOMfzAtCIL4
-         fzVMf/xgJTG9/G9gxQtv2oGtXigJTQFN9smWwKM6ZiAx/nUJKc5xBgI5BWBHgiJJiiBr
-         ADXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LFmKISUEP4KMKksliNnDW8AAbwgCUx4p8IWA7pxHiq8=;
-        b=zuKehliS+DoQol3uXzohXlg3G4vN9nD19hAHYedtlO8vjXhX6LvBpRn8ziq7X24+kw
-         bqTeHMN+Ir4Z0VzTeWIuTa2nTcO1l/VsXrifS5SkHvCXY2N8sEk2HwWMIijdoupRBwAI
-         QmkNPhkTnpdawahe/A7GGozXHy6fGuli2N0nK/gMdhVsTm5eB8fexL2ZlW/gQJurSkdw
-         /+cRcPZqZtARfFzeosXP+rZZ5DrM0Kyz1s5Vol7qNw/FsvSLYwMII3UytscR9d7+rVJC
-         fsnYQsfAbwaZgMOcdQqxoj8VPwSPsGhH3QQ1AHVVqumIolrjPshNdIe/OcoznTw8W0bU
-         f/Cw==
-X-Gm-Message-State: AFqh2kqXJfx9tmuwxUn6GX/6gFJOjWN8tHjkhDfZfWMlsk4OIWdLIM2J
-        raA/woQpC3iE7+eKmtK+Ifk=
-X-Google-Smtp-Source: AMrXdXveaCF5SJskLiomc3lMHSStv0NhioAVOI3d2VT+5OEGZYo9xjWAP63yTJ42xtolAElwMtrbtg==
-X-Received: by 2002:a17:906:2308:b0:870:709e:169d with SMTP id l8-20020a170906230800b00870709e169dmr32337303eja.35.1674601500929;
-        Tue, 24 Jan 2023 15:05:00 -0800 (PST)
-Received: from krava ([83.240.61.48])
-        by smtp.gmail.com with ESMTPSA id p16-20020a1709060e9000b008779570227bsm1464215ejf.112.2023.01.24.15.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 15:05:00 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 25 Jan 2023 00:04:57 +0100
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] tools/resolve_btfids: Install subcmd headers
-Message-ID: <Y9BkGR8me2T7CWoT@krava>
-References: <20230124064324.672022-1-irogers@google.com>
+        Tue, 24 Jan 2023 18:06:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0994AA63
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:06:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4AF3B81717
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:06:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED762C433EF;
+        Tue, 24 Jan 2023 23:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674601610;
+        bh=s7pIW0jia0g5VIFzcKgT/jLZ3jSOURjQa383hJ8aYqI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Fg1YSiGUjN1zndovtoikiu0vqfEKGhRoqrNvGkbdoMwNlVXslB0X9fhYdmjB060pP
+         ucdwamaTozqkicBefjY1B865QF7EJ3BE+wIe0dao1RUWbnAb7UxO8mldV739t5HlwX
+         SyHqp1ltDgVhntqGkVlqwkURt4ywFhFKyvDu6lOwFtwREiXGa4wgYABxmU6gX59cID
+         VI/7V2kZxb6cDAVb+Fzh90sucX8kqvMFZGUhoX6HBiKhwouYhaGg1R9vIf1BHdYBzN
+         Hd/1YX1zGc/ua5r3MbE8sNG5bsR4Zt5TtVriUELvhyd/jMSfL6YIZi1WPphLSiMEPk
+         ZeBLuMbs+EWug==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
+        linux-damon-trial@amazon.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: DAMON Beer/Coffee/Tea chat series
+Date:   Tue, 24 Jan 2023 23:06:48 +0000
+Message-Id: <20230124230648.113669-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230124014421.112436-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124064324.672022-1-irogers@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:43:23PM -0800, Ian Rogers wrote:
-> Previously tools/lib/subcmd was added to the include path, switch to
-> installing the headers and then including from that directory. This
-> avoids dependencies on headers internal to tools/lib/subcmd. Add the
-> missing subcmd directory to the affected #include.
+On Tue, 24 Jan 2023 01:44:21 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> Hello,
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-
-Acked-by: iri Olsa <jolsa@kernel.org>
-
-jirka
-
-> ---
->  tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
->  tools/bpf/resolve_btfids/main.c   |  2 +-
->  2 files changed, 15 insertions(+), 6 deletions(-)
+> On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
 > 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index f7375a119f54..1fe0082b2ecc 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
->  BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
->  LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
->  SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
-> +SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
->  
->  LIBBPF_DESTDIR := $(LIBBPF_OUT)
->  LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
->  
-> +SUBCMD_DESTDIR := $(SUBCMD_OUT)
-> +SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
-> +
->  BINARY     := $(OUTPUT)/resolve_btfids
->  BINARY_IN  := $(BINARY)-in.o
->  
->  all: $(BINARY)
->  
-> +prepare: $(BPFOBJ) $(SUBCMDOBJ)
-> +
->  $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->  	$(call msg,MKDIR,,$@)
->  	$(Q)mkdir -p $(@)
->  
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> -	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
-> +	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> +		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> +		    $(abspath $@) install_headers
->  
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> @@ -63,7 +71,7 @@ CFLAGS += -g \
->            -I$(srctree)/tools/include \
->            -I$(srctree)/tools/include/uapi \
->            -I$(LIBBPF_INCLUDE) \
-> -          -I$(SUBCMD_SRC) \
-> +          -I$(SUBCMD_INCLUDE) \
->            $(LIBELF_FLAGS)
->  
->  LIBS = $(LIBELF_LIBS) -lz
-> @@ -71,7 +79,7 @@ LIBS = $(LIBELF_LIBS) -lz
->  export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->  
-> -$(BINARY_IN): $(BPFOBJ) fixdep FORCE | $(OUTPUT)
-> +$(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
->  	$(Q)$(MAKE) $(build)=resolve_btfids
->  
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> @@ -83,7 +91,8 @@ clean_objects := $(wildcard $(OUTPUT)/*.o                \
->                              $(OUTPUT)/.*.o.d             \
->                              $(LIBBPF_OUT)                \
->                              $(LIBBPF_DESTDIR)            \
-> -                            $(OUTPUT)/libsubcmd          \
-> +                            $(SUBCMD_OUT)                \
-> +                            $(SUBCMD_DESTDIR)            \
->                              $(OUTPUT)/resolve_btfids)
->  
->  ifneq ($(clean_objects),)
-> @@ -100,4 +109,4 @@ tags:
->  
->  FORCE:
->  
-> -.PHONY: all FORCE clean tags
-> +.PHONY: all FORCE clean tags prepare
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index 80cd7843c677..77058174082d 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -75,7 +75,7 @@
->  #include <linux/err.h>
->  #include <bpf/btf.h>
->  #include <bpf/libbpf.h>
-> -#include <parse-options.h>
-> +#include <subcmd/parse-options.h>
->  
->  #define BTF_IDS_SECTION	".BTF_ids"
->  #define BTF_ID		"__BTF_ID__"
-> -- 
-> 2.39.0.246.g2a6d74b583-goog
+> > Hello,
+> > 
+> > 
+> > In short, I'd like to start an open, regular, and informal virtual bi-weekly
+> > meeting series for DAMON community.
+> > 
+> > Important links and dates
+> > -------------------------
+> > 
+> > Location: https://meet.google.com/ndx-evoc-gbu
+> > Agenda: https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
+> 
+> This is a reminder for the next instance of the chat series.  Next instance
+> will be 2023-01-23 (Tue) 09:30 PST.  You can show proposed agendas for the
+> chat, or propose your own using the above Google doc.  Looking forward to see
+> you after about 15 hours for the first time in the new lunar year :)
+
+If you tried to but couldn't join today meeting, that's not you or system's
+fault but mine.  I was out of mind this morning due to some other urgent things
+and therefore couldn't attend, sorry.
+
+Let's have yet another one instance for next Tuesday morning (PST), so
+2023-01-31 (Tue) 09:30 PST.
+
+
+Thanks,
+SJ
+
+> 
+> 
+> Thanks,
+> SJ
 > 
