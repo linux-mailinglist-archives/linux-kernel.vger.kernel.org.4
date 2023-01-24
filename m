@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4117679D73
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8677679D76
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbjAXP2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S234984AbjAXP21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbjAXP17 (ORCPT
+        with ESMTP id S235102AbjAXP2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:27:59 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E297DBE
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:27:49 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id tz11so40059099ejc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:27:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9K4VINx5OKjEA306fu/v7ErNDQ2+AySRwfVGcdjkuNE=;
-        b=eMSnOdN7gUPWZU6M/OsLCIvxUIoN264+Mcl7IToOu64/xDg0TWt2bWNvzb8N6z+Axt
-         +hS/yXLWPv8ohGrVMtdiaTrNe8v0a89WBD7r56s0CBlkETknif9xoPJTTsUpvL3941lX
-         wzVAFaON8oaaKrt+puBgyJ3N6vtc+e3sHtG0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9K4VINx5OKjEA306fu/v7ErNDQ2+AySRwfVGcdjkuNE=;
-        b=1G718Sbt1juaCRZTuWjoP0EzKYIGRoAKi/Dv5JNWTIWHA6DayLwSH3utLWvGcYhIbX
-         tVwroqcWJHW0JH7Ayojl5Jx35zCi1L1/9ltz1oHtG5IrBbr+qrBm5s2LKyvfWT7uF/gv
-         NcluGGy1Ha6vau9fJrwGNTNyf+R/y8/dpnYGs89ZydDQSxWWsqpPYaPHPYV2EXhRfzEC
-         9L7I9RSAxkUcYe6c+MUK6jt6msk4borouwEsCLRTSbcDx+chvuoWWshsoXiaWIFI8mSA
-         GLF9A3dCO25K7XPxNNn5AN7Ra4d0cwmFnlTEGVoWMggdbRoKa2aNRWa/1qquqeUS4+i2
-         PvRw==
-X-Gm-Message-State: AFqh2kp7IWA4tkr7jsWwKSnNpbmieaBWdWXhEP5WlZqNX5gCea/TedYV
-        jLScVwPB3WxWNgqsp828z/ttPo7MSL/ghuQrf7f/dQ==
-X-Google-Smtp-Source: AMrXdXuX/ATUdqKG9nCy8XT8y4LmKHnV6+AhNvip4pbLjczyHUqkHSTSTMvMK+6DlLiOveSKXT2O6c0IoDVfLYXf6qo=
-X-Received: by 2002:a17:906:e087:b0:870:450d:c2b1 with SMTP id
- gh7-20020a170906e08700b00870450dc2b1mr2768970ejb.45.1674574067831; Tue, 24
- Jan 2023 07:27:47 -0800 (PST)
+        Tue, 24 Jan 2023 10:28:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AD41A96D;
+        Tue, 24 Jan 2023 07:28:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFF6612CF;
+        Tue, 24 Jan 2023 15:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934D3C433D2;
+        Tue, 24 Jan 2023 15:28:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674574097;
+        bh=DFV2/9gj6sPEo6k2DtJ6ywijKdwcFb8PC1ifLycfAFI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1tgPOElY70AjKYefZZ3RvfK47hsmQEB/T1V2sauA4iCGt321FSN4QO4E2DfQ38UhA
+         CnQDFsiYJPkrsutVqOt7ARcFe+xCBu0X7wJZDMz6FDXFpqQSFCip/myisS1FBQ3pkk
+         04L7FQnpu6Cpbb7Y4cIF0zfQQZ3R+FkIwVeRVF5E=
+Date:   Tue, 24 Jan 2023 16:28:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jordy Zomer <jordyzomer@google.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        ebiederm@xmission.com, brho@google.com, catalin.marinas@arm.com,
+        broonie@kernel.org, legion@kernel.org, Jason@zx2c4.com,
+        surenb@google.com
+Subject: Re: [PATCH AUTOSEL 6.1 34/35] prlimit: do_prlimit needs to have a
+ speculation check
+Message-ID: <Y8/5DKfHZ2Mj7m8Q@kroah.com>
+References: <20230124134131.637036-1-sashal@kernel.org>
+ <20230124134131.637036-34-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20230120205827.740900-1-pmalani@chromium.org> <20230120205827.740900-2-pmalani@chromium.org>
-In-Reply-To: <20230120205827.740900-2-pmalani@chromium.org>
-From:   Benson Leung <bleung@chromium.org>
-Date:   Tue, 24 Jan 2023 07:27:33 -0800
-Message-ID: <CANLzEkvmCOR3B-Sx3z=wyPB+6h_OyvbHqhsShAiT368N1-3pFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Remove altmode active state updates
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Benson Leung <bleung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124134131.637036-34-sashal@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 1:00 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Since the "active" state for partner altmodes is now being taken care of
-> by the altmode driver itself (specifically, DisplayPort altmode), we
-> no longer need to do so from the port driver. So remove the calls to
-> typec_altmode_update_active() from TCPM.
->
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
+On Tue, Jan 24, 2023 at 08:41:30AM -0500, Sasha Levin wrote:
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> [ Upstream commit 739790605705ddcf18f21782b9c99ad7d53a8c11 ]
+> 
+> do_prlimit() adds the user-controlled resource value to a pointer that
+> will subsequently be dereferenced.  In order to help prevent this
+> codepath from being used as a spectre "gadget" a barrier needs to be
+> added after checking the range.
+> 
+> Reported-by: Jordy Zomer <jordyzomer@google.com>
+> Tested-by: Jordy Zomer <jordyzomer@google.com>
+> Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->
-> Changes since v1:
-> - Patch first introduced in v2.
->
->  drivers/usb/typec/tcpm/tcpm.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 904c7b4ce2f0..0f5a9d4db105 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1693,14 +1693,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->                         }
->                         break;
->                 case CMD_ENTER_MODE:
-> -                       if (adev && pdev) {
-> -                               typec_altmode_update_active(pdev, true);
-> +                       if (adev && pdev)
->                                 *adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
-> -                       }
->                         return 0;
->                 case CMD_EXIT_MODE:
->                         if (adev && pdev) {
-> -                               typec_altmode_update_active(pdev, false);
->                                 /* Back to USB Operation */
->                                 *adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
->                                 return 0;
-> --
-> 2.39.0.246.g2a6d74b583-goog
->
+>  kernel/sys.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/sys.c b/kernel/sys.c
+> index 5fd54bf0e886..88b31f096fb2 100644
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+> @@ -1442,6 +1442,8 @@ static int do_prlimit(struct task_struct *tsk, unsigned int resource,
+>  
+>  	if (resource >= RLIM_NLIMITS)
+>  		return -EINVAL;
+> +	resource = array_index_nospec(resource, RLIM_NLIMITS);
+> +
+>  	if (new_rlim) {
+>  		if (new_rlim->rlim_cur > new_rlim->rlim_max)
+>  			return -EINVAL;
+> -- 
+> 2.39.0
+> 
 
+This is already in the 6.1.8 release so no need to add it again :)
 
--- 
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+thanks,
+
+greg k-h
