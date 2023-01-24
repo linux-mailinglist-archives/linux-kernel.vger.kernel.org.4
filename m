@@ -2,143 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C626791DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8846791EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbjAXHZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S232848AbjAXH2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjAXHZM (ORCPT
+        with ESMTP id S229791AbjAXH2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:25:12 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618D912057
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:25:10 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso10215247wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tf2jkhDB/fcmN7gxB9BcFTlLK/uYEMsrGqgyWUEbIpY=;
-        b=Ey5ePlReG/n9vBilW4cfQNWTL/l/rns4G9TU3NjLnRqHlJJzRriYkfBLv5xkOYvf6k
-         tNxSvygXO6JmhBMATZP+4RWAM/qYoK+q58K2fGxlVf3UbxlZmZosyZyB7cVttv347tmV
-         ToZmZNkSArgBvXSky7SGWU5otTh8k17jeKQ6Uh0BaB+2hypaWFk51+cw5M9c8zLR4S3R
-         rbDfCUXeYIQrU4d9Pt7pOiZaZYPBWWhjidrvFXtsrwVzlgWlckyPuyElevm1lIgZxXFd
-         Sh35CcPBTdxpyV6N59BG7Xin73RUoxjOaqsLKKctlriqnkR8ys0RBffv86iFWpPani9v
-         EefQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tf2jkhDB/fcmN7gxB9BcFTlLK/uYEMsrGqgyWUEbIpY=;
-        b=J7FtNa6xyhJYFlWKz4pfKQQMr6uOPchz52vUx4CdwMOaxY6p/dejWi1ClUqE3DnMw6
-         qojv+EmqjAeSp2uAAKB48grXLrELOpNb24W8ed495ACqwZt7siVjxqsgx5xm6mxr9NEa
-         coZBm8I3M6g6uTp/oYoxB4pACy8BldfK3w20mHza6IGnfKXYPSQhTWn1/6a4XDflg5ZL
-         dSOO3MHlVbQtkORt30amzLEvjcU9PWmfAs7Xa0PSZFMwvL1GDJY2P4h403a33TXfM26J
-         uSVR/WHDxcb7fbDVXeXwNadugplYDgNqom137ZW7+dMG71QMaCg7TCbjaaLhEAy5Zb4I
-         BGBA==
-X-Gm-Message-State: AFqh2krX28R4yjo4ufu3kHASHb4bPk58iw8l/JesQ5TmdBXNmoI/EL+f
-        fEO+osOzYhiOnFgeS8R5vPx4jw==
-X-Google-Smtp-Source: AMrXdXvH5bGz6Fl5hSlEDfijg+poG9+NkFL619URN+WkIB9aNvhttf/yW+RHKBUEvSvYNh4NNDJZuw==
-X-Received: by 2002:a05:600c:5386:b0:3cf:9844:7b11 with SMTP id hg6-20020a05600c538600b003cf98447b11mr27831353wmb.23.1674545108902;
-        Mon, 23 Jan 2023 23:25:08 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o25-20020a1c7519000000b003daf6e3bc2fsm1216707wmc.1.2023.01.23.23.25.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 23:25:08 -0800 (PST)
-Message-ID: <e0dd24e8-9d4b-ea23-d1de-190330c0e825@linaro.org>
-Date:   Tue, 24 Jan 2023 08:25:05 +0100
+        Tue, 24 Jan 2023 02:28:07 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1175E974C;
+        Mon, 23 Jan 2023 23:28:05 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30O7OPln026293;
+        Tue, 24 Jan 2023 07:27:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KwQ/PtpYUTz+cVdN4b3hZ/Dm5u2vC7+yvEKnwB3nkAA=;
+ b=PS6PoZCpSi3B5YUgjUt0VCH2FSsVBbgrEXJLdKMOUew2dgGxjzZae6oGyOg9dsEu9scL
+ o/sCPGpSyUYi1dZa5fZhaOEpZxCMj6MNk6pLI0zMQb/iAtcI1pHIduLb/hsOIpMq+149
+ +FYBevsmSikxwHlz/qK54206eVkZdDWMAOtwDW70ug+4560bkpXDllnUpEZd7FkJVMaM
+ V7xpr4LRpN2DLDBPgSI1dt3pd96cmlk2urXZ+Dym2xvZzT5e0DxouZ5jsoazhCQGv8oP
+ 5DzUwm1TAqN41MA4pVHIRyBCPm6qlIaeyp5e+BG0ylMkGO2zpVqITQX0JHqvRnXaRsEG Gw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89dncfdg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 07:27:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30O7RGuG011025
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 07:27:16 GMT
+Received: from [10.216.24.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 23 Jan
+ 2023 23:27:07 -0800
+Message-ID: <2852fc37-284f-6534-f163-45b37b153db1@quicinc.com>
+Date:   Tue, 24 Jan 2023 12:57:04 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 11/13] dt-bindings: serial: restrict possible child node
- names
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/7] clk: qcom: Add Global Clock Controller driver for
+ IPQ9574
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, - <devicetree@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Chester Lin <clin@suse.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, Fugang Duan <fugang.duan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230123151302.368277-1-krzysztof.kozlowski@linaro.org>
- <20230123151302.368277-11-krzysztof.kozlowski@linaro.org>
- <167451486467.2795286.1299932821783618559.robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <167451486467.2795286.1299932821783618559.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-3-quic_devipriy@quicinc.com>
+ <de346d71-1fe7-e357-d220-d4468e4bb933@linaro.org>
+ <afd2e5c8-fa5a-ac1f-4ede-4ab1f91c0d0d@quicinc.com>
+ <9bdf757d-1fa0-106f-eb77-7f2a8593213f@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <9bdf757d-1fa0-106f-eb77-7f2a8593213f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: STEphrwkEN8UcQaS1cFm2yXVFfi5Dkf-
+X-Proofpoint-ORIG-GUID: STEphrwkEN8UcQaS1cFm2yXVFfi5Dkf-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240068
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 00:05, Rob Herring wrote:
+
+
+On 1/13/2023 7:39 PM, Konrad Dybcio wrote:
 > 
-> On Mon, 23 Jan 2023 16:13:00 +0100, Krzysztof Kozlowski wrote:
->> The re-usable serial.yaml schema matches every property with ".*"
->> pattern, thus any other schema referencing it will not report unknown
->> (unevaluated) properties.  This hides several wrong properties.  It is
->> a limitation of dtschema, thus provide a simple workaround: expect
->> children to be only of few names matching upstream usage (Bluetooth,
->> GNSS, GPS and MCU).
+> 
+> On 13.01.2023 14:21, Devi Priya wrote:
 >>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/serial/serial.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
+>> On 1/10/2023 6:07 PM, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 10.01.2023 13:13, devi priya wrote:
+>>>> Add Global Clock Controller (GCC) driver for ipq9574 based devices
+>>>>
+>>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>> ---
+> [...]
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>> +static struct clk_branch gcc_blsp1_qup6_i2c_apps_clk = {
+>>>> +    .halt_reg = 0x07024,
+>>>> +    .clkr = {
+>>>> +        .enable_reg = 0x07024,
+>>>> +        .enable_mask = BIT(0),
+>>>> +        .hw.init = &(struct clk_init_data) {
+>>>> +            .name = "gcc_blsp1_qup6_i2c_apps_clk",
+>>>> +            .parent_hws = (const struct clk_hw *[]) {
+>>>> +                    &blsp1_qup6_i2c_apps_clk_src.clkr.hw },
+>>>> +            .num_parents = 1,
+>>>> +            .flags = CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
+>>> Sounds very much like a hack..
+>> Got it, will remove the clock entry as it is not being used in linux
+> I'm not sure removing it is the best option, somebody might have a
+> funky board where they use this particular QUP for I2C for whatever
+> reason and then the clock would have to be re-added..
+Sure, Understood
+This clock is used by the RPM component to communicate with PMIC and we
+would add the critical flag here
+
+> Thanks for addressing all of the review comments so thoroughly!
 > 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.example.dtb: serial@1,0: Unevaluated properties are not allowed ('intel,ixp4xx-eb-byte-access', 'intel,ixp4xx-eb-cycle-type', 'intel,ixp4xx-eb-t3', 'intel,ixp4xx-eb-write-enable' were unexpected)
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/8250.yaml
+> Konrad
 
-Did I just forgot to test all the bindings (except the changed ones)? It
-seems so, therefoer note to myself:
-
-Please run `make dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions). :)
-
-Best regards,
-Krzysztof
-
+Best Regards,
+Devi Priya
