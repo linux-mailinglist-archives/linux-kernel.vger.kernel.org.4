@@ -2,149 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169A06794AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05D96794A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbjAXKDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        id S233545AbjAXKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjAXKDF (ORCPT
+        with ESMTP id S233235AbjAXKC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:03:05 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145FB1E5EF;
-        Tue, 24 Jan 2023 02:03:04 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AE6EE1F45B;
-        Tue, 24 Jan 2023 10:03:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674554582; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XlyGLp9iAeImFLsnSAcMxEWopq1s7dMOnOrqAcJb5aI=;
-        b=iJDUQkn/cNwIAVgveFSobSI3meetZed44h7lnlZflvh4gDI46mQBSDkxqHvrqeHMfYls6f
-        9EWA/IotXTRFDUB0S9wT9at9zLO0tXlK3CpdY4EWQJsLzz4JDGUL+eMvI/eysH5fokc2EY
-        iLKuAju/gW/5MPS+zYspo9Anb6VcSbk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674554582;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XlyGLp9iAeImFLsnSAcMxEWopq1s7dMOnOrqAcJb5aI=;
-        b=1g2PDkp0PuOb8PuA74YKfnsTkM9oHi5HzEuRXHxv53mKfiTZNvEGV/U2nocVh5EYQDjvUN
-        Oyka4gXQ2GVZS6Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8173139FB;
-        Tue, 24 Jan 2023 10:03:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8JCTJ9Wsz2O3ZgAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 24 Jan 2023 10:03:01 +0000
-Message-ID: <45e64c7c-8a78-d15c-0cc5-9ba465acf691@suse.de>
-Date:   Tue, 24 Jan 2023 11:02:21 +0100
+        Tue, 24 Jan 2023 05:02:59 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D1A11E89
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:02:57 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12441587wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e7+2ObP6hwGfYv8AoClcbY4T+NA4DE6TZB+TmM9ZmmE=;
+        b=Qrm3AJfL/kw1YbFePRK1oUcqKcOxpjENw5HzCbfcFTD48Htaa1hSvGC/HSbVSuigeD
+         ymfmSmQwAPDkCVcJcDW797QKZOEqV8gWVGpvLohdmWBS7UVfq5MhfwlocVGOSjaT4pu6
+         tZBtmjY3y/CJL6GQGIF5bHV258lDpHDnVdOPU5NABATZywZhILE7m2QCYZIJx7niHVnK
+         ePzHLlc/I408cWUSeDAalrRBA11wkadAxv92tDdWVQRgXkDqaAzyyhqm4HkO+AYCB5oI
+         yJMYm/e/PceuZGu/c9tonmlvYQYpGl0BVdyFJe2RxvzG41bbzAf11WY+j2EtQjuepJsY
+         gGQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e7+2ObP6hwGfYv8AoClcbY4T+NA4DE6TZB+TmM9ZmmE=;
+        b=gImoH9CPN1UmSWElBAcDsYdRyqXbM1jUL7vTmkgXbzASProY/FsV4rZVHs6/44ds1d
+         aEYvTNu0pK3n52qPPE57m7aTifg0DHOKt1WqBz5SbZgDNArEtKtE0lzZL5NAjgbq+aKw
+         tbvkflfQEtE3WVLizBr+hkjnRlHxSE9YzdEDsYD5gFklDSvTSMFuk3MoHsCNZJ0PKxkp
+         wXy1UMGmIeqGLiNqkdx5QigWGspsPi58CVx35xo4JdXJJtI0+EMHvwOLW4Q8jGqLb0bw
+         CsYwGy6Ri2845v7cJh2eHWkrYmrxU3UqLnH55+Ir/NOV+Sx7Sgi7ppXLmdGBnOlMmIO9
+         HteQ==
+X-Gm-Message-State: AFqh2kqPqBhCWYrwq+a5ffYkEMwGwXvCQiwp7b/Ef6jjBeWgVV92/Hjg
+        yBy6/IfHOhcsNjXielDfpCf0jg==
+X-Google-Smtp-Source: AMrXdXuVShf4vzB3MRnsGM1yCSL18NhLSOQCh97phU6rXE44vNaCzhjcUEtLDEHz4IHu5gDEqcTYNw==
+X-Received: by 2002:a05:600c:89a:b0:3cf:6e78:e2ca with SMTP id l26-20020a05600c089a00b003cf6e78e2camr34965451wmp.5.1674554575278;
+        Tue, 24 Jan 2023 02:02:55 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b003d9df9e59c4sm13866978wmq.37.2023.01.24.02.02.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 02:02:54 -0800 (PST)
+Message-ID: <37a95380-ee68-5c3a-3b96-48cc8b525f19@linaro.org>
+Date:   Tue, 24 Jan 2023 11:02:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] pata_parport: add driver (PARIDE replacement)
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
-        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230121225314.32459-1-linux@zary.sk>
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
+ controller
 Content-Language: en-US
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20230121225314.32459-1-linux@zary.sk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230113103759.327698-1-herve.codina@bootlin.com>
+ <20230113103759.327698-6-herve.codina@bootlin.com>
+ <316ddb81-8d13-71dd-3396-412e31cfb880@linaro.org>
+ <20230124104232.183cc9ff@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124104232.183cc9ff@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/23 23:53, Ondrej Zary wrote:
-> The pata_parport is a libata-based replacement of the old PARIDE
-> subsystem - driver for parallel port IDE devices.
-> It uses the original paride low-level protocol drivers but does not
-> need the high-level drivers (pd, pcd, pf, pt, pg). The IDE devices
-> behind parallel port adapters are handled by the ATA layer.
+On 24/01/2023 10:42, Herve Codina wrote:
+> Hi Krzysztof,
 > 
-> This will allow paride and its high-level drivers to be removed.
+> On Tue, 17 Jan 2023 12:31:09 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> Unfortunately, libata drivers cannot sleep so pata_parport claims
-> parport before activating the ata host and keeps it claimed (and
-> protocol connected) until the ata host is removed. This means that
-> no devices can be chained (neither other pata_parport devices nor
-> a printer).
+>> On 13/01/2023 11:37, Herve Codina wrote:
+>>> Add support for the QMC (QUICC Multichannel Controller)
+>>> available in some PowerQUICC SoC such as MPC885 or MPC866.
+>>>
+>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>>> ---
+>>>  .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      | 164 ++++++++++++++++++
+>>>  1 file changed, 164 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+>>> new file mode 100644
+>>> index 000000000000..3ec52f1635c8
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+>>> @@ -0,0 +1,164 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,qmc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
+>>> +
+>>> +maintainers:
+>>> +  - Herve Codina <herve.codina@bootlin.com>
+>>> +
+>>> +description: |
+>>> +  The QMC (QUICC Multichannel Controller) emulates up to 64 channels within
+>>> +  one serial controller using the same TDM physical interface routed from
+>>> +  TSA.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - fsl,mpc885-scc-qmc
+>>> +          - fsl,mpc866-scc-qmc
+>>> +      - const: fsl,cpm1-scc-qmc
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: SCC (Serial communication controller) register base
+>>> +      - description: SCC parameter ram base
+>>> +      - description: Dual port ram base
+>>> +
+>>> +  reg-names:
+>>> +    items:
+>>> +      - const: scc_regs
+>>> +      - const: scc_pram
+>>> +      - const: dpram
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +    description: SCC interrupt line in the CPM interrupt controller
+>>> +
+>>> +  fsl,tsa:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description: phandle to the TSA
+>>> +
+>>> +  fsl,tsa-cell-id:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    enum: [1, 2, 3]
+>>> +    description: |
+>>> +      TSA cell ID (dt-bindings/soc/fsl,tsa.h defines these values)
+>>> +       - 1: SCC2
+>>> +       - 2: SCC3
+>>> +       - 3: SCC4  
+>>
+>> Is this used as argument to tsa? If so, this should be part of fsl,tsa
+>> property, just like we do for all syscon-like phandles.
 > 
-> paride and pata_parport are mutually exclusive because the compiled
-> protocol drivers are incompatible.
-> 
-> Tested with:
->   - Imation SuperDisk LS-120 and HP C4381A (EPAT)
->   - Freecom Parallel CD (FRPW)
->   - Toshiba Mobile CD-RW 2793008 w/Freecom Parallel Cable rev.903 (FRIQ)
->   - Backpack CD-RW 222011 and CD-RW 19350 (BPCK6)
-> 
-> The following bugs in low-level protocol drivers were found and will
-> be fixed later:
-> 
-> Note: EPP-32 mode is buggy in EPAT - and also in all other protocol
-> drivers - they don't handle non-multiple-of-4 block transfers
-> correctly. This causes problems with LS-120 drive.
-> There is also another bug in EPAT: EPP modes don't work unless a 4-bit
-> or 8-bit mode is used first (probably some initialization missing?).
-> Once the device is initialized, EPP works until power cycle.
-> 
-> So after device power on, you have to:
-> echo "parport0 epat 0" >/sys/bus/pata_parport/new_device
-> echo pata_parport.0 >/sys/bus/pata_parport/delete_device
-> echo "parport0 epat 4" >/sys/bus/pata_parport/new_device
-> (autoprobe will initialize correctly as it tries the slowest modes
-> first but you'll get the broken EPP-32 mode)
-> 
-> Note: EPP modes are buggy in FRPW, only modes 0 and 1 work.
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
-> ---
-> 
-> Changes in v2:
->   - keep device connected, remove disconnect timer
-> 
->   Documentation/admin-guide/blockdev/paride.rst |  52 ++
->   drivers/Makefile                              |   2 +-
->   drivers/ata/Kconfig                           |  14 +
->   drivers/ata/Makefile                          |   2 +
->   drivers/ata/pata_parport.c                    | 783 ++++++++++++++++++
->   drivers/block/paride/Kconfig                  |  32 +-
->   drivers/block/paride/paride.h                 |  13 +
->   include/linux/pata_parport.h                  | 106 +++
->   8 files changed, 987 insertions(+), 17 deletions(-)
->   create mode 100644 drivers/ata/pata_parport.c
->   create mode 100644 include/linux/pata_parport.h
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Yes, indeed.
+> I will move 'fsl,tsa' to 'fsl,tsa-cell' with 'fsl,tsa-cell' a phandle/number
+> pair (the phandle to TSA node and the TSA cell id to use)
 
-Cheers,
+Move to fsl,tsa, not from.
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+
+Best regards,
+Krzysztof
 
