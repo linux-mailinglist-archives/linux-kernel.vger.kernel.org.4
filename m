@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4A9678FC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A745678FC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbjAXFUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 00:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S232778AbjAXFVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 00:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXFUi (ORCPT
+        with ESMTP id S229930AbjAXFVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 00:20:38 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7D844AA;
-        Mon, 23 Jan 2023 21:20:36 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id DA62C24E24D;
-        Tue, 24 Jan 2023 13:20:33 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 24 Jan
- 2023 13:20:33 +0800
-Received: from [192.168.125.95] (183.27.96.38) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 24 Jan
- 2023 13:20:32 +0800
-Message-ID: <820be512-c7f8-1af1-12fa-53c557532c7a@starfivetech.com>
-Date:   Tue, 24 Jan 2023 13:20:32 +0800
+        Tue, 24 Jan 2023 00:21:00 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D41838E99;
+        Mon, 23 Jan 2023 21:20:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 40971CE18B2;
+        Tue, 24 Jan 2023 05:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6B6C433EF;
+        Tue, 24 Jan 2023 05:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674537649;
+        bh=IPH+4bKPJ1q/DT8SYZikBubihCjX3YUeSWZ2Pk8HJvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R4djtlxqzSL669QEV9XRu8IM6qFlotd2DrwQ7ct2ypDX3HlTIh7Robjbh1JWvp6la
+         D+LM4FL+XogclgO/F0u+BOYAcM7M95VUgC5/O7+cxmfNLAY7nJmzgizlWTMM9v+yGP
+         4jkkv6ijvwa3Z1yj8LLBgll+wLCwSOPFURqzkUA0=
+Date:   Tue, 24 Jan 2023 06:20:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Konstantin Ryabitsev <mricon@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anton Blanchard <anton@linux.ibm.com>,
+        Trilok Soni <tsoni@codeaurora.org>,
+        James Morris <jamorris@linux.microsoft.com>, corbet@lwn.net,
+        javier.gonz@samsung.com, linux-doc@vger.kernel.org,
+        a.manzanares@samsung.com, dave@stgolabs.net,
+        darren@os.amperecomputing.com, ndesaulniers@google.com,
+        gost.dev@samsung.com, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof.c@samsung.com>
+Subject: Re: [PATCH] docs: embargoed-hardware-issues: add embargoed HW
+ contact for Samsung
+Message-ID: <Y89qrid7YOsIFbD6@kroah.com>
+References: <20230123183926.249601-1-mcgrof@kernel.org>
+ <Y87X6tFlevIebcc6@kroah.com>
+ <Y88Ak8K5mD7tFItG@bombadil.infradead.org>
+ <Y89E+S7TA6UwtNe2@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 0/2] JH7110 PMU Support
-To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230119094447.21939-1-walker.chen@starfivetech.com>
- <167425300253.196995.6414153954346182622.b4-ty@microchip.com>
-Content-Language: en-US
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <167425300253.196995.6414153954346182622.b4-ty@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.38]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y89E+S7TA6UwtNe2@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,29 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/21 6:21, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Tue, Jan 24, 2023 at 02:39:53AM +0000, Matthew Wilcox wrote:
+> On Mon, Jan 23, 2023 at 01:48:03PM -0800, Luis Chamberlain wrote:
+> > > > @@ -251,6 +251,7 @@ an involved disclosed party. The current ambassadors list:
+> > > >    IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
+> > > >    Intel		Tony Luck <tony.luck@intel.com>
+> > > >    Qualcomm	Trilok Soni <tsoni@codeaurora.org>
+> > > > +  Samsung       Javier González <javier.gonz@samsung.com>
+> > 
+> > I'll send a fix on v2.
+> > 
+> > BTW while at it, it got me wondering, since most of the emails on
+> > this hw embargo page are not required to have kernel.org accounts
 > 
-> On Thu, 19 Jan 2023 17:44:45 +0800, Walker Chen wrote:
->> This patchset adds PMU (Power Management Unit) controller driver for the
->> StarFive JH7110 SoC. In order to meet low power requirements, PMU is
->> designed for including multiple PM domains that can be used for power
->> gating of selected IP blocks for power saving by reduced leakage
->> current. The first patch adds device tree binding for PM domain provider
->> and consumer. The second patch adds pmu driver and support JH7110 SoC.
->> 
->> [...]
+> This isn't the list of hw embargo people.  This is the list of
+> "ambassadors" who can help people work through the security disclosure
+> process.  My impression is that it's to tell me that I should contact
+> Konrad, since he also works at Oracle, to help me through the process.
+> It's not for people outside Oracle to contact.
 > 
-> Applied to riscv-soc-for-next, thanks!
-> 
-> [1/2] dt-bindings: power: Add starfive,jh7110-pmu
->       https://git.kernel.org/conor/c/1fc7606d5083f79a20eb9cfd77c0dbd9299421c1
-> [2/2] soc: starfive: Add StarFive JH71XX pmu driver
->       https://git.kernel.org/conor/c/08b9a94e8654d402bfd1f5496b077503d69aa2cf
-> 
-> I modified the MAINTAINERS entry to remove the include directory that
-> was deleted along the way.
+> If I have the wrong impression of that list, perhaps the description
+> could be clarified.
 
-Thank you so much for your support, Conor, Krzysztof, Emil, Heiko, Rob Herring, etc.
-Hopefully more and more drivers & modules of StarFive SoC will upstream to the open source community.
+That is correct, but it is primarily a list that I use when needing to
+contact companies about potential issues in their hardware.  For that I
+don't need a GPG key, that's only required if they need to get added to
+a secure mailing list, and at that point I can have a key sent to me, it
+does not have to be in our kernel.org keyring at all (and list
+participants usually are not there.)
 
+So there's no need for any of these addresses to be part of the kernel
+gpg ring of trust for any of their activities.
+
+thanks,
+
+greg k-h
