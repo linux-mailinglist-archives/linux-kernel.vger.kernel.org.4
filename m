@@ -2,142 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B2067A089
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6901967A066
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233259AbjAXRwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S234223AbjAXRsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbjAXRwr (ORCPT
+        with ESMTP id S233062AbjAXRsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:52:47 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84DD5251;
-        Tue, 24 Jan 2023 09:52:45 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7755521976;
-        Tue, 24 Jan 2023 17:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674582764;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Skva1shEE/HsMOpqBg9bz8kfTRteiEo++f+fehu7oXw=;
-        b=aGX0E8XrDCHcRCVG3VAY9Z/gQpmErfQtaWPiBaHPevpj2iOZqOftEvAlT7qZciHFusvaWL
-        ROLYxMyj9sOIfsRfJUxhyXQFuUYzWZyqK5hBDYCXvH4QuS5OYrpxFkOoVcpNhEGuwqaeft
-        OrLH7ELI1Rk4NiVRljzdCVFT3D2DE4s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674582764;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Skva1shEE/HsMOpqBg9bz8kfTRteiEo++f+fehu7oXw=;
-        b=pK5suF+uVP5Hv8VS5Us1ycz54+2ik14Xx8i3plKx4K3jEuqlAGJnfGJ+5Y/hEZgqtfkQg9
-        YKbOJSEar9gphZCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C00F13487;
-        Tue, 24 Jan 2023 17:52:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ARm8Cewa0GNCdgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 24 Jan 2023 17:52:44 +0000
-Date:   Tue, 24 Jan 2023 18:47:02 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     syzbot <syzbot+4376a9a073770c173269@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
-        dsterba@suse.cz, josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, w@1wt.eu
-Subject: Re: [syzbot] [btrfs?] WARNING: kmalloc bug in btrfs_ioctl_send
-Message-ID: <20230124174702.GU11562@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <00000000000075a52e05ee97ad74@google.com>
- <0000000000006e58cb05f2d86236@google.com>
- <CAHk-=whJ0Rya9++f5B=6euHxRGRKOYNZARxN7bZb61RmOHGnFA@mail.gmail.com>
+        Tue, 24 Jan 2023 12:48:05 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2041.outbound.protection.outlook.com [40.107.7.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB536FC6;
+        Tue, 24 Jan 2023 09:48:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HUDEA8Lxt/rOu1BtbgKH5Hm6/He2AaZIqC78r/Sbay0myuz6fLooBjugxwHcIi5Vgaj1LB70vTVGX21P2gMi945eJMmpSwQCs18g3Ue4QdzVrgibucBJawfDO8tfSNWnlVR/Ad5TCRVkWsbtEkgdvvrJnmLH3LWeVxUPVOhRXIga6/tDKfbghmeGox8dwFCHKZY1kEhF51AbZ9D7WH9lMBZ17vm5IldVpKozHNv+KWgJwn7+gDYmgIyBoMYigVthsd2W6cgO5S7pPA96SiaAJtZo4xijvyhrXRMsMlO/jZ+peZNALyDWotY63MbQmK+4b2drHfPS/oMpf/2CqyQvlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FQ3b2QLhz7WRUQJs4C8t3KFBNDEodREWIhI58Em3PYI=;
+ b=lyfCntKQn3yRiGhxe4mDbN5Rvemju+n34JPDGGSrflViqCnMZP1affLE8eA5PUIXu0aDtseK9hHsdauLDUXC0CptDcZztu4tcoxlt9T8RO/t4uetK7vR6UzWYj2FyozdYOk8p5V9Qcat90fvIY5IBWZtDVYxfQQLPoRKd3my4w1BmNuCdapi2m0g3TOMjcTWEZvG81KT+z4Ez62eKqj8eNkSgzkRWb3hnm90Czsnn/AuLqZSxH5M+cWogC6j20/zFDCyfGcy+G6yhpLqG+4vkbCW7m+W6Poo7ihMiJcIOTmP68BH7rVvyKrRpCumvR8ICP7E1GqFFC2q7JVST536XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FQ3b2QLhz7WRUQJs4C8t3KFBNDEodREWIhI58Em3PYI=;
+ b=jpOgMfUy13DngAecsIL9eEk54ly8Ddr8RnKPtAZNVv63NqY4h88/2PtT72paPhrTGFa7OTS3YFUCbIhPfHo17izpMH4K3jqZQv7mGMYA/4+3Y9qEFGdIEGteK4Wj1/brbsg1wIX4I4Me4IWfzo3/ZbeiYBFB8v+hjmeL/IcJqvY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
+ by AM0PR04MB7026.eurprd04.prod.outlook.com (2603:10a6:208:192::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Tue, 24 Jan
+ 2023 17:48:01 +0000
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::f8fe:ab7c:ef5d:9189]) by AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::f8fe:ab7c:ef5d:9189%5]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 17:48:01 +0000
+From:   Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
+        rohit.fule@nxp.com, sherry.sun@nxp.com, neeraj.sanjaykale@nxp.com
+Subject: [PATCH v1 0/3] Add support for NXP bluetooth chipsets
+Date:   Tue, 24 Jan 2023 23:17:11 +0530
+Message-Id: <20230124174714.2775680-1-neeraj.sanjaykale@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0008.apcprd02.prod.outlook.com
+ (2603:1096:4:194::12) To AM9PR04MB8603.eurprd04.prod.outlook.com
+ (2603:10a6:20b:43a::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whJ0Rya9++f5B=6euHxRGRKOYNZARxN7bZb61RmOHGnFA@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8603:EE_|AM0PR04MB7026:EE_
+X-MS-Office365-Filtering-Correlation-Id: b1087160-f287-49f3-22cd-08dafe332330
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P86tX+e0bNQ0DuxU5Q1v5BQaqOtloS7H/z2NZsiHvvcPmpzdqPFnZdZj0+KmeGgeFzgYMqSxUlmNIaaXNA53EOA79dogn4ZAKV19KZP4XwIoxqpOT/HYIsTzrUR2jolCOBWPBlaEiioCjJEEa+7uf2ktrRk9Xf3BV8LPeMf74IbEOt95XFZmKEAVFJyuBwJLJIScycdsfECPZJEkTqrtuiRleDWSwIOHdJADJtYNYZ/83QuQYKBlb+qckVB7oYkqStBaDQEcAWmjEZy9ug970/K0DNGzK2gcKJiG4ERdqnwyVrxszjYtelcYyS9gBk2VImPtsitOPZQi2p//0qwgfMRyxu1FsQthZkt4wmkaOEcCmpGkJux6wAAGhGpyBn7PI6ZxqKh4sAIWTC6FhzbY5IugN4+TB61CdbONIizNfsgv4e3aMaq7C+pIUTXu1rJ+Y8jeAR501ZXI0kjMyjSU19px3UrwECz2pvLNO+UKIhLUZTdAHs0Q+jGSVd/4ckXz2HyiBfCq2D5KXveOH2/K0E4Ix8FndmsIEAq286Upl+YBUDpqq3TUOgIIuSIm+agQd1a78pSrXBIAF9Csp0/U8IEjfqqkMSGoRyPHE2EeaLEmnGtVaiFxgY8kFd56iOA2yximrsFv1eROR7ckwfeuitKlgcRnmqcuvvpwZbGiqMSPYab7CivEIMUxNkizb7mr7+9aTD9YdI5EzJQXdqRSBywlR/X62UD2orwzyDivzd8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(39860400002)(136003)(451199015)(36756003)(86362001)(921005)(66556008)(66476007)(4326008)(66946007)(2906002)(8936002)(8676002)(5660300002)(7416002)(38350700002)(38100700002)(6666004)(52116002)(316002)(478600001)(6486002)(41300700001)(6506007)(26005)(83380400001)(2616005)(1076003)(186003)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GWbxvnBeEpmDUnJ6ApW5VcSx7ILJZsSbmqw9Aqc6NS8sAjBxDgYB7IlqJ+gB?=
+ =?us-ascii?Q?KmmA6QcfOBQFtjsglxUdlVnQnIiFEsBk+Dqz4wy+swdMqJdU5ADjNTFLqL0A?=
+ =?us-ascii?Q?F5s2p6z+ByLxRF0FrvAsd5cZgIxU0V1UonHxu9gO81MyVY5tFkGLEQK/rLuk?=
+ =?us-ascii?Q?AAry+MlAROPmrFmGMypiR1cgNtyGbBALSj/025ZBzI4HFh3kqnaZHJFtbPTa?=
+ =?us-ascii?Q?Ws533OVHe6ghRuPdEQVill9itMl8NLpoYntQnnj4y3iUWW1wK3F11H8iUz2O?=
+ =?us-ascii?Q?YRlHGOnnLks/xK9BG8YkTwN3aLAzzPLnmepl57E+pPc3JieDh8IuwBIhxxZ1?=
+ =?us-ascii?Q?YD90Q2pvkIrnNTAsqWUCTWpaxB8encRb3Qb3zTspT64kCsvfdNr+JTbLbNfo?=
+ =?us-ascii?Q?aqwpXJ1MK8+TjbsrM47zc/bagaFHfNhHbTZfM0WjUrSex8r9gHkWEiiTuJ0T?=
+ =?us-ascii?Q?es36usNEw6EyHaYvmYQucq9dhKozR78X2EXl5h4pK8aplVQ+7ndKgHnzLEO9?=
+ =?us-ascii?Q?fVwxiq3Gs4jVvndHexXj9mUwbSZKTp+7XGCJLptrapJatJdYaiJXyjGrMP5f?=
+ =?us-ascii?Q?4+9e5m5He57XEEMyd3563BaSqQK8Se4F4SGeYFZjZHMqC2JtENTgEG6vVXZG?=
+ =?us-ascii?Q?U7SUUvp3NMR4QONcNbXoP8JGIEGqgR3D+wA/wiv6zodwwbjzTObZcT340A00?=
+ =?us-ascii?Q?3JIGI7cB+WzgE9mrajbvxNncu81hjsTigAMIxSedskEsdFwg8CUI5XOudi4A?=
+ =?us-ascii?Q?3zD7lUEnhT1nPMS+hQjoGFSn7EEF9vQlltY9y6XS5142/Hpzd7dpVyab9JsF?=
+ =?us-ascii?Q?8a0cryS4hRguEDkJz9Izrl37JtGlx0/eB8TG2b/rM0w/S9enkuhycngrX2sb?=
+ =?us-ascii?Q?6EqFIxMLg/IuyG0dnH0IDpQ6eAFMYaHZz7Cn1imM46vgh48OK6YWu+4uWyJQ?=
+ =?us-ascii?Q?fiu6iuDVGDlwf8lcyjOPV18XVoi5i/OKyWeLfAW76fsHKKrPjwy/3G9lt7zD?=
+ =?us-ascii?Q?tZCc7+iM3sAnd+P8e/s1gfNf8WSrna/M4c2dqcgXljIVpGdH6SaTVCX5fRmr?=
+ =?us-ascii?Q?ZQOGJVjkTm1sFbE85lTHCUsu1TdgOXxz3M/pUshEDjST9NsxrRZ5LPJgbgxi?=
+ =?us-ascii?Q?baMWAAgvTmoAsR2/0VRUzJEcJ36au040eqtG0v09EvtO23/V7/e71Abx5pG4?=
+ =?us-ascii?Q?3vu70QqObYqOMrHkyxz0OJMTuuiEFjrKSezVNDGhI1VcCM0tY8S8Awe24N2e?=
+ =?us-ascii?Q?16jqOMDS1ncfzHIZi4cSaVbZNb/hoY0KUY6VSlIZ7/+pQWuWtpAWkutXaut0?=
+ =?us-ascii?Q?3l0JPkdlHAG1/qYxOFEdnJ53WzY97ETIC942RteRDGPqVeLbV5pGqlhl9CB0?=
+ =?us-ascii?Q?Sx9HypJAof3JbpwR5P/Y6rwPENCMyO5S4eApHW+7Q8tDr7+KljqaIz9dJFb7?=
+ =?us-ascii?Q?rT+zAofFA4JeZI9z0cMzlqi+U7pnaeuj5obwa7HrTBnHSBxUZ+VaU/bR2NxM?=
+ =?us-ascii?Q?ecFLAT1rtlIsJlqW3xy5Il6KBYhjj50OstAjrdBbx6GR5ZwOxoX2HGcq2Pj5?=
+ =?us-ascii?Q?LTKJIW+cZNxAbpF295E57gv9jY0SptM4L8LDwJYaUSrtYHVSEcMMxHGP4Cr9?=
+ =?us-ascii?Q?kg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1087160-f287-49f3-22cd-08dafe332330
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 17:48:01.6939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gmGsVp55DAXbXq4VxqhWhM5Z0gwsyiCHvwAmqQLdO1lnIJlGmlv4TrPGy1N/jA6DDH4EQh4Qyv7M6oFlKfc+8JT2NOHaMuRLTn5ocPPER9A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7026
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 11:53:08AM -0800, Linus Torvalds wrote:
-> On Sun, Jan 22, 2023 at 3:14 AM syzbot
-> <syzbot+4376a9a073770c173269@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has bisected this issue to:
-> >
-> > commit 7661809d493b426e979f39ab512e3adf41fbcc69
-> > Author: Linus Torvalds <torvalds@linux-foundation.org>
-> > Date:   Wed Jul 14 16:45:49 2021 +0000
-> >
-> >     mm: don't allow oversized kvmalloc() calls
-> 
-> Heh. I assume this is the
-> 
->         sctx->clone_roots = kvcalloc(sizeof(*sctx->clone_roots),
->                                      arg->clone_sources_count + 1,
->                                      GFP_KERNEL);
-> 
-> in btrfs_ioctl_send(), where the 'clone_sources_count' thing is
-> basically just an argument to the btrfs ioctl, and user space can set
-> it to anything it damn well likes.
-> 
-> So that warning is very much correct, and the problem is that the code
-> doesn't do any  realsanity checking at all on the ioctl arguments, and
-> basically allows the code to exhaust all memory.
-> 
-> Ok, there's a sanity check in the form of an overflow check:
-> 
->         /*
->          * Check that we don't overflow at later allocations, we request
->          * clone_sources_count + 1 items, and compare to unsigned long inside
->          * access_ok.
->          */
->         if (arg->clone_sources_count >
->             ULONG_MAX / sizeof(struct clone_root) - 1) {
->                 ret = -EINVAL;
->                 goto out;
->         }
-> 
-> but ULONG_MAX is a *lot* of memory that the btrfs code is happy to try
-> to allocate.
-> 
-> This ioctl does seem to be protected by a
-> 
->         if (!capable(CAP_SYS_ADMIN))
->                 return -EPERM;
-> 
-> so at least it wasn't some kind of "random user can use up all memory".
-> 
-> I suspect the simplest way to make syzbot happy is to change the
-> 
->         if (arg->clone_sources_count >
->             ULONG_MAX / sizeof(struct clone_root) - 1) {
-> 
-> test to use INT_MAX instead of ULONG_MAX, which will then match the
-> vmalloc sanity check and avoid the warning.
-> 
-> But maybe an even smaller value might be more domain-appropriate here?
+This patch adds a driver for NXP bluetooth chipsets.
+The driver is based on H4 protocol, and uses serdev
+APIs. It supports host to chip power save feature,
+which is signalled by the host by asserting break
+over UART TX lines, to put the chip into sleep state.
 
-Real world number for clone_sources_count would be low, in tens or
-hundreds at most.  Size of struct clone_root is 40 bytes, and 1M array
-can hold about 26K items, which is enough for some realistic stress
-testing. I'll set the limit for allocated memory to 8M which should be
-generous (about 200K array items) and future proof in case new members
-need to be added to clone_root.
+To support this feature, break_ctl has also been
+added to serdev-tty along with a new serdev API
+serdev_device_break_ctl().
+
+This driver is capable of downloading chip specific
+firmware, where user can either define the firmware
+file name in DTS file, or in the user-space config
+file. Each chip has a unique bootloader signature,
+and the driver is capable of selecting firmware file
+based on the signature received.
+
+The document specifying device tree bindings for
+this driver is also included in this patch series.
+
+Neeraj Sanjay Kale (3):
+  serdev: Add method to assert break
+  dt-bindings: net: bluetooth: Add NXP bluetooth support
+  Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
+
+ .../bindings/net/bluetooth/nxp-bluetooth.yaml |  45 +
+ MAINTAINERS                                   |   6 +
+ drivers/bluetooth/Kconfig                     |  11 +
+ drivers/bluetooth/Makefile                    |   1 +
+ drivers/bluetooth/btnxp.c                     | 947 ++++++++++++++++++
+ drivers/bluetooth/btnxp.h                     | 188 ++++
+ drivers/tty/serdev/core.c                     |  11 +
+ drivers/tty/serdev/serdev-ttyport.c           |  12 +
+ include/linux/serdev.h                        |   6 +
+ 9 files changed, 1227 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+ create mode 100644 drivers/bluetooth/btnxp.c
+ create mode 100644 drivers/bluetooth/btnxp.h
+
+-- 
+2.34.1
+
