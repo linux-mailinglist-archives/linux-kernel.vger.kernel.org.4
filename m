@@ -2,123 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0821B679F66
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36884679F7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbjAXRBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S234769AbjAXRDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233580AbjAXRBT (ORCPT
+        with ESMTP id S234660AbjAXRCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:01:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1004B8A1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:01:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 24 Jan 2023 12:02:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712264B1A7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:01:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674579707;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J0g/m29YfoRQ3He4ADW0GiFq635ufDIaXkn3qdmeao4=;
+        b=fSN6DhyLIFAo48WK4LtjpOXInsM3BngXlp+NeyA3qzgrvtJU9I2PuFz7pbRF3ecdhI7geO
+        4taSy2nEB/wEvJYeGftuTvH2v+UnW45+QcTmRWzYndM0a3luNgUi0LUptCAP727TtNyU7J
+        s5g5uzWNdh/UhKBm0YcguV7GWacNnzM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-439-TbIaFIU1MyWlp-Hc-YVrNw-1; Tue, 24 Jan 2023 12:01:44 -0500
+X-MC-Unique: TbIaFIU1MyWlp-Hc-YVrNw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F9E361306
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 17:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5481EC433D2;
-        Tue, 24 Jan 2023 17:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674579671;
-        bh=hH4ROFBDE9/zvCleMxO0DBsKXeLU0Z/8dFxdcAZGYMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xx7okMwMsx1OdKtdINef/nsB6UPGFCy5I8aNzzJ49saQp+dHtt/IfDu/atvIBwzhl
-         9ADvrLntSkKdkpOmIu3Og70fxhXty9DVLI8V6eQC/ZO8NhJUDFAO/5PegwaZNAvYhh
-         iBNdXUlA9i7E4CDD0oeQ2B2AiCcPlArgRsbGnRV7fejqbWn1QToVQCw69tpX6jfG9S
-         56PanImLqpeQrsON5VmL39gcwJJTCYO4bU+5ZDTiBfjwbp8mOJNiCnpbWUacTs10Ks
-         HIv4RYtrgv+fQwIaU6V9DFkCBPpw+vCIHXEpOHq1+bG6VBxOn3xJfPsdSb87cZaiuJ
-         WOuaAfxdg0WjQ==
-Date:   Tue, 24 Jan 2023 17:01:04 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH -next v2 3/3] cacheinfo: Remove unused check in
- init_cache_level()
-Message-ID: <Y9AO0GDslKS0Hs1c@spud>
-References: <20230124154053.355376-1-pierre.gondois@arm.com>
- <20230124154053.355376-4-pierre.gondois@arm.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A4E3802C18;
+        Tue, 24 Jan 2023 17:01:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A08C053A0;
+        Tue, 24 Jan 2023 17:01:41 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v9 5/8] block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted logic
+Date:   Tue, 24 Jan 2023 17:01:05 +0000
+Message-Id: <20230124170108.1070389-6-dhowells@redhat.com>
+In-Reply-To: <20230124170108.1070389-1-dhowells@redhat.com>
+References: <20230124170108.1070389-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="C5gbpn4doceQBVba"
-Content-Disposition: inline
-In-Reply-To: <20230124154053.355376-4-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Christoph Hellwig <hch@lst.de>
 
---C5gbpn4doceQBVba
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Replace BIO_NO_PAGE_REF with a BIO_PAGE_REFFED flag that has the inverted
+meaning is only set when a page reference has been acquired that needs to
+be released by bio_release_pages().
 
-On Tue, Jan 24, 2023 at 04:40:48PM +0100, Pierre Gondois wrote:
-> commit e75d18cecbb3 ("arm64: cacheinfo: Fix incorrect assignment
-> of signed error value to unsigned fw_level")
-> checks the fw_level value in init_cache_level() in case the value is
-> negative.
-> Remove this check as the error code is not returned through
-> fw_level anymore, and reset fw_level if acpi_get_cache_info()
-> failed. This allows to try fetching the cache information from
-> clidr_el1.
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Jan Kara <jack@suse.cz>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: Logan Gunthorpe <logang@deltatee.com>
+cc: linux-block@vger.kernel.org
+---
 
-I dunno anything about clidr_el1, but the mechanics of the change seem
-fair. There is a non-acpi path too, which shouldn't return negative
-numbers either so LGTM.
+Notes:
+    ver #8)
+     - Don't default to BIO_PAGE_REFFED [hch].
+    
+    ver #5)
+     - Split from patch that uses iov_iter_extract_pages().
 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  arch/arm64/kernel/cacheinfo.c | 3 ---
->  1 file changed, 3 deletions(-)
->=20
-> diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
-> index bf348b8d321f..c307f69e9b55 100644
-> --- a/arch/arm64/kernel/cacheinfo.c
-> +++ b/arch/arm64/kernel/cacheinfo.c
-> @@ -62,9 +62,6 @@ int init_cache_level(unsigned int cpu)
->  			fw_level =3D 0;
->  	}
-> =20
-> -	if (fw_level < 0)
-> -		return fw_level;
-> -
->  	if (level < fw_level) {
->  		/*
->  		 * some external caches not specified in CLIDR_EL1
-> --=20
-> 2.25.1
->=20
+ block/bio.c               | 2 +-
+ block/blk-map.c           | 1 +
+ fs/direct-io.c            | 2 ++
+ fs/iomap/direct-io.c      | 1 -
+ include/linux/bio.h       | 2 +-
+ include/linux/blk_types.h | 2 +-
+ 6 files changed, 6 insertions(+), 4 deletions(-)
 
---C5gbpn4doceQBVba
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/block/bio.c b/block/bio.c
+index 683444e6b711..851c23641a0d 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -1198,7 +1198,6 @@ void bio_iov_bvec_set(struct bio *bio, struct iov_iter *iter)
+ 	bio->bi_io_vec = (struct bio_vec *)iter->bvec;
+ 	bio->bi_iter.bi_bvec_done = iter->iov_offset;
+ 	bio->bi_iter.bi_size = size;
+-	bio_set_flag(bio, BIO_NO_PAGE_REF);
+ 	bio_set_flag(bio, BIO_CLONED);
+ }
+ 
+@@ -1343,6 +1342,7 @@ int bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+ 		return 0;
+ 	}
+ 
++	bio_set_flag(bio, BIO_PAGE_REFFED);
+ 	do {
+ 		ret = __bio_iov_iter_get_pages(bio, iter);
+ 	} while (!ret && iov_iter_count(iter) && !bio_full(bio, 0));
+diff --git a/block/blk-map.c b/block/blk-map.c
+index 7db52ad5b2d0..0e2b0a861ba3 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -282,6 +282,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+ 	if (blk_queue_pci_p2pdma(rq->q))
+ 		extraction_flags |= ITER_ALLOW_P2PDMA;
+ 
++	bio_set_flag(bio, BIO_PAGE_REFFED);
+ 	while (iov_iter_count(iter)) {
+ 		struct page **pages, *stack_pages[UIO_FASTIOV];
+ 		ssize_t bytes;
+diff --git a/fs/direct-io.c b/fs/direct-io.c
+index 03d381377ae1..07810465fc9d 100644
+--- a/fs/direct-io.c
++++ b/fs/direct-io.c
+@@ -403,6 +403,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio,
+ 		bio->bi_end_io = dio_bio_end_aio;
+ 	else
+ 		bio->bi_end_io = dio_bio_end_io;
++	/* for now require references for all pages */
++	bio_set_flag(bio, BIO_PAGE_REFFED);
+ 	sdio->bio = bio;
+ 	sdio->logical_offset_in_bio = sdio->cur_page_fs_offset;
+ }
+diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+index 47db4ead1e74..c0e75900e754 100644
+--- a/fs/iomap/direct-io.c
++++ b/fs/iomap/direct-io.c
+@@ -202,7 +202,6 @@ static void iomap_dio_zero(const struct iomap_iter *iter, struct iomap_dio *dio,
+ 	bio->bi_private = dio;
+ 	bio->bi_end_io = iomap_dio_bio_end_io;
+ 
+-	bio_set_flag(bio, BIO_NO_PAGE_REF);
+ 	__bio_add_page(bio, page, len, 0);
+ 	iomap_dio_submit_bio(iter, dio, bio, pos);
+ }
+diff --git a/include/linux/bio.h b/include/linux/bio.h
+index 10366b8bdb13..805957c99147 100644
+--- a/include/linux/bio.h
++++ b/include/linux/bio.h
+@@ -484,7 +484,7 @@ void zero_fill_bio(struct bio *bio);
+ 
+ static inline void bio_release_pages(struct bio *bio, bool mark_dirty)
+ {
+-	if (!bio_flagged(bio, BIO_NO_PAGE_REF))
++	if (bio_flagged(bio, BIO_PAGE_REFFED))
+ 		__bio_release_pages(bio, mark_dirty);
+ }
+ 
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index 99be590f952f..7daa261f4f98 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -318,7 +318,7 @@ struct bio {
+  * bio flags
+  */
+ enum {
+-	BIO_NO_PAGE_REF,	/* don't put release vec pages */
++	BIO_PAGE_REFFED,	/* put pages in bio_release_pages() */
+ 	BIO_CLONED,		/* doesn't own data */
+ 	BIO_BOUNCED,		/* bio is a bounce bio */
+ 	BIO_QUIET,		/* Make BIO Quiet */
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9AO0AAKCRB4tDGHoIJi
-0szJAQCdmFEFdFU4G6o36G8+91OO9PTUNKda+jTIrbjZ3pKAnwD/XUULiEMDXoMo
-mI2CSx7E69a1BYjjDaTuo6jiVUpjBQs=
-=Wii1
------END PGP SIGNATURE-----
-
---C5gbpn4doceQBVba--
