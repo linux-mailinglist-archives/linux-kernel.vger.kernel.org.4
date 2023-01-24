@@ -2,44 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A7067A5F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A0E67A5FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbjAXWip convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 Jan 2023 17:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
+        id S234110AbjAXWjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbjAXWil (ORCPT
+        with ESMTP id S229719AbjAXWjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:38:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF0230B12;
-        Tue, 24 Jan 2023 14:38:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E0E61351;
-        Tue, 24 Jan 2023 22:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66F7C433EF;
-        Tue, 24 Jan 2023 22:38:01 +0000 (UTC)
-Date:   Tue, 24 Jan 2023 17:38:00 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Donglin Peng <dolinux.peng@gmail.com>
-Cc:     mhiramat@kernel.org, xiehuan09@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6] tracing/probe: add a char type to show the character
- value of traced arguments
-Message-ID: <20230124173800.639a8165@gandalf.local.home>
-In-Reply-To: <20221219110613.367098-1-dolinux.peng@gmail.com>
-References: <20221219110613.367098-1-dolinux.peng@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 24 Jan 2023 17:39:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC693AA5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:39:14 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pKRwQ-0000eR-1x; Tue, 24 Jan 2023 23:38:58 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1pKRwN-000359-UC; Tue, 24 Jan 2023 23:38:55 +0100
+Date:   Tue, 24 Jan 2023 23:38:55 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
+        Robert Mader <robert.mader@collabora.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hantro: Fix JPEG encoder ENUM_FRAMESIZE on RK3399
+Message-ID: <20230124223855.GD7611@pengutronix.de>
+References: <20221223141644.703088-1-nicolas.dufresne@collabora.com>
+ <CAAEAJfATk+jOq3qt-m2CZEbCVumHHWDFfuEXKA7k0NZQXajCRg@mail.gmail.com>
+ <6449640fcfbbfd4b72e619f03704b7e9031a8a17.camel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pZs/OQEoSSbxGlYw"
+Content-Disposition: inline
+In-Reply-To: <6449640fcfbbfd4b72e619f03704b7e9031a8a17.camel@collabora.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -47,178 +64,157 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Looking back at emails that happened when I was off ;-)
+--pZs/OQEoSSbxGlYw
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Masami, what's you thoughts about this patch?
+On Fri, Dec 23, 2022 at 12:05:21PM -0500, Nicolas Dufresne wrote:
+>Le vendredi 23 d=E9cembre 2022 =E0 13:28 -0300, Ezequiel Garcia a =E9crit=
+=A0:
+>> Hi everyone,
+>>
+>> On Fri, Dec 23, 2022 at 11:17 AM Nicolas Dufresne
+>> <nicolas.dufresne@collabora.com> wrote:
+>> >
+>> > The frmsize structure was left initialize to 0, as side effect, the dr=
+iver was
+>> > reporting an invalid frmsize.
+>> >
+>> >   Size: Stepwise 0x0 - 0x0 with step 0/0
+>> >
+>> > Fix this by replicating the constraints in the raw formats too. This f=
+ixes
+>> > taking picture in Gnome Cheese Software, or any software using GSteamer
+>> > encodebin feature.
+>> >
+>> > Fixes: 775fec69008d30 ("media: add Rockchip VPU JPEG encoder driver")
+>>
+>> The frmsize is only for bitstream formats (see comment in struct hantro_=
+fmt).
+>> If I can read code correctly, this was broken by this commit:
+>>
+>> commit 79c987de8b35421a2a975982929f150dd415f8f7
+>> Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> Date:   Mon Apr 4 18:06:40 2022 +0200
+>>
+>>     media: hantro: Use post processor scaling capacities
+>>
+>> Before that commit we used to return EINVAL for enum_framesizes
+>> in RAW formats. I guess we missed that :-)
+>
+>I see, and gstreamer had a quirk for such a bogus response. Let me explain=
+ why
+>its bogus, for the general knowlege. A driver that supports ENUM_FRAMESIZE=
+ but
+>does not return any sizes, is in theory a driver that does not support any=
+thing.
+>Fortunaly, GStreamer considered not having a single framesize bogus, and w=
+ould
+>fallback to the old school try_fmt() dance to find the supported sizes.
+>
+>So yes, it used to work in gstreamer, and its indeed
+>79c987de8b35421a2a975982929f150dd415f8f7 that broke it. I'll correct his i=
+n V2.
+>
+>>
+>> To be completely honest, I'm not sure if we used to support encodebin,
+>> and I'm not too sure how to approach this issue, but I would really
+>> love to start with something super simple like:
+>>
+>> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> b/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> index 2c7a805289e7..0b28f86b7463 100644
+>> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+>> @@ -161,8 +161,11 @@ static int vidioc_enum_framesizes(struct file
+>> *file, void *priv,
+>>         }
+>>
+>>         /* For non-coded formats check if postprocessing scaling is poss=
+ible */
+>> -       if (fmt->codec_mode =3D=3D HANTRO_MODE_NONE &&
+>> hantro_needs_postproc(ctx, fmt)) {
+>> -               return hanto_postproc_enum_framesizes(ctx, fsize);
+>> +       if (fmt->codec_mode =3D=3D HANTRO_MODE_NONE)
+>> +        if (hantro_needs_postproc(ctx, fmt))
+>> +            return hanto_postproc_enum_framesizes(ctx, fsize);
+>> +        else
+>> +            return -ENOTTY;
+>>         } else if (fsize->index !=3D 0) {
+>>                 vpu_debug(0, "invalid frame size index (expected 0, got =
+%d)\n",
+>>                           fsize->index);
+>>
+>> (ENOTTY was suggested by Nicolas on IRC)
+>>
+>> Nicolas also pointed out that our current handling of frmsize is not cor=
+rect,
+>> as we cannot express different constraints on combinations of RAW
+>> and bitstream formats.
+>>
+>> This seems to call for a rework of enum_framesizes, so frmsize
+>> is not static but somehow obtained per-codec.
+>
+>So I'll respin along these line to we more or less "revert back" to working
+>state. Though having a framesize enumeration on encoder raw (OUTPUT queue)=
+ is
+>what makes most sense so that will have to be revisited with a corrected
+>mechanism, as whenever we add VP8 and H.264 encoding, we'll need different=
+ range
+>per codec. I'll check in January with my colleague, we might do that insid=
+e the
+>VP8 encoder branch (that is nearly ready and will be sent after the holida=
+ys),
+>or could be an intermediate set.
 
--- Steve
+I just came across this discussion and found my very similar and somehow
+forgotten patch the other day.
 
+https://lore.kernel.org/linux-media/66839e0c4b19eb4faba5fbed5cd0a4ec0c8415f=
+8.camel@ndufresne.ca/
 
-On Mon, 19 Dec 2022 03:06:13 -0800
-Donglin Peng <dolinux.peng@gmail.com> wrote:
+Should I just send a v2 with the ENOTTY for now?
 
-> There are scenes that we want to show the character value of traced
-> arguments other than a decimal or hexadecimal or string value for debug
-> convinience. I add a new type named 'char' to do it and a new test case
-> file named 'kprobe_args_char.tc' to do selftest for char type.
-> 
-> For example:
-> 
-> The to be traced function is 'void demo_func(char type, char *name);', we
-> can add a kprobe event as follows to show argument values as we want:
-> 
-> echo  'p:myprobe demo_func $arg1:char +0($arg2):char[5]' > kprobe_events
-> 
-> we will get the following trace log:
-> 
-> ... myprobe: (demo_func+0x0/0x29) arg1='A' arg2={'b','p','f','1',''}
-> 
-> Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
-> Changes in v6:
->  - change "\'%c\'" to "'%c'" in trace_probe.c
-> 
-> Changes in v5:
->  - wrap the output character with single quotes
->  - add a test case named kprobe_args_char.tc to do selftest
-> 
-> Changes in v4:
->  - update the example in the commit log
-> 
-> Changes in v3:
->  - update readme_msg
-> 
-> Changes in v2:
->  - fix build warnings reported by kernel test robot
->  - modify commit log
-> ---
->  Documentation/trace/kprobetrace.rst           |  3 +-
->  kernel/trace/trace.c                          |  2 +-
->  kernel/trace/trace_probe.c                    |  2 +
->  kernel/trace/trace_probe.h                    |  1 +
->  .../ftrace/test.d/kprobe/kprobe_args_char.tc  | 47 +++++++++++++++++++
->  5 files changed, 53 insertions(+), 2 deletions(-)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-> 
-> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-> index 4274cc6a2f94..007972a3c5c4 100644
-> --- a/Documentation/trace/kprobetrace.rst
-> +++ b/Documentation/trace/kprobetrace.rst
-> @@ -58,7 +58,7 @@ Synopsis of kprobe_events
->    NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
->    FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
->  		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
-> -		  (x8/x16/x32/x64), "string", "ustring" and bitfield
-> +		  (x8/x16/x32/x64), "char", "string", "ustring" and bitfield
->  		  are supported.
->  
->    (\*1) only for the probe on function entry (offs == 0).
-> @@ -80,6 +80,7 @@ E.g. 'x16[4]' means an array of x16 (2bytes hex) with 4 elements.
->  Note that the array can be applied to memory type fetchargs, you can not
->  apply it to registers/stack-entries etc. (for example, '$stack1:x8[8]' is
->  wrong, but '+8($stack):x8[8]' is OK.)
-> +Char type can be used to show the character value of traced arguments.
->  String type is a special type, which fetches a "null-terminated" string from
->  kernel space. This means it will fail and store NULL if the string container
->  has been paged out. "ustring" type is an alternative of string for user-space.
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 6d7ef130f57e..c602081e64c8 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -5615,7 +5615,7 @@ static const char readme_msg[] =
->  	"\t           $stack<index>, $stack, $retval, $comm,\n"
->  #endif
->  	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
-> -	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
-> +	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, char, string, symbol,\n"
->  	"\t           b<bit-width>@<bit-offset>/<container-size>, ustring,\n"
->  	"\t           <type>\\[<array-size>\\]\n"
->  #ifdef CONFIG_HIST_TRIGGERS
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index bb2f95d7175c..794a21455396 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -50,6 +50,7 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x8,  u8,  "0x%x")
->  DEFINE_BASIC_PRINT_TYPE_FUNC(x16, u16, "0x%x")
->  DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
->  DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
-> +DEFINE_BASIC_PRINT_TYPE_FUNC(char, u8, "'%c'")
->  
->  int PRINT_TYPE_FUNC_NAME(symbol)(struct trace_seq *s, void *data, void *ent)
->  {
-> @@ -93,6 +94,7 @@ static const struct fetch_type probe_fetch_types[] = {
->  	ASSIGN_FETCH_TYPE_ALIAS(x16, u16, u16, 0),
->  	ASSIGN_FETCH_TYPE_ALIAS(x32, u32, u32, 0),
->  	ASSIGN_FETCH_TYPE_ALIAS(x64, u64, u64, 0),
-> +	ASSIGN_FETCH_TYPE_ALIAS(char, u8, u8,  0),
->  	ASSIGN_FETCH_TYPE_ALIAS(symbol, ADDR_FETCH_TYPE, ADDR_FETCH_TYPE, 0),
->  
->  	ASSIGN_FETCH_TYPE_END
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index de38f1c03776..8c86aaa8b0c9 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -164,6 +164,7 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(x16);
->  DECLARE_BASIC_PRINT_TYPE_FUNC(x32);
->  DECLARE_BASIC_PRINT_TYPE_FUNC(x64);
->  
-> +DECLARE_BASIC_PRINT_TYPE_FUNC(char);
->  DECLARE_BASIC_PRINT_TYPE_FUNC(string);
->  DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
->  
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-> new file mode 100644
-> index 000000000000..285b4770efad
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-> @@ -0,0 +1,47 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: Kprobe event char type argument
-> +# requires: kprobe_events
-> +
-> +case `uname -m` in
-> +x86_64)
-> +  ARG1=%di
-> +;;
-> +i[3456]86)
-> +  ARG1=%ax
-> +;;
-> +aarch64)
-> +  ARG1=%x0
-> +;;
-> +arm*)
-> +  ARG1=%r0
-> +;;
-> +ppc64*)
-> +  ARG1=%r3
-> +;;
-> +ppc*)
-> +  ARG1=%r3
-> +;;
-> +s390*)
-> +  ARG1=%r2
-> +;;
-> +mips*)
-> +  ARG1=%r4
-> +;;
-> +*)
-> +  echo "Please implement other architecture here"
-> +  exit_untested
-> +esac
-> +
-> +: "Test get argument (1)"
-> +echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char" > kprobe_events
-> +echo 1 > events/kprobes/testprobe/enable
-> +echo "p:test $FUNCTION_FORK" >> kprobe_events
-> +grep -qe "testprobe.* arg1='t'" trace
-> +
-> +echo 0 > events/kprobes/testprobe/enable
-> +: "Test get argument (2)"
-> +echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
-> +echo 1 > events/kprobes/testprobe/enable
-> +echo "p:test $FUNCTION_FORK" >> kprobe_events
-> +grep -qe "testprobe.* arg1='t' arg2={'t','e','s','t'}" trace
+Thanks,
+Michael
 
+>> > Reported-by: Robert Mader <robert.mader@collabora.com>
+>> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>>
+>> And thanks a lot for the report and the patch!
+>>
+>
+>
+>_______________________________________________
+>linux-arm-kernel mailing list
+>linux-arm-kernel@lists.infradead.org
+>http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--pZs/OQEoSSbxGlYw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmPQXf8ACgkQC+njFXoe
+LGR0URAAnuIJ1dqGDMV7Do/ZHpZdF0V/7bcGJE4ur8iVcpa23lu6TpbboYTIT7Wu
+YlKwhKkSwmKny7fQIujtHMQ34WQCJc+LET9sccMg23pr8ZFNoeSJOALfeWY2F039
+mDTGT3RDz6T/vtb1jBkA+r/uABVZe9XwB//1INx5BYBVBCy8nJWLCzWIh858njLk
+a5SEXcB89AKNASx2QXkV8GXvXwTwYzxh9myreJRo0Zsu5ZNZKmdP90ohWPAVRDGb
+M7L4f54ZAYOdlOqHalqujcazbOq5jifjheD2dXVgGZX0viR1vY7msdtE33MOP2ma
+VACntFZRkfQb9LwuxRE/TarOVecZqm44J93eU8LfS4azWjf/cVpe3PmniJ0B9Zkc
+opIGR+h/kbig+VZpvix5Z683UqtdHg3MAtLSe1j2E7r1h3THE2Q/SJ+BR2BFLkE5
+hRszxEbPMJSQY3BQtOWsG2QvxNrfq+29WyxSHzN+ZidHr3DO2Clcj08zDsmQ0H6R
+h9+ohPy9DWgr887bolhR49dPzvuuPpiWBSdZDK6yJvBD6EjxpSMSsDtSp/7mBfvA
+tSjxKfnI8EEUve9uhhI+iUkHsgl4kE9QLzozcVXkxOMlc3lQMEmNz/zAGq6ymK+D
+KE9u9I3v59cIQk7jomSxcXJFqhHTWyn26SOLT6ugzve4fNIePgI=
+=rLWU
+-----END PGP SIGNATURE-----
+
+--pZs/OQEoSSbxGlYw--
