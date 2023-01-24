@@ -2,145 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53150678F2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 05:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D9A678F33
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 05:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbjAXEJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 23:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S231787AbjAXEQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 23:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbjAXEJq (ORCPT
+        with ESMTP id S229502AbjAXEQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 23:09:46 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEAB4EF1;
-        Mon, 23 Jan 2023 20:09:45 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id p24so13519390plw.11;
-        Mon, 23 Jan 2023 20:09:45 -0800 (PST)
+        Mon, 23 Jan 2023 23:16:34 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5182E0E9;
+        Mon, 23 Jan 2023 20:16:32 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id be8so670225plb.7;
+        Mon, 23 Jan 2023 20:16:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1CiC6L/MPz8ZmBhU93JAZAVZyRDaJoENCcWkRf+ufm4=;
-        b=bdqWNXxaEAoHIX04bpEVSBIbEFxFmKE+NKUP+75biPBPRZHWfgH7gcbZuKt1OP9hOZ
-         /vSdWxVYknC7sKp0ZSuaz1umVtqStNug+gJmIq5Q7Z54DDJ7YaG+qv728xcN+biUJ6cx
-         /xndsgVYkazdnHPxfq0R2gEDJkxA4HBtk6f/RnpDhTdQRKKlUztkzRdhmQ/eaVmMkRcF
-         i3XS5Lm6XwJQU68T64CCiS5tMPlSpREhvDTaDQ8kcqdGTPOBHwP6yt6udcIFeldEfw6U
-         Exf37LEFu0wdqZ9LKjcCh43EaJZz8nPFptguv9BH8ETcoyeaTtt5jT5aa/lqBoDvURay
-         sKJA==
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1urGv0mHJ7YJYJNJOzM1m8Twx0srW6ZZUopL2pa7yvk=;
+        b=prWn9RufzbUdIxdrCBTqxlvlDhB2nZTXXo9FuZLk4bJa65H6zYekYGRzNiJNrKfZg3
+         UgcSiCo/D69OjJEYuwoEmgNLA/VYs7dl9gumw8ynQnWf651mpvbumodhdQt7UhERqwM3
+         fdM9/jmZ84IoEds5rX0kzv4rhs/lb8m3RV1uZZvoj+dqRJ/3eiEBUk71T+MmMCtFvCmG
+         3VCkyxjbVOQtfwTXVRiXK1+x2JYWpNPqugwwyEMBPdfk0M+zTNMYCAnP8ujfNu9IC+om
+         KP67nyALTqSNFyHPgM/Ik2eE3iXITmzFBuLiLAUWanZlt/st1Wf0K3YKnS0pcvk0yQ10
+         9SAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1CiC6L/MPz8ZmBhU93JAZAVZyRDaJoENCcWkRf+ufm4=;
-        b=WihfXxiUesJuFTm1Tr6YxOnzn3kAnSnZgjAh4W3ZHr88tOK4hE0bSlPzzy0PrXe6dO
-         FKuAG+xd65pqFDzWyQCBadyPZ3k8XIx+BbuIUXQXFTdvPrAkdh2XTo0/+Vps0+xOlqj0
-         sC6O/nX5J5u8macVRJbt6JIzFY61pa0Qse+jKiVVQN0LQhNuqWAdvU4af0muD9zNCkNi
-         RdDKnd4VIwWOOcpgOu3uunTENOTvIl1SCz6a/gj83PnYiQJaghf/fED+gU/JKi1NdSR6
-         nSj9NsrYv6hjiSseDSzYTqfNa4ixDFopgO0Ws3e9cdc431Ei/AAIVuGJKTljYxQLwRtP
-         R0CQ==
-X-Gm-Message-State: AFqh2kqe6mHAHF95JLE9b79/wKERRHx8dDaJF+pobb0EjtCfNU0BVR1F
-        QHYawO5bsZ3LOjLuNAjFBQnJVHoLVacctA==
-X-Google-Smtp-Source: AMrXdXvZt1un5aXiFJAX4vKuY9CQmfzHY67G3vdATIaA7xHuJXH9BYTDB/1ELClrg0gcDiebTJXDZA==
-X-Received: by 2002:a05:6a20:6592:b0:a4:8725:fdcd with SMTP id p18-20020a056a20659200b000a48725fdcdmr27632969pzh.15.1674533384795;
-        Mon, 23 Jan 2023 20:09:44 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
-        by smtp.gmail.com with ESMTPSA id i127-20020a639d85000000b00478162d9923sm336384pgd.13.2023.01.23.20.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 20:09:44 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id D22F7105170; Tue, 24 Jan 2023 11:09:41 +0700 (WIB)
-Date:   Tue, 24 Jan 2023 11:09:41 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org
-Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [RESEND RFC PATCH v1 15/20] docs: document new procfs ksm knobs
-Message-ID: <Y89aBXuPrbjrFAmC@debian.me>
-References: <20230123173748.1734238-1-shr@devkernel.io>
- <20230123173748.1734238-16-shr@devkernel.io>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XX6agEIUzIpHNuNV"
-Content-Disposition: inline
-In-Reply-To: <20230123173748.1734238-16-shr@devkernel.io>
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1urGv0mHJ7YJYJNJOzM1m8Twx0srW6ZZUopL2pa7yvk=;
+        b=pxNp4a3a8E93HYRKkrUX9+m6hyPWD5l5O86aMCrDue/TmXve5xmmLzVkWpahJ3QbS5
+         PffdmLIp+V6lWZa3AWdrh7OjnPgkq/TWQemtCNYotsULjDOVzX74559C2QIbE7a3zVYa
+         VOV430jVCEwqOtb7b2gm8BsJDXVB4PYcjoZNTlhGCA1NRRZ//JYpjg2FSOnNijFn4VQA
+         Ntmp7miQenw0iPDChN8hvDu5pfr+Naz0FhZZgPIGP3dRWAnZGEce52Y4fbVyKynMHHSO
+         cpr0TOW3DuQHqegz+d44IGUwZjuSPMkD3PF4O+IbpGi2BgzfiqydiocWd4EBnkYLldBs
+         pmMw==
+X-Gm-Message-State: AFqh2krldjB0EvjBRcegf1sZPW6Kgy0kkJwAf9CwfMy1IoooKz8k4g9v
+        FX5wVi5givkRAxguhTN+MLxANCFq9pU4wQ==
+X-Google-Smtp-Source: AMrXdXuSVtrTllW9RCM77BotoTrsr7sGbJ91c+Msy2yWlokuP6tycoBTZ9CnrNQiDLj02Dfj8ugNzg==
+X-Received: by 2002:a05:6a20:4c8a:b0:b8:8e17:901c with SMTP id fq10-20020a056a204c8a00b000b88e17901cmr24234111pzb.52.1674533792376;
+        Mon, 23 Jan 2023 20:16:32 -0800 (PST)
+Received: from localhost (121-44-64-35.tpgi.com.au. [121.44.64.35])
+        by smtp.gmail.com with ESMTPSA id b20-20020a170902d31400b0019603cb63d4sm487043plc.280.2023.01.23.20.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 20:16:31 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 24 Jan 2023 14:16:24 +1000
+Message-Id: <CQ04OOT6CW1A.MCLZN2B4BTWK@bobo>
+Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
+        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>, <ruscur@russell.cc>,
+        <gcwilson@linux.ibm.com>, <joel@jms.id.au>
+Subject: Re: [PATCH v4 16/24] powerpc/pseries: Implement signed update for
+ PLPKS objects
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.13.0
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+ <20230120074306.1326298-17-ajd@linux.ibm.com>
+In-Reply-To: <20230120074306.1326298-17-ajd@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---XX6agEIUzIpHNuNV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jan 23, 2023 at 09:37:43AM -0800, Stefan Roesch wrote:
-> This documents the ksm_process_profit and ksm_merge_type settings in
-> ksm_stat.
-
-"Document both ksm_process_profit and ksm_merge_type proc settings."
-
->=20
-> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+On Fri Jan 20, 2023 at 5:42 PM AEST, Andrew Donnellan wrote:
+> From: Nayna Jain <nayna@linux.ibm.com>
+>
+> The Platform Keystore provides a signed update interface which can be use=
+d
+> to create, replace or append to certain variables in the PKS in a secure
+> fashion, with the hypervisor requiring that the update be signed using th=
+e
+> Platform Key.
+>
+> Implement an interface to the H_PKS_SIGNED_UPDATE hcall in the plpks
+> driver to allow signed updates to PKS objects.
+>
+> (The plpks driver doesn't need to do any cryptography or otherwise handle
+> the actual signed variable contents - that will be handled by userspace
+> tooling.)
+>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> [ajd: split patch, add timeout handling and misc cleanups]
+> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+>
 > ---
->  Documentation/admin-guide/mm/ksm.rst | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-g=
-uide/mm/ksm.rst
-> index 72189bf1283e..70896f01d641 100644
-> --- a/Documentation/admin-guide/mm/ksm.rst
-> +++ b/Documentation/admin-guide/mm/ksm.rst
-> @@ -211,7 +211,8 @@ several times, which are unprofitable memory consumed.
->  			  ksm_rmap_items * sizeof(rmap_item).
+>
+> v3: Merge plpks fixes and signed update series with secvar series
+>
+>     Fix error code handling in plpks_confirm_object_flushed() (ruscur)
+>
+>     Pass plpks_var struct to plpks_signed_update_var() by reference (mpe)
+>
+>     Consistent constant naming scheme (ruscur)
+>
+> v4: Fix MAX_HCALL_OPCODE rebasing issue (npiggin)
+> ---
+>  arch/powerpc/include/asm/hvcall.h      |  1 +
+>  arch/powerpc/include/asm/plpks.h       |  5 ++
+>  arch/powerpc/platforms/pseries/plpks.c | 71 ++++++++++++++++++++++++--
+>  3 files changed, 72 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm=
+/hvcall.h
+> index 95fd7f9485d5..c099780385dd 100644
+> --- a/arch/powerpc/include/asm/hvcall.h
+> +++ b/arch/powerpc/include/asm/hvcall.h
+> @@ -335,6 +335,7 @@
+>  #define H_RPT_INVALIDATE	0x448
+>  #define H_SCM_FLUSH		0x44C
+>  #define H_GET_ENERGY_SCALE_INFO	0x450
+> +#define H_PKS_SIGNED_UPDATE	0x454
+>  #define H_WATCHDOG		0x45C
+>  #define MAX_HCALL_OPCODE	H_WATCHDOG
 > =20
->     where ksm_merging_pages is shown under the directory ``/proc/<pid>/``,
-> -   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``.
-> +   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process =
-profit
-> +   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
+> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/=
+plpks.h
+> index 7c5f51a9af7c..e7204e6c0ca4 100644
+> --- a/arch/powerpc/include/asm/plpks.h
+> +++ b/arch/powerpc/include/asm/plpks.h
+> @@ -68,6 +68,11 @@ struct plpks_var_name_list {
+>  	struct plpks_var_name varlist[];
+>  };
 > =20
->  From the perspective of application, a high ratio of ``ksm_rmap_items`` =
-to
->  ``ksm_merging_pages`` means a bad madvise-applied policy, so developers =
-or
-> @@ -222,6 +223,9 @@ so if the ``ksm_rmap_items/ksm_merging_pages`` ratio =
-exceeds 64 on 64-bit CPU
->  or exceeds 128 on 32-bit CPU, then the app's madvise policy should be dr=
-opped,
->  because the ksm profit is approximately zero or negative.
-> =20
-> +The ksm_merge_type in ``/proc/<pid>/ksm_stat`` shows the merge type of t=
-he
-> +process. Valid values are ``none``, ``madvise`` and ``process``.
+> +/**
+> + * Updates the authenticated variable. It expects NULL as the component.
+> + */
+> +int plpks_signed_update_var(struct plpks_var *var, u64 flags);
 > +
->  Monitoring KSM events
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  /**
+>   * Writes the specified var and its data to PKS.
+>   * Any caller of PKS driver should present a valid component type for
+> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platfo=
+rms/pseries/plpks.c
+> index 1189246b03dc..796ed5544ee5 100644
+> --- a/arch/powerpc/platforms/pseries/plpks.c
+> +++ b/arch/powerpc/platforms/pseries/plpks.c
+> @@ -81,6 +81,12 @@ static int pseries_status_to_err(int rc)
+>  		err =3D -ENOENT;
+>  		break;
+>  	case H_BUSY:
+> +	case H_LONG_BUSY_ORDER_1_MSEC:
+> +	case H_LONG_BUSY_ORDER_10_MSEC:
+> +	case H_LONG_BUSY_ORDER_100_MSEC:
+> +	case H_LONG_BUSY_ORDER_1_SEC:
+> +	case H_LONG_BUSY_ORDER_10_SEC:
+> +	case H_LONG_BUSY_ORDER_100_SEC:
+>  		err =3D -EBUSY;
+>  		break;
+>  	case H_AUTHORITY:
+
+This is a bit sad to maintain here. It's duplicating bits with
+hvcs_convert, and a bunch of open coded places. Probably not the
+series to do anything about. Would be nice if we could standardise
+it though.
+
+> @@ -184,14 +190,17 @@ static struct label *construct_label(char *componen=
+t, u8 varos, u8 *name,
+>  				     u16 namelen)
+>  {
+>  	struct label *label;
+> -	size_t slen;
+> +	size_t slen =3D 0;
 > =20
+>  	if (!name || namelen > PLPKS_MAX_NAME_SIZE)
+>  		return ERR_PTR(-EINVAL);
+> =20
+> -	slen =3D strlen(component);
+> -	if (component && slen > sizeof(label->attr.prefix))
+> -		return ERR_PTR(-EINVAL);
+> +	// Support NULL component for signed updates
+> +	if (component) {
+> +		slen =3D strlen(component);
+> +		if (slen > sizeof(label->attr.prefix))
+> +			return ERR_PTR(-EINVAL);
+> +	}
 
-The change LGTM.
+Is this already a bug? Code checks for component !=3D NULL but previously
+calls strlen which would oops on NULL component AFAIKS. Granted nothing
+is actually using any of this these days.
 
---=20
-An old man doll... just what I always wanted! - Clara
+It already seems like it's supposed to be allowed to rad NULL component
+with read_var though? Why the differences, why not always allow NULL
+component? (I assume there is some reason, I just don't know anything
+about secvar or secure boot).
 
---XX6agEIUzIpHNuNV
-Content-Type: application/pgp-signature; name="signature.asc"
+> =20
+>  	// The label structure must not cross a page boundary, so we align to t=
+he next power of 2
+>  	label =3D kzalloc(roundup_pow_of_two(sizeof(*label)), GFP_KERNEL);
+> @@ -397,6 +406,58 @@ static int plpks_confirm_object_flushed(struct label=
+ *label,
+>  	return pseries_status_to_err(rc);
+>  }
+> =20
+> +int plpks_signed_update_var(struct plpks_var *var, u64 flags)
+> +{
+> +	unsigned long retbuf[PLPAR_HCALL9_BUFSIZE] =3D {0};
+> +	int rc;
+> +	struct label *label;
+> +	struct plpks_auth *auth;
+> +	u64 continuetoken =3D 0;
+> +	u64 timeout =3D 0;
+> +
+> +	if (!var->data || var->datalen <=3D 0 || var->namelen > PLPKS_MAX_NAME_=
+SIZE)
+> +		return -EINVAL;
+> +
+> +	if (!(var->policy & PLPKS_SIGNEDUPDATE))
+> +		return -EINVAL;
+> +
+> +	auth =3D construct_auth(PLPKS_OS_OWNER);
+> +	if (IS_ERR(auth))
+> +		return PTR_ERR(auth);
+> +
+> +	label =3D construct_label(var->component, var->os, var->name, var->name=
+len);
+> +	if (IS_ERR(label)) {
+> +		rc =3D PTR_ERR(label);
+> +		goto out;
+> +	}
+> +
+> +	do {
+> +		rc =3D plpar_hcall9(H_PKS_SIGNED_UPDATE, retbuf,
+> +				  virt_to_phys(auth), virt_to_phys(label),
+> +				  label->size, var->policy, flags,
+> +				  virt_to_phys(var->data), var->datalen,
+> +				  continuetoken);
+> +
+> +		continuetoken =3D retbuf[0];
+> +		if (pseries_status_to_err(rc) =3D=3D -EBUSY) {
+> +			int delay_ms =3D get_longbusy_msecs(rc);
+> +			mdelay(delay_ms);
+> +			timeout +=3D delay_ms;
+> +		}
+> +		rc =3D pseries_status_to_err(rc);
+> +	} while (rc =3D=3D -EBUSY && timeout < PLPKS_MAX_TIMEOUT);
+> +
+> +	if (!rc)
+> +		rc =3D plpks_confirm_object_flushed(label, auth);
+> +
+> +	kfree(label);
+> +out:
+> +	kfree(auth);
+> +
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL(plpks_signed_update_var);
 
------BEGIN PGP SIGNATURE-----
+Sorry I missed it before -- can this be a _GPL export?
 
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY89aBQAKCRD2uYlJVVFO
-o5VVAQDUTWIM8oin7v2bLz8Fg+xjQgz6v0OLJxT0G5Q0oiQeuAEAtVt3/yWMls24
-CeYG0s/x1NbG/nXXj/D9+N7HeZvVSwY=
-=O4Jm
------END PGP SIGNATURE-----
-
---XX6agEIUzIpHNuNV--
+Thanks,
+Nick
