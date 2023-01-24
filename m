@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D79679C62
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A2A679C71
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbjAXOrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S235007AbjAXOtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbjAXOrf (ORCPT
+        with ESMTP id S234997AbjAXOsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:47:35 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872A41BDB;
-        Tue, 24 Jan 2023 06:47:34 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id mp20so39577621ejc.7;
-        Tue, 24 Jan 2023 06:47:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yvhId9fOglLhC4N0PXr8agmQKbuMh/aC+XILERRJYp0=;
-        b=bd1LOgl03YpcxGYbx4OOzUB49sP0TncE6CcGMrb5H4DOpqDzl7YOQGCWlFL4Bydz3G
-         OuJ4zaskUJu/BJD3D6B6GryKcYQMe8/18kjPP+yLuk0kVs8kaQt5VWanZmq4QmzAJC2H
-         OUo369cldQrVhyQUr3fIF4Uh1s5SmY2E5vyER71Z2xHwbFOCGtV2egill7uY1hTKmZXR
-         B8CN7dYnH/qHz8P/B/6lm4hhcBVGpW9GFFkYwfjX5ZkPT2rv5MDizVEQVZUSyuVntP/c
-         0v9Cys4n0kVXEya6HFJQzBQnxrDkA0Ydcgc3I1PaZK5ZHjksZPWnL89vVX4jFVPLX2Iz
-         gtxA==
-X-Gm-Message-State: AFqh2kqYQhE1bqcxjHQisVB62AWJWKM+l5eM/ZuQRGRLQiARu8AapCn1
-        atVpE3wKNILvatcrZhaKE/XMJ/CAV+Jrb/ejyCc=
-X-Google-Smtp-Source: AMrXdXtGJQWYz9rDiyL66zBbTj2dVE+N2xUISXMFqgsJDLvcSq3S6zFWPZZBNWx+JfL6luBwUzPDSlLBbEFTFNICooI=
-X-Received: by 2002:a17:906:514:b0:870:6768:ebcb with SMTP id
- j20-20020a170906051400b008706768ebcbmr3418117eja.13.1674571653097; Tue, 24
- Jan 2023 06:47:33 -0800 (PST)
+        Tue, 24 Jan 2023 09:48:38 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4188645BFD;
+        Tue, 24 Jan 2023 06:48:35 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id DAD2E8563B;
+        Tue, 24 Jan 2023 15:48:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1674571713;
+        bh=Y5gd2EDZ3Kk/gz4KuqyqTDq9f2L0geBvWTECbmKRxN0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VuZHofmifGRfHdEG7Cdxz2Mu0ebPR7yzH4o9dCwFx27waZvyKcKpiQXSllJeBJH2Z
+         ammntn4sLK8BdzUnAsfiGa6Zhe3IPqqu0qSleVMA3vwe2aWVn7EYCeT6eCHu4lx0/t
+         oKSb68hlsCr20gfOc83UwatA4QWY3NYKbAWWVHcLnhM2rnF/gs4TMi3HE05ReDGWSY
+         lMkzVrI+Gv4hPSfmiIlvmX2cUbi3DUW9Qftk+yaL6UFiL2w8qmXvbl5zorAe5AXW8U
+         k4x+DHSkFtd3dmtPLovLfoji+XbbElt8Z5eR+e2YLIOh47GbMZmOqD1OGmTMib/CjG
+         uRVXjw6Z2Rwjg==
+Message-ID: <25ff9e4d-0a9f-59fc-902a-5b68cf7200b9@denx.de>
+Date:   Tue, 24 Jan 2023 15:47:42 +0100
 MIME-Version: 1.0
-References: <20230107192513.118172-1-tim@linux4.de> <CAJZ5v0jYUmDHn6ati=zOU6JyYYAuc6CUtV2eomPWWa2aBoKdSA@mail.gmail.com>
- <5b145975c781b9a8165acea037192f38f9a6d87b.camel@linux.intel.com> <498ed05c0c4fcd9d1459313279aa4105ff514650.camel@intel.com>
-In-Reply-To: <498ed05c0c4fcd9d1459313279aa4105ff514650.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Jan 2023 15:47:21 +0100
-Message-ID: <CAJZ5v0jRbGZr-g6TLq3NEpZtBBeTDKaEe1un=R2Q4FB=5SFWkA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: pch: Add support for Wellsburg PCH
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "tim@linux4.de" <tim@linux4.de>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tushar.n.dave@intel.com" <tushar.n.dave@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] drm: lcdif: Add i.MX93 LCDIF support
+Content-Language: en-US
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liu Ying <victor.liu@nxp.com>
+Cc:     s.hauer@pengutronix.de, robh+dt@kernel.org, linux-imx@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        kernel@pengutronix.de
+References: <20230123072358.1060670-1-victor.liu@nxp.com>
+ <ace76615-533a-9295-8271-95262859d287@denx.de>
+ <7ac57bc28da40df054c81fd74f69207af66ad97b.camel@nxp.com>
+ <13189854.uLZWGnKmhe@steina-w>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <13189854.uLZWGnKmhe@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 6:01 AM Zhang, Rui <rui.zhang@intel.com> wrote:
->
-> On Fri, 2023-01-20 at 09:50 -0800, srinivas pandruvada wrote:
-> > On Fri, 2023-01-20 at 17:40 +0100, Rafael J. Wysocki wrote:
-> > > On Sat, Jan 7, 2023 at 8:42 PM Tim Zimmermann <tim@linux4.de>
-> > > wrote:
-> > > > This adds the PCI ID for the Wellsburg C610 series chipset PCH.
-> > > > The
-> > > > driver can read the temperature from the Wellsburg PCH with only
-> > > > the PCI
-> > > > ID added and no other modifications.
-> > > >
-> > > > Signed-off-by: Tim Zimmermann <tim@linux4.de>
-> > >
-> > > Rui, Srinivas, any objections to this one?
-> > No objection.
-> >
-> And no objections from me.
+On 1/24/23 12:15, Alexander Stein wrote:
+> Hi,
 
-OK
+Hi,
 
-Applied as 6.3 material, thanks!
+> Am Dienstag, 24. Januar 2023, 08:59:39 CET schrieb Liu Ying:
+>> On Mon, 2023-01-23 at 16:57 +0100, Marek Vasut wrote:
+>>> On 1/23/23 08:23, Liu Ying wrote:
+>>>> The LCDIF embedded in i.MX93 SoC is essentially the same to those
+>>>> in i.MX8mp SoC.  However, i.MX93 LCDIF may connect with MIPI DSI
+>>>> controller through LCDIF cross line pattern(controlled by mediamix
+>>>> blk-ctrl) or connect with LVDS display bridge(LDB) directly or a
+>>>> parallel display(also through mediamix blk-ctrl), so add multiple
+>>>> encoders(with DRM_MODE_ENCODER_NONE encoder type) support in the
+>>>> LCDIF DRM driver and find a bridge to attach the relevant encoder's
+>>>> chain when needed.  While at it, derive lcdif_crtc_state structure
+>>>> from drm_crtc_state structure to introduce bus_format and bus_flags
+>>>> states so that the next downstream bridges may use consistent bus
+>>>> format and bus flags.
+>>>
+>>> Would it be possible to split this patch into preparatory clean up
+>>> and
+>>> i.MX93 addition ? It seems like the patch is doing two things
+>>> according
+>>> to the commit message.
+>>
+>> IMHO, all the patch does is for i.MX93 addition, not for clean up.
+>> Note that the single LCDIF embedded in i.MX93 SoC may connect with MIPI
+>> DSI/LVDS/parallel related bridges to drive triple displays
+>> _simultaneously_ in theory, while the three LCDIF instances embedded in
+>> i.MX8mp SoC connect with MIPI DSI/LVDS/HDMI displays respectively(one
+>> LCDIF maps to one display).  The multiple encoders addition and the new
+>> checks for consistent bus format and bus flags are only for i.MX93
+>> LCDIF, not for i.MX8mp LCDIF.  Also, I think the multiple encoders
+>> addition and the new checks should be done together - if the new checks
+>> come first, then the new checks do not make sense(no multiple displays
+>> driven by LCDIF);
+> 
+> You are right on this one, but on the other hand there are lot of preparing
+> patches already. Even if it is useless by itself, having the bus format & flag
+> checks in a separate patch, it is easier to review, IMHO.
+
+I agree on the ease of review.
+
+[...]
