@@ -2,111 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC2D679B13
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFA5679AFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbjAXOFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
+        id S234231AbjAXODW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbjAXOEw (ORCPT
+        with ESMTP id S233694AbjAXODV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:04:52 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A696A4859B;
-        Tue, 24 Jan 2023 06:04:21 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id bk15so39193373ejb.9;
-        Tue, 24 Jan 2023 06:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z7dRloswEV6O4FN2iiz6ZS4n2jKn6i71GuWTIh1+d6c=;
-        b=ZM+3T5Y+1o/Xr4JI8qDG+x0+yhUFZx7dOowdLYw01bMwVcGvO3wY1d3/SCGoOTZNOe
-         Fe0hgNCf0nVXF1VEsM6GgU0dYtbBDcUZSyScCz53HpWLmkLIiOUDtXO5sDUucZhVVmGF
-         lM9z+mu0spGpmNm9nETCXb9c3hBLMJhLAIFI97q9fUAb0ZrykXtTG4qME6CHw1BnB9iv
-         3jTliBp6JuLhQrJt2fiU2R6VZhDFzVj3hdXRjEa83po6+Hff1wPGrNU7aWxaLZePgLUr
-         W9OugBNhPTeok059hFbqFUk6erTwddYx0AAUJRsjslOG/QGcCY7enHPopecYFgHC+2+F
-         +85Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7dRloswEV6O4FN2iiz6ZS4n2jKn6i71GuWTIh1+d6c=;
-        b=ORO3Cd6pyWpGnp+A4UqzVxAhMy2QshffALwtT53xM70evbst6tnxrW6AHQoQk9DN8X
-         jKzVnrjAmU7rlO4jpwKZDKsUKnkfEulFBZInW9deHbkGuulKmtEr0YHKh3NuB60EyeyF
-         vgko2+dCW2dpihbSls31ZNkJp4AkjgzekpF0ixWsn+1sJxqpENKoFdrvaQnFeSApJsz2
-         8AlPP7DGsoJS3CIjOgcWdRWv8ItNEzGhWOR6Y6l2IGqSob5MbEI5W9qFKrF8ezg49AGK
-         lEgURaJNXGhnyaOYfXGwCcQamr1Q48vBhHZzs27MtvEXNVD+K8/PI+7xZB8iuPTf/jno
-         Xvug==
-X-Gm-Message-State: AFqh2kqCuo5s2bBGddnZ/GabxUX/lJ4nm44hEcX+FyGMh3R9YIxANj0c
-        5VzRxiS1UykbRgbQlLH2gvk=
-X-Google-Smtp-Source: AMrXdXttKKi+iLAmx5d8d5yerYPKvbMZTKXClJq6rTidBrzh7/IKlMLyt82AtvsCotlbkVuV2jyhXA==
-X-Received: by 2002:a17:906:e2cd:b0:870:2aa7:6509 with SMTP id gr13-20020a170906e2cd00b008702aa76509mr30689651ejb.43.1674569059643;
-        Tue, 24 Jan 2023 06:04:19 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:310::206f? ([2620:10d:c092:600::2:74e0])
-        by smtp.gmail.com with ESMTPSA id s22-20020a170906501600b0085ca279966esm945567ejj.119.2023.01.24.06.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 06:04:19 -0800 (PST)
-Message-ID: <077b10a5-5ccb-870c-3dd2-e96bc6aad5ef@gmail.com>
-Date:   Tue, 24 Jan 2023 14:01:54 +0000
+        Tue, 24 Jan 2023 09:03:21 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82747EF85;
+        Tue, 24 Jan 2023 06:03:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DYKGL6jdW48jjLGtQGlo55UCRBRwJlq9pwc27T0p/Fw=; b=uzqa9ZQSlszDjcu6uDXWUFQU6g
+        7BWFS8WeyYycIR8/yV1oPiCkXkIbUdIrFRugUUl6frhM3lLNixOqXnylZ9u0sK4Jb25zT+Z/iun8/
+        z9G2P3jznLcBVcHpZWp0P2N8AqYz2bcdCYsS7hviWclG71eCIP8z7xO100DANWwiOaMw8FsYVwdB8
+        CKtr0IabzAMwXEoBbeQ/Y44NO5jEjlF80/mn5IEptD8E1VCmfQ1Q8txYzgeyde7UtmkYPfPA+aWOt
+        dCyb+zeQmorRLkRRIjmcZa/BDqT0SKJwlW3z5AGl0OQXTn/+7CQGTGLGy+jqqtW9kjlPUujPJtOnD
+        pNrvrT7A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKJt3-004AUs-72; Tue, 24 Jan 2023 14:02:57 +0000
+Date:   Tue, 24 Jan 2023 06:02:57 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
+Message-ID: <Y8/lEVirzumLn4OG@infradead.org>
+References: <Y8/hhvfDtVcsgQd6@nvidia.com>
+ <Y8/ZekMEAfi8VeFl@nvidia.com>
+ <20230123173007.325544-1-dhowells@redhat.com>
+ <20230123173007.325544-11-dhowells@redhat.com>
+ <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com>
+ <84721e8d-d40e-617c-b75e-ead51c3e1edf@nvidia.com>
+ <852117.1674567983@warthog.procyon.org.uk>
+ <852914.1674568628@warthog.procyon.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] io_uring: initialize count variable to 0
-To:     Tom Rix <trix@redhat.com>, axboe@kernel.dk, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20230124125805.630359-1-trix@redhat.com>
-Content-Language: en-US
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20230124125805.630359-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <852914.1674568628@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 12:58, Tom Rix wrote:
-> The clang build fails with
-> io_uring/io_uring.c:1240:3: error: variable 'count' is uninitialized
->    when used here [-Werror,-Wuninitialized]
->    count += handle_tw_list(node, &ctx, &uring_locked, &fake);
->    ^~~~~
-> 
-> The commit listed in the fixes: removed the initialization of count.
+On Tue, Jan 24, 2023 at 01:57:08PM +0000, David Howells wrote:
+> 	[include/linux/mm_types.h]
+> 	#define PAGE_CLEANUP_UNPIN	(1U << 0)
+> 	#define PAGE_CLEANUP_PUT	(1U << 0)
 
-My bad. The patch looks good, thanks
-
-
-> Fixes: b5b57128d0cd ("io_uring: refactor tctx_task_work")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->   io_uring/io_uring.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-> index 734d074cdd94..4cb409ae9840 100644
-> --- a/io_uring/io_uring.c
-> +++ b/io_uring/io_uring.c
-> @@ -1227,7 +1227,7 @@ void tctx_task_work(struct callback_head *cb)
->   	struct llist_node fake = {};
->   	struct llist_node *node;
->   	unsigned int loops = 0;
-> -	unsigned int count;
-> +	unsigned int count = 0;
->   
->   	if (unlikely(current->flags & PF_EXITING)) {
->   		io_fallback_tw(tctx);
-
--- 
-Pavel Begunkov
+With the latest series we don't need PAGE_CLEANUP_PUT at all.
