@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F663679699
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D736C67969B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbjAXL3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S233985AbjAXL3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjAXL26 (ORCPT
+        with ESMTP id S233976AbjAXL3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:28:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04897B74D;
-        Tue, 24 Jan 2023 03:28:56 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Tue, 24 Jan 2023 06:29:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753A62C651;
+        Tue, 24 Jan 2023 03:29:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 916DF1EC05DD;
-        Tue, 24 Jan 2023 12:28:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674559735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=T/Ams73IS9pldjpzsGFlcABahyaCKghXFaudjYvUOgE=;
-        b=cXgUcsNUfF6P+SjHqCuNAxT84nV5oe/5u+2t5INvDnnNWPn5Q7ARhf+Pb18qGAYifk/0XE
-        znw6/Rvere9W8D/xW7u0qTYsyGIh9gTN2wzuWOs3VJGRsaN3RkElclAwOslWbw+F1vS1ie
-        wf0z59faKNsNTHDm1/yA9bE+rnqkrFU=
-Date:   Tue, 24 Jan 2023 12:28:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Moger, Babu" <babu.moger@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
-        "peternewman@google.com" <peternewman@google.com>
-Subject: Re: [PATCH v11 04/13] x86/cpufeatures: Add Bandwidth Monitoring
- Event Configuration feature flag
-Message-ID: <Y8/A8yYcU0QXVRGG@zn.tnic>
-References: <20230109164405.569714-1-babu.moger@amd.com>
- <20230109164405.569714-5-babu.moger@amd.com>
- <Y7xjxUj+KnOEJssZ@zn.tnic>
- <5afd0a7c-3fbe-dfea-f1b4-2fc35fbb4f13@amd.com>
- <Y7yCCNANVBnOOmxM@zn.tnic>
- <SJ1PR11MB608321F26D729A082BFC6FAEFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y7yJq2lV262EPCQT@zn.tnic>
- <SJ1PR11MB60839FFE6A7769A1E15818DDFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 141C36100B;
+        Tue, 24 Jan 2023 11:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 932BDC4339B;
+        Tue, 24 Jan 2023 11:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674559772;
+        bh=5WEoIGkzQvM2CGmnowaKG97b9a5ptWcHyPkR/YW7pFA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GsZ4xcS8oIMgMR4HW6Y/IgATE97fF5C8NhNoPFn0c02QHxw3GTXfRODJoD+BxwIR8
+         YJRDgSuB51ZC/GC7Xky74K7lcA/InrQGUEQ1W4AWCGBDFcRcRin0loU9C4gavpC31d
+         x9p+ALYW6pssd+4sqNaGG5AJvGnBk8Beg6jrU+xmsKUe+Cy3vbn7lSX19sf6VJnyjB
+         1eUzwt4ckLD8nz4fm39mkzAfJqzyntnoYnIdM+OcfJf7Z9HXo88QArMRSSLNGdSIqu
+         kaDlmuK6oZuega8LS5AqXruVSgx3mjBPlnHKpKexPbtj2etiHedsbyY9MG8ilwHLt0
+         8xmVIKPh/GjHA==
+Message-ID: <bcdaaf94-b879-b171-f24a-82647a1ef9a6@kernel.org>
+Date:   Tue, 24 Jan 2023 12:29:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB60839FFE6A7769A1E15818DDFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/3 v6] input: pwm-beeper: add feature to set volume level
+To:     Manuel Traut <manuel.traut@mt.com>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-input@vger.kernel.org
+References: <Y8+8824hy/fWkpEk@mt.com> <Y8+9WRP51u+dof8p@mt.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <Y8+9WRP51u+dof8p@mt.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 09:50:20PM +0000, Luck, Tony wrote:
-> But that allows for the flimsiest of reasons to used to justify making a
-> flag visible.
+On 24/01/2023 12:13, Manuel Traut wrote:
+> This patch adds the documentation for the devicetree bindings to set
+> the volume levels.
 
-How's that for starters?
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-c: The naming override can be "", which means it will not appear in /proc/cpuinfo.
-----------------------------------------------------------------------------------
+> 
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@exceet.de>
 
-The feature shall be omitted from /proc/cpuinfo if there is no valid use case
-for userspace to query this flag and cannot rely on other means for detecting
-feature support. For example, toolchains do use CPUID directly instead of
-relying on the kernel providing that info.
+I think it is kontron.de now.
 
-If unsure, that flag can always be omitted initially and, once a valid use case
-presents itself, be shown later. Not the other way around.
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Another example is X86_FEATURE_ALWAYS, defined in cpufeatures.h. That flag is an
-internal kernel feature used in the alternative runtime patching functionality.
-So, its name is overridden with "". Its flag will not appear in /proc/cpuinfo
-because it absolutely does not make any sense to appear there.
+This misses your SoB.
 
--- 
-Regards/Gruss,
-    Boris.
+> ---
+>  .../devicetree/bindings/input/pwm-beeper.txt          | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/pwm-beeper.txt b/Documentation/devicetree/bindings/input/pwm-beeper.txt
+> index 8fc0e48c20db..93cab5eee9f2 100644
+> --- a/Documentation/devicetree/bindings/input/pwm-beeper.txt
+> +++ b/Documentation/devicetree/bindings/input/pwm-beeper.txt
+> @@ -9,6 +9,15 @@ Required properties:
+>  Optional properties:
+>  - amp-supply: phandle to a regulator that acts as an amplifier for the beeper
+>  - beeper-hz:  bell frequency in Hz
+> +- volume-levels: Array of PWM duty cycle values that correspond to
+> +      linear volume levels. These need to be in the range of 0 to 500,
+> +      while 0 means 0% duty cycle (mute) and 500 means 50% duty cycle
+> +      (max volume).
+> +      Please note that the actual volume of most beepers is highly
+> +      non-linear, which means that low volume levels are probably somewhere
+> +      in the range of 1 to 30 (0.1-3% duty cycle).
+> +- default-volume-level: the default volume level (index into the
+> +      array defined by the "volume-levels" property)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+The bindings should be converted to DT schema first and then new
+properties added.
+
+Best regards,
+Krzysztof
+
