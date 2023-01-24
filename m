@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5542679BBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B72A679BC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbjAXO0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S234878AbjAXO1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjAXO0R (ORCPT
+        with ESMTP id S233417AbjAXO1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:26:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7DF485A2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:25:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674570320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XO5A6WAtDgp5br3HLb+4sHFyIh5WN7cTJ94YiThUnn4=;
-        b=L3UlJ1YZoBQYfnnldmNK4KXFqciuP6i8E9qobektJI3urA+TfqaL5FZQgddIgLaG7EzN5T
-        tiy6k4n9eAzj8+wDXrBtvn/1nHdxu0YG38Qp0tPsxnTBwgr/TliQ9tSv0VuvHsk+yznZsq
-        tTvhaiE9Vs6e3+hcGXGwZUfyuNnPMNs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-vsV2wBhuNOufnzk2IHIz6w-1; Tue, 24 Jan 2023 09:25:15 -0500
-X-MC-Unique: vsV2wBhuNOufnzk2IHIz6w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 405A385C064;
-        Tue, 24 Jan 2023 14:25:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A0FA040AE1E9;
-        Tue, 24 Jan 2023 14:25:12 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y8/njtHRF/dXM+cx@infradead.org>
-References: <Y8/njtHRF/dXM+cx@infradead.org> <Y8/lEVirzumLn4OG@infradead.org> <Y8/hhvfDtVcsgQd6@nvidia.com> <Y8/ZekMEAfi8VeFl@nvidia.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-11-dhowells@redhat.com> <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com> <84721e8d-d40e-617c-b75e-ead51c3e1edf@nvidia.com> <852117.1674567983@warthog.procyon.org.uk> <852914.1674568628@warthog.procyon.org.uk> <859186.1674569545@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
+        Tue, 24 Jan 2023 09:27:17 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE593E08F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:27:16 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h12so10056587wrv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=83ylCl/7imBVz3B8ZOzg+0qRgMLvJMRlFiKPHboLlxk=;
+        b=MPXhllcNYY9b3gb+8OWFbAz6PZAmG5olDb7v7cFbSDAv6IwaYP5r1ajWxqqAcJTWRE
+         kv0aj0tN9/TLxX2C07tXUA4T+tY9fJDb2/QglaKVJBF2/D7sbVLoz6sbMTS0v7gAZMuS
+         MYj+dHDvQFFpLMA7UwCs9Sxm2e/estStI2h9lq43kj5blR9fw7REwxLAoLApCwsbfUJi
+         lWicTdTu5OI6gTe1zV/Ka2C286XKTSvWQVqXSpJD1OHjuMhwmGKF8h63ESyu67sPQ4tO
+         Z5zvyc1unTIeZNGNnoSTjkZH5pUaPbagmQflF1JqyXrRU1msMP203UZceEzYUCOoCWYA
+         jzng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=83ylCl/7imBVz3B8ZOzg+0qRgMLvJMRlFiKPHboLlxk=;
+        b=BSvjVBKnr9g0F2Qyya3hPZtJkwIVJQIl11wYk2y7M8YKxlN9PKSJnedaAv9fz69LEn
+         I2bGG/I+YLUaXOiV6jondPiMjw5iCpN4l+OyovaTzK4igOFE9Mzx+WE0bfLWJEUufvJM
+         u5iqL8DmT3yBMpsJ51+6tjTAiWZm5K8bsF4mziJxWjexEtCLpgEawvJkLQUyAhBHzMTf
+         F+K+Z/hvAcmNvPphYMto7rsl9Neo8gWgOa+LYotqiQoJXUnU0zT/9qJ0L2qyWGhXthWc
+         2dgg8EpQ8aCSV/OPkbI/eYS4bl60dbr8Lw4mxAukqzI/aTIF1QcBl2dQO/CGrvcm2oUd
+         Ciag==
+X-Gm-Message-State: AFqh2kqko++h0ubygY8KKu6WlSmnveahTR0ZXEYYunSlMsHlz66T6aav
+        GZnphuW6hKgAFnxy8KfHKB2jzw==
+X-Google-Smtp-Source: AMrXdXvMAViaj+SgLZBHJD3XBfKynm+jGHWqx/r/lR4qtu9h2VNuT7hG8p9SQKXEEJx9GAShpDsPrg==
+X-Received: by 2002:a05:6000:1b85:b0:2be:f21:6af6 with SMTP id r5-20020a0560001b8500b002be0f216af6mr24625431wru.23.1674570434971;
+        Tue, 24 Jan 2023 06:27:14 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v4-20020adfedc4000000b002bf94527b9esm2002227wro.85.2023.01.24.06.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 06:27:14 -0800 (PST)
+Message-ID: <d2efeff9-1fb9-222c-2d21-1811d8237326@linaro.org>
+Date:   Tue, 24 Jan 2023 15:27:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <863856.1674570312.1@warthog.procyon.org.uk>
-Date:   Tue, 24 Jan 2023 14:25:12 +0000
-Message-ID: <863857.1674570312@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: Add Infineon
+ TDA38640 Voltage Regulator
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-hwmon@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230124141436.1687397-1-Naresh.Solanki@9elements.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124141436.1687397-1-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
-
-> > > With the latest series we don't need PAGE_CLEANUP_PUT at all.
-> > 
-> > We will when it comes to skbuffs.
+On 24/01/2023 15:14, Naresh Solanki wrote:
+> Infineon TDA38640 is PMBUS compliant voltage regulator.
 > 
-> I'm a little doubtful of that.
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../devicetree/bindings/trivial-devices.yaml  |  2 +
 
-skbuff fragments will be and will have to be a mixture of allocated pages that
-need putting and pinned or non-ref'd and non-pinned zerocopy stuff.  I have
-posted a patch that works for the limited amount of driverage that I use on my
-test machine.
+Where is the second patch?
 
-Think network filesystem messages where you have a mixture of protocol bits
-generated by the kernel and data provided by direct I/O being sent by zerocopy
-(libceph, for example).
+>  Documentation/hwmon/tda38640.rst              | 66 +++++++++++++++++++
 
-David
+These are not bindings. You can keep them with the driver.
+
+Best regards,
+Krzysztof
 
