@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEEE678FDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161E6678FF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjAXFaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 00:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S232021AbjAXFcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 00:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjAXFaV (ORCPT
+        with ESMTP id S229452AbjAXFcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 00:30:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA9311653;
-        Mon, 23 Jan 2023 21:30:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1A490CE1397;
-        Tue, 24 Jan 2023 05:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3CF8CC4339B;
-        Tue, 24 Jan 2023 05:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674538216;
-        bh=u9veJcozE7PY0d6xyU5g2KdbliwKSBONZLe9x1IFe3U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gUc559U1/TYxKN+gFize3Iw84lnXl2igAVp41Q+w6L+lo/foVciDknvdUuS11OT+J
-         MXTLQ0q25noNzaO9/bBPNRTV8dq3wKJgAf0ms7BpIhULML6NJaZPTJpa0SAhFD/ZJV
-         xVX0OKoVHC32FM4nxG2/pzdOzUBYOcH0kq3O6iR5pLFEeFF4BuQc77fo6PUOFz+rTc
-         DDubC/lQMqKietuCSU2W7/KK/bh4MErweTYhN54FsITynriO6qv3SlCyeFH/9vKOdI
-         o8T7aY+9WjgOeTDVeUpU1YHT9svuf7FzAzXsVNi0zEofKGZVbE9RDnwFDcPnGjLNSx
-         VG846XJ8Q3Nag==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21984E4522B;
-        Tue, 24 Jan 2023 05:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 24 Jan 2023 00:32:17 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC521113FF;
+        Mon, 23 Jan 2023 21:32:16 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id mg12so36105742ejc.5;
+        Mon, 23 Jan 2023 21:32:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNreOgpbDDYLXB0lHydwWOLk/CCoPwMbZLNxKsq1ywA=;
+        b=RXailLhO9HLEmDnh9MeambYI7cOBo27tc0/hQ2Y+LULzVK6aowd+as2L3azTtqIOSP
+         HhmvSJOkmeiIRzxNi8swixvKhT0Gt2QIZl5Fjc3OmRvaEQW6O34RXNFRiBu7PaH9kB5S
+         fJx5OUuyB3x4cnQc/uoe2ZAQNc7WVB4mfTx/XDo5lhmVSP9+hgiz1egJ+1/c/3mO/LjI
+         yT80G2t6x6NKkcQkfmnhemSM3E20H6amEfZRk+gVaeeEttqu0vTsS6k+PAUC31hRDylT
+         8JepnK424tOSulMkgoBoxXbJuW46zmsD3WmpJUtN7diJWFhUTOmD+lm8YTsQfeNWGQXY
+         qtpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NNreOgpbDDYLXB0lHydwWOLk/CCoPwMbZLNxKsq1ywA=;
+        b=1X7cyKC1OE1jBBF83y4IeEa4vGskj1v3ebcI2Tgpf7A7CcE+55eUsXoIjxJey5aZC6
+         z+2K98DQYAo9ByNKI0F4OHhCcQnSB+p3Wn1akTL+Kkdb5Das3+1k7dzDQU8rmfCD47xY
+         Xj3MEHO8M4Q/nAipnnDk4JEotkhoREeAHBMwn5LhjQ+ndOL0AEsnsTOr9BkMoZ9nMlXJ
+         xa+mrG3ArqxSsZiUeymYcvyp2vf+8EjbN97/HSjVyOdB580YmMXCHF0iny1ruxHMmFBW
+         OAA4YW+ICscCols9dG0JXweLO27rH/j/YzZIyHT4Om9ySxrbeTl1SLfnKKrXDXa7HLXQ
+         ZZ5w==
+X-Gm-Message-State: AFqh2kr6Y5cVUUM/t0TmqLVrqltBrpl+Ueqq0FpWsXz+mVobK86qUcpc
+        7gdV/EGPpIlI5rUg6NvfHERloaSwGtMvTGS0mUA=
+X-Google-Smtp-Source: AMrXdXvPcnv0tVhvVis9Zhru1bIw1wECYpQAcIXB/dvhFQBLK42qxBuzVuaBhekCMMzeyUUzmaMNy0i05i32sLc2vok=
+X-Received: by 2002:a17:906:e0d3:b0:7b2:7af0:c231 with SMTP id
+ gl19-20020a170906e0d300b007b27af0c231mr2509367ejb.240.1674538335104; Mon, 23
+ Jan 2023 21:32:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dt-bindings: net: asix,ax88796c: allow SPI peripheral
- properties
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167453821613.25349.16692808522163523181.git-patchwork-notify@kernel.org>
-Date:   Tue, 24 Jan 2023 05:30:16 +0000
-References: <20230120144329.305655-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120144329.305655-1-krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     l.stelmach@samsung.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123232228.646563-1-void@manifault.com> <20230123232228.646563-4-void@manifault.com>
+In-Reply-To: <20230123232228.646563-4-void@manifault.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 23 Jan 2023 21:32:03 -0800
+Message-ID: <CAADnVQKnyz4gqDXfo0OTDuGGbn3i-+roB4M4Q-uxiMLrSP=S=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf/selftests: Verify struct_ops prog
+ sleepable behavior
+To:     David Vernet <void@manifault.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>, Tejun Heo <tj@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Jan 23, 2023 at 3:22 PM David Vernet <void@manifault.com> wrote:
+>
+> +static struct dummy_st_ops *open_load_skel(void)
+> +{
+> +       int err;
+> +       struct dummy_st_ops *skel;
+> +
+> +       skel = dummy_st_ops__open();
+> +       if (!ASSERT_OK_PTR(skel, "dummy_st_ops_open"))
+> +               return NULL;
+> +
+> +       err = bpf_program__set_flags(skel->progs.test_3, BPF_F_SLEEPABLE);
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Feels that this is incomplete without libbpf support.
+Instead of:
++SEC("struct_ops/test_3")
+the users should be able to:
++SEC("struct_ops.s/test_3")
 
-On Fri, 20 Jan 2023 15:43:29 +0100 you wrote:
-> The AX88796C device node on SPI bus can use SPI peripheral properties in
-> certain configurations:
-> 
->   exynos3250-artik5-eval.dtb: ethernet@0: 'controller-data' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> [...]
-
-Here is the summary with links:
-  - dt-bindings: net: asix,ax88796c: allow SPI peripheral properties
-    https://git.kernel.org/netdev/net-next/c/306f208259ff
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+and the above manual set_flags won't be needed.
