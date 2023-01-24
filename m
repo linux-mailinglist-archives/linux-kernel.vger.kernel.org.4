@@ -2,123 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F30679E0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B014E679E07
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbjAXPzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S233378AbjAXPyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbjAXPz0 (ORCPT
+        with ESMTP id S233425AbjAXPyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:55:26 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70664A1D9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:55:21 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P1WYz1bqJz9xqnb
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:47:19 +0800 (CST)
-Received: from [10.48.129.122] (unknown [10.48.129.122])
-        by APP1 (Coremail) with SMTP id LxC2BwD3ewdF_89jGUbDAA--.14197S2;
-        Tue, 24 Jan 2023 16:54:57 +0100 (CET)
-Message-ID: <280fb8f6-f1fd-76ce-7851-cf720820c44e@huaweicloud.com>
-Date:   Tue, 24 Jan 2023 16:54:42 +0100
+        Tue, 24 Jan 2023 10:54:53 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FB49406
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:54:53 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so18989528pjg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tTB7QQhaFSlJZCgaajKbzp9eWeGSwdO4XEz/GYqEPW8=;
+        b=WLrzs2UbKnxvmlEXQmhbTDf/QauwbyqmKmZHAz2K8tZCKPQ9o3EQGeimUUsavMAWkx
+         BpehPBLyWtPsQg9sAQUeSxs81wkP4Puvj6RhemDLofbk5gO5J44dUGm0Aw9yLAnyXN26
+         Yousn6hgnAHb0Csm8CynGQBc96HZvQqjSi+hJCn0GMxNJiPS7alV93LHIOWv916+f3o/
+         ZpesoNLvsQiqCicY00FkXJ3KfNyA+dVGmhr22vEfUgbqb059OAyNtAdEMEw3zaQE5QVl
+         0RXelImEnStBITFtg8EGEvdCAdIskk2a5N8OsKDzE0qlVPzAbMFSVyu0fGVq0uEzc6Vr
+         baLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tTB7QQhaFSlJZCgaajKbzp9eWeGSwdO4XEz/GYqEPW8=;
+        b=7arTFY9/B9zkSUbTJpGJEBRRpGAnN0PYP9kLklUP9/6grd9Piqno6b2frUgjlBU2My
+         xdjdAMhaTyTiuzllDX37Rk19NSMmr9924GtFJ2QNKT/NHUeE+BR/q5+L18XMuDdEr6Zb
+         3g2ODm9wYZinYmszvWO61C5ntQ3Gt3IqJ8guiRSKclv2JWlxXZVx2IX7SaRQ1r8ePbCv
+         YcUYnrauycGBOjApPJBbkdgkuGc7juRLwjnbBFEnZ4PgQB+hoFSha21+UZVNJ3Tr4L8b
+         YtfjvtiO4/HCF0mlruGgc6X9aBBALv1XMEox+M9Q3jCtNjfem7wZyvBPAWIMWFPzZRT/
+         Bd5A==
+X-Gm-Message-State: AO0yUKV+2htdbdE9blj24N1H/jDd3J1V+qXhgpCd0fTOMOzWFrmvJgy2
+        qcrnqHI/chXaVw3/4coZbrtsiw==
+X-Google-Smtp-Source: AK7set82EVT6qAWOMs7UHodk557+mxhNz3qM85ri7lrGhnXrY20LJRqZ9w9mYPYVIvADZLnUH7oe+A==
+X-Received: by 2002:a17:903:2644:b0:189:b910:c6d2 with SMTP id je4-20020a170903264400b00189b910c6d2mr169346plb.1.1674575692495;
+        Tue, 24 Jan 2023 07:54:52 -0800 (PST)
+Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
+        by smtp.gmail.com with ESMTPSA id ja5-20020a170902efc500b001930b189b32sm1816858plb.189.2023.01.24.07.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 07:54:51 -0800 (PST)
+Date:   Tue, 24 Jan 2023 07:54:48 -0800
+From:   Ricardo Koller <ricarkol@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH 2/2] selftests: KVM: Add page splitting test
+Message-ID: <Y8//SKBTT2h2m8Cz@google.com>
+References: <20230119212510.3938454-1-bgardon@google.com>
+ <20230119212510.3938454-3-bgardon@google.com>
+ <Y8nKerX9tDRHkFq+@google.com>
+ <CANgfPd8B_0w39d7V+c4GnUxdqrc8qN78r8Pq0Con3Mx9WO0hkQ@mail.gmail.com>
+ <Y8qj1QS1VadgaX7A@google.com>
+ <CAOHnOrzKBh2Cq7ZQece+6f6P5wS6gZ1R2vjEQ5=QLTy7BmUvFQ@mail.gmail.com>
+ <CANgfPd_B0q6uU1Be7A-QOj5_YoWi8z9g9LO63mc+=136hO5K4Q@mail.gmail.com>
+ <Y87UzmpCg9hXO2NI@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
- <YytfFiMT2Xsdwowf@rowland.harvard.edu>
- <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
- <114ECED5-FED1-4361-94F7-8D9BC02449B7> <Y8lynRI35cFeuqb5@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y8lynRI35cFeuqb5@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3ewdF_89jGUbDAA--.14197S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw18uF48WryrCry5WF17KFg_yoW8uw17pF
-        WkKayktF4xKw1v9rn7Aw4I9w4xAa1xZ3W3Jrn5Gw4xX3s8JF9ayw4xKFWYvFykWryIyw4j
-        vr1qg34DXas8AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y87UzmpCg9hXO2NI@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 10:41:18AM -0800, David Matlack wrote:
+> On Fri, Jan 20, 2023 at 12:04:04PM -0800, Ben Gardon wrote:
+> > On Fri, Jan 20, 2023 at 6:34 AM Ricardo Koller <ricarkol@google.com> wrote:
+> > >
+> > ...
+> > > > > > > +
+> > > > > > > +     run_test(&p);
+> > > > > >
+> > > > > > Use for_each_guest_mode() to run against all supported guest modes.
+> > > > >
+> > > > > I'm not sure that would actually improve coverage. None of the page
+> > > > > splitting behavior depends on the mode AFAICT.
+> > > >
+> > > > You need to use for_each_guest_mode() for the ARM case. The issue is
+> > > > that whatever mode (guest page size and VA size) you pick might not be
+> > > > supported by the host. So, you first to explore what's available (via
+> > > > for_each_guest_mode()).
+> > >
+> > > Actually, that's fixed by using the default mode, which picks the
+> > > first available
+> > > mode. I would prefer to use for_each_guest_mode() though, who knows and
+> > > something fails with some specific guest page size for some reason.
+> > 
+> > Okay, will do. I wasn't sure if we did eager page splitting on ARM, so
+> 
+> Ricardo is in the process of upstreaming eager page splitting for ARM:
+> 
+> https://lore.kernel.org/kvm/20230113035000.480021-1-ricarkol@google.com/
+> 
+> > I was only planning on making this test for x86_64 initially, hence it
+> > being in that directory. If ARM rolls with the same behavior, then
+> > I'll add the for_each_mode bit and move the test up a directory.
+> 
+> In addition to for_each_guest_mode(), KVM/ARM will need to expose page
+> size stats so the test can verify the splitting (yet another reason to
+> have a common MMU).
+> 
+> Ricardo, if you're interested in adding page size stats to KVM/ARM ahead
+> of the Common MMU, e.g. to test eager page splitting, let me know.
 
+Sure, I can do that. Sounds pretty useful too.
 
-On 1/19/2023 5:41 PM, Alan Stern wrote:
-> On Thu, Jan 19, 2023 at 12:22:50PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/19/2023 3:28 AM, Alan Stern wrote:
->>>> This is a permanent error; I've given up. Sorry it didn't
->>> work out.
->> [It seems the e-mail still reached me through the mailing list]
-> [For everyone else, Jonas is referring to the fact that the last two
-> emails I sent to his huaweicloud.com address could not be delivered, so
-> I copied them off-list to his huawei.com address.]
->
->>>> I consider that a hack though and don't like it.
->>> It _is_ a bit of a hack, but not a huge one.  srcu_read_lock() really
->>> is a lot like a load, in that it returns a value obtained by reading
->>> something from memory (along with some other operations, though, so it
->>> isn't a simple straightforward read -- perhaps more like an
->>> atomic_inc_return_relaxed).
->> The issue I have with this is that it might create accidental ordering. How
->> does it behave when you throw fences in the mix?
-> I think this isn't going to be a problem.  Certainly any real
-> implementation of scru_read_lock() is going to involve some actual load
-> operations, so any unintentional ordering caused by fences will also
-> apply to real executions.  Likewise for srcu_read_unlock and store
-> operations.
+> I
+> want to make sure we align on the userspace-visible stat names to avoid
+> churn down the road. Specifically, do we want to expose neutral names
+> like pages_{pte,pmd,pud} or expand the KVM/x86 list to include all of
+> ARM's possible pages sizes like pages_{4k,16k,64k,...} (or both)?
 
-Note that there may indeed be reads in the implementation, but most 
-likely not from the srcu_read_unlock()s of other threads. Most probably 
-from the synchronize_srcu() calls. So the rfe edges being added are 
-probably not corresponding to any rfe edges in the implementation.
+I would prefer the latter, mainly to match the x86 names:
 
-That said, I believe there may indeed not be any restrictions in 
-behavior caused by this, because any code that relies on the order being 
-a certain thing would need to use some other ordering mechanism, and 
-that would probably restrict the behavior anyways.
+	+	stats->pages_4k = vm_get_stat(vm, "pages_4k");
+	+	stats->pages_2m = vm_get_stat(vm, "pages_2m");
+	+	stats->pages_1g = vm_get_stat(vm, "pages_1g");
+	(from this patch)
 
-It does have the negative side-effect of creating an explosion of 
-permutations though, by ordering all unlocks() in a total way and also 
-sometimes allowing multiple options for each lock() (e.g., 
-lock();unlock() || lock();unlock()  has 4 executions instead of 1).
+but pages_{pte,pmd,pud} would certainly make this test simpler
+as it would handle all guest page sizes:
 
-Anyways, not much to be done about it right now.
+	+	stats->pages_pte = vm_get_stat(vm, "pages_pte");
 
-best wishes, jonas
 
