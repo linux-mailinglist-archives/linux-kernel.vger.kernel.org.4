@@ -2,152 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765EF67982C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDBC67982F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbjAXMiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S233919AbjAXMis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbjAXMiH (ORCPT
+        with ESMTP id S233513AbjAXMip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:38:07 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A957F2BF13;
-        Tue, 24 Jan 2023 04:38:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g6eD6Hc71b2LPXtljRkHdylQ6McSDOLd83nqkrxM73vGHqf3754TW0eYIdZueHZKxnGuNJuS+iyTJmjFNI/QmFeWbN8Q1LDMAuBO0jV9oXJyYQScUFOdAkyeiqKN6ShZlLMnvXbLyuc+yxMeaa7r0tkzw+J5fxGPo9yKgSGGfFikEx1/m7EYxV+GJRN94JBKY6Y8wLMWZvn9yXr9ZCNrCS1FMib/sRDDP/VxOqXwAVHdwOQ+NNbnX9+4ijJUgdAfYyj3EnO/eHqwcm4ikTESkBF0xoiz2AmKY6stb7q9zzEfs2oB6nER29xVPOhPPkqPrboeG8/3CI0K2icg5UURMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5l98okWjXzpJC2jgreim6oKS74HYHxqe/sbMMV7JTzo=;
- b=lephXDNetLJ5XmcqTavjd4Z+3MDztn6ZtXpww7wQx41p6kfIEttpppctFrYRCGKsPLgve6UWr4x/5AlUlthkkgDJDnKBv03K0XlrldCi+rYuDZ+0WOQyuQ95nAOmgIoGBKSqZzDVLMl0QIYAbbpMdzk56HzPKsyOeu9bUY/ivRgeI55kWe0wZXp4OIad4JL1cL6yXixi9yRNVP4ROGHNWkUCxxB1PTZycEcMEYoT26bU9aARgWt9FL3Dq04z5Q6fGoirzsFASCeJZ7XbxSeyMn4jcTVmOeVxXMXICS7EZFeOHgC1raso0Cnb+KPIfzcIgHjbYYdkBBIMjdBJamJ3/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5l98okWjXzpJC2jgreim6oKS74HYHxqe/sbMMV7JTzo=;
- b=S+WfBF57dCudE2XC9TX8yArZh4hs0DJeXXLUmO3+5enXzdWlhlfzE/pEiOhuumaFxHpHtJtfkMeqUbh+uOLUH5LQGgt7pv4m1+yIHrOXvSKTsRh1eRxN7roTRuUTNHgMlJPMwGpPQU8SOB2L/M0+b0bXzp1Cddrq9oHiiHwM25I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
- PH7PR12MB6979.namprd12.prod.outlook.com (2603:10b6:510:1b9::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 12:38:03 +0000
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::2867:7b21:95a4:aaf]) by DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::2867:7b21:95a4:aaf%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
- 12:38:03 +0000
-Message-ID: <ebfcef92-d892-1d7e-004a-1899da968d16@amd.com>
-Date:   Tue, 24 Jan 2023 23:37:46 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH kernel v3 3/3] x86/sev: Do not handle #VC for DR7
- read/write
-Content-Language: en-US
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Juergen Gross <jgross@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230120031047.628097-1-aik@amd.com>
- <20230120031047.628097-4-aik@amd.com>
- <adc11ed3-de89-a389-e629-3c951257469c@amd.com>
- <533c5c83-b68b-eff0-d36d-9963194ab844@amd.com>
- <b30d6f61-2dc9-4c4f-dbdb-a48c186745d3@amd.com>
-From:   Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <b30d6f61-2dc9-4c4f-dbdb-a48c186745d3@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY0PR01CA0010.ausprd01.prod.outlook.com
- (2603:10c6:10:1bb::14) To DM6PR12MB2843.namprd12.prod.outlook.com
- (2603:10b6:5:48::24)
+        Tue, 24 Jan 2023 07:38:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C2237B7D;
+        Tue, 24 Jan 2023 04:38:29 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OC1lmh001235;
+        Tue, 24 Jan 2023 12:38:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=la4YFSxXOheE6TzxwQqP3ufcbSsJu2d3J+0QKvARdUA=;
+ b=Wm5oAfHgvTjJqjhG2IwBuOz/c2q+xWwpchqHD3qZfCjwaFWhMy+7o91tiGMuXZ8Ov4ty
+ rKpYlVUT8s6u0C6K1BK1fR9qumKy6BoSQ0XC/YsPXNuplMn/Tvtj9qUZf4erEB0+icNh
+ +0iOKdYgobjic1x1NHeun7AqAvwpWnR5ErISYAiGPCqamUf7pYysTw95z3fZYMb4D0F1
+ WAE7LcMjoCobuYBSYS6MERH8VMpy2d2tBMFAG9b4ZrV3/h52YdAb8k1la4xGRbglxnX5
+ SjQqZ5F68AvjnRCF2hQIiFS5W0E2V37iQNzkKCvV9GmGBq7QJNotr84RAxQzeKs6ktNl ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg0mec8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:38:13 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30OBuxcG000304;
+        Tue, 24 Jan 2023 12:38:12 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg0meba-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:38:12 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBfIqt006849;
+        Tue, 24 Jan 2023 12:38:10 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7a1vf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:38:10 +0000
+Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCc9tJ10486320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 12:38:09 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1AC97805E;
+        Tue, 24 Jan 2023 14:24:59 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1B0F7805C;
+        Tue, 24 Jan 2023 14:24:56 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.163.35.100])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 14:24:56 +0000 (GMT)
+Message-ID: <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     William Roberts <bill.c.roberts@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Date:   Tue, 24 Jan 2023 07:38:04 -0500
+In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+         <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+         <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+         <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+         <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+         <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+         <Y8tcEtr8Kl3p4qtA@kernel.org>
+         <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|PH7PR12MB6979:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc6d7d0b-3c57-4f44-ac90-08dafe07d566
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yaZQGFjmA1DXfdWn2oJXTzdDmYTLVRMpSON1rNQ7yT3ziP5aIU0LcTwFt61sGgfqkUmjXLBe4io2NTlBoZ/xwq5T1T4Zz1q5tRWcFX6wjIYLdhTvi9bW79D2SWD5Gi6oOtZ8wNY9XBHKAa9wKgE9Ne+1AzmQLb5D9EUokOBnjbuUwYLw6tHlYtVItRs3S2lRHufuIWeig0EO1mShIee3gtQ9r/jC1olSY39uLAS7kbRGsjvghVP4G08XuOwJ7ub4+69fX9J5V2jKOGSl3vujYnoLAUyBk4q1gam9BN9ShcasXjc4dXKXos3uxIOfN9zchKWKFZ2f7YremUxUvyLTJrSVZQJvWUZj7fXAv2HrXUVoZA4uRkPv10TQW9Qalhqe/mK4LYEHuRg4GBbZ8+kjNdm2Rovl/CCxlOvgJJ1Uoki4gsEQauGWMOA6IsG8zzfD4jUpdD/vjV0bguHRvfQJbsBMsa68WB0U1++LS/n0a3QRlA5jAAmtis6RIeNlKfzK1gN87I6Es3FomGpQUbOGFHCK/ZqDAZNbQEeo2N/To9h9/cljx7M+edyirOmM747KesUUjHIWeysDpupSDqWK9aiP7te8NCF+EcfDuBkWW4HpH1CyvcNDepp2+xicLKcGBkbeUlVeJwuT9IjhATz0fbzYpEZysY8c5N4Y2bu3lhxzvU4dPCtuf+eRA5oSibirVMwWcx2Evm9EcsV0doJUFwsTEfq7rTDeKaiOcUhsmC4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(451199015)(54906003)(6636002)(38100700002)(316002)(37006003)(2616005)(5660300002)(8936002)(6862004)(2906002)(7416002)(4744005)(4326008)(66946007)(8676002)(36756003)(66476007)(66556008)(31696002)(41300700001)(83380400001)(6506007)(478600001)(6486002)(6666004)(26005)(31686004)(6512007)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGdxaDg1Y21ycm9aM00xT3JsWExRQm15R0g5OWRkMjBaWUpkejNuMnNXbnF3?=
- =?utf-8?B?NlhSeThTd243Qk5zNTl2YnQwM2hyY1pTRTk2dHhkWFVpWWFYMmZnekZHemFM?=
- =?utf-8?B?aWo4MFhZUXp4aThibVBjNmxOb0xVVWh0OXZYWFhLYU5OMThOSlhOamFhdzk0?=
- =?utf-8?B?TnpXR2pzOXlaT0V1elJvN2pJb05qUjdpK3NVdS94VzdRSVJ6TGtHeXo3V2gx?=
- =?utf-8?B?ck5NejNPVlRPUis2bTdlbzh0MmpOUWV5My8wOUkvbUNuV2xuV0prUkdQSEYx?=
- =?utf-8?B?MCtlN2ZIR3RDYWYzZURQM2hSQzRUS09EaGxRTUxLa09CVzBCeFBwbnZFbEQ5?=
- =?utf-8?B?RGxrUDAvQndzTXU2R0Q2OVNhSmpNSGcxdUFmcnB3TDJYUVEvbHlxYWdLbFl1?=
- =?utf-8?B?UFlhaExEc05XYVhCdEN0R1NIV3hnbElqb2VmVG52eEFIbkZndWRZVThFVUVJ?=
- =?utf-8?B?T1dYOWxXQUF1RUhLU2FnUFRiQWNJUmVvQkZEVGRsOHljeDhsSTlJNThMRWI3?=
- =?utf-8?B?cndieExPZUVsL0FQMGZZVnZaZ0JuRjNRUkx6b3RqRUNmdkNneWZhdW9ieW95?=
- =?utf-8?B?TjFTSTNkTXVndzJWenBLWDRNZEplOUVRQ2xjWFprWC8waDNhck9Hc28yek05?=
- =?utf-8?B?bitCcklUZXlqMkVTUFZMMmZOaWQzcWo2Wmg5bDNENG55RjRZQnpwbWtYaksy?=
- =?utf-8?B?K2FnK2ZxK05lanBJMStvV0lnL0ltZFpsZTJZSWpBK1FBTjdGYUVkY0N2RXFR?=
- =?utf-8?B?YW1aZ0RlQ3JkYnAyNENmVkNsL2V4c3h6cHUxRmFQYXNZWmxtRW9tVUQwNlhn?=
- =?utf-8?B?bFNQVi9ObDdDMGE2c2t2UWh0Y09pWlJ0djdkQTMwMDA5Y0JVM2pWQVcwbHZh?=
- =?utf-8?B?VXF0TVB4TnlTNWJZNHV3M1l4UVZKSyswVHZiK2w0YThOVGthd3lPUUVmY2pI?=
- =?utf-8?B?clJ0OWVidDErTUo2THowVHJ1OGFBS0I0WEFHNStMSFQxMFZaOWo3ZE5tb0R3?=
- =?utf-8?B?YWNHeWFNYWVudklEb2c3RkFHRGhDUnk2UmtFMHE3dDZyRi9SNGpuVW1ad01B?=
- =?utf-8?B?TUNadnhPeG5aSThONFdUbytXOXhJTnpDU3VRVU50aXNjZVkrZDJYNEN0b0t5?=
- =?utf-8?B?cHg5UXhrZzl5eEI2dmZpWVNnVkJiNVVscDlIQVpzVmIzUlkzSGRJOWMxcGdJ?=
- =?utf-8?B?S29WSUIxQm5FYmljdkMxd1RBTGtBRFVQWDVHVWw2Z3NneTlhelBIRTdDallv?=
- =?utf-8?B?d2treWYvOE9tV25mSWRFRXY0OU83bE5DS3JEZjBuTURpaGEyT1Jja0toQlU1?=
- =?utf-8?B?ckd2N3VhdCtUbVl1L1A1Vkl5dnRVT1NnRllVTTBhdG1aWnFUN3lHcTFxMkdJ?=
- =?utf-8?B?dEFGcEZIM1lCQ2tCZ2U2K1k1OEQvQWhVSDcyL0JZdCtFYkFLUGZ6bDFWS2Mw?=
- =?utf-8?B?OXdENHdVVS9wb0kzcm10ZDBaRGcrVUZySGRjOFU2RHR1ck10VXM2RnQ5c0RP?=
- =?utf-8?B?U3dtWFRJaXpudWRxVFNoUEw4eGVoTHpyTU5jcEw2U0QwYURUR0xKNG1zMGpP?=
- =?utf-8?B?SncwN3FGQWJQdUl4dWlpNElyRGlmeW1NWllUSHorblg5U1F1STRYYU50VU13?=
- =?utf-8?B?OC9QN2lhZ1NMMFNkS2taMVc4MU9iZ2M2MnBQeGpQc3JuczRlQjlOdjVUQi9t?=
- =?utf-8?B?aXdmL2t2OC9xNXU0WG5saFFFcDJWSnhyNFlxNDdGalNKVTFEd0FuUGF2M29z?=
- =?utf-8?B?dWpmNnlqdWJSMUs4RThtVHU5U2JpWUZhM1VjQmVZNkYwYnhMZHo1Y1Y5Wm9N?=
- =?utf-8?B?dGJJSis4aC8zUzlKeC9PckJ1clRsUkxXWmNwL0ZuR0lGazkzTHJCUFkva3NI?=
- =?utf-8?B?eVlRMGtwaHdhdHpSU3Juc3BvQkFpWCtXck9ocFRqTkttWkdyYWl2eTNaeHFu?=
- =?utf-8?B?blBPVVNUNmdRZW82ZzZHdmx2Y2J2MXF2OHk4dVRSdWdjbmdpY2NFeGFqdzZX?=
- =?utf-8?B?QVNYZU5mQUJmWlE3YjNqQ3FqT2hQYktaYTBkUjA1dVMwQWpXVzdNaTB2VmNY?=
- =?utf-8?B?OHE4d0RZYzBSWFhpbUk0NDJ0dllRM2kxeEE3bmdGOHl3Tkl5eUtjV3ZCU3Ix?=
- =?utf-8?Q?VUfXnOFCX/Q9WmsEvn+88C+WC?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc6d7d0b-3c57-4f44-ac90-08dafe07d566
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 12:38:02.8754
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9dzbxJQKY8I672qmDQCFIvFl0hcnNKcKLprubApA3Q231JtP4QaYNNDghk52FEW4mtVti8DrU0gMHp2m6NrRgw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6979
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: W6lhHVrCJEXLOG1WcinsU_3DsgBdNAVC
+X-Proofpoint-GUID: TTPoKd1_ay6imEY8KQ5opjuTd2SWTtph
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240114
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,17 +111,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
+> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
+> > 
+> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > > <bill.c.roberts@gmail.com> wrote:
+> > > > 
+> > > > > What's the use case of using the creation data and ticket in
+> > > > > this context? Who gets the creationData and the ticket?
+> > > > > Could a user supplied outsideInfo work? IIRC I saw some
+> > > > > patches flying around where the sessions will get encrypted
+> > > > > and presumably correctly as well. This would allow the
+> > > > > transfer of that outsideInfo, like the NV Index PCR value to
+> > > > > be included and integrity protected by the session HMAC.
+> > > > 
+> > > > The goal is to ensure that the key was generated by the kernel.
+> > > > In the absence of the creation data, an attacker could generate
+> > > > a hibernation image using their own key and trick the kernel
+> > > > into resuming arbitrary code. We don't have any way to pass
+> > > > secret data from the hibernate kernel to the resume kernel, so
+> > > > I don't think there's any easy way to do it with outsideinfo.
+> > > 
+> > > Can we go back again to why you can't use locality?  It's exactly
+> > > designed for this since locality is part of creation data. 
+> > > Currently everything only uses locality 0, so it's impossible for
+> > > anyone on Linux to produce a key with anything other than 0 in
+> > > the creation data for locality.  However, the dynamic launch
+> > > people are proposing that the Kernel should use Locality 2 for
+> > > all its operations, which would allow you to distinguish a key
+> > > created by the kernel from one created by a user by locality.
+> > > 
+> > > I think the previous objection was that not all TPMs implement
+> > > locality, but then not all laptops have TPMs either, so if you
+> > > ever come across one which has a TPM but no locality, it's in a
+> > > very similar security boat to one which has no TPM.
+> > 
+> > Kernel could try to use locality 2 and use locality 0 as fallback.
+> 
+> I don't think that would work for Matthew, they need something
+> reliable to indicate key provenance.
 
+No, I think it would be good enough: locality 0 means anyone (including
+the kernel on a machine which doesn't function correctly) could have
+created this key.  Locality 2 would mean only the kernel could have
+created this key.
 
-On 24/1/23 21:37, Nikunj A. Dadhania wrote:>> It is 
-MSR_AMD64_SEV_DEBUG_SWAP (SEV, not SNP), it is an SEV-ES thing.> Yes, 
-noticed that, earlier analysis was that Debug Swap shouldn't need any 
-guest side changes, but it does need it.>>> Why is that feature 
-negotiation SNP-only and not SEV?> > As per the spec, GHCB termination 
-request: reason code: 0x2 is SNP features specific.
-Does the guest really need to terminate in such case? A VM could just 
-not do the GHCB thing if it does not want to.
+By the time the kernel boots and before it loads the hibernation image
+it will know the answer to the question "does my TPM support locality
+2", so it can use that in its security assessment: if the kernel
+supports locality 2 and the key wasn't created in locality 2 then
+assume an attack.  Obviously, if the kernel doesn't support locality 2
+then the hibernation resume has to accept any old key, but that's the
+same as the situation today.
 
+> I was informed that all 5 localities should be supported starting
+> with Gen 7 Kaby Lake launched in 2016. Don't know if this is
+> still "too new".
 
--- 
-Alexey
+It's probably good enough.  Current laptops which can't use locality 2
+are in the same position as now, but newer ones can provide more
+security guarantees.
+
+There is, however, another wrinkle: can Kaby Lake be persuaded, though
+bios settings perhaps, to shut off the non zero localities?  This would
+allow for a downgrade attack where you shut off locality 2 then present
+a forged locality 0 key and hibernation image; the kernel will think,
+because it can't access locality 2, that it's in a reduced security
+environment so the key might be OK.  We could fix this by requiring
+Kaby Lake and beyond to have locality 2 and refusing to hibernate if it
+can't be accessed and building "is this Kaby lake or beyond" into the
+check for should I have locality 2, but this is getting complex and
+error prone.
+
+James
+
