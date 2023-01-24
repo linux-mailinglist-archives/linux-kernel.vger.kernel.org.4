@@ -2,130 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C149F67942A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDF8679430
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbjAXJ1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S233701AbjAXJ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbjAXJ0n (ORCPT
+        with ESMTP id S233641AbjAXJ1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:26:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AC13BDA6;
-        Tue, 24 Jan 2023 01:26:42 -0800 (PST)
-Date:   Tue, 24 Jan 2023 09:26:38 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674552398;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hs6Gt3G7vzGof1pAkzTdwmtY96iWMmkidqX3PCTzQW8=;
-        b=eRawV1C+eMkN9NZ0abGsG3Ucugkj57N0p+7vof+Hjl+cFl6d+YXx1eaDXAVRmhAH6zIINn
-        bbn7l6yELR8/Yyf6KLEsMXXhZxetBJ7DyKhVB/2HUz6RE08cTENInthbtgt7jCw7wQCTMz
-        tZCOSLTnjmUM6mZwiR6Pk8JyGGpgs+lKOxnw8wTgCnthWTY6COLZIu9zYkpz2EfSdeBSk9
-        mOWDy6ca9FPrdt9XO77eJFgaueB9GU7LBnWafo/XHve/AR4p205RtjQ29PHpIUKHSu9pIr
-        Yj18tOhm6wgY62sA95EjsV4m/B2VxiYgNVkdhjiTNWSQ+gQjsISt8R/K6kbMSQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674552398;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hs6Gt3G7vzGof1pAkzTdwmtY96iWMmkidqX3PCTzQW8=;
-        b=Vthr4zdStAOqifCNYvJ3eKcdGCvpCfcE5fX6IdMPpJIvfzNjisZ5OtLQav6WbxD87nIcM9
-        O//fum4hZ0HzBUAw==
-From:   "tip-bot2 for Babu Moger" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Add a new resource type RDT_RESOURCE_SMBA
-Cc:     Babu Moger <babu.moger@amd.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230113152039.770054-4-babu.moger@amd.com>
-References: <20230113152039.770054-4-babu.moger@amd.com>
+        Tue, 24 Jan 2023 04:27:22 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6291555C;
+        Tue, 24 Jan 2023 01:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=ctJgpO7IHWdhLMWOxSQ2U3kHoPMeDR9uKIVG3QAMmmo=;
+        t=1674552411; x=1675762011; b=p/k36Bg3qtlMpMFCZItuebK3VOK9aR9zGAF+LOqAz+QR03h
+        Wbpmkt72SYJgcTip/BCxAq/Fhdd0aHIDR+nbuBbdkjUem5AiraSWQbzGPGmgRBlQhypyw1ATMHuWU
+        NivarzGPmydDIT1JlDmurT8nYlop2pzzjVleQ/YKVoHLvUsGYFUbera9/n20liAGVB9hnd90VsW35
+        qIVtFZvMW2BHc2LUeXCUGdLYPNfpXHWFIghK5lHBldgLX0KrB8BpKHEFbQlNaWlKosaRkiZRbZPxJ
+        03SkTXpwVdSmUNwNLH0Wwyl7Da5UOKzYyMT1oeYs4Gv7kCtn8Lb+dpDUHt9z6P7A==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pKFZi-00AoMW-31;
+        Tue, 24 Jan 2023 10:26:43 +0100
+Message-ID: <758384602b93da0f242ee5d82847a1b4ab102b91.camel@sipsolutions.net>
+Subject: Re: [PATCH next] wifi: nl80211: emit CMD_START_AP on multicast
+ group when an AP is started
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Alvin =?UTF-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     Alvin =?UTF-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 24 Jan 2023 10:26:41 +0100
+In-Reply-To: <20230121130717.l5ynezk4rug7fypb@bang-olufsen.dk>
+References: <20221209152836.1667196-1-alvin@pqrs.dk>
+         <c7eac35785bf672b3b9da45c41baa4149a632daa.camel@sipsolutions.net>
+         <20230121130717.l5ynezk4rug7fypb@bang-olufsen.dk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Message-ID: <167455239810.4906.3081147401716810165.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cache branch of tip:
+Hi,
 
-Commit-ID:     a5b699665580725de8c0c01f2163a15af78b6866
-Gitweb:        https://git.kernel.org/tip/a5b699665580725de8c0c01f2163a15af78b6866
-Author:        Babu Moger <babu.moger@amd.com>
-AuthorDate:    Fri, 13 Jan 2023 09:20:29 -06:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 23 Jan 2023 17:38:22 +01:00
+> > Seems like you should include the link ID or something?
+>=20
+> Thanks for your review, you are quite right. I didn't give much thought
+> to MLO as I am not too familiar with it. Is something like the below
+> what you are looking for?
 
-x86/resctrl: Add a new resource type RDT_RESOURCE_SMBA
+Yes, that looks good.
 
-Add a new resource type RDT_RESOURCE_SMBA to handle the QoS enforcement
-policies on the external slow memory.
+> Speaking of which: I drew inspiration from nl80211_send_ap_stopped()
+> which see also doesn't include the link ID. Would you like me to include
+> a second patch in v2 which adds the link ID to that function along the
+> same lines?
 
-Mostly initialization of the essentials. Setting fflags to RFTYPE_RES_MB
-configures the SMBA resource to have the same resctrl files as the
-existing MBA resource. The SMBA resource has identical properties to
-the existing MBA resource. These properties will be enumerated in an
-upcoming change and exposed via resctrl because of this flag.
+Maybe have that as a separate patch, but yeah, good idea - thanks for
+looking!
 
-Signed-off-by: Babu Moger <babu.moger@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Link: https://lore.kernel.org/r/20230113152039.770054-4-babu.moger@amd.com
----
- arch/x86/kernel/cpu/resctrl/core.c     | 12 ++++++++++++
- arch/x86/kernel/cpu/resctrl/internal.h |  1 +
- 2 files changed, 13 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index c98e52f..f6af3ac 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -100,6 +100,18 @@ struct rdt_hw_resource rdt_resources_all[] = {
- 			.fflags			= RFTYPE_RES_MB,
- 		},
- 	},
-+	[RDT_RESOURCE_SMBA] =
-+	{
-+		.r_resctrl = {
-+			.rid			= RDT_RESOURCE_SMBA,
-+			.name			= "SMBA",
-+			.cache_level		= 3,
-+			.domains		= domain_init(RDT_RESOURCE_SMBA),
-+			.parse_ctrlval		= parse_bw,
-+			.format_str		= "%d=%*u",
-+			.fflags			= RFTYPE_RES_MB,
-+		},
-+	},
- };
- 
- /*
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 5ebd28e..fdbbf66 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -409,6 +409,7 @@ enum resctrl_res_level {
- 	RDT_RESOURCE_L3,
- 	RDT_RESOURCE_L2,
- 	RDT_RESOURCE_MBA,
-+	RDT_RESOURCE_SMBA,
- 
- 	/* Must be the last */
- 	RDT_NUM_RESOURCES,
+johannes
