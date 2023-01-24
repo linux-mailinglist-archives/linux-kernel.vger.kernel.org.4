@@ -2,158 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134C6678C59
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 00:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F45678C5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjAWX7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 18:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S231774AbjAXAAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjAWX7N (ORCPT
+        with ESMTP id S229476AbjAXAAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 18:59:13 -0500
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F1226A0;
-        Mon, 23 Jan 2023 15:59:10 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Va6CeTr_1674518344;
-Received: from 192.168.1.38(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Va6CeTr_1674518344)
-          by smtp.aliyun-inc.com;
-          Tue, 24 Jan 2023 07:59:05 +0800
-Message-ID: <45d611a6-84d4-6be2-1f45-e4f13673dbba@linux.alibaba.com>
-Date:   Tue, 24 Jan 2023 07:59:04 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Alexander Larsson <alexl@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gscrivan@redhat.com, david@fromorbit.com, brauner@kernel.org,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-References: <cover.1674227308.git.alexl@redhat.com>
- <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 23 Jan 2023 19:00:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71387619F;
+        Mon, 23 Jan 2023 16:00:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B1B161185;
+        Tue, 24 Jan 2023 00:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FEB6C433D2;
+        Tue, 24 Jan 2023 00:00:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674518431;
+        bh=lN3ydNKiMW4CG+lUktMuD4EV+SnXsQMVUALM9djM6Vc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z+qGzYk3dubI6SKphR6WQ+TGf4uOcj16jWTdX8ZCxMG3X6huePHRN+Tdj0DOWrXG3
+         oi7x09HbDZnC8dDpQjR9e+U+ZtieZ1awQRmfgxvQiCSFyefH0+sUzrFUWJkcxgAaAw
+         QAwwAQiMvAHFE+k6w9rnTiHVLT/2Hr+mJsnfO8e1WqDcUvM+N9oG4mI0lWNYLWl+x+
+         FtzoCMom+fyh8qbU/1wsIpsxx3nqLcZ8ojUZGmrwMeJa/kTqF3BEVxBNDK/lCakoEu
+         2x/UnfKcygTbNPHeInhpFSC6rehoHqScNqIYYAkcfWpFtBX0351xayY1OhyIoU4Kkn
+         SIldWwEt99FPQ==
+Date:   Tue, 24 Jan 2023 09:00:26 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-trace-kernel@vger.kernel.org,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        heng.su@intel.com, "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH] kprobes: Fix to handle forcibly unoptimized kprobes on
+ freeing_list
+Message-Id: <20230124090026.02d897cfe904a0af5283b6b5@kernel.org>
+In-Reply-To: <20230123133931.6f6a711d@gandalf.local.home>
+References: <Y8URdIfVr3pq2X8w@xpf.sh.intel.com>
+        <167448024501.3253718.13037333683110512967.stgit@devnote3>
+        <20230123133931.6f6a711d@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 23 Jan 2023 13:39:31 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Mon, 23 Jan 2023 22:24:05 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Sinec forcibly unoptimized kprobes will be put on the freeing_list directly
+> 
+> "Since"
+> 
+> > in the unoptimize_kprobe(), do_unoptimize_kprobes() must continue to check
+> > the freeing_list even if unoptimizing_list is empty.
+> > 
+> > This bug can be happen if a kprobe is put in an instruction which is in the
+> 
+> "This bug can happen if"
+> 
+> > middle of the jump-replaced instruction sequence of an optprobe, *and* the
+> > optprobe is recently unregistered and queued on unoptimizing_list.
+> > In this case, the optprobe will be unoptimized forcibly (means immediately)
+> > and put it into the freeing_list, expecting the optprobe will be handled in
+> > do_unoptimize_kprobe().
+> > But if there is no other optprobes on the unoptimizing_list, current code
+> > returns from the do_unoptimize_kprobe() soon and do not handle the optprobe
+> 
+>                                               "and does not handle'
+> 
+> > which is on the freeing_list, and it will hit the WARN_ON_ONCE() in the
+> > do_free_cleaned_kprobes(), because it is not handled in the latter loop of
+> > the do_unoptimize_kprobe().
+> > 
+> > To solve this issue, do not return from do_unoptimize_kprobes() immediately
+> > even if unoptimizing_list is empty.
+> > 
+> > Moreover, this change affects another case. kill_optimized_kprobes() expects
+> > kprobe_optimizer() will just free the optprobe on freeing_list.
+> > So I changed it to just do list_move() to freeing_list if optprobes are on
+> > unoptimizing list. And the do_unoptimize_kprobe() will skip
+> > arch_disarm_kprobe() if the probe on freeing_list has gone flag.
+> > 
+> > Link: https://lore.kernel.org/all/Y8URdIfVr3pq2X8w@xpf.sh.intel.com/
+> > 
+> > Fixes: e4add247789e ("kprobes: Fix optimize_kprobe()/unoptimize_kprobe() cancellation logic")
+> > Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  kernel/kprobes.c |   23 ++++++++++-------------
+> >  1 file changed, 10 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index 1c18ecf9f98b..73b150fad936 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -555,17 +555,15 @@ static void do_unoptimize_kprobes(void)
+> >  	/* See comment in do_optimize_kprobes() */
+> >  	lockdep_assert_cpus_held();
+> >  
+> > -	/* Unoptimization must be done anytime */
+> > -	if (list_empty(&unoptimizing_list))
+> > -		return;
+> > +	if (!list_empty(&unoptimizing_list))
+> > +		arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
+> >  
+> > -	arch_unoptimize_kprobes(&unoptimizing_list, &freeing_list);
+> > -	/* Loop on 'freeing_list' for disarming */
+> > +	/* Loop on 'freeing_list' for disarming and removing from kprobe hash list */
+> >  	list_for_each_entry_safe(op, tmp, &freeing_list, list) {
+> >  		/* Switching from detour code to origin */
+> >  		op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
+> > -		/* Disarm probes if marked disabled */
+> > -		if (kprobe_disabled(&op->kp))
+> > +		/* Disarm probes if marked disabled and not gone */
+> > +		if (kprobe_disabled(&op->kp) && !kprobe_gone(&op->kp))
+> >  			arch_disarm_kprobe(&op->kp);
+> >  		if (kprobe_unused(&op->kp)) {
+> >  			/*
+> > @@ -797,14 +795,13 @@ static void kill_optimized_kprobe(struct kprobe *p)
+> >  	op->kp.flags &= ~KPROBE_FLAG_OPTIMIZED;
+> >  
+> >  	if (kprobe_unused(p)) {
+> > -		/* Enqueue if it is unused */
+> > -		list_add(&op->list, &freeing_list);
+> >  		/*
+> > -		 * Remove unused probes from the hash list. After waiting
+> > -		 * for synchronization, this probe is reclaimed.
+> > -		 * (reclaiming is done by do_free_cleaned_kprobes().)
+> > +		 * Unused kprobe is on unoptimizing or freeing list. We move it
+> > +		 * to freeing_list and let the kprobe_optimizer() removes it from
+> 
+>                                                                  "remove it"
+> 
+> > +		 * the kprobe hash list and frees it.
+> 
+>                                         "and free it."
+> 
+> >  		 */
+> > -		hlist_del_rcu(&op->kp.hlist);
+> > +		if (optprobe_queued_unopt(op))
+> > +			list_move(&op->list, &freeing_list);
+> >  	}
+> >  
+> >  	/* Don't touch the code, because it is already freed. */
+> 
+> Other than the spelling issues,
+> 
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Thanks for review! I'll fix typos and put on probes/urgent.
+Also,
+Cc: stable@vger.kernel.org
+
+Thank you,
+
+> 
+> -- Steve
 
 
-On 2023/1/24 01:56, Alexander Larsson wrote:
-> On Fri, 2023-01-20 at 21:44 +0200, Amir Goldstein wrote:
->> On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson <alexl@redhat.com>
->> wrote:
->>>
->>> Giuseppe Scrivano and I have recently been working on a new project
->>> we
->>> call composefs. This is the first time we propose this publically
->>> and
->>> we would like some feedback on it.
->>>
->>
->> Hi Alexander,
->>
->> I must say that I am a little bit puzzled by this v3.
->> Gao, Christian and myself asked you questions on v2
->> that are not mentioned in v3 at all.
-> 
-> I got lots of good feedback from Dave Chinner on V2 that caused rather
-> large changes to simplify the format. So I wanted the new version with
-> those changes out to continue that review. I think also having that
-> simplified version will be helpful for the general discussion.
-> 
->> To sum it up, please do not propose composefs without explaining
->> what are the barriers for achieving the exact same outcome with
->> the use of a read-only overlayfs with two lower layer -
->> uppermost with erofs containing the metadata files, which include
->> trusted.overlay.metacopy and trusted.overlay.redirect xattrs that
->> refer to the lowermost layer containing the content files.
-> 
-
-...
-
-> 
-> I would say both versions of this can work. There are some minor
-> technical issues with the overlay option:
-> 
-> * To get actual verification of the backing files you would need to
-> add support to overlayfs for an "trusted.overlay.digest" xattrs, with
-> behaviour similar to composefs.
-> 
-> * mkfs.erofs doesn't support sparse files (not sure if the kernel code
-> does), which means it is not a good option for the backing all these
-> sparse files. Squashfs seems to support this though, so that is an
-> option.
-
-EROFS support chunk-based files, you actually can use this feature to do
-sparse files if really needed.
-
-Currently Android use cases and OCI v1 both doesn't need this feature,
-but you can simply use ext4, I don't think squashfs here is a good
-option since it doesn't optimize anything about directory lookup.
-
-> 
-> However, the main issue I have with the overlayfs approach is that it
-> is sort of clumsy and over-complex. Basically, the composefs approach
-> is laser focused on read-only images, whereas the overlayfs approach
-> just chains together technologies that happen to work, but also do a
-> lot of other stuff. The result is that it is more work to use it, it
-> uses more kernel objects (mounts, dm devices, loopbacks) and it has
-> worse performance.
-> 
-> To measure performance I created a largish image (2.6 GB centos9
-> rootfs) and mounted it via composefs, as well as overlay-over-squashfs,
-> both backed by the same objects directory (on xfs).
-> 
-> If I clear all caches between each run, a `ls -lR` run on composefs
-> runs in around 700 msec:
-> 
-> # hyperfine -i -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR cfs-mount"
-> Benchmark 1: ls -lR cfs-mount
->    Time (mean ± σ):     701.0 ms ±  21.9 ms    [User: 153.6 ms, System: 373.3 ms]
->    Range (min … max):   662.3 ms … 725.3 ms    10 runs
-> 
-> Whereas same with overlayfs takes almost four times as long:
-> 
-> # hyperfine -i -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR ovl-mount"
-> Benchmark 1: ls -lR ovl-mount
->    Time (mean ± σ):      2.738 s ±  0.029 s    [User: 0.176 s, System: 1.688 s]
->    Range (min … max):    2.699 s …  2.787 s    10 runs
-> 
-> With page cache between runs the difference is smaller, but still
-> there:
-> 
-> # hyperfine "ls -lR cfs-mnt"
-> Benchmark 1: ls -lR cfs-mnt
->    Time (mean ± σ):     390.1 ms ±   3.7 ms    [User: 140.9 ms, System: 247.1 ms]
->    Range (min … max):   381.5 ms … 393.9 ms    10 runs
-> 
-> vs
-> 
-> # hyperfine -i "ls -lR ovl-mount"
-> Benchmark 1: ls -lR ovl-mount
->    Time (mean ± σ):     431.5 ms ±   1.2 ms    [User: 124.3 ms, System: 296.9 ms]
->    Range (min … max):   429.4 ms … 433.3 ms    10 runs
-> 
-> This isn't all that strange, as overlayfs does a lot more work for
-> each lookup, including multiple name lookups as well as several xattr
-> lookups, whereas composefs just does a single lookup in a pre-computed
-> table. But, given that we don't need any of the other features of
-> overlayfs here, this performance loss seems rather unnecessary.
-
-You should use ext4 to make a try first.
-
-Thanks,
-Gao Xiang
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
