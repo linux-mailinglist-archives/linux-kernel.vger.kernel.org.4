@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C150678E87
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE293678E89
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjAXCtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S232671AbjAXCto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbjAXCtO (ORCPT
+        with ESMTP id S232579AbjAXCtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:49:14 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2083F3B0ED;
-        Mon, 23 Jan 2023 18:49:08 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id o13so13519839pjg.2;
-        Mon, 23 Jan 2023 18:49:08 -0800 (PST)
+        Mon, 23 Jan 2023 21:49:42 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E2312871;
+        Mon, 23 Jan 2023 18:49:29 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id c145-20020a4a4f97000000b004f505540a20so2445065oob.1;
+        Mon, 23 Jan 2023 18:49:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=10WRUmnlj92TgdMfMl0OkfHOZQo7PKllqvBEDgwMaoA=;
-        b=qNN4n8fCMBr5mvxuvA51fnuENMgCADH5ZAipGXnDeMF9zliNUcHKkIyn7BFxvQPqiB
-         uS67h4ikyIowvds75hFlraj92iDgnvpu8+zkBMlbUtNqCjzF0qFuC37eC7NyrxwfQn5w
-         9JWkS/xOHvl55A7OcgKmCYsYIZSTbZKW4eRTjeNF01JpuOpFdhfBnaqkBGbOoIGiANgm
-         xdoZiRJphWTJyihHbPeoGP4LVKaViP+B2OOgtYy7OP61BsaVKa9Wa/OowARrhNTOLaDq
-         qefHuoMcJD8RH1BGI2PPejfhw4ky3eAuqU1FPAXwZmETSY8kBxFM85xlVNFT1md9bcH/
-         rAwA==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kZQ9vrog7jwNZgu5+COhRurOZBjvasf11OGREJXcEyo=;
+        b=nXxI9dcxw4FCLr6MFNVsEbPm6aMw9maNM3UTrhikgJbE8snI5b/PV9RbiNWnqiTorx
+         WhsNUl7sOR0eSI0BhM3/Pz41FdlYdlXcfPDuIeo19/mULpRQ5nZ53Nl38D8dMBlwdd0o
+         MG5ekJIHE5DiKOOyNhzrRCM3tq9K0KGm5prFxh2G631EMp5v3zL3V2Zs7LBtnXek+PMU
+         qmTAjhMNB/CzNFzbo/6enO35xUeyrJStGfnDpZFV8xft8DDs3iC3aNwSxte7wEEI6D4a
+         OffVuvyUkV7nukWLHytffshM9/37TOtYJ4XOkwcI+KPhgZQD5sar4c9yROJZ/TRyHP0s
+         sfRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=10WRUmnlj92TgdMfMl0OkfHOZQo7PKllqvBEDgwMaoA=;
-        b=5h2aYzyV4IuCZDifyQNeShHX3A9IbNvhZYcayUiM1XvZf/koq0ogHA832L+BU9RtBJ
-         L9eJY4W97i9+zhp+qSy48A5rjXw5ux2HZ3dCnC9jh0xyxrg+R8gkq1Zyg7Z9jSdcdMRi
-         Ek6JGEM1G17o8kWo+cEiS8z9ROdq4IYASgQUvJNNWVfhyXBb3DILvbs3S251fmkIGRki
-         b/rKa+NphhhQ0fmYmjrMFkRCutyLdJIH7T+Q4qSRjdc8hYP5BYnZ+kDWd21vt43kLZOe
-         MpO8Kmo7xct3+khZSkQ33WEdNtZD4taN0D3bvM4l8fVpP99Bl5FCdk/OLkI6Gnkf2fVz
-         zojQ==
-X-Gm-Message-State: AO0yUKVQYxkn2BMWaUwCVRSSXez659R99lrvDptBt952wAwRJlpK/tOL
-        ADeiEZDWcvMeRcslFgHSst2B1gI2rnPJGQ==
-X-Google-Smtp-Source: AK7set9m3IjRxZKzuMrXof+Y/DSDaTkyiy2DMLr/kJ4OZeoXNLwjzGA63X1gGjYDio4iKgOvqRWBOw==
-X-Received: by 2002:a17:903:2310:b0:196:119e:810c with SMTP id d16-20020a170903231000b00196119e810cmr1431370plh.0.1674528547605;
-        Mon, 23 Jan 2023 18:49:07 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-19.three.co.id. [180.214.232.19])
-        by smtp.gmail.com with ESMTPSA id d24-20020a170902aa9800b00194bda5fe5asm410305plr.115.2023.01.23.18.49.05
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kZQ9vrog7jwNZgu5+COhRurOZBjvasf11OGREJXcEyo=;
+        b=xte8jkWnSVP5Ujq4dJR4bb5tLVqYILFoRkp7E2W82xffutjnRaalrm2O7+xFSdP60U
+         rvNXHP0/hC32mx+1WnsWvBqLuQnNLOi2zIdXyXu3dFqhs4AVOh6BBP76A86X3iH66wy4
+         2GDJORSplBkMecLywExmrqKW3qDqsQ1XJpdLE7tiIFE1KU3WNpHM3K7sovZnX6qt8P+A
+         uoAQ4WUsEXYvZzn7FmKom5bn0IeOeUL6jWVjT6JJsv5gq22lmFNp3RC3loHdedmDkuDJ
+         gZ/rOBdhDaC4sBaInZ3d4IuuRv7YvnLjY0MjqrOQX2iCwgNyq8E+hah8pvaxjKIMG7uO
+         8yJQ==
+X-Gm-Message-State: AFqh2kqur6XqeLnrXYzOVhHuq3uKowdnFL932bYhh+bslIKy7ckheV/n
+        +SE20zMRWL3lIrXmtFxlj04=
+X-Google-Smtp-Source: AMrXdXtjSXuytDtnGpEG907cWjqqFD6TqwgBcWQLdNpexxhGWG5R08Si91mT/uz3nUEwFAS4282gTg==
+X-Received: by 2002:a4a:1584:0:b0:4f2:88ea:54dc with SMTP id 126-20020a4a1584000000b004f288ea54dcmr18717473oon.7.1674528569167;
+        Mon, 23 Jan 2023 18:49:29 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v25-20020a4ade99000000b0049ee88e86f9sm325889oou.10.2023.01.23.18.49.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 18:49:05 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id B1414105170; Tue, 24 Jan 2023 09:49:02 +0700 (WIB)
-Date:   Tue, 24 Jan 2023 09:49:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Diederik de Haas <didi.debian@cknow.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
-        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] module.h: Fix full name of the GPL
-Message-ID: <Y89HHtQQ4/pvsOut@debian.me>
-References: <20230122193443.60267-1-didi.debian@cknow.org>
+        Mon, 23 Jan 2023 18:49:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 23 Jan 2023 18:49:27 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc2 review
+Message-ID: <20230124024927.GE1495310@roeck-us.net>
+References: <20230123094918.977276664@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BA5YW9TKzNjuM13A"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230122193443.60267-1-didi.debian@cknow.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230123094918.977276664@linuxfoundation.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 10:52:31AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.90 release.
+> There are 117 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
+> Anything received after that time might be too late.
+> 
 
---BA5YW9TKzNjuM13A
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Build results:
+	total: 160 pass: 160 fail: 0
+Qemu test results:
+	total: 492 pass: 492 fail: 0
 
-On Sun, Jan 22, 2023 at 08:34:43PM +0100, Diederik de Haas wrote:
-> Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-No patch description, really?
-
-> ---
->  include/linux/module.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 8c5909c0076c..329fa0b56642 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -186,14 +186,14 @@ extern void cleanup_module(void);
->   * The following license idents are currently accepted as indicating free
->   * software modules
->   *
-> - *	"GPL"				[GNU Public License v2]
-> - *	"GPL v2"			[GNU Public License v2]
-> - *	"GPL and additional rights"	[GNU Public License v2 rights and more]
-> - *	"Dual BSD/GPL"			[GNU Public License v2
-> + *	"GPL"				[GNU General Public License v2]
-> + *	"GPL v2"			[GNU General Public License v2]
-> + *	"GPL and additional rights"	[GNU General Public License v2 rights and=
- more]
-> + *	"Dual BSD/GPL"			[GNU General Public License v2
->   *					 or BSD license choice]
-> - *	"Dual MIT/GPL"			[GNU Public License v2
-> + *	"Dual MIT/GPL"			[GNU General Public License v2
->   *					 or MIT license choice]
-> - *	"Dual MPL/GPL"			[GNU Public License v2
-> + *	"Dual MPL/GPL"			[GNU General Public License v2
->   *					 or Mozilla license choice]
->   *
->   * The following other idents are available
-
-Why did you do that? Maybe as justification for your other GPL name expansi=
-on
-fix patches?=20
-
-Anyway, let's see what Linus thinks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---BA5YW9TKzNjuM13A
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY89HFwAKCRD2uYlJVVFO
-o+bKAQCTx68iwlMjlC99zL4xr0lf5527j1ubdYlcXKFVxXKVAwEAwWAHN+VAV+VQ
-GqB6/d6IrpQygRPKuwg3IjCfnaMRHAQ=
-=o/dX
------END PGP SIGNATURE-----
-
---BA5YW9TKzNjuM13A--
+Guenter
