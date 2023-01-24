@@ -2,93 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8846791EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC276791F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbjAXH2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S232862AbjAXH3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjAXH2H (ORCPT
+        with ESMTP id S229791AbjAXH3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:28:07 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1175E974C;
-        Mon, 23 Jan 2023 23:28:05 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30O7OPln026293;
-        Tue, 24 Jan 2023 07:27:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KwQ/PtpYUTz+cVdN4b3hZ/Dm5u2vC7+yvEKnwB3nkAA=;
- b=PS6PoZCpSi3B5YUgjUt0VCH2FSsVBbgrEXJLdKMOUew2dgGxjzZae6oGyOg9dsEu9scL
- o/sCPGpSyUYi1dZa5fZhaOEpZxCMj6MNk6pLI0zMQb/iAtcI1pHIduLb/hsOIpMq+149
- +FYBevsmSikxwHlz/qK54206eVkZdDWMAOtwDW70ug+4560bkpXDllnUpEZd7FkJVMaM
- V7xpr4LRpN2DLDBPgSI1dt3pd96cmlk2urXZ+Dym2xvZzT5e0DxouZ5jsoazhCQGv8oP
- 5DzUwm1TAqN41MA4pVHIRyBCPm6qlIaeyp5e+BG0ylMkGO2zpVqITQX0JHqvRnXaRsEG Gw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89dncfdg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 07:27:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30O7RGuG011025
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 07:27:16 GMT
-Received: from [10.216.24.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 23 Jan
- 2023 23:27:07 -0800
-Message-ID: <2852fc37-284f-6534-f163-45b37b153db1@quicinc.com>
-Date:   Tue, 24 Jan 2023 12:57:04 +0530
+        Tue, 24 Jan 2023 02:29:31 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74FA1BAEF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:29:28 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id vw16so36570484ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:29:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=streamunlimited.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m6qG3BxsU9DzBi96t2cPx3U6M9c7IcgwUtyH0SLYa4g=;
+        b=XQJEBD+Y7xXVzz/nDHd/S0HvH752rWzTMP0DGsUG38TNK8qbInkeX38e7aL20QWe6M
+         kBVcoZbmlAMEKoI1tVfFsZpem66CouQRKsddSFwIgsX5WGdyHserqv6Cz18iyTVwfS51
+         nRepPkKhPh77MF1ftu2fBC1KafiG0Apx3fp/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m6qG3BxsU9DzBi96t2cPx3U6M9c7IcgwUtyH0SLYa4g=;
+        b=t2pKgprWu+JHam4UxV0SfhOiNnLq5jPsRMIURi+zohALOTfBLrosYS92TpWOhLBADB
+         tSDr4147TNebaGOglemMU/mLfq6VmaPNeUKubYv69+NAR0/tBlzNr0y7wyPq9YD5tsku
+         gEmi2oaYLzGwBoGfU5GjPEDav9pp1T7p8U3lJmU50R9F4pvCW/A8OmbDqHfVIS6qQhPm
+         Z//8Cb9I5FfE6CfJ2wxuj2DXyrhUPpMy6wN2C8r4goGzpM13+N5HLt1e2IfOTOpNfzq8
+         ofFszj0TtAJekyZU1nDNZYM651QC9yRdp9ayYx/MF30b65u/lqQiB6NG9nISuve1cDxg
+         AIIg==
+X-Gm-Message-State: AFqh2krlBmyBaPLspZe+XzJcy8wUm8/arNs3q8sXZl7ZmdaxSJOFaw5/
+        D2OBYjq4xynsrvJL6aN5iT/SG3Vc3CKBvv3wcNhWvA==
+X-Google-Smtp-Source: AMrXdXvidJI1X9Ofw2tlxMTOMXNJKUk8KX9Nvo9V+Ox1qGGWLz9APdwv7vOmlMKgq5MPZP8u79+DHlr5adylHiaktg0=
+X-Received: by 2002:a17:906:f9d5:b0:86e:65b8:e908 with SMTP id
+ lj21-20020a170906f9d500b0086e65b8e908mr2065436ejb.450.1674545367480; Mon, 23
+ Jan 2023 23:29:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/7] clk: qcom: Add Global Clock Controller driver for
- IPQ9574
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-3-quic_devipriy@quicinc.com>
- <de346d71-1fe7-e357-d220-d4468e4bb933@linaro.org>
- <afd2e5c8-fa5a-ac1f-4ede-4ab1f91c0d0d@quicinc.com>
- <9bdf757d-1fa0-106f-eb77-7f2a8593213f@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <9bdf757d-1fa0-106f-eb77-7f2a8593213f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: STEphrwkEN8UcQaS1cFm2yXVFfi5Dkf-
-X-Proofpoint-ORIG-GUID: STEphrwkEN8UcQaS1cFm2yXVFfi5Dkf-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301240068
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <52861a84-0fe2-37f0-d66a-145f2ebe1d79@gmail.com>
+ <20221214134620.3028726-1-peter.suti@streamunlimited.com> <c6863a3e-8855-50fe-25cb-0b38bc3a05e0@gmail.com>
+ <CACMGZgZY4Zb+3vHUDAS0+3r55K4_J40dtbsTPTFZMd6duBikpQ@mail.gmail.com>
+ <7c4aa0d2-d8e9-416b-b2ad-f5c3c8ea33de@gmail.com> <CACMGZgaS7z2YoViA3jV-gVBvASSq1maiGj_6hfrJQ3zr69esgQ@mail.gmail.com>
+ <c6d797f8-8177-75c7-4522-eea3da6b56d8@gmail.com>
+In-Reply-To: <c6d797f8-8177-75c7-4522-eea3da6b56d8@gmail.com>
+From:   Peter Suti <peter.suti@streamunlimited.com>
+Date:   Tue, 24 Jan 2023 08:29:16 +0100
+Message-ID: <CACMGZgbR_aE9Wph3ZGZ8yGy+V2qjG6GXV8w6JMkw2WYzk8gdow@mail.gmail.com>
+Subject: Re: [PATCH v3] mmc: meson-gx: fix SDIO interrupt handling
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,49 +74,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 8:37 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> > v1 and v2 also fix the issue, but v3 does not correct the bug when
+> > WiFi is stressed for a longer time. And therefore it should not be
+> > used.
+> > Could you please give us some advice on how to investigate this further?
+>
+> One more thought:
+> When checking device tree I found that my system uses IRQ_TYPE_LEVEL_HIGH
+> for the SDIO interrupt. meson-g12-common.dtsi uses IRQ_TYPE_EDGE_RISING
+> in mainline Linux, however vendor kernel uses IRQ_TYPE_LEVEL_HIGH
+> in meson-g12-common.dtsi. A wrong interrupt trigger type may result in
+> lost interrupts.
+> So you could check which trigger type your system uses for the SDIO interrupt.
+> If it's IRQ_TYPE_EDGE_RISING, re-test with IRQ_TYPE_LEVEL_HIGH.
 
-
-On 1/13/2023 7:39 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 13.01.2023 14:21, Devi Priya wrote:
->>
->>
->> On 1/10/2023 6:07 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 10.01.2023 13:13, devi priya wrote:
->>>> Add Global Clock Controller (GCC) driver for ipq9574 based devices
->>>>
->>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->>>> ---
-> [...]
-> 
->>>> +static struct clk_branch gcc_blsp1_qup6_i2c_apps_clk = {
->>>> +    .halt_reg = 0x07024,
->>>> +    .clkr = {
->>>> +        .enable_reg = 0x07024,
->>>> +        .enable_mask = BIT(0),
->>>> +        .hw.init = &(struct clk_init_data) {
->>>> +            .name = "gcc_blsp1_qup6_i2c_apps_clk",
->>>> +            .parent_hws = (const struct clk_hw *[]) {
->>>> +                    &blsp1_qup6_i2c_apps_clk_src.clkr.hw },
->>>> +            .num_parents = 1,
->>>> +            .flags = CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
->>> Sounds very much like a hack..
->> Got it, will remove the clock entry as it is not being used in linux
-> I'm not sure removing it is the best option, somebody might have a
-> funky board where they use this particular QUP for I2C for whatever
-> reason and then the clock would have to be re-added..
-Sure, Understood
-This clock is used by the RPM component to communicate with PMIC and we
-would add the critical flag here
-
-> Thanks for addressing all of the review comments so thoroughly!
-> 
-> Konrad
-
-Best Regards,
-Devi Priya
+Thank you for this suggestion, this change fixes the problem fully.
+With the interrupt trigger type set to IRQ_TYPE_LEVEL_HIGH everything
+works as expected even when WiFI is stressed for a long time.
