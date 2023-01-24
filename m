@@ -2,124 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E06667947E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFEB67947C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjAXJrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S233309AbjAXJrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbjAXJrM (ORCPT
+        with ESMTP id S233097AbjAXJrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:47:12 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD5D298DE;
-        Tue, 24 Jan 2023 01:47:11 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id f23so5457877qkg.1;
-        Tue, 24 Jan 2023 01:47:11 -0800 (PST)
+        Tue, 24 Jan 2023 04:47:07 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0D7298DE
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:47:03 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id mp20so37396807ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:47:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBWXb8Qu133qoYYF1PqkNFWZ6siJCHp1ub01xgs3xcc=;
-        b=PWHFiaKKRa0MKA9n2tn92Vj7RSj/T505GaIWy1hjJ1lQZY+U8ZCA29oZnQXBhzE8Yf
-         mDk8tTazWk5WxuZnl4MOdlT1J95DZuAsVynlEJ4vAFrNTpgqVC3/9qf/cR4Lb37UtqSl
-         gbA64OEZ9Tkol54ToNhbUCTIHArKEFgCUIywA2pBNuqEQImw04KVMg1sbLrfHvXjsCM1
-         Y1zDshUIDll+r2uqYWDAi9IwGy9C4jRRGcT4bKdM6USjYStdUgqGqRIhtGQATFdgw2pi
-         VWrJp6L0DVktiGAC+InCUVrKvxt4ucq7ZG8Dq0jIcModvH63Xi9hJ+I7Mky2OL+4jUtu
-         GeJQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o3C7ldfBLXi3hXV4pFxelnt9/f5/V65vBB6BlKhSBWo=;
+        b=vLssLMT4y6tEvIBNnOhKtr/5zWkvVXyRJP+9aaSDN6O2U6fs/2iq2yUgCPeRB+9tI6
+         STLILc0aeIUuUz7z+vvieHWuoSdOFuMRo2Zsow6OxemIZVz07/anY4vhscPyCtprpR/z
+         P7xKxvMwSAFWEyYVzBE7LQxhu6tYCwHFP+YnV7diYDLT3sRDOihIQcoM7BiivXNCEhMB
+         FF7P1hNjuDfI0Q0F2jDATqcspHylbaArM8NlI806wR9FXqmzsUpm0KiXwWrnzGvPzagG
+         AqmnlG2Cad0DwURv3hFJyp3WmyKb6mjhI+NSG8eVaWTBgFFoC7wRUTVQsg3zJSXsuGMe
+         PiTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GBWXb8Qu133qoYYF1PqkNFWZ6siJCHp1ub01xgs3xcc=;
-        b=dwUGmQR1xS8qINQ54ZPkeig7+ZYhyf9tKWM1KXR/xZvGx2QGB4gUlzNBsULWs9XcSD
-         i2jucmppImsniFtnUA712Qrw53sSsVOve6S8lFBhbM5vGh7NWG4qy5JKF6ROjuAEdqEO
-         B5zmprfBeCKwPSCnUbWIKsNHhBRBcSLUIK4qkCCNKAgJjWcHhA9J/AoOJ/ftu1CsLN2H
-         7crJZvPcCkF2J5qv25fq44AWvgZ0qSjBNWM0upOcRKWLYDxPj18La9V9TKayvTYXjA3W
-         ffz1WlaxeimtOet2973RZvEufX+j/pmt58jnl71NFgm+3rlWRbDLBAAHiyTvuAGRISNa
-         EFnQ==
-X-Gm-Message-State: AFqh2kr1/kXFhLcCYSPSM7RDrbjL91yPJLNrUukibAGCx19hFmrgWIhS
-        sthyzLGEkHv4M0gCI36++S5BuFEsWR+SWj8JegIxIkM2MqU=
-X-Google-Smtp-Source: AMrXdXuv9aInX+jRdl99IwDJbzxZ2OyQqq3lu1Jih8JW9aFVLHmHk14oalsuXXLvUBcztV/Cr+I8OqNHtqsYLUb4guM=
-X-Received: by 2002:a05:620a:e:b0:705:c63f:1fa8 with SMTP id
- j14-20020a05620a000e00b00705c63f1fa8mr1671527qki.504.1674553630860; Tue, 24
- Jan 2023 01:47:10 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o3C7ldfBLXi3hXV4pFxelnt9/f5/V65vBB6BlKhSBWo=;
+        b=VdTdtdtrT1ND1FUrl3D0YKtK2ccQfYMpKJEwGyrciPNZTljktVyekUPgbFN2GOBNF+
+         +Z0Wu2JiwWhJWKgMRWE/pWGFLffirdCOos1Ns7wIgNnBCauhX6hBhqLVNrhB7cv5BRWj
+         5+grlUHC5MBXwYAndmqd4EcZJYC4Udrqrrf7wmw6k7wZW1dB9Oz4zvF2wx1k2T2Zs17r
+         WtyXQx+CSBjxhzBVKJnkNSFXwcljwjheozAm9ukYPg/85XcR2g4sr3p+zEmuf7x2lz8Q
+         lcpm6t8A4Z6KA+3rnDg/ri+f6ImJzNlyfuVoG5W3mW/oGU0u0RzJ6IQTMDMeJmzGUWsa
+         ZH4Q==
+X-Gm-Message-State: AFqh2krvjU2BFTjgnaBZmswhQ5B4e6Dl+dEb/0cVoCV/rHeZoukcGAOq
+        2qS4ukIw4rqsQhKdhjc9poIeRg==
+X-Google-Smtp-Source: AMrXdXvhjbo2HrIxrdYnwU06J+8+ObBkI8rZsJ/LqpLKOO0lnDbsUQqvpp/dJKYckxFL/7ABOmr1YQ==
+X-Received: by 2002:a17:906:9f1f:b0:871:d59d:4f54 with SMTP id fy31-20020a1709069f1f00b00871d59d4f54mr29773166ejc.27.1674553621588;
+        Tue, 24 Jan 2023 01:47:01 -0800 (PST)
+Received: from [192.168.1.101] (abyl109.neoplus.adsl.tpnet.pl. [83.9.31.109])
+        by smtp.gmail.com with ESMTPSA id w1-20020a170906480100b0080c433a9eeesm637395ejq.182.2023.01.24.01.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 01:47:01 -0800 (PST)
+Message-ID: <675ed9f7-da31-6206-5089-1db22025ef4b@linaro.org>
+Date:   Tue, 24 Jan 2023 10:46:57 +0100
 MIME-Version: 1.0
-References: <20221007153323.1326-1-henning.schild@siemens.com>
- <Y8mv8PzL1UsP9gNh@google.com> <20230123214859.725cd1c3@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20230123214859.725cd1c3@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 24 Jan 2023 11:46:34 +0200
-Message-ID: <CAHp75VfSHgdikX5=Qba62BwWofVf7gHhS2hq2OuBwHFz9riCWQ@mail.gmail.com>
-Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
+To:     Devi Priya <quic_devipriy@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, tdas@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-7-quic_devipriy@quicinc.com>
+ <f6ef1834-b629-b76c-9cde-55af56320665@linaro.org>
+ <7f157b73-f856-04d2-1b39-e1f8861d0439@quicinc.com>
+ <84aa79c3-b793-0d0e-d6a5-035aff5a17b4@linaro.org>
+ <278a2e6e-69e0-81b0-f476-571edea950ff@quicinc.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <278a2e6e-69e0-81b0-f476-571edea950ff@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:49 PM Henning Schild
-<henning.schild@siemens.com> wrote:
-> Am Thu, 19 Jan 2023 21:02:40 +0000
-> schrieb Lee Jones <lee@kernel.org>:
-> > On Fri, 07 Oct 2022, Henning Schild wrote:
 
-> > > If we register a "leds-gpio" platform device for GPIO pins that do
-> > > not exist we get a -EPROBE_DEFER and the probe will be tried again
-> > > later. If there is no driver to provide that pin we will poll
-> > > forever and also create a lot of log messages.
-> > >
-> > > So check if that GPIO driver is configured, if so it will come up
-> > > eventually. If not, we exit our probe function early and do not even
-> > > bother registering the "leds-gpio". This method was chosen over
-> > > "Kconfig depends" since this way we can add support for more
-> > > devices and GPIO backends more easily without "depends":ing on all
-> > > GPIO backends.
-> > >
-> > > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version
-> > > of Siemens driver") Reviewed-by: Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> Signed-off-by: Henning Schild
-> > > <henning.schild@siemens.com> ---
-> > >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> >
-> > FYI: I'm going to try my best not to take another one like this.
->
-> understood!
->
-> > Please try to improve the whole situation for you next submission.
->
-> When i have to touch this again, which i will, i will propose either
-> "depend on all possible GPIO drivers" or introduce "#ifdef CONFIG"s.
-> Caring most about big configs as seen in distros like debian, even for
-> embedded systems ... i think i would prefer the first option, as it
-> will also be easier to maintain.
->
-> I do not see the whole infinite loop story on my plate, but if that got
-> fixed i would follow up taking the fix into account.
 
-AFAICS another possible (not sure if it's preferable) solution is to
-split this driver to subdrivers and each of them will be dependent on
-the corresponding pin control in Kconfig. It will satisfy both of your
-requirements, right? Something like
+On 24.01.2023 08:19, Devi Priya wrote:
+> 
+> 
+> On 1/13/2023 7:50 PM, Krzysztof Kozlowski wrote:
+>> On 13/01/2023 14:29, Devi Priya wrote:
+>>>>> +
+>>>>> +    soc: soc@0 {
+>>>>> +        #address-cells = <1>;
+>>>>> +        #size-cells = <1>;
+>>>>> +        ranges = <0 0 0 0xffffffff>;
+>>>>> +        compatible = "simple-bus";
+>>>>> +
+>>>>> +        tlmm: pinctrl@1000000 {
+>>>>> +            compatible = "qcom,ipq9574-tlmm";
+>>>>> +            reg = <0x01000000 0x300000>;
+>>>>> +            interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> +            gpio-controller;
+>>>>> +            #gpio-cells = <2>;
+>>>>> +            gpio-ranges = <&tlmm 0 0 65>;
+>>>>> +            gpio-reserved-ranges = <59 1>;
+>>>>
+>>>> Hm, why reserved ranges are in SoC?
+>>> As the gpio is forbidden on all ipq9574 boards, we have added it in SoC
+>>
+>> Why it is forbidden on all boards? I guess it depends on the firmware
+>> and this can differ, can't it?
+>>
+> This GPIO is protected and used by the TZ firmware and is forbidden on all the boards & firmware
+If it's protected on *all* boards and *all* firmwares (for any
+good reason that you probably have internally), perhaps it
+would be better to describe it in the .c driver.. wdyt?
 
-simatic-leds-core.c
-simatic-leds-127e.c (config ..._127E depends on PINCTRL_BROXTON)
-...
-
--- 
-With Best Regards,
-Andy Shevchenko
+Konrad
+>> Best regards,
+>> Krzysztof
+>>
+> Regards,
+> Devi Priya
