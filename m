@@ -2,144 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734C067A524
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46EA67A528
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbjAXVn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S230011AbjAXVnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjAXVnY (ORCPT
+        with ESMTP id S235060AbjAXVne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:43:24 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE3C47082
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:43:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674596604; x=1706132604;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OyMFGGntUnPYhGVxQeOHDXLc1V17I6tBaQNDlHnBZEQ=;
-  b=bP9yX15wBpym9z7pS+6lS62/wc75ne0WOw6iFZqrajsc3OX/UAnGzJ9y
-   2ePh1bl+nD6UlXR2lFGkfl8EH4BP3Ckt8z6Uwa0Oncb4w0TMtKETXtGtQ
-   TVgdAKnbR6GU64BW7/crhPEqjwW8sFZaKbjlNcjD3EG5WNefaI9Z00kDQ
-   oDJK2zxRzGKYJB5BK1KdjsgHIFx/dz7h+bE6t+XLWaSsVnRvwqK34kXar
-   KdCi42WNXJuCyNmBFvNnChq3Z3UTw9Rwvvh+6ZVpHD62Z2XJpQ4OdUOa3
-   H3tffOsy1bE4/Jf3iJ20PLhFWFru+vh2STqtqrAp8mI2DfWoeyIdKLUCH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="412646362"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="412646362"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:43:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="750964786"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="750964786"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2023 13:43:22 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKR4c-0006ns-0U;
-        Tue, 24 Jan 2023 21:43:22 +0000
-Date:   Wed, 25 Jan 2023 05:43:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 8272720be0448ed9da201afb1ba4f65e31d8fc0a
-Message-ID: <63d050e6.Ltx7CP1++ek5Hsdo%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 24 Jan 2023 16:43:34 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAAF4B4A1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:43:31 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id vw16so42691201ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:43:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=REF9Fo0sKbKUPgYgq1ClXxYyHpD2eo/2b/LahHN2320=;
+        b=tK0gwua8KBnxjCNNIZiSmKMZxH1Xq2GMFWZkbxZlHBxQkf7whmVoR0tNVrdr+ok4mE
+         MxgC1/45Ur7dOcEeZ6W7LO2Tq9xoVHheIwpkNKpG4AfeaUFU4/USWpM/zsGJdN+XF03/
+         AZQMVqMRHTZDe3bzPH8wv7kweoNoSFjWkJOdeFiF1mHw1U8t1no6xulT956fV98abDjt
+         A+NNlZmhBz9ZeR1bUm+8mnQf8gr9gBImV5UvNpyKLmXEbxQEvMhc4XfPCJbFnjp/LRkN
+         Y9FlRqke542W93wi30+AL0w6ZTFeyg+udZs+4d48nAC/CboBFweiQbOaLnN4BV57E3Tf
+         aPrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=REF9Fo0sKbKUPgYgq1ClXxYyHpD2eo/2b/LahHN2320=;
+        b=y2rL6uewJjywnb1Ge0yRun7tXKYxvGqZW5muGTIk3gD4y7JNjUba39LYXdHsn5m5zC
+         fiZ4WefLAZJm17FMcLEti3TpB9RRrGbdGTgpsDNIgwIkDihf4Dh61ifYo0koZ3Tsm/Ss
+         rhVI+K9w606z1BUNFOtYB7VM0cCfDBMTDtVkngVZpl6+lHnluhuOB/ImCsjl2NFMt5zr
+         WuOrqLJ5SXOASahBJiaGcl5j3Qj5To3A0LjlHZLWIKFOAAMBbOEAnGnDLqdibzJ2RBxz
+         4DY10z5iRMRHongm9JaSEG1SdDfEvHikm4ViSsIJqTViAys1a+wjR6sVKkCZRYSBeV52
+         F2Yw==
+X-Gm-Message-State: AFqh2kqL7fY4cl+MkRdAH2ErnhaKEEMNZjBZNnfC3/6NU3DZVEMnbjOT
+        6apN+MMNZ9MNJHPzDgPxq/0yKw==
+X-Google-Smtp-Source: AMrXdXucqopCCy6mQUblvOoS2imUr4b4rNxxuleAJ/9M8nNSvDTTAFCtJ7pfS2ZCXFjAe/O7Qc/2VQ==
+X-Received: by 2002:a17:907:2982:b0:7c1:23f2:c052 with SMTP id eu2-20020a170907298200b007c123f2c052mr21529722ejc.45.1674596609850;
+        Tue, 24 Jan 2023 13:43:29 -0800 (PST)
+Received: from [192.168.1.101] (abyl109.neoplus.adsl.tpnet.pl. [83.9.31.109])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170906774e00b0084d1b34973dsm1421473ejn.61.2023.01.24.13.43.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 13:43:29 -0800 (PST)
+Message-ID: <973776ae-0434-db09-0ffb-d88f65bdf050@linaro.org>
+Date:   Tue, 24 Jan 2023 22:43:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sa8540p-ride: Fix some i2c pinctrl
+ settings
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org
+Cc:     agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bmasney@redhat.com, quic_shazhuss@quicinc.com
+References: <20230124192351.695838-1-ahalaney@redhat.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230124192351.695838-1-ahalaney@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 8272720be0448ed9da201afb1ba4f65e31d8fc0a  Merge x86/cache into tip/master
 
-elapsed time: 726m
 
-configs tested: 62
-configs skipped: 2
+On 24.01.2023 20:23, Andrew Halaney wrote:
+> Some of the pinctrl groups were invalid for the selected pins. Select
+> the proper qup group to fix these warnings:
+> 
+> [    6.523566] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio135" for function "qup15"
+> [    6.535042] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio136" for function "qup15"
+> [    6.597536] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio158" for function "qup15"
+> [    6.597544] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio159" for function "qup15"
+> [    6.597991] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio0" for function "qup15"
+> [    6.597996] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio1" for function "qup15"
+> 
+> Fixes: e073899ec3e1 ("arm64: dts: qcom: sa8540p-ride: add i2c nodes")
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> ---
+This matches the pinctrl .c driver.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-gcc tested configs:
-i386                                defconfig
-powerpc                           allnoconfig
-x86_64                            allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-arm                                 defconfig
-sh                               allmodconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-arc                  randconfig-r043-20230123
-arm                  randconfig-r046-20230123
-alpha                            allyesconfig
-m68k                             allyesconfig
-arc                                 defconfig
-mips                             allyesconfig
-i386                 randconfig-a004-20230123
-i386                 randconfig-a003-20230123
-s390                             allmodconfig
-m68k                             allmodconfig
-alpha                               defconfig
-arc                              allyesconfig
-x86_64                           allyesconfig
-powerpc                          allmodconfig
-i386                 randconfig-a002-20230123
-x86_64               randconfig-a002-20230123
-arm64                            allyesconfig
-x86_64               randconfig-a001-20230123
-i386                 randconfig-a001-20230123
-s390                                defconfig
-ia64                             allmodconfig
-arm                              allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-i386                 randconfig-a005-20230123
-x86_64               randconfig-a004-20230123
-x86_64                         rhel-8.3-kunit
-x86_64                          rhel-8.3-func
-x86_64               randconfig-a003-20230123
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a006-20230123
-x86_64                           rhel-8.3-bpf
-x86_64               randconfig-a005-20230123
-x86_64               randconfig-a006-20230123
-s390                             allyesconfig
-i386                             allyesconfig
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-i386                 randconfig-a012-20230123
-riscv                randconfig-r042-20230123
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a012-20230123
-i386                 randconfig-a013-20230123
-i386                 randconfig-a015-20230123
-i386                 randconfig-a011-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a015-20230123
-i386                 randconfig-a014-20230123
-x86_64               randconfig-a014-20230123
-i386                 randconfig-a016-20230123
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> index eacc1764255b..cb9fbdeb5a9e 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> @@ -318,21 +318,21 @@ &xo_board_clk {
+>  &tlmm {
+>  	i2c0_default: i2c0-default-state {
+>  		pins = "gpio135", "gpio136";
+> -		function = "qup15";
+> +		function = "qup0";
+>  		drive-strength = <2>;
+>  		bias-pull-up;
+>  	};
+>  
+>  	i2c1_default: i2c1-default-state {
+>  		pins = "gpio158", "gpio159";
+> -		function = "qup15";
+> +		function = "qup1";
+>  		drive-strength = <2>;
+>  		bias-pull-up;
+>  	};
+>  
+>  	i2c12_default: i2c12-default-state {
+>  		pins = "gpio0", "gpio1";
+> -		function = "qup15";
+> +		function = "qup12";
+>  		drive-strength = <2>;
+>  		bias-pull-up;
+>  	};
