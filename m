@@ -2,164 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B153A679C22
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00539679C08
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbjAXOkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S234303AbjAXOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbjAXOj6 (ORCPT
+        with ESMTP id S233781AbjAXOf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:39:58 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54133AE;
-        Tue, 24 Jan 2023 06:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674571196; x=1706107196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QYC/3AGiRj6sLnDRHA1FuZ9RfMd2Lv6xm2a4QznoPBo=;
-  b=gewVi62oKZf9vbj0w8rwWkEsHdo7uk+sE8Hq4chPC+ircRGVwNDUf8j0
-   HSRbVgE3jtG0NtgKRF1dtVasz0RGtykm9hUnBkFxt6F6D6Xf2MNgqMduw
-   Wb2R27gzlX5bg3sKpOWf7UmVtGVxEUTUDFb9iIqVNFRj/ceVWgOQ3FIHV
-   gJiWdtmh1apS/JPPSGd5JFexZnJYEcHNMvjwbgp6CQnMcTEYtRNncFjcs
-   JeN+dqw1NUDbqYOMLitKJjcgqcTXWffqjlzxc7DLQ7N2FBFWRvQpJ5jUQ
-   Nv7DOaHR4eDbRk5WDVjpBxm6b42fjKg98cJ30mW7g0+SFrTAbzoZSu2k3
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,242,1669100400"; 
-   d="asc'?scan'208";a="193633516"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jan 2023 07:39:54 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 24 Jan 2023 07:39:45 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Tue, 24 Jan 2023 07:39:42 -0700
-Date:   Tue, 24 Jan 2023 14:39:19 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gavin Shan <gshan@redhat.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v4 6/6] arch_topology: Build cacheinfo from primary CPU
-Message-ID: <Y8/tl999NQwbPL/R@wendy>
-References: <20230104183033.755668-1-pierre.gondois@arm.com>
- <20230104183033.755668-7-pierre.gondois@arm.com>
- <CAMuHMdUjgxgOXf5He1x=PLn7MQTjZgFQUHj8JrwbyweT4uOALQ@mail.gmail.com>
- <20230124140420.4srnufcvamvff77v@bogus>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Vk/U8mTs5k/Wt3P9"
-Content-Disposition: inline
-In-Reply-To: <20230124140420.4srnufcvamvff77v@bogus>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 09:35:57 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5BC5B84
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:35:55 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P1TpJ1bNkz9xqdF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:27:52 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.206.133.88])
+        by APP2 (Coremail) with SMTP id GxC2BwD3xl2n7M9jRCHBAA--.13278S2;
+        Tue, 24 Jan 2023 15:35:30 +0100 (CET)
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+To:     paulmck@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Subject: [PATCH] tools/memory-model Flag suspicious use of srcu cookies
+Date:   Tue, 24 Jan 2023 15:39:51 +0100
+Message-Id: <20230124143951.23372-1-jonas.oberhauser@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: GxC2BwD3xl2n7M9jRCHBAA--.13278S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZry3CrWDAFykWrWrury3urg_yoW5Aw1kpr
+        W8ta4rKw4DtFyfuwn2g347uFyrXas7XrZFyrn3Ja48Z3W5ZrnrCryxKas0qw43tF17ta18
+        ZryYqFsFy3WkJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF0
+        eHDUUUU
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Vk/U8mTs5k/Wt3P9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The herd model of LKMM deviates from actual implementations in the
+range of cookies that might be returned by srcu_lock() and similar
+functions.  As a consequence, code that relies on srcu_lock()
+returning specific values might pass on the herd model but fail in
+the real world.
 
-On Tue, Jan 24, 2023 at 02:04:20PM +0000, Sudeep Holla wrote:
-> Conor might help me remember the details.
+This patch flags any code that looks at the value of a cookie
+without passing it on to an srcu_unlock().  This indicates that the
+cookie value might be being used in ways that can lead herd to
+produce incorrect results, as in the following (contrived) case:
 
-And I can't shirk either since you know I just replied to Pierre!
+P0(struct srcu_struct *ss)
+{
+	int r = srcu_read_lock(ss);
+	if (r==0)
+		srcu_read_unlock(ss, r);
+}
 
-> On Tue, Jan 24, 2023 at 02:50:16PM +0100, Geert Uytterhoeven wrote:
+Without this patch, the code passes herd7 without any warnings.
 
-> > > @@ -840,6 +840,14 @@ void __init init_cpu_topology(void)
-> > >                 reset_cpu_topology();
-> > >                 return;
-> > >         }
-> > > +
-> > > +       for_each_possible_cpu(cpu) {
-> > > +               ret =3D fetch_cache_info(cpu);
-> > > +               if (ret) {
-> > > +                       pr_err("Early cacheinfo failed, ret =3D %d\n"=
-, ret);
-> >=20
-> > This triggers on all my RV64 platforms (K210, Icicle, Starlight,
-> > RZ/Five).
-> >=20
-> > This seems to be a respin of
-> > https://lore.kernel.org/all/CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=3DSQ+X=
-8w5Q4C_70g@mail.gmail.com
-> > which had the same issue.
-> >
->=20
-> I need to recollect my memories reading all the thread, but even after the
-> fixes there were few platforms that failed with so early allocation but w=
-ere
-> fine with initcalls. Are these such platforms or am I mixing up things he=
-re ?
-> Do you still see all the cacheinfo in the sysfs with initcalls that happen
-> later in the boot ?
+With this patch, this code is flagged with illegal-srcu-cookie-ctrl,
+indicating that a cookie is used to compute a control condition.
+Such scenarios potentially lead to other branches of the code that
+are possible in real usage not being evaluated by herd7.  In this
+example, this affects the branch where r!=0, which would lead to
+an unmatched read side critical section and thus to hangs of
+synchronize_srcu() calls.
 
-IIRC that stuff was failing back then because riscv calls
-init_cpu_topology() far sooner in boot than arm64 does, and therefore
-caused allocation failures. You made that warning go away in the below
-patch by moving detect_cache_attributes() to update_siblings_masks(),
-which both arches call later during boot IIRC:
-https://lore.kernel.org/all/20220713133344.1201247-1-sudeep.holla@arm.com
+Besides use of cookies in control conditions, the patch also flags
+use in address computation and any time a cookie is inspected but
+not later passed to srcu_read_unlock().
 
-Pierre's patch has added fetch_cache_info() to the problematic
-init_cpu_topology() which is called before we can actually do any
-allocation in smp_prepare_boot_cpu() or something like that.
+Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+---
+ tools/memory-model/linux-kernel.bell | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-That's what I get for only reviewing the patch that was specifically for
-riscv, and not the rest of the series... D'oh.
+diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+index 6e702cda15e1..db5993acc241 100644
+--- a/tools/memory-model/linux-kernel.bell
++++ b/tools/memory-model/linux-kernel.bell
+@@ -58,7 +58,8 @@ flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-unlock
+ 
+ (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+ let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
+-let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
++let pass-cookie = carry-srcu-data ; data
++let srcu-rscs = ([Srcu-lock] ; pass-cookie ; [Srcu-unlock]) & loc
+ 
+ (* Validate nesting *)
+ flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-lock
+@@ -71,6 +72,15 @@ flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+ (* Validate SRCU dynamic match *)
+ flag ~empty different-values(srcu-rscs) as bad-srcu-value-match
+ 
++(*
++ * Check that srcu cookies are only used for passing to srcu_unlock()
++ * Note: this check is only approximate
++ *)
++flag ~empty [Srcu-lock] ; pass-cookie ; rf ;
++	[~ domain(pass-cookie ; [Srcu-unlock])] as suspicious-srcu-cookie-use
++flag ~empty [Srcu-lock] ; carry-srcu-data ; ctrl as illegal-srcu-cookie-ctrl
++flag ~empty [Srcu-lock] ; carry-srcu-data ; addr as illegal-srcu-cookie-addr
++
+ (* Compute marked and plain memory accesses *)
+ let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
+ 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
+-- 
+2.17.1
 
-This actually came up a few weeks ago, although I kinda considered the
-reason it was triggered to be a bit bogus there, since that dmips property
-is not (yet?) a valid property on RISC-V. The patch for that is here:
-https://patchwork.kernel.org/project/linux-riscv/patch/20230105033705.39461=
-30-1-leyfoon.tan@starfivetech.com/
-I tried it on a PolarFire SoC (unfortunately not an Icicle, I just went
-and bricked mine an hour ago) & it should be a fix for this problem too.
-
-My suggested commit message for that is somewhat prophetic now that I
-look back at it:
-https://lore.kernel.org/all/Y7V4byskevAWKM3G@spud/
-
-I'll ping Palmer about that patch I guess...
-
-Cheers,
-Conor.
-
-
---Vk/U8mTs5k/Wt3P9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8/tlgAKCRB4tDGHoIJi
-0sDmAQC5A7U+zC3XFE9IoI8mjgdAUswG9Sc9F3KPSROMrGNuzAD/RYD2MWaKYUqC
-sZ+0vgdr9ZaNFfw9F1XIgPCOYWjBcQ8=
-=jqYz
------END PGP SIGNATURE-----
-
---Vk/U8mTs5k/Wt3P9--
