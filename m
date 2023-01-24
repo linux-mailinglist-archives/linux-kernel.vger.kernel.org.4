@@ -2,219 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADCA67A3B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F8167A42D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjAXUPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:15:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S234246AbjAXUpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjAXUOz (ORCPT
+        with ESMTP id S234337AbjAXUp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:14:55 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AF31E5C6;
-        Tue, 24 Jan 2023 12:14:54 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so19817656pjg.4;
-        Tue, 24 Jan 2023 12:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oEtY5LynS2vkRPJ1R/kvYmV9SRofdb2LH2C1cStAz2M=;
-        b=YLqMn6DXAHVh1XoLozY4AjSZ2agwCfvhkAMhaBbQlDjZBccFd5CgQll9zu3+eXv+T3
-         lut752J6pdicDNwtPw0D/+VEKasV0TNfcTCgXpPB0+JjUkK9ObZ5KeUXHB4eBdiCgMkS
-         rAsMHZUlC4kZpqXMwZFqItpHxhcsPA2Noz9zjHKcdCT3BueUIdmHnnQRZNxkxJqrQKcx
-         73PR4NrdkovewfZ3usoqswNOzbAYl+8khJh3bxc7hzSMHjXLOYeeH6BYtu/OA+CUrS4O
-         3PzgLegGlYVKJyk9LsJVomZ987ObpTgG9tGRWdgemBqxaQ6xBdhniwDIeH/nvK/6pAuE
-         rP4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oEtY5LynS2vkRPJ1R/kvYmV9SRofdb2LH2C1cStAz2M=;
-        b=Vg6VeW8lC4EhbhXBwPmcsYfSihSdRr5etMv1R1Fyy3+FwHd9TrqUeEXjA2b5uKTL0A
-         ZgJt2RpaCo8EQlf5bRdh/0z8aUddKnYgaMCeo3E+ptDrrxhIzJw8+SVYNwsn47teRwxy
-         1cYLrXZqlkIhPdTBmGFxJTEZgM7gawbtvVMQgmkDIWo68m7atE80cW6P9DGLKPgCw5iO
-         hQLQwrvNBUDXBP2YAP1UslpvvCJVPoZJWxZ+R7OHZQbo85l3QX8al4ct5SGI9dJ998BP
-         Cr2dWEhaKn87FZJf7roPL4+jmjAJuJNJy9zV5xcaQRNll7V8s49gULsNRZyYm/IiPfcn
-         81RA==
-X-Gm-Message-State: AO0yUKWKASRiHYug93PVla9D+aozZGyRUfiDcxc1KLw04qrAPcYn3ALs
-        q0O7Wg2rKdbXgezTmgSLFpk=
-X-Google-Smtp-Source: AK7set/SVm0TL+nwZtkO3KuT5ojyygCFXTfAneUC4EiVvIR5DnLMNpB8e+WyXau6/07/j3+AxU1FYg==
-X-Received: by 2002:a05:6a20:6985:b0:bb:a0a2:c37a with SMTP id t5-20020a056a20698500b000bba0a2c37amr4187151pzk.33.1674591293717;
-        Tue, 24 Jan 2023 12:14:53 -0800 (PST)
-Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170902728d00b00174f61a7d09sm2057824pll.247.2023.01.24.12.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 12:14:53 -0800 (PST)
-From:   Doug Berger <opendmb@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Brian Norris <computersforpeace@gmail.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH v2 2/2] rtc: brcmstb-waketimer: allow use as non-wake alarm
-Date:   Tue, 24 Jan 2023 12:14:30 -0800
-Message-Id: <20230124201430.2502371-3-opendmb@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230124201430.2502371-1-opendmb@gmail.com>
-References: <20230124201430.2502371-1-opendmb@gmail.com>
+        Tue, 24 Jan 2023 15:45:26 -0500
+X-Greylist: delayed 1811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 12:45:21 PST
+Received: from bosmailout10.eigbox.net (bosmailout10.eigbox.net [66.96.184.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E2A4FAC2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:45:21 -0800 (PST)
+Received: from [10.20.15.6] (helo=bosmailscan06.eigbox.net)
+        by bosmailout10.eigbox.net with esmtp (Exim)
+        id 1pKPhF-0002wy-2J
+        for linux-kernel@vger.kernel.org; Tue, 24 Jan 2023 15:15:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=bestfzyhs.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=X2ynI9Fsuf73Q/abz5DQqXyVbIcRJ5o0sL15Wzf8gr0=; b=GATVM0Lj5wWEsSwRE8AvmsOVH/
+        uVmIbkZk0KpFCGT0jrt08jvIJRMUzS+7gwpNNFM+dwUZAJz2boppPM2BmiAxjD0mSPSU8CoauKRdx
+        c0DH0q21FZMc2tVuOKgltY/E5vBapNweZ+NCttKx+eKYDOdTjwOnrTWdX9iOOmJ6h5DB7bhIaG1BR
+        zxXccdV8j2JhDiGssB8fLiex9fRD3Zz2XtUZw2TpzKCpMABmvAgPqu63D2sxlqqVPc+4BDa9W1/zp
+        MgSy5PmkPNjgHtsFsS6wGx/BpHnN6UUyNcyb8t5VZsMn2sDupxPq2+jtWhrQt7L8ZqLfURxg0sze8
+        quafhTkg==;
+Received: from [10.115.3.33] (helo=bosimpout13)
+        by bosmailscan06.eigbox.net with esmtp (Exim)
+        id 1pKPhE-0001PU-75; Tue, 24 Jan 2023 15:15:08 -0500
+Received: from boswebmail02.eigbox.net ([10.20.16.2])
+        by bosimpout13 with 
+        id CkF12901702gDNJ01kF7ki; Tue, 24 Jan 2023 15:15:08 -0500
+X-EN-SP-DIR: OUT
+X-EN-SP-SQ: 1
+Received: from [127.0.0.1] (helo=homestead)
+        by boswebmail02.eigbox.net with esmtp (Exim)
+        id 1pKPgh-0006I1-Fg; Tue, 24 Jan 2023 15:14:35 -0500
+Received: from [197.239.108.34]
+ by emailmg.homestead.com
+ with HTTP (HTTP/1.1 POST); Tue, 24 Jan 2023 15:14:35 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Date:   Tue, 24 Jan 2023 12:14:35 -0800
+From:   Mrs Lorence Gonzalez <mrs.lorencez@bestfzyhs.com>
+To:     undisclosed-recipients:;
+Subject: Hello
+Reply-To: mrslorencegonzalez@gmail.com
+Mail-Reply-To: mrslorencegonzalez@gmail.com
+Message-ID: <6f6c1c16bc3f9e9ccefc2006514c5519@bestfzyhs.com>
+X-Sender: mrs.lorencez@bestfzyhs.com
+User-Agent: Roundcube Webmail/1.3.14
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-EN-AuthUser: mrs.lorencez@bestfzyhs.com
+Sender:  Mrs Lorence Gonzalez <mrs.lorencez@bestfzyhs.com>
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FROM_FMBLA_NEWDOM,
+        HEADER_FROM_DIFFERENT_DOMAINS,ODD_FREEM_REPTO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_MR_MRS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [66.96.184.10 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5589]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [66.96.184.10 listed in wl.mailspike.net]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.4 ODD_FREEM_REPTO Has unusual reply-to header
+        *  0.0 T_HK_NAME_MR_MRS No description available.
+        *  1.0 FROM_FMBLA_NEWDOM From domain was registered in last 7 days
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wake interrupt only fires when the system is in a suspend
-state. Fortunately we have another interrupt that fires in a
-non-suspend state at the L2 controller UPG_AUX_AON. Add support
-for this interrupt line so we can use the alarm in a non-wake
-context.
 
-Signed-off-by: Doug Berger <opendmb@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/rtc/rtc-brcmstb-waketimer.c | 55 +++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
-index e25f9fcd6ed1..1efa81cecc27 100644
---- a/drivers/rtc/rtc-brcmstb-waketimer.c
-+++ b/drivers/rtc/rtc-brcmstb-waketimer.c
-@@ -28,6 +28,7 @@ struct brcmstb_waketmr {
- 	struct device *dev;
- 	void __iomem *base;
- 	unsigned int wake_irq;
-+	unsigned int alarm_irq;
- 	struct notifier_block reboot_notifier;
- 	struct clk *clk;
- 	u32 rate;
-@@ -56,6 +57,8 @@ static inline void brcmstb_waketmr_clear_alarm(struct brcmstb_waketmr *timer)
- {
- 	u32 reg;
- 
-+	if (timer->alarm_en && timer->alarm_irq)
-+		disable_irq(timer->alarm_irq);
- 	timer->alarm_en = false;
- 	reg = readl_relaxed(timer->base + BRCMSTB_WKTMR_COUNTER);
- 	writel_relaxed(reg - 1, timer->base + BRCMSTB_WKTMR_ALARM);
-@@ -88,7 +91,25 @@ static irqreturn_t brcmstb_waketmr_irq(int irq, void *data)
- {
- 	struct brcmstb_waketmr *timer = data;
- 
--	pm_wakeup_event(timer->dev, 0);
-+	if (!timer->alarm_irq)
-+		pm_wakeup_event(timer->dev, 0);
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t brcmstb_alarm_irq(int irq, void *data)
-+{
-+	struct brcmstb_waketmr *timer = data;
-+
-+	/* Ignore spurious interrupts */
-+	if (!brcmstb_waketmr_is_pending(timer))
-+		return IRQ_HANDLED;
-+
-+	if (timer->alarm_en) {
-+		if (!device_may_wakeup(timer->dev))
-+			writel_relaxed(WKTMR_ALARM_EVENT,
-+				       timer->base + BRCMSTB_WKTMR_EVENT);
-+		rtc_update_irq(timer->rtc, 1, RTC_IRQF | RTC_AF);
-+	}
- 
- 	return IRQ_HANDLED;
- }
-@@ -114,7 +135,7 @@ static void wktmr_read(struct brcmstb_waketmr *timer,
- static int brcmstb_waketmr_prepare_suspend(struct brcmstb_waketmr *timer)
- {
- 	struct device *dev = timer->dev;
--	int ret = 0;
-+	int ret;
- 
- 	if (device_may_wakeup(dev)) {
- 		ret = enable_irq_wake(timer->wake_irq);
-@@ -122,9 +143,17 @@ static int brcmstb_waketmr_prepare_suspend(struct brcmstb_waketmr *timer)
- 			dev_err(dev, "failed to enable wake-up interrupt\n");
- 			return ret;
- 		}
-+		if (timer->alarm_en && timer->alarm_irq) {
-+			ret = enable_irq_wake(timer->alarm_irq);
-+			if (ret) {
-+				dev_err(dev, "failed to enable rtc interrupt\n");
-+				disable_irq_wake(timer->wake_irq);
-+				return ret;
-+			}
-+		}
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- /* If enabled as a wakeup-source, arm the timer when powering off */
-@@ -192,7 +221,11 @@ static int brcmstb_waketmr_alarm_enable(struct device *dev,
- 		    !brcmstb_waketmr_is_pending(timer))
- 			return -EINVAL;
- 		timer->alarm_en = true;
-+		if (timer->alarm_irq)
-+			enable_irq(timer->alarm_irq);
- 	} else if (!enabled && timer->alarm_en) {
-+		if (timer->alarm_irq)
-+			disable_irq(timer->alarm_irq);
- 		timer->alarm_en = false;
- 	}
- 
-@@ -269,6 +302,19 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_clk;
- 
-+	brcmstb_waketmr_clear_alarm(timer);
-+
-+	/* Attempt to initialize non-wake irq */
-+	ret = platform_get_irq(pdev, 1);
-+	if (ret > 0) {
-+		timer->alarm_irq = (unsigned int)ret;
-+		ret = devm_request_irq(dev, timer->alarm_irq, brcmstb_alarm_irq,
-+				       IRQF_NO_AUTOEN, "brcmstb-waketimer-rtc",
-+				       timer);
-+		if (ret < 0)
-+			timer->alarm_irq = 0;
-+	}
-+
- 	timer->reboot_notifier.notifier_call = brcmstb_waketmr_reboot;
- 	register_reboot_notifier(&timer->reboot_notifier);
- 
-@@ -317,6 +363,8 @@ static int brcmstb_waketmr_resume(struct device *dev)
- 		return 0;
- 
- 	ret = disable_irq_wake(timer->wake_irq);
-+	if (timer->alarm_en && timer->alarm_irq)
-+		disable_irq_wake(timer->alarm_irq);
- 
- 	brcmstb_waketmr_clear_alarm(timer);
- 
-@@ -346,4 +394,5 @@ module_platform_driver(brcmstb_waketmr_driver);
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Brian Norris");
- MODULE_AUTHOR("Markus Mayer");
-+MODULE_AUTHOR("Doug Berger");
- MODULE_DESCRIPTION("Wake-up timer driver for STB chips");
--- 
-2.25.1
+Hello,
+
+Am a dying woman here in the hospital, i was diagnose as a Cancer
+patient over  2 Years ago. I am A business woman how dealing with Gold
+Exportation. I Am from Us California
+I have a charitable and unfulfilled project that am about to handover
+to you, if you are interested please reply
+
+Hope to hear from you.
+Regard
+
+mrslorencegonzalez@gmail.com
+
+Mrs.lorence Gonzalez
+
+
+
+
 
