@@ -2,214 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B6767A3F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D227467A39D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbjAXUcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:32:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S229582AbjAXUJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjAXUcI (ORCPT
+        with ESMTP id S229584AbjAXUJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:32:08 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2C2AD2A;
-        Tue, 24 Jan 2023 12:32:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BVsAXeGxOvz2kFADzljmZEWqBA1RfztE/tlD2nwuFxdGshcgNC42WmcOafAWOEeOHBtywVTJ7xIxoIXEMRSwzZd/IYmxhkfih/aiGMQdkVvnQ54IUexV20vXMhGgLgAmdXjYfZ5VYAqCBTfHQrqVc3ZG+23uxIpFSX0KIUl+9eQTPZaL2HvkV9Qhn4hE1+abDaTs+Wwz9aYsrESkcL5CvcPNS2bDP+x9U1IAzxTOzLCfhWKKtCb225Tuqdwm7Eo/cfqmSRVGNB6uCc/VO/MAgGwrohrY0+hQ6NkXfv1nitRn5Ny9Bwfp2Sq4InKjsn5Q+0ARD4JqO6X7S8FCdDM3/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u2fda49ycLyC38hvtVHurB4o1JnTe0GhHvqYhEsRXBs=;
- b=GQxUn6ZEGFLQzufTu6bAjDpUXGAdOgxP9iLHTM/rIqcQTyQOxByFH+KDCsvVVjJvlXJHBlEZrx6cAsoxRKDIT4jOhoYiEefckjfbw6eekbHmp03U55af2+Kf8v+DipdEpkOIVscTVnCUIv9TltI8LlM0WiwaOSs3FH4ZHC1qaXatogLEx4JihCLK/12MWg8ufhTknhkRjyWivpbUlda6pPJGt+wywQhOEMQlG4qk9cLAZO9/1Nz84XssEkr4psmnH62/5KOuJgQBE4zLi2uXR/a1UkxktYGHL7KsitLi9VrjkDUpoFeUS2XUWbv7c6QisMb543JRaS3znEdq2oqAXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u2fda49ycLyC38hvtVHurB4o1JnTe0GhHvqYhEsRXBs=;
- b=n1tKWewEsM1xGQ3w9ZaJqg8X9xvm0024a2/ebdq59bAK0R9ADfCxHkBTI1IqdMFrmrtxucq6TVVtZgJSGVWeE4k0ujyegbGBcVPHUqc47IwS0sJXxhM98fUxei5Aywm7OdY1mY4WoLX2qPnJeD1r4wmWZ+8ayf+dg8YPxMSGpw2Nvyl4bY5jO1mxhwXOS6JqXsmHWPOIoZLxRgcDqcaSnH1L0Yp1/+raCG0G1UiUNcj8tXxvoM5cxA8zoHhva6slNUb/JlfRFjTbtyAk4yua4sfxe0FCVk1MnxuiGOxDMW4iDsPVT+Mxxw/pjFMbiXWpzw2SaOcjQtjuo/ax+ypsLQ==
-Received: from DM6PR11CA0012.namprd11.prod.outlook.com (2603:10b6:5:190::25)
- by SN7PR12MB7323.namprd12.prod.outlook.com (2603:10b6:806:29a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Tue, 24 Jan
- 2023 20:32:06 +0000
-Received: from DS1PEPF0000E63D.namprd02.prod.outlook.com
- (2603:10b6:5:190:cafe::7e) by DM6PR11CA0012.outlook.office365.com
- (2603:10b6:5:190::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
- Transport; Tue, 24 Jan 2023 20:32:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS1PEPF0000E63D.mail.protection.outlook.com (10.167.17.75) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.12 via Frontend Transport; Tue, 24 Jan 2023 20:32:05 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
- 2023 12:08:16 -0800
-Received: from [10.110.48.28] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
- 2023 12:08:15 -0800
-Message-ID: <df718bc0-2163-a7a7-8c5c-db22e9320b7c@nvidia.com>
-Date:   Tue, 24 Jan 2023 12:08:15 -0800
+        Tue, 24 Jan 2023 15:09:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C8C470B4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674590911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HZlHrisrjivNag8krExh7n8GmeapkJNDFL8v/PEUtvw=;
+        b=fa6krzB01Df8VmTmikgfnJ3zrjqzLJWcyq4WuQeOtyTtVINnOaMtMUuzf1hQLwqy6o9Bqq
+        aQalmS0Gnbe3qmS/+6fgdsyWeJfnBV9FA1dtZgCZlaOwucCFzvB4Zv4RKpqhR5z2y4KlIy
+        93Cnoi4sr+1VbzkQrmIYemOtweQ/Rhs=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-475-ir0rrSKIMY2Lp-xSC_W82Q-1; Tue, 24 Jan 2023 15:08:29 -0500
+X-MC-Unique: ir0rrSKIMY2Lp-xSC_W82Q-1
+Received: by mail-qv1-f72.google.com with SMTP id f16-20020ad442d0000000b005376362aa66so2175248qvr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:08:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZlHrisrjivNag8krExh7n8GmeapkJNDFL8v/PEUtvw=;
+        b=X9UFXps5EqvkIWDKOZa2DtqVH1GALMsA3MlWyCpuNz9J7MPisRUYBqD1uAhGSHhLOl
+         hR5rWJdxjd8tQMJUYbijTXP3uY59XUUIe+SNDPHhY0clPowRpHjRlWkQTY7P2bQBTZuS
+         63VmIQmsHsiTfOG3LIRp98qzuSeA2bgsGoiL++XUUragATIeTJdL+nr1OYl5AMF+lWhy
+         AGeqO1KxKc3BsKBRA71xP4c+eroCf9MCaKi9k/5CYIqUTyK5olYZZWH37jENtGgrm0Sc
+         skRfh7G7yomq8POsdRA+3BnisO4zEi4F5537YATIqw1UXSLcAYHt7WZvamjJnYx4drou
+         zy+g==
+X-Gm-Message-State: AFqh2kqS2KjD6vHNFRb8WT24M5E6wZAbtt72UwIXizuKgN9VkIQORtgw
+        LbXMSP7YIEmcSSkYRRwhdbty4O9tItbUlDFRheHLZk6BCc7ngzsdeqt4E9dj1ZmvRdv4f5Xquxc
+        kXmkB/Rk1cxymacevR0oz9V+v
+X-Received: by 2002:a05:6214:5d82:b0:534:a801:1131 with SMTP id mf2-20020a0562145d8200b00534a8011131mr45882658qvb.43.1674590909104;
+        Tue, 24 Jan 2023 12:08:29 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuIULrSN5831DcR2bFIY1bRoKCemMhbW8/t5enh1wumovBzWa4Uzgv60OO1MWPaYERPIBafqQ==
+X-Received: by 2002:a05:6214:5d82:b0:534:a801:1131 with SMTP id mf2-20020a0562145d8200b00534a8011131mr45882626qvb.43.1674590908766;
+        Tue, 24 Jan 2023 12:08:28 -0800 (PST)
+Received: from [192.168.1.16] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
+        by smtp.gmail.com with ESMTPSA id 72-20020a370a4b000000b006fcc3858044sm2018287qkk.86.2023.01.24.12.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 12:08:28 -0800 (PST)
+Message-ID: <57fa3069-8e7e-d204-4c78-05432156f044@redhat.com>
+Date:   Tue, 24 Jan 2023 15:08:27 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 8/8] block: convert bio_map_user_iov to use
- iov_iter_extract_pages
+ Thunderbird/102.6.0
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>
-References: <20230124170108.1070389-1-dhowells@redhat.com>
- <20230124170108.1070389-9-dhowells@redhat.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20230124170108.1070389-9-dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Song Liu <song@kernel.org>
+References: <20230118204728.1876249-1-song@kernel.org>
+ <20230118220812.dvztwhlmliypefha@treble>
+ <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+ <20230120064215.cdyfbjlas5noxam6@treble>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
+ removal
+In-Reply-To: <20230120064215.cdyfbjlas5noxam6@treble>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63D:EE_|SN7PR12MB7323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e1a86b5-52f9-4424-d4c7-08dafe4a0f0f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Wqc65LRXfWXoQPdJAoVXsvffjESIhpTypEft6/bnDP4WjjG2hpJbQezFXqjbnu2jC8ZjAPPToRHBMU5A+n6RfWTsoMTbdeXbpcztBtuV+amssWHveYe7HJe4Es1/Yx8uxWD0C69GPKWVK1UD76iojJ1xCPkBE+2rxLbjjflGHFWAvdEBl8zC0iu9Fnfca16dN+IgcM8DvZN7tRd8Mzz15lBqojxp8lKCF55w7qHAW7przzfJE9YMRSLoV3BdU+45rzCszC2k7Msf+S+24NkWnZXBKUDeTpSjkHrYFaeDCdxuofUBj8B/HmCcfNf8us5gbeWYRZnjqLEhqbWAaJGmhx/T3C0I7aE1NWPHUTPtqKEXT5tClL1NDXVxjCcYUKLkNeMZkhQerEoHKmKrDrUVop0O+w9olSt6NR+mr4HP863kAH/pIr2Sx6/uL4b8K+fRuE+O1ur3vnyuR3l/tPaZA7BDde5cBJ7Wlk1BHnlnjkld1aDwzqWjQPDPKgD0v/Adhn4JbkONinW0U1vdRV/KuRJDsBCaXcP7PVGQkZJw2LjCLvkJr/sQUODKk53ws90GX+OwnC2v2kPPQUvm11iOGMr1mAQ8ZXHchhmS7OSGh1VwfgRrpX/0X2Nkx8cRWkDl6/SuXYYY/+bANM8ZMKRSigz1H75E9yr2Tf98zc0cW19/kV7E+OorQC5aLuRtLhJn9w0lfIIA3TNqz3RU8xJqQAEpwO/u6qfqGfdVXyB1WQA=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(136003)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(31686004)(36756003)(86362001)(40480700001)(70586007)(82740400003)(356005)(83380400001)(8676002)(31696002)(8936002)(5660300002)(7416002)(2906002)(70206006)(7636003)(16576012)(36860700001)(316002)(40460700003)(478600001)(82310400005)(110136005)(54906003)(426003)(16526019)(47076005)(41300700001)(4326008)(26005)(336012)(2616005)(186003)(53546011)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 20:32:05.8514
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e1a86b5-52f9-4424-d4c7-08dafe4a0f0f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7323
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 09:01, David Howells wrote:
-> This will pin pages or leave them unaltered rather than getting a ref on
-> them as appropriate to the iterator.
+On 1/20/23 01:42, Josh Poimboeuf wrote:
+> On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
+>> On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>>>
+>>> On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
+>>>> From: Miroslav Benes <mbenes@suse.cz>
+>>>>
+>>>> Josh reported a bug:
+>>>>
+>>>>   When the object to be patched is a module, and that module is
+>>>>   rmmod'ed and reloaded, it fails to load with:
+>>>>
+>>>>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>>>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>>>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+>>>>
+>>>>   The livepatch module has a relocation which references a symbol
+>>>>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>>>>   tries to replace the old relocation with a new one, it sees that
+>>>>   the previous one is nonzero and it errors out.
+>>>>
+>>>>   On ppc64le, we have a similar issue:
+>>>>
+>>>>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+>>>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>>>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+>>>
+>>> Shouldn't there also be a fix for this powerpc issue?
+>>
+>> There was a working version, but it was not very clean. We couldn't agree
+>> on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
+>> s390?) first [1].
 > 
-> The pages need to be pinned for DIO rather than having refs taken on them
-> to prevent VM copy-on-write from malfunctioning during a concurrent fork()
-> (the result of the I/O could otherwise end up being visible to/affected by
-> the child process).
+> Sorry for coming in late, I was on leave so I missed a lot of the
+> discussions on previous versions.  The decision to leave powerpc broken
+> wasn't clear from reading the commit message.  The bug is mentioned, and
+> the fix is implied, but surprisingly there's no fix.
 > 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Jan Kara <jack@suse.cz>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: Logan Gunthorpe <logang@deltatee.com>
-> cc: linux-block@vger.kernel.org
-> ---
+> I agree that the powerpc fix should be in a separate patch, but I still
+> don't feel comfortable merging the x86 fix without the corresponding
+> powerpc fix.
 > 
-> Notes:
->      ver #8)
->       - Split the patch up a bit [hch].
->       - We should only be using pinned/non-pinned pages and not ref'd pages,
->         so adjust the comments appropriately.
->      
->      ver #7)
->       - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
->      
->      ver #5)
->       - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
->         BIO_* flags and got rid of bi_cleanup_mode.
->       - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+> powerpc is a major arch and not a second-class citizen.  If we don't fix
+> it now then it'll probably never get fixed until it blows up in the real
+> world.
 > 
->   block/blk-map.c | 22 ++++++++++------------
->   1 file changed, 10 insertions(+), 12 deletions(-)
+> For powerpc, instead of clearing, how about just "fixing" the warning
+> site, something like so (untested)?
 > 
+> 
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+> index 1096d6b3a62c..1a12463ba674 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+>  
+>  /* We expect a noop next: if it is, replace it with instruction to
+>     restore r2. */
+> -static int restore_r2(const char *name, u32 *instruction, struct module *me)
+> +static int restore_r2(const char *name, u32 *instruction, struct module *me,
+> +		      bool klp_sym)
+>  {
+>  	u32 *prev_insn = instruction - 1;
+> +	u32 insn_val = *instruction;
+>  
+>  	if (is_mprofile_ftrace_call(name))
+>  		return 1;
+> @@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+>  	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
+>  		return 1;
+>  
+> -	if (*instruction != PPC_RAW_NOP()) {
+> +	/*
+> +	 * For a livepatch relocation, the restore r2 instruction might have
+> +	 * been previously written if the relocation references a symbol in a
+> +	 * module which was unloaded and is now being reloaded.  In that case,
+> +	 * skip the warning and instruction write.
+> +	 */
+> +	if (klp_sym && insn_val == PPC_INST_LD_TOC)
+> +		return 0;
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Hi Josh,
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+Nit: shouldn't this return 1?
 
-> diff --git a/block/blk-map.c b/block/blk-map.c
-> index 0e2b0a861ba3..4e22dccdbe9b 100644
-> --- a/block/blk-map.c
-> +++ b/block/blk-map.c
-> @@ -282,21 +282,19 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
->   	if (blk_queue_pci_p2pdma(rq->q))
->   		extraction_flags |= ITER_ALLOW_P2PDMA;
->   
-> -	bio_set_flag(bio, BIO_PAGE_REFFED);
-> +	bio_set_cleanup_mode(bio, iter);
->   	while (iov_iter_count(iter)) {
-> -		struct page **pages, *stack_pages[UIO_FASTIOV];
-> +		struct page *stack_pages[UIO_FASTIOV];
-> +		struct page **pages = stack_pages;
->   		ssize_t bytes;
->   		size_t offs;
->   		int npages;
->   
-> -		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
-> -			pages = stack_pages;
-> -			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
-> -						   nr_vecs, &offs, extraction_flags);
-> -		} else {
-> -			bytes = iov_iter_get_pages_alloc(iter, &pages,
-> -						LONG_MAX, &offs, extraction_flags);
-> -		}
-> +		if (nr_vecs > ARRAY_SIZE(stack_pages))
-> +			pages = NULL;
+And if you're willing to entertain a small refactor, wouldn't
+restore_r2() be clearer if it returned -ESOMETHING on error?
+
+Maybe converting to a boolean could work, but then I'd suggest a name
+that clearly implies success/fail given true/false return.  Maybe
+replace_nop_with_ld_toc() or replace_nop_to_restore_r2() ... still
+-ESOMETHING is more intuitive to me as there are cases like this where
+the function safely returns w/o replacing anything.
+
 > +
-> +		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
-> +					       nr_vecs, extraction_flags, &offs);
->   		if (unlikely(bytes <= 0)) {
->   			ret = bytes ? bytes : -EFAULT;
->   			goto out_unmap;
-> @@ -318,7 +316,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
->   				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
->   						     max_sectors, &same_page)) {
->   					if (same_page)
-> -						put_page(page);
-> +						bio_release_page(bio, page);
->   					break;
->   				}
->   
-> @@ -330,7 +328,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
->   		 * release the pages we didn't map into the bio, if any
->   		 */
->   		while (j < npages)
-> -			put_page(pages[j++]);
-> +			bio_release_page(bio, pages[j++]);
->   		if (pages != stack_pages)
->   			kvfree(pages);
->   		/* couldn't stuff something into bio? */
+> +	if (insn_val != PPC_RAW_NOP()) {
+>  		pr_err("%s: Expected nop after call, got %08x at %pS\n",
+> -			me->name, *instruction, instruction);
+> +			me->name, insn_val, instruction);
+>  		return 0;
+>  	}
+>  
+> @@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+>  				if (!value)
+>  					return -ENOENT;
+>  				if (!restore_r2(strtab + sym->st_name,
+> -							(u32 *)location + 1, me))
+> +						(u32 *)location + 1, me,
+> +						sym->st_shndx == SHN_LIVEPATCH))
+>  					return -ENOEXEC;
+>  			} else
+>  				value += local_entry_offset(sym);
 > 
+
+klp-convert-tree tests* ran OK with this patch (with the nit fixed) on
+top of Song's v10.  LMK if you want me to push a branch with some or all
+of these patches for further testing.
+
+* I removed the tests that check for relocation clearing, only tested
+module reloading
+
+-- 
+Joe
 
