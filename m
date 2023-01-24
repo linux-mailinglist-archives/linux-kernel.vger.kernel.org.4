@@ -2,111 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD946796A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7154C6796A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbjAXLb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S234055AbjAXLbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbjAXLbY (ORCPT
+        with ESMTP id S234048AbjAXLb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:31:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1648CF772;
-        Tue, 24 Jan 2023 03:31:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF726B8117D;
-        Tue, 24 Jan 2023 11:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8419BC433EF;
-        Tue, 24 Jan 2023 11:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674559881;
-        bh=vSvpFgPqXmxl07qKO0PotIG3YQSs9V4kcX2WYtv6Y00=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MMe07pLbu1gmDqdbs7WNdKnwqs+02+j539LNGY1cbZMWSb+LgaN+KtJUxKap9GrfZ
-         Hfhq+ygaBNKzJtysre7CBNnQlIR0Am8ltX6plLvaXdquNMgugVHz57WxEz2rNQ/fLz
-         BZIsFBfSWiYZADWRI7ik7KAtacsW3AzCP9theWeLzf4veQK/glOgUD9GJIjUxoCCW6
-         tC31q7RHPnyE8UPD7z5eIvTBISBkftsQgI2XvEJihbHkDyLk6OPcKaGgyBxqmM6ocJ
-         IqwjQz7zIvo0gms9KkDdTo0rv/FXFiTdDCIBDkBg1GE+6h+u6Rx4dNMyyuKWA+Ws3h
-         hZaRP1nfl9ayQ==
-Message-ID: <c850df25-57b8-3172-8e5c-c466dc8556cd@kernel.org>
-Date:   Tue, 24 Jan 2023 12:31:12 +0100
+        Tue, 24 Jan 2023 06:31:29 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDAB3D909
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:31:27 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id n7so13556981wrx.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:31:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jLLfocHfbHOL40uUXPgns0rpEqz3nPLXX2K2rRvVLrg=;
+        b=DEXRUatr5utyB4EOK86e5LPurvKMapMmZDc2v0HM/kq1oNFxjcQzYCAx+ndneN4ERl
+         0gDqmzKRQUJfHs/DacPephHXPIXVd2mHWDXz2sfNKlZkM67sgHgkihsWuhZLGyMaMFO1
+         WVVwOvO0NWp3ZjRjsQwzCLi1MUrwf7dtefhaKkG9NPRRI1taxdIZ0h1tyZhXnr6bYiiI
+         vr1CNLkQCgboDgT6uX51SCYemrxdhugTyM1DEX7W54H17bg2fiAYdWuwM+vdE5++R/WK
+         3C26A6hIHVVhGe/Ez9hcZs8CRPPvfjeunNQGSq+xihDWl7tOTorthvz8rxJyXlVv+GKB
+         wRLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLLfocHfbHOL40uUXPgns0rpEqz3nPLXX2K2rRvVLrg=;
+        b=I8HZYmK/wXEHgZ+wb9GjD5O/O2UKysjdGvJndkMM0Ws1HKyLoRvZu3pctXAe6Dt+pR
+         DsMpLqM/84C2PFNubJNe8prhCGxq/hfdgWYiNBWiYws1RwKJm+fuhbdDVlF93UyCbCAR
+         GY5Xm4XbGvUe9D0/GxcTqcgSWGJPEiYA55uUtSkKI4q4Du3e5EJf0T4XWCwpQux+P2lo
+         ZS2H0ElxE7dMmfWP0xqlaQFkcpXIpD+emYcZ/7VzeBHZk4HF2ucZsI7TtGgIAgOu7oXh
+         d+kpQuT3oL4+TdEdn6q4gICIRV9L9WuOYpG/Sol28zfEdb1egcMYAbgbZffXIeKzEznP
+         4hJQ==
+X-Gm-Message-State: AFqh2kpxOfkmcytwFOVlPM0GfXyE821gSgHvJ24CR5tvZrq8BcZ3Pzh6
+        oKgBVUwh6nUiSPmIF9eON4ZfEg==
+X-Google-Smtp-Source: AMrXdXvjHkzAnZJ0fbZHcGRpy4aZpsopasdvyrp+0Xf7BVvh20Ocf8+v5SFmLRtxn0FLI76/7f6/TQ==
+X-Received: by 2002:adf:f890:0:b0:2be:5a87:7727 with SMTP id u16-20020adff890000000b002be5a877727mr12963183wrp.15.1674559885893;
+        Tue, 24 Jan 2023 03:31:25 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id t14-20020a5d690e000000b002bdd96d88b4sm1627451wru.75.2023.01.24.03.31.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 03:31:25 -0800 (PST)
+Message-ID: <3bcd80e7-5934-ca8d-ac86-9bc5b3a8a6ef@linaro.org>
+Date:   Tue, 24 Jan 2023 12:31:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v1 2/4] Revert "dt-bindings: mmc: Add bindings for Intel
- Thunder Bay SoC"
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] thermal/drivers/armada: Use the
+ thermal_zone_get_crit_temp()
 Content-Language: en-US
-To:     rashmi.a@intel.com, ulf.hansson@linaro.org,
-        michal.simek@xilinx.com, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kishon@ti.com, vkoul@kernel.org, andriy.shevchenko@linux.intel.com,
-        linux-phy@lists.infradead.org, mgross@linux.intel.com
-Cc:     kris.pan@linux.intel.com, adrian.hunter@intel.com,
-        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
-        vasavi.v.itha@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com
-References: <20230124054427.28808-1-rashmi.a@intel.com>
- <20230124054427.28808-2-rashmi.a@intel.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230124054427.28808-2-rashmi.a@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230118222610.186088-1-daniel.lezcano@linaro.org>
+ <20230124120458.412fc528@xps-13>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230124120458.412fc528@xps-13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 06:44, rashmi.a@intel.com wrote:
-> From: "A, Rashmi" <rashmi.a@intel.com>
+
+Hi Miquel,
+
+On 24/01/2023 12:04, Miquel Raynal wrote:
+> Hi Daniel,
 > 
-> This reverts commit ab991c05c42853f0b6110022db9bf30fcc6323dd.
+> daniel.lezcano@linaro.org wrote on Wed, 18 Jan 2023 23:26:10 +0100:
+> 
+>> The driver browses the trip point to find out the critical trip
+>> temperature. However the function thermal_zone_get_crit_temp() does
+>> already that, so the routine is pointless in the driver.
+>>
+>> Use thermal_zone_get_crit_temp() instead of inspecting all the trip
+>> points.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/thermal/armada_thermal.c | 38 +++++++++++++-------------------
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+[ ... ]
 
 > 
-> Revert Thunder Bay specific code as the product got cancelled
-> and there are no end customers.
+> Makes sense.
 > 
-> Signed-off-by: A, Rashmi <rashmi.a@intel.com>
-> Reviewed-by: Hunter, Adrian <adrian.hunter@intel.com>wq
+> Nit: I would actually put that comment in the commit log rather than
+> keeping it in the code, but whatever, that's a nice simplification.
 
-Stray characters.
+Ok, I'll do the change.
 
-> ---
->  .../devicetree/bindings/mmc/arasan,sdhci.yaml | 25 -------------------
->  1 file changed, 25 deletions(-)
+>> +	armada_set_overheat_thresholds(priv, temperature, 0);
+>> +	priv->overheat_sensor = tz;
+>> +	priv->interrupt_source = sensor_id;
+>> +	armada_enable_overheat_interrupt(priv);
+>>   
+>> -	return -EINVAL;
+>> +	return 0;
+>>   }
+>>   
+>>   static int armada_thermal_probe(struct platform_device *pdev)
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
-> index 4053de758db6..0d5d21dd30bb 100644
-> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
-> @@ -88,12 +88,6 @@ properties:
->          description:
->            For this device it is strongly suggested to include
->            arasan,soc-ctl-syscon.
-> -      - items:
-> -          - const: intel,thunderbay-sdhci-5.1   # Intel Thunder Bay eMMC PHY
-> -          - const: arasan,sdhci-5.1
+> LGTM so,
+> 
+> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-Instead should be made rather deprecated, unless you are sure there is
-no single person in the world using the bindings (e.g. with BSD or
-bootloader)?
+Thanks for the review
 
+   -- Daniel
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Best regards,
-Krzysztof
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
