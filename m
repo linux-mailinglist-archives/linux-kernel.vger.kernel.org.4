@@ -2,157 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A014679F85
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D95A679F69
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbjAXRDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:03:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S234186AbjAXRCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbjAXRCr (ORCPT
+        with ESMTP id S233475AbjAXRCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:02:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F5349010
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674579716;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/VYBInuQuOZkbnPAeLMLfVK65/N8eTFHDXxeC7cDBQE=;
-        b=DskKA2/M6WRt+2I0Y9AgS2Evd2qmp3NJfiZxhQGt32WORYEWUPAypoHq4S9jSZEewwRC5H
-        LSb7OwaDX+VHfZL4buO9Z+WKNkJVFu/6jGJj3ccwnfBC911R+Zn/az05BDZuhl3M6R+q8d
-        na1d68eGLic8HkhtTSdPbUapnSfVg5M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-523-GK62Won7NQWIhcktuj4p4w-1; Tue, 24 Jan 2023 12:01:52 -0500
-X-MC-Unique: GK62Won7NQWIhcktuj4p4w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5E56882820;
-        Tue, 24 Jan 2023 17:01:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0FFC4C15BA0;
-        Tue, 24 Jan 2023 17:01:48 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v9 8/8] block: convert bio_map_user_iov to use iov_iter_extract_pages
-Date:   Tue, 24 Jan 2023 17:01:08 +0000
-Message-Id: <20230124170108.1070389-9-dhowells@redhat.com>
-In-Reply-To: <20230124170108.1070389-1-dhowells@redhat.com>
-References: <20230124170108.1070389-1-dhowells@redhat.com>
+        Tue, 24 Jan 2023 12:02:00 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CBE4B1BE;
+        Tue, 24 Jan 2023 09:01:59 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C5B285C0316;
+        Tue, 24 Jan 2023 12:01:57 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 24 Jan 2023 12:01:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674579717; x=1674666117; bh=xbrz6SCwKn
+        Yqh4vhdua4HKD2oPexvSgzujn4R8eXrRY=; b=lktfyKWnLsOfxuZm6d1r3UqsGj
+        TFcPh6CWNVJMTRdyMmwU+mcBY8xbUjn2hoowcrgSazmDvnnlp+9N009Y7KHrdwFv
+        EsPDjchnCQCZKfPQJS7uPNtXh3GkUQrC94bH4ZChwwq9GTLUptZh0521i+d7looT
+        rEflRKLhCPbBG9c3Y5lOkPJOBe5yU9MgjyBMwoLbNc0YSSHwFA2sgX+kvL0dKqJ/
+        YciAbNT0dngH89zy0uFc65mLuuO/32C/njCRn+7jGWkrcvJxo84yVngEVs+Yud6m
+        Fn+vqvIbsOHpAV/b1Jn4f15dEzktcK55m5TcnuiQeQkW0yevf+Oj1x7HtGlw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674579717; x=1674666117; bh=xbrz6SCwKnYqh4vhdua4HKD2oPex
+        vSgzujn4R8eXrRY=; b=j+vrakw/uFZ7OAPzq23SNPkXYxs8qXAtxzDdZDtsTzrF
+        HOKg3EhetiCw2UxHFlV0Qw5xBG8RLWCJk4KS+d1jzS5nLMfjnFvDx3E8/BLHmX/C
+        vocf+0Ua+lsU7IxVabQ29Pk5E9D1ECuzF6IJo61z/sr5NrAMD5DAGaznGTGsTnIV
+        2wPA+Bn3MVkNaTK0lOS5K7yChUFU9KZhDRMXhyBoEHuLEOTulvbyGGvRucRuoDso
+        PD1cIEoKM0b+7IydfvD+it2PgCu9qOfNDzA4GeOs9YLFJ4015apr7gY9MDTYObIY
+        H6ATrUL8RVOtA3Pl3VVRvugoumyf62U1a0KwrZvRUw==
+X-ME-Sender: <xms:BQ_QY-vA4sBpwTp9LB1Dfxb1wQjpreJUfaBgh-DxUKR3wHIrQVXZUg>
+    <xme:BQ_QYzdiecTKUrs0SXqbjKMVm3BKcQSWh34yxbr6RLqIlRLKp2myNZjIJ-dma71R-
+    rxFyWMsP69QGg>
+X-ME-Received: <xmr:BQ_QY5yTAOrJIWhvBPixchU9Dw4gnpqIPt66VlB4jN8R9LCN3jnF_orZIXQ7hmRc5avCqxgEa30FuUM29L47nksToqDpnHx2UK912fk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvtddgledvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:BQ_QY5NtkMflpbJF71AzyCG4pgOfrkOwzMjNvoqE91SQZ3_3Xtebgg>
+    <xmx:BQ_QY-99uHRxDFI9hnc-fm_SzgAqy8fy8jlYXGU0D61bJuIUvsVDJg>
+    <xmx:BQ_QYxX17E7aTfnTkbn_lE0pYZbJc784saKgj7HiS0VXW-VPMVpUwQ>
+    <xmx:BQ_QYyWQ8CpE7x8sA-PFMhGAIBQjhzx-_JHeptofHfI2KumjZ3fU8A>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 24 Jan 2023 12:01:56 -0500 (EST)
+Date:   Tue, 24 Jan 2023 18:01:55 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: linux-next: manual merge of the fpga tree with the tty tree
+Message-ID: <Y9APAw4CoA31ubtb@kroah.com>
+References: <20230123124502.725e8700@canb.auug.org.au>
+ <Y9AKa/MU2EJPgQXS@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9AKa/MU2EJPgQXS@yilunxu-OptiPlex-7050>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will pin pages or leave them unaltered rather than getting a ref on
-them as appropriate to the iterator.
+On Wed, Jan 25, 2023 at 12:42:19AM +0800, Xu Yilun wrote:
+> On 2023-01-23 at 12:45:02 +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the fpga tree got conflicts in:
+> > 
+> >   drivers/fpga/dfl.c
+> >   drivers/fpga/dfl.h
+> > 
+> > between commit:
+> > 
+> >   4747ab89b4a6 ("fpga: dfl: add basic support for DFHv1")
+> > 
+> > from the tty tree and commits:
+> > 
+> >   3afe90d5b7a4 ("fpga: dfl: kernel-doc corrections")
+> >   e5541aae450e ("fpga: dfl: more kernel-doc corrections")
+> > 
+> > from the fpga tree.
+> 
+> 
+> Hi Greg:
+> 
+> I could re-apply the 2 FPGA patches based on the following series on
+> tty-next tree:
+> 
+> 46879f71061a ("Documentation: fpga: dfl: Add documentation for DFHv1")
+> 0926d8d52d42 ("fpga: dfl: Add DFHv1 Register Definitions")
+> 4747ab89b4a6 ("fpga: dfl: add basic support for DFHv1")
+> e34a79d0b320 ("tty: serial: 8250: add DFL bus driver for Altera 16550")
+> 
+> Then there will be no conflict for my pull request.
 
-The pages need to be pinned for DIO rather than having refs taken on them
-to prevent VM copy-on-write from malfunctioning during a concurrent fork()
-(the result of the I/O could otherwise end up being visible to/affected by
-the child process).
+Ok, that seems reasonable.  If there's anything you think I should
+change in the tty tree, please let me know.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Jan Kara <jack@suse.cz>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: linux-block@vger.kernel.org
----
+thanks,
 
-Notes:
-    ver #8)
-     - Split the patch up a bit [hch].
-     - We should only be using pinned/non-pinned pages and not ref'd pages,
-       so adjust the comments appropriately.
-    
-    ver #7)
-     - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
-    
-    ver #5)
-     - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
-       BIO_* flags and got rid of bi_cleanup_mode.
-     - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
-
- block/blk-map.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
-
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 0e2b0a861ba3..4e22dccdbe9b 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -282,21 +282,19 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 	if (blk_queue_pci_p2pdma(rq->q))
- 		extraction_flags |= ITER_ALLOW_P2PDMA;
- 
--	bio_set_flag(bio, BIO_PAGE_REFFED);
-+	bio_set_cleanup_mode(bio, iter);
- 	while (iov_iter_count(iter)) {
--		struct page **pages, *stack_pages[UIO_FASTIOV];
-+		struct page *stack_pages[UIO_FASTIOV];
-+		struct page **pages = stack_pages;
- 		ssize_t bytes;
- 		size_t offs;
- 		int npages;
- 
--		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
--			pages = stack_pages;
--			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
--						   nr_vecs, &offs, extraction_flags);
--		} else {
--			bytes = iov_iter_get_pages_alloc(iter, &pages,
--						LONG_MAX, &offs, extraction_flags);
--		}
-+		if (nr_vecs > ARRAY_SIZE(stack_pages))
-+			pages = NULL;
-+
-+		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
-+					       nr_vecs, extraction_flags, &offs);
- 		if (unlikely(bytes <= 0)) {
- 			ret = bytes ? bytes : -EFAULT;
- 			goto out_unmap;
-@@ -318,7 +316,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
- 						     max_sectors, &same_page)) {
- 					if (same_page)
--						put_page(page);
-+						bio_release_page(bio, page);
- 					break;
- 				}
- 
-@@ -330,7 +328,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		 * release the pages we didn't map into the bio, if any
- 		 */
- 		while (j < npages)
--			put_page(pages[j++]);
-+			bio_release_page(bio, pages[j++]);
- 		if (pages != stack_pages)
- 			kvfree(pages);
- 		/* couldn't stuff something into bio? */
-
+greg k-h
