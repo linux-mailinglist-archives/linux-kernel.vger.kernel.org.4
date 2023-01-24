@@ -2,121 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AB167A510
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD3367A523
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbjAXVhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
+        id S234944AbjAXVkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbjAXVhn (ORCPT
+        with ESMTP id S229851AbjAXVkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:37:43 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722181B3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:37:42 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so43952pjq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:37:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xCg+14KhdGv7fDnqb2rUDWNTTTL3orxb6Lg6ROb71qM=;
-        b=bqryvfh/KBC/5NXKHYJZ0a9Jy2d6IlGtG0JOTS7QF96tYE8zMNzUvhCVnXfvJEt2YV
-         0qgrpUr5VGeO3/A++oBiRYp/0U+ORZ2U0NniFmlFE1yig3fjukEUqNXLWsIqogpWtK0h
-         n3pEGCAx91Bm+4Y8Lyur18S5rJ5jieQvtfruWWYoCrkfrI8vf0JDWTDmH05cBLZCxNaH
-         g61bXKhXQdncJ3GWly7Ga/2YFUZM7WttST3Jc4HJps86NcPYKBhS6VgP+IwOfF0t2mvG
-         bHAIUSNtomwtMrot4HD074x+hN7XUWAlG5GzzZJSai6fkLzcJXQBOHCgIIbGz8JmYsIo
-         xxAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xCg+14KhdGv7fDnqb2rUDWNTTTL3orxb6Lg6ROb71qM=;
-        b=cICEq99GQ/ECPjpSpmk13MUEZGFtVDHkOdj5TvVkIFR9xSKxPkbjUK4rJOoYcUJvxb
-         P4IiDxnWDPexx9Pzh3oia1rWzNU2Nbq1wXvt+nOsgIG+z54hlSthcmZXlub5wlL8ltU9
-         TTY30cy9yFUh0We1Uq7ik573RINxPfaRGVj9PY2HZw3vmWbEypZkoX/VdixzQB5WypiK
-         MbKHwH3KsZ3ySUpS9Bn7fm4RGhxHkRdNr8k3oGq4hy+Sij2LJFLzqBfOae6RAmpkqSCV
-         TtcQlSWHlhZnwPJVPJGn3SLM564pEH8SCjfKVwo1AhHG2ksly77rXoagfM2X2BXLIsWe
-         oeoA==
-X-Gm-Message-State: AO0yUKXFG84WW8YRTHc7MN8NQSCVQHrLi9BOTFotnUvT3HWjFpgDqxhO
-        1E3zBGObWe11iDRABKkORs7G7A==
-X-Google-Smtp-Source: AK7set86jseu/vYRkmTo3r44uV1Oupq7/YteqiMcddsfINv9XXxhuDed8J59rP/5cL3MDxIbQhc2ng==
-X-Received: by 2002:a05:6a20:4c08:b0:a4:efde:2ed8 with SMTP id fm8-20020a056a204c0800b000a4efde2ed8mr400647pzb.0.1674596261827;
-        Tue, 24 Jan 2023 13:37:41 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056a00180500b0058d97b624f0sm2068374pfa.75.2023.01.24.13.37.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 13:37:38 -0800 (PST)
-Date:   Tue, 24 Jan 2023 21:37:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kim Phillips <kim.phillips@amd.com>
-Cc:     x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tue, 24 Jan 2023 16:40:23 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C96F448A;
+        Tue, 24 Jan 2023 13:40:22 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30OLbhtZ2875378
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 24 Jan 2023 13:37:44 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30OLbhtZ2875378
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674596265;
+        bh=FYpw+DyQo6/Zeyp/1DrOHhEA63iP6n4iCeDIbepaNsY=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=DHVv04PucDlTaMfDdkOIauIG7IlNyhe12mIe8glApPxXoInLtYGNOaJ9UYs62IHhb
+         My/GMi1qGY3BA3uMiDjVZfLI2rwUqiEtwJRxWNTyLvw4cNGKiC15Q0fepnx831610j
+         MTqQwSt6f2n21undMG9onhe3/pLD2CRjIK1wAMayBEyGIv43C+0JYWApCIUA300Nc6
+         T1agihripZAo4Q5sGozRnsDKXDP7zpg+bAGT2GiN9QI0gz2JRv0qQfbUngeR2rMuGD
+         bybK9WfTlvZaaQvQ2Hy7C542sAQ5rZ4I+ntxQhD69BMzcSgHIH6Z/UpM7ySbzViwEV
+         ELDRBqFWBbvTQ==
+Date:   Tue, 24 Jan 2023 13:37:43 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+CC:     "Hansen, Dave" <dave.hansen@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 0/8] x86/cpu, kvm: Support AMD Automatic IBRS
-Message-ID: <Y9BPnTJSI247DV50@google.com>
-References: <20230124163319.2277355-1-kim.phillips@amd.com>
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: =?US-ASCII?Q?RE=3A_=5BRFC_PATCH_v3_0/2=5D_selftests/x8?= =?US-ASCII?Q?6=3A_sysret=5Frip_update_for_FRED_system?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <SA1PR11MB6734CA3184183E490D18CA72A8C99@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org> <20230124100926.637335-1-ammarfaizi2@gnuweeb.org> <SA1PR11MB6734CA3184183E490D18CA72A8C99@SA1PR11MB6734.namprd11.prod.outlook.com>
+Message-ID: <7E935340-B596-4663-80FF-CDC4E31896B4@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124163319.2277355-1-kim.phillips@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023, Kim Phillips wrote:
-> Kim Phillips (8):
->   x86/cpu, kvm: Add support for CPUID_80000021_EAX
->   KVM: x86: Move open-coded cpuid leaf 0x80000021 EAX bit propagation
->     code
->   x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
->   x86/cpu, kvm: Move X86_FEATURE_LFENCE_RDTSC to its native leaf
->   x86/cpu, kvm: Add the Null Selector Clears Base feature
->   x86/cpu, kvm: Add the SMM_CTL MSR not present feature
->   x86/cpu: Support AMD Automatic IBRS
->   KVM: x86: Propagate the AMD Automatic IBRS feature to the guest
-> 
->  Documentation/admin-guide/hw-vuln/spectre.rst |  6 ++--
->  .../admin-guide/kernel-parameters.txt         |  6 ++--
->  arch/x86/include/asm/cpufeature.h             |  7 +++--
->  arch/x86/include/asm/cpufeatures.h            | 11 ++++++--
->  arch/x86/include/asm/disabled-features.h      |  3 +-
->  arch/x86/include/asm/msr-index.h              |  2 ++
->  arch/x86/include/asm/required-features.h      |  3 +-
->  arch/x86/kernel/cpu/amd.c                     |  2 +-
->  arch/x86/kernel/cpu/bugs.c                    | 20 +++++++------
->  arch/x86/kernel/cpu/common.c                  | 26 +++++++++--------
->  arch/x86/kvm/cpuid.c                          | 28 ++++++-------------
->  arch/x86/kvm/reverse_cpuid.h                  |  1 +
->  arch/x86/kvm/svm/svm.c                        |  3 ++
->  arch/x86/kvm/x86.c                            |  3 ++
->  14 files changed, 70 insertions(+), 51 deletions(-)
-> 
-> -- 
+On January 24, 2023 1:32:14 PM PST, "Li, Xin3" <xin3=2Eli@intel=2Ecom> wrot=
+e:
+>> From: Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg>
+>>=20
+>> This is an RFC patchset v3:
+>> sysret_rip test update for Intel FRED architecture=2E
+>>=20
+>> Xin Li reported sysret_rip test fails at:
+>>=20
+>>         assert(ctx->uc_mcontext=2Egregs[REG_EFL] =3D=3D
+>>                ctx->uc_mcontext=2Egregs[REG_R11]);
+>
+>On FRED systems, flags is 0x200a93 and r11 is 0xfeedfacedeadbeef here=2E
+>
+>We need to remove or change this assertion, maybe:
+>  assert(ctx->uc_mcontext=2Egregs[REG_EFL] =3D=3D ctx->uc_mcontext=2Egreg=
+s[REG_R11] ||
+>         r11_sentinel =3D=3D ctx->uc_mcontext=2Egregs[REG_R11]);
+>
+>>=20
+>> in a FRED system=2E Let's handle the FRED system scenario too=2E The 's=
+yscall'
+>> instruction in a FRED system doesn't set %r11=3D%rflags=2E
+>>=20
+>> There are two patches in this series=2E
+>>=20
+>> How to test this:
+>>=20
+>>   $ make -C tools/testing/selftests/x86
+>>   $ tools/testing/selftests/x86/sysret_rip_64
+>>=20
+>> Link: https://lore=2Ekernel=2Eorg/lkml/5d4ad3e3-034f-c7da-d141-
+>> 9c001c2343af@intel=2Ecom
+>> Fixes: 660602140103 ("selftests/x86: Add a selftest for SYSRET to nonca=
+nonical
+>> addresses")
+>> Link: https://lore=2Ekernel=2Eorg/lkml/25b96960-a07e-a952-5c23-
+>> 786b55054126@zytor=2Ecom
+>> Reported-by: Xin Li <xin3=2Eli@intel=2Ecom>
+>> Co-developed-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>> Signed-off-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>> Acked-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg>
+>> ---
+>>=20
+>> ## Changelog v3:
+>>=20
+>>    - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET,
+>>      which is a major part of the point (hpa)=2E
+>>=20
+>> ## Changelog v2:
+>>=20
+>>    - Use "+r"(rsp) as the right way to avoid redzone problems
+>>      per Andrew's comment (hpa)=2E
+>>      (Ref: https://lore=2Ekernel=2Eorg/lkml/8f5c24df-514d-5d89-f58f-
+>> ec8c3eb1e049@zytor=2Ecom )
+>>=20
+>> ---
+>>=20
+>> Ammar Faizi (2):
+>>   selftests/x86: sysret_rip: Handle syscall in a FRED system
+>>   selftests/x86: sysret_rip: Add more syscall tests with respect to `%r=
+cx` and `%r11`
+>>=20
+>>  tools/testing/selftests/x86/sysret_rip=2Ec | 120 +++++++++++++++++++++=
++-
+>>  1 file changed, 119 insertions(+), 1 deletion(-)
+>>=20
+>>=20
+>> base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
+>> --
+>> Ammar Faizi
+>
+>
 
-With my goof in the LFENCE_RDTSC patch fixed,
-
-Acked-by: Sean Christopherson <seanjc@google.com>
+This should use check_regs_result() =E2=80=93 which is exactly the reason =
+I made that a separate function=2E
