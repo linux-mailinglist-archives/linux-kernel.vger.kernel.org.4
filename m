@@ -2,200 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B046B678CEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339A6678CF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjAXAkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S231709AbjAXAni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjAXAko (ORCPT
+        with ESMTP id S229589AbjAXAnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:40:44 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E7F1557B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:40:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674520843; x=1706056843;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v17R3QyYZCP4T22EmjJYvFeZBPZM3Q8P3+3lMWzi8To=;
-  b=gTLhFSZTdzua/9K0wb82hu5jgcjJTa6PfJIB0XIQ+scbdYiNbdPJRzEN
-   dXZP/dUSIlIpJscN8KK82UIsUxYBgcBLI5jPDxHAxocdBOFE5ko5SWbFF
-   I0m3IB942OgZiXKxQeBmDvB/69X9UUeOWpxoHugf9zmrf5pLuj0fqj6as
-   +D7upHgo9ajvJKvxIwUAHwtbcNnhfb0uweLpXzMIag/gzPBOgO/FHfHAs
-   6PwJyysgXBrLg+NZnPx/03CxQKBL+1u4i1KLFqcb8X8JEPNE1MqDn7JGP
-   wMCkDEpNYxOa1VdIEWRiFcZyJHlapFxZ4vGM54U4cqi8tbT15NVoR272t
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="326234810"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="326234810"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 16:40:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="692428776"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="692428776"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Jan 2023 16:40:29 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pK7MS-0005zE-2E;
-        Tue, 24 Jan 2023 00:40:28 +0000
-Date:   Tue, 24 Jan 2023 08:39:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     George Prekas <george@enfabrica.net>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Christoph Lameter <cl@linux-foundation.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        George Prekas <george@enfabrica.net>
-Subject: Re: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
-Message-ID: <202301240827.j2GJi7v5-lkp@intel.com>
-References: <20230123170419.7292-2-george@enfabrica.net>
+        Mon, 23 Jan 2023 19:43:37 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9432DE54
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:43:36 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id t16so12385204ybk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VirHtwZIR+krpt640kXLmdBO4/megsErXbDLotYWnLE=;
+        b=Mq+q9W/IFdy0auODrchmgOt8fh63zbjA0dkS6/VHQt14A8kAew8LJk2n1Iim/ScdTK
+         pZ/g+VkrJz07bgGtpy6r5wHmAmw0/WJ8+hanA3kY92uyHKz5NxVVABz1/s4gFNLFszJK
+         Pu3qQmyxA/pUANR/Y6lmA0gUM/Nkw/ogJiyHI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VirHtwZIR+krpt640kXLmdBO4/megsErXbDLotYWnLE=;
+        b=QTRo6fUkC+1Nr148AIFCCSN5sKyGdY6wCA++vBzCQ5YiPwgXJ72A50GEcMSyWDg1NG
+         nZ7CrKx1oW403wL6dcnLE3TkUBePz6uoQkqPd5z4KVp/s6ogrP/eB1dI7dGq8X7ZGUDK
+         bPESyksVWznr4z7o/2y3kIgmN15Fgl8+mqZ8LRDP2op7xklvZxkLJSkC7GUodK+ZyRwH
+         jrKwP0/OLF9pNrwQ5ucs1OdYHChufqVAO4PKbROtXHCExCO16QuSrMSyJKarYPvVXIiU
+         nHiODqswhPfGTzthB1VL1LEFri/bkMsDEdKjiu5xXbHlhlxgI/+V8x4Gcs1Y28KbwQeb
+         ih7A==
+X-Gm-Message-State: AFqh2kp8UKultORh8OBjnYskP3LYswO5lLsLWisUrExAKsx91Z+ENw/P
+        61+lZ8uKUAH9EwlpIsAltMgOWFM/vplFt7leg2YGvg==
+X-Google-Smtp-Source: AMrXdXtXzlxEcjko7SKoGgpsddK1ALit1MUPi8Wv7qxawIFiDTWvsAmxw+tfW96X+19/d/juBi2twOXfE2JllLnVdvk=
+X-Received: by 2002:a05:6902:90e:b0:7c8:3a6f:9b7b with SMTP id
+ bu14-20020a056902090e00b007c83a6f9b7bmr2956596ybb.88.1674521015221; Mon, 23
+ Jan 2023 16:43:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123170419.7292-2-george@enfabrica.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123093609.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
+In-Reply-To: <20230123093609.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Mon, 23 Jan 2023 16:43:23 -0800
+Message-ID: <CACeCKafcL=KJ+a5C2BKXWX3rkWf9BHp1oB3dikAjGtFWqW5_PA@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: allow deferred probe of
+ switch handles
+To:     Victor Ding <victording@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        gustavoars@kernel.org, heikki.krogerus@linux.intel.com,
+        dnojiri@chromium.org, dustin@howett.net, lee.jones@linaro.org,
+        tzungbi@kernel.org, groeck@chromium.org,
+        gregkh@linuxfoundation.org, tinghan.shen@mediatek.com,
+        sebastian.reichel@collabora.com, enric.balletbo@collabora.com,
+        bleung@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi George,
+On Mon, Jan 23, 2023 at 1:36 AM Victor Ding <victording@chromium.org> wrote:
+>
+> `fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
+> which is called from `cros_typec_get_switch_handles`. When this happens,
+> it does not indicate absence of switches; instead, it only hints that
+> probing of switches should occur at a later time.
+>
+> Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
+> probing switches as a better time.
+>
+> Signed-off-by: Victor Ding <victording@chromium.org>
+> ---
+>
+>  drivers/platform/chrome/cros_ec_typec.c | 30 +++++++++++++++++--------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 59de4ce01fab..f4b3fc788491 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -145,31 +145,37 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
+>                                          struct fwnode_handle *fwnode,
+>                                          struct device *dev)
+>  {
+> +       int ret = 0;
+> +
+>         port->mux = fwnode_typec_mux_get(fwnode, NULL);
+>         if (IS_ERR(port->mux)) {
+> -               dev_dbg(dev, "Mux handle not found.\n");
+> +               ret = PTR_ERR(port->mux);
+> +               dev_dbg(dev, "Mux handle not found: %d.\n", ret);
+>                 goto mux_err;
+>         }
+>
+>         port->retimer = fwnode_typec_retimer_get(fwnode);
+>         if (IS_ERR(port->retimer)) {
+> -               dev_dbg(dev, "Retimer handle not found.\n");
+> +               ret = PTR_ERR(port->retimer);
+> +               dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
+>                 goto retimer_sw_err;
+>         }
+>
+>         port->ori_sw = fwnode_typec_switch_get(fwnode);
+>         if (IS_ERR(port->ori_sw)) {
+> -               dev_dbg(dev, "Orientation switch handle not found.\n");
+> +               ret = PTR_ERR(port->ori_sw);
+> +               dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
+>                 goto ori_sw_err;
+>         }
+>
+>         port->role_sw = fwnode_usb_role_switch_get(fwnode);
+>         if (IS_ERR(port->role_sw)) {
+> -               dev_dbg(dev, "USB role switch handle not found.\n");
+> +               ret = PTR_ERR(port->role_sw);
+> +               dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
+>                 goto role_sw_err;
+>         }
+>
+> -       return 0;
+> +       return ret;
+>
+>  role_sw_err:
+>         typec_switch_put(port->ori_sw);
+> @@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
+>         typec_mux_put(port->mux);
+>         port->mux = NULL;
+>  mux_err:
+> -       return -ENODEV;
+> +       return ret;
+>  }
+>
+>  static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
+> @@ -423,9 +429,15 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+>                 }
+>
+>                 ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
+> -               if (ret)
+> -                       dev_dbg(dev, "No switch control for port %d\n",
+> -                               port_num);
+> +               switch (ret) {
+> +               case 0:
+> +                       break;
+> +               case -EPROBE_DEFER:
+> +                       dev_err(dev, "Deferring getting switch handles at port %d\n", port_num);
+> +                       goto unregister_ports;
+> +               default:
+> +                       dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
+> +               }
 
-Thank you for the patch! Yet something to improve:
+The switch statement seems a little clunky here. Instead, nest a couple
+of ifs; it is shorter and easier to read IMO.
 
-[auto build test ERROR on vbabka-slab/for-next]
-[also build test ERROR on linus/master v6.2-rc5 next-20230123]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
+if (ret) {
+    dev_err_probe(dev, ret, "No switch control for port: %d\n", port_num);
+    if (ret == -EPROBE_DEFER)
+        goto unregister_ports;
+}
 
-url:    https://github.com/intel-lab-lkp/linux/commits/George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
-patch link:    https://lore.kernel.org/r/20230123170419.7292-2-george%40enfabrica.net
-patch subject: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20230124/202301240827.j2GJi7v5-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f0d9df4305849ecea4402bc614cadb0dd357da77
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
-        git checkout f0d9df4305849ecea4402bc614cadb0dd357da77
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/fork.c: In function 'alloc_thread_stack_node':
->> kernel/fork.c:320:9: error: implicit declaration of function 'kmemleak_mark_stack'; did you mean 'kmemleak_no_scan'? [-Werror=implicit-function-declaration]
-     320 |         kmemleak_mark_stack(stack);
-         |         ^~~~~~~~~~~~~~~~~~~
-         |         kmemleak_no_scan
-   kernel/fork.c: At top level:
-   kernel/fork.c:865:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
-     865 | void __init __weak arch_task_cache_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +320 kernel/fork.c
-
-   274	
-   275	static int alloc_thread_stack_node(struct task_struct *tsk, int node)
-   276	{
-   277		struct vm_struct *vm;
-   278		void *stack;
-   279		int i;
-   280	
-   281		for (i = 0; i < NR_CACHED_STACKS; i++) {
-   282			struct vm_struct *s;
-   283	
-   284			s = this_cpu_xchg(cached_stacks[i], NULL);
-   285	
-   286			if (!s)
-   287				continue;
-   288	
-   289			/* Reset stack metadata. */
-   290			kasan_unpoison_range(s->addr, THREAD_SIZE);
-   291	
-   292			stack = kasan_reset_tag(s->addr);
-   293	
-   294			/* Clear stale pointers from reused stack. */
-   295			memset(stack, 0, THREAD_SIZE);
-   296	
-   297			if (memcg_charge_kernel_stack(s)) {
-   298				vfree(s->addr);
-   299				return -ENOMEM;
-   300			}
-   301	
-   302			tsk->stack_vm_area = s;
-   303			tsk->stack = stack;
-   304			return 0;
-   305		}
-   306	
-   307		/*
-   308		 * Allocated stacks are cached and later reused by new threads,
-   309		 * so memcg accounting is performed manually on assigning/releasing
-   310		 * stacks to tasks. Drop __GFP_ACCOUNT.
-   311		 */
-   312		stack = __vmalloc_node_range(THREAD_SIZE, THREAD_ALIGN,
-   313					     VMALLOC_START, VMALLOC_END,
-   314					     THREADINFO_GFP & ~__GFP_ACCOUNT,
-   315					     PAGE_KERNEL,
-   316					     0, node, __builtin_return_address(0));
-   317		if (!stack)
-   318			return -ENOMEM;
-   319	
- > 320		kmemleak_mark_stack(stack);
-   321	
-   322		vm = find_vm_area(stack);
-   323		if (memcg_charge_kernel_stack(vm)) {
-   324			vfree(stack);
-   325			return -ENOMEM;
-   326		}
-   327		/*
-   328		 * We can't call find_vm_area() in interrupt context, and
-   329		 * free_thread_stack() can be called in interrupt context,
-   330		 * so cache the vm_struct.
-   331		 */
-   332		tsk->stack_vm_area = vm;
-   333		stack = kasan_reset_tag(stack);
-   334		tsk->stack = stack;
-   335		return 0;
-   336	}
-   337	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+}
+}
+>
+>                 ret = cros_typec_register_port_altmodes(typec, port_num);
+>                 if (ret) {
+> --
+> 2.39.0.246.g2a6d74b583-goog
+>
