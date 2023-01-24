@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4911678D1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD38678D1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjAXBEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S232621AbjAXBEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXBEh (ORCPT
+        with ESMTP id S229569AbjAXBEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:04:37 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F481303C8;
-        Mon, 23 Jan 2023 17:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=YLRZgPgm6zFTbHxaOInUyu4eJC7xlh91Tt1JwAy9PRk=; b=nlVxWqq0PB30WEGxiirjxXsV1T
-        m+t9c5zpijwC9nE8FbSu1H2x/XYasgNgzfYSy6u/XoOgXVkf6S531YbAwX5b6WmljqvcV1E7QLsfj
-        6yiozCFkBHz9xgrmg/T+Vzhq2w50IKLG/ZifSu4dQ4nvHOUQ6DsLvDmNkiB7wihOdO3o=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pK7jZ-002xyX-QM; Tue, 24 Jan 2023 02:04:21 +0100
-Date:   Tue, 24 Jan 2023 02:04:21 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com,
-        peppe.cavallaro@st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/2] net: stmmac: add DT parameter to keep RX_CLK running
- in LPI state
-Message-ID: <Y88uleBK5zROcpgc@lunn.ch>
-References: <20230123133747.18896-1-andrey.konovalov@linaro.org>
+        Mon, 23 Jan 2023 20:04:40 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753BA37571;
+        Mon, 23 Jan 2023 17:04:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674522279; x=1706058279;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aMviCDSGaCW3l39VquuZe87DPlMX3jx/HG+Zzl5cpWc=;
+  b=jRsDxnISHjBbbTxRckAfot4zaOXBHOWMrsEV5RFz48kGBSd3s4wrQ78Y
+   z7JboYNWL3VRBUksDUj8jRPJ5DIZrZTVCdT9YpDQw6d3R9HmtuOnyfcWf
+   EftFOLR148SeTp9ZFykmqxUXR8m7knOm/DrFz0PyfMWbWWLcpGUr5MiqM
+   juDzsy2O3PhgM2g7E1kMSAG42MxtidPkBU7yxERMKM1nAMhXp1wWpeZmU
+   m6jtuRgdYgFnFtI+ok/WUvPDdK15zTWZRwG7oU9WfdwodUjK78z19Oovq
+   ZRqKuBEgqPHBQRevuCSeG6BbdsAW5XqZnSTgaZtWaVfy2kzTLsQiI6ELO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="314103901"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="314103901"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 17:04:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="990690966"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="990690966"
+Received: from akleen-mobl3.amr.corp.intel.com (HELO [10.255.230.108]) ([10.255.230.108])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 17:04:37 -0800
+Message-ID: <67facb87-f835-abcd-3d1b-527531b26e52@linux.intel.com>
+Date:   Mon, 23 Jan 2023 17:04:33 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123133747.18896-1-andrey.konovalov@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] perf/x86: KVM: Disable vPMU support on hybrid CPUs (host
+ PMUs)
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+References: <20230120004051.2043777-1-seanjc@google.com>
+ <1dec071d-c010-cd89-9e58-d643e71e775c@linux.intel.com>
+ <Y8rQJf3ki8a1aRjW@google.com>
+ <50e840ea-ce9c-9290-2187-d3ff0d9a6709@linux.intel.com>
+ <Y8r604tRexxWlF8F@google.com>
+ <e161b7c0-f0be-23c8-9a25-002260c2a085@linux.intel.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <e161b7c0-f0be-23c8-9a25-002260c2a085@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,39 +82,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 04:37:45PM +0300, Andrey Konovalov wrote:
-> On my qcs404 based board the ethernet MAC has issues with handling
-> Rx LPI exit / Rx LPI entry interrupts.
-> 
-> When in LPI mode the "refresh transmission" is received, the driver may
-> see both "Rx LPI exit", and "Rx LPI entry" bits set in the single read from
-> GMAC4_LPI_CTRL_STATUS register (vs "Rx LPI exit" first, and "Rx LPI entry"
-> then). In this case an interrupt storm happens: the LPI interrupt is
-> triggered every few microseconds - with all the status bits in the
-> GMAC4_LPI_CTRL_STATUS register being read as zeros. This interrupt storm
-> continues until a normal non-zero status is read from GMAC4_LPI_CTRL_STATUS
-> register (single "Rx LPI exit", or "Tx LPI exit").
-> 
-> The reason seems to be in the hardware not being able to properly clear
-> the "Rx LPI exit" interrupt if GMAC4_LPI_CTRL_STATUS register is read
-> after Rx LPI mode is entered again.
-> 
-> The current driver unconditionally sets the "Clock-stop enable" bit
-> (bit 10 in PHY's PCS Control 1 register) when calling phy_init_eee().
-> Not setting this bit - so that the PHY continues to provide RX_CLK
-> to the ethernet controller during Rx LPI state - prevents the LPI
-> interrupt storm.
-> 
-> This patch set adds a new parameter to the stmmac DT:
-> snps,rx-clk-runs-in-lpi.
-> If this parameter is present in the device tree, the driver configures
-> the PHY not to stop RX_CLK after entering Rx LPI state.
 
-Do we really need yet another device tree parameter? Could
-dwmac-qcom-ethqos.c just do this unconditionally? Is the interrupt
-controller part of the licensed IP, or is it from QCOM? If it is part
-of the licensed IP, it is probably broken for other devices as well,
-so maybe it should be a quirk for all devices of a particular version
-of the IP?
+> If I understand correct, the workaround in KVM is to add a white/black
+> list to filter the events. I think we can do the same thing for the
+> hybrid machine for now.
+> https://lore.kernel.org/lkml/CAOyeoRUUK+T_71J=+zcToyL93LkpARpsuWSfZS7jbJq=wd1rQg@mail.gmail.com/
 
-   Andrew
+
+This will make everyone who actually wants to use the PMU sad.
+
+It's reasonable if the vCPUs are not bound, but if they are bound it 
+would be better to expose it with a suitable CPUID for the types.
+
+
+-Andi
+
+
+
