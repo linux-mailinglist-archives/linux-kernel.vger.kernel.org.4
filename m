@@ -2,92 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3632678C7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F04678C7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjAXADu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S232156AbjAXAEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjAXADr (ORCPT
+        with ESMTP id S231584AbjAXAEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:03:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE8B83C4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674518574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Viudg6MoejX0l+blH0qOsZmA3H+aCmAXY+dSPMYU12A=;
-        b=Xliz6UEplvRqSrCfqt4+pEnG1+X4pO/qPvBYaboSIiT6Y2xmHaNFVjM/t6wbyI6f00rc5A
-        kzibmE+IeCOBPlWnCMLoQwzf4U/BZ8/ZkwOfk2S48Fc1iFhmb6lOsIXRxtVlhNLJMGGGfO
-        +4WbitzoROUCuDMVSQZoSph3RQG6b1k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-ts3hbKqWPQ-brZHtcxct8g-1; Mon, 23 Jan 2023 19:02:50 -0500
-X-MC-Unique: ts3hbKqWPQ-brZHtcxct8g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 23 Jan 2023 19:04:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1DF65BA;
+        Mon, 23 Jan 2023 16:04:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6F4D1802BF3;
-        Tue, 24 Jan 2023 00:02:50 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 157142166B32;
-        Tue, 24 Jan 2023 00:02:47 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, shan.gavin@gmail.com
-Subject: [PATCH] nodemask: Drop duplicate check in for_each_node_mask()
-Date:   Tue, 24 Jan 2023 08:02:43 +0800
-Message-Id: <20230124000243.415621-1-gshan@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5483B80EF0;
+        Tue, 24 Jan 2023 00:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B80C433D2;
+        Tue, 24 Jan 2023 00:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674518648;
+        bh=I/4HF/UWHkyj0AKgmX5aVea6n1NeFD9hJ3KsaZ4MVf0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OxQir4Py2cNgyc9lxe4vK3+YAk1cOT3NVbPbI5Ii16OlJH93waZ67KEftOxZgsXAG
+         TA0H+rpKOxV8U8bkHmU1b0IXU5FdZpXinbPllq/yIvkodjhMrgPSWpMYQjYtHcfdmg
+         X1DSGNpEunzMAq0rzbxSR8RRHIwTrgM3a/uXXyGhOsMz0YhZO2y0znJVaX5PoQIc8V
+         drsrrALgmtDz6pABsccKRnBdqjOKgtJihNDx9ChrjjGNQ5Us3GyHFMykW0XRv02Qa4
+         b1X1ZkE2MJyn5+RVDGWjVAXpZl8JXwTwNNM8+F5uevF8hhZXtuhtrOXwGUmpq/Zt6o
+         vwIk/KE7RLc8Q==
+Date:   Mon, 23 Jan 2023 16:04:06 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, fsverity@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] fsverity MAINTAINERS entry update for 6.2-rc6
+Message-ID: <Y88gdkbdscJPOqSX@sol.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value type is changed from 'int' to 'unsigned int' since
-commit 0dfe54071d7c8 ("nodemask: Fix return values to be unsigned").
-Besides, the conversion between 'int' and 'unsigned int' on the
-parameter @node is guaranteed to be safe due to the limited range of
-MAX_NUMNODES and CONFIG_NODES_SHIFT. By the way, '(node >= 0)' should
-have been '(node) >= 0' actually.
+The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
 
-It's unnecessary to check if their return values are greater or equal
-to 0 in for_each_node_mask(). Remove it.
+  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
 
-No functional change intended.
+are available in the Git repository at:
 
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
- include/linux/nodemask.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  https://git.kernel.org/pub/scm/fs/fsverity/linux.git tags/fsverity-for-linus
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index bb0ee80526b2..8d07116caaf1 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -385,7 +385,7 @@ static inline void __nodes_fold(nodemask_t *dstp, const nodemask_t *origp,
- #if MAX_NUMNODES > 1
- #define for_each_node_mask(node, mask)				    \
- 	for ((node) = first_node(mask);				    \
--	     (node >= 0) && (node) < MAX_NUMNODES;		    \
-+	     (node) < MAX_NUMNODES;				    \
- 	     (node) = next_node((node), (mask)))
- #else /* MAX_NUMNODES == 1 */
- #define for_each_node_mask(node, mask)                                  \
--- 
-2.23.0
+for you to fetch changes up to ef7592e466ef7b2595fdfdfd23559a779f4b211a:
 
+  MAINTAINERS: update fsverity git repo, list, and patchwork (2023-01-16 15:38:41 -0800)
+
+----------------------------------------------------------------
+Update the MAINTAINERS file entry for fsverity.
+
+----------------------------------------------------------------
+Eric Biggers (1):
+      MAINTAINERS: update fsverity git repo, list, and patchwork
+
+ MAINTAINERS | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
