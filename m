@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7CE679708
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5C567973C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbjAXLuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S233321AbjAXMF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjAXLuo (ORCPT
+        with ESMTP id S229935AbjAXMFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:50:44 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6DF4346C;
-        Tue, 24 Jan 2023 03:50:30 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7E62F1C0008;
-        Tue, 24 Jan 2023 11:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674561029;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gip/5wYm+i55v0+JQ88y8nuBa+vXIFpCdmLVgWdcsVk=;
-        b=DljCXLOb4dzsaEu0ozmSGV8XFgn20xYjSmXrrSivwa+auj/JQCXtXJrj0DKLCb/VulrBI5
-        fVy1Pr/qkgvM/ViotyhEYm5QwOrbwDQOU4aIA8FMt41N/0UZXYcQaOy/YBXfliYOMo0zkV
-        YIabBxQBUnOp6m+yPbBIXpEDzqOPmWE9ZWj7PCHG7RQvZZEgZzdc/8YdKkICDLvgPaPKgx
-        0J7QUkNhBPeeme6ZswOw8zeTfSXkUFnSm52LN/nN0SWdI7Zp91pscrDiXeES+0JjE7borH
-        ntJ6QmoaoJ7wn7Uzdy97bDh+LD/Jtm5icbW2ASdxTtlRZqskRROWW8mT2Z2COA==
-Date:   Tue, 24 Jan 2023 12:50:27 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] thermal/drivers/armada: Use the
- thermal_zone_get_crit_temp()
-Message-ID: <20230124125027.2dba0f1a@xps-13>
-In-Reply-To: <4225f833-0f15-5780-5ef4-4cd9e05eca70@linaro.org>
-References: <20230118222610.186088-1-daniel.lezcano@linaro.org>
-        <20230124120458.412fc528@xps-13>
-        <4225f833-0f15-5780-5ef4-4cd9e05eca70@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        Tue, 24 Jan 2023 07:05:52 -0500
+X-Greylist: delayed 843 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 04:05:50 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 347022333A;
+        Tue, 24 Jan 2023 04:05:50 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 30OBp2L3017928;
+        Tue, 24 Jan 2023 05:51:02 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 30OBp0bo017927;
+        Tue, 24 Jan 2023 05:51:00 -0600
+Date:   Tue, 24 Jan 2023 05:51:00 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     William Roberts <bill.c.roberts@gmail.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
+Message-ID: <20230124115100.GA17771@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com> <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com> <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com> <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <Y8tcEtr8Kl3p4qtA@kernel.org> <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Tue, 24 Jan 2023 05:51:02 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,97 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, Jan 23, 2023 at 11:48:25AM -0600, William Roberts wrote:
 
-daniel.lezcano@linaro.org wrote on Tue, 24 Jan 2023 12:36:22 +0100:
+Good morning, I hope the week is going well for everyone.
 
-> On 24/01/2023 12:04, Miquel Raynal wrote:
-> > Hi Daniel,
-> >=20
-> > daniel.lezcano@linaro.org wrote on Wed, 18 Jan 2023 23:26:10 +0100:
-> >  =20
-> >> The driver browses the trip point to find out the critical trip
-> >> temperature. However the function thermal_zone_get_crit_temp() does
-> >> already that, so the routine is pointless in the driver.
-> >>
-> >> Use thermal_zone_get_crit_temp() instead of inspecting all the trip
-> >> points.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
-> >>   drivers/thermal/armada_thermal.c | 38 +++++++++++++-----------------=
---
-> >>   1 file changed, 15 insertions(+), 23 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada=
-_thermal.c
-> >> index db040dbdaa0a..c6d51d8acbf0 100644
-> >> --- a/drivers/thermal/armada_thermal.c
-> >> +++ b/drivers/thermal/armada_thermal.c
-> >> @@ -784,34 +784,26 @@ static int armada_configure_overheat_int(struct =
-armada_thermal_priv *priv,
-> >>   					 int sensor_id)
-> >>   {
-> >>   	/* Retrieve the critical trip point to enable the overheat interrup=
-t */
-> >> -	struct thermal_trip trip;
-> >> +	int temperature;
-> >>   	int ret;
-> >> -	int i;
-> >> -
-> >> -	for (i =3D 0; i < thermal_zone_get_num_trips(tz); i++) {
-> >> -
-> >> -		ret =3D thermal_zone_get_trip(tz, i, &trip);
-> >> -		if (ret)
-> >> -			return ret;
-> >> -
-> >> -		if (trip.type !=3D THERMAL_TRIP_CRITICAL)
-> >> -			continue;
-> >> -
-> >> -		ret =3D armada_select_channel(priv, sensor_id);
-> >> -		if (ret)
-> >> -			return ret; =20
-> >>   >> -		armada_set_overheat_thresholds(priv, trip.temperature, =20
-> >> -					       trip.hysteresis);
-> >> -		priv->overheat_sensor =3D tz;
-> >> -		priv->interrupt_source =3D sensor_id;
-> >> +	ret =3D thermal_zone_get_crit_temp(tz, &temperature);
-> >> +	if (ret)
-> >> +		return ret; =20
-> >>   >> -		armada_enable_overheat_interrupt(priv); =20
-> >> +	ret =3D armada_select_channel(priv, sensor_id);
-> >> +	if (ret)
-> >> +		return ret; =20
-> >>   >> -		return 0; =20
-> >> -	}
-> >> +	/*
-> >> +	 * A critical temperature does not have a hysteresis
-> >> +	 */ =20
-> >=20
-> > Makes sense.
-> >=20
-> > Nit: I would actually put that comment in the commit log rather than
-> > keeping it in the code, but whatever, that's a nice simplification. =20
->=20
-> Oh, actually, I added the comment because of the third parameter change f=
-or armada_set_overheat_thresholds(..., 0);
+> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > > <bill.c.roberts@gmail.com> wrote:
+> > > >
+> > > > > What's the use case of using the creation data and ticket in this
+> > > > > context? Who gets the creationData and the ticket?
+> > > > > Could a user supplied outsideInfo work? IIRC I saw some patches
+> > > > > flying around where the sessions will get encrypted and presumably
+> > > > > correctly as well. This would allow the transfer of that
+> > > > > outsideInfo, like the NV Index PCR value to be included and
+> > > > > integrity protected by the session HMAC.
+> > > >
+> > > > The goal is to ensure that the key was generated by the kernel. In
+> > > > the absence of the creation data, an attacker could generate a
+> > > > hibernation image using their own key and trick the kernel into
+> > > > resuming arbitrary code. We don't have any way to pass secret data
+> > > > from the hibernate kernel to the resume kernel, so I don't think
+> > > > there's any easy way to do it with outsideinfo.
+> > >
+> > > Can we go back again to why you can't use locality?  It's exactly
+> > > designed for this since locality is part of creation data.  Currently
+> > > everything only uses locality 0, so it's impossible for anyone on Linux
+> > > to produce a key with anything other than 0 in the creation data for
+> > > locality.  However, the dynamic launch people are proposing that the
+> > > Kernel should use Locality 2 for all its operations, which would allow
+> > > you to distinguish a key created by the kernel from one created by a
+> > > user by locality.
+> > >
+> > > I think the previous objection was that not all TPMs implement
+> > > locality, but then not all laptops have TPMs either, so if you ever
+> > > come across one which has a TPM but no locality, it's in a very similar
+> > > security boat to one which has no TPM.
+> >
+> > Kernel could try to use locality 2 and use locality 0 as fallback.
 
-Yes, that's why I proposed to mention it in the commit log rather than
-in the code. If having no threshold here makes sense (and it does), I
-don't see the point in explaining it in a comment. I usually use
-comments to explain what could appear strange/unclear when looking at
-the code.
+> I don't think that would work for Matthew, they need something
+> reliable to indicate key provenance.
 
-Here, while the parameter change is intended and legitimate, I feel
-like it is worth justifying, but doing so in the commit logs feels
-enough.
+Indeed, I was going to mention that.  Falling back means that the
+security guarantee is lost, perhaps silently and lost on the owner of
+the system, if they are not paying attention to things like the boot
+logs.
 
-But that's minor tbh, so feel free to do it like you prefer.
+One of the persistent challenges with these hardware security
+technologies is that they need to be ubiquitous to be useful,
+something that has historically plagued all of these technologies.
 
-> >> +	armada_set_overheat_thresholds(priv, temperature, 0); =20
->=20
-> I think it makes sense to keep the comment to clarify why we pass this ze=
-ro temperature argument.
+> I was informed that all 5 localities should be supported starting
+> with Gen 7 Kaby Lake launched in 2016. Don't know if this is still
+> "too new".
 
-Thanks,
-Miqu=C3=A8l
+It will be necessary, and important, to differentiate between
+'supported' and 'available'.
+
+Historically, security features have been SKU'ified, in other words,
+made available only on specific SKU's, even when the platform writ
+large has the necessary support.  These SKU's are designed to be
+directed at various verticals or OEM's who are perceived to be willing
+to pay more for enhanced security.
+
+I've had conversations on whether or not hardware technologies would
+be available and the conversation usually ends with the equivalent of:
+"Show us the business case for supporting this."
+
+Which translates, roughly, into how much money are we going to make if
+we offer this.
+
+Unfortunately, without being ubiquitous, as you note for a long period
+of time, there is no development interest, which in turn translates
+into no market 'pull'.  A rather troublesome dilemma for security
+innovation.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
