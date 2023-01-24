@@ -2,239 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABD8679E15
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36005679E1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbjAXP5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S234498AbjAXQAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbjAXP5v (ORCPT
+        with ESMTP id S233461AbjAXQAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:57:51 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F687768C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:57:48 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id v81so7812531vkv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rt1mrhGHV+ldz6z6aqQgrdha6p8O6lh39DequDEH0yE=;
-        b=IjSHFd+Vn2/fkqTe5+VAtDGku8zfUzzP+8BcO4Ir/3IcZDAaLVJDmxAiuWr2TeDmu/
-         ER8u67yjuXwboLQIohzs9q9q1U8SE5E7/7s+Pv3PzURjz8lKjKh1Eyw2sCA+nfffpozh
-         oBLz26dFnnbIza3QIq1HQGbQJxHUclbHsX0HHmw+2UwCK4HgVmT7eBRt5kQXMl8aWJPU
-         53X0p2ObmgjnPCvPVjyX82MDF3oQqeH/KGnjC+1w+O3TOzWdD/WVf6/Owmgsoetq0Wy3
-         sIBOTe1z/WpXqq2CUItkNHyMPU+iKp8/asuaastuRVXBBfC7o/8fAKX0eCgvfau5MO7X
-         FUVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rt1mrhGHV+ldz6z6aqQgrdha6p8O6lh39DequDEH0yE=;
-        b=0HaES5MFxEfcHpAftRztNXkWztoa/ErtM0XxNs7oseEEgpkjfntT1KHtMeQyI1ehGR
-         eCUj0jKFuGu78t+857swM+GOhWFBkPklbYoP2b846szLrFkb0cewjmkb/ev6m3FrywQF
-         lpkJ1xV+lSc3atn02IBRDQo2T9fafXbVpNdlRdcl/LqRjtsLPEwcEFyRcjAGwUjplxmv
-         VWMc3PCd87Z130ClbQueKiFwazS8evNqftMYzKJz92TsoZAjAX1Bq6brdervKk2iGo+U
-         kJVamwFPJp+poZUKKroi6dF9kn3+Mwq5x3hHmeYp9YTpSPz8W2nJ2vx9V67cvOJ/aPWO
-         2Sww==
-X-Gm-Message-State: AFqh2kqY7gm3OFcIvA0JMEEDYKwVA+UeVVdRlytut4mO/2/STHMz1dbp
-        w9CGabsaAJ0DuxbEC5FwaWoeUjJvKDeYaIh7nqKvaQ==
-X-Google-Smtp-Source: AMrXdXtqs9pmeYKVlp5gkQOIDBOvbJ1s4bxzVrVQmF0oYHrigv63uukiEf1yx9kbm/7UGTA+8RQ5NOhfeA5Sc0vj+8s=
-X-Received: by 2002:a1f:2e58:0:b0:3e1:5761:fdbb with SMTP id
- u85-20020a1f2e58000000b003e15761fdbbmr3626747vku.7.1674575867112; Tue, 24 Jan
- 2023 07:57:47 -0800 (PST)
+        Tue, 24 Jan 2023 11:00:00 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D759ABA;
+        Tue, 24 Jan 2023 07:59:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=juCJLe5fQe7IUPsxrS2Q5VEfB7fzhzTlztUbkeZYfl76MedmA9CRW+WwlWVJbAOscD17nhr0DEX02Z8LdFNbuPYBDI8QsoBXA2RAvbySMmw2Icvt/xsSFKhW44F4jcsfDbmUd6CcU1PkvqN+IfS7WZdAdqejZYexKgnc0Rn/NkHdASLUqfZ6UmDIPmnIUAPwhaqfiR6399JhQmc91GaRu0qXSrR5RQz3aLcpm6wvPYPyqHaYWkkc28z7TxMGUNnyyS7heGKmz1LxTVShTt6XIKOUGgzpTHtBnxBfJ9tW6CeC21JuooIkttun1114ozDQtMu2ezl693yNhS4ubc9lnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HYFd9SN8uyt7sDJWr1Z6HvxkKuUrSIfTeO5zURDGchM=;
+ b=lZG9KgZLB6ghVGjHMYj7axap06mMlca8JRNWqy41EEShG+GcwFgIHfgMsF+YfLrfy/LLk788GaJFQAPm/lpkrkGFlFir5ie9UWM68eea/sbx+mYyaRDa2EY3YvRlgm+TGWMPrbfB9BoqSaIV1ttZiE+drlQNs8MHgGbMZA4xWuPQfFqBxeiSxat6Ciob+UX/EgckNLNW344dtWeTdTlQiFu/TH9HH+UovU60F361LK0nEsvP9m+miwhhDknSO7fabH4KGX0UwMhCkcak+TFWiwbujRRp+si3IMu0g0062kGTZamxyFGke0LjbBxcaSagizHZX3ZOkDatvMjKzHsa6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
+ dkim=pass header.d=memverge.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HYFd9SN8uyt7sDJWr1Z6HvxkKuUrSIfTeO5zURDGchM=;
+ b=S4XFGy6Iwau0WKgXzkqaY6ZnHQcWXsRnlH4HH6/8mhdGcFx91n570xVdPOXiopeGOe92N7+z8FKe2aerGp2FOJ6C/E+U5c1j17CNUe+HgDjZCasU9AjXwJjrl6bIYu8jx3nCMLinZuwToUo3j+Norki0PFS+k4tLMdLBKvsIlpM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=memverge.com;
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
+ by SA1PR17MB5106.namprd17.prod.outlook.com (2603:10b6:806:1b5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 15:59:57 +0000
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 15:59:57 +0000
+Date:   Tue, 24 Jan 2023 10:59:46 -0500
+From:   Gregory Price <gregory.price@memverge.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, avagin@gmail.com
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+Message-ID: <Y9AAcuomaVM2JRCA@memverge.com>
+References: <20230123032942.18263-1-gregory.price@memverge.com>
+ <20230123032942.18263-4-gregory.price@memverge.com>
+ <20230123154101.GA6268@redhat.com>
+ <Y87OEdDXwZG8pmmE@memverge.com>
+ <20230123195228.GD6268@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123195228.GD6268@redhat.com>
+X-ClientProxiedBy: BY3PR05CA0052.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::27) To BN6PR17MB3121.namprd17.prod.outlook.com
+ (2603:10b6:405:7c::19)
 MIME-Version: 1.0
-References: <20230122150246.321043584@linuxfoundation.org> <CA+G9fYsS1GLzMoeh-jz8eOMbomJ=XBg_3FjQ+4w_=Dw1Mwr3rQ@mail.gmail.com>
- <20230123191128.ewfyc5cdbbdx5gtl@oracle.com> <20230123194218.47ssfzhrpnv3xfez@oracle.com>
- <CA+G9fYvLh=epzy_KEZObfFn1kVCugKvuVWF08X9eEiPe4ehe3g@mail.gmail.com> <20230124125445.gqko2lyvp3vmecto@oracle.com>
-In-Reply-To: <20230124125445.gqko2lyvp3vmecto@oracle.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 Jan 2023 21:27:35 +0530
-Message-ID: <CA+G9fYvOdYfsvprxtFqdGdfBOK88CDRU4i=d6aH1WBUc+tZ5RQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
-To:     Tom Saeger <tom.saeger@oracle.com>
-Cc:     Rich Felker <dalias@libc.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|SA1PR17MB5106:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b5c9749-da80-4c63-1148-08dafe2409ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rbjWVF3sZCW9rgIj7RTwCFlBzX2mGpDIACid58ne9XXCsLkKPbwGEgHZ+zil34g2TFrkpauZQYUAlCpgP+0YvtLnBrZJ48Qmc2oRbaJADIKA44WGe4GUergXR3ENtLFlgeJsPaXcblvEB4l7wpRRjpAIPTTxDQ0Wvo1YdCNve0/8N3pmCK4TD5DVbM0FyhIiBXKAxyQBUYH0jgdjwDo6GpRKQBd/O2aklo+ka/gJAVmE3GsRx5Fnr27iqMGgtFjz9B91ZFnkLmdVGCXtBU1GP37zlY+RtU3PpqZkhzJcd3gRbtzbFqwr81Z9c8UmPMNmHQ5Sv+nhDJLYQEl4lxIOG83sePaHPeH+URWCvuSjNctjukwVzwGdPp5B6pITpoPC0KU3RijDIGmEBr4Ez0c6PVAPOcbQkFbrzJwd8tRAKF90ciDSGwmgexhCT7x7LkUWU7HCg69xskLw1Ec+Wz6tehB0r7C2YvAM3a1p2JGtfDtCD3QvSO7zmoPqAxK98MGLpRS+Y4Qm00j08SYPaafCWf2PLsZcC7vK2h9DR/JrVUhFvJQUe1kA97yHssxFEdocz1C0K1k5c9kbAS6YNbxIW0+VYIUV0gaqki3leIUgiwFAAorNWN5COsUfZpUvQAdYTlX8SWI4PFEROXBBLdE4sA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(376002)(366004)(39840400004)(396003)(451199015)(36756003)(41300700001)(86362001)(7416002)(8936002)(5660300002)(4326008)(44832011)(2906002)(38100700002)(83380400001)(478600001)(6486002)(66946007)(6512007)(6916009)(26005)(6506007)(8676002)(186003)(316002)(6666004)(2616005)(66476007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wo0z7Rc2krAkqAQgfClILT9QFEv9mYrw0j2WsWDbe5ZojbnwBYoVHeEbMqON?=
+ =?us-ascii?Q?n6SKpAhSKrk+VSnqk6dkVhyWUgu8XxE6ophAk3u31cQDWiamD52mnOgOoODe?=
+ =?us-ascii?Q?tNpK51pepudTe+mC1TMXjRNl5ofilR39t50nKGUgLYEdvROMo6t/YnLsUnql?=
+ =?us-ascii?Q?qnHeoHMGFA5OXcC9VG6F6oPIZPJaNde8KplxfgQAYFAQhXH8YSLV0w73OSCl?=
+ =?us-ascii?Q?x1pj0C8If25atXCwsrvvRcEbk9JfMntF/qSSlzKjH3aMSh37nXAkWz4j4Bgr?=
+ =?us-ascii?Q?kHq6Vf91yrLFgP5MpNr5Zjj5dr18nbsprIwwyYNFXNl845Fso+/w5oW1js5z?=
+ =?us-ascii?Q?kUlk6XzJGTuCb6USGsbESS7+VVA/1C/pD0ABsNC2wP4up6036xB4vmFRCYlz?=
+ =?us-ascii?Q?lA9E/dE68Utcg8E6bn/IBYErUTJgMyjR32uwbFCECggU40vJKx+gHIzdS5Vz?=
+ =?us-ascii?Q?HUR3X4/dHi9tof2WsAV/GzIwnEkJmZdC8UjPBpW1KZpVZxtjUaOFlz5bcULK?=
+ =?us-ascii?Q?AUwMuzO1J0r/xfVmNM1zq0nOwycSASsnl7F8fRLVeAxlkr3JRD60vwJI1Ghr?=
+ =?us-ascii?Q?nrUxGP+OLFflH3QDIDYyLP28kGPuY0STbECJ5kAVlzvQG6w0LhEPWAL1D+ie?=
+ =?us-ascii?Q?CJPZveR6bfZiwP6PZh70b6FZ9/fxV2f05Wv9950WDj5fyAFe4CfxQ3EB5CCO?=
+ =?us-ascii?Q?qncTmr5Wule3fs10aDzHA9J8fQ9oObxEPahUdcn8SVyZqd4lMt4v2cFPjGr9?=
+ =?us-ascii?Q?V5k2DTmHcmABtaFcRr4JYy74CIO3/RCCqNjVp0BJiYpi+20Ej2nQbmT8ZGWI?=
+ =?us-ascii?Q?0QkwlyrH9C7JELS1jtV+1LxQAP59PdTPku+3iYzB2dvvwZIS+h7qOmocfu2L?=
+ =?us-ascii?Q?weo5X3QZAAebH5lFsuwwRRWvorLTgbnsWTz42t63FOb2it9BA6QI8Gmwfr8h?=
+ =?us-ascii?Q?tuXqA88Vlmm55aY+eZt7z7mF8b2ntkuloI2xlQp80yheJ95+zkUD53EQQ8u+?=
+ =?us-ascii?Q?29Lrq54RDBsu15AGiY8q6qBVFty1gfUOOMgkz/c5DYLsZvTTmTCdMypH69fu?=
+ =?us-ascii?Q?nyorEh7OqDMKZgE1C75zZacxBCbNd4C3GBSJxkvxzpRtefTQqTfMvLoKPE33?=
+ =?us-ascii?Q?TKeVB2RtNjiwADAiJAh68dc1cLESm9LuWsDMnVZGsj8IY+/DecnmDhFRumNH?=
+ =?us-ascii?Q?hp4LyPOIWi65E476eQsrFo3im2VPFB4pjGXkNpylTtqw7zXhOpndP7yS9KHd?=
+ =?us-ascii?Q?N6GD38sjh2ifPAQ++clBQx6kovJ7o24Qz6uwnT+RFxaMBVTLLDmE2UWkZmYC?=
+ =?us-ascii?Q?YhhRtwLxkmLMNniZNejX5/O+tjgmmmnZRvP87RjTSW1cCjvLE5WlxG0JSa9O?=
+ =?us-ascii?Q?CgGfWu25HZSren6t0QaEhFgf9UfomOTm+0kUsi+ztqpzzCDk5NJlcvqKSnMl?=
+ =?us-ascii?Q?QnJWSAWXF7NQe+0HuNcncUre1iUUbjB0UaEpUpBJ1Fkf+mTM/abHusqIiAmQ?=
+ =?us-ascii?Q?zXYHgA8/zZTycGcevsaVF5SoMbXqUZTOp31bCBK6eD5hNe8/tWDVcR9sPsWT?=
+ =?us-ascii?Q?VZSBFS2ZSZ2bwrbHKE87KqffV8Ui6yfLoMv+W7WlCOkJa//zlc+T6bKOx/MW?=
+ =?us-ascii?Q?Yg=3D=3D?=
+X-OriginatorOrg: memverge.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b5c9749-da80-4c63-1148-08dafe2409ef
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 15:59:56.8567
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wIkMSvEKE0e9qbnXuJN9n9EYLsNn2+4lzS8W+31LqMEv1egP3eb/RlnHi1SlPOV89WLZxCmc/PDu3lFRdfSlf2Sfs1yotA25h73gTasnvNw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR17MB5106
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 at 18:25, Tom Saeger <tom.saeger@oracle.com> wrote:
+On Mon, Jan 23, 2023 at 08:52:29PM +0100, Oleg Nesterov wrote:
+> On 01/23, Gregory Price wrote:
+> >
+> > So i think dropping 2/3 in the list is good.  If you concur i'll do
+> > that.
+> 
+> Well I obviously think that 2/3 should be dropped ;)
+> 
+> As for 1/3 and 3/3, feel free to add my reviewed-by.
+> 
+> Oleg.
 >
-> On Tue, Jan 24, 2023 at 05:41:22PM +0530, Naresh Kamboju wrote:
-> > Hi Tom,
-> >
-> > On Tue, 24 Jan 2023 at 01:12, Tom Saeger <tom.saeger@oracle.com> wrote:
-> > >
-> > > On Mon, Jan 23, 2023 at 01:11:32PM -0600, Tom Saeger wrote:
-> > > > On Mon, Jan 23, 2023 at 01:39:11PM +0530, Naresh Kamboju wrote:
-> > > > > On Sun, 22 Jan 2023 at 20:51, Greg Kroah-Hartman
-> > > > >
-> > > > > Results from Linaro=E2=80=99s test farm.
-> > > > >
-> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > > >
-> > > > > * sh, build
-> > > > >   - gcc-8-dreamcast_defconfig
-> > > > >   - gcc-8-microdev_defconfig
-> > > >
-> > > > Naresh, any chance you could test again adding the following:
-> > > >
-> > > > diff --git a/arch/sh/kernel/vmlinux.lds.S b/arch/sh/kernel/vmlinux.=
-lds.S
-> > > > index 3161b9ccd2a5..b6276a3521d7 100644
-> > > > --- a/arch/sh/kernel/vmlinux.lds.S
-> > > > +++ b/arch/sh/kernel/vmlinux.lds.S
-> > > > @@ -4,6 +4,7 @@
-> > > >   * Written by Niibe Yutaka and Paul Mundt
-> > > >   */
-> > > >  OUTPUT_ARCH(sh)
-> > > > +#define RUNTIME_DISCARD_EXIT
-> > > >  #include <asm/thread_info.h>
-> > > >  #include <asm/cache.h>
-> > > >  #include <asm/vmlinux.lds.h>
-> > > >
-> > > >
-> > > > My guess is build environment is using ld < 2.36??
-> > > > and this is probably similar to:
-> > > > a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error =
-with GNU ld < 2.36")
-> > > > 4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
-> > > >
-> > > >
-> > > > Regards,
-> > > >
-> > > > --Tom
-> > > >
-> > > > >
-> > > > >
-> > > > > Build error logs:
-> > > > > `.exit.text' referenced in section `__bug_table' of crypto/algbos=
-s.o:
-> > > > > defined in discarded section `.exit.text' of crypto/algboss.o
-> > > > > `.exit.text' referenced in section `__bug_table' of
-> > > > > drivers/char/hw_random/core.o: defined in discarded section
-> > > > > `.exit.text' of drivers/char/hw_random/core.o
-> > > > > make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux]=
- Error 1
-> > >
-> > >
-> > > This is also occurring in latest upstream:
-> >
-> > Right !
-> > build/gcc-8-dreamcast_defconfig
-> > build/gcc-8-microdev_defconfig
-> >
-> > These build errors started from v6.2-rc2 on the mainline [1] & [2].
-> >
-> > >
-> > > =E2=9D=AF git describe HEAD
-> > > v6.2-rc5-13-g2475bf0250de
-> > >
-> > > =E2=9D=AF tuxmake --runtime podman --target-arch sh --toolchain gcc-8=
- --kconfig microdev_defconfig
-> > >
-> > > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:=
- defined in discarded section `.exit.text' of crypto/algboss.o
-> > > `.exit.text' referenced in section `__bug_table' of drivers/char/hw_r=
-andom/core.o: defined in discarded section `.exit.text' of drivers/char/hw_=
-random/core.o
-> > > make[2]: *** [/home2/tsaeger/linux/linux-upstream/scripts/Makefile.vm=
-linux:35: vmlinux] Error 1
-> > > make[2]: Target '__default' not remade because of errors.
-> > > make[1]: *** [/home2/tsaeger/linux/linux-upstream/Makefile:1264: vmli=
-nux] Error 2
-> > > make[1]: Target '__all' not remade because of errors.
-> > > make: *** [Makefile:242: __sub-make] Error 2
-> > > make: Target '__all' not remade because of errors.
-> > >
-> > >
-> > > FWIW, the above patch resolves this.
-> > Yes. Tested and confirmed it fixes the reported problem.
-> >
-> > > How many more architectures need something similar?
-> > Now I see it on sh with gcc-8 only on the mainline.
-> >
-> > OTOH,
-> > It was noticed on earlier stable-rc 5.4 for x86, i386, powerpc, sh and =
-s390.
-> >
-> > git_describe : v5.4.228-679-g79cbaf4448f3
-> > kernel_version: 5.4.230-rc1
-> >
-> > Regressions found on sh: [1] & [2] mainline and below
-> >     - build/gcc-8-dreamcast_defconfig
-> >     - build/gcc-8-microdev_defconfig
-> >
-> > Regressions found on i386: [3]
-> >     - build/gcc-8-i386_defconfig
-> >
-> > Regressions found on powerpc:  [4]
-> >     - build/gcc-8-mpc83xx_defconfig
-> >     - build/gcc-8-ppc64e_defconfig
-> >     - build/gcc-8-maple_defconfig
-> >     - build/gcc-8-ppc6xx_defconfig
-> >     - build/gcc-8-defconfig
-> >     - build/gcc-8-tqm8xx_defconfig
-> >     - build/gcc-8-cell_defconfig
-> >
-> > Regressions found on s390: [5]
-> >     - build/gcc-8-defconfig-fe40093d
-> >
-> > Regressions found on x86_64: [6]
-> >     - build/gcc-8-x86_64_defconfig
->
-> v5.4 needs:
-> 84d5f77fc2ee ("x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to generic DISC=
-ARDS")
->
-> which didn't hit Linus's tree until: v5.7-rc1~164^2~1
-> This explains why v5.4 blew-up and v5.10 didn't.
->
-> I'm testing the following for v5.4
->
-> 84d5f77fc2ee ("x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to generic DISC=
-ARDS")
-> This needed a little massaging to apply.
->
-> 99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv")
-> 4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
-> 07b050f9290e ("powerpc/vmlinux.lds: Don't discard .rela* for relocatable =
-builds")
-> a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error with G=
-NU ld < 2.36")
-> + the arch/sh patch https://lore.kernel.org/all/9166a8abdc0f979e50377e617=
-80a4bba1dfa2f52.1674518464.git.tom.saeger@oracle.com/
->
->
-> I'd be grateful if you could confirm - so I can send this full series to
-> Greg.
->
-> If you'd rather - I can send the patch-series now for testing?
 
-Please send your repo and branch. I will pick up and run tests on it.
+I'm actually going to walk my agreement back.
 
-- Naresh
+After one more review, the need for the proc/status entry is not to
+decide whether to dump SUD settings, but for use in deciding whether to
+set the SUSPEND_SYSCALL_DISPATCH option from patch 1/3.
+
+For SECCOMP, CRIU's `compel` does the following:
+
+1. ptrace attach / halt
+2. examine proc/status for seccomp usage
+3. if seccomp in use, set PTRACE_O_SUSPEND_SECCOMP
+4. proceed with further operations
+
+The same pattern would be used for syscall dispatch.
+
+Technically I think setting the flag unconditionally would be safe, but
+it would lead to unclear system state (i.e. did i actually suspend
+something? was the process actually using it?)
+
+To me it seems better to leave it explicit and keep the second commit.
+
+Thoughts?
+
+(cc: @avagin if you happen to have any input on this particular pattern)
+
+~Gregory
