@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A9C6796B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E172A6796B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234103AbjAXLcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S234122AbjAXLdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234101AbjAXLcp (ORCPT
+        with ESMTP id S234119AbjAXLd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:32:45 -0500
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCA13EC61
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:32:41 -0800 (PST)
-Received: by mail-ed1-x549.google.com with SMTP id y21-20020a056402359500b0049e171c4ad0so10411563edc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:32:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eUs+oxPX+Th3wCoMo6p6epBi5r7JS+DC4cGwD7gny+c=;
-        b=CqGd/97PcLQj91KKCP5sxd4iglhV1eOb7dm0qEy1kEmbfQ9dWO/BilGXTlraPVU/uo
-         8qVKcb+sPAZUz5xOgKIa8tqZcq9ak5jafw0trh0fnw2+7H5ymJnBuBw8kJfjeRVRG4VP
-         RiWvT1jniMcwmDlrK9v0dqfsVJOfnFcJB+PvBMXGMGisiwZzxRtzvJL+lkIIh76o5joG
-         cyWQhxAKNfEW8OSBUCiXWoOYRJ+k76EgWktoj1igjFT+++pLILH6yGzoIVZMHLcJIjCG
-         Vl57c4dYpI7JkJH/Sh2ILc8hmtPb+3gyWYt+tC54dYHroPPOyPo4CWmLj0hAQkYO8u/+
-         ST3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eUs+oxPX+Th3wCoMo6p6epBi5r7JS+DC4cGwD7gny+c=;
-        b=etBVYzDMCaSWKYo3VRWMXOlzTamqPr1hu7u5po0IdmY5fQsFBGfCzc12WYHAOAf6vI
-         SV3fgaqAMhPRm92Go6DHSvT0DlBNrJ957d3NXMgie8Ffc0UxVA+E5RYKzM2O0h5Qmwp6
-         sV57uy7mT8JvkMdRHh5dLi0ywv/WvAjLx2GozJ0pdnBvxxrzZSnHp4d2wbTYgq9lTRGy
-         0G5TJ8HypXVBrqOgQTGVOm0rtOeyuofUnkFrE6pvI4Z0lGIclT245tAoYEH515Le7UzR
-         yj0KXPN9WyyJtG+Lebmv4acGd/p4YgNZRZCEZglEgA8ugYRdHEvnk4oG48ROme1YE9uL
-         ZgZA==
-X-Gm-Message-State: AFqh2kqq5rwy5lEO5G0KuRVReWP/44z2efiTT2BezG77p/m6h14tqNaI
-        Ug2NXQ0owRx9EUn+y9ZjJpRl2MHer7M=
-X-Google-Smtp-Source: AMrXdXukPK/fp3o4cX+0H76GM//1rajVg16t0TEI+/mYOVFX441vBmDJO4sQq9Ijsu2A4ylpiGExyr8esNA=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:21dc:97d0:ed7:bbcd])
- (user=glider job=sendgmr) by 2002:a05:6402:d2:b0:48e:bad6:720c with SMTP id
- i18-20020a05640200d200b0048ebad6720cmr3152609edu.2.1674559959884; Tue, 24 Jan
- 2023 03:32:39 -0800 (PST)
-Date:   Tue, 24 Jan 2023 12:32:34 +0100
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230124113234.2070729-1-glider@google.com>
-Subject: [PATCH] btrfs: zlib: zero-initialize zlib workspace
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ebiggers@kernel.org,
-        syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Tue, 24 Jan 2023 06:33:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7377A9025;
+        Tue, 24 Jan 2023 03:33:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1037460F36;
+        Tue, 24 Jan 2023 11:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5EAC4339B;
+        Tue, 24 Jan 2023 11:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674560006;
+        bh=pqiKu2iFX77RIfIfiJ+5aMwkbCrMMguxTgKU4tKjUc0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jgG/iA+3jct6fX618SdC2isOsZjWZm850pXEIc4qvAxt/n0eIhCt6KTmRo3zzkL8o
+         hJkC9ifX5nG04CmUdkrMj8X1xdCdF9QBCGwpLig5drRUU0hEvDtyZZeHVNHUjPf6Ui
+         ibhw6WnPMN4ao6NtsT/Pf/bt39cm5j6kbF4T9ZIZZ12xPDOgfJwMv70aUfZ+eAmPav
+         chhJQw+fSLdYqvAmIxK7WfQBAv8yGvwjiGZ398QLL5DSxhhMfeQVeAglmzqCHSyIIx
+         1YhxJcQoS7U/O+Z7t0X7McA+2/AIYxmpvUnWfRHPu7tzCWyIuLzJHSzpzhdFVIa3KI
+         EvkegYMtxhCZA==
+Message-ID: <c15b377a-a07e-c43e-55f2-c0f6dd8cd75f@kernel.org>
+Date:   Tue, 24 Jan 2023 12:33:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V3 7/9] dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to
+Content-Language: en-US
+To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>,
+        michal.simek@xilinx.com, michal.simek@amd.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     git@amd.com, srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
+        manion05gk@gmail.com,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+References: <1674536682-25278-1-git-send-email-manikanta.guntupalli@amd.com>
+ <1674536682-25278-8-git-send-email-manikanta.guntupalli@amd.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1674536682-25278-8-git-send-email-manikanta.guntupalli@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,31 +62,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN reports uses of uninitialized memory in zlib's longest_match()
-called on memory originating from zlib_alloc_workspace().
-This issue is known by zlib maintainers and is claimed to be harmless,
-but to be on the safe side we'd better initialize the memory.
+On 24/01/2023 06:04, Manikanta Guntupalli wrote:
 
-Link: https://zlib.net/zlib_faq.html#faq36
-Reported-by: syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
- fs/btrfs/zlib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
-index 01a13de118320..da7bb9187b68a 100644
---- a/fs/btrfs/zlib.c
-+++ b/fs/btrfs/zlib.c
-@@ -63,7 +63,7 @@ struct list_head *zlib_alloc_workspace(unsigned int level)
- 
- 	workspacesize = max(zlib_deflate_workspacesize(MAX_WBITS, MAX_MEM_LEVEL),
- 			zlib_inflate_workspacesize());
--	workspace->strm.workspace = kvmalloc(workspacesize, GFP_KERNEL);
-+	workspace->strm.workspace = kvzalloc(workspacesize, GFP_KERNEL);
- 	workspace->level = level;
- 	workspace->buf = NULL;
- 	/*
--- 
-2.39.0.246.g2a6d74b583-goog
+You missed several entries, so this also will mean patch won't get tested.
+
+
+> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+> 
+> compatible
+
+Messed up subject and commit msg.
+
+> 
+> Added the xilinx I2C new version 'xlnx,axi-iic-2.1' string to compatible
+> Added clock-frequency as optional property.
+> 
+> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> Acked-by: Michal Simek <michal.simek@amd.com>
+> ---
+>  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml       | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> index 8d241a703d85..42488a67260c 100644
+> --- a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> @@ -14,7 +14,9 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    const: xlnx,xps-iic-2.00.a
+> +    enum:
+> +      - xlnx,xps-iic-2.00.a
+> +      - xlnx,axi-iic-2.1
+>  
+>    reg:
+>      maxItems: 1
+> @@ -36,6 +38,9 @@ required:
+>    - interrupts
+>    - clocks
+>  
+> +optional:
+> +  - clock-frequency
+
+Nope. Just test your bindings...
+
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+Best regards,
+Krzysztof
 
