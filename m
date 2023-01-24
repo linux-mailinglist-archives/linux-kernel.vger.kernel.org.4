@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF48E67954C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5206367954D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbjAXKeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S233819AbjAXKes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbjAXKeh (ORCPT
+        with ESMTP id S232654AbjAXKeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 Jan 2023 05:34:37 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A5140BC5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:27 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id j17so11097322wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:27 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F0940BEF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:28 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h12so9406931wrv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SgP0cw5fx/i+2eK9QIjVGPdzg1sK0wxXwC3QQeMgW+4=;
-        b=gYuWo5AV7I67iDn889BBqUGZq3cacMS4y2uWUsiSTm1YBoaqp+7ie0uZQOXE5yMTct
-         haSTlh6HKBd4ZxU5ytkotToybZnPBuLxcpkpIb+kWZVOkmXoGKwX65R3djcD0qiGyph6
-         hrKfZB/EKLbhFevt/VDakLTe4l7QOBV4ofUdTf1VYuyfbdmu8RXTMs2HLb9vX4XPEHR7
-         +rZf52FAFCTUIEX5lWLLu7Hh5LvRADnloJCdJlOsw47+81CTlX7l/G81uRrqvuAePh+G
-         GdNIKr9BJYU13oGTqN+XqUrvsqVzycyrGfP5WdZ19pRYe3fGVxW/x7bLqRuMFrNnpF3d
-         9d2g==
+        bh=m5KCrVUjHQ7CYQCved0mtIgwVFkff6FVL28Qru4rupM=;
+        b=rCHaNlocN7UnOx+q/fVQ5SEbuhKfeF9jie2UTKZPysV7MvyMx8qdsfYucf+FzLeGW+
+         XQow12ijzfN8tOGmmQCu9VK2DwoaT++sLWlnYM/taPHrMIrkHFHNPL/lB6BkLXHvpDpE
+         kwie4sPqo08mZV7x0zsnagzTmxsVD9nk6ul9IX24QZ374UeAada8VOTmjMV3AzopNYaw
+         bxndBkTMYMnJg5DlH8SXJ1am2cSbj5CSAW2DyLaIxNQ/Lrr19lDszsaonoOFmh3L5XtE
+         9YG/J5vCMoHu4JOLzIMc0PSi+P3MTvKmoQ8qc3kcbquqJRPNtkHWetgTLf4YUo6Ptj5q
+         Pf6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SgP0cw5fx/i+2eK9QIjVGPdzg1sK0wxXwC3QQeMgW+4=;
-        b=VWijvAIa/ksoqBw+mn0VkKcgTTBT2d8mZk9zCLVv5xLDqTDVV+Mh9aHa7evGE1S9eo
-         0crRAVtDd8Wv/0MODqt2FAuzsQn0xSCxNXevcAXgKHtuMxmR/UHSyoyaMV2GxvCrA956
-         B9OiUQlRvNMX/gsi9EFW6MTpedxSBqvbI58orETW33voYTQAd8vnPT0ctGqLdLFoXkaY
-         02FD3Ku6CQFp752qyLrd65naj9AxR5yLTmy7GKjfj3udBrRgFI7k2eFQD27RmyocLwpe
-         gJTWncc0oLEqD/9fIhhHPVNgL5Zo7wf/vTnrurGdjKIhPe4h/wIexDGRS4qhgQ3CexEj
-         XFWg==
-X-Gm-Message-State: AFqh2koxze2kvMRwQXM09e2Q/qaiaGCPoTa7/t9MGtRUfmCKY3uvkZXG
-        gOImNb+o9jlY5oVw1+lVx2051A==
-X-Google-Smtp-Source: AMrXdXvC5sKP/orS0sFdGP+jXhVFRAlaxxJEH33JUUod6+5y/LerkdNqkh7Ez4SoOsCCmaHh3E42Kg==
-X-Received: by 2002:a05:600c:3c92:b0:3d3:4007:9c88 with SMTP id bg18-20020a05600c3c9200b003d340079c88mr27615743wmb.18.1674556465674;
-        Tue, 24 Jan 2023 02:34:25 -0800 (PST)
+        bh=m5KCrVUjHQ7CYQCved0mtIgwVFkff6FVL28Qru4rupM=;
+        b=n7YDT1B5TLP+z3Fvmg1g689kgTWw/pwSPtAML+XsQIsfc9oG6ZtwqXKFXzSzRUy7zR
+         wMWss8xF2GKc/Y63t7i7pSt6VpjX5rTy9sPGnCsIGpW+g34nOt73ctQ8FKlsxSpDIEvr
+         /HJVSHltShYf5ktBW7WTB3nI8XHElqwZHoJt2zh7lYL+HnGBXQA+zecOS23ZHxeYOoZ2
+         oD2K3HHyn428eMNszwoFnks6njsVQn30LO4uca89ixf5COVSd6GuiL80ynPWzxrs4rVP
+         rbzEJXTD2f7/VdfVG9lcHySx2To5O0uMlRdrq3XtOxVdkZlRk+afBJat/zJ/MQ9N038w
+         BkUw==
+X-Gm-Message-State: AFqh2kpCeTUyB5nmQn4u4XgDg82MgFuPpKEqPGtTEb9nl6bJONlJGGMA
+        07mjtYYtfrEXkBHxsDQkwrZ41A==
+X-Google-Smtp-Source: AMrXdXu0RDV0SkAYheTBT/4bnxJuE8twYoMFEyzsJF7QeXPO+ys2zWHaXTXjFDK+IBzalzIZSdWVww==
+X-Received: by 2002:a5d:5383:0:b0:2bd:ca3c:344e with SMTP id d3-20020a5d5383000000b002bdca3c344emr22956013wrv.7.1674556466425;
+        Tue, 24 Jan 2023 02:34:26 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id q6-20020adfcd86000000b002bded7da2b8sm1551889wrj.102.2023.01.24.02.34.24
+        by smtp.gmail.com with ESMTPSA id q6-20020adfcd86000000b002bded7da2b8sm1551889wrj.102.2023.01.24.02.34.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 02:34:25 -0800 (PST)
+        Tue, 24 Jan 2023 02:34:26 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 24 Jan 2023 11:34:22 +0100
-Subject: [PATCH 01/14] arm64: dts: amlogic: meson-gx: fix SCPI clock dvfs
+Date:   Tue, 24 Jan 2023 11:34:23 +0100
+Subject: [PATCH 02/14] arm64: dts: amlogic: meson-axg: fix SCPI clock dvfs
  node name
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230124-b4-amlogic-bindings-fixups-v1-1-44351528957e@linaro.org>
+Message-Id: <20230124-b4-amlogic-bindings-fixups-v1-2-44351528957e@linaro.org>
 References: <20230124-b4-amlogic-bindings-fixups-v1-0-44351528957e@linaro.org>
 In-Reply-To: <20230124-b4-amlogic-bindings-fixups-v1-0-44351528957e@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -71,8 +71,7 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,14 +83,14 @@ scpi: clocks: 'clock-controller' does not match any of the regexes: '^clocks-[0-
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 2 +-
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-index a79a35e84281..11f3b3a4df97 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-@@ -250,7 +250,7 @@ scpi {
+diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
+index 1648e67afbb6..13f8d483c61a 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
+@@ -153,7 +153,7 @@ scpi {
  		scpi_clocks: clocks {
  			compatible = "arm,scpi-clocks";
  
