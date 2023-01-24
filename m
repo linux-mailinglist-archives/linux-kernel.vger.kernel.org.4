@@ -2,210 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA6F679841
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89814679847
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjAXMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S233969AbjAXMpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjAXMnP (ORCPT
+        with ESMTP id S233952AbjAXMpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:43:15 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD2918D;
-        Tue, 24 Jan 2023 04:43:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=227WHg8XMGQOt5KWOZSFB1DzK0nKdtSPwCgG4ajgWvs=; b=Nvz7q52sqs+Bbdxp8QJF6I0a8M
-        Hhs2Tq9vGJ49O1cZGfviIlb97ywW92QOBWOHADpjuyVF0KVnbMfJTZeW5I+UZrYv5IaHHQ2T0pwO3
-        LNj0inHaTg7UyDqGnYjq3iGJz2SJ8LP9yPrmrbq6GKToCPtfi6Dv/s0oEZlmrq7QjVgc=;
-Received: from p4ff1378e.dip0.t-ipconnect.de ([79.241.55.142] helo=Maecks.lan)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pKIdk-00218F-4b; Tue, 24 Jan 2023 13:43:04 +0100
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: page_pool: fix refcounting issues with fragmented allocation
-Date:   Tue, 24 Jan 2023 13:43:00 +0100
-Message-Id: <20230124124300.94886-1-nbd@nbd.name>
-X-Mailer: git-send-email 2.39.0
+        Tue, 24 Jan 2023 07:45:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205B73D928
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:44:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674564265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HlWOeuZubdR/IcleVktzfNZM3qINJhEfgeqWEooUufo=;
+        b=WHuZnKhHKyNPJJDInTwa5CXrfKqVgmoi22KaFjY2DHMYRvj+Pq48oV2ztwho7YMZZs/KbP
+        EcPyTjwjDqHi6eMQMStgv7YNu8/qkBV4lev/vYjMFGzKjPIeoLELcACI4cx4yA5vBxKte1
+        Go0Zgde+yb4XhJhPEI6+InDH6FRq4HY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-648-X5hj1azdOrCJ9SAlbBl6Zg-1; Tue, 24 Jan 2023 07:44:24 -0500
+X-MC-Unique: X5hj1azdOrCJ9SAlbBl6Zg-1
+Received: by mail-wm1-f70.google.com with SMTP id r15-20020a05600c35cf00b003d9a14517b2so11144096wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:44:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HlWOeuZubdR/IcleVktzfNZM3qINJhEfgeqWEooUufo=;
+        b=ZwaQ4Su6S85zgZEviz6q//BAgfH0ElnudgwybXZJpSaKmOmaVJm9qELxELZaEdDAmX
+         pEDOd+U9jNh4uN3vlLaWoC3w9wgB+qALFoVIJjOFKE2IN+x2YGMAyoF+sjfhYSTZPUJI
+         sqoNqIIMVZXE8914xG/nMW9nGyeyizfX7ooycjPU3yHtR/vZ3v93wX+eaekITEYUgo5M
+         PYG6ENRihVnIQrer5Pd1Y+3ScZ8uqwEkRHXKrgzcJfs1sv07zccXLKJ/9n5m1oMw5znw
+         OW3+OmJqGboIZTMEHWr+X5HlYvarEil0IvRorBgx1W4lqW82xYKF6hg835pVKisX2HhJ
+         sqiw==
+X-Gm-Message-State: AFqh2kpwAgBW6d55P4o6vOqxQW20Ghk51n4GqwlzxQyfG50xzjLpMoV1
+        3q+jYBaL/l+faPcXtjSYg9kxBR5JbPrwQW80d+B+vdFVDExiQqZgONgZ0o+l2Wnnx4UQfJ2OrfC
+        mEIEZyqXuvbrrG8VFWR2/p3zu
+X-Received: by 2002:a05:600c:89a:b0:3cf:6e78:e2ca with SMTP id l26-20020a05600c089a00b003cf6e78e2camr35484881wmp.5.1674564263014;
+        Tue, 24 Jan 2023 04:44:23 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvpaVb+KoSyYZ6Y+8AIxJte3JAF9rgdFAtF5kPBqPK5CZV0UkXliZS3CFsvIUsXKdIwnvdMEw==
+X-Received: by 2002:a05:600c:89a:b0:3cf:6e78:e2ca with SMTP id l26-20020a05600c089a00b003cf6e78e2camr35484856wmp.5.1674564262663;
+        Tue, 24 Jan 2023 04:44:22 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id he7-20020a05600c540700b003d9fb04f658sm13084678wmb.4.2023.01.24.04.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 04:44:22 -0800 (PST)
+Message-ID: <02063032-61e7-e1e5-cd51-a50337405159@redhat.com>
+Date:   Tue, 24 Jan 2023 13:44:21 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230123173007.325544-1-dhowells@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v8 00/10] iov_iter: Improve page extraction (pin or just
+ list)
+In-Reply-To: <20230123173007.325544-1-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While testing fragmented page_pool allocation in the mt76 driver, I was able
-to reliably trigger page refcount underflow issues, which did not occur with
-full-page page_pool allocation.
-It appears to me, that handling refcounting in two separate counters
-(page->pp_frag_count and page refcount) is racy when page refcount gets
-incremented by code dealing with skb fragments directly, and
-page_pool_return_skb_page is called multiple times for the same fragment.
+On 23.01.23 18:29, David Howells wrote:
+> Hi Al, Christoph,
+> 
+> Here are patches to provide support for extracting pages from an iov_iter
+> and to use this in the extraction functions in the block layer bio code.
+> 
+> The patches make the following changes:
+> 
+>   (1) Add a function, iov_iter_extract_pages() to replace
+>       iov_iter_get_pages*() that gets refs, pins or just lists the pages as
+>       appropriate to the iterator type.
+> 
+>       Add a function, iov_iter_extract_mode() that will indicate from the
+>       iterator type how the cleanup is to be performed, returning FOLL_PIN
+>       or 0.
+> 
+>   (2) Add a function, folio_put_unpin(), and a wrapper, page_put_unpin(),
+>       that take a page and the return from iov_iter_extract_mode() and do
+>       the right thing to clean up the page.
+> 
+>   (3) Make the bio struct carry a pair of flags to indicate the cleanup
+>       mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (equivalent to
+>       FOLL_GET) and BIO_PAGE_PINNED (equivalent to BIO_PAGE_PINNED) is
+>       added.
+> 
+>   (4) Add a function, bio_release_page(), to release a page appropriately to
+>       the cleanup mode indicated by the BIO_PAGE_* flags.
+> 
+>   (5) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
+>       pages appropriately and clean them up later.
+> 
+>   (6) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
+> 
+>   (7) Renumber FOLL_PIN and FOLL_GET down so that they're at bits 0 and 1
+>       and coincident with BIO_PAGE_PINNED and BIO_PAGE_REFFED.  The compiler
+>       can then optimise on that.  Also, it's probably going to be necessary
+>       to embed these in the page pointer in sk_buff fragments.  This patch
+>       can go independently through the mm tree.
 
-Dropping page->pp_frag_count and relying entirely on the page refcount makes
-these underflow issues and crashes go away.
+^ I feel like some of that information might be stale now that you're 
+only using FOLL_PIN.
 
-Cc: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- include/linux/mm_types.h | 17 +++++------------
- include/net/page_pool.h  | 19 ++++---------------
- net/core/page_pool.c     | 12 ++++--------
- 3 files changed, 13 insertions(+), 35 deletions(-)
+> 
+> I've pushed the patches here also:
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 9757067c3053..96ec3b19a86d 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -125,18 +125,11 @@ struct page {
- 			struct page_pool *pp;
- 			unsigned long _pp_mapping_pad;
- 			unsigned long dma_addr;
--			union {
--				/**
--				 * dma_addr_upper: might require a 64-bit
--				 * value on 32-bit architectures.
--				 */
--				unsigned long dma_addr_upper;
--				/**
--				 * For frag page support, not supported in
--				 * 32-bit architectures with 64-bit DMA.
--				 */
--				atomic_long_t pp_frag_count;
--			};
-+			/**
-+			 * dma_addr_upper: might require a 64-bit
-+			 * value on 32-bit architectures.
-+			 */
-+			unsigned long dma_addr_upper;
- 		};
- 		struct {	/* Tail pages of compound page */
- 			unsigned long compound_head;	/* Bit zero is set */
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 813c93499f20..28e1fdbdcd53 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -279,14 +279,14 @@ void page_pool_put_defragged_page(struct page_pool *pool, struct page *page,
- 
- static inline void page_pool_fragment_page(struct page *page, long nr)
- {
--	atomic_long_set(&page->pp_frag_count, nr);
-+	page_ref_add(page, nr);
- }
- 
- static inline long page_pool_defrag_page(struct page *page, long nr)
- {
- 	long ret;
- 
--	/* If nr == pp_frag_count then we have cleared all remaining
-+	/* If nr == page_ref_count then we have cleared all remaining
- 	 * references to the page. No need to actually overwrite it, instead
- 	 * we can leave this to be overwritten by the calling function.
- 	 *
-@@ -295,22 +295,14 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
- 	 * especially when dealing with a page that may be partitioned
- 	 * into only 2 or 3 pieces.
- 	 */
--	if (atomic_long_read(&page->pp_frag_count) == nr)
-+	if (page_ref_count(page) == nr)
- 		return 0;
- 
--	ret = atomic_long_sub_return(nr, &page->pp_frag_count);
-+	ret = page_ref_sub_return(page, nr);
- 	WARN_ON(ret < 0);
- 	return ret;
- }
- 
--static inline bool page_pool_is_last_frag(struct page_pool *pool,
--					  struct page *page)
--{
--	/* If fragments aren't enabled or count is 0 we were the last user */
--	return !(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
--	       (page_pool_defrag_page(page, 1) == 0);
--}
--
- static inline void page_pool_put_page(struct page_pool *pool,
- 				      struct page *page,
- 				      unsigned int dma_sync_size,
-@@ -320,9 +312,6 @@ static inline void page_pool_put_page(struct page_pool *pool,
- 	 * allow registering MEM_TYPE_PAGE_POOL, but shield linker.
- 	 */
- #ifdef CONFIG_PAGE_POOL
--	if (!page_pool_is_last_frag(pool, page))
--		return;
--
- 	page_pool_put_defragged_page(pool, page, dma_sync_size, allow_direct);
- #endif
- }
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 9b203d8660e4..0defcadae225 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -25,7 +25,7 @@
- #define DEFER_TIME (msecs_to_jiffies(1000))
- #define DEFER_WARN_INTERVAL (60 * HZ)
- 
--#define BIAS_MAX	LONG_MAX
-+#define BIAS_MAX(pool)	(PAGE_SIZE << ((pool)->p.order))
- 
- #ifdef CONFIG_PAGE_POOL_STATS
- /* alloc_stat_inc is intended to be used in softirq context */
-@@ -619,10 +619,6 @@ void page_pool_put_page_bulk(struct page_pool *pool, void **data,
- 	for (i = 0; i < count; i++) {
- 		struct page *page = virt_to_head_page(data[i]);
- 
--		/* It is not the last user for the page frag case */
--		if (!page_pool_is_last_frag(pool, page))
--			continue;
--
- 		page = __page_pool_put_page(pool, page, -1, false);
- 		/* Approved for bulk recycling in ptr_ring cache */
- 		if (page)
-@@ -659,7 +655,7 @@ EXPORT_SYMBOL(page_pool_put_page_bulk);
- static struct page *page_pool_drain_frag(struct page_pool *pool,
- 					 struct page *page)
- {
--	long drain_count = BIAS_MAX - pool->frag_users;
-+	long drain_count = BIAS_MAX(pool) - pool->frag_users;
- 
- 	/* Some user is still using the page frag */
- 	if (likely(page_pool_defrag_page(page, drain_count)))
-@@ -678,7 +674,7 @@ static struct page *page_pool_drain_frag(struct page_pool *pool,
- 
- static void page_pool_free_frag(struct page_pool *pool)
- {
--	long drain_count = BIAS_MAX - pool->frag_users;
-+	long drain_count = BIAS_MAX(pool) - pool->frag_users;
- 	struct page *page = pool->frag_page;
- 
- 	pool->frag_page = NULL;
-@@ -724,7 +720,7 @@ struct page *page_pool_alloc_frag(struct page_pool *pool,
- 		pool->frag_users = 1;
- 		*offset = 0;
- 		pool->frag_offset = size;
--		page_pool_fragment_page(page, BIAS_MAX);
-+		page_pool_fragment_page(page, BIAS_MAX(pool));
- 		return page;
- 	}
- 
+I gave this a quick test and it indeed fixes the last remaining test 
+case of my O_DIRECT+fork tests [1] that was still failing on upstream 
+(test3).
+
+
+Once landed upstream, if we feel confident enough (I tend to), we could 
+adjust the open() man page to state that O_DIRECT can now be run 
+concurrently with fork(). Especially, the following documentation might 
+be adjusted:
+
+"O_DIRECT  I/Os  should  never  be run concurrently with the fork(2) 
+system call, if the memory buffer is a private mapping (i.e., any 
+mapping created with the mmap(2) MAP_PRIVATE flag; this includes  memory 
+  allocated  on  the  heap  and statically allocated buffers).  Any such 
+I/Os, whether submitted via an asynchronous I/O interface or from 
+another thread in the  process, should  be completed before fork(2) is 
+called.  Failure to do so can result in data corruption and undefined 
+behavior in parent and child processes."
+
+
+This series does not yet fix vmsplice()+hugetlb ... simply because your 
+series does not mess with the vmsplice() implementation I assume ;) Once 
+vmsplice() uses FOLL_PIN, all cow tests should be passing as well. Easy 
+to test:
+
+$ cd tools/testing/selftests/vm/
+$ echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+$ echo 2 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+$ ./cow
+...
+Bail out! 8 out of 190 tests failed
+# Totals: pass:181 fail:8 xfail:0 xpass:0 skip:1 error:0
+
+
+[1] https://gitlab.com/davidhildenbrand/o_direct_fork_tests
+
 -- 
-2.39.0
+Thanks,
+
+David / dhildenb
 
