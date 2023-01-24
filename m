@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DD8678D14
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4911678D1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjAXBC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S231953AbjAXBEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbjAXBCz (ORCPT
+        with ESMTP id S229930AbjAXBEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:02:55 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99252303C8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:02:54 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id q130so6439528iod.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QzXjtHokknNOIo6i/tDT9iY3dlftA7c+qD6KDgI/3xM=;
-        b=Ya6DyH/c2FTdfl3jQ1YJUj5Gj+vPmDibNyFtLMocR61+n4mprvIqqG0ILITHWaCZTg
-         2ITPjo7yI3ZJQbIBmiY+Chnr1F2iODXnGQDW0aSbNJrLTg9N4bjZI/2Ed0P5JNVIobYF
-         nP+fAv8scO5NYmXkEZ5CsCEiETs5Ir+2Y5oG8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzXjtHokknNOIo6i/tDT9iY3dlftA7c+qD6KDgI/3xM=;
-        b=vS7Q/6ghH5eIqu6wWH5DIkit/TIOi9kQqazsbXcB67v3AV8tNOouG27sMqJOlcV8DM
-         3vjW+qy3V0telXFyq1/e/Vk0jr5Xalb6QN7L1X76n3twGwi4XWcCvJ4kV7Z+7W+9gp5K
-         dUfGNqh7bt8cm8zWdWeys60ZgmCjhvbsR4h7wDPoPzt6j1JYTWIyPZ6NetjFVgrAuXdQ
-         R4C5swed45QxJRqoA5nAutnXY7TsX8PEPIG7XUpMccMUhbmnMMi/9WlCndHtkYm9Mo8W
-         WzstpUWrXpzG8gBistXDnKTp8CRt36tQsxj8OQ5GDXFfmvGk0WWyRRI/f28xzzSTvAHn
-         A+YA==
-X-Gm-Message-State: AFqh2kof4k7prWIc7p7du2Yt21DXCi93oKPsiSLmgHFEjfTFrY05Fb1w
-        WqK7+wGmHxgjmW3FryjKykfOjA==
-X-Google-Smtp-Source: AMrXdXuT7QTYaVhT7eW2ioWfw+txTXicI4WfnHl2vrWE842osIoJlfttp/JuUbxsMP+NGaq8VNAW9g==
-X-Received: by 2002:a5d:875a:0:b0:707:d0c0:1bd6 with SMTP id k26-20020a5d875a000000b00707d0c01bd6mr348453iol.1.1674522172688;
-        Mon, 23 Jan 2023 17:02:52 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a15-20020a02998f000000b003a53692d6dbsm216336jal.124.2023.01.23.17.02.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 17:02:52 -0800 (PST)
-Message-ID: <d2902d2b-67db-9670-fe6a-7e4af5f86ad3@linuxfoundation.org>
-Date:   Mon, 23 Jan 2023 18:02:51 -0700
+        Mon, 23 Jan 2023 20:04:37 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F481303C8;
+        Mon, 23 Jan 2023 17:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=YLRZgPgm6zFTbHxaOInUyu4eJC7xlh91Tt1JwAy9PRk=; b=nlVxWqq0PB30WEGxiirjxXsV1T
+        m+t9c5zpijwC9nE8FbSu1H2x/XYasgNgzfYSy6u/XoOgXVkf6S531YbAwX5b6WmljqvcV1E7QLsfj
+        6yiozCFkBHz9xgrmg/T+Vzhq2w50IKLG/ZifSu4dQ4nvHOUQ6DsLvDmNkiB7wihOdO3o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pK7jZ-002xyX-QM; Tue, 24 Jan 2023 02:04:21 +0100
+Date:   Tue, 24 Jan 2023 02:04:21 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andrey Konovalov <andrey.konovalov@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com,
+        peppe.cavallaro@st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/2] net: stmmac: add DT parameter to keep RX_CLK running
+ in LPI state
+Message-ID: <Y88uleBK5zROcpgc@lunn.ch>
+References: <20230123133747.18896-1-andrey.konovalov@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6.1 000/188] 6.1.8-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230123094931.568794202@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230123094931.568794202@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123133747.18896-1-andrey.konovalov@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 02:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.8 release.
-> There are 188 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Jan 23, 2023 at 04:37:45PM +0300, Andrey Konovalov wrote:
+> On my qcs404 based board the ethernet MAC has issues with handling
+> Rx LPI exit / Rx LPI entry interrupts.
 > 
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
+> When in LPI mode the "refresh transmission" is received, the driver may
+> see both "Rx LPI exit", and "Rx LPI entry" bits set in the single read from
+> GMAC4_LPI_CTRL_STATUS register (vs "Rx LPI exit" first, and "Rx LPI entry"
+> then). In this case an interrupt storm happens: the LPI interrupt is
+> triggered every few microseconds - with all the status bits in the
+> GMAC4_LPI_CTRL_STATUS register being read as zeros. This interrupt storm
+> continues until a normal non-zero status is read from GMAC4_LPI_CTRL_STATUS
+> register (single "Rx LPI exit", or "Tx LPI exit").
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.8-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> The reason seems to be in the hardware not being able to properly clear
+> the "Rx LPI exit" interrupt if GMAC4_LPI_CTRL_STATUS register is read
+> after Rx LPI mode is entered again.
 > 
-> thanks,
+> The current driver unconditionally sets the "Clock-stop enable" bit
+> (bit 10 in PHY's PCS Control 1 register) when calling phy_init_eee().
+> Not setting this bit - so that the PHY continues to provide RX_CLK
+> to the ethernet controller during Rx LPI state - prevents the LPI
+> interrupt storm.
 > 
-> greg k-h
-> 
+> This patch set adds a new parameter to the stmmac DT:
+> snps,rx-clk-runs-in-lpi.
+> If this parameter is present in the device tree, the driver configures
+> the PHY not to stop RX_CLK after entering Rx LPI state.
 
-Compiled and booted on my test system. No dmesg regressions.
+Do we really need yet another device tree parameter? Could
+dwmac-qcom-ethqos.c just do this unconditionally? Is the interrupt
+controller part of the licensed IP, or is it from QCOM? If it is part
+of the licensed IP, it is probably broken for other devices as well,
+so maybe it should be a quirk for all devices of a particular version
+of the IP?
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+   Andrew
