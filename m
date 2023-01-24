@@ -2,149 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E178679FE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738D0679FED
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbjAXRPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S234750AbjAXRQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbjAXRP1 (ORCPT
+        with ESMTP id S234746AbjAXRQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:15:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B367298E2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:15:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAB1461300
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 17:15:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8C1C433D2;
-        Tue, 24 Jan 2023 17:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674580524;
-        bh=wKvlYv5MLbM587ZQe0pRKBkwTxNoL4bwXuRQfuT4NHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qj3luYUncno5jJfr6SLoF+rwSBiURG6vl3iGXneH6Ok87J4XZRkSxK4vnshRFb7e6
-         +Bm4a7DddIRBDhYEsR6RAb+0mYODt+MJTOlKIhAH/GHlpoJ1JMGYh228NApZi2yxJw
-         EXiPj1hr0jQ4yLgv9A8TnCOpmfv02cQdQ2S7mouJnG3Q1R2Jv4+jA7bsSnLVxEDuZn
-         tAE9M4jarmrhU+QMxBJ7OxeXA1iyuQ8RWu4K97UsFN1KL0qBB1/lCnvfDsBB/DQdxn
-         MtPwH8fmSQmVtsJWSGOMmXEgM1wwySnamv/dUXWTbOtTr45AzJZymGoQgf8C49zV5v
-         nwpKQcdW6rFrg==
-Date:   Tue, 24 Jan 2023 17:15:18 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH -next v2 2/3] cacheinfo: Make default
- acpi_get_cache_info() return an error
-Message-ID: <Y9ASJiKjIhpMk/8n@spud>
-References: <20230124154053.355376-1-pierre.gondois@arm.com>
- <20230124154053.355376-3-pierre.gondois@arm.com>
+        Tue, 24 Jan 2023 12:16:08 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96341298E2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:16:06 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id k14so277682ybt.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SB09lLGRGIMFrYYKfJZPIdG/5osP14MZrW2FUGghSBk=;
+        b=k/mBrYMkl7HW/QMTyhTOwhYfTPv20DbvoMy7/jnPRMNNTFDIfIuPWtckad7bfhUEAa
+         mvNAmEZ0E//z0z5QVr0ea1izXcOY609jgQtDn3iD5Vbte42TKhP4A+tl+Ofcl6kX90pm
+         HHzxU4hw+Z/GjMJzaHzwgmw4c/X2s3aIDG9es8kDGn7+GM4hCj69wt5bEzvgMUZTGwBw
+         8Yg1ZsMWcvLLW5KdhkvjT/rBfEyQkFrv8kUfT4ysBv/tZSKGLDz2Jz3rMDVFNZUvH7kc
+         2ERsLF0RBKO1wXF5by0OpPbSUlB1PZzrLIxE9RvtTUc57QGT94kL6a194LfKj8BCmvgL
+         x7bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SB09lLGRGIMFrYYKfJZPIdG/5osP14MZrW2FUGghSBk=;
+        b=yHIHNI85H7rgjS9w3tW7UPMV8EnVDK3QurebYnuBs8p81QBPa7swwRyiube5kypOoz
+         yHCp9dOZbB9h625zDu1xUGrl1wCK+f9khgheH26XA0hLqA1Nr9MlIZv6tmtSlvvBjHmQ
+         Mc7nV1nuj+axSC9xDqxoVrgc/vYtXXhtLyfxfJOM/N09DBmLW4/QchVRP3HZavtEJPtQ
+         0NrYiN30tJMUml/jsjOSObhXVNUdN3eeTPPUYvWE7LKid7sXdkhFOLv3azZgEFmautlN
+         zjIYxiF/Jx7TMjoSjg3S3a8lizYM7WLtu4KUxe1+glRvT9Q9J6ORjAGrJpE+zZmKqvbH
+         4wQQ==
+X-Gm-Message-State: AFqh2ko3JGcE9VU4534pxha3V+RU87FId2Agg6NAKRxOSO1tqlW3/Vvq
+        hKTu1yy798FLOCguXYNscumGpp2OIMuoOplPhkCMlw==
+X-Google-Smtp-Source: AMrXdXtbY1NTeRdg02HGeRz8yvSmmdeILyVfa0WUl64oywG5rltAxavdZBHDfYp1xGmawbNnPXsSQWe6WQo+leez2kU=
+X-Received: by 2002:a25:8002:0:b0:723:96ad:6761 with SMTP id
+ m2-20020a258002000000b0072396ad6761mr3476678ybk.326.1674580565671; Tue, 24
+ Jan 2023 09:16:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SHrM4lZTmcwll7Yv"
-Content-Disposition: inline
-In-Reply-To: <20230124154053.355376-3-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230119212510.3938454-1-bgardon@google.com> <20230119212510.3938454-3-bgardon@google.com>
+ <Y8nKerX9tDRHkFq+@google.com> <CANgfPd8B_0w39d7V+c4GnUxdqrc8qN78r8Pq0Con3Mx9WO0hkQ@mail.gmail.com>
+ <Y8qj1QS1VadgaX7A@google.com> <CAOHnOrzKBh2Cq7ZQece+6f6P5wS6gZ1R2vjEQ5=QLTy7BmUvFQ@mail.gmail.com>
+ <CANgfPd_B0q6uU1Be7A-QOj5_YoWi8z9g9LO63mc+=136hO5K4Q@mail.gmail.com>
+ <Y87UzmpCg9hXO2NI@google.com> <Y8//SKBTT2h2m8Cz@google.com>
+In-Reply-To: <Y8//SKBTT2h2m8Cz@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 24 Jan 2023 09:15:39 -0800
+Message-ID: <CALzav=e0hiTK5xX+9vrpf_unK274NYxKGUVQ43tSpO_ad0MSPQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: KVM: Add page splitting test
+To:     Ricardo Koller <ricarkol@google.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 24, 2023 at 7:54 AM Ricardo Koller <ricarkol@google.com> wrote:
+>
+> On Mon, Jan 23, 2023 at 10:41:18AM -0800, David Matlack wrote:
+> >
+> > Ricardo, if you're interested in adding page size stats to KVM/ARM ahead
+> > of the Common MMU, e.g. to test eager page splitting, let me know.
+>
+> Sure, I can do that. Sounds pretty useful too.
+>
+> > I
+> > want to make sure we align on the userspace-visible stat names to avoid
+> > churn down the road. Specifically, do we want to expose neutral names
+> > like pages_{pte,pmd,pud} or expand the KVM/x86 list to include all of
+> > ARM's possible pages sizes like pages_{4k,16k,64k,...} (or both)?
+>
+> I would prefer the latter, mainly to match the x86 names:
+>
+>         +       stats->pages_4k = vm_get_stat(vm, "pages_4k");
+>         +       stats->pages_2m = vm_get_stat(vm, "pages_2m");
+>         +       stats->pages_1g = vm_get_stat(vm, "pages_1g");
+>         (from this patch)
 
---SHrM4lZTmcwll7Yv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We can always add pages_{pte,pmd,pud} to x86 as aliases of the
+existing stats. The series I recently sent out to allow custom names
+for stats [1] would make adding the aliases trivial actually.
 
-On Tue, Jan 24, 2023 at 04:40:47PM +0100, Pierre Gondois wrote:
-> commit bd500361a937 ("ACPI: PPTT: Update acpi_find_last_cache_level()
-> to acpi_get_cache_info()")
-> updates the prototype of acpi_get_cache_info(). The cache 'levels'
-> is update through a pointer and not the return value of the function.
->=20
-> If CONFIG_ACPI_PPTT is not defined, acpi_get_cache_info() doesn't
-> update its *levels and *split_levels parameters and returns 0.
-> This can lead to a faulty behaviour.
->=20
-> Make acpi_get_cache_info() return an error code if CONFIG_ACPI_PPTT
-> is not defined.
-> Also,
->=20
-> In init_cache_level(), if no PPTT is present or CONFIG_ACPI_PPTT is
-> not defined, instead of aborting if acpi_get_cache_info() returns an
-> error code, just continue. This allows to try fetching the cache
-> information from clidr_el1.
+[1] https://lore.kernel.org/kvm/20230118175300.790835-1-dmatlack@google.com/
 
-Again, dunno jack about clidr_el1. But the change here seems sane once
-more? I was going to suggest throwing away ret entirely and just
-initialising fw_level to zero, since the function inside
-acpi_get_cache_level() that actually modifies it comes after the last
-error return anyway - but that probably would just leave you exposed to
-a change in the core code that doesn't also update the callsites.
-Plus this looks more deliberate IMO. On that basis, LGTM.
+>
+> but pages_{pte,pmd,pud} would certainly make this test simpler
+> as it would handle all guest page sizes:
+>
+>         +       stats->pages_pte = vm_get_stat(vm, "pages_pte");
+>
 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  arch/arm64/kernel/cacheinfo.c | 2 +-
->  include/linux/cacheinfo.h     | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
-> index d3fe9542c370..bf348b8d321f 100644
-> --- a/arch/arm64/kernel/cacheinfo.c
-> +++ b/arch/arm64/kernel/cacheinfo.c
-> @@ -59,7 +59,7 @@ int init_cache_level(unsigned int cpu)
->  	} else {
->  		ret =3D acpi_get_cache_info(cpu, &fw_level, NULL);
->  		if (ret < 0)
-> -			return ret;
-> +			fw_level =3D 0;
->  	}
-> =20
->  	if (fw_level < 0)
-> diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
-> index dfef57077cd0..908e19d17f49 100644
-> --- a/include/linux/cacheinfo.h
-> +++ b/include/linux/cacheinfo.h
-> @@ -100,7 +100,7 @@ static inline
->  int acpi_get_cache_info(unsigned int cpu,
->  			unsigned int *levels, unsigned int *split_levels)
->  {
-> -	return 0;
-> +	return -ENOENT;
->  }
->  #else
->  int acpi_get_cache_info(unsigned int cpu,
-> --=20
-> 2.25.1
->=20
+Yeah pages_{pte,pmd,pud} would certainly make the test simpler.
 
---SHrM4lZTmcwll7Yv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9ASJgAKCRB4tDGHoIJi
-0kCAAPwM3UDd3wrW0Ki90PSY0KOZP5nvSwQFHugxZ9qRKiq+rgEA8Ps9R0lLiliq
-mzMeShNEiuc5jE9G3Fkdi+l/pLHCAgA=
-=42pH
------END PGP SIGNATURE-----
-
---SHrM4lZTmcwll7Yv--
+At this point I'm leaning toward pages_{pte,pmd,pud} to unblock this
+testing in an architecture neutral way, and we can add
+pages_{4k,16k,...} to ARM in the future using aliases.
