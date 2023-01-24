@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDD4678E24
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831A1678E36
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjAXCSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S229848AbjAXC1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjAXCSQ (ORCPT
+        with ESMTP id S229603AbjAXC1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:18:16 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 31033C66A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 18:18:14 -0800 (PST)
-Received: (qmail 148042 invoked by uid 1000); 23 Jan 2023 21:18:14 -0500
-Date:   Mon, 23 Jan 2023 21:18:14 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y88/5ib7zYl67mcE@rowland.harvard.edu>
-References: <Y8hclxuhpGm+krkz@rowland.harvard.edu>
- <20230119000214.GM2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8q6v3BZ8dlyoTxo@rowland.harvard.edu>
- <20230120175804.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8rff3HJ2o9wUyGT@rowland.harvard.edu>
- <20230120192032.GR2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8r7SBdfuZX/y1cd@rowland.harvard.edu>
- <20230120212037.GW2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y82dWEW4RwclDTGM@rowland.harvard.edu>
- <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 23 Jan 2023 21:27:50 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A72A7298;
+        Mon, 23 Jan 2023 18:27:49 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 7E07682EF0;
+        Tue, 24 Jan 2023 02:27:42 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674527268;
+        bh=lfJPIxz6SznwA800g3Y9BeouGUR6bkc7dvZhqtUjmII=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EAnyk8BQaiFAL/LUCIygK5N/vVI+cKscritKaCGXcIYPcl3l+ykpJeILaANYlIfQp
+         W+2avU1oitGYw37+2u13JOuxFF4i4yKZqg55p8Pc91Po1cjCgRbpYb6VRBIjh3fV7g
+         evNAijLWDotdDU96WF58MH/Y82WQmHRKs/jL6pqR95ET/qyE5vp0i0goGOZzXYlVyU
+         FTN54xIEIEbxYeyPsQTJETG7kOcAt1X58ymgPXwFj6PhTmhsleg96kxB67oazhezPL
+         EqpY9QExvPhMiEGCN9gr2NI60Mvwp5MuUg9j+kwGh4s01VtHxvauC/XMhUexqkESCF
+         FGdVrdC/qliUA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>, x86 Mailing List <x86@kernel.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xin Li <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v2 0/2] selftests/x86: sysret_rip update for FRED system
+Date:   Tue, 24 Jan 2023 09:27:27 +0700
+Message-Id: <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com> <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com> <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 12:16:59PM -0800, Paul E. McKenney wrote:
-> One twist is that the design of both SRCU and RCU are stronger than LKMM
-> requires, as illustrated by the litmus test at the end of this email.
-> 
-> I believe that your proof outline above also covers this case, but I
-> figure that I should ask.
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-This test is full of typos, and I guess that one of them seriously 
-affects the meaning, because as far as I can tell the corrected test is 
-allowed.
+This is an RFC patchset v2.
 
-> C C-srcu-observed-2
-> 
-> (*
->  * Result: Sometimes
->  *
->  * But please note that the Linux-kernel SRCU implementation is designed
->  * to provide Never.
->  *)
-> 
-> {}
-> 
-> P0(int *x, int *y, int *z, struct srcu_struct *s)
-> {
-> 	int r1;
-> 	int r2;
+Xin Li reported sysret_rip test fails at:
 
-r2 is never used.
+        assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+               ctx->uc_mcontext.gregs[REG_R11]);
 
-> 
-> 	r1 = srcu_read_lock(s);
-> 	WRITE_ONCE(*y, 1);
-> 	WRITE_ONCE(*x, 1);
-> 	srcu_read_unlock(s, r3);
+in a FRED system. Handle the FRED system scenario too. There are two
+patches in this series. Comments welcome...
 
-There is no r3; this should be r1.
+Note: This patchset is only tested for 'syscall' sets %rcx=%rip and
+%r11=%rflags case. I don't have a FRED system to test it.
 
-> }
-> 
-> P1(int *x, int *y, int *z, struct srcu_struct *s)
-> {
-> 	int r1;
-> 	int r2;
+How to test this:
 
-r2 is never used.
+  $ make -C tools/testing/selftests/x86
+  $ tools/testing/selftests/x86/sysret_rip_64
 
-> 
-> 	r1 = READ_ONCE(*y);
-> 	synchronize_srcu(s);
-> 	WRITE_ONCE(*z, 1);
-> }
-> 
-> P2(int *x, int *y, int *z, struct srcu_struct *s)
-> {
-> 	int r1;
+Link: https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
 
-r1 is never used; it should be r2.
+## Changelog v2:
 
-> 
-> 	WRITE_ONCE(*z, 2);
-> 	smp_mb();
-> 	r2 = READ_ONCE(*x);
-> }
-> 
-> exists (1:r1=1 /\ 1:r2=0 /\ z=1)
+   - Use "+r"(rsp) as the right way to avoid redzone problems
+     per Andrew's comment (hpa).
+     (Ref: https://lore.kernel.org/lkml/8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com )
 
-1:r2 is never used.  Apparently this should 2:r2.
+---
 
-Given those changes, the test can run as follows: P2 runs to completion, 
-writing z=2 and reading x=0.  Then P0 runs to completion, writing y=1 
-and x=1.  Then P1 runs to completion, reading y=1 and overwriting z=1.
+Ammar Faizi (2):
+  selftests/x86: sysret_rip: Handle syscall in a FRED system
+  selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
 
-Alan
+ tools/testing/selftests/x86/sysret_rip.c | 105 ++++++++++++++++++++++-
+ 1 file changed, 104 insertions(+), 1 deletion(-)
+
+
+base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
+-- 
+Ammar Faizi
+
