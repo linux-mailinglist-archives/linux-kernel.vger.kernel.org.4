@@ -2,158 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B775679385
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA80F67938F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbjAXIzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S233335AbjAXI5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjAXIzH (ORCPT
+        with ESMTP id S231629AbjAXI5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:55:07 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F204F38039
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:55:05 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id q125so15829053vsb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MAttpzueGAYsfaY0baImq0QHsztmrAcw7EcUju76EJQ=;
-        b=fcSq88q+gQ5eVNKYLGRZEx6kB2ONx1zmeU1qez4U7QDuktWoB7lmK8aFdS8VEwL2sF
-         PqRyzTb/krZQ/E6MNFy/FA1lmeSZrGz9OuE3hfzJnVAn5gjLStKs5nKjLskBjGNgEX+a
-         YvZ9MCVRO7PQuFmEglWWmEmb+hxORUDq8tRkSeNdPH7F0BjUkaWHn6Jawxyx4gAJLIP0
-         Ij2tlUSvYSzLMYiAISia27aJ0WyL94BUUrKb4PGOCcgfpDLtEspYmMKG1qAGRPPptmcI
-         M97E6qQyMzqvnQ6Akhx5OuCGoLUCrExeCDmy7oGGhoaRbd8eJYxVyW0aIOi57DvFv1Cc
-         PvWQ==
+        Tue, 24 Jan 2023 03:57:18 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25DC3D08C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:57:17 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id b21-20020a5d8d95000000b006fa39fbb94eso8459300ioj.17
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:57:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MAttpzueGAYsfaY0baImq0QHsztmrAcw7EcUju76EJQ=;
-        b=GuOjD4UMBsPGMGVHzXyVeMSV4/OZWaVycSEQQfqq6gDhHaM4W/1J08laaaPDV4vU9a
-         4Bvd3mUw+KP9udc05Y8GlvS9Jy3gXbEc5c5Fepn5ob0OVF9AWFXUKzURMmLdidyrpws8
-         NT5nV4fX1D1CYe+6grKGELMjaQjVX00laT3xBrQ2Le6v16sQwAHTMRY2+Muxi6l9MtmS
-         oZ1BJQo34BnIcot3Gj0tx1lNROPnRdiGnaXt/evYxryT1Kn6M+VW31gadrLdyp+lWXzq
-         RCzWj2cWEDfX1AKbZ+SbrUMKCZNZ43UyPQYDz2+1cMz5hD8X0FatiQeoh8Sifz9WuGpz
-         TM9Q==
-X-Gm-Message-State: AFqh2kqjv+4cLjziMcpT5MnJdlzo1yN2XrEwIqbsqNT2EQLs6d38Rl5A
-        6YUlFEiWYlhO9PTNvdMa5/b5dxnWXKIZINbW18YeAw==
-X-Google-Smtp-Source: AMrXdXuUoP42kHvOc0dUiqLBSTR/RBqOZsA4WwAH+/UWLlRHw2aHIpQhFqNrjzSKRhS4tuFWBcImWJSY29BLSdLdnhI=
-X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
- a26-20020a67f2da000000b003d3d90c5ef2mr4449498vsn.17.1674550505097; Tue, 24
- Jan 2023 00:55:05 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlqNjgd3eRIYDTKHlZ6hEp0r6nIEjM/F53EV9FU/n5g=;
+        b=LpzB5NhEJVs9dbQdHtUWTwLbaxTsMfdvGjStlX1wdCOOceO2t587k8eMGxVBCjOSCf
+         KbNzXqOnBmwQVCCWWpL73iW1fALiOQtEO5sy3YKqFPa2S68TMxUXfKV0w9ImoCZE/JsC
+         u1K4DjTf273cVu5vPbPG8Kb4EzQrgjvWZouJZSluKjI/gLI69Ft8t+XaEv75aFhFKInA
+         3q3TBeRWkALRWEvKRh7ckOiVgXgH7seIiwKTdBBndXCginQClreepCary7t1bEWl7x3f
+         Iky96XBgBfbKzS1uypJFYoFj7lBUJVsjcOKBfI+rhMdiC1UKC77F4Kv49Y1pdf9LFKsi
+         sWNg==
+X-Gm-Message-State: AFqh2krvE9N8bDiTkxUldBRxToFQJ9J6KnNpNpsRzM6ndjOfGnrqEYaO
+        L6bf9RlHZ26f1DRuwA2JKRWDpMvdcpd+RrKoDYpH/v3cE2Oe
+X-Google-Smtp-Source: AMrXdXsUCkXvgb7fvzNjYB6vnqz4sxeezDwrNKweS81JCSIk15mqbkNS22G0WGDO5DzSrUWEHro13o0p3tgMObQkCGbbSKHQrrHp
 MIME-Version: 1.0
-References: <20230124013138.358595-1-pierluigi.p@variscite.com>
-In-Reply-To: <20230124013138.358595-1-pierluigi.p@variscite.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 24 Jan 2023 09:54:54 +0100
-Message-ID: <CAMRc=Mcf+PA-uhT+3Sq5AxHUMb-K_ogw=kBtGV6-wK00PtXGkw@mail.gmail.com>
-Subject: Re: [PATCH v3] gpiolib: fix linker errors when GPIOLIB is disabled
-To:     Pierluigi Passaro <pierluigi.p@variscite.com>
-Cc:     linus.walleij@linaro.org, yamada.masahiro@socionext.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sfr@canb.auug.org.au, eran.m@variscite.com, nate.d@variscite.com,
-        francesco.f@variscite.com, pierluigi.passaro@gmail.com,
-        kernel test robot <lkp@intel.com>
+X-Received: by 2002:a05:6e02:1d99:b0:30f:11bc:cc6e with SMTP id
+ h25-20020a056e021d9900b0030f11bccc6emr2638812ila.87.1674550636901; Tue, 24
+ Jan 2023 00:57:16 -0800 (PST)
+Date:   Tue, 24 Jan 2023 00:57:16 -0800
+In-Reply-To: <000000000000e4630c05e974c1eb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000defd4b05f2feb35c@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in evict
+From:   syzbot <syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com>
+To:     feldsherov@google.com, hirofumi@mail.parknet.co.jp, jack@suse.cz,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu,
+        viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 2:31 AM Pierluigi Passaro
-<pierluigi.p@variscite.com> wrote:
->
-> Both the functions gpiochip_request_own_desc and
-> gpiochip_free_own_desc are exported from
->     drivers/gpio/gpiolib.c
-> but this file is compiled only when CONFIG_GPIOLIB is enabled.
-> Move the prototypes under "#ifdef CONFIG_GPIOLIB" and provide
-> reasonable definitions and includes in the "#else" branch.
->
-> Fixes: 9091373ab7ea ("gpio: remove less important #ifdef around declarations")
-> Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
-> Changes in v2:
-> - add Fixes tag
-> Changes in v3:
-> - add includes to fix builds against x86_64-defconfig
->
+syzbot suspects this issue was fixed by commit:
 
-Hey Pierluigi!
+commit 4e3c51f4e805291b057d12f5dda5aeb50a538dc4
+Author: Svyatoslav Feldsherov <feldsherov@google.com>
+Date:   Tue Nov 15 20:20:01 2022 +0000
 
-Thanks for the quick fix. When this happens - a bug report after a
-patch was applied - please generally submit a fix based on what's
-already in next, not another version. This time, I'll back it out of
-next because I have some comments on this, so please do send a v4.
+    fs: do not update freeing inode i_io_list
 
->  include/linux/gpio/driver.h | 23 +++++++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-> index 44783fc16125..e00eaba724dc 100644
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -758,6 +758,8 @@ gpiochip_remove_pin_ranges(struct gpio_chip *gc)
->
->  #endif /* CONFIG_PINCTRL */
->
-> +#ifdef CONFIG_GPIOLIB
-> +
->  struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
->                                             unsigned int hwnum,
->                                             const char *label,
-> @@ -765,8 +767,6 @@ struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
->                                             enum gpiod_flags dflags);
->  void gpiochip_free_own_desc(struct gpio_desc *desc);
->
-> -#ifdef CONFIG_GPIOLIB
-> -
->  /* lock/unlock as IRQ */
->  int gpiochip_lock_as_irq(struct gpio_chip *gc, unsigned int offset);
->  void gpiochip_unlock_as_irq(struct gpio_chip *gc, unsigned int offset);
-> @@ -776,6 +776,25 @@ struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc);
->
->  #else /* CONFIG_GPIOLIB */
->
-> +#include <linux/gpio/machine.h>
-> +#include <linux/gpio/consumer.h>
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=111208cd480000
+start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b74cf8fcd7378d8be7c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1353a3e2880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16163dce880000
 
-Please move those headers to the top and arrange them alphabetically
-with the rest of the <linux/ headers. Since you're now including
-those, remove any forward declarations of the types in question.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-Bart
+#syz fix: fs: do not update freeing inode i_io_list
 
-> +
-> +static inline struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
-> +                                           unsigned int hwnum,
-> +                                           const char *label,
-> +                                           enum gpio_lookup_flags lflags,
-> +                                           enum gpiod_flags dflags)
-> +{
-> +       /* GPIO can never have been requested */
-> +       WARN_ON(1);
-> +       return ERR_PTR(-ENODEV);
-> +}
-> +
-> +static inline void gpiochip_free_own_desc(struct gpio_desc *desc)
-> +{
-> +       WARN_ON(1);
-> +}
-> +
->  static inline struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc)
->  {
->         /* GPIO can never have been requested */
-> --
-> 2.34.1
->
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
