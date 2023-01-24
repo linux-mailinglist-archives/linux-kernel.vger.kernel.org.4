@@ -2,129 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C8A679C40
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724AC679C43
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbjAXOnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S233621AbjAXOn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbjAXOnA (ORCPT
+        with ESMTP id S234954AbjAXOnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:43:00 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E8574A1E1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:42:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 703194B3;
-        Tue, 24 Jan 2023 06:43:30 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 92E083F71E;
-        Tue, 24 Jan 2023 06:42:47 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:42:45 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-        ALKML <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org,
-        Pierre Gondois <pierre.gondois@arm.com>
-Subject: Re: [GIT PULL] cacheinfo/arch_topology: Updates for v6.3
-Message-ID: <20230124144245.ddphvqbcxpzrlgek@bogus>
-References: <20230120121856.1407369-1-sudeep.holla@arm.com>
- <CAMuHMdUZzLkWvhQ=YeH2KfQ_FRidemfOvbbHf_b1AHROK9HFNA@mail.gmail.com>
+        Tue, 24 Jan 2023 09:43:47 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAF230F0;
+        Tue, 24 Jan 2023 06:43:45 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ODv064000553;
+        Tue, 24 Jan 2023 14:43:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=jvxFBVLhUdxzD0KY+/g4A7pGQ7XFNoKf6nUsW/mm17M=;
+ b=bKbG2rv2OEIFoWX7D4/PPVB4OztFZ5W3ytw+cOJiDO49+2NaDJIsm/tla2YsGGTDkl2U
+ MzOHfvsBM6oPJchWyNXUSRgesXvxD3QfrvpSyorUEUcT7jaBvy5dIjNlO2CKAk4Pt/gw
+ V4NZHasUqwT8jxwuCQt7GEp0eKh+DtDot1shmdC0sTgNO4z/uG+ZVhNIppO6Fpju8YeC
+ imYmf5DDeWKGxWQWfv0A8x+Zc0pcBG9OIiDKrpLpjKdiFQ8l17MKxh8E75tPwpRCgQeK
+ DjOCpNaoQDzdCzPAIhpxNxDazSB8LcEkdm5yrI6x5+IkRnvuxdQ9PVIfbyo0a1mDFg2k Fw== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac20062g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 14:43:35 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBx114003228;
+        Tue, 24 Jan 2023 14:43:34 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3n87p72pr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 14:43:34 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OEhWko32113012
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 14:43:32 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E33DA58066;
+        Tue, 24 Jan 2023 14:43:31 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53D2B5805C;
+        Tue, 24 Jan 2023 14:43:31 +0000 (GMT)
+Received: from [9.160.36.55] (unknown [9.160.36.55])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 14:43:31 +0000 (GMT)
+Message-ID: <63cf4e55-13cd-5037-8b07-674da55e04ed@linux.ibm.com>
+Date:   Tue, 24 Jan 2023 09:43:30 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: linux-next: manual merge of the kvms390 tree with the s390 tree
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230123121245.526d262b@canb.auug.org.au>
+ <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
+ <0fae8ad5-8dcd-3864-a532-4760f3f2a95c@linux.ibm.com>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <0fae8ad5-8dcd-3864-a532-4760f3f2a95c@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R6bPp8SdkUibtavxwlthRKIzivBqeYAy
+X-Proofpoint-ORIG-GUID: R6bPp8SdkUibtavxwlthRKIzivBqeYAy
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUZzLkWvhQ=YeH2KfQ_FRidemfOvbbHf_b1AHROK9HFNA@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240132
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:44:10PM +0100, Geert Uytterhoeven wrote:
-> Hi Sudeep,
-> 
-> On Fri, Jan 20, 2023 at 1:22 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > It has been tested on RISC-V which is the main users outside of arm64.
-> 
-> Has it?
+
+On 1/24/23 6:19 AM, Christian Borntraeger wrote:
+> hAm 23.01.23 um 20:02 schrieb Anthony Krowiak:
+>>
+>> On 1/22/23 8:12 PM, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Today's linux-next merge of the kvms390 tree got a conflict in:
+>>>
+>>>    drivers/s390/crypto/vfio_ap_ops.c
+>>>
+>>> between commit:
+>>>
+>>>    0daf9878a799 ("s390/vfio_ap: check TAPQ response code when 
+>>> waiting for queue reset")
+>>>
+>>> from the s390 tree and commit:
+>>>
+>>>    bedac519eefa ("s390/vfio-ap: check TAPQ response code when 
+>>> waiting for queue reset")
+>>>
+>>> from the kvms390 tree.
+>>>
+>>> They seem to do the same thing, so I used the version of this file from
+>>> the s390 tree as it's commit is much newer and has other changes to 
+>>> this
+>>> file i.e. I effectively dropped the kvms390 tree commit.
+>>
+>>
+>> That's odd, the patch series posted to the kernel mailing lists did 
+>> not have both of those patches. I think the problem may have occurred 
+>> because there was an earlier version of the patch in question that 
+>> was used to debug a problem in our CI. That patch should have been 
+>> reverted prior to installing the latest version.
 >
-
-Hmm, I might have mixed up things then. I was on a vacation for quite some
-time and might have assumed Conor response on the thread with testing.
-Extremely sorry for that. However it was in -next for few days before
-Greg applied to his tree.
-
-> > The ACPI the RISC-V parts are acked-by the respective maintainers. All
-> > the changes are in the -next for sometime and no issues reported at this
-> > time.
-> >
-> > Regards,
-> > Sudeep
-> >
-> > -->8
-> >
-> > The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> >
-> >   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/archtopo-cacheinfo-updates-6.3
-> >
-> > for you to fetch changes up to 198102c9103fc78d8478495971947af77edb05c1:
-> >
-> >   cacheinfo: Fix shared_cpu_map to handle shared caches at different levels (2023-01-18 09:58:40 +0000)
-> >
-> > ----------------------------------------------------------------
-> > cacheinfo and arch_topology updates for v6.3
-> >
-> > The main change is to build the cache topology information for all
-> > the CPUs from the primary CPU. Currently the cacheinfo for secondary CPUs
-> > is created during the early boot on the respective CPU itself. Preemption
-> > and interrupts are disabled at this stage. On PREEMPT_RT kernels, allocating
-> > memory and even parsing the PPTT table for ACPI based systems triggers a:
-> >   'BUG: sleeping function called from invalid context'
-> >
-> > To prevent this bug, the cacheinfo is now allocated from the primary CPU
-> > when preemption and interrupts are enabled and before booting secondary
-> > CPUs. The cache levels/leaves are computed from DT/ACPI PPTT information
-> > only, without relying on any architecture specific mechanism if done so
-> > early.
-> >
-> > The other minor change included here is to handle shared caches at
-> > different levels when not all the CPUs on the system have the same
-> > cache hierarchy.
-> 
-> While this gets rid of the "cacheinfo: Unable to detect cache hierarchy
-> for CPU N" warnings printed during boot, it resurrects the printing of
-> 
->     Early cacheinfo failed, ret = -12
-> 
-> during early boot on all my RV64 platforms
-> 
-> See also https://lore.kernel.org/all/CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com/
-> for a similar earlier version triggering the same issue.
-> 
-> > ----------------------------------------------------------------
-> > Pierre Gondois (6):
-> >       arch_topology: Build cacheinfo from primary CPU
-> 
-> Reverting commit 5944ce092b97caed ("arch_topology: Build cacheinfo
-> from primary CPU") fixes the issue.
 >
+> Yes, that patch was part of the kvms390 tree and it was old. I removed 
+> it. Sorry for the left-over
+> The one in the s390 tree is the correct one:
+>
+> https://lore.kernel.org/all/20230118203111.529766-3-akrowiak@linux.ibm.com/ 
+>
+> is now
+> https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=for-next&id=0daf9878a7990058e74025493820bce0f67654c4 
+>
+>
+> this should be ok now?
 
-OK, thanks for narrowing it to one patch. We will look at it. But does
-it work fine even with this errors ? We had seen such a behaviour in the
-past. It fails to initialise too early but works at later initcall level
-which I am not sure if we investigated why.
 
--- 
-Regards,
-Sudeep
+Yes, that is the correct one.
+
+
+>
+> Christian
