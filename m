@@ -2,92 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B19678E8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88752678E8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbjAXCuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
+        id S232129AbjAXCul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbjAXCuB (ORCPT
+        with ESMTP id S232631AbjAXCui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:50:01 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46093526B;
-        Mon, 23 Jan 2023 18:49:59 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 66012C009; Tue, 24 Jan 2023 03:50:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1674528616; bh=sNo2M+vMXVNnmuHmMi9fNsU/T1dxnbKBZtBfGYFBJqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=auR2LTgbqUESWdQFsOH6G6jdyJZNuEsdbqwj0802ggjGubDemBBcTW19oJHdwERf1
-         KLTj92n6Ak9FVEbsnYXQJ2xOrszyVoz885izMPPYWA4oSwJVyiaj/y9X4ALultB3W9
-         a5wVG0+4SHzuFnT2zpV9ABro5E0Cr+nB1AYh5SYPRJLDEripVC72CTjKLhGtKRdiE+
-         SKBGNpWjdJ1Kb35YzaHH25NuDRGLMjxCchxUiStvUlsTWB3n1kQDG6IeHR5RZjTKFX
-         ZrbYTjf4/pd/KEE5zY0OVsoHcgmJP0Bm8W6jSS0sfjgm9eY+brz/leDX18Q2EfS61o
-         fYShBUznNpRdg==
+        Mon, 23 Jan 2023 21:50:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9309272AB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 18:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674528589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDEShTc+qxEMTNcIsETbduQ+QSQW/4E7thNs06NrHuI=;
+        b=ChvetQtXooMZAqZOR7TB7BCw6BLHMS3w39hK5P5sh9D1an4/EmmqiqF0bFe+DYVltdUscq
+        Uo1X7DyHqfHbWPJg8vbuaXpfRiVduFFZOrxC+Y5Ni55JZ3x2pnbHO6YmEhcMkVSsikkD4H
+        06YUvT7EeDvplCwWXjiE+m+NRbjXhhk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-56-ajSWj7FDNyGCHfrOcokx7g-1; Mon, 23 Jan 2023 21:49:48 -0500
+X-MC-Unique: ajSWj7FDNyGCHfrOcokx7g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE1E385C069;
+        Tue, 24 Jan 2023 02:49:47 +0000 (UTC)
+Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 607FC4069768;
+        Tue, 24 Jan 2023 02:49:45 +0000 (UTC)
+Date:   Tue, 24 Jan 2023 10:49:42 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Simon Horman <horms@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, wangkefeng.wang@huawei.com
+Subject: Re: [PATCH 2/2] arm64/kdump: add code comments for crashkernel
+ reservation cases
+Message-ID: <Y89HRnIzq034pJH8@fedora>
+References: <20230117034921.185150-1-bhe@redhat.com>
+ <20230117034921.185150-3-bhe@redhat.com>
+ <Y8pYvBvDonUya1mx@vergenet.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8pYvBvDonUya1mx@vergenet.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id AF6ECC009;
-        Tue, 24 Jan 2023 03:50:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1674528615; bh=sNo2M+vMXVNnmuHmMi9fNsU/T1dxnbKBZtBfGYFBJqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i16EJ9kBh9jIXmYnudf4BDTdOfKbpABLFv4Ox9v/rl7CDDxWuA6w4A2Icyc6BCcZ9
-         eIPAloZCWtNKPJdUJfn1QNaKdsmGGGtr0mEd4dZCm+vLeb64KnRJuYH2dFVdzbvQlN
-         r2q/wUfbbiKCYCH5iXg85p4zDne3Y++NbNE4IL9I/bMNMW4e9ZtUbB066vcnpHYVqr
-         2ce5q4DuR0WWaAZ1EprZIwszrDXLO8+0T0DKciuigt8VzdjoD8Uwqur1OkXgGO2ryp
-         3fHBgz0PbYy+tONgQqjZuAO7/nEzNJYaZxLTp/9rei9lKyi2IBH3tL7vT7lEA4p3TR
-         l217FDv+lrQfA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 3239948c;
-        Tue, 24 Jan 2023 02:49:52 +0000 (UTC)
-Date:   Tue, 24 Jan 2023 11:49:37 +0900
-From:   asmadeus@codewreck.org
-To:     evanhensbergen@icloud.com
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Zhengchao Shao via V9fs-developer 
-        <v9fs-developer@lists.sourceforge.net>,
-        Ron Minnich <rminnich@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] Performance fixes for 9p filesystem
-Message-ID: <Y89HQXu90ea6Ed4r@codewreck.org>
-References: <20221217183142.1425132-1-evanhensbergen@icloud.com>
- <20221218232217.1713283-1-evanhensbergen@icloud.com>
- <4478705.9R3AOq7agI@silver>
- <CEE93F4D-7C11-4FE3-BB70-A9C865BE5BC2@icloud.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CEE93F4D-7C11-4FE3-BB70-A9C865BE5BC2@icloud.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-evanhensbergen@icloud.com wrote on Mon, Jan 23, 2023 at 08:33:46PM -0600:
-> I’m fine with funneling these through Dominique since he’s currently
-> the active maintainer, but I’ve also re-established kernel.org
-> <http://kernel.org/> credentials so I can field the pull-request if
-> desired.
+On 01/20/23 at 10:02am, Simon Horman wrote:
+> On Tue, Jan 17, 2023 at 11:49:21AM +0800, Baoquan He wrote:
+> > This will help understand codes on crashkernel reservations on arm64.
+> 
+> FWIIW, I think you can fold this into the first patch.
 
-I'm happy either way; I've had a (too quick to really call review) look
-at the code itself and it mostly makes sense to me, and as you pointed
-out some would warrant a Cc stable@ and not waiting if I had time to do
-this seriously, but I'm not sure I'll make it if this needs to wait for
-me.
+Sure, will do.
 
-Do you also have a tree that goes in -next ? I think I asked before but
-lost your reply, sorry.
-If not it'll probably be easier for me to pick it up this cycle, but
-that's about the only reason I'd see for me to take the patches as
-things stand.
+I folded this into patch 1 at the very beginning. Then felt the added
+code comments add lines of change and make the code change not so
+straightforward. I admit it's from personal feeling. 
 
--- 
-Dominique
+> 
+> And, although I have no good idea at this moment, I do wonder
+> if the logic can be simplified - I for one really needed the
+> comments to understand the retry logic.
+
+Got it. I will consider if I can improve the logic readability. Thanks.
+
+> 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > ---
+> >  arch/arm64/mm/init.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> > 
+> > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> > index 26a05af2bfa8..f88ad17cb20d 100644
+> > --- a/arch/arm64/mm/init.c
+> > +++ b/arch/arm64/mm/init.c
+> > @@ -177,6 +177,10 @@ static void __init reserve_crashkernel(void)
+> >  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+> >  					       search_base, crash_max);
+> >  	if (!crash_base) {
+> > +		/*
+> > +		 * For crashkernel=size[KMG]@offset[KMG], print out failure
+> > +		 * message if can't reserve the specified region.
+> > +		 */
+> >  		if (fixed_base) {
+> >  			pr_warn("cannot reserve crashkernel region [0x%llx-0x%llx]\n",
+> >  				search_base, crash_max);
+> > @@ -188,6 +192,11 @@ static void __init reserve_crashkernel(void)
+> >  		 * high memory, the minimum required low memory will be
+> >  		 * reserved later.
+> >  		 */
+> > +		/*
+> > +		 * For crashkernel=size[KMG], if the first attempt was for
+> > +		 * low memory, fall back to high memory, the minimum required
+> > +		 * low memory will be reserved later.
+> > +		 */
+> 
+> I think this duplicates the preceding comment.
+> Perhaps just replace the earlier comment with this one.
+> 
+> >  		if (!high && crash_max == CRASH_ADDR_LOW_MAX) {
+> >  			crash_max = CRASH_ADDR_HIGH_MAX;
+> >  			search_base = CRASH_ADDR_LOW_MAX;
+> > @@ -195,6 +204,10 @@ static void __init reserve_crashkernel(void)
+> >  			goto retry;
+> >  		}
+> >  
+> > +		/*
+> > +		 * For crashkernel=size[KMG],high, if the first attempt was for
+> > +		 * high memory, fall back to low memory.
+> > +		 */
+> >  		if (high && (crash_max == CRASH_ADDR_HIGH_MAX)) {
+> >  			crash_max = CRASH_ADDR_LOW_MAX;
+> >  			search_base = 0;
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> > _______________________________________________
+> > kexec mailing list
+> > kexec@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kexec
+> > 
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
+
