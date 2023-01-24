@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8A2678E98
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3E2678E9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjAXC4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        id S231848AbjAXC6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjAXC4A (ORCPT
+        with ESMTP id S229956AbjAXC6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:56:00 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6A039294;
-        Mon, 23 Jan 2023 18:55:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1BRv5WK4z4xyd;
-        Tue, 24 Jan 2023 13:55:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674528957;
-        bh=zX3wtMRaVccd57BJ0+a8W7mlX/qXeO52xggODmbMqC8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kfxDBMB5RLOGU8z/17gIPBcj1tEMAgIfdO7bT6DAbNm5/n5v8SkwLhJVX4zu+KbOP
-         H/EF3OVjghW0gMYXEENkcuWstlu1JZvtV1vw33y718NLkby8pkBgt25qYR9q+/0syQ
-         AywKh8+o0/QVQBhDkiC3Po4jvP635YejA9TPJFd2RrSZjq+BsXxM8/ZoIo0QW3hknS
-         oavImppd/RH9JgMSTTYn79CaqrO+ZN6i0lh7YFSRo+r0Fq+EzmOQvOHijHVRXAZgDf
-         2uIJPTn/qxKflu3MWrO7O02CifAhZy1Ot4PIdxoEHXWyvyfCarkm7UJcenpg60GilT
-         Q0j/hsvSA0D9Q==
-Date:   Tue, 24 Jan 2023 13:55:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mm tree
-Message-ID: <20230124135554.3bedbf77@canb.auug.org.au>
+        Mon, 23 Jan 2023 21:58:12 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D825CDCA;
+        Mon, 23 Jan 2023 18:58:11 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso610073pjj.1;
+        Mon, 23 Jan 2023 18:58:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=B4YXx3GIWFGT1/D+Depzji9t9vqaSeQNHwZmz3y3RyY=;
+        b=dVZDpG7d/DXo38EW3uvmydy8fqHaieawOFMU8s1gOvkLTbQHdyTkEXBPcGeCrig6R1
+         G7SKQ3ljxUDN7goiCLSKpoqf2pH1xSYui1Xl2RXq/adSJItEfYOVviWO3D6ZhOboAJ97
+         JQGyNF7gQ/8MHo+FlOnoXaWGJgXGJGAaJTMpfEUfP1A8VYRQ3BaKlvNvp7nEOWaxCLrq
+         SREv4dLWvZkMIBFnmJJmlUYNDbtaurRiQn3lYe0KnFRi8j3d8Lahh9G7agZMeuidufMx
+         w5N5QSSPjSNs/X/RKrRm9AkniDxiuZl+N5KDyBFhjkXuTRRmwE4jXc+a1/1SHMXJ8sXc
+         QUyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B4YXx3GIWFGT1/D+Depzji9t9vqaSeQNHwZmz3y3RyY=;
+        b=UuDEHw2LvxQlXLwrPrF2qnzysUemLfjOVU8OcnywsQKxWfsjlw9nQIW/WVmpuRo9QO
+         m4Xbb/qiefKsChKdbACdZyHGYqMtnLskl+bY8luwfzvflfTdAShD5XF3bwHRdAKpEsbO
+         adJ1nKlBeZlL2tO5ibgymm2IAmUgKz3Nqd7drktXF7Tn+/agFxdlYwJN8NYAUzsPrOIx
+         DxhtmojWP+8ZN63pnF3W8hY2BjU/66VGcQPjG08GTRWQEepwkbfoZ3mDgjpJFxq/LQGg
+         wxtw3ZvaVPHhaRzCUSU7bYlFuOwdxYVXoPVMRAbBUYC4Hhpi7ioDbiJI5krR79Ji9b8X
+         fDMg==
+X-Gm-Message-State: AFqh2koMHQ0kmjRvdwGGZceEHzbOwfbrGNgmKKNemovEsfHEy42eq8/Q
+        /0lLVTESC8POuWCX0RsPIqY=
+X-Google-Smtp-Source: AMrXdXuksllhpgpMo5HDdSP8BAWq7WYDScRIpYKpgyHE5LMkhaqmZqbEqq7pc5jbIzd3h1dN0/N45g==
+X-Received: by 2002:a17:902:9b97:b0:193:12fd:a2e3 with SMTP id y23-20020a1709029b9700b0019312fda2e3mr24817049plp.55.1674529090698;
+        Mon, 23 Jan 2023 18:58:10 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-19.three.co.id. [180.214.232.19])
+        by smtp.gmail.com with ESMTPSA id jl16-20020a170903135000b001869ba04c83sm402338plb.245.2023.01.23.18.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 18:58:10 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9FA73105170; Tue, 24 Jan 2023 09:58:06 +0700 (WIB)
+Date:   Tue, 24 Jan 2023 09:58:05 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc2 review
+Message-ID: <Y89JPe7Q3zJsKKV+@debian.me>
+References: <20230123094918.977276664@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZyiKg3sxftyWEF5tI915Z4C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iDVC1M9WRDgULcUY"
+Content-Disposition: inline
+In-Reply-To: <20230123094918.977276664@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ZyiKg3sxftyWEF5tI915Z4C
-Content-Type: text/plain; charset=US-ASCII
+
+--iDVC1M9WRDgULcUY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Jan 23, 2023 at 10:52:31AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.90 release.
+> There are 117 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-The following commit is also in Linus the rpmsg tree as a different commit
-(but the same patch):
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-  9bf96454b9dd ("Revert "remoteproc: qcom_q6v5_mss: map/unmap metadata regi=
-on before/after use"")
-
-This is also commit
-
-  a899d542b687 ("Revert "remoteproc: qcom_q6v5_mss: map/unmap metadata regi=
-on before/after use"")
-
-in the rpmsg tree.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 --=20
-Cheers,
-Stephen Rothwell
+An old man doll... just what I always wanted! - Clara
 
---Sig_/ZyiKg3sxftyWEF5tI915Z4C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--iDVC1M9WRDgULcUY
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPPSLoACgkQAVBC80lX
-0GxI0Qf+MvdIFFqknRGKCEx/aINMNxArFQu9MQZQPKa02hPZ1y+lrPwVS8mjeVvv
-08PQinmcGWoerjKmIIjnQc8vXx18zTqCjTZ9Fg7op0ni8UYKjopuUIhCs1AzsenR
-Jr4Sl+ejL+n3L5eDwHGafcW/0v2FhmBwzlCfpuHce0eMypeoeRDxonIXLmOgax4p
-4weo8jFrGw1cvJjg2xGlYo6KeoAzKum19elIgaLG4mfxx7W9fcSQZ+nKciYYnynz
-DoE+25nzFXSxJzksgZmsiByTIg+HNzs4wG6nRr4nV6NKdlCgp85NQJbCmxOnmhmf
-S4CSn1KfvdtyOqVKyS1ZWSvB3KccIg==
-=1Qn6
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY89JPQAKCRD2uYlJVVFO
+oz9gAP95uAgUemwNkB4dCOOxG7potsDPZDjkyMfB8rTyfp48HgEAvMame/xm8Fqo
+m9NW0jT0BHqFmmFqFUT2iepTT/Pp/Qs=
+=ni80
 -----END PGP SIGNATURE-----
 
---Sig_/ZyiKg3sxftyWEF5tI915Z4C--
+--iDVC1M9WRDgULcUY--
