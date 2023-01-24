@@ -2,409 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86B8679280
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F1E67928C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbjAXIEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S232605AbjAXIJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjAXIEF (ORCPT
+        with ESMTP id S229965AbjAXIJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:04:05 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9DF3250F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:04:02 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id d10-20020a631d4a000000b00491da16dc44so6628407pgm.16
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6MfHTuEf4r86+PFtflimvGxC6PNCOKta4sNIc6FGOy8=;
-        b=b1M6Nlc5jpnDMvZgET1XVlu7rTMoo8JEImsGaOtaoUw/ZLlvaIaMyYmoZWJ2QwXsfn
-         QMZGnlcpTtktGNMyytpFf+3Lryep7rs17S5w8WrntnpwxA97T1pUbq24K0+eLjdZsQdg
-         r/+nOfAClMbm5tYdVZayl00qSZLehEWv0gt7K71uNz/MbfGL9DoZ8EXJcwVDaLypAUAM
-         Ynmbxjz117bA/tisqQF5lTiK4EPvUgHO+u3oHAtuQuI6GQq7T3Vj4EeI/fq6w9L7XW/I
-         N+emk3nl1NiXRcvJsb3OuOb+WYK82BDSZtoln5QsYFK2FQAKR7GB1OuQ3ujrFKZGQDjN
-         3b1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6MfHTuEf4r86+PFtflimvGxC6PNCOKta4sNIc6FGOy8=;
-        b=L18MdVRoJwI8xsKShSNrYZ4/djPziPZiQf0bz0a8iMhAo3XHYyYGLmXQgwWIwuzKRW
-         q36wOYNyQYXcNuEmAzVhc8ZRGbLeV3HGkfROO5mpjXMOjRF1trRmZR61276B98VtSbAK
-         aIUwy2EgjMOy812DO995SORyLb+xyAjsKcZ4Pun5ST/Oz5TSWHoRkniKqAjUU3CZ59J3
-         248bOi0JCtTCC6SrvVQ73dvbAvP8KJC167z1zbmrsIjOUBjedKIg6w2701Pg6uHjrZA2
-         btbOcwxUmDchtcVyHsd0B89iHDcn01GNzCzVvYMNj0QlhLKax8E1VHjupoaKvlAeVwqr
-         EmrA==
-X-Gm-Message-State: AFqh2kqt1UgE1ptUs12rFhXXox6y0/0A4tCSV8w7QIiBmDps0vyfYzAS
-        K+VOiwB7zzNmkud48FWD9JcUY6UOkfZX6A==
-X-Google-Smtp-Source: AMrXdXvdrVCihXYcqPjQjglWu9qwd55uNK+jZY14LmMkaPoZuxY30uChtzHtE/Gjln1OcM4VshIpI2eAhW3ADA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:b217:b0:194:7c22:1885 with SMTP
- id t23-20020a170902b21700b001947c221885mr2567366plr.26.1674547441782; Tue, 24
- Jan 2023 00:04:01 -0800 (PST)
-Date:   Tue, 24 Jan 2023 16:03:50 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230124080350.2275652-1-davidgow@google.com>
-Subject: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's built
- as a module
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 03:09:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F6A3D935;
+        Tue, 24 Jan 2023 00:09:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 176E761219;
+        Tue, 24 Jan 2023 08:09:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7290BC433D2;
+        Tue, 24 Jan 2023 08:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674547742;
+        bh=TRocIrBG205Sv8eelyMy2hfITbfOBpE1O01eh4HW/XY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CJYnW7GphJzPeSUmvUcxBIa/oKMqd8ezbxM/r+fuCWqX2Zgfr4dD+O2cB4XfxhATR
+         iGdkGVu94g8Gvk3utzvoszBn2wH/jBw7JGBPAOKp/UcD1AtQa/66g/8fJiu4hOsYoP
+         I/3qplJNLecojxQP2AI0FS952OCFWqFa9eNIwDF4jmR9Py03O5W9xInmgxxySvq9P+
+         xcYWom6EsrZjH4NQRrkcrR9epy1fGP8TlhhoCs+lqPMbUmAIoHin8j75hwIKyh/en1
+         OjhikC4epD7BMLFuoNzV6Y9ujmTdcoiEV+rOgd0Y9qF9WN3OOja6A8wx4nq6UmyT9o
+         zKeTjnQt1z9ug==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pKEMX-00057Z-IJ; Tue, 24 Jan 2023 09:09:02 +0100
+Date:   Tue, 24 Jan 2023 09:09:01 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm: Initialize mode_config earlier
+Message-ID: <Y8+SHQ/klPwusQRj@hovoldconsulting.com>
+References: <20230113041051.4189063-1-quic_bjorande@quicinc.com>
+ <eea1c5dc-6bc5-4246-f0e1-0c790de9f078@linaro.org>
+ <9a64c685-9ff0-bc1d-e604-e3773ff9edd7@linaro.org>
+ <20230117025122.jt3wrjkqfnogu4ci@builder.lan>
+ <Y8ZWl85gSpOaLgO4@hovoldconsulting.com>
+ <Y86vaTQR7INWezyj@hovoldconsulting.com>
+ <20230123171749.GA623918@hu-bjorande-lv.qualcomm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123171749.GA623918@hu-bjorande-lv.qualcomm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KUnit has several macros and functions intended for use from non-test
-code. These hooks, currently the kunit_get_current_test() and
-kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
+On Mon, Jan 23, 2023 at 09:17:49AM -0800, Bjorn Andersson wrote:
+> On Mon, Jan 23, 2023 at 05:01:45PM +0100, Johan Hovold wrote:
+> > On Tue, Jan 17, 2023 at 09:04:39AM +0100, Johan Hovold wrote:
+> > > On Mon, Jan 16, 2023 at 08:51:22PM -0600, Bjorn Andersson wrote:
 
-In order to support this case, the required functions and static data
-need to be available unconditionally, even when KUnit itself is not
-built-in. The new 'hooks.c' file is therefore always included, and has
-both the static key required for kunit_get_current_test(), and a
-function pointer to the real implementation of
-__kunit_fail_current_test(), which is populated when the KUnit module is
-loaded.
+> > > > Perhaps we have shuffled other things around to avoid this bug?  Either
+> > > > way, let's this on hold  until further proof that it's still
+> > > > reproducible.
+> > > 
+> > > As I've mentioned off list, I haven't hit the apparent race I reported
+> > > here:
+> > > 
+> > > 	https://lore.kernel.org/all/Y1efJh11B5UQZ0Tz@hovoldconsulting.com/
+> > > 
+> > > since moving to 6.2. I did hit it with both 6.0 and 6.1-rc2, but it
+> > > could very well be that something has changes that fixes (or hides) the
+> > > issue since.
+> > 
+> > For unrelated reasons, I tried enabling async probing, and apart from
+> > apparently causing the panel driver to probe defer indefinitely, I also
+> > again hit the WARN_ON() I had added to catch this:
+> > 
+> > [   13.593235] WARNING: CPU: 0 PID: 125 at drivers/gpu/drm/drm_probe_helper.c:664 drm_kms_helper_hotplug_event+0x48/0x7
+> > 0 [drm_kms_helper]
 
-A new header, kunit/hooks-table.h, contains a table of all hooks, and is
-repeatedly included with different definitions of the KUNIT_HOOK() in
-order to automatically generate the needed function pointer tables. When
-KUnit is disabled, or the module is not loaded, these function pointers
-are all NULL. This shouldn't be a problem, as they're all used behind
-wrappers which check kunit_running and/or that the pointer is non-NULL.
+> > So the bug still appears to be there (and the MSM DRM driver is fragile
+> > and broken, but we knew that).
+> > 
+> 
+> But the ordering between mode_config.funcs = !NULL and
+> drm_kms_helper_poll_init() in msm_drm_init() seems pretty clear.
+> 
+> And my testing shows that drm_kms_helper_poll_init() is the cause for
+> getting bridge->hpd_cb != NULL.
+> 
+> So the ordering seems legit, unless there's something else causing the
+> assignment of bridge->hpd_cb to happen earlier in this scenario.
 
-This can then be extended for future features which require similar
-"hook" behaviour, such as static stubs:
-https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
+I'm not saying that this patch is correct (indeed it doesn't seem to
+be), but only that the bug I reported still appears to be present in
+6.2.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+Now that I actually looked at this again, I realise that the reason that
+haven't seen it with 6.2 is more likely due to the fact that I'm now
+making sure to load the panel driver before the drm driver to avoid that
+unnecessary probe deferral.
 
-This is basically a prerequisite for the stub features working when
-KUnit is built as a module, and should nicely make a few other tests
-work then, too.
+With async probing, I get the probe deferral again, and boom, I hit the
+same old NULL deref.
 
-v2 adds a slightly-excessive macro-based system for defining hooks. This
-made adding the static stub hooks absolutely trivial, and the complexity
-is totally hidden from the user (being an internal KUnit implementation
-detail), so I'm more comfortable with this than some other macro magic.
+I see there's a call to drm_kms_helper_poll_fini() in msm_drm_uninit()
+which should stop the polling, but perhaps there's still some corner
+case due to the unexpected probe (or rather component bind) deferral
+which we're hitting.
 
-It does however result in a huge number of checkpatch.pl errors, as
-we're using macros in unconventional ways, and checkpatch just can't
-work out the syntax. These are mostly "Macros with complex values should
-be enclosed in parentheses", "Macros with multiple statements should be
-enclosed in a do - while loop", and similar, which don't apply due to
-the macros not being expressions: they are mostly declarations or
-assignment statements. There are a few others where checkpatch thinks
-that the return value is the function name and similar, so complains
-about the style.
-
-Open questions:
-- Is this macro-based system worth it, or was v1 better?
-- Should we rename test-bug.h to hooks.h or similar.
-  (I think so, but would rather do it in a separate patch, to make it
-  easier to review. There are a few includes of it scattered about.)
-- Is making these NULL when KUnit isn't around sensible, or should we
-  auto-generate a "default" implementation. This is a pretty easy
-  extension to the macros here.
-  (I think NULL is good for now, as we have wrappers for these anyway.
-  If we want to change our minds later as we add more hooks, it's easy.)
-- Any other thoughts?
-
-Cheers,
--- David
-
-Changes since RFC v1:
-https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
-- Major refit to auto-generate the hook code using macros.
-- (Note that previous Reviewed-by tags have not been added, as this is a
-  big enough change it probably needs a re-reviews. Thanks Rae for
-  reviewing RFC v1 previously, though!)
----
- Documentation/dev-tools/kunit/usage.rst | 14 +++++-----
- include/kunit/hooks-table.h             | 34 +++++++++++++++++++++++++
- include/kunit/test-bug.h                | 24 +++++++++--------
- lib/Makefile                            |  4 +++
- lib/kunit/Makefile                      |  3 +++
- lib/kunit/hooks.c                       | 27 ++++++++++++++++++++
- lib/kunit/test.c                        | 22 +++++++++++-----
- 7 files changed, 103 insertions(+), 25 deletions(-)
- create mode 100644 include/kunit/hooks-table.h
- create mode 100644 lib/kunit/hooks.c
-
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 48f8196d5aad..6424493b93cb 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -648,10 +648,9 @@ We can do this via the ``kunit_test`` field in ``task_struct``, which we can
- access using the ``kunit_get_current_test()`` function in ``kunit/test-bug.h``.
- 
- ``kunit_get_current_test()`` is safe to call even if KUnit is not enabled. If
--KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
--running in the current task, it will return ``NULL``. This compiles down to
--either a no-op or a static key check, so will have a negligible performance
--impact when no test is running.
-+KUnit is not enabled, or if no test is running in the current task, it will
-+return ``NULL``. This compiles down to either a no-op or a static key check,
-+so will have a negligible performance impact when no test is running.
- 
- The example below uses this to implement a "mock" implementation of a function, ``foo``:
- 
-@@ -726,8 +725,7 @@ structures as shown below:
- 	#endif
- 
- ``kunit_fail_current_test()`` is safe to call even if KUnit is not enabled. If
--KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
--running in the current task, it will do nothing. This compiles down to either a
--no-op or a static key check, so will have a negligible performance impact when
--no test is running.
-+KUnit is not enabled, or if no test is running in the current task, it will do
-+nothing. This compiles down to either a no-op or a static key check, so will
-+have a negligible performance impact when no test is running.
- 
-diff --git a/include/kunit/hooks-table.h b/include/kunit/hooks-table.h
-new file mode 100644
-index 000000000000..0b5eafd199ed
---- /dev/null
-+++ b/include/kunit/hooks-table.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit 'Hooks' function pointer table
-+ *
-+ * This file is included multiple times, each time with a different definition
-+ * of KUNIT_HOOK. This provides one place where all of the hooks can be listed
-+ * which can then be converted into function / implementation declarations, or
-+ * code to set function pointers.
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+/*
-+ * To declare a hook, use:
-+ * KUNIT_HOOK(name, retval, args), where:
-+ * - name: the function name of the exported hook
-+ * - retval: the type of the return value of the hook
-+ * - args: the arguments to the hook, of the form (int a, int b)
-+ *
-+ * Note that the argument list should be contained within the brackets (),
-+ * and that the implementation of the hook should be in a <name>_impl
-+ * function, which should not be declared static, but need not be exported.
-+ */
-+
-+#ifndef KUNIT_HOOK
-+#error KUNIT_HOOK must be defined before including the hooks table
-+#endif
-+
-+KUNIT_HOOK(__kunit_fail_current_test, __printf(3, 4) void,
-+	   (const char *file, int line, const char *fmt, ...));
-+
-+/* Undefine KUNIT_HOOK at the end, ready for the next use. */
-+#undef KUNIT_HOOK
-diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-index c1b2e14eab64..3203ffc0a08b 100644
---- a/include/kunit/test-bug.h
-+++ b/include/kunit/test-bug.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * KUnit API allowing dynamic analysis tools to interact with KUnit tests
-+ * KUnit API providing hooks for non-test code to interact with tests.
-  *
-  * Copyright (C) 2020, Google LLC.
-  * Author: Uriel Guajardo <urielguajardo@google.com>
-@@ -9,7 +9,7 @@
- #ifndef _KUNIT_TEST_BUG_H
- #define _KUNIT_TEST_BUG_H
- 
--#if IS_BUILTIN(CONFIG_KUNIT)
-+#if IS_ENABLED(CONFIG_KUNIT)
- 
- #include <linux/jump_label.h> /* For static branch */
- #include <linux/sched.h>
-@@ -43,20 +43,21 @@ static inline struct kunit *kunit_get_current_test(void)
-  * kunit_fail_current_test() - If a KUnit test is running, fail it.
-  *
-  * If a KUnit test is running in the current task, mark that test as failed.
-- *
-- * This macro will only work if KUnit is built-in (though the tests
-- * themselves can be modules). Otherwise, it compiles down to nothing.
-  */
- #define kunit_fail_current_test(fmt, ...) do {					\
- 		if (static_branch_unlikely(&kunit_running)) {			\
-+			/* Guaranteed to be non-NULL when kunit_running true*/	\
- 			__kunit_fail_current_test(__FILE__, __LINE__,		\
- 						  fmt, ##__VA_ARGS__);		\
- 		}								\
- 	} while (0)
- 
- 
--extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
--						    const char *fmt, ...);
-+/* Declare all of the available hooks. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	extern retval (*name)args
-+
-+#include "kunit/hooks-table.h"
- 
- #else
- 
-@@ -66,10 +67,11 @@ static inline struct kunit *kunit_get_current_test(void) { return NULL; }
- #define kunit_fail_current_test(fmt, ...) \
- 		__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
- 
--static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
--							    const char *fmt, ...)
--{
--}
-+/* No-op stubs if KUnit is not enabled. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	static retval (*name)args = NULL
-+
-+#include "kunit/hooks-table.h"
- 
- #endif
- 
-diff --git a/lib/Makefile b/lib/Makefile
-index 4d9461bfea42..9031de6ca73c 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -126,6 +126,10 @@ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
- obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
- 
- obj-$(CONFIG_KUNIT) += kunit/
-+# Include the KUnit hooks unconditionally. They'll compile to nothing if
-+# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
-+# function pointers) which need to be built-in even when KUnit is a module.
-+obj-y += kunit/hooks.o
- 
- ifeq ($(CONFIG_DEBUG_KOBJECT),y)
- CFLAGS_kobject.o += -DDEBUG
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 29aff6562b42..deeb46cc879b 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -11,6 +11,9 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
- kunit-objs +=				debugfs.o
- endif
- 
-+# KUnit 'hooks' are built-in even when KUnit is built as a module.
-+lib-y +=				hooks.o
-+
- obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
- 
- # string-stream-test compiles built-in only.
-diff --git a/lib/kunit/hooks.c b/lib/kunit/hooks.c
-new file mode 100644
-index 000000000000..29e81614f486
---- /dev/null
-+++ b/lib/kunit/hooks.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit 'Hooks' implementation.
-+ *
-+ * This file contains code / structures which should be built-in even when
-+ * KUnit itself is built as a module.
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+/* This file is always built-in, so make sure it's empty if CONFIG_KUNIT=n */
-+#if IS_ENABLED(CONFIG_KUNIT)
-+
-+#include <kunit/test-bug.h>
-+
-+DEFINE_STATIC_KEY_FALSE(kunit_running);
-+EXPORT_SYMBOL(kunit_running);
-+
-+/* Function pointers for hooks. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	retval (*name)args; \
-+	EXPORT_SYMBOL(name)
-+
-+#include "kunit/hooks-table.h"
-+
-+#endif
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c9ebf975e56b..b6c88f722b68 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -20,13 +20,10 @@
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
--DEFINE_STATIC_KEY_FALSE(kunit_running);
--
--#if IS_BUILTIN(CONFIG_KUNIT)
- /*
-  * Fail the current test and print an error message to the log.
-  */
--void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
-+void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
- {
- 	va_list args;
- 	int len;
-@@ -53,8 +50,6 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
- 	kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
- 	kunit_kfree(current->kunit_test, buffer);
- }
--EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
--#endif
- 
- /*
-  * Enable KUnit tests to run.
-@@ -775,8 +770,18 @@ void kunit_cleanup(struct kunit *test)
- }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
- 
-+/* Declarations for the hook implemetnations */
-+#define KUNIT_HOOK(name, retval, args) \
-+	extern retval name##_impl args
-+#include "kunit/hooks-table.h"
-+
- static int __init kunit_init(void)
- {
-+	/* Install the KUnit hook functions. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	name = name##_impl
-+#include "kunit/hooks-table.h"
-+
- 	kunit_debugfs_init();
- #ifdef CONFIG_MODULES
- 	return register_module_notifier(&kunit_mod_nb);
-@@ -788,6 +793,11 @@ late_initcall(kunit_init);
- 
- static void __exit kunit_exit(void)
- {
-+	/* Remove the KUnit hook functions. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	name = NULL
-+#include "kunit/hooks-table.h"
-+
- #ifdef CONFIG_MODULES
- 	unregister_module_notifier(&kunit_mod_nb);
- #endif
--- 
-2.39.0.246.g2a6d74b583-goog
-
+Johan
