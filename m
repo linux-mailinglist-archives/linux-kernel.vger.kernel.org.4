@@ -2,184 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05D96794A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEFA6794B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbjAXKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S233687AbjAXKEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjAXKC7 (ORCPT
+        with ESMTP id S232276AbjAXKEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:02:59 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D1A11E89
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:02:57 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12441587wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:02:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7+2ObP6hwGfYv8AoClcbY4T+NA4DE6TZB+TmM9ZmmE=;
-        b=Qrm3AJfL/kw1YbFePRK1oUcqKcOxpjENw5HzCbfcFTD48Htaa1hSvGC/HSbVSuigeD
-         ymfmSmQwAPDkCVcJcDW797QKZOEqV8gWVGpvLohdmWBS7UVfq5MhfwlocVGOSjaT4pu6
-         tZBtmjY3y/CJL6GQGIF5bHV258lDpHDnVdOPU5NABATZywZhILE7m2QCYZIJx7niHVnK
-         ePzHLlc/I408cWUSeDAalrRBA11wkadAxv92tDdWVQRgXkDqaAzyyhqm4HkO+AYCB5oI
-         yJMYm/e/PceuZGu/c9tonmlvYQYpGl0BVdyFJe2RxvzG41bbzAf11WY+j2EtQjuepJsY
-         gGQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e7+2ObP6hwGfYv8AoClcbY4T+NA4DE6TZB+TmM9ZmmE=;
-        b=gImoH9CPN1UmSWElBAcDsYdRyqXbM1jUL7vTmkgXbzASProY/FsV4rZVHs6/44ds1d
-         aEYvTNu0pK3n52qPPE57m7aTifg0DHOKt1WqBz5SbZgDNArEtKtE0lzZL5NAjgbq+aKw
-         tbvkflfQEtE3WVLizBr+hkjnRlHxSE9YzdEDsYD5gFklDSvTSMFuk3MoHsCNZJ0PKxkp
-         wXy1UMGmIeqGLiNqkdx5QigWGspsPi58CVx35xo4JdXJJtI0+EMHvwOLW4Q8jGqLb0bw
-         CsYwGy6Ri2845v7cJh2eHWkrYmrxU3UqLnH55+Ir/NOV+Sx7Sgi7ppXLmdGBnOlMmIO9
-         HteQ==
-X-Gm-Message-State: AFqh2kqPqBhCWYrwq+a5ffYkEMwGwXvCQiwp7b/Ef6jjBeWgVV92/Hjg
-        yBy6/IfHOhcsNjXielDfpCf0jg==
-X-Google-Smtp-Source: AMrXdXuVShf4vzB3MRnsGM1yCSL18NhLSOQCh97phU6rXE44vNaCzhjcUEtLDEHz4IHu5gDEqcTYNw==
-X-Received: by 2002:a05:600c:89a:b0:3cf:6e78:e2ca with SMTP id l26-20020a05600c089a00b003cf6e78e2camr34965451wmp.5.1674554575278;
-        Tue, 24 Jan 2023 02:02:55 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b003d9df9e59c4sm13866978wmq.37.2023.01.24.02.02.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 02:02:54 -0800 (PST)
-Message-ID: <37a95380-ee68-5c3a-3b96-48cc8b525f19@linaro.org>
-Date:   Tue, 24 Jan 2023 11:02:52 +0100
+        Tue, 24 Jan 2023 05:04:10 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35B923846;
+        Tue, 24 Jan 2023 02:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674554638; x=1706090638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8mR/uvzv2jV6r7LTK/xqyg4Ig58IGy9kGuy8OKDjYJU=;
+  b=Gdy5cbeNUeFdvemCZIqIT8eP4XDT5q8wEQkbru9F126JJkc1RC1SukKk
+   vuS3SYldyxlMOHur10Ffk94zuwV3GHkz9fVACQ2iYFDWfwA27UaogixSa
+   6zMIc8BC/ACPvuhYTaDjSnU6I/vzFSgVa9J0Nz473e860X90spSXhPxeA
+   ZXkrUqNjrtu3ExfGdohAXMOCTbZvER9KXfu5g9N1Laz0bU7900tPQDOlV
+   RbdrclGRi+XiSt9eslpWkXTG6ozdyPI0kpK3AB4jr6HQFxxqzBQQr16uM
+   yQRcqZYjcX/dvcFPoSxZhOTACNwye2glgNOoEEIr0KKxCSNIA/KUac46N
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328351348"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="328351348"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 02:03:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="786021876"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="786021876"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2023 02:03:49 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKG9c-0006Jw-1l;
+        Tue, 24 Jan 2023 10:03:48 +0000
+Date:   Tue, 24 Jan 2023 18:02:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v8 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <202301241708.pfzy132a-lkp@intel.com>
+References: <20230124084323.1363825-4-usama.anjum@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
- controller
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230113103759.327698-1-herve.codina@bootlin.com>
- <20230113103759.327698-6-herve.codina@bootlin.com>
- <316ddb81-8d13-71dd-3396-412e31cfb880@linaro.org>
- <20230124104232.183cc9ff@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124104232.183cc9ff@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124084323.1363825-4-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 10:42, Herve Codina wrote:
-> Hi Krzysztof,
-> 
-> On Tue, 17 Jan 2023 12:31:09 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 13/01/2023 11:37, Herve Codina wrote:
->>> Add support for the QMC (QUICC Multichannel Controller)
->>> available in some PowerQUICC SoC such as MPC885 or MPC866.
->>>
->>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>> ---
->>>  .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      | 164 ++++++++++++++++++
->>>  1 file changed, 164 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
->>> new file mode 100644
->>> index 000000000000..3ec52f1635c8
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
->>> @@ -0,0 +1,164 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,qmc.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
->>> +
->>> +maintainers:
->>> +  - Herve Codina <herve.codina@bootlin.com>
->>> +
->>> +description: |
->>> +  The QMC (QUICC Multichannel Controller) emulates up to 64 channels within
->>> +  one serial controller using the same TDM physical interface routed from
->>> +  TSA.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      - enum:
->>> +          - fsl,mpc885-scc-qmc
->>> +          - fsl,mpc866-scc-qmc
->>> +      - const: fsl,cpm1-scc-qmc
->>> +
->>> +  reg:
->>> +    items:
->>> +      - description: SCC (Serial communication controller) register base
->>> +      - description: SCC parameter ram base
->>> +      - description: Dual port ram base
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: scc_regs
->>> +      - const: scc_pram
->>> +      - const: dpram
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +    description: SCC interrupt line in the CPM interrupt controller
->>> +
->>> +  fsl,tsa:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>> +    description: phandle to the TSA
->>> +
->>> +  fsl,tsa-cell-id:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [1, 2, 3]
->>> +    description: |
->>> +      TSA cell ID (dt-bindings/soc/fsl,tsa.h defines these values)
->>> +       - 1: SCC2
->>> +       - 2: SCC3
->>> +       - 3: SCC4  
->>
->> Is this used as argument to tsa? If so, this should be part of fsl,tsa
->> property, just like we do for all syscon-like phandles.
-> 
-> Yes, indeed.
-> I will move 'fsl,tsa' to 'fsl,tsa-cell' with 'fsl,tsa-cell' a phandle/number
-> pair (the phandle to TSA node and the TSA cell id to use)
+Hi Muhammad,
 
-Move to fsl,tsa, not from.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v6.2-rc5]
+[cannot apply to next-20230124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230124-164601
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20230124084323.1363825-4-usama.anjum%40collabora.com
+patch subject: [PATCH v8 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301241708.pfzy132a-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8d3b72e0605d479fbc5c2bc6f4ba9ddfecdb9ccb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230124-164601
+        git checkout 8d3b72e0605d479fbc5c2bc6f4ba9ddfecdb9ccb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/proc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
+   fs/proc/task_mmu.c:1880:14: warning: unused variable 'pmd_wt' [-Wunused-variable]
+    1880 |         bool pmd_wt;
+         |              ^~~~~~
+   fs/proc/task_mmu.c:1876:22: warning: unused variable 'len' [-Wunused-variable]
+    1876 |         unsigned int len;
+         |                      ^~~
+   fs/proc/task_mmu.c: In function 'do_pagemap_cmd':
+>> fs/proc/task_mmu.c:1971:15: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    1971 |         vec = (struct page_region *)untagged_addr(arg->vec);
+         |               ^
 
 
-Best regards,
-Krzysztof
+vim +1971 fs/proc/task_mmu.c
 
+  1960	
+  1961	static long do_pagemap_cmd(struct mm_struct *mm, struct pagemap_scan_arg *arg)
+  1962	{
+  1963		unsigned long empty_slots, vec_index = 0;
+  1964		unsigned long __user start, end;
+  1965		unsigned long __start, __end;
+  1966		struct page_region __user *vec;
+  1967		struct pagemap_scan_private p;
+  1968		int ret;
+  1969	
+  1970		start = (unsigned long)untagged_addr(arg->start);
+> 1971		vec = (struct page_region *)untagged_addr(arg->vec);
+  1972		if ((!IS_ALIGNED(start, PAGE_SIZE)) || (!access_ok((void __user *)start, arg->len)))
+  1973			return -EINVAL;
+  1974		if (IS_GET_OP(arg) && ((arg->vec_len == 0) ||
+  1975		    (!access_ok((void __user *)vec, arg->vec_len * sizeof(struct page_region)))))
+  1976			return -ENOMEM;
+  1977		if ((arg->flags & ~PAGEMAP_WP_ENGAGE) || (arg->required_mask & ~PAGEMAP_OP_MASK) ||
+  1978		    (arg->anyof_mask & ~PAGEMAP_OP_MASK) || (arg->excluded_mask & ~PAGEMAP_OP_MASK) ||
+  1979		    (arg->return_mask & ~PAGEMAP_OP_MASK))
+  1980			return -EINVAL;
+  1981		if (IS_GET_OP(arg) && ((!arg->required_mask && !arg->anyof_mask && !arg->excluded_mask) ||
+  1982					!arg->return_mask))
+  1983			return -EINVAL;
+  1984		/* The non-WT flags cannot be obtained if PAGEMAP_WP_ENGAGE is also specified. */
+  1985		if (IS_WP_ENGAGE_OP(arg) && ((arg->required_mask & PAGEMAP_NONWT_OP_MASK) ||
+  1986		    (arg->anyof_mask & PAGEMAP_NONWT_OP_MASK)))
+  1987			return -EINVAL;
+  1988	
+  1989		end = start + arg->len;
+  1990		p.max_pages = arg->max_pages;
+  1991		p.found_pages = 0;
+  1992		p.flags = arg->flags;
+  1993		p.required_mask = arg->required_mask;
+  1994		p.anyof_mask = arg->anyof_mask;
+  1995		p.excluded_mask = arg->excluded_mask;
+  1996		p.return_mask = arg->return_mask;
+  1997		p.prev.len = 0;
+  1998		p.vec_len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+  1999	
+  2000		if (IS_GET_OP(arg)) {
+  2001			p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region), GFP_KERNEL);
+  2002			if (!p.vec)
+  2003				return -ENOMEM;
+  2004		} else {
+  2005			p.vec = NULL;
+  2006		}
+  2007		__start = __end = start;
+  2008		while (__end < end) {
+  2009			p.vec_index = 0;
+  2010			empty_slots = arg->vec_len - vec_index;
+  2011			if (p.vec_len > empty_slots)
+  2012				p.vec_len = empty_slots;
+  2013	
+  2014			__end = (__start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+  2015			if (__end > end)
+  2016				__end = end;
+  2017	
+  2018			mmap_read_lock(mm);
+  2019			ret = walk_page_range(mm, __start, __end, &pagemap_scan_ops, &p);
+  2020			mmap_read_unlock(mm);
+  2021			if (!(!ret || ret == -ENOSPC))
+  2022				goto free_data;
+  2023	
+  2024			__start = __end;
+  2025			if (IS_GET_OP(arg) && p.vec_index) {
+  2026				if (copy_to_user(&vec[vec_index], p.vec,
+  2027						 p.vec_index * sizeof(struct page_region))) {
+  2028					ret = -EFAULT;
+  2029					goto free_data;
+  2030				}
+  2031				vec_index += p.vec_index;
+  2032			}
+  2033		}
+  2034		ret = export_prev_to_out(&p, vec, &vec_index);
+  2035		if (!ret)
+  2036			ret = vec_index;
+  2037	free_data:
+  2038		if (IS_GET_OP(arg))
+  2039			kfree(p.vec);
+  2040	
+  2041		return ret;
+  2042	}
+  2043	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
