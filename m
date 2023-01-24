@@ -2,186 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78681678EE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 04:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A462C678EF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 04:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbjAXDSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 22:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        id S232137AbjAXDV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 22:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjAXDSl (ORCPT
+        with ESMTP id S231872AbjAXDVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 22:18:41 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2339C367E4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 19:18:40 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so11899409wml.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 19:18:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bX8jlvRRHnbZO+FMV1n3GBuPBKjA8HiWEl8ZU9biZNo=;
-        b=Ap90xt+qVTa67tCBqS8cFgHYFj2iwWOTgoYIt3UhkzA4peSOFAcpjTMJlDtl4r81k/
-         bh88B8WYHja4Yf2hDG4gomibKmboIeM93CQBNasSul5xH+vXo9NJsICrhcNzhvyVCHfX
-         6bFLaDzoaGsVOpnh3f52m+4T3rz2qDsL/05Mc0A1Q175ZtZKYt/nI1/n8ySFLbGxhhwC
-         7Hid+fDug4UIhVYXdRDe13OHwrqopSXm5RPf1ueDWyfeCNnNcCGK/8RrtoiCqCawDofn
-         A/Oer92NO/+NgUQKmxDrJkLW1+968BULoJpT+ziqcza2S1UJd9YmlwmriNuXzVpkd1JH
-         fKJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bX8jlvRRHnbZO+FMV1n3GBuPBKjA8HiWEl8ZU9biZNo=;
-        b=4BZtNIN57xXI3zaeKPro7uKOE4TrDJdtDc7T8qLQCZYfMbulTEx1KSzJWf/I9J0K+u
-         duWGe1407kwZBnqR8vdh7KvitWiOdmMSMREXiGD2kFK246Nzc/FvB+v64hm5JF4mokfV
-         pbfwXwQFyG/5GY4A9HoSzysKj/XdsCeUFf8pPD3EBYSh6X9gmsnp2wBar3bNGHOHacvm
-         YKQW2Qvxn/vJPckER7MfuqEYpAVm1hUG+vYZj5zQO1w2rpBewb04oHfqsnxjYD0/4Mtx
-         g/MwLnym4apipULpijs5aWo/yDhfElgQxnzz9p0g9HXpVz38wO6UixS3CFaVpzEzGAD2
-         /eMQ==
-X-Gm-Message-State: AFqh2koaycD8mlTDRsb605doAx4mcKNHivGcUQvNEPjC48lsojOM75qh
-        uehiMRZ62oHVAIF844jR5kTbhAC1yHXinrnMpjXrbg==
-X-Google-Smtp-Source: AMrXdXtm/suOeOr9KR3L8KHaqhXFEzCi41T0bOriyTa9SyB4A+WCUSa2jrS1s+hMpg9BJMYxrsHJmJzdPHyzOq7qhl0=
-X-Received: by 2002:a05:600c:5117:b0:3cf:cb16:f242 with SMTP id
- o23-20020a05600c511700b003cfcb16f242mr1888101wms.82.1674530318392; Mon, 23
- Jan 2023 19:18:38 -0800 (PST)
+        Mon, 23 Jan 2023 22:21:22 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E028A39B95
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 19:21:21 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6504B2C0470;
+        Tue, 24 Jan 2023 16:21:17 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1674530477;
+        bh=2xMEbOKhtIY1n5O8ShroG3k1FtbRxbMYyFn8oh9S9AQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j1VAsK2+DK3ulPT1hXQv4xpKz1DfVevTga8bx8RTfeijQksTEH6c1U9xsmVEatFM0
+         GkWdN8Y/IVY8sbvz8xD+qGTv48N210hVNp2d1laz5R8Kms04jkUQTcIksEajAYKG+3
+         owtRlgyDR44pMiI0mDpj+KBTUFI7B+VAdXykvp0cPeaxH/L9pnw04Fi6tDTjRErHV8
+         /BUVqMCpxJwoPImVFbBxKpbQD7sJaFBRtRpgmbK77yS0GN+a24lUbHx+ZV0uXZksFo
+         FLtcLaXAaz9SteGh1RjdjQggqKNybbhZrYYn1Ixo91waFIM6WJVZaSL3qZ5YMNvbWT
+         oPImWRE2pOPFA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63cf4ead0000>; Tue, 24 Jan 2023 16:21:17 +1300
+Received: from thomaswi-dl.ws.atlnz.lc (thomaswi-dl.ws.atlnz.lc [10.33.25.46])
+        by pat.atlnz.lc (Postfix) with ESMTP id 0745913EE28;
+        Tue, 24 Jan 2023 16:21:17 +1300 (NZDT)
+Received: by thomaswi-dl.ws.atlnz.lc (Postfix, from userid 1719)
+        id 0058A3E07A2; Tue, 24 Jan 2023 16:21:16 +1300 (NZDT)
+From:   Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        pabeni@redhat.com, edumazet@google.com, kuba@kernel.org,
+        a@unstable.cc, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] ip/ip6_gre: Fix GRE tunnels not generating IPv6 link local addresses
+Date:   Tue, 24 Jan 2023 16:21:01 +1300
+Message-Id: <20230124032105.79487-1-Thomas.Winter@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230123093609.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
- <CACeCKafcL=KJ+a5C2BKXWX3rkWf9BHp1oB3dikAjGtFWqW5_PA@mail.gmail.com>
-In-Reply-To: <CACeCKafcL=KJ+a5C2BKXWX3rkWf9BHp1oB3dikAjGtFWqW5_PA@mail.gmail.com>
-From:   Victor Ding <victording@google.com>
-Date:   Tue, 24 Jan 2023 14:18:02 +1100
-Message-ID: <CANqTbdY=X0=GH2Gf_yB3vhY1iBK-Mfr=Yqu73=xujgfof+3sCA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: allow deferred probe of
- switch handles
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        gustavoars@kernel.org, heikki.krogerus@linux.intel.com,
-        dnojiri@chromium.org, dustin@howett.net, lee.jones@linaro.org,
-        tzungbi@kernel.org, groeck@chromium.org,
-        gregkh@linuxfoundation.org, tinghan.shen@mediatek.com,
-        sebastian.reichel@collabora.com, enric.balletbo@collabora.com,
-        bleung@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=a6lOCnaF c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=RvmDmJFTN0MA:10 a=IpZYufPWUN2N8bb5Va0A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 11:43 AM Prashant Malani <pmalani@chromium.org> wrote:
->
-> On Mon, Jan 23, 2023 at 1:36 AM Victor Ding <victording@chromium.org> wrote:
-> >
-> > `fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
-> > which is called from `cros_typec_get_switch_handles`. When this happens,
-> > it does not indicate absence of switches; instead, it only hints that
-> > probing of switches should occur at a later time.
-> >
-> > Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
-> > probing switches as a better time.
-> >
-> > Signed-off-by: Victor Ding <victording@chromium.org>
-> > ---
-> >
-> >  drivers/platform/chrome/cros_ec_typec.c | 30 +++++++++++++++++--------
-> >  1 file changed, 21 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> > index 59de4ce01fab..f4b3fc788491 100644
-> > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > @@ -145,31 +145,37 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
-> >                                          struct fwnode_handle *fwnode,
-> >                                          struct device *dev)
-> >  {
-> > +       int ret = 0;
-> > +
-> >         port->mux = fwnode_typec_mux_get(fwnode, NULL);
-> >         if (IS_ERR(port->mux)) {
-> > -               dev_dbg(dev, "Mux handle not found.\n");
-> > +               ret = PTR_ERR(port->mux);
-> > +               dev_dbg(dev, "Mux handle not found: %d.\n", ret);
-> >                 goto mux_err;
-> >         }
-> >
-> >         port->retimer = fwnode_typec_retimer_get(fwnode);
-> >         if (IS_ERR(port->retimer)) {
-> > -               dev_dbg(dev, "Retimer handle not found.\n");
-> > +               ret = PTR_ERR(port->retimer);
-> > +               dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
-> >                 goto retimer_sw_err;
-> >         }
-> >
-> >         port->ori_sw = fwnode_typec_switch_get(fwnode);
-> >         if (IS_ERR(port->ori_sw)) {
-> > -               dev_dbg(dev, "Orientation switch handle not found.\n");
-> > +               ret = PTR_ERR(port->ori_sw);
-> > +               dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
-> >                 goto ori_sw_err;
-> >         }
-> >
-> >         port->role_sw = fwnode_usb_role_switch_get(fwnode);
-> >         if (IS_ERR(port->role_sw)) {
-> > -               dev_dbg(dev, "USB role switch handle not found.\n");
-> > +               ret = PTR_ERR(port->role_sw);
-> > +               dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
-> >                 goto role_sw_err;
-> >         }
-> >
-> > -       return 0;
-> > +       return ret;
-> >
-> >  role_sw_err:
-> >         typec_switch_put(port->ori_sw);
-> > @@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
-> >         typec_mux_put(port->mux);
-> >         port->mux = NULL;
-> >  mux_err:
-> > -       return -ENODEV;
-> > +       return ret;
-> >  }
-> >
-> >  static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
-> > @@ -423,9 +429,15 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
-> >                 }
-> >
-> >                 ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
-> > -               if (ret)
-> > -                       dev_dbg(dev, "No switch control for port %d\n",
-> > -                               port_num);
-> > +               switch (ret) {
-> > +               case 0:
-> > +                       break;
-> > +               case -EPROBE_DEFER:
-> > +                       dev_err(dev, "Deferring getting switch handles at port %d\n", port_num);
-> > +                       goto unregister_ports;
-> > +               default:
-> > +                       dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
-> > +               }
->
-> The switch statement seems a little clunky here. Instead, nest a couple
-> of ifs; it is shorter and easier to read IMO.
->
-> ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
-> if (ret) {
->     dev_err_probe(dev, ret, "No switch control for port: %d\n", port_num);
->     if (ret == -EPROBE_DEFER)
->         goto unregister_ports;
-> }
->
-Good idea, I'll update accordingly in the next revision.
-> }
-> }
-> >
-> >                 ret = cros_typec_register_port_altmodes(typec, port_num);
-> >                 if (ret) {
-> > --
-> > 2.39.0.246.g2a6d74b583-goog
-> >
+For our point-to-point GRE tunnels, they have IN6_ADDR_GEN_MODE_NONE
+when they are created then we set IN6_ADDR_GEN_MODE_EUI64 when they
+come up to generate the IPv6 link local address for the interface.
+Recently we found that they were no longer generating IPv6 addresses.
+
+Also, non-point-to-point tunnels were not generating any IPv6 link
+local address and instead generating an IPv6 compat address,
+breaking IPv6 communication on the tunnel.
+
+These failures were caused by commit e5dd729460ca and this patch set
+aims to resolve these issues.
+
+Thomas Winter (2):
+  ip/ip6_gre: Fix changing addr gen mode not generating IPv6 link local
+    address
+  ip/ip6_gre: Fix non-point-to-point tunnel not generating IPv6 link
+    local address
+
+ net/ipv6/addrconf.c | 61 ++++++++++++++++++++++++---------------------
+ 1 file changed, 33 insertions(+), 28 deletions(-)
+
+--=20
+2.39.0
+
