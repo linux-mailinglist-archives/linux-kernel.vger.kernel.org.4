@@ -2,105 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8B9679EF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D374A679EFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbjAXQk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S234222AbjAXQlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233467AbjAXQk4 (ORCPT
+        with ESMTP id S234279AbjAXQlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:40:56 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6133BD8D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:40:31 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so13247007wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:40:31 -0800 (PST)
+        Tue, 24 Jan 2023 11:41:12 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BB04B757
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:41:03 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id a184so11579439pfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:41:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p5CdgtjGUNx9xYKIZte0y4ycWmDexwRQIUIxQ6tWTHs=;
-        b=jgDjdQPlJG8loqFBlxuut9n3wmlfn5rGbQgVG5K7Q1eg4kNWPatML2H8jtVpBxAKcH
-         u1Uhdf9VthDHJEWPvMJTNREwwLkvoyiJaXqmq4DYB8pe110wm/ss1xlvUU0eaxFuT86q
-         pXQd8hJVugzlAv0HC3axvtp2QiRH1wUo8B5yTss+Nh7zfvr1iMXQFznVTJoW9z39arln
-         OstIuuB+8fU3wyvAcqq0I8tG5nYX/eGfIEvqQkOi3HVDzfmSKwEQ2qDfaicJc/uNbppC
-         Vz5NIRyKZTmVmJDXPCAKKr/karh8H51LtK2i///upRc1qXxo5radFtAu6HrW9GQpESDo
-         GSzw==
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uIiZYluQMdBDmvpbXKh0chNKaPyLFMc0XwqCd43cT0I=;
+        b=DIuOlcj9s/pDf00YmHwnX8M7Y2o5EMrXd/jlt1Vt+FMdUFDabkK0hrXtX/ZzfOcJy8
+         ym2hZeaGkXkeYF7dYYllyUEj72Zqj32i1v6nnSNJfXiOqWa1Nq4xdNomZ9gYUUATZ4iQ
+         FVH4XPqslJFTfysp5THa7KZbZCsH+HJQNZUWs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p5CdgtjGUNx9xYKIZte0y4ycWmDexwRQIUIxQ6tWTHs=;
-        b=E49wC/6Zu6o0EmxO0S2lk1LP/zcU9YsRJRk78Am6f+2lhQjtV8eKNIdtx6Qj2xhNYE
-         GefYFNcKc4MOVt9gD9yv+M8GY2/3xfCxQDv7hAe6ArpV0RC7ox9sBR51G5pa4U54KTbM
-         k1ujS8e3dCnC2IOvR9YXo7LwAmn10HThj6iXIpiD3pYoc7m83JQZpJ8Qr1KwV8LGCDBm
-         uDIKLl70sG+1Oq79u/Cx+Q/iUqIHZwIOxu7G85wasHJ9eY6vL5nnLIwiZFlEbDGWoyHT
-         NdLR942UOMD1nheqDntbl36ObrPJg4TLYvU/jULVVTEHDQqsVnhLGuh/Swx6JMDQI8/y
-         Y5Cw==
-X-Gm-Message-State: AFqh2kotO+uFXvL+WYUn6wfURId/owJ9Ne4xcr5KJ45Lk13Aba6x4imL
-        rLVg29JcTG2/+j+rtIjrTRbY5Q==
-X-Google-Smtp-Source: AMrXdXtIPLw44bxgX+91criAbr8NNm8pepLZdVXuERkZ0SBD4iC8yciSfrm5O9rovH83qq2SeMSI1Q==
-X-Received: by 2002:a05:600c:3488:b0:3d2:370b:97f4 with SMTP id a8-20020a05600c348800b003d2370b97f4mr36445797wmq.16.1674578429812;
-        Tue, 24 Jan 2023 08:40:29 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id o4-20020a05600c2e0400b003db305bece4sm2315561wmf.45.2023.01.24.08.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 08:40:29 -0800 (PST)
-Message-ID: <1f70f2a2-3bc2-586f-67da-76b1c8379ff6@linaro.org>
-Date:   Tue, 24 Jan 2023 17:40:28 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uIiZYluQMdBDmvpbXKh0chNKaPyLFMc0XwqCd43cT0I=;
+        b=a97MP/g5yPxktQeSI36Ht6VXAX7tGFgws/qmbU3mhM6tQjvJiizA+VaD0F6kHGdjj6
+         JfezGVfyna90caZN7LVNMmdXwIpMkE1JtZeUowU0pYv0RgKMv2o/sDHMHov0pNgoUTlI
+         ZVzczSIUJMoTt0UpxTE/LqUYIOPtbnwZiICrTYqVRnp3HmjugLnScVkcWYsTyGthuPzY
+         UIgYzMCdi5+R/aKbvrsNR1H0n/TbxaHK244qgx7syGOJus4mxT3zdFYJGWC6NrrNGjL0
+         YWAOnoCcUqN7UUtBJ6BUMJKVv/rS4xdyzKM9to/N8vSdySzG4NY9y2eHYmi5K1lB2naW
+         exow==
+X-Gm-Message-State: AFqh2koHAvcNargQ41pERcwAAMrJ+zx2irKhChbv4mwjSbmjfFDJhdFf
+        Ks+u4vraSotVdlS+A8AKrwKduWh1NxwbMO0DY9gaJg==
+X-Google-Smtp-Source: AMrXdXvTyPGL75HlaoYc5Lf+J9LBjWQMwYDmGpcL5hpMuAd++iyD6imIWLpbSwW6Pf3xh73dmzsTTMRBdw2p/tPIb5Q=
+X-Received: by 2002:a62:e317:0:b0:588:cb81:9221 with SMTP id
+ g23-20020a62e317000000b00588cb819221mr3337801pfh.69.1674578462877; Tue, 24
+ Jan 2023 08:41:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] thermal: intel: int340x: Fix unitialized variable
- error
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-References: <2685606.mvXUDI8C0e@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2685606.mvXUDI8C0e@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230124145127.189221-1-ivecera@redhat.com>
+In-Reply-To: <20230124145127.189221-1-ivecera@redhat.com>
+From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
+Date:   Tue, 24 Jan 2023 22:10:51 +0530
+Message-ID: <CALs4sv2JF+xksLCFmBefWp7hu2+Mq_pcSO-dDjQrO+9cvD4upQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] docs: networking: Fix bridge documentation URL
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000740b4a05f3052e38"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 17:38, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If PATC evaluation fails in int340x_thermal_zone_add(), trip_cnt will
-> not be initialized when allocating the trips array later.
-> 
-> Address this by initializing trip_cnt to 0.
-> 
-> While at it, move the status variable definition lower for better
-> code readability.
-> 
-> Fixes: d58c653e9e26 ("thermal: intel: int340x: Use generic trip points")
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+--000000000000740b4a05f3052e38
+Content-Type: text/plain; charset="UTF-8"
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Tue, Jan 24, 2023 at 8:22 PM Ivan Vecera <ivecera@redhat.com> wrote:
+>
+> Current documentation URL [1] is no longer valid.
+>
+> [1] https://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
+>
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> ---
+>  Documentation/networking/bridge.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/networking/bridge.rst b/Documentation/networking/bridge.rst
+> index 4aef9cddde2f..c859f3c1636e 100644
+> --- a/Documentation/networking/bridge.rst
+> +++ b/Documentation/networking/bridge.rst
+> @@ -8,7 +8,7 @@ In order to use the Ethernet bridging functionality, you'll need the
+>  userspace tools.
+>
+>  Documentation for Linux bridging is on:
+> -   http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
+> +   https://wiki.linuxfoundation.org/networking/bridge
 
+Maybe there is a reason I don't know why this patch is for net-next and not net.
+Change looks good to me.
+Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+>  The bridge-utilities are maintained at:
+>     git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git
+> --
+> 2.38.2
+>
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--000000000000740b4a05f3052e38
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+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
+OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
+dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
+fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
+9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
+pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
+25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
+Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIL+wyJdfArN9ZUTnjoBxxIG3KseI1oE7
+xQWEZOg+F/R3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDEy
+NDE2NDEwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAgtmhpBrRXO/6EQcw6jUwUwgRLdspCf7ZANMOhMYWlMwpx8375
+CpLKaFSs6ut0Uv0WW9rS4P7uQ/PMY5+NiZfmsCV2xELzKBpT7nFOdZwy1liUVyz1S7LpPPMv9i6k
+AReQ8oLi3CmHm8sJvTjuUvFP/6jD3BBEfGhhrKNHp9tT7zB9KmXX2+d3xuM+tsdJLLWwHS9Hu80i
+YYY0hSQ+cs/lO3SBBbjX1ikjqi1APxxLwOoSi6TS/o2yxq8OmSiTzZcvFqkWB2yL+3f1oeEvp8Qi
+bfUFnt/MPY7s7Sxh0D3A66BCkGGH1VOeKwQRHsFTiX3LD0xdMvlqlRVd+BFj5lQ2
+--000000000000740b4a05f3052e38--
