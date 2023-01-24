@@ -2,176 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06776679D1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E71679D20
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234252AbjAXPPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S234262AbjAXPPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234923AbjAXPOy (ORCPT
+        with ESMTP id S235039AbjAXPO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:14:54 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AE948595
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:14:48 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y11so18544589edd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:14:48 -0800 (PST)
+        Tue, 24 Jan 2023 10:14:56 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFE84708E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:14:53 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id y1so9713697wru.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:14:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eFeBhnH+0B/42mAHnRRgB7lrALBFMURKcwmaM7RawrY=;
-        b=k+mgpune5Pmc2lqEWZ+99lql1jb492y3C/Kyzi9ionAfVmCVTFvbOtMD0QaLYL9ypL
-         IAsvZGY+J3UA7pz8mcMHWMzlZcNBSpr+RED1DOLVtaFVwwgqtNrweAJLw4O89YLUUDNS
-         rdNk3uJASxvwQ3Fd7gvZD9tI7lMwWJ7pBnl+g=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fa3NonT7uFixEjw+mFXts/QRHz1QGTzg+aYFZ1DSamI=;
+        b=ZDwoRWXjszEA2Uri4ulJorf3U8qeYpMCzR9w95It/1gUBf49Qp2To8luIc8kDHdrxW
+         FO9g8eIkGybfAuaMkAa7qWlRjQKZia6gZzzuEMba/PBpQbZj1vsW7IiTtxk2BaCH6u2g
+         WuY8nWWaaQZesAhD1Hp/CkPGxt+c73uqhP8N9iH4sqYsfkhAcz+YH4CYpjPbr6j9NPtv
+         JxdnlmhmAEJupOZdHv/cSBJi772XxQ1gunch/yWVVhkzzd27ePiVcvcS1ch7I6bM+mbN
+         3Vp0oCwj6XDip/JpghvWcM6pCB5D5rCwK2bxnp08+BJutG4B+3YIVslD9+EB+fibY2+p
+         qZ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eFeBhnH+0B/42mAHnRRgB7lrALBFMURKcwmaM7RawrY=;
-        b=dZSb4odVWKW7sNR7mZ4nZwLDVYJWqBS/8YSwUZypydPq2QpGPUAyn16/JtTvuj8wEB
-         UiYPcCORU9ZZTuCtxkqRFuYmHlul7YfgKeu1Iyy2wiXFQxE4EVqWw5x8k80FglQG5zQI
-         v4zoWeLbQ7zwnX8GcYqUsKIEKz7MJxEBuTg5pBkGpHQvPCo33hV7E8CcYRCL7Ewvt/yF
-         UnhO0DWBSqXfxVMF62HDj+nyl97hWA9loDzfxAG3wIgsgWyTJcx5hjOCyvvdSjNjBvCH
-         8kRuJDk1DWN3h0MVEvMsLQKmc5cnlUvRXcgrf30/JuEmcE4qNmOUSWpCZaqiufAtxj39
-         e7Zw==
-X-Gm-Message-State: AFqh2krE3XNfLxKKWflJisxv75D3/rDowcCJ+5kbSqQJ9QWtSzumN6AZ
-        RSrMddqkgOc6EPj5k6GG9Otlb3P+rlU/Xo0x0zCSQQ==
-X-Google-Smtp-Source: AMrXdXsY39EBZImVG3yBHV1zEjbdADI7AUEz6yUS4RDiaCK4MX0EZZGfjAHxM38N8ipvhu0XJdE4viQYk9mA0ilnfSU=
-X-Received: by 2002:a05:6402:417:b0:49e:27c9:8fe5 with SMTP id
- q23-20020a056402041700b0049e27c98fe5mr4018804edv.56.1674573286172; Tue, 24
- Jan 2023 07:14:46 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fa3NonT7uFixEjw+mFXts/QRHz1QGTzg+aYFZ1DSamI=;
+        b=upQdR4lvPO0fKU9UhCbeQl715Tju5RMQg9qMmW3T/8YkFAfYaUbNOJOMoKMoIVHayZ
+         eL5pH7yg0qb+xkxZg7EeKm/GmeJJq0P+gLU+JcBiFrBTjahJQ964fO81QVw2y000kB0z
+         /LRtqr1U/tAtMGd+KMP3lihKPCGbk7ZbxOIPpoBVhyrCboBBzZLlhut2ulsj7HqQRDsA
+         stD1K/4F6OSq+79VpxKcXW/bfGFPx6YvOfIBz+kfUELxDBRWLIOVHlZNs85Yg1BrLs2R
+         Nkphj/vXQVTO3e5S9Om0ubQk369sj8Gr4O0wN88YbDr7tPneBhA650akkodQN1i9nJBa
+         v9Hg==
+X-Gm-Message-State: AFqh2kr7hIKEnKtGB/AYhK2Ar2YFGZYaBZF5RXJ68Dmb1IZ7r5+vMF9Z
+        ghy/3xzU9XOVWmxbNGN4VfRdog==
+X-Google-Smtp-Source: AMrXdXvK51H0IbshntMwpUlZI+AFdA28RuhJbW5H0nwtSX5T9NKgvLN4T82oPMNUoBjZnUPRsi2oJA==
+X-Received: by 2002:adf:e883:0:b0:2be:4624:dd81 with SMTP id d3-20020adfe883000000b002be4624dd81mr16218138wrm.58.1674573292454;
+        Tue, 24 Jan 2023 07:14:52 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s9-20020adfdb09000000b002238ea5750csm2644979wri.72.2023.01.24.07.14.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 07:14:52 -0800 (PST)
+Message-ID: <adb66162-6ff3-184e-fe92-109bdef8ed1c@linaro.org>
+Date:   Tue, 24 Jan 2023 16:14:49 +0100
 MIME-Version: 1.0
-References: <20230124075555.v3.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
-In-Reply-To: <20230124075555.v3.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
-From:   Benson Leung <bleung@chromium.org>
-Date:   Tue, 24 Jan 2023 07:14:33 -0800
-Message-ID: <CANLzEku+O2=Ow+OO0-VoCxKbmoXDz-Jdj-VNE69f-iDEX=XENA@mail.gmail.com>
-Subject: Re: [PATCH v3] platform/chrome: cros_ec_typec: allow deferred probe
- of switch handles
-To:     Victor Ding <victording@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        heikki.krogerus@linux.intel.com, lee.jones@linaro.org,
-        groeck@chromium.org, enric.balletbo@collabora.com,
-        tzungbi@kernel.org, sebastian.reichel@collabora.com,
-        gregkh@linuxfoundation.org, gustavoars@kernel.org,
-        dustin@howett.net, dnojiri@chromium.org, tinghan.shen@mediatek.com,
-        pmalani@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V1 7/8] arm64: dts: qcom: Add ipq9574 SoC and AL02 board
+ support
+Content-Language: en-US
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+ <20230124141541.8290-8-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124141541.8290-8-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:56 PM Victor Ding <victording@chromium.org> wrote:
->
-> `fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
-> which is called from `cros_typec_get_switch_handles`. When this happens,
-> it does not indicate absence of switches; instead, it only hints that
-> probing of switches should occur at a later time.
->
-> Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
-> probing switches as a better time.
->
-> Signed-off-by: Victor Ding <victording@chromium.org>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
+On 24/01/2023 15:15, devi priya wrote:
+> From: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> 
+> Add initial device tree support for Qualcomm IPQ9574 SoC
+> and AL02 board
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
 > ---
->
-> Changes in v3:
-> - Reverted unnecessary change.
->
-> Changes in v2:
-> - Coverted switch-block to nested if-blocks.
->
->  drivers/platform/chrome/cros_ec_typec.c | 24 ++++++++++++++++--------
->  1 file changed, 16 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index 59de4ce01fab..de480ab10488 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -145,27 +145,33 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
->                                          struct fwnode_handle *fwnode,
->                                          struct device *dev)
->  {
-> +       int ret = 0;
-> +
->         port->mux = fwnode_typec_mux_get(fwnode, NULL);
->         if (IS_ERR(port->mux)) {
-> -               dev_dbg(dev, "Mux handle not found.\n");
-> +               ret = PTR_ERR(port->mux);
-> +               dev_dbg(dev, "Mux handle not found: %d.\n", ret);
->                 goto mux_err;
->         }
->
->         port->retimer = fwnode_typec_retimer_get(fwnode);
->         if (IS_ERR(port->retimer)) {
-> -               dev_dbg(dev, "Retimer handle not found.\n");
-> +               ret = PTR_ERR(port->retimer);
-> +               dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
->                 goto retimer_sw_err;
->         }
->
->         port->ori_sw = fwnode_typec_switch_get(fwnode);
->         if (IS_ERR(port->ori_sw)) {
-> -               dev_dbg(dev, "Orientation switch handle not found.\n");
-> +               ret = PTR_ERR(port->ori_sw);
-> +               dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
->                 goto ori_sw_err;
->         }
->
->         port->role_sw = fwnode_usb_role_switch_get(fwnode);
->         if (IS_ERR(port->role_sw)) {
-> -               dev_dbg(dev, "USB role switch handle not found.\n");
-> +               ret = PTR_ERR(port->role_sw);
-> +               dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
->                 goto role_sw_err;
->         }
->
-> @@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
->         typec_mux_put(port->mux);
->         port->mux = NULL;
->  mux_err:
-> -       return -ENODEV;
-> +       return ret;
->  }
->
->  static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
-> @@ -423,9 +429,11 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
->                 }
->
->                 ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
-> -               if (ret)
-> -                       dev_dbg(dev, "No switch control for port %d\n",
-> -                               port_num);
-> +               if (ret) {
-> +                       dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
-> +                       if (ret == -EPROBE_DEFER)
-> +                               goto unregister_ports;
-> +               }
->
->                 ret = cros_typec_register_port_altmodes(typec, port_num);
->                 if (ret) {
-> --
-> 2.39.1.405.gd4c25cc71f-goog
->
->
+>  arch/arm64/boot/dts/qcom/Makefile            |   1 +
+>  arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  78 +++++
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 285 +++++++++++++++++++
+>  3 files changed, 364 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 3e79496292e7..872c62028a0b 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
 
+This does not match current tree, so I could not apply it for tests. I
+think you based it on a bit older version.
 
--- 
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+Best regards,
+Krzysztof
+
