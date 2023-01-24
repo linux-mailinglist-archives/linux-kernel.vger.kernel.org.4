@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF2A679BFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054C6679BED
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbjAXOdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S234959AbjAXOdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:33:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbjAXOdZ (ORCPT
+        with ESMTP id S234951AbjAXOc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:33:25 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051D7A9A;
-        Tue, 24 Jan 2023 06:33:15 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso11062691wmq.5;
-        Tue, 24 Jan 2023 06:33:15 -0800 (PST)
+        Tue, 24 Jan 2023 09:32:56 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638A43C00
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:32:44 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id o17-20020a05600c511100b003db021ef437so11068126wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:32:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7aOtYwkJuuHEPdSEaKtuY4IVMeDQdkAEZJbms1VnoL4=;
-        b=GexpuhAbVSXoU0EPzvjZgr4tSeN0n51vxGdsguhXKYvtz4V5HBssb9UIK4oHWOM3nf
-         txLzl1zwlKiFc9WbFASq59y5hGJrs/etdpknLbHgLGicI0iGLQVMU2Yt3En/XDIWx2ye
-         4/MeLqz2N6JHI98fiyyGuDWiazqoZf7iz78T2MJ4K0gxbqQe7S2TI6Nyi9SQJdjJBD1d
-         9jjtYR+xTga5ighZQd/PWgU3kxqBwiaLjtJxhg6EfXTdo3cWxq46OiesZ3CtYEDWi49D
-         3W0FNfWfo+tktO2tyX5vxfRLZpu3VP6/M6Grru2sNaHSSySaDKLgqbwAFJGA/A0pJ/+z
-         266g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XDiS1iCUboVrRCsKlm7Fzmy1FXXwzKYsp25Aj0Yy6MQ=;
+        b=vPtvZdOa87UVy/r+4SHu0OZoqhQC1mbPBb1lk1SIuBgnt2zuSIjtzfW4NGIBVD0H84
+         6v8OACkHlDBy+yHF76OayE3+j6SqJAwx+1qYg3fVlGn5zZw1ANGhqs6J8n4Bs2maVU6a
+         dihaM2KSVX0WTV5KVTEC0B6r/29kp/MISeR0nu9kJSL4oqKNr5oAVeZchM/7wiGLTcqX
+         ZcgkldwnH3eNvfXnqndagRUz5izEsxyOZVEDiaHGAcCdSKXfOAdahbU9acfaitLVdEVB
+         UcWJqZu3gIHfSC7nzXPs/kjTfySZtzfSIBJ3VL1mJHkDB4GHL70a7jdKxbNq0C5OtcnU
+         ObJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7aOtYwkJuuHEPdSEaKtuY4IVMeDQdkAEZJbms1VnoL4=;
-        b=fNQkQKciaGKRymA1FliD1gOPbjl9VHaeIywy1j/n0uquLaEjtfrQvj2PUh47oyPpzG
-         JF4qc92kGSvyOllAODjBImhcxqNL6k6MPnOKdq14c0Cs5tUHsDgXJfdB2SQue0CesTEI
-         IDOOqv0MqZLRQPSCSU7Zh7JIxR/IEtuuV/0lMgSdXY4EPKck8OSq21BTse9D9ao+T8kG
-         HQn8jTlN7akMplF0hh8vA5DPwqRzlq57uvSZIT6BbdVoMDAvo+oyPIz+RUq4AZcmxSuU
-         bgXo+CsPD+XjBzqxjrrGZFGu8Bd4HPyntZ9z7bLPC794NDTSdSHcD0cIEkp4YZWuiloA
-         qh0g==
-X-Gm-Message-State: AFqh2koyJKU72LOGzZE1fNdFG+tbKbAj+jyy4XexZMTKg0Tn7G6eBxhe
-        Mp4mDU+pZRJiKXmm/Lmfo6A=
-X-Google-Smtp-Source: AMrXdXtpjWD0+cZIvANzhQag0IH6f60p2wMHykGleUd706IE+w4sB96Pw83DkgscJQB0pxreZNI50Q==
-X-Received: by 2002:a05:600c:3b83:b0:3d9:f758:e280 with SMTP id n3-20020a05600c3b8300b003d9f758e280mr29410938wms.24.1674570793989;
-        Tue, 24 Jan 2023 06:33:13 -0800 (PST)
-Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
-        by smtp.googlemail.com with ESMTPSA id j14-20020a05600c130e00b003db0bb81b6asm2083039wmf.1.2023.01.24.06.33.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 06:33:13 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v2 2/2] soc: qcom: socinfo: Add Soc IDs for IPQ8064 and variants
-Date:   Tue, 24 Jan 2023 15:32:36 +0100
-Message-Id: <20230124143236.1038-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230124143236.1038-1-ansuelsmth@gmail.com>
-References: <20230124143236.1038-1-ansuelsmth@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDiS1iCUboVrRCsKlm7Fzmy1FXXwzKYsp25Aj0Yy6MQ=;
+        b=fMzr7fxPpH69D5UrkcKIQLgwtt7mdGO0ESgr340DBekv7AhzOdwG+gTvwOSRa0+3sa
+         bSBINJ2o57ug5jhGnn7PYxWLwOp7mqs50bV0Gu8VdKslHTLPJPzh/nl2o3qHZtMqM0BO
+         8Z/sbvzy5s+xJYpvKzLj5k3UCMIFwV4djLCW0r8d4MSonjSREfLDJupTmIzeJTAVw67S
+         ppCu7z9YHDtWZhntrg3GhLQZ3xlaCJb+WD5VcfpEiGTSrRo6mCgpLpoEZXou9xKS27H7
+         bsB41BYWwcHENUFRSqT83ClE4qmbBiUvGhcEwZ+2tu5xoAho4d1MVPwMNrwIHtF8vVT4
+         rh0w==
+X-Gm-Message-State: AFqh2ko/EkeTQwg0l1YhwhnlbofSu8DdVbI2ThYal3UyMC5IaFjrO70H
+        4apjaQn4Yguu1HfJBvmIvqe61g==
+X-Google-Smtp-Source: AMrXdXsctwTFCtiWVY6Ey4pL/EArJw4xmGNT7B2kGRBsUfNDt8LEAZCPcupBoBqTG2mCKoR9qHLQAg==
+X-Received: by 2002:a1c:4b09:0:b0:3db:f0a:8726 with SMTP id y9-20020a1c4b09000000b003db0f0a8726mr25144788wma.28.1674570762789;
+        Tue, 24 Jan 2023 06:32:42 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05600c378600b003d9fba3c7a4sm13542158wmr.16.2023.01.24.06.32.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 06:32:42 -0800 (PST)
+Message-ID: <5331527f-a96c-1c1b-dcf5-8f7e5957814d@linaro.org>
+Date:   Tue, 24 Jan 2023 15:32:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V1 0/8] Add minimal boot support for IPQ9574
+Content-Language: en-US
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Soc IDs table entries for Qualcomm IPQ8064 and variants.
+On 24/01/2023 15:15, devi priya wrote:
+> The IPQ9574 is Qualcomm's 802.11ax SoC for Routers,
+> Gateways and Access Points.
+> 
+> This series adds minimal board boot support for ipq9574-al02-c7 board
+> 
+> [V1]
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/soc/qcom/socinfo.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+You already sent a v1. This should be v2.
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 10efdbcfdf05..a4347fec7d37 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -255,10 +255,16 @@ static const struct soc_id soc_id[] = {
- 	{ qcom_board_id(MSM8126) },
- 	{ qcom_board_id(APQ8026) },
- 	{ qcom_board_id(MSM8926) },
-+	{ qcom_board_id(IPQ8062) },
-+	{ qcom_board_id(IPQ8064) },
-+	{ qcom_board_id(IPQ8066) },
-+	{ qcom_board_id(IPQ8068) },
- 	{ qcom_board_id(MSM8326) },
- 	{ qcom_board_id(MSM8916) },
- 	{ qcom_board_id(MSM8956) },
- 	{ qcom_board_id(MSM8976) },
-+	{ qcom_board_id(IPQ8065) },
-+	{ qcom_board_id(IPQ8069) },
- 	{ qcom_board_id(MSM8994) },
- 	{ qcom_board_id_named(APQ8074PRO_AA, "APQ8074PRO-AA") },
- 	{ qcom_board_id_named(APQ8074PRO_AB, "APQ8074PRO-AB") },
--- 
-2.38.1
+> 	Fixed all the review comments
+
+That's not specific enough.
+
+Best regards,
+Krzysztof
 
