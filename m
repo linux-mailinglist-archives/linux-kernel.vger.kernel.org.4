@@ -2,65 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DD1679D79
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6506B679D84
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbjAXP2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S235128AbjAXPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234994AbjAXP2d (ORCPT
+        with ESMTP id S234976AbjAXPbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:28:33 -0500
+        Tue, 24 Jan 2023 10:31:09 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19D865A8;
-        Tue, 24 Jan 2023 07:28:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371C2213A;
+        Tue, 24 Jan 2023 07:31:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674574112; x=1706110112;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=tkzGpVlFyCfFjd/vFXWy7GqH6aY1OKezZNGGV0z+nSY=;
-  b=lPBi56tc4A08dFfvTkUhbp2MvwEO7agQwJapJPOaNp+WIxVS1KDcI/mB
-   gI+IhS57poVmaUtL5HymCJRhB7035uwwmGMwiPrPfCAnPMvKe/yqpYlbT
-   nYw2hDM5QsHwa5d8u79MrOmGgaZEYwZjBjHbe63Qv9TXaoZf3OJE0MChL
-   MHK4H6M+NBNrWhZOC6+9ynqg67v1CwG3VeTw8RgfD93s40OPeGO05GahY
-   xHo7kvkyF9HHH5Ce/Om9dKpO4i2eQxjHnt8QD04FKxGtBnWdgfJilWS8d
-   6j9Z5Rr0dgW2OVe0Rk0F905ONUJRKoiqsqau50/GOQdkh+opcXJCc6XuR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327575317"
+  t=1674574268; x=1706110268;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LYBqnbp7RgPa9rBpiZ++vb4CG6oJaSkh3E7AYQvH3A4=;
+  b=Gdn2Vwxr7uhMjBKoWAM2XD5rhtxs7tXIc414MJupihAX87kxDnkDTQf0
+   ZLN56a3Ns52JiXmoACOIeR4sJE3rqDn31oNjVNjEP0X7AP8cOadBtifzy
+   yJhIVK/blCzr9e+ceHm5GoGr+RRvJNQZjfuhyIY1yIhG5hpOsLJ9N7OAD
+   9CBv+KI3PYSOQnBYSQDMszZiOpHgH8JBYLwLlfm6CssQqUjkKgIwMVViM
+   0oR0nClAWc9I61SzkJRa/qmi4vYiIUPoVCsfQP+fNAE8U+stt3t3MLK2N
+   lAtfdIlOfJaECO/aNqFmzx7suwTtlRCQuKfrbID94ySNdfTLZ45TZJcUe
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="327575987"
 X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="327575317"
+   d="scan'208";a="327575987"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 07:28:32 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 07:31:07 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="770354522"
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="770356043"
 X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="770354522"
-Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2023 07:28:28 -0800
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, darwi@linutronix.de,
-        elena.reshetova@intel.com, kirill.shutemov@linux.intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        stable@vger.kernel.org, alexander.shishkin@linux.intel.com
-Subject: Re: [PATCH 1/2] PCI/MSI: Cache the MSIX table size
-In-Reply-To: <Y8/WPAqZACAHcmf+@unreal>
-References: <20230119170633.40944-1-alexander.shishkin@linux.intel.com>
- <20230119170633.40944-2-alexander.shishkin@linux.intel.com>
- <Y8z7FPcuDXDBi+1U@unreal> <87v8kwp2t6.fsf@ubik.fi.intel.com>
- <Y8/Kyzh+stow83lQ@unreal> <87pmb4p0ik.fsf@ubik.fi.intel.com>
- <Y8/WPAqZACAHcmf+@unreal>
-Date:   Tue, 24 Jan 2023 17:28:27 +0200
-Message-ID: <87mt68ostg.fsf@ubik.fi.intel.com>
+   d="scan'208";a="770356043"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2023 07:31:03 -0800
+Received: from [10.251.2.31] (kliang2-mobl1.ccr.corp.intel.com [10.251.2.31])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 8254B580B9A;
+        Tue, 24 Jan 2023 07:31:01 -0800 (PST)
+Message-ID: <8eda340a-8c5d-a801-54eb-501c44a68d89@linux.intel.com>
+Date:   Tue, 24 Jan 2023 10:31:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/x86: KVM: Disable vPMU support on hybrid CPUs (host
+ PMUs)
+Content-Language: en-US
+To:     Andi Kleen <ak@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+References: <20230120004051.2043777-1-seanjc@google.com>
+ <1dec071d-c010-cd89-9e58-d643e71e775c@linux.intel.com>
+ <Y8rQJf3ki8a1aRjW@google.com>
+ <50e840ea-ce9c-9290-2187-d3ff0d9a6709@linux.intel.com>
+ <Y8r604tRexxWlF8F@google.com>
+ <e161b7c0-f0be-23c8-9a25-002260c2a085@linux.intel.com>
+ <67facb87-f835-abcd-3d1b-527531b26e52@linux.intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <67facb87-f835-abcd-3d1b-527531b26e52@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,39 +89,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Leon Romanovsky <leon@kernel.org> writes:
 
-> On Tue, Jan 24, 2023 at 02:42:11PM +0200, Alexander Shishkin wrote:
->> Leon Romanovsky <leon@kernel.org> writes:
->> 
->> A malicious device is what the fuzzing is aiming to simulate. The fact
->> of fuzzing process itself didn't seem relevant to the patch, so I didn't
->> include it, going instead for the problem statement and proposed
->> solution. Will the commit message benefit from mentioning fuzzing?
->
-> No, for most if not all kernel developers, the fuzzing means some sort of
-> random user-space input. PCI devices are trusted in the kernel.
 
-Right, it's a different kind of fuzzing. Apologies, I should have made
-it clear.
+On 2023-01-23 8:04 p.m., Andi Kleen wrote:
+> 
+>> If I understand correct, the workaround in KVM is to add a white/black
+>> list to filter the events. I think we can do the same thing for the
+>> hybrid machine for now.
+>> https://lore.kernel.org/lkml/CAOyeoRUUK+T_71J=+zcToyL93LkpARpsuWSfZS7jbJq=wd1rQg@mail.gmail.com/
+> 
+> 
+> This will make everyone who actually wants to use the PMU sad.
 
->> > Do you see "gazillion bugs" for devices which don't change their MSI-X
->> > table size under the hood, which is main kernel assumption?
->> 
->> Not so far.
->
-> So please share them with us.
+Yes, but we still have all the architecture events work. I think it
+should be good enough as a short-term solution, when the hybrid is not
+completely supported in KVM.
+> 
+> It's reasonable if the vCPUs are not bound, but if they are bound it
+> would be better to expose it with a suitable CPUID for the types.
+> 
 
-We do, as soon as we find them. This patch is one such instance.
+Yes, and also the CPUID leaf 0x23H support to enumerate the PMU features
+of each types.
 
->> > If yes, you should fix these bugs.
->> 
->> That's absolutely the intention.
->
-> So let's fix the bugs and not hide them.
-
-Yes, that's what this patch aims to achieve.
 
 Thanks,
---
-Alex
+Kan
+
