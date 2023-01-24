@@ -2,119 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107BF679724
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2977567971B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjAXL7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S233129AbjAXL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjAXL7i (ORCPT
+        with ESMTP id S229546AbjAXL46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:59:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F11541B61;
-        Tue, 24 Jan 2023 03:59:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5782FB810F7;
-        Tue, 24 Jan 2023 11:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A38C433D2;
-        Tue, 24 Jan 2023 11:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674561575;
-        bh=YZ+vBu4ztT6wwThgjIPo2vsGVB02GGGHCVkvRdgZXYA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Vudp/uaBjlLkgY5TVF3F3D2/WJGfRGkddKr3VLOxk+p4tB+Rn9tJncLf9nK+FqAR9
-         Ubn4IucGXYwUH/Nb9hMHy+CQ0C7Ps4SF44nvR6qlGIlsdTt6xU0laZp3IDEebgaM4o
-         zBW1aCuFpPUvir2xueZVzX/TiNtNIE07xgy7CWwaAUVYwuMHHxBqtGhyn75G1ErWd6
-         m01kB1YTt5UWRcRHugmd1mOQRdgLQjuvzxh328bKIeHO5YKZP1nx7oZ9KZfWFNtFVe
-         cSwzyXJlzprD7wJQMiR2pFRE7CrjjaoAM7sD35IrqeiwDNVAdvML3wt9oc8v7PdSBA
-         QmduvV/iO+orw==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Andy Gospodarek <andy@greyhouse.net>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        intel-wired-lan@lists.osuosl.org,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        oss-drivers@corigine.com, Paolo Abeni <pabeni@redhat.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Veaceslav Falico <vfalico@gmail.com>
-Subject: [PATCH net-next v1 00/10] Convert drivers to return XFRM configuration errors through extack
-Date:   Tue, 24 Jan 2023 13:54:56 +0200
-Message-Id: <cover.1674560845.git.leon@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Tue, 24 Jan 2023 06:56:58 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEAE4ED8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:56:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674561417; x=1706097417;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=phCYjbeYeH33D7C/gttd9sta4hen+i8d+oLpv9x6oaU=;
+  b=L5w+Y/PRHsoRvHQwk2gfH2B7HglNqiUbnyTwf9lTsZGiDMX8rd+RphKn
+   qCPtxmEBNBniTncMii2AuVEoIVk+mnVnpq26i9vgxOcP+q6cclKJC2zrB
+   2sbkM71clzCgmHsnLddsAnYmxg9u6mYtIM1JIJbLJt+/iu34oHQkY4NLX
+   muL0iCGF4vhmt44oxRJRPPowIPItRW/0N7Ey+YdEKhgXvwm/dyPmZ8Wta
+   YIB8svrRdP7d1y4ryxKPgyShpD/plqpE6YiisV6vcxjF2bcozgu/TsFJo
+   arZL67JCUTkf5/1XAcIbVjWl+ESPAsan3bp54Zrq2nJMI8mIY+gzjDdJT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412509276"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="412509276"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:56:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804570487"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="804570487"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2023 03:56:54 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKHv3-0006Q5-2y;
+        Tue, 24 Jan 2023 11:56:53 +0000
+Date:   Tue, 24 Jan 2023 19:55:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Babu Moger <babu.moger@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: [tip:x86/cache 9/13] arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:13:
+ warning: variable 'h' set but not used
+Message-ID: <202301241934.L4ops5VY-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changelog
-v1:
- * Fixed rebase errors in mlx5 and cxgb4 drivers
- * Fixed previously existed typo in nfp driver
- * Added Simon's ROB
- * Removed my double SOB tags
-v0: https://lore.kernel.org/all/cover.1674481435.git.leon@kernel.org
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
+head:   0a363fb23ee2f7beb08437ad7db86d195878d79f
+commit: dc2a3e857981f859889933cf66ded117d74edff1 [9/13] x86/resctrl: Add interface to read mbm_total_bytes_config
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301241934.L4ops5VY-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=dc2a3e857981f859889933cf66ded117d74edff1
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/cache
+        git checkout dc2a3e857981f859889933cf66ded117d74edff1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/resctrl/
 
----------------------------------------------------------------------------
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Hi,
+All warnings (new ones prefixed by >>):
 
-This series continues effort started by Sabrina to return XFRM configuration
-errors through extack. It allows for user space software stack easily present
-driver failure reasons to users.
+   arch/x86/kernel/cpu/resctrl/rdtgroup.c: In function 'mon_event_config_read':
+>> arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:13: warning: variable 'h' set but not used [-Wunused-but-set-variable]
+    1456 |         u32 h;
+         |             ^
 
-As a note, Intel drivers have a path where extack is equal to NULL, and error
-prints won't be available in current patchset. If it is needed, it can be
-changed by adding special to Intel macro to print to dmesg in case of
-extack == NULL.
 
-Thanks
+vim +/h +1456 arch/x86/kernel/cpu/resctrl/rdtgroup.c
 
-Leon Romanovsky (10):
-  xfrm: extend add policy callback to set failure reason
-  net/mlx5e: Fill IPsec policy validation failure reason
-  xfrm: extend add state callback to set failure reason
-  net/mlx5e: Fill IPsec state validation failure reason
-  netdevsim: Fill IPsec state validation failure reason
-  nfp: fill IPsec state validation failure reason
-  ixgbevf: fill IPsec state validation failure reason
-  ixgbe: fill IPsec state validation failure reason
-  bonding: fill IPsec state validation failure reason
-  cxgb4: fill IPsec state validation failure reason
-
- Documentation/networking/xfrm_device.rst      |   4 +-
- drivers/net/bonding/bond_main.c               |  10 +-
- .../net/ethernet/chelsio/cxgb4/cxgb4_main.c   |   8 +-
- .../inline_crypto/ch_ipsec/chcr_ipsec.c       |  34 +++---
- .../net/ethernet/intel/ixgbe/ixgbe_ipsec.c    |  27 ++---
- drivers/net/ethernet/intel/ixgbevf/ipsec.c    |  21 ++--
- .../mellanox/mlx5/core/en_accel/ipsec.c       | 103 ++++++++----------
- .../net/ethernet/netronome/nfp/crypto/ipsec.c |  41 +++----
- drivers/net/netdevsim/ipsec.c                 |  14 +--
- include/linux/netdevice.h                     |   4 +-
- net/xfrm/xfrm_device.c                        |   9 +-
- net/xfrm/xfrm_state.c                         |   2 +-
- 12 files changed, 137 insertions(+), 140 deletions(-)
+  1451	
+  1452	static void mon_event_config_read(void *info)
+  1453	{
+  1454		struct mon_config_info *mon_info = info;
+  1455		unsigned int index;
+> 1456		u32 h;
+  1457	
+  1458		index = mon_event_config_index_get(mon_info->evtid);
+  1459		if (index == INVALID_CONFIG_INDEX) {
+  1460			pr_warn_once("Invalid event id %d\n", mon_info->evtid);
+  1461			return;
+  1462		}
+  1463		rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
+  1464	
+  1465		/* Report only the valid event configuration bits */
+  1466		mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
+  1467	}
+  1468	
 
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
