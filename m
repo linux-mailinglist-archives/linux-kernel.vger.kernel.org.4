@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF7D679E30
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB66E679E39
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbjAXQHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S233346AbjAXQJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbjAXQGz (ORCPT
+        with ESMTP id S229956AbjAXQJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:06:55 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AD246D7B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674576411; x=1706112411;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XdBMmP76/kIfQmuowbQ55kRU8wLLl2YLjduiN6mcGNk=;
-  b=k+JuVgRWWl7Ct6Q5GclojB+KXNhcCWsKb0Z6wXIxXiMyc+ubMqvUUqzc
-   dLjzFnVVSKWNCDMhA2lrkLY1iLsOIqsvX75FrN+DB1UExHnu6Kim3BLoG
-   O2ksN0Z1a1gzrRNkIorDGviFzbk8FFtAFySE6yuM7ZjqUNYQv7946hvup
-   ER+Cjxelg47y9SLy3s/i5N9r9/cRIhe7So3G1ZC051ytCXOfFM3jDgGWB
-   IFh4DpBjGw7nxBWuKIO1GgJGqpoXSD1CHGku2hmJLKCzIwjoqffXGAKAK
-   h/0LnSxw9LLz05HL5J22MOOlyLQ9TosKIlx59hBGFXTIqMYFK9gbljq4p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="353606265"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="353606265"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 08:06:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="990923894"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="990923894"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2023 08:06:15 -0800
-Received: from [10.251.2.31] (kliang2-mobl1.ccr.corp.intel.com [10.251.2.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 85040580B9A;
-        Tue, 24 Jan 2023 08:06:14 -0800 (PST)
-Message-ID: <8c1ca162-d6af-888b-6c9a-a907ad74efde@linux.intel.com>
-Date:   Tue, 24 Jan 2023 11:06:13 -0500
+        Tue, 24 Jan 2023 11:09:26 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F191ABFC;
+        Tue, 24 Jan 2023 08:09:26 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id d16so13428890qtw.8;
+        Tue, 24 Jan 2023 08:09:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4oW+kjbdfD2UZ0Y0yY675AjDRpuz5dKDMbgZwwf8UEg=;
+        b=fiGiClFex72BIS1hZUQTUCTdRaUt7TqJmMc57SbHabC15wBR3mjcpa59Lc25H2U4UC
+         Fg/9yYR6ePWg+9IsoTMjozKA1owCG7d7OyoejW0s+AUMaqSb49ONzvxSDVKCY86O2KF5
+         Mg3IWjqno4S3cACODGurbr0ffXPZXc1iEkQRv5RlkLHo2BkEx9OOvC/J1q0jD9YfBR1+
+         +oGj2pL2bo6RBvVJHWVPwXhy6Cqr5mgCfyYhAWU1s8+nOV+sZm9jt/lFC0Xzd1NeNCTb
+         5XBLlfnQ+JKRku+I+DaJWWwmflaSC6GzdUItlc6rRuKoKUT6UY7ipd71g17HrO0NGFOa
+         /4qg==
+X-Gm-Message-State: AFqh2krWQ31dOmWvf/XnCCr0dJQm3+obXm15m3Z0r6FZeHOct1xyTMC9
+        51hWCWU7zg2Jx7Ei65q/1AQ6p5Ob3q0GEqex
+X-Google-Smtp-Source: AMrXdXvC+umlqmNelcwfCQdMZV7Tl8BrcqM5LHNEQKBDqBYZBgRv5LOLFDs477x7RVhMGNNpKX3Uuw==
+X-Received: by 2002:ac8:5194:0:b0:3b6:302d:714 with SMTP id c20-20020ac85194000000b003b6302d0714mr44609903qtn.4.1674576564672;
+        Tue, 24 Jan 2023 08:09:24 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:93a0])
+        by smtp.gmail.com with ESMTPSA id d7-20020ac800c7000000b003b0b903720esm1495692qtg.13.2023.01.24.08.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 08:09:24 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, tj@kernel.org
+Subject: [PATCH bpf-next v2 0/4] Enable struct_ops programs to be sleepable
+Date:   Tue, 24 Jan 2023 10:07:58 -0600
+Message-Id: <20230124160802.1122124-1-void@manifault.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] timekeeping: NMI safe converter from a given time to
- monotonic
-Content-Language: en-US
-To:     Stephane Eranian <eranian@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     peterz@infradead.org, mingo@redhat.com, jstultz@google.com,
-        sboyd@kernel.org, linux-kernel@vger.kernel.org,
-        namhyung@kernel.org, ak@linux.intel.com
-References: <20230123182728.825519-1-kan.liang@linux.intel.com>
- <20230123182728.825519-2-kan.liang@linux.intel.com> <87sfg0gvrk.ffs@tglx>
- <CABPqkBSt2WH=zo0_tXNb_Q7waDazvcquXgexXqqn=70A_f4H8Q@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CABPqkBSt2WH=zo0_tXNb_Q7waDazvcquXgexXqqn=70A_f4H8Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is part 2 of https://lore.kernel.org/bpf/20230123232228.646563-1-void@manifault.com/
 
+Changelog:
+----------
+v1 -> v2:
+- Add support for specifying sleepable struct_ops programs with
+  struct_ops.s in libbpf (Alexei).
+- Move failure test case into new dummy_st_ops_fail.c prog file.
+- Update test_dummy_sleepable() to use struct_ops.s instead of manually
+  setting prog flags. Also remove open_load_skel() helper which is no
+  longer needed.
+- Fix verifier tests to expect new sleepable prog failure message.
 
-On 2023-01-24 4:10 a.m., Stephane Eranian wrote:
-> On Tue, Jan 24, 2023 at 12:52 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> On Mon, Jan 23 2023 at 10:27, kan liang wrote:
->>> From: Kan Liang <kan.liang@linux.intel.com>
->>>
->>> It's useful to provide a NMI safe function to convert a given time to
->>> monotonic. For example, the perf_event subsystem wants to convert a TSC
->>> of a PEBS record to a monotonic clock in a NMI handler.
->>
->> Why? That's a postprocessing problem, really.
->>
+David Vernet (4):
+  bpf: Allow BPF_PROG_TYPE_STRUCT_OPS programs to be sleepable
+  libbpf: Support sleepable struct_ops.s section
+  bpf: Pass const struct bpf_prog * to .check_member
+  bpf/selftests: Verify struct_ops prog sleepable behavior
 
-Besides the reason Stephane mentioned, the current perf tool assumes
-that kernel always gives the time it asked. For example, without the
-patch, the kernel uses ktime_get_mono_fast_ns() to get the MONOTONIC
-time and dump it to user space.
+ include/linux/bpf.h                           |  4 +-
+ kernel/bpf/verifier.c                         |  7 ++-
+ net/bpf/bpf_dummy_struct_ops.c                | 18 ++++++
+ net/bpf/test_run.c                            |  6 ++
+ net/ipv4/bpf_tcp_ca.c                         |  3 +-
+ tools/lib/bpf/libbpf.c                        |  1 +
+ .../selftests/bpf/prog_tests/dummy_st_ops.c   | 56 ++++++++++++++-----
+ .../selftests/bpf/progs/dummy_st_ops_common.h | 20 +++++++
+ .../selftests/bpf/progs/dummy_st_ops_fail.c   | 41 ++++++++++++++
+ ...{dummy_st_ops.c => dummy_st_ops_success.c} | 18 +++---
+ 10 files changed, 145 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops_fail.c
+ rename tools/testing/selftests/bpf/progs/{dummy_st_ops.c => dummy_st_ops_success.c} (75%)
 
-If we want to break the assumption, I think we have to modify the
-current interfaces and dump more extra data to indicate the clock
-source. That makes the existing interface more complex. Preparing and
-dumping the extra data also brings overhead. We also have to force the
-user to update their tools.
+-- 
+2.39.0
 
-
-Thanks,
-Kan
-
-> Because you want to correlate samples captured by PEBS with samples
-> from applications timestamped with a user available clock such as
-> CLOCK_MONOTONIC, for instance.
-> When I create a perf_event event and I stipulate that
-> event_attr.clockid=MONOTONIC, I expect all the samples from
-> that event to be timestamped using the same clock source, regardless
-> of PEBS or IBS.
-> 
-> 
-> 
->> Thanks,
->>
->>         tglx
