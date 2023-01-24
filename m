@@ -2,112 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83346794D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC646794F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbjAXKLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S233076AbjAXKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXKLj (ORCPT
+        with ESMTP id S233783AbjAXKNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:11:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E4B75D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:10:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674555049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/ea3L0Ed5IYjUQaMLhyl4vDM8euWki44OGeAFp5yFf8=;
-        b=AUBNTcKg3C/M0XD134iji+Td+0ZWIDHP85gBJIIXMmRYF0Hrc7YuCrWEfBwEr1RPQpSq4l
-        lKgpsDAZo8oSdDXJ+5ycmYjmkCVh4WHVS7LKZbpr1WeMcl2/0kbAxV/NyPA1jPdgHJz2BB
-        wPgxdnRIGfbgMdZMTMbynQs3vkmSbbM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-ogIEAxvxNyWWw183L7LFlw-1; Tue, 24 Jan 2023 05:10:48 -0500
-X-MC-Unique: ogIEAxvxNyWWw183L7LFlw-1
-Received: by mail-wm1-f72.google.com with SMTP id l19-20020a05600c1d1300b003dc13fc9e42so592939wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:10:47 -0800 (PST)
+        Tue, 24 Jan 2023 05:13:44 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301B841B6B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:13:36 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id b7so13360960wrt.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S8taYkiDRhxwSj2khSrYXtScgLWDxF1GD5X3Ip5sSGs=;
+        b=LLp84wiadrhwgCkt5Iy//WkgeSBuROH6t0YeHNNNAtMvdohLlAiDAEDkQPNjfHsmOa
+         SnQ0Hqj7fFh3RIR5ryXAvuJ0MXz2o3AGYojvwuFBQduvyX/fuU/CEGjXqQfOeXvm+B2N
+         38hUhIMVdjhF5Nde8peUn0fcZMHn89MyndOYvmVILwVapZkIIxp9Y/31L8hlcaXu1c3D
+         FVnhP2FqR8jz8PfwwArxgb2uEFfXPo+3gwiHeIxg6C4RfRd9K8uhnGtl99WC50CBqpI2
+         fUKxyd6/aSmt4uHQl5nWmHv218zWtiUOPfENRl1AQNL9E5m3KmwTPCG21C6QBzfoRdtL
+         t/wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ea3L0Ed5IYjUQaMLhyl4vDM8euWki44OGeAFp5yFf8=;
-        b=CVcWCF5lN2uRVfg7JgAAFkRmfYc7fJG8HMkW67SoiJnIJ+E4+NlBl0vEA6wo1NrGyj
-         EXmiyaL/K2hqHqKC6ARsrjL+CI2IaSZYPNdSJvT1T0Ho/umTBgk1co8qDNgJT+i3h25C
-         UybesOBmUfWhepm2Q3trALuHdtwKpvqOzvKgdn5RMmr+0EkIOruuGOO+EdyioVWSVbXl
-         Gs5NM4JXgzSVBo3QLeIlBq08f44ld5eqf+r+eK1uhi6IpijjSpZITADNxyRYwM/Sh5+p
-         hMBg4cMVQh9c6ZGdhyKu2ZRPQX1VqoVX4BfzLVBLuGLnugO2iDMFMQBkEQH3TmDPmalz
-         ExFw==
-X-Gm-Message-State: AFqh2kpiXhBXFkk13Ie6poKxXo3U9lzFs4tPPAhQ0Eu+OeM6GldY3ikT
-        0ZuTkYQRQzNaoDJKf3AnMN5zj1fl4aLzQRHV1zRasF9CY105ioXutpzljAyFzZoFEZqCZnLwD6N
-        s6t6DMQI3jTK5YTOlOtNkVm3ezCaqy9HR44SS0ArVJ4dRrdT/JeVJ+uGmipCpXfbvnl3QyfTEia
-        A=
-X-Received: by 2002:a7b:c45a:0:b0:3d1:ed41:57c0 with SMTP id l26-20020a7bc45a000000b003d1ed4157c0mr35140101wmi.30.1674555046598;
-        Tue, 24 Jan 2023 02:10:46 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv5AioHCNcL30Sjju8XtwLP3T9V6KC2OqPgEYZytb4DQyKsMxqZxY2HiIkelfmcTqUxgcRd0Q==
-X-Received: by 2002:a7b:c45a:0:b0:3d1:ed41:57c0 with SMTP id l26-20020a7bc45a000000b003d1ed4157c0mr35140084wmi.30.1674555046385;
-        Tue, 24 Jan 2023 02:10:46 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05600c2cad00b003cfa622a18asm14171373wmc.3.2023.01.24.02.10.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 02:10:46 -0800 (PST)
-Message-ID: <9bc96f9d-8e3a-7c71-c9fe-088c9d086f2a@redhat.com>
-Date:   Tue, 24 Jan 2023 11:10:45 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S8taYkiDRhxwSj2khSrYXtScgLWDxF1GD5X3Ip5sSGs=;
+        b=JayVTtkHBs/1BkSGswBc9xR5/v2Hj3z6PMMdTvoI1ov6EIaKmGeRGTZElmHQvRtYfx
+         gXlRJuuGoM3ekhJTUlgLltLJxHAJTw7u5Thq1lBdMTc33T1jZmuFf8QEVZtS42eRcEpe
+         Cbr4lcUz5xvaf6T7WwgSv5jLSeEbNSEXWcIEYHpBwJEnCCyAGDRdUTrYAV8CmGpoPSi7
+         ur4eDVMkCI350m+diUb6Ce+4ngzTQ4FUTh5+GBSebSDTL+UEEujbbmcWz7YvLmPnTssc
+         v5ekWfytppartENVpOhObD6TJD+Zf8wSbbMMKFVb8PWu/ZdSwqLCfvtMyUoSrQK2gCou
+         kB8A==
+X-Gm-Message-State: AO0yUKUU1DFvv8b/LoK1NcUd6ITH4E5UYvteoYxfvvjyKB/hFDgY82gL
+        qNggVskkEnAO8CZ8cGkqlVnRUQ==
+X-Google-Smtp-Source: AK7set+aTxPF4ny5RRAONgayCfTl2kwcaYwdQh9zSQY+aRfErh7XOu1AKwZIhC13TWp5Gcty+g3RPQ==
+X-Received: by 2002:adf:fa09:0:b0:2bf:ac2c:4489 with SMTP id m9-20020adffa09000000b002bfac2c4489mr2351847wrr.54.1674555214568;
+        Tue, 24 Jan 2023 02:13:34 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id r1-20020a0560001b8100b002bfae16ee2fsm1452595wru.111.2023.01.24.02.13.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 02:13:34 -0800 (PST)
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Qi Duan <qi.duan@amlogic.com>
+Subject: [PATCH v2 net] net: mdio-mux-meson-g12a: force internal PHY off on mux switch
+Date:   Tue, 24 Jan 2023 11:11:57 +0100
+Message-Id: <20230124101157.232234-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/ssd130x: Silence a `dubious: x & !y` warning
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230121190930.2804224-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230121190930.2804224-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/23 20:09, Javier Martinez Canillas wrote:
-> The sparse tool complains with the following warning:
-> 
-> $ make M=drivers/gpu/drm/solomon/ C=2
->   CC [M]  drivers/gpu/drm/solomon/ssd130x.o
->   CHECK   drivers/gpu/drm/solomon/ssd130x.c
-> drivers/gpu/drm/solomon/ssd130x.c:363:21: warning: dubious: x & !y
-> 
-> This seems to be a false positive in my opinion but still we can silence
-> the tool while making the code easier to read. Let's also add a comment,
-> to explain why the "com_seq" logical not is used rather than its value.
-> 
-> Reported-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->
+Force the internal PHY off then on when switching to the internal path.
+This fixes problems where the PHY ID is not properly set.
 
-Pushed this to drm-misc (drm-misc-next). Thanks!
+Fixes: 7090425104db ("net: phy: add amlogic g12a mdio mux support")
+Suggested-by: Qi Duan <qi.duan@amlogic.com>
+Co-developed-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
 
+Changes since v1:
+ - Fix variable position for reverse Xmas tree requirement.
+
+The initial discussion about this change can be found here:
+https://lore.kernel.org/all/1j4jslwen5.fsf@starbuckisacylon.baylibre.com/
+
+ drivers/net/mdio/mdio-mux-meson-g12a.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/mdio/mdio-mux-meson-g12a.c b/drivers/net/mdio/mdio-mux-meson-g12a.c
+index 4a2e94faf57e..c4542ecf5623 100644
+--- a/drivers/net/mdio/mdio-mux-meson-g12a.c
++++ b/drivers/net/mdio/mdio-mux-meson-g12a.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/bitfield.h>
++#include <linux/delay.h>
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/device.h>
+@@ -150,6 +151,7 @@ static const struct clk_ops g12a_ephy_pll_ops = {
+ 
+ static int g12a_enable_internal_mdio(struct g12a_mdio_mux *priv)
+ {
++	u32 value;
+ 	int ret;
+ 
+ 	/* Enable the phy clock */
+@@ -163,18 +165,25 @@ static int g12a_enable_internal_mdio(struct g12a_mdio_mux *priv)
+ 
+ 	/* Initialize ephy control */
+ 	writel(EPHY_G12A_ID, priv->regs + ETH_PHY_CNTL0);
+-	writel(FIELD_PREP(PHY_CNTL1_ST_MODE, 3) |
+-	       FIELD_PREP(PHY_CNTL1_ST_PHYADD, EPHY_DFLT_ADD) |
+-	       FIELD_PREP(PHY_CNTL1_MII_MODE, EPHY_MODE_RMII) |
+-	       PHY_CNTL1_CLK_EN |
+-	       PHY_CNTL1_CLKFREQ |
+-	       PHY_CNTL1_PHY_ENB,
+-	       priv->regs + ETH_PHY_CNTL1);
++
++	/* Make sure we get a 0 -> 1 transition on the enable bit */
++	value = FIELD_PREP(PHY_CNTL1_ST_MODE, 3) |
++		FIELD_PREP(PHY_CNTL1_ST_PHYADD, EPHY_DFLT_ADD) |
++		FIELD_PREP(PHY_CNTL1_MII_MODE, EPHY_MODE_RMII) |
++		PHY_CNTL1_CLK_EN |
++		PHY_CNTL1_CLKFREQ;
++	writel(value, priv->regs + ETH_PHY_CNTL1);
+ 	writel(PHY_CNTL2_USE_INTERNAL |
+ 	       PHY_CNTL2_SMI_SRC_MAC |
+ 	       PHY_CNTL2_RX_CLK_EPHY,
+ 	       priv->regs + ETH_PHY_CNTL2);
+ 
++	value |= PHY_CNTL1_PHY_ENB;
++	writel(value, priv->regs + ETH_PHY_CNTL1);
++
++	/* The phy needs a bit of time to power up */
++	mdelay(10);
++
+ 	return 0;
+ }
+ 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.39.0
 
