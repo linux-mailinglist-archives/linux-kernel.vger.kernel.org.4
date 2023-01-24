@@ -2,310 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E45367A516
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458C967A51D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjAXViB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S235038AbjAXVj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbjAXVh7 (ORCPT
+        with ESMTP id S233577AbjAXVjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:37:59 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E0D1285C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:37:56 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id az20so42755997ejc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:37:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nsphrrjxZf/+mPZVnaJS6mjjScGG2KpHZGQnFCMnJoo=;
-        b=rjGqwSb2fN+qTpPLAqi4z5UfpQGufsABBYNRT6ynzNViP1u3Q907adnDyoZxvyCYjK
-         5eqUDck80qxisGW+W9wQJd+Jp+oLFul1/eTtB4/Kxpx28lHQqqsUUxuPCM3j8kK1fp9q
-         38zn3t9cOfSz5TR+HZXLk6kARLe8SExs+btfkZ8lpaP0tecv9P64tsp+2VWdbiVVbTa4
-         PHxPlt5bI9EnERZN0W8NYffbx5GBTzpNmbya7aSRII/1+EU+IWaWysFLIHPKPU6t2dvu
-         ZWoQxySrL3ATrLkM4QSSetovok/zLYHsDOcFVF+ZW3+H8u3csdCe5SlEZUq9tsrcy1dJ
-         byvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nsphrrjxZf/+mPZVnaJS6mjjScGG2KpHZGQnFCMnJoo=;
-        b=wpJGbOJZmcM4gCZgYFCM8Pfdq5Z1SQu0dMME11Whp78VEMOlLnfT5a9K7LomzqA+yV
-         7BxP3q6a3O+Orr1uC+3KtM5EA4YLqmMohJLgQfYnF8E4mWf6je8AJxEAwlOOgK6U0qvr
-         FRJWJ3B0A5hrxwhU1LsZ8n14GGlwBJgmjPNM6EuBEgV11vREuSiHgK2YaDb7VWVKpAXT
-         SU3kjneQGIePZWoSu3LQUqwHCl0kv/jbyRxWP06s8S27jJ/eL8AMdBX5FtTor4NdOWp8
-         Od7N2thSs1uUfQAzz6kimV7Pg+8gOpUEiGqD7EPumqBb42BT7OsKw7u9xbYuCLMXr6sy
-         vSkA==
-X-Gm-Message-State: AFqh2krAhKC3xrNW9eYrnPIKxfs94Yb+PlnQTa4TlzmrjWbwoXp51rFX
-        RTYQ2ydT5Xuluqbe02Te6ujzDQ==
-X-Google-Smtp-Source: AMrXdXvjtnBcp5rMK6F+wDLvmFhhGha2RHemyD07HuF63iQgwpduKDRPkAT+MHX2dcbxMf0v6EAjEw==
-X-Received: by 2002:a17:906:9f03:b0:877:962f:be0a with SMTP id fy3-20020a1709069f0300b00877962fbe0amr16968479ejc.37.1674596274530;
-        Tue, 24 Jan 2023 13:37:54 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id a13-20020a17090682cd00b0086ffe8a00fdsm1407592ejy.84.2023.01.24.13.37.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 13:37:54 -0800 (PST)
-Message-ID: <6f15bfe3-68f9-6da5-0363-ff7b854dce69@linaro.org>
-Date:   Tue, 24 Jan 2023 23:37:52 +0200
+        Tue, 24 Jan 2023 16:39:23 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2066.outbound.protection.outlook.com [40.107.102.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F678A51;
+        Tue, 24 Jan 2023 13:39:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F3KAJCJVYtPOdol7DojnQaasrRihKj8bogIl1H/P4kk0i+MJZP/xy/9s8QgEA/ioegUOtnxI6RDlsFKbI1Z86ugQpYajLWHhUbZQJv1E6jRxBg3uiDgOJf4ra0KioaC4d/hoy8oeXSD2b/M3OXU0NiOAXGNfDC1U2X+Gp/WQzneT20X2aFNBa8lKFMdaawzH7os1hWfqXPtBq7eVoXqZBPvAUiWaP69bqEaNKp8fY1VABD7O2QNhyOifPpqsSl1w7hfjDKcoAghqDQ3qs18g3JzZpDapns0nuuXLK8YnvLQWoLrztnYiyOtVlkUpPGniD36zV33HSjsdrKRgI0G+tA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4gXmgJ/zet9yfOM6vJYnDCuPsnUqGWb/8+q5JpRY7dU=;
+ b=d5n1FwRU2dN2L+GK67XIrecJjUtXp+ANe2xrg+3FXi2H8fvo8Kaur5abrGubwB0cllXajkoO8gzV6Qvv6uP4t60ZjhtZn/EkPX4NyuWb61GVD1iDj1aS1xtUCSvgMA0sx63M4q48Qf1UW22frL9gVIwTqGt93q9jQtfGX9+Szi2pD9TaiVKFY0Wv0yVC9Omy5aIIm7ik95g44zdv4xxC3uDT8CUqoifo+QbDYCGjGrAfbhXbkKWhWHCRIKe0CKJfaUq4rqP2X2njTHYXb0D8vlhrzzObiE890vl9FgGJh+/P9pvTe9yJtzrrwLrn8xbU1U+GqDvQnOK2rJDAHhWPzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
+ dkim=pass header.d=memverge.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4gXmgJ/zet9yfOM6vJYnDCuPsnUqGWb/8+q5JpRY7dU=;
+ b=IzFT7IT2IbdMlsxfSxY8WLded/MtDRJvDcuUW6kFNcmBszJqiEhc9QAxuT+ypK1vGNijcyNoRsbZcvi3UW1uB61Xgc2HFtFZvFqFxMFzb87PqtDs1IMDPH5D+HrEjcfboqZuoxMMO0q5kGc+6+GnTaHHScMgWb24ndecPA09AB8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=memverge.com;
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
+ by SA1PR17MB5718.namprd17.prod.outlook.com (2603:10b6:806:1cd::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 21:39:18 +0000
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 21:39:18 +0000
+Date:   Tue, 24 Jan 2023 16:39:12 -0500
+From:   Gregory Price <gregory.price@memverge.com>
+To:     Andrei Vagin <avagin@gmail.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+Message-ID: <Y9BQAEVp/oGjZz46@memverge.com>
+References: <20230123032942.18263-1-gregory.price@memverge.com>
+ <20230123032942.18263-4-gregory.price@memverge.com>
+ <20230123154101.GA6268@redhat.com>
+ <Y87OEdDXwZG8pmmE@memverge.com>
+ <20230123195228.GD6268@redhat.com>
+ <Y9AAcuomaVM2JRCA@memverge.com>
+ <20230124164347.GA28280@redhat.com>
+ <Y9ANOfzl+iZSBIEP@memverge.com>
+ <CANaxB-wASWa1k6X5umJ=wt-K47uiBo9N5hxc--xz5cmU2bvysA@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANaxB-wASWa1k6X5umJ=wt-K47uiBo9N5hxc--xz5cmU2bvysA@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR13CA0073.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::18) To BN6PR17MB3121.namprd17.prod.outlook.com
+ (2603:10b6:405:7c::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 12/14] drm/msm/disp/dpu1: revise timing engine
- programming to work for DSC
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
- <1674498274-6010-13-git-send-email-quic_khsieh@quicinc.com>
- <8392e1f3-8459-4408-41de-564a41980b4c@linaro.org>
- <3588a5d0-ca28-918f-e072-35f15a5a5132@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <3588a5d0-ca28-918f-e072-35f15a5a5132@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|SA1PR17MB5718:EE_
+X-MS-Office365-Filtering-Correlation-Id: b70f5e88-a335-4b62-ea29-08dafe537275
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ms0FHqIBNy9umLwJNRQgx9nQ1TQy09RQX1PQYxzVmpDq0bK0AM1gHQDiGTV8hkVNOna21zUa/qkmBuJR0gTEGiqCvPxsmKGzld0a25MAqYY9mXQdn/RST5ILCBJ53tGdgGI0GU6ihCPx9ANrHp1geZ2gWSEQk1x0woxjcaAsIBSdADrgKcgBWpppAGl4n4IJfdDp1fC7RDKTy3693q8KqnAUBvyo1VQfbGQCUFWEaaZHE32W+JZhy7ox1eZRLgmNGx5VspphBssriq5/7YgRQ8QWhCX+2SvLMmEaJS1clLYDDebUzF3i1PotWfLgA7poSOSs3bBSYmSIUh+/x590RAmdI6gpoJr1N/ZIguAW5rhfn8pjZctjkXqLTftPV20Dj581+PSlldw8vZIrCdmCOQEmVUO+hcJbwHFnGIrDPTNUCOnCpLbGT37L4pguW957uf9HSW9ay/fVlzg29QkpMZmO7Qwp2SHLLQ0anVyiqOm1r9m95qPRqLR39KLUPCBPB8m3W2/cBgiDP+q/QNZzMqPuWVcKqkYfiHSECdpU/AFRevfT90S0BcvKHO2PZMpQnWJ2K9e6/JtvUY/jEbArQ5Cm5uXmQJZGvKuuvPTWpEypcQ3W8Ud2LpO8agpEXP9av6zUhVxbAfgX6ho/0f6WKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39830400003)(376002)(396003)(366004)(136003)(451199018)(8676002)(6512007)(478600001)(66946007)(66556008)(4326008)(6916009)(316002)(26005)(66476007)(186003)(6506007)(2616005)(8936002)(2906002)(44832011)(41300700001)(4744005)(5660300002)(38100700002)(7416002)(54906003)(86362001)(6666004)(36756003)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jxs1kM22BDxkHJnXEixcczV72z7yCjLnhv9VLGgFaL7h+09ccqZUOH6iz5jQ?=
+ =?us-ascii?Q?O+qmhYIQyUD0JxOEEMIoTEH2qLokqaAf+YpLJGo0tL741BUiRJWy+YLnNlrl?=
+ =?us-ascii?Q?Lxx06QcWFMzXXsFKO1vRFwT0ik80QJBwoTpwS1hwb2mFRKKG+Js0Zx7pYXq6?=
+ =?us-ascii?Q?1A42La93evB1XAFTOrGCwQh7lNljfVETTqEatW7w6cP1j3dQzPhZtMLYSUYb?=
+ =?us-ascii?Q?WHhLbV0nGAg+gCGm4mlNb/MsgX4D8EnucW6Q1ae7vTSVFI44P0EMC2ijpiCF?=
+ =?us-ascii?Q?3PL7/Rb1/Opibc0xwqgLmfqb7kC63qPGZxf0u4WP3XPgOssFzyQcBWp92N6S?=
+ =?us-ascii?Q?aTVxQbDannYh9rpAOpoEhqsXnGtR6YvBR8xf7twX8L+npSxKfOMej6L43Ypp?=
+ =?us-ascii?Q?0XD9jgzx1g5peOnCzhZLOZeq8DFGXeXvX2yhNv3dl0B8qygMxSdp8busMk0I?=
+ =?us-ascii?Q?gcGU+zi86VEwoyz24cUAbmrlwaLmO+U23Gp3jSDWRakaDRV9kCSPa5mryoEp?=
+ =?us-ascii?Q?upPAGQ3KODk/+/ze3MJcbCSBlEpf0uCDcaizv96POUcLBMoBdgmsWxmTW03v?=
+ =?us-ascii?Q?TJw3lHScksc3uOBx/Ylxvp2eWLFP/lVP3+lQipGqQXT1+FCKbBKHiqwLuWqG?=
+ =?us-ascii?Q?0bJ+voqjHAfKX6xn4/ne990XW0YzKwBmy7N/boVQm0xvazcJygIU5HmPqfQO?=
+ =?us-ascii?Q?mH8Sh7Ymmg9kxp/BJojxN98a9yltLs9/pqbz5wsznkKmXqqWYZt2NQa5lP9z?=
+ =?us-ascii?Q?mGievo0o4rIEba+QMOib/zXQEs/PBjisbj2gkzTlExYQEG2NRToNMqdThdgx?=
+ =?us-ascii?Q?WfedayNyJxUdZhw18TDfXhDfgjAHjtU3k6gZgOd94bM/Fum4/LX8a/mvrZi1?=
+ =?us-ascii?Q?PqyySJYVJCJQOhQxG4kf7x9fIzh587oG/CGlqgd9HVmXD+nqUKDYV1emqpN3?=
+ =?us-ascii?Q?yP0h+IecFTl8i6QsQhNySjv/6Tc+uatEEjQ+TSG+j2UK9yDgUwn7Vf0Ijt1Z?=
+ =?us-ascii?Q?xyzFYBq6uLUqCGKe131FUEQZGsTm9TEOF8RJJUdS2RYnN4ZD4gPrrGkRFXQl?=
+ =?us-ascii?Q?Bb5HQVXuFe4bn3n1PCEjktKgaLO//Jzh02df4u7/D8Y7PEvNlcihb9YJAMAu?=
+ =?us-ascii?Q?H7nfQvRmcw6meMNy3gjX47ce0CfKsza3stihR7jCr1QIHiT76sQj8e+j9v4b?=
+ =?us-ascii?Q?XCSs33452xI9lOEWPUnHFCjwP+0V7maHodjYvxyJbCEFgO+hdgOCiQoEmITX?=
+ =?us-ascii?Q?WghH2oMS2U4IPt2v+8XWQiNLg8ZMZY7zNivTaxOYP6sEl7rwjtTGunQGodSz?=
+ =?us-ascii?Q?mASM6nBhaI4QQx8m3HDvAE+IxCm5YyOJ2r+RojZQ33lgG0cE1TJp6UMTu8Q0?=
+ =?us-ascii?Q?YrofM1TeD2mgyQBmQIB9pVA/B6cVRZrclUwfFaQkgV0+h3HTAxPFijV6CNVq?=
+ =?us-ascii?Q?PNyr0UpioukXTiIlO/hlCdjM9XYA+lOzJX1aOQIistHCFuGcgOXh6iZukvmI?=
+ =?us-ascii?Q?sJDKmF7UYvrId+9BKkuqIFO8ZT9MLLeUiRtv3Fszgal0NWpHJJho0OJOmdgM?=
+ =?us-ascii?Q?OK/bqmfzhawSWF+7NpzenRiof0/ZuDTni4MMBCUy9H4is8WZMM1v69KYngjn?=
+ =?us-ascii?Q?NQ=3D=3D?=
+X-OriginatorOrg: memverge.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b70f5e88-a335-4b62-ea29-08dafe537275
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 21:39:18.5073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pqekUY+oPUZHL3Ta07etqFHaOipf9jRd9YapzO4ilvWOj1Sxx3ib5KBYfW9rWlDC5acmW1XR7rNld54baFPCa8vAv5F84wKayKC0aTmiEmA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR17MB5718
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 19:55, Kuogee Hsieh wrote:
+On Tue, Jan 24, 2023 at 09:58:02AM -0800, Andrei Vagin wrote:
+> >
+> > *facepalm* good point, i'm wondering if there's a reason CRIU doesn't do
+> > the same for SECCOMP.
 > 
-> On 1/24/2023 1:11 AM, Dmitry Baryshkov wrote:
->> On 23/01/2023 20:24, Kuogee Hsieh wrote:
->>> Current implementation timing engine programming does not consider
->>> compression factors. This patch add consideration of DSC factors
->>> while programming timing engine.
->>>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->>>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |   2 +
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  14 ++-
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 132 
->>> +++++++++++++--------
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  10 +-
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h         |   6 +-
->>>   5 files changed, 110 insertions(+), 54 deletions(-)
->>>
->>
->> [skipped]
->>
->>> @@ -113,82 +124,96 @@ static void 
->>> dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>>       /* read interface_cfg */
->>>       intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
->>>   -    if (ctx->cap->type == INTF_DP)
->>> +    if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
->>>           dp_intf = true;
->>>         hsync_period = p->hsync_pulse_width + p->h_back_porch + 
->>> p->width +
->>> -    p->h_front_porch;
->>> +            p->h_front_porch;
->>>       vsync_period = p->vsync_pulse_width + p->v_back_porch + 
->>> p->height +
->>> -    p->v_front_porch;
->>> +            p->v_front_porch;
->>
->> Actually I went on through the history and found the previous 
->> submission, https://patchwork.freedesktop.org/patch/471505/.
->> Exactly the same piece of code. Did you expect that the comments will 
->> be different this time?
->>
->> I really hoped that at that time we already went through this. But it 
->> seems I was wrong. That series went through v10 or v12 before being 
->> accepted. And it was just adding wide_bus_en. Back at that time we 
->> lightly discussed that the code will receive compression support. But 
->> I never expected to see the original submission again.
->>
->> It might sound bad, but could you please find somebody who can do 
->> internal review for you? Good internal review.
->>
->> That said, I really do not expect to see v2 before the whole series is 
->> reworked, restructured and prepared for the review on your side.
+> Because information about seccomp was in /proc/pid/status forever and we
+> started using it before the ptrace interface was merged. I am not sure that
+> this is the only reason, but  it is definitely one of them.
 > 
-> This timing engine code is derived from our downstream code directly and 
-> it has been used at many mobile devices by many vendors for many years 
-> already.
-> 
-> On the other words, it had been tested very thorough and works on 
-> dsi/dp/hdmi/dsc/widebus applications.
 
-As far as I understand, it has been tested on the recent generations of 
-the hardware. I doubt that anybody retests new techpack drops on 
-previous hardware generations. Correct?
+Even better reason to drop it.  I'll send out (hopefully) the final
+configuration here shortly.
 
-When was the last time this particular code drop was tested on 
-INTF_HDMI? I think it was back in the 4.4 era. Newer vendor kernels do 
-not have hdmi-staging, so at least the claim of testing this codepiece 
-on HDMI is not correct.
-
-What is the earliest chip that has been driven by this particular code 
-instance?
-
-> When i brought dsc v1.2 over, I just merged it over and did not consider 
-> too much.
-> 
-> Can we adapt this code so that both upstream and down stream shared same 
-> timing engine programming so that easier to maintain?
-
-We have been discussing exactly the same piece of code a year ago. Could 
-you please recheck the comments that were provided to your patches. And 
-I actually mean that. There were 12 iterations of wide bus patchset. 
-Timing engine programming patch had 8. I do not want to start again from 
-the very beginning.
-
-The basic idea is that you have to evolve the code rather than flushing 
-us with the 'latest and greatest code dump'. Split this into individual 
-atomic changes that we can review. Provide justification (= motivation) 
-for each change. Previously we haven't seen them.
-
-We know that current function works. We must be able to assume that new 
-instance doesn't break things. Or, if something breaks, understand which 
-particular change broke it. Consider the case that your patch breaks 
-msm8998. Or sdm845. How can we cope? Would you be able to spot the place 
-which did that? I know I wouldn't. The only way would be to revert the 
-patch completely. And inherently the whole series.
-
->>
->>>         display_v_start = ((p->vsync_pulse_width + p->v_back_porch) *
->>> -    hsync_period) + p->hsync_skew;
->>> +            hsync_period) + p->hsync_skew;
->>>       display_v_end = ((vsync_period - p->v_front_porch) * 
->>> hsync_period) +
->>> -    p->hsync_skew - 1;
->>> +            p->hsync_skew - 1;
->>> +
->>> +    hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
->>>         hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
->>>       hsync_end_x = hsync_period - p->h_front_porch - 1;
->>>   -    if (p->width != p->xres) { /* border fill added */
->>> -        active_h_start = hsync_start_x;
->>> -        active_h_end = active_h_start + p->xres - 1;
->>> -    } else {
->>> -        active_h_start = 0;
->>> -        active_h_end = 0;
->>> -    }
->>> -
->>> -    if (p->height != p->yres) { /* border fill added */
->>> -        active_v_start = display_v_start;
->>> -        active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>> -    } else {
->>> -        active_v_start = 0;
->>> -        active_v_end = 0;
->>> -    }
->>> -
->>> -    if (active_h_end) {
->>> -        active_hctl = (active_h_end << 16) | active_h_start;
->>> -        intf_cfg |= INTF_CFG_ACTIVE_H_EN;
->>> -    } else {
->>> -        active_hctl = 0;
->>> -    }
->>> -
->>> -    if (active_v_end)
->>> -        intf_cfg |= INTF_CFG_ACTIVE_V_EN;
->>> -
->>> -    hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
->>> -    display_hctl = (hsync_end_x << 16) | hsync_start_x;
->>> -
->>>       /*
->>>        * DATA_HCTL_EN controls data timing which can be different from
->>>        * video timing. It is recommended to enable it for all cases, 
->>> except
->>>        * if compression is enabled in 1 pixel per clock mode
->>>        */
->>> +    if (!p->compression_en || p->wide_bus_en)
->>> +        intf_cfg2 |= INTF_CFG2_DATA_HCTL_EN;
->>> +
->>>       if (p->wide_bus_en)
->>> -        intf_cfg2 |= INTF_CFG2_DATABUS_WIDEN | INTF_CFG2_DATA_HCTL_EN;
->>> +        intf_cfg2 |= INTF_CFG2_DATABUS_WIDEN;
->>>   +    /*
->>> +     * If widebus is disabled:
->>> +     * For uncompressed stream, the data is valid for the entire active
->>> +     * window period.
->>> +     * For compressed stream, data is valid for a shorter time period
->>> +     * inside the active window depending on the compression ratio.
->>> +     *
->>> +     * If widebus is enabled:
->>> +     * For uncompressed stream, data is valid for only half the active
->>> +     * window, since the data rate is doubled in this mode.
->>> +     * p->width holds the adjusted width for DP but unadjusted width 
->>> for DSI
->>> +     * For compressed stream, data validity window needs to be 
->>> adjusted for
->>> +     * compression ratio and then further halved.
->>> +     */
->>>       data_width = p->width;
->>>   +    if (p->compression_en) {
->>> +        if (p->wide_bus_en)
->>> +            data_width = DIV_ROUND_UP(p->dce_bytes_per_line, 6);
->>> +        else
->>> +            data_width = DIV_ROUND_UP(p->dce_bytes_per_line, 3);
->>> +    } else if (!dp_intf && p->wide_bus_en) {
->>> +        data_width = p->width >> 1;
->>> +    } else {
->>> +        data_width = p->width;
->>> +    }
->>> +
->>>       hsync_data_start_x = hsync_start_x;
->>>       hsync_data_end_x =  hsync_start_x + data_width - 1;
->>>   +    display_hctl = (hsync_end_x << 16) | hsync_start_x;
->>>       display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
->>>         if (dp_intf) {
->>>           /* DP timing adjustment */
->>>           display_v_start += p->hsync_pulse_width + p->h_back_porch;
->>>           display_v_end   -= p->h_front_porch;
->>> +    }
->>> +
->>> +    intf_cfg |= INTF_CFG_ACTIVE_H_EN;
->>> +    intf_cfg |= INTF_CFG_ACTIVE_V_EN;
->>> +    active_h_start = hsync_start_x;
->>> +    active_h_end = active_h_start + p->xres - 1;
->>> +    active_v_start = display_v_start;
->>> +    active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>>   -        active_h_start = hsync_start_x;
->>> -        active_h_end = active_h_start + p->xres - 1;
->>> -        active_v_start = display_v_start;
->>> -        active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>> +    active_hctl = (active_h_end << 16) | active_h_start;
->>>   -        active_hctl = (active_h_end << 16) | active_h_start;
->>> +    if (dp_intf) {
->>>           display_hctl = active_hctl;
->>>   -        intf_cfg |= INTF_CFG_ACTIVE_H_EN | INTF_CFG_ACTIVE_V_EN;
->>> +        if (p->compression_en) {
->>> +            active_data_hctl = (hsync_start_x + p->extra_dto_cycles) 
->>> << 16;
->>> +            active_data_hctl += hsync_start_x;
->>> +
->>> +            display_data_hctl = active_data_hctl;
->>> +        }
->>>       }
->>>   +    _check_and_set_comp_bit(ctx, p->dsc_4hs_merge, 
->>> p->compression_en, &intf_cfg2);
->>> +
->>>       den_polarity = 0;
->>>       if (ctx->cap->type == INTF_HDMI) {
->>>           hsync_polarity = p->yres >= 720 ? 0 : 1;
->>> @@ -202,7 +227,7 @@ static void 
->>> dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>
-
--- 
-With best wishes
-Dmitry
-
+Glad this simplified down as much as it did.
