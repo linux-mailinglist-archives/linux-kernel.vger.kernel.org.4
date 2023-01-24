@@ -2,86 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D574678DF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928FD678DF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjAXCIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:08:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S232116AbjAXCJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjAXCIn (ORCPT
+        with ESMTP id S229956AbjAXCJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:08:43 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E071A972;
-        Mon, 23 Jan 2023 18:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=7/JIwVXiCaPDOdmqesGLjJhozqxJG+q2zVApYkSIfX4=; b=Zop2DgmqOnBus6DPl8Kszy1RhW
-        JjCLCtBbKDsU71zuR/kd1cB0/viMI8sfKDMrRSTOSBhUSzIqaJSL8T6Otl/vREpM58KI3sopgsHtd
-        9SXT2HPDJaPm8YpY7lW0x09v68IxuCSkgyAXZk3CVgFZU9JZiJy5Y+r/t7QhxNdKcnQU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pK8jb-002yBh-Os; Tue, 24 Jan 2023 03:08:27 +0100
-Date:   Tue, 24 Jan 2023 03:08:27 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexandru Tachici <alexandru.tachici@analog.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com,
-        yangyingliang@huawei.com, weiyongjun1@huawei.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, lennart@lfdomain.com
-Subject: Re: [net-next 1/3] net: ethernet: adi: adin1110: add PTP clock
- support
-Message-ID: <Y889m+CUSTbuv9Db@lunn.ch>
-References: <20230120095348.26715-1-alexandru.tachici@analog.com>
- <20230120095348.26715-2-alexandru.tachici@analog.com>
+        Mon, 23 Jan 2023 21:09:06 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC306301B6;
+        Mon, 23 Jan 2023 18:09:01 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso8298779pjp.3;
+        Mon, 23 Jan 2023 18:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cDOI66t0q/oP7E/pKikemgOCe2s0l8GcG5GBgKQtNXE=;
+        b=fLS/Ec7hGZGwOF2csyyx7asmruxOhiKoolimG+J143sZaS3Dd9SI4B9Y+jRI/smyYM
+         7FTlvkrIihPwyL7KIhzRT5OmgwHmi0Ol2iPA72h6Ac6DsOK1n/8kUnfY/qv8dbaNArwt
+         K1LO71u0KJukhXLFhDqCcDJwxbkCfiCGzz1tJMsxGcxkZuw3dzWO97kbGLpt6gaPPWZY
+         IRrhV3aMPdfIa8kKQ4ii62OGb3odO2SvVHrnM5xrTO2zdYFb2LZ3H1FsdkinNkyqZesb
+         lDxkTRPtaLQidsvcONDyXXRDLab+zGkI36MC73q5SudTjGFm8sOUj90aitBwQfeeZR/q
+         F7ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cDOI66t0q/oP7E/pKikemgOCe2s0l8GcG5GBgKQtNXE=;
+        b=FZ7XNzT61TIPkr3duHalZfDLBc1Kk+DK6bF6+ZEFmTsqb+Ebj/GzFrQh91n1jLxf+d
+         CqtrAdjDlYSjachc7FfdDYtwYijSnSIcAMkexuVm+UUFJsCcpW244XxgXkn5V65pkzSC
+         yDjWs8S4LutQ9f8KFVuuXs6FZbcEl/Cmuslzye6HQUpqglWUYEx7gVcDroFbCqu28UoE
+         lxcv2mZmK+M6SLFsCATxeimhFxEzyEr/+MriwWfoFnMna2w+iSCbhvLitY3wdmg21/e0
+         j3xbhuWXwyowikN2jpONemyJd0qZ96WbSPNC+semWhfnqO90/+L4L63uULDL4rP3XIZS
+         anfQ==
+X-Gm-Message-State: AFqh2ko5qUW6TsBv1mh/tED2uU5gU2F92TGtTnOskOLu/WmdGPcD8lKk
+        2Qmg9EIJkIwZlVuWeMSjJT0=
+X-Google-Smtp-Source: AMrXdXvg/EPy6kakIOxMYkNEGMjnT9H8lLzdCwftb8iaw8taUrONL/r/vPS4ux4xrk13uYltzaEQhA==
+X-Received: by 2002:a17:902:7881:b0:192:bb38:c412 with SMTP id q1-20020a170902788100b00192bb38c412mr26040498pll.44.1674526141197;
+        Mon, 23 Jan 2023 18:09:01 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-19.three.co.id. [180.214.232.19])
+        by smtp.gmail.com with ESMTPSA id y7-20020a170902d64700b001929568afe9sm346624plh.306.2023.01.23.18.08.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 18:09:00 -0800 (PST)
+Message-ID: <679a3bed-e3fc-832e-8e5a-e6bca638ad26@gmail.com>
+Date:   Tue, 24 Jan 2023 09:08:49 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120095348.26715-2-alexandru.tachici@analog.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 00/15] Ambarella S6LM SoC bring-up
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Li Chen <lchen@ambarella.com>
+Cc:     =?UTF-8?Q?Andreas_B=c3=b6hler?= <dev@aboehler.at>,
+        Brian Norris <briannorris@chromium.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Li Chen <lchen@ambarella.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
+        <linux-mtd@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Rickard x Andersson <rickaran@axis.com>,
+        Rob Herring <robh@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+ <a69a5ffc-0820-4adc-9ac4-f827ebf66cf0@app.fastmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <a69a5ffc-0820-4adc-9ac4-f827ebf66cf0@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int adin1110_enable_perout(struct adin1110_priv *priv,
-> +				  struct ptp_perout_request perout,
-> +				  int on)
-> +{
-> +	u32 on_nsec;
-> +	u32 phase;
-> +	u32 mask;
-> +	int ret;
-> +
-> +	if (priv->cfg->id == ADIN2111_MAC) {
-> +		ret = phy_clear_bits_mmd(priv->ports[0]->phydev, MDIO_MMD_VEND1,
-> +					 ADIN2111_LED_CNTRL,
-> +					 ADIN2111_LED_CNTRL_LED0_FUNCTION);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = phy_set_bits_mmd(priv->ports[0]->phydev, MDIO_MMD_VEND1,
-> +				       ADIN2111_LED_CNTRL,
-> +				       on ? ADIN2111_LED_CNTRL_TS_TIMER : 0);
+On 1/23/23 15:39, Arnd Bergmann wrote:
+> I seem to only have part of the series, please add both me and
+> the linux-arm-kernel mailing list to each part of the initial
+> submission.
+> 
+> It's possible that some patches were already Cc'd to
+> linux-arm-kernel but did not make it through because the Cc list
+> was too long (it has to fit within 1024 characters for many lists).
+> I think you too the Cc list from get_maintainers.pl, but when
+> sending new drivers this does not work well because it picks
+> up everyone that recently touched the Makefile/Kconfig.
 
-I normally say a MAC driver should not be accessing PHY register...
+Hi Arnd,
 
-You have the advantage of knowing it is integrated, so you know
-exactly what PHY it is. But you still have a potential race condition
-sometime in the future. You are not taking the phydev->lock, which is
-something phylib nearly always does before accessing a PHY. If you
-ever add control of the LEDs, that lack of locking could get you in
-trouble.
+It is possible (and common) that people who recently touched these
+files, when given new drivers patches, aren't interested in reviewing
+them for many reasons.
 
-Is this functionality always on LED0? It cannot be LED1 or LED2?
+In that case, you may want to see Alison's trick posted on kernel
+outreachy list [1]. In summary, pass `--no-gitfallback` (don't give
+addresses of recent commit authors) and `--norolestats` (only name and
+email are printed; MLs don't get open list:-generated names). Also,
+another trick that I use is to condense the list by passing
+`--separator , ` so that it can be easily copy-pasted to
+git-send-email(1).
 
-   Andrew
+Thanks.
+
+[1]: https://lore.kernel.org/outreachy/20211015171331.GA431883@alison-desk/
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
