@@ -2,103 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E739E679ECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68EF679EAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbjAXQfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S233785AbjAXQcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbjAXQfi (ORCPT
+        with ESMTP id S229932AbjAXQb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:35:38 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B9D4C6C0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:35:16 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so11404876wmq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:35:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KWY8t6MGSD+ddhFLpUPHcH1FizkiNtOJ0a7ycgsdp9A=;
-        b=tRFUEFCqosQ2VLKNFVJlOmLwDyAusvTvviijp1YiLfpIrYW8hO4cHDzGlFF65sb5aY
-         +1GcO9Nnoam06P9O7wKozz7TFIkiry+R5z9UnSQd/T2u+l60RcSM7wWCZDAg0z5keo2F
-         erIicnRZXjv9FaegvYDEKRyvGPJrMm6cOOjBb3AvfdAABcbEN6K5ogQgLNYWK0xKHuUY
-         VOq9cXmbyheFAJjhRDcuHKF7MCuFDeWS5wAWXK2/d+4K4LQygxuk10CVLxHV6NSdTSZ7
-         7JTDTLF7duMsu/ccWK1DVxAlz8WQU/OX4ayXinWlAzSFPBX7FP6WqUosOre+N7t9g+n2
-         uWBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KWY8t6MGSD+ddhFLpUPHcH1FizkiNtOJ0a7ycgsdp9A=;
-        b=zI2cvg74HbnFZFme+jMZaFN210+OdhY8JYVEevL3B+fIGsM44fXq/UZVqV5CKgInUm
-         kaoDHMrUlmIgXqPY1u9Zfe9xbxcdnmYf6Xd8f1imyF//mfcytGK+S43HbRIt8HSEvb7h
-         Pwd90FzjwE6mM/FN5Zld9BqyCLc5ECyxJshTB26mXpkRfLTzTlaTVcha7eY7Qb1C45+b
-         8LeXU26oaxuPao4a0WevtJI1JyM3/IPwRWlt23UtY6hJRspnrcss9c/Hnng5eNeumH83
-         T0eZgd/sJBMwRym83/CoCsO+Fcc4sEYzZkpYSRcvfUdjDgRuPjYSxlNGVqkAlmgOA0J+
-         hqqw==
-X-Gm-Message-State: AFqh2ko64S7hTA66aaW1FeuTAjvhQ0f1sfJRIY0Esg9utPZ2bDZWz0e3
-        3pUclhJeZ7RPFxnRAme39xeeNg==
-X-Google-Smtp-Source: AMrXdXtEsvhEpSWe+OLcAKIsAFoPG7UhBOBeQiMUSEIqblkGFiizLQINmdJP1+ZtFxCkSQrR4HSX3Q==
-X-Received: by 2002:a05:600c:c0c:b0:3db:1caf:1044 with SMTP id fm12-20020a05600c0c0c00b003db1caf1044mr22587617wmb.13.1674578113098;
-        Tue, 24 Jan 2023 08:35:13 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id m26-20020a7bcb9a000000b003db2dede1a2sm13605171wmi.26.2023.01.24.08.35.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 08:35:12 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org
-Cc:     error27@gmail.com, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal/drivers/int340x: Fix uninitialized trip_cnt variable
-Date:   Tue, 24 Jan 2023 17:31:25 +0100
-Message-Id: <20230124163127.445942-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y8/1ccQLn41w+Vek@kili>
-References: <Y8/1ccQLn41w+Vek@kili>
+        Tue, 24 Jan 2023 11:31:59 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921DD59D3;
+        Tue, 24 Jan 2023 08:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674577918; x=1706113918;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OvNpWuC+w4Wd0rSZuW0EhaDQzPNd74u6nMFDok7/of0=;
+  b=i6ZybJJgQVidlk4AbDZERpoEOu68bDGGmitRnRDAz5wHJHJ3XxUVtcTa
+   4m5VOJm6z1cmXl2gQkxrSGv+pzMfZ59VzzQePoemKGGef9s/0NZ67RC5q
+   KLNW33JKsS6MztWRFXgJDtAOjMw/K2nXuhU4F4g9FbDRTg38Pn5nMAwUc
+   l0qAvjRbnpBpInmvSlisk3KYjgWl1CXGhx8BzxV2ibYx7+EGd/macIsIB
+   RZj3CX1eqaZBgxGdbPA96ohTdBJFmnrI7+JDToAZKUhEsp5HKJL6yOiYu
+   Uj5ZsLkHBVhNHxMfOTkT7yT04T0MEt9tMDiTImgFKsem5A8FM16LHOnWX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="309907034"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="309907034"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 08:31:57 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="907560712"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="907560712"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.213.182.87]) ([10.213.182.87])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 08:31:53 -0800
+Message-ID: <83d6db31-c75c-6d0f-0b31-7cd12a6816ae@intel.com>
+Date:   Tue, 24 Jan 2023 09:31:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+Subject: Re: [PATCH v4] cxl/mbox: Fix Payload Length check for Get Log command
+Content-Language: en-US
+To:     Robert Richter <rrichter@amd.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Jonathan Cameron <jonathan.cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230119094934.86067-1-rrichter@amd.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230119094934.86067-1-rrichter@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The conversion to the generic trip points missed to initializes the
-extra trip points to zero in case the _PATC method is not found.
 
-Set by default the trip_cnt to zero.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 1/19/23 2:49 AM, Robert Richter wrote:
+> Commit 2aeaf663b85e introduced strict checking for variable length
+> payload size validation. The payload length of received data must
+> match the size of the requested data by the caller except for the case
+> where the min_out value is set.
+> 
+> The Get Log command does not have a header with a length field set.
+> The Log size is determined by the Get Supported Logs command (CXL 3.0,
+> 8.2.9.5.1). However, the actual size can be smaller and the number of
+> valid bytes in the payload output must be determined reading the
+> Payload Length field (CXL 3.0, Table 8-36, Note 2).
+> 
+> Two issues arise: The command can successfully complete with a payload
+> length of zero. And, the valid payload length must then also be
+> consumed by the caller.
+> 
+> Change cxl_xfer_log() to pass the number of payload bytes back to the
+> caller to determine the number of log entries. Implement the payload
+> handling as a special case where mbox_cmd->size_out is consulted when
+> cxl_internal_send_cmd() returns -EIO. A WARN_ONCE() is added to check
+> that -EIO is only returned in case of an unexpected output size.
+> 
+> Logs can be bigger than the maximum payload length and multiple Get
+> Log commands can be issued. If the received payload size is smaller
+> than the maximum payload size we can assume all valid bytes have been
+> fetched. Stop sending further Get Log commands then.
+> 
+> On that occasion, change debug messages to also report the opcodes of
+> supported commands.
+> 
+> The variable payload commands GET_LSA and SET_LSA are not affected by
+> this strict check: SET_LSA cannot be broken because SET_LSA does not
+> return an output payload, and GET_LSA never expects short reads.
+> 
+> Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-index 7ff5d9b1c490..c113962a599e 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -121,7 +121,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- {
- 	struct int34x_thermal_zone *int34x_thermal_zone;
- 	acpi_status status;
--	unsigned long long trip_cnt;
-+	unsigned long long trip_cnt = 0;
- 	int trip_mask = 0;
- 	int i, ret;
- 
--- 
-2.34.1
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
+> ---
+> v4:
+>   * Fixed a build issue.
+> v3:
+>   * Added comment to the WARN_ONCE(). (Jonathan)
+>   * Passing a size pointer to report the payload size back. (Jonathan)
+>   * Moved logging of supported opcodes out of this patch for a separate
+>     change. (Jonathan)
+> 
+>   drivers/cxl/core/mbox.c | 25 ++++++++++++++++++++++---
+>   1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index b03fba212799..a48ade466d6a 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -170,6 +170,12 @@ int cxl_internal_send_cmd(struct cxl_dev_state *cxlds,
+>   	out_size = mbox_cmd->size_out;
+>   	min_out = mbox_cmd->min_out;
+>   	rc = cxlds->mbox_send(cxlds, mbox_cmd);
+> +	/*
+> +	 * EIO is reserved for a payload size mismatch and mbox_send()
+> +	 * may not return this error.
+> +	 */
+> +	if (WARN_ONCE(rc == -EIO, "Bad return code: -EIO"))
+> +		return -ENXIO;
+>   	if (rc)
+>   		return rc;
+>   
+> @@ -550,9 +556,9 @@ int cxl_send_cmd(struct cxl_memdev *cxlmd, struct cxl_send_command __user *s)
+>   	return 0;
+>   }
+>   
+> -static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8 *out)
+> +static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 *size, u8 *out)
+>   {
+> -	u32 remaining = size;
+> +	u32 remaining = *size;
+>   	u32 offset = 0;
+>   
+>   	while (remaining) {
+> @@ -576,6 +582,17 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>   		};
+>   
+>   		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
+> +
+> +		/*
+> +		 * The output payload length that indicates the number
+> +		 * of valid bytes can be smaller than the Log buffer
+> +		 * size.
+> +		 */
+> +		if (rc == -EIO && mbox_cmd.size_out < xfer_size) {
+> +			offset += mbox_cmd.size_out;
+> +			break;
+> +		}
+> +
+>   		if (rc < 0)
+>   			return rc;
+>   
+> @@ -584,6 +601,8 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>   		offset += xfer_size;
+>   	}
+>   
+> +	*size = offset;
+> +
+>   	return 0;
+>   }
+>   
+> @@ -694,7 +713,7 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
+>   			goto out;
+>   		}
+>   
+> -		rc = cxl_xfer_log(cxlds, &uuid, size, log);
+> +		rc = cxl_xfer_log(cxlds, &uuid, &size, log);
+>   		if (rc) {
+>   			kvfree(log);
+>   			goto out;
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
