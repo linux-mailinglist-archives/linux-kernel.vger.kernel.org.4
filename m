@@ -2,186 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E6467A6C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098ED67A6C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjAXXQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 18:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S234312AbjAXXRF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 Jan 2023 18:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbjAXXQy (ORCPT
+        with ESMTP id S230221AbjAXXRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:16:54 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79D7EC64
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:16:52 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15ff0a1f735so11268909fac.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O6FG0rZSsowFESqKod3eAgl51fl1/NMrQnVO/Zh39hI=;
-        b=eR1U7BkGEuJ+TCHIVXpFwddImI5S3U2vXU1zewsNhfCxSMVc/26xsyZBaRgZQOW+ZL
-         HnkKvbbBG+tuWBdrDCFZkTrSk2X9Y2NjywIGHOuLnidslxFJXZ5uSHs4KmPXSOuFWMsP
-         ZQf//u33Y2C6UYKLift0E23EGwHm+VeUA9/cBPNor6648uC15rHXsqWmJmBnFSGW09GT
-         8Y33o1T2FEGPi71gVa9fNcG7XYFOYKm9lsLUhUXnyKt7nGYWv9+s/a3SEkLUZf9AvG3+
-         3hTAtup8gHP74IYXFyVCNch9uobWHS1mCZdlzaU/v93rRfn4MJuih1A9+BFpqpX3ObgE
-         /jvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O6FG0rZSsowFESqKod3eAgl51fl1/NMrQnVO/Zh39hI=;
-        b=7A0Zx19I9KVR/0blAwls1ZxYoNkROSJo5ECc4J2x8fZ5C5+9xidUZWuVTxFF6P/OaQ
-         RxebtnMEshJy3h5300H963Zh1cu1CONGwvGC6IIAcvYwoplZW80aKhdcCH1eAqcbkOU8
-         V1kYoNwxu8EbVBPL6k31QPgu/kfdQU3aVE3QFaaDL2Bqbs4J+HnHpRPX7MRRctvwi5G0
-         kzbCi7o/eO/HK1pk4EEmK43rPS89b3kyTdcDt7rdn0fPJZyLkoTdc8qMoBBK8G+zj77X
-         wmeJvIp/ABppy+y8vHpBtI0n0TCQzQ1CqwI3MFEgtPQMT9CsM1UMMA4rg4Ry1ScGVCAW
-         cnRQ==
-X-Gm-Message-State: AO0yUKW6xDtCGcaEvSC6Y++IZITHPggLgS+AKJ9ESQIImEk2F6Hww5Z9
-        sG+aruY/ZZGuEK9mdYcRC1Mr+SiJ8VafZBLbiG7A7Q==
-X-Google-Smtp-Source: AK7set8qpmlTZgkaUMcLNSDdmgMOL4CvGDG0uVtE6IwrUSmYA+gizCDKzIty6cgsFhGPXfg7G/uh/jeVCJmdTCdbZ6M=
-X-Received: by 2002:a05:6871:6ca5:b0:160:3235:9c33 with SMTP id
- zj37-20020a0568716ca500b0016032359c33mr389603oab.103.1674602211611; Tue, 24
- Jan 2023 15:16:51 -0800 (PST)
+        Tue, 24 Jan 2023 18:17:03 -0500
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A694F341
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:17:01 -0800 (PST)
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id 7C346AB323;
+        Tue, 24 Jan 2023 23:17:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 197112000D;
+        Tue, 24 Jan 2023 23:16:56 +0000 (UTC)
+Message-ID: <36069dac5d07509dab1c7f1238f8cbb08db80ac6.camel@perches.com>
+Subject: [PATCH] checkpatch: Improve EMBEDDED_FILENAME test
+From:   Joe Perches <joe@perches.com>
+To:     Heinz Mauelshagen <heinzm@redhat.com>,
+        "apw@canonical.com" <apw@canonical.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Date:   Tue, 24 Jan 2023 15:16:55 -0800
+In-Reply-To: <CAM23VxrnywdK2BW9MurPqa9bAmzeM42oUtH=LFdabgvjrP-hrw@mail.gmail.com>
+References: <CAM23VxrnywdK2BW9MurPqa9bAmzeM42oUtH=LFdabgvjrP-hrw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <20221027092036.2698180-1-pbonzini@redhat.com>
-In-Reply-To: <20221027092036.2698180-1-pbonzini@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 24 Jan 2023 15:16:40 -0800
-Message-ID: <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Rspamd-Queue-Id: 197112000D
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Stat-Signature: 4i5n3hg93edqeco6xjbitqofqjzdgpmf
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+ElIneKqzk8BOiFcZlPbCWae08MyF3kNs=
+X-HE-Tag: 1674602216-665982
+X-HE-Meta: U2FsdGVkX1+h9CH2AcKFseB6jVNxUVyOQh/SZL70vg9OIdXIq29f/2LBbTHQRBbO+zLFyAbwXNNyXQgVOkMFuw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 2:21 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> Passing the host topology to the guest is almost certainly wrong
-> and will confuse the scheduler.  In addition, several fields of
-> these CPUID leaves vary on each processor; it is simply impossible to
-> return the right values from KVM_GET_SUPPORTED_CPUID in such a way that
-> they can be passed to KVM_SET_CPUID2.
->
-> The values that will most likely prevent confusion are all zeroes.
-> Userspace will have to override it anyway if it wishes to present a
-> specific topology to the guest.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  Documentation/virt/kvm/api.rst | 14 ++++++++++++++
->  arch/x86/kvm/cpuid.c           | 32 ++++++++++++++++----------------
->  2 files changed, 30 insertions(+), 16 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index eee9f857a986..20f4f6b302ff 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -8249,6 +8249,20 @@ CPU[EAX=1]:ECX[24] (TSC_DEADLINE) is not reported by ``KVM_GET_SUPPORTED_CPUID``
->  It can be enabled if ``KVM_CAP_TSC_DEADLINE_TIMER`` is present and the kernel
->  has enabled in-kernel emulation of the local APIC.
->
-> +CPU topology
-> +~~~~~~~~~~~~
-> +
-> +Several CPUID values include topology information for the host CPU:
-> +0x0b and 0x1f for Intel systems, 0x8000001e for AMD systems.  Different
-> +versions of KVM return different values for this information and userspace
-> +should not rely on it.  Currently they return all zeroes.
-> +
-> +If userspace wishes to set up a guest topology, it should be careful that
-> +the values of these three leaves differ for each CPU.  In particular,
-> +the APIC ID is found in EDX for all subleaves of 0x0b and 0x1f, and in EAX
-> +for 0x8000001e; the latter also encodes the core id and node id in bits
-> +7:0 of EBX and ECX respectively.
-> +
->  Obsolete ioctls and capabilities
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 0810e93cbedc..164bfb7e7a16 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -759,16 +759,22 @@ struct kvm_cpuid_array {
->         int nent;
->  };
->
-> +static struct kvm_cpuid_entry2 *get_next_cpuid(struct kvm_cpuid_array *array)
-> +{
-> +       if (array->nent >= array->maxnent)
-> +               return NULL;
-> +
-> +       return &array->entries[array->nent++];
-> +}
-> +
->  static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
->                                               u32 function, u32 index)
->  {
-> -       struct kvm_cpuid_entry2 *entry;
-> +       struct kvm_cpuid_entry2 *entry = get_next_cpuid(array);
->
-> -       if (array->nent >= array->maxnent)
-> +       if (!entry)
->                 return NULL;
->
-> -       entry = &array->entries[array->nent++];
-> -
->         memset(entry, 0, sizeof(*entry));
->         entry->function = function;
->         entry->index = index;
-> @@ -945,22 +951,13 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->                 entry->edx = edx.full;
->                 break;
->         }
-> -       /*
-> -        * Per Intel's SDM, the 0x1f is a superset of 0xb,
-> -        * thus they can be handled by common code.
-> -        */
->         case 0x1f:
->         case 0xb:
->                 /*
-> -                * Populate entries until the level type (ECX[15:8]) of the
-> -                * previous entry is zero.  Note, CPUID EAX.{0x1f,0xb}.0 is
-> -                * the starting entry, filled by the primary do_host_cpuid().
-> +                * No topology; a valid topology is indicated by the presence
-> +                * of subleaf 1.
->                  */
-> -               for (i = 1; entry->ecx & 0xff00; ++i) {
-> -                       entry = do_host_cpuid(array, function, i);
-> -                       if (!entry)
-> -                               goto out;
-> -               }
-> +               entry->eax = entry->ebx = entry->ecx = 0;
->                 break;
->         case 0xd: {
->                 u64 permitted_xcr0 = kvm_caps.supported_xcr0 & xstate_get_guest_group_perm();
-> @@ -1193,6 +1190,9 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->                 entry->ebx = entry->ecx = entry->edx = 0;
->                 break;
->         case 0x8000001e:
-> +               /* Do not return host topology information.  */
-> +               entry->eax = entry->ebx = entry->ecx = 0;
-> +               entry->edx = 0; /* reserved */
->                 break;
->         case 0x8000001F:
->                 if (!kvm_cpu_cap_has(X86_FEATURE_SEV)) {
-> --
-> 2.31.1
->
+Privately, Heinz Mauelshagen showed that the embedded filename test
+is not specific enough.
 
-This is a userspace ABI change that breaks existing hypervisors.
-Please don't do this. Userspace ABIs are supposed to be inviolate.
+> WARNING: It's generally not useful to have the filename in the file
+> #113: FILE: errors.c:113:
+> +            block < registered_errors.blocks + registered_errors.count;
+
+Extend the test to use the appropriate word boundary tests.
+
+Reported-by: Heinz Mauelshagen <heinzm@redhat.com>
+Signed-off-by: Joe Perches <joe@perches.com>
+---
+
+Heinz, next time please make sure to CC linux-kernel@vger.kernel.org
+
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index a6d6d7e1d0cf1..40102bc0ce535 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3727,7 +3727,7 @@ sub process {
+ 		}
+ 
+ # check for embedded filenames
+-		if ($rawline =~ /^\+.*\Q$realfile\E/) {
++		if ($rawline =~ /^\+.*\b\Q$realfile\E\b/) {
+ 			WARN("EMBEDDED_FILENAME",
+ 			     "It's generally not useful to have the filename in the file\n" . $herecurr);
+ 		}
+
