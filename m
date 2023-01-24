@@ -2,153 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A2F6793A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921DB6793A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbjAXJFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S233369AbjAXJFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbjAXJFe (ORCPT
+        with ESMTP id S232654AbjAXJFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:05:34 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870FF3E08B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:05:32 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id r2so13160536wrv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:05:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wh9YPwUFmU9TlXE8h6aarMlvLtrqOnroY8ktmkM9cF4=;
-        b=NZLu/mXW/jR7P3J17bOgR6qP2EvV8pBIAs2EK+EY8boNhE8FtlYTBwgw1o4LP0Ou5l
-         7o9Ot2ODWivHgzBSAJ0IBV+AjHzdb/yukmzpiuClYyjEROnI3ViQRRGAxEgPg+Aa8riC
-         /AEH2/T5wFH6p7d08431R59fEPkQPu0yfIC+5VFqCfp1HoGp3Pzsb2O0R+lJCpAhsUGS
-         dxOGk6V7Uo+G3wxAFhgDfzHRNuEFmH3+71rHT0oNwPvn/PfJj4WULB6tuCfythudkkAk
-         Iq3YSBNJYb0c/jvBZfE4g6qZiRcRY90ZDBvI2s9Iu4kIZb8WiN9rzzTZchvcSyXjzL9p
-         p4UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wh9YPwUFmU9TlXE8h6aarMlvLtrqOnroY8ktmkM9cF4=;
-        b=Im6eJWKqdgPYThF/in2Qt5Wph3z6pWb2zzPzYQs+Yx0rn9OlRjthjWt78kHJzei8xl
-         PbRx+hyV74dLOvuHf8kwZOHERS1jyhJShpNMu2dzhWp9s78LmPuff3SulwvihIMqRCyy
-         CIYlCJwJMxnHzzJQ6tV2JWF7sUc2zzhJFoWxEwGZTbR6wkB9vp5cAhoUK4xIPzTH2pRw
-         j9W58ZpcIDzAmGwEFGsHgTl/lt3KrI0NIVo8fcbp4Lb7qqvkyk7vqCwcxkA55ujD+sRV
-         qVNROMxiPMUDdiKMlhhMdJtrsRAuJrn2PrRsFxrmJ9C7qFPuNt7eDkSJDMNru04klqST
-         FOYg==
-X-Gm-Message-State: AFqh2kqVvkcIlf5RV6/kNORfuweszjztU1o2h9gDqtUUnrTFtT5WSx8N
-        ZGC69d23MPplShYuj1ba86fqtA==
-X-Google-Smtp-Source: AMrXdXukUC6LKF0R6+9iNiS48zc+9/Y6jhzP7MWyQ85ZuTQuZfZ3Y1McusWuaT27kf+OhuNHIrxGtQ==
-X-Received: by 2002:a5d:6b05:0:b0:2bd:cf99:e6ab with SMTP id v5-20020a5d6b05000000b002bdcf99e6abmr22075514wrw.65.1674551131018;
-        Tue, 24 Jan 2023 01:05:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l4-20020adfa384000000b00241fab5a296sm1365052wrb.40.2023.01.24.01.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 01:05:30 -0800 (PST)
-Message-ID: <71fd9674-63a7-9887-d602-1f57ae3982aa@linaro.org>
-Date:   Tue, 24 Jan 2023 10:05:27 +0100
+        Tue, 24 Jan 2023 04:05:37 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C20A3F292;
+        Tue, 24 Jan 2023 01:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674551136; x=1706087136;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dfjo3zaZbVl8vyIEZKN8E3xoubV49NEBMowOxUxaKU4=;
+  b=n1cMCmwzNJsQVTZJ/wmDoAoUGpDg3ZC+TIsH/hPMQfF59G4z45ELjHFX
+   70VNRuJjexIQvxphz2m2iAXPHeh8U/0JsOVkvOxZeAuqWgvF9dfjKNZav
+   GCbHwxUJ0uuRxjlkpACU0Z0WgkL6LoZmopRI7HE1eaPtlakVv1zFfxc6U
+   oaEi2V9JUIj5R9VbJAlLDDTkmWz+smMUZ0DUqyjY10JTFK6YJnNhQkvjN
+   SPXJEeJTf1fQVkOoAYJ0E0I1kEbU3BtQqMNmU5FfWH3ofXXKYo7ge0snt
+   I/u2h9kZt+rG9y2WC7k80uwQHH77I7vEexfxN/VX3edwgK0rOJ1JMp29a
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="388599976"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="388599976"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 01:05:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="664003493"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="664003493"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2023 01:05:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pKFFD-00EFjI-2Y;
+        Tue, 24 Jan 2023 11:05:31 +0200
+Date:   Tue, 24 Jan 2023 11:05:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Subject: Re: [PATCH v1 1/3] ACPI: video: Fix refcounting in
+ apple_gmux_backlight_present()
+Message-ID: <Y8+fWzQP87kGBuJP@smile.fi.intel.com>
+References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
+ <9e24156c-65fc-d38b-317a-9cc8fb2201b9@redhat.com>
+ <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
+ <ea836a1e-a4ab-1c72-dd1f-b1e61fa9595e@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 11/13] dt-bindings: serial: restrict possible child node
- names
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, - <devicetree@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Chester Lin <clin@suse.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, Fugang Duan <fugang.duan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230123151302.368277-1-krzysztof.kozlowski@linaro.org>
- <20230123151302.368277-11-krzysztof.kozlowski@linaro.org>
- <167451486467.2795286.1299932821783618559.robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <167451486467.2795286.1299932821783618559.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea836a1e-a4ab-1c72-dd1f-b1e61fa9595e@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 00:05, Rob Herring wrote:
+On Mon, Jan 23, 2023 at 11:10:26PM +0100, Hans de Goede wrote:
+> On 1/23/23 19:18, Andy Shevchenko wrote:
+> > On Mon, Jan 23, 2023 at 06:46:44PM +0100, Hans de Goede wrote:
+> >> On 1/23/23 18:10, Andy Shevchenko wrote:
+> >>> acpi_dev_get_first_match_dev() gets ACPI device with the bumped
+> >>> refcount. The caller must drop it when it's done.
+> >>>
+> >>> Fix ACPI device refcounting in apple_gmux_backlight_present().
+
+...
+
+> >> Thank you for your work on this, much appreciated and I like
+> >> the new acpi_get_first_match_physical_node().
+> >>
+> >> But I don't think this patch is a good idea. There is a
+> >> regression related to apple_gmux_backlight_present()
+> >> with a patch-set fixing it pending.
+> >>
+> >> And that patch-set actually removes this function. Adding
+> >> a fix for this real, but not really important leak now,
+> >> will just make backporting the actual fix harder.
+> >>
+> >> So I would prefer for this patch to not go in and to
+> >> go for (a to be submitted v2) of the patch-set fixing
+> >> the regression right away instead.
+> > 
+> > Maybe I missed something, but I noticed that you actually moved (not killed)
+> > the code which is currently in this function. If it's the case, I prefer my
+> > fix to be imported first.
 > 
-> On Mon, 23 Jan 2023 16:13:00 +0100, Krzysztof Kozlowski wrote:
->> The re-usable serial.yaml schema matches every property with ".*"
->> pattern, thus any other schema referencing it will not report unknown
->> (unevaluated) properties.  This hides several wrong properties.  It is
->> a limitation of dtschema, thus provide a simple workaround: expect
->> children to be only of few names matching upstream usage (Bluetooth,
->> GNSS, GPS and MCU).
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/serial/serial.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
+> The code is not really moved, patch 2/3 of my patch-set factors out
+> the detection code from drivers/platform/x86/apple-gmux.c's probe
+> function. The new factored out code uses a similar construct as
+> the apple_gmux_backlight_present() code (including the same leak).
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> Then patch 3/3 drops apple_gmux_backlight_present() and calls
+> the new factored out probe code.
 > 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.example.dtb: serial@1,0: Unevaluated properties are not allowed ('intel,ixp4xx-eb-byte-access', 'intel,ixp4xx-eb-cycle-type', 'intel,ixp4xx-eb-t3', 'intel,ixp4xx-eb-write-enable' were unexpected)
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/8250.yaml
+> I'll fix the leak in v2 and then add the 3 patches to pdx86/fixes
+> for the next pull-req to Linus (thus also fixing the leak).
 
-Eh, this is not trivial to solve. The
-"intel,ixp4xx-expansion-bus-controller.yaml" bindings add properties to
-children nodes, just like spi-peripheral-props:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml?h=v6.2-rc5#n147
+As agreed with Rafael, thanks!
 
-Any node can be there:
-1. serial, which was broken since beginning but errors not visible,
-2. flash, which work fine just because mtd-physmap.yaml allows it,
-3. more?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Existing DTS of this ixp4xx controller have different nodes, for example:
-flash, shared-dma-pool, ns8250, arcom,vulcan-gpio, maxim,max6369:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/intel-ixp42x-arcom-vulcan.dts?h=v6.2-rc5#n40
-
-Probably we need expansion-bus-controller-peripheral-props.yaml and
-include it in every possible child. Does it sound reasonable?
-
-Best regards,
-Krzysztof
 
