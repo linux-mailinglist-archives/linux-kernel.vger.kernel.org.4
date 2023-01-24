@@ -2,198 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8539678CA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E4A678CA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjAXALc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S232098AbjAXAL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbjAXALa (ORCPT
+        with ESMTP id S230224AbjAXAL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:11:30 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCC21204B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:11:20 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id r132so11904599oif.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:11:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMGBITMz/lZXCdFVps8h/n7rt2b1zZj8hAlJn9lprRY=;
-        b=lUUPMeHekcwzu5xQppi84GAUJeT5ZVQiZA4fOCOTC01Tgysoh8T9a5HNjOylL5O8q+
-         4cM0yW1dA3OIT7AJOzGT9Y44wf3eslxaLFQ3WhPRKrRTK89ydRkXq4ywvnLfppRyUSTE
-         LgAMsOdS/tTEBKUnpnLvJ/SD/thpV5yKZSPSqxeewmTv0W49GIUtTQmLaqfCSRYZalqo
-         LneYb64SbHjXwDLN7e7unTgVEHg1yskwcY79z9/fBnrNVENr+QU8YO/uikCq4dyE2ptY
-         kZNrMnePJ1+AIww23aB3LQBe+cWijGXwkAjGLr0LraZ8U2YZ/s/1xVJI3tw4dgqN2E+O
-         OQZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CMGBITMz/lZXCdFVps8h/n7rt2b1zZj8hAlJn9lprRY=;
-        b=0Ye/vDGMfv+ZFfSComZNZGtedd2ItruyR0KXrsebOPHHRS6q3W8UlUK0gXMROx64fB
-         VJGNGL4uOoCcAmUaS6ZJ4Fn9Ynm9koYv7VXWmHwIYXnNTuHQh7xmeY98jMUo7Y3EcDh7
-         xcyojWEYmFGFwBuuLcnVVVsYtpJKMnzZY82KoMSbSWb6GVl6vyj6AmO/JV50uaprWHVa
-         Zv63/z68yUJ0dHBXSOs48VxtIlGbMJI6TuU5/tmPXhkQ/z1aD9GzYW4NJOR16AiwywzB
-         /gylvIXzAl9LOEbPZzzH50glU0qfYIOs4rZDq2EDq5avpmO1F3FGu9xGDIcIy/qfrgHQ
-         r+hA==
-X-Gm-Message-State: AFqh2ko/ooVphUN3ywHJhCtlVnDuelBfyP+j5o6ES7C5logzJo2C1X8N
-        9CGH+r9QeYvLmYD7bVZb2anGNbXglI1f9Myj6FpKdK5r
-X-Google-Smtp-Source: AMrXdXsNzX8wnMzrzwoysweIyE0AFToe00bJ4Iyyja138RtBGRebyrXJAnDgp2CG+BTJqX3WEPIFE0nCpqgcglEroyU=
-X-Received: by 2002:aca:2107:0:b0:365:64a:b3a1 with SMTP id
- 7-20020aca2107000000b00365064ab3a1mr1021061oiz.81.1674519080060; Mon, 23 Jan
- 2023 16:11:20 -0800 (PST)
+        Mon, 23 Jan 2023 19:11:56 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70057279AF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1674519111; x=1706055111;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xy0S4tydBQLsREe4methXzx1qb/et0hP72ULQQwMdGo=;
+  b=d/hk1e7xQJf5n8VnMoyQ4ClQ1RPftdVCPO4MLvuuy2ofFp9zhnhYrw/0
+   Gj3DteWHoCyv3OGA59zZXs0MNzUlumHX64BySa7nZ8cORMyYvPwCuQ1z2
+   WNdOt1MsDgPB0U0JDXhDG5XV52I7ZyDVHUB7ArgFCkIrPoDhh1gEIxxpj
+   UAMv18vRlpptGBSCfs41aGKp4qwnLi6MruipKZULOMrv48t7sdPN+UwuV
+   eQnUHaefPX8wMpZcBK5aHbFxDb1/68jnBT/UOhkouSlk9BUHFmd9/QrIX
+   Gsnnj17Q+L7SCGbDxsx3f5FUmqmSoFegMrbUypG5aRJ0Dd49e68XLN01G
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,240,1669046400"; 
+   d="scan'208";a="221659156"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 24 Jan 2023 08:11:50 +0800
+IronPort-SDR: Hv9UMDcwUmUBxK/q74XzQ75qkGMpDct0T4BoZIGfI/6ZSgXAlvrRtl6hN6cjqpbbiKz3NhKdCp
+ 72+Actt4BtASNiV5IaLO8hy03uzC3aD0JuQll77GSpUO0ODke//Sc1fnrRWxCGxuZ6HR9MJYdE
+ XTGan+pbYvmvsMftxyfT5dNTVgbTVvXfqgGxqgx5v1QehHSYU7uS1eh30RoO/5Onx30BxgVeaQ
+ 2WrsQXkSTEHVvcpay8k9JmQX+XkLQRutNNXtvpl8UY0k7Q90sC+Ya/OqL2XQNM4DZ45BD0fEsr
+ GTI=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 15:23:40 -0800
+IronPort-SDR: 7q8Xz5OmvtaqdwMZ9PHLAuU9OAtFqBtUo4pZXq00Q8a9dxbX3RodRZnUGtoGlpVsixh709OweN
+ 3WsQStChopJYkvF9o3c7QWnza9YgcpImizUDeiYmAPhc3LVyUeL96a8e2FqkMUFbIRBM/SMU4I
+ hRkcoOvTUB9wYTt9bcS1t14kbkdjV1XQYMfoPjf5qOQIGILoS87FUXIQUbc3eV5e/KIp01sd75
+ 2Euk1CxMRUIW/EWoU5qLZvJ9O375U1aR8Bg21hW9PQEGXM1ytKF7n/0yqhjnf6wwO/diene4Bt
+ FoI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 16:11:51 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P16pZ5kKGz1Rwrq
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:11:50 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1674519110; x=1677111111; bh=Xy0S4tydBQLsREe4methXzx1qb/et0hP72U
+        LQQwMdGo=; b=jLiwz6zGhpz696NE03KG9wTsTl14PCK1gPlySp1FYS5efzxPlNC
+        qdcBiawTFomwNFE6gzuFBCi3BzFiOLeZaRNk6Xwng+nVpwN7r5KDd3h+0P8NiPo5
+        VR4pv1Y7Hk0wIfLK9JmlACy6r8Aoo55l/+T/ywDGnXG9Evus2JPx1JSZyX+DUQfE
+        4uSGjO2vJcFIgvu0WueuilR0n8Z+XhuOB9J91HyK634zLFiOC/HhrkN/XzeTWfIf
+        fCJxWOuIOPTmtnGOJTv8wTFdQl8J2p0Rfn78/LH/Lr3L90hK/M9bQBdNI+oZVTgB
+        ft09hjaKX3Gu9dzk1VdQ9Gj2YxLvnW/fwog==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id KlvBS_o5sosa for <linux-kernel@vger.kernel.org>;
+        Mon, 23 Jan 2023 16:11:50 -0800 (PST)
+Received: from [10.225.163.51] (unknown [10.225.163.51])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P16pX6mrnz1RvLy;
+        Mon, 23 Jan 2023 16:11:48 -0800 (PST)
+Message-ID: <8871d62a-b87f-75d6-fb5d-d9811a3e5dae@opensource.wdc.com>
+Date:   Tue, 24 Jan 2023 09:11:47 +0900
 MIME-Version: 1.0
-Received: by 2002:a8a:ad6:0:b0:49c:e11d:f815 with HTTP; Mon, 23 Jan 2023
- 16:11:19 -0800 (PST)
-In-Reply-To: <CAHk-=whUSZk1dZrJuhxeb4qB3POstVRwOZCN8PXd3W7ztbqQBg@mail.gmail.com>
-References: <20230118150703.4024-1-ubizjak@gmail.com> <20230118131825.c6daea81ea1e2dc6aa014f38@linux-foundation.org>
- <CAFULd4ZQGG+N3f7xDuoiNG1jY128pqaH0F4eLKO+fhvSNAbKfA@mail.gmail.com>
- <CAFULd4b5szcTHTVbGJ9WiciG_+8kANiPZYP_pkEZUhnz_HHy-g@mail.gmail.com>
- <913c01d41f824fa8b3400384437fa0d8@AcuMS.aculab.com> <CAFULd4aDORSrq7zf_LcAZRP8HOHcrq2-rGMaroKyG2zQDHNpOA@mail.gmail.com>
- <CAGudoHF6zbyzza6xysuCjcxjHAUgeAVvgW0sqxDAFQNwz9u7wg@mail.gmail.com> <CAHk-=whUSZk1dZrJuhxeb4qB3POstVRwOZCN8PXd3W7ztbqQBg@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Tue, 24 Jan 2023 01:11:19 +0100
-Message-ID: <CAGudoHH+SmRoyXvppjBEoK=dvVdy1jvKNHDLEVf9mLnzsEds6Q@mail.gmail.com>
-Subject: Re: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Uros Bizjak <ubizjak@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: manual merge of the zonefs tree with the
+ vfs-idmapping tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@rothwell.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230124085951.59eb8da3@canb.auug.org.au>
+ <1631b427-9efd-cd26-5dbc-0143097f859b@opensource.wdc.com>
+ <20230124102535.1e21a533@canb.auug.org.au>
+ <87958074-baa4-b6c9-da0c-d654e4009611@opensource.wdc.com>
+ <20230124110745.5c9b78b0@oak.ozlabs.ibm.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230124110745.5c9b78b0@oak.ozlabs.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Mon, Jan 23, 2023 at 7:59 AM Mateusz Guzik <mjguzik@gmail.com> wrote:
->> Basic idea would be to have competing CPUs aggregate the total change
->> on the lock and then have one of them make it happen across the
->> interconnect -- so instead of add/sub 1 you would add/sub n, where n
->> can very well be quite big.
->
-> No. The use is literally serialized, and done one at a time, and needs
-> to be synchronous.
->
-> We're talking about looking up a <i>single</i> path component, while
-> at the same time making sure that that path component isn't being
-> removed by another CPU - and there is by definition no other locking
-> going on, because the lockref *is* the locking.
->
-[snip]
->
-> Thanks to RCU pathname lookup, the lockref thing *should* come into
-> play only when  you actually fall out of RCU mode, ie for the last
-> component. That's a huge win, because that's what avoids the whole
-> "everybody hammers on the root/pwd dentry counts".
->
-> Your benchmark that looked up the *same* last component in parallell
-> and all the time is not really a real load.
->
-[snip2]
->
-> So I'm not claiming lockref is perfect, but I do suspect you're
-> barking up the wrong tree here. The optimizations you are talking
-> about are either not realistic in the first place (because
-> serialization and locking) or have already mostly been done (ie
-> avoiding the op entirely except for the last component).
->
+On 1/24/23 09:07, Stephen Rothwell wrote:
+> Hi Damien,
+> 
+> On Tue, 24 Jan 2023 08:30:29 +0900 Damien Le Moal <damien.lemoal@opensource.wdc.com> wrote:
+>>
+>> OK. I think I will merge the 3 patches that create the conflict and rebase
+>> the patches. I need that for retesting at least. But given the size of the
+>> conflict resolution, I may push that as an update to my for-6.3/for-next
+>> branch. Let me see...
+>>
+>>> Alternatively, just leave the fix up to Linus (but mention it to him
+>>> when you send your pull requests).  
+>>
+>> Understood. Let me retest first :)
+> 
+> When I said "merge", I meant literally "git merge <some stable branch
+> from the vfs-mapping tree that contains the conflicting commit>" not
+> cherry pick the commits i.e. you would need to coordinate with
+> Christian about having a common branch (or making sure that the part of
+> his tree you pull in is immutable).
 
-That was a minor remark in the spirit of attempting to reduce pingpong,
-only made because of the paper. It was not a serious proposal, but
-perhaps I failed to make it clear enough.
+Yep, cherry picking did not work :)
+I did a merge test and came up with the same resolution as you did. It
+looks good. It looks big but is in fact fairly simple. I will keep it as
+is and signal it to Linus when I send my PR.
 
-A more serious remark was in the last paragraph.
+But retesting everything to be sure there are no issues.
 
-> HOWEVER. There is one special exception that might be interesting and
-> that has never been done: 'fstat()' and friends could possibly avoid
-> the "try_to_unlazy()" even for the last component.
->
-> IOW, we might be able to do fstatat() without ever even finalizing the
-> RCU state of the pathname, and actually looking up the stat
-> information while still in RCU mode, and instead of doing the actual
-> final lockref_get_not_dead() to turn an RCU path into a real
-> ref-counted path, we could just do the "get the stat info, then do
-> read_seqcount_retry() to verify that the RCU walk _and_ the stat info
-> is still valid".
->
+Christian,
 
-Ignoring mentioning specific routines by name is precisely what
-I proposed in that e-mail. To quote myself:
-
-> Personally, for lockref, I think the way to go forward is to use it less
-> to begin with and to look for ways to convert it into a lock xadd-able
-> primitive instead. The "doing it less thing" could be done by
-> implementing a RCU-only mode for select syscalls, which defaults to
-> opportunistically avoid refing squat. If the caller manages to do what
-> it needed to do, that is a massive win; otherwise refs get taken. This
-> could work well in the common case for syscalls like statx and access,
-> but would not for open. Frankly I'm surprised something like this is
-> not already implemented (maybe I missed a major showstopper?).
-
-Now back to your response:
-
-> But I'm not convinced that final complexity would be worth it. It
-> sounds like a potentially fun and interesting exercise (Al Viro added
-> to particupants so that he can say "No! That's not 'fun and exciting',
-> that's just crazy!") if somebody really wants to, but see above: the
-> last path component is very seldom something that sees contention. You
-> look up the same root/pwd over and over again, but nobody sane looks
-> up the same full pathname over and over again.
->
-[snip]
-> But since you clearly were looking at fstatat() performance, I can
-> only point you at this case and say "There's _potentially_ upside
-> there".
->
-
-So if you strace something like gcc compiling stuff you will find:
-- some access calls on shared dirs, for example:
-78533 access("/usr/lib/gcc/x86_64-linux-gnu/11/", X_OK) = 0
-78533 access("/usr/lib/gcc/x86_64-linux-gnu/11/", X_OK) = 0
-78533 access("/usr/lib/gcc/x86_64-linux-gnu/11/", X_OK) = 0
-- same with newfstatat:
-87428 newfstatat(AT_FDCWD, "./arch/x86/include",
-{st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
-87428 newfstatat(AT_FDCWD, "./arch/x86/include/generated",
-{st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
-87428 newfstatat(AT_FDCWD, "./include", {st_mode=S_IFDIR|0755,
-st_size=4096, ...}, 0) = 0
-87428 newfstatat(AT_FDCWD, "./arch/x86/include/uapi",
-{st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
-- there is also quite a bit of readlink:
-87502 readlink("/tmp", 0x7ffe28847ac0, 1023) = -1 EINVAL (Invalid argument)
-87502 readlink("/tmp/ccTh37oI.s", 0x7ffe28847ac0, 1023) = -1 EINVAL
-(Invalid argument)
-
-that last bit is glibc doing realpath(). A case can be made for making
-realpath into a syscall instead, but I'm not going to flame over for
-the time being. :)
-
-Anyhow, my point is that 2 gcc compiling different files do invoke path
-lookups with the same terminal path components and lockref stuff gets
-bounced around when it happens.
-
-On another point how to end up dealing with lockref less, I have to
-note glibc switched fstat(fd, buf) to use newfstatat(fd, "", buf,
-AT_EMPTY_PATH) internally. This adds a lot of work single-threaded as
-it forces a path lookup with associated stac/clac trip, but more
-importantly the kernel no longer relies on liveness of the dentry
-provided by the file object, but uses lockref instead. Something which
-allows to get data produced by newfstatat without forcing a lookup
-sounds like a welcome addition. Same goes for statx which seems to be
-the recommended syscall. I'll be writing about this to -fsdevel some
-time later.
+Next time, when you touch an fs, please cc the maintainer for acks. I had
+that zonefs series ready for a while and we could have coordinated for the
+conflict...
 
 -- 
-Mateusz Guzik <mjguzik gmail.com>
+Damien Le Moal
+Western Digital Research
+
