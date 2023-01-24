@@ -2,106 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9AC67A49F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E411B67A49B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbjAXVL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S234617AbjAXVLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjAXVLY (ORCPT
+        with ESMTP id S229452AbjAXVLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:11:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16886470B7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674594640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+S5IUZHTVF9Pd6bZbdf7wMuVKpNUwM0nLhEcSQAjNaE=;
-        b=VdHnD2yu0j/Qv/MRKrJcVnSTSPRlPtgx2jBAUV5ZDHCbUDQz7Fx3DDUR5kDL9+UJjjDL1e
-        Zmrgxmt2oQXkN2zr9pPOQlE5whAqITKIoXzco4VgbH6bbDzoSxliUBGzJiVxLoGUw9R3SU
-        uuGS9L0IuCzvH3ZYvuFOraabv51p62U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-496-PXodvBPsPsCCtt8GzvXR7Q-1; Tue, 24 Jan 2023 16:10:34 -0500
-X-MC-Unique: PXodvBPsPsCCtt8GzvXR7Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CCB132802E24;
-        Tue, 24 Jan 2023 21:10:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DBAAE2166B26;
-        Tue, 24 Jan 2023 21:10:31 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <4be974aa-2beb-9ae5-3f48-7dde6241b0c7@nvidia.com>
-References: <4be974aa-2beb-9ae5-3f48-7dde6241b0c7@nvidia.com> <20230124170108.1070389-1-dhowells@redhat.com> <20230124170108.1070389-3-dhowells@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Christoph Hellwig" <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v9 2/8] iov_iter: Add a function to extract a page list from an iterator
+        Tue, 24 Jan 2023 16:11:11 -0500
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA23F286;
+        Tue, 24 Jan 2023 13:11:10 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso3416465pjj.1;
+        Tue, 24 Jan 2023 13:11:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ss0SZeBtkJ7QpD8l3oHEzxDybW1VYSzAEeuI0YqP6CY=;
+        b=2tBPXU/2oVcQTnYzbCtgPubL9hWnWlKs2ZVbtaCoU7lOzGyM4LX1HSXk0kh1rBDRsY
+         xZPY8Fn92wqojJeoDh3s9j0qcpnokV8xo2WBRAZQQ9LB9OvqU29A9te9Q8WXnHXYLz2V
+         M/D2mjhhkn9MkdTnXXVPnubbbNzXqIt1OlJc26Fspz/p6vb00sxdvuyzFA6DVHKhQAhV
+         ZGOv2khKnV80ufHeFpWv5H4hAQLSx91fFnZXJPc04OXlGK5/7KP1op2L39J109H9jM4z
+         BO6v9Qk4smNuEAaClfzAAdcd+Yuqdjbk14s5f24zIJR/DyzE5D+qEg1QRiaJH89Rd9Qf
+         vX1g==
+X-Gm-Message-State: AFqh2kqeSJ7q8zHzwHeBdUMp3acDWUOBMBGeiyc2r9vi/CnT5+ORzJy8
+        Q6Nf5tjcwtidhxsWOM1PubM=
+X-Google-Smtp-Source: AMrXdXtZf9Cas1NrdMubZUJkfSlUzUrdaOCauZzGg6YaboU6OYUFDIx/qBZoLOnCN3B+twW3slr51Q==
+X-Received: by 2002:a17:902:e5d2:b0:191:3808:14b0 with SMTP id u18-20020a170902e5d200b00191380814b0mr40520566plf.4.1674594669087;
+        Tue, 24 Jan 2023 13:11:09 -0800 (PST)
+Received: from maniforge ([2620:10d:c090:400::5:ce3f])
+        by smtp.gmail.com with ESMTPSA id x12-20020a170902820c00b0019488090884sm2079384pln.273.2023.01.24.13.11.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 13:11:08 -0800 (PST)
+Date:   Tue, 24 Jan 2023 15:11:04 -0600
+From:   David Vernet <void@manifault.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, tj@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 4/4] bpf/selftests: Verify struct_ops prog
+ sleepable behavior
+Message-ID: <Y9BJaFS9rwA/5Cb7@maniforge>
+References: <20230124160802.1122124-1-void@manifault.com>
+ <20230124160802.1122124-5-void@manifault.com>
+ <57a2e223-6fe8-7b7b-1b02-800665673ad1@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1353066.1674594631.1@warthog.procyon.org.uk>
-Date:   Tue, 24 Jan 2023 21:10:31 +0000
-Message-ID: <1353067.1674594631@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <57a2e223-6fe8-7b7b-1b02-800665673ad1@linux.dev>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-John Hubbard <jhubbard@nvidia.com> wrote:
+On Tue, Jan 24, 2023 at 11:52:17AM -0800, Martin KaFai Lau wrote:
+> On 1/24/23 8:08 AM, David Vernet wrote:
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 50123afab9bf..64034311c5f7 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1474,6 +1474,7 @@ struct bpf_dummy_ops {
+> >   	int (*test_1)(struct bpf_dummy_ops_state *cb);
+> >   	int (*test_2)(struct bpf_dummy_ops_state *cb, int a1, unsigned short a2,
+> >   		      char a3, unsigned long a4);
+> > +	int (*test_3)(struct bpf_dummy_ops_state *cb);
+> 
+> nit. May be a self describe name like test_sleepable().
 
-> > +	for (;;) {
-> > +		if (i->nr_segs == 0)
-> > +			return 0;
-> > +		maxsize = min(maxsize, i->bvec->bv_len - skip);
-> > +		if (maxsize)
-> > +			break;
-> > +		i->iov_offset = 0;
-> > +		i->nr_segs--;
-> > +		i->kvec++;
-> > +		skip = 0;
+Will do. I agree that's better, but was just following the existing
+contours of the file. Happy to have an excuse to improve it.
+
+> 
+> >   };
+> >   int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
+> > diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
+> > index 1ac4467928a9..46099737d1da 100644
+> > --- a/net/bpf/bpf_dummy_struct_ops.c
+> > +++ b/net/bpf/bpf_dummy_struct_ops.c
+> > @@ -154,6 +154,23 @@ static bool bpf_dummy_ops_is_valid_access(int off, int size,
+> >   	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
+> >   }
+> > +static int bpf_dummy_ops_check_member(const struct btf_type *t,
+> > +				      const struct btf_member *member,
+> > +				      const struct bpf_prog *prog)
+> > +{
+> > +	u32 moff = __btf_member_bit_offset(t, member) / 8;
+> > +
+> > +	switch (moff) {
+> > +	case offsetof(struct bpf_dummy_ops, test_3):
+> > +		break;
+> > +	default:
+> > +		if (prog->aux->sleepable)
+> > +			return -EINVAL;
 > > +	}
 > > +
-> > +	skip += i->bvec->bv_offset;
-> > +	page = i->bvec->bv_page + skip / PAGE_SIZE;
-> > +	offset = skip % PAGE_SIZE;
-> > +	*offset0 = offset;
+> > +	return 0;
+> > +}
 > > +
-> > +	maxpages = want_pages_array(pages, maxsize, offset, maxpages);
-> > +	if (!maxpages)
-> > +		return -ENOMEM;
+> >   static int bpf_dummy_ops_btf_struct_access(struct bpf_verifier_log *log,
+> >   					   const struct bpf_reg_state *reg,
+> >   					   int off, int size, enum bpf_access_type atype,
+> > @@ -208,6 +225,7 @@ static void bpf_dummy_unreg(void *kdata)
+> >   struct bpf_struct_ops bpf_bpf_dummy_ops = {
+> >   	.verifier_ops = &bpf_dummy_verifier_ops,
+> >   	.init = bpf_dummy_init,
+> > +	.check_member = bpf_dummy_ops_check_member,
+> >   	.init_member = bpf_dummy_init_member,
+> >   	.reg = bpf_dummy_reg,
+> >   	.unreg = bpf_dummy_unreg,
+> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> > index 8da0d73b368e..33ea57d34c0b 100644
+> > --- a/net/bpf/test_run.c
+> > +++ b/net/bpf/test_run.c
+> > @@ -730,6 +730,10 @@ noinline void bpf_kfunc_call_test_destructive(void)
+> >   {
+> >   }
+> > +noinline void bpf_kfunc_call_test_sleepable(void)
+> > +{
+> > +}
+> > +
+> >   __diag_pop();
+> >   BTF_SET8_START(bpf_test_modify_return_ids)
+> > @@ -767,6 +771,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
+> >   BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
+> >   BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS)
+> >   BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
+> > +BTF_ID_FLAGS(func, bpf_kfunc_call_test_sleepable, KF_SLEEPABLE)
 > 
-> Is it OK that the iov_iter position has been advanced, and left that way,
-> in the case of an early -ENOMEM return here?
+> KF_SLEEPABLE kfunc is not specific to the struct_ops prog. I hope a test has
+> already covered that KF_SLEEPABLE kfunc can only be called from sleepable
+> prog. eg. there is bpf_fentry_test1.
+> 
+> This new kfunc could then be omitted and make the test simpler. There is no
+> need to add the test to the DENYLIST.s390x:
+> https://github.com/kernel-patches/bpf/actions/runs/3998188872/jobs/6861920516
 
-I think it should be okay.  The for-loop at the top just skips over empty
-segments, so it doesn't really advance things.  There is an error there,
-though: it should be i->bvec++, not i->kvec++ in the loop.
+Ah, good point. Totally forgot about s390x. Will send out a v3 that
+doesn't bother with also including the KF_SLEEPABLE invocation, and
+instead just validates that .check_member() is called.
 
-David
+> 
+> > diff --git a/tools/testing/selftests/bpf/progs/dummy_st_ops_common.h b/tools/testing/selftests/bpf/progs/dummy_st_ops_common.h
+> > new file mode 100644
+> > index 000000000000..7d0761594b69
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/dummy_st_ops_common.h
+> > @@ -0,0 +1,20 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
+> > +
+> > +#ifndef _DUMMY_ST_OPS_COMMON_H
+> > +#define _DUMMY_ST_OPS_COMMON_H
+> > +
+> > +struct bpf_dummy_ops_state {
+> > +	int val;
+> > +} __attribute__((preserve_access_index));
+> > +
+> > +struct bpf_dummy_ops {
+> > +	int (*test_1)(struct bpf_dummy_ops_state *state);
+> > +	int (*test_2)(struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
+> > +		      char a3, unsigned long a4);
+> > +	int (*test_3)(struct bpf_dummy_ops_state *state);
+> > +};
+> 
+> Instead of adding a new dummy_st_ops_common.h header, try to directly
+> include vmlinux.h in the dummy_st_ops_{success,fail}.c.
 
+Ack, I'll give it a shot. Should be fine to include once we get rid of
+the test logic that includes the KF_SLEEPABLE kfunc.
+
+> 
+> > +
+> > +void bpf_kfunc_call_test_sleepable(void) __ksym;
+> 
