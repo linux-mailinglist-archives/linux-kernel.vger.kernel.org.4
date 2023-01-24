@@ -2,241 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F390B679F1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FAB679F23
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbjAXQp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S234230AbjAXQq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234565AbjAXQpW (ORCPT
+        with ESMTP id S229792AbjAXQqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:45:22 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF784C6C0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:45:15 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id t16so14948800ybk.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:45:15 -0800 (PST)
+        Tue, 24 Jan 2023 11:46:24 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A57110E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:46:22 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id bk15so40560610ejb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:46:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QqylS5Lo3YH2jz2661PX4pOVQQ/ziJPTaE7wN+OoHEs=;
-        b=OpIDwdu/r4cU3OtbGrTpTUn1uaGaVsKSXep/L98p5R65QQm1cokpwVtTor3unuqYty
-         Hurk2yVfcMTTBcT2zcEyrMiXheKNkOtYFRwf1NBoCpdaKZE9b2nW7SbiOl1/pw+ORK60
-         OZCWIB5l7bShpG0e8HkeNDKzzM4aeKQPLPaqXQdV2ckfyDC4mBm3cWdJsUU5jr6kOVtJ
-         84qrTJMR8Cey96o9a0TAEHmKW9l/Id+mOvXPzCFaW4QU+4ggQK5ELW3i2rjuaiCK7VST
-         wLuCcF3sjKgM+C8Zfyu1vpQ0X/SeXHKucd5PsGaE1DB0byyPkICaol7swVq9Vwpij8GA
-         SAOA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6anXkQhWREYZ7Z+wwNJ+N2b9GEDIU27Fd9BJKH3olz8=;
+        b=hmUF4NSx9DwWxuh+5qY9qu3vXkC9Su3E5becp0tyPpN837yiIcN4xF42l8Bf4EEa+9
+         SliZMm3HRDA1+eTeu7GZ4KWp5fUs7cXQaHAXQ6AHNcV8/oUvm105igX8pi2S7TV2IKJI
+         19lNuuJLGhcM+bb33fpMMZYTlJMyGXOZdLPMj7KJWC5laC3MetrRsawI6Rfwfa5dEqDa
+         znzpUabGpsI23R942mnNAAzKZ/RXjAoCWqyFJw6/KKGNOqhBSFiQWCGEqFZuFqPs/zM1
+         Z7TJu49nnNuTH+dX2xkLms84mXSOU7YTKNP1Uw87AQLGIQKBNmTBPvcBdnfPmPJvj6d/
+         Hi7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QqylS5Lo3YH2jz2661PX4pOVQQ/ziJPTaE7wN+OoHEs=;
-        b=OumQRchH8kQXUn20LgNcnxWD0lQ220wJWqcQu90BOFS7QVm40D88rvW7oHcNgVomvN
-         xkWtzhcj75RhtKHFLWsl/iKM9HOcn5rdQZWvpIIT7R1TfOBQTDY9peVCUXL11fvuM6QE
-         EJOFyy+P2JVIB/mubaOqU9BwNpn1nBHZ2fBlX3Qp9YBHLuWGVM7tHpSzVafTFmtJSkvo
-         7u/lmpT3KUf2G7XJenJ5y0JgPN6BzdH/z767yD1IAJ3KsC2198Ps0m410w8c47sI3DOC
-         Vl3kJGPLTWU3jETArAAGmLgx7JvyF6gY//wpaPnjOjUeY3Q2KL+qkLgYmHcKSvs9RLHp
-         sLKw==
-X-Gm-Message-State: AFqh2krdfyFvf8BtPEYI4wRFYg8yF3nYA03gelVNXvRKLx7/nRF/92ID
-        hbf0y1nh3IdS0Y72OdmY5iSct98NSkIyGCKNa4qw5w==
-X-Google-Smtp-Source: AMrXdXtZPEVLbt4E2y7ClbN4olSQU0OIa8qgWqubL2tDIH+VU4Fh/bQQNeOcjXxjCOKFPpXRS+UVtpEo3UMHpXeoYjs=
-X-Received: by 2002:a25:99c7:0:b0:6e0:c7d3:f026 with SMTP id
- q7-20020a2599c7000000b006e0c7d3f026mr3293665ybo.275.1674578714375; Tue, 24
- Jan 2023 08:45:14 -0800 (PST)
+        bh=6anXkQhWREYZ7Z+wwNJ+N2b9GEDIU27Fd9BJKH3olz8=;
+        b=K3o2k2pU4hst2uB5IEURVyww8ztimLorl+k4+RmHfl/OEylmdgKutpSHgmV1TSvp10
+         jbsnzoSUaNuSICqWMtDyQDkYRTxvrjJrutQymPuJO9qYOGHWEM/6QKyIlUOne2XcCz91
+         Ob8xIy/osOU4SMVOvH3DEqgtX450Zt7igEYUmkVcLnONx2UAd6EhL82kil5K5P13fD0W
+         9hAdSGtRP8gPSV5cNO47Tr8rjwRXWuWyjJn6EDVmM91uqIJByaCHBfqWyVaKJXztxUVT
+         2kjCz8vN0uoJFSME8L5O3IP6Q1WgMqcLYAXbE2+EmP2mb3/iT3rdiCb9s+tevVzvauNG
+         U3/Q==
+X-Gm-Message-State: AFqh2krsPwryHkjQtqFwzXZTJTJL3HPFn/2q4tS1zcY4n5UYb7CP6TUH
+        PF8NZfQIlhX1jQLtf0KuhspRdQ==
+X-Google-Smtp-Source: AMrXdXv1OwKIofcJpXz1pJ4NeedVbdQbdmtmeO818Cw3ayAERbgGVzTc74MxKGKJhhgeQ5+iF2R27Q==
+X-Received: by 2002:a17:906:b30f:b0:838:9c66:cd2f with SMTP id n15-20020a170906b30f00b008389c66cd2fmr31112589ejz.74.1674578780819;
+        Tue, 24 Jan 2023 08:46:20 -0800 (PST)
+Received: from localhost.localdomain (abyl109.neoplus.adsl.tpnet.pl. [83.9.31.109])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170906078400b008711cab8875sm1108506ejc.216.2023.01.24.08.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 08:46:20 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm8250: Disable wsamacro and swr0 by default
+Date:   Tue, 24 Jan 2023 17:46:16 +0100
+Message-Id: <20230124164616.228619-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <1674138393-475-1-git-send-email-quic_vpolimer@quicinc.com>
- <1674138393-475-6-git-send-email-quic_vpolimer@quicinc.com>
- <4a359748-e53c-a178-de09-2c999eb69013@linaro.org> <BN0PR02MB8173B73AC4E3DB9A7D0509DCE4C99@BN0PR02MB8173.namprd02.prod.outlook.com>
-In-Reply-To: <BN0PR02MB8173B73AC4E3DB9A7D0509DCE4C99@BN0PR02MB8173.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 24 Jan 2023 18:45:03 +0200
-Message-ID: <CAA8EJpr_YAD185VKtLD2TDmbYPpe7S4KPkoP-8N95nwKRt9Y=g@mail.gmail.com>
-Subject: Re: [PATCH Resend v11 05/15] drm/msm/dp: disable self_refresh_aware
- after entering psr
-To:     Vinod Polimera <vpolimer@qti.qualcomm.com>
-Cc:     "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "Vishnuvardhan Prodduturi (QUIC)" <quic_vproddut@quicinc.com>,
-        "Bjorn Andersson (QUIC)" <quic_bjorande@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 at 17:10, Vinod Polimera <vpolimer@qti.qualcomm.com> wrote:
-> > -----Original Message-----
-> > From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Sent: Tuesday, January 24, 2023 5:52 AM
-> > To: Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>; dri-
-> > devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
-> > freedreno@lists.freedesktop.org; devicetree@vger.kernel.org
-> > Cc: Sankeerth Billakanti (QUIC) <quic_sbillaka@quicinc.com>; linux-
-> > kernel@vger.kernel.org; robdclark@gmail.com; dianders@chromium.org;
-> > swboyd@chromium.org; Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>;
-> > Kuogee Hsieh (QUIC) <quic_khsieh@quicinc.com>; Vishnuvardhan
-> > Prodduturi (QUIC) <quic_vproddut@quicinc.com>; Bjorn Andersson (QUIC)
-> > <quic_bjorande@quicinc.com>; Abhinav Kumar (QUIC)
-> > <quic_abhinavk@quicinc.com>
-> > Subject: Re: [PATCH Resend v11 05/15] drm/msm/dp: disable
-> > self_refresh_aware after entering psr
-> >
-> > WARNING: This email originated from outside of Qualcomm. Please be wary
-> > of any links or attachments, and do not enable macros.
+They are not used on all boards, so disable them by default.
+Enable them back on MTP/RB5, which were the only current users.
 
-I hope such headers can be fixed on your side rather than being sent to the ML.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 6 ++++++
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts  | 6 ++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi     | 4 ++++
+ 3 files changed, 16 insertions(+)
 
-> >
-> > On 19/01/2023 16:26, Vinod Polimera wrote:
-> > > From: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> > >
-> > > Updated frames get queued if self_refresh_aware is set when the
-> > > sink is in psr. To support bridge enable and avoid queuing of update
-> > > frames, reset the self_refresh_aware state after entering psr.
-> >
-> > I'm not convinced by this change. E.g. analogix code doesn't do this.
-> > Could you please clarify, why do you need to toggle the
-> > self_refresh_aware flag?
-> >
-> This was done to fix a bug reported by google. The use case is as follows:
->         CPU was running in a low frequency with debug build.
->         When self refresh was triggered by the library, due to system latency, the queued work was not scheduled.
->         There in another commit came and reinitialized the timer for the next PSR trigger.
->         This sequence happened multiple times  and we found there were multiple works which are stuck and yet to be run.
-
-Where were workers stuck? Was it a busy loop around -EDEADLK /
-drm_modeset_backoff()? Also, what were ther ewma times for entry/exit
-avg times?
-
-I'm asking because the issue that you are describing sounds like a
-generic one, not the driver-specific issue. And being generic it
-should be handled in a generic fascion, in drm_self_refresh_helper.c.
-
-For example, I can imagine adding a variable to sr_data telling that
-the driver is in the process of transitioning to SR. Note: I did not
-perform a full research if it is a working solution or not. But from
-your description the driver really has to bail out early from
-drm_self_refresh_helper_entry_work().
-
->         As PSR trigger is guarded by self_refresh_aware, we initialized the variable such that, if we are in PSR then until PSR exit, there cannot be any further PSR entry again.
->                 https://chromium.googlesource.com/chromiumos/third_party/kernel/+/refs/tags/v5.15.90/drivers/gpu/drm/drm_self_refresh_helper.c#105
-
-Yes, and that's what triggered my attention. We are using a set of
-helpers, that depend on the self_refresh_aware being true. And
-suddenly under the hood we disable this flag. I'd say that I can not
-predict the effect this will have on the helpers library behaviour.
-
->         This has solved few flicker issues during the stress testing.
-> > >
-> > > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> > > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> > > ---
-> > >   drivers/gpu/drm/msm/dp/dp_drm.c | 27
-> > ++++++++++++++++++++++++++-
-> > >   1 file changed, 26 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c
-> > b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > > index 029e08c..92d1a1b 100644
-> > > --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> > > +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > > @@ -134,6 +134,8 @@ static void edp_bridge_atomic_enable(struct
-> > drm_bridge *drm_bridge,
-> > >       struct drm_crtc_state *old_crtc_state;
-> > >       struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
-> > >       struct msm_dp *dp = dp_bridge->dp_display;
-> > > +     struct drm_connector *connector;
-> > > +     struct drm_connector_state *conn_state = NULL;
-> > >
-> > >       /*
-> > >        * Check the old state of the crtc to determine if the panel
-> > > @@ -150,10 +152,22 @@ static void edp_bridge_atomic_enable(struct
-> > drm_bridge *drm_bridge,
-> > >
-> > >       if (old_crtc_state && old_crtc_state->self_refresh_active) {
-> > >               dp_display_set_psr(dp, false);
-> > > -             return;
-> > > +             goto psr_aware;
-> > >       }
-> > >
-> > >       dp_bridge_atomic_enable(drm_bridge, old_bridge_state);
-> > > +
-> > > +psr_aware:
-> > > +     connector =
-> > drm_atomic_get_new_connector_for_encoder(atomic_state,
-> > > +                                                     drm_bridge->encoder);
-> > > +     if (connector)
-> > > +             conn_state =
-> > drm_atomic_get_new_connector_state(atomic_state,
-> > > +                                                             connector);
-> > > +
-> > > +     if (conn_state) {
-> > > +             conn_state->self_refresh_aware = dp->psr_supported;
-> > > +     }
-> >
-> > No need to wrap a single line statement in brackets.
-> >
-> > > +
-> > >   }
-> > >
-> > >   static void edp_bridge_atomic_disable(struct drm_bridge *drm_bridge,
-> > > @@ -164,6 +178,14 @@ static void edp_bridge_atomic_disable(struct
-> > drm_bridge *drm_bridge,
-> > >       struct drm_crtc_state *new_crtc_state = NULL, *old_crtc_state = NULL;
-> > >       struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
-> > >       struct msm_dp *dp = dp_bridge->dp_display;
-> > > +     struct drm_connector *connector;
-> > > +     struct drm_connector_state *conn_state = NULL;
-> > > +
-> > > +     connector =
-> > drm_atomic_get_old_connector_for_encoder(atomic_state,
-> > > +                                                     drm_bridge->encoder);
-> > > +     if (connector)
-> > > +             conn_state =
-> > drm_atomic_get_new_connector_state(atomic_state,
-> > > +                                                             connector);
-> > >
-> > >       crtc = drm_atomic_get_old_crtc_for_encoder(atomic_state,
-> > >                                                  drm_bridge->encoder);
-> > > @@ -190,6 +212,9 @@ static void edp_bridge_atomic_disable(struct
-> > drm_bridge *drm_bridge,
-> > >        * when display disable occurs while the sink is in psr state.
-> > >        */
-> > >       if (new_crtc_state->self_refresh_active) {
-> > > +             if (conn_state)
-> > > +                     conn_state->self_refresh_aware = false;
-> > > +
-> > >               dp_display_set_psr(dp, true);
-> > >               return;
-> > >       } else if (old_crtc_state->self_refresh_active) {
-> >
-> > --
-> > With best wishes
-> > Dmitry
->
-> Thanks,
-> Vinod P.
->
-
-
+diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+index 8c64cb060e21..6802d36fb20c 100644
+--- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
++++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+@@ -1007,6 +1007,8 @@ can@0 {
+ };
+ 
+ &swr0 {
++	status = "okay";
++
+ 	left_spkr: speaker@0,3 {
+ 		compatible = "sdw10217211000";
+ 		reg = <0 3>;
+@@ -1322,6 +1324,10 @@ &venus {
+ 	status = "okay";
+ };
+ 
++&wsamacro {
++	status = "okay";
++};
++
+ /* PINCTRL - additions to nodes defined in sm8250.dtsi */
+ &qup_spi0_cs_gpio {
+ 	drive-strength = <6>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+index 0991b34a8e49..c0d83fa9a73b 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+@@ -759,6 +759,8 @@ codec {
+ };
+ 
+ &swr0 {
++	status = "okay";
++
+ 	left_spkr: speaker@0,3 {
+ 		compatible = "sdw10217211000";
+ 		reg = <0 3>;
+@@ -892,3 +894,7 @@ &usb_2_qmpphy {
+ &venus {
+ 	status = "okay";
+ };
++
++&wsamacro {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 95f1a6afcd43..a0ba166f89d8 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -2277,6 +2277,8 @@ wsamacro: codec@3240000 {
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&wsa_swr_active>;
++
++			status = "disabled";
+ 		};
+ 
+ 		swr0: soundwire-controller@3250000 {
+@@ -2297,6 +2299,8 @@ swr0: soundwire-controller@3250000 {
+ 			#sound-dai-cells = <1>;
+ 			#address-cells = <2>;
+ 			#size-cells = <0>;
++
++			status = "disabled";
+ 		};
+ 
+ 		audiocc: clock-controller@3300000 {
 -- 
-With best wishes
-Dmitry
+2.39.1
+
