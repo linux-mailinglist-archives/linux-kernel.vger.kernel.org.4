@@ -2,154 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FAB679F23
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EB9679F26
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbjAXQq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S234459AbjAXQro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjAXQqY (ORCPT
+        with ESMTP id S233235AbjAXQrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:46:24 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A57110E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:46:22 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id bk15so40560610ejb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:46:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6anXkQhWREYZ7Z+wwNJ+N2b9GEDIU27Fd9BJKH3olz8=;
-        b=hmUF4NSx9DwWxuh+5qY9qu3vXkC9Su3E5becp0tyPpN837yiIcN4xF42l8Bf4EEa+9
-         SliZMm3HRDA1+eTeu7GZ4KWp5fUs7cXQaHAXQ6AHNcV8/oUvm105igX8pi2S7TV2IKJI
-         19lNuuJLGhcM+bb33fpMMZYTlJMyGXOZdLPMj7KJWC5laC3MetrRsawI6Rfwfa5dEqDa
-         znzpUabGpsI23R942mnNAAzKZ/RXjAoCWqyFJw6/KKGNOqhBSFiQWCGEqFZuFqPs/zM1
-         Z7TJu49nnNuTH+dX2xkLms84mXSOU7YTKNP1Uw87AQLGIQKBNmTBPvcBdnfPmPJvj6d/
-         Hi7A==
+        Tue, 24 Jan 2023 11:47:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ECB10F9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674578817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AzVI7y/XknPI0cUXSqe1BbmcfE0qXgoZKVccnfEMNGg=;
+        b=GvuWkzkJLVSWTkcj9no1ip6641SEaDeZ7ttLVc4Cb9WiI5EsXju15q2n9KLgMOdvg3egdX
+        uR8XK2T4TmxZB97k2LFT04NuHoa4A64IAkp8oVBfAEj9i0E8hWC1gJYqGPbxGHNU/ucJjn
+        QgOqTStvjVWS3mykUcXHD63dRINdsGI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-47-AQ5qJT1CN_a-Db6b6jKtPw-1; Tue, 24 Jan 2023 11:46:56 -0500
+X-MC-Unique: AQ5qJT1CN_a-Db6b6jKtPw-1
+Received: by mail-wm1-f71.google.com with SMTP id c7-20020a1c3507000000b003d355c13ba8so9469529wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:46:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6anXkQhWREYZ7Z+wwNJ+N2b9GEDIU27Fd9BJKH3olz8=;
-        b=K3o2k2pU4hst2uB5IEURVyww8ztimLorl+k4+RmHfl/OEylmdgKutpSHgmV1TSvp10
-         jbsnzoSUaNuSICqWMtDyQDkYRTxvrjJrutQymPuJO9qYOGHWEM/6QKyIlUOne2XcCz91
-         Ob8xIy/osOU4SMVOvH3DEqgtX450Zt7igEYUmkVcLnONx2UAd6EhL82kil5K5P13fD0W
-         9hAdSGtRP8gPSV5cNO47Tr8rjwRXWuWyjJn6EDVmM91uqIJByaCHBfqWyVaKJXztxUVT
-         2kjCz8vN0uoJFSME8L5O3IP6Q1WgMqcLYAXbE2+EmP2mb3/iT3rdiCb9s+tevVzvauNG
-         U3/Q==
-X-Gm-Message-State: AFqh2krsPwryHkjQtqFwzXZTJTJL3HPFn/2q4tS1zcY4n5UYb7CP6TUH
-        PF8NZfQIlhX1jQLtf0KuhspRdQ==
-X-Google-Smtp-Source: AMrXdXv1OwKIofcJpXz1pJ4NeedVbdQbdmtmeO818Cw3ayAERbgGVzTc74MxKGKJhhgeQ5+iF2R27Q==
-X-Received: by 2002:a17:906:b30f:b0:838:9c66:cd2f with SMTP id n15-20020a170906b30f00b008389c66cd2fmr31112589ejz.74.1674578780819;
-        Tue, 24 Jan 2023 08:46:20 -0800 (PST)
-Received: from localhost.localdomain (abyl109.neoplus.adsl.tpnet.pl. [83.9.31.109])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170906078400b008711cab8875sm1108506ejc.216.2023.01.24.08.46.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 08:46:20 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm8250: Disable wsamacro and swr0 by default
-Date:   Tue, 24 Jan 2023 17:46:16 +0100
-Message-Id: <20230124164616.228619-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
+        bh=AzVI7y/XknPI0cUXSqe1BbmcfE0qXgoZKVccnfEMNGg=;
+        b=ROSIX181UHT5fzuNEw9wS0vr9t7tEyZu6TiGykGfMJLBa1L+kebl8tV4N0vjzDhq1m
+         je1x1BP1DZ8H+iuLwbHY96wW+TYC3cJxc1Kr/n4j0KnlfV7dzCzGLbBE8ry9UBg2E27o
+         2ktzQABdQYMQJ0XHTWvZDvuJoHvpHTxJ6gd034eAFyOgODMzzc7DtfW/23RnuyA6/ROK
+         314lqtoC3EyJvfU5IukhyXfKU3cvWwgunYoJ8mrNbDeMbrCEEe6H3w9onQYXXlBooxc0
+         fsdOhGjj7txpCm97adOLymCqGPqkpeWj9LVMOnsgNeZC7zahdb7pwgk2ySTju+T/3h/w
+         rghA==
+X-Gm-Message-State: AFqh2kpaZ50yeqaWZrMtYFHx/R0vraRkW1ewOnEv1X05JYrF6jiIGPiV
+        lDXSXnksHyRuG3j9JBEETsAgtVRw8AE628fG8XYzExgR9GzWbos/C78Bm+MU+XsUSpoByIeDePJ
+        MY+ks402Om5zVgYWEFWNQoYBz
+X-Received: by 2002:a05:600c:11:b0:3db:162f:3551 with SMTP id g17-20020a05600c001100b003db162f3551mr24694581wmc.21.1674578814951;
+        Tue, 24 Jan 2023 08:46:54 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsuq8kMWZJOxuD81FxqWA2x0JPKsdYTiKSGjyZW4md/Vl44YCClZdGliDY2lYz6DFu4PeNHYA==
+X-Received: by 2002:a05:600c:11:b0:3db:162f:3551 with SMTP id g17-20020a05600c001100b003db162f3551mr24694561wmc.21.1674578814690;
+        Tue, 24 Jan 2023 08:46:54 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id d4-20020a05600c3ac400b003daf7721bb3sm13735123wms.12.2023.01.24.08.46.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 08:46:54 -0800 (PST)
+Message-ID: <2172496c-2cd2-a2c8-9ddb-cd7d56bcfc75@redhat.com>
+Date:   Tue, 24 Jan 2023 17:46:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+References: <Y8/xApRVtqK7IlYT@infradead.org>
+ <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com>
+ <20230123173007.325544-1-dhowells@redhat.com>
+ <20230123173007.325544-8-dhowells@redhat.com>
+ <874829.1674571671@warthog.procyon.org.uk>
+ <875433.1674572633@warthog.procyon.org.uk> <Y9AK+yW7mZ2SNMcj@infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y9AK+yW7mZ2SNMcj@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-They are not used on all boards, so disable them by default.
-Enable them back on MTP/RB5, which were the only current users.
+On 24.01.23 17:44, Christoph Hellwig wrote:
+> On Tue, Jan 24, 2023 at 03:03:53PM +0000, David Howells wrote:
+>> Christoph Hellwig <hch@infradead.org> wrote:
+>>
+>>> It can't.  Per your latest branch:
+>>
+>> Yes it can.  Patch 6:
+> 
+> This never involves the cleanup mode as input.  And as I pointed out
+> in the other mail, there is no need for the FOLL_ flags on the
+> cleanup side.  You can just check the bio flag in bio_release_apges
+> and call either put_page or unpin_user_page on that.  The direct
+> callers of bio_release_page never mix them pin and get cases anyway.
+> Let me find some time to code this up if it's easier to understand
+> that way.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 6 ++++++
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts  | 6 ++++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi     | 4 ++++
- 3 files changed, 16 insertions(+)
+In case this series gets resend (which I assume), it would be great to 
+CC linux-mm on the whole thing.
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index 8c64cb060e21..6802d36fb20c 100644
---- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -1007,6 +1007,8 @@ can@0 {
- };
- 
- &swr0 {
-+	status = "okay";
-+
- 	left_spkr: speaker@0,3 {
- 		compatible = "sdw10217211000";
- 		reg = <0 3>;
-@@ -1322,6 +1324,10 @@ &venus {
- 	status = "okay";
- };
- 
-+&wsamacro {
-+	status = "okay";
-+};
-+
- /* PINCTRL - additions to nodes defined in sm8250.dtsi */
- &qup_spi0_cs_gpio {
- 	drive-strength = <6>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-index 0991b34a8e49..c0d83fa9a73b 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-@@ -759,6 +759,8 @@ codec {
- };
- 
- &swr0 {
-+	status = "okay";
-+
- 	left_spkr: speaker@0,3 {
- 		compatible = "sdw10217211000";
- 		reg = <0 3>;
-@@ -892,3 +894,7 @@ &usb_2_qmpphy {
- &venus {
- 	status = "okay";
- };
-+
-+&wsamacro {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 95f1a6afcd43..a0ba166f89d8 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2277,6 +2277,8 @@ wsamacro: codec@3240000 {
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&wsa_swr_active>;
-+
-+			status = "disabled";
- 		};
- 
- 		swr0: soundwire-controller@3250000 {
-@@ -2297,6 +2299,8 @@ swr0: soundwire-controller@3250000 {
- 			#sound-dai-cells = <1>;
- 			#address-cells = <2>;
- 			#size-cells = <0>;
-+
-+			status = "disabled";
- 		};
- 
- 		audiocc: clock-controller@3300000 {
 -- 
-2.39.1
+Thanks,
+
+David / dhildenb
 
