@@ -2,129 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298B767A0D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF31867A0DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbjAXSEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 13:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S233690AbjAXSGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 13:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbjAXSEs (ORCPT
+        with ESMTP id S229451AbjAXSGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:04:48 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C5D6E8F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:04:47 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id t18so1896738wro.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fcv6YlYwthbf33Ogqv6JLVX/MechHhaaWBX2ABOcF1o=;
-        b=f7DEZIkMC/7DBK+b63R294AHhM+QuJSZ2ePjRoNtRFJUAg/MUT1/OkhDdhsSAERR4r
-         YzCK0o5Dk2ZZ9+ftaFQ6EMC+0Vg2QX7YdJNA4LcLHJClNy9tB+PRzeSTFL3qRHpy/qV/
-         RJ/kPfa71io5LOL8anirbwIWGq0JF+N2hu3OIWIZCVY2nSnUhmD5gSwxz4jUMA/uirUG
-         PTCZ1mPlkAA9noN+x2FRC3EREW8F3NQ4yFj/XbZIoi5TiTJFVRsgNr7Tw7WVnluy+wkP
-         Lo+pBmOrKdinubVnkHNNUoL2ojByak63Y06teyx08HhJvdY/WqAHUOMnPyCNZrlkvuHT
-         gjOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fcv6YlYwthbf33Ogqv6JLVX/MechHhaaWBX2ABOcF1o=;
-        b=l3dRWvbmj/n0R4Z2+f4bhxeonhrOdGr+DrqwkxOZX8zwPcvInWU8Plxmoolcy5JhzF
-         I4G5Z3IuZ9dAY9YfYdcq3OtmOsoECA4VIn1az4p9FxAjdNCOW9gauN9EAZOi3rCoOV89
-         SD6e2uYHoGxhJowH6HQaT599OUni0Hs84JR73jY2MGG/BmcaJd6c0G5/hpNbAdz+N6oU
-         u02FNDNc6l7E1GqwvIwKY8yZ9sfPLf/Ph0chIefwJLhngqUpfXcD2LH+4EfvswDD2XGO
-         f0eUm4XseYBBLwL1TN+lnJlVQt55TP9yHfeuhsdYjn39vJxSRa5cEm/vbS+/jo25IRTR
-         MV4w==
-X-Gm-Message-State: AFqh2krEEIx6jK06NNLB7MXJuLO7lsbfuyMU1MlrT49lijinD3BpF5z7
-        5jC/oU6bSPEn7BYyf2ied1Fg1A==
-X-Google-Smtp-Source: AMrXdXuM4rUMNiLb4hrXmD8jVCbf4WgTZ7QqQC++AaS5X6Q/RQKGhcFaU75SaD/t8AllsLN1P/mCdQ==
-X-Received: by 2002:adf:a147:0:b0:2be:34fb:673 with SMTP id r7-20020adfa147000000b002be34fb0673mr19234592wrr.52.1674583485645;
-        Tue, 24 Jan 2023 10:04:45 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id b5-20020a5d4b85000000b00273cd321a1bsm2359492wrt.107.2023.01.24.10.04.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 10:04:44 -0800 (PST)
-Date:   Tue, 24 Jan 2023 18:04:42 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     will@kernel.org, catalin.marinas@arm.com, liwei391@huawei.com,
-        mhiramat@kernel.org, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, dianders@chromium.org
-Subject: Re: [PATCH v5 0/2] arm64: Fix pending single-step debugging issues
-Message-ID: <Y9AdunpawWzWKIXN@aspen.lan>
-References: <20221219102452.2860088-1-sumit.garg@linaro.org>
- <CAFA6WYOucB3JdVATbydxYuAb0Q5P7ff_JMb=-BgiF+uip8pdpg@mail.gmail.com>
+        Tue, 24 Jan 2023 13:06:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA50B6E8F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674583552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2N+kM/3dF+O6lMdyXgsFWVkaLPgjCZtQ7IuExEmDs+k=;
+        b=Uug8QAEv6+R+2zE6apmBsqIzeoI0PzGpkKOriV+wt5Os/QgmN+uMLPSep5PMMvTO7iJjTf
+        nyCuCNoBVMAnrrWVD8Exn3B73RVHuRXiiB8pWJF5jQ9mtLelN3Q6Zfg6CLAUeTH7wxzOcS
+        ou+Q8Jg+F1e53Lx/4F4ZrlcGxQBXyJg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-290-m2TkqPBDMve15awijoak0g-1; Tue, 24 Jan 2023 13:05:48 -0500
+X-MC-Unique: m2TkqPBDMve15awijoak0g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 691A53C42201;
+        Tue, 24 Jan 2023 18:05:48 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D0612026D2A;
+        Tue, 24 Jan 2023 18:05:48 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 6.2-rc6
+Date:   Tue, 24 Jan 2023 13:05:47 -0500
+Message-Id: <20230124180547.4192955-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYOucB3JdVATbydxYuAb0Q5P7ff_JMb=-BgiF+uip8pdpg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 02:52:49PM +0530, Sumit Garg wrote:
-> Hi Will, Catalin,
->
-> On Mon, 19 Dec 2022 at 15:55, Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > This patch-set reworks pending fixes from Wei's series [1] to make
-> > single-step debugging via kgdb/kdb on arm64 work as expected. There was
-> > a prior discussion on ML [2] regarding if we should keep the interrupts
-> > enabled during single-stepping. So patch #1 follows suggestion from Will
-> > [3] to not disable interrupts during single stepping but rather skip
-> > single stepping within interrupt handler.
-> >
-> > [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
-> > [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
-> > [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
-> >
-> > Changes in v5:
-> > - Incorporated misc. comments from Mark.
-> >
->
-> Since patch #1 has already been reviewed/acked by Mark and the
-> complete patchset has been tested by Doug, would it be fine for you to
-> pick up this patchset? It fixes a real single stepping problem for
-> kgdb on arm64.
+Linus,
 
-Sorry to be quiet for so long.
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-Testing this patch set has proven to be a little difficult.
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
-It certainly fixes the single step tests in the kgdbtest suite.
-That's a good start.
+are available in the Git repository at:
 
-Unfortunately when testing using qemu/KVM (hosted on NXP
-2k/Solidrun Honeycomb) the patch set is resulting in instability
-running the built-in self tests (specifically this one:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/misc/kgdbts.c#n74 ). Running this test using the kgdbtest harness
-results in the test failing roughly a third of the time.
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-The error reported is that the trap handler tried to unlock a spinlock
-that isn't currently locked. To be honest I suspect this is a generic
-problem that the new feature happens to tickle (this test has
-historically been unreliable on x86 too... and x86 is noteworthy for
-being the only other platform I test using KVM rather than pure qemu).
-Of course the only way to prove that would be to find and fix the
-problem in the trap handler (which probably involves rewriting it) and I
-haven't managed to do that yet.
+for you to fetch changes up to c2c46b10d52624376322b01654095a84611c7e09:
 
-In short, I think the debugger is more useful with this patchset than
-without so, although it is caveated by the above, I'd call this:
+  KVM: selftests: Make reclaim_period_ms input always be positive (2023-01-22 04:10:24 -0500)
 
-Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-Tested-by: Daniel Thompson <daniel.thompson@linaro.org>
+----------------------------------------------------------------
+ARM64:
 
+- Pass the correct address to mte_clear_page_tags() on initialising
+  a tagged page
 
-Daniel.
+- Plug a race against a GICv4.1 doorbell interrupt while saving
+  the vgic-v3 pending state.
+
+x86:
+
+- A command line parsing fix and a clang compilation fix for selftests
+
+- A fix for a longstanding VMX issue, that surprisingly was only found
+  now to affect real world guests
+
+----------------------------------------------------------------
+Catalin Marinas (1):
+      KVM: arm64: Pass the actual page address to mte_clear_page_tags()
+
+Hendrik Borghorst (1):
+      KVM: x86/vmx: Do not skip segment attributes if unusable bit is set
+
+Marc Zyngier (1):
+      KVM: arm64: GICv4.1: Fix race with doorbell on VPE activation/deactivation
+
+Paolo Bonzini (2):
+      Merge tag 'kvmarm-fixes-6.2-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      selftests: kvm: move declaration at the beginning of main()
+
+Vipin Sharma (1):
+      KVM: selftests: Make reclaim_period_ms input always be positive
+
+ arch/arm64/kvm/guest.c                             |  2 +-
+ arch/arm64/kvm/vgic/vgic-v3.c                      | 25 ++++++++++------------
+ arch/arm64/kvm/vgic/vgic-v4.c                      |  8 +++++--
+ arch/arm64/kvm/vgic/vgic.h                         |  1 +
+ arch/x86/kvm/vmx/vmx.c                             | 21 ++++++++----------
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c      |  2 +-
+ .../testing/selftests/kvm/x86_64/xen_shinfo_test.c |  7 +++---
+ 7 files changed, 32 insertions(+), 34 deletions(-)
+
