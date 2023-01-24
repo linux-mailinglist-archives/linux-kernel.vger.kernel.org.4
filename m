@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED83678D5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657A3678D63
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbjAXBYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S231808AbjAXBZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjAXBYH (ORCPT
+        with ESMTP id S229603AbjAXBZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:24:07 -0500
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76613757B;
-        Mon, 23 Jan 2023 17:23:31 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-15f97c478a8so16017091fac.13;
-        Mon, 23 Jan 2023 17:23:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GLVto5yh3pJz6zu6tYjZ+M6kKyH93aiMkaD5/MTlBWE=;
-        b=flznn8Vx665lOgJN6Q6Co3YtZZ0YZS6Bw2KgwlcAG3yF6vctEmde6gSl/u/Hwkkpfc
-         7jVXidLQSgXObawA0hjA6GwVKhQDFc8WiePuZBmjZ2BpeKvbl7MfTbTlA7eFmX6Z2GP6
-         Ot7HfgHWud1YmGWnCrcAR2wxkhPWSRIe2Dai/+vIxuyUqdDr07dVtZUxtkgP69no0log
-         qYAyDolHV3aoHI0+WQHaj30d1ioYl5J31+R2dKqmGoc/uofOpjx2L5EqPiWvAubWPoNV
-         zr//c/xarRc5o92DuCOP3ZhrWzoHvlodQrSSvXm9hru+5+dbIg3OBM1rt68TMJKfDtIU
-         4iDg==
-X-Gm-Message-State: AFqh2kq87X/p6+bP03MaNAER7856jM97W3umDx8v769NlN611tRJlF8+
-        YOwwTtFGyGbBUkcP4SslCQ+0DTV1RA==
-X-Google-Smtp-Source: AMrXdXtytUFc/3CGNMl4vK4INEEhyGrE/0xGZ7ONnXHIP1hzrgKo4K1R2LtegXWqsO91zJ+MQU6vBA==
-X-Received: by 2002:a05:6870:9b09:b0:15f:456:6b98 with SMTP id hq9-20020a0568709b0900b0015f04566b98mr13453079oab.7.1674523364347;
-        Mon, 23 Jan 2023 17:22:44 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id eb44-20020a056870a8ac00b0014fb4bdc746sm210523oab.8.2023.01.23.17.22.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 17:22:43 -0800 (PST)
-Received: (nullmailer pid 3121716 invoked by uid 1000);
-        Tue, 24 Jan 2023 01:22:42 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 23 Jan 2023 20:25:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8041B359F;
+        Mon, 23 Jan 2023 17:25:44 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P18Rp2jxXz4y0R;
+        Tue, 24 Jan 2023 12:25:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674523543;
+        bh=5q3NJPCSg2jvR3DLK90Z0GSVnjuOIa0rURCcBO2ndRI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Cee4h/WFljPM92sHsydZcM9VchsUZ+UT6cKxDq+S5HllkAfzTLs1JhSdXgYob7+I/
+         dipjwYB+RA8n/ONeQ3urfdweIu7uSGZm4syrU44xOJzFL2j04nmhjIksJFdORy6af7
+         mEOem4Rb+im6snAp5EfckqQWmtKKkwto6n6ysC3967k3CnTAg7uL4TG/j5PjlUvZpR
+         S3PA11xq8PPc0RpLgp6oYsL8JcS5asQb/WIQG9T9SdJqA4t8OXlowz7950DmZgnH5g
+         KDcm0DWCVIuBtzK+6zvJj+LFyaPpgplRMgPe+qVqPNsMPLocvpDcIfHazWyvrwYoAo
+         6M2SNvym6yVJg==
+Date:   Tue, 24 Jan 2023 12:25:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the gpio-brgl-fixes
+ tree
+Message-ID: <20230124122541.0e310a1f@canb.auug.org.au>
+In-Reply-To: <AM6PR08MB43769CCE04DA7C624CA3028AFFC99@AM6PR08MB4376.eurprd08.prod.outlook.com>
+References: <AM6PR08MB43769CCE04DA7C624CA3028AFFC99@AM6PR08MB4376.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        devicetree@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-In-Reply-To: <20230118122817.42466-3-francesco@dolcini.it>
-References: <20230118122817.42466-1-francesco@dolcini.it>
- <20230118122817.42466-3-francesco@dolcini.it>
-Message-Id: <167452324070.3116911.2276760222144588940.robh@kernel.org>
-Subject: Re: [PATCH v1 2/4] dt-bindings: bluetooth: marvell: add max-speed property
-Date:   Mon, 23 Jan 2023 19:22:42 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/signed; boundary="Sig_/+odWJyEaQpCa._98RQ/GoKc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,45 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/+odWJyEaQpCa._98RQ/GoKc
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 18 Jan 2023 13:28:15 +0100, Francesco Dolcini wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> 
-> The 88W8997 bluetooth module supports setting the max-speed property.
-> 
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> ---
->  .../bindings/net/marvell-bluetooth.yaml          | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
+Hi Pierluigi,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Tue, 24 Jan 2023 00:51:48 +0000 Pierluigi Passaro <pierluigi.p@variscite=
+.com> wrote:
+>
+> On 1/23/23 21:56, Stephen Rothwell wrote:
+> >
+> > After merging the gpio-brgl-fixes tree, today's linux-next build (power=
+pc
+> > ppc64_defconfig) failed like this:
+> >
+> > In file included from include/linux/of_gpio.h:14,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 from drivers/net/phy/mdio_bus.c:27:
+> > include/linux/gpio/driver.h:782:68: error: parameter 4 ('lflags') has i=
+ncomplete type
+> > =C2=A0 782 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enum gpio_lookup_=
+flags lflags,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+> > include/linux/gpio/driver.h:779:33: error: function declaration isn't a=
+ prototype [-Werror=3Dstrict-prototypes]
+> > =C2=A0 779 | static inline struct gpio_desc *gpiochip_request_own_desc(=
+struct gpio_chip *gc,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > cc1: some warnings being treated as errors
+> >
+> > Caused by commit
+> >
+> > =C2=A0 de5f701724ac ("gpiolib: fix linker errors when GPIOLIB is disabl=
+ed")
+> >
+> > I have used the gpio-brgl-fixes tree from next-20210123 for today.
+>
+> please provide detailed build instructions.
+> Building with
+> - commit id de5f701724ac
+> - defconfig arch/powerpc/configs/ppc64_defconfig
+> - powerpc64-linux-gnu-gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04)
+> The build fails almost immediately as follow
+> arch/powerpc/kernel/trace/ftrace.c:839:7: error: no previous prototype fo=
+r =E2=80=98arch_ftrace_match_adjust=E2=80=99 [-Werror=3Dmissing-prototypes]
+>   839 | char *arch_ftrace_match_adjust(char *str, const char *search)
+>       |       ^~~~~~~~~~~~~~~~~~~~~~~~
+> However, the same happens rolling back de5f701724ac.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/net/marvell-bluetooth.yaml:29:8: [error] empty value in block mapping (empty-values)
+What I actually built to get the above error was what is now the
+pending-fixes branch in
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git but
+with the gpio-brgl-fixes tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git branch
+gpio/for-current (commit de5f701724ac1) merged in.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/marvell-bluetooth.yaml: allOf:0:if: None is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/marvell-bluetooth.yaml: ignoring, error in schema: allOf: 0: if
-Documentation/devicetree/bindings/net/marvell-bluetooth.example.dtb: /example-0/serial/bluetooth: failed to match any schema with compatible: ['mrvl,88w8897']
+but after removing that commit (and its parent), what I built was commit
+  83784b157e44 ("Merge branch 'riscv-soc-fixes' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/conor/linux.git")
+(which is in the pending-fixes branch above) which did not fail.
 
-doc reference errors (make refcheckdocs):
+gcc (Debian 12.2.0-10) 12.2.0
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230118122817.42466-3-francesco@dolcini.it
+enum gpio_lookup_flags is defined in include/linux/gpio/machine.h which
+is not directly included by include/linux/gpio/driver.h or
+drivers/net/phy/mdio_bus.c.
+--=20
+Cheers,
+Stephen Rothwell
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+--Sig_/+odWJyEaQpCa._98RQ/GoKc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+-----BEGIN PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPPM5UACgkQAVBC80lX
+0GzPSgf/bjdk5Cb73Jf/qZyr4xnwN/2zsstv/vkk4wjZTBaJjnaaJLpzFsIGazH/
+FWPWBaFYGxKzSxRH79yWJ9dpwSKeVlphAVPSEyTnq0npD881O3grzc5eTyifdA8u
+QjsnAy1Z/q6mutPW3Xs8WQ5ZO2C2BJADH/NDd1L5wf3F9Xiia2EllkCdFL417pyB
+MXknBzhNH/+MN2TLedXN1n7jzMP9U6en+l+97ep1yadqixMl/GKFgJyYmqoW/7P2
+z7JIyhh6/PseolhP1mDTR1VznrEHdp1PgyR0oVT7GKUfoqyBjN9B2cMWRQJMJJ3x
+ExUSu5yAvqzFJLYNVHcrDg14EioDXA==
+=kiYT
+-----END PGP SIGNATURE-----
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--Sig_/+odWJyEaQpCa._98RQ/GoKc--
