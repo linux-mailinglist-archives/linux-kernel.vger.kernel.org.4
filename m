@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619F3679EDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68D3679EE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjAXQiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S233750AbjAXQiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232744AbjAXQh5 (ORCPT
+        with ESMTP id S233135AbjAXQis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:37:57 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD864C0DB
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:37:24 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id v23so15284604plo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R+Dlh2CSJr34p4VoH6TTQCOTVAnxybB784uCTFKkuqk=;
-        b=qTI3UY08Kv09+ILMWkvgwtj1Qxjp1ej9Y76FSsTQddtsfB0O/4GDegV3vzL08Akd3H
-         GnckwoK+lFqqw3gVKwcbH2kUrrE2fjyICflU4VQtvqI+DBitdCXedA8jLLvcRTPnro1o
-         94IIi2fFPYEvKToOtV5PE1na7F4+U4ekVTNDTURlxqL6ZYxvFiyoagKOEixLuf9GdinM
-         4xAaymYbwBxzgrIfvCkw9omHJUqzKaKAdfxvGltNftKsYVxy4T7OG5NBJaxlSIhDu0lk
-         33l/uLsUc+LGfsjgCS7KtVG9PT5nMyF5s3KSXafGBH/4dkLWvwfJFxR9tQ6QsAISLqj2
-         gx8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+Dlh2CSJr34p4VoH6TTQCOTVAnxybB784uCTFKkuqk=;
-        b=TKjx0Scz3WpCy6QWgOd9N9+nNCENUHjneQL74zYXEtOlIo61aSe++ww7BkoS7XIice
-         vLzvKH1yx3CAsOu5bTmdLCG9hWXIZAlc+K4wy8PiCLj/nans9vPy1nQZ2gVoMTGtEgnF
-         nZaM/XC6SXQvrVoxm/7+tO6pub64R2zOM38lijQC4Kp3sxB2EPlaJLhqwVfnRDwjoBxK
-         j7tlirEWuqqyYW+d2VY2xikRyGg1DN3Ddgju6z/c2TCvFHNWqaqMTFu9Knr7dqz3Cgmn
-         dozLG/nf5tJtV8pEaIXJjfPFcGuXMA/WfwbJpdvkpkmOeefgj+ZUVgcvT6VMF17Is/gr
-         7f0Q==
-X-Gm-Message-State: AFqh2kqbe1x6AlMBUAz+K6vOyE0d1KF7TYMIFpNLWoRYoRP5J9uu7h8B
-        hGXKQbMbBWXTHHlkoFFCC45mSs2BhAcVSln7
-X-Google-Smtp-Source: AMrXdXsqYWe6Fbks3vKe5IOKsnA6+Uz3yTmvwwGyPeU8dsm2UBBStmXnQw3r7XqlpBOZoCBSBYcRhg==
-X-Received: by 2002:a17:902:b183:b0:18b:cea3:645 with SMTP id s3-20020a170902b18300b0018bcea30645mr7084359plr.0.1674578242993;
-        Tue, 24 Jan 2023 08:37:22 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y10-20020a62f24a000000b00581013fcbe1sm1791902pfl.159.2023.01.24.08.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 08:37:22 -0800 (PST)
-Message-ID: <579d6d81-4f24-16e4-ee56-11089eae0164@kernel.dk>
-Date:   Tue, 24 Jan 2023 09:37:21 -0700
+        Tue, 24 Jan 2023 11:38:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D2026B1;
+        Tue, 24 Jan 2023 08:38:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 196BF60ADA;
+        Tue, 24 Jan 2023 16:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0673BC433D2;
+        Tue, 24 Jan 2023 16:38:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674578312;
+        bh=1fehoiVZxL/sJuvdNIBqzb2g04Po36ejMe8GPiKr1eM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TSvzufRHRuuZYdhVlkhDRPo1LuFkwMGuQlXMZ/B/qVNE6erVXPSjPUzaMiQ5zeLbX
+         onRm5eCNeL7JFvzXbOmD9NT31+YgbbIz66dozfwocuQosvDlOftkCIL/rC/m/dNBMK
+         1OCYhptVc39+/SQpM0rFroK5at3HiliFPLS3jZCM=
+Date:   Tue, 24 Jan 2023 17:38:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Konstantin Ryabitsev <mricon@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anton Blanchard <anton@linux.ibm.com>,
+        Trilok Soni <tsoni@codeaurora.org>,
+        James Morris <jamorris@linux.microsoft.com>, corbet@lwn.net,
+        javier.gonz@samsung.com, linux-doc@vger.kernel.org,
+        a.manzanares@samsung.com, dave@stgolabs.net,
+        darren@os.amperecomputing.com, ndesaulniers@google.com,
+        gost.dev@samsung.com, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof.c@samsung.com>
+Subject: Re: [PATCH] docs: embargoed-hardware-issues: add embargoed HW
+ contact for Samsung
+Message-ID: <Y9AJhe+OjJNwLq7N@kroah.com>
+References: <20230123183926.249601-1-mcgrof@kernel.org>
+ <Y87X6tFlevIebcc6@kroah.com>
+ <Y88Ak8K5mD7tFItG@bombadil.infradead.org>
+ <Y89E+S7TA6UwtNe2@casper.infradead.org>
+ <Y89qrid7YOsIFbD6@kroah.com>
+ <Y9AF1UV/ow7eP92L@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] KASAN: use-after-free Read in fuse_dev_poll
-Content-Language: en-US
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+d3b704fabd7f02206294@syzkaller.appspotmail.com>,
-        io-uring@vger.kernel.org
-References: <000000000000bac7df05f260d220@google.com>
- <CAJfpegteWVfJ8CLATjhk7==iLmqyZT_ao8Hs2JaNKdbgceXZYw@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAJfpegteWVfJ8CLATjhk7==iLmqyZT_ao8Hs2JaNKdbgceXZYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y9AF1UV/ow7eP92L@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 9:29â€¯AM, Miklos Szeredi wrote:
-> Hi Jens,
+On Tue, Jan 24, 2023 at 08:22:45AM -0800, Luis Chamberlain wrote:
+> On Tue, Jan 24, 2023 at 06:20:46AM +0100, Greg KH wrote:
+> > On Tue, Jan 24, 2023 at 02:39:53AM +0000, Matthew Wilcox wrote:
+> > > On Mon, Jan 23, 2023 at 01:48:03PM -0800, Luis Chamberlain wrote:
+> > > > > > @@ -251,6 +251,7 @@ an involved disclosed party. The current ambassadors list:
+> > > > > >    IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
+> > > > > >    Intel		Tony Luck <tony.luck@intel.com>
+> > > > > >    Qualcomm	Trilok Soni <tsoni@codeaurora.org>
+> > > > > > +  Samsung       Javier González <javier.gonz@samsung.com>
+> > > > 
+> > > > I'll send a fix on v2.
+> > > > 
+> > > > BTW while at it, it got me wondering, since most of the emails on
+> > > > this hw embargo page are not required to have kernel.org accounts
+> > > 
+> > > This isn't the list of hw embargo people.  This is the list of
+> > > "ambassadors" who can help people work through the security disclosure
+> > > process.  My impression is that it's to tell me that I should contact
+> > > Konrad, since he also works at Oracle, to help me through the process.
+> > > It's not for people outside Oracle to contact.
+> > > 
+> > > If I have the wrong impression of that list, perhaps the description
+> > > could be clarified.
+> > 
+> > That is correct, but it is primarily a list that I use when needing to
+> > contact companies about potential issues in their hardware. 
 > 
-> Forwarding, since it looks like io_uring is the culprit: vfs_poll() is
-> called by io_poll_check_events() on an already released file.
+> That is the impression I gathered.
+> 
+> > For that I
+> > don't need a GPG key, that's only required if they need to get added to
+> > a secure mailing list, and at that point I can have a key sent to me, it
+> > does not have to be in our kernel.org keyring at all (and list
+> > participants usually are not there.)
+> 
+> That might be useful to explain in the documentation.
 
-We had a bad patch around that time, pretty sure that's what's
-triggering this one too as it's not a recent kernel.
+It is not really needed as the kernel.org gpg keyring has nothing to do
+with this list or the people on it.  No need to say "that other thing
+over there has nothing to do with this thing here", otherwise we would
+be enumerating everything in this file :)
 
-#syz invalid
+thanks,
 
--- 
-Jens Axboe
-
-
+greg k-h
