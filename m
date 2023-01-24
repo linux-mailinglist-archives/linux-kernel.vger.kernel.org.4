@@ -2,221 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B34D67A497
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282B067A499
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbjAXVIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S234592AbjAXVK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjAXVIQ (ORCPT
+        with ESMTP id S229452AbjAXVK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:08:16 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE473F286;
-        Tue, 24 Jan 2023 13:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674594495; x=1706130495;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Bic6hppxNnebo+xUPCxa4lLCVlJSELtjBqOLv8adWFk=;
-  b=FaOr92r7Mh3Bv3pJueLMIRvL92o71vQ+6xM+h50snukCeYseJvqFBcXD
-   z4GBBZs6Qd7pbcmu0WufHmzB/4SD+1Lq3TSlzauKrzWnPU3QKIgeA2lsf
-   9RZtcKPjkKWrKu02FRxVZuLi+C0zMTfOghXUoCbBq+38sT1nOlyTigHlN
-   VynFUZFSupTRsvpM1B1nhn9frK6YziW4yJkKp4NAF039lbUJNhU9B3b0J
-   oa8DaQCoHSTSgeyw9K15uNgJuAThj+Km9Eb4GUAX5VbTu/SnhmTBxXend
-   lI8A+VunZunDBHhFqXUeUgZm+NlLC3S60NdB+XEsoE6b8W98lfT87SuGt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="328491570"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="328491570"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:08:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="639705037"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="639705037"
-Received: from kabbas-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.252.131.133])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:08:14 -0800
-Message-ID: <d93ad3c0717f17e3a6fd065fe35edb2c5820cb82.camel@linux.intel.com>
-Subject: Re: [PATCH v2] thermal: int340x: Protect trip temperature from
- dynamic update
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Tue, 24 Jan 2023 13:08:14 -0800
-In-Reply-To: <CAJZ5v0hBy2Jgezhuamz+++_EVfrO2gyuaC8vXvRMHvE5MjxtXw@mail.gmail.com>
-References: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0hBy2Jgezhuamz+++_EVfrO2gyuaC8vXvRMHvE5MjxtXw@mail.gmail.com>
+        Tue, 24 Jan 2023 16:10:28 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DBB2A17F;
+        Tue, 24 Jan 2023 13:10:27 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id jl3so15992802plb.8;
+        Tue, 24 Jan 2023 13:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1D8ZEDoIZB8YyudSb7sCblWlbH8KH7zzZSAuZ0TbhG4=;
+        b=BpONE3z8mbmm1aQQvEtExx1FMMReeNk6YUzVIylNelNMi86MtTU9lCO7tC0gaPRGdr
+         BIuLzlZWCuZU+7htTW0xk7UGuzfRY+uMD0Iw5N0KLrUHekTEZyAwAuedJs4YO5GxLvr/
+         9ELIYqPFdCYsTnsrs1U7bK6+FVVvvfYwLvU/vKlWKkn4UPAxqmEJiqqMSZ20Dkahraxc
+         nOhctSmzuRF8xxgzuRk8UiMZmoZLBJO08lNX9tlSgqizsBAt+L6+GsBypBnKmFrY5C6W
+         7aEZT7MEScaxN3DoYtBAoZYhccJQRGNnI3gfE0HiCJidnGLkqOhrFTVfCpMsHtsMX9uK
+         a6ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1D8ZEDoIZB8YyudSb7sCblWlbH8KH7zzZSAuZ0TbhG4=;
+        b=cBGuFt/kTZTVtZlCGilYgr9dwBWQPFnFtkWKW1nk4mhpwxyITIi5DR1SY3VH3yUHJL
+         0kzNJaJSihlg9RZkbvYB99BH3PZBIOXrUuvDEt74+HJ/KaHnp+Z3NjURXapyIfD9bhre
+         czrms2eFzO5aICU7QTTzgHGv3jiBY8HgHjPt8jwkeGfBAaANyvB5IZWAsgHVmS3Qz8j9
+         55UZpH3uZNy2mn3QVL0pw7X7N+kqqIgXqglK9SG8Ou4fwwodDb9mIxSF/AeTOlxgL5pK
+         D8pc2zXzIhgsZJtaKT1AASDLULQTIPea6trMyqBudMqyCVePgZ4+5SuVd64LDfU0Hljd
+         qKVQ==
+X-Gm-Message-State: AO0yUKUQFulKXNVzOM1PLwoqahkbmy37Xsp5ccldR/6A7lJkwiazMisb
+        X0LEDzfNL1PSJ+PfiWbuSKg=
+X-Google-Smtp-Source: AK7set+RLKhhwMxUNZ0I/NY+kzk+/Gc6YxaBajQ0l0Qc6GeBVNhthZ39fHMTWZakwqmFnAWzNw4n6Q==
+X-Received: by 2002:a17:903:1245:b0:196:f00:c8f9 with SMTP id u5-20020a170903124500b001960f00c8f9mr5993858plh.10.1674594626486;
+        Tue, 24 Jan 2023 13:10:26 -0800 (PST)
+Received: from [192.168.0.128] ([98.97.116.5])
+        by smtp.googlemail.com with ESMTPSA id m4-20020a170902768400b00194ab9a4fecsm2112330pll.138.2023.01.24.13.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 13:10:25 -0800 (PST)
+Message-ID: <cd35316065cfe8d706ca2730babe3e6519df6034.camel@gmail.com>
+Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented
+ allocation
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
+Date:   Tue, 24 Jan 2023 13:10:24 -0800
+In-Reply-To: <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name>
+References: <20230124124300.94886-1-nbd@nbd.name>
+         <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+         <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-24 at 21:32 +0100, Rafael J. Wysocki wrote:
-> On Mon, Jan 23, 2023 at 6:26 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > Trip temperatures are read using ACPI methods and stored in the
-> > memory
-> > during zone initializtion and when the firmware sends a
-> > notification for
-> > change. This trip temperature is returned when the thermal core
-> > calls via
-> > callback get_trip_temp().
-> > 
-> > But it is possible that while updating the memory copy of the trips
-> > when
-> > the firmware sends a notification for change, thermal core is
-> > reading the
-> > trip temperature via the callback get_trip_temp(). This may return
-> > invalid
-> > trip temperature.
-> > 
-> > To address this add a mutex to protect the invalid temperature
-> > reads in
-> > the callback get_trip_temp() and int340x_thermal_read_trips().
-> > 
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > Cc: stable@vger.kernel.org # 5.0+
-> > ---
-> > v2:
-> > - rebased on linux-next
-> 
-> So I've rebased it back onto 6.2-rc5 and pushed the result into the
-> thermal-intel-fixes branch.  Please see if it looks good to you and
-> let me know.
-Looks good.
+On Tue, 2023-01-24 at 18:22 +0100, Felix Fietkau wrote:
+> On 24.01.23 15:11, Ilias Apalodimas wrote:
+> > Hi Felix,
+> >=20
+> > ++cc Alexander and Yunsheng.
+> >=20
+> > Thanks for the report
+> >=20
+> > On Tue, 24 Jan 2023 at 14:43, Felix Fietkau <nbd@nbd.name> wrote:
+> > >=20
+> > > While testing fragmented page_pool allocation in the mt76 driver, I w=
+as able
+> > > to reliably trigger page refcount underflow issues, which did not occ=
+ur with
+> > > full-page page_pool allocation.
+> > > It appears to me, that handling refcounting in two separate counters
+> > > (page->pp_frag_count and page refcount) is racy when page refcount ge=
+ts
+> > > incremented by code dealing with skb fragments directly, and
+> > > page_pool_return_skb_page is called multiple times for the same fragm=
+ent.
+> > >=20
+> > > Dropping page->pp_frag_count and relying entirely on the page refcoun=
+t makes
+> > > these underflow issues and crashes go away.
+> > >=20
+> >=20
+> > This has been discussed here [1].  TL;DR changing this to page
+> > refcount might blow up in other colorful ways.  Can we look closer and
+> > figure out why the underflow happens?
+> I don't see how the approch taken in my patch would blow up. From what I=
+=20
+> can tell, it should be fairly close to how refcount is handled in=20
+> page_frag_alloc. The main improvement it adds is to prevent it from=20
+> blowing up if pool-allocated fragments get shared across multiple skbs=
+=20
+> with corresponding get_page and page_pool_return_skb_page calls.
+>=20
+> - Felix
+>=20
+
+Do you have the patch available to review as an RFC? From what I am
+seeing it looks like you are underrunning on the pp_frag_count itself.
+I would suspect the issue to be something like starting with a bad
+count in terms of the total number of references, or deducing the wrong
+amount when you finally free the page assuming you are tracking your
+frag count using a non-atomic value in the driver.
 
 Thanks,
-Srinivas
 
-> 
-> I'd prefer to push it for 6.2-rc.
-> 
-> > - Add ret variable and remove return as suugested by Rafael
-> 
-> Thanks!
-> 
-> >  .../int340x_thermal/int340x_thermal_zone.c     | 18
-> > +++++++++++++++---
-> >  .../int340x_thermal/int340x_thermal_zone.h     |  1 +
-> >  2 files changed, 16 insertions(+), 3 deletions(-)
-> > 
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> > b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> > index 228f44260b27..5fda1e67b793 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> > @@ -41,7 +41,9 @@ static int int340x_thermal_get_trip_temp(struct
-> > thermal_zone_device *zone,
-> >                                          int trip, int *temp)
-> >  {
-> >         struct int34x_thermal_zone *d = zone->devdata;
-> > -       int i;
-> > +       int i, ret = 0;
-> > +
-> > +       mutex_lock(&d->trip_mutex);
-> > 
-> >         if (trip < d->aux_trip_nr)
-> >                 *temp = d->aux_trips[trip];
-> > @@ -60,10 +62,12 @@ static int int340x_thermal_get_trip_temp(struct
-> > thermal_zone_device *zone,
-> >                         }
-> >                 }
-> >                 if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
-> > -                       return -EINVAL;
-> > +                       ret = -EINVAL;
-> >         }
-> > 
-> > -       return 0;
-> > +       mutex_unlock(&d->trip_mutex);
-> > +
-> > +       return ret;
-> >  }
-> > 
-> >  static int int340x_thermal_get_trip_type(struct
-> > thermal_zone_device *zone,
-> > @@ -165,6 +169,8 @@ int int340x_thermal_read_trips(struct
-> > int34x_thermal_zone *int34x_zone)
-> >         int trip_cnt = int34x_zone->aux_trip_nr;
-> >         int i;
-> > 
-> > +       mutex_lock(&int34x_zone->trip_mutex);
-> > +
-> >         int34x_zone->crt_trip_id = -1;
-> >         if (!int340x_thermal_get_trip_config(int34x_zone->adev-
-> > >handle, "_CRT",
-> >                                              &int34x_zone-
-> > >crt_temp))
-> > @@ -192,6 +198,8 @@ int int340x_thermal_read_trips(struct
-> > int34x_thermal_zone *int34x_zone)
-> >                 int34x_zone->act_trips[i].valid = true;
-> >         }
-> > 
-> > +       mutex_unlock(&int34x_zone->trip_mutex);
-> > +
-> >         return trip_cnt;
-> >  }
-> >  EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
-> > @@ -215,6 +223,8 @@ struct int34x_thermal_zone
-> > *int340x_thermal_zone_add(struct acpi_device *adev,
-> >         if (!int34x_thermal_zone)
-> >                 return ERR_PTR(-ENOMEM);
-> > 
-> > +       mutex_init(&int34x_thermal_zone->trip_mutex);
-> > +
-> >         int34x_thermal_zone->adev = adev;
-> > 
-> >         int34x_thermal_zone->ops =
-> > kmemdup(&int340x_thermal_zone_ops,
-> > @@ -277,6 +287,7 @@ struct int34x_thermal_zone
-> > *int340x_thermal_zone_add(struct acpi_device *adev,
-> >  err_trip_alloc:
-> >         kfree(int34x_thermal_zone->ops);
-> >  err_ops_alloc:
-> > +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
-> >         kfree(int34x_thermal_zone);
-> >         return ERR_PTR(ret);
-> >  }
-> > @@ -289,6 +300,7 @@ void int340x_thermal_zone_remove(struct
-> > int34x_thermal_zone
-> >         acpi_lpat_free_conversion_table(int34x_thermal_zone-
-> > >lpat_table);
-> >         kfree(int34x_thermal_zone->aux_trips);
-> >         kfree(int34x_thermal_zone->ops);
-> > +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
-> >         kfree(int34x_thermal_zone);
-> >  }
-> >  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> > b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> > index e28ab1ba5e06..6610a9cc441b 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> > +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> > @@ -32,6 +32,7 @@ struct int34x_thermal_zone {
-> >         struct thermal_zone_device_ops *ops;
-> >         void *priv_data;
-> >         struct acpi_lpat_conversion_table *lpat_table;
-> > +       struct mutex trip_mutex;
-> >  };
-> > 
-> >  struct int34x_thermal_zone *int340x_thermal_zone_add(struct
-> > acpi_device *,
-> > --
-> > 2.31.1
-> > 
-
+- Alex
