@@ -2,233 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F31B6798C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033F66798D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbjAXM56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S233758AbjAXM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbjAXM5w (ORCPT
+        with ESMTP id S233119AbjAXM7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:57:52 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF0C2702
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:57:50 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id 5so9320463plo.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lbga1PekNQG7Wr08X5AD8bYyGj914Yhe8xMoadj6ep8=;
-        b=Wkgvt7M/3VLY+FML2DA+LVjnEPI6mopPmwB+jdxBTvY1cW+hfiTbvwPmfPCRqxGI/5
-         U3eRsnTqOG/OKrTOaCjpI+jKcytHrjhZx6z39hTcQlghqpfQlhf29szyk26EOPQ81aqv
-         RvwwXVDt+PD6CF73FMYrpZEPqnV75wK6k25xYKamIq9l28L6Gp65toSLr+8cLL6q0TLO
-         ccCO/h/ArwS/JoxxHnTzcPk2iEfgeIx30Ctb7nPpqPE37BtQA8X64Bv2FTfaU609ago/
-         JAZdxoMS/9mYTNvfvzHD4f1RyngBXoDNWTOYRxudbM0n2u2AKtqYXULrUqbNAOiL/GbG
-         s51Q==
+        Tue, 24 Jan 2023 07:59:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300DC42BD2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674565098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZSi6S+muZGTgBwtIdsJ5fCvNBIzBTV5J3NQ7wnrMIF8=;
+        b=TFmHdcpenNEKi4Fl/mEdv4jzvXsPXciXZ/565PdS4yzowAhlcfKRQgeM/PLgZlXtDpGq0l
+        NUyjw3mXTqKoGBVNqUWtxrkpOC4ZWAzY8RR/kAuJi4czk/O3US4DwoI78w/nHD1FOqXHqv
+        a8m/vbv5FqDnP/C7aGkxzkSmTE+2RQY=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-153-weAzCEXCOHmG9XVJtf0iMw-1; Tue, 24 Jan 2023 07:58:17 -0500
+X-MC-Unique: weAzCEXCOHmG9XVJtf0iMw-1
+Received: by mail-qv1-f71.google.com with SMTP id r10-20020ad4522a000000b004d28fcbfe17so7501409qvq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:58:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Lbga1PekNQG7Wr08X5AD8bYyGj914Yhe8xMoadj6ep8=;
-        b=Y6dnUvmfLi41YwmBYVm1Le2wzTTALRVHadA97BDOQokLsotZLW3kHTC3ajORj8B5Kv
-         4eeEq9Myxo5c7Sz9RUMNa8P8HhC2600aMNog6xx9u8lwi96Z2MY6FvaAxl9GxpcOxJHA
-         mYjbzkfUSQOfOkr5GN7lf6CTOefH7mwbB4HuHC3HnP+YOXeDSBc4kj9CsVWTg9sKmCmA
-         McMH/FyD/V2VoEN3UJMwNSUUM342Yldnblai0ZgFaAB5UXWZ2uvQ0/9Dgh7n/thdWSq6
-         H60EQldG8IOTMZ+nM0v3Nz4Ol5sbLuQ3h9qvPr/SzUSRP5jTSiqpbKtPZNE8/8x74qN5
-         E/WQ==
-X-Gm-Message-State: AFqh2krWREXFlpd8wyejoQON+UVIVUHkao/i95J99uPJCIF8xptAtMNU
-        BojEfeUpEvNPA6o1MG9TtaysuK4BrgfxdK1Rzvxpvw==
-X-Google-Smtp-Source: AMrXdXtCakx+gDCZWxcq7+x+5SmE+6G1+2IncnakyeXGIZcRncfenaixWLy34xEgyDCGALWUs3tkMTZmGb6hw3x1WUo=
-X-Received: by 2002:a17:90a:1d07:b0:228:f08f:a9b3 with SMTP id
- c7-20020a17090a1d0700b00228f08fa9b3mr3625899pjd.202.1674565070644; Tue, 24
- Jan 2023 04:57:50 -0800 (PST)
+        bh=ZSi6S+muZGTgBwtIdsJ5fCvNBIzBTV5J3NQ7wnrMIF8=;
+        b=Pl9SoFhX7b7An5/92LMVCURjthEp5PfDhl01rv+s3PysC9sL2ANPxCeCkUrDNbeQIA
+         Rfri7qKLznsK1kFv6NznUS0QVBqAZDWSWwYkJdbYCHe0oY6bwRspAQLC4okZ+o5gch6s
+         4mdBquSSWZTWyf3kGNJSThIyaRQlwp0dUW+O4YNdCWoX7WpGN519OIVLZqZ0tqwjqMx2
+         9vaxDMggd8xqRwseUjqTiA9ofoToLa+JZ35UIW4vOe0uzr0yeuF6hQ1bFcO/dWrZJFH4
+         oMTqKJODoyLP+O1mIRWg/rx6W7/2KoZzdEy1RWSoGLCBKg1sXVn+ZyJ1J9BVFRcVoqde
+         4k3A==
+X-Gm-Message-State: AFqh2ko2NmN6IJl6gCdiw3ZRLAYt7xpUhg92CkpIlXzdQt6pLVUFGrDj
+        gn4Gxusd4c+Zny8nX61byzvUwcsq/wd5mayRMQxCJ7pYvX2D4zNKhvd3+dbT/38Ip0qYlJ3UEsj
+        GAUqY3gdFaRlq6VhXmE0TX/ES
+X-Received: by 2002:ac8:7350:0:b0:3b6:90c4:b13a with SMTP id q16-20020ac87350000000b003b690c4b13amr27608078qtp.58.1674565096640;
+        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtLt3U69T2XRyfXT9r14cbZA03RVHPgFC5vWRm+j1Qb42uI3X9erIeuPmuCPjOI5VnlnIACFQ==
+X-Received: by 2002:ac8:7350:0:b0:3b6:90c4:b13a with SMTP id q16-20020ac87350000000b003b690c4b13amr27608059qtp.58.1674565096385;
+        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id r22-20020ac87ef6000000b003ab7aee56a0sm1192570qtc.39.2023.01.24.04.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     axboe@kernel.dk, asml.silence@gmail.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] io_uring: initialize count variable to 0
+Date:   Tue, 24 Jan 2023 04:58:05 -0800
+Message-Id: <20230124125805.630359-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v3-6-e28dd31e3bed@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v3-6-e28dd31e3bed@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 24 Jan 2023 13:57:14 +0100
-Message-ID: <CAPDyKFrRN-+fhvWQNmQfD2u-0+2iqP-iONaKx61K685ZqcrZOg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] dt-bindings: mmc: convert amlogic,meson-gx.txt to dt-schema
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 at 11:10, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->
-> Convert the Amlogic SD / eMMC controller for S905/GXBB family SoCs
-> to dt-schema.
->
-> Take in account the used variant with amlogic,meson-gx-mmc.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+The clang build fails with
+io_uring/io_uring.c:1240:3: error: variable 'count' is uninitialized
+  when used here [-Werror,-Wuninitialized]
+  count += handle_tw_list(node, &ctx, &uring_locked, &fake);
+  ^~~~~
 
-Applied for next, thanks!
+The commit listed in the fixes: removed the initialization of count.
 
-Kind regards
-Uffe
+Fixes: b5b57128d0cd ("io_uring: refactor tctx_task_work")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ io_uring/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 734d074cdd94..4cb409ae9840 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1227,7 +1227,7 @@ void tctx_task_work(struct callback_head *cb)
+ 	struct llist_node fake = {};
+ 	struct llist_node *node;
+ 	unsigned int loops = 0;
+-	unsigned int count;
++	unsigned int count = 0;
+ 
+ 	if (unlikely(current->flags & PF_EXITING)) {
+ 		io_fallback_tw(tctx);
+-- 
+2.26.3
 
-> ---
->  .../bindings/mmc/amlogic,meson-gx-mmc.yaml         | 73 ++++++++++++++++++++++
->  .../devicetree/bindings/mmc/amlogic,meson-gx.txt   | 39 ------------
->  2 files changed, 73 insertions(+), 39 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
-> new file mode 100644
-> index 000000000000..46e235bf228b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/amlogic,meson-gx-mmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic SD / eMMC controller for S905/GXBB family SoCs
-> +
-> +description:
-> +  The MMC 5.1 compliant host controller on Amlogic provides the
-> +  interface for SD, eMMC and SDIO devices
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: amlogic,meson-axg-mmc
-> +      - items:
-> +          - const: amlogic,meson-gx-mmc
-> +          - const: amlogic,meson-gxbb-mmc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: core
-> +      - const: clkin0
-> +      - const: clkin1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  amlogic,dram-access-quirk:
-> +    type: boolean
-> +    description:
-> +      set when controller's internal DMA engine cannot access the DRAM memory,
-> +      like on the G12A dedicated SDIO controller.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    mmc@70000 {
-> +        compatible = "amlogic,meson-gx-mmc", "amlogic,meson-gxbb-mmc";
-> +        reg = <0x70000 0x2000>;
-> +        interrupts = <GIC_SPI 216 IRQ_TYPE_EDGE_RISING>;
-> +        clocks = <&clk_mmc>, <&xtal>, <&clk_div>;
-> +        clock-names = "core", "clkin0", "clkin1";
-> +        pinctrl-0 = <&emm_pins>;
-> +        resets = <&reset_mmc>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
-> deleted file mode 100644
-> index ccc5358db131..000000000000
-> --- a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
-> +++ /dev/null
-> @@ -1,39 +0,0 @@
-> -Amlogic SD / eMMC controller for S905/GXBB family SoCs
-> -
-> -The MMC 5.1 compliant host controller on Amlogic provides the
-> -interface for SD, eMMC and SDIO devices.
-> -
-> -This file documents the properties in addition to those available in
-> -the MMC core bindings, documented by mmc.txt.
-> -
-> -Required properties:
-> -- compatible : contains one of:
-> -  - "amlogic,meson-gx-mmc"
-> -  - "amlogic,meson-gxbb-mmc"
-> -  - "amlogic,meson-gxl-mmc"
-> -  - "amlogic,meson-gxm-mmc"
-> -  - "amlogic,meson-axg-mmc"
-> -- clocks     : A list of phandle + clock-specifier pairs for the clocks listed in clock-names.
-> -- clock-names: Should contain the following:
-> -       "core" - Main peripheral bus clock
-> -       "clkin0" - Parent clock of internal mux
-> -       "clkin1" - Other parent clock of internal mux
-> -  The driver has an internal mux clock which switches between clkin0 and clkin1 depending on the
-> -  clock rate requested by the MMC core.
-> -- resets     : phandle of the internal reset line
-> -
-> -Optional properties:
-> -- amlogic,dram-access-quirk: set when controller's internal DMA engine cannot access the
-> -  DRAM memory, like on the G12A dedicated SDIO controller.
-> -
-> -Example:
-> -
-> -       sd_emmc_a: mmc@70000 {
-> -               compatible = "amlogic,meson-gxbb-mmc";
-> -               reg = <0x0 0x70000 0x0 0x2000>;
-> -               interrupts = < GIC_SPI 216 IRQ_TYPE_EDGE_RISING>;
-> -               clocks = <&clkc CLKID_SD_EMMC_A>, <&xtal>, <&clkc CLKID_FCLK_DIV2>;
-> -               clock-names = "core", "clkin0", "clkin1";
-> -               pinctrl-0 = <&emmc_pins>;
-> -               resets = <&reset RESET_SD_EMMC_A>;
-> -       };
->
-> --
-> 2.34.1
->
