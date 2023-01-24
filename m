@@ -2,87 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE8867A10D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09B167A11C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbjAXSR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 13:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
+        id S232823AbjAXS1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 13:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbjAXSRz (ORCPT
+        with ESMTP id S230048AbjAXS1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:17:55 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064F355A1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:17:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=SntAzMBO3bJKyNhtYzvu12a2G3VGXSJyPQenLuZjxb8=; b=1ZesVOV+ndjJQBsRoDxfmxbL9T
-        iUxjsU9Wk8h6qapNtgyURpnnGuDwB2W0ZrKTE0l11Zr1T+CHp+aqfXGMiWi8cfYx0PZgkLzWHS9l+
-        J6xojKN4hy5sOaNgU8yOQ0wDrqpLfv0LoYAGs8Im/yX6ldY4jTvu+9rmqTNWtyWvlKBRX6MOM91Mu
-        Wu+iuKsephs7j1zfZ/TjfYaeZXl2IAkbAIE6H9pxMF4kAu4mUerGKBwVCapw5Smz+XGm4oiuk1qPO
-        WedJz3dAK/7DplZYNOqLLFHaopRWBXA0wCFOQfdYj+jMRyahQYzNCdZUueR7Y6VWC9vPO6kcQpa5V
-        OszDu7gQ==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKNrm-004vqT-GK; Tue, 24 Jan 2023 18:17:54 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: [PATCH] x86: Kconfig: fix spellos & punctuation
-Date:   Tue, 24 Jan 2023 10:17:53 -0800
-Message-Id: <20230124181753.19309-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
+        Tue, 24 Jan 2023 13:27:30 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6BD3D0BA
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:27:29 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id az20so41478660ejc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:27:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIwygwRM9tzobh7QaVo0cnmbFvKeH50XulwOSqSD844=;
+        b=cBbJb/Nx3OmOGYqdI8Yo1XttKVQwMvETRTZnmA/yBdPsHIR2qt4/Iv5TghMNeWcf7g
+         3NwPmcWCiVrWVMIFPwvpqPx777Yo9B1ExCJfTWMFeKrUQllNjdvxr0DdCrlBzyrV0gov
+         T7fZd0SmjzqKN8Jz/z4d6G+zYENz5OUYmVrXV2gxXpGfvL2OHf5b+orFKoR9hII5TC11
+         uHTu8Shf5tqIRjjT4iaN2O23SRGB5uf9WaYPy4t4ihT2foBPhFAGS9TDdMbZxzUEywuo
+         RGHCjr7/DDLcUoFp0xwsRRdmX81H2m/F8AKB5c/eM0Z+e0GoeLC9zauUJ/knC5ZVdtwt
+         hM+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RIwygwRM9tzobh7QaVo0cnmbFvKeH50XulwOSqSD844=;
+        b=O8EkQFi/O5IXXlet6Y6cCE937V5xOku64ZqgIvohpOfT0jvb9hzYYgMnossQu9Rqgq
+         YOogZ0ONso7MOtQqlpRt1+seYzR3vStHmnqUdb6adXQnXYtYnv+P/FLcKETp5Lrq59lZ
+         ZSmgmw55ankZS3BUIUixfH6Er2jFVk+9DmFANbIZQe4k1zzTvN8Mu1X1QjcTmOoX3n7Z
+         rvYGq5FYkWwhvVGaQ0EYwNLMYnJWJFYrH4p+Yu/XMzbyuZAyvwqhCKf5MoiY6y1IIUJ0
+         WGjU0xDTG061Li++Vo9pLaVWI5wKMDbIruZcuJ1J6tPz/rKihcGRUVnt0rEd94Y7V1Tb
+         73zQ==
+X-Gm-Message-State: AFqh2kpQxHUKAJeoFeZAX4AfHeeYpEGnojsAM4jk03gpaKycGeBCP4iD
+        0ZTkv/5J2SGN4p6XgGyLK5ztD7QKFxvkmMZFVAkJEA==
+X-Google-Smtp-Source: AMrXdXsu4OXpseg7nR0i1smFRE12hMtFwaOjRfzoI8Hv61dk6zz58TcLoy62SrgqOS77rNtGXfXSXi9UZI+OwNj5rx4=
+X-Received: by 2002:a17:906:3487:b0:861:7caf:c252 with SMTP id
+ g7-20020a170906348700b008617cafc252mr3272304ejb.212.1674584847639; Tue, 24
+ Jan 2023 10:27:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+In-Reply-To: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 24 Jan 2023 10:26:49 -0800
+Message-ID: <CAJD7tkavoSu9WOnw4Nbxz41nq+Rm6Sq5EeOjh3CTyA=AT5=ujg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/19] mm: Introduce a cgroup to limit the amount of
+ locked and pinned memory
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix spelling (reported by codespell) & punctuation in arch/x86/ Kconfig.
+On Mon, Jan 23, 2023 at 9:43 PM Alistair Popple <apopple@nvidia.com> wrote:
+>
+> Having large amounts of unmovable or unreclaimable memory in a system
+> can lead to system instability due to increasing the likelihood of
+> encountering out-of-memory conditions. Therefore it is desirable to
+> limit the amount of memory users can lock or pin.
+>
+> From userspace such limits can be enforced by setting
+> RLIMIT_MEMLOCK. However there is no standard method that drivers and
+> other in-kernel users can use to check and enforce this limit.
+>
+> This has lead to a large number of inconsistencies in how limits are
+> enforced. For example some drivers will use mm->locked_mm while others
+> will use mm->pinned_mm or user->locked_mm. It is therefore possible to
+> have up to three times RLIMIT_MEMLOCKED pinned.
+>
+> Having pinned memory limited per-task also makes it easy for users to
+> exceed the limit. For example drivers that pin memory with
+> pin_user_pages() it tends to remain pinned after fork. To deal with
+> this and other issues this series introduces a cgroup for tracking and
+> limiting the number of pages pinned or locked by tasks in the group.
+>
+> However the existing behaviour with regards to the rlimit needs to be
+> maintained. Therefore the lesser of the two limits is
+> enforced. Furthermore having CAP_IPC_LOCK usually bypasses the rlimit,
+> but this bypass is not allowed for the cgroup.
+>
+> The first part of this series converts existing drivers which
+> open-code the use of locked_mm/pinned_mm over to a common interface
+> which manages the refcounts of the associated task/mm/user
+> structs. This ensures accounting of pages is consistent and makes it
+> easier to add charging of the cgroup.
+>
+> The second part of the series adds the cgroup and converts core mm
+> code such as mlock over to charging the cgroup before finally
+> introducing some selftests.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
----
- arch/x86/Kconfig |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff -- a/arch/x86/Kconfig b/arch/x86/Kconfig
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1501,7 +1501,7 @@ config X86_5LEVEL
- 	depends on X86_64
- 	help
- 	  5-level paging enables access to larger address space:
--	  upto 128 PiB of virtual address space and 4 PiB of
-+	  up to 128 PiB of virtual address space and 4 PiB of
- 	  physical address space.
- 
- 	  It will be supported by future Intel CPUs.
-@@ -2607,8 +2607,8 @@ config CALL_THUNKS_DEBUG
- 	  a noisy dmesg about callthunks generation and call patching for
- 	  trouble shooting. The debug prints need to be enabled on the
- 	  kernel command line with 'debug-callthunks'.
--	  Only enable this, when you are debugging call thunks as this
--	  creates a noticable runtime overhead. If unsure say N.
-+	  Only enable this when you are debugging call thunks as this
-+	  creates a noticeable runtime overhead. If unsure say N.
- 
- config CPU_IBPB_ENTRY
- 	bool "Enable IBPB on kernel entry"
+I didn't go through the entire series, so apologies if this was
+mentioned somewhere, but do you mind elaborating on why this is added
+as a separate cgroup controller rather than an extension of the memory
+cgroup controller?
+
+>
+>
+> As I don't have access to systems with all the various devices I
+> haven't been able to test all driver changes. Any help there would be
+> appreciated.
+>
+> Alistair Popple (19):
+>   mm: Introduce vm_account
+>   drivers/vhost: Convert to use vm_account
+>   drivers/vdpa: Convert vdpa to use the new vm_structure
+>   infiniband/umem: Convert to use vm_account
+>   RMDA/siw: Convert to use vm_account
+>   RDMA/usnic: convert to use vm_account
+>   vfio/type1: Charge pinned pages to pinned_vm instead of locked_vm
+>   vfio/spapr_tce: Convert accounting to pinned_vm
+>   io_uring: convert to use vm_account
+>   net: skb: Switch to using vm_account
+>   xdp: convert to use vm_account
+>   kvm/book3s_64_vio: Convert account_locked_vm() to vm_account_pinned()
+>   fpga: dfl: afu: convert to use vm_account
+>   mm: Introduce a cgroup for pinned memory
+>   mm/util: Extend vm_account to charge pages against the pin cgroup
+>   mm/util: Refactor account_locked_vm
+>   mm: Convert mmap and mlock to use account_locked_vm
+>   mm/mmap: Charge locked memory to pins cgroup
+>   selftests/vm: Add pins-cgroup selftest for mlock/mmap
+>
+>  MAINTAINERS                              |   8 +-
+>  arch/powerpc/kvm/book3s_64_vio.c         |  10 +-
+>  arch/powerpc/mm/book3s64/iommu_api.c     |  29 +--
+>  drivers/fpga/dfl-afu-dma-region.c        |  11 +-
+>  drivers/fpga/dfl-afu.h                   |   1 +-
+>  drivers/infiniband/core/umem.c           |  16 +-
+>  drivers/infiniband/core/umem_odp.c       |   6 +-
+>  drivers/infiniband/hw/usnic/usnic_uiom.c |  13 +-
+>  drivers/infiniband/hw/usnic/usnic_uiom.h |   1 +-
+>  drivers/infiniband/sw/siw/siw.h          |   2 +-
+>  drivers/infiniband/sw/siw/siw_mem.c      |  20 +--
+>  drivers/infiniband/sw/siw/siw_verbs.c    |  15 +-
+>  drivers/vdpa/vdpa_user/vduse_dev.c       |  20 +--
+>  drivers/vfio/vfio_iommu_spapr_tce.c      |  15 +-
+>  drivers/vfio/vfio_iommu_type1.c          |  59 +----
+>  drivers/vhost/vdpa.c                     |   9 +-
+>  drivers/vhost/vhost.c                    |   2 +-
+>  drivers/vhost/vhost.h                    |   1 +-
+>  include/linux/cgroup.h                   |  20 ++-
+>  include/linux/cgroup_subsys.h            |   4 +-
+>  include/linux/io_uring_types.h           |   3 +-
+>  include/linux/kvm_host.h                 |   1 +-
+>  include/linux/mm.h                       |   5 +-
+>  include/linux/mm_types.h                 |  88 ++++++++-
+>  include/linux/skbuff.h                   |   6 +-
+>  include/net/sock.h                       |   2 +-
+>  include/net/xdp_sock.h                   |   2 +-
+>  include/rdma/ib_umem.h                   |   1 +-
+>  io_uring/io_uring.c                      |  20 +--
+>  io_uring/notif.c                         |   4 +-
+>  io_uring/notif.h                         |  10 +-
+>  io_uring/rsrc.c                          |  38 +---
+>  io_uring/rsrc.h                          |   9 +-
+>  mm/Kconfig                               |  11 +-
+>  mm/Makefile                              |   1 +-
+>  mm/internal.h                            |   2 +-
+>  mm/mlock.c                               |  76 +------
+>  mm/mmap.c                                |  76 +++----
+>  mm/mremap.c                              |  54 +++--
+>  mm/pins_cgroup.c                         | 273 ++++++++++++++++++++++++-
+>  mm/secretmem.c                           |   6 +-
+>  mm/util.c                                | 196 +++++++++++++++--
+>  net/core/skbuff.c                        |  47 +---
+>  net/rds/message.c                        |   9 +-
+>  net/xdp/xdp_umem.c                       |  38 +--
+>  tools/testing/selftests/vm/Makefile      |   1 +-
+>  tools/testing/selftests/vm/pins-cgroup.c | 271 ++++++++++++++++++++++++-
+>  virt/kvm/kvm_main.c                      |   3 +-
+>  48 files changed, 1114 insertions(+), 401 deletions(-)
+>  create mode 100644 mm/pins_cgroup.c
+>  create mode 100644 tools/testing/selftests/vm/pins-cgroup.c
+>
+> base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+> --
+> git-series 0.9.1
+>
