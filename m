@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89814679847
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA3A679851
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbjAXMpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S233984AbjAXMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbjAXMpM (ORCPT
+        with ESMTP id S233972AbjAXMrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:45:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205B73D928
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674564265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HlWOeuZubdR/IcleVktzfNZM3qINJhEfgeqWEooUufo=;
-        b=WHuZnKhHKyNPJJDInTwa5CXrfKqVgmoi22KaFjY2DHMYRvj+Pq48oV2ztwho7YMZZs/KbP
-        EcPyTjwjDqHi6eMQMStgv7YNu8/qkBV4lev/vYjMFGzKjPIeoLELcACI4cx4yA5vBxKte1
-        Go0Zgde+yb4XhJhPEI6+InDH6FRq4HY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-648-X5hj1azdOrCJ9SAlbBl6Zg-1; Tue, 24 Jan 2023 07:44:24 -0500
-X-MC-Unique: X5hj1azdOrCJ9SAlbBl6Zg-1
-Received: by mail-wm1-f70.google.com with SMTP id r15-20020a05600c35cf00b003d9a14517b2so11144096wmq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:44:24 -0800 (PST)
+        Tue, 24 Jan 2023 07:47:24 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3E3D928
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:47:22 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id b7so13773735wrt.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:47:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NQY35x77x8kOxBsXweZuI8QRw64wWTJF3dft8bDEqWY=;
+        b=PiMMyODDWRQalMesG3gfe5bcjonEYBSCvJw/RQKhDkj8rVDL85SL3V7NUqvU9Tx7mg
+         /jjHHUivYBes8xRQhqokxAILXlynP0KUbQEtTYVND0yahLoiHyL3CLqktoQr+Y/NopUX
+         mHRTyBITWCcndRFO3zkI2UKFAEi1CwWBHFsWy6+Opp7h9M8nLoXOeuuh6BEqXcKbE3p0
+         NNN3ugOyaK/TpA53cLo0F9droSpVeNMnGo0xnmk7yd7LjVYiVMfYC550vflqOhnLpUm8
+         P0m4j9boYN5yD3rSOCy0pwlVHipMjULnvDxnMtDMUqcFUmY88DJwyEw9lZLbaGbf59Hn
+         8EHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HlWOeuZubdR/IcleVktzfNZM3qINJhEfgeqWEooUufo=;
-        b=ZwaQ4Su6S85zgZEviz6q//BAgfH0ElnudgwybXZJpSaKmOmaVJm9qELxELZaEdDAmX
-         pEDOd+U9jNh4uN3vlLaWoC3w9wgB+qALFoVIJjOFKE2IN+x2YGMAyoF+sjfhYSTZPUJI
-         sqoNqIIMVZXE8914xG/nMW9nGyeyizfX7ooycjPU3yHtR/vZ3v93wX+eaekITEYUgo5M
-         PYG6ENRihVnIQrer5Pd1Y+3ScZ8uqwEkRHXKrgzcJfs1sv07zccXLKJ/9n5m1oMw5znw
-         OW3+OmJqGboIZTMEHWr+X5HlYvarEil0IvRorBgx1W4lqW82xYKF6hg835pVKisX2HhJ
-         sqiw==
-X-Gm-Message-State: AFqh2kpwAgBW6d55P4o6vOqxQW20Ghk51n4GqwlzxQyfG50xzjLpMoV1
-        3q+jYBaL/l+faPcXtjSYg9kxBR5JbPrwQW80d+B+vdFVDExiQqZgONgZ0o+l2Wnnx4UQfJ2OrfC
-        mEIEZyqXuvbrrG8VFWR2/p3zu
-X-Received: by 2002:a05:600c:89a:b0:3cf:6e78:e2ca with SMTP id l26-20020a05600c089a00b003cf6e78e2camr35484881wmp.5.1674564263014;
-        Tue, 24 Jan 2023 04:44:23 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvpaVb+KoSyYZ6Y+8AIxJte3JAF9rgdFAtF5kPBqPK5CZV0UkXliZS3CFsvIUsXKdIwnvdMEw==
-X-Received: by 2002:a05:600c:89a:b0:3cf:6e78:e2ca with SMTP id l26-20020a05600c089a00b003cf6e78e2camr35484856wmp.5.1674564262663;
-        Tue, 24 Jan 2023 04:44:22 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
-        by smtp.gmail.com with ESMTPSA id he7-20020a05600c540700b003d9fb04f658sm13084678wmb.4.2023.01.24.04.44.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 04:44:22 -0800 (PST)
-Message-ID: <02063032-61e7-e1e5-cd51-a50337405159@redhat.com>
-Date:   Tue, 24 Jan 2023 13:44:21 +0100
+        bh=NQY35x77x8kOxBsXweZuI8QRw64wWTJF3dft8bDEqWY=;
+        b=ry0d5FD/kOuXHP8/OBhvzvJEbbUmkZC1N6Xx1YhEJ7bID5e0zDwkdp1NtxD+OnQ4yi
+         RpPF2hMH7KgYsdQkHQxc2a93zHe7cyTIFo3P+RXCO/6gokAWrmfnr/IqeRfFc8n1ouso
+         FYzamukKP1/Gic144rhaw0O9eer1/eA0ij5B9mLEIZbwhLKTQRgVl0uzodwirc4Lvg34
+         6ewcyCoY9bch7Ejv9CmOg5C+3PjybnaW7YKXXbBVo5mVpWrFrtE9iCIXSsd4tluVT/J2
+         Op0NHHE6UiURtd/67tkZBPaqccFJIDA65oeNY2dCFkY5eGfnk1WF1MDrb20xQSDoKRsS
+         h2Cw==
+X-Gm-Message-State: AFqh2kp3JePbxDz159ltd8ARG+5NI82rZKqQYCVoSl0zuhmw8kiK1XW6
+        B/Xi0fThpAFYLqO0in54wXP3eg==
+X-Google-Smtp-Source: AMrXdXv5jJuf7e8t1rbwRrcG+mysui5oKWwSENlk39CSpsFbmdFPiRUPasU4MUTSIxXuNY1nRxqWrg==
+X-Received: by 2002:a5d:457a:0:b0:2bb:e993:6c85 with SMTP id a26-20020a5d457a000000b002bbe9936c85mr23682176wrc.35.1674564440879;
+        Tue, 24 Jan 2023 04:47:20 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id a5-20020a5d5705000000b002bdbde1d3absm1766840wrv.78.2023.01.24.04.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 04:47:20 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-phy@lists.infradead.org
+Subject: [PATCH v5 00/12] sm8550: Add PCIe HC and PHY support
+Date:   Tue, 24 Jan 2023 14:47:02 +0200
+Message-Id: <20230124124714.3087948-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230123173007.325544-1-dhowells@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v8 00/10] iov_iter: Improve page extraction (pin or just
- list)
-In-Reply-To: <20230123173007.325544-1-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 18:29, David Howells wrote:
-> Hi Al, Christoph,
-> 
-> Here are patches to provide support for extracting pages from an iov_iter
-> and to use this in the extraction functions in the block layer bio code.
-> 
-> The patches make the following changes:
-> 
->   (1) Add a function, iov_iter_extract_pages() to replace
->       iov_iter_get_pages*() that gets refs, pins or just lists the pages as
->       appropriate to the iterator type.
-> 
->       Add a function, iov_iter_extract_mode() that will indicate from the
->       iterator type how the cleanup is to be performed, returning FOLL_PIN
->       or 0.
-> 
->   (2) Add a function, folio_put_unpin(), and a wrapper, page_put_unpin(),
->       that take a page and the return from iov_iter_extract_mode() and do
->       the right thing to clean up the page.
-> 
->   (3) Make the bio struct carry a pair of flags to indicate the cleanup
->       mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (equivalent to
->       FOLL_GET) and BIO_PAGE_PINNED (equivalent to BIO_PAGE_PINNED) is
->       added.
-> 
->   (4) Add a function, bio_release_page(), to release a page appropriately to
->       the cleanup mode indicated by the BIO_PAGE_* flags.
-> 
->   (5) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
->       pages appropriately and clean them up later.
-> 
->   (6) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
-> 
->   (7) Renumber FOLL_PIN and FOLL_GET down so that they're at bits 0 and 1
->       and coincident with BIO_PAGE_PINNED and BIO_PAGE_REFFED.  The compiler
->       can then optimise on that.  Also, it's probably going to be necessary
->       to embed these in the page pointer in sk_buff fragments.  This patch
->       can go independently through the mm tree.
+For changelogs please look at each patch individually.
 
-^ I feel like some of that information might be stale now that you're 
-only using FOLL_PIN.
+Abel Vesa (12):
+  dt-bindings: phy: Add QMP PCIe PHY comptible for SM8550
+  phy: qcom-qmp: pcs: Add v6 register offsets
+  phy: qcom-qmp: pcs: Add v6.20 register offsets
+  phy: qcom-qmp: pcs-pcie: Add v6 register offsets
+  phy: qcom-qmp: pcs-pcie: Add v6.20 register offsets
+  phy: qcom-qmp: qserdes-txrx: Add v6.20 register offsets
+  phy: qcom-qmp: qserdes-lane-shared: Add v6 register offsets
+  phy: qcom-qmp-pcie: Add support for SM8550 g3x2 and g4x2 PCIEs
+  dt-bindings: PCI: qcom: Add SM8550 compatible
+  PCI: qcom: Add SM8550 PCIe support
+  arm64: dts: qcom: sm8550: Add PCIe PHYs and controllers nodes
+  arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
 
-> 
-> I've pushed the patches here also:
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
-
-I gave this a quick test and it indeed fixes the last remaining test 
-case of my O_DIRECT+fork tests [1] that was still failing on upstream 
-(test3).
-
-
-Once landed upstream, if we feel confident enough (I tend to), we could 
-adjust the open() man page to state that O_DIRECT can now be run 
-concurrently with fork(). Especially, the following documentation might 
-be adjusted:
-
-"O_DIRECT  I/Os  should  never  be run concurrently with the fork(2) 
-system call, if the memory buffer is a private mapping (i.e., any 
-mapping created with the mmap(2) MAP_PRIVATE flag; this includes  memory 
-  allocated  on  the  heap  and statically allocated buffers).  Any such 
-I/Os, whether submitted via an asynchronous I/O interface or from 
-another thread in the  process, should  be completed before fork(2) is 
-called.  Failure to do so can result in data corruption and undefined 
-behavior in parent and child processes."
-
-
-This series does not yet fix vmsplice()+hugetlb ... simply because your 
-series does not mess with the vmsplice() implementation I assume ;) Once 
-vmsplice() uses FOLL_PIN, all cow tests should be passing as well. Easy 
-to test:
-
-$ cd tools/testing/selftests/vm/
-$ echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-$ echo 2 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-$ ./cow
-...
-Bail out! 8 out of 190 tests failed
-# Totals: pass:181 fail:8 xfail:0 xpass:0 skip:1 error:0
-
-
-[1] https://gitlab.com/davidhildenbrand/o_direct_fork_tests
+ .../devicetree/bindings/pci/qcom,pcie.yaml    |  44 +++
+ .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       |  30 +-
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts       |  37 ++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          | 203 +++++++++-
+ drivers/pci/controller/dwc/pcie-qcom.c        |  25 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 369 +++++++++++++++++-
+ .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6.h   |  15 +
+ .../qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h    |  23 ++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6.h    |  16 +
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6_20.h |  18 +
+ .../phy-qcom-qmp-qserdes-ln-shrd-v6.h         |  32 ++
+ .../phy-qcom-qmp-qserdes-txrx-v6_20.h         |  45 +++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           |   6 +
+ 13 files changed, 846 insertions(+), 17 deletions(-)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6_20.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
 
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 
