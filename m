@@ -2,228 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED93679BA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603AA679BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbjAXOWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
+        id S234856AbjAXOXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbjAXOWh (ORCPT
+        with ESMTP id S234797AbjAXOW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:22:37 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2053.outbound.protection.outlook.com [40.107.247.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7AC21966;
-        Tue, 24 Jan 2023 06:22:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=biC7tXNCGcD5lutCUGEHoCLsufbeXV/oxcF3Xm84xi7QMH1YoRWxydH4mRjBJohCrtmIKLG+f3wBU19zXfUpZ0xjPOQ0U3F7OzgB3/JQsmq/30gbWEvq6rxSO3EJXzv+xsRqOUT4WR+fBibr3Fsy3VslZPo5mYV8tDv9RvNNbiAMqDISrDISRP1JtVjN2FXPe/MfQcadURu0JV+APkLa7pCPFcOEBJbuXdVd7wzacTFDqv/jsqxTczRLv9JIh1AWJIII7AQiYpSLaw7EXAdnSNOWXHxUUpG1A3SOaKgpcIwVjFlmKpB7xhCpybU/MneYo4ii3mmk95ZLMjQZI6bwdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jii+a1dy2p2/gymryjK8h5Z4O11MbWgGBSDynhGWguc=;
- b=aZwCXb/Cw6J2pFnZwy4YrwWJTiKGf7ENrLlpuwewR302mHCJIhRYxOycsG/RpboDTH7EDqFQzm6B9cy+8bIMddle82sbgbZpIzk7imDWZBpC8tNJNTEql4+XVnchjgQFOgA30SaQMsKKQlS1gDS62EoYPB/pxQXP6uzcgXpeMDkdlpiMQoPbm3v2lnisOBvqo/nVteC/CBPacJgrl1NyW55fahV5osGjO2CYZldzrgUa0FBOePEVfSOO7qLQvMaK/MB+aj2jpFay3LcOQfYC2FQPIr16zp9nMD0Zp607qhriMPwi27RGw4ze+VNN0FvYqpotECIiUhzSd9LRT+7eWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jii+a1dy2p2/gymryjK8h5Z4O11MbWgGBSDynhGWguc=;
- b=mgbgnkuvYytKClo+JnYMW0cy2xb9bhXW0V5QX1RVIxsCVmmhnc2Tr998aaULG8r0rvADnrco8To96EIHbgNQp+fyxQuw1xLwGG9jibDTFaocbJ1/MCGY4ZV3MRjBok63JchHxMahfXvu6Nj0QExAHAYeP60EsVqZaNX7rfLprNA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by PAXPR04MB9594.eurprd04.prod.outlook.com (2603:10a6:102:23c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 14:22:28 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc%7]) with mapi id 15.20.6002.028; Tue, 24 Jan 2023
- 14:22:28 +0000
-Message-ID: <f5c3430fef6795ba4cc52b27a7732da5ffce7bc2.camel@nxp.com>
-Subject: Re: [PATCH 2/2] drm: lcdif: Add i.MX93 LCDIF support
-From:   Liu Ying <victor.liu@nxp.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>, s.hauer@pengutronix.de,
-        robh+dt@kernel.org, linux-imx@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        kernel@pengutronix.de
-Date:   Tue, 24 Jan 2023 22:21:51 +0800
-In-Reply-To: <13189854.uLZWGnKmhe@steina-w>
-References: <20230123072358.1060670-1-victor.liu@nxp.com>
-         <ace76615-533a-9295-8271-95262859d287@denx.de>
-         <7ac57bc28da40df054c81fd74f69207af66ad97b.camel@nxp.com>
-         <13189854.uLZWGnKmhe@steina-w>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TYAPR01CA0010.jpnprd01.prod.outlook.com (2603:1096:404::22)
- To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+        Tue, 24 Jan 2023 09:22:57 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DCA975C;
+        Tue, 24 Jan 2023 06:22:54 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id bk15so39348229ejb.9;
+        Tue, 24 Jan 2023 06:22:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kPc3U4Ryl/mKkmIF4TQfdebgB3N7QRmFQxK1chu2YlA=;
+        b=2tmFWYrKzssuM4zOjzpJ0mYZwmNXPYjaD1JnTovhCIY3n6vdC7f6TS/DxXRlnJ6QAU
+         1FmBl/vsfVnIVTHnkDGA1JTFWCP7Xw4foCDkdB4YjakMVkmYJaZcakX8nZbavOmpgbSO
+         VFyhePz8enIMZL1TlFG7XQmHffv24gh93jVf7ioS/reMigtR53fqjCJc028pgIYddytv
+         YtEBzN+oOixqBBPBe5TXmmIbsMzTj/CmzzYKYXfCg1VXCxHYzK5reyrTdMT0HZ/VQZlP
+         DO39A+IV0HuanVP8qw7PjH/A+IaZ1UWVttJJPZDtJIBMhaoV31mM/8kDhOTCjf2lXMZQ
+         aBIQ==
+X-Gm-Message-State: AFqh2koC/Qq/Q30rWE/fpIbpComk58uWwbUShGwmhRuHjt0U0lcjS5wr
+        oDIXkmOJLpjw2b0+5u/1Y8ymVJq/KnF32ylDpcI+IYCpqlU=
+X-Google-Smtp-Source: AMrXdXu+rGhC8WBT9vbLib8ObZ1uG95VEsfdO04HPSRxNtifH6eat1pm5i4fopQPo622QseNL0mFWmhEmRSArGHIzfE=
+X-Received: by 2002:a17:906:4e9a:b0:84d:4dc6:1c08 with SMTP id
+ v26-20020a1709064e9a00b0084d4dc61c08mr4678764eju.421.1674570173334; Tue, 24
+ Jan 2023 06:22:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|PAXPR04MB9594:EE_
-X-MS-Office365-Filtering-Correlation-Id: 521eb3dc-e2b6-4436-1d1f-08dafe166c06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lfb9hoq1SY8y4ruQAWfhGXSOEutP/AvrZGi7eeRFo2SgWltqqNL/dwASebBrGw9zDBH3pCu+geubkItaraCyeN4I8b6LW9XeEp8mN7hAedX8tb0iFn1A0qNWCO7QQYhlBcQ6MXB5/X31gI6oyMe83KQ30yFRtWDwWSjf08jpZT3ZcMw3KY5IX40kxW7ishWNOUvp+7y6TJyTVkrmtZk0N+1b2HSRX2+jz1GTdKPd0MlJW0OdgvovnK2t+AT7uXjDPLjSoAatFarBwCwjlx7QZRv3AAcSuF/VXFD6l8X4EoUIIFTy53jQayWB+TUPJ2ZNOKJPu22V49J4MqpI43ZbetZAAbIeTaxZZDWB9aHzd0LU87TzU9ZKs2yIq1Izz900Hbofc+5PIMOypcn+HdNujAWpFQe0EzkCVXs1rW+hsJ/nyWxkcK9lQRTQ1OmqS44h6qfyj1AyJPrgYWpz8hmJlfXzeBvd1FJGoTu+ZWWDFYUvThrOXH/Q+0BJ4R1ouzv+8n5rrwIY+RJmMWnIFDDvH44vv4yW4P2bywWzohY+1AutmHASjF997nyIcRxpNTxgbPnh17/65xQr6HfBtLD+rcWXFoXq7rs1VaR7bOLSFmRdB+B/jAdHQcTXDNhhdWNZGM1zm32AMHfUz2aDW+M/Pl9liZ21ZQzTFYEJht77p0WvBjpVMHA2H9443vvruhdHCz0NGO0pPVHK/l7R9DPoMFIqtItdzv3jeed6gWde700=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199015)(2616005)(478600001)(2906002)(41300700001)(38100700002)(38350700002)(5660300002)(7416002)(8936002)(66476007)(66946007)(8676002)(4326008)(66556008)(36756003)(86362001)(186003)(6512007)(26005)(316002)(52116002)(6486002)(83380400001)(6506007)(6666004)(53546011)(99106002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WHRaVFNlNGdFcEQybHVMazB2WVBuVzRQektWd0lLOFcvbThwSXF6S1BZc2lK?=
- =?utf-8?B?RXFkQm0vSkJSYmRuRS80YksxM2UyY3cvdllEQjVOL1R6dm02eU9hQ1FIZjBF?=
- =?utf-8?B?d1QxWjRTV1gvWE43YS9UbEhtNS9ybXZEZDdkc09OdzZNVytOV1FGd1hJczVO?=
- =?utf-8?B?N1lObXV3VVRmQmhHaXZoanFzMmhvSStob0xnbEkwM01ZTEZPVmNud1ZobTFF?=
- =?utf-8?B?K0VaUEdUanB3NG91d3Exa3BPU1FOZnFSbFY5elpZZzJxSjk3Wnh6U3lQUkdl?=
- =?utf-8?B?N1MxejBDR3hTcHhhZlZqOTk3dDdYeEN6Y3ljQmNUeXhBVnNsbHgrdjV4QmZX?=
- =?utf-8?B?c1UrTWhsclFjczN2N2tzUEJ0ZzR3THpSTHFUNmFwQTlDVitwdFZYb3k0cXhO?=
- =?utf-8?B?NzEyeHNGdFUwQXRmVE9nMW04ZkFVWVVDTElUbUE5amZJeTBRZTQ0QTk0Yjg4?=
- =?utf-8?B?R0hSWUllNFlvcWVSV0F5RzB4V3lTWWlJbWJaQkFxV042ZkxMbzkxTUNTNi84?=
- =?utf-8?B?TVZkMnRDUThka2t0T0lrdnNUdHlvQysxSjM2Mzhnb0tCaG5lOVdnUkVwdDha?=
- =?utf-8?B?N3FGeDFXNlV2UUxCQ1ZFcng0cG02b1F1ZlNCVzcrTWdBVWR0SzhYRnBqVkZL?=
- =?utf-8?B?OFk1VW92MFdUN2Y0Sk5uK1pkUzkrWFFlS05sbk5oUDVvdVVPMnFScnIydHJn?=
- =?utf-8?B?YjA1L014UENZamdyRVVsV2xaYlRRam5qb3JOZGlzZkdXanhLK0ptdFZTOEdj?=
- =?utf-8?B?RGhKeWdReE4rY1QrVHN3N1MyUVU1WlJidzN6eHEyTWRZeEFNWnJENGNwbjVN?=
- =?utf-8?B?ZmJFOXZGQkdoZ2dSQ1VXcHd6VDM4MTNOaUQ0MW4xWEZNN0RPNWZQZzdWVVRM?=
- =?utf-8?B?eVZudXArTFBFd01JRXg0QjhjKzZ0UDNvY0NjUlBRbE5hbG5tbUJhZ2kyVjI4?=
- =?utf-8?B?eVRLZFIwSUw3czlpY0g3OXJVblRWYVpYLzZ0SEJVSE4xZ1JGdHEyRVJxZW1s?=
- =?utf-8?B?MHlCWERNQW5EK3dVMU1Qa1U5MHhBKzRwZXJoV0JJb3ZyOXJucUFHZXJ3U3VN?=
- =?utf-8?B?QWQ3MXFjTjQybXMxcW5aUkIycjM4emZqUlI3WStJaTZsSkNOcDR4U1BHRFg5?=
- =?utf-8?B?WjZpYmYzNEtINHkwWUhjSmJYRlIyQVlRaktIaXVvY2RYQVVxaVJ2YTdadFEw?=
- =?utf-8?B?S0RsOGVWSVRsQ1U0bnE4NWhJa01QVmlBeW1IZTN3RCtpYmExZ2FIQ1psUGM1?=
- =?utf-8?B?T08yU004a2dyTVFaZDR0WnJPRDhFNUNrMFV5U1h5MHZEM2NpQ3FYaG1XZjRX?=
- =?utf-8?B?WlpERWpKbE9vRWE4cXRUdkZGM255dDJ0MkJiVnRkWlZvQXB6ZFBndG5IQ3cv?=
- =?utf-8?B?TzBOVXhBVlBEWnJFT3lPcTZScDRxWTJEa3IvTDdOTkd0N3VDeTlVU3pzOUp3?=
- =?utf-8?B?MC9VRzhsT05MT1ZTMityVDRnajFzM0V0eHVvNHdhcHFDZXJyS1oxUlQ1S3V0?=
- =?utf-8?B?OHRuY3NMQnkzU09VNnBkZ3YrM3dDTTJMYTAwcUtvVElVb29USWEyZ0NWT09P?=
- =?utf-8?B?QytNTzZwZWdwN1lFOUlBQUZBTzJkS0RJVmlFbGwyN3hoZytzZ0NicnZvZWFR?=
- =?utf-8?B?K2FFMkNCTDFVOVRTdFNhUlliMExtS3hubitzMDVmcU5BV3FpMmh3T3kwSjB2?=
- =?utf-8?B?ZWdrenBjNjJYcEh4elV3OWxwenc5TmdFUkxSeTJUQlcyY3prL0JDRjBEMkMy?=
- =?utf-8?B?NkZmMHVrOFgyWHhJQXAyZGk0OFNkNFkwcUpndzlWd3R4ZUlkN0lDZHQ3Z3Y1?=
- =?utf-8?B?U2IzdnJhb1oxSGs5MHpUOXgvN3I5VVk3d0dhR3FpcmwzdTZGbTdneUdudVlG?=
- =?utf-8?B?RzVKVDJra3lrcEdlS3Q3ajg1MDNINUxrbVhOUmxrWjhjQjM2cTA2eGpNbm1E?=
- =?utf-8?B?Vnc4RUpOQTBTNDVmYzFOM0FSTmRIUHVhTUhyUmZxaGlCbUNtNkhYUmdUUmNy?=
- =?utf-8?B?TTBJSkdERVZEY0pRVkFHU1p1U0ZhVkNQczlaS1cvOWFWdmNBQnQ5VGs2eU1E?=
- =?utf-8?B?c3dEWkcxZkMwSGEreVJ3ZnAwWi9SUnVIczZzVzJmWkFETW1OZ3dIR2NtNW1K?=
- =?utf-8?Q?YoyLZ4TuDiUyo6gybYYVdObEo?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 521eb3dc-e2b6-4436-1d1f-08dafe166c06
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 14:22:28.5171
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ggAC2KpRvT+r8gWB2okYu4341UW1mvImW46sEEyPXJIq6268EcehJMIwlG1peFWEi+o6eMP4wvn1OO02qUgBtw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9594
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230123163046.358879-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230123163046.358879-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Jan 2023 15:22:41 +0100
+Message-ID: <CAJZ5v0iK-ob4Mhh-Upq01gq6SPsYuAD22E-o0zwcoL1hLiP3JQ@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: int340x_thermal: Add production mode attribute
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-24 at 12:15 +0100, Alexander Stein wrote:
-> Hi,
+On Mon, Jan 23, 2023 at 5:31 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> It is possible that the system manufacturer locks down thermal tuning
+> beyond what is usually done on the given platform. In that case user
+> space calibration tools should not try to adjust the thermal
+> configuration of the system.
+>
+> To allow user space to check if that is the case, add a new sysfs
+> attribute "production_mode" that will be present when the ACPI DCFG
+> method is present under the INT3400 device object in the ACPI Namespace.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> v3:
+> Build warning reported by for missing static
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> v2
+> Addressed comments from Rafael:
+> - Updated commit excatly same as Rafael wrote
+> - Removed production_mode_support bool
+> - Use sysfs_emit
+> - Update documentation
+>
+>  .../driver-api/thermal/intel_dptf.rst         |  3 ++
+>  .../intel/int340x_thermal/int3400_thermal.c   | 48 +++++++++++++++++++
+>  2 files changed, 51 insertions(+)
+>
+> diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+> index 372bdb4d04c6..f5c193cccbda 100644
+> --- a/Documentation/driver-api/thermal/intel_dptf.rst
+> +++ b/Documentation/driver-api/thermal/intel_dptf.rst
+> @@ -84,6 +84,9 @@ DPTF ACPI Drivers interface
+>         https:/github.com/intel/thermal_daemon for decoding
+>         thermal table.
+>
+> +``production_mode`` (RO)
+> +       When different from zero, manufacturer locked thermal configuration
+> +       from further changes.
+>
+>  ACPI Thermal Relationship table interface
+>  ------------------------------------------
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index db8a6f63657d..23ea21238bbd 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -60,6 +60,7 @@ struct int3400_thermal_priv {
+>         int odvp_count;
+>         int *odvp;
+>         u32 os_uuid_mask;
+> +       int production_mode;
+>         struct odvp_attr *odvp_attrs;
+>  };
+>
+> @@ -315,6 +316,44 @@ static int int3400_thermal_get_uuids(struct int3400_thermal_priv *priv)
+>         return result;
+>  }
+>
+> +static ssize_t production_mode_show(struct device *dev, struct device_attribute *attr,
+> +                                    char *buf)
+> +{
+> +       struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+> +
+> +       return sysfs_emit(buf, "%d\n", priv->production_mode);
+> +}
+> +
+> +static DEVICE_ATTR_RO(production_mode);
+> +
+> +static int production_mode_init(struct int3400_thermal_priv *priv)
+> +{
+> +       unsigned long long mode;
+> +       acpi_status status;
+> +       int ret;
+> +
+> +       priv->production_mode = -1;
+> +
+> +       status = acpi_evaluate_integer(priv->adev->handle, "DCFG", NULL, &mode);
+> +       /* If the method is not present, this is not an error */
+> +       if (ACPI_FAILURE(status))
+> +               return 0;
+> +
+> +       ret = sysfs_create_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
+> +       if (ret)
+> +               return ret;
+> +
+> +       priv->production_mode = mode;
+> +
+> +       return 0;
+> +}
+> +
+> +static void production_mode_exit(struct int3400_thermal_priv *priv)
+> +{
+> +       if (priv->production_mode >= 0)
+> +               sysfs_remove_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
 
-Hi,
+Isn't it OK to call sysfs_remove_file() if the given attribute is not there?
 
-> 
-> Am Dienstag, 24. Januar 2023, 08:59:39 CET schrieb Liu Ying:
-> > On Mon, 2023-01-23 at 16:57 +0100, Marek Vasut wrote:
-> > > On 1/23/23 08:23, Liu Ying wrote:
-> > > > The LCDIF embedded in i.MX93 SoC is essentially the same to
-> > > > those
-> > > > in i.MX8mp SoC.  However, i.MX93 LCDIF may connect with MIPI
-> > > > DSI
-> > > > controller through LCDIF cross line pattern(controlled by
-> > > > mediamix
-> > > > blk-ctrl) or connect with LVDS display bridge(LDB) directly or
-> > > > a
-> > > > parallel display(also through mediamix blk-ctrl), so add
-> > > > multiple
-> > > > encoders(with DRM_MODE_ENCODER_NONE encoder type) support in
-> > > > the
-> > > > LCDIF DRM driver and find a bridge to attach the relevant
-> > > > encoder's
-> > > > chain when needed.  While at it, derive lcdif_crtc_state
-> > > > structure
-> > > > from drm_crtc_state structure to introduce bus_format and
-> > > > bus_flags
-> > > > states so that the next downstream bridges may use consistent
-> > > > bus
-> > > > format and bus flags.
-> > > 
-> > > Would it be possible to split this patch into preparatory clean
-> > > up
-> > > and
-> > > i.MX93 addition ? It seems like the patch is doing two things
-> > > according
-> > > to the commit message.
-> > 
-> > IMHO, all the patch does is for i.MX93 addition, not for clean up.
-> > Note that the single LCDIF embedded in i.MX93 SoC may connect with
-> > MIPI
-> > DSI/LVDS/parallel related bridges to drive triple displays
-> > _simultaneously_ in theory, while the three LCDIF instances
-> > embedded in
-> > i.MX8mp SoC connect with MIPI DSI/LVDS/HDMI displays
-> > respectively(one
-> > LCDIF maps to one display).  The multiple encoders addition and the
-> > new
-> > checks for consistent bus format and bus flags are only for i.MX93
-> > LCDIF, not for i.MX8mp LCDIF.  Also, I think the multiple encoders
-> > addition and the new checks should be done together - if the new
-> > checks
-> > come first, then the new checks do not make sense(no multiple
-> > displays
-> > driven by LCDIF); 
-> 
-> You are right on this one, but on the other hand there are lot of
-> preparing 
-> patches already. Even if it is useless by itself, having the bus
-> format & flag 
-> checks in a separate patch, it is easier to review, IMHO.
+If so, the above check is unnecessary and the assignment to -1 above
+too (as this is the only place where the value is tested).
 
-TBH, this way of separating patch looks too artificial. It's odd to
-check consistent bus format and bus flags for multiple bridges while
-there is only one encoder.
-
-What I can do is to make a separate patch to introduce the
-lcdif_crtc_state structure(with bus_format and bus_flags members) and
-determine the format and flags in ->atomic_check() instead of
-->atomic_enable().  And then, add i.MX93 LCDIF support with an another
-patch which adds multiple encoders+bridges and new checks for
-consistent bus format and bus flags.  Sounds good?
-
-Regards,
-Liu Ying  
-
-> 
-> > if the new checks come later, then it would be a bug
-> > to allow inconsistent bus format and bus flags across the next
-> > downstream bridges when only adding multiple encoders support(also,
-> > I
-> > don't know which encoder's bridge should determine the LCDIF output
-> > bus
-> > format and bus flags, since the three encoders come together with
-> > the
-> > three next bridges).
-> 
-> Agreed, this order is a no-go.
-> 
-> Best regards,
-> Alexander
-> 
-> > Regards,
-> > Liu Ying
-> 
-> 
-> 
-> 
-
+> +}
+> +
+>  static ssize_t odvp_show(struct device *dev, struct device_attribute *attr,
+>                          char *buf)
+>  {
+> @@ -610,8 +649,15 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+>         if (result)
+>                 goto free_sysfs;
+>
+> +       result = production_mode_init(priv);
+> +       if (result)
+> +               goto free_notify;
+> +
+>         return 0;
+>
+> +free_notify:
+> +       acpi_remove_notify_handler(priv->adev->handle, ACPI_DEVICE_NOTIFY,
+> +                                  int3400_notify);
+>  free_sysfs:
+>         cleanup_odvp(priv);
+>         if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
+> @@ -638,6 +684,8 @@ static int int3400_thermal_remove(struct platform_device *pdev)
+>  {
+>         struct int3400_thermal_priv *priv = platform_get_drvdata(pdev);
+>
+> +       production_mode_exit(priv);
+> +
+>         acpi_remove_notify_handler(
+>                         priv->adev->handle, ACPI_DEVICE_NOTIFY,
+>                         int3400_notify);
+> --
