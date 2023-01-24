@@ -2,78 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6ED679C9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE9B679CC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbjAXOyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S235201AbjAXO7P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 Jan 2023 09:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235126AbjAXOyH (ORCPT
+        with ESMTP id S234186AbjAXO7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:54:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DD845F75;
-        Tue, 24 Jan 2023 06:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GHCwlLF7wa3yuDKNbyAKB1+xPsU+XQeBpEiRl/4dAmg=; b=thE9gt5GWJRi8DSGQFxSuVj2XN
-        wQ9x+oLubqqxo/bSLujOGaKIpLqmokTx8uhCTlBg5VLn+3zDVhw4QHINCvUmwNaKznolkrU+UeiJ5
-        hHv/h9KzIGll9nN2GB4YfqzgZKt8kCmG+t1M52MpIyNqVHHN1Pw2krrPFqFS3EOTTLPOfOTxJxO7+
-        UHZPBAxnV1s4CiLP6C9HLlorUFSgHqSelmYI5amb1J4BcnIj5M3nbQQXUQxPFq8cMft0HPtQAWb5b
-        WmNu1LS432m7zgldrqwXmGhePg/uKXH5HCusSJ5pmjvwRgjVfKsNevkXy6f3dNw+SDjz07dL7hb/7
-        oRaB866g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKKgM-004QVO-CE; Tue, 24 Jan 2023 14:53:54 +0000
-Date:   Tue, 24 Jan 2023 06:53:54 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
-Message-ID: <Y8/xApRVtqK7IlYT@infradead.org>
-References: <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com>
- <20230123173007.325544-1-dhowells@redhat.com>
- <20230123173007.325544-8-dhowells@redhat.com>
- <874829.1674571671@warthog.procyon.org.uk>
+        Tue, 24 Jan 2023 09:59:13 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 06:59:13 PST
+Received: from mail.sofgi.ru (mail.sofgi.ru [80.252.25.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AE415C8C;
+        Tue, 24 Jan 2023 06:59:12 -0800 (PST)
+Received: from [156.96.56.77] (156.96.56.77) by mail.sofgi.ru (192.168.0.8)
+ with Microsoft SMTP Server (TLS) id 14.1.218.12; Tue, 24 Jan 2023 18:50:15
+ +0400
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874829.1674571671@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re: Email
+To:     Recipients@vger.kernel.org
+From:   Cohen@vger.kernel.org
+Date:   Tue, 24 Jan 2023 06:54:21 -0800
+Reply-To: <cohencharles59@gmail.com>
+Message-ID: <036d922a-9954-4e15-a7ea-a043ec4e9e96@EXCHANGE.fond-samara.ru>
+X-Originating-IP: [156.96.56.77]
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,TO_MALFORMED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:47:51PM +0000, David Howells wrote:
-> > > +static inline void bio_set_cleanup_mode(struct bio *bio, struct iov_iter *iter)
-> > > +{
-> > > +	unsigned int cleanup_mode = iov_iter_extract_mode(iter);
-> > > +
-> > > +	if (cleanup_mode & FOLL_GET)
-> > > +		bio_set_flag(bio, BIO_PAGE_REFFED);
-> > > +	if (cleanup_mode & FOLL_PIN)
-> > > +		bio_set_flag(bio, BIO_PAGE_PINNED);
-> > 
-> > Can FOLL_GET ever happen?
-> 
-> Yes - unless patches 8 and 9 are merged.  I had them as one, but Christoph
-> split them up.
-
-It can't.  Per your latest branch:
-
-#define iov_iter_extract_mode(iter) (user_backed_iter(iter) ? FOLL_PIN : 0)
+I am interested in funding your business/project. I am a private investor, and I am open to further negotiation with you if this suits your interest.
+Regards,
+Charles Cohen
