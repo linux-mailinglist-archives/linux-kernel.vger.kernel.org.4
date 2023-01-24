@@ -2,131 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58772679889
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE1567988E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbjAXMvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S233720AbjAXMwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjAXMvR (ORCPT
+        with ESMTP id S233390AbjAXMwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:51:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4866182
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:49:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674564515;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mKlGGN/Cv/e/LCDkUt1uykWKamvG2Ui1ifnCT6XaOdM=;
-        b=jO1FbBraUjza6PFxu53p6dZgo6PdL4ggeAeYVH7RuPEuXV0cHB8Hmz8EnkV31aeBJqSxiI
-        TvAfsZouLo7KDwxtpX4kMcjRBjg86Kb5k1OhoQ3B/CBti+2YENmr3DdqM4cWHIJOlaRvHT
-        3nWOlwFLjmilenJ0cBTvDmX2hy4Vw2c=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-641-3cNk3hH2O5qtnyApOK1X-A-1; Tue, 24 Jan 2023 07:48:34 -0500
-X-MC-Unique: 3cNk3hH2O5qtnyApOK1X-A-1
-Received: by mail-ej1-f70.google.com with SMTP id gb18-20020a170907961200b008715e951f02so9817369ejc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:48:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mKlGGN/Cv/e/LCDkUt1uykWKamvG2Ui1ifnCT6XaOdM=;
-        b=QAYpvUy7LJhdttlX9i1+/CWRKi6/sfFRchbSbMQBC8qP8tWdx7jxgWkQN+NZ37Pbtd
-         bzUmW2dXthYUfD7mmxk/TQoDbx/cn6G1ii9omqcd5kF9sgM9sriuBdEaJlc4KdA2DqKL
-         b1dpk0ad5dOP3eyYA9JRxshrFqOcY1wxp09bAkJsxIaJ3synQFFEfh2L6Maz1oaWCdsU
-         bWX6cUP3B8r0uImBoYgj/QFxTrSKVQJDUMzk9k/CBMAUQ5RcLbhX6vhHb+Ady6fvh5ll
-         9VZ6+oyL1smc6fvTF6Cr5KCsM8DqNacrZ4Z/3AoqBP7wyGuMQsErhj8zTayEsDA8+nRU
-         c0AQ==
-X-Gm-Message-State: AFqh2kq2BgSri0Iyrh8MCXZMashPMnsProWwNCrTCfjWSP7LZVgW8eGr
-        PCYFVmh8ugJ0F4pBs3Asp9Z5ol3+2TpyP4J/FO90OBMQpFStlduCBtMD/RDtisFFkoZEdcxvkHw
-        L+Wx3NNjO/zEPiFyPvzOYhRUh
-X-Received: by 2002:a17:906:4557:b0:84d:3a95:cdf5 with SMTP id s23-20020a170906455700b0084d3a95cdf5mr27820475ejq.10.1674564513148;
-        Tue, 24 Jan 2023 04:48:33 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuwf/QaQ7ssTfZKYy6xP8WjtnjSROX4nzzKhPAhI8xZEqFVaTmzVbtai61Rp493mGogj1b/Iw==
-X-Received: by 2002:a17:906:4557:b0:84d:3a95:cdf5 with SMTP id s23-20020a170906455700b0084d3a95cdf5mr27820466ejq.10.1674564512969;
-        Tue, 24 Jan 2023 04:48:32 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id m23-20020a1709060d9700b007aef930360asm861276eji.59.2023.01.24.04.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 04:48:32 -0800 (PST)
-Message-ID: <73853dc1-e925-de93-aefa-aebc1a23ccc2@redhat.com>
-Date:   Tue, 24 Jan 2023 13:48:31 +0100
+        Tue, 24 Jan 2023 07:52:12 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2E740BFC;
+        Tue, 24 Jan 2023 04:51:44 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBVD6J001302;
+        Tue, 24 Jan 2023 12:50:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=kM89gj3G4MJN4xmLt0QFlA96GWTNFdJw8zxUixocrtY=;
+ b=aY/60V1MNRaCdSEbpt9v4ELiMtl5iNyT3ryWUvj7Ddjg3l5RBtt8WihjlSDmBLEP5csI
+ tM+FFbj4SBiyTmJOivhl6MlIkphjq2kDb+XXX3mbqdND0nbG0HC4yiPu0K3LsNkv14/N
+ uifAlPpUYvj7yNv+ssaUm8Nbrzi79f2Ith/11w5DXUvC5TPLlbVCOI/TUrrFT2eI8cHB
+ 8Ifo3n0zuV+j1AIVIY3u84c0CiiFL8scQ5rDtqu8ci4jU81W+ZgeLdGud8rhxszcTmMV
+ uaLn7MNGXg3DxtBetnGO/uN9o/2ZDzMakGWz9FNWtJZ60dvBva+yZYqtlGxjCIjsBdr8 PA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac1ywcsm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:50:44 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30O9dAPo026670;
+        Tue, 24 Jan 2023 12:50:41 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6btmf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:50:41 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCocdr17105246
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 12:50:38 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2593220040;
+        Tue, 24 Jan 2023 12:50:38 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B52E20043;
+        Tue, 24 Jan 2023 12:50:37 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 12:50:37 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Subject: [PATCH v5 0/7] iommu/dma: s390 DMA API conversion and optimized IOTLB flushing
+Date:   Tue, 24 Jan 2023 13:50:30 +0100
+Message-Id: <20230124125037.3201345-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aaoWQIjir9xcrBRZwBVKCMVnfwGRXUd5
+X-Proofpoint-ORIG-GUID: aaoWQIjir9xcrBRZwBVKCMVnfwGRXUd5
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] platform/x86: hp-wmi: Ignore Win-Lock key events
-Content-Language: en-US, nl
-To:     Rishit Bansal <rishitbansal0@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230123214150.62597-1-rishitbansal0@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230123214150.62597-1-rishitbansal0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240114
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi All,
 
-On 1/23/23 22:41, Rishit Bansal wrote:
-> Follow up from https://lore.kernel.org/all/20230120221214.24426-1-rishitbansal0@gmail.com/
-> 
-> There is a "Win-Lock" key on HP Omen Laptops which supports
-> enabling and disabling the Windows key, which trigger commands 0x21a4
-> and 0x121a4 respectively. Currently the hp-wmi driver throws warnings
-> for this event. These can be ignored using KE_IGNORE as the
-> functionality is handled by the keyboard firmware itself.
-> 
-> Signed-off-by: Rishit Bansal <rishitbansal0@gmail.com>
+This patch series converts s390's PCI support from its platform specific DMA
+API implementation in arch/s390/pci/pci_dma.c to the common DMA IOMMU layer.
+The conversion itself is done in patches 3-4 with patch 2 providing the final
+necessary IOMMU driver improvement to handle s390's special IOTLB flush
+out-of-resource indication in virtualized environments. Patches 1-2 can be
+applied independently. The conversion itself only touches the s390 IOMMU driver
+and arch code moving over remaining functions from the s390 DMA API
+implementation. No changes to common code are necessary.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+After patch 4 the basic conversion is done and on our partitioning machine
+hypervisor LPAR performance matches or exceeds the existing code. When running
+under z/VM or KVM however, performance plummets to about half of the existing
+code due to a much higher rate of IOTLB flushes for unmapped pages. Due to the
+hypervisors use of IOTLB flushes to synchronize their shadow tables these are
+very expensive and minimizing them is key for regaining the performance loss.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+To this end patches 5-7 propose a new, single queue, IOTLB flushing scheme as
+an alternative to the existing per-CPU flush queues. Introducing an alternative
+scheme was also suggested by Robin Murphy[1]. In the previous RFC of this
+conversion Robin suggested reusing more of the existing queuing logic which
+I incorporated since v2. The single queue mode is introduced in patch
+5. It allows batching a much larger number of lazily freed IOVAs and was also
+chosen as hypervisors tend to serialize IOTLB flushes removing some of the
+gains of multiple queues. Except for going from one per-CPU to a global queue
+the queue logic remains untouched.
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+Then patch 6 enables variable queue sizes using power of 2 queue sizes and
+shift/mask to keep performance as close to the existing code as possible.
+After this patch 7 introdues an IOMMU operation to automatically pick between
+the existing per-CPU and new single queue flushing schemes on a per device
+basis and utilizes this to enable single queue mode for PCI devices on s390
+that require IOTLB flushes on map indicating expensive shadowing.
 
-Regards,
+As it is implemented in common code the single queue IOTLB flushing scheme can
+of course be used by other platforms with expensive IOTLB flushes. Particularly
+virtio-iommu may be a candidate.
 
-Hans
+I did verify that the new scheme does work on my x86_64 Ryzen workstation by
+locally modifying drivers/iommu/iommu.c:iommu_subsys_init() to default to the
+single queue mode and verifying its use via "/sys/.../iommu_group/type". I did
+not find problems with an AMD GPU, Intel NIC (with SR-IOV and KVM
+pass-through), NVMes or any on board peripherals.
 
+As with previous series this is available via my git.kernel.org tree[3] in the
+dma_iommu_v5 branch with signed s390_dma_iommu_v4 tag. Thanks to previous IOMMU
+changes merged with v6.2-rc1 this does apply directly on v6.2-rc2 now.
+ 
+NOTE: Due to the large drop in performance I think we should not merge the DMA
+API conversion (patch 4) until we have a more suited IOVA flushing scheme
+with similar improvements as the proposed changes of patches 5-7. Patches 1 and
+2 on the other hand are ready to be applied as is from my point of view.
 
+Best regards,
+Niklas
 
-> ---
->  drivers/platform/x86/hp/hp-wmi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-> index 0a99058be813..009cf0bda756 100644
-> --- a/drivers/platform/x86/hp/hp-wmi.c
-> +++ b/drivers/platform/x86/hp/hp-wmi.c
-> @@ -216,6 +216,8 @@ static const struct key_entry hp_wmi_keymap[] = {
->  	{ KE_KEY, 0x213b,  { KEY_INFO } },
->  	{ KE_KEY, 0x2169,  { KEY_ROTATE_DISPLAY } },
->  	{ KE_KEY, 0x216a,  { KEY_SETUP } },
-> +	{ KE_IGNORE, 0x21a4, }, /* Win Lock On */
-> +	{ KE_IGNORE, 0x121a4, }, /* Win Lock Off */
->  	{ KE_KEY, 0x21a9,  { KEY_TOUCHPAD_OFF } },
->  	{ KE_KEY, 0x121a9, { KEY_TOUCHPAD_ON } },
->  	{ KE_KEY, 0x231b,  { KEY_HELP } },
+[0] https://lore.kernel.org/linux-iommu/20221109142903.4080275-1-schnelle@linux.ibm.com/
+[1] https://lore.kernel.org/linux-iommu/3e402947-61f9-b7e8-1414-fde006257b6f@arm.com/
+[2] https://lore.kernel.org/linux-iommu/a8e778da-7b41-a6ba-83c3-c366a426c3da@arm.com/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/
+
+Changes since v4:
+- Picked up R-b's for patch 1, 2 and 3
+- In patch 5 fixed iommu_group_store_type() mistakenly initializing DMA-SQ
+  instead of DMA-FQ. This was caused by iommu_dma_init_fq() being called before
+  domain->type is set, instead pass the type as paramater. This also closes
+  a window where domain->type is still DMA while the FQ is already used. (Gerd)
+- Replaced a missed check for IOMMU_DOMAIN_DMA_FQ with the new generic
+  __IOMMU_DOMAIN_DMA_LAZY in patch 5
+- Made the ISM PCI Function Type a define (Matt)
+- Removed stale TODO comment (Matt)
+
+Changes since v3:
+- Reword commit message of patch 2 for more clarity
+- Correct typo in comment added by patch 2 (Alexandra)
+- Adapted signature of .iommu_tlb_sync mapo for sun50i IOMMU driver added in
+  v6.2-rc1 (kernel test robot)
+- Add R-b from Alexandra for patch 1
+
+Changes since v2:
+- Move the IOTLB out-of-resource handling into the IOMMU enabling it also for
+  the IOMMU API (patch 2). This also makes this independent from the DMA API
+  conversion (Robin, Jason).
+- Rename __IOMMU_DOMAIN_DMA_FQ to __IOMMU_DOMAIN_DMA_LAZY when introducing
+  single queue flushing mode.
+- Make selecting between single and per-CPU flush queues an explicit IOMMU op
+  (patch 7)
+
+Changes since RFC v1:
+- Patch 1 uses dma_set_mask_and_coherent() (Christoph)
+- Patch 3 now documents and allows the use of iommu.strict=0|1 on s390 and
+  deprecates s390_iommu=strict while making it an alias.
+- Patches 5-7 completely reworked to reuse existing queue logic (Robin)
+- Added patch 4 to allow using iommu.strict=0|1 to override
+  ops->def_domain_type.
+
+Niklas Schnelle (7):
+  s390/ism: Set DMA coherent mask
+  iommu: Allow .iotlb_sync_map to fail and handle s390's -ENOMEM return
+  s390/pci: prepare is_passed_through() for dma-iommu
+  s390/pci: Use dma-iommu layer
+  iommu/dma: Allow a single FQ in addition to per-CPU FQs
+  iommu/dma: Enable variable queue size and use larger single queue
+  iommu/dma: Add IOMMU op to choose lazy domain type
+
+ .../admin-guide/kernel-parameters.txt         |   9 +-
+ arch/s390/include/asm/pci.h                   |   7 -
+ arch/s390/include/asm/pci_clp.h               |   3 +
+ arch/s390/include/asm/pci_dma.h               | 120 +--
+ arch/s390/pci/Makefile                        |   2 +-
+ arch/s390/pci/pci.c                           |  22 +-
+ arch/s390/pci/pci_bus.c                       |   5 -
+ arch/s390/pci/pci_debug.c                     |  12 +-
+ arch/s390/pci/pci_dma.c                       | 732 ------------------
+ arch/s390/pci/pci_event.c                     |  17 +-
+ arch/s390/pci/pci_sysfs.c                     |  19 +-
+ drivers/iommu/Kconfig                         |   4 +-
+ drivers/iommu/amd/iommu.c                     |   5 +-
+ drivers/iommu/apple-dart.c                    |   5 +-
+ drivers/iommu/dma-iommu.c                     | 193 +++--
+ drivers/iommu/dma-iommu.h                     |   4 +-
+ drivers/iommu/intel/iommu.c                   |   5 +-
+ drivers/iommu/iommu.c                         |  49 +-
+ drivers/iommu/msm_iommu.c                     |   5 +-
+ drivers/iommu/mtk_iommu.c                     |   5 +-
+ drivers/iommu/s390-iommu.c                    | 430 +++++++++-
+ drivers/iommu/sprd-iommu.c                    |   5 +-
+ drivers/iommu/sun50i-iommu.c                  |   4 +-
+ drivers/iommu/tegra-gart.c                    |   5 +-
+ drivers/s390/net/ism_drv.c                    |   2 +-
+ include/linux/iommu.h                         |  23 +-
+ 26 files changed, 687 insertions(+), 1005 deletions(-)
+ delete mode 100644 arch/s390/pci/pci_dma.c
+
+-- 
+2.34.1
 
