@@ -2,48 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05880679263
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC657679266
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbjAXHz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S232408AbjAXH4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:56:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjAXHzy (ORCPT
+        with ESMTP id S229627AbjAXH4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:55:54 -0500
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E5DEC44A9;
-        Mon, 23 Jan 2023 23:55:49 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [112.254.167.99])
-        by mail-app2 (Coremail) with SMTP id by_KCgAXHyP3js9j+tkkCg--.54572S2;
-        Tue, 24 Jan 2023 15:55:45 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     sean@mess.org, linux-media@vger.kernel.org
-Cc:     maximlevitsky@gmail.com, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH v3] media: rc: Fix use-after-free bugs caused by ene_tx_irqsim()
-Date:   Tue, 24 Jan 2023 15:55:33 +0800
-Message-Id: <20230124075533.30152-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgAXHyP3js9j+tkkCg--.54572S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFyxXrW3ZFW7AryUtF1rCrg_yoW5Wr45p3
-        95GFWfKryvqw429r17Xw48ZF15Wr4xJ34rZ34Sg34j9wn5CFyFqF9Yqa4j9a4rAFyrAFZF
-        vr43Xw4fZFnxZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUekucDUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIFAVZdtdVLGAASsu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Tue, 24 Jan 2023 02:56:43 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C6B44A9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:56:42 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p24so13934107plw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:56:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IehvW+ytjBjOfr0jydrmbHO2zJBLkzx2YGJHGnzqhIs=;
+        b=ieHxGjYP8uzW4ht7awbJlp0w57w+d3HLN/c5Rpqv9ec8UY15FIC9zl4hbfuNFqvMXS
+         +1DHL18xYK4z4sNc5GOQ3vTQk1rY8vSyc4NfPpbQycd6rXjX5DOPYAXZCHpjN/kIvo3a
+         VcxuW7hNdsqrJXKqx9WmBg4iCQvJQBQRz+OIg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IehvW+ytjBjOfr0jydrmbHO2zJBLkzx2YGJHGnzqhIs=;
+        b=q5CIfBp825W+oA3xbZSzbnXyflTajwp5BoVv5zdANTYif74FPRmCuapqtKyOrqBcjz
+         gU6PGacc8bkWmt3Pi6zf/c1VVwlN7FQNP0axs+4e1tpfR5fsktxJxUq8Vaq6Ctj+yHjX
+         EHSp1nlZONQ2vsjYJ0bh6SG6gnpfzsKbWIJN92XQ3ZfsIrOLmwKVCL5CQoW6NM2vmaiP
+         hVK15+oazyqrK88ygetqeWHPbjI868SO6xnGyxCCFt6B+9G4jxIUmMrtQdS3vI9sW9Fh
+         MT9AIghwckeGQOEKa9Lcih31DM7yroOq0KVdSdojbWmPreU2oi/7zNw8dz12TnZO+fjw
+         ukvA==
+X-Gm-Message-State: AO0yUKU7VXxZpaxx8JNjYkHd4QJVmI16GEUE+J0NOKCJfu/yYv+BXlDO
+        beYiXktexp/AwBTRB2yrKY+MmLSUOTE2yIAMO9o=
+X-Google-Smtp-Source: AK7set8ZncBvg0s//J6Daa/MO2C9pY4Ac7/ua4mDRMZHFDHgfdR6jtnM16WToqPBhBhXS7U/oPT2tA==
+X-Received: by 2002:a17:902:d4cc:b0:196:11ae:95f1 with SMTP id o12-20020a170902d4cc00b0019611ae95f1mr2252872plg.24.1674547001696;
+        Mon, 23 Jan 2023 23:56:41 -0800 (PST)
+Received: from localhost ([2401:fa00:9:14:92d9:f31f:cbe8:b7e7])
+        by smtp.gmail.com with UTF8SMTPSA id w23-20020a1709027b9700b00189743ed3b6sm1003340pll.64.2023.01.23.23.56.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 23:56:41 -0800 (PST)
+From:   Victor Ding <victording@chromium.org>
+To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Cc:     heikki.krogerus@linux.intel.com, lee.jones@linaro.org,
+        groeck@chromium.org, enric.balletbo@collabora.com,
+        tzungbi@kernel.org, sebastian.reichel@collabora.com,
+        gregkh@linuxfoundation.org, gustavoars@kernel.org,
+        bleung@chromium.org, dustin@howett.net, dnojiri@chromium.org,
+        tinghan.shen@mediatek.com, pmalani@chromium.org,
+        Victor Ding <victording@chromium.org>
+Subject: [PATCH v3] platform/chrome: cros_ec_typec: allow deferred probe of switch handles
+Date:   Tue, 24 Jan 2023 07:56:32 +0000
+Message-Id: <20230124075555.v3.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,78 +70,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the ene device is detaching, function ene_remove() will
-be called. But there is no function to cancel tx_sim_timer
-in ene_remove(), the timer handler ene_tx_irqsim() could race
-with ene_remove(). As a result, the UAF bugs could happen,
-the process is shown below.
+`fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
+which is called from `cros_typec_get_switch_handles`. When this happens,
+it does not indicate absence of switches; instead, it only hints that
+probing of switches should occur at a later time.
 
-    (cleanup routine)          |        (timer routine)
-                               | mod_timer(&dev->tx_sim_timer, ..)
-ene_remove()                   | (wait a time)
-  kfree(dev) //FREE            |
-                               | ene_tx_irqsim()
-                               |   dev->hw_lock //USE
-                               |   ene_tx_sample(dev) //USE
+Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
+probing switches as a better time.
 
-Fix by adding del_timer_sync(&dev->tx_sim_timer) in ene_remove(),
-The tx_sim_timer could stop before ene device is deallocated.
-
-What's more, The rc_unregister_device() and del_timer_sync()
-should be called first in ene_remove() and the deallocated
-functions such as free_irq(), release_region() and so on
-should be called behind them. Because the rc_unregister_device()
-is well synchronized. Otherwise, race conditions may happen. The
-situations that may lead to race conditions are shown below.
-
-Firstly, the rx receiver is disabled with ene_rx_disable()
-before rc_unregister_device() in ene_remove(), which means it
-can be enabled again if a process opens /dev/lirc0 between
-ene_rx_disable() and rc_unregister_device().
-
-Secondly, the irqaction descriptor is freed by free_irq()
-before the rc device is unregistered, which means irqaction
-descriptor may be accessed again after it is deallocated.
-
-Thirdly, the timer can call ene_tx_sample() that can write
-to the io ports, which means the io ports could be accessed
-again after they are deallocated by release_region().
-
-Therefore, the rc_unregister_device() and del_timer_sync()
-should be called first in ene_remove().
-
-Suggested by: Sean Young <sean@mess.org>
-
-Fixes: 9ea53b74df9c ("V4L/DVB: STAGING: remove lirc_ene0100 driver")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Victor Ding <victording@chromium.org>
 ---
+
 Changes in v3:
-  - Call rc_unregister_device() and del_timer_sync() first in ene_remove().
+- Reverted unnecessary change.
 
- drivers/media/rc/ene_ir.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes in v2:
+- Coverted switch-block to nested if-blocks.
 
-diff --git a/drivers/media/rc/ene_ir.c b/drivers/media/rc/ene_ir.c
-index e09270916fb..11ee21a7db8 100644
---- a/drivers/media/rc/ene_ir.c
-+++ b/drivers/media/rc/ene_ir.c
-@@ -1106,6 +1106,8 @@ static void ene_remove(struct pnp_dev *pnp_dev)
- 	struct ene_device *dev = pnp_get_drvdata(pnp_dev);
- 	unsigned long flags;
+ drivers/platform/chrome/cros_ec_typec.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index 59de4ce01fab..de480ab10488 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -145,27 +145,33 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
+ 					 struct fwnode_handle *fwnode,
+ 					 struct device *dev)
+ {
++	int ret = 0;
++
+ 	port->mux = fwnode_typec_mux_get(fwnode, NULL);
+ 	if (IS_ERR(port->mux)) {
+-		dev_dbg(dev, "Mux handle not found.\n");
++		ret = PTR_ERR(port->mux);
++		dev_dbg(dev, "Mux handle not found: %d.\n", ret);
+ 		goto mux_err;
+ 	}
  
-+	rc_unregister_device(dev->rdev);
-+	del_timer_sync(&dev->tx_sim_timer);
- 	spin_lock_irqsave(&dev->hw_lock, flags);
- 	ene_rx_disable(dev);
- 	ene_rx_restore_hw_buffer(dev);
-@@ -1113,7 +1115,6 @@ static void ene_remove(struct pnp_dev *pnp_dev)
+ 	port->retimer = fwnode_typec_retimer_get(fwnode);
+ 	if (IS_ERR(port->retimer)) {
+-		dev_dbg(dev, "Retimer handle not found.\n");
++		ret = PTR_ERR(port->retimer);
++		dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
+ 		goto retimer_sw_err;
+ 	}
  
- 	free_irq(dev->irq, dev);
- 	release_region(dev->hw_io, ENE_IO_SIZE);
--	rc_unregister_device(dev->rdev);
- 	kfree(dev);
+ 	port->ori_sw = fwnode_typec_switch_get(fwnode);
+ 	if (IS_ERR(port->ori_sw)) {
+-		dev_dbg(dev, "Orientation switch handle not found.\n");
++		ret = PTR_ERR(port->ori_sw);
++		dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
+ 		goto ori_sw_err;
+ 	}
+ 
+ 	port->role_sw = fwnode_usb_role_switch_get(fwnode);
+ 	if (IS_ERR(port->role_sw)) {
+-		dev_dbg(dev, "USB role switch handle not found.\n");
++		ret = PTR_ERR(port->role_sw);
++		dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
+ 		goto role_sw_err;
+ 	}
+ 
+@@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
+ 	typec_mux_put(port->mux);
+ 	port->mux = NULL;
+ mux_err:
+-	return -ENODEV;
++	return ret;
  }
  
+ static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
+@@ -423,9 +429,11 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+ 		}
+ 
+ 		ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
+-		if (ret)
+-			dev_dbg(dev, "No switch control for port %d\n",
+-				port_num);
++		if (ret) {
++			dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
++			if (ret == -EPROBE_DEFER)
++				goto unregister_ports;
++		}
+ 
+ 		ret = cros_typec_register_port_altmodes(typec, port_num);
+ 		if (ret) {
 -- 
-2.17.1
+2.39.1.405.gd4c25cc71f-goog
 
