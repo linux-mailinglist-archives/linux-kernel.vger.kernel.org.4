@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7DC678E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2009C678E70
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjAXCkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S232633AbjAXClO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbjAXCjr (ORCPT
+        with ESMTP id S232667AbjAXClA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:39:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7DF30EB9;
-        Mon, 23 Jan 2023 18:39:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6EA8B80EBB;
-        Tue, 24 Jan 2023 02:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C0BC4339B;
-        Tue, 24 Jan 2023 02:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674527959;
-        bh=fE7TnKGk+7sECniXW1Co7rrNpfck1npdV3aCIbmWvVY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jCqPJMhz+6FbBO604fTHk1Jefz1JgQav5j2OQSC3HHeTH0ntkts7NTG+v7/9iOw/d
-         VH8t4YwRoediSlsf7CsTGHnBSl0p3K2USE5t6imqn3MIo8ibGniAgzUMqnOuhIQf0f
-         EKzmS70uGtCYaHtwFjryFoDS57RDKMy0gv1g3GtK4dn8mEwQKiVWWyz2NeRy3Oyk6M
-         itrKbYiUeb98SDn72IUnYOeZA+4jJSEX08dRL1fNu5W+yAiHR7GPHhudfc1RXuIZJ/
-         e81hZ7FKkHYqIvypgC0aM4zrD7JMxv3ijn2XHbpIaB0GqHPIMv5zxZJ8n0IDjTEjMF
-         iZ0SK9zvS4xqw==
-From:   Eric Van Hensbergen <ericvh@kernel.org>
-To:     v9fs-developer@lists.sourceforge.net, asmadeus@codewreck.org,
-        rminnich@gmail.com, lucho@ionkov.net
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux_oss@crudebyte.com, Eric Van Hensbergen <ericvh@kernel.org>
-Subject: [PATCH v3 11/11] Fix revalidate
-Date:   Tue, 24 Jan 2023 02:38:34 +0000
-Message-Id: <20230124023834.106339-12-ericvh@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230124023834.106339-1-ericvh@kernel.org>
-References: <20221218232217.1713283-1-evanhensbergen@icloud.com>
- <20230124023834.106339-1-ericvh@kernel.org>
+        Mon, 23 Jan 2023 21:41:00 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577543C291;
+        Mon, 23 Jan 2023 18:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=hJzZkQ5tXghkUUrzWChisLPF8Mi1gd4we1pNZEFybz4=; b=BNkeuaZKrQdLKO0JthXe6ioOVI
+        /fGtObqN4ZTyFYEeLhwrbKiO2/Xs+4BWrOSxdEy3UYD/vOQmK5bUUP8M2z/Bug7Pc1W/VmkPpae8J
+        ORg1G/CCKiFh2yjUtNovYGdAOzaSOS0390hQc8+cjj7CpXji0m/2WRx1WAf2hyuav/YmKHHyyc0F5
+        EhmrHtS9CRiJcUDQdJ7eIjVpZE3IZAB8k5ini+ouo4Hu+5nnYVz6cYsTfarSzPdwz+xZi8nGgG/Qf
+        xwAVbMuA1P5s8ktPbPl//v69czuYeTSGObdjMHwanxpvuIK7LHimAkr8sNzjlihGCnVaJ4+eJNnGd
+        AGWn11HA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pK9E1-004i9u-Cj; Tue, 24 Jan 2023 02:39:53 +0000
+Date:   Tue, 24 Jan 2023 02:39:53 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <mricon@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anton Blanchard <anton@linux.ibm.com>,
+        Trilok Soni <tsoni@codeaurora.org>,
+        James Morris <jamorris@linux.microsoft.com>, corbet@lwn.net,
+        javier.gonz@samsung.com, linux-doc@vger.kernel.org,
+        a.manzanares@samsung.com, dave@stgolabs.net,
+        darren@os.amperecomputing.com, ndesaulniers@google.com,
+        gost.dev@samsung.com, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof.c@samsung.com>
+Subject: Re: [PATCH] docs: embargoed-hardware-issues: add embargoed HW
+ contact for Samsung
+Message-ID: <Y89E+S7TA6UwtNe2@casper.infradead.org>
+References: <20230123183926.249601-1-mcgrof@kernel.org>
+ <Y87X6tFlevIebcc6@kroah.com>
+ <Y88Ak8K5mD7tFItG@bombadil.infradead.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y88Ak8K5mD7tFItG@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unclear if this case ever happens, but if no inode in dentry, then
-the dentry is definitely invalid.  Seemed to be the opposite in the
-existing code.
+On Mon, Jan 23, 2023 at 01:48:03PM -0800, Luis Chamberlain wrote:
+> > > @@ -251,6 +251,7 @@ an involved disclosed party. The current ambassadors list:
+> > >    IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
+> > >    Intel		Tony Luck <tony.luck@intel.com>
+> > >    Qualcomm	Trilok Soni <tsoni@codeaurora.org>
+> > > +  Samsung       Javier González <javier.gonz@samsung.com>
+> 
+> I'll send a fix on v2.
+> 
+> BTW while at it, it got me wondering, since most of the emails on
+> this hw embargo page are not required to have kernel.org accounts
 
-Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
----
- fs/9p/vfs_dentry.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This isn't the list of hw embargo people.  This is the list of
+"ambassadors" who can help people work through the security disclosure
+process.  My impression is that it's to tell me that I should contact
+Konrad, since he also works at Oracle, to help me through the process.
+It's not for people outside Oracle to contact.
 
-diff --git a/fs/9p/vfs_dentry.c b/fs/9p/vfs_dentry.c
-index 65fa2df5e49b..b0c3f8e8ea00 100644
---- a/fs/9p/vfs_dentry.c
-+++ b/fs/9p/vfs_dentry.c
-@@ -68,7 +68,7 @@ static int v9fs_lookup_revalidate(struct dentry *dentry, unsigned int flags)
- 
- 	inode = d_inode(dentry);
- 	if (!inode)
--		goto out_valid;
-+		return 0;
- 
- 	v9inode = V9FS_I(inode);
- 	if (v9inode->cache_validity & V9FS_INO_INVALID_ATTR) {
-@@ -91,7 +91,6 @@ static int v9fs_lookup_revalidate(struct dentry *dentry, unsigned int flags)
- 		if (retval < 0)
- 			return retval;
- 	}
--out_valid:
- 	return 1;
- }
- 
--- 
-2.37.2
+If I have the wrong impression of that list, perhaps the description
+could be clarified.
 
+> not all of the folks on that page have a PGP key on the pgpkeys git
+> tree [0]. Today we constrain kernel.org accounts to folks that send
+> pull requests to Linus. Not all folks on the embargo list need to also
+> be active kernel developers. Given the issues reported before by Konstantin
+> on PGP keyservers we rely on our own git tree for keys we wish to get access
+> to in our community. The below email addresses do not have any PGP
+> key associated on the pgpkeys tree as of this day.
+> 
+>   * Tom Lendacky <thomas.lendacky@amd.com>
+>   * Catalin Marinas <catalin.marinas@arm.com>
+>   * Anton Blanchard <anton@linux.ibm.com>
+>   * Trilok Soni <tsoni@codeaurora.org>
+>   * James Morris <jamorris@linux.microsoft.com
+> 
+> So it occurs to me to perhaps modify pgpg keys documentation to welcome
+> community related keys to at least include folks like the above for the
+> hw embargo emails should communication via PGP be required. Thoughts?
+> 
+> [0] https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+> 
+>   Luis
