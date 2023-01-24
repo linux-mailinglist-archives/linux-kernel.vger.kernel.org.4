@@ -2,118 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61218679C3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C8A679C40
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbjAXOnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
+        id S235012AbjAXOnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234912AbjAXOmm (ORCPT
+        with ESMTP id S235006AbjAXOnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:42:42 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173EA4A1DC;
-        Tue, 24 Jan 2023 06:42:27 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id t18so1281353wro.1;
-        Tue, 24 Jan 2023 06:42:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULYuWXV/gOEakuXjYyzzPaFAF/ufwa1YfwMolryeGUM=;
-        b=cgw3mJmyiwBWjJtV9xeWFnFIArTiv+hIHox3q8JHJd1tEiIc95OhiLNb+Esl7v2uk/
-         l9j6UQA8fmquOTUmBmWw46iI+3ZFYjM2z0RFxDxwYqDwIS1IGjUUpEvCn8YsHdIYBfR4
-         GBcLi0y+5KVuNclKgoHqAK8kw4w7BUjWIHPa/iaNCtCZ9UhDIwHGSmSiGPxJ62ycV8Ly
-         MCJu5HZI4GzabKTMv+82IT+Eh7AzcsrMrffut+SJPkINivgb9UKhY6y0k/G+JJx0zIk5
-         qACMp3TpagVHMu0zMZghJnAqfl8Pfbi7aaY6qUBj1E/r4XofX+oEk09Yy+UswNOQvfSs
-         gqTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ULYuWXV/gOEakuXjYyzzPaFAF/ufwa1YfwMolryeGUM=;
-        b=ASjZcVoFx5yT2HJxL5O/jLI9I5bxOM/k9LbREdGdVTnO6gPhvyKeHfEEi0Z9UnI8iM
-         Ci+KAmYTd9hoMtA1LSw09ioeziCYhfB3+c0zDD3Z4dQZ+LoHdWZg5qkDc7xJ8UfyqeFB
-         lDkefvjH0yXKTkf5pseNoY9psZBAsEKhPej34e9aL2E9+1kLngJMCuUDk53x5zH1EBz0
-         HZbbbTIYJ/qrHNHwV9DXcL5Snuj6aBXfQ4zvSQybhhjMoWmf5Xl+f5z9ai5ImreD7cRt
-         3EpXcjPfjNcw+qWd3DLED8szvzOYR2n+A4Z6WE/jyPVj3OmtEz5u30O87sy04tHgSj00
-         m1xg==
-X-Gm-Message-State: AFqh2koGlr0oP/aWJII5uYP42pFdGc46scRBATz/wlAcjmLF3WC1DK2g
-        szxBbfvzA3kz4zK7T/XoJaY=
-X-Google-Smtp-Source: AMrXdXskPF1ZD0ZmfencZ5tEi8M4YEL2aTheDKQMrqEBrm7RB+dZMcEceObH2/QvJlVxFhODeOG0wg==
-X-Received: by 2002:a05:6000:549:b0:2be:184a:5d5c with SMTP id b9-20020a056000054900b002be184a5d5cmr21672099wrf.59.1674571345340;
-        Tue, 24 Jan 2023 06:42:25 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id m14-20020adffa0e000000b00287da7ee033sm2098028wrr.46.2023.01.24.06.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 06:42:24 -0800 (PST)
-Date:   Tue, 24 Jan 2023 17:42:21 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Brent Pappas <bpappas@pappasbrent.com>
-Cc:     sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
-        tian.shu.qiu@intel.com, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mdeia: ipu3: ipu33-mmu: Replace macro IPU3_ADDR2PTE()
- with a function
-Message-ID: <Y8/uTYK7qmYD5MSA@kadam>
-References: <20230124135554.13787-1-bpappas@pappasbrent.com>
+        Tue, 24 Jan 2023 09:43:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E8574A1E1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:42:48 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 703194B3;
+        Tue, 24 Jan 2023 06:43:30 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 92E083F71E;
+        Tue, 24 Jan 2023 06:42:47 -0800 (PST)
+Date:   Tue, 24 Jan 2023 14:42:45 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+        ALKML <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Pierre Gondois <pierre.gondois@arm.com>
+Subject: Re: [GIT PULL] cacheinfo/arch_topology: Updates for v6.3
+Message-ID: <20230124144245.ddphvqbcxpzrlgek@bogus>
+References: <20230120121856.1407369-1-sudeep.holla@arm.com>
+ <CAMuHMdUZzLkWvhQ=YeH2KfQ_FRidemfOvbbHf_b1AHROK9HFNA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124135554.13787-1-bpappas@pappasbrent.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdUZzLkWvhQ=YeH2KfQ_FRidemfOvbbHf_b1AHROK9HFNA@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 08:55:54AM -0500, Brent Pappas wrote:
-> Replace the macro IPU3_ADDR2PTE() with a static function to match
-> Linux coding style standards.
-
-When you say "Linux coding style standards" what exactly does that mean?
-I've just re-read the Documentation/process/coding-style.rst section on
-"Macros, Enums and RTL" and I don't see an issue with the macro.
-
-This code is in the middle of a big section full of macros.  Why did you
-pick this particular macro?  Now it doesn't mirror the IPU3_PTE2ADDR()
-so this patch hurts readability.
-
+On Tue, Jan 24, 2023 at 02:44:10PM +0100, Geert Uytterhoeven wrote:
+> Hi Sudeep,
 > 
-> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
-> ---
->  drivers/staging/media/ipu3/ipu3-mmu.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+> On Fri, Jan 20, 2023 at 1:22 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > It has been tested on RISC-V which is the main users outside of arm64.
 > 
-> diff --git a/drivers/staging/media/ipu3/ipu3-mmu.c b/drivers/staging/media/ipu3/ipu3-mmu.c
-> index cb9bf5fb29a5..d2d603c32773 100644
-> --- a/drivers/staging/media/ipu3/ipu3-mmu.c
-> +++ b/drivers/staging/media/ipu3/ipu3-mmu.c
-> @@ -25,7 +25,11 @@
->  #define IPU3_PT_SIZE		(IPU3_PT_PTES << 2)
->  #define IPU3_PT_ORDER		(IPU3_PT_SIZE >> PAGE_SHIFT)
->  
-> -#define IPU3_ADDR2PTE(addr)	((addr) >> IPU3_PAGE_SHIFT)
-> +static u32 ipu3_addr2pte(phys_addr_t addr)
-> +{
-> +	return addr >> IPU3_PAGE_SHIFT;
-> +}
+> Has it?
+>
 
-To me the original macro is fine.  The inline would also be fine if it
-were done consistently.  But I guess I just don't see a lot of value in
-changing the existing code.
+Hmm, I might have mixed up things then. I was on a vacation for quite some
+time and might have assumed Conor response on the thread with testing.
+Extremely sorry for that. However it was in -next for few days before
+Greg applied to his tree.
 
-If you were taking ownership of this driver in a more meaningful way
-then I would defer to your taste...  But I just don't see a lot of value
-in the patch.
+> > The ACPI the RISC-V parts are acked-by the respective maintainers. All
+> > the changes are in the -next for sometime and no issues reported at this
+> > time.
+> >
+> > Regards,
+> > Sudeep
+> >
+> > -->8
+> >
+> > The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> >
+> >   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/archtopo-cacheinfo-updates-6.3
+> >
+> > for you to fetch changes up to 198102c9103fc78d8478495971947af77edb05c1:
+> >
+> >   cacheinfo: Fix shared_cpu_map to handle shared caches at different levels (2023-01-18 09:58:40 +0000)
+> >
+> > ----------------------------------------------------------------
+> > cacheinfo and arch_topology updates for v6.3
+> >
+> > The main change is to build the cache topology information for all
+> > the CPUs from the primary CPU. Currently the cacheinfo for secondary CPUs
+> > is created during the early boot on the respective CPU itself. Preemption
+> > and interrupts are disabled at this stage. On PREEMPT_RT kernels, allocating
+> > memory and even parsing the PPTT table for ACPI based systems triggers a:
+> >   'BUG: sleeping function called from invalid context'
+> >
+> > To prevent this bug, the cacheinfo is now allocated from the primary CPU
+> > when preemption and interrupts are enabled and before booting secondary
+> > CPUs. The cache levels/leaves are computed from DT/ACPI PPTT information
+> > only, without relying on any architecture specific mechanism if done so
+> > early.
+> >
+> > The other minor change included here is to handle shared caches at
+> > different levels when not all the CPUs on the system have the same
+> > cache hierarchy.
+> 
+> While this gets rid of the "cacheinfo: Unable to detect cache hierarchy
+> for CPU N" warnings printed during boot, it resurrects the printing of
+> 
+>     Early cacheinfo failed, ret = -12
+> 
+> during early boot on all my RV64 platforms
+> 
+> See also https://lore.kernel.org/all/CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com/
+> for a similar earlier version triggering the same issue.
+> 
+> > ----------------------------------------------------------------
+> > Pierre Gondois (6):
+> >       arch_topology: Build cacheinfo from primary CPU
+> 
+> Reverting commit 5944ce092b97caed ("arch_topology: Build cacheinfo
+> from primary CPU") fixes the issue.
+>
 
-regards,
-dan carpenter
+OK, thanks for narrowing it to one patch. We will look at it. But does
+it work fine even with this errors ? We had seen such a behaviour in the
+past. It fails to initialise too early but works at later initcall level
+which I am not sure if we investigated why.
 
+-- 
+Regards,
+Sudeep
