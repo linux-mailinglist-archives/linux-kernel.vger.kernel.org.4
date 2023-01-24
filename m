@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7061B679037
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16375679051
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjAXFpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 00:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
+        id S232937AbjAXFtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 00:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbjAXFps (ORCPT
+        with ESMTP id S233034AbjAXFtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 00:45:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2ED3BDB9;
-        Mon, 23 Jan 2023 21:45:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC5B6B81061;
-        Tue, 24 Jan 2023 05:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D010C4339E;
-        Tue, 24 Jan 2023 05:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674539102;
-        bh=ScyvuQegV5fO5JfKO+uV9dbs09GznxoP8p2RacsRoQ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aieViE0VmzSNNzQQLemLOpdylwN3jL7h9CPVewNebScLHhnL6HbDltpq7BhXWJJvL
-         LXfTknZc9hhbCzA5B46rD3D5TN51FTYw+ytSFgSdInkHjI2g8VtiYcPbPTXhm+OxHU
-         DD5mlN7P8/CCSHzUj5k4rZYLrpbTCxIxHyVbvSs2YdwMidEkmVZimrZgISpBkSCrfn
-         4ilHh3eV0pBTOe0dZSE2a09NlORVhdAvHRneo1OrNwNlv3MqPNTdhGj1dxNpvyMr4v
-         11v+OCkvfU2AAAxr8lg7mwMHgpY1AgeGNiYA8FQT2SWO6eKTvIkQmM4kaOGL37Vse3
-         P0x5P4osYN0Yw==
-Date:   Tue, 24 Jan 2023 14:44:57 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V1] bootconfig: Increase max nodes of bootconfig from
- 1024 to 8192 for DCC support
-Message-Id: <20230124144457.00fb60b872c701d70808215e@kernel.org>
-In-Reply-To: <1674536682-18404-1-git-send-email-quic_schowdhu@quicinc.com>
-References: <1674536682-18404-1-git-send-email-quic_schowdhu@quicinc.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 24 Jan 2023 00:49:02 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793253C294;
+        Mon, 23 Jan 2023 21:48:14 -0800 (PST)
+Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30O5j52V2628757
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 23 Jan 2023 21:45:07 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30O5j52V2628757
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674539111;
+        bh=1PBmtzTOvoQB1NIFT9gzjuVDOXpEJFnIM/BFNCdi4UA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FgKFvQgQuXtAEPMUNy7oaizi2x7WHXMtfVem1W87yPbrEwnT1A+cqjLuf+cS9I3XK
+         87mL7vIlCRR82Tafi/DJGcQEP+5sF+S/viv9woS004+wfWm6rcHrZw7/g6JuouxamY
+         8x0Ss1WVbdVHH/4oI5yT/SYbd5OghFXF7ICEUrQHMbODrlocpOtHrg9YPk9Uipbdbv
+         bcIND06el5Py3JD52lvTpzZagAkruMCOFMrBKymZyJBbernDEGSlDKHKHV/eSNSy+v
+         DTLh4wANulqbQdTN8hyUx/e4d5nTsBpIEmRYOwJy6e8xaQKPA6oTsVIvMBlI9N+Eff
+         ukFIJIIvGbnmg==
+Message-ID: <ea9dbc3c-0148-ecf1-d68f-2fcd1d026c36@zytor.com>
+Date:   Mon, 23 Jan 2023 21:44:59 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH v2 1/2] selftests/x86: sysret_rip: Handle syscall in a
+ FRED system
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xin Li <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com>
+ <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
+ <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
+ <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-2-ammarfaizi2@gnuweeb.org>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20230124022729.596997-2-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 10:34:42 +0530
-Souradeep Chowdhury <quic_schowdhu@quicinc.com> wrote:
 
-> The Data Capture and Compare(DCC) is a debugging tool that uses the bootconfig
-> for configuring the register values during boot-time. Increase the max nodes
-> supported by bootconfig to cater to the requirements of the Data Capture and
-> Compare Driver.
 
-Thanks, this looks good to me :)
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
+On 1/23/23 18:27, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 > 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> The current selftest asserts %r11 == %rflags after the 'syscall'
+> returns to user. Such an assertion doesn't apply to a FRED system
+> because in a FRED system the 'syscall' instruction does not set
+> %r11=%rflags and %rcx=%rip.
+> 
+> Handle the FRED case. Now, test that:
+> 
+>    - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+>    - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+> 
+> The 'raise()' function from libc can't be used to control those
+> registers. Therefore, create a syscall wrapper in inline Assembly to
+> fully control them.
+> 
+> Fixes: 660602140103 ("selftests/x86: Add a selftest for SYSRET to noncanonical addresses")
+> Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
+> Reported-by: Xin Li <xin3.li@intel.com>
+> Co-developed-by: "H. Peter Anvin" <hpa@zytor.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 > ---
->  include/linux/bootconfig.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> index 1611f9d..ca73940 100644
-> --- a/include/linux/bootconfig.h
-> +++ b/include/linux/bootconfig.h
-> @@ -59,7 +59,7 @@ struct xbc_node {
->  /* Maximum size of boot config is 32KB - 1 */
->  #define XBC_DATA_MAX	(XBC_VALUE - 1)
-> 
-> -#define XBC_NODE_MAX	1024
-> +#define XBC_NODE_MAX	8192
->  #define XBC_KEYLEN_MAX	256
->  #define XBC_DEPTH_MAX	16
-> 
-> --
-> 2.7.4
+> Need hpa's sign off.
 > 
 
+For both patches:
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+
