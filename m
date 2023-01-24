@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABBD67A4DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E1667A4D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbjAXVT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S234858AbjAXVTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbjAXVTo (ORCPT
+        with ESMTP id S234998AbjAXVTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:19:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA9351C4C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:18:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674595084;
+        Tue, 24 Jan 2023 16:19:02 -0500
+Received: from out-245.mta0.migadu.com (out-245.mta0.migadu.com [91.218.175.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D9E49575
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:18:41 -0800 (PST)
+Date:   Tue, 24 Jan 2023 21:18:10 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1674595095;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Cp0bQAXkNYOtockNiUGfxh3g6gE8MLITE+yOOD5XVmY=;
-        b=Ol3HFvmfzDyCAa9x4aDFkAxBtRNKNEPEsYkqxnwQCMIjD+23z11IGfEih3lxhoX3bjb2bY
-        clYjhrCMFvSc9qrwZ1cDHMBnzHGgagTGhUzoWd+2ITQ5YP9G4eyDSe5Ka8EIupKS7DfAGc
-        cgHSirxzs/TnWU6FgD9UhxdE+GaukKE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-260-nDIqO7AtO72E8yH6xux5Lw-1; Tue, 24 Jan 2023 16:18:01 -0500
-X-MC-Unique: nDIqO7AtO72E8yH6xux5Lw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 510B485C06B;
-        Tue, 24 Jan 2023 21:18:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 70FD9140EBF5;
-        Tue, 24 Jan 2023 21:17:58 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <b7833fd7-eb7d-2365-083d-5a01b9fee464@nvidia.com>
-References: <b7833fd7-eb7d-2365-083d-5a01b9fee464@nvidia.com> <20230124170108.1070389-1-dhowells@redhat.com> <20230124170108.1070389-6-dhowells@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Christoph Hellwig" <hch@lst.de>
-Subject: Re: [PATCH v9 5/8] block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted logic
+        bh=CnSq4mBbw8yIBMhIRKayETuEHeib8k7L9ZTqOeYi3PI=;
+        b=MgrUEDLCALpdGP50oLgldB4thgGtzyIH2dBkSuxkTLVU9dFZOdt4boNR1m6wbC7ZVk08LO
+        huugRiBeVoC41yib++Q7KKxT/txti822KALNGV+56GxuLP5E37h9HOEsfpzxoQicWYkoUY
+        Qz0ak+yrCJ0K2x15ayvuCIBYWMIgJpE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Will Deacon <will@kernel.org>
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        seanjc@google.com, kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] MAINTAINERS: Add Oliver Upton as co-maintainer of
+ KVM/arm64
+Message-ID: <Y9BLEj+/doAKmXzP@google.com>
+References: <20230123210256.2728218-1-oliver.upton@linux.dev>
+ <20230124093728.GA26080@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1353770.1674595077.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 24 Jan 2023 21:17:57 +0000
-Message-ID: <1353771.1674595077@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124093728.GA26080@willie-the-truck>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-John Hubbard <jhubbard@nvidia.com> wrote:
+On Tue, Jan 24, 2023 at 09:37:29AM +0000, Will Deacon wrote:
+> On Mon, Jan 23, 2023 at 09:02:56PM +0000, Oliver Upton wrote:
+> > Going forward I intend to help Marc with maintaining KVM/arm64. We've
+> > spoken about this quite a bit and he has been a tremendous help in
+> > ramping up to the task (thank you!). We haven't worked out the exact
+> > details of how the process will work, but the goal is to even out the
+> > maintenance responsibilities to give us both ample time for development.
+> > 
+> > To that end, updating the maintainers entry to reflect the change.
+> > 
+> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> > ---
+> >  MAINTAINERS | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 42fc47c6edfd..7323efcc1270 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -11355,9 +11355,9 @@ F:	virt/kvm/*
+> >  
+> >  KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)
+> >  M:	Marc Zyngier <maz@kernel.org>
+> > +M:	Oliver Upton <oliver.upton@linux.dev>
+> 
+> Ya know, alphabetical order tends to put Mr Z at the bottom of the list,
+> but I can understand why you don't necessarily want to be first in the
+> pack just yet!
 
-> > +	/* for now require references for all pages */
-> =
+I think you may've spotted my intentions here :-) Short of any
+objections, I'll shamelessly leave Marc in the direct line of fire until
+someone alphabetizes it.
 
-> Maybe just delete this comment?
+> In any case, this is really great to see:
+> 
+> Acked-by: Will Deacon <will@kernel.org>
 
-Christoph added that.  Presumably because this really should move to pinni=
-ng
-or be replaced with iomap, but it's not straightforward either way.  Chris=
-toph?
+Thanks!
 
-David
-
+-- 
+Thanks,
+Oliver
