@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16064678E7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5E5678E7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbjAXCoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S232161AbjAXCri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjAXCoC (ORCPT
+        with ESMTP id S231245AbjAXCrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:44:02 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B1C1BF9;
-        Mon, 23 Jan 2023 18:43:51 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 8F807C01F; Tue, 24 Jan 2023 03:44:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1674528248; bh=HTS1ZbZA1TUADjld+raUJqmd4pxeyrVKtWHVtO56iNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F0RhzEZND/5LfsABCtWDR9xa5yhiK9tt1DKJQXleksWBvc6ywXFdBCTRbr2HrsH+b
-         HKCY4DkKcoDz0FRh8mpcnsl1sHo+1jT5l/0vnc9KhF2Je0uL+dbmKBHaIdJCKryWrt
-         1xL5ac8aLhmrMde6i/bPOZM1MA4Y0bWLfUP+guU5Bue5ZAUMIxUgf0jruFy3MNMEII
-         eINNCfhSJzMdJ2U+fb2gVBaO7sMRGeQn9ueTAiuHHbyKO8SyuS01YBEZw2ofpeoid3
-         KvjrduDcqbFSM3D27Y/rOvznSepcx3/RDjglWsD87pRtNhaTgG59x/Q4oJdl2FWyIx
-         2KoOY3qjtJWnw==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id C1AD8C009;
-        Tue, 24 Jan 2023 03:44:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1674528247; bh=HTS1ZbZA1TUADjld+raUJqmd4pxeyrVKtWHVtO56iNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aYX5LCOYgSENiFQRS/BnkaxgHeqU1ZlFISHHmmZavmJCJwIFNCTUy1l66kJaiBkhU
-         SqcaPEdijGw98Dd9dmAUykYj/BeFZrz+O61dQbYZtMmoDLqFjH0uyzWyl6to4BlaCU
-         pcp6ug6Wv8npzAANS/p/P4ZKmmlBUPzK+6MsYAQI8Zk1o6CJPGw7gpblEquCgr1Nsu
-         n6lo8t1LDhJWNoi/YAMSvWVtUtkObpj4slGWFGXfdV+ZevBV0d87cxP6Yf3Ku5He0N
-         0vus9nPMBAKZCdMPTsQPB31BodKxX7e1k3lF8TBQZx2z4WrIVvlg3XiLqrXyzsH2E/
-         7Mh2T2UWwNiFg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id ed1f598f;
-        Tue, 24 Jan 2023 02:43:43 +0000 (UTC)
-Date:   Tue, 24 Jan 2023 11:43:28 +0900
-From:   asmadeus@codewreck.org
-To:     Eric Van Hensbergen <evanhensbergen@icloud.com>
-Cc:     v9fs-developer@lists.sourceforge.net, rminnich@gmail.com,
-        lucho@ionkov.net, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux_oss@crudebyte.com
-Subject: Re: [PATCH v2 03/10] Consolidate file operations and add readahead
- and writeback
-Message-ID: <Y89F0KGdEBcwu39Y@codewreck.org>
-References: <20221217183142.1425132-1-evanhensbergen@icloud.com>
- <20221218232217.1713283-1-evanhensbergen@icloud.com>
- <20221218232217.1713283-4-evanhensbergen@icloud.com>
+        Mon, 23 Jan 2023 21:47:37 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0281BF9;
+        Mon, 23 Jan 2023 18:47:36 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id n24-20020a0568301e9800b006865671a9d5so8473043otr.6;
+        Mon, 23 Jan 2023 18:47:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YqexzIVMo40KP8hIDZ4Shizea2o4Dbmk1MKMn4wNOtQ=;
+        b=UDKZR+Go9AIqlZ4sWp2iWsmkDb5CBx29aKwvioHxza+4UnQK29g+4zpcO87nTwopdj
+         sSqa+ekMs9nNtjGYZFoCzQLK7DsMRsuKMMidQgRQ3uCNmxgfyBwVp1iTIo1As7N4fhoV
+         /BQEyY6blqChslzEKOfJZU4XPvvHxT9kf47pWBRyl3P9jgenCroGOxIYGndg2d5VR1To
+         YNc9A3a/B8rdRpmP0sOaiy9KqJq9H2cKmacYl8+rkQ0C2+R5kAxXDNMlczDzRjh33ChT
+         Ru1yfYPJnWlPjbIRy1xYV4cOsJYVEywGolW/d4BJQ3bFmfyJNroExu9tE8i/udMSxTRK
+         h4wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqexzIVMo40KP8hIDZ4Shizea2o4Dbmk1MKMn4wNOtQ=;
+        b=tQLf/bx1c7JAg9zuOs3K3svKgNjU9slxjCu4qxKtUgQDExbEIT4ebaATMkW+fYcpGH
+         /C1pxVJMqPbavsH96jQj4p5YJwJg+NWcAf4YrezJ5HEMsPW6fD7Hyyv9Ysc6PMg5MBS7
+         Hqyt9EQK99FigbvUtrTaC7B3lPYnlOsyUvXFbc/QUo9uWz8soe7K38JveW+cCQ9CBfCX
+         o/SEu7nDaDtD3h/d7ePEfYohjx0F6JN/sxChOX4LKprmATCrTtorEEba6Kp9ToFu30Gs
+         e2OHGu1mpU/Nxwa84tsB3SwDMVRJRqOv0EDdWUn9JIjGqmmXDX1Iptn7ygmOUxBLtO1q
+         tQ7w==
+X-Gm-Message-State: AFqh2kp0B8OrbE0qq1DfdFq35pZYGu5Y+3k1BGXeWR2s8BG2mQf0VoEW
+        VjtsgU7HTgTjfeGNultEKuA=
+X-Google-Smtp-Source: AMrXdXsiCbgg7HVN6mXN7b30bstYk+4L2gna7rlOHKvcnJ4xcDLaSqhzHprZxFED6URZlv57ZqLidQ==
+X-Received: by 2002:a05:6830:61c:b0:684:c128:5495 with SMTP id w28-20020a056830061c00b00684c1285495mr12704506oti.10.1674528455878;
+        Mon, 23 Jan 2023 18:47:35 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h22-20020a9d6016000000b00670461b8be4sm414495otj.33.2023.01.23.18.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 18:47:35 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 23 Jan 2023 18:47:34 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 00/37] 4.19.271-rc1 review
+Message-ID: <20230124024734.GB1495310@roeck-us.net>
+References: <20230122150219.557984692@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221218232217.1713283-4-evanhensbergen@icloud.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230122150219.557984692@linuxfoundation.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Van Hensbergen wrote on Sun, Dec 18, 2022 at 11:22:13PM +0000:
-> We had 3 different sets of file operations across 2 different protocol
-> variants differentiated by cache which really only changed 3
-> functions.  But the real problem is that certain file modes, mount
-> options, and other factors weren't being considered when we
-> decided whether or not to use caches.
+On Sun, Jan 22, 2023 at 04:03:57PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.271 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This consolidates all the operations and switches
-> to conditionals within a common set to decide whether or not
-> to do different aspects of caching.
+> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Eric Van Hensbergen <evanhensbergen@icloud.com>
-> ---
->  fs/9p/v9fs.c           |  30 ++++------
->  fs/9p/v9fs.h           |   2 +
->  fs/9p/v9fs_vfs.h       |   4 --
->  fs/9p/vfs_dir.c        |   9 +++
->  fs/9p/vfs_file.c       | 123 +++++++----------------------------------
->  fs/9p/vfs_inode.c      |  31 ++++-------
->  fs/9p/vfs_inode_dotl.c |  19 ++++++-
->  7 files changed, 71 insertions(+), 147 deletions(-)
-> 
-> diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
-> index 1675a196c2ba..536769cdf7c8 100644
-> --- a/fs/9p/vfs_dir.c
-> +++ b/fs/9p/vfs_dir.c
-> @@ -214,6 +214,15 @@ int v9fs_dir_release(struct inode *inode, struct file *filp)
->  	p9_debug(P9_DEBUG_VFS, "inode: %p filp: %p fid: %d\n",
->  		 inode, filp, fid ? fid->fid : -1);
->  	if (fid) {
-> +		if ((fid->qid.type == P9_QTFILE) && (filp->f_mode & FMODE_WRITE)) {
 
-dir release, but the fid is of type regular file ?
+Build results:
+	total: 155 pass: 154 fail: 1
+Failed builds:
+	i386:tools/perf
+Qemu test results:
+	total: 426 pass: 426 fail: 0
 
-Either way this doesn't look directly related to cache level
-consodilations, probably better in another commit.
+perf build failure:
 
-> +			int retval = file_write_and_wait_range(filp, 0, -1);
-> +
-> +			if (retval != 0) {
-> +				p9_debug(P9_DEBUG_ERROR,
-> +					"trying to flush filp %p failed with error code %d\n",
-> +					filp, retval);
-> +			}
-> +		}
->  		spin_lock(&inode->i_lock);
->  		hlist_del(&fid->ilist);
->  		spin_unlock(&inode->i_lock);
--- 
-Dominique
+util/env.c: In function ‘perf_env__arch’:
+cc1: error: function may return address of local variable [-Werror=return-local-addr]
+util/env.c:166:17: note: declared here
+  166 |  struct utsname uts;
+      |                 ^~~
+
+No one to blame but me, for switching the gcc version used to build perf
+to gcc 10.3.0 (from 9.4.0). The problem is fixed in the upstream kernel
+with commit ebcb9464a2ae3 ("perf env: Do not return pointers to local
+variables"). This patch applies to v5.4.y and earlier kernels.
+
+I'll leave it up to you if you want to apply the fix or not; I'll be
+happy to work around the problem in my tests otherwise. Either case,
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+since this is not a new problem.
+
+Thanks,
+Guenter
