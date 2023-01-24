@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764A9679B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B910679B68
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234792AbjAXOPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S234861AbjAXORN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234791AbjAXOPh (ORCPT
+        with ESMTP id S234822AbjAXORI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:15:37 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD18474FB;
-        Tue, 24 Jan 2023 06:15:21 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 42D451BF207;
-        Tue, 24 Jan 2023 14:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674569720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nIw7NLrNROmQKNYPnuHqk2CqEst9nY4HbXU+KKl/pwM=;
-        b=l286gH4zaStuaORA777qpXwbAcZhj+YncUk7uAzqZWieWArt4tThJzZODVGh3YOrFbJHtU
-        m8cKCADL7W5gTqH9C4sVG9v10R83cBxOoitdOMZmEMoIL3wjgzIRy0QYHkbhsJWb0M0q99
-        DSGZNYvWKavYM1d3HCPODu3BTzKd25pk8CS3NSrusau5hMrD7nXly7YbUmg2k2VKrKmcnT
-        SSI1M6d7PAkbbHtw+r41Jpo+T68ejoqYgqa4ScFyV9VHcOP2NXTAOmbhMvzAeJyPxkVLqr
-        xgz62FwAENgzCQVsiux7WoHiKL3FWptBkgnR5k1Toe7gRkcSgk14Mdyqzkmbsw==
-Date:   Tue, 24 Jan 2023 15:15:14 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
- controller
-Message-ID: <20230124151514.58d77765@bootlin.com>
-In-Reply-To: <81f80190-a05c-5d0d-11b2-a80573b86e1c@linaro.org>
-References: <20230113103759.327698-1-herve.codina@bootlin.com>
-        <20230113103759.327698-6-herve.codina@bootlin.com>
-        <316ddb81-8d13-71dd-3396-412e31cfb880@linaro.org>
-        <20230124104232.183cc9ff@bootlin.com>
-        <37a95380-ee68-5c3a-3b96-48cc8b525f19@linaro.org>
-        <20230124122347.1a531d0f@bootlin.com>
-        <81f80190-a05c-5d0d-11b2-a80573b86e1c@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Tue, 24 Jan 2023 09:17:08 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413FED52F;
+        Tue, 24 Jan 2023 06:17:04 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ODrUoe026106;
+        Tue, 24 Jan 2023 14:16:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=LU5OsjKuwBW6l12Ef/P6s8MXKpt4xlHQeDXksT/qW38=;
+ b=W3uJEPdGffSo+C8W5oH4MPmu92HIpCDRuLS5BKhHN/3OpDXS3hP/gVNdWTvGu/AGslxS
+ QUaaeWHIL2k2P0olZCRVf5jlj8lUqGDqX6Zhy1TBGNko/AlnCHHDbHmydcvjk+Xk71wu
+ 7yxMI4JSfE4XzTI6B02MdngOP77wki5aZel8zm1KkE/CwSDpSYrLWEHOaGCpFGm6K12M
+ GwuWf9tQVEJeSIDaFpDjW6qmtgpNGVxZ9XWcPgaAOLn4W/5iebXodgdtGmrUvNhETaiH
+ RSB1C4N5qpjQAT3k4ogt9VTx5cDUgQmbKe0dZz8r6pOy8F4MzdRMV0tkLAY0ja30esih cw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89gt51cq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 14:16:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30OEG5lN001102
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 14:16:05 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 24 Jan 2023 06:15:56 -0800
+From:   devi priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <marcel.ziswiler@toradex.com>,
+        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <tdas@codeaurora.org>,
+        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+Subject: [PATCH V1 0/8] Add minimal boot support for IPQ9574
+Date:   Tue, 24 Jan 2023 19:45:33 +0530
+Message-ID: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rruTB5FWrRxVWp7Wn7edqIj4v3CnEP1W
+X-Proofpoint-ORIG-GUID: rruTB5FWrRxVWp7Wn7edqIj4v3CnEP1W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=650 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ clxscore=1011 mlxscore=0 suspectscore=0 phishscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240129
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -76,150 +87,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 13:24:48 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+The IPQ9574 is Qualcomm's 802.11ax SoC for Routers,
+Gateways and Access Points.
 
-> On 24/01/2023 12:23, Herve Codina wrote:
-> > On Tue, 24 Jan 2023 11:02:52 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >  =20
-> >> On 24/01/2023 10:42, Herve Codina wrote: =20
-> >>> Hi Krzysztof,
-> >>>
-> >>> On Tue, 17 Jan 2023 12:31:09 +0100
-> >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >>>    =20
-> >>>> On 13/01/2023 11:37, Herve Codina wrote:   =20
-> >>>>> Add support for the QMC (QUICC Multichannel Controller)
-> >>>>> available in some PowerQUICC SoC such as MPC885 or MPC866.
-> >>>>>
-> >>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> >>>>> ---
-> >>>>>  .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      | 164 ++++++++++++++=
-++++
-> >>>>>  1 file changed, 164 insertions(+)
-> >>>>>  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_q=
-e/fsl,qmc.yaml
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,q=
-mc.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..3ec52f1635c8
-> >>>>> --- /dev/null
-> >>>>> +++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
-> >>>>> @@ -0,0 +1,164 @@
-> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>>>> +%YAML 1.2
-> >>>>> +---
-> >>>>> +$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,qmc.yaml#
-> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>>> +
-> >>>>> +title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
-> >>>>> +
-> >>>>> +maintainers:
-> >>>>> +  - Herve Codina <herve.codina@bootlin.com>
-> >>>>> +
-> >>>>> +description: |
-> >>>>> +  The QMC (QUICC Multichannel Controller) emulates up to 64 channe=
-ls within
-> >>>>> +  one serial controller using the same TDM physical interface rout=
-ed from
-> >>>>> +  TSA.
-> >>>>> +
-> >>>>> +properties:
-> >>>>> +  compatible:
-> >>>>> +    items:
-> >>>>> +      - enum:
-> >>>>> +          - fsl,mpc885-scc-qmc
-> >>>>> +          - fsl,mpc866-scc-qmc
-> >>>>> +      - const: fsl,cpm1-scc-qmc
-> >>>>> +
-> >>>>> +  reg:
-> >>>>> +    items:
-> >>>>> +      - description: SCC (Serial communication controller) registe=
-r base
-> >>>>> +      - description: SCC parameter ram base
-> >>>>> +      - description: Dual port ram base
-> >>>>> +
-> >>>>> +  reg-names:
-> >>>>> +    items:
-> >>>>> +      - const: scc_regs
-> >>>>> +      - const: scc_pram
-> >>>>> +      - const: dpram
-> >>>>> +
-> >>>>> +  interrupts:
-> >>>>> +    maxItems: 1
-> >>>>> +    description: SCC interrupt line in the CPM interrupt controller
-> >>>>> +
-> >>>>> +  fsl,tsa:
-> >>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >>>>> +    description: phandle to the TSA
-> >>>>> +
-> >>>>> +  fsl,tsa-cell-id:
-> >>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>>>> +    enum: [1, 2, 3]
-> >>>>> +    description: |
-> >>>>> +      TSA cell ID (dt-bindings/soc/fsl,tsa.h defines these values)
-> >>>>> +       - 1: SCC2
-> >>>>> +       - 2: SCC3
-> >>>>> +       - 3: SCC4     =20
-> >>>>
-> >>>> Is this used as argument to tsa? If so, this should be part of fsl,t=
-sa
-> >>>> property, just like we do for all syscon-like phandles.   =20
-> >>>
-> >>> Yes, indeed.
-> >>> I will move 'fsl,tsa' to 'fsl,tsa-cell' with 'fsl,tsa-cell' a phandle=
-/number
-> >>> pair (the phandle to TSA node and the TSA cell id to use)   =20
-> >>
-> >> Move to fsl,tsa, not from. =20
-> >=20
-> > Well, I plan to remove both fsl,tsa and fsl,tsa-cell-id and use this:
-> >   fsl,tsa-cell:
-> >     $ref: /schemas/types.yaml#/definitions/phandle-array
-> >     items:
-> >       - items:
-> >           - description: phandle to TSA node
-> >           - enum: [1, 2, 3]
-> >             description: |
-> >               TSA cell ID (dt-bindings/soc/fsl,tsa.h defines these valu=
-es)
-> >                - 1: SCC2
-> >                - 2: SCC3
-> >                - 3: SCC4
-> >     description:
-> >       Should be a phandle/number pair. The phandle to TSA node and the =
-TSA
-> >       cell ID to use.
-> >=20
-> > Is that what you were thinking about ? =20
->=20
-> Yes, except again, so third time, why calling this "cell"? Move it to
-> fsl,tsa.
->=20
+This series adds minimal board boot support for ipq9574-al02-c7 board
 
-Why calling this "cell" ? Just because we reference a "cell" using the TSA
-cell ID inside TSA and not the TSA itself.
+[V1]
+	Fixed all the review comments
 
-Maybe the problem is the term "cell" as it is not the DT definition of
-"cell" but the source/destination of the TSA routing.
+Poovendhan Selvaraj (1):
+  arm64: dts: qcom: Add ipq9574 SoC and AL02 board support
 
-TSA can route data from/to some "serial controller".
-These serial controllers are :
-- SCC (Serial Communication Controller)
-- SMC (Serial Management Controller)
-- UCC (Unified Communication Controller)
+devi priya (7):
+  dt-bindings: Add ipq9574 clock and reset definitions
+  clk: qcom: Add Global Clock Controller driver for IPQ9574
+  dt-bindings: pinctrl: qcom: Document IPQ9574 pinctrl driver
+  pinctrl: qcom: Add IPQ9574 pinctrl driver
+  dt-bindings: arm: qcom: Add ipq9574 compatible
+  dt-bindings: mmc: sdhci-msm: Document the IPQ9574 compatible
+  arm64: defconfig: Enable IPQ9574 SoC base configs
 
-Only SCCs are handled here.
+ .../devicetree/bindings/arm/qcom.yaml         |    7 +
+ .../bindings/clock/qcom,gcc-other.yaml        |   39 +-
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    |    1 +
+ .../bindings/pinctrl/qcom,ipq9574-tlmm.yaml   |  135 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts  |   78 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  285 ++
+ arch/arm64/configs/defconfig                  |    2 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-ipq9574.c                | 4301 +++++++++++++++++
+ drivers/pinctrl/qcom/Kconfig                  |   11 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-ipq9574.c        | 1007 ++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  |  213 +
+ include/dt-bindings/reset/qcom,ipq9574-gcc.h  |  164 +
+ 16 files changed, 6251 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq9574.c
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq9574.c
+ create mode 100644 include/dt-bindings/clock/qcom,ipq9574-gcc.h
+ create mode 100644 include/dt-bindings/reset/qcom,ipq9574-gcc.h
 
-Maybe the term "serial" makes more sense which will lead to
-  fsl,tsa-serial =3D <&tsa, SCC4>;
 
-Best regards,
-Herv=C3=A9
+base-commit: 7bf70dbb18820b37406fdfa2aaf14c2f5c71a11a
+-- 
+2.17.1
 
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
