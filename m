@@ -2,80 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D208667A599
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDFE67A59C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbjAXWU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S233815AbjAXWWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbjAXWUv (ORCPT
+        with ESMTP id S231538AbjAXWWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:20:51 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952BA48A1B;
-        Tue, 24 Jan 2023 14:20:43 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0C8B8739;
-        Tue, 24 Jan 2023 22:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0C8B8739
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1674598843; bh=BFuMfm2b/s+EbxALlbvXjniNZ5TTunbX1CSvm2qW0fE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UII91CncQrnQQvKvjNPN2T6N1IsKFU7gfAE0phP1+fT0Kc2PCtZ4J/EbxhvAxm+lG
-         AZj3JWcd1BNvVdqPDA/IhBmMyxX6FtCirfHoecZGi5wEEvVpaDUKf+Ay1oy9+yAwCx
-         La0kbOdLLOA7QqFGeZ65Gm2QqNFj3Ket3smHsnxEPYFtJpiWXuVqk/SZ0ilqMNFRlf
-         JSgAvNYzdJrV4c6HimI4Ecx6B8FDIUPbWSbEWjxpOA+ZMlfTLw7pqa+gP85nWu5fgo
-         kbWs+pz6s7fjqN/CdpixL4EotCX+rpBQQhYqO056+ECHw+gCAXJyZSzFch6Myw+2Va
-         y8XulmEf1gG1A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, ogabbay@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: Re: [PATCH] docs: accel: Fix debugfs path
-In-Reply-To: <1674145568-31513-1-git-send-email-quic_jhugo@quicinc.com>
-References: <1674145568-31513-1-git-send-email-quic_jhugo@quicinc.com>
-Date:   Tue, 24 Jan 2023 15:20:42 -0700
-Message-ID: <87mt67fubp.fsf@meer.lwn.net>
+        Tue, 24 Jan 2023 17:22:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BB52ED7B;
+        Tue, 24 Jan 2023 14:22:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=85wQJ1T0FgB7jdbTAIU4N89j02y6DNu0JcJ0cGxxy/A=; b=sP25CJ0IW8VYRwPigUMtcw6N9b
+        phVCeLBV2z+P9cMTFXxAlmba0Vjjmh1WFbZ5R8A8gRkskiSlcXjmGs72zROWoH6Ca4+W5ZQc+bdGo
+        M1f+aikAxcdjR34nquiiyaaw99/q7xYBX4848Z4Q+LBWlP6sU6jhc5hkIYGZf3tGmKlFemHDEKKDP
+        3kDIRghGi55JsYE1wAS6DiDgtHqtCIdC7u00Ohd/jULdmCD9I4pXno4BhSKsoO8tYa5B4/8f/cqWe
+        2aUP1is/8cFIu2ZxMhkZCBa0BfB8z0iR8fPizEOZpz/QavfaKheLfIWYPEmNiCaDzt31rbAtNknmT
+        Nb6athTg==;
+Received: from [2601:1c2:d80:3110::9307]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKRgF-005UY3-L9; Tue, 24 Jan 2023 22:22:15 +0000
+Message-ID: <9cce70d9-bbcc-0026-d872-f4d1f90148be@infradead.org>
+Date:   Tue, 24 Jan 2023 14:22:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 1/1] arch/sh: avoid spurious sizeof-pointer-div warning
+Content-Language: en-US
+To:     Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
+        linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+References: <619fa552-c988-35e5-b1d7-fe256c46a272@mkarcher.dialup.fu-berlin.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <619fa552-c988-35e5-b1d7-fe256c46a272@mkarcher.dialup.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffrey Hugo <quic_jhugo@quicinc.com> writes:
+Hi--
 
-> The device specific directory in debugfs does not have "accel".  For
-> example, the documentation says device 0 should have a debugfs entry as
-> /sys/kernel/debug/accel/accel0/ but in reality the entry is
-> /sys/kernel/debug/accel/0/
->
-> Fix the documentation to match the implementation.
->
-> Fixes: 8c5577a5ccc6 ("doc: add documentation for accel subsystem")
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+On 1/24/23 13:48, Michael Karcher wrote:
+> Gcc warns about the pattern sizeof(void*)/sizeof(void), as it looks like
+> the abuse of a pattern to calculate the array size. This pattern appears
+> in the unevaluated part of the ternary operator in _INTC_ARRAY if the
+> parameter is NULL.
+> 
+> The replacement uses an alternate approach to return 0 in case of NULL
+> which does not generate the pattern sizeof(void*)/sizeof(void), but still
+> emits the warning if _INTC_ARRAY is called with a nonarray parameter.
+> 
+> This patch is required for successful compilation with -Werror enabled.
+> 
+> The idea to use _Generic for type distinction is taken from Comment #7
+> inhttps://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483  by Jakub Jelinek
+> 
+> Signed-off-by: Michael Karcher<kernel@mkarcher.dialup.fu-berlin.de>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+Thanks.
+
 > ---
->  Documentation/accel/introduction.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/accel/introduction.rst b/Documentation/accel/introduction.rst
-> index 6f31af1..11cade5 100644
-> --- a/Documentation/accel/introduction.rst
-> +++ b/Documentation/accel/introduction.rst
-> @@ -69,7 +69,7 @@ The accelerator devices will be exposed to the user space with the dedicated
->  
->  - device char files - /dev/accel/accel*
->  - sysfs             - /sys/class/accel/accel*/
-> -- debugfs           - /sys/kernel/debug/accel/accel*/
-> +- debugfs           - /sys/kernel/debug/accel/*/
->  
-Applied, thanks.
+> (resend of the mail as plaintext only instead of multipart/alternative)
+> History:
+> v5:
+>   - Cleanly generated the patch
+> v4:
+>   - Put the case distinction into the numerator instead of the denominator
+>   - Refactor the case disctinction into a second macro
+> v3:
+>   - I had a stern discussion with Thunderbird about not mangling the
+>     space characters in my email, and I hope spaces get sent as standard
+>     spaces now
+> v2:
+>   - improve title and remove mostly redundant first sentence of the
+>     description
+>   - adjust formatting of the _Generic construction
+> 
+> diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
+> index c255273b0281..37ad81058d6a 100644
+> --- a/include/linux/sh_intc.h
+> +++ b/include/linux/sh_intc.h
+> @@ -97,7 +97,10 @@ struct intc_hw_desc {
+>         unsigned int nr_subgroups;
+>  };
+> 
+> -#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
+> +#define _INTC_SIZEOF_OR_ZERO(a) (_Generic(a,                 \
+> +                                 typeof(NULL):  0,           \
+> +                                 default:       sizeof(a)))
+> +#define _INTC_ARRAY(a) a, _INTC_SIZEOF_OR_ZERO(a)/sizeof(*a)
+> 
+>  #define INTC_HW_DESC(vectors, groups, mask_regs,       \
+>                      prio_regs, sense_regs, ack_regs)   \
+> 
+> 
+> 
 
-jon
+-- 
+~Randy
