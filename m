@@ -2,119 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5E5678E7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA5F678E83
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjAXCri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
+        id S231511AbjAXCs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjAXCrh (ORCPT
+        with ESMTP id S232587AbjAXCs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:47:37 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0281BF9;
-        Mon, 23 Jan 2023 18:47:36 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id n24-20020a0568301e9800b006865671a9d5so8473043otr.6;
-        Mon, 23 Jan 2023 18:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YqexzIVMo40KP8hIDZ4Shizea2o4Dbmk1MKMn4wNOtQ=;
-        b=UDKZR+Go9AIqlZ4sWp2iWsmkDb5CBx29aKwvioHxza+4UnQK29g+4zpcO87nTwopdj
-         sSqa+ekMs9nNtjGYZFoCzQLK7DsMRsuKMMidQgRQ3uCNmxgfyBwVp1iTIo1As7N4fhoV
-         /BQEyY6blqChslzEKOfJZU4XPvvHxT9kf47pWBRyl3P9jgenCroGOxIYGndg2d5VR1To
-         YNc9A3a/B8rdRpmP0sOaiy9KqJq9H2cKmacYl8+rkQ0C2+R5kAxXDNMlczDzRjh33ChT
-         Ru1yfYPJnWlPjbIRy1xYV4cOsJYVEywGolW/d4BJQ3bFmfyJNroExu9tE8i/udMSxTRK
-         h4wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqexzIVMo40KP8hIDZ4Shizea2o4Dbmk1MKMn4wNOtQ=;
-        b=tQLf/bx1c7JAg9zuOs3K3svKgNjU9slxjCu4qxKtUgQDExbEIT4ebaATMkW+fYcpGH
-         /C1pxVJMqPbavsH96jQj4p5YJwJg+NWcAf4YrezJ5HEMsPW6fD7Hyyv9Ysc6PMg5MBS7
-         Hqyt9EQK99FigbvUtrTaC7B3lPYnlOsyUvXFbc/QUo9uWz8soe7K38JveW+cCQ9CBfCX
-         o/SEu7nDaDtD3h/d7ePEfYohjx0F6JN/sxChOX4LKprmATCrTtorEEba6Kp9ToFu30Gs
-         e2OHGu1mpU/Nxwa84tsB3SwDMVRJRqOv0EDdWUn9JIjGqmmXDX1Iptn7ygmOUxBLtO1q
-         tQ7w==
-X-Gm-Message-State: AFqh2kp0B8OrbE0qq1DfdFq35pZYGu5Y+3k1BGXeWR2s8BG2mQf0VoEW
-        VjtsgU7HTgTjfeGNultEKuA=
-X-Google-Smtp-Source: AMrXdXsiCbgg7HVN6mXN7b30bstYk+4L2gna7rlOHKvcnJ4xcDLaSqhzHprZxFED6URZlv57ZqLidQ==
-X-Received: by 2002:a05:6830:61c:b0:684:c128:5495 with SMTP id w28-20020a056830061c00b00684c1285495mr12704506oti.10.1674528455878;
-        Mon, 23 Jan 2023 18:47:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h22-20020a9d6016000000b00670461b8be4sm414495otj.33.2023.01.23.18.47.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 18:47:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 23 Jan 2023 18:47:34 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 00/37] 4.19.271-rc1 review
-Message-ID: <20230124024734.GB1495310@roeck-us.net>
-References: <20230122150219.557984692@linuxfoundation.org>
+        Mon, 23 Jan 2023 21:48:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD1432E64;
+        Mon, 23 Jan 2023 18:48:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28698B80FCD;
+        Tue, 24 Jan 2023 02:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20A3C4339B;
+        Tue, 24 Jan 2023 02:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674528532;
+        bh=txixw/DyRM2x3mOH5v36EhVcGwhyzbgQWa88XOxMgaI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K4iUz7vgILKzfm+t0OX1DEKigV+FtI2kNKT8Txxb5q4N1Ck9fZEQesq0/u2OMhpWN
+         EWMYMm24bWKBi9Jtt2Oftz/DcgtKGyL4PUVfmHXxjHZjexYQESv/jRaSPRSHTqPKga
+         Ws4blaslEnzXwyuS2gKXZOED11+3WsvBmwsD7RkRHzHcodHb3t0gsVZ65NL+HFbelD
+         +tBimPLb6ArVsj/ERZ0Mm0MkvJRQsDo/cPl61Ep5510jibNfn5IPUCFDUxHqJXiwJv
+         pysb5kC70dEY3pIJrJP1qqQ965Ud6uhBYDnOUv3Oucys6Ms42MQUI3FuOLcywD7ROO
+         W4M8YBd5eVYzw==
+Received: by mail-oi1-f178.google.com with SMTP id p185so12190392oif.2;
+        Mon, 23 Jan 2023 18:48:52 -0800 (PST)
+X-Gm-Message-State: AFqh2koW81CEPXo4ls5O9cYFT21TnTebvpYIOaP4GUi7Bt3+uDTXmjD9
+        06NOdm5CUtjW8XvGBiKfAYVF4CeTR2cHO/oCW8o=
+X-Google-Smtp-Source: AMrXdXt7t+66BbeTn/cyRB6k9WMjKHVNKVrBwYd/JJ/GbD3VOJAZ6mscXLLnr1lfRdHerwkZ1Dz6c+yS/PJNoa2cQ8I=
+X-Received: by 2002:aca:acd5:0:b0:364:5d10:7202 with SMTP id
+ v204-20020acaacd5000000b003645d107202mr1093092oie.194.1674528532066; Mon, 23
+ Jan 2023 18:48:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230122150219.557984692@linuxfoundation.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230123052653.711899-1-masahiroy@kernel.org> <Y88NX11/LcnfloYk@google.com>
+In-Reply-To: <Y88NX11/LcnfloYk@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 24 Jan 2023 11:48:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASfY+2w-aN0LQs0_gB=ASRyJoXSobsqzGa0BNL2sqpJeA@mail.gmail.com>
+Message-ID: <CAK7LNASfY+2w-aN0LQs0_gB=ASRyJoXSobsqzGa0BNL2sqpJeA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: do not automatically add -w option to modpost
+To:     William McVicker <willmcvicker@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 04:03:57PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.271 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> Anything received after that time might be too late.
-> 
+On Tue, Jan 24, 2023 at 7:42 AM William McVicker
+<willmcvicker@google.com> wrote:
+>
+> On 01/23/2023, Masahiro Yamada wrote:
+> > When there is a missing input file (vmlinux.o or Module.symvers), you
+> > are likely to get a ton of unresolved symbols.
+> >
+> > Currently, Kbuild automatically adds the -w option to allow module builds
+> > to continue with warnings instead of errors.
+> >
+> > This may not be what the user expects because it is generally more useful
+> > to catch all possible issues at build time instead of at run time.
+> >
+> > Let's not do what the user did not ask.
+> >
+> > If you still want to build modules anyway, you can proceed by explicitly
+> > setting KBUILD_MODPOST_WARN=1. Since you may miss a real issue, you need
+> > to be aware of what you are doing.
+> >
+> > Suggested-by: William McVicker <willmcvicker@google.com>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/Makefile.modpost | 8 +++-----
+> >  1 file changed, 3 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> > index 43343e13c542..9254ed811ddd 100644
+> > --- a/scripts/Makefile.modpost
+> > +++ b/scripts/Makefile.modpost
+> > @@ -121,16 +121,14 @@ modpost-args += -e $(addprefix -i , $(KBUILD_EXTRA_SYMBOLS))
+> >
+> >  endif # ($(KBUILD_EXTMOD),)
+> >
+> > -ifneq ($(missing-input),)
+> > -modpost-args += -w
+> > -endif
+> > -
+> >  quiet_cmd_modpost = MODPOST $@
+> >        cmd_modpost = \
+> >       $(if $(missing-input), \
+> >               echo >&2 "WARNING: $(missing-input) is missing."; \
+> >               echo >&2 "         Modules may not have dependencies or modversions."; \
+> > -             echo >&2 "         You may get many unresolved symbol warnings.";) \
+> > +             echo >&2 "         You may get many unresolved symbol errors.";) \
+>
+> You need to move the closing parenthesis to come at the end of these
+> echo messages. Otherwise you get this new message unconditionally.
 
-Build results:
-	total: 155 pass: 154 fail: 1
-Failed builds:
-	i386:tools/perf
-Qemu test results:
-	total: 426 pass: 426 fail: 0
 
-perf build failure:
+Ah, thanks for catching it.
 
-util/env.c: In function ‘perf_env__arch’:
-cc1: error: function may return address of local variable [-Werror=return-local-addr]
-util/env.c:166:17: note: declared here
-  166 |  struct utsname uts;
-      |                 ^~~
 
-No one to blame but me, for switching the gcc version used to build perf
-to gcc 10.3.0 (from 9.4.0). The problem is fixed in the upstream kernel
-with commit ebcb9464a2ae3 ("perf env: Do not return pointers to local
-variables"). This patch applies to v5.4.y and earlier kernels.
+> I also found during testing that the refactoring in commit f73edc8951b2
+> ("kbuild: unify two modpost invocations") dropped the check for missing
+> KBUILD_EXTRA_SYMBOLS. That means if an external module depends on
+> another external module and sets:
+>
+>   KBUILD_EXTRA_SYMBOLS=/path/to/ext_module/Module.symvers
+>
+> ... then make will fail even with KBUILD_MODPOST_WARN=1 since we
+> unconditionally add KBUILD_EXTRA_SYMBOLS to the modpost-args like this:
+>
+>   modpost-args += -e $(addprefix -i , $(KBUILD_EXTRA_SYMBOLS))
+>
+> To fix this, I suggest you also take the following patch so that
+> KBUILD_MODPOST_WARN=1 will allow you to skip those unresolved symbols as
+> well:
 
-I'll leave it up to you if you want to apply the fix or not; I'll be
-happy to work around the problem in my tests otherwise. Either case,
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+How is this useful?
 
-since this is not a new problem.
+KBUILD_EXTRA_SYMBOLS is explicitly specified by the user
+via the command line or the environment variable.
 
-Thanks,
-Guenter
+If $(KBUILD_EXTRA_SYMBOLS) does not exist,
+it is a user's fault, isn't it?
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
