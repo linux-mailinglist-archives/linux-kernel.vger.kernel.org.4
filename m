@@ -2,62 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C247B6791BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7285B6791BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbjAXHPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        id S233483AbjAXHQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjAXHPG (ORCPT
+        with ESMTP id S233477AbjAXHQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:15:06 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A86D2D77;
-        Mon, 23 Jan 2023 23:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QqtdrcIQh0doLs5ICncqDJLHAC8tMhUvfthajetJCxQ=; b=qFROB4Dkc8xISIjMpSDgGWgvRn
-        7QSEMmyXl2HYJjjD9/5jKHr7yXccUg6eNwyYUGPCLgAaSWAZ3U4BZrt53sFci13hTGegtWPhTFJRL
-        XPltHXFXUVrsp7pzeRYtWp2To3OP8woghihKpz7S6HUipOPBosyDweSVV/SUtlZpl1Zy7RluNs7L6
-        f++4Aapb2Rx3Qt3ZHwgxb0mGwNj1QnqasIPCyB40s4DbG50TlbAZLKO+a2oneaEAQZQIHMhNCkwL8
-        Z7JpLA6XOZtl75moZRMvx2DZ0Ah3A6akKX0ZImJJYIQOBOW9CP/+P6D3aK3YLW8gvmuHxu6Jc3F+t
-        oiZU8bUg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKDWK-002byh-Fb; Tue, 24 Jan 2023 07:15:04 +0000
-Date:   Mon, 23 Jan 2023 23:15:04 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        memxor@gmail.com
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
- definitions
-Message-ID: <Y8+FeH7rz8jDTubt@infradead.org>
-References: <20230123171506.71995-1-void@manifault.com>
- <20230123171506.71995-4-void@manifault.com>
+        Tue, 24 Jan 2023 02:16:13 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D003AA6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:16:11 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id j5so294846pjn.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:16:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SiurnOYAkeKt29fHrAzebFb+oWYWVydRMZlV3KhJgps=;
+        b=FIEUh4JxydUOaCsXsiTa4mg/Yx4/E35uzA6fUk4BLH+osNOAqiLKTI+Bh7khgxLGpz
+         LiyB/RxEwe1voPsIZsn2Jm54v/4OK/Q3980vm1SHgI3Rv0LL2A7zKDpvLGg+te33hZAm
+         L6JkFomSbbmFmYeE+wgXyadq7dx8GgWj0hDYmBJORKpSQNgVWm1IHKfiaccGdYvMEp02
+         wFqM4axXMSoll1urC1zBGQufqGIqTdrRtHp475dwAOapcVSjosLIRS10c8fYLWXodpvD
+         X5IGvHGiyu75LneBXq2ASRWA3bhQPwtvwguDw/tyulIl1ti+6rwGsxcbg5VxVhdClxxJ
+         dNcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SiurnOYAkeKt29fHrAzebFb+oWYWVydRMZlV3KhJgps=;
+        b=e0PRqrw1X2Nx2PRc9aPlJ8V8gSnGYeW3FnAxq/KSnPbnGyUSPZ0au8JlyNPqNTHvCf
+         mG7nJcWhntumQOyWdKD5c788j8SU1tPFAmrvEw50Ren3kpaypJMJftyKVbOW3uSZxgml
+         lQJ/8LgUWkRiGkHDEArBhsxvLDfOzBcg4pnQ0u6oNo7oYEOrKbaJCxNxPWyCy+VN1B72
+         Adcr3HlIT6FkwwETeD1yPJsoYA0aWYI+hByVzMayFtnkf1CgWYLSgSAvOEoDiu8vPcao
+         wIWJv8VlCX5A9bOXlb3jOINnTpFo47zvPe5dNIURysUZ0e1+OZqkaK8Hy2vJ1FwpCJrr
+         LMSQ==
+X-Gm-Message-State: AFqh2kqyqKg44vdEI52e10MRh+9yGEEkcezntOJ7ZFN4swQr1vy6zjFC
+        ST0dU0mBpOWHCl4nbg78dJybnZy9mlvFgOA=
+X-Google-Smtp-Source: AMrXdXu4mi6dvGvEO/n/C5xxXN1FLj9XQ2O0zlWnVWpPCjshvxCfAR8WoMfy5X7ZEJve9bf9pc0YkQ==
+X-Received: by 2002:a05:6a20:be03:b0:b8:5813:e700 with SMTP id ge3-20020a056a20be0300b000b85813e700mr37929542pzb.3.1674544571225;
+        Mon, 23 Jan 2023 23:16:11 -0800 (PST)
+Received: from thinkpad ([117.193.209.165])
+        by smtp.gmail.com with ESMTPSA id ja5-20020a170902efc500b001930b189b32sm883146plb.189.2023.01.23.23.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 23:16:10 -0800 (PST)
+Date:   Tue, 24 Jan 2023 12:46:02 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com
+Subject: Re: [PATCH v5 0/5] PCI: endpoint: Rework the EPC to EPF notification
+Message-ID: <20230124071602.GB4947@thinkpad>
+References: <20230124071158.5503-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230123171506.71995-4-void@manifault.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230124071158.5503-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I don't think this is the way to go.  For one the syntax looks odd,
-and for another count we had a rough agreement at the kernel summit
-to make BPF kfuncs look more like export symbols.
+On Tue, Jan 24, 2023 at 12:41:53PM +0530, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> During the review of the patch that fixes DBI access in PCI EP, Rob
+> suggested [1] using a fixed interface for passing the events from EPC to
+> EPF instead of the in-kernel notifiers.
+> 
+> This series introduces a simple callback based mechanism for passing the
+> events from EPC to EPF. This interface is chosen for satisfying the below
+> requirements:
+> 
+> 1. The notification has to reach the EPF drivers without any additional
+> latency.
+> 2. The context of the caller (EPC) needs to be preserved while passing the
+> notifications.
+> 
+> With the existing notifier mechanism, the 1st case can be satisfied since
+> notifiers aren't adding any huge overhead. But the 2nd case is clearly not
+> satisfied, because the current atomic notifiers forces the EPF
+> notification context to be atomic even though the caller (EPC) may not be
+> in atomic context. In the notification function, the EPF drivers are
+> required to call several EPC APIs that might sleep and this triggers a
+> sleeping in atomic bug during runtime.
+> 
+> The above issue could be fixed by using a blocking notifier instead of
+> atomic, but that proposal was not accepted either [2].
+> 
+> So instead of working around the issues within the notifiers, let's get rid
+> of it and use the callback mechanism.
+> 
+> NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
+> on the real platforms is greatly appreciated.
+> 
 
-So can you please try to instad make this a EXPORT_SYMBOL_BPF that
-looks and feels more like EXPORT_SYMBOL instead?
+Lorenzo, all patches in this series got review tags. Can you please merge now?
+
+Thanks,
+Mani
+
+> Thanks,
+> Mani
+> 
+> [1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
+> [2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
+> 
+> Changes in v5:
+> 
+> * Collected review tag from Vidya
+> * Fixed the issue reported by Kbot regarding missing declaration
+> 
+> Changes in v4:
+> 
+> * Added check for the presence of event_ops before involing the callbacks (Kishon)
+> * Added return with IRQ_WAKE_THREAD when link_up event is found in the hard irq
+>   handler of tegra194 driver (Vidya)
+> * Collected review tags
+> 
+> Changes in v3:
+> 
+> * As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
+>   call the LINK_UP callback in threaded IRQ handler.
+> 
+> Changes in v2:
+> 
+> * Introduced a new "list_lock" for protecting the epc->pci_epf list and
+>   used it in the callback mechanism.
+> 
+> Manivannan Sadhasivam (5):
+>   PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+>   PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
+>   PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
+>   PCI: endpoint: Use callback mechanism for passing events from EPC to
+>     EPF
+>   PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+> 
+>  drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
+>  drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
+>  drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
+>  include/linux/pci-epc.h                       | 10 +----
+>  include/linux/pci-epf.h                       | 19 ++++++----
+>  6 files changed, 59 insertions(+), 51 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
