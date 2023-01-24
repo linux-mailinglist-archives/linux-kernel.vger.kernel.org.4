@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C036794C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171A56794C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjAXKHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S233052AbjAXKHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjAXKHG (ORCPT
+        with ESMTP id S229889AbjAXKHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 Jan 2023 05:07:06 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5FC12F30;
-        Tue, 24 Jan 2023 02:07:03 -0800 (PST)
-Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MmD6U-1otgns42Vs-00i8Qx; Tue, 24 Jan 2023 11:06:29 +0100
-Message-ID: <45528830-d59a-4c8b-5b76-2e683c2c6964@i2se.com>
-Date:   Tue, 24 Jan 2023 11:06:25 +0100
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF2822DD9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:07:03 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12449391wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:07:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4R9YOVwUyYBfPGZ2jxpq4QdSE5HSTz36nOFHPxprj4k=;
+        b=zJVdnaSFz7iV10ZvhyVWrq7k7nAXw+oolpCL+uYiR4/jcI197MSHCIJKOVqDlIO86l
+         0isT162sRwAkmrA9EfHiob7XmPBJY3fO6FhiI7BBL2XF38SO6lFoHODuAkBwTa0rei/x
+         39klM776k3NT+DK2ikAGzZRcP+M6Z2qypHYBHWk8EwAuZMVuHAO1cZPuQ9hrYX0HKWB7
+         Rzvn1I5SKEXKxPWvQexvtRIXgU5EMTRTvOFIdhMHPFNS7QAAjf1BY+m40ULxhxOVIi/n
+         +jztu7FOtdoGIUj2laKjBDLsL87KFHKFEBCtV+DDcFSWtjaXyKOpfVBoLnWIsEJ1PQJk
+         IdLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4R9YOVwUyYBfPGZ2jxpq4QdSE5HSTz36nOFHPxprj4k=;
+        b=rgfTGxjD9LEj1df3lp0uumWKi6qYJWY6Ta5ZLsXf8DXAq9dBwFqTlOm0sWOIaqGzpZ
+         BH+FZssKOPn4RwM8MthKvcIKZAL/CNG3ljnX1cMJ6EhdUJkWGbUH+zw7JSWzdOLaCJ8S
+         CYWGU6qrLT4T8KCJSvL0ZnPcMZ6XHlSosoSCAm9uc9fiMvDQX1Jl9vnbvuX89rsR/Zky
+         C4fsm3Iq4TKjcl9+sNTXFpIcsAz1uZ5Qtq50puq78VFZ+diFIpIvghQsMFd/yjYT/HZD
+         D/04fRjDipPZqAoet4oZkNqh29fMZmRD64MoVgOCB5tHOoa/EhmlMEJB4bqvtVuVWzoS
+         og4Q==
+X-Gm-Message-State: AFqh2krWgPRWwyTi455S39/VZdmlzd87PA+TLqkONO+U1i9s2hgOcOm4
+        oMVydYnyw9X+6lp/brTdNOt2aw==
+X-Google-Smtp-Source: AMrXdXusOj/jDctjTJIm+rwbb31SI3b7Z1ftwkUnu0L0+tn23q9EQqeQJ+gRSS2nGC+u8jOURVKWtw==
+X-Received: by 2002:a05:600c:1c02:b0:3d2:3b8d:21e5 with SMTP id j2-20020a05600c1c0200b003d23b8d21e5mr27392120wms.14.1674554822224;
+        Tue, 24 Jan 2023 02:07:02 -0800 (PST)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id y15-20020a5d470f000000b002bc8130cca7sm1491871wrq.23.2023.01.24.02.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 02:07:01 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Rayyan Ansari <rayyan@ansari.sh>, linux-input@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Rayyan Ansari <rayyan@ansari.sh>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: synaptics-rmi4: Fix SPI device ID
+In-Reply-To: <20221219133717.1638496-1-rayyan@ansari.sh>
+References: <20221219133717.1638496-1-rayyan@ansari.sh>
+Date:   Tue, 24 Jan 2023 11:07:00 +0100
+Message-ID: <8735802qm3.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 03/12] dt-bindings: serial: pl011: allow ARM Primecell
- properties
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Chester Lin <clin@suse.com>, Fugang Duan <fugang.duan@nxp.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
- <20230124091916.45054-1-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230124091916.45054-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:93ulo0PlqXqG5/52B3bZ3mfpX/fbI2HdhNtc3AuLxgKQl2dxSyA
- /kJkZ7NeRKreYzG5ax4gsYEQSTwH8yygbh7vEtHYYFwTpBZPdev84Mx3OJaAU1mPR2u2MKv
- vnOjns7+asiWML/aEgPvFrMy3n7cCAB7qWD90wKMTlXMsTG2OvRrP0vJoFgY7ANNIySelYu
- fM48s9RMBQWREZhb7cuBQ==
-UI-OutboundReport: notjunk:1;M01:P0:VczEPCxySYQ=;U0Lzc/tH6qc3i8FdF6E0O/w2p33
- Rf11TjOB+akTwm0k3YDF/CofSRH8x/BDseAI/U/Tn594gBt0St1mGo09JEYietjXutJGqAa38
- zaL10VqH0zF7IKZzZ5Z1m08FP08Hku7dGolSylwNAaZ2y1rLGrHYqFyc+M37tlOd4V/KYz/s/
- yPTfVxC1z8FodPfbMSQcVSl+rUIPp/vGCjgLT/ut4XDlL6w+TK7v/HFgJl0sHHVNaieHwS1Ea
- b4NV0O0fSO7293v0aENxUFLcK06FbqeaifKcoESN4aA8zQAFHfrYcQMOIEW282GMu10cwpWFd
- AdBAUt1TOyQGva+5yTnreOJjQuxcR5RsWNwO6OIj7FVzwe8OYZpcfvtzWiyAQPvaNDlZTFXOZ
- 4x9WSxOjyQMQo1PyKhAUMTtuQx85DunFFoRMThVzMM/6QUENiZuW9Rcd3PeP5Vnc/bgLd6rbl
- H4jigRxjDGgJuKqrKb5GnE23xpYOgwb8v4NX72tbbq/9P/kyvziwUZFOyeN/pDyt7VDJDlByy
- jZKE/3ERTx1japcd0XrLKLJAhUfA2UrgguOdT1zBQZpe7Nu3Xsa0vJSz07Orp1L8GV41dZTOk
- 57XR3M44hao1bm5JYn6UzhqkyhT70Zi3Iy8m3UNpsTcXFBzpT8t7SEoIryrsEG4qXm0djOnTI
- h58bXWDP2g/fsSCP4wz1Hu2KLbYyzj7GsP1bgbwh9Q==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 24.01.23 um 10:19 schrieb Krzysztof Kozlowski:
-> Reference ARM Primecell bindings to allow typical Primecell device node properties:
+On Mon, Dec 19, 2022 at 13:37, Rayyan Ansari <rayyan@ansari.sh> wrote:
+
+> Currently, the ID being set to "rmi4_spi" causes this warning:
+> "SPI driver rmi4_spi has no spi_device_id for syna,rmi4-spi"
 >
->    broadcom/bcm2711-rpi-400.dtb: serial@7e201000: Unevaluated properties are not allowed ('arm,primecell-periphid' was unexpected)
+> Change the ID to rmi4-spi to stop this warning.
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
 
-Reviewed-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-Thanks
-
+> ---
+>  drivers/input/rmi4/rmi_spi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/input/rmi4/rmi_spi.c b/drivers/input/rmi4/rmi_spi.c
+> index c82edda66b23..aa3a6a8544d4 100644
+> --- a/drivers/input/rmi4/rmi_spi.c
+> +++ b/drivers/input/rmi4/rmi_spi.c
+> @@ -510,7 +510,7 @@ static const struct dev_pm_ops rmi_spi_pm = {
+>  };
+>  
+>  static const struct spi_device_id rmi_id[] = {
+> -	{ "rmi4_spi", 0 },
+> +	{ "rmi4-spi", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(spi, rmi_id);
+> -- 
+> 2.39.0
