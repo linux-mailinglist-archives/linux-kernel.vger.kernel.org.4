@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6036F679530
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F95679537
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233520AbjAXK3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        id S233518AbjAXKb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjAXK3q (ORCPT
+        with ESMTP id S233165AbjAXKb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:29:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89636402FD;
-        Tue, 24 Jan 2023 02:29:41 -0800 (PST)
+        Tue, 24 Jan 2023 05:31:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EE13F2BB;
+        Tue, 24 Jan 2023 02:31:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D67BA60B29;
-        Tue, 24 Jan 2023 10:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A4CC433D2;
-        Tue, 24 Jan 2023 10:29:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9462B80EA9;
+        Tue, 24 Jan 2023 10:31:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA936C433D2;
+        Tue, 24 Jan 2023 10:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674556180;
-        bh=EzT56XQJOL6STtbWMJM7SuwaIPlurSVkp9kmAZZvnMk=;
+        s=k20201202; t=1674556283;
+        bh=h6wqmaeSg72818E0HuM8wvDpwZQKe1MLEUh3fylym74=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b7Ik92Z3A522198ucGebLAKbV4YXT+qeqhqzWwMk1gM7EC3VFp6bKAjOXsDcc8DkH
-         dKmc9wgFdRQTIvVMTZI+mHOvYr3ekZmrqvRFFSUtEMk+VJcxo3R0AS74OeyhJvn5r9
-         wJ6lmkLfBz+duc+ckwcxHWD7+Yt3wU0snoJ3ANTnXW44uEy5SjdPncznt73JXOh1DE
-         aNnk3nEHLyUO82KBhrERoxi+ZX8KU2x/o6kWR6xA5kowNMAQGl28I8Zn2Us+6rhv3g
-         SfHGbMHItipSJrI9NjnNE5xrJztIltWWFz+qKKFBesNDFHrfNv14R+ms7/7ub2TgZI
-         KlJCFi8mq5WKA==
-Date:   Tue, 24 Jan 2023 10:29:35 +0000
+        b=qOeJ8B3malNs8GmcREBHPjGGsuPcJbrrt1JGKdLHNCH1YhQS20WjWTEBMOOva9FGF
+         apXKxTTgUq/2dAGom0s22T9+BcfEaBvvJG4t8iyd6Gy67bySXFALPapgEG1g3dJYKL
+         4RdL0u0HxeZ8kpo8kX8so9Kfg663/SBoMp2aN/jm6skdR4U50mjT8QSnw0Ejqqu+Ak
+         eHzOI3ZnqZaB2qyVZ4sLLAobvB2RCwmjQYgr/4ZXYP9+7UuAXanhB0KKuvJT9HtkH1
+         b2pcZYdGoAa6q5CN5VBnbWcgih3TiIaTGrzGTOAyXW/4tzIZnirKN9LHU3I4OhxMtW
+         5kKuUezJSxpGQ==
+Date:   Tue, 24 Jan 2023 10:31:16 +0000
 From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-Message-ID: <Y8+zD6AxuJVy5b7Y@google.com>
-References: <20221007153323.1326-1-henning.schild@siemens.com>
- <Y8mv8PzL1UsP9gNh@google.com>
- <20230123214859.725cd1c3@md1za8fc.ad001.siemens.net>
- <CAHp75VfSHgdikX5=Qba62BwWofVf7gHhS2hq2OuBwHFz9riCWQ@mail.gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v3 3/5] dt-bindings: usb: Convert OMAP OHCI/EHCI bindings
+ to schema
+Message-ID: <Y8+zdODQTEyKGwpd@google.com>
+References: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org>
+ <20230110-dt-usb-v3-3-5af0541fcf8c@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VfSHgdikX5=Qba62BwWofVf7gHhS2hq2OuBwHFz9riCWQ@mail.gmail.com>
+In-Reply-To: <20230110-dt-usb-v3-3-5af0541fcf8c@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,64 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023, Andy Shevchenko wrote:
+On Mon, 23 Jan 2023, Rob Herring wrote:
 
-> On Mon, Jan 23, 2023 at 10:49 PM Henning Schild
-> <henning.schild@siemens.com> wrote:
-> > Am Thu, 19 Jan 2023 21:02:40 +0000
-> > schrieb Lee Jones <lee@kernel.org>:
-> > > On Fri, 07 Oct 2022, Henning Schild wrote:
+> The OMAP OHCI and EHCI USB host bindings follow the generic binding, so
+> add the compatibles and remove the old txt binding docs.
 > 
-> > > > If we register a "leds-gpio" platform device for GPIO pins that do
-> > > > not exist we get a -EPROBE_DEFER and the probe will be tried again
-> > > > later. If there is no driver to provide that pin we will poll
-> > > > forever and also create a lot of log messages.
-> > > >
-> > > > So check if that GPIO driver is configured, if so it will come up
-> > > > eventually. If not, we exit our probe function early and do not even
-> > > > bother registering the "leds-gpio". This method was chosen over
-> > > > "Kconfig depends" since this way we can add support for more
-> > > > devices and GPIO backends more easily without "depends":ing on all
-> > > > GPIO backends.
-> > > >
-> > > > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version
-> > > > of Siemens driver") Reviewed-by: Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> Signed-off-by: Henning Schild
-> > > > <henning.schild@siemens.com> ---
-> > > >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > >
-> > > FYI: I'm going to try my best not to take another one like this.
-> >
-> > understood!
-> >
-> > > Please try to improve the whole situation for you next submission.
-> >
-> > When i have to touch this again, which i will, i will propose either
-> > "depend on all possible GPIO drivers" or introduce "#ifdef CONFIG"s.
-> > Caring most about big configs as seen in distros like debian, even for
-> > embedded systems ... i think i would prefer the first option, as it
-> > will also be easier to maintain.
-> >
-> > I do not see the whole infinite loop story on my plate, but if that got
-> > fixed i would follow up taking the fix into account.
-
-I still don't really know what you mean by this.  Probe deferring should
-not work this way.  Do you know why the loop is infinite on your
-platform?  What keeps triggering the re-probe?  Are you continually
-binding and unbinding drivers, forever?  Also, what is printing out the
-failure?  Maybe it should be silent?
-
-> AFAICS another possible (not sure if it's preferable) solution is to
-> split this driver to subdrivers and each of them will be dependent on
-> the corresponding pin control in Kconfig. It will satisfy both of your
-> requirements, right? Something like
+> The examples in omap-usb-host.txt don't match actual users, so update
+> them dropping the fallback compatible.
 > 
-> simatic-leds-core.c
-> simatic-leds-127e.c (config ..._127E depends on PINCTRL_BROXTON)
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v3:
+>  - Fix document references to generic-ehci.yaml and generic-ohci.yaml (0-day)
+> v2:
+>  - New patch
+> ---
+>  .../devicetree/bindings/mfd/omap-usb-host.txt      |  8 +++---
 
-In theory, yes it would.  You could also introduce a core driver to
-contain all of the shared code.  Duplication would also be a travesty.
+Acked-by: Lee Jones <lee@kernel.org>
+
+>  .../devicetree/bindings/usb/ehci-omap.txt          | 31 ----------------------
+>  .../devicetree/bindings/usb/generic-ehci.yaml      |  1 +
+>  .../devicetree/bindings/usb/generic-ohci.yaml      |  4 ++-
+>  .../devicetree/bindings/usb/ohci-omap3.txt         | 15 -----------
+>  5 files changed, 8 insertions(+), 51 deletions(-)
 
 -- 
 Lee Jones [李琼斯]
