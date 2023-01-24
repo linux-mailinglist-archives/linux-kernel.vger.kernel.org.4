@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D127567A0B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6318F67A0B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjAXR6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S233599AbjAXR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjAXR63 (ORCPT
+        with ESMTP id S233451AbjAXR66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:58:29 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F84E46159;
-        Tue, 24 Jan 2023 09:58:28 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id q8so12078234wmo.5;
-        Tue, 24 Jan 2023 09:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pHojIfH7mPoYEvGud+s1TGzI5a9ONBh3yI2E9bhxwuE=;
-        b=DAnTpjO0/mkgf9pkRLf5wRr7TAchsXeFYnhq0fR9DRc/d+sK+yvQun8QF19rWy/6fJ
-         hC3zTLccF9TP0ov6gVwGegZ3/aCT3TxBu6W6leXwM3P3gtt71Wc/gvpYnRBUgj5nwwbt
-         Zm6uUdlKkhslLh97iR0znrLiOlUOKWd/+tMXvBlgFOp3ibg6vb5XoMIu/Y1rpUeXS/Yp
-         s/05fWK8vHJExnNypvM1Pj2NQdS3YWabasBIZ4TJMkgC6OKIgWnTG3uZ3bh5abA7k/8z
-         BzOAI8zj4JrtdVQESAbib2P1kpCGHPqoOLs9WaXKv+myXgqcKIXq5UiXPiej44SWUdfT
-         8/sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pHojIfH7mPoYEvGud+s1TGzI5a9ONBh3yI2E9bhxwuE=;
-        b=rJDsxWpqB6YVsNrlxOO4qsjr/6ahi4uCpiE8dyOvdJliIabSTaxmC5+4PP+jPCImJL
-         MybPLiHmlQ5Y+cyZkkMRzIr/jLmCN0bP+aA/Xft9yvMqEBGgzeodhQoJ5db3tCj1jLL+
-         HHZEybyPl3OX7zYME4VyQW6KM2wlvGy9NgjggM6kRgEJj48YJFpuiwkPg/3L1v5yAk7R
-         3hm+lf2ONVKK5DVrKF2CkxMM9T51YzDe7dsH3JaDWXwhNANv3c46Bq8VfPsjb86slCTw
-         ROMxknBitwWhgVi6LV+Z4Ghg78KIQ/gB/fdOUSuaN37gKzS4v3NmAqg+wWzuKsmoQroq
-         HZuA==
-X-Gm-Message-State: AFqh2kovtignvKzGuYmX/SC3Yb0I5UxVIqP2haBxRtf8a/V15c1OkxmL
-        V1ozZyL1mk2cLUfq42ZfKTfnjfdF3Hh4NzUyjzg=
-X-Google-Smtp-Source: AMrXdXtlfu8opsQ0soNTGE9/M+8iwAgYCCDH4vkFL3mYltaU7lG78XFHRvBuGsDBaq++OIafyW9ieDeyeLqqlS5BZuI=
-X-Received: by 2002:a05:600c:47cf:b0:3cf:b1c2:c911 with SMTP id
- l15-20020a05600c47cf00b003cfb1c2c911mr1887357wmo.16.1674583106429; Tue, 24
- Jan 2023 09:58:26 -0800 (PST)
+        Tue, 24 Jan 2023 12:58:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DC6269A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674583088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8p0fjBFbr33layaeANbx7Fcez2vuRTWnR65WsK5kAh0=;
+        b=FUxg0Ad6zSaGZCd3ZUjUEfR8IzTDr0ME0mZPvbd5KJyymJafr3JpOC99TQ9kOpXaYDrfcP
+        KoQYlgFJuYqN4rLEHKr/s0/IFWpC66aaSkFI9iqPHZb996f1Yl3Bt5LelgByqbGJ82mbKo
+        xLQCCyJ6XMOqc1B66GP+KgDBcfimEbA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-EgctpWEEMH6pWck4X7eZqw-1; Tue, 24 Jan 2023 12:58:04 -0500
+X-MC-Unique: EgctpWEEMH6pWck4X7eZqw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0126F857F41;
+        Tue, 24 Jan 2023 17:58:04 +0000 (UTC)
+Received: from [10.22.10.191] (unknown [10.22.10.191])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F304492C14;
+        Tue, 24 Jan 2023 17:58:03 +0000 (UTC)
+Message-ID: <b2962bcd-c35f-26dd-cb4e-8bc7e2807ca2@redhat.com>
+Date:   Tue, 24 Jan 2023 12:58:03 -0500
 MIME-Version: 1.0
-References: <20230123032942.18263-1-gregory.price@memverge.com>
- <20230123032942.18263-4-gregory.price@memverge.com> <20230123154101.GA6268@redhat.com>
- <Y87OEdDXwZG8pmmE@memverge.com> <20230123195228.GD6268@redhat.com>
- <Y9AAcuomaVM2JRCA@memverge.com> <20230124164347.GA28280@redhat.com> <Y9ANOfzl+iZSBIEP@memverge.com>
-In-Reply-To: <Y9ANOfzl+iZSBIEP@memverge.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Tue, 24 Jan 2023 09:58:02 -0800
-Message-ID: <CANaxB-wASWa1k6X5umJ=wt-K47uiBo9N5hxc--xz5cmU2bvysA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for
- sud configuration
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: WARNING: locking bug in pgd_free
+Content-Language: en-US
+To:     Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "contact@pgazz.com" <contact@pgazz.com>,
+        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>
+References: <IA1PR07MB98304A14BD26596C87A8C581ABC99@IA1PR07MB9830.namprd07.prod.outlook.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <IA1PR07MB98304A14BD26596C87A8C581ABC99@IA1PR07MB9830.namprd07.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 8:54 AM Gregory Price
-<gregory.price@memverge.com> wrote:
->
-> On Tue, Jan 24, 2023 at 05:43:47PM +0100, Oleg Nesterov wrote:
-> > I won't really argue, but...
-> >
-> > On 01/24, Gregory Price wrote:
-> > >
-> > > On Mon, Jan 23, 2023 at 08:52:29PM +0100, Oleg Nesterov wrote:
-> > > > On 01/23, Gregory Price wrote:
-> > > > >
-> > > > > So i think dropping 2/3 in the list is good.  If you concur i'll do
-> > > > > that.
-> > > >
-> > > > Well I obviously think that 2/3 should be dropped ;)
-> > > >
-> > > > As for 1/3 and 3/3, feel free to add my reviewed-by.
-> > > >
-> > > > Oleg.
-> > > >
-> > >
-> > > I'm actually going to walk my agreement back.
-> > >
-> > > After one more review, the need for the proc/status entry is not to
-> > > decide whether to dump SUD settings, but for use in deciding whether to
-> > > set the SUSPEND_SYSCALL_DISPATCH option from patch 1/3.
-> >
-> > Rather than read /proc/pid/status, CRIU can just do
-> > PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG unconditionally
-> > and check syscall_user_dispatch_config.mode ?
-> >
-> > Why do want to expose SYSCALL_USER_DISPATCH in /proc/status? If this task
-> > is not stopped you can't trust this value anyway. If it is stopped, I don't
-> > think ptrace(PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG) is slower than reading
-> > /proc.
-> >
-> > but perhaps I missed something?
-> >
-> > Oleg.
-> >
->
-> *facepalm* good point, i'm wondering if there's a reason CRIU doesn't do
-> the same for SECCOMP.
 
-Because information about seccomp was in /proc/pid/status forever and we
-started using it before the ptrace interface was merged. I am not sure that
-this is the only reason, but  it is definitely one of them.
-
+On 1/24/23 11:22, Sanan Hasanov wrote:
+> Good day, dear maintainers,
 >
-> either way, going to drop it
+> We found a bug using a modified kernel configuration file used by syzbot.
+>
+> We enhanced the coverage of the configuration file using our tool, klocalizer.
+>
+> Kernel Branch: 6.2.0-rc3-next-20230112
+> Kernel config: https://drive.google.com/file/d/1Zg-NZ5s04wPVdO8cfpvQjatI-0VAVjZV/view?usp=sharing
+>
+> Unfortunately, we do not have a reproducer yet.
+>
+> Thank you!
+>
+> Best regards,
+> Sanan Hasanov
+>
+> ------------[ cut here ]------------
+> DEBUG_LOCKS_WARN_ON(1)
+> WARNING: CPU: 5 PID: 7278 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:232 [inline]
+> WARNING: CPU: 5 PID: 7278 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:221 [inline]
+> WARNING: CPU: 5 PID: 7278 at kernel/locking/lockdep.c:232 check_deadlock kernel/locking/lockdep.c:3017 [inline]
+> WARNING: CPU: 5 PID: 7278 at kernel/locking/lockdep.c:232 validate_chain kernel/locking/lockdep.c:3819 [inline]
+> WARNING: CPU: 5 PID: 7278 at kernel/locking/lockdep.c:232 __lock_acquire+0x24b8/0x5170 kernel/locking/lockdep.c:5056
+> Modules linked in:
+> CPU: 5 PID: 7278 Comm: systemd-udevd Not tainted 6.2.0-rc3-next-20230112 #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> RIP: 0010:hlock_class kernel/locking/lockdep.c:232 [inline]
+> RIP: 0010:hlock_class kernel/locking/lockdep.c:221 [inline]
+> RIP: 0010:check_deadlock kernel/locking/lockdep.c:3017 [inline]
+> RIP: 0010:validate_chain kernel/locking/lockdep.c:3819 [inline]
+> RIP: 0010:__lock_acquire+0x24b8/0x5170 kernel/locking/lockdep.c:5056
+
+This error only happens when the lock class used has been freed 
+(zapped). A lock class can be freed by either lockdep_unregister_key() 
+or by lockdep_reset_lock(). The lock in question is a static pgd_lock 
+defined in arch/x86/mm/fault.c. lockdep_unregister_key() is for 
+dynamically allocated key which is not the case for pgd_lock. 
+lockdep_reset_lock() is used by locking_selftest.c only. Does your 
+config include CONFIG_DEBUG_LOCKING_API_SELFTESTS?
+
+Cheers,
+Longman
+
