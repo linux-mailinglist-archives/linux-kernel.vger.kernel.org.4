@@ -2,272 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7896B6798CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A961D6798D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjAXM6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S233661AbjAXM7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjAXM6w (ORCPT
+        with ESMTP id S233617AbjAXM7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:58:52 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9F222C3;
-        Tue, 24 Jan 2023 04:58:23 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1631b928691so1211447fac.11;
-        Tue, 24 Jan 2023 04:58:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=19Cl6GiHai15EHKqqL5MJsrC0SAK4DYngi9P4S3JRXk=;
-        b=U8Usm78auw113UmivYoQMM23I5glJEnLHLoyduEbqXMuiAdiladsOszSiC6Q68AmoB
-         B/jRT5Tyfu/lYYb9s7glroJ73a8073nbEF20HQAWm0IR5warkOsJN4eQT/qBmorQuvkS
-         NdoQVaIhwt5SCX0FOwFWtFyQflzKclZrV0aCtvsm9WDsj6YDaWm6Ff3qlpX8M32cuYOg
-         1GXkN1TuaBiKpTvziwYKp9oXLadDF6AxFfeWnuj9VNrH1ly5mffP1JsSDjA9ilev8INc
-         8yWuvGuFwPceTpKV2a5216841n5WzwthIeax787dp5wPRhqTSX9yLvCDoqBBsQuoJQbg
-         BOhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=19Cl6GiHai15EHKqqL5MJsrC0SAK4DYngi9P4S3JRXk=;
-        b=fbtlOBaHHFvs2LjneHNbab8OXKEmpoEuS0SV4SPQeum1Wk0DPwik41uu2e9t7j+Ul2
-         jfeHeGf9HleM8rBWMA4pGwIQOH4ensy9Eh+cZq7QDFY8ydf1/ulXKYXa6b9FA7JARfR/
-         go+5Yhh/qIFGZnHmEQyjd9N8ZuKG5/BdYPWL+hIczP1rv9YO+iNVXv4tNKtjScNbDHrS
-         t4nyD/6gfnyuJ4WWHynqAVBxULoPxDg+B0/aJ/ifpEpHAE+yAttf4r9By+6Q8l6CxJo3
-         tg4/MpUJCowwro10EvrGjNmwpAUAUtkSgKisaFt24OwD0QV6Djmh8+3gtxgy3TFhBPgB
-         SQ+A==
-X-Gm-Message-State: AFqh2kpcIcDdr/UeJsl3VfxWhC5th/q4VMdw4KjaQUHuWCazANW7JEy4
-        S9GBLgIgr0jf9eFqSYQCFgI=
-X-Google-Smtp-Source: AMrXdXvliegj7O+rvgOxjzAKA6LY4l9+aBGRXYocBkO1ydo/NIqQ4VpDYKVyc/0VpI/uGueGLbXvTg==
-X-Received: by 2002:a05:6870:289a:b0:15e:9b5b:e2c9 with SMTP id gy26-20020a056870289a00b0015e9b5be2c9mr14560866oab.3.1674565102219;
-        Tue, 24 Jan 2023 04:58:22 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j24-20020a056870051800b0013b9ee734dcsm679971oao.35.2023.01.24.04.58.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 04:58:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <433e41da-5965-ccf0-c3de-79bd696806f7@roeck-us.net>
-Date:   Tue, 24 Jan 2023 04:58:17 -0800
+        Tue, 24 Jan 2023 07:59:21 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706D010245
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:59:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=2hHVDuYILU91LBlODczQ+7XGtJToJZo0ZLxE3dBYL9E=; b=JeDAFovgya9Xlp3iLijb398/Hd
+        QpGNNWFwXbEGd/dAJ/wBOuG3m2Y6HLnS8l2fSVPZxpDXaas8U+D8x1s8FRPwjU4DK9cckidluivBm
+        1w6pjPGTFKTe/zVhjGRYWvJJn79vOJkB9xliaSFtQ9w1e29XIy2nV1tOJpoBfLDeKcpNb+PU37MXB
+        4mdcdzGDzJJmv7WkN9MESoSNTUHl7H4u8/s7MkMF2o/p6MrscAhO+TRW4rfIL3kHH5dxu8YLID2Xd
+        aSqDX59pVGCC+P4rkK1Crb7bJLQ/i6EqyZ7eOGr88Ozovp3U895THneHMwqASMqJkA2jv5KEvTjai
+        xxX/s9CA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKIsw-0053EV-Ol; Tue, 24 Jan 2023 12:58:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AF5BC300327;
+        Tue, 24 Jan 2023 13:58:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 95EF62B6BE287; Tue, 24 Jan 2023 13:58:44 +0100 (CET)
+Date:   Tue, 24 Jan 2023 13:58:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Ting11 Wang =?utf-8?B?546L5am3?= <wangting11@xiaomi.com>
+Subject: Re: [PATCH v6 5/6] locking/rwsem: Enable direct rwsem lock handoff
+Message-ID: <Y8/WBFj4uLz4N2ZH@hirez.programming.kicks-ass.net>
+References: <20221118022016.462070-1-longman@redhat.com>
+ <20221118022016.462070-6-longman@redhat.com>
+ <Y86gzkVHlsOTY8QL@hirez.programming.kicks-ass.net>
+ <9fb531a9-0951-f7c0-316d-749d2c59ade8@redhat.com>
+ <284b7d75-42cd-ddab-8431-dfbde8bea2b2@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc2 review
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230123094918.977276664@linuxfoundation.org>
- <CA+G9fYuH9vUTHjtByq184N2dNuquT1Z02JDRh2GYFR96weZcFA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CA+G9fYuH9vUTHjtByq184N2dNuquT1Z02JDRh2GYFR96weZcFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <284b7d75-42cd-ddab-8431-dfbde8bea2b2@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 01:52, Naresh Kamboju wrote:
-> On Mon, 23 Jan 2023 at 15:22, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->>
->> This is the start of the stable review cycle for the 5.15.90 release.
->> There are 117 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.90-rc2.gz
->> or in the git tree and branch at:
->>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
+On Mon, Jan 23, 2023 at 05:07:08PM -0500, Waiman Long wrote:
+> On 1/23/23 12:30, Waiman Long wrote:
+> > I will update the patch description to highlight the points that I
+> > discussed in this email.
 > 
+> I am planning to update the patch description to as follows:
 > 
-> Results from Linaroâ€™s test farm.
-> Regressions found on arm64 for both 5.15.90-rc2 and 5.10.165-rc2.
+>     The lock handoff provided in rwsem isn't a true handoff like that in
+>     the mutex. Instead, it is more like a quiescent state where optimistic
+>     spinning and lock stealing are disabled to make it easier for the first
+>     waiter to acquire the lock.
 > 
+>     For mutex, lock handoff is done at unlock time as the owner value and
+>     the handoff bit is in the same lock word and can be updated atomically.
+> 
+>     That is the not case for rwsem which has a separate count value for
+>     locking and an owner value. The only way to update them in a
+> quasi-atomic
+>     way is to use the wait_lock for synchronization as the handoff bit can
+>     only be updated while holding the wait_lock. So for rwsem, the new
+>     lock handoff mechanism is done mostly at rwsem_wake() time when the
+>     wait_lock has to be acquired anyway to minimize additional overhead.
 
-Didn't you send an earlier e-mail suggesting no regressions ?
+So for first==reader, sure, and you don't need anything special, since
+rwsem_mark_wake() already does the right thing.
 
-Guenter
+But for first==writer, I don't follow; *WHY* do you have to complicate
+this path so. The write_slowpath already takes wait_lock for
+rwsem_try_write_lock() and that already knows about handoff.
 
-> * qemu-arm64-mte, kselftest-arm64
->    - arm64_check_buffer_fill
->    - arm64_check_child_memory
->    - arm64_check_ksm_options
->    - arm64_check_mmap_options
->    - arm64_check_tags_inclusion
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> We are in a process to bisecting this problem and there are updates coming
-> from kselftest rootfs.
-> 
-> Test logs,
-> # selftests: arm64: check_buffer_fill
-> # 1..20
-> # ok 1 Check buffer correctness by byte with sync err mode and mmap memory
-> # ok 2 Check buffer correctness by byte with async err mode and mmap memory
-> # ok 3 Check buffer correctness by byte with sync err mode and
-> mmap/mprotect memory
-> # ok 4 Check buffer correctness by byte with async err mode and
-> mmap/mprotect memory
-> # not ok 5 Check buffer write underflow by byte with sync mode and mmap memory
-> # not ok 6 Check buffer write underflow by byte with async mode and mmap memory
-> # ok 7 Check buffer write underflow by byte with tag check fault
-> ignore and mmap memory
-> # ok 8 Check buffer write underflow by byte with sync mode and mmap memory
-> # ok 9 Check buffer write underflow by byte with async mode and mmap memory
-> # ok 10 Check buffer write underflow by byte with tag check fault
-> ignore and mmap memory
-> # not ok 11 Check buffer write overflow by byte with sync mode and mmap memory
-> # not ok 12 Check buffer write overflow by byte with async mode and mmap memory
-> # ok 13 Check buffer write overflow by byte with tag fault ignore mode
-> and mmap memory
-> # not ok 14 Check buffer write correctness by block with sync mode and
-> mmap memory
-> # not ok 15 Check buffer write correctness by block with async mode
-> and mmap memory
-> # ok 16 Check buffer write correctness by block with tag fault ignore
-> and mmap memory
-> # ok 17 Check initial tags with private mapping, sync error mode and mmap memory
-> # ok 18 Check initial tags with private mapping, sync error mode and
-> mmap/mprotect memory
-> # ok 19 Check initial tags with shared mapping, sync error mode and mmap memory
-> # ok 20 Check initial tags with shared mapping, sync error mode and
-> mmap/mprotect memory
-> # # Totals: pass:14 fail:6 xfail:0 xpass:0 skip:0 error:0
-> not ok 34 selftests: arm64: check_buffer_fill # exit=1
-> 
-> 
-> # selftests: arm64: check_child_memory
-> # 1..12
-> # not ok 1 Check child anonymous memory with private mapping, precise
-> mode and mmap memory
-> # not ok 2 Check child anonymous memory with shared mapping, precise
-> mode and mmap memory
-> # not ok 3 Check child anonymous memory with private mapping,
-> imprecise mode and mmap memory
-> # not ok 4 Check child anonymous memory with shared mapping, imprecise
-> mode and mmap memory
-> # not ok 5 Check child anonymous memory with private mapping, precise
-> mode and mmap/mprotect memory
-> # not ok 6 Check child anonymous memory with shared mapping, precise
-> mode and mmap/mprotect memory
-> # not ok 7 Check child file memory with private mapping, precise mode
-> and mmap memory
-> # not ok 8 Check child file memory with shared mapping, precise mode
-> and mmap memory
-> # not ok 9 Check child file memory with private mapping, imprecise
-> mode and mmap memory
-> # not ok 10 Check child file memory with shared mapping, imprecise
-> mode and mmap memory
-> # not ok 11 Check child file memory with private mapping, precise mode
-> and mmap/mprotect memory
-> # not ok 12 Check child file memory with shared mapping, precise mode
-> and mmap/mprotect memory
-> # # Totals: pass:0 fail:12 xfail:0 xpass:0 skip:0 error:0
-> not ok 35 selftests: arm64: check_child_memory # exit=1
-> 
-> # selftests: arm64: check_ksm_options
-> # 1..4
-> # # Invalid MTE synchronous exception caught!
-> not ok 37 selftests: arm64: check_ksm_options # exit=1
-> 
-> 
-> # selftests: arm64: check_mmap_options
-> # 1..22
-> # ok 1 Check anonymous memory with private mapping, sync error mode,
-> mmap memory and tag check off
-> # ok 2 Check file memory with private mapping, sync error mode,
-> mmap/mprotect memory and tag check off
-> # ok 3 Check anonymous memory with private mapping, no error mode,
-> mmap memory and tag check off
-> # ok 4 Check file memory with private mapping, no error mode,
-> mmap/mprotect memory and tag check off
-> # not ok 5 Check anonymous memory with private mapping, sync error
-> mode, mmap memory and tag check on
-> # not ok 6 Check anonymous memory with private mapping, sync error
-> mode, mmap/mprotect memory and tag check on
-> # not ok 7 Check anonymous memory with shared mapping, sync error
-> mode, mmap memory and tag check on
-> # not ok 8 Check anonymous memory with shared mapping, sync error
-> mode, mmap/mprotect memory and tag check on
-> # not ok 9 Check anonymous memory with private mapping, async error
-> mode, mmap memory and tag check on
-> # not ok 10 Check anonymous memory with private mapping, async error
-> mode, mmap/mprotect memory and tag check on
-> # not ok 11 Check anonymous memory with shared mapping, async error
-> mode, mmap memory and tag check on
-> # not ok 12 Check anonymous memory with shared mapping, async error
-> mode, mmap/mprotect memory and tag check on
-> # not ok 13 Check file memory with private mapping, sync error mode,
-> mmap memory and tag check on
-> # not ok 14 Check file memory with private mapping, sync error mode,
-> mmap/mprotect memory and tag check on
-> # not ok 15 Check file memory with shared mapping, sync error mode,
-> mmap memory and tag check on
-> # not ok 16 Check file memory with shared mapping, sync error mode,
-> mmap/mprotect memory and tag check on
-> # not ok 17 Check file memory with private mapping, async error mode,
-> mmap memory and tag check on
-> # not ok 18 Check file memory with private mapping, async error mode,
-> mmap/mprotect memory and tag check on
-> # not ok 19 Check file memory with shared mapping, async error mode,
-> mmap memory and tag check on
-> # not ok 20 Check file memory with shared mapping, async error mode,
-> mmap/mprotect memory and tag check on
-> # not ok 21 Check clear PROT_MTE flags with private mapping, sync
-> error mode and mmap memory
-> # not ok 22 Check clear PROT_MTE flags with private mapping and sync
-> error mode and mmap/mprotect memory
-> # # Totals: pass:4 fail:18 xfail:0 xpass:0 skip:0 error:0
-> not ok 38 selftests: arm64: check_mmap_options # exit=1
-> 
-> 
-> # selftests: arm64: check_tags_inclusion
-> # 1..4
-> # # No valid fault recorded for 0x500ffffb8b27000 in mode 1
-> # not ok 1 Check an included tag value with sync mode
-> # # No valid fault recorded for 0x400ffffb8b27000 in mode 1
-> # not ok 2 Check different included tags value with sync mode
-> # ok 3 Check none included tags value with sync mode
-> # # No valid fault recorded for 0xa00ffffb8b27000 in mode 1
-> # not ok 4 Check all included tags value with sync mode
-> # # Totals: pass:1 fail:3 xfail:0 xpass:0 skip:0 error:0
-> not ok 40 selftests: arm64: check_tags_inclusion # exit=1
-> 
-> Test logs,
-> https://lkft.validation.linaro.org/scheduler/job/6087664#L4865
-> https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.162-951-g9096aabfe9e0/testrun/14329777/suite/kselftest-arm64/test/arm64_check_tags_inclusion/log
-> https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.162-951-g9096aabfe9e0/testrun/14329777/suite/kselftest-arm64/tests/
-> https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.87-219-g60931c95bb6d/testrun/14329656/suite/kselftest-arm64/tests/
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+>     It is also likely that the active lock in this case may be a transient
+>     RWSEM_READER_BIAS that will be removed soon. So we have a secondary
+>     handoff done at reader slow path to handle this particular case.
 
+Only because you made it so damn complicated. If instead you rely on the
+wait_lock in write_slowpath you can keep it all in once place AFAICT.
+
+>     For reader-owned rwsem, the owner value other than the
+> RWSEM_READER_OWNED
+>     bit is mostly for debugging purpose only. So it is not safe to use
+>     the owner value to confirm a handoff to a reader has happened. On the
+
+What ?!? Where do we care about the owner value? There's
+RWSEM_FLAG_HANDOFF which lives in sem->count and there's
+waiter->handoff_set. Nowhere do we care about sem->owner in this.
+
+>     other hand, we can do that when handing off to a writer. However, it
+>     is simpler to use the same mechanism to notify a handoff has happened
+>     for both readers and writers. So a new HANDOFF_GRANTED state is added
+
+I really can't follow whatever logic jump here.
+
+>     to enum rwsem_handoff_state to signify that. This new value will be
+>     written to the handoff_state value of the first waiter.
+> 
+>     With true lock handoff, there is no need to do a NULL owner spinning
+>     anymore as wakeup will be performed if handoff is successful. So it
+>     is likely that the first waiter won't actually go to sleep even when
+>     schedule() is called in this case.
+
+So this spinning, this is purely for writer->write handoff (which is
+exceedingly rare since it is readers that set handoff), right?
+
+Why is that so important?
+
+Also, why can't we add something like
+
+	owner = rwsem_owner_flags(sem, &flags);
+	if (owner && !(flags & RWSEM_READER_OWNED))
+		atomic_long_cond_read_relaxed(&sem->counter, !(VAL & RWSEM_WRITER_LOCKED))
+
+to the start of that? If it's really needed.
