@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888DE67A29E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B23F67A298
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjAXTZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:25:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S229792AbjAXTYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjAXTZV (ORCPT
+        with ESMTP id S233843AbjAXTYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:25:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E744ED03
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674588266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cO6b+dBIzWhUJ0Ot0Nn16J8i3J9gyi8QLbDA6Oroy1E=;
-        b=DeAsX+n/63HqrBdA5mZeRMilh6iRwA8XHa+0Ks7zxzyEhFNNdEYFwnj9PJr0mGx0Y4Kg5r
-        2cF59erv58VbhFF2+1kJ9cHE4arrWP62TgL7MAV32S/eWgE+VF8Bnlyymp8f929p9VG/iK
-        Ro6rxTaMrQo4o5sT+bE4oEIYvGWUpfY=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-259-6ThUOcfsMS6ARbZjCtz_Jw-1; Tue, 24 Jan 2023 14:24:22 -0500
-X-MC-Unique: 6ThUOcfsMS6ARbZjCtz_Jw-1
-Received: by mail-ot1-f71.google.com with SMTP id q9-20020a056830018900b006865e3f13c4so8192596ota.23
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:24:22 -0800 (PST)
+        Tue, 24 Jan 2023 14:24:12 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0994C0D4;
+        Tue, 24 Jan 2023 11:24:09 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id jr19so12771993qtb.7;
+        Tue, 24 Jan 2023 11:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H02SARdJbOG9xHDyO4rUQCOtJbYpCr4eHoKUBzaYL6Q=;
+        b=C85m29M5lfrN780bOuZp0hcwIYmhYNu3EpCIUC5yO+IBjLEzwdVRSVjTss3vblrmTO
+         QATRwCNI055bWM2lULIfOOg1dTqsEtj7/x7T1aWQXczPgKAwNSvro1yvrqREynp/BY/P
+         KCaRyB+7mmWH8uudnalwE0g3WeJObVQUlFbuEeWGqTCVSunmEBNWkBuLcYyiLF42Vtmy
+         RPulL5QO653p3sT6zUEPCUTuzW7byd4bJ25Zu1OWQrd6lmUoZ5zcCDRim4IH3f+b86bn
+         ouQqN8M07iSpAjiG/YPu8/E92l+z8fEj7WBhCG8QWP3Gxr0Yp1uN7SVASIBkYK1h1+2f
+         wlng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cO6b+dBIzWhUJ0Ot0Nn16J8i3J9gyi8QLbDA6Oroy1E=;
-        b=sBMIpsJFpVGPgZddxm2EB+M0kMkdAX7ZaNxKDwEBNuKyLI3qOfjw/teIL6nUckqpXC
-         Fj1lATgnJCEnHebcLBUHwQ6fIRghqGP4yiPJyI/qY8kpx9v6l6koobNjhmQoV8Y9cNaK
-         wXERCyUJeGnWj9yQvfMihs3rASTodXO0pGYQXg1t52/dli/tD3u5MFX7cZgyiwgWdmvt
-         NrmFMvaCji+KDZeUBSgILp5g6b5VZ2pgcSdAvW64C8QAG5M9MDMIqW7OS+otMtZ0ZO9W
-         5w0Rttx7ap/o4JekomWtKcsU/gnuie8tueRDxWxfvTly68EvJHnbknyrnSnLMSApS3wC
-         6OyA==
-X-Gm-Message-State: AFqh2kouKy7t+c5x1RTBJLExShdOssh35F6UJ36qfpfzTSxEm01u91CZ
-        5DccNQoc1FdgJzW+5D9Kf8gJfGUvwA0iFtLLD0ZUYCQDcisLHXv3YFui/sSaVHqN8uiI0xDJcEm
-        VJQUCqLyz7frCPeEVLwyBP12p
-X-Received: by 2002:a05:6808:300e:b0:364:f962:afd1 with SMTP id ay14-20020a056808300e00b00364f962afd1mr15578562oib.56.1674588262029;
-        Tue, 24 Jan 2023 11:24:22 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtXJqXdze5ERKsi/TEq4I3Qn8MLneaaxsNGXIqSS/Q8exKfwqcnDFs/GLX78SPVbd3lckA+0A==
-X-Received: by 2002:a05:6808:300e:b0:364:f962:afd1 with SMTP id ay14-20020a056808300e00b00364f962afd1mr15578541oib.56.1674588261773;
-        Tue, 24 Jan 2023 11:24:21 -0800 (PST)
-Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id r21-20020a056808211500b0036e3bb67a20sm1388024oiw.38.2023.01.24.11.24.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 11:24:21 -0800 (PST)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     andersson@kernel.org
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bmasney@redhat.com, quic_shazhuss@quicinc.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: sa8540p-ride: Document i2c busses
-Date:   Tue, 24 Jan 2023 13:23:51 -0600
-Message-Id: <20230124192351.695838-2-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230124192351.695838-1-ahalaney@redhat.com>
-References: <20230124192351.695838-1-ahalaney@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H02SARdJbOG9xHDyO4rUQCOtJbYpCr4eHoKUBzaYL6Q=;
+        b=ZXvsY/QtCX6teDGJhJCudc2ff2u7z5xDIFyPd5FjqeBr998VmpiruP90c779cR5XF7
+         CA/trV9TUC6f63bb5UFSZT2bMY9XhfDFTiWWbxzUhkLw6aaulk/R+4i2LvxWjSTcg8N2
+         lUyy5Om2qjCZT117rbkiN1eKYnEFt8w+nWMx/v7fc/FxeTj9OUhy9TTWpMkne3nfQN4g
+         aT0m6/0D68/UYbx4+sLjRDEI8Ynklr0RZt5NgE626BjmVknpbJeSJWV86SwET0mPL0V/
+         YKLRYoS35symo+vJb6MihdtXMZZsqJQwH1R6Zz+LPlHF26RGLZWY5SCpXdk1qSw4AYPb
+         nXYA==
+X-Gm-Message-State: AFqh2kqdCoADQETvzDTL1XtH2jwVN5eGoiICh5sgN7X3GWKc4YvajZN6
+        57l2XoUznVhsmF+WG8Wrv+NhVOdXZdZ/4HvfKrE=
+X-Google-Smtp-Source: AMrXdXslw37tCOS4eF39s7VAH4eqhhJOdfda7JWGinfdntqqz+u1IqaESuA5KlGI4tYZV1Y805Xd6YqiehtmiIrtbbI=
+X-Received: by 2002:ac8:774d:0:b0:3b6:6669:dd20 with SMTP id
+ g13-20020ac8774d000000b003b66669dd20mr850987qtu.93.1674588248442; Tue, 24 Jan
+ 2023 11:24:08 -0800 (PST)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230124021118.154078-3-nphamcs@gmail.com> <202301241402.CeUdAtDh-lkp@intel.com>
+In-Reply-To: <202301241402.CeUdAtDh-lkp@intel.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Tue, 24 Jan 2023 11:23:57 -0800
+Message-ID: <CAKEwX=P0RvicKMEWAzb+48V2Y1Cai8tdMc8oCS0GY8qoiv0g=w@mail.gmail.com>
+Subject: Re: [PATCH v7 2/3] cachestat: implement cachestat syscall
+To:     kernel test robot <lkp@intel.com>
+Cc:     akpm@linux-foundation.org, oe-kbuild-all@lists.linux.dev,
+        hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,71 +70,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It isn't obvious in the current devicetree what is connected. Go ahead
-and document what's on the other end.
+On Mon, Jan 23, 2023 at 10:49 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Nhat,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on 1440f576022887004f719883acb094e7e0dd4944]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
+> base:   1440f576022887004f719883acb094e7e0dd4944
+> patch link:    https://lore.kernel.org/r/20230124021118.154078-3-nphamcs%40gmail.com
+> patch subject: [PATCH v7 2/3] cachestat: implement cachestat syscall
+> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301241402.CeUdAtDh-lkp@intel.com/config)
+> compiler: mips-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/f902a360bb453bd6885cd89d4f9ad4a40205fd15
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
+>         git checkout f902a360bb453bd6885cd89d4f9ad4a40205fd15
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
+> --
+> >> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
+> --
+>    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+>    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+>    scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>    arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+>       26 | void output_ptreg_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+>       78 | void output_task_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+>       92 | void output_thread_info_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+>      108 | void output_thread_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
+>      136 | void output_thread_fpu_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+>      179 | void output_mm_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:213:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+>      213 | void output_sc_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:248:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
+>      248 | void output_signal_defined(void)
+>          |      ^~~~~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:315:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+>      315 | void output_pbe_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:327:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
+>      327 | void output_pm_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:341:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
+>      341 | void output_kvm_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~
+>    arch/mips/kernel/asm-offsets.c:385:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
+>      385 | void output_cps_defines(void)
+>          |      ^~~~~~~~~~~~~~~~~~
+> >> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
 
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
-
-Not sure if this sort of patch is actually welcomed or not but I went
-through this exercise (for the prior patch) and thought it might be
-useful to document.
-
-Shazad, this also highlights (unless I misread things) that i2c12 has no
-use for us, right? If agreed I can remove it but sorting through the
-lore links that provided all this it seems like at the time it was
-desired to be added.
-
-Thanks,
-Andrew
-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index cb9fbdeb5a9e..3478ab91fe73 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -317,6 +317,7 @@ &xo_board_clk {
- 
- &tlmm {
- 	i2c0_default: i2c0-default-state {
-+		/* To USB7002T-I/KDXVA0 USB hub (SIP1 only) */
- 		pins = "gpio135", "gpio136";
- 		function = "qup0";
- 		drive-strength = <2>;
-@@ -324,6 +325,7 @@ i2c0_default: i2c0-default-state {
- 	};
- 
- 	i2c1_default: i2c1-default-state {
-+		/* To PM40028B-F3EI PCIe switch */
- 		pins = "gpio158", "gpio159";
- 		function = "qup1";
- 		drive-strength = <2>;
-@@ -331,6 +333,7 @@ i2c1_default: i2c1-default-state {
- 	};
- 
- 	i2c12_default: i2c12-default-state {
-+		/* Not connected */
- 		pins = "gpio0", "gpio1";
- 		function = "qup12";
- 		drive-strength = <2>;
-@@ -338,6 +341,7 @@ i2c12_default: i2c12-default-state {
- 	};
- 
- 	i2c15_default: i2c15-default-state {
-+		/* To display connector (SIP1 only) */
- 		pins = "gpio36", "gpio37";
- 		function = "qup15";
- 		drive-strength = <2>;
-@@ -345,6 +349,7 @@ i2c15_default: i2c15-default-state {
- 	};
- 
- 	i2c18_default: i2c18-default-state {
-+		/* To ASM330LHH IMU (SIP1 only) */
- 		pins = "gpio66", "gpio67";
- 		function = "qup18";
- 		drive-strength = <2>;
--- 
-2.39.0
-
+I need to add the new syscall to mips' syscall table
+(arch/mips/kernel/syscalls/syscall_n32.tbl etc.)
