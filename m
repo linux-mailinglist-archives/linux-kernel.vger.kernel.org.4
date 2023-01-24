@@ -2,156 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D534B67A564
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CDC67A56A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbjAXWIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S235183AbjAXWJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjAXWII (ORCPT
+        with ESMTP id S232601AbjAXWJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:08:08 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8491F909
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674598087; x=1706134087;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wvM59Edi8nqbgKMNL0z60yihBPX0x9u6/vQtdXNwkFg=;
-  b=cFS5YqX0/B+HTTFHve28AdzPOjVIdso4Rug02qjFl3AXJw/cW4ws6bM5
-   ZWBz1QsDSgdRGdLcns0woOZP3nO7o6OH5d0fcxcgvMMjUv5fLst02cd2G
-   NciEwCa0B1WxRxC5vzRUZ//rT1nsdcHuC8OghG9YtdsFugaQQfwKq5Fht
-   eOB/YRwK+twWQ3sA45OTjnlxaxb02n8PpNDkDGJ5iH6P9AALcoN1gzDoy
-   LD6r9q1XoJvvwInGFj8hE9xjmdb71J9yy2jdYt18N+zUnhnP8BQZBfRdJ
-   xj2w8HeZ/2R/csRuDz9xJkDId3H1ilhxe9o6LIf0d1k2t38fNGeJkEbE6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="388765038"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="388765038"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 14:08:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="907673111"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="907673111"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Jan 2023 14:08:06 -0800
-Received: from [10.251.2.31] (kliang2-mobl1.ccr.corp.intel.com [10.251.2.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 24 Jan 2023 17:09:10 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07F11F909;
+        Tue, 24 Jan 2023 14:09:09 -0800 (PST)
+Received: from [192.168.2.197] (unknown [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 86A84580AA4;
-        Tue, 24 Jan 2023 14:08:05 -0800 (PST)
-Message-ID: <c8ad4654-6bfd-2983-036e-e969787992e9@linux.intel.com>
-Date:   Tue, 24 Jan 2023 17:08:04 -0500
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 817406602E22;
+        Tue, 24 Jan 2023 22:09:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674598148;
+        bh=1zr7qfrQPqMx8+ESoAypSrnPHB7w9ZVQOi/B07+18JM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SDARVLb5YiWptwh6L3DVv0MFnmaAm45m1TQew0cK6L2fC/SlMd37DVjpBrEGvH9yV
+         qW3E4riaTEwEeBUJGjh+8xbbyMceXQuN2XBDJooc1WsQubHF9E+NaKldlRqjv4ui/8
+         NpSefHwxNO7lLlo/Sivx6+aGjBTqtRj7PiW9xViUS8HYYe691iOXfpQESk4pRUQ8Jz
+         4/purXnCJu/tKKiR3PzmNBPrgrfSrcVlmff+DiCZqCOFsOOO3fu0JvAnRiq1XUsMPE
+         pz87Zaaf7g7Qvy3UO9FhKBw914eGk/j7agbNG8bD410pT6xk9VHSORcfhEiSwezLHm
+         FhyfVO1Tm+syQ==
+Message-ID: <90f005c1-effa-2117-8b57-fb8f2cf9d71b@collabora.com>
+Date:   Wed, 25 Jan 2023 01:09:03 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] timekeeping: NMI safe converter from a given time to
- monotonic
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 02/21] dt-bindings: display: tegra: vi: add 'vip'
+ property and example
 Content-Language: en-US
-To:     John Stultz <jstultz@google.com>,
-        Stephane Eranian <eranian@google.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, tglx@linutronix.de,
-        sboyd@kernel.org, linux-kernel@vger.kernel.org,
-        namhyung@kernel.org, ak@linux.intel.com
-References: <20230123182728.825519-1-kan.liang@linux.intel.com>
- <20230123182728.825519-2-kan.liang@linux.intel.com>
- <CANDhNCpWwxXM8DD9h4zOW+bygshkOg9TWO9Z7wJO_B7bDtgEHw@mail.gmail.com>
- <9c17d6be-e532-84e1-4d35-77b9bd3051dc@linux.intel.com>
- <CANDhNCp_0Os+e0A0LZ7yKw16mWai9MAPMPYL0p1NkcVxifh88w@mail.gmail.com>
- <1fb59dfa-1ab9-51ad-98c6-89431aa56918@linux.intel.com>
- <CANDhNCodq8iyRY-md-nRkAPYS5p3iTCgDqZXvWAA108TctQASg@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CANDhNCodq8iyRY-md-nRkAPYS5p3iTCgDqZXvWAA108TctQASg@mail.gmail.com>
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221229133205.981397-1-luca.ceresoli@bootlin.com>
+ <20221229133205.981397-3-luca.ceresoli@bootlin.com>
+ <cdc91bc4-aa76-f824-36c9-d2995c17fb18@collabora.com>
+ <20230124221421.2d45a532@booty>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230124221421.2d45a532@booty>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-01-24 3:33 p.m., John Stultz wrote:
-> On Tue, Jan 24, 2023 at 12:13 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->> On 2023-01-24 1:43 p.m., John Stultz wrote:
->>> On Tue, Jan 24, 2023 at 7:09 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>>> On 2023-01-24 2:01 a.m., John Stultz wrote:
->>>>> On Mon, Jan 23, 2023 at 10:27 AM <kan.liang@linux.intel.com> wrote:
->>>>>> +               /*
->>>>>> +                * Check whether the given timestamp is on the current
->>>>>> +                * timekeeping interval.
->>>>>> +                */
->>>>>> +               now = tk_clock_read(tkr);
->>>>>> +               interval_start = tkr->cycle_last;
->>>>>> +               if (!cycle_between(interval_start, cycles, now))
->>>>>> +                       return -EOPNOTSUPP;
->>>>> So. I've not fully thought this out, but it seems like it would be
->>>>> quite likely that you'd run into the case where the cycle_last value
->>>>> is updated and your earlier TSC timestamp isn't valid for the current
->>>>> interval. The get_device_system_crosststamp() logic has a big chunk of
->>>>> complex code to try to handle this case by interpolating the cycle
->>>>> value back in time. How well does just failing in this case work out?
->>>>>
->>>> For the case, perf fallback to the time captured in the NMI handler, via
->>>> ktime_get_mono_fast_ns().
->>> This feels like *very* subtle behavior. Maybe I'm misunderstanding,
->>> but the goal seems to be to have more accurate timestamps on the hw
->>> events, and using the captured tsc timestamp avoids the measuring
->>> latency reading the time again. But if every timekeeping update
->>> interval (~tick) you transparently get a delayed value due to the
->>> fallback, it makes it hard to understand which timestamps are better
->>> or worse. The latency between two reads may be real or it may be just
->>> bad luck. This doesn't intuitively seem like a great benefit over more
->>> consistent latency of just using the ktime_get_mono_fast()
->>> timestamping.
->> Your understand is correct. We want a more accurate timestamp for the
->> analysis work.
+On 1/25/23 00:14, Luca Ceresoli wrote:
+> Hi Dmitry,
+> 
+> On Tue, 24 Jan 2023 20:02:39 +0300
+> Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+> 
+>> On 12/29/22 16:31, Luca Ceresoli wrote:
+>>> +        vip {
+>>> +            compatible = "nvidia,tegra20-vip";
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>> +            channel@0 {
+>>> +                reg = <0>;
+>>> +                ports {
+>>> +                    #address-cells = <1>;
+>>> +                    #size-cells = <0>;
+>>> +                    port@0 {
+>>> +                        reg = <0>;
+>>> +                        vi_vip_in: endpoint {
+>>> +                            remote-endpoint = <&mt9v111_out>;
+>>> +                        };
+>>> +                    };
+>>> +                    port@1 {
+>>> +                        reg = <1>;
+>>> +                        vi_vip_out: endpoint {
+>>> +                            remote-endpoint = <&vi_in>;
+>>> +                        };
+>>> +                    };
+>>> +                };
+>>> +            };  
 >>
->> As my understanding, the timekeeping update should not be very often. If
-> "Often" depends on your your timescale.
+>> In the changelog you said that the channel@0 node is removed
 > 
->> I read the code correctly, it should happen only when adjusting NTP or
->> suspending/resuming. If so, I think the drawback should not impact the
->> normal analysis work. I will call out the drwabacks in the comments
->> where the function is used.
-> So the adjustments are done at tick time depending on the current NTP
-> "error" (basically what the kernel tracks as the delta from its sense
-> of what NTP has told us).
+> Thanks, you are right, this is a leftover. I must have forgotten about
+> updating the example. :-\
 > 
-> Not just at the time when ntp makes an adjustment.
-> 
-> So the window for it to happen is every timekeeping update (which is ~HZ).
+> It will be fixed in v4 obviously, I was waiting before sending it in
+> case of any feedback on the other patches.
 
-You mean the tkf->base is updated in each tick?
-If so, that should be a problem.
+The rest of the patches look okay. The patchset should get testing on
+T210 and then will be good to apply it, IMO. If nobody will volunteer to
+test T210 then should be good to apply it too, we can always fix the
+code later on.
 
-Does the NTP "error" consistently happen on all the platforms? Or just
-on some platforms which we can check and limit the usage?
+-- 
+Best regards,
+Dmitry
 
-There are two configurations for PEBS, single PEBS, and large PEBS.
-For the single PEBS mode, HW triggers a NMI for each record. The TSC is
-the time which the record is generated, and we convert it in the same
-NMI. I don't think the NTP "error" can impact it.
-
-But for the large PEBS mode, HW triggers a NMI only when a fixed number
-of records are generated. It's very likely that the base has been
-updated between the records. That could bring troubles, since we can
-only fall back to the NMI handler time of the last record. I'm afraid we
-have to disable the large PEBS mode.
-
-Stephane,
-
-What do you think?
-Is it still useful for you if we only support the single PEBS?
-
-
-Thanks,
-Kan
