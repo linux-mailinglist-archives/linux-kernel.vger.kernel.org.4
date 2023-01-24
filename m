@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF5E67939D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968E467939B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjAXJFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S233009AbjAXJEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:04:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjAXJE6 (ORCPT
+        with ESMTP id S231483AbjAXJEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:04:58 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8933D0BC
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:04:55 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id n7so13165141wrx.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1juhkmhpvx2lT4x4u+c5+9s9S4X54bhJYPvzt6ZWnE=;
-        b=8R7UGXzogpSZH3Cp+NSSbVCzzvNbQcxPAtX9ECF9aLa/JCykl+NcPb3t87f5F09V9T
-         GlKkIG22mHuVpzNgOc5H81+jPFAEQrCnF6t6ztL/4c6kzf1nt6f5q8JpIx5qFKQnLxzQ
-         vS1KF/8gU3eJylhbeMxZoN3xd/Cxl/agoR5NJSvUG+L9vIeFR3jVjb4JdBtB9kMCZi/k
-         ZTC42UPjHAw3DZe3NYlMzhNOVX/mXw4aXZu3GX9wp/x6GOHuN05aX2g5j4gmEz/eqUqr
-         v9m2xdFf3T/xSN3o1YMKqlfxtFaR5rm5DkgEWhLmz5R3Un6nlmPhfD+xDdKvmi84TW9w
-         rXSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i1juhkmhpvx2lT4x4u+c5+9s9S4X54bhJYPvzt6ZWnE=;
-        b=i/+5bQ9sEimbbdKnYSmcHcOS+HlWx3gf0LANCPqARYpQUwgDAQlR9PViWjLuaAVCtV
-         2/umQ/cRf90NNHFWT2Ec5KeUCwPpufkp1Cfgvzkb1qs/xN8pZcxqBDJQZGAhrR3cnfiS
-         C9aE8TSnj4JWIum54d1TKzSWKZOIv4HcNNX1SIFypyU4UlnLrwZ9HaxYxscyfcWl1AqY
-         Fr9oOGxoBrrYN8aFF0/8Vb6pKqjr/eF9vAYcyM5WYqzugnIUZAGCD7eW26UMsdyJInMo
-         C1FmmLa8AUHSD9U1RzLLyTL4N4XXI+jwlMNTjQctKzgxNt7Jvfxom9SnqBKAdzsEMKXF
-         IkEA==
-X-Gm-Message-State: AFqh2kqdNmXB5OdfK8VMipF3jdb46CBoEIdRd4bSEojKN8LArCf4cTqF
-        38ga9mUDdq6YIcIemjrkN9e3aaqcDXSUFcA5Bqjq5A==
-X-Google-Smtp-Source: AMrXdXslWzyBPl6qN6lfBta/ufChiJMu2Y2CiUL1C94ZCECbF4eI9FFmR8w/ZsdDLVJkOVp28ufLm8pcdg8HVQLMWtk=
-X-Received: by 2002:a5d:5190:0:b0:2bd:d6bc:e35c with SMTP id
- k16-20020a5d5190000000b002bdd6bce35cmr1227921wrv.144.1674551093678; Tue, 24
- Jan 2023 01:04:53 -0800 (PST)
+        Tue, 24 Jan 2023 04:04:53 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504723D0BC;
+        Tue, 24 Jan 2023 01:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674551092; x=1706087092;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vAWLkQQtGh1QvXHIm+N+kend/e1ltxLlDjhIkUmDNzg=;
+  b=dSNH8il9TukaiykYsr/a0zjloDbH/K09nrOM5wfv7MO2k6WytQwbhe7u
+   a+nO8zs+xs/YYhK+R5Gigq71/UNdC7BaAso8sEDySqKaB2vkVJfcbX1FR
+   tU+aY2v8NGiuLI03YMuhnw7QiGK1HUlXRpnFramYDJr7gGbAyhYzzf+gz
+   pKoY4vbNibdZOSA1gjkQy40CUtJCErrQRxqEwnu0FznZO1qRtVAAF7ylg
+   OocqXWrP69TvMNu7HXxk6O28tPr+gj/lsEKBuJZmSKH6c2vVRiAZ8Sb49
+   i1H6uXAcZP3dpx9OxSPv5197Mgv3+HgotgQu11muSdNyC4in1rlxZuh/s
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412484606"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="412484606"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 01:04:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750758003"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="750758003"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2023 01:04:49 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pKFEW-00EFi1-0k;
+        Tue, 24 Jan 2023 11:04:48 +0200
+Date:   Tue, 24 Jan 2023 11:04:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Subject: Re: [PATCH v1 1/3] ACPI: video: Fix refcounting in
+ apple_gmux_backlight_present()
+Message-ID: <Y8+fL3S36gDPydo0@smile.fi.intel.com>
+References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
+ <9e24156c-65fc-d38b-317a-9cc8fb2201b9@redhat.com>
+ <Y87PWaFFpHeW5YLv@smile.fi.intel.com>
+ <CAJZ5v0g_WmbCwcqvy_VwZZNDbX48c84vmkqUdGvjX3-w24GCwg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230123112803.817534-1-alexghiti@rivosinc.com> <Y88F808GULoKFOVJ@spud>
-In-Reply-To: <Y88F808GULoKFOVJ@spud>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 24 Jan 2023 10:04:42 +0100
-Message-ID: <CAHVXubh=SQ0fS2FCpdB-TD5n=DHUHAaRqDazHWDMv3fWqwpjcA@mail.gmail.com>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g_WmbCwcqvy_VwZZNDbX48c84vmkqUdGvjX3-w24GCwg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On Mon, Jan 23, 2023 at 08:24:27PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Jan 23, 2023 at 7:18 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Mon, Jan 23, 2023 at 06:46:44PM +0100, Hans de Goede wrote:
+> > > On 1/23/23 18:10, Andy Shevchenko wrote:
+> > > > acpi_dev_get_first_match_dev() gets ACPI device with the bumped
+> > > > refcount. The caller must drop it when it's done.
+> > > >
+> > > > Fix ACPI device refcounting in apple_gmux_backlight_present().
 
-On Mon, Jan 23, 2023 at 11:11 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
-> > During the early page table creation, we used to set the mapping for
-> > PAGE_OFFSET to the kernel load address: but the kernel load address is
-> > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> > PAGE_OFFSET is).
-> >
-> > But actually we don't have to establish this mapping (ie set va_pa_offset)
-> > that early in the boot process because:
-> >
-> > - first, setup_vm installs a temporary kernel mapping and among other
-> >   things, discovers the system memory,
-> > - then, setup_vm_final creates the final kernel mapping and takes
-> >   advantage of the discovered system memory to create the linear
-> >   mapping.
-> >
-> > During the first phase, we don't know the start of the system memory and
-> > then until the second phase is finished, we can't use the linear mapping at
-> > all and phys_to_virt/virt_to_phys translations must not be used because it
-> > would result in a different translation from the 'real' one once the final
-> > mapping is installed.
-> >
-> > So here we simply delay the initialization of va_pa_offset to after the
-> > system memory discovery. But to make sure noone uses the linear mapping
-> > before, we add some guard in the DEBUG_VIRTUAL config.
-> >
-> > Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-> > in a better TLB utilization.
-> >
-> > Note that we rely on the firmware to protect itself using PMP.
-> >
-> > Acked-by: Rob Herring <robh@kernel.org> # DT bits
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
-> No good on !MMU unfortunately Alex:
-> ../arch/riscv/mm/init.c:222:2: error: use of undeclared identifier 'riscv_pfn_base'
->         riscv_pfn_base = PFN_DOWN(phys_ram_base);
->         ^
->
-> Reproduces with nommu_virt_defconfig.
+...
 
-Thanks, fixed locally, I'll push the v5 soon.
+> > > Thank you for your work on this, much appreciated and I like
+> > > the new acpi_get_first_match_physical_node().
+> > >
+> > > But I don't think this patch is a good idea. There is a
+> > > regression related to apple_gmux_backlight_present()
+> > > with a patch-set fixing it pending.
+> > >
+> > > And that patch-set actually removes this function. Adding
+> > > a fix for this real, but not really important leak now,
+> > > will just make backporting the actual fix harder.
+> > >
+> > > So I would prefer for this patch to not go in and to
+> > > go for (a to be submitted v2) of the patch-set fixing
+> > > the regression right away instead.
+> >
+> > Maybe I missed something, but I noticed that you actually moved (not killed)
+> > the code which is currently in this function. If it's the case, I prefer my
+> > fix to be imported first.
+> 
+> Well, what about making the new code not leak?
+> 
+> That way the separate fix won't be necessary any more, will it?
 
-Thanks again,
+Yes, it will.
 
-Alex
+-- 
+With Best Regards,
+Andy Shevchenko
 
->
-> Thanks,
-> Conor.
+
