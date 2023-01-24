@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082CF67A5A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4C867A5A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbjAXW1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S233549AbjAXW1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjAXW1e (ORCPT
+        with ESMTP id S234481AbjAXW1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:27:34 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7F37B48;
-        Tue, 24 Jan 2023 14:27:33 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-15ff0a1f735so11146551fac.5;
-        Tue, 24 Jan 2023 14:27:33 -0800 (PST)
+        Tue, 24 Jan 2023 17:27:47 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D9644A1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:27:44 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso57175wmc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:27:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QYzhrVnn/TY2Z5kM6uHGUFL5kwZuEGKyu87043mT1ZQ=;
-        b=cIGvlQmaaiEqC5V/4G5Lr1T6F65HXZJPeGHaQHS+dac+N8DztqppB82k7MxXnivBwC
-         FFBHSuZUBwWfLZS26Fku1zffVyQCKsm0nVt8u+QT++d8TzSywJ1Tb6A2WRifnO4HzG3T
-         YdW5tKU4jYcot3mbAV+Jm+4bqNtOZ4YKQzjGzRxCTL+cNsEgKH55XCwOz1D3WA0C9VgS
-         fW+KfBRr0CY5iktem3H0V1aV0zt4WWiPkSg21xfGnNTq88CVlsnLL4VLiMJhmJqBQ7cF
-         +Jjf2FjSKJmc3LAMT/z2WRtON1uOt6BShOK3/F2bzpxwsFqsq9HfUkUEEq1mTevasmJA
-         v7Aw==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fmjm3Z829U3eQ0HD7RpgQ6QYQN7YmYNmxztlfIbUa3s=;
+        b=qKkFDQZcyvsrKMBBuR0L3F2Ue12BBua/+IGpL5PYXj42IfmbIk7GCNpjsGTlNboBY+
+         hrNhUkQ0Y1o9KCcyi9g1jHGP/fqYc+/C/78N7UBBxLy1EOZvLLnu7nSQDTu0dwQQkJci
+         kWp57evylzpB6O50bYTtbZJ0+RCzKQjSVciZVsUi76gk11ghiNlp2Ui6o81SnI1RlLOy
+         L2H2kt8CXzswNirTU7/a24Cg76KG+SXjXZoh7KaCZig7wS8WuMrSAjqFqpSy9EbSO1V7
+         SqF39G7nuhjAPXZETrPN8FNyTi+CMhanYURNGqvyt9mu5XWOjgdYzXHSCWyUQHTOuTD/
+         y3zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QYzhrVnn/TY2Z5kM6uHGUFL5kwZuEGKyu87043mT1ZQ=;
-        b=Izkc78Vthpjs3mxqQIZN6/kvCDIo2EHaMzIi7sJ1HU76t2ixfekAaOHVn+mzXapMdl
-         9nf5m1/fBbMF5szb/z+wA75aAk9VzButeLg4XIyKuhF560uSbwVdhqi3b4AW655N4AUX
-         DkqjfeTP99FBl5Ujb3CoB+lKwDUGz/Im2pJb8pPc0+pO7zJPOhcGkNbKxLYD6tE6KDsZ
-         byd23OrqjIFVVBCUQwOssGG0aJDCFkihcK5+5YPdTkMsZ0B/8CBC2BpBjwWIR4bo69P4
-         WIE0Joruz71FGhk7GrNhxudX0OdYZiY3T2nX4FoHFfQQNAVJpN2tMOK99w0MwPUmmCsG
-         rNZQ==
-X-Gm-Message-State: AFqh2kqi+Ab31eHqkYSiYR7/3jami79P8dxcr2xyQtngYUI3IU5Zh8OV
-        LkZLhpi2nxVZcQiJ/+OwCvxIkyq54wo=
-X-Google-Smtp-Source: AMrXdXuqIExoz1KdggK4V62mQTSd9Qhu9wNsHAolO6rFH/iSKHpqVVJol9SdetGRc261eg0JVANNoQ==
-X-Received: by 2002:a05:6870:288a:b0:144:c094:16bb with SMTP id gy10-20020a056870288a00b00144c09416bbmr16293353oab.51.1674599252398;
-        Tue, 24 Jan 2023 14:27:32 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ov16-20020a056870cb9000b00136f3e4bc29sm1288212oab.9.2023.01.24.14.27.30
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fmjm3Z829U3eQ0HD7RpgQ6QYQN7YmYNmxztlfIbUa3s=;
+        b=5r5BIdT1JNz5tDcBHrII9m6A4TBS6R3n9UHz6Sy5wvnvKS2R8RwbSlisk1h9ldlDGR
+         6VUUDrM8chWUPo2IfIiA9CcQHoxmewx1xSIjn3nj8dMXwiiyO/XUZ5bKz5KhFBtVfjkM
+         mR9v/oCxHtEXoZrOMuRYHQ12xPZj1Z6KUXuwoFry2jv/v3OXt0GtxXncRoFbKZQrrHNf
+         /1cRg1dI+DARaPn7RKxTl4qhItvNOrzuT/H91y63tcY9Yz+b7p19wPm2gX7EPFzoFlSI
+         XfWHkalU7HZVc25u12qk+2cgNGnQwIQpf06C5VFMuLQqUUnMnz0zAHz9dL6XELoUavLG
+         HrLA==
+X-Gm-Message-State: AFqh2krl9uNkoHS0FvWW934bPUdIrsxhR5MACPPjRxk/wqLxzZtoY3Lx
+        JmlYVaKNisBPi5PuzlPO7Gc8vw==
+X-Google-Smtp-Source: AMrXdXtUIhIbk+FfYfm8bkmmKEpk9WmMbkLiISQPuqi+mTwK8Cf7fynMGVuZBW+nCEzqHn41DSs8cA==
+X-Received: by 2002:a05:600c:3512:b0:3db:1665:2a98 with SMTP id h18-20020a05600c351200b003db16652a98mr24655553wmq.16.1674599262543;
+        Tue, 24 Jan 2023 14:27:42 -0800 (PST)
+Received: from [192.168.0.20] (62.213.132.195.rev.sfr.net. [195.132.213.62])
+        by smtp.gmail.com with ESMTPSA id bd25-20020a05600c1f1900b003dafa04ecc4sm105977wmb.6.2023.01.24.14.27.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 14:27:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f8381a17-f4ca-122f-15fc-b5b88d3d322a@roeck-us.net>
-Date:   Tue, 24 Jan 2023 14:27:29 -0800
+        Tue, 24 Jan 2023 14:27:41 -0800 (PST)
+Message-ID: <0b5e3a14-fd23-4646-d4cb-df255eb8fa20@baylibre.com>
+Date:   Tue, 24 Jan 2023 23:27:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: build failure after merge of the hwmon-staging tree
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mario Kicherer <dev@kicherer.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230125092416.44a98d6b@canb.auug.org.au>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230125092416.44a98d6b@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Michael Kao <michael.kao@mediatek.com>,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
+ <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
+ <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
+ <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
+ <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
+ <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
+ <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
+ <d3daece0-ed23-fae7-9bc8-c6e53b84e8e7@baylibre.com>
+ <9f9547a2-69dd-f91d-c587-289156bf9d55@linaro.org>
+ <2950b824-ad2f-2579-a956-a03d157453eb@baylibre.com>
+ <c1fad818-1858-2e81-84fd-03cfb54d8938@linaro.org>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <c1fad818-1858-2e81-84fd-03cfb54d8938@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8yNC8yMyAxNDoyNCwgU3RlcGhlbiBSb3Rod2VsbCB3cm90ZToNCj4gSGkgYWxsLA0K
-PiANCj4gQWZ0ZXIgbWVyZ2luZyB0aGUgaHdtb24tc3RhZ2luZyB0cmVlLCB0b2RheSdzIGxp
-bnV4LW5leHQgYnVpbGQgKHg4Nl82NA0KPiBhbGxtb2Rjb25maWcpIGZhaWxlZCBsaWtlIHRo
-aXM6DQo+IA0KPiBkcml2ZXJzL2h3bW9uL21jMzR2cjUwMDogc3RydWN0IG9mX2RldmljZV9p
-ZCBpcyAyMDAgYnl0ZXMuICBUaGUgbGFzdCBvZiAxIGlzOg0KPiAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAg
-MHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4
-MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4NmUgMHg3OCAweDcwIDB4MmMg
-MHg2ZCAweDYzIDB4MzMgMHgzNCAweDc2IDB4NzIgMHgzNSAweDMwIDB4MzAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4
-MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAg
-MHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4
-MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAg
-MHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDANCj4gRkFUQUw6IG1vZHBvc3Q6IGRyaXZlcnMvaHdtb24vbWMzNHZyNTAw
-OiBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGlzIG5vdCB0ZXJtaW5hdGVkIHdpdGggYSBOVUxMIGVu
-dHJ5IQ0KPiANCj4gQ2F1c2VkIGJ5IGNvbW1pdA0KPiANCj4gICAgZDRhNmFlMDQ0MDQ1ICgi
-aHdtb246IGFkZCBpbml0aWFsIE5YUCBNQzM0VlI1MDAgUE1JQyBtb25pdG9yaW5nIHN1cHBv
-cnQiKQ0KPiANCj4gSSBoYXZlIHVzZWQgdGhlIGh3bW9uLXN0YWdpbmcgdHJlZSBmcm9tIG5l
-eHQtMjAyMzAxMjQgZm9yIHRvZGF5Lg0KPiANCg0KQWxyZWFkeSBmaXhlZC4gU29ycnkgZm9y
-IHRoZSB0cm91YmxlLg0KDQpHdWVudGVyDQoNCg==
+
+On 1/24/23 18:55, Daniel Lezcano wrote:
+> On 24/01/2023 18:46, Amjad Ouled-Ameur wrote:
+>>
+>> On 1/24/23 17:54, Daniel Lezcano wrote:
+>>>
+>>> Hi Amjad,
+>>>
+>>> On 24/01/2023 11:08, Amjad Ouled-Ameur wrote:
+>>>
+>>> [ ... ]
+>>>
+>>>>>>
+>>>>>> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 Little, right ?
+>>>>>
+>>>>> MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per sensor. Thermal zone 0 corresponds
+>>>>>
+>>>>> to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has nothing to do with CPUs. The cooling device type
+>>>>>
+>>>>> used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are present in the SoC for debug-purpose only, they are not supposed
+>>>>>
+>>>>> to be used for production.
+>>>>>
+>>>> After reconsidering the fact that zones 1, 2 and 3 are only used for dev/debug, it might be best to avo >
+>>>> aggregation as you suggested, and keep only support for zone 0 in this driver. Thus I suggest I send a V8
+>>>>
+>>>> where I keep only below fixes for this patch if that's okay with you:
+>>>>
+>>>> - Define "raw_to_mcelsius" function pointer for "struct thermal_bank_cfg".
+>>>>
+>>>> - Fix "mtk_thermal" variable in mtk_read_temp().
+>>>>
+>>>> - Set "mt->raw_to_mcelsius" in probe().
+>>>>
+>>>>
+>>>> For zones 1, 2 and 3 we can later add a different driver specific for dev/debug to probe them to
+>>>>
+>>>> avoid confusion.
+>>>
+>>> You can add them in the driver and in the device tree, but just add the cooling device for the thermal zone 0.
+>>
+>> Thermal zone 0 uses CPU{0..3} for passive cooling, in this case we should register cooling device with
+>>
+>> cpufreq_cooling_register() for each CPU right ?
+>
+> No, the OF code device tree does already that. You just have to register the different thermal zones.
+>
+> Do you have a pointer to a device tree for this board and the thermal setup ?
+
+Sure, here is a dtsi for MT8365 SoC which contains thermal nodes [0].
+
+[0]: https://lore.kernel.org/linux-arm-kernel/20220531135026.238475-17-fparent@baylibre.com/#Z31arch:arm64:boot:dts:mediatek:mt8365.dtsi
+
+>
+>
