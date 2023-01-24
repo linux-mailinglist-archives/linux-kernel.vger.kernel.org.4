@@ -2,182 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3918D67A39B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B6767A3F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjAXUJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S233964AbjAXUcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjAXUJJ (ORCPT
+        with ESMTP id S230334AbjAXUcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:09:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D6942DFD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:08:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674590903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z4KVYNPvkP145/CKGoPDMz+6Nv29JHPEPCKgPsjx58g=;
-        b=FnBIM8H437MS71wPLfde5K7Jmj+rtGg9TeVwZrSdzKjijWuhWQpn3h+HsuX6NCZqmR3mno
-        sjiQ54K5/LXlNZxd9RV/opsD2dtD+JOG+jO/Z73KtVZL7X/amZSlHIyF9kOU/DzzRzkYKy
-        lw60NXDRWnJgZduxDhjIEya164Gcod8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-497-bvdrvDDeP3i5ShdadmQeWA-1; Tue, 24 Jan 2023 15:08:19 -0500
-X-MC-Unique: bvdrvDDeP3i5ShdadmQeWA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0333329AA2C8;
-        Tue, 24 Jan 2023 20:08:11 +0000 (UTC)
-Received: from [10.22.10.191] (unknown [10.22.10.191])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3136753A0;
-        Tue, 24 Jan 2023 20:08:10 +0000 (UTC)
-Message-ID: <70cf3890-efb1-cf35-2f94-f2b09092231f@redhat.com>
-Date:   Tue, 24 Jan 2023 15:08:09 -0500
+        Tue, 24 Jan 2023 15:32:08 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2C2AD2A;
+        Tue, 24 Jan 2023 12:32:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BVsAXeGxOvz2kFADzljmZEWqBA1RfztE/tlD2nwuFxdGshcgNC42WmcOafAWOEeOHBtywVTJ7xIxoIXEMRSwzZd/IYmxhkfih/aiGMQdkVvnQ54IUexV20vXMhGgLgAmdXjYfZ5VYAqCBTfHQrqVc3ZG+23uxIpFSX0KIUl+9eQTPZaL2HvkV9Qhn4hE1+abDaTs+Wwz9aYsrESkcL5CvcPNS2bDP+x9U1IAzxTOzLCfhWKKtCb225Tuqdwm7Eo/cfqmSRVGNB6uCc/VO/MAgGwrohrY0+hQ6NkXfv1nitRn5Ny9Bwfp2Sq4InKjsn5Q+0ARD4JqO6X7S8FCdDM3/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u2fda49ycLyC38hvtVHurB4o1JnTe0GhHvqYhEsRXBs=;
+ b=GQxUn6ZEGFLQzufTu6bAjDpUXGAdOgxP9iLHTM/rIqcQTyQOxByFH+KDCsvVVjJvlXJHBlEZrx6cAsoxRKDIT4jOhoYiEefckjfbw6eekbHmp03U55af2+Kf8v+DipdEpkOIVscTVnCUIv9TltI8LlM0WiwaOSs3FH4ZHC1qaXatogLEx4JihCLK/12MWg8ufhTknhkRjyWivpbUlda6pPJGt+wywQhOEMQlG4qk9cLAZO9/1Nz84XssEkr4psmnH62/5KOuJgQBE4zLi2uXR/a1UkxktYGHL7KsitLi9VrjkDUpoFeUS2XUWbv7c6QisMb543JRaS3znEdq2oqAXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u2fda49ycLyC38hvtVHurB4o1JnTe0GhHvqYhEsRXBs=;
+ b=n1tKWewEsM1xGQ3w9ZaJqg8X9xvm0024a2/ebdq59bAK0R9ADfCxHkBTI1IqdMFrmrtxucq6TVVtZgJSGVWeE4k0ujyegbGBcVPHUqc47IwS0sJXxhM98fUxei5Aywm7OdY1mY4WoLX2qPnJeD1r4wmWZ+8ayf+dg8YPxMSGpw2Nvyl4bY5jO1mxhwXOS6JqXsmHWPOIoZLxRgcDqcaSnH1L0Yp1/+raCG0G1UiUNcj8tXxvoM5cxA8zoHhva6slNUb/JlfRFjTbtyAk4yua4sfxe0FCVk1MnxuiGOxDMW4iDsPVT+Mxxw/pjFMbiXWpzw2SaOcjQtjuo/ax+ypsLQ==
+Received: from DM6PR11CA0012.namprd11.prod.outlook.com (2603:10b6:5:190::25)
+ by SN7PR12MB7323.namprd12.prod.outlook.com (2603:10b6:806:29a::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Tue, 24 Jan
+ 2023 20:32:06 +0000
+Received: from DS1PEPF0000E63D.namprd02.prod.outlook.com
+ (2603:10b6:5:190:cafe::7e) by DM6PR11CA0012.outlook.office365.com
+ (2603:10b6:5:190::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
+ Transport; Tue, 24 Jan 2023 20:32:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E63D.mail.protection.outlook.com (10.167.17.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.12 via Frontend Transport; Tue, 24 Jan 2023 20:32:05 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 12:08:16 -0800
+Received: from [10.110.48.28] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 12:08:15 -0800
+Message-ID: <df718bc0-2163-a7a7-8c5c-db22e9320b7c@nvidia.com>
+Date:   Tue, 24 Jan 2023 12:08:15 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] sched: Store restrict_cpus_allowed_ptr() call state
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 8/8] block: convert bio_map_user_iov to use
+ iov_iter_extract_pages
 Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
-        regressions@leemhuis.info
-References: <20230121021749.55313-1-longman@redhat.com>
- <20230124194805.GA27257@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230124194805.GA27257@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>
+References: <20230124170108.1070389-1-dhowells@redhat.com>
+ <20230124170108.1070389-9-dhowells@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230124170108.1070389-9-dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63D:EE_|SN7PR12MB7323:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e1a86b5-52f9-4424-d4c7-08dafe4a0f0f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Wqc65LRXfWXoQPdJAoVXsvffjESIhpTypEft6/bnDP4WjjG2hpJbQezFXqjbnu2jC8ZjAPPToRHBMU5A+n6RfWTsoMTbdeXbpcztBtuV+amssWHveYe7HJe4Es1/Yx8uxWD0C69GPKWVK1UD76iojJ1xCPkBE+2rxLbjjflGHFWAvdEBl8zC0iu9Fnfca16dN+IgcM8DvZN7tRd8Mzz15lBqojxp8lKCF55w7qHAW7przzfJE9YMRSLoV3BdU+45rzCszC2k7Msf+S+24NkWnZXBKUDeTpSjkHrYFaeDCdxuofUBj8B/HmCcfNf8us5gbeWYRZnjqLEhqbWAaJGmhx/T3C0I7aE1NWPHUTPtqKEXT5tClL1NDXVxjCcYUKLkNeMZkhQerEoHKmKrDrUVop0O+w9olSt6NR+mr4HP863kAH/pIr2Sx6/uL4b8K+fRuE+O1ur3vnyuR3l/tPaZA7BDde5cBJ7Wlk1BHnlnjkld1aDwzqWjQPDPKgD0v/Adhn4JbkONinW0U1vdRV/KuRJDsBCaXcP7PVGQkZJw2LjCLvkJr/sQUODKk53ws90GX+OwnC2v2kPPQUvm11iOGMr1mAQ8ZXHchhmS7OSGh1VwfgRrpX/0X2Nkx8cRWkDl6/SuXYYY/+bANM8ZMKRSigz1H75E9yr2Tf98zc0cW19/kV7E+OorQC5aLuRtLhJn9w0lfIIA3TNqz3RU8xJqQAEpwO/u6qfqGfdVXyB1WQA=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(136003)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(31686004)(36756003)(86362001)(40480700001)(70586007)(82740400003)(356005)(83380400001)(8676002)(31696002)(8936002)(5660300002)(7416002)(2906002)(70206006)(7636003)(16576012)(36860700001)(316002)(40460700003)(478600001)(82310400005)(110136005)(54906003)(426003)(16526019)(47076005)(41300700001)(4326008)(26005)(336012)(2616005)(186003)(53546011)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 20:32:05.8514
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e1a86b5-52f9-4424-d4c7-08dafe4a0f0f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7323
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 14:48, Will Deacon wrote:
-> Hi Waiman,
->
-> [+Thorsten given where we are in the release cycle]
->
-> On Fri, Jan 20, 2023 at 09:17:49PM -0500, Waiman Long wrote:
->> The user_cpus_ptr field was originally added by commit b90ca8badbd1
->> ("sched: Introduce task_struct::user_cpus_ptr to track requested
->> affinity"). It was used only by arm64 arch due to possible asymmetric
->> CPU setup.
->>
->> Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
->> cpumask"), task_struct::user_cpus_ptr is repurposed to store user
->> requested cpu affinity specified in the sched_setaffinity().
->>
->> This results in a performance regression in an arm64 system when booted
->> with "allow_mismatched_32bit_el0" on the command-line. The arch code will
->> (amongst other things) calls force_compatible_cpus_allowed_ptr() and
->> relax_compatible_cpus_allowed_ptr() when exec()'ing a 32-bit or a 64-bit
->> task respectively. Now a call to relax_compatible_cpus_allowed_ptr()
->> will always result in a __sched_setaffinity() call whether there is a
->> previous force_compatible_cpus_allowed_ptr() call or not.
-> I'd argue it's more than just a performance regression -- the affinity
-> masks are set incorrectly, which is a user visible thing
-> (i.e. sched_getaffinity() gives unexpected values).
->
->> In order to fix this regression, a new scheduler flag
->> task_struct::cpus_allowed_restricted is now added to track if
->> force_compatible_cpus_allowed_ptr() has been called before or not. This
->> patch also updates the comments in force_compatible_cpus_allowed_ptr()
->> and relax_compatible_cpus_allowed_ptr() and handles their interaction
->> with sched_setaffinity().
->>
->> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
->> Reported-by: Will Deacon <will@kernel.org>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   include/linux/sched.h |  3 +++
->>   kernel/sched/core.c   | 46 ++++++++++++++++++++++++++++++++++---------
->>   kernel/sched/sched.h  |  2 ++
->>   3 files changed, 42 insertions(+), 9 deletions(-)
-> I find this pretty invasive, but I guess it's up to Peter and Ingo.
-> It also doesn't the whole problem for me; see below.
->
->> diff --git a/include/linux/sched.h b/include/linux/sched.h
->> index 853d08f7562b..f93f62a1f858 100644
->> --- a/include/linux/sched.h
->> +++ b/include/linux/sched.h
->> @@ -886,6 +886,9 @@ struct task_struct {
->>   	unsigned			sched_contributes_to_load:1;
->>   	unsigned			sched_migrated:1;
->>   
->> +	/* restrict_cpus_allowed_ptr() bit, serialized by scheduler locks */
->> +	unsigned			cpus_allowed_restricted:1;
->> +
->>   	/* Force alignment to the next boundary: */
->>   	unsigned			:0;
->>   
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index bb1ee6d7bdde..48234dc9005b 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2999,15 +2999,40 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
->>   	struct rq *rq;
->>   
->>   	rq = task_rq_lock(p, &rf);
->> +
->> +	if (ctx->flags & (SCA_CLR_RESTRICT | SCA_SET_RESTRICT)) {
->> +		p->cpus_allowed_restricted = 0;
-> I don't think this is ever called on the SCA_SET_RESTRICT path, as
-> restrict_cpus_allowed_ptr() calls __set_cpus_allowed_ptr_locked() directly.
-> In my testing, we see a failure in the following sequence:
->
->    1. A 64-bit task has an affinity of 0xf
->    2. It exec()s a 32-bit program and is forcefully restricted to the set
->       of 32-bit-capable cores. Let's say that new mask is 0xc
->    3. The 32-bit task now exec()s a 64-bit program again
->
-> And now we're still stuck with 0xc after step 3 whereas we should restore
-> 0xf.
-I am sorry that missed it. You are right. For setting the 
-cpus_allowed_restricted bit, it should be done directly in 
-restrict_cpus_allowed_ptr().
->> +	} else if (p->cpus_allowed_restricted) {
->> +		/*
->> +		 * If force_compatible_cpus_allowed_ptr() has been called,
->> +		 * we can't extend cpumask to beyond what is in cpus_mask.
->> +		 */
->> +		if (!cpumask_and(rq->scratch_mask, ctx->new_mask,
->> +				 &p->cpus_mask)) {
->> +			task_rq_unlock(rq, p, &rf);
->> +			return -EINVAL;
->> +		}
-> Why is this masking actually needed? __sched_setaffinity() already
-> takes into account the task_cpu_possible_mask(), which is why I asked you
-> before [1] about cases where the saved affinity is not simply a superset
-> of the effective affinity.
+On 1/24/23 09:01, David Howells wrote:
+> This will pin pages or leave them unaltered rather than getting a ref on
+> them as appropriate to the iterator.
+> 
+> The pages need to be pinned for DIO rather than having refs taken on them
+> to prevent VM copy-on-write from malfunctioning during a concurrent fork()
+> (the result of the I/O could otherwise end up being visible to/affected by
+> the child process).
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Jan Kara <jack@suse.cz>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Logan Gunthorpe <logang@deltatee.com>
+> cc: linux-block@vger.kernel.org
+> ---
+> 
+> Notes:
+>      ver #8)
+>       - Split the patch up a bit [hch].
+>       - We should only be using pinned/non-pinned pages and not ref'd pages,
+>         so adjust the comments appropriately.
+>      
+>      ver #7)
+>       - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
+>      
+>      ver #5)
+>       - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
+>         BIO_* flags and got rid of bi_cleanup_mode.
+>       - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+> 
+>   block/blk-map.c | 22 ++++++++++------------
+>   1 file changed, 10 insertions(+), 12 deletions(-)
+> 
 
-I kind of overlook the use of task_cpu_possible_mask() in 
-__set_cpus_allowed_ptr_locked. So we don't really need that masking. 
-That make the patch even simpler then. I will send out a v3.
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-Cheers,
-Longman
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+> diff --git a/block/blk-map.c b/block/blk-map.c
+> index 0e2b0a861ba3..4e22dccdbe9b 100644
+> --- a/block/blk-map.c
+> +++ b/block/blk-map.c
+> @@ -282,21 +282,19 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+>   	if (blk_queue_pci_p2pdma(rq->q))
+>   		extraction_flags |= ITER_ALLOW_P2PDMA;
+>   
+> -	bio_set_flag(bio, BIO_PAGE_REFFED);
+> +	bio_set_cleanup_mode(bio, iter);
+>   	while (iov_iter_count(iter)) {
+> -		struct page **pages, *stack_pages[UIO_FASTIOV];
+> +		struct page *stack_pages[UIO_FASTIOV];
+> +		struct page **pages = stack_pages;
+>   		ssize_t bytes;
+>   		size_t offs;
+>   		int npages;
+>   
+> -		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
+> -			pages = stack_pages;
+> -			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
+> -						   nr_vecs, &offs, extraction_flags);
+> -		} else {
+> -			bytes = iov_iter_get_pages_alloc(iter, &pages,
+> -						LONG_MAX, &offs, extraction_flags);
+> -		}
+> +		if (nr_vecs > ARRAY_SIZE(stack_pages))
+> +			pages = NULL;
+> +
+> +		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
+> +					       nr_vecs, extraction_flags, &offs);
+>   		if (unlikely(bytes <= 0)) {
+>   			ret = bytes ? bytes : -EFAULT;
+>   			goto out_unmap;
+> @@ -318,7 +316,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+>   				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
+>   						     max_sectors, &same_page)) {
+>   					if (same_page)
+> -						put_page(page);
+> +						bio_release_page(bio, page);
+>   					break;
+>   				}
+>   
+> @@ -330,7 +328,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+>   		 * release the pages we didn't map into the bio, if any
+>   		 */
+>   		while (j < npages)
+> -			put_page(pages[j++]);
+> +			bio_release_page(bio, pages[j++]);
+>   		if (pages != stack_pages)
+>   			kvfree(pages);
+>   		/* couldn't stuff something into bio? */
+> 
 
