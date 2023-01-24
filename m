@@ -2,83 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF6E67A593
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E6E67A596
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjAXWUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S229488AbjAXWUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjAXWUA (ORCPT
+        with ESMTP id S231538AbjAXWUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:20:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2580D37F2F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:19:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7398B81714
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A44BC433EF;
-        Tue, 24 Jan 2023 22:19:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674598796;
-        bh=9iFrfubPvHkXkZRsBFgVQ8F91LkJAJBVgFQiapRHzs8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=jhlMb2hzv21TpaaPbTaED6UyekpkT8jIYa6+GIj23XJuGXGb8PtviQIAAU4ycOARm
-         8NoT/uGSjJrceFO4ZmwrICiNr5fuUgLgOrXcJ0Mz1MulHkdLsCJWRr+w8pIBMk0xau
-         XEOxJa0Xj/eJ93L+S57JBMl6ibmHQtC7mGxGlUpV32q49lkuKmzucZrGI/E5vG8TIW
-         4LI3t+6xymiLdR6Jn2lmMd5dqIyGyTqv9a95FNi1uJ/xvG0AVGVCJ1MQ+HV5W83/CM
-         +pY5KOGLT6VW7I1fYgHthvXh/81nCO+dGLyFrhyAXnBrNpbzM/33ThIIuy1EwkVTEl
-         xkJ6wpK16iSuw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 0D3055C1183; Tue, 24 Jan 2023 14:19:56 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:19:56 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
+        Tue, 24 Jan 2023 17:20:33 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6DC37F2F;
+        Tue, 24 Jan 2023 14:20:32 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id g2-20020a9d6b02000000b006864bf5e658so10110446otp.1;
+        Tue, 24 Jan 2023 14:20:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eez1m+PXfOfMtBkO1erQPzslo6stvsXK/McJNzS+bhE=;
+        b=Y0EqZxzKKFrunEnDMpbyNm9vqKMsPBH3WCDPHj9UnR35f1+8069rQgItBroZcZH5Zc
+         gAdtnLWgyPNFCj/rLHCKlzoXoJZ9/eMT49qFr6Zvs/DauhYOYkYnEbRuafQILXsS9Stv
+         ZjkeDFoafh/sLe8R78IDx4v8Y0sMb62vxDFhUnsw7do8Mx0+fqVE2kt+/ogmlt2AzKga
+         q4Y+xYsdvkREY0dSayC2rBbZ0H7/GFhUpSjz1hwc4VA3qX28PiS58pB/5ojzYC93/NAS
+         33xzVijwY/vnQ+O7OfxrnDa0GL5S0A9+osdu2Efasqu8CM+69muvnpeZx7h16u5wAB/L
+         Zotw==
+X-Gm-Message-State: AFqh2kobLE5Lb15AEnouuCj3VHum8ArM29u1yOYNSPRK/pacYyRbXPHw
+        iOFVfJjmmOC7GFXcFGeO5A==
+X-Google-Smtp-Source: AMrXdXsQOGXLvDUlDyfIhPA3kuz6+QbLmoFpTLE7cXamFILL4fYDaWa2Qf1wZU85+DoB6HyjAsx7SQ==
+X-Received: by 2002:a05:6830:244d:b0:675:410e:7533 with SMTP id x13-20020a056830244d00b00675410e7533mr16096069otr.9.1674598831857;
+        Tue, 24 Jan 2023 14:20:31 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a18-20020a9d74d2000000b00684eaf9018csm1449579otl.34.2023.01.24.14.20.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 14:20:31 -0800 (PST)
+Received: (nullmailer pid 316282 invoked by uid 1000);
+        Tue, 24 Jan 2023 22:20:30 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/memory-model Flag suspicious use of srcu cookies
-Message-ID: <20230124221956.GX2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230124143951.23372-1-jonas.oberhauser@huaweicloud.com>
- <Y9ATHMm/iVG8goln@rowland.harvard.edu>
- <20230124191535.GT2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9BFDYUykYBqjfw1@rowland.harvard.edu>
+Subject: [PATCH] dt-bindings: firmware: arm,scmi: Restrict protocol child node properties
+Date:   Tue, 24 Jan 2023 16:20:23 -0600
+Message-Id: <20230124222023.316089-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9BFDYUykYBqjfw1@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 03:52:29PM -0500, Alan Stern wrote:
-> On Tue, Jan 24, 2023 at 11:15:35AM -0800, Paul E. McKenney wrote:
-> > Thank you both!
-> > 
-> > I wordsmithed the commit log as follows, but then realized that this
-> > depends on Alan's earlier patch.
-> > 
-> > Did I miss the official version?  The latest one I have is
-> > message-id Y8q9zjxA620GAFu2@rowland.harvard.edu.
-> 
-> I wanted to update the patch description before submitting it 
-> officially, but I haven't gotten around to it yet.
+The SCMI protocol child nodes are missing any constraints on unknown
+properties. Specifically, either 'unevaluatedProperties' or
+'additionalProperties' is needed. The current structure with a regex
+match for all child nodes doesn't work for this purpose, so let's move
+the common properties '$defs' entry which each specific protocol node
+can reference and set 'unevaluatedProperties: false'.
 
-Would you like to queue Jonas's patch in the meantime?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/firmware/arm,scmi.yaml           | 43 ++++++++++++++-----
+ 1 file changed, 33 insertions(+), 10 deletions(-)
 
-Either way works for me, give or take forgetfulness.
+diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+index 176796931a22..2f7c51c75e85 100644
+--- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
++++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+@@ -100,7 +100,9 @@ properties:
+       Channel specifier required when using OP-TEE transport.
+ 
+   protocol@11:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x11
+@@ -112,7 +114,9 @@ properties:
+       - '#power-domain-cells'
+ 
+   protocol@13:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x13
+@@ -124,7 +128,9 @@ properties:
+       - '#clock-cells'
+ 
+   protocol@14:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x14
+@@ -136,7 +142,9 @@ properties:
+       - '#clock-cells'
+ 
+   protocol@15:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x15
+@@ -148,7 +156,9 @@ properties:
+       - '#thermal-sensor-cells'
+ 
+   protocol@16:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x16
+@@ -160,20 +170,31 @@ properties:
+       - '#reset-cells'
+ 
+   protocol@17:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x17
+ 
+       regulators:
+         type: object
++        additionalProperties: false
+         description:
+           The list of all regulators provided by this SCMI controller.
+ 
++        properties:
++          '#address-cells':
++            const: 1
++
++          '#size-cells':
++            const: 0
++
+         patternProperties:
+-          '^regulators@[0-9a-f]+$':
++          '^regulator@[0-9a-f]+$':
+             type: object
+             $ref: "../regulator/regulator.yaml#"
++            unevaluatedProperties: false
+ 
+             properties:
+               reg:
+@@ -184,15 +205,17 @@ properties:
+               - reg
+ 
+   protocol@18:
+-    type: object
++    $ref: '#/$defs/protocol-node'
++    unevaluatedProperties: false
++
+     properties:
+       reg:
+         const: 0x18
+ 
+ additionalProperties: false
+ 
+-patternProperties:
+-  '^protocol@[0-9a-f]+$':
++$defs:
++  protocol-node:
+     type: object
+     description:
+       Each sub-node represents a protocol supported. If the platform
+-- 
+2.39.0
 
-							Thanx, Paul
