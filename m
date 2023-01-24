@@ -2,183 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F65679E9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D363679E9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234289AbjAXQ1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjAXQ1e (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233629AbjAXQ1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 24 Jan 2023 11:27:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327A646A7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674577609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i7Pw8HLyonCZeA68egrmyo7nTJgPIzxf4MWuoam80Xs=;
-        b=SDyNE1+w1+HKQlJ7VSAIEpIcdaW7+88OIg9ry7nSp6r1QUQbOfxVJjEAKDxJg1xk0cW0YD
-        e6W12wHIIQNiuL+fkziQPzBvyuvbSRNzSt39A2oZ5RHRbDFYVOAxLQzYnu2UU36rbs3w7H
-        5z7d6ze3gJFI6rWwavjPa1hm+XViq2s=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-488-83XZaMi2MmedpBBNr6atYQ-1; Tue, 24 Jan 2023 11:26:47 -0500
-X-MC-Unique: 83XZaMi2MmedpBBNr6atYQ-1
-Received: by mail-wm1-f72.google.com with SMTP id o5-20020a05600c4fc500b003db0b3230efso11434086wmq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:26:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i7Pw8HLyonCZeA68egrmyo7nTJgPIzxf4MWuoam80Xs=;
-        b=2uzqIYttLJidYIcHusVOuePuermHk1kZ6zTrmjMqeDEtcoOV27LHBSBJxLtCrwFMIw
-         z2GUbhPIgm39+0iMbwMQa8YC9Wqjv4K8fSar96bnoLUTDJDyH95pPDWPK/uT0vcTLR1a
-         Hfv8CQFYk0wcLXMysdKhCGHknY/Cp4LQS8JWwsjXCmheE1/mYKW6mEGEh4vrY4x7TwZY
-         ePx7T45f3+q3T8F/bzkQjvsp3icg4AdQ+2bhrpg+bVenHIp0hObxc8ezhmDoTkKAfURV
-         1qZ+lo2+5SnHRW25wUjtJQnSJBwoSw19dwP4kSd9ROYkl0Cy/g9KeX2kwnbPMG/S4BUE
-         Buxg==
-X-Gm-Message-State: AFqh2krcJvVmaSX/NDFDPlv9jhygIgx+tbXwAHjC6oJldJYZdWSisw1l
-        ybp9IizU2uaRSIoScPXrQzUyiF6aNFvN20EyEO2FJb2bgPy9waMM+Vo7rJRHhiKrkrTFZeCot4f
-        I6w4AGWb5ZJe9iN1ZQPUPe0dI
-X-Received: by 2002:a05:6000:10c6:b0:2bd:e33e:c04b with SMTP id b6-20020a05600010c600b002bde33ec04bmr23891408wrx.22.1674577606155;
-        Tue, 24 Jan 2023 08:26:46 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtQ9TD2bnXMPy82nhP127kncrzx3y56M6S5Ht8LsvTwDvmKsGRFx5R/aF94Ts9iBIA/bwn/sg==
-X-Received: by 2002:a05:6000:10c6:b0:2bd:e33e:c04b with SMTP id b6-20020a05600010c600b002bde33ec04bmr23891359wrx.22.1674577605843;
-        Tue, 24 Jan 2023 08:26:45 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
-        by smtp.gmail.com with ESMTPSA id t16-20020a5d49d0000000b002bfb0c5527esm1691618wrs.109.2023.01.24.08.26.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 08:26:45 -0800 (PST)
-Message-ID: <fd741ac9-8214-a375-00b2-a652a7ef27ea@redhat.com>
-Date:   Tue, 24 Jan 2023 17:26:43 +0100
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232776AbjAXQ1c (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 24 Jan 2023 11:27:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DE299742;
+        Tue, 24 Jan 2023 08:27:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CEF94B3;
+        Tue, 24 Jan 2023 08:28:12 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.11.85])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF8D83F5A1;
+        Tue, 24 Jan 2023 08:27:29 -0800 (PST)
+Date:   Tue, 24 Jan 2023 16:27:23 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>, chriscli@google.com
+Subject: Re: [PATCH] ftrace: Show a list of all functions that have ever been
+ enabled
+Message-ID: <Y9AG63mgkyzSEbSa@FVFF77S0Q05N>
+References: <20230124095653.6fd1640e@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 23/39] mm: Don't allow write GUPs to shadow stack
- memory
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-24-rick.p.edgecombe@intel.com>
- <aa973c0f-5d90-36df-01b2-db9d9182910e@redhat.com>
- <87fsc1il73.fsf@oldenburg.str.redhat.com>
- <c6dc94eb193634fa27e1715ab2978a3ce4b6c544.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <c6dc94eb193634fa27e1715ab2978a3ce4b6c544.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124095653.6fd1640e@gandalf.local.home>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 21:46, Edgecombe, Rick P wrote:
-> On Mon, 2023-01-23 at 11:45 +0100, Florian Weimer wrote:
->> * David Hildenbrand:
->>
->>> On 19.01.23 22:23, Rick Edgecombe wrote:
->>>> The x86 Control-flow Enforcement Technology (CET) feature
->>>> includes a new
->>>> type of memory called shadow stack. This shadow stack memory has
->>>> some
->>>> unusual properties, which requires some core mm changes to
->>>> function
->>>> properly.
->>>> Shadow stack memory is writable only in very specific, controlled
->>>> ways.
->>>> However, since it is writable, the kernel treats it as such. As a
->>>> result
->>>> there remain many ways for userspace to trigger the kernel to
->>>> write to
->>>> shadow stack's via get_user_pages(, FOLL_WRITE) operations. To
->>>> make this a
->>>> little less exposed, block writable GUPs for shadow stack VMAs.
->>>> Still allow FOLL_FORCE to write through shadow stack protections,
->>>> as
->>>> it
->>>> does for read-only protections.
->>>
->>> So an app can simply modify the shadow stack itself by writing to
->>> /proc/self/mem ?
->>>
->>> Is that really intended? Looks like security hole to me at first
->>> sight, but maybe I am missing something important.
->>
->> Isn't it possible to overwrite GOT pointers using the same vector?
->> So I think it's merely reflecting the status quo.
+On Tue, Jan 24, 2023 at 09:56:53AM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> There was some debate on this. /proc/self/mem can currently write
-> through read-only memory which protects executable code. So should
-> shadow stack get separate rules? Is ROP a worry when you can overwrite
-> executable code?
+> When debugging a crash that appears to be related to ftrace, but not for
+> sure, it is useful to know if a function was ever enabled by ftrace or
+> not. It could be that a BPF program was attached to it, or possibly a live
+> patch.
 > 
+> We are having crashes in the field where this information is not always
+> known. But having ftrace set a flag if a function has ever been attached
+> since boot up helps tremendously in trying to know if a crash had to do
+> with something using ftrace.
+> 
+> For analyzing crashes, the use of a kdump image can have access to the
+> flags. When looking at issues where the kernel did not panic, the
+> touched_functions file can simply be used.
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+> 
+> [
+>   This patch will conflict with Mark's patch that is going through the ARM
+>   tree. I will hold off pulling this patch until the next merge window, and
+>   rebase it on top of the changes when the tracing tree merges with upstream
+>   that has the changes from the ARM tree.
+> ]
 
-The question is, if there is reasonable debugging reason to keep it. I 
-assume if a debugger would adjust the ordinary stack, it would have to 
-adjust the shadow stack as well (oh my ...). So it sounds reasonable to 
-have it in theory at least ... not sure when debugger would support 
-that, but maybe they already do.
+Sorry for the conflict!
 
-> The consensus seemed to lean towards not making special rules for this
-> case, and there was some discussion that /proc/self/mem should maybe be
-> hardened generally.
+The patch looks good to me; I just gave it a spin on arm64 (resolving the
+conflcit with my changes by moving FTRCE_FL_TOUCHED to bit 20, and
+FTRACE_REF_MAX_SHIFT down to 20), and from a naive test that seems happy:
 
-I agree with that. It's a debugging mechanism that a process can abuse 
-to do nasty stuff to its memory that it maybe shouldn't be able to do ...
+| # cat /sys/kernel/tracing/touched_functions 
+| # echo do_el0_svc > /sys/kernel/tracing/set_ftrace_filter 
+| # echo function_graph > /sys/kernel/tracing/current_tracer 
+| # cat /sys/kernel/tracing/touched_functions 
+| do_el0_svc (1)       O  ops: graph_ops+0x0/0xb8 (ftrace_graph_func+0x0/0x58)
+| # echo nop > /sys/kernel/tracing/current_tracer 
+| # cat /sys/kernel/tracing/touched_functions 
+| do_el0_svc (0) 
 
--- 
 Thanks,
+Mark.
 
-David / dhildenb
-
+> 
+>  include/linux/ftrace.h |  5 ++++-
+>  kernel/trace/ftrace.c  | 51 +++++++++++++++++++++++++++++++++++++-----
+>  2 files changed, 50 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 99f1146614c0..76baba9bd21b 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -563,6 +563,7 @@ bool is_ftrace_trampoline(unsigned long addr);
+>   *  IPMODIFY - the record allows for the IP address to be changed.
+>   *  DISABLED - the record is not ready to be touched yet
+>   *  DIRECT   - there is a direct function to call
+> + *  TOUCHED  - A callback was added since boot up
+>   *
+>   * When a new ftrace_ops is registered and wants a function to save
+>   * pt_regs, the rec->flags REGS is set. When the function has been
+> @@ -580,9 +581,10 @@ enum {
+>  	FTRACE_FL_DISABLED	= (1UL << 25),
+>  	FTRACE_FL_DIRECT	= (1UL << 24),
+>  	FTRACE_FL_DIRECT_EN	= (1UL << 23),
+> +	FTRACE_FL_TOUCHED	= (1UL << 22),
+>  };
+>  
+> -#define FTRACE_REF_MAX_SHIFT	23
+> +#define FTRACE_REF_MAX_SHIFT	22
+>  #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
+>  
+>  #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
+> @@ -641,6 +643,7 @@ enum {
+>  	FTRACE_ITER_PROBE	= (1 << 4),
+>  	FTRACE_ITER_MOD		= (1 << 5),
+>  	FTRACE_ITER_ENABLED	= (1 << 6),
+> +	FTRACE_ITER_TOUCHED	= (1 << 7),
+>  };
+>  
+>  void arch_ftrace_update_code(int command);
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 442438b93fe9..7687f413ab36 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -45,6 +45,9 @@
+>  #include "trace_output.h"
+>  #include "trace_stat.h"
+>  
+> +/* Flags that do not get reset */
+> +#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED)
+> +
+>  #define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
+>  
+>  #define FTRACE_WARN_ON(cond)			\
+> @@ -2196,7 +2199,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+>  		flag ^= rec->flags & FTRACE_FL_ENABLED;
+>  
+>  		if (update) {
+> -			rec->flags |= FTRACE_FL_ENABLED;
+> +			rec->flags |= FTRACE_FL_ENABLED | FTRACE_FL_TOUCHED;
+>  			if (flag & FTRACE_FL_REGS) {
+>  				if (rec->flags & FTRACE_FL_REGS)
+>  					rec->flags |= FTRACE_FL_REGS_EN;
+> @@ -2251,7 +2254,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+>  	if (update) {
+>  		/* If there's no more users, clear all flags */
+>  		if (!ftrace_rec_count(rec))
+> -			rec->flags &= FTRACE_FL_DISABLED;
+> +			rec->flags &= FTRACE_NOCLEAR_FLAGS;
+>  		else
+>  			/*
+>  			 * Just disable the record, but keep the ops TRAMP
+> @@ -3067,7 +3070,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+>  		struct dyn_ftrace *rec;
+>  
+>  		do_for_each_ftrace_rec(pg, rec) {
+> -			if (FTRACE_WARN_ON_ONCE(rec->flags & ~FTRACE_FL_DISABLED))
+> +			if (FTRACE_WARN_ON_ONCE(rec->flags & ~FTRACE_NOCLEAR_FLAGS))
+>  				pr_warn("  %pS flags:%lx\n",
+>  					(void *)rec->ip, rec->flags);
+>  		} while_for_each_ftrace_rec();
+> @@ -3518,7 +3521,10 @@ t_func_next(struct seq_file *m, loff_t *pos)
+>  		     !ftrace_lookup_ip(iter->hash, rec->ip)) ||
+>  
+>  		    ((iter->flags & FTRACE_ITER_ENABLED) &&
+> -		     !(rec->flags & FTRACE_FL_ENABLED))) {
+> +		     !(rec->flags & FTRACE_FL_ENABLED)) ||
+> +
+> +		    ((iter->flags & FTRACE_ITER_TOUCHED) &&
+> +		     !(rec->flags & FTRACE_FL_TOUCHED))) {
+>  
+>  			rec = NULL;
+>  			goto retry;
+> @@ -3777,7 +3783,7 @@ static int t_show(struct seq_file *m, void *v)
+>  		return 0;
+>  	}
+>  
+> -	if (iter->flags & FTRACE_ITER_ENABLED) {
+> +	if (iter->flags & (FTRACE_ITER_ENABLED | FTRACE_ITER_TOUCHED)) {
+>  		struct ftrace_ops *ops;
+>  
+>  		seq_printf(m, " (%ld)%s%s%s",
+> @@ -3869,6 +3875,31 @@ ftrace_enabled_open(struct inode *inode, struct file *file)
+>  	return 0;
+>  }
+>  
+> +static int
+> +ftrace_touched_open(struct inode *inode, struct file *file)
+> +{
+> +	struct ftrace_iterator *iter;
+> +
+> +	/*
+> +	 * This shows us what functions have ever been enabled
+> +	 * (traced, direct, patched, etc). Not sure if we want lockdown
+> +	 * to hide such critical information for an admin.
+> +	 * Although, perhaps it can show information we don't
+> +	 * want people to see, but if something had traced
+> +	 * something, we probably want to know about it.
+> +	 */
+> +
+> +	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
+> +	if (!iter)
+> +		return -ENOMEM;
+> +
+> +	iter->pg = ftrace_pages_start;
+> +	iter->flags = FTRACE_ITER_TOUCHED;
+> +	iter->ops = &global_ops;
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * ftrace_regex_open - initialize function tracer filter files
+>   * @ops: The ftrace_ops that hold the hash filters
+> @@ -6137,6 +6168,13 @@ static const struct file_operations ftrace_enabled_fops = {
+>  	.release = seq_release_private,
+>  };
+>  
+> +static const struct file_operations ftrace_touched_fops = {
+> +	.open = ftrace_touched_open,
+> +	.read = seq_read,
+> +	.llseek = seq_lseek,
+> +	.release = seq_release_private,
+> +};
+> +
+>  static const struct file_operations ftrace_filter_fops = {
+>  	.open = ftrace_filter_open,
+>  	.read = seq_read,
+> @@ -6601,6 +6639,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+>  	trace_create_file("enabled_functions", TRACE_MODE_READ,
+>  			d_tracer, NULL, &ftrace_enabled_fops);
+>  
+> +	trace_create_file("touched_functions", TRACE_MODE_READ,
+> +			d_tracer, NULL, &ftrace_touched_fops);
+> +
+>  	ftrace_create_filter_files(&global_ops, d_tracer);
+>  
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> -- 
+> 2.39.0
+> 
