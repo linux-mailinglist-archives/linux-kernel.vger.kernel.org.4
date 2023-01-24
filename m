@@ -2,158 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7442F67A01D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E0667A025
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbjAXR0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S233768AbjAXR3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjAXR0v (ORCPT
+        with ESMTP id S232550AbjAXR3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:26:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E3749011
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:26:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65805B81608
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 17:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE82C433EF;
-        Tue, 24 Jan 2023 17:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674581208;
-        bh=uDj/gWJUH8gzog+9GZMB9fG7LXatsYxTB/P63pyeTdo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FYiX1QBm2RAHsQEmKYaoFmO6bkut+//ZCWr2pvGnuakMUIVpbauBPf9VDUU5wqqWc
-         IgUaJUshg3+PKJIZCeqDq39unCdy6w9LXZG2HfPptQeVTv8KqqcTSdqN17eL7Z444Z
-         WUJlAMUGPg4YSdAb0hoVVYMvbopNN7tTQKtjxNGvzmZ/tEa1aE31Yw1YkFlkebLqT0
-         YFsRKYQhWAnR2+vsX8xDYRSR2WdIWnKf2YTXUlTcbe4yyCRKrTn6vMHxqU3LDCKytk
-         ynWclzrOIecjW5sC+JYaJYmbDTXVi+gwpZMqpdepOYIqc3Y9ZH0GmZYSkdR7lJ6oPK
-         Vy7y0mO9lmxsQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8CFF75C06D0; Tue, 24 Jan 2023 09:26:47 -0800 (PST)
-Date:   Tue, 24 Jan 2023 09:26:47 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230120212037.GW2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y82dWEW4RwclDTGM@rowland.harvard.edu>
- <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
- <Y88/5ib7zYl67mcE@rowland.harvard.edu>
- <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8+8fH52iqQABYs2@andrea>
- <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
- <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
+        Tue, 24 Jan 2023 12:29:12 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476854617A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:29:10 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id l125so17215658vsc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:29:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlHbSZMlPdXpLeDouv7a3mV2CdQfaeCUY7pl+TBjXQY=;
+        b=ib93aF9ek7RuB2GLDrxTjN5TBNM67+QOmR05pq7gw1XaIhfBOHudy8M/sCW9C0vh/k
+         QfgN1LO/XpaA54djdNSctqLXRjDPSXCDuqVLluveYdwOr65V0XX8a6OZH7XXX0xjKz/f
+         Hp7vksljpSAY52CxDuy97ZJXJch48FRspfwIY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TlHbSZMlPdXpLeDouv7a3mV2CdQfaeCUY7pl+TBjXQY=;
+        b=RqxjRKaKEsqN2X5ggytRh71g1c1GY8XJyd9rzcm1Fv3F+2kYF/wH1KSsAFu9s7W3MK
+         WYOQ/GqmwTvkvPSCB3WLBEogP3M3QXUYbo7ENijrsLkJMfdHF4f8iTuJZlmA+txHK+CO
+         4+erGfYFy6Mx59OB5Qg9kmTspDJrHMYT2gevrJxkMc1Bwn8FhKyTz4BvoWjrFvbRzhU5
+         AJUIfUDpAAX0smfyPMDV5Dh2SRoOneGaChB+lrotWt9ot1G1aeNzEP7Wb7G6bDeP+EeU
+         KzronaqOefA13+TR1x2K8Zl7incUi0i0Nh10u/TPnOqx3TDRvFpWXW5qf9+Zpl9BGC2q
+         shug==
+X-Gm-Message-State: AFqh2kpuXxCL18om+iuJWAyrneTt5rhtn8ZA6Nxcexfe/MF6BK7onkUB
+        urFWWndJMBeLA/6uQyo+/rUS05z92Yb+ahYq
+X-Google-Smtp-Source: AMrXdXv4rXfQ73wIG7bS1VfHPEu0lxrDeOySCYttuUSdEtxq0kw2Z2WfC6yBOAcgrOlQOIAe+Bg0cA==
+X-Received: by 2002:a67:66c3:0:b0:3d3:c5ba:1f27 with SMTP id a186-20020a6766c3000000b003d3c5ba1f27mr16598637vsc.4.1674581348419;
+        Tue, 24 Jan 2023 09:29:08 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id e22-20020a05620a209600b006cbe3be300esm1798450qka.12.2023.01.24.09.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 09:29:07 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        rcu <rcu@vger.kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH v2] tick/nohz: Fix cpu_is_hotpluggable() by checking with nohz subsystem
+Date:   Tue, 24 Jan 2023 17:28:55 +0000
+Message-Id: <20230124172855.3489912-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 05:39:53PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/24/2023 5:22 PM, Paul E. McKenney wrote:
-> > I clearly recall some
-> > store-based lack of ordering after a grace period from some years back,
-> > and am thus far failing to reproduce it.
-> > 
-> > And here is another attempt that herd7 actually does allow.
-> > 
-> > So what did I mess up this time?  ;-)
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > C C-srcu-observed-4
-> > 
-> > (*
-> >   * Result: Sometimes
-> >   *
-> >   * The Linux-kernel implementation is suspected to forbid this.
-> >   *)
-> > 
-> > {}
-> > 
-> > P0(int *x, int *y, int *z, struct srcu_struct *s)
-> > {
-> > 	int r1;
-> > 
-> > 	r1 = srcu_read_lock(s);
-> > 	WRITE_ONCE(*y, 2);
-> > 	WRITE_ONCE(*x, 1);
-> > 	srcu_read_unlock(s, r1);
-> > }
-> > 
-> > P1(int *x, int *y, int *z, struct srcu_struct *s)
-> > {
-> > 	int r1;
-> > 
-> > 	WRITE_ONCE(*y, 1);
-> > 	synchronize_srcu(s);
-> > 	WRITE_ONCE(*z, 2);
-> > }
-> > 
-> > P2(int *x, int *y, int *z, struct srcu_struct *s)
-> > {
-> > 	WRITE_ONCE(*z, 1);
-> > 	smp_store_release(x, 2);
-> > }
-> > 
-> > exists (x=1 /\ y=1 /\ z=1)
-> 
-> I think even if you implement the unlock as mb() followed by some store that
-> is read by the gp between mb()s, this would still be allowed.
+For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
+However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
+torture tests that do offlining to end up trying to offline this CPU causing
+test failures. Such failure happens on all architectures.
 
-The implementation of synchronize_srcu() has quite a few smp_mb()
-invocations.
+Fix it by asking the opinion of the nohz subsystem on whether the CPU can
+be hotplugged.
 
-But exactly how are you modeling this?  As in what additional accesses
-and memory barriers are you placing in which locations?
+[ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(). ]
 
-> I have already forgotten the specifics, but I think the power model allows
-> certain stores never propagating somewhere?
+For drivers/base/ portion:
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-PowerPC would forbid the 3.2W case, where each process used an
-smp_store_release() as its sole ordering (no smp_mb() calls at all).
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: rcu <rcu@vger.kernel.org>
+Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest of the kernel")
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-> If z=2,z=1,x=2 never propagate to P0, you might start by executing P0, then
-> P1, and then P2 at which point the memory system decides that x=1 overwrites
-> x=2, and the latter simply doesn't propagate anywhere.
+---
+ drivers/base/cpu.c       |  3 ++-
+ include/linux/tick.h     |  2 ++
+ kernel/time/tick-sched.c | 11 ++++++++---
+ 3 files changed, 12 insertions(+), 4 deletions(-)
 
-This propagation is modulated by the memory barriers, though.
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index 55405ebf23ab..450dca235a2f 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -487,7 +487,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
+ bool cpu_is_hotpluggable(unsigned int cpu)
+ {
+ 	struct device *dev = get_cpu_device(cpu);
+-	return dev && container_of(dev, struct cpu, dev)->hotpluggable;
++	return dev && container_of(dev, struct cpu, dev)->hotpluggable
++		&& tick_nohz_cpu_hotpluggable(cpu);
+ }
+ EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+ 
+diff --git a/include/linux/tick.h b/include/linux/tick.h
+index bfd571f18cfd..9459fef5b857 100644
+--- a/include/linux/tick.h
++++ b/include/linux/tick.h
+@@ -216,6 +216,7 @@ extern void tick_nohz_dep_set_signal(struct task_struct *tsk,
+ 				     enum tick_dep_bits bit);
+ extern void tick_nohz_dep_clear_signal(struct signal_struct *signal,
+ 				       enum tick_dep_bits bit);
++extern bool tick_nohz_cpu_hotpluggable(unsigned int cpu);
+ 
+ /*
+  * The below are tick_nohz_[set,clear]_dep() wrappers that optimize off-cases
+@@ -280,6 +281,7 @@ static inline void tick_nohz_full_add_cpus_to(struct cpumask *mask) { }
+ 
+ static inline void tick_nohz_dep_set_cpu(int cpu, enum tick_dep_bits bit) { }
+ static inline void tick_nohz_dep_clear_cpu(int cpu, enum tick_dep_bits bit) { }
++static inline bool tick_nohz_cpu_hotpluggable(unsigned int cpu) { return true; }
+ 
+ static inline void tick_dep_set(enum tick_dep_bits bit) { }
+ static inline void tick_dep_clear(enum tick_dep_bits bit) { }
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 9c6f661fb436..63e3e8ebcd64 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -510,7 +510,7 @@ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
+ 	tick_nohz_full_running = true;
+ }
+ 
+-static int tick_nohz_cpu_down(unsigned int cpu)
++bool tick_nohz_cpu_hotpluggable(unsigned int cpu)
+ {
+ 	/*
+ 	 * The tick_do_timer_cpu CPU handles housekeeping duty (unbound
+@@ -518,8 +518,13 @@ static int tick_nohz_cpu_down(unsigned int cpu)
+ 	 * CPUs. It must remain online when nohz full is enabled.
+ 	 */
+ 	if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
+-		return -EBUSY;
+-	return 0;
++		return false;
++	return true;
++}
++
++static int tick_nohz_cpu_down(unsigned int cpu)
++{
++	return tick_nohz_cpu_hotpluggable(cpu) ? 0 : -EBUSY;
+ }
+ 
+ void __init tick_nohz_init(void)
+-- 
+2.39.1.405.gd4c25cc71f-goog
 
-> (I'll let anyone who has the model at hand correct me on this, because I
-> have to take a walk now).
-
-Have a good walk!
-
-							Thanx, Paul
