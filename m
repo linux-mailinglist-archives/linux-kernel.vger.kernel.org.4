@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8276867A6E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18E867A6E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjAXXfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 18:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S233490AbjAXXfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 18:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbjAXXe7 (ORCPT
+        with ESMTP id S233239AbjAXXfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:34:59 -0500
+        Tue, 24 Jan 2023 18:35:11 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA21E4ED27;
-        Tue, 24 Jan 2023 15:34:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44DE4B8B6;
+        Tue, 24 Jan 2023 15:35:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=z33pQjo2sqnjX+oWqsRt7jj4kSZj16MMYd3bF/XJY6w=; b=CAxqrX95Ee2z8b587wMhEVQP84
-        SRUdVoImnHfKD4VhbmSKs05kcM1kEKWVlWfqheOCMaKeYvVIsch0kjD/L13OxfSUN5zr9DTAFrzIV
-        sBQXwKBdbVQzbThd8NnshGbKpoRhV2wvnyuEjcJ3wqPLStrtjO4xhntq/thtHG6biO3cERVMcOv0n
-        baJSTC0s6/Kq7VxEAAb8F2l3AIbc2KVIfLnWeyOmZf7TWJA1cjX5/ijncOxV5fqc6edT3D6oJHge6
-        xQyIElNus6txtxxDGj8JxGfTFdif8gHykBf2Q12YnChWS5/0NMGBGEoj/RBUkmkdFOvgVQrwR/QFq
-        AESZYfgw==;
+        bh=j+Ij8B4FmQFzvhgIaXBGR57xyNuw6Bm4LHaUavMwE6g=; b=ixccSXnLSZJeIlIrTBeheJOgX6
+        SvDt6Lr3ekDqiMtiEw6jTPn0n3xZj28qtV02dkFP09ZkGcPo5OFBHaA/6EYOTRCnRMV6vZIuqCwYF
+        na/rfYnlXh3Z27FLtca9Y2T7wy5fP6R5g4meF7W39vf6N+ZBMfChS9jYnFKfNulXOI4zy+ukvKxLy
+        S0NurMDlsu6Sh1ROzipUcCIGjAFvfCG31vvIqehOB3fkZwxDBmCqEqHPRUGonWpbM2eD75br5say4
+        oD2Gz06LifCnAPREG0QAxNOvXMLoTLoUORgB6YwBEwC8MHgfccABeSw2nXHlg75/0erdgiIxTe21i
+        e9dmxvzA==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKSoX-005eDw-Mu; Tue, 24 Jan 2023 23:34:53 +0000
+        id 1pKSoh-005eFZ-2N; Tue, 24 Jan 2023 23:35:03 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: [PATCH] input: keyboard: fix a Kconfig spelling mistake & hyphenation
-Date:   Tue, 24 Jan 2023 15:34:53 -0800
-Message-Id: <20230124233453.22893-1-rdunlap@infradead.org>
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH] spi: Kconfig: fix a spelling mistake & hyphenation
+Date:   Tue, 24 Jan 2023 15:35:02 -0800
+Message-Id: <20230124233502.23330-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,24 +48,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Correct a spelling mistake (reported by codespell).
-Also hyphenate "matrix-based".
+Also hyphenate "8-bit".
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: linux-input@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
 ---
- drivers/input/keyboard/Kconfig |    2 +-
+ drivers/spi/Kconfig |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -557,7 +557,7 @@ config KEYBOARD_PMIC8XXX
- 	help
- 	  Say Y here if you want to enable the driver for the PMIC8XXX
- 	  keypad provided as a reference design from Qualcomm. This is intended
--	  to support upto 18x8 matrix based keypad design.
-+	  to support up to 18x8 matrix-based keypad design.
+diff -- a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -247,7 +247,7 @@ config SPI_CADENCE_XSPI
+ 	  Enable support for the Cadence XSPI Flash controller.
  
- 	  To compile this driver as a module, choose M here: the module will
- 	  be called pmic8xxx-keypad.
+ 	  Cadence XSPI is a specialized controller for connecting an SPI
+-	  Flash over upto 8bit wide bus. Enable this option if you have a
++	  Flash over up to 8-bit wide bus. Enable this option if you have a
+ 	  device with a Cadence XSPI controller and want to access the
+ 	  Flash as an MTD device.
+ 
