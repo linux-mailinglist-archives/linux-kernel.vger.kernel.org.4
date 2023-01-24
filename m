@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBA3679416
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79D3679428
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjAXJ0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S233572AbjAXJ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjAXJ0j (ORCPT
+        with ESMTP id S233410AbjAXJ0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:26:39 -0500
+        Tue, 24 Jan 2023 04:26:43 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D805030D5;
-        Tue, 24 Jan 2023 01:26:37 -0800 (PST)
-Date:   Tue, 24 Jan 2023 09:26:36 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B2F3A8A;
+        Tue, 24 Jan 2023 01:26:41 -0800 (PST)
+Date:   Tue, 24 Jan 2023 09:26:37 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674552396;
+        s=2020; t=1674552397;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rm6gA2w9XdDWphFl1YcP9fSiFF3SKIi0cBfaZDeNRsM=;
-        b=BD1tUPuumV+TEYbkdGLyp+UiNXrVsTAVCrCvNZF1LXnKFLK/osu0GTiG8j7ivJMEtgiYv+
-        srFSpAqkke9a+wm0tIy1N0TRfmlfoSMklMAu9hlq1WXT604Tb53u1N5ymXT2ayuPSp5WDC
-        fiUrWcyFUZFOyyu8Y+oH6Jpn3htfbPmPedOgGeFVnwkKuSFNhMocwHx8VZ7o6QQ5ul7Rdp
-        FqdCfSp580Ruyko4uJFsw3jnmJUEB9YFy5MxuKDzdV8TIQ438eW24EjhuwfwbQiCkcEiEr
-        HYg4lNWB64bcS+dRy50Ipyl0/Gfn/a62euxPsim1Miz90764oaspMbNPsd2y2Q==
+        bh=JdsggK7FzLyZAwgALqWgLy7E9ToxzqebgBrgK4iiSNE=;
+        b=DWd9FkbOhnimc7HBcL5cy7umwscP8sIb+gkkVd6WpYIHVDieZCp8XdbK3d21Z//TinFtPF
+        Jx+3+bgMlh3LoBcNqfDD9w4EdFevGpfrEDL4fXMnQM8W5T+oDnHj2ZD9kTah2xUhspclM1
+        f+HjGJnoBaSjov2ZCTmgmhtMbB1whQNDN6QFp13dKvpArWICAck3V3Nxu3ZDi3g0hrMwlA
+        1OND6EhUbCRhRNDZGZ0D1TQcVMZjrd+umdW0K716E1Ed6Yv+hpXblSw23T1AWzBDPJWZLx
+        dA0vcrJEQ1Ph4r+nz9vGTZOdkVeAspS00VtoUrQKS5edawyw2pVgvQHa2Vv2DQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674552396;
+        s=2020e; t=1674552397;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rm6gA2w9XdDWphFl1YcP9fSiFF3SKIi0cBfaZDeNRsM=;
-        b=lLfhJ5nkvmHu395VqXcXZf8CVlM97SPRDeYyi5jB0WjKjmWERIfCAU/0lg2aehNuRC/5mA
-        fZ+BlU5FKlxjIrBA==
+        bh=JdsggK7FzLyZAwgALqWgLy7E9ToxzqebgBrgK4iiSNE=;
+        b=lYSjkrr8ONb4y49P3+3NuXGIHDqczsHF5OJkLr8aIvuT727eQ2fbK+9X4Sr9wezb7FixtZ
+        NSodPkMzF0Cw9MBw==
 From:   "tip-bot2 for Babu Moger" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Add interface to write mbm_total_bytes_config
+Subject: [tip: x86/cache] x86/resctrl: Detect and configure Slow Memory
+ Bandwidth Allocation
 Cc:     Babu Moger <babu.moger@amd.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
         Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230113152039.770054-12-babu.moger@amd.com>
-References: <20230113152039.770054-12-babu.moger@amd.com>
+In-Reply-To: <20230113152039.770054-7-babu.moger@amd.com>
+References: <20230113152039.770054-7-babu.moger@amd.com>
 MIME-Version: 1.0
-Message-ID: <167455239604.4906.13914048239718392770.tip-bot2@tip-bot2>
+Message-ID: <167455239730.4906.16138208729063128746.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,250 +68,161 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     92bd5a1390335bb3cc76bdf1b4356edbc94d408d
-Gitweb:        https://git.kernel.org/tip/92bd5a1390335bb3cc76bdf1b4356edbc94d408d
+Commit-ID:     5b6fac3fa44bafee12e0c3d1c5cbae6d058e9c98
+Gitweb:        https://git.kernel.org/tip/5b6fac3fa44bafee12e0c3d1c5cbae6d058e9c98
 Author:        Babu Moger <babu.moger@amd.com>
-AuthorDate:    Fri, 13 Jan 2023 09:20:37 -06:00
+AuthorDate:    Fri, 13 Jan 2023 09:20:32 -06:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 23 Jan 2023 17:40:30 +01:00
+CommitterDate: Mon, 23 Jan 2023 17:38:44 +01:00
 
-x86/resctrl: Add interface to write mbm_total_bytes_config
+x86/resctrl: Detect and configure Slow Memory Bandwidth Allocation
 
-The event configuration for mbm_total_bytes can be changed by the user by
-writing to the file /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config.
-
-The event configuration settings are domain specific and affect all the
-CPUs in the domain.
-
-Following are the types of events supported:
-
-  ====  ===========================================================
-  Bits   Description
-  ====  ===========================================================
-  6      Dirty Victims from the QOS domain to all types of memory
-  5      Reads to slow memory in the non-local NUMA domain
-  4      Reads to slow memory in the local NUMA domain
-  3      Non-temporal writes to non-local NUMA domain
-  2      Non-temporal writes to local NUMA domain
-  1      Reads to memory in the non-local NUMA domain
-  0      Reads to memory in the local NUMA domain
-  ====  ===========================================================
-
-For example:
-
-To change the mbm_total_bytes to count only reads on domain 0, the bits
-0, 1, 4 and 5 needs to be set, which is 110011b (in hex 0x33).
-Run the command:
-
-  $echo  0=0x33 > /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config
-
-To change the mbm_total_bytes to count all the slow memory reads on domain 1,
-the bits 4 and 5 needs to be set which is 110000b (in hex 0x30).
-Run the command:
-
-  $echo  1=0x30 > /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config
+The QoS slow memory configuration details are available via
+CPUID_Fn80000020_EDX_x02. Detect the available details and
+initialize the rest to defaults.
 
 Signed-off-by: Babu Moger <babu.moger@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Link: https://lore.kernel.org/r/20230113152039.770054-12-babu.moger@amd.com
+Link: https://lore.kernel.org/r/20230113152039.770054-7-babu.moger@amd.com
 ---
- arch/x86/kernel/cpu/resctrl/monitor.c  |  17 +++-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 124 +++++++++++++++++++++++-
- include/linux/resctrl.h                |  11 ++-
- 3 files changed, 151 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/msr-index.h          |  1 +-
+ arch/x86/kernel/cpu/resctrl/core.c        | 36 ++++++++++++++++++++--
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c |  2 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    |  8 +++--
+ 4 files changed, 41 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 28c6500..7fe5148 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -204,6 +204,23 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 37ff475..e0a4002 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -1061,6 +1061,7 @@
+ 
+ /* - AMD: */
+ #define MSR_IA32_MBA_BW_BASE		0xc0000200
++#define MSR_IA32_SMBA_BW_BASE		0xc0000280
+ 
+ /* MSR_IA32_VMX_MISC bits */
+ #define MSR_IA32_VMX_MISC_INTEL_PT                 (1ULL << 14)
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index 10a8c9d..b4fc851 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -162,6 +162,13 @@ bool is_mba_sc(struct rdt_resource *r)
+ 	if (!r)
+ 		return rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl.membw.mba_sc;
+ 
++	/*
++	 * The software controller support is only applicable to MBA resource.
++	 * Make sure to check for resource type.
++	 */
++	if (r->rid != RDT_RESOURCE_MBA)
++		return false;
++
+ 	return r->membw.mba_sc;
+ }
+ 
+@@ -225,9 +232,15 @@ static bool __rdt_get_mem_config_amd(struct rdt_resource *r)
+ 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+ 	union cpuid_0x10_3_eax eax;
+ 	union cpuid_0x10_x_edx edx;
+-	u32 ebx, ecx;
++	u32 ebx, ecx, subleaf;
+ 
+-	cpuid_count(0x80000020, 1, &eax.full, &ebx, &ecx, &edx.full);
++	/*
++	 * Query CPUID_Fn80000020_EDX_x01 for MBA and
++	 * CPUID_Fn80000020_EDX_x02 for SMBA
++	 */
++	subleaf = (r->rid == RDT_RESOURCE_SMBA) ? 2 :  1;
++
++	cpuid_count(0x80000020, subleaf, &eax.full, &ebx, &ecx, &edx.full);
+ 	hw_res->num_closid = edx.split.cos_max + 1;
+ 	r->default_ctrl = MAX_MBA_BW_AMD;
+ 
+@@ -750,6 +763,19 @@ static __init bool get_mem_config(void)
+ 	return false;
+ }
+ 
++static __init bool get_slow_mem_config(void)
++{
++	struct rdt_hw_resource *hw_res = &rdt_resources_all[RDT_RESOURCE_SMBA];
++
++	if (!rdt_cpu_has(X86_FEATURE_SMBA))
++		return false;
++
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
++		return __rdt_get_mem_config_amd(&hw_res->r_resctrl);
++
++	return false;
++}
++
+ static __init bool get_rdt_alloc_resources(void)
+ {
+ 	struct rdt_resource *r;
+@@ -780,6 +806,9 @@ static __init bool get_rdt_alloc_resources(void)
+ 	if (get_mem_config())
+ 		ret = true;
+ 
++	if (get_slow_mem_config())
++		ret = true;
++
+ 	return ret;
+ }
+ 
+@@ -869,6 +898,9 @@ static __init void rdt_init_res_defs_amd(void)
+ 		} else if (r->rid == RDT_RESOURCE_MBA) {
+ 			hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
+ 			hw_res->msr_update = mba_wrmsr_amd;
++		} else if (r->rid == RDT_RESOURCE_SMBA) {
++			hw_res->msr_base = MSR_IA32_SMBA_BW_BASE;
++			hw_res->msr_update = mba_wrmsr_amd;
+ 		}
  	}
  }
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index 7eece3d..eb07d44 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -209,7 +209,7 @@ static int parse_line(char *line, struct resctrl_schema *s,
+ 	unsigned long dom_id;
  
-+/*
-+ * Assumes that hardware counters are also reset and thus that there is
-+ * no need to record initial non-zero counts.
-+ */
-+void resctrl_arch_reset_rmid_all(struct rdt_resource *r, struct rdt_domain *d)
-+{
-+	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
-+
-+	if (is_mbm_total_enabled())
-+		memset(hw_dom->arch_mbm_total, 0,
-+		       sizeof(*hw_dom->arch_mbm_total) * r->num_rmid);
-+
-+	if (is_mbm_local_enabled())
-+		memset(hw_dom->arch_mbm_local, 0,
-+		       sizeof(*hw_dom->arch_mbm_local) * r->num_rmid);
-+}
-+
- static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int width)
- {
- 	u64 shift = 64 - width, chunks;
+ 	if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP &&
+-	    r->rid == RDT_RESOURCE_MBA) {
++	    (r->rid == RDT_RESOURCE_MBA || r->rid == RDT_RESOURCE_SMBA)) {
+ 		rdt_last_cmd_puts("Cannot pseudo-lock MBA resource\n");
+ 		return -EINVAL;
+ 	}
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index ad3c701..03284a6 100644
+index d23fbc4..7516968 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -1517,6 +1517,127 @@ static int mbm_local_bytes_config_show(struct kernfs_open_file *of,
- 	return 0;
- }
+@@ -1210,7 +1210,7 @@ static bool rdtgroup_mode_test_exclusive(struct rdtgroup *rdtgrp)
  
-+static void mon_event_config_write(void *info)
-+{
-+	struct mon_config_info *mon_info = info;
-+	unsigned int index;
-+
-+	index = mon_event_config_index_get(mon_info->evtid);
-+	if (index == INVALID_CONFIG_INDEX) {
-+		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
-+		return;
-+	}
-+	wrmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, 0);
-+}
-+
-+static int mbm_config_write_domain(struct rdt_resource *r,
-+				   struct rdt_domain *d, u32 evtid, u32 val)
-+{
-+	struct mon_config_info mon_info = {0};
-+	int ret = 0;
-+
-+	/* mon_config cannot be more than the supported set of events */
-+	if (val > MAX_EVT_CONFIG_BITS) {
-+		rdt_last_cmd_puts("Invalid event configuration\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Read the current config value first. If both are the same then
-+	 * no need to write it again.
-+	 */
-+	mon_info.evtid = evtid;
-+	mondata_config_read(d, &mon_info);
-+	if (mon_info.mon_config == val)
-+		goto out;
-+
-+	mon_info.mon_config = val;
-+
-+	/*
-+	 * Update MSR_IA32_EVT_CFG_BASE MSR on one of the CPUs in the
-+	 * domain. The MSRs offset from MSR MSR_IA32_EVT_CFG_BASE
-+	 * are scoped at the domain level. Writing any of these MSRs
-+	 * on one CPU is observed by all the CPUs in the domain.
-+	 */
-+	smp_call_function_any(&d->cpu_mask, mon_event_config_write,
-+			      &mon_info, 1);
-+
-+	/*
-+	 * When an Event Configuration is changed, the bandwidth counters
-+	 * for all RMIDs and Events will be cleared by the hardware. The
-+	 * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for
-+	 * every RMID on the next read to any event for every RMID.
-+	 * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)
-+	 * cleared while it is tracked by the hardware. Clear the
-+	 * mbm_local and mbm_total counts for all the RMIDs.
-+	 */
-+	resctrl_arch_reset_rmid_all(r, d);
-+
-+out:
-+	return ret;
-+}
-+
-+static int mon_config_write(struct rdt_resource *r, char *tok, u32 evtid)
-+{
-+	char *dom_str = NULL, *id_str;
-+	unsigned long dom_id, val;
-+	struct rdt_domain *d;
-+	int ret = 0;
-+
-+next:
-+	if (!tok || tok[0] == '\0')
-+		return 0;
-+
-+	/* Start processing the strings for each domain */
-+	dom_str = strim(strsep(&tok, ";"));
-+	id_str = strsep(&dom_str, "=");
-+
-+	if (!id_str || kstrtoul(id_str, 10, &dom_id)) {
-+		rdt_last_cmd_puts("Missing '=' or non-numeric domain id\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!dom_str || kstrtoul(dom_str, 16, &val)) {
-+		rdt_last_cmd_puts("Non-numeric event configuration value\n");
-+		return -EINVAL;
-+	}
-+
-+	list_for_each_entry(d, &r->domains, list) {
-+		if (d->id == dom_id) {
-+			ret = mbm_config_write_domain(r, d, evtid, val);
-+			if (ret)
-+				return -EINVAL;
-+			goto next;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static ssize_t mbm_total_bytes_config_write(struct kernfs_open_file *of,
-+					    char *buf, size_t nbytes,
-+					    loff_t off)
-+{
-+	struct rdt_resource *r = of->kn->parent->priv;
-+	int ret;
-+
-+	/* Valid input requires a trailing newline */
-+	if (nbytes == 0 || buf[nbytes - 1] != '\n')
-+		return -EINVAL;
-+
-+	mutex_lock(&rdtgroup_mutex);
-+
-+	rdt_last_cmd_clear();
-+
-+	buf[nbytes - 1] = '\0';
-+
-+	ret = mon_config_write(r, buf, QOS_L3_MBM_TOTAL_EVENT_ID);
-+
-+	mutex_unlock(&rdtgroup_mutex);
-+
-+	return ret ?: nbytes;
-+}
-+
- /* rdtgroup information files for one cache resource. */
- static struct rftype res_common_files[] = {
- 	{
-@@ -1617,9 +1738,10 @@ static struct rftype res_common_files[] = {
- 	},
- 	{
- 		.name		= "mbm_total_bytes_config",
--		.mode		= 0444,
-+		.mode		= 0644,
- 		.kf_ops		= &rdtgroup_kf_single_ops,
- 		.seq_show	= mbm_total_bytes_config_show,
-+		.write		= mbm_total_bytes_config_write,
- 	},
- 	{
- 		.name		= "mbm_local_bytes_config",
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 0cee154..8334eea 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -250,6 +250,17 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
- 			     u32 rmid, enum resctrl_event_id eventid);
+ 	list_for_each_entry(s, &resctrl_schema_all, list) {
+ 		r = s->res;
+-		if (r->rid == RDT_RESOURCE_MBA)
++		if (r->rid == RDT_RESOURCE_MBA || r->rid == RDT_RESOURCE_SMBA)
+ 			continue;
+ 		has_cache = true;
+ 		list_for_each_entry(d, &r->domains, list) {
+@@ -1399,7 +1399,8 @@ static int rdtgroup_size_show(struct kernfs_open_file *of,
+ 					ctrl = resctrl_arch_get_config(r, d,
+ 								       closid,
+ 								       type);
+-				if (r->rid == RDT_RESOURCE_MBA)
++				if (r->rid == RDT_RESOURCE_MBA ||
++				    r->rid == RDT_RESOURCE_SMBA)
+ 					size = ctrl;
+ 				else
+ 					size = rdtgroup_cbm_to_size(r, d, ctrl);
+@@ -2842,7 +2843,8 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
  
-+/**
-+ * resctrl_arch_reset_rmid_all() - Reset all private state associated with
-+ *				   all rmids and eventids.
-+ * @r:		The resctrl resource.
-+ * @d:		The domain for which all architectural counter state will
-+ *		be cleared.
-+ *
-+ * This can be called from any CPU.
-+ */
-+void resctrl_arch_reset_rmid_all(struct rdt_resource *r, struct rdt_domain *d);
-+
- extern unsigned int resctrl_rmid_realloc_threshold;
- extern unsigned int resctrl_rmid_realloc_limit;
- 
+ 	list_for_each_entry(s, &resctrl_schema_all, list) {
+ 		r = s->res;
+-		if (r->rid == RDT_RESOURCE_MBA) {
++		if (r->rid == RDT_RESOURCE_MBA ||
++		    r->rid == RDT_RESOURCE_SMBA) {
+ 			rdtgroup_init_mba(r, rdtgrp->closid);
+ 			if (is_mba_sc(r))
+ 				continue;
