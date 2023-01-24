@@ -2,129 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13EC679DCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030ED679DD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbjAXPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S235050AbjAXPqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234578AbjAXPnZ (ORCPT
+        with ESMTP id S233840AbjAXPq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:43:25 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DBE4C0D9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:43:09 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l8so11760730wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:43:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N/a+6+PTNK+EgdrHpwsWimSpIXxnD79ClgSYevcrnuE=;
-        b=yf89n9wHbV/XnkigjdbRLaTnDYXsvazoQNIyN4X9VfmFm/yRnOxKuD2VSDfh5nnAp6
-         j4iTCxnMuig5YSDyZo8Erw2bTT2twrR2zWWFhJy6JFPsnAcAcdTGVctCKCp9UWLgE4+m
-         3Zi1q2MGqqELl250sQRxjmNJ0u7dcRA6gGRtqvEmswNkmgTPhecSFQp0Il/496oc8U0/
-         YdfTzSMYOXEck4uhxPAIyQRXI+zoKOVzm9a5QSHHp61yj+d8NPyK6ZRiRzTixITkkm6w
-         gciX8E0C3kDc17akCA4xh1Di4UAEoZQsJSGgqIo/e9jYsdup1v6zagNvDeIvivrAfAuw
-         HUuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N/a+6+PTNK+EgdrHpwsWimSpIXxnD79ClgSYevcrnuE=;
-        b=WNhZCDON4hL5ldNqt4lpKRtTLydSXOhaY1TZzSvrBcGLl5J97G0qREfuDMvnh4wyx1
-         /gtU36lyyCX2VLhfIgmwcRlGsYJNSa1WIZnHsvBFLzcRWhQQld4vJjLfKRKrFXaL46ZZ
-         aQyCyGg4yAD1njf6MxozOTqXI9CWALSwc/TeDwF9HJfbGHjvP+XiBZxzGTCqUiHItwzM
-         2dGMnul+5r4ArpxpSD1iBk8poynXJyhQp5fOBiGU5p+Q7RJCiWqM4W6+Sf34kc+XCdfF
-         hPvvQNsHCj98mMnD5RGGyJht0OOHHMVAbouQKfkgOtLhIt7v/hCawPC/u2EDB2hbfVnM
-         9P+A==
-X-Gm-Message-State: AFqh2krD1Pw+S9Co17qpR9W1iZEiGqH/s7bFVgSiSoJrlVjM2082UDxm
-        By6u3OhrZHjcyJDq22C4Yz30a0rB+eL0esFE
-X-Google-Smtp-Source: AMrXdXuYOE3dT+VE3oSwdKK67My+x+RmBaEi/JYTrdmPi+C9tVhvtgV7Z5YjOeHbO2Ewx7v3D/2lrg==
-X-Received: by 2002:a05:600c:1d12:b0:3da:ff82:f627 with SMTP id l18-20020a05600c1d1200b003daff82f627mr29438313wms.25.1674574987235;
-        Tue, 24 Jan 2023 07:43:07 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t16-20020a5d49d0000000b002bfb0c5527esm1611046wrs.109.2023.01.24.07.43.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 07:43:06 -0800 (PST)
-Message-ID: <e34dd560-1fb5-bd27-a659-eec465fe584a@linaro.org>
-Date:   Tue, 24 Jan 2023 16:43:05 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
- controller
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230113103759.327698-1-herve.codina@bootlin.com>
- <20230113103759.327698-6-herve.codina@bootlin.com>
- <316ddb81-8d13-71dd-3396-412e31cfb880@linaro.org>
- <20230124104232.183cc9ff@bootlin.com>
- <37a95380-ee68-5c3a-3b96-48cc8b525f19@linaro.org>
- <20230124122347.1a531d0f@bootlin.com>
- <81f80190-a05c-5d0d-11b2-a80573b86e1c@linaro.org>
- <20230124151514.58d77765@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124151514.58d77765@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 24 Jan 2023 10:46:29 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D605C6A45
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:46:28 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6285932002FB;
+        Tue, 24 Jan 2023 10:46:27 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 24 Jan 2023 10:46:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674575186; x=1674661586; bh=Gk83FnAdUE
+        syXvflFK7DVR+IxkdYGScYi8WPtKi/v3M=; b=d7CMGUbsBnOSJXUNFchsOjYZDg
+        5W9TxTm3ZHkPb/xodBLAS78YS8gbfi6G7WPqnDhaKgOQ+DWCD+xMWmiZ0dggD9uJ
+        z2BEs6tp3bSmiY2FUtsB0wdT6gUJz08UKp8tawl5bX5fTcn2HujqkUWNi74Gh4Di
+        NrunHknEW0YWEJ2NAvr01KEx5WTcPc2XK/ssgIePdCVlan2NkAZka9RcIoAbeGb1
+        1iW9MCYOjLXZ9yb5UluMkCqzl9Q7/SrMv8B5wgaxQKYRKTQ2N8zVFq/nJS69atnd
+        4uUdHfaTNKMGMQ8umpdpx52ftSKl9oPKJLwhs2KhC6uI6PVnLx6zxz0LFTww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674575186; x=1674661586; bh=Gk83FnAdUEsyXvflFK7DVR+IxkdY
+        GScYi8WPtKi/v3M=; b=VEw+GnffiG/Vy7njcar5zL23D3Uzm7DUfRAxJIYfiyhL
+        0PkSQEYmeLC35ob0KN6VEj33V3odxvg3MXtOb9arm+v6AYg1jJX+AWg5UO/Wp7Kx
+        wxnC4f8rIDMJJKC8+AogkZauBWtZ9ZAGQBJ5StJW/anLzyvHoaMCmdhCwmFPOFX+
+        pr10d7fetcBBo+LnOYPDba+aEnQ//OcpNSbA45cgvr/D5ncpIaC7Ers6E8/duLeH
+        Xt1BR6UNU81qd9PG+rsJLh8eEAryBL/ARUXNpjlhBK6oQI+3i/EVIGnHE+hIJMTZ
+        J9a1SeyJNRSr1G4GM8JYIM6ezjM++dJB5qsibHS2qA==
+X-ME-Sender: <xms:Uf3PYyAbYIWv2O6S6kVmGQZhhhF1m6bohopPXl-pS1SiVOizpw_zRw>
+    <xme:Uf3PY8howCt4J1YXyRtjyZICImFDLxYrnhAjnAUKuhIbWeIQKgdQsirfYyNnp1R9e
+    sNT3ZvBz8W2hKpZHX4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvtddgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Uf3PY1ml0H4tHxzn9IDdxH7GpTXJB4quTrfkAjHGruNRjlDxWzcjgA>
+    <xmx:Uf3PYwzJU1TNeoBVaT7cAvkrOvs9QfbNzBKhpuGXJCrUgyZTR8xTBQ>
+    <xmx:Uf3PY3QmoSmZxZBU3MRV-ENdCWvT277LBmRrsaQNf0uH-ulf7ic7Ng>
+    <xmx:Uv3PY89EXcef0JgtN0-77xvcL6-4n3KZN5AUZR_WOcaxDolNpv01FA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6E415B60086; Tue, 24 Jan 2023 10:46:25 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <8e404cef-52fb-49a2-a91b-8e3c60407ddd@app.fastmail.com>
+In-Reply-To: <871qnkicsi.wl-me@linux.beauty>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+ <20230123073305.149940-7-lchen@ambarella.com>
+ <85b86d06-c63c-4481-a3dd-16b72572a5ee@app.fastmail.com>
+ <871qnkicsi.wl-me@linux.beauty>
+Date:   Tue, 24 Jan 2023 16:46:06 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Li Chen" <me@linux.beauty>
+Cc:     "Li Chen" <lchen@ambarella.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Lubomir Rintel" <lkundrak@v3.sk>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Sven Peter" <sven@svenpeter.dev>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        "Brian Norris" <briannorris@chromium.org>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 06/15] soc: add Ambarella driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 15:15, Herve Codina wrote:
->>> Is that what you were thinking about ?  
+On Tue, Jan 24, 2023, at 08:58, Li Chen wrote:
+> On Mon, 23 Jan 2023 16:29:06 +0800,
+> Arnd Bergmann wrote:
+>> On Mon, Jan 23, 2023, at 08:32, Li Chen wrote:
+>> > +static struct ambarella_soc_id {
+>> > +	unsigned int id;
+>> > +	const char *name;
+>> > +	const char *family;
+>> > +} soc_ids[] = {
+>> > +	{ 0x00483245, "s6lm",  "10nm", },
+>> > +};
 >>
->> Yes, except again, so third time, why calling this "cell"? Move it to
->> fsl,tsa.
+>> I would suggest something more descriptive in the "family"
+>> field to let users know they are on an Ambarella SoC.
 >>
-> 
-> Why calling this "cell" ? Just because we reference a "cell" using the TSA
-> cell ID inside TSA and not the TSA itself.
-> 
-> Maybe the problem is the term "cell" as it is not the DT definition of
-> "cell" but the source/destination of the TSA routing.
-> 
-> TSA can route data from/to some "serial controller".
-> These serial controllers are :
-> - SCC (Serial Communication Controller)
-> - SMC (Serial Management Controller)
-> - UCC (Unified Communication Controller)
-> 
-> Only SCCs are handled here.
-> 
-> Maybe the term "serial" makes more sense which will lead to
->   fsl,tsa-serial = <&tsa, SCC4>;
+>> Maybe just "Ambarella 10nm".
+>
+> There is a "pr_info("Ambarella SoC %s detected\n", 
+> soc_dev_attr->soc_id);" in this file,
+> I think this should be enough, right?
 
-Yes, that's better. Thanks.
+The pr_info() can probably be removed here, or reworded
+based on the changed contents, those are just meant for
+humans reading through the log rather than parsed by
+software.
 
-Best regards,
-Krzysztof
+The soc_id fields on the other hand need to be parsable
+by scripts looking at the sysfs files, in a way that lets
+them identify the system. Usually the script would look
+at the "family" as the primary key before looking up the
+"name", so you have to make sure that the family uniquely
+identifies this as one of yours rather than a 10nm chip
+from some other company.
 
+>> If there are other unrelated registers in there, the compatible
+>> string should probably be changed to better describe the
+>> entire area based on the name in the datasheet.
+>
+> Yeah, this block is only used for identification bits. In datasheet,
+> it is also named "CPU ID".
+
+ok.
+
+> Other than cpuid_regmap, this driver also looks for "model" name as soc 
+> machine name:
+> of_property_read_string(np, "model", &soc_dev_attr->machine);
+>
+> So I think it is not a good idea to conver it to into a platform driver.
+
+I don't understand what you mean. A lot of soc_id drivers put
+the model string into soc_dev_attr->machine, this makes no
+difference here.
+
+> As for "syscon", I think it is still very helpful to get regmap easily. 
+> Generally speaking,
+> I prefer regmap over void*, because it has debugfs support, so I can 
+> get its value more easily.
+
+What value would you get through debugfs that is not already in
+the soc_device?
+
+>> > +static unsigned int ambsys_config;
+>> > +
+>> > +unsigned int ambarella_sys_config(void)
+>> > +{
+>> > +	return ambsys_config;
+>> > +}
+>> > +EXPORT_SYMBOL(ambarella_sys_config);
+>>
+>> Which drivers use this bit? Can they be changed to
+>> use soc_device_match() instead to avoid the export?
+>
+> sys_config is used by our nand and sd drivers. I also don't want to export,
+> but struct soc_device_attribute/soc_device don't have private data to store it,
+> I think there is no better way.
+
+The nand and sd drivers should not rely on any private data
+from another driver. What information do they actually
+need here that is not already in their own DT nodes or
+in the soc_device_attributes?
+
+>> > +static int __init ambarella_soc_init(void)
+>> > +{
+>> > +	struct regmap *rct_regmap;
+>> > +	int ret;
+>> > +
+>> > +	rct_regmap = syscon_regmap_lookup_by_compatible("ambarella,rct");
+>> > +	if (IS_ERR(rct_regmap)) {
+>> > +		pr_err("failed to get ambarella rct regmap\n");
+>> > +		return PTR_ERR(rct_regmap);
+>> > +	}
+>> ...
+>> > +arch_initcall(ambarella_soc_init);
+>>
+>> It is not an error to use a chip from another manufacturer,
+>> please drop the pr_err() and return success here.
+>
+> Ok, good to know, thanks. But we don't have other manufacturers at 
+> least for now,
+
+I care a lot about supporting multiple SoC vendors, it would seem
+very rude to assume that we stop supporting everything else after
+merging Ambarella support.
+
+> and rct_regmap is need to be updated here, like sys_config and soft 
+> reboot. So I think this rct regmap is still needed.
+
+It is certainly only needed on Ambarella SoCs, no other one
+has this device at the moment.
+
+      Arnd
