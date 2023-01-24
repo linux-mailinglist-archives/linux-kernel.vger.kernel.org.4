@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B545678CD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E26678CD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjAXA1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S232371AbjAXA1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjAXA06 (ORCPT
+        with ESMTP id S232349AbjAXA1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:26:58 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462C939B89;
+        Mon, 23 Jan 2023 19:27:00 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0B23757F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:26:53 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id hw16so34895502ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KwGmEa06omOhettp+Z0U9Hx95U15RGfyvNHOg11/HaU=;
+        b=BxgM0uL92DiH8vBmFVQX5YRizpa0FSpTigSVNf68cvSGiLSmrrd+HL0LU8nGEtgI9U
+         47PNKMUWousS1hlKa3LGIf5eaPSy6GV8c0rTXUT33Vqu+/GfXC2nLqKj9dLUQ+iog9um
+         iygD4KYwtU1nQI9dq2rPz0mCQcd4poIfQNdwV4V+gtPR9sjCPWKmnYOJyHAzLZ3T5isy
+         Y2JrFY9lKIOtWqRXEKKtWEf0qeGdt1Ig0yCQCkXZMok04YiPsPqom50vJZtHp67j6MVD
+         wJ6r9WJq2B1Hdwyo4gUHBvjOz4YJdoqWYSne4c+jU22HEhLALYJjlC4F5pxW2wiOJRtq
+         C5kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KwGmEa06omOhettp+Z0U9Hx95U15RGfyvNHOg11/HaU=;
+        b=aBRK+uCR4vevtPl0SC/5W0XFYDIB5B9HsYwQla7xGKKFkNauhw/rnH5GIJhrS9ytmC
+         r3Oqhoy4xrsTkjtWg+OJsOBnRRvCNTAFyZAlnxCykuHu3xwBa+u4/NElbrc1lMIdf5mI
+         6IRH6E2DVcHDQzflFiHtd+c9uEHsTGbIoPqeB7DLHmwbZynihZdlAQMAhLzolqgZftC9
+         450szP4DY7YpGwhlrMQr7CCE1s+CuQG+JlMQ7Ddu78CVhstkd9x7CW95CXkc6zXhhK2f
+         0MtvWTqM1JT5BYsaaNCdjoGikymcXclzlRfg901u5pipI57HOzFPMYJnnH/fg+fLgjzl
+         vyeQ==
+X-Gm-Message-State: AFqh2ko8I847SXA0sX9alKogJJcnhDhmmF1kmOJkgex/Tp1nHONhbkRq
+        wTUL8NvkIwX9aUEmRf1wu47LiA==
+X-Google-Smtp-Source: AMrXdXts2d88Uk+7HdLIKXrZYxU82+pFx+YRlzrEXNldi8ylu63Erwb2h8tt2KYbCBT6aJShQ/Ijfg==
+X-Received: by 2002:a17:907:9b06:b0:872:f259:a7ea with SMTP id kn6-20020a1709079b0600b00872f259a7eamr28628465ejc.53.1674520012237;
         Mon, 23 Jan 2023 16:26:52 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id D2214824E0;
-        Tue, 24 Jan 2023 00:26:45 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674520012;
-        bh=SXQXpbuiBQdiwXpH2+78kfJuScDGyhqpyjZmkT1By0E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qZ4AUcVqaCg4Eqketr209fH1DlzQ7tYfr4oo/RJDieFUYL3SPhUeuiFadn9JS9c/u
-         cT9mBLn3vi89aAsRL6rZ7aL9Yw1Xq27Gwc32zhDxTo+IeJRgy6a8B2aEjH2rNL+z9a
-         uvgGnK5S+WAwfJjetSfovuygOacgRjMorVPIfejVRtmKBUoRxDvVGeg5e/U5wt+GNr
-         XsBNLifoZj/ZZJSwNqzDWWe7UXrLyuoefZlHDp7brkzMeIdM5581OlwRSIKB5BE+g+
-         9Y2OUde4q6XdCj+rNvyX0Y19rF+C/nf+8/EZXoth5qbswSFnJnn2UfT+64VgJFCms8
-         dyZebDu32OVmA==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     x86 Mailing List <x86@kernel.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xin Li <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v1 2/2] selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
-Date:   Tue, 24 Jan 2023 07:26:25 +0700
-Message-Id: <20230124002625.581323-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
-References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com> <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com> <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com> <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org> <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
- <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id jl20-20020a17090775d400b0082535e2da13sm142641ejc.6.2023.01.23.16.26.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 16:26:51 -0800 (PST)
+Message-ID: <b86bf5b7-2b73-0955-8a12-d997f7715067@linaro.org>
+Date:   Tue, 24 Jan 2023 02:26:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH Resend v11 13/15] drm/msm/disp/dpu: reset the datapath
+ after timing engine disable
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
+References: <1674138393-475-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1674138393-475-14-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1674138393-475-14-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On 19/01/2023 16:26, Vinod Polimera wrote:
+> Reset the datapath after disabling the timing gen, such that
+> it can start on a clean slate when the intf is enabled back.
+> This was a recommended sequence from the DPU HW programming guide.
+> 
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c | 1 +
+>   1 file changed, 1 insertion(+)
 
-Test that:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
- - "syscall" in a FRED system doesn't clobber %rcx and %r11.
- - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
-
-Test them out with a trivial system call like __NR_getppid and friends
-which are extremely likely to return with SYSRET on an IDT system; check
-that it returns a nonnegative value and then save the result.
-
-Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
-Co-developed-by: "H. Peter Anvin" <hpa@zytor.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
-Missing a Signed-off-by tag from HPA. 
-
-@hpa send your sign off if you like this patch.
-
- tools/testing/selftests/x86/sysret_rip.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 9056f2e2674d2bc5..c55f6d04f0ae1f2d 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -252,8 +252,17 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
- }
- 
-+static void test_syscall_rcx_r11(void)
-+{
-+	do_syscall(__NR_getpid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_gettid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
-+}
-+
- int main()
- {
-+	test_syscall_rcx_r11();
-+
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
- 	 * detect whether SYSRET is appropriate.  If it incorrectly
 -- 
-Ammar Faizi
+With best wishes
+Dmitry
 
