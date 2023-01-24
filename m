@@ -2,117 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC1367A3BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8F367A3C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjAXUWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S233161AbjAXUZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjAXUWm (ORCPT
+        with ESMTP id S231827AbjAXUZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:22:42 -0500
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8478848A10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:22:36 -0800 (PST)
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <mhal@rbox.co>)
-        id 1pKPoO-00ESTv-C3; Tue, 24 Jan 2023 21:22:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-        s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-        bh=ofpnODegQDOIRCO2eZN2SpGGzNBUu2sXhCtmyK94QM4=; b=eD07QtPIUxEY6K58yJAcgjTCJI
-        fR61X2nt7aWWjOa3y8vvkRlm2332FFy4uo6pjGeuLB+3ZyeJJJd1fq/MvBRnQJTKcM/WRQJ0IA+xn
-        w+jsF166ItraAHI3eWsCei5g79qfoVLwe8GvdERV9zqqIANo7+PHbGR4zcqn2STHxxwt+zXAxQLXI
-        KwcSoajLmtYWpF67B8ErK25bNyCMyDvSYCALzK1ToWJKVVMXZiElGtPjpp4rmMW20mMIpfFqkHt2Y
-        WN9MlhEOOUGdZjmF3++nKQJx6cPPEeeQ4HMY3eaaBgVBsrPFT/evkxdatR85gbyiXqtDyKGx7qbNY
-        B+mbfEWA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <mhal@rbox.co>)
-        id 1pKPoN-0001OO-8D; Tue, 24 Jan 2023 21:22:31 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1pKPoH-0005lf-HN; Tue, 24 Jan 2023 21:22:25 +0100
-Message-ID: <85285ccd-7b1a-9a94-5471-8036cb824b28@rbox.co>
-Date:   Tue, 24 Jan 2023 21:22:23 +0100
-MIME-Version: 1.0
-User-Agent: Thunderbird
-Subject: Re: [PATCH v1] KVM: destruct kvm_io_device while unregistering it
- from kvm_io_bus
-Content-Language: pl-PL
-To:     Sean Christopherson <seanjc@google.com>,
-        Wei Wang <wei.w.wang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?UTF-8?B?5p+z6I+B5bOw?= <liujingfeng@qianxin.com>
-References: <20221229123302.4083-1-wei.w.wang@intel.com>
- <Y88XYR0L2DyiKnIM@google.com>
-From:   Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <Y88XYR0L2DyiKnIM@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 15:25:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAAC83E9;
+        Tue, 24 Jan 2023 12:25:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A51AB816AD;
+        Tue, 24 Jan 2023 20:25:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E49CFC433EF;
+        Tue, 24 Jan 2023 20:25:16 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1pKPr1-003dz3-2D;
+        Tue, 24 Jan 2023 15:25:15 -0500
+Message-ID: <20230124202238.563854686@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 24 Jan 2023 15:22:38 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+Subject: [PATCH 0/2] tracing: Have bpf and perf reuse the tracefs TRACE_EVENT macros
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 00:25, Sean Christopherson wrote:
-> On Thu, Dec 29, 2022, Wei Wang wrote:
->> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
->> index 2a3ed401ce46..1b277afb545b 100644
->> --- a/virt/kvm/eventfd.c
->> +++ b/virt/kvm/eventfd.c
->> @@ -898,7 +898,6 @@ kvm_deassign_ioeventfd_idx(struct kvm *kvm, enum kvm_bus bus_idx,
->>  		bus = kvm_get_bus(kvm, bus_idx);
->>  		if (bus)
->>  			bus->ioeventfd_count--;
->> -		ioeventfd_release(p);
->>  		ret = 0;
->>  		break;
->>  	}
+When reviewing Linyu Yuan patches[1] where the change was to move most
+the macros from perf and bpf into stages, I realized that the macros
+that makes up perf and bpf events are duplicated from the tracefs
+macros that were moved into the stages directory. One reason to move
+them into that directory was to remove duplicate code.
 
-I was wondering: would it make sense to simplify from
-list_for_each_entry_safe() to list_for_each_entry() in this loop?
+Remove the macros that are duplicated in the bpf and perf code and use
+stage 6, which is the macros used to build the data needed to record
+the TRACE_EVENT() TP_fast_assign() into the trace. This will mean they
+will pick up bug fixes, as well as any enhacements that are added.
 
->> @@ -5453,18 +5459,18 @@ int kvm_io_bus_unregister_dev(struct kvm *kvm, enum kvm_bus bus_idx,
->>  	rcu_assign_pointer(kvm->buses[bus_idx], new_bus);
->>  	synchronize_srcu_expedited(&kvm->srcu);
->>  
->> -	/* Destroy the old bus _after_ installing the (null) bus. */
->> +	/*
->> +	 * If (null) bus is installed, destroy the old bus, including all the
->> +	 * attached devices. Otherwise, destroy the caller's device only.
->> +	 */
->>  	if (!new_bus) {
->>  		pr_err("kvm: failed to shrink bus, removing it completely\n");
->> -		for (j = 0; j < bus->dev_count; j++) {
->> -			if (j == i)
->> -				continue;
->> -			kvm_iodevice_destructor(bus->range[j].dev);
->> -		}
->> +		kvm_io_bus_destroy(bus);
->> +		return -ENOMEM;
-> 
-> Returning an error code is unnecessary if unregister_dev() destroys the bus.
-> Nothing ultimately consumes the result, e.g. kvm_vm_ioctl_unregister_coalesced_mmio()
-> intentionally ignores the result other than to bail from the loop, and destroying
-> the bus means it will immediately bail from the loop anyways.
+[1] https://lore.kernel.org/lkml/1671181385-5719-1-git-send-email-quic_linyyuan@quicinc.com/
 
-But it is important to know _if_ the bus was destroyed, right?
-IOW, doesn't your comment from commit 5d3c4c79384a still hold?
+Steven Rostedt (Google) (2):
+      perf/tracing: Use stage6 of tracing to not duplicate macros
+      bpf/tracing: Use stage6 of tracing to not duplicate macros
 
-    (...) But, it doesn't tell the caller that it obliterated the
-    bus and invoked the destructor for all devices that were on the bus.  In
-    the coalesced MMIO case, this can result in a deleted list entry
-    dereference due to attempting to continue iterating on coalesced_zones
-    after future entries (in the walk) have been deleted.
-
-Michal
-
+----
+ include/trace/bpf_probe.h                    | 45 +--------------------------
+ include/trace/perf.h                         | 46 +---------------------------
+ include/trace/stages/stage6_event_callback.h |  3 ++
+ 3 files changed, 5 insertions(+), 89 deletions(-)
