@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDF8679430
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5AF679432
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbjAXJ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        id S233647AbjAXJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjAXJ1W (ORCPT
+        with ESMTP id S233697AbjAXJ14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:27:22 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6291555C;
-        Tue, 24 Jan 2023 01:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=ctJgpO7IHWdhLMWOxSQ2U3kHoPMeDR9uKIVG3QAMmmo=;
-        t=1674552411; x=1675762011; b=p/k36Bg3qtlMpMFCZItuebK3VOK9aR9zGAF+LOqAz+QR03h
-        Wbpmkt72SYJgcTip/BCxAq/Fhdd0aHIDR+nbuBbdkjUem5AiraSWQbzGPGmgRBlQhypyw1ATMHuWU
-        NivarzGPmydDIT1JlDmurT8nYlop2pzzjVleQ/YKVoHLvUsGYFUbera9/n20liAGVB9hnd90VsW35
-        qIVtFZvMW2BHc2LUeXCUGdLYPNfpXHWFIghK5lHBldgLX0KrB8BpKHEFbQlNaWlKosaRkiZRbZPxJ
-        03SkTXpwVdSmUNwNLH0Wwyl7Da5UOKzYyMT1oeYs4Gv7kCtn8Lb+dpDUHt9z6P7A==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1pKFZi-00AoMW-31;
-        Tue, 24 Jan 2023 10:26:43 +0100
-Message-ID: <758384602b93da0f242ee5d82847a1b4ab102b91.camel@sipsolutions.net>
-Subject: Re: [PATCH next] wifi: nl80211: emit CMD_START_AP on multicast
- group when an AP is started
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Alvin =?UTF-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     Alvin =?UTF-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Tue, 24 Jan 2023 04:27:56 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E242DCF;
+        Tue, 24 Jan 2023 01:27:18 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id tz11so37407653ejc.0;
+        Tue, 24 Jan 2023 01:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ri9z+xYMt218fYVVMTgtEzsjvMbOGDhhgvVh2Oo1De8=;
+        b=W3K8YVr1IJt2kf6zQVyQ0lGjB39bSPnyPcWb1aNfRHJ783tH83bdr066LTuIyrmqsn
+         DIvSkmkZrv9W0yhKsQNDUSSbQ3+9+iizwuMhTNIUejhs0ZUwKrYmu96D1DpGbM5LiBtF
+         gnQ1PhxzsRv2Kg6yKKTliJgTlQUNDYyiaSFqlNrELEL6cd6FjVTI88A6MJONnJ8Nyxu1
+         i9MOX0WG9VaPY+iM8uukCbe4ceNudde0DLGP3Ok2YlgjdcBW3w+bVCFVJSo5Qd2BWidg
+         Wg4cCyV1sMdO490g3XrGW0N95Rk8PqiSQ1rsd4j61wHE0kDYL5J43uptI/vWj9w97lOj
+         QCGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ri9z+xYMt218fYVVMTgtEzsjvMbOGDhhgvVh2Oo1De8=;
+        b=lLiFodZCRnYfWV9njZZBBtDX7Ugzi689hqFYD+VpKK6oFoDqUYqObwEeiN2VQAF6HR
+         W49TLy15FgFazTQ5mulE6hRE8pYBTC8C6jGzf50h2w+29Tws47BP9DF4Km9Ogo/wpl6T
+         bkvGeGM9o9CGan2YE8KNx94L77tAo5hKORf/zHhIB5IVfNiVMMPvXnjcVn0YzHWXxUFk
+         SgxZ1JgBnxN+hycpP1nPvzD0W/Dor9I3Djj2gBVoN853RPa3NATP2wdtAkMlAnoA+M+8
+         yQhbOtiH4bRsFzNwRrNAYoDwZ3CXqCN/ndTB4zJI9ixwWebBRdJKVmFN76gJTioD1M2S
+         pH1g==
+X-Gm-Message-State: AFqh2koTWXl5MZ0gOg/fXx07o21f80cQR96bpjYwhg0BJWWc64BpJF6G
+        2DQO9ij0qOSIjhUb/5bICN5wHuW/Wa3LBg==
+X-Google-Smtp-Source: AMrXdXsUj1glqQxDmzX1OGu4Y3daRhi/uusOo0IVPnQ+CKFKRQvRm9/clO/fhoqEcq77C00Yj1So7Q==
+X-Received: by 2002:a17:907:c319:b0:877:609c:edc3 with SMTP id tl25-20020a170907c31900b00877609cedc3mr26701799ejc.18.1674552435983;
+        Tue, 24 Jan 2023 01:27:15 -0800 (PST)
+Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id fx18-20020a170906b75200b0084d35ffbc20sm639419ejb.68.2023.01.24.01.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 01:27:15 -0800 (PST)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Received: by eldamar.lan (Postfix, from userid 1000)
+        id A8861BE2DE0; Tue, 24 Jan 2023 10:27:14 +0100 (CET)
+Date:   Tue, 24 Jan 2023 10:27:14 +0100
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 24 Jan 2023 10:26:41 +0100
-In-Reply-To: <20230121130717.l5ynezk4rug7fypb@bang-olufsen.dk>
-References: <20221209152836.1667196-1-alvin@pqrs.dk>
-         <c7eac35785bf672b3b9da45c41baa4149a632daa.camel@sipsolutions.net>
-         <20230121130717.l5ynezk4rug7fypb@bang-olufsen.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+Subject: Re: amd_pmc module not autoloading on Thinkpad X13 Gen 2a
+Message-ID: <Y8+kclibAb32JCIp@eldamar.lan>
+References: <Y80NXKyaj25CtSBt@eldamar.lan>
+ <MN0PR12MB6101ACCD8A5003CBB4BEF58DE2CB9@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <Y81Ja5Y/tgPXk5FA@eldamar.lan>
+ <MN0PR12MB61019EC33FA0F91C0E79967BE2CB9@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MN0PR12MB61019EC33FA0F91C0E79967BE2CB9@MN0PR12MB6101.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Mario,
 
-> > Seems like you should include the link ID or something?
->=20
-> Thanks for your review, you are quite right. I didn't give much thought
-> to MLO as I am not too familiar with it. Is something like the below
-> what you are looking for?
+On Sun, Jan 22, 2023 at 03:34:55PM +0000, Limonciello, Mario wrote:
+> [AMD Official Use Only - General]
+> 
+> Salvatore,
+> 
+> I don't think we have a bug here. The reporters said it's working
+> for s0ix.
+> 
+> It will only load by default when the system is set to Modern
+> Standby/s2idle mode in BIOS. On Lenovo systems they call this
+> "Windows" sleep mode for some systems.
 
-Yes, that looks good.
+Thanks, reporter confirmed that it's actually working (possibly just a
+confusion initially on testing the scenarios):
 
-> Speaking of which: I drew inspiration from nl80211_send_ap_stopped()
-> which see also doesn't include the link ID. Would you like me to include
-> a second patch in v2 which adds the link ID to that function along the
-> same lines?
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1029356#74
 
-Maybe have that as a separate patch, but yeah, good idea - thanks for
-looking!
+Thanks for your time looking into it,
 
-johannes
+Regards,
+Salvatore
