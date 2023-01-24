@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A745678FC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0A3678FCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjAXFVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 00:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
+        id S230129AbjAXFYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 00:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXFVA (ORCPT
+        with ESMTP id S229930AbjAXFYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 00:21:00 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D41838E99;
-        Mon, 23 Jan 2023 21:20:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40971CE18B2;
-        Tue, 24 Jan 2023 05:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6B6C433EF;
-        Tue, 24 Jan 2023 05:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674537649;
-        bh=IPH+4bKPJ1q/DT8SYZikBubihCjX3YUeSWZ2Pk8HJvo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R4djtlxqzSL669QEV9XRu8IM6qFlotd2DrwQ7ct2ypDX3HlTIh7Robjbh1JWvp6la
-         D+LM4FL+XogclgO/F0u+BOYAcM7M95VUgC5/O7+cxmfNLAY7nJmzgizlWTMM9v+yGP
-         4jkkv6ijvwa3Z1yj8LLBgll+wLCwSOPFURqzkUA0=
-Date:   Tue, 24 Jan 2023 06:20:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Konstantin Ryabitsev <mricon@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Anton Blanchard <anton@linux.ibm.com>,
-        Trilok Soni <tsoni@codeaurora.org>,
-        James Morris <jamorris@linux.microsoft.com>, corbet@lwn.net,
-        javier.gonz@samsung.com, linux-doc@vger.kernel.org,
-        a.manzanares@samsung.com, dave@stgolabs.net,
-        darren@os.amperecomputing.com, ndesaulniers@google.com,
-        gost.dev@samsung.com, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof.c@samsung.com>
-Subject: Re: [PATCH] docs: embargoed-hardware-issues: add embargoed HW
- contact for Samsung
-Message-ID: <Y89qrid7YOsIFbD6@kroah.com>
-References: <20230123183926.249601-1-mcgrof@kernel.org>
- <Y87X6tFlevIebcc6@kroah.com>
- <Y88Ak8K5mD7tFItG@bombadil.infradead.org>
- <Y89E+S7TA6UwtNe2@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y89E+S7TA6UwtNe2@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 00:24:39 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757542DE60;
+        Mon, 23 Jan 2023 21:24:38 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d3so13658621plr.10;
+        Mon, 23 Jan 2023 21:24:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EPflxlzn7J3IhwXMqkbeD44ht96unETWIQ75Qp5FCss=;
+        b=ZfxguGrgsLcY0Sq2+g0kbtCLDOQn3UY9YpncBNNH3WXAXs6UuShB7ggTMjxNLWBRjS
+         4S2X4T6qfadLoMDptTXfGxpyzDxNWD0Mvm6hXftn2Lo1du7fO/Wgelose8ln1gXxxAnV
+         1ufbzEVQ1fiSBbzhMDfUDsZRajZhptf2gdv4k5wJZ3zuhE/qJ94/PW6HVgFQwyCBJkih
+         J2w2im5PbQOYqqfvagGdJqgoYAIFOzd3c57/LwIlI/igZvZSBJZVoxo5fvn/y9QHxZXS
+         6RgHH6s63RFqcET7pCffXuuFWsoLNKYoKi47uZwKzlT5UZMJkVSxosnChe+QDzKFoFtL
+         rpXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EPflxlzn7J3IhwXMqkbeD44ht96unETWIQ75Qp5FCss=;
+        b=1QTVPrzgpp7VYXqWBvN/8xusGEaXwAA5IA1Pl8nPkNrM+8ptx6pc0s2n2mZd/50Fkx
+         2cA2RCoKriFbHd3NCXRS2U8UVoxOakdlN56wNO7JnAYuODtKPVeXDsT4he8ZcbxNiuIF
+         65JYzrV5l260RHZp7K1SGOM6rPE7x1PLUuQOf7njJKpaZOb3fCf/Q1tkqI1muHUMzeCa
+         hKuliaJYCU5KVYUuXDAQo+bulpFu10Nrlnvt3QSUjdF93pU9TTfJv5NHucYtFnzBelgN
+         PiQjwi8Sn5vGS1CNBybIl8XaY4cH6GpQLW9B+l0BYW5LUUY32FTwTpzefUWp4/lAHCK7
+         opnQ==
+X-Gm-Message-State: AFqh2kqKnHJbbpKTYEVadRPjYbyUcRUPtd4UvUnURbdfzs4Gk5oTGekG
+        cInCBwceIlchWBFl1VwQKj4=
+X-Google-Smtp-Source: AMrXdXsxQsqTnL+GRVS6OYc23i7BV4V8GyCJ1wcsXO8yFBZz0e4RWJrhVbXXTmgGKft8W5rGH5tVOg==
+X-Received: by 2002:a05:6a20:3d0f:b0:af:9539:a2c0 with SMTP id y15-20020a056a203d0f00b000af9539a2c0mr35468533pzi.26.1674537877942;
+        Mon, 23 Jan 2023 21:24:37 -0800 (PST)
+Received: from localhost (121-44-64-35.tpgi.com.au. [121.44.64.35])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902c38500b00196047fc25dsm657743plg.42.2023.01.23.21.24.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 21:24:37 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 24 Jan 2023 15:24:25 +1000
+Message-Id: <CQ064REW0ZEO.1LUHVNN78TBRJ@bobo>
+Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
+        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>, <ruscur@russell.cc>,
+        <gcwilson@linux.ibm.com>, <joel@jms.id.au>
+Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
+ pseries secvar
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.13.0
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+ <20230120074306.1326298-25-ajd@linux.ibm.com>
+In-Reply-To: <20230120074306.1326298-25-ajd@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:39:53AM +0000, Matthew Wilcox wrote:
-> On Mon, Jan 23, 2023 at 01:48:03PM -0800, Luis Chamberlain wrote:
-> > > > @@ -251,6 +251,7 @@ an involved disclosed party. The current ambassadors list:
-> > > >    IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
-> > > >    Intel		Tony Luck <tony.luck@intel.com>
-> > > >    Qualcomm	Trilok Soni <tsoni@codeaurora.org>
-> > > > +  Samsung       Javier González <javier.gonz@samsung.com>
-> > 
-> > I'll send a fix on v2.
-> > 
-> > BTW while at it, it got me wondering, since most of the emails on
-> > this hw embargo page are not required to have kernel.org accounts
-> 
-> This isn't the list of hw embargo people.  This is the list of
-> "ambassadors" who can help people work through the security disclosure
-> process.  My impression is that it's to tell me that I should contact
-> Konrad, since he also works at Oracle, to help me through the process.
-> It's not for people outside Oracle to contact.
-> 
-> If I have the wrong impression of that list, perhaps the description
-> could be clarified.
+On Fri Jan 20, 2023 at 5:43 PM AEST, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+>
+> The secvar object format is only in the device tree under powernv.
+> We now have an API call to retrieve it in a generic way, so we should
+> use that instead of having to handle the DT here.
+>
+> Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
+> The object format is expected to be the same, so there shouldn't be any
+> functional differences between objects retrieved from powernv and
+> pseries.
+>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+>
+> ---
+>
+> v3: New patch
+>
+> v4: Pass format buffer size (stefanb, npiggin)
+> ---
+>  .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+>
+> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/=
+integrity/platform_certs/load_powerpc.c
+> index dee51606d5f4..d4ce91bf3fec 100644
+> --- a/security/integrity/platform_certs/load_powerpc.c
+> +++ b/security/integrity/platform_certs/load_powerpc.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/cred.h>
+>  #include <linux/err.h>
+>  #include <linux/slab.h>
+> -#include <linux/of.h>
+>  #include <asm/secure_boot.h>
+>  #include <asm/secvar.h>
+>  #include "keyring_handler.h"
+> @@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
+>  	void *db =3D NULL, *dbx =3D NULL;
+>  	u64 dbsize =3D 0, dbxsize =3D 0;
+>  	int rc =3D 0;
+> -	struct device_node *node;
+> +	ssize_t len;
+> +	char buf[32];
+> =20
+>  	if (!secvar_ops)
+>  		return -ENODEV;
+> =20
+> -	/* The following only applies for the edk2-compat backend. */
+> -	node =3D of_find_compatible_node(NULL, NULL, "ibm,edk2-compat-v1");
+> -	if (!node)
+> +	len =3D secvar_ops->format(buf, 32);
 
-That is correct, but it is primarily a list that I use when needing to
-contact companies about potential issues in their hardware.  For that I
-don't need a GPG key, that's only required if they need to get added to
-a secure mailing list, and at that point I can have a key sent to me, it
-does not have to be in our kernel.org keyring at all (and list
-participants usually are not there.)
+sizeof(buf)?
 
-So there's no need for any of these addresses to be part of the kernel
-gpg ring of trust for any of their activities.
+Thanks,
+Nick
 
-thanks,
-
-greg k-h
