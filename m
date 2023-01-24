@@ -2,48 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E1667A4D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E916967A4D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbjAXVTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S234975AbjAXVTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbjAXVTC (ORCPT
+        with ESMTP id S234998AbjAXVTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:19:02 -0500
-Received: from out-245.mta0.migadu.com (out-245.mta0.migadu.com [91.218.175.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D9E49575
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:18:41 -0800 (PST)
-Date:   Tue, 24 Jan 2023 21:18:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674595095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CnSq4mBbw8yIBMhIRKayETuEHeib8k7L9ZTqOeYi3PI=;
-        b=MgrUEDLCALpdGP50oLgldB4thgGtzyIH2dBkSuxkTLVU9dFZOdt4boNR1m6wbC7ZVk08LO
-        huugRiBeVoC41yib++Q7KKxT/txti822KALNGV+56GxuLP5E37h9HOEsfpzxoQicWYkoUY
-        Qz0ak+yrCJ0K2x15ayvuCIBYWMIgJpE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Will Deacon <will@kernel.org>
-Cc:     maz@kernel.org, linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        seanjc@google.com, kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] MAINTAINERS: Add Oliver Upton as co-maintainer of
- KVM/arm64
-Message-ID: <Y9BLEj+/doAKmXzP@google.com>
-References: <20230123210256.2728218-1-oliver.upton@linux.dev>
- <20230124093728.GA26080@willie-the-truck>
+        Tue, 24 Jan 2023 16:19:25 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502024671F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:19:14 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id q15so14368264qtn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:19:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K8tBkVDcR3cIjvCGSV7pCzotu/GYoRW4uPdPyTobpUU=;
+        b=q/9e3e2NeK80DecsM1DxuwcETnH6bT2rG52Bz4kbxpn9ZUDkALoLB/GXpmZoTETo3u
+         ZXWm/Y/fmSX/kQyrHvV20YZQMs6JQ6Sv9WnFxs0h8Vb/wNoXLt9n+bjCzB7Tu7QAtLZu
+         CphXsH2+n8rm0whA1MrKA/9G7ZIUvx5OyeW2yY1CL8d+ZudMrtoaVSPZgjTh6cjycO3K
+         CpQ+tnxejzvBgLmnrJjgTB2YCsA64fDR0qKx9NbotZOJrwSu4OEI+75HS8Q1t8Lip+h9
+         xx5k9FZo0LIWwoLSrE8fk5zFe2yJYpbldsvt0WmLZ7b3jbz6ggh+xGtIyvyT19rsgUiS
+         r3ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K8tBkVDcR3cIjvCGSV7pCzotu/GYoRW4uPdPyTobpUU=;
+        b=WA/5FI96cAqzxsl/o6q0YEHQSMv4QrTd62SfiLA4BdPo9j1QU4jXiNNqKq55HU8m0O
+         K5N14HTiKX9RhtBurEoa7hznLZytVaSfM0X9uhn+eQCyL9RBJ6ich96mgPhtuO5d30AR
+         udP0xREUK3pGINsiqTUAknLfkAUEktiA3gG3mWBZM4jGb5kBIEmiHJ/EWE08n2inXifw
+         nTiD4QNUPnZozwDsV3DtFFYp42OD2D+W6MIgTNhI3WXIiSe88i2FlSlJidpn1+D7Y/Op
+         PoWvwSNjXJ7uBZt5OL/z2HgW3e/3Nmb6/Wgz2lLi5RXerqki6BbJTZpsVD8mvUU6Vc/b
+         dI+g==
+X-Gm-Message-State: AFqh2ko9S5Uv7lml9Vg+Z4avxDoDR6mJDAjopJ4YyHhUiiddlxxk2m8I
+        SIrjaOAIjJdcKbeybS0pXomm+A==
+X-Google-Smtp-Source: AMrXdXvVfqjmstskpsb+7KNHHK7XTOLpCh5jIf1Zf8VZzT8oMkYcJQXg4wGwRvhcYM63kTu9+3C+7Q==
+X-Received: by 2002:ac8:6792:0:b0:3a8:1793:76d6 with SMTP id b18-20020ac86792000000b003a8179376d6mr40904443qtp.68.1674595153462;
+        Tue, 24 Jan 2023 13:19:13 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id i7-20020ac84887000000b003b6a17e1996sm1965508qtq.83.2023.01.24.13.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 13:19:12 -0800 (PST)
+Message-ID: <40a7e1171d7777128c0728a28a029e6f3643145a.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 1/2] media: meson: vdec: implement 10bit bitstream
+ handling
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     neil.armstrong@linaro.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Benjamin Roszak <benjamin545@gmail.com>
+Date:   Tue, 24 Jan 2023 16:19:11 -0500
+In-Reply-To: <95132025-8f0f-8179-40b7-8bf83458886a@linaro.org>
+References: <20230124034058.3407235-1-christianshewitt@gmail.com>
+         <20230124034058.3407235-2-christianshewitt@gmail.com>
+         <6ff68c4bea9d48980853e9af9db1fc0bf13976ae.camel@ndufresne.ca>
+         <07933226-fbab-fa78-6b96-38e365577605@linaro.org>
+         <478d5a7569b7879aa3410a5b3049d745867df780.camel@ndufresne.ca>
+         <95132025-8f0f-8179-40b7-8bf83458886a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124093728.GA26080@willie-the-truck>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,45 +86,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 09:37:29AM +0000, Will Deacon wrote:
-> On Mon, Jan 23, 2023 at 09:02:56PM +0000, Oliver Upton wrote:
-> > Going forward I intend to help Marc with maintaining KVM/arm64. We've
-> > spoken about this quite a bit and he has been a tremendous help in
-> > ramping up to the task (thank you!). We haven't worked out the exact
-> > details of how the process will work, but the goal is to even out the
-> > maintenance responsibilities to give us both ample time for development.
-> > 
-> > To that end, updating the maintainers entry to reflect the change.
-> > 
-> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> > ---
-> >  MAINTAINERS | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 42fc47c6edfd..7323efcc1270 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -11355,9 +11355,9 @@ F:	virt/kvm/*
-> >  
-> >  KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)
-> >  M:	Marc Zyngier <maz@kernel.org>
-> > +M:	Oliver Upton <oliver.upton@linux.dev>
-> 
-> Ya know, alphabetical order tends to put Mr Z at the bottom of the list,
-> but I can understand why you don't necessarily want to be first in the
-> pack just yet!
+Hi Neil,
 
-I think you may've spotted my intentions here :-) Short of any
-objections, I'll shamelessly leave Marc in the direct line of fire until
-someone alphabetizes it.
+Le mardi 24 janvier 2023 =C3=A0 17:51 +0100, neil.armstrong@linaro.org a =
+=C3=A9crit=C2=A0:
+> We hoped we could use the same modifier as DRM, but it seems this is now =
+out of scope.
+>=20
+> Neil
 
-> In any case, this is really great to see:
-> 
-> Acked-by: Will Deacon <will@kernel.org>
+Its not out of scope, its just not being worked on. There is no infra to su=
+pport
+an extra 64bit modifier in V4L2 atm, or to use DRM formats in general. Folk=
+s
+form Qualcomm or Mediatek didn't want to do it, so they worked around by ad=
+ding
+their strictly needed subset of compressed formats. If you don't want this,=
+ then
+fine, but I'm not aware of someone actively working on that today.
 
-Thanks!
+I was just curious if there was anything other then NV12 (something 10bit) =
+on
+the secondary buffer case, that was my initial question here ;-D.
 
--- 
-Thanks,
-Oliver
+Nicolas
+
