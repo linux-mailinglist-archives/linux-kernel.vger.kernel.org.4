@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC59D67A40E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F06B67A415
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbjAXUkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S233429AbjAXUlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjAXUkO (ORCPT
+        with ESMTP id S229584AbjAXUlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:40:14 -0500
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1994B1AD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:40:13 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674592811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1AR/rv3Oa6O7jvIvFBjmYxJ41m4mSBsPB4PLJyrZR80=;
-        b=LRQ50Wlwhf1P8ib6bD5y2GyXEpsCFdUF085x/dfwV/VvezEeAHY1OezRZK/hl25p+jY+mi
-        Tz8huiM9NBELezIT+858ud6mKtFPdqQ6cK4fT5RFKBZUFO4UUWv1VJmYvADVVCuCJ/1Jn/
-        635A+wFIPnEfuPGzLQjo/LPVYOalXt0=
-From:   andrey.konovalov@linux.dev
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Subject: [PATCH v2 mm] kasan: reset page tags properly with sampling
-Date:   Tue, 24 Jan 2023 21:40:09 +0100
-Message-Id: <5dbd866714b4839069e2d8469ac45b60953db290.1674592780.git.andreyknvl@google.com>
+        Tue, 24 Jan 2023 15:41:46 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541B44C0F6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:41:45 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id 20so12041358pfu.13
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kArh2JTETPG4MZN8AtzWKM/hnB740sJiaw+6d2XmltY=;
+        b=oyLp/nUpTQCOQMyT5yEtRG7o0JQPEbxztyhTTwBBWfbRApCOOFV/WkDLdIbvbSvWLz
+         b1hrf5/g8Fdn++whjE9zqRHbe7cRC42175lcv4Eyj7FJEwCFaWE1ruLkzMZpzPw3MEn6
+         dm8HGLCYb86tX0qQL+B4f0kcnhqKsu6O9j+KA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kArh2JTETPG4MZN8AtzWKM/hnB740sJiaw+6d2XmltY=;
+        b=27R/eRr1Lh+vRSiitcMUUy/+hbQtNK3AFcmFd8p9CWkme3QxLpTYzrQRj3dpcQKjNI
+         /0JH+s0Hg1DYu0Pe34//q33CMOQVh4Eivjhs2V/PRNfIO08umVcB/j7xtXojw24mSyXS
+         VAOIl4oplxkQ2lS0/RK4SYWiWc/AnrUc0R6ykhDKIbJoV3Fmm814fHckEcP59Nt8693f
+         L5TkqDIswekYmzPyhJTGbVhpcBvFVn65r93xkmhvqrZekN+CnXYdKmB3QMxg4XmH6oe2
+         VSFpi6EowzM3xyVvJ+ZD4GKrEPK+Qbz33LrUZKN+d/6T2y3uxo55G51X7z6Dj4KYNld7
+         YnIA==
+X-Gm-Message-State: AFqh2kpMAenhSKaGXyYS2NQRJ91IHOVi/CSCkMebqFoauuWDOlIlBky6
+        yXu0EgVv5oBgZhFhe9+tQWOvpQzahisVHztiChGg
+X-Google-Smtp-Source: AMrXdXv//TSHap1rIs4T8t6FimYpSoWP8wIEH1RnksqTCs7706WWqSUBG8nxukPl0ALp6mPXwdjofzthPg+fGXMiqgg=
+X-Received: by 2002:a05:6a00:1d23:b0:58d:b662:af11 with SMTP id
+ a35-20020a056a001d2300b0058db662af11mr2817916pfx.37.1674592904836; Tue, 24
+ Jan 2023 12:41:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215170046.2010255-1-atishp@rivosinc.com> <20221215170046.2010255-2-atishp@rivosinc.com>
+ <20230112100608.d7tnvhbotjfctlgk@orel> <CAHBxVyESkQ9Krmn-44f-A8hYzMrZBtBfq15fdx-sHDQfkBMtKQ@mail.gmail.com>
+ <20230113072255.34cnyautbwiy25p5@orel>
+In-Reply-To: <20230113072255.34cnyautbwiy25p5@orel>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 24 Jan 2023 12:41:33 -0800
+Message-ID: <CAOnJCU+UBG-AouAc1M4J-i9Y_nPE9RfrFZfNyLSxhKbNF55AMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] RISC-V: Define helper functions expose hpm
+ counter width and count
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Atish Kumar Patra <atishp@rivosinc.com>,
+        linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+On Thu, Jan 12, 2023 at 11:22 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Thu, Jan 12, 2023 at 10:18:05AM -0800, Atish Kumar Patra wrote:
+> > On Thu, Jan 12, 2023 at 2:06 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> > >
+> > > On Thu, Dec 15, 2022 at 09:00:36AM -0800, Atish Patra wrote:
+> ...
+> > > > +EXPORT_SYMBOL(riscv_pmu_get_hpm_info);
+> > >
+> > > EXPORT_SYMBOL_GPL ?
+> > >
+> >
+> > Is that mandatory ? I have seen usage of both in arch/riscv and other
+> > places though.
+> > I am also not sure if any other non-GPL module should/need access to this.
+>
+> TBH, I'm not sure what the best policy is, but I presumed we should use
+> _GPL when we aren't aware of anything non-GPL and then when a day comes
+> that something non-GPL would like this to be exported, the patch that
+> flips it will provide the justification in its commit message.
+>
 
-The implementation of page_alloc poisoning sampling assumed that
-tag_clear_highpage resets page tags for __GFP_ZEROTAGS allocations.
-However, this is no longer the case since commit 70c248aca9e7
-("mm: kasan: Skip unpoisoning of user pages").
+Sgtm. Changed it to EXPORT_SYMBOL_GPL for now.
 
-This leads to kernel crashes when MTE-enabled userspace mappings are
-used with Hardware Tag-Based KASAN enabled.
+> Thanks,
+> drew
 
-Reset page tags for __GFP_ZEROTAGS allocations in post_alloc_hook().
 
-Also clarify and fix related comments.
 
-Reported-by: Peter Collingbourne <pcc@google.com>
-Tested-by: Peter Collingbourne <pcc@google.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- mm/page_alloc.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 5514d84cc712..b917aebfd3d0 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -2471,7 +2471,7 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 	bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags) &&
- 			!should_skip_init(gfp_flags);
- 	bool zero_tags = init && (gfp_flags & __GFP_ZEROTAGS);
--	bool reset_tags = !zero_tags;
-+	bool reset_tags = true;
- 	int i;
- 
- 	set_page_private(page, 0);
-@@ -2498,7 +2498,7 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 	 * (which happens only when memory should be initialized as well).
- 	 */
- 	if (zero_tags) {
--		/* Initialize both memory and tags. */
-+		/* Initialize both memory and memory tags. */
- 		for (i = 0; i != 1 << order; ++i)
- 			tag_clear_highpage(page + i);
- 
-@@ -2516,14 +2516,15 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 		} else {
- 			/*
- 			 * KASAN decided to exclude this allocation from being
--			 * poisoned due to sampling. Skip poisoning as well.
-+			 * (un)poisoned due to sampling. Make KASAN skip
-+			 * poisoning when the allocation is freed.
- 			 */
- 			SetPageSkipKASanPoison(page);
- 		}
- 	}
- 	/*
--	 * If memory tags have not been set, reset the page tags to ensure
--	 * page_address() dereferencing does not fault.
-+	 * If memory tags have not been set by KASAN, reset the page tags to
-+	 * ensure page_address() dereferencing does not fault.
- 	 */
- 	if (reset_tags) {
- 		for (i = 0; i != 1 << order; ++i)
 -- 
-2.25.1
-
+Regards,
+Atish
