@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA5F678E83
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B476B678E81
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjAXCs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S232516AbjAXCse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbjAXCs4 (ORCPT
+        with ESMTP id S232315AbjAXCsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:48:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD1432E64;
-        Mon, 23 Jan 2023 18:48:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28698B80FCD;
-        Tue, 24 Jan 2023 02:48:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20A3C4339B;
-        Tue, 24 Jan 2023 02:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674528532;
-        bh=txixw/DyRM2x3mOH5v36EhVcGwhyzbgQWa88XOxMgaI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=K4iUz7vgILKzfm+t0OX1DEKigV+FtI2kNKT8Txxb5q4N1Ck9fZEQesq0/u2OMhpWN
-         EWMYMm24bWKBi9Jtt2Oftz/DcgtKGyL4PUVfmHXxjHZjexYQESv/jRaSPRSHTqPKga
-         Ws4blaslEnzXwyuS2gKXZOED11+3WsvBmwsD7RkRHzHcodHb3t0gsVZ65NL+HFbelD
-         +tBimPLb6ArVsj/ERZ0Mm0MkvJRQsDo/cPl61Ep5510jibNfn5IPUCFDUxHqJXiwJv
-         pysb5kC70dEY3pIJrJP1qqQ965Ud6uhBYDnOUv3Oucys6Ms42MQUI3FuOLcywD7ROO
-         W4M8YBd5eVYzw==
-Received: by mail-oi1-f178.google.com with SMTP id p185so12190392oif.2;
-        Mon, 23 Jan 2023 18:48:52 -0800 (PST)
-X-Gm-Message-State: AFqh2koW81CEPXo4ls5O9cYFT21TnTebvpYIOaP4GUi7Bt3+uDTXmjD9
-        06NOdm5CUtjW8XvGBiKfAYVF4CeTR2cHO/oCW8o=
-X-Google-Smtp-Source: AMrXdXt7t+66BbeTn/cyRB6k9WMjKHVNKVrBwYd/JJ/GbD3VOJAZ6mscXLLnr1lfRdHerwkZ1Dz6c+yS/PJNoa2cQ8I=
-X-Received: by 2002:aca:acd5:0:b0:364:5d10:7202 with SMTP id
- v204-20020acaacd5000000b003645d107202mr1093092oie.194.1674528532066; Mon, 23
- Jan 2023 18:48:52 -0800 (PST)
+        Mon, 23 Jan 2023 21:48:32 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BAFA5E6;
+        Mon, 23 Jan 2023 18:48:31 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id r9so12135565oig.12;
+        Mon, 23 Jan 2023 18:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yje2JP2mUPKrgvQ8BEU++4+nLYxRl5QuruHK7Veg1Qk=;
+        b=l2llHYiEgouvs8ePn8UGMqsmZ/pJMoFDoY9XJmQd5/HaG2cg127Yt5QEdZCIjaiV+4
+         9TF4wkzF/4/T92sKZU9gzHF8cEgtoIG/pDeqLz6R352qkpSBYS2/PA/l09g/xE70pbuD
+         KsoSYwGFyWAGM8mTFLQ9aRQiKWhCMWwQ8lMQLI0VYsGEMi363JBnT1IKSuS6rQZjIIGS
+         QfxgutHpBrjNkZU6fRQoCQE7/7aD8duV1H49Z+Aei+RlX91FwWqnl7yBanuy3FV7kc4J
+         q2hDmovfYi38/XUCcoq27cjLhWgqjfIX3t+u8b6qKZ5UUW1FPeOYwSAwICOU5JB1g6lo
+         ag7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Yje2JP2mUPKrgvQ8BEU++4+nLYxRl5QuruHK7Veg1Qk=;
+        b=SXhqAf0aOnjv0AIID6/7dzbspML/I5jrSdnJiYrtRG695ZGRwXqZbWINpxNEZhLVi/
+         QtAp9QTdz6JngBANcp3ONZcWbewduDclU9noN86UUHc/ppFKH1XiVk1XBAP1IoQUF9Gv
+         MM5FQttuqH3LpOopdqqQSmEYJE18NO88QRufrUWGRbHKqjsaPg8uVJpIGLA/rYsM17VB
+         +sw9gRENkC/uxo/Z4ZaZBpcQGgLXjlZWWsIhlo/tx1LjTCP7pyxPRT6sXRmL/dX66HbE
+         wmvr+Wwdprftvc23LZIkXYXyWJSOmdqJ1ugucekwvVFaEN9iumt2BTHkYOV0/iGwfiY3
+         h1cQ==
+X-Gm-Message-State: AFqh2krTj/daJJz4SBdnDRr2zrlQtaXSTl2sR3hDthgDbOXaVHvX3Tc/
+        ju5fYkpS76DhW0IQRied//A=
+X-Google-Smtp-Source: AMrXdXvgfKGP1eMBWG0z+qx5Lxw6MDhD/sD1+4SLoLfnHBnOxSixilC5fvjsFwG3ap/oKxXOVZ1CNg==
+X-Received: by 2002:a05:6808:118e:b0:35a:6005:3dc5 with SMTP id j14-20020a056808118e00b0035a60053dc5mr15366094oil.51.1674528510466;
+        Mon, 23 Jan 2023 18:48:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r124-20020aca4482000000b0036eb408a81fsm480457oia.24.2023.01.23.18.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 18:48:30 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 23 Jan 2023 18:48:28 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 00/51] 5.4.230-rc2 review
+Message-ID: <20230124024828.GC1495310@roeck-us.net>
+References: <20230123094907.292995722@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230123052653.711899-1-masahiroy@kernel.org> <Y88NX11/LcnfloYk@google.com>
-In-Reply-To: <Y88NX11/LcnfloYk@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 24 Jan 2023 11:48:15 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASfY+2w-aN0LQs0_gB=ASRyJoXSobsqzGa0BNL2sqpJeA@mail.gmail.com>
-Message-ID: <CAK7LNASfY+2w-aN0LQs0_gB=ASRyJoXSobsqzGa0BNL2sqpJeA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: do not automatically add -w option to modpost
-To:     William McVicker <willmcvicker@google.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123094907.292995722@linuxfoundation.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 7:42 AM William McVicker
-<willmcvicker@google.com> wrote:
->
-> On 01/23/2023, Masahiro Yamada wrote:
-> > When there is a missing input file (vmlinux.o or Module.symvers), you
-> > are likely to get a ton of unresolved symbols.
-> >
-> > Currently, Kbuild automatically adds the -w option to allow module builds
-> > to continue with warnings instead of errors.
-> >
-> > This may not be what the user expects because it is generally more useful
-> > to catch all possible issues at build time instead of at run time.
-> >
-> > Let's not do what the user did not ask.
-> >
-> > If you still want to build modules anyway, you can proceed by explicitly
-> > setting KBUILD_MODPOST_WARN=1. Since you may miss a real issue, you need
-> > to be aware of what you are doing.
-> >
-> > Suggested-by: William McVicker <willmcvicker@google.com>
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/Makefile.modpost | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> > index 43343e13c542..9254ed811ddd 100644
-> > --- a/scripts/Makefile.modpost
-> > +++ b/scripts/Makefile.modpost
-> > @@ -121,16 +121,14 @@ modpost-args += -e $(addprefix -i , $(KBUILD_EXTRA_SYMBOLS))
-> >
-> >  endif # ($(KBUILD_EXTMOD),)
-> >
-> > -ifneq ($(missing-input),)
-> > -modpost-args += -w
-> > -endif
-> > -
-> >  quiet_cmd_modpost = MODPOST $@
-> >        cmd_modpost = \
-> >       $(if $(missing-input), \
-> >               echo >&2 "WARNING: $(missing-input) is missing."; \
-> >               echo >&2 "         Modules may not have dependencies or modversions."; \
-> > -             echo >&2 "         You may get many unresolved symbol warnings.";) \
-> > +             echo >&2 "         You may get many unresolved symbol errors.";) \
->
-> You need to move the closing parenthesis to come at the end of these
-> echo messages. Otherwise you get this new message unconditionally.
+On Mon, Jan 23, 2023 at 10:52:43AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.230 release.
+> There are 51 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
+> Anything received after that time might be too late.
+> 
 
+Build results:
+	total: 159 pass: 159 fail: 0
+Qemu test results:
+	total: 449 pass: 449 fail: 0
 
-Ah, thanks for catching it.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
+Note: perf built with gcc 9.4.0.
 
-> I also found during testing that the refactoring in commit f73edc8951b2
-> ("kbuild: unify two modpost invocations") dropped the check for missing
-> KBUILD_EXTRA_SYMBOLS. That means if an external module depends on
-> another external module and sets:
->
->   KBUILD_EXTRA_SYMBOLS=/path/to/ext_module/Module.symvers
->
-> ... then make will fail even with KBUILD_MODPOST_WARN=1 since we
-> unconditionally add KBUILD_EXTRA_SYMBOLS to the modpost-args like this:
->
->   modpost-args += -e $(addprefix -i , $(KBUILD_EXTRA_SYMBOLS))
->
-> To fix this, I suggest you also take the following patch so that
-> KBUILD_MODPOST_WARN=1 will allow you to skip those unresolved symbols as
-> well:
-
-
-How is this useful?
-
-KBUILD_EXTRA_SYMBOLS is explicitly specified by the user
-via the command line or the environment variable.
-
-If $(KBUILD_EXTRA_SYMBOLS) does not exist,
-it is a user's fault, isn't it?
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Guenter
