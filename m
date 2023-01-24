@@ -2,195 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4CC678D6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC89678D6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjAXB2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S232319AbjAXBaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjAXB16 (ORCPT
+        with ESMTP id S231760AbjAXBaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:27:58 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1C11352E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:27:55 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id s3so10188374pfd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8F6hRIomZ2nfgoOl9vt+Mda6mTJjuiQ/nB/OzAXwDSI=;
-        b=H0wzig6HSgCdkJfbnchvpXtWngdQg2CyHZkhgdpFw+HuZ2/LaO4BJx1ZZJ+RRoILq8
-         GuT7pIND31DaoY+FiJSBILYhipQMPqJ7CZUOuz7x71s515bfTFYymuOqj76dpZGGPe0R
-         roYrZDSWF8NxOve8Pxp7cvCd6BZ0axXo2A8t3B8iw98G/r8Tkcv0kcruglI/OT22oEey
-         j/0uWp0hdocKI/BmP7HVj2M7QFhthg3W7d8Q1vm0Us4lX+kWe4jn02BGZ4yej5UdNIiy
-         ekteTmqXj33t26Jyf+JF3RUpU48Qj5o/y07idXkF5Ho4kjJsXeyVErd+MUZWegqHYXVp
-         q16Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8F6hRIomZ2nfgoOl9vt+Mda6mTJjuiQ/nB/OzAXwDSI=;
-        b=pXwBQpr485x/sigU+CaZ2Y09+1YVqJKtieCswcML4SNI4ZLAh0GApzwtrKlkN2yNvz
-         pAr0uSAXDEiQrTcbqN4XKkRrpPH+mdqJFisEUz4LDIDQdpop6zQ5LxYVn4rJRMNZSNX8
-         QHBdHbSk2kFOFco/zGRbRKnoEziSexOjVxiwda/4m/WBEawRtxLjxPzvR6LBKG+eNg5m
-         4WaPh1Edc2z/Wpp2iRUifsw/9EiPk5YjHJfO3xj69rx40oCmw8p6TutMUSlfkCCcKIyk
-         AwSPSLvcWEeG7AHKWlwCdxysCfwGHORM9JBYGYtqB+PxSKx94XKH5aTNzKbsl1dcjoGg
-         9FUA==
-X-Gm-Message-State: AO0yUKXbMoo668ojlXpsVYW/LFH6F/SzsgubYBWQbOM0LcbWOp0tgwwc
-        IWbxtyqhElsUjaGKGsollZDBRA==
-X-Google-Smtp-Source: AK7set8oWHW5as5U3Q0r97O5m1dlnRFyFLOsa36pUh2yIP/6nFcX7lH+DqOSXyUNOJ1I4yEcn6HIvg==
-X-Received: by 2002:a05:6a00:b55:b0:576:9252:d06 with SMTP id p21-20020a056a000b5500b0057692520d06mr19319pfo.0.1674523674434;
-        Mon, 23 Jan 2023 17:27:54 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a28-20020aa78e9c000000b00582bdaab584sm238831pfr.81.2023.01.23.17.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 17:27:53 -0800 (PST)
-Date:   Tue, 24 Jan 2023 01:27:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-Message-ID: <Y880FiYF7YCtsw/i@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com>
- <20230119111308.GC2976263@ls.amr.corp.intel.com>
- <Y8lg1G2lRIrI/hld@google.com>
- <20230119223704.GD2976263@ls.amr.corp.intel.com>
+        Mon, 23 Jan 2023 20:30:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206D312869;
+        Mon, 23 Jan 2023 17:30:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=nSp19ujQ+ktxCD6Dze1xGnN3rj3fGXlTk3QIIyKXR7Q=; b=RKmQLDt+q2mx7+HZ2KoFnjklUW
+        uiYSwBVvbxB9kllH9g46k8r3ryyb7gIDxzK5XqU9xan0Fpog1a8yc+YHqBw/2yeXD+jgKxUAQAwGA
+        6zSVJQh7syc6nN0q0FoK6d5I7A7Lk4OYe32BRvosylNjP0v0KzH9uwroW4V4nFkQPyHhbXL4oOvAv
+        6ai0v/4W/7Wiirl68/E5FJ6d/X+Ezekwtjka2ZtsBCsGCYDaotELoBqUzjYJYIJZkTcRi4vSu6WiG
+        CeJN++U+0RH5HMC3y+hoCm4Racd2ONn1BNVQkZNeopViJ7sC0o7PBfpi3JNPSH+8fyk11Hy2Y3nKv
+        QAgDymaA==;
+Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pK88d-00223C-T5; Tue, 24 Jan 2023 01:30:15 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: atomisp: fix build error, use vb2 interfaces
+Date:   Mon, 23 Jan 2023 17:30:14 -0800
+Message-Id: <20230124013014.23578-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119223704.GD2976263@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023, Isaku Yamahata wrote:
-> On Thu, Jan 19, 2023 at 03:25:08PM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > On Thu, Jan 19, 2023, Isaku Yamahata wrote:
-> > > On Sat, Jan 14, 2023 at 12:37:59AM +0000,
-> > > Sean Christopherson <seanjc@google.com> wrote:
-> > > 
-> > > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > > > > This patch series implements KVM guest private memory for confidential
-> > > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
-> > > > > TDX-protected guest memory, machine check can happen which can further
-> > > > > crash the running host system, this is terrible for multi-tenant
-> > > > > configurations. The host accesses include those from KVM userspace like
-> > > > > QEMU. This series addresses KVM userspace induced crash by introducing
-> > > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
-> > > > > via a fd-based approach, but it can never access the guest memory
-> > > > > content.
-> > > > > 
-> > > > > The patch series touches both core mm and KVM code. I appreciate
-> > > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> > > > > reviews are always welcome.
-> > > > >   - 01: mm change, target for mm tree
-> > > > >   - 02-09: KVM change, target for KVM tree
-> > > > 
-> > > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
-> > > > is available here:
-> > > > 
-> > > >   git@github.com:sean-jc/linux.git x86/upm_base_support
-> > > > 
-> > > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
-> > > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-> > > > a WIP.
-> > > > 
-> > > > As for next steps, can you (handwaving all of the TDX folks) take a look at what
-> > > > I pushed and see if there's anything horrifically broken, and that it still works
-> > > > for TDX?
-> > > > 
-> > > > Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
-> > > > (and I mean that).
-> > > > 
-> > > > On my side, the two things on my mind are (a) tests and (b) downstream dependencies
-> > > > (SEV and TDX).  For tests, I want to build a lists of tests that are required for
-> > > > merging so that the criteria for merging are clear, and so that if the list is large
-> > > > (haven't thought much yet), the work of writing and running tests can be distributed.
-> > > > 
-> > > > Regarding downstream dependencies, before this lands, I want to pull in all the
-> > > > TDX and SNP series and see how everything fits together.  Specifically, I want to
-> > > > make sure that we don't end up with a uAPI that necessitates ugly code, and that we
-> > > > don't miss an opportunity to make things simpler.  The patches in the SNP series to
-> > > > add "legacy" SEV support for UPM in particular made me slightly rethink some minor
-> > > > details.  Nothing remotely major, but something that needs attention since it'll
-> > > > be uAPI.
-> > > 
-> > > Although I'm still debuging with TDX KVM, I needed the following.
-> > > kvm_faultin_pfn() is called without mmu_lock held.  the race to change
-> > > private/shared is handled by mmu_seq.  Maybe dedicated function only for
-> > > kvm_faultin_pfn().
-> > 
-> > Gah, you're not on the other thread where this was discussed[*].  Simply deleting
-> > the lockdep assertion is safe, for guest types that rely on the attributes to
-> > define shared vs. private, KVM rechecks the attributes under the protection of
-> > mmu_seq.
-> > 
-> > I'll get a fixed version pushed out today.
-> > 
-> > [*] https://lore.kernel.org/all/Y8gpl+LwSuSgBFks@google.com
-> 
-> Now I have tdx kvm working. I've uploaded at the followings.
-> It's rebased to v6.2-rc3.
->         git@github.com:yamahata/linux.git tdx/upm
->         git@github.com:yamahata/qemu.git tdx/upm
+The atomisp driver uses functions that are provided by VIDEOBUF2_VMALLOC
+instead of VIDEOBUF_VMALLOC, so change the 'select' so that the correct
+interfaces are built.
 
-And I finally got a working, building version updated and pushed out (again to):
+ld: drivers/staging/media/atomisp/pci/atomisp_fops.o: in function `atomisp_init_pipe':
+drivers/staging/media/atomisp/pci/atomisp_fops.c:649: undefined reference to `vb2_vmalloc_memops'
 
-  git@github.com:sean-jc/linux.git x86/upm_base_support
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 9d4fa1a16b28 ("media: atomisp: cleanup directory hierarchy")
+Fixes: ad85094b293e ("Revert "media: staging: atomisp: Remove driver"")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org
+---
+ drivers/staging/media/atomisp/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Took longer than expected to get the memslot restrictions sussed out.  I'm done
-working on the code for now, my plan is to come back to it+TDX+SNP in 2-3 weeks
-to resolves any remaining todos (that no one else tackles) and to do the whole
-"merge the world" excersise.
-
-> kvm_mmu_do_page_fault() needs the following change.
-> kvm_mem_is_private() queries mem_attr_array.  kvm_faultin_pfn() also uses
-> kvm_mem_is_private(). So the shared-private check in kvm_faultin_pfn() doesn't
-> make sense. This change would belong to TDX KVM patches, though.
-
-Yeah, SNP needs similar treatment.  Sorting that out is high up on the todo list.
+diff -- a/drivers/staging/media/atomisp/Kconfig b/drivers/staging/media/atomisp/Kconfig
+--- a/drivers/staging/media/atomisp/Kconfig
++++ b/drivers/staging/media/atomisp/Kconfig
+@@ -14,7 +14,7 @@ config VIDEO_ATOMISP
+ 	depends on VIDEO_DEV && INTEL_ATOMISP
+ 	depends on PMIC_OPREGION
+ 	select IOSF_MBI
+-	select VIDEOBUF_VMALLOC
++	select VIDEOBUF2_VMALLOC
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	help
+ 	  Say Y here if your platform supports Intel Atom SoC
