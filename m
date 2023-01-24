@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E815679BD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDD8679BD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbjAXOan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S234456AbjAXOaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234712AbjAXOai (ORCPT
+        with ESMTP id S234765AbjAXOaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:30:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75DD46D4E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:29:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674570590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vo8komcAdWdEd2HeYlqbGambAOZnw7KhmFAc4ykFVR4=;
-        b=RXb75rPObeJqtns3DpgAig/eMqWpHltYWN1FC1vwtADroJeEOHFaNYtSpOvC0+NU4ngzie
-        VB8KMThRWLdve0/PwQ0vTzdHetgg8wKpc0/kgdjBL/3mgEh/Q7AZ8qPx3urt8p5FWoJje4
-        GREwZKB4QPzDMzKsDsShDCQGpR5KmgI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-221-XceqzRpLN_mvZa7eJ3vk4Q-1; Tue, 24 Jan 2023 09:29:49 -0500
-X-MC-Unique: XceqzRpLN_mvZa7eJ3vk4Q-1
-Received: by mail-wm1-f71.google.com with SMTP id 12-20020a05600c228c00b003db09699216so4005959wmf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:29:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vo8komcAdWdEd2HeYlqbGambAOZnw7KhmFAc4ykFVR4=;
-        b=m+Cx5CgaPjGAPr26CidaOt+34ajvJ3pO4YjU5/EhuViAd5MK+Ib/V44YzKwsJvHW0W
-         FV7YccARY1tkK+d4gexhPGRYaJDFrILPKTq646TZ8BJ4aDBa14Bpsefm6QQ20zQjIi9v
-         V+XW5YmBU25jZIQ01aSn6iLQ9QAmk2yZR7vrV7WEzoNd2yf3hJmqzA1jmGtSx9FjpwUv
-         gczwJmWvkBZhF/QWT6XUl4HB/pmgQqhbDLkhMhAnUjVvvnpyG6mZwUNSE5eUK9Y+7Np+
-         deY6XXsEFzfLxow9CGzetNGnyuVxpyVWed4BJrHIt9lZihT7IML/5B8Bf3auYvlDawIZ
-         a4iw==
-X-Gm-Message-State: AFqh2kr44MiwlZxdl5W2qm54r4yxs/apsCqhjK+wKNuvhv6rqCbeG9Zb
-        fSWH7XmdkJ0mc1FaWfoYgw9DQKxfiog7DQCPPlrof9QmeOXgvVUDX8osSSi5oDj71qDeYHtUFIJ
-        n0AXja/9rHqdPJrOoox0m3CAY
-X-Received: by 2002:a05:600c:1d8e:b0:3d9:f9ef:3d23 with SMTP id p14-20020a05600c1d8e00b003d9f9ef3d23mr28401075wms.23.1674570588489;
-        Tue, 24 Jan 2023 06:29:48 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsyFqAD6TPt3fgk8iAn3mdUhNKxrUDu7vp8H7TLkDfIF7R+AaPkLbQzT2K7yCwghdLrRYin7w==
-X-Received: by 2002:a05:600c:1d8e:b0:3d9:f9ef:3d23 with SMTP id p14-20020a05600c1d8e00b003d9f9ef3d23mr28401055wms.23.1674570588170;
-        Tue, 24 Jan 2023 06:29:48 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003daff80f16esm18913172wmg.27.2023.01.24.06.29.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 06:29:47 -0800 (PST)
-Message-ID: <76a0dc81-7fd6-a923-f22c-22b0be12a709@redhat.com>
-Date:   Tue, 24 Jan 2023 15:29:46 +0100
+        Tue, 24 Jan 2023 09:30:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0574615C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:30:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8E4A61299
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D8CC433D2;
+        Tue, 24 Jan 2023 14:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674570604;
+        bh=PHhA2thK99LDK7KgFn8m6wG4a/0PBj3xWHjyopgvXng=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pF1DuxX/DyIX/oQWzTMDkA1U5+mrtHEhsjFiHgeClJt4FB+w+aAlRQsEStR27GSfe
+         2vgIqWZyBMU5QhhGYHAdWlK03K82YapJ+zjw2UXMsaXoIVFZLHhjbNc1+7Vqrp/PAB
+         9kmVfx4Vs5RJs01Q0ylD5W9cDv1Yfroqxdk3G2CBolLtgDNLRUnsURqWE/zJ0WMoSE
+         M4FduDVA0dTcuzKTizntStT4UbqmbZnPDteeLs+FAAGXK/ap9m7dskCtbJhltafaJx
+         AJ6+RR0gTSK3s3+rmigSv1N0qDC0fOThiHqh9zDpZ6ZGOVxzHpmSNKm5KHvkshx/kA
+         Nf8XH+1mH94SQ==
+Date:   Tue, 24 Jan 2023 14:29:59 +0000
+From:   Will Deacon <will@kernel.org>
+To:     joro@8bytes.org
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        kernel-team@android.com
+Subject: [GIT PULL v2] iommu/arm-smmu: Updates for 6.3
+Message-ID: <20230124142957.GA26873@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v8 04/10] iomap: don't get an reference on ZERO_PAGE for
- direct I/O block zeroing
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-References: <20230123173007.325544-1-dhowells@redhat.com>
- <20230123173007.325544-5-dhowells@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230123173007.325544-5-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 18:30, David Howells wrote:
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> ZERO_PAGE can't go away, no need to hold an extra reference.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> ---
->   fs/iomap/direct-io.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
-> index 9804714b1751..47db4ead1e74 100644
-> --- a/fs/iomap/direct-io.c
-> +++ b/fs/iomap/direct-io.c
-> @@ -202,7 +202,7 @@ static void iomap_dio_zero(const struct iomap_iter *iter, struct iomap_dio *dio,
->   	bio->bi_private = dio;
->   	bio->bi_end_io = iomap_dio_bio_end_io;
->   
-> -	get_page(page);
-> +	bio_set_flag(bio, BIO_NO_PAGE_REF);
->   	__bio_add_page(bio, page, len, 0);
->   	iomap_dio_submit_bio(iter, dio, bio, pos);
->   }
-> 
+Hi Joerg,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+This is an updated version of the pull request I previously sent here:
 
--- 
-Thanks,
+https://lore.kernel.org/r/20230120161527.GA22266@willie-the-truck
 
-David / dhildenb
+The branch is now based on your iommu/fixes branch rather than the
+arm-smmu-fixes tag. I've also picked up an additional DT bindings patch
+which came in since last time.
 
+Summary in the tag.
+
+Cheers,
+
+Will
+
+--->8
+
+The following changes since commit 142e821f68cf5da79ce722cb9c1323afae30e185:
+
+  iommu/mediatek-v1: Fix an error handling path in mtk_iommu_v1_probe() (2023-01-13 13:46:32 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-updates
+
+for you to fetch changes up to 8a24401701aa67c3bf8daa56c54d7bd1d6e69c23:
+
+  Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates (2023-01-24 11:45:41 +0000)
+
+----------------------------------------------------------------
+Arm SMMU updates for 6.3
+
+- Device-tree binding updates:
+  * Cater for three power domains on SM6375
+  * Document existing compatible strings for Qualcomm SoCs
+  * Tighten up clocks description for platform-specific compatible strings
+
+- Enable Qualcomm workarounds for some additional platforms that need them
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
+
+Bjorn Andersson (1):
+      iommu/arm-smmu-qcom: Select identity domain for sc8280xp MDSS
+
+Konrad Dybcio (1):
+      dt-bindings: arm-smmu: Allow 3 power domains on SM6375 MMU500
+
+Krzysztof Kozlowski (1):
+      dt-bindings: arm-smmu: disallow clocks when not used
+
+Luca Weiss (1):
+      dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
+
+Manivannan Sadhasivam (1):
+      dt-bindings: arm-smmu: Fix binding for SDX55 and SDX65
+
+Marijn Suijten (2):
+      dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
+      iommu/arm-smmu-qcom: Add SM8150 DPU compatible
+
+Martin Botka (1):
+      dt-bindings: arm-smmu: Document smmu-500 binding for SM6125
+
+Will Deacon (1):
+      Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates
+
+ .../devicetree/bindings/iommu/arm,smmu.yaml        | 66 +++++++++++++++++++---
+ .../devicetree/bindings/iommu/qcom,iommu.txt       |  1 +
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |  2 +
+ 3 files changed, 60 insertions(+), 9 deletions(-)
