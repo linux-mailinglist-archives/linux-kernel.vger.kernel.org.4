@@ -2,125 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB9A679FE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E178679FE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbjAXROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S234695AbjAXRPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbjAXROk (ORCPT
+        with ESMTP id S234729AbjAXRP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:14:40 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922AE3D091
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:35 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id jr19so12408804qtb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=spY1Ga4Htt/e4/S3YR+lJ4bQ2N92evKYOkZEiqiKzXc=;
-        b=OdfpXJDvwGfjoa/f0B3U31apaRVO+bHLetpe4JZQeT9jcGD15bvQ0ANB1i2v8cy/0e
-         ZAvaAK8BR5efiy/dEM/Rdur3S8J8CNsF/ZTG/wknYZFmNOY0JTvlRw1ZWLbMnXAuDhB2
-         gcfq49QV6SqUItxv2HJN+/3Z0MAIXynTjELL8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=spY1Ga4Htt/e4/S3YR+lJ4bQ2N92evKYOkZEiqiKzXc=;
-        b=O2fzVH4cXcft7u+6qxCVvOLaZsr2oJcBfIPjVDTK8i9lhtZuNmjOuVV4twuPWkxKud
-         HHEGRsj5aV2VnNms0Qba1U2RFWLQPVYG+TXN5RdZut+rcXnSMxuqVAoPpZ61hzyIejSv
-         sMEBDEriuVGRWOL5lDJANeHVcDOx6SHS4Dc1hBbk6PAvcIq9XjKnZWX/7dU+1TN1oZ7r
-         HLBMwv7R8/W0dirSCX2883rK3TAgA6JGekE2yC1pZ8bP2k0NogEPnBG47k6UymGRfzcZ
-         Fb5dJm5RUXcJpatprcyEFRFm7XZbAybH4Dd0E0glGwlyEknUBUZzM0+BbRx27qbCpdou
-         6m7g==
-X-Gm-Message-State: AFqh2kpeK+ArBpeQl6uI5RQbk1I/xUjmqpL8XoYhM8SohUCp1q8+R8e7
-        jpMAoAnhbeJu8PTp1QyaqJ7zXz8Ye669WPrP
-X-Google-Smtp-Source: AMrXdXuGlJED8fsY9PUNK7q4q7WUE7Aitb/ZZJ0+StlJI/etduj+0SOGIgBpCq92gqWQfPzqsxKm+A==
-X-Received: by 2002:ac8:60c8:0:b0:3b0:d422:1cbe with SMTP id i8-20020ac860c8000000b003b0d4221cbemr46270748qtm.10.1674580474403;
-        Tue, 24 Jan 2023 09:14:34 -0800 (PST)
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac8428b000000b003b6347595c9sm1581316qtl.12.2023.01.24.09.14.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 09:14:34 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id u20so12131378qvq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:33 -0800 (PST)
-X-Received: by 2002:a05:6214:5f82:b0:534:252f:b091 with SMTP id
- ls2-20020a0562145f8200b00534252fb091mr1278555qvb.130.1674580473657; Tue, 24
- Jan 2023 09:14:33 -0800 (PST)
+        Tue, 24 Jan 2023 12:15:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B367298E2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:15:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAB1461300
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 17:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8C1C433D2;
+        Tue, 24 Jan 2023 17:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674580524;
+        bh=wKvlYv5MLbM587ZQe0pRKBkwTxNoL4bwXuRQfuT4NHY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qj3luYUncno5jJfr6SLoF+rwSBiURG6vl3iGXneH6Ok87J4XZRkSxK4vnshRFb7e6
+         +Bm4a7DddIRBDhYEsR6RAb+0mYODt+MJTOlKIhAH/GHlpoJ1JMGYh228NApZi2yxJw
+         EXiPj1hr0jQ4yLgv9A8TnCOpmfv02cQdQ2S7mouJnG3Q1R2Jv4+jA7bsSnLVxEDuZn
+         tAE9M4jarmrhU+QMxBJ7OxeXA1iyuQ8RWu4K97UsFN1KL0qBB1/lCnvfDsBB/DQdxn
+         MtPwH8fmSQmVtsJWSGOMmXEgM1wwySnamv/dUXWTbOtTr45AzJZymGoQgf8C49zV5v
+         nwpKQcdW6rFrg==
+Date:   Tue, 24 Jan 2023 17:15:18 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH -next v2 2/3] cacheinfo: Make default
+ acpi_get_cache_info() return an error
+Message-ID: <Y9ASJiKjIhpMk/8n@spud>
+References: <20230124154053.355376-1-pierre.gondois@arm.com>
+ <20230124154053.355376-3-pierre.gondois@arm.com>
 MIME-Version: 1.0
-References: <20230116212105.1840362-1-mjguzik@gmail.com> <20230116212105.1840362-2-mjguzik@gmail.com>
- <CAHC9VhSKEyyd-s_j=1UbA0+vOK7ggyCp6e-FNSG7XVYvCxoLnA@mail.gmail.com>
- <CAGudoHF+bg0qiq+ByVpysa9t8J=zpF8=d1CqDVS5GmOGpVM9rQ@mail.gmail.com>
- <CAHC9VhTnpWKnKRu3wFTNfub_qdcDePdEXYZWOpvpqL0fcfS_Uw@mail.gmail.com>
- <CAGudoHEWQJKMS=pL9Ate4COshgQaC-fjQ2RN3LiYmdS=0MVruA@mail.gmail.com> <CAHC9VhSYg-BbJvNBZd3dayYCf8bzedASoidnX23_i4iK7P-WxQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhSYg-BbJvNBZd3dayYCf8bzedASoidnX23_i4iK7P-WxQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 24 Jan 2023 09:14:17 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
-Message-ID: <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Mateusz Guzik <mjguzik@gmail.com>, viro@zeniv.linux.org.uk,
-        serge@hallyn.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SHrM4lZTmcwll7Yv"
+Content-Disposition: inline
+In-Reply-To: <20230124154053.355376-3-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 9:00 AM Paul Moore <paul@paul-moore.com> wrote:
->
-> My main concern is the duplication between the cred check and the cred
-> override functions leading to a bug at some unknown point in the
-> future.
 
-Yeah, it might be good to try to have some common logic for this,
-although it's kind of messy.
+--SHrM4lZTmcwll7Yv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The access_override_creds() logic is fairly different from the "do I
-need to create new creds" decision, since instead of *testing* whether
-the fs[ug]id and [ug]id matches, it just sets the fs[ug]id to the
-expected values.
+On Tue, Jan 24, 2023 at 04:40:47PM +0100, Pierre Gondois wrote:
+> commit bd500361a937 ("ACPI: PPTT: Update acpi_find_last_cache_level()
+> to acpi_get_cache_info()")
+> updates the prototype of acpi_get_cache_info(). The cache 'levels'
+> is update through a pointer and not the return value of the function.
+>=20
+> If CONFIG_ACPI_PPTT is not defined, acpi_get_cache_info() doesn't
+> update its *levels and *split_levels parameters and returns 0.
+> This can lead to a faulty behaviour.
+>=20
+> Make acpi_get_cache_info() return an error code if CONFIG_ACPI_PPTT
+> is not defined.
+> Also,
+>=20
+> In init_cache_level(), if no PPTT is present or CONFIG_ACPI_PPTT is
+> not defined, instead of aborting if acpi_get_cache_info() returns an
+> error code, just continue. This allows to try fetching the cache
+> information from clidr_el1.
 
-So that part of the test doesn't really exist.
+Again, dunno jack about clidr_el1. But the change here seems sane once
+more? I was going to suggest throwing away ret entirely and just
+initialising fw_level to zero, since the function inside
+acpi_get_cache_level() that actually modifies it comes after the last
+error return anyway - but that probably would just leave you exposed to
+a change in the core code that doesn't also update the callsites.
+Plus this looks more deliberate IMO. On that basis, LGTM.
 
-And the same is true of the !SECURE_NO_SETUID_FIXUP logic case - the
-current access() override doesn't _test_ those variables for equality,
-it just sets them.
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  arch/arm64/kernel/cacheinfo.c | 2 +-
+>  include/linux/cacheinfo.h     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
+> index d3fe9542c370..bf348b8d321f 100644
+> --- a/arch/arm64/kernel/cacheinfo.c
+> +++ b/arch/arm64/kernel/cacheinfo.c
+> @@ -59,7 +59,7 @@ int init_cache_level(unsigned int cpu)
+>  	} else {
+>  		ret =3D acpi_get_cache_info(cpu, &fw_level, NULL);
+>  		if (ret < 0)
+> -			return ret;
+> +			fw_level =3D 0;
+>  	}
+> =20
+>  	if (fw_level < 0)
+> diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+> index dfef57077cd0..908e19d17f49 100644
+> --- a/include/linux/cacheinfo.h
+> +++ b/include/linux/cacheinfo.h
+> @@ -100,7 +100,7 @@ static inline
+>  int acpi_get_cache_info(unsigned int cpu,
+>  			unsigned int *levels, unsigned int *split_levels)
+>  {
+> -	return 0;
+> +	return -ENOENT;
+>  }
+>  #else
+>  int acpi_get_cache_info(unsigned int cpu,
+> --=20
+> 2.25.1
+>=20
 
-So Mateusz' patch doesn't really duplicate any actual logic, it just
-has similarities in that it checks "would that new cred that
-access_override_creds() would create be the same as the old one".
+--SHrM4lZTmcwll7Yv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So sharing code is hard, because the code is fundamentally not the same.
+-----BEGIN PGP SIGNATURE-----
 
-The new access_need_override_creds() function is right next to the
-pre-existing access_override_creds() one, so at least they are close
-to each other. That may be the best that can be done.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9ASJgAKCRB4tDGHoIJi
+0kCAAPwM3UDd3wrW0Ki90PSY0KOZP5nvSwQFHugxZ9qRKiq+rgEA8Ps9R0lLiliq
+mzMeShNEiuc5jE9G3Fkdi+l/pLHCAgA=
+=42pH
+-----END PGP SIGNATURE-----
 
-Maybe some of the "is it the root uid" logic could be shared, though.
-Both cases do have this part in common:
-
-        if (!issecure(SECURE_NO_SETUID_FIXUP)) {
-                /* Clear the capabilities if we switch to a non-root user */
-                kuid_t root_uid = make_kuid(override_cred->user_ns, 0);
-                if (!uid_eq(override_cred->uid, root_uid))
-
-and that is arguably the nastiest part of it all.
-
-I don't think it's all that likely to change in the future, though
-(except for possible changes due to user_ns re-orgs, but then changing
-both would be very natural).
-
-               Linus
+--SHrM4lZTmcwll7Yv--
