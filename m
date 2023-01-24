@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEF967989B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BEB67989A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbjAXMwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S233692AbjAXMwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbjAXMwW (ORCPT
+        with ESMTP id S233806AbjAXMwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:52:22 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077DE35A7;
-        Tue, 24 Jan 2023 04:51:56 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBFhZ4027127;
+        Tue, 24 Jan 2023 07:52:21 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B980013DC8;
+        Tue, 24 Jan 2023 04:51:57 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OC8WpS005410;
         Tue, 24 Jan 2023 12:50:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=jRXASvPVg3y0Hb9srnP4XjuCmdfLD6Pi+o7+IT18XNU=;
- b=kGMrM+4ma7OGyd3pD0tUsK6p6mhNgoAnN62IKA/20YxKuykSWNkRcxS6hai9l/XPGz5Z
- iX9TiPNQA7JkuA7iks9UTCrC9o3T3CHl9n1XtUywB0/38jTZlOasqsHO8pk3IPwt2J5J
- dkArEapq2AJWN+/miwA4t8DL7icLQPR3v1EY4oefSilVm25egem7UQ6HtVf7A66WXeqq
- I0MZN66R28XnXuaptLDdIDhSLbTMiV1ubq8Dx9YdRiLQKeu/OIVTx9SQX4wKQRLVi9Es
- m6SaWGwXVUsWMoF3Dvjw2PkzK56z2FgDweFgqZT1b/dL3wTzGFap5qBlVDZyUgYC9UpG Pw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nabuewmm3-1
+ bh=FzJPQIWID7udwDzccsSaQMdjKv9trlQdgcA+VWM69VE=;
+ b=oqLCylEkwEAyqfmdWEtrRCOlHiky6PL6uuBkLEjnt8q0wCF/PbgFVhg+U4h2RK4Oaqlf
+ l2x9qbCT0baJTmGopnDmRs4YlXy3ipcqrdGjHvXYSW+xxUF1Y3w03v5ZcIi0uMyzIDtO
+ jCFUX7hVIyLLAfavjSW/iQoDdsl0Ux25rmjeK1boSyG0vBx6ECMEM/R4eTMHpnpWceco
+ 3TWFphBQwds+I86t8uBH5WmCqIRh2Zvba1XfhY0UK9/K7Ufm4Q7qX9hIb7PkI9iOWOrj
+ UFGIwVsuH4zLFE8J2aUwiQM9bUOZRFHVHzdjcrWAYov5IH08+OjLBvdv6BH2X1F4WDMf 0w== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na9vbrasc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 24 Jan 2023 12:50:45 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30O9xdPs026731;
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBhRXO029852;
         Tue, 24 Jan 2023 12:50:43 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6btmg-1
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n87afarpw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 24 Jan 2023 12:50:43 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCodSL40239426
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCoeal46662086
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Jan 2023 12:50:39 GMT
+        Tue, 24 Jan 2023 12:50:40 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E4D22004B;
+        by IMSVA (Postfix) with ESMTP id ED80520040;
         Tue, 24 Jan 2023 12:50:39 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBAD320043;
-        Tue, 24 Jan 2023 12:50:38 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6AF792004D;
+        Tue, 24 Jan 2023 12:50:39 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 24 Jan 2023 12:50:38 +0000 (GMT)
+        Tue, 24 Jan 2023 12:50:39 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>,
@@ -64,25 +64,25 @@ Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
         gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
         svens@linux.ibm.com, linux-kernel@vger.kernel.org,
         Julian Ruess <julianr@linux.ibm.com>
-Subject: [PATCH v5 2/7] iommu: Allow .iotlb_sync_map to fail and handle s390's -ENOMEM return
-Date:   Tue, 24 Jan 2023 13:50:32 +0100
-Message-Id: <20230124125037.3201345-3-schnelle@linux.ibm.com>
+Subject: [PATCH v5 3/7] s390/pci: prepare is_passed_through() for dma-iommu
+Date:   Tue, 24 Jan 2023 13:50:33 +0100
+Message-Id: <20230124125037.3201345-4-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230124125037.3201345-1-schnelle@linux.ibm.com>
 References: <20230124125037.3201345-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8-Uin76g6XkXb-oqu8efxh009UmBWZAJ
-X-Proofpoint-ORIG-GUID: 8-Uin76g6XkXb-oqu8efxh009UmBWZAJ
+X-Proofpoint-GUID: x4qsvnitCnYyjOppkm1UAqR1vyj-I4SF
+X-Proofpoint-ORIG-GUID: x4qsvnitCnYyjOppkm1UAqR1vyj-I4SF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=882 bulkscore=0
- mlxscore=0 impostorscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301240114
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=984 clxscore=1015 spamscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240114
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -92,327 +92,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On s390 when using a paging hypervisor, .iotlb_sync_map is used to sync
-mappings by letting the hypervisor inspect the synced IOVA range and
-updating a shadow table. This however means that .iotlb_sync_map can
-fail as the hypervisor may run out of resources while doing the sync.
-This can be due to the hypervisor being unable to pin guest pages, due
-to a limit on mapped addresses such as vfio_iommu_type1.dma_entry_limit
-or lack of other resources. Either way such a failure to sync a mapping
-should result in a DMA_MAPPING_ERROR.
+With the IOMMU always controlled through the IOMMU driver testing for
+zdev->s390_domain is not a valid indication of the device being
+passed-through. Instead test if zdev->kzdev is set.
 
-Now especially when running with batched IOTLB flushes for unmap it may
-be that some IOVAs have already been invalidated but not yet synced via
-.iotlb_sync_map. Thus if the hypervisor indicates running out of
-resources, first do a global flush allowing the hypervisor to free
-resources associated with these mappings as well a retry creating the
-new mappings and only if that also fails report this error to callers.
-
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
 Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
-v3 -> v4:
-- Adapted signature of .iommu_tlb_sync mapo for sun50i IOMMU driver added in
-  v6.2-rc1 (kernel test robot)
+ arch/s390/pci/pci_event.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
- drivers/iommu/amd/iommu.c    |  5 +++--
- drivers/iommu/apple-dart.c   |  5 +++--
- drivers/iommu/intel/iommu.c  |  5 +++--
- drivers/iommu/iommu.c        | 20 ++++++++++++++++----
- drivers/iommu/msm_iommu.c    |  5 +++--
- drivers/iommu/mtk_iommu.c    |  5 +++--
- drivers/iommu/s390-iommu.c   | 29 ++++++++++++++++++++++++-----
- drivers/iommu/sprd-iommu.c   |  5 +++--
- drivers/iommu/sun50i-iommu.c |  4 +++-
- drivers/iommu/tegra-gart.c   |  5 +++--
- include/linux/iommu.h        |  4 ++--
- 11 files changed, 66 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index cbeaab55c0db..3df7d20e0e52 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -2180,14 +2180,15 @@ static int amd_iommu_attach_device(struct iommu_domain *dom,
- 	return ret;
- }
- 
--static void amd_iommu_iotlb_sync_map(struct iommu_domain *dom,
--				     unsigned long iova, size_t size)
-+static int amd_iommu_iotlb_sync_map(struct iommu_domain *dom,
-+				    unsigned long iova, size_t size)
- {
- 	struct protection_domain *domain = to_pdomain(dom);
- 	struct io_pgtable_ops *ops = &domain->iop.iop.ops;
- 
- 	if (ops->map_pages)
- 		domain_flush_np_cache(domain, iova, size);
-+	return 0;
- }
- 
- static int amd_iommu_map_pages(struct iommu_domain *dom, unsigned long iova,
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index 4f4a323be0d0..4a76f4d95459 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -344,10 +344,11 @@ static void apple_dart_iotlb_sync(struct iommu_domain *domain,
- 	apple_dart_domain_flush_tlb(to_dart_domain(domain));
- }
- 
--static void apple_dart_iotlb_sync_map(struct iommu_domain *domain,
--				      unsigned long iova, size_t size)
-+static int apple_dart_iotlb_sync_map(struct iommu_domain *domain,
-+				     unsigned long iova, size_t size)
- {
- 	apple_dart_domain_flush_tlb(to_dart_domain(domain));
-+	return 0;
- }
- 
- static phys_addr_t apple_dart_iova_to_phys(struct iommu_domain *domain,
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 59df7e42fd53..3b36a544c8fa 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4725,8 +4725,8 @@ static bool risky_device(struct pci_dev *pdev)
- 	return false;
- }
- 
--static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
--				       unsigned long iova, size_t size)
-+static int intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
-+				      unsigned long iova, size_t size)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	unsigned long pages = aligned_nrpages(iova, size);
-@@ -4736,6 +4736,7 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 
- 	xa_for_each(&dmar_domain->iommu_array, i, info)
- 		__mapping_notify_one(info->iommu, dmar_domain, pfn, pages);
-+	return 0;
- }
- 
- static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 5f6a85aea501..5565e510f7d2 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -2367,8 +2367,17 @@ static int _iommu_map(struct iommu_domain *domain, unsigned long iova,
- 	int ret;
- 
- 	ret = __iommu_map(domain, iova, paddr, size, prot, gfp);
--	if (ret == 0 && ops->iotlb_sync_map)
--		ops->iotlb_sync_map(domain, iova, size);
-+	if (ret == 0 && ops->iotlb_sync_map) {
-+		ret = ops->iotlb_sync_map(domain, iova, size);
-+		if (ret)
-+			goto out_err;
-+	}
-+
-+	return ret;
-+
-+out_err:
-+	/* undo mappings already done */
-+	iommu_unmap(domain, iova, size);
- 
- 	return ret;
- }
-@@ -2516,8 +2525,11 @@ static ssize_t __iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
- 			sg = sg_next(sg);
+diff --git a/arch/s390/pci/pci_event.c b/arch/s390/pci/pci_event.c
+index b9324ca2eb94..4ef5a6a1d618 100644
+--- a/arch/s390/pci/pci_event.c
++++ b/arch/s390/pci/pci_event.c
+@@ -59,9 +59,16 @@ static inline bool ers_result_indicates_abort(pci_ers_result_t ers_res)
  	}
- 
--	if (ops->iotlb_sync_map)
--		ops->iotlb_sync_map(domain, iova, mapped);
-+	if (ops->iotlb_sync_map) {
-+		ret = ops->iotlb_sync_map(domain, iova, mapped);
-+		if (ret)
-+			goto out_err;
-+	}
- 	return mapped;
- 
- out_err:
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index c60624910872..62fc52765554 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -486,12 +486,13 @@ static int msm_iommu_map(struct iommu_domain *domain, unsigned long iova,
- 	return ret;
  }
  
--static void msm_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
--			       size_t size)
-+static int msm_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
-+			      size_t size)
+-static bool is_passed_through(struct zpci_dev *zdev)
++static bool is_passed_through(struct pci_dev *pdev)
  {
- 	struct msm_priv *priv = to_msm_priv(domain);
- 
- 	__flush_iotlb_range(iova, size, SZ_4K, false, priv);
-+	return 0;
- }
- 
- static size_t msm_iommu_unmap(struct iommu_domain *domain, unsigned long iova,
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 2badd6acfb23..76d413aef1ef 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -758,12 +758,13 @@ static void mtk_iommu_iotlb_sync(struct iommu_domain *domain,
- 	mtk_iommu_tlb_flush_range_sync(gather->start, length, dom->bank);
- }
- 
--static void mtk_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
--			       size_t size)
-+static int mtk_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
-+			      size_t size)
- {
- 	struct mtk_iommu_domain *dom = to_mtk_domain(domain);
- 
- 	mtk_iommu_tlb_flush_range_sync(iova, size, dom->bank);
-+	return 0;
- }
- 
- static phys_addr_t mtk_iommu_iova_to_phys(struct iommu_domain *domain,
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index ed33c6cce083..4dfa557270f4 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -210,6 +210,14 @@ static void s390_iommu_release_device(struct device *dev)
- 		__s390_iommu_detach_device(zdev);
- }
- 
+-	return zdev->s390_domain;
++	struct zpci_dev *zdev = to_zpci(pdev);
++	bool ret;
 +
-+static int zpci_refresh_all(struct zpci_dev *zdev)
-+{
-+	return zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
-+				  zdev->end_dma - zdev->start_dma + 1);
-+
-+}
-+
- static void s390_iommu_flush_iotlb_all(struct iommu_domain *domain)
- {
- 	struct s390_domain *s390_domain = to_s390_domain(domain);
-@@ -217,8 +225,7 @@ static void s390_iommu_flush_iotlb_all(struct iommu_domain *domain)
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
--		zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
--				   zdev->end_dma - zdev->start_dma + 1);
-+		zpci_refresh_all(zdev);
- 	}
- 	rcu_read_unlock();
- }
-@@ -242,20 +249,32 @@ static void s390_iommu_iotlb_sync(struct iommu_domain *domain,
- 	rcu_read_unlock();
- }
- 
--static void s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
-+static int s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 				      unsigned long iova, size_t size)
- {
- 	struct s390_domain *s390_domain = to_s390_domain(domain);
- 	struct zpci_dev *zdev;
-+	int ret = 0;
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
- 		if (!zdev->tlb_refresh)
- 			continue;
--		zpci_refresh_trans((u64)zdev->fh << 32,
--				   iova, size);
-+		ret = zpci_refresh_trans((u64)zdev->fh << 32,
-+					 iova, size);
-+		/*
-+		 * let the hypervisor discover invalidated entries
-+		 * allowing it to free IOVAs and unpin pages
-+		 */
-+		if (ret == -ENOMEM) {
-+			ret = zpci_refresh_all(zdev);
-+			if (ret)
-+				break;
-+		}
- 	}
- 	rcu_read_unlock();
++	mutex_lock(&zdev->kzdev_lock);
++	ret = !!zdev->kzdev;
++	mutex_unlock(&zdev->kzdev_lock);
 +
 +	return ret;
  }
  
- static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
-diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index 219bfa11f7f4..9e590829992c 100644
---- a/drivers/iommu/sprd-iommu.c
-+++ b/drivers/iommu/sprd-iommu.c
-@@ -330,8 +330,8 @@ static size_t sprd_iommu_unmap(struct iommu_domain *domain, unsigned long iova,
- 	return size;
- }
+ static bool is_driver_supported(struct pci_driver *driver)
+@@ -176,7 +183,7 @@ static pci_ers_result_t zpci_event_attempt_error_recovery(struct pci_dev *pdev)
+ 	}
+ 	pdev->error_state = pci_channel_io_frozen;
  
--static void sprd_iommu_sync_map(struct iommu_domain *domain,
--				unsigned long iova, size_t size)
-+static int sprd_iommu_sync_map(struct iommu_domain *domain,
-+			       unsigned long iova, size_t size)
- {
- 	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
- 	unsigned int reg;
-@@ -343,6 +343,7 @@ static void sprd_iommu_sync_map(struct iommu_domain *domain,
- 
- 	/* clear IOMMU TLB buffer after page table updated */
- 	sprd_iommu_write(dom->sdev, reg, 0xffffffff);
-+	return 0;
- }
- 
- static void sprd_iommu_sync(struct iommu_domain *domain,
-diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index 5b585eace3d4..9d2ff7a95624 100644
---- a/drivers/iommu/sun50i-iommu.c
-+++ b/drivers/iommu/sun50i-iommu.c
-@@ -402,7 +402,7 @@ static void sun50i_iommu_flush_iotlb_all(struct iommu_domain *domain)
- 	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
- }
- 
--static void sun50i_iommu_iotlb_sync_map(struct iommu_domain *domain,
-+static int sun50i_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 					unsigned long iova, size_t size)
- {
- 	struct sun50i_iommu_domain *sun50i_domain = to_sun50i_domain(domain);
-@@ -412,6 +412,8 @@ static void sun50i_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 	spin_lock_irqsave(&iommu->iommu_lock, flags);
- 	sun50i_iommu_zap_range(iommu, iova, size);
- 	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
-+
-+	return 0;
- }
- 
- static void sun50i_iommu_iotlb_sync(struct iommu_domain *domain,
-diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
-index ed53279d1106..a59966290e46 100644
---- a/drivers/iommu/tegra-gart.c
-+++ b/drivers/iommu/tegra-gart.c
-@@ -252,10 +252,11 @@ static int gart_iommu_of_xlate(struct device *dev,
- 	return 0;
- }
- 
--static void gart_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
--				size_t size)
-+static int gart_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
-+			       size_t size)
- {
- 	FLUSH_GART_REGS(gart_handle);
-+	return 0;
- }
- 
- static void gart_iommu_sync(struct iommu_domain *domain,
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 46e1347bfa22..e7f76599f09e 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -332,8 +332,8 @@ struct iommu_domain_ops {
- 			      struct iommu_iotlb_gather *iotlb_gather);
- 
- 	void (*flush_iotlb_all)(struct iommu_domain *domain);
--	void (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
--			       size_t size);
-+	int (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
-+			      size_t size);
- 	void (*iotlb_sync)(struct iommu_domain *domain,
- 			   struct iommu_iotlb_gather *iotlb_gather);
- 
+-	if (is_passed_through(to_zpci(pdev))) {
++	if (is_passed_through(pdev)) {
+ 		pr_info("%s: Cannot be recovered in the host because it is a pass-through device\n",
+ 			pci_name(pdev));
+ 		goto out_unlock;
+@@ -239,7 +246,7 @@ static void zpci_event_io_failure(struct pci_dev *pdev, pci_channel_state_t es)
+ 	 * we will inject the error event and let the guest recover the device
+ 	 * itself.
+ 	 */
+-	if (is_passed_through(to_zpci(pdev)))
++	if (is_passed_through(pdev))
+ 		goto out;
+ 	driver = to_pci_driver(pdev->dev.driver);
+ 	if (driver && driver->err_handler && driver->err_handler->error_detected)
 -- 
 2.34.1
 
