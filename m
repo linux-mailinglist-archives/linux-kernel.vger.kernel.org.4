@@ -2,79 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D880678F74
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 05:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D37678F7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 05:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbjAXEr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 23:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S231938AbjAXEtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 23:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjAXEr1 (ORCPT
+        with ESMTP id S232209AbjAXEs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 23:47:27 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BC861A8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 20:47:26 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id 188so17440888ybi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 20:47:26 -0800 (PST)
+        Mon, 23 Jan 2023 23:48:59 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727FE38009
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 20:48:53 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12006062wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 20:48:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+5+rk6gG92yU871Q18SGdLg7yIfDbgS5v3bi+1rCUbI=;
-        b=aWyceTWtE5DTXNyf9TvC5uY4/OZwC8YyWYVPbtQZa82CqvSa6NLYy7WyPJWvo1gHfR
-         qbqDg2g0l+Ahec3b15JPqyZBqEWwhusTLppzRnqY5x9zcHeYavXxKgYAg8mIW3k8ULE5
-         sKYGam3VNwr5rFIaYa2weHMKPhAlUexGu6I7BsgaF2BY/zDAErUTVigE890Cwy6KLrLc
-         9yqPI2WnnMdJHwF42k8jmH74XUPI11iHViGtCj+XOvHYb5av5UEmYLP4v0+hPOymIYpP
-         lWNcJpvaBML6U8BIJzbtH/XxL8W2IM9HC5UZ/bhRzYNKonuqg2CbUJvEgWkhW0R7YNE1
-         MdFQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKJPQXY28kZK7sCwwfHqZtW+iaz8ixGeBHkUMwf8lzA=;
+        b=gNSuTHWqTDUcrxe9zsCC4yYEY2rZQXORvk3fw4qmmWxw2l42+EC9yw7KqKe2quFZEe
+         bY+YmE2RUJhFudy4dhFNjFSA11WsPlVloeZNf5AEAzakkkfzjbrQIiD5AYMJuds2+p3y
+         WlDGYlqR9N7caF9bVNhsWX55495kUPcpe5woqbTK2NxQvHU5lMXghhxBNMpDJNs5+4Yj
+         60S83jF7r+k6aZfANn3ILWpN94enZPVhtBn4yiGBKE2/KV1d11Sna9KB2n6cUyW1r/Dz
+         SbOMhIeNFfbDBSqQdCsWUDSQTFzgOUiKBjNA+3LVRTtiGvu/oqWpgZeytFOcb4JJoCn7
+         6G3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+5+rk6gG92yU871Q18SGdLg7yIfDbgS5v3bi+1rCUbI=;
-        b=hiX5nI3DEpBdu40BjGZZvrVT/vzaGG5PAZTpyyokU11Xq5Xau+oe0FFZ8sZdZfkOHi
-         +WtqhloYmu9gdeaMJdLaFbJM58EXEf1u1OCcSTlnBbTdrF6d4auj1y1eFYobBF/7wLss
-         zkVRO81i8I+Qe2YXlSRm2qek9PGwVcFilnqMVhqFtDLBHfLfXTFoDV+xI9sGx4hDq5ho
-         S8Pu/qRYd3CRuitApDHvWaJmp/GqpgIfD3HMEWqoEblev+GuEuoUOZ5CDt2O8nHTrJT7
-         /c41AVpvdYa0XR0IWXfR0Wo5qq6HP+Ts++KN5T5FLwYjcqoUR+SFWypGUM4PGKBupGn2
-         pqnA==
-X-Gm-Message-State: AFqh2kqyZ57U1pj95y86fGOhiy6npgYV4Yh/KBJAW3rI4bQXKxhh7PQ1
-        CGle3BzzDi/vaC1A5ErzM0nEkoiPH4SUO6DCU9KA4g==
-X-Google-Smtp-Source: AMrXdXuYdYgfPuS6e/ypCYP4fU7Onii28qxOTxo06MVE/ttY1OEfzR8WQcc4gqxY5GLV14tPPWAYGcO2P7+hD94HjyM=
-X-Received: by 2002:a25:c00a:0:b0:733:4dbc:7215 with SMTP id
- c10-20020a25c00a000000b007334dbc7215mr3054103ybf.636.1674535645579; Mon, 23
- Jan 2023 20:47:25 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iKJPQXY28kZK7sCwwfHqZtW+iaz8ixGeBHkUMwf8lzA=;
+        b=LwrFsudBS6DoZt7SgMRpNI+FoanlwfhpGsxl/9uVk5SBtmsyNZHvXoUA+qOmOCrqe+
+         PEKWzskMJhuw37RLBv0peHa3auHxiGa+PldDFSfSLqOgppkH9A3boVqeZdrPy6T1e+8U
+         RBY0s2gVxORVUV0U/GVCjy3QIjTKwx6zY02wc+Fm9yfjnbipm5ML5xrOk5UIb8qbgEt1
+         ZKX+Jdi7jpCNpDxEfycquA9Y05TcN3/Ug0m/VRhYhhczbGwC5/3MJa2PV3X7VhPNb1Hz
+         Z/+TXsiF6Fo6NIc7xN73chiDb8HzghvXQNiNATjGn/gtnMj82Vez3JZhAAnAxBvAXkJ2
+         PBnA==
+X-Gm-Message-State: AFqh2kqqegjXPzvecWj3R5F/ugbnQ0s8U7cjHIbjSR72k0wlh7VK+B1R
+        wRUyNxrgFBYNlKmB1NL/OjDE74YLYWfyUtK93ax6Aw==
+X-Google-Smtp-Source: AMrXdXuMYuRnnaqnV0ZJVjXo29rptcdLEFYk5BJ3Dt8c+V+fJ/G1tmHSGfz0tW2p5tESpKI2eKbU3HfNsfo07+c+W9o=
+X-Received: by 2002:a05:600c:2247:b0:3da:27dd:9585 with SMTP id
+ a7-20020a05600c224700b003da27dd9585mr1110848wmm.182.1674535731455; Mon, 23
+ Jan 2023 20:48:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20230123191728.2928839-1-tjmercier@google.com>
- <20230123191728.2928839-5-tjmercier@google.com> <CAHC9VhQtbTWXXy8mNxNDdukaAp6YB4CX5Xa6dvSZ_r4DhM2EXg@mail.gmail.com>
- <CABdmKX0Jc3OTnSMv_GoL0eEo=7W9dP29+r5K=PfF84xAUHviBw@mail.gmail.com>
-In-Reply-To: <CABdmKX0Jc3OTnSMv_GoL0eEo=7W9dP29+r5K=PfF84xAUHviBw@mail.gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Mon, 23 Jan 2023 20:47:14 -0800
-Message-ID: <CABdmKX0EoAw+TYk29z1dJXtWekfw22KDQAkQPGiDAh8ojeKd1A@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] security: binder: Add binder object flags to selinux_binder_transfer_file
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, hannes@cmpxchg.org,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        jeffv@google.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221221223420.2157113-1-irogers@google.com> <20221221223420.2157113-8-irogers@google.com>
+ <dd5070a7-254d-4763-439f-a5bfa8240fe1@oracle.com>
+In-Reply-To: <dd5070a7-254d-4763-439f-a5bfa8240fe1@oracle.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 23 Jan 2023 20:48:39 -0800
+Message-ID: <CAP-5=fV0GBtx_0qHPemO_AsLyf_3XAxcC9Q2eG-=rMpuTsMmzg@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] perf pmu-events: Introduce pmu_metrics_table
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -86,105 +93,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 2:04 PM T.J. Mercier <tjmercier@google.com> wrote:
+On Mon, Jan 23, 2023 at 7:36 AM John Garry <john.g.garry@oracle.com> wrote:
 >
+> On 21/12/2022 22:34, Ian Rogers wrote:
+> > Add a metrics table that is just a cast from pmu_events_table. This
+> > changes the APIs so that event and metric usage of the underlying
+> > table is different. Later changes will separate the tables.
+> >
+> > This introduction fixes a NO_JEVENTS=1 regression on:
+> >   68: Parse and process metrics                                       : Ok
+> >   70: Event expansion for cgroups                                     : Ok
+> > caused by the necessary test metrics not being found.
+> >
 >
+> I have just checked some of this code so far...
 >
-> On Mon, Jan 23, 2023 at 1:36 PM Paul Moore <paul@paul-moore.com> wrote:
->>
->> On Mon, Jan 23, 2023 at 2:18 PM T.J. Mercier <tjmercier@google.com> wrot=
-e:
->> >
->> > Any process can cause a memory charge transfer to occur to any other
->> > process when transmitting a file descriptor through binder. This shoul=
-d
->> > only be possible for central allocator processes, so the binder object
->> > flags are added to the security_binder_transfer_file hook so that LSMs
->> > can enforce restrictions on charge transfers.
->> >
->> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
->> > ---
->> >  drivers/android/binder.c            |  2 +-
->> >  include/linux/lsm_hook_defs.h       |  2 +-
->> >  include/linux/lsm_hooks.h           |  5 ++++-
->> >  include/linux/security.h            |  6 ++++--
->> >  security/security.c                 |  4 ++--
->> >  security/selinux/hooks.c            | 13 ++++++++++++-
->> >  security/selinux/include/classmap.h |  2 +-
->> >  7 files changed, 25 insertions(+), 9 deletions(-)
->>
->> ...
->>
->> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
->> > index 3c5be76a9199..d4cfca3c9a3b 100644
->> > --- a/security/selinux/hooks.c
->> > +++ b/security/selinux/hooks.c
->> > @@ -88,6 +88,7 @@
->> >  #include <linux/bpf.h>
->> >  #include <linux/kernfs.h>
->> >  #include <linux/stringhash.h>  /* for hashlen_string() */
->> > +#include <uapi/linux/android/binder.h>
->> >  #include <uapi/linux/mount.h>
->> >  #include <linux/fsnotify.h>
->> >  #include <linux/fanotify.h>
->> > @@ -2029,7 +2030,8 @@ static int selinux_binder_transfer_binder(const =
-struct cred *from,
->> >
->> >  static int selinux_binder_transfer_file(const struct cred *from,
->> >                                         const struct cred *to,
->> > -                                       struct file *file)
->> > +                                       struct file *file,
->> > +                                       u32 binder_object_flags)
->> >  {
->> >         u32 sid =3D cred_sid(to);
->> >         struct file_security_struct *fsec =3D selinux_file(file);
->> > @@ -2038,6 +2040,15 @@ static int selinux_binder_transfer_file(const s=
-truct cred *from,
->> >         struct common_audit_data ad;
->> >         int rc;
->> >
->> > +       if (binder_object_flags & BINDER_FD_FLAG_XFER_CHARGE) {
->> > +               rc =3D avc_has_perm(&selinux_state,
->> > +                           cred_sid(from), sid,
->> > +                           SECCLASS_BINDER, BINDER__TRANSFER_CHARGE,
->> > +                           NULL);
->> > +               if (rc)
->> > +                       return rc;
->> > +       }
->> > +
->> >         ad.type =3D LSM_AUDIT_DATA_PATH;
->> >         ad.u.path =3D file->f_path;
->> >
->> > diff --git a/security/selinux/include/classmap.h b/security/selinux/in=
-clude/classmap.h
->> > index a3c380775d41..2eef180d10d7 100644
->> > --- a/security/selinux/include/classmap.h
->> > +++ b/security/selinux/include/classmap.h
->> > @@ -172,7 +172,7 @@ const struct security_class_mapping secclass_map[]=
- =3D {
->> >         { "tun_socket",
->> >           { COMMON_SOCK_PERMS, "attach_queue", NULL } },
->> >         { "binder", { "impersonate", "call", "set_context_mgr", "trans=
-fer",
->> > -                     NULL } },
->> > +                     "transfer_charge", NULL } },
->> >         { "cap_userns",
->> >           { COMMON_CAP_PERMS, NULL } },
->> >         { "cap2_userns",
->>
->> My first take on reading these changes above is that you've completely
->> ignored my previous comments about SELinux access controls around
->> resource management.  You've leveraged the existing LSM/SELinux hook
->> as we discussed previously, that's good, but can you explain what
->> changes you've made to address my concerns about one-off resource
->> management controls?
->>
-> It's been a couple of weeks since v1 so I've sent this update out now to =
-incorporate all the other feedback so far to make sure it's headed in the r=
-ight direction. I've tried opening up a discussion about this rather unique=
- case, but there's been no activity on that yet.
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >   tools/perf/arch/arm64/util/pmu.c         | 23 ++++++++++-
+> >   tools/perf/pmu-events/empty-pmu-events.c | 52 ++++++++++++++++++++----
+> >   tools/perf/pmu-events/jevents.py         | 24 ++++++++---
+> >   tools/perf/pmu-events/pmu-events.h       | 10 +++--
+> >   tools/perf/tests/expand-cgroup.c         |  4 +-
+> >   tools/perf/tests/parse-metric.c          |  4 +-
+> >   tools/perf/tests/pmu-events.c            |  5 ++-
+> >   tools/perf/util/metricgroup.c            | 50 +++++++++++------------
+> >   tools/perf/util/metricgroup.h            |  2 +-
+> >   tools/perf/util/pmu.c                    |  9 +++-
+> >   tools/perf/util/pmu.h                    |  1 +
+> >   11 files changed, 133 insertions(+), 51 deletions(-)
+> >
+> > diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+> > index 477e513972a4..f8ae479a06db 100644
+> > --- a/tools/perf/arch/arm64/util/pmu.c
+> > +++ b/tools/perf/arch/arm64/util/pmu.c
+> > @@ -19,7 +19,28 @@ const struct pmu_events_table *pmu_events_table__find(void)
+> >               if (pmu->cpus->nr != cpu__max_cpu().cpu)
+> >                       return NULL;
+> >
+> > -             return perf_pmu__find_table(pmu);
+> > +             return perf_pmu__find_events_table(pmu);
+> > +     }
+> > +
+> > +     return NULL;
+> > +}
+> > +
+> > +const struct pmu_metrics_table *pmu_metrics_table__find(void)
+> > +{
+> > +     struct perf_pmu *pmu = NULL;
+> > +
+> > +     while ((pmu = perf_pmu__scan(pmu))) {
+> > +             if (!is_pmu_core(pmu->name))
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * The cpumap should cover all CPUs. Otherwise, some CPUs may
+> > +              * not support some events or have different event IDs.
+> > +              */
+> > +             if (pmu->cpus->nr != cpu__max_cpu().cpu)
+> > +                     return NULL;
+> > +
+> > +             return perf_pmu__find_metrics_table(pmu);
 >
-Someone pointed out this didn't make it to the lists. Retrying.
+> I think that this code will be conflicting with the recent arm64 metric
+> support. And now it seems even more scope for factoring out code.
 
->> --
->> paul-moore.com
+v3 will rebase and fix.
+
+> >       }
+> >
+> >       return NULL;
+> > diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
+> > index 5572a4d1eddb..d50f60a571dd 100644
+> > --- a/tools/perf/pmu-events/empty-pmu-events.c
+> > +++ b/tools/perf/pmu-events/empty-pmu-events.c
+> > @@ -278,14 +278,12 @@ int pmu_events_table_for_each_event(const struct pmu_events_table *table, pmu_ev
+> >       return 0;
+> >   }
+> >
+> > -int pmu_events_table_for_each_metric(const struct pmu_events_table *etable, pmu_metric_iter_fn fn,
+> > -                                  void *data)
+> > +int pmu_metrics_table_for_each_metric(const struct pmu_metrics_table *table, pmu_metric_iter_fn fn,
+> > +                                   void *data)
+> >   {
+> > -     struct pmu_metrics_table *table = (struct pmu_metrics_table *)etable;
+> > -
+> >       for (const struct pmu_metric *pm = &table->entries[0]
+>
+> nit on coding style: do we normally declare local variables like this?
+> It condenses the code but makes a bit less readable, IMHO
+
+The main reason to do it is to reduce the scope of pm to just be the
+loop body. There's some discussion relating to this to do with the
+move to C11:
+https://lwn.net/Articles/885941/
+
+> > ; pm->metric_group || pm->metric_name;
+> >            pm++) {
+> > -             int ret = fn(pm, etable, data);
+> > +             int ret = fn(pm, table, data);
+> >
+> >               if (ret)
+> >                       return ret;
+> > @@ -293,7 +291,7 @@ int pmu_events_table_for_each_metric(const struct pmu_events_table *etable, pmu_
+> >       return 0;
+> >   }
+> >
+> > -const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
+> > +const struct pmu_events_table *perf_pmu__find_events_table(struct perf_pmu *pmu)
+> >   {
+> >       const struct pmu_events_table *table = NULL;
+> >       char *cpuid = perf_pmu__getcpuid(pmu);
+> > @@ -321,6 +319,34 @@ const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
+> >       return table;
+> >   }
+> >
+> > +const struct pmu_metrics_table *perf_pmu__find_metrics_table(struct perf_pmu *pmu)
+> > +{
+> > +     const struct pmu_metrics_table *table = NULL;
+> > +     char *cpuid = perf_pmu__getcpuid(pmu);
+> > +     int i;
+> > +
+> > +     /* on some platforms which uses cpus map, cpuid can be NULL for
+> > +      * PMUs other than CORE PMUs.
+> > +      */
+> > +     if (!cpuid)
+> > +             return NULL;
+> > +
+> > +     i = 0;
+> > +     for (;;) {
+> > +             const struct pmu_events_map *map = &pmu_events_map[i++];
+>
+> To me, this is all strange code. Again this is a comment on the current
+> code: Consider pmu_for_each_sys_event() as an example, we have a while
+> loop for each member of pmu_sys_event_tables[]. But pmu_sys_event_tables
+> is hardcoded for a single member, so why loop? It seems the same for all
+> these "for each" helper in the "empty" events c file.
+
+Agreed. I think we should generate the empty case and then event if
+there is just 1 iteration, we know that the code is that way because
+of the auto-generation.
+
+> > +
+> > +             if (!map->cpuid)
+> > +                     break;
+> > +
+> > +             if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
+> > +                     table = &map->metric_table;
+> > +                     break;
+> > +             }
+> > +     }
+> > +     free(cpuid);
+> > +     return table;
+> > +}
+> > +
+> >   const struct pmu_events_table *find_core_events_table(const char *arch, const char *cpuid)
+> >   {
+> >       for (const struct pmu_events_map *tables = &pmu_events_map[0];
+> > @@ -332,6 +358,17 @@ const struct pmu_events_table *find_core_events_table(const char *arch, const ch
+> >       return NULL;
+> >   }
+> >
+> > +const struct pmu_metrics_table *find_core_metrics_table(const char *arch, const char *cpuid)
+> > +{
+> > +     for (const struct pmu_events_map *tables = &pmu_events_map[0];
+> > +          tables->arch;
+> > +          tables++) {
+>
+> combine with previous line?
+
+Done.
+
+> > +             if (!strcmp(tables->arch, arch) && !strcmp_cpuid_str(tables->cpuid, cpuid))
+> > +                     return &tables->metric_table;
+> > +     }
+> > +     return NULL;
+> > +}
+> > +
+> >   int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data)
+> >   {
+> >       for (const struct pmu_events_map *tables = &pmu_events_map[0];
+> > @@ -350,8 +387,7 @@ int pmu_for_each_core_metric(pmu_metric_iter_fn fn, void *data)
+> >       for (const struct pmu_events_map *tables = &pmu_events_map[0];
+> >            tables->arch;
+> >            tables++) {
+> > -             int ret = pmu_events_table_for_each_metric(
+> > -                     (const struct pmu_events_table *)&tables->metric_table, fn, data);
+> > +             int ret = pmu_metrics_table_for_each_metric(&tables->metric_table, fn, data);
+> >
+> >               if (ret)
+> >                       return ret;
+> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> > index 7b9714b25d0a..be2cf8a8779c 100755
+> > --- a/tools/perf/pmu-events/jevents.py
+> > +++ b/tools/perf/pmu-events/jevents.py
+> > @@ -609,17 +609,19 @@ int pmu_events_table_for_each_event(const struct pmu_events_table *table,
+> >           return 0;
+> >   }
+> >
+> > -int pmu_events_table_for_each_metric(const struct pmu_events_table *table,
+> > +int pmu_metrics_table_for_each_metric(const struct pmu_metrics_table *mtable,
+> >                                        pmu_metric_iter_fn fn,
+> >                                        void *data)
+> >   {
+> > +        struct pmu_events_table *table = (struct pmu_events_table *)mtable;
+>
+> As I may have hinted before, can we avoid casts like this, even if
+> transient?
+
+It was a trade-off with patch size. Will try to improve in v3.
+
+Thanks,
+Ian
+
+> > +
+> >           for (size_t i = 0; i < table->length; i++) {
+> >                   struct pmu_metric pm;
+> >                   int ret;
+> >
+> >                   decompress_metric(table->entries[i].offset, &pm);
+> >                   if (pm.metric_name) {
+> > -                        ret = fn(&pm, table, data);
+> > +                        ret = fn(&pm, mtable, data);
+> >                           if (ret)
+> >                                   return ret;
+> >                   }
+>
+>
+>
