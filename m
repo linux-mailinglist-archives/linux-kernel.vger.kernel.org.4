@@ -2,134 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AC567A374
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E0267A37C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjAXT5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S233789AbjAXT7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233568AbjAXT53 (ORCPT
+        with ESMTP id S230334AbjAXT70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:57:29 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E25546D73
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id b7so15010771wrt.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
-        b=YiZbCsTkWX7qaBcx9slMjH6+effXtwjymWr3GN8IP7nGKDffEFwF+GniYQJGxRDdij
-         ddxnoXiPHLtD1J2xu06stt50XG7TMZHlU4vUx1FUq5u1vVJ1iFg138K5ObVFl5VqTbij
-         vgJu63fNHqpEAcA70RBCp7uEoqgSo8vC4mMsXr1eFSwwyt5n7FebqWFUxG22D15WSOLx
-         rr65vwxKSRjpn0Q/Phw+MaIIrh5QNbS8PF3uygWX27Z16dxkYQc/uZt6NRcmIevTJ0To
-         TDTM2yGHMo7TX+Uiq+7ajTJHTvsLOzLdPh7rrhMVO04WMLFrxkUZDic+0tnVmERM7//X
-         EyTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
-        b=sOpCmWvHARc2JMTReTPpAUTkT7txrNbswpFHtIS8BKcnlynRuyEdgmB7rfeL7A5Pia
-         ZlGveL+BWYUmah4WVyg18tnsLQLJFDjKuEvRoNjuiLyHSaxeu8gKfqp+6VfXsfYCjx5L
-         a6rn3LIOhGoua/osi3CW1hu0FMoCqt4aBXUJEmvf1d6F526PuJZdQLlyx7/tV1zm3zSc
-         HFiJkUQ19SJPDVHiX+6F/w3FtiSWknaYA1kFFrHjAl6/Wh14pCPl+97HeM1/9T8NAEe1
-         gbVpbySJVfNQXgjorkXgYerGKJzxFXdqxxic8Qjh2ZRIMIYhc6FGdS5QgnrHfhThQDvb
-         pfpg==
-X-Gm-Message-State: AFqh2kpgdkpaRCGUFaI5hSRn3Q26zr/Xm3Ad8O+witVPlIFriurC4NAG
-        dT614Hvob10aWx0GKBj8W/mJhw==
-X-Google-Smtp-Source: AMrXdXsxJ+yxlj1AkbpDDlit6M5S/lntxDSsaXZO6X121kBm1RStBcF/mVtX9lX/QgH1/sqY8z727Q==
-X-Received: by 2002:a5d:404c:0:b0:2be:1258:897d with SMTP id w12-20020a5d404c000000b002be1258897dmr25315390wrp.43.1674590245043;
-        Tue, 24 Jan 2023 11:57:25 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q3-20020adff943000000b002bfae43109fsm2473693wrr.93.2023.01.24.11.57.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 11:57:24 -0800 (PST)
-Message-ID: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
-Date:   Tue, 24 Jan 2023 20:57:23 +0100
+        Tue, 24 Jan 2023 14:59:26 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24316199;
+        Tue, 24 Jan 2023 11:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qIm8wL36iwpoekk73rrv9Q8YomfdW/WTpB+Pvm9Jxvc=; b=F014UayJlOj/pwPT/DRgjdfDgq
+        TwaOLkTiFaKdBzt4ig39IBADYQ9AgQ9oeT+6Tazls5bs/h4fT95HT94bmyLTD1jzf8hUR3Z3hbzXB
+        toE8TLnsV1TG2S3CuiSb+wir0wEm2bb/b+w/J6m+Oz3/1eY68/PJ9aCih/KEipiM55FRUdAjTnaSH
+        otX5Zl1SGKlt1PVyRuNbjIN5X+YvLTX+Tk4F5e5Kco69ZXEGJENMAvKyCRSBnDI5aV1YutBjU9mMg
+        srvt3F47BMhzjX6ii16t+boiVlkZ5EUIwo9JniFNxEFhTfBFDVFTlCEgvvAjj+SeYqZapL6xNPDyb
+        vkvZ6m9g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKPRW-0057vV-4v; Tue, 24 Jan 2023 19:58:54 +0000
+Date:   Tue, 24 Jan 2023 11:58:54 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        David Hildenbrand <david@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
+        Adam Manzanares <a.manzanares@samsung.com>, mwilck@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y9A4fiobL6IHp//P@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+ <Y8ll+eP+fb0TzFUh@alley>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>, Wei Ni <wni@nvidia.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8ll+eP+fb0TzFUh@alley>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
+> I wonder if it races with module -r that removes the module before
+> it tries to load it multiple times in parallel.
+> 
+> Does the test pass when you add sleep after the module -r, like this:
+> 
+> diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+> index 7189715d7960..8a020f90a3f6 100755
+> --- a/tools/testing/selftests/kmod/kmod.sh
+> +++ b/tools/testing/selftests/kmod/kmod.sh
+> @@ -322,6 +322,7 @@ kmod_defaults_fs()
+>  {
+>  	config_reset
+>  	modprobe -r $DEFAULT_KMOD_FS
+> +	sleep 1
+>  	config_set_fs $DEFAULT_KMOD_FS
+>  	config_set_test_case_fs
+>  }
 
-Hi,
+FWIW I was curious if the kmod test 0009.sh now could pass with this
+too, but alas it can sometimes fail too.
 
-does anyone know what is the purpose of the get_thermal_instance() usage 
-in this code:
+[  138.590663] misc test_kmod0: reset
+[  139.729273] misc test_kmod0: Test case: TEST_KMOD_FS_TYPE (2)
+[  139.732874] misc test_kmod0: Test filesystem to load: xfs
+[  139.736230] misc test_kmod0: Number of threads to run: 62
+[  139.739575] misc test_kmod0: Thread IDs will range from 0 - 61
+[  140.402079] __request_module: 2 callbacks suppressed
+[  140.402082] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.418075] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.430124] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.450119] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.478037] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.498080] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.518066] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.530207] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.549949] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.562182] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
+[  140.582342] misc test_kmod0: No errors were found while initializing threads
+[  145.385414] SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
+[  145.461962] request_module: modprobe fs-xfs cannot be processed, kmod busy with 50 threads for more than 5 seconds now
+[  145.652541] misc test_kmod0: Done: 62 threads have all run now
+[  145.655020] misc test_kmod0: Last thread to run: 39
+[  145.655831] misc test_kmod0: Results:
+[  145.656450] misc test_kmod0: Sync thread 0 fs: xfs
+[  145.657164] misc test_kmod0: Sync thread 1 fs: xfs
+[  145.657875] misc test_kmod0: Sync thread 2 fs: xfs
+[  145.658615] misc test_kmod0: Sync thread 3 fs: xfs
+[  145.659324] misc test_kmod0: Sync thread 4 fs: xfs
+[  145.660026] misc test_kmod0: Sync thread 5 fs: xfs
+[  145.660948] misc test_kmod0: Sync thread 6 fs: xfs
+[  145.661870] misc test_kmod0: Sync thread 7 fs: xfs
+[  145.662625] misc test_kmod0: Sync thread 8 fs: xfs
+[  145.663363] misc test_kmod0: Sync thread 9 fs: xfs
+[  145.664073] misc test_kmod0: Sync thread 10 fs: xfs
+[  145.664791] misc test_kmod0: Sync thread 11 fs: xfs
+[  145.665509] misc test_kmod0: Sync thread 12 fs: xfs
+[  145.666252] misc test_kmod0: Sync thread 13 fs: xfs
+[  145.666971] misc test_kmod0: Sync thread 14 fs: xfs
+[  145.667693] misc test_kmod0: Sync thread 15 fs: xfs
+[  145.668405] misc test_kmod0: Sync thread 16 fs: xfs
+[  145.669113] misc test_kmod0: Sync thread 17 fs: xfs
+[  145.669823] misc test_kmod0: Sync thread 18 fs: xfs
+[  145.670634] misc test_kmod0: Sync thread 19 fs: xfs
+[  145.671390] misc test_kmod0: Sync thread 20 fs: xfs
+[  145.672126] misc test_kmod0: Sync thread 21 fs: xfs
+[  145.672842] misc test_kmod0: Sync thread 22 fs: xfs
+[  145.673561] misc test_kmod0: Sync thread 23 fs: xfs
+[  145.674327] misc test_kmod0: Sync thread 24 fs: xfs
+[  145.675051] misc test_kmod0: Sync thread 25 fs: xfs
+[  145.675772] misc test_kmod0: Sync thread 26 fs: xfs
+[  145.676491] misc test_kmod0: Sync thread 27 fs: xfs
+[  145.677207] misc test_kmod0: Sync thread 28 fs: xfs
+[  145.677920] misc test_kmod0: Sync thread 29 fs: xfs
+[  145.678658] misc test_kmod0: Sync thread 30 fs: xfs
+[  145.679369] misc test_kmod0: Sync thread 31 fs: xfs
+[  145.680075] misc test_kmod0: Sync thread 32 fs: xfs
+[  145.680780] misc test_kmod0: Sync thread 33 fs: xfs
+[  145.681481] misc test_kmod0: Sync thread 34 fs: xfs
+[  145.682211] misc test_kmod0: Sync thread 35 fs: xfs
+[  145.682925] misc test_kmod0: Sync thread 36 fs: xfs
+[  145.683633] misc test_kmod0: Sync thread 37 fs: xfs
+[  145.684363] misc test_kmod0: Sync thread 38 fs: xfs
+[  145.685196] misc test_kmod0: Sync thread 39 fs: xfs
+[  145.685896] misc test_kmod0: Sync thread 40 fs: xfs
+[  145.687009] misc test_kmod0: Sync thread 41 fs: xfs
+[  145.687800] misc test_kmod0: Sync thread 42 fs: xfs
+[  145.688540] misc test_kmod0: Sync thread 43 fs: xfs
+[  145.689227] misc test_kmod0: Sync thread 44 fs: xfs
+[  145.689901] misc test_kmod0: Sync thread 45 fs: xfs
+[  145.690924] misc test_kmod0: Sync thread 46 fs: xfs
+[  145.691721] misc test_kmod0: Sync thread 47 fs: xfs
+[  145.692533] misc test_kmod0: Sync thread 48 fs: xfs
+[  145.693329] misc test_kmod0: Sync thread 49 fs: xfs
+[  145.694140] misc test_kmod0: Sync thread 50 fs: xfs
+[  145.694910] misc test_kmod0: Sync thread 51 fs: xfs
+[  145.695695] misc test_kmod0: Sync thread 52 fs: NULL
+[  145.696461] misc test_kmod0: Sync thread 53 fs: xfs
+[  145.697229] misc test_kmod0: Sync thread 54 fs: xfs
+[  145.698027] misc test_kmod0: Sync thread 55 fs: xfs
+[  145.698898] misc test_kmod0: Sync thread 56 fs: xfs
+[  145.699953] misc test_kmod0: Sync thread 57 fs: xfs
+[  145.700667] misc test_kmod0: Sync thread 58 fs: xfs
+[  145.701362] misc test_kmod0: Sync thread 59 fs: xfs
+[  145.702078] misc test_kmod0: Sync thread 60 fs: xfs
+[  145.702765] misc test_kmod0: Sync thread 61 fs: xfs
+[  145.703456] misc test_kmod0: General test result: -22
 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
+The key here:
 
-The driver is using a function which is reserved for the thermal core. 
-It should not.
+[  145.461962] request_module: modprobe fs-xfs cannot be processed, kmod busy with 50 threads for more than 5 seconds now
 
-Is the following change ok ?
+That is not printed when the test iterates and does not fail. That
+comes from kernel/kmod.c:
 
-diff --git a/drivers/thermal/tegra/soctherm.c 
-b/drivers/thermal/tegra/soctherm.c
-index 220873298d77..5f552402d987 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct 
-thermal_zone_device *tz, int trip
-  				continue;
+	if (!ret) {                                                     
+		pr_warn_ratelimited("request_module: %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+		return -ETIME;   
+	} ...
 
-  			cdev = ts->throt_cfgs[i].cdev;
--			if (get_thermal_instance(tz, cdev, trip_id))
--				stc = find_throttle_cfg_by_name(ts, cdev->type);
--			else
-+			stc = find_throttle_cfg_by_name(ts, cdev->type);
-+			if (!stc)
-  				continue;
+ETIME however is 62 as per include/uapi/asm-generic/errno.h. The loss
+of the value comes from the fact get_fs_type() ignores error types and
+so lib/test_kmod.c just sets err_ret = -EINVAL in tally_work_test() as
+it cannot get more heuristics out of the kernel as to why get_fs_type()
+failed.
 
-  			return throttrip_program(dev, sg, stc, temp);
-@@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device 
-*dev,
-  			continue;
+This should mean that the failure observed with test 0009 on kmod is
+very likely not due to module compression but just a timing issue, and
+that compression just increases the probability of having 50 threads
+busy concurrently on modprobe in 5 seconds with that test. I've
+confirmed this by running a test with a modified kmod as follows
+*after* booting into a kernel with no compression:
 
-  		cdev = ts->throt_cfgs[i].cdev;
--		if (get_thermal_instance(tz, cdev, trip))
--			stc = find_throttle_cfg_by_name(ts, cdev->type);
--		else
+diff --git a/tools/modprobe.c b/tools/modprobe.c
+index 3b7897c..0b7574d 100644
+--- a/tools/modprobe.c
++++ b/tools/modprobe.c
+@@ -1012,6 +1012,8 @@ static int do_modprobe(int argc, char **orig_argv)
+ 
+ 	log_setup_kmod_log(ctx, verbose);
+ 
++	usleep(5000000);
 +
-+		stc = find_throttle_cfg_by_name(ts, cdev->type);
-+		if (!stc)
-  			continue;
+ 	kmod_load_resources(ctx);
+ 
+ 	if (do_show_config)
 
-  		ret = throttrip_program(dev, sg, stc, temperature);
+Modules don't tend to be large in size but module compression is an
+extrapolation of what could happen without compression if we had huge
+modules often and userspace doing something wild. If you end up with 50
+concurrent threads running modprobe for more than 5 seconds the kernel
+pr_warn_ratelimited() would print though and it surely is a sign userspace
+is doing something stupid. The sad part though is that a filesystem
+mount *can* be triggered in these cases and so can fail to boot.
 
+The above test were run with next-20230119 without the patch on this
+thread, and so as noted before this doesn't create a regression, this is
+a known issue now. And so -- further confirmation I'll move forward with
+this patch for the next rc.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Note kernel/kmod.c in the kernel states:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+/*                                                                              
+ * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads            
+ * running at the same time without returning. When this happens we             
+ * believe you've somehow ended up with a recursive module dependency           
+ * creating a loop.                                                             
+ *                                                                              
+ * We have no option but to fail.                                               
+ *                                                                              
+ * Userspace should proactively try to detect and prevent these.                
+ */                                                                             
+#define MAX_KMOD_ALL_BUSY_TIMEOUT 5 
+
+I can update the docs to reflect that this can be triggered by
+the kernel trying to auto-loading DoS or each CPU count triggering
+tons of unecessary duplicate auto-loading module requests. This is a self
+kernel inflicted situation.
+
+As for the DoS Vegard Nossum did report that user namespaces *could*
+trigger / abuse kernel module autoloading and that they shouldn't be allowed
+to do that as they can't load modules directly anyway (finit_module() won't work
+for them). I'm waiting for a proper patch follow up from him, but *that* in
+theory could then be another way to trigger this issue other than kmod test
+0009, abuse user namespaces so to trigger a module failure by going over board on
+auto-module loading. Boot likely can't be compromised unless creation of user
+namespaces is allowed to be exploited early on boot. But post boot
+kernel module auto-loading could be DoS'd with user namespaces.
+
+As for the other case -- each additional CPU causing more module
+auto-loading than before -- this is a real issue to monitor for and likely
+can cause odd boot failures. This thread already dealt with
+cpu-frequency modules as an example of abuse in the kernel for this.
+Folks are working to fix this though but older kernels will have these
+issues.
+
+Since the kernel is the one that *is* dealing with throttling of this
+auto-load situation, fixing these cases in-kernel is the right solution.
+I don't think userspace can do much here as the limit hit is inherent to
+auto-loading.
+
+Perhaps the we should upgrade the pr_warn_ratelimited() to WARN_ONCE()?
+
+[0] https://lore.kernel.org/all/Y8HkC1re3Fo46Ne3@bombadil.infradead.org/T/#u
+
+  Luis
