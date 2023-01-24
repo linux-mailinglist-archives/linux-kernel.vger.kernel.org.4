@@ -2,109 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09CA679E87
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DE3679E83
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbjAXQXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S233933AbjAXQXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbjAXQXK (ORCPT
+        with ESMTP id S234315AbjAXQXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:23:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCFB6A56;
-        Tue, 24 Jan 2023 08:22:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=hJtnfFyj9mQFKS9gYTdD9QF9mbnLj6wzdIlpc9Mzmtc=; b=QG8pY8TLbtbuk56ZwQ9ACeowgZ
-        RYEHWeUSM8f12aPmM2OlD8gsF3D3iFgqw0YufCScZZN+zfauFhgCJxSBT2JFOlatxoWuvN2C0EJg5
-        h5rahUsALpVAO4JUlhjXi0iQG0113hvKGqpzYZwREjrujIt7OgMy1FJqPw3txiOFGm04NEgeTZh6W
-        jQvvdUapweDZQ0yp1gXs3ZEONsWgijuvReQxCDaxQ8jztox/ugqRFLOMl+IVoqqvOWaRcjM0a102i
-        7f5Er6sFwo+ZPtW1aACbGQcs52h1mreJRszrMBsiD1Re3DYr91tiZ6Q3HJmW4sPDCI+Fneti1Sx/c
-        ZhZuI0/Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKM4L-004f0a-5z; Tue, 24 Jan 2023 16:22:45 +0000
-Date:   Tue, 24 Jan 2023 08:22:45 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Konstantin Ryabitsev <mricon@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Anton Blanchard <anton@linux.ibm.com>,
-        Trilok Soni <tsoni@codeaurora.org>,
-        James Morris <jamorris@linux.microsoft.com>, corbet@lwn.net,
-        javier.gonz@samsung.com, linux-doc@vger.kernel.org,
-        a.manzanares@samsung.com, dave@stgolabs.net,
-        darren@os.amperecomputing.com, ndesaulniers@google.com,
-        gost.dev@samsung.com, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof.c@samsung.com>
-Subject: Re: [PATCH] docs: embargoed-hardware-issues: add embargoed HW
- contact for Samsung
-Message-ID: <Y9AF1UV/ow7eP92L@bombadil.infradead.org>
-References: <20230123183926.249601-1-mcgrof@kernel.org>
- <Y87X6tFlevIebcc6@kroah.com>
- <Y88Ak8K5mD7tFItG@bombadil.infradead.org>
- <Y89E+S7TA6UwtNe2@casper.infradead.org>
- <Y89qrid7YOsIFbD6@kroah.com>
+        Tue, 24 Jan 2023 11:23:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E711657
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:22:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71E6F612D8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBCBC433D2;
+        Tue, 24 Jan 2023 16:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674577373;
+        bh=ES8KdFjesOfmcXYfcZJrLe0xXaIMzQ+tdZf5M8VYliw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=CASL0yX6rLSupHCsv5WHkPMurFzqvYlga/g0HD6vGp8/6/X4Kqcud2+FE5aAonLz9
+         oxz2kHxmlUK+Zbq8FT4oAFqJnh5kUSwQo5Ep7sMHVdqI5OSJbqcv1itFQHqk5Nt8on
+         dAnR1/go0oW7YqH0vnI4xHY538XNfKPufMBX1KscJRNNPB9EmsQ6FGZwwLy2cgaadl
+         iSMqVYgkAkvpc+z4f6E48WeQlZm5faTi++xqG3Y6b97LGpcAkWu56Lu6PNkQGsCOpc
+         GTeYk6YOgsV/ilwXOp8Y8+rtDKYSb/ej6awQOJ63Y2IN9hRu9GjUljQ9Bk10O7XMz4
+         l6E7L9l4Y145w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 562055C06D0; Tue, 24 Jan 2023 08:22:53 -0800 (PST)
+Date:   Tue, 24 Jan 2023 08:22:53 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230120192032.GR2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8r7SBdfuZX/y1cd@rowland.harvard.edu>
+ <20230120212037.GW2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y82dWEW4RwclDTGM@rowland.harvard.edu>
+ <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
+ <Y88/5ib7zYl67mcE@rowland.harvard.edu>
+ <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8+8fH52iqQABYs2@andrea>
+ <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y89qrid7YOsIFbD6@kroah.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 06:20:46AM +0100, Greg KH wrote:
-> On Tue, Jan 24, 2023 at 02:39:53AM +0000, Matthew Wilcox wrote:
-> > On Mon, Jan 23, 2023 at 01:48:03PM -0800, Luis Chamberlain wrote:
-> > > > > @@ -251,6 +251,7 @@ an involved disclosed party. The current ambassadors list:
-> > > > >    IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
-> > > > >    Intel		Tony Luck <tony.luck@intel.com>
-> > > > >    Qualcomm	Trilok Soni <tsoni@codeaurora.org>
-> > > > > +  Samsung       Javier González <javier.gonz@samsung.com>
-> > > 
-> > > I'll send a fix on v2.
-> > > 
-> > > BTW while at it, it got me wondering, since most of the emails on
-> > > this hw embargo page are not required to have kernel.org accounts
-> > 
-> > This isn't the list of hw embargo people.  This is the list of
-> > "ambassadors" who can help people work through the security disclosure
-> > process.  My impression is that it's to tell me that I should contact
-> > Konrad, since he also works at Oracle, to help me through the process.
-> > It's not for people outside Oracle to contact.
-> > 
-> > If I have the wrong impression of that list, perhaps the description
-> > could be clarified.
+On Tue, Jan 24, 2023 at 04:11:14PM +0100, Jonas Oberhauser wrote:
 > 
-> That is correct, but it is primarily a list that I use when needing to
-> contact companies about potential issues in their hardware. 
+> 
+> On 1/24/2023 3:54 PM, Paul E. McKenney wrote:
+> > On Tue, Jan 24, 2023 at 12:09:48PM +0100, Andrea Parri wrote:
+> > > > There is the one below, but I am (1) not sure that I have it right,
+> > > > (2) not immediately certain that the Linux-kernel implementation would
+> > > > forbid it, (3) not immediately sure that it should be forbidden.
+> > > > 
+> > > > In the meantime, thoughts?
+> > > As it stands, P0 to completion, then P1 to completion, then P2 to
+> > > completion should meet the "exists" clause; I guess we want "x=1"
+> > > in the clause (or the values of the stores to "x" exchanged).
+> > OK, so I still don't have it right.  ;-)
+> > 
+> > Make that x=1.  I think.
+> > 
+> 
+> If it is x=1, why doesn't LKMM forbid it?
+> Because T1:y=1 is read by T1 before the GP, the whole CS is before the GP,
+> i.e.,
+> 
+> srcu_read_unlock(s, r1);  ->rcu-order synchronize_srcu(s);
+> 
+> The GP is furthermore po;prop;strong-fence;prop;po ordered before the
+> unlock, which you can shuffle around to get
+>    Wx=2  ->prop;po;rcu-order;po ;  prop;strong-fence  Wx=2
+> or
+>    Wx=2  ->rb  Wx=2
+> which is forbidden because rb is irreflexive.
+> 
+> Right?
 
-That is the impression I gathered.
+Yes according to herd7, hence the "I think".  I clearly recall some
+store-based lack of ordering after a grace period from some years back,
+and am thus far failing to reproduce it.
 
-> For that I
-> don't need a GPG key, that's only required if they need to get added to
-> a secure mailing list, and at that point I can have a key sent to me, it
-> does not have to be in our kernel.org keyring at all (and list
-> participants usually are not there.)
+And here is another attempt that herd7 actually does allow.
 
-That might be useful to explain in the documentation.
+So what did I mess up this time?  ;-)
 
-> So there's no need for any of these addresses to be part of the kernel
-> gpg ring of trust for any of their activities.
+							Thanx, Paul
 
-Sounds good.
+------------------------------------------------------------------------
 
-  Luis
+C C-srcu-observed-4
+
+(*
+ * Result: Sometimes
+ *
+ * The Linux-kernel implementation is suspected to forbid this.
+ *)
+
+{}
+
+P0(int *x, int *y, int *z, struct srcu_struct *s)
+{
+	int r1;
+
+	r1 = srcu_read_lock(s);
+	WRITE_ONCE(*y, 2);
+	WRITE_ONCE(*x, 1);
+	srcu_read_unlock(s, r1);
+}
+
+P1(int *x, int *y, int *z, struct srcu_struct *s)
+{
+	int r1;
+
+	WRITE_ONCE(*y, 1);
+	synchronize_srcu(s);
+	WRITE_ONCE(*z, 2);
+}
+
+P2(int *x, int *y, int *z, struct srcu_struct *s)
+{
+	WRITE_ONCE(*z, 1);
+	smp_store_release(x, 2);
+}
+
+exists (x=1 /\ y=1 /\ z=1)
