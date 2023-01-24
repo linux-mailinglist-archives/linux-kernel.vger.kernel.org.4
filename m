@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830AB6794ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5926794EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjAXKNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S233759AbjAXKNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbjAXKNV (ORCPT
+        with ESMTP id S233741AbjAXKNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 Jan 2023 05:13:21 -0500
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9302279F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAED22A16;
         Tue, 24 Jan 2023 02:13:19 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30OACfpC019815;
-        Tue, 24 Jan 2023 04:12:41 -0600
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30OACgTE019820;
+        Tue, 24 Jan 2023 04:12:42 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674555161;
-        bh=ghswS2nFYduYIes1Z1G2QvvBAQbFntj6MXzY4neWztI=;
+        s=ti-com-17Q1; t=1674555162;
+        bh=TbI0et8o9xsZ9z4H+7u5mLi2Xelz8H1ZgN17q6rtog4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=qpjcKBfQWPtbbeljysQUHh0YzH7tlJkVqaHxKcXts2Xar9bJAg39bkI5B8s8sUHyY
-         1A/TGXmbV68tKXj60XN3rjGNspbDZKw64GJjghxt4GQDcf07yWVdkY+AdeA6YzTaia
-         5f+bTL8tTQD3sSrSg7jIJYBk2pVVhOviaQa8lONg=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30OACfaq038334
+        b=bbi+KPe1fzkccDFZP6aEsX0fqgwX0gsJhbYFb/5zAUXFPrIpXtXbZ5xkhh+i6rr5Q
+         7I1Cr3b6KSp3DYLjsmxEz5hXd9o2vz/vasWs1YAsQXgaPJvti3z+FAeLvD74vF2ZoK
+         5rt6xNbHYX6R1Rh/hRdsN3qxC0phUCNjlY4uF6mc=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30OACg6R032434
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Jan 2023 04:12:41 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 24 Jan 2023 04:12:42 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 24
- Jan 2023 04:12:40 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2023 04:12:42 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 24 Jan 2023 04:12:40 -0600
+ Frontend Transport; Tue, 24 Jan 2023 04:12:42 -0600
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30OACebS013089;
-        Tue, 24 Jan 2023 04:12:40 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30OACfWO018473;
+        Tue, 24 Jan 2023 04:12:42 -0600
 From:   Aradhya Bhatia <a-bhatia1@ti.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -73,9 +73,9 @@ CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
         Jai Luthra <j-luthra@ti.com>,
         Jayesh Choudhary <j-choudhary@ti.com>,
         Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v2 1/4] dt-bindings: vendor-prefixes: Add microtips
-Date:   Tue, 24 Jan 2023 15:42:35 +0530
-Message-ID: <20230124101238.4542-2-a-bhatia1@ti.com>
+Subject: [PATCH v2 2/4] dt-bindings: vendor-prefixes: Add lincolntech
+Date:   Tue, 24 Jan 2023 15:42:36 +0530
+Message-ID: <20230124101238.4542-3-a-bhatia1@ti.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230124101238.4542-1-a-bhatia1@ti.com>
 References: <20230124101238.4542-1-a-bhatia1@ti.com>
@@ -92,7 +92,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document vendor prefix for Microtips Technology USA (microtips).
+Add document vendor prefix for Lincoln Technology Solutions
+(lincolntech).
 
 Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -102,18 +103,18 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ce00135fd6d0..169a3d4210bb 100644
+index 169a3d4210bb..347459dc5d1b 100644
 --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
 +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -833,6 +833,8 @@ patternProperties:
-     description: Microsoft Corporation
-   "^microsys,.*":
-     description: MicroSys Electronics GmbH
-+  "^microtips,.*":
-+    description: Microtips Technology USA
-   "^mikroe,.*":
-     description: MikroElektronika d.o.o.
-   "^mikrotik,.*":
+@@ -737,6 +737,8 @@ patternProperties:
+     description: Lichee Pi
+   "^linaro,.*":
+     description: Linaro Limited
++  "^lincolntech,.*":
++    description: Lincoln Technology Solutions
+   "^lineartechnology,.*":
+     description: Linear Technology
+   "^linksprite,.*":
 -- 
 2.39.0
 
