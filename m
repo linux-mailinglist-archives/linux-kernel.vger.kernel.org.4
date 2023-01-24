@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1970678E93
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8A2678E98
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjAXCv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S231163AbjAXC4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXCvX (ORCPT
+        with ESMTP id S230062AbjAXC4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:51:23 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC2512875;
-        Mon, 23 Jan 2023 18:51:21 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id n7so12565080wrx.5;
-        Mon, 23 Jan 2023 18:51:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gAY8vTZyGk4M83RejMJDWSVQbhO5UIeP+/JnuniVPrg=;
-        b=S2EsGrQuOEU3Y4RGr7uuVf6dI5nPSlI0GiuLVrqgLazzWYX90iOjMzZYyVgMddzVsX
-         w25hR1vptvZlEFwB0eyVraN5Qvzn84zZ8lb9TG3E8lT8wKDXRpBUzLyopqBno9Be3kAu
-         HsJ1gZ60PCggsTDTxlLQ/D8o5TDpJcmshYmhqLneSeHjAOSyU4GNB3nfsfYgPjbzcD9N
-         PrNH+lW9zs8irTLqDMrkXcNHjI0a27JOWm9htzAag+2PFbTHoZSMmoxOstSbPBiLdZbr
-         MStHGVmBFjOlqlj4cVKQmTCLeen9k0uw9biauAa4u0l8JJgxOtx8DQb8shfd9H5ZDECp
-         MQdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gAY8vTZyGk4M83RejMJDWSVQbhO5UIeP+/JnuniVPrg=;
-        b=F+CaRI50BwA2THGPdYkSdt0jm/VauLkQTqYNhoYzD1sQQEZzKkRPtdhZZq/RachUnW
-         mndZbsdmYcdhl1D2Tg0zSSUucOT51cTqMbD3HZ5h+UyK9WyOR0lsqqRjfTHssXAFstHU
-         B98P+jgEKVXFHRTdf9RqoKNpvPuYIxEc2X1HN56TSG4LrkPzlLVrGw+KC2D15G8SrHkc
-         f2e00zUFQACJFCK6V8EQ7b+udj+VNAPV+zA41if4n+s7f34ZklQUz6SN7B+kqp/A2/Xf
-         gDUc1HGhpdujbtgcPIPU/IKoo/53UfMD4J4DfyM4+2C8s8+oaYlAgsn/mXUtt0C/RQjr
-         LXSw==
-X-Gm-Message-State: AFqh2krIOW6KBbdVUz/Z96iIRDp6mwrMx48l389SK1zPWnNlJJQcb93L
-        h2oaEwGFBpo7kL9YYlIsAlrbv69dZdIXWRiBe0M=
-X-Google-Smtp-Source: AMrXdXtE2KHUJeDVXhPQUTYkHKp8SQa1hujduK30aDNEeyEHd80uFa/sA9H62IvvTm5YgT/eugKtTOl8LOGRi8K5uU8=
-X-Received: by 2002:a5d:4851:0:b0:2be:575:2e07 with SMTP id
- n17-20020a5d4851000000b002be05752e07mr675943wrs.111.1674528680274; Mon, 23
- Jan 2023 18:51:20 -0800 (PST)
+        Mon, 23 Jan 2023 21:56:00 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6A039294;
+        Mon, 23 Jan 2023 18:55:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1BRv5WK4z4xyd;
+        Tue, 24 Jan 2023 13:55:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674528957;
+        bh=zX3wtMRaVccd57BJ0+a8W7mlX/qXeO52xggODmbMqC8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kfxDBMB5RLOGU8z/17gIPBcj1tEMAgIfdO7bT6DAbNm5/n5v8SkwLhJVX4zu+KbOP
+         H/EF3OVjghW0gMYXEENkcuWstlu1JZvtV1vw33y718NLkby8pkBgt25qYR9q+/0syQ
+         AywKh8+o0/QVQBhDkiC3Po4jvP635YejA9TPJFd2RrSZjq+BsXxM8/ZoIo0QW3hknS
+         oavImppd/RH9JgMSTTYn79CaqrO+ZN6i0lh7YFSRo+r0Fq+EzmOQvOHijHVRXAZgDf
+         2uIJPTn/qxKflu3MWrO7O02CifAhZy1Ot4PIdxoEHXWyvyfCarkm7UJcenpg60GilT
+         Q0j/hsvSA0D9Q==
+Date:   Tue, 24 Jan 2023 13:55:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the mm tree
+Message-ID: <20230124135554.3bedbf77@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230123032942.18263-1-gregory.price@memverge.com> <20230123032942.18263-4-gregory.price@memverge.com>
-In-Reply-To: <20230123032942.18263-4-gregory.price@memverge.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Mon, 23 Jan 2023 18:51:07 -0800
-Message-ID: <CANaxB-x86NUAYG1F2+-uOj676weVOdy9aKnmxjaHTuNxek28gg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for
- sud configuration
-To:     Gregory Price <gourry.memverge@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ZyiKg3sxftyWEF5tI915Z4C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 8:22 PM Gregory Price <gourry.memverge@gmail.com> wrote:
-<snip>
->
-> +#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
-> +#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
-> +struct syscall_user_dispatch_config {
-> +       __u64 mode;
-> +       __s8 *selector;
-> +       __u64 offset;
-> +       __u64 len;
-> +       __u8 on_dispatch;
+--Sig_/ZyiKg3sxftyWEF5tI915Z4C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I didn't notice this in the previous version. on_dispatch looks
-like an internal
-property and I don't see how we can stop a process with ptrace when on_dispatch
-is set to a non-zero value. I am not sure that we need to expose it to
-user-space.
+Hi all,
 
-Other than that, the patch looks good to me.
+The following commit is also in Linus the rpmsg tree as a different commit
+(but the same patch):
 
-Thanks,
-Andrei
+  9bf96454b9dd ("Revert "remoteproc: qcom_q6v5_mss: map/unmap metadata regi=
+on before/after use"")
+
+This is also commit
+
+  a899d542b687 ("Revert "remoteproc: qcom_q6v5_mss: map/unmap metadata regi=
+on before/after use"")
+
+in the rpmsg tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZyiKg3sxftyWEF5tI915Z4C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPPSLoACgkQAVBC80lX
+0GxI0Qf+MvdIFFqknRGKCEx/aINMNxArFQu9MQZQPKa02hPZ1y+lrPwVS8mjeVvv
+08PQinmcGWoerjKmIIjnQc8vXx18zTqCjTZ9Fg7op0ni8UYKjopuUIhCs1AzsenR
+Jr4Sl+ejL+n3L5eDwHGafcW/0v2FhmBwzlCfpuHce0eMypeoeRDxonIXLmOgax4p
+4weo8jFrGw1cvJjg2xGlYo6KeoAzKum19elIgaLG4mfxx7W9fcSQZ+nKciYYnynz
+DoE+25nzFXSxJzksgZmsiByTIg+HNzs4wG6nRr4nV6NKdlCgp85NQJbCmxOnmhmf
+S4CSn1KfvdtyOqVKyS1ZWSvB3KccIg==
+=1Qn6
+-----END PGP SIGNATURE-----
+
+--Sig_/ZyiKg3sxftyWEF5tI915Z4C--
