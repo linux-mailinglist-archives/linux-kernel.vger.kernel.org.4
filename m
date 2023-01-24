@@ -2,105 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F4567953C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB14679545
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjAXKcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
+        id S232676AbjAXKeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbjAXKcP (ORCPT
+        with ESMTP id S233595AbjAXKeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:32:15 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145983FF01
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:32:11 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id h16so13377765wrz.12
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:32:11 -0800 (PST)
+        Tue, 24 Jan 2023 05:34:05 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480D6402FA
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:03 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id be8so1405198plb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vgx+byQpBO/6No7Ir2bnN8fVUuZMRKX8+w8Wat/wjes=;
-        b=OuQJqxRtNYs7Sva3jrKvhV17n3ni651EJpq1zFt7cdE/1SM1pSRe3/GTkhENJ6ZfV0
-         gTxh2TNBTcLl9Zjwz+RGr4KglC9pWlQPiOu7BlZ5CnFBmjUoY3iYdubioHbIxROkfc7d
-         9o88HQvLa09KqZsfskNQBm2C30yyZcamjU9EOLvZGpT9OxYj6/mjQjG2ILB2+U7GDzT1
-         CmqyXx+7J+IRNWHyVY4hBrs8QIUy3goWTXPH7SGSAfD+xg7w7IE/sItMi5450IatozaQ
-         3XfoRhUfmSB8BOIrL5OKxL0oVsfa/wOAblvk9ZyNJGQ6AlsAM8hkiw1S+cpmPf5PIzQX
-         v3/A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mQi313Cv+dJA11wKypNOswRAce9Ls2rcLx6HZ6CfVY=;
+        b=g8KOWvONw7VprZCL7iMsDfE1MkerljIw1sSAcF7MgX2mp+udysuYBMx7G8nxH+DzmL
+         7zPoUgzXCriw478dJzbbs2xIYUlg5VyL7lMvmQqt+SlKNXnPT2boGPTEv1UpHE6m17Vi
+         XTE2eNG1NkDLidec7J5vSpm7teD0M59O1u2/NgSFsOq7BHkgxi/VDWtyuHTz+k581bkO
+         YttE1o++Rwp8DV2EChV9+gkYnjw8xCgwzUFVOuor8IEhUkE5JGcxENcCzdcv8Qkx02+i
+         7lGGQY0I9NaJo+nUMaoa2gPFTXTRV60ta8F2HgUk74c7+JSk88lVsbDFvfaiMkO9U5ST
+         EolA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vgx+byQpBO/6No7Ir2bnN8fVUuZMRKX8+w8Wat/wjes=;
-        b=g9eZK8rXAYhsyc+WU8kTzy4NyNxkz9hgFDZx1D8wvl7g6bEB8Q7r6yOhizbN+lQXnK
-         EEGP9ZNIiaoY3LdTDgLCRlXpl6DVjBM/quX8n6ULznvcNrmLRqLlHn85wJuZ89sBoIPI
-         rgCiHkEakJ0VaEUszbBXHNr/GcET053pzXpA/Z33KiyeBnMlJGDYQVO5ohmKq8EQGvkX
-         NIRk3sRqPxqdJ+kxsqxFHyJswY+mGnxeB/BGZrEf1J0YddLub1qjrYKZSwGjNyFB4gdQ
-         GFMJ7qXL8Lbwo+P1i9tXcBLPQS2PkLSj8GfOC/20lGnPRkdQg9JQL+jenX3uSXaoHmrt
-         LolQ==
-X-Gm-Message-State: AFqh2kr3cqAKHZGDIR10XCHQF6aJy5t5TCCa5Aw5GlhYEPhft5PaxE/r
-        joKyYbpZ0TwMVDt61VjIt1EtdA==
-X-Google-Smtp-Source: AMrXdXsRbdzhAPpI+JnXWb0o8J0R9VSbSXKp5V9FYY6TChaGKTvDrXPVuu8lgDC2/XJw3EmKa9i5pQ==
-X-Received: by 2002:adf:ef11:0:b0:2bb:dd87:3485 with SMTP id e17-20020adfef11000000b002bbdd873485mr24895602wro.30.1674556329374;
-        Tue, 24 Jan 2023 02:32:09 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t9-20020adff049000000b002bddaea7a0bsm1556999wro.57.2023.01.24.02.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 02:32:09 -0800 (PST)
-Message-ID: <09396c7b-1cf5-8ce6-e1ba-3c79a9e8ec56@linaro.org>
-Date:   Tue, 24 Jan 2023 11:32:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5mQi313Cv+dJA11wKypNOswRAce9Ls2rcLx6HZ6CfVY=;
+        b=A0NvuS8Uy0Div0KkeoHQwr4y6+tZASXjPEAbw5DcddH/P1aplO0oFMh0WH6OgWiAl+
+         bSNN5cKuw2juXHMnZa8ozGbDsllylgKEEihfaEgPiM3JgXWTSy37Ns8rqXDAaqjaZ/k6
+         sHN9TEwAoUvnnDFfLTpkF5roaxmNXMNqeiGPAgUFd0Yd/CzkoWPjV5BNTfoNg5BC2EXb
+         viOa53GhEj33b4uK7Kb3HS2peZcndnhtXFhFzkSueYb65GaFZk6KV2HfaZY5zWKgklvs
+         FJx/ioLzX7MpzqDXQeo7rT3FvsCMP4ttLl+UPmSzPHGjEjaBhDiqjI+SUqKTdDSXRbUF
+         FwNw==
+X-Gm-Message-State: AFqh2krtmbLD8FeTBFEwxEVoyi2AqC1wfnwB2UAvYcScqASerGl7F066
+        OqjJNcZO2Au9+VaXCzyp7s4n4+aTjVZErPX5NvuXFw==
+X-Google-Smtp-Source: AMrXdXsi5yxQ/URPis/O2O09f9Fv5gptW86J4sz9BB11M7G8PHA/m5F2u1Mr9jJbA57pTppE/lZwxEQNgrfkROWikIo=
+X-Received: by 2002:a17:90a:730a:b0:229:7d95:a476 with SMTP id
+ m10-20020a17090a730a00b002297d95a476mr3673364pjk.84.1674556442813; Tue, 24
+ Jan 2023 02:34:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: iio: tcs3490: Add bindings for AMS
- TCS3490 light sensor
-Content-Language: en-US
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230123231028.26073-1-markuss.broks@gmail.com>
- <20230123231028.26073-2-markuss.broks@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123231028.26073-2-markuss.broks@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 24 Jan 2023 11:33:26 +0100
+Message-ID: <CAPDyKFqwRw5=SK9vckt02eGoo_dtqEpV6D0Nr5YsijoJZQh0eQ@mail.gmail.com>
+Subject: Re: [PATCH v3] cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 00:10, Markuss Broks wrote:
-> Add device-tree bindings for the AMS TCS3490 Color ALS.
+On Thu, 19 Jan 2023 at 19:42, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The runtime Power Management of CPU topology is not compatible with
+> PREEMPT_RT:
+> 1. Core cpuidle path disables IRQs.
+> 2. Core cpuidle calls cpuidle-psci.
+> 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
+>    pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
+>    spinlocks (which are sleeping on PREEMPT_RT).
+>
+> Deep sleep modes are not a priority of Realtime kernels because the
+> latencies might become unpredictable.  On the other hand the PSCI CPU
+> idle power domain is a parent of other devices and power domain
+> controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
+>
+> Disable the runtime PM calls from cpuidle-psci, which effectively stops
+> suspending the cpuidle PSCI domain.  This is a trade-off between making
+> PREEMPT_RT working and still having a proper power domain hierarchy in
+> the system.
 
-If there is going to be new version:
+I think this sounds like a reasonable compromise, at least at this point.
 
-Subject: drop second/last, redundant "bindings for". The "dt-bindings"
-prefix is already stating that these are bindings.
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-> 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+>
+> Cc: Adrien Thierry <athierry@redhat.com>
+> Cc: Brian Masney <bmasney@redhat.com>
+> Cc: linux-rt-users@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
 > ---
+>
+> Changes since v1:
+> 1. Re-work commit msg.
+> 2. Add note to Kconfig.
+>
+> Several other patches were dropped, as this is the only one actually
+> needed.  It effectively stops PSCI cpuidle power domains from suspending
+> thus solving all other issues I experienced.
 
-Best regards,
-Krzysztof
+I like this approach better, thanks!
 
+> ---
+>  drivers/cpuidle/Kconfig.arm    | 3 +++
+>  drivers/cpuidle/cpuidle-psci.c | 4 ++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 747aa537389b..24429b5bfd1c 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -24,6 +24,9 @@ config ARM_PSCI_CPUIDLE
+>           It provides an idle driver that is capable of detecting and
+>           managing idle states through the PSCI firmware interface.
+>
+> +         The driver is not yet compatible with PREEMPT_RT: no idle states will
+> +         be entered by CPUs on such kernel.
+
+This isn't entirely correct. In principle your suggested change ends
+up providing the below updated behaviour for PREEMPT_RT.
+
+*) If the idle states are described with the non-hierarchical layout,
+all idle states are still available.
+**) If the idle states are described with the hierarchical layout,
+only the idle states defined per CPU are available, but not the ones
+being shared among a group of CPUs (aka cluster idle states).
+
+Perhaps there is an easier way to summarize what I stated above?
+
+> +
+>  config ARM_PSCI_CPUIDLE_DOMAIN
+>         bool "PSCI CPU idle Domain"
+>         depends on ARM_PSCI_CPUIDLE
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index 312a34ef28dc..c25592718984 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -66,7 +66,7 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
+>         /* Do runtime PM to manage a hierarchical CPU toplogy. */
+>         if (s2idle)
+>                 dev_pm_genpd_suspend(pd_dev);
+> -       else
+> +       else if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+
+Rather than doing this (and the below) in
+__psci_enter_domain_idle_state(), I suggest replacing this with a
+bailout point in psci_dt_cpu_init_topology(). That would prevent the
+__psci_enter_domain_idle_state() from being called altogether, which
+is really what we need.
+
+Moreover, I think it would make sense to set the GENPD_FLAG_ALWAYS_ON
+for the corresponding genpd, when CONFIG_PREEMPT_RT is set. See
+psci_pd_init().
+
+>                 pm_runtime_put_sync_suspend(pd_dev);
+>
+>         state = psci_get_domain_state();
+> @@ -77,7 +77,7 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
+>
+>         if (s2idle)
+>                 dev_pm_genpd_resume(pd_dev);
+> -       else
+> +       else if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+>                 pm_runtime_get_sync(pd_dev);
+>
+>         cpu_pm_exit();
+> --
+
+Kind regards
+Uffe
