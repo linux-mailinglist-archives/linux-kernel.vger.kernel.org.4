@@ -2,153 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B98D67A35A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B9067A3D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbjAXTrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S233840AbjAXU0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbjAXTrV (ORCPT
+        with ESMTP id S234039AbjAXUZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:47:21 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0D71CF59
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:47:20 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id h16so14950899wrz.12
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nNr1LUPBn6inNA8VZVETp+QL4Mct4+taZ8R3vQRhgHU=;
-        b=Ku1KJyIH5iA0zb+ZLxSfwOMuGPi4LHYcc4LsFXU+tcttNuaRKEnrSgJq/ZgRsV8PU3
-         fwDgRTiFBzga3hHanZDh+Iimdby5yQYstdZIF9XE7mqmY83a4yeT7wo40VoHndy99CJZ
-         IjF2DdTHK+euJnh6+eXBawh++3suwxM7hI9qLRn4lXS0RePH6vjxa3dL4dx4G1j+V4om
-         o/h3WaOVmPXy3hJYLRn41wl91kAeCKq8yzz1TKcdExud9V6JyMkEhclFjJo4gpB4jqot
-         TYi2Jf/vskdmZi/EgjKpg9DXEBHGMWX+EGLwT0337BtkZcP4DN6ixBn9xoajHad+l/2B
-         F6lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nNr1LUPBn6inNA8VZVETp+QL4Mct4+taZ8R3vQRhgHU=;
-        b=BmzowRgVuzCznCYMxIG3HRS3ktQNrmoqIafjxzT2wm4NT0zPHxmAIIfAT0draFwsYd
-         WCg/bajUrRMdZ/Jk6aeKdShc6l9/TMlvtliwajGRZ/bSk/hNAqJGY/Qr3eT4oVxKHtLY
-         bxms6cat2c3+lNlvVgR9QEsNRx3BkufeaWuF6S2F2pR+zWP655El4lGwYaC4Y1hWHUyf
-         8v53CUvkCE9gf+8T2B5nuHuGStvL88RmTrYUWcRAfWfOc6uZd8wt0J8VJnezbYARsyhY
-         kUaAnauvK5mQ6JkP4fOi0bg5+tDQVKfDQxsi342c8eTP/vU/b6xKhW8e5IOLECfRh91u
-         q/tQ==
-X-Gm-Message-State: AFqh2kpc6JhgfZ1kaawGQnLczoxwxi1YWRrrRONLRzbVwd7Vi69PNUkN
-        Vd05eehdTNT2l4Czr2PjE6wrlg==
-X-Google-Smtp-Source: AMrXdXsdV1/c0K60ElxHx9ZlIhlW/1kAwg7hXgxSo71OqXQP9dAljVq/0xZ+x8ceYca8lju7MBsLGA==
-X-Received: by 2002:a5d:6b05:0:b0:2bd:cf99:e6ab with SMTP id v5-20020a5d6b05000000b002bdcf99e6abmr23775790wrw.65.1674589638559;
-        Tue, 24 Jan 2023 11:47:18 -0800 (PST)
-Received: from [192.168.187.211] ([86.12.200.143])
-        by smtp.gmail.com with ESMTPSA id f5-20020adffcc5000000b002bfae3f6802sm2459515wrs.58.2023.01.24.11.47.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 11:47:18 -0800 (PST)
-Message-ID: <2ad50d65-9ce2-de4c-b14f-98c086b2d8c0@raspberrypi.com>
-Date:   Tue, 24 Jan 2023 19:47:23 +0000
+        Tue, 24 Jan 2023 15:25:53 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3AA4ABE9;
+        Tue, 24 Jan 2023 12:25:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fxGLRBdQegsfNiswyksbnFZAzwIEs7xsqq77RMCEDaGaVhCs0zGm5/jBg7EHvLXwR1EB2FHvDIinpdyCc9m0bUdU+r7QHXMqHoAgZHtAqkbWTrVLyMPxoC+WF69VRz5mGHIK+TclmpSnGEAy9ve14uj3DDOyPjHo790Of/dZXTZmCPbpTOjn/7BnJc1ACY3wk2DJGpEN4CX9tT+nyiovd9mP0XgmnRpSUaIzP57+OxwFpfP3eTPdtua1BRrYIN+xsIpC+sKVvhhT1O/DL4TstBaV7xeMAsVfH0RMhLlsgu+vUa8R/2QLiYuKW82drVpdusJISevotUR9cXOOV1T8Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tMI1u5r/RYaBF9q378KN/DbUHr9RfUddXU5SXVEvq5g=;
+ b=azZpqKWMc0Is2SCb3jvqTD16g8mU9HX88KOlSB1+IqcUDbtf6dKx2wry8QCJ1P9xJu83MDTBdD6C1dMItuE7Yjuw3yz/EztOKy+LIAjPeoA3db9j+Pve+GhH7XDQTnS1OfiApy0AY6H5yQsTKqnXPai0xXhpzLmbysqdge5I+yS8fKQjCgTrr7PHHYEmfQXpIfKXrCFxghF3/XEeu0RJtrwkcR1t74qgk88ZLRvthNHtADFIhf7HAtq+HdYz8GTyhoaFtSvYA8p7cCgl7scG9j9vrtsVgmL3mIYXN9NuA0rEsDCAHi/ozFpe07FqHfI2eIO90UeR5/e3T+b3Sn8r3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tMI1u5r/RYaBF9q378KN/DbUHr9RfUddXU5SXVEvq5g=;
+ b=O9mhnniJuiv6sSVpsl/W004IEkZD8jiXCCSo7Fm+Z7v/NaRqY8635w3AmEEYXzg5YYY8m0R0M3X3uwB4SIKfUFYUJEMlTfbHtCnJFRWMWoivoJp0CHDZJdd6zmr4tSO5NOZ2zxdyTfbeCmQW3WEAROjSTv4zFUT23S0A9Sunjc6XKqXmgYp/oBhsdb5ZYjUePZR01o6jU/hBPmmfV8/byaJmTHkl3Le+EaZ4DmiP9//6fq+RyiKlUOdqsQu3uiGLsWRaUAa04gpY0a/Zt3GgNELb4g6tY4/Ooja5ym6Lwef0msPmE1/qI3ZgWDS2dmweOY3lFWwCoGsktoL65fFvVA==
+Received: from BN9P221CA0027.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::21)
+ by BN9PR12MB5036.namprd12.prod.outlook.com (2603:10b6:408:135::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 20:25:39 +0000
+Received: from BN8NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10a:cafe::d4) by BN9P221CA0027.outlook.office365.com
+ (2603:10b6:408:10a::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
+ Transport; Tue, 24 Jan 2023 20:25:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT049.mail.protection.outlook.com (10.13.177.157) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.17 via Frontend Transport; Tue, 24 Jan 2023 20:25:39 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 11:47:36 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 11:47:35 -0800
+Message-ID: <b7833fd7-eb7d-2365-083d-5a01b9fee464@nvidia.com>
+Date:   Tue, 24 Jan 2023 11:47:35 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
- with a custom bus_type
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>
-References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
- <786df750-221e-82fc-a324-d30261296974@i2se.com>
- <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
- <Y85MOdAVh/fv5HRt@pendragon.ideasonboard.com>
- <39f438f8-c41b-17e6-42ba-9d87098a1eee@i2se.com>
-From:   Phil Elwell <phil@raspberrypi.com>
-In-Reply-To: <39f438f8-c41b-17e6-42ba-9d87098a1eee@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 5/8] block: Replace BIO_NO_PAGE_REF with
+ BIO_PAGE_REFFED with inverted logic
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>
+References: <20230124170108.1070389-1-dhowells@redhat.com>
+ <20230124170108.1070389-6-dhowells@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230124170108.1070389-6-dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT049:EE_|BN9PR12MB5036:EE_
+X-MS-Office365-Filtering-Correlation-Id: a613e488-b483-4c21-a615-08dafe4928cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qUJ8g3GZDzczwZwBxej/naWyPqie9zNHZfljmIDKYBPNGtatxJ3UnirVNeVq3YAHewG0iLkoI3qw0LSiEOoanHNCoXIsUVUUAi4iLuiz2hm4n7jQZ3NRdW9H9w13FV3mFR8Xh1DDQHTXejKIvI+pIYgkgaayvryaaTsLiKSgaR+84C/PL8ZNrwgDV3lubPnGT8X5o0Yzp6JAdKYiC1m9SrDTRFU2b0fXfPVZ7Pczu+bCrKlds4oR8Z5pupDL5nSeJOnu9ZFi5IMlw3t1pdTh1tbTyPdZ9gNbYPnzDjTxW8koKrqis7Ii9IB+6HDqFBOvTbMFZRJvt6Imik5lETyoKRykcF0FGduUDzfM9uLU4RKA+sIRTueq90uX1O/+ubtoCr8h4CAOKFouOWtpg+ancGuws+SdzYTj0Z0zvVP5c23F5twakvbwEZQ/j9WW06hD4OGbr7CeG6rLYYn667HFFKuhRoS2gjZwh9U635/t+pTc1Tt83tB/idi4UhE6+jK8L42N6vPKmNriptGy+2D6LoRGxLioEn90YHrg+CAgyEO3t5HSN3/oezprWUnKRhBtyMSIrQUtoxiMHuNF6FG5W9hw8ufHqhJddWPwrpscrsFh7+NMtWZPi5USCyAfc7VJAoCwmkSlpJHDS4BF9AliGLUMXBBq/kbaFsjdMLkpfVIo4vqxUzmCOmz4BTkXnHEokzrJ9Rt3cMBKIqC4C8YYgrqMQbsHs+dHtRIXi+LyobQ=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199018)(36840700001)(40470700004)(46966006)(7636003)(70586007)(82740400003)(40480700001)(40460700003)(36756003)(356005)(31696002)(110136005)(16576012)(336012)(478600001)(83380400001)(316002)(70206006)(8676002)(4326008)(2616005)(426003)(47076005)(54906003)(31686004)(2906002)(53546011)(86362001)(8936002)(36860700001)(186003)(26005)(41300700001)(5660300002)(7416002)(82310400005)(16526019)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 20:25:39.4883
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a613e488-b483-4c21-a615-08dafe4928cc
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5036
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjQvMDEvMjAyMyA4OjQxLCBTdGVmYW4gV2FocmVuIHdyb3RlOg0KPiBIaSBQaGlsLA0K
-PiANCj4gQW0gMjMuMDEuMjMgdW0gMDk6NTggc2NocmllYiBMYXVyZW50IFBpbmNoYXJ0Og0K
-Pj4gT24gTW9uLCBKYW4gMjMsIDIwMjMgYXQgMDE6MTg6MzBQTSArMDUzMCwgVW1hbmcgSmFp
-biB3cm90ZToNCj4+PiBIaSBTdGVmYW4sDQo+Pj4NCj4+PiBUaGFuayBmb3IgdGhlIHRlc3Rp
-bmcuDQo+Pj4NCj4+PiBPbiAxLzIzLzIzIDU6MDQgQU0sIFN0ZWZhbiBXYWhyZW4gd3JvdGU6
-DQo+Pj4+IEhpIFVtYW5nLA0KPj4+Pg0KPj4+PiBBbSAyMC4wMS4yMyB1bSAyMToxMCBzY2hy
-aWViIFVtYW5nIEphaW46DQo+Pj4+PiBUaGlzIHNlcmllcyBqdXN0IGludHJvZHVjZXMgZml2
-ZSBleHRyYSBwYXRjaGVzIGZvciBkcm9wcGluZyBpbmNsdWRlDQo+Pj4+PiBkaXJlY3RpdmVz
-IGZyb20gTWFrZWZpbGVzIChzdWdnZXN0ZWQgYnkgR3JlZyBLSCkgYW5kIHJlYmFzZWQuDQo+
-Pj4+Pg0KPj4+Pj4gVGhlIG1haW4gcGF0Y2ggKDYvNikgcmVtb3ZlcyBwbGF0Zm9ybSBkZXZp
-Y2UvZHJpdmVyIGFidXNlIGFuZCBtb3Zlcw0KPj4+Pj4gdGhpbmdzIHRvIHN0YW5kYXJkIGRl
-dmljZS9kcml2ZXIgbW9kZWwgdXNpbmcgYSBjdXN0b21fYnVzLiBTcGVjaWZpYw0KPj4+Pj4g
-ZGV0YWlscyBhcmUgZWxhYm9yYXRlZCBpbiB0aGUgY29tbWl0IG1lc3NhZ2UuDQo+Pj4+Pg0K
-Pj4+Pj4gVGhlIHBhdGNoIHNlcmllcyBpcyBiYXNlZCBvbiB0b3Agb2YgZDUxNDM5MmYxN2Zk
-ICh0YWc6IG5leHQtMjAyMzAxMjApDQo+Pj4+PiBvZiBsaW51eC1uZXh0Lg0KPj4+PiBhcHBs
-aWVkIHRoaXMgc2VyaWVzIG9uIHRvcCBvZiBsaW51eC1uZXh0IGFuZCBidWlsZCBpdCB3aXRo
-DQo+Pj4+IGFybS9tdWx0aV92N19kZWZjb25maWcgcGx1cyB0aGUgZm9sbG93aW5nOg0KPj4+
-Pg0KPj4+PiBDT05GSUdfQkNNX1ZJREVPQ09SRT15DQo+Pj4+IENPTkZJR19CQ00yODM1X1ZD
-SElRPW0NCj4+Pj4gQ09ORklHX1ZDSElRX0NERVY9eQ0KPj4+PiBDT05GSUdfU05EX0JDTTI4
-MzU9bQ0KPj4+PiBDT05GSUdfVklERU9fQkNNMjgzNT1tDQo+Pj4+IENPTkZJR19CQ00yODM1
-X1ZDSElRX01NQUw9bQ0KPj4+Pg0KPj4+PiBhbmQgdGhlIGRldmljZXMgZG9lc24ndCByZWdp
-c3RlciBvbiBSYXNwYmVycnkgUGkgMyBCIFBsdXM6DQo+Pj4+DQo+Pj4+IFvCoMKgIDI1LjUy
-MzMzN10gdmNoaXE6IG1vZHVsZSBpcyBmcm9tIHRoZSBzdGFnaW5nIGRpcmVjdG9yeSwgdGhl
-IHF1YWxpdHkgaXMgdW5rbm93biwgeW91IGhhdmUgYmVlbiB3YXJuZWQuDQo+Pj4+IFvCoMKg
-IDI1LjU0MTY0N10gYmNtMjgzNV92Y2hpcSAzZjAwYjg0MC5tYWlsYm94OiBGYWlsZWQgdG8g
-cmVnaXN0ZXIgYmNtMjgzNV9hdWRpbyB2Y2hpcSBkZXZpY2UNCj4+Pj4gW8KgwqAgMjUuNTUz
-NjkyXSBiY20yODM1X3ZjaGlxIDNmMDBiODQwLm1haWxib3g6IEZhaWxlZCB0byByZWdpc3Rl
-ciBiY20yODM1LWNhbWVyYSB2Y2hpcSBkZXZpY2UNCj4+PiBJIHdhcyBhYmxlIHRvIHJlcHJv
-ZHVjZSBhbmQgaXQgc2VlbXMgdGhlIGlzc3VlIGhlcmUgaXMgdGhlIGNoYW5nZQ0KPj4+IG1l
-bnRpb25lZCBpbiB0aGUgY292ZXINCj4+Pg0KPj4+IC0gZHJvcCBkbWFfc2V0X21hc2tfYW5k
-X2NvaGVyZW50DQo+Pj4NCj4+PiBpbiBWNi4NCj4+Pg0KPj4+IChJIHVzdWFsbHkgdGVzdCBw
-YXRjaGVzIG9uIFJQaSA0QiB3aXRoIHZjc20tY21hIGFuZCBiY20yODM1LWlzcCBhcHBsaWVk
-DQo+Pj4gc28gbXkgYnJhbmNoIGhhcyB0aGUgRE1BIGh1bmsgaW5jbHVkZWQgd2hpbGUgSSB3
-YXMgdGVzdGluZyBWNikNCj4+Pg0KPj4+IEJlbG93IGlzIHRoZSBodW5rIHdoaWNoIHNob3Vs
-ZCByZXNvbHZlIHRoZSBpc3N1ZS4NCj4+Pg0KPj4+IC0tLSBhL2RyaXZlcnMvc3RhZ2luZy92
-YzA0X3NlcnZpY2VzL2ludGVyZmFjZS92Y2hpcV9hcm0vdmNoaXFfZGV2aWNlLmMNCj4+PiAr
-KysgYi9kcml2ZXJzL3N0YWdpbmcvdmMwNF9zZXJ2aWNlcy9pbnRlcmZhY2UvdmNoaXFfYXJt
-L3ZjaGlxX2RldmljZS5jDQo+Pj4gQEAgLTYsNiArNiw3IEBADQo+Pj4gwqAgwqAgKi8NCj4+
-Pg0KPj4+IMKgIMKgI2luY2x1ZGUgPGxpbnV4L2RldmljZS9idXMuaD4NCj4+PiArI2luY2x1
-ZGUgPGxpbnV4L2RtYS1tYXBwaW5nLmg+DQo+Pj4gwqAgwqAjaW5jbHVkZSA8bGludXgvc2xh
-Yi5oPg0KPj4+IMKgIMKgI2luY2x1ZGUgPGxpbnV4L3N0cmluZy5oPg0KPj4+DQo+Pj4gQEAg
-LTcyLDYgKzczLDEyIEBAIGludCB2Y2hpcV9kZXZpY2VfcmVnaXN0ZXIoc3RydWN0IGRldmlj
-ZSAqcGFyZW50LA0KPj4+IGNvbnN0IGNoYXIgKm5hbWUpDQo+Pj4gwqAgwqDCoMKgwqDCoMKg
-wqAgZGV2aWNlLT5kZXYudHlwZSA9ICZ2Y2hpcV9kZXZpY2VfdHlwZTsNCj4+PiDCoCDCoMKg
-wqDCoMKgwqDCoCBkZXZpY2UtPmRldi5yZWxlYXNlID0gdmNoaXFfZGV2aWNlX3JlbGVhc2U7
-DQo+Pj4NCj4+PiArwqDCoMKgwqDCoMKgIHJldCA9IGRtYV9zZXRfbWFza19hbmRfY29oZXJl
-bnQoJmRldmljZS0+ZGV2LCBETUFfQklUX01BU0soMzIpKTsNCj4+PiArwqDCoMKgwqDCoMKg
-IGlmIChyZXQgPCAwKSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdmNo
-aXFfZGV2aWNlX3JlbGVhc2UoJmRldmljZS0+ZGV2KTsNCj4+PiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPj4+ICvCoMKgwqDCoMKgwqAgfQ0KPj4+ICsN
-Cj4+PiDCoCDCoMKgwqDCoMKgwqDCoCByZXQgPSBkZXZpY2VfcmVnaXN0ZXIoJmRldmljZS0+
-ZGV2KTsNCj4+PiDCoCDCoMKgwqDCoMKgwqDCoCBpZiAocmV0KSB7DQo+Pj4gwqAgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHB1dF9kZXZpY2UoJmRldmljZS0+ZGV2KTsNCj4+
-Pg0KPj4+IEl0IHNlZW1zIHdlIG5lZWQgdG8gaW5jbHVkZSB0aGUgZG1hX3NldF9tYXNrX2Fu
-ZF9jb2hlcmVudCgpIGV2ZW4gaWYNCj4+PiBiY20yODM1LWF1ZGlvLCBiY20yODM1LWNhbWVy
-YSBkZXZpY2UgZG9lc24ndCBkbyBETUE/IEkgbmVlZCB0byBsb29rIGludG8NCj4+PiB3aHkg
-aXMgdGhhdC8NCj4gDQo+IERvIHlvdSBoYXZlIGFuIGFuc3dlciBmb3IgdGhpcz8NCg0KVGhh
-dCdzIGJlY2F1c2UgdmNoaXEgZG9lcyB1c2UgRE1BIGZvciBidWxrIHRyYW5zZmVycywgaXQn
-cyBqdXN0IHRoYXQgdGhlIERNQSBoYXJkd2FyZQ0KaXMgZHJpdmVuIGZyb20gdGhlIFZQVSBz
-aWRlLiBBbmQgZXZlbiB0aG91Z2ggdGhlIFZQVSBjYW4gb25seSBhZGRyZXNzIDFHQiwgaXQg
-dXNlcyB0aGUNCnVwcGVyIGFkZHJlc3MgYml0cyB0byBkZXRlcm1pbmUgY2FjaGVhYmlsaXR5
-IG9mIGFjY2Vzc2VzLCBoZW5jZSB0aGUgbmVlZCBmb3IgMzItYml0DQpETUEgYWRkcmVzc2Vz
-Lg0KDQpQaGlsDQoNCg==
+On 1/24/23 09:01, David Howells wrote:
+> From: Christoph Hellwig <hch@lst.de>
+> 
+> Replace BIO_NO_PAGE_REF with a BIO_PAGE_REFFED flag that has the inverted
+> meaning is only set when a page reference has been acquired that needs to
+> be released by bio_release_pages().
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Jan Kara <jack@suse.cz>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Logan Gunthorpe <logang@deltatee.com>
+> cc: linux-block@vger.kernel.org
+> ---
+> 
+> Notes:
+>      ver #8)
+>       - Don't default to BIO_PAGE_REFFED [hch].
+>      
+>      ver #5)
+>       - Split from patch that uses iov_iter_extract_pages().
+> 
+>   block/bio.c               | 2 +-
+>   block/blk-map.c           | 1 +
+>   fs/direct-io.c            | 2 ++
+>   fs/iomap/direct-io.c      | 1 -
+>   include/linux/bio.h       | 2 +-
+>   include/linux/blk_types.h | 2 +-
+>   6 files changed, 6 insertions(+), 4 deletions(-)
+
+One documentation nit below, but either way,
+
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+> 
+> diff --git a/block/bio.c b/block/bio.c
+> index 683444e6b711..851c23641a0d 100644
+> --- a/block/bio.c
+> +++ b/block/bio.c
+> @@ -1198,7 +1198,6 @@ void bio_iov_bvec_set(struct bio *bio, struct iov_iter *iter)
+>   	bio->bi_io_vec = (struct bio_vec *)iter->bvec;
+>   	bio->bi_iter.bi_bvec_done = iter->iov_offset;
+>   	bio->bi_iter.bi_size = size;
+> -	bio_set_flag(bio, BIO_NO_PAGE_REF);
+>   	bio_set_flag(bio, BIO_CLONED);
+>   }
+>   
+> @@ -1343,6 +1342,7 @@ int bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>   		return 0;
+>   	}
+>   
+> +	bio_set_flag(bio, BIO_PAGE_REFFED);
+>   	do {
+>   		ret = __bio_iov_iter_get_pages(bio, iter);
+>   	} while (!ret && iov_iter_count(iter) && !bio_full(bio, 0));
+> diff --git a/block/blk-map.c b/block/blk-map.c
+> index 7db52ad5b2d0..0e2b0a861ba3 100644
+> --- a/block/blk-map.c
+> +++ b/block/blk-map.c
+> @@ -282,6 +282,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+>   	if (blk_queue_pci_p2pdma(rq->q))
+>   		extraction_flags |= ITER_ALLOW_P2PDMA;
+>   
+> +	bio_set_flag(bio, BIO_PAGE_REFFED);
+>   	while (iov_iter_count(iter)) {
+>   		struct page **pages, *stack_pages[UIO_FASTIOV];
+>   		ssize_t bytes;
+> diff --git a/fs/direct-io.c b/fs/direct-io.c
+> index 03d381377ae1..07810465fc9d 100644
+> --- a/fs/direct-io.c
+> +++ b/fs/direct-io.c
+> @@ -403,6 +403,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio,
+>   		bio->bi_end_io = dio_bio_end_aio;
+>   	else
+>   		bio->bi_end_io = dio_bio_end_io;
+> +	/* for now require references for all pages */
+
+Maybe just delete this comment?
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
