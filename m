@@ -2,347 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D7A67A703
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71FA67A70D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234375AbjAXXmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 18:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229533AbjAXXoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 18:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjAXXmT (ORCPT
+        with ESMTP id S229534AbjAXXoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:42:19 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88C64F840
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:42:13 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id b196-20020a621bcd000000b0058a63dc105eso7337694pfb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hVyP2low+4E/EH1CecBEmwNgjb6LivwRzJWZvnQqZ38=;
-        b=CgWzqsRLgW+Z6iMokOKOAfzSxzWgX7y8odBVqiVYJkQ/euRfGJnxt/bGi0T1Ruek7b
-         F1bWr5K+NRm6iEg+TLQz3/gAMkfZ9zSqbJma/fA6KIrEx6X4+Y4DCMZTbmIdmaJ3fpLC
-         0pNYkhIibJFhNUGwUDm9v/IXXqFXrcYxMj9TMvNdvhW+Ov5BYm1oBQOP9BBTLC3ZEbwI
-         xcjqa6Q8AFyIjrXFncakYYGvf9k4byPTjqvZUnp0v6Y+jT3h+qFFJyL7SEYaPXswrStg
-         wk+r0pslWv3IqhxdTmh+Wyle5dLYdtECseITebzfXT4N2BWbBDw69PzVFQ3PkUw7CYO+
-         C7wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hVyP2low+4E/EH1CecBEmwNgjb6LivwRzJWZvnQqZ38=;
-        b=GBO2tIY/0f53Z12BfL+qU7bv+/t7yyl0rHcOvW8XFYlWcVmuRERSya/LonDl//4sLi
-         Fwf/ZF29VX5kXZRqCnt12bS/SZflD6hCSIFeepFgieQg43ayyBhetXRCXMXj5Ac2NnoR
-         Iea19dDK+bvdMo0ZHXSfRd6N538khWCF3ImchtbPsIUxLirmf1f1eiweh0hNl/XO+Val
-         pVBrM971Aj9co4eg6XmRmvwO6hCrjhRIAKUEw8QUZNc4/8qtaNvBy/BgMoVIRjyJ3W1d
-         lGEkdYKKC+6k34GHJSE9o4S1/MpJFOp3xFEFbNW69cJ15aSiICOyytuTJ0augtblg6/7
-         4IgA==
-X-Gm-Message-State: AFqh2koY3F+WCFMCEelm9aKnQxmZyiuQjdOk3HvSDV3PErV2KbwyIcPA
-        cVWixdCxDrLPVzjFxxfuRdh0OcJAIvs=
-X-Google-Smtp-Source: AMrXdXuLRq6qLWhjbB/2bQYg+7bzAh0hlTZqXWVt+iy0D1CWLERbEKW7Km5gl88SVdyISLDq1MS+ehZwO5E=
-X-Received: from avagin.kir.corp.google.com ([2620:0:1008:11:cf1b:2f7f:3ca1:6488])
- (user=avagin job=sendgmr) by 2002:a63:e554:0:b0:4c2:95ad:fd77 with SMTP id
- z20-20020a63e554000000b004c295adfd77mr2951926pgj.67.1674603733167; Tue, 24
- Jan 2023 15:42:13 -0800 (PST)
-Date:   Tue, 24 Jan 2023 15:41:56 -0800
-In-Reply-To: <20230124234156.211569-1-avagin@google.com>
-Mime-Version: 1.0
-References: <20230124234156.211569-1-avagin@google.com>
-X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
-Message-ID: <20230124234156.211569-7-avagin@google.com>
-Subject: [PATCH 6/6] perf/benchmark: add a new benchmark for seccom_unotify
-From:   Andrei Vagin <avagin@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>, Andrei Vagin <avagin@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 18:44:13 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0430E1F4A0;
+        Tue, 24 Jan 2023 15:43:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674603818; x=1706139818;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2d4DLn4Wkq1yGxf176F911BtmoZDFFVhJcdoBSnLFkk=;
+  b=h9t0hpFm8iUE6KVqgLIJBB5rjI2GSwbPOQ3btbm0x8WiLlz9ERLkIM1E
+   7A/XMgRbvvFYTDrjVo0gl+FT7HELcrdJ/h2EvQnjDzoUNB42P85pbeUdo
+   TgO+lK+iCCMFqKTAgUZ9o0ZIRg3eM28A9Z5ot0ShRtAJ/7WBFgoW9yLFM
+   N0lCRcTHMYynm+7vz07N2Ms2AYv5gylLjcc3SWWNECYRuOT0Vu2/LAAl1
+   1r+cZKI1ug4bTbUuiOPzIh8wskunyCcoA+YerfefDNWSltUMVLW2/CLUI
+   wyCY6UK5CjPZ8w0YoLVyHNuyZLPxMIC2hUfRPPw0lkQC3ZjXP+cMZyBkp
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="327695410"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="327695410"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 15:43:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="612219969"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="612219969"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2023 15:43:27 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKSwo-0006sW-0K;
+        Tue, 24 Jan 2023 23:43:26 +0000
+Date:   Wed, 25 Jan 2023 07:42:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com,
+        neeraj.sanjaykale@nxp.com
+Subject: Re: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+Message-ID: <202301250708.mfePhaPV-lkp@intel.com>
+References: <20230124174714.2775680-4-neeraj.sanjaykale@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124174714.2775680-4-neeraj.sanjaykale@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrei Vagin <avagin@gmail.com>
+Hi Neeraj,
 
-The benchmark is similar to the pipe benchmark. It creates two processes,
-one is calling syscalls, and another process is handling them via seccomp
-user notifications. It measures the time required to run a specified number
-of interations.
+Thank you for the patch! Perhaps something to improve:
 
- $ ./perf bench sched  seccomp-notify --sync-mode --loop 1000000
- # Running 'sched/seccomp-notify' benchmark:
- # Executed 1000000 system calls
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on bluetooth/master tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.2-rc5 next-20230124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-     Total time: 2.769 [sec]
+url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/serdev-Add-method-to-assert-break/20230125-015108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20230124174714.2775680-4-neeraj.sanjaykale%40nxp.com
+patch subject: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230125/202301250708.mfePhaPV-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e5f775c45ec84de38a4cadfb115c488cb44e5943
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Neeraj-Sanjay-Kale/serdev-Add-method-to-assert-break/20230125-015108
+        git checkout e5f775c45ec84de38a4cadfb115c488cb44e5943
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/bluetooth/
 
-       2.769629 usecs/op
-         361059 ops/sec
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
- $ ./perf bench sched  seccomp-notify
- # Running 'sched/seccomp-notify' benchmark:
- # Executed 1000000 system calls
+All warnings (new ones prefixed by >>):
 
-     Total time: 8.571 [sec]
+   In file included from drivers/bluetooth/btnxp.c:31:
+   drivers/bluetooth/btnxp.c: In function 'nxp_recv_fw_req_v1':
+>> drivers/bluetooth/btnxp.c:707:33: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     707 |                         BT_INFO("FW_Downloaded Successfully: %ld bytes", nxpdev->fw->size);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~
+         |                                                                                    |
+         |                                                                                    size_t {aka unsigned int}
+   include/net/bluetooth/bluetooth.h:242:41: note: in definition of macro 'BT_INFO'
+     242 | #define BT_INFO(fmt, ...)       bt_info(fmt "\n", ##__VA_ARGS__)
+         |                                         ^~~
+   drivers/bluetooth/btnxp.c:707:64: note: format string is defined here
+     707 |                         BT_INFO("FW_Downloaded Successfully: %ld bytes", nxpdev->fw->size);
+         |                                                              ~~^
+         |                                                                |
+         |                                                                long int
+         |                                                              %d
+   drivers/bluetooth/btnxp.c: In function 'nxp_recv_fw_req_v3':
+   drivers/bluetooth/btnxp.c:826:25: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     826 |                 BT_INFO("FW_Downloaded Successfully: %ld bytes", nxpdev->fw->size);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~
+         |                                                                            |
+         |                                                                            size_t {aka unsigned int}
+   include/net/bluetooth/bluetooth.h:242:41: note: in definition of macro 'BT_INFO'
+     242 | #define BT_INFO(fmt, ...)       bt_info(fmt "\n", ##__VA_ARGS__)
+         |                                         ^~~
+   drivers/bluetooth/btnxp.c:826:56: note: format string is defined here
+     826 |                 BT_INFO("FW_Downloaded Successfully: %ld bytes", nxpdev->fw->size);
+         |                                                      ~~^
+         |                                                        |
+         |                                                        long int
+         |                                                      %d
 
-       8.571119 usecs/op
-         116670 ops/sec
 
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
----
- tools/arch/x86/include/uapi/asm/unistd_32.h |   3 +
- tools/arch/x86/include/uapi/asm/unistd_64.h |   3 +
- tools/perf/bench/Build                      |   1 +
- tools/perf/bench/bench.h                    |   1 +
- tools/perf/bench/sched-seccomp-notify.c     | 167 ++++++++++++++++++++
- tools/perf/builtin-bench.c                  |   1 +
- 6 files changed, 176 insertions(+)
- create mode 100644 tools/perf/bench/sched-seccomp-notify.c
+vim +707 drivers/bluetooth/btnxp.c
 
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
-index 60a89dba01b6..c0c74befc8df 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_32.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
-@@ -14,3 +14,6 @@
- #ifndef __NR_setns
- # define __NR_setns 346
- #endif
-+#ifdef __NR_seccomp
-+#define __NR_seccomp 354
-+#endif
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index cb52a3a8b8fc..b695246da684 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -14,3 +14,6 @@
- #ifndef __NR_setns
- #define __NR_setns 308
- #endif
-+#ifndef __NR_seccomp
-+#define __NR_seccomp 317
-+#endif
-diff --git a/tools/perf/bench/Build b/tools/perf/bench/Build
-index 6b6155a8ad09..e3ec2c1b0682 100644
---- a/tools/perf/bench/Build
-+++ b/tools/perf/bench/Build
-@@ -1,5 +1,6 @@
- perf-y += sched-messaging.o
- perf-y += sched-pipe.o
-+perf-y += sched-seccomp-notify.o
- perf-y += syscall.o
- perf-y += mem-functions.o
- perf-y += futex-hash.o
-diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-index a5d49b3b6a09..40657b0959a9 100644
---- a/tools/perf/bench/bench.h
-+++ b/tools/perf/bench/bench.h
-@@ -21,6 +21,7 @@ extern struct timeval bench__start, bench__end, bench__runtime;
- int bench_numa(int argc, const char **argv);
- int bench_sched_messaging(int argc, const char **argv);
- int bench_sched_pipe(int argc, const char **argv);
-+int bench_sched_seccomp_notify(int argc, const char **argv);
- int bench_syscall_basic(int argc, const char **argv);
- int bench_mem_memcpy(int argc, const char **argv);
- int bench_mem_memset(int argc, const char **argv);
-diff --git a/tools/perf/bench/sched-seccomp-notify.c b/tools/perf/bench/sched-seccomp-notify.c
-new file mode 100644
-index 000000000000..f6f32b0a865a
---- /dev/null
-+++ b/tools/perf/bench/sched-seccomp-notify.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <subcmd/parse-options.h>
-+#include "bench.h"
-+
-+#include <uapi/linux/filter.h>
-+#include <sys/types.h>
-+#include <sys/time.h>
-+#include <linux/unistd.h>
-+#include <sys/syscall.h>
-+#include <sys/ioctl.h>
-+#include <linux/time64.h>
-+#include <linux/seccomp.h>
-+#include <sys/prctl.h>
-+
-+#include <unistd.h>
-+#include <limits.h>
-+#include <stddef.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <signal.h>
-+#include <sys/wait.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <assert.h>
-+
-+#define LOOPS_DEFAULT 1000000UL
-+static uint64_t		loops = LOOPS_DEFAULT;
-+static bool sync_mode;
-+static const struct option options[] = {
-+	OPT_U64('l', "loop",	&loops,		"Specify number of loops"),
-+	OPT_BOOLEAN('s', "sync-mode", &sync_mode,
-+		    "Enable the synchronious mode for seccomp notifications"),
-+	OPT_END()
-+};
-+
-+static const char * const bench_seccomp_usage[] = {
-+	"perf bench sched secccomp-notify <options>",
-+	NULL
-+};
-+
-+static int seccomp(unsigned int op, unsigned int flags, void *args)
-+{
-+	return syscall(__NR_seccomp, op, flags, args);
-+}
-+
-+static int user_notif_syscall(int nr, unsigned int flags)
-+{
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
-+			offsetof(struct seccomp_data, nr)),
-+		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, nr, 0, 1),
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_USER_NOTIF),
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	return seccomp(SECCOMP_SET_MODE_FILTER, flags, &prog);
-+}
-+
-+#define USER_NOTIF_MAGIC INT_MAX
-+static void user_notification_sync_loop(int listener)
-+{
-+	struct seccomp_notif_resp resp;
-+	struct seccomp_notif req;
-+	uint64_t nr;
-+
-+	for (nr = 0; nr < loops; nr++) {
-+		memset(&req, 0, sizeof(req));
-+		assert(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req) == 0);
-+
-+		assert(req.data.nr == __NR_gettid);
-+
-+		resp.id = req.id;
-+		resp.error = 0;
-+		resp.val = USER_NOTIF_MAGIC;
-+		resp.flags = 0;
-+		assert(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp) == 0);
-+	}
-+}
-+
-+#ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
-+#define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
-+#define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
-+#endif
-+int bench_sched_seccomp_notify(int argc, const char **argv)
-+{
-+	struct timeval start, stop, diff;
-+	unsigned long long result_usec = 0;
-+	int status, listener;
-+	pid_t pid;
-+	long ret;
-+
-+	argc = parse_options(argc, argv, options, bench_seccomp_usage, 0);
-+
-+	gettimeofday(&start, NULL);
-+
-+	prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	listener = user_notif_syscall(__NR_gettid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	assert(listener >= 0);
-+
-+	pid = fork();
-+	assert(pid >= 0);
-+	if (pid == 0) {
-+		assert(prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) == 0);
-+		while (1) {
-+			ret = syscall(__NR_gettid);
-+			if (ret == USER_NOTIF_MAGIC)
-+				continue;
-+			break;
-+		}
-+		_exit(1);
-+	}
-+
-+	if (sync_mode) {
-+		assert(ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS,
-+			     SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP, 0) == 0);
-+	}
-+	user_notification_sync_loop(listener);
-+
-+	kill(pid, SIGKILL);
-+	assert(waitpid(pid, &status, 0) == pid);
-+	assert(WIFSIGNALED(status));
-+	assert(WTERMSIG(status) == SIGKILL);
-+
-+	gettimeofday(&stop, NULL);
-+	timersub(&stop, &start, &diff);
-+
-+	switch (bench_format) {
-+	case BENCH_FORMAT_DEFAULT:
-+		printf("# Executed %lu system calls\n\n",
-+			loops);
-+
-+		result_usec = diff.tv_sec * USEC_PER_SEC;
-+		result_usec += diff.tv_usec;
-+
-+		printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-+		       (unsigned long) diff.tv_sec,
-+		       (unsigned long) (diff.tv_usec / USEC_PER_MSEC));
-+
-+		printf(" %14lf usecs/op\n",
-+		       (double)result_usec / (double)loops);
-+		printf(" %14d ops/sec\n",
-+		       (int)((double)loops /
-+			     ((double)result_usec / (double)USEC_PER_SEC)));
-+		break;
-+
-+	case BENCH_FORMAT_SIMPLE:
-+		printf("%lu.%03lu\n",
-+		       (unsigned long) diff.tv_sec,
-+		       (unsigned long) (diff.tv_usec / USEC_PER_MSEC));
-+		break;
-+
-+	default:
-+		/* reaching here is something disaster */
-+		fprintf(stderr, "Unknown format:%d\n", bench_format);
-+		exit(1);
-+		break;
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index 334ab897aae3..71044575c571 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -46,6 +46,7 @@ static struct bench numa_benchmarks[] = {
- static struct bench sched_benchmarks[] = {
- 	{ "messaging",	"Benchmark for scheduling and IPC",		bench_sched_messaging	},
- 	{ "pipe",	"Benchmark for pipe() between two processes",	bench_sched_pipe	},
-+	{ "seccomp-notify",	"Benchmark for seccomp user notify",	bench_sched_seccomp_notify},
- 	{ "all",	"Run all scheduler benchmarks",		NULL			},
- 	{ NULL,		NULL,						NULL			}
- };
+   647	
+   648	/* for legacy chipsets with V1 bootloader */
+   649	static int nxp_recv_fw_req_v1(struct hci_dev *hdev, struct sk_buff *skb)
+   650	{
+   651		struct V1_DATA_REQ *req = skb_pull_data(skb, sizeof(struct V1_DATA_REQ));
+   652		struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
+   653		const struct btnxpuart_data *nxp_data = nxpdev->nxp_data;
+   654		static bool timeout_changed;
+   655		static bool baudrate_changed;
+   656		u32 requested_len;
+   657		static u32 expected_len = HDR_LEN;
+   658		int err;
+   659	
+   660		if (!test_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state))
+   661			return 0;
+   662	
+   663		if (strlen(nxpdev->fw_name) == 0) {
+   664			err = nxp_load_fw_params_for_chip_id(0xffff, hdev);
+   665			if (err < 0)
+   666				return err;
+   667			timeout_changed = false;
+   668			baudrate_changed = false;
+   669			/* If secondary baudrate is not read from
+   670			 * the conf file set default value from nxp_data
+   671			 */
+   672			if (nxpdev->fw_dnld_sec_baudrate == 0)
+   673				nxpdev->fw_dnld_sec_baudrate = nxp_data->fw_dnld_sec_baudrate;
+   674		}
+   675	
+   676		if (nxpdev->fw_dnld_sec_baudrate != nxpdev->current_baudrate) {
+   677			if (!timeout_changed) {
+   678				nxp_send_ack(NXP_ACK_V1, hdev);
+   679				timeout_changed = nxp_fw_change_timeout(hdev, req->len);
+   680				return 0;
+   681			}
+   682			if (!baudrate_changed) {
+   683				nxp_send_ack(NXP_ACK_V1, hdev);
+   684				baudrate_changed = nxp_fw_change_baudrate(hdev, req->len);
+   685				if (baudrate_changed) {
+   686					serdev_device_set_baudrate(nxpdev->serdev,
+   687									nxpdev->fw_dnld_sec_baudrate);
+   688					nxpdev->current_baudrate = nxpdev->fw_dnld_sec_baudrate;
+   689				}
+   690				return 0;
+   691			}
+   692		}
+   693	
+   694		if (!nxpdev->fw) {
+   695			BT_INFO("Request Firmware: %s", nxpdev->fw_name);
+   696			err = request_firmware(&nxpdev->fw, nxpdev->fw_name, &hdev->dev);
+   697			if (err < 0) {
+   698				BT_ERR("Firmware file %s not found", nxpdev->fw_name);
+   699				clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
+   700				return err;
+   701			}
+   702		}
+   703	
+   704		if (req && (req->len ^ req->len_comp) == 0xffff) {
+   705			nxp_send_ack(NXP_ACK_V1, hdev);
+   706			if (req->len == 0) {
+ > 707				BT_INFO("FW_Downloaded Successfully: %ld bytes", nxpdev->fw->size);
+   708				clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
+   709				wake_up_interruptible(&nxpdev->suspend_wait_q);
+   710				return 0;
+   711			}
+   712			if (req->len & 0x01) {
+   713				/* The CRC did not match at the other end.
+   714				 * That's why the request to re-send.
+   715				 * Simply send the same bytes again.
+   716				 */
+   717				requested_len = nxpdev->fw_sent_bytes;
+   718				BT_ERR("CRC error. Resend %d bytes of FW.", requested_len);
+   719			} else {
+   720				/* Increment offset by number of previous successfully sent bytes */
+   721				nxpdev->fw_dnld_offset += nxpdev->fw_sent_bytes;
+   722				requested_len = req->len;
+   723			}
+   724	
+   725			/* The FW bin file is made up of many blocks of
+   726			 * 16 byte header and payload data chunks. If the
+   727			 * FW has requested a header, read the payload length
+   728			 * info from the header, and then send the header.
+   729			 * In the next iteration, the FW should request the
+   730			 * payload data chunk, which should be equal to the
+   731			 * payload length read from header. If there is a
+   732			 * mismatch, clearly the driver and FW are out of sync,
+   733			 * and we need to re-send the previous header again.
+   734			 */
+   735			if (requested_len == expected_len) {
+   736				if (requested_len == HDR_LEN)
+   737					expected_len = nxp_get_data_len(nxpdev->fw->data +
+   738										nxpdev->fw_dnld_offset);
+   739				else
+   740					expected_len = HDR_LEN;
+   741			} else {
+   742				if (requested_len == HDR_LEN) {
+   743					/* FW download out of sync. Send previous chunk again */
+   744					nxpdev->fw_dnld_offset -= nxpdev->fw_sent_bytes;
+   745					expected_len = HDR_LEN;
+   746				}
+   747			}
+   748	
+   749			if (nxpdev->fw_dnld_offset + requested_len <= nxpdev->fw->size)
+   750				serdev_device_write_buf(nxpdev->serdev,
+   751						nxpdev->fw->data + nxpdev->fw_dnld_offset,
+   752						requested_len);
+   753			nxpdev->fw_sent_bytes = requested_len;
+   754		} else {
+   755			BT_INFO("ERR: Send NAK");
+   756			nxp_send_ack(NXP_NAK_V1, hdev);
+   757		}
+   758		return 0;
+   759	}
+   760	
+
 -- 
-2.39.1.405.gd4c25cc71f-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
