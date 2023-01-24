@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8E0679753
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C57679756
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbjAXMKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S233436AbjAXMKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbjAXMK3 (ORCPT
+        with ESMTP id S232381AbjAXMKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:10:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5727D2330C;
-        Tue, 24 Jan 2023 04:10:28 -0800 (PST)
+        Tue, 24 Jan 2023 07:10:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E4C42DD9;
+        Tue, 24 Jan 2023 04:10:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0942CB8117B;
-        Tue, 24 Jan 2023 12:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A94C433D2;
-        Tue, 24 Jan 2023 12:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674562225;
-        bh=l5P2dcDwl1Ro2L6ilIOJKG9O4Vu68MKthz8L2plR9oc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JGYpkXcWDatP+rjnX/LmQNuidY4UidrMsxoi89jllbg4Ia5fiAucLHzFPrMZicryh
-         enw2AZmOAd2nwcejAz/b0Mq2fkSJACf9HI5QzEeaqfoayK5CArnOVFYxTSzZyDzgu+
-         gALXwLVrjMhs0rB3dhpE88Y//9SaOrMVJAABl0zQ33HAM/nrdeOxqtywGLWyRGHJcE
-         kxhOy8zbj9n+4P4u6tt/89QaEKXeIMMSSWc33Ng6n+AIyaVkpVVWO0VoAjlEgZPHG4
-         +e1C7f/b1NdZV1Gt8OV2iz3Bb8Mc439bnwxO91YkKfppd5yad+mqJWzbbP87gkBJd2
-         e70mQNYYfhP0w==
-From:   Will Deacon <will@kernel.org>
-To:     krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        joro@8bytes.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        robh+dt@kernel.org
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/3] Fix SMMU on SDX55 and SDX65
-Date:   Tue, 24 Jan 2023 12:10:19 +0000
-Message-Id: <167456063714.294556.5041040061000624802.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230123131931.263024-1-manivannan.sadhasivam@linaro.org>
-References: <20230123131931.263024-1-manivannan.sadhasivam@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76C0AB81197;
+        Tue, 24 Jan 2023 12:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96242C433EF;
+        Tue, 24 Jan 2023 12:10:42 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Will Deacon <will@kernel.org>, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mhiramat@kernel.org, ndesaulniers@google.com, ojeda@kernel.org,
+        peterz@infradead.org, rafael.j.wysocki@intel.com,
+        revest@chromium.org, robert.moore@intel.com
+Subject: Re: [PATCH v3 0/8] arm64/ftrace: Add support for DYNAMIC_FTRACE_WITH_CALL_OPS
+Date:   Tue, 24 Jan 2023 12:10:40 +0000
+Message-Id: <167456223711.325781.3444355742803808035.b4-ty@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230123134603.1064407-1-mark.rutland@arm.com>
+References: <20230123134603.1064407-1-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 18:49:28 +0530, Manivannan Sadhasivam wrote:
-> Both SDX55 and SDX65 SoCs are using the Qcom version of the ARM SMMU-500
-> IP. Even though the SoC specfic compatibles were being used in devicetree,
-> the compatibles were not added to the arm-smmu-qcom driver. So they end up
-> using the generic ARM SMMU-500 driver instead.
+On Mon, 23 Jan 2023 13:45:55 +0000, Mark Rutland wrote:
+> I'm not sure how we want to merge this, so I've moved the core ftrace
+> patch to the start of the series so that it can more easily be placed on
+> a stable branch if we want that to go via the ftrace tree and the rest
+> to go via arm64.
 > 
-> Spotting this discrepancy, the recent arm,smmu bindings change moved these
-> SoCs under the non-qcom implementation of the SMMU.
+> This is cleanly pasing the ftrace selftests from v6.2-rc3 (results in
+> the final patch).
 > 
 > [...]
 
-Applied bindings change to will (for-joerg/arm-smmu/bindings), thanks!
+Applied to arm64 (for-next/ftrace), thanks!
 
-[1/3] dt-bindings: arm-smmu: Fix binding for SDX55 and SDX65
-      https://git.kernel.org/will/c/eb9181a3ae60
+[1/8] ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
+      https://git.kernel.org/arm64/c/cbad0fb2d8d9
+[2/8] Compiler attributes: GCC cold function alignment workarounds
+      https://git.kernel.org/arm64/c/c27cd083cfb9
+[3/8] ACPI: Don't build ACPICA with '-Os'
+      https://git.kernel.org/arm64/c/8f9e0a52810d
+[4/8] arm64: Extend support for CONFIG_FUNCTION_ALIGNMENT
+      https://git.kernel.org/arm64/c/47a15aa54427
+[5/8] arm64: insn: Add helpers for BTI
+      https://git.kernel.org/arm64/c/2bbbb4015aa1
+[6/8] arm64: patching: Add aarch64_insn_write_literal_u64()
+      https://git.kernel.org/arm64/c/e4ecbe83fd1a
+[7/8] arm64: ftrace: Update stale comment
+      https://git.kernel.org/arm64/c/90955d778ad7
+[8/8] arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
+      https://git.kernel.org/arm64/c/baaf553d3bc3
 
-Cheers,
 -- 
-Will
+Catalin
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
