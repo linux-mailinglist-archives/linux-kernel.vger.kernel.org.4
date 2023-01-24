@@ -2,188 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E61767934A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8D567934E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjAXIlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S233102AbjAXImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjAXIlO (ORCPT
+        with ESMTP id S230088AbjAXImJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:41:14 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822A63A84E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:41:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1674549670; x=1706085670;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UUb0frJwgSxSvNq2xdQNPHmq/M6CyA/nnqq7BHMOPKw=;
-  b=XMSTb7wzaaARkAd8LbyVuToZdz3UKe3suwl6/J/aAewGhDZ3/+Wpvbj+
-   JXPHQ4f7z5km/mrTcVCRpUK1ow+efc6Ul/kN6VP2Jbx/UsRXW+LUiehYr
-   cCAMcoKxbVMVhKHeIRKYrp0URBSNsM3qU1eQt7LUwkVLApEb7u5PLrEqg
-   5NtwdPNyC0ZLKOCbqVHycYdl3AeDrHULqBC6UsQbnt5Jd9EEXCdaeUYLK
-   pY7uyIDiU50QTV/qh1/gNC5XPWOkywYCc8YkbTAymUHXAMbcjPbRSZpYY
-   eL0E7v02FHeneE+8ZeSxY/YhGggNQH8NZlXoK13sKmT+wWvtvfkJSXd1p
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,241,1669046400"; 
-   d="scan'208";a="226602547"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Jan 2023 16:41:08 +0800
-IronPort-SDR: KaMLN4Q/hDrQpEX9RIIBsss5qHLFVCskBtlyd3veRbl0MQLFnIwJG1exfsOS933vcei/eLtFXx
- wyPHjxJa3S6D4Iq1ypV0LVp2/67vFRf3gOAn0KBfLlpcXMafk5RL13Pll7jcCcBifk4aFuoj4m
- 2aRdMQm2+8fPShzY59xINo+qQ0aTih9mg4ebZnA9FoLS/vQmHY3CwLgASpMsdXGTvSm7qju59g
- +X0TO1h1lCvzkHiqrf4oEXs36tDA1/ft/TwbSiAB2xaa2HcBVbDx0yqgL8aX9TYJKW0oaGno8d
- WW8=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 23:52:57 -0800
-IronPort-SDR: SzNb9rhXXtSvRzzZHTjbI5IJEwQAJptPReVOeaT0GQMUisy9WQ+tFstXchRXibsD7K/6Uvafkx
- aJX+qWP7au4V1xYbtGAgUwSQaC8HICv5sm0SyBj5y1lMwQJYBdfWPCUR7zEz9Pir3gfwlrLMjD
- QfLj8t+A9p8vL5KELHwZD8pFwVeAsWGX62SeqszWlfICt5+VCNemhZovqEqqM1WEJaVDPp4Xs1
- jfwg+EbXsy65FUgke7jVaJX7LOIirAorS0K8qU4z15zvdGEbN8Imjzgys42R7twGfULbGMsSC+
- Ccc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Jan 2023 00:41:09 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P1L6D5cgYz1RvTp
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:41:08 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1674549664; x=1677141665; bh=UUb0frJwgSxSvNq2xdQNPHmq/M6CyA/nnqq
-        7BHMOPKw=; b=r6kCwzyWrUWkDh7QAX8bRZhUGcCwhGIC4847W2CgymFqmXBp605
-        VlPj4sixdbOQ8u5YvmVRqLA1vlTi1gXE+9TXpOE045Wl1dZ0XKbgQ6eeBZHihqE1
-        xDc9q1s8NXCSiItw+f4Wgn81NeWyHHZ8kLBmmS5LsBG9W7MA7t4s1d3Zp2XD4J+9
-        6++raAWYQ/zzYdD/NB8hCSWGm3kbFg1ueyNvFdB8KQM4aGnda3eHm9MSiGZcPWP6
-        wXjil5ugXYSzJPO468HKf3Yfap4ryYEejehZgifukOiGURFGGavmiiO2YSovqlvW
-        sT8owyxsxYc7FTrW3oaQDyK2qLEMDu5eEtA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id UEcddrtpbPYE for <linux-kernel@vger.kernel.org>;
-        Tue, 24 Jan 2023 00:41:04 -0800 (PST)
-Received: from [10.225.163.51] (unknown [10.225.163.51])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P1L672v9Jz1RvLy;
-        Tue, 24 Jan 2023 00:41:03 -0800 (PST)
-Message-ID: <6073061b-138b-499c-6de1-5196f191b176@opensource.wdc.com>
-Date:   Tue, 24 Jan 2023 17:41:01 +0900
+        Tue, 24 Jan 2023 03:42:09 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE4A3BDB2;
+        Tue, 24 Jan 2023 00:42:07 -0800 (PST)
+Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MVv8f-1pAAeI0bBd-00RmTC; Tue, 24 Jan 2023 09:41:51 +0100
+Message-ID: <39f438f8-c41b-17e6-42ba-9d87098a1eee@i2se.com>
+Date:   Tue, 24 Jan 2023 09:41:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: linux-next: manual merge of the zonefs tree with the
- vfs-idmapping tree
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
+ with a custom bus_type
 Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230124085951.59eb8da3@canb.auug.org.au>
- <1631b427-9efd-cd26-5dbc-0143097f859b@opensource.wdc.com>
- <20230124102535.1e21a533@canb.auug.org.au>
- <87958074-baa4-b6c9-da0c-d654e4009611@opensource.wdc.com>
- <20230124110745.5c9b78b0@oak.ozlabs.ibm.com>
- <8871d62a-b87f-75d6-fb5d-d9811a3e5dae@opensource.wdc.com>
- <20230124083235.6fhvnjgl4bzuzwuq@wittgenstein>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230124083235.6fhvnjgl4bzuzwuq@wittgenstein>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        Phil Elwell <phil@raspberrypi.com>
+Cc:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>
+References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
+ <786df750-221e-82fc-a324-d30261296974@i2se.com>
+ <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
+ <Y85MOdAVh/fv5HRt@pendragon.ideasonboard.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <Y85MOdAVh/fv5HRt@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:VAFnV+DT+oBQC6pjDpGX9dQmrvSbaecnSJvqFwdLObeLF3U+WJ7
+ 0gUn0O7/7P5CwJRm3y/vXeQgycUtY1OmG5IWqcRCNGVUwSArjiME1FVHxBZhUVNrZE2eluP
+ Vz/IiFSEP7nhTolp5GM9cIAPw8y/OavmlgSGwntJU59izGY0G1fQyUT4qkSfbpBPEgKR7E5
+ res8tP6U7+5Vd6fohQmKQ==
+UI-OutboundReport: notjunk:1;M01:P0:RKxdTa9q39w=;LWa7w9PjNO3g7L7iSLQsz3O0kI1
+ 4IzOwA/7vUdbbxMzw3ghvu8q96sTMIsC51r7AhyHA2IS82bHOzQXPH1O4cRLkAuTbfgg/5fp9
+ QVBHrjnfKbo1fjan3ZU2Sio2G4yuB3yvcmPjFdMvCuAwZ56NDapQ/AIEEZbOoxk20yPae/frN
+ 6PqnKdWyLc/k7Yf3Rj45i5DjHDjk7bQ2CFvgoRuDY4X2epsbAFue0SI21HPuR0oWKLr+GlIqd
+ anuLt7HC1IBRz1j8sIkeSRmUnVGSPe1hO7xK8fF7mzCB1mSaB9aRkfBQNx1u6/kMvrJZOr/GS
+ tPKbc+nVCH4g46BEclVxk79b4TAj8tkXbBAciBmsyDMupFqoSpEwxEhjygBTOZnE3mJ4/bZ06
+ pDGulgBuYgU8LK2dx6xJdilv7aPJlEv5YXtP5zYadPXiCmWu/EXAY13wtpOOJRB3SvOyCy/3W
+ ez93k14lL5FM/KLGzNfyyckGKo1wb6CBc0xTn11P9EzRKNfJqeiVG64cWkOkHJhHLh0xNopIh
+ eRBOgKUq9/fJu3w1dGZY9m3WlmmXqwUQhTxGwm4mJmo8h/v0sQogT1mDaS9KW//BZc39SEmUX
+ WS/LhR2hvbN+Vx5qwr1jWuejScqNTiFK8j5rI7U+/IpcKsUnChGh5XesABs12jkiokh2SFDhX
+ YpuEr1MBtOUyoLfGDWX3ZwIOrt8lGIqCotxW6Qh0ww==
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 17:32, Christian Brauner wrote:
-> On Tue, Jan 24, 2023 at 09:11:47AM +0900, Damien Le Moal wrote:
->> On 1/24/23 09:07, Stephen Rothwell wrote:
->>> Hi Damien,
+Hi Phil,
+
+Am 23.01.23 um 09:58 schrieb Laurent Pinchart:
+> On Mon, Jan 23, 2023 at 01:18:30PM +0530, Umang Jain wrote:
+>> Hi Stefan,
+>>
+>> Thank for the testing.
+>>
+>> On 1/23/23 5:04 AM, Stefan Wahren wrote:
+>>> Hi Umang,
 >>>
->>> On Tue, 24 Jan 2023 08:30:29 +0900 Damien Le Moal <damien.lemoal@opensource.wdc.com> wrote:
+>>> Am 20.01.23 um 21:10 schrieb Umang Jain:
+>>>> This series just introduces five extra patches for dropping include
+>>>> directives from Makefiles (suggested by Greg KH) and rebased.
 >>>>
->>>> OK. I think I will merge the 3 patches that create the conflict and rebase
->>>> the patches. I need that for retesting at least. But given the size of the
->>>> conflict resolution, I may push that as an update to my for-6.3/for-next
->>>> branch. Let me see...
+>>>> The main patch (6/6) removes platform device/driver abuse and moves
+>>>> things to standard device/driver model using a custom_bus. Specific
+>>>> details are elaborated in the commit message.
 >>>>
->>>>> Alternatively, just leave the fix up to Linus (but mention it to him
->>>>> when you send your pull requests).  
->>>>
->>>> Understood. Let me retest first :)
+>>>> The patch series is based on top of d514392f17fd (tag: next-20230120)
+>>>> of linux-next.
+>>> applied this series on top of linux-next and build it with
+>>> arm/multi_v7_defconfig plus the following:
 >>>
->>> When I said "merge", I meant literally "git merge <some stable branch
->>> from the vfs-mapping tree that contains the conflicting commit>" not
->>> cherry pick the commits i.e. you would need to coordinate with
->>> Christian about having a common branch (or making sure that the part of
->>> his tree you pull in is immutable).
+>>> CONFIG_BCM_VIDEOCORE=y
+>>> CONFIG_BCM2835_VCHIQ=m
+>>> CONFIG_VCHIQ_CDEV=y
+>>> CONFIG_SND_BCM2835=m
+>>> CONFIG_VIDEO_BCM2835=m
+>>> CONFIG_BCM2835_VCHIQ_MMAL=m
+>>>
+>>> and the devices doesn't register on Raspberry Pi 3 B Plus:
+>>>
+>>> [   25.523337] vchiq: module is from the staging directory, the quality is unknown, you have been warned.
+>>> [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register bcm2835_audio vchiq device
+>>> [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register bcm2835-camera vchiq device
+>> I was able to reproduce and it seems the issue here is the change
+>> mentioned in the cover
 >>
->> Yep, cherry picking did not work :)
->> I did a merge test and came up with the same resolution as you did. It
->> looks good. It looks big but is in fact fairly simple. I will keep it as
->> is and signal it to Linus when I send my PR.
-> 
-> I don't rebase branches after they're in -next as soon as someone
-> wants to depend on them.
-
-I understand that. Nobody does.
-
-> 
+>> - drop dma_set_mask_and_coherent
 >>
->> But retesting everything to be sure there are no issues.
+>> in V6.
 >>
->> Christian,
+>> (I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp applied
+>> so my branch has the DMA hunk included while I was testing V6)
 >>
->> Next time, when you touch an fs, please cc the maintainer for acks. I had
->> that zonefs series ready for a while and we could have coordinated for the
->> conflict...
-> 
-> I understand merge conflicts aren't pleasant as I'm dealing with them on
-> a regular basis myself and I'm sorry that this is causing churn for you.
+>> Below is the hunk which should resolve the issue.
+>>
+>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+>> @@ -6,6 +6,7 @@
+>>     */
+>>
+>>    #include <linux/device/bus.h>
+>> +#include <linux/dma-mapping.h>
+>>    #include <linux/slab.h>
+>>    #include <linux/string.h>
+>>
+>> @@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent,
+>> const char *name)
+>>           device->dev.type = &vchiq_device_type;
+>>           device->dev.release = vchiq_device_release;
+>>
+>> +       ret = dma_set_mask_and_coherent(&device->dev, DMA_BIT_MASK(32));
+>> +       if (ret < 0) {
+>> +               vchiq_device_release(&device->dev);
+>> +               return ret;
+>> +       }
+>> +
+>>           ret = device_register(&device->dev);
+>>           if (ret) {
+>>                   put_device(&device->dev);
+>>
+>> It seems we need to include the dma_set_mask_and_coherent() even if
+>> bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look into
+>> why is that/
 
-The conflict is fine, I can handle. I was more surprised that patches
-touching zonefs were applied without acks from me.
+Do you have an answer for this?
 
-> 
-> Similar to other large branches such as the initial folio conversion
-> that affected a lot of filesystems and other branches of mine it simply
-> becomes impractical to generate a massive recipients list.
+Thanks
 
-Fair enough.
-
-> All filesystems were touched in non-semantical ways and simply replace a
-> vfs type.
-
-That I saw :)
-
-> 
-> One of linux-next's tasks is to find generated merge conflicts so that
-> we can coordinate. As usual, I will send a list of merge conflicts
-> caused by one of our branches to Linus and point him to the relevant
-> threads that Steven reported with proposed resolutions as he prefers to
-> fix them up himself.
-> 
-> Sorry for the inconvenience.
-
-All solved now. My morning was only a little more busy than expected
-dealing with this :)
-Thanks.
-
--- 
-Damien Le Moal
-Western Digital Research
-
+>>
+>>    Laurent, any thoughts on this please?
+> Nothing that immediately springs to my mind. Can you investigate ?
+>
