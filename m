@@ -2,164 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B848E679A77
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB61E679AB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbjAXNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 08:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S234726AbjAXN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 08:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbjAXNrM (ORCPT
+        with ESMTP id S234667AbjAXN4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:47:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D3044BF9;
-        Tue, 24 Jan 2023 05:44:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E24A0B811CF;
-        Tue, 24 Jan 2023 13:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8A1C433A7;
-        Tue, 24 Jan 2023 13:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674567852;
-        bh=320LOy96niVDCD4DB0IrsME/G/jx6C/XnUurhK+F3vg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CZcNwbCyX8bIq2KPGgqrm+fG+46EZhDZTpOtyGgFHLqif6/ZbNw7d0TZ8fAg7/eYr
-         Yk/s5F9RXhl+6FWxtdw/nQI8R29dM35gmKX0omFuJUVQxSrGTNJUk3EchRog8NcFNm
-         tuXTTok2XVg5KiZNFihMPHqnBjsv13WsfuBjIk+Md+AF9PUW2uQy/qT3CjK8VT/Sxj
-         DWbmloprR8tX7KRStkeneecJm0quFwG3gUx9lBmHcEIAiBFLPitYS6CwflDJJCFfc/
-         QUqtMjKfc161nWmZqKsk7L7hpGGiv/xVSyu6a43B6U0ssjnNFYlb3ucD9Ah47UlhN7
-         UZb115quinK3g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Andreas Dilger <adilger@dilger.ca>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Jason Donenfeld <Jason@zx2c4.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 2/2] ext4: deal with legacy signed xattr name hash values
-Date:   Tue, 24 Jan 2023 08:44:06 -0500
-Message-Id: <20230124134407.638009-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230124134407.638009-1-sashal@kernel.org>
-References: <20230124134407.638009-1-sashal@kernel.org>
+        Tue, 24 Jan 2023 08:56:32 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597C047416
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:55:50 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id a9so6945142ilb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:55:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C6DU+ytc1NqENDkZNmeISMtYPcZVMd3z1m1alcPvP8E=;
+        b=3zUn0X1NnYVX9K06T/PhOs1uQDwYHcxEjNVSidPbBKwMza0tNvn/OUZmEBkPK6MJMz
+         kH+o+M30bPvpkST1sCEMdGpI495nppPCUxqmWB2C/4aVsp2fCRxeLERU7lMcCOTdFkR/
+         Mp51fQsEN1qalwyYqNuBGviAcI+yPJcPQHnXe0XJrdOQt7DLW8rZQwMGPNTEllqz1Nnj
+         ZTotOw2hi4tc790W/tZiqmFdxZ/WbHEEs2FIANgYknXmKA5pjTZpiuQsjJ+wkWD7VMd+
+         zgkhmgR8d0h1K+Ztnr/QlDLBuXDw2wDc5+Sp/7CSanSeSkT9Kk4zo/6yp/uuKCakXQ7L
+         zi0w==
+X-Gm-Message-State: AFqh2kqPnsdXfsZ/8zCxvsT8idcMBtR+XzrLpEKW9/RbpbIjBAorjaZb
+        DKhnMbWTCQQadGXif8jYlP471hQGu/N+PQ==
+X-Google-Smtp-Source: AMrXdXs8fh5A4N7yK12sW16RXFH+u9o39QjwUn8rJX+e/LVtdDAcRMPT9UOFzHk6G7aoQI6OFLGAkQ==
+X-Received: by 2002:ac8:7205:0:b0:3b0:9e27:ddb2 with SMTP id a5-20020ac87205000000b003b09e27ddb2mr40651838qtp.3.1674567862697;
+        Tue, 24 Jan 2023 05:44:22 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id a20-20020aed2794000000b003b63b20314esm1274171qtd.57.2023.01.24.05.44.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 05:44:22 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 129so14826903ybb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:44:21 -0800 (PST)
+X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
+ p134-20020a25d88c000000b0077ab5f3d0acmr2648671ybg.202.1674567861745; Tue, 24
+ Jan 2023 05:44:21 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230120121856.1407369-1-sudeep.holla@arm.com>
+In-Reply-To: <20230120121856.1407369-1-sudeep.holla@arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 Jan 2023 14:44:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUZzLkWvhQ=YeH2KfQ_FRidemfOvbbHf_b1AHROK9HFNA@mail.gmail.com>
+Message-ID: <CAMuHMdUZzLkWvhQ=YeH2KfQ_FRidemfOvbbHf_b1AHROK9HFNA@mail.gmail.com>
+Subject: Re: [GIT PULL] cacheinfo/arch_topology: Updates for v6.3
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+        ALKML <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Pierre Gondois <pierre.gondois@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+Hi Sudeep,
 
-[ Upstream commit f3bbac32475b27f49be201f896d98d4009de1562 ]
+On Fri, Jan 20, 2023 at 1:22 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> It has been tested on RISC-V which is the main users outside of arm64.
 
-We potentially have old hashes of the xattr names generated on systems
-with signed 'char' types.  Now that everybody uses '-funsigned-char',
-those hashes will no longer match.
+Has it?
 
-This only happens if you use xattrs names that have the high bit set,
-which probably doesn't happen in practice, but the xfstest generic/454
-shows it.
+> The ACPI the RISC-V parts are acked-by the respective maintainers. All
+> the changes are in the -next for sometime and no issues reported at this
+> time.
+>
+> Regards,
+> Sudeep
+>
+> -->8
+>
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+>
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/archtopo-cacheinfo-updates-6.3
+>
+> for you to fetch changes up to 198102c9103fc78d8478495971947af77edb05c1:
+>
+>   cacheinfo: Fix shared_cpu_map to handle shared caches at different levels (2023-01-18 09:58:40 +0000)
+>
+> ----------------------------------------------------------------
+> cacheinfo and arch_topology updates for v6.3
+>
+> The main change is to build the cache topology information for all
+> the CPUs from the primary CPU. Currently the cacheinfo for secondary CPUs
+> is created during the early boot on the respective CPU itself. Preemption
+> and interrupts are disabled at this stage. On PREEMPT_RT kernels, allocating
+> memory and even parsing the PPTT table for ACPI based systems triggers a:
+>   'BUG: sleeping function called from invalid context'
+>
+> To prevent this bug, the cacheinfo is now allocated from the primary CPU
+> when preemption and interrupts are enabled and before booting secondary
+> CPUs. The cache levels/leaves are computed from DT/ACPI PPTT information
+> only, without relying on any architecture specific mechanism if done so
+> early.
+>
+> The other minor change included here is to handle shared caches at
+> different levels when not all the CPUs on the system have the same
+> cache hierarchy.
 
-Instead of adding a new "signed xattr hash filesystem" bit and having to
-deal with all the possible combinations, just calculate the hash both
-ways if the first one fails, and always generate new hashes with the
-proper unsigned char version.
+While this gets rid of the "cacheinfo: Unable to detect cache hierarchy
+for CPU N" warnings printed during boot, it resurrects the printing of
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202212291509.704a11c9-oliver.sang@intel.com
-Link: https://lore.kernel.org/all/CAHk-=whUNjwqZXa-MH9KMmc_CpQpoFKFjAB9ZKHuu=TbsouT4A@mail.gmail.com/
-Exposed-by: 3bc753c06dd0 ("kbuild: treat char as always unsigned")
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: Andreas Dilger <adilger@dilger.ca>
-Cc: Theodore Ts'o <tytso@mit.edu>,
-Cc: Jason Donenfeld <Jason@zx2c4.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/ext4/xattr.c | 41 +++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 39 insertions(+), 2 deletions(-)
+    Early cacheinfo failed, ret = -12
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 8a3f0e20c51e..2397fbbe259c 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -80,6 +80,8 @@ ext4_xattr_block_cache_find(struct inode *, struct ext4_xattr_header *,
- 			    struct mb_cache_entry **);
- static __le32 ext4_xattr_hash_entry(char *name, size_t name_len, __le32 *value,
- 				    size_t value_count);
-+static __le32 ext4_xattr_hash_entry_signed(char *name, size_t name_len, __le32 *value,
-+				    size_t value_count);
- static void ext4_xattr_rehash(struct ext4_xattr_header *);
- 
- static const struct xattr_handler * const ext4_xattr_handler_map[] = {
-@@ -452,8 +454,21 @@ ext4_xattr_inode_verify_hashes(struct inode *ea_inode,
- 		tmp_data = cpu_to_le32(hash);
- 		e_hash = ext4_xattr_hash_entry(entry->e_name, entry->e_name_len,
- 					       &tmp_data, 1);
--		if (e_hash != entry->e_hash)
--			return -EFSCORRUPTED;
-+		/* All good? */
-+		if (e_hash == entry->e_hash)
-+			return 0;
-+
-+		/*
-+		 * Not good. Maybe the entry hash was calculated
-+		 * using the buggy signed char version?
-+		 */
-+		e_hash = ext4_xattr_hash_entry_signed(entry->e_name, entry->e_name_len,
-+							&tmp_data, 1);
-+		if (e_hash == entry->e_hash)
-+			return 0;
-+
-+		/* Still no match - bad */
-+		return -EFSCORRUPTED;
- 	}
- 	return 0;
- }
-@@ -3107,6 +3122,28 @@ static __le32 ext4_xattr_hash_entry(char *name, size_t name_len, __le32 *value,
- 	return cpu_to_le32(hash);
- }
- 
-+/*
-+ * ext4_xattr_hash_entry_signed()
-+ *
-+ * Compute the hash of an extended attribute incorrectly.
-+ */
-+static __le32 ext4_xattr_hash_entry_signed(char *name, size_t name_len, __le32 *value, size_t value_count)
-+{
-+	__u32 hash = 0;
-+
-+	while (name_len--) {
-+		hash = (hash << NAME_HASH_SHIFT) ^
-+		       (hash >> (8*sizeof(hash) - NAME_HASH_SHIFT)) ^
-+		       (signed char)*name++;
-+	}
-+	while (value_count--) {
-+		hash = (hash << VALUE_HASH_SHIFT) ^
-+		       (hash >> (8*sizeof(hash) - VALUE_HASH_SHIFT)) ^
-+		       le32_to_cpu(*value++);
-+	}
-+	return cpu_to_le32(hash);
-+}
-+
- #undef NAME_HASH_SHIFT
- #undef VALUE_HASH_SHIFT
- 
--- 
-2.39.0
+during early boot on all my RV64 platforms
 
+See also https://lore.kernel.org/all/CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com/
+for a similar earlier version triggering the same issue.
+
+> ----------------------------------------------------------------
+> Pierre Gondois (6):
+>       arch_topology: Build cacheinfo from primary CPU
+
+Reverting commit 5944ce092b97caed ("arch_topology: Build cacheinfo
+from primary CPU") fixes the issue.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
