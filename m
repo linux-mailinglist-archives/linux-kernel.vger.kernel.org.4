@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E301679D55
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE908679D5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbjAXPXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S234811AbjAXPY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbjAXPXc (ORCPT
+        with ESMTP id S234650AbjAXPY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:23:32 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EECF2C659
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:23:22 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso14342080pjf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:23:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EDh4QTzHw/7wfcqru+uyNm9ezOu9lq8rt7xeGWJhJ/0=;
-        b=Wh6rAVMgDCwlzYMbxMaV3w2L+dwCKP6nCm117xKOJiHgJhOOY8zg0FuEITs7LG5a3G
-         jllbBFRKQ3jznMmLhE2V37Bn3i59awGGaoiQi39KyI/uTGtgpwPfJ7ahKnttxntdkKDF
-         GcUyB5KiMugWNhV1b3IxKJjKEjFcSvc2tfMTcuim05X5AkNtB7E59T5OG7tTDZOOJfgf
-         lgrLzoXtsIRWqDmDJOm3DJ29aXTw2VNt1zRSCs4pmvF8XdpX8l8I8K15fskZGQeWhjUg
-         7yEoqNXHVyM12BEl7hRDaOGbYFq5f9yrfNAD5WWQry+gmGcoRxxvLD/Z2C1iz68JfJDi
-         IhyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EDh4QTzHw/7wfcqru+uyNm9ezOu9lq8rt7xeGWJhJ/0=;
-        b=YCL7Yb6ZTi/JUdRDI+IIGcYAuM9WLc+M+dFnglc7UluQqXIONEoviJLw3ufb3Nj0yA
-         fT2j2ldDOYn4fP81iahCCga8mRty2RH0h9X4JTkH8QFstbvN9Ad9AKF5J0qchDMO6V7m
-         lznz0jkTEDuTRXqN99F7V4lI4yxHb7l8FTNuHSeOCBJepcot2rAgUog2TXIYNRS/MBzp
-         IM3HA68FDcrGh99bIAPxQCt5j7O2cuK71da+PIDzE4ckyY4YSvXocc4kewFWf7zrn5wc
-         Or7sKtMf/7WQs3nhqRXiGzN7B/JdhgQKaHu0T2ZgkFG3s0gTnEpczc7OVbpvyfO4Oc0J
-         6Y3A==
-X-Gm-Message-State: AFqh2kr4P/KHqrYoRako6TwILybKWtjYdRg5WTFK93l1pVMBcoqdQQ+D
-        D14y+YEygYK5/3/ofQFp/deGVmIJD0V04hbU
-X-Google-Smtp-Source: AMrXdXuqmoj89+Uu74kc/T4pp6nJ4liQskksdNJ+RFHVJDvvBBXStdsQjHDN3YzMRsAeNjihiEMA7w==
-X-Received: by 2002:a17:902:848d:b0:189:f460:d24b with SMTP id c13-20020a170902848d00b00189f460d24bmr7108780plo.5.1674573801641;
-        Tue, 24 Jan 2023 07:23:21 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902aa4100b001960441f604sm1778542plr.277.2023.01.24.07.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 07:23:21 -0800 (PST)
-Message-ID: <560c844c-f128-555b-40c6-31baff27537f@kernel.dk>
-Date:   Tue, 24 Jan 2023 08:23:20 -0700
+        Tue, 24 Jan 2023 10:24:27 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E643125B1;
+        Tue, 24 Jan 2023 07:24:26 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OET9XS006166;
+        Tue, 24 Jan 2023 15:23:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zZGjMjcjm4r7qco+xF5Csqx8YX3fGvwxRVOz+yxZjAk=;
+ b=p4BBTOLbehhEpGSPhkTqTzBzbFwCazZ4hspvP7Id6zJ69hMv4QAYrI77GKunF9QLiyHf
+ 09CNfcOcRMjHqdiw1tW7K5pRHE0gBdFKSTYwUbiUz1Rgi3xy+SnPZ7K96KYq/UqRlbIm
+ R0GnD5YJscst/9gJ81kW2hz8cFW3kvXz0CzlfhL0EPWUR3VPwsn1Pivmz9c7AJAFncAr
+ woO3WDl8dQxMoUZ8MRg0tG4qVF8MpCdT3PvUDFo2ncAQc9AG5f+gnLseHhBYXIUY153z
+ fdZHWrTWStWTMkzc+eLY9OMdY7mpV/7sYkn1saP6MBZYIoAkG8RnLRL0tY1u16AJITYL CA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3na6vyqtrx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 15:23:55 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30O4ujra018029;
+        Tue, 24 Jan 2023 15:23:51 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3n87p62usm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 15:23:51 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OFNnJO20120038
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 15:23:49 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B2612004B;
+        Tue, 24 Jan 2023 15:23:49 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2B4920040;
+        Tue, 24 Jan 2023 15:23:48 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.28.222])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Tue, 24 Jan 2023 15:23:48 +0000 (GMT)
+Date:   Tue, 24 Jan 2023 16:23:46 +0100
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, willy@infradead.org, jhubbard@nvidia.com,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 8/9] mm/hugetlb: convert hugetlb_wp() to take in a folio
+Message-ID: <20230124162346.404985e8@thinkpad>
+In-Reply-To: <20230119211446.54165-9-sidhartha.kumar@oracle.com>
+References: <20230119211446.54165-1-sidhartha.kumar@oracle.com>
+        <20230119211446.54165-9-sidhartha.kumar@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] x86/fpu: don't set TIF_NEED_FPU_LOAD for PF_IO_WORKER threads
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FEepWRTrhP5FT2DgTCs3k73bRN9a3bTq
+X-Proofpoint-ORIG-GUID: FEepWRTrhP5FT2DgTCs3k73bRN9a3bTq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 clxscore=1011 lowpriorityscore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301240136
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't set it on PF_KTHREAD threads as they never return to userspace,
-and PF_IO_WORKER threads are identical in that regard. As they keep
-running in the kernel until they die, skip setting the FPU flag on them.
+On Thu, 19 Jan 2023 13:14:45 -0800
+Sidhartha Kumar <sidhartha.kumar@oracle.com> wrote:
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+[...]
+>  	page =3D pte_page(entry);
+> -	if (page !=3D pagecache_page)
+> +	if (page_folio(page) !=3D pagecache_folio)
+>  		if (!trylock_page(page)) {
+>  			need_wait_lock =3D 1;
+>  			goto out_ptl;
+>  		}
+> =20
+> -	get_page(page);
+> +	folio_get(pagecache_folio);
+> =20
 
----
+We get a kernel crash on s390 in mprotect testcase from libhugetlbfs
+testsuite, starting with next-20230120, bisected to this commit.
 
-Not urgent, more of a cosmetic thing that was found while debugging and
-issue and pondering why the FPU flag is set on these threads.
+We get here with pagecache_folio =3D=3D NULL, and crash in folio_get().
+It doesn=C2=B4t seem right to replace the get_page() with folio_get()
+here, the matching put_page() at out_put_page: also wasn't changed
+correspondingly. Also, pagecache_folio =3D=3D NULL seems to be a valid
+case here, on all architectures.
 
-diff --git a/arch/x86/include/asm/fpu/sched.h b/arch/x86/include/asm/fpu/sched.h
-index b2486b2cbc6e..c2d6cd78ed0c 100644
---- a/arch/x86/include/asm/fpu/sched.h
-+++ b/arch/x86/include/asm/fpu/sched.h
-@@ -39,7 +39,7 @@ extern void fpu_flush_thread(void);
- static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
- {
- 	if (cpu_feature_enabled(X86_FEATURE_FPU) &&
--	    !(current->flags & PF_KTHREAD)) {
-+	    !(current->flags & (PF_KTHREAD | PF_IO_WORKER))) {
- 		save_fpregs_to_fpstate(old_fpu);
- 		/*
- 		 * The save operation preserved register state, so the
-diff --git a/arch/x86/kernel/fpu/context.h b/arch/x86/kernel/fpu/context.h
-index 958accf2ccf0..9fcfa5c4dad7 100644
---- a/arch/x86/kernel/fpu/context.h
-+++ b/arch/x86/kernel/fpu/context.h
-@@ -57,7 +57,7 @@ static inline void fpregs_restore_userregs(void)
- 	struct fpu *fpu = &current->thread.fpu;
- 	int cpu = smp_processor_id();
- 
--	if (WARN_ON_ONCE(current->flags & PF_KTHREAD))
-+	if (WARN_ON_ONCE(current->flags & (PF_KTHREAD | PF_IO_WORKER)))
- 		return;
- 
- 	if (!fpregs_state_valid(fpu, cpu)) {
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 9baa89a8877d..2babc537ff36 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -426,7 +426,7 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
- 
- 	this_cpu_write(in_kernel_fpu, true);
- 
--	if (!(current->flags & PF_KTHREAD) &&
-+	if (!(current->flags & (PF_KTHREAD | PF_IO_WORKER)) &&
- 	    !test_thread_flag(TIF_NEED_FPU_LOAD)) {
- 		set_thread_flag(TIF_NEED_FPU_LOAD);
- 		save_fpregs_to_fpstate(&current->thread.fpu);
-
--- 
-Jens Axboe
-
+Reverting this folio_get() to get_page() fixes the crash. Not sure
+though if I missed something. I think you only want to replace
+pagecache_page with pagecache_folio, like in the rest of the commit,
+and not page -> pagecache_folio for this get_page().
