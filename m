@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05647678E46
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8185B678E95
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjAXCcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S231840AbjAXCwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAXCcR (ORCPT
+        with ESMTP id S231868AbjAXCve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:32:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE3B46D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 18:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OzPDZ4GQurQ3Wi5M3nuD8SPGO947lucDtaqwO/v+ugk=; b=RIRW6FzX1L2Ilb64mAF0WuK3ZC
-        IBKJEySwbhjJJTDy7YouhVBaxSKPoQa37sOqk72zNmcLnk3SLsnWsOYmk+k230wp3vUpUNUt8tFwM
-        IVaNu+mhaCne7fWB7xV5LybzEeLVpWLfqa9G5BABDRyV/JhG1zhgqT98+wrRQJA+29bf52YO7s0Io
-        p0cS3Lf8PwxSQj0V9z7cOM2SF5sbB5gJ3M38hD5vQZwTIA2NHq+30Ocr7GslJdzE2tP/iaKQN8Ize
-        9UVfUzqtmiZEGM5IAqHrO8HCFrjev+UIC0G+y9rShQ5AMJyxpHd0rUoolIWSws82CeBfh2WiJYIu5
-        cDWOa1yQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pK96Z-004hsI-Bs; Tue, 24 Jan 2023 02:32:11 +0000
-Date:   Tue, 24 Jan 2023 02:32:11 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, david@redhat.com, osalvador@suse.de
-Subject: Re: [PATCH 1/2] mm/memory_hotplug: remove head page reference in
- do_migrate_range
-Message-ID: <Y89DK23hYiLtgGNk@casper.infradead.org>
-References: <20230123202347.317065-1-sidhartha.kumar@oracle.com>
- <Y87wJ6ERhdujjo6P@casper.infradead.org>
- <5c40ed66-1e51-78fa-193c-0eb0db814b01@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c40ed66-1e51-78fa-193c-0eb0db814b01@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 Jan 2023 21:51:34 -0500
+X-Greylist: delayed 1051 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 18:51:32 PST
+Received: from ms11p00im-qufo17282001.me.com (ms11p00im-qufo17282001.me.com [17.58.38.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A76812875
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 18:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1674527639;
+        bh=ZHNbCgWVVT7jpGNkzvsiuGGNtXGpfKi/ODrPRk3Scp4=;
+        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
+        b=coIbI4uymHXeJssODSrKoxz6FRCUt02w3YoFk/9MPmKjOT/q17DjTXFQtM5TJmbGw
+         cY9v/z5W/epOACJRK3DlD1F4rGYrR9MDoKAT0noB/UdUMO047Rn4/vv3SYQ1QoDhAD
+         x3+PzupR2DQcyRYOb3Mpl3uaQ30HOZjQemcs7jmQuqFcLzKelhYQHPLvQsX3S4fxDu
+         ApKPpST0GDhlkVzcmL2edjLuXaUBZ/9q9GBy1tMCPUlo0Tw7QuOQaALC1EHxO9BHI8
+         Q+2yoYVmFFTwI5nG+b4e8WR6Zr87aXVUKeaZK2LP38J5CBwjGG3VIE8E+jLJYDgEw2
+         Y57G7sS7J8l3g==
+Received: from smtpclient.apple (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
+        by ms11p00im-qufo17282001.me.com (Postfix) with ESMTPSA id 5A7091E092A;
+        Tue, 24 Jan 2023 02:33:58 +0000 (UTC)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH v2 00/10] Performance fixes for 9p filesystem
+From:   evanhensbergen@icloud.com
+In-Reply-To: <4478705.9R3AOq7agI@silver>
+Date:   Mon, 23 Jan 2023 20:33:46 -0600
+Cc:     Zhengchao Shao via V9fs-developer 
+        <v9fs-developer@lists.sourceforge.net>, asmadeus@codewreck.org,
+        Ron Minnich <rminnich@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CEE93F4D-7C11-4FE3-BB70-A9C865BE5BC2@icloud.com>
+References: <20221217183142.1425132-1-evanhensbergen@icloud.com>
+ <20221218232217.1713283-1-evanhensbergen@icloud.com>
+ <4478705.9R3AOq7agI@silver>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Proofpoint-ORIG-GUID: XO9m9q2upogfFOPd73bmfT3B9_AEbpYD
+X-Proofpoint-GUID: XO9m9q2upogfFOPd73bmfT3B9_AEbpYD
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2301240019
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:08:49PM -0800, Sidhartha Kumar wrote:
-> On 1/23/23 12:37 PM, Matthew Wilcox wrote:
-> > On Mon, Jan 23, 2023 at 12:23:46PM -0800, Sidhartha Kumar wrote:
-> > > @@ -1637,14 +1637,13 @@ do_migrate_range(unsigned long start_pfn, unsigned long end_pfn)
-> > >   			continue;
-> > >   		page = pfn_to_page(pfn);
-> > >   		folio = page_folio(page);
-> > > -		head = &folio->page;
-> > > -		if (PageHuge(page)) {
-> > > -			pfn = page_to_pfn(head) + compound_nr(head) - 1;
-> > > +		if (folio_test_hugetlb(folio)) {
-> > > +			pfn = folio_pfn(folio) + folio_nr_pages(folio) - 1;
-> > >   			isolate_hugetlb(folio, &source);
-> > >   			continue;
-> > > -		} else if (PageTransHuge(page))
-> > > -			pfn = page_to_pfn(head) + thp_nr_pages(page) - 1;
-> > > +		} else if (folio_test_transhuge(folio))
-> > > +			pfn = folio_pfn(folio) + thp_nr_pages(page) - 1;
-> > 
-> > I'm pretty sure those two lines should be...
-> > 
-> > 		} else if (folio_test_large(folio) > 			pfn = folio_pfn(folio) + folio_nr_pages(folio) - 1;
-> > 
-> > But, erm ... we're doing this before we have a refcount on the page,
-> > right?  So this is unsafe because the page might change which folio
-> > it is in.  And the folio we found earlier might become a tail page
-> > of a different folio.  (As the comment below explains, HWPoison pages
-> > won't, so it's not unsafe for them).
-> > 
-> 
-> Thanks for the explanation of why this is unsafe. Would it be worth to put
-> this code block inside the
-> 
-> 		if (!get_page_unless_zero(page))
-> 			continue;
-> 
-> 		put_page(page);
-> 
-> block found lower? My motivation for this series is the HPageMigratable call
-> in patch 2 is the last user of the huge page flag test macros so a
-> conversion would allow for the removal of the macro. I thought I could also
-> remove the head page references found in this function, but if that would
-> cause too much churn in a complicated sub-system it can be dropped.
+Well timed prompt, sorry =E2=80=94 I had been out of pocket while =
+traveling.  The WIPs in the development branch on GitHub are me working =
+my way through the dir-cache patches (which was intended as the next set =
+of patches after this one) =E2=80=94 but those are complimentary to this =
+set, so I=E2=80=99m about send out a [V3] without those so we can get =
+this into linux-next with enough time for some more exhaustive testing =
+before the next merge window.
 
-I think we just have to be very careful when working without a page ref.
+I=E2=80=99m fine with funneling these through Dominique since he=E2=80=99s=
+ currently the active maintainer, but I=E2=80=99ve also re-established =
+kernel.org <http://kernel.org/> credentials so I can field the =
+pull-request if desired.
 
-Now, specifically to the matter of converting HPageMigratable(), I think
-that's fine.  Your folio_test_hugetlb_##flname macro does not have a
-VM_BUG_ON_PGFLAGS(PageTail(page), page) in it, unlike folio_flags().
-So it looks like even if your folio becomes a tail page in the middle
-of scan_movable_pages(), you won't hit a BUG().
+          -Eric
 
-Now, should we go further?  Possibly.  But I'm more concerned that we
-haven't really figured out which functions should be checking this.
-Maybe we should drop the BUG entirely and rely more on the type system
-(and people not casting) to prevent errors.
 
-We could go a lot further with the type system and define a new type for
-"might be a folio but we don't have a refcount on it".  But we don't
-do a lot of work with unreferenced folios, so I'm not inclined to go to
-all that effort.
+> On Jan 23, 2023, at 10:31 AM, Christian Schoenebeck =
+<linux_oss@crudebyte.com> wrote:
+>=20
+> On Monday, December 19, 2022 12:22:07 AM CET Eric Van Hensbergen =
+wrote:
+>> This is the second version of a patch series which adds a number
+>> of features to improve read/write performance in the 9p filesystem.
+>> Mostly it focuses on fixing caching to help utilize the recently
+>> increased MSIZE limits and also fixes some problematic behavior
+>> within the writeback code.
+>>=20
+>> Altogether, these show roughly 10x speed increases on simple
+>> file transfers.  Future patch sets will improve cache consistency
+>> and directory caching.
+>>=20
+>> These patches are also available on github:
+>> https://github.com/v9fs/linux/tree/ericvh/9p-next
+>>=20
+>> Tested against qemu, cpu, and diod with fsx, dbench, and some
+>> simple benchmarks.
+>>=20
+>> Signed-off-by: Eric Van Hensbergen <evanhensbergen@icloud.com>
+>=20
+> Hi Eric,
+>=20
+> what's your plan on this series? I just had a look at your github repo =
+and saw
+> there is a lot of stuff marked as WIP.
+>=20
+> Best regards,
+> Christian Schoenebeck
+>=20
+>=20
 
-Perhaps we want a folio_maybe_X() series of functions that don't warn
-if the folio has morphed into not-a-folio.  I don't know.
