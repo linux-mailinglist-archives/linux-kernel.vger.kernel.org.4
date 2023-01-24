@@ -2,272 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E0267A37C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B82D67A3E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjAXT7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S233914AbjAXU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjAXT70 (ORCPT
+        with ESMTP id S233939AbjAXU04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:59:26 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24316199;
-        Tue, 24 Jan 2023 11:59:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qIm8wL36iwpoekk73rrv9Q8YomfdW/WTpB+Pvm9Jxvc=; b=F014UayJlOj/pwPT/DRgjdfDgq
-        TwaOLkTiFaKdBzt4ig39IBADYQ9AgQ9oeT+6Tazls5bs/h4fT95HT94bmyLTD1jzf8hUR3Z3hbzXB
-        toE8TLnsV1TG2S3CuiSb+wir0wEm2bb/b+w/J6m+Oz3/1eY68/PJ9aCih/KEipiM55FRUdAjTnaSH
-        otX5Zl1SGKlt1PVyRuNbjIN5X+YvLTX+Tk4F5e5Kco69ZXEGJENMAvKyCRSBnDI5aV1YutBjU9mMg
-        srvt3F47BMhzjX6ii16t+boiVlkZ5EUIwo9JniFNxEFhTfBFDVFTlCEgvvAjj+SeYqZapL6xNPDyb
-        vkvZ6m9g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKPRW-0057vV-4v; Tue, 24 Jan 2023 19:58:54 +0000
-Date:   Tue, 24 Jan 2023 11:58:54 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        Adam Manzanares <a.manzanares@samsung.com>, mwilck@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y9A4fiobL6IHp//P@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
+        Tue, 24 Jan 2023 15:26:56 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BCE4DE0F;
+        Tue, 24 Jan 2023 12:26:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kv9nznBbfYaWMC5PdWGgIf1L1XcYuZUAUgr50l/S3J/mcSCTV1tW6xswxz0x8ZsqGjISaRBgZZFq2AKDS1W1Qj16s4Q1K2qeX7NObBzLaBKpZNVWjOpH2fhFvEqGP9XqVTGBxj9CiSHfrV8kzYCc37Jrwg1+pFZX8UOeBnFRRDc8xwC05E7BgK03QsS9AKMcKd2DcEN7Oc2hMn6HVx3JFs3V4K/6zXnRUzmmgkbN6y+qwaw/rsfez1HwyDZ+20QlzQ7CtRetmqRf1ohZHHSEUGERVdzfuU6TcMypZtTt1dFAfxkWdq4ZdRMJXpfLfhLBqwD1CJ3KMggYtNBW6ty54g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VGayIN/7yYOxf1NuH5oLbEOmo3VhAGKxrP+rFw/dtJM=;
+ b=ij0X1U2/SPnx7DjO6EEhgaggxHwVg2Xwifb5mhI8XxxEwQD8+BYSB11XPRrLXhgCmO4mPWovN/uoAIaRJ0nVAPPq5HKSwi0iSGyY/6gOyGIJWfyG186lF/RXqPa00LgCnr88LokU/w1CvYd7Zw3/NuWnWtXRUZKzj3pulkQtJmvnQ8mUGtyzMJ4fxle9g9326uS25f242+VmeTXUHbMeHFdn5fUmbULWQHrvq/q5OaFnVTYWBD/MOJn8pwwIjTzWXyO7hy5F3lIqnMltSEaM7zOPjTVB3+W7UyjCnUsXYKewfcKy4ePJEvzwiIDs6NLPrWIlhbSEmMUAAM1/nHt61Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VGayIN/7yYOxf1NuH5oLbEOmo3VhAGKxrP+rFw/dtJM=;
+ b=a+WN0ekslhib51bmvsPhu6p+a/xwBE+kEzO/HMGRn5uSFUzknIjFc6HRvEQas7GJ1QtlQfPZvLaDMYCV5NVYFFRitWChjApKm45HCkhu9JukMxJNndxtDQGOiX6ggW55YghV6sjm/NKWgYUi0chlUKERJmDaqxNigMbYZ+LBZx2yTtdIK3DDNOrvvSoeKc1A3+xhEINeXm/0A0Bq/vTqijq5wxV9puhijYm9UBiNvmGPCOw4MC2orCpxd+qu2VF7w7tHcLKVDl0RuCY13LWgr2nmVNIrj4MrzrLHXesVgWz7GAngXtomlOYVmTTZaI0oaHrG26IrUd5tdgNd7WeGsA==
+Received: from BN9P221CA0022.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::14)
+ by DM4PR12MB6661.namprd12.prod.outlook.com (2603:10b6:8:bb::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 20:26:49 +0000
+Received: from BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10a:cafe::a0) by BN9P221CA0022.outlook.office365.com
+ (2603:10b6:408:10a::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
+ Transport; Tue, 24 Jan 2023 20:26:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT110.mail.protection.outlook.com (10.13.176.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.17 via Frontend Transport; Tue, 24 Jan 2023 20:26:49 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 12:00:18 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 12:00:17 -0800
+Message-ID: <689058d5-618b-d487-c168-5e8d3733321d@nvidia.com>
+Date:   Tue, 24 Jan 2023 12:00:16 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8ll+eP+fb0TzFUh@alley>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 7/8] block: Convert bio_iov_iter_get_pages to use
+ iov_iter_extract_pages
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>
+References: <20230124170108.1070389-1-dhowells@redhat.com>
+ <20230124170108.1070389-8-dhowells@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230124170108.1070389-8-dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT110:EE_|DM4PR12MB6661:EE_
+X-MS-Office365-Filtering-Correlation-Id: 701bd5e8-a0d4-46ae-59e4-08dafe495248
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M6ci0Rn8otFT/EViW57CY3yyNLyqtd71+A/luYJQfAUFlLDAfAO/KS/a+HwN+RLUgvS8bpsVLoicFHHpct3RHpgAPvSbhFdoIItQGeoHMn19xrQamppeKJS6miOkHvkzVDlgiEOIpViLUVDmCi2+49Sne2IBwdx4smDfeodi7QlNMI9/PhiCyGdGn1NYmqDyJQcF6XoghNdj5W/gLfEo51rEXRrabcv/TgA6QhgB/aS+c9Z6S8yRAA5HTU+tys34qnC94K3/MWX9NdKm187+tqEVVIikRrCP89ZPFXscfR7uNIbozY4JUAPS8p/2g0teI2mrgdbCV+NFPJMRHr96RoMLnR35+TlbKer3gli7zoeq6I9sy7uHRc7tYaKtdYHPK80eS9X4kcXCLeGGKV6241lJ5oDCe/vuVxr/rIYHAbJzqdT4xd3I/Gq2M+dWhhp3BWH/elpQD9n4cdAKLnl+DKbQdzP9eXECuzWA3VoF2hiBIKDSdPXeseJBhai5F7r5nh8TPl+ClcSdmnlp0BvG6YuSv6cegwZg6dF9bHH9mHc6xJKsHo/wT9s0QtEUr3L76X/0CNfYr6fVHNj7Jq2i1+gF+mrNSTQhJWSfmsCHI7Yq6QW+CsE6ACaz3n7BZcaMUcwQB9nOheFhWq78VIfJ2OHmpDj7JmGBOvvxUKSx6kppiLHxgxXyesUb3G01iMvoaJuweqY9NrS0Opd1X831oiVGIhR2gGpPUGm0HleyttU=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(136003)(396003)(346002)(451199018)(36840700001)(46966006)(40470700004)(2616005)(110136005)(356005)(16576012)(316002)(40480700001)(54906003)(2906002)(336012)(47076005)(83380400001)(36860700001)(36756003)(41300700001)(7416002)(40460700003)(5660300002)(7636003)(70586007)(70206006)(82740400003)(8936002)(426003)(8676002)(4326008)(26005)(82310400005)(478600001)(16526019)(31686004)(86362001)(186003)(53546011)(31696002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 20:26:49.0543
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 701bd5e8-a0d4-46ae-59e4-08dafe495248
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6661
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
-> I wonder if it races with module -r that removes the module before
-> it tries to load it multiple times in parallel.
+On 1/24/23 09:01, David Howells wrote:
+> This will pin pages or leave them unaltered rather than getting a ref on
+> them as appropriate to the iterator.
 > 
-> Does the test pass when you add sleep after the module -r, like this:
+> The pages need to be pinned for DIO rather than having refs taken on them to
+> prevent VM copy-on-write from malfunctioning during a concurrent fork() (the
+> result of the I/O could otherwise end up being affected by/visible to the
+> child process).
 > 
-> diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-> index 7189715d7960..8a020f90a3f6 100755
-> --- a/tools/testing/selftests/kmod/kmod.sh
-> +++ b/tools/testing/selftests/kmod/kmod.sh
-> @@ -322,6 +322,7 @@ kmod_defaults_fs()
->  {
->  	config_reset
->  	modprobe -r $DEFAULT_KMOD_FS
-> +	sleep 1
->  	config_set_fs $DEFAULT_KMOD_FS
->  	config_set_test_case_fs
->  }
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Jan Kara <jack@suse.cz>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Logan Gunthorpe <logang@deltatee.com>
+> cc: linux-block@vger.kernel.org
+> ---
+> 
+> Notes:
+>      ver #8)
+>       - Split the patch up a bit [hch].
+>       - We should only be using pinned/non-pinned pages and not ref'd pages,
+>         so adjust the comments appropriately.
+>      
+>      ver #7)
+>       - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
+>      
+>      ver #5)
+>       - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
+>         BIO_* flags and got rid of bi_cleanup_mode.
+>       - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+> 
+>   block/bio.c | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/block/bio.c b/block/bio.c
+> index fc45aaa97696..936301519e6c 100644
+> --- a/block/bio.c
+> +++ b/block/bio.c
+> @@ -1212,7 +1212,7 @@ static int bio_iov_add_page(struct bio *bio, struct page *page,
+>   	}
+>   
+>   	if (same_page)
+> -		put_page(page);
+> +		bio_release_page(bio, page);
+>   	return 0;
+>   }
+>   
+> @@ -1226,7 +1226,7 @@ static int bio_iov_add_zone_append_page(struct bio *bio, struct page *page,
+>   			queue_max_zone_append_sectors(q), &same_page) != len)
+>   		return -EINVAL;
+>   	if (same_page)
+> -		put_page(page);
+> +		bio_release_page(bio, page);
+>   	return 0;
+>   }
+>   
+> @@ -1237,10 +1237,10 @@ static int bio_iov_add_zone_append_page(struct bio *bio, struct page *page,
+>    * @bio: bio to add pages to
+>    * @iter: iov iterator describing the region to be mapped
+>    *
+> - * Pins pages from *iter and appends them to @bio's bvec array. The
+> - * pages will have to be released using put_page() when done.
+> - * For multi-segment *iter, this function only adds pages from the
+> - * next non-empty segment of the iov iterator.
+> + * Extracts pages from *iter and appends them to @bio's bvec array.  The pages
+> + * will have to be cleaned up in the way indicated by the BIO_PAGE_PINNED flag.
+> + * For a multi-segment *iter, this function only adds pages from the next
+> + * non-empty segment of the iov iterator.
+>    */
+>   static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>   {
+> @@ -1272,9 +1272,9 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>   	 * result to ensure the bio's total size is correct. The remainder of
+>   	 * the iov data will be picked up in the next bio iteration.
+>   	 */
+> -	size = iov_iter_get_pages(iter, pages,
+> -				  UINT_MAX - bio->bi_iter.bi_size,
+> -				  nr_pages, &offset, extraction_flags);
+> +	size = iov_iter_extract_pages(iter, &pages,
+> +				      UINT_MAX - bio->bi_iter.bi_size,
+> +				      nr_pages, extraction_flags, &offset);
 
-FWIW I was curious if the kmod test 0009.sh now could pass with this
-too, but alas it can sometimes fail too.
+A quite minor point: it seems like the last two args got reversed more
+or less by accident. It's not worth re-spinning or anything, but it
+seems better to leave the order the same between these two routines.
 
-[  138.590663] misc test_kmod0: reset
-[  139.729273] misc test_kmod0: Test case: TEST_KMOD_FS_TYPE (2)
-[  139.732874] misc test_kmod0: Test filesystem to load: xfs
-[  139.736230] misc test_kmod0: Number of threads to run: 62
-[  139.739575] misc test_kmod0: Thread IDs will range from 0 - 61
-[  140.402079] __request_module: 2 callbacks suppressed
-[  140.402082] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.418075] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.430124] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.450119] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.478037] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.498080] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.518066] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.530207] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.549949] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.562182] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.582342] misc test_kmod0: No errors were found while initializing threads
-[  145.385414] SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
-[  145.461962] request_module: modprobe fs-xfs cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  145.652541] misc test_kmod0: Done: 62 threads have all run now
-[  145.655020] misc test_kmod0: Last thread to run: 39
-[  145.655831] misc test_kmod0: Results:
-[  145.656450] misc test_kmod0: Sync thread 0 fs: xfs
-[  145.657164] misc test_kmod0: Sync thread 1 fs: xfs
-[  145.657875] misc test_kmod0: Sync thread 2 fs: xfs
-[  145.658615] misc test_kmod0: Sync thread 3 fs: xfs
-[  145.659324] misc test_kmod0: Sync thread 4 fs: xfs
-[  145.660026] misc test_kmod0: Sync thread 5 fs: xfs
-[  145.660948] misc test_kmod0: Sync thread 6 fs: xfs
-[  145.661870] misc test_kmod0: Sync thread 7 fs: xfs
-[  145.662625] misc test_kmod0: Sync thread 8 fs: xfs
-[  145.663363] misc test_kmod0: Sync thread 9 fs: xfs
-[  145.664073] misc test_kmod0: Sync thread 10 fs: xfs
-[  145.664791] misc test_kmod0: Sync thread 11 fs: xfs
-[  145.665509] misc test_kmod0: Sync thread 12 fs: xfs
-[  145.666252] misc test_kmod0: Sync thread 13 fs: xfs
-[  145.666971] misc test_kmod0: Sync thread 14 fs: xfs
-[  145.667693] misc test_kmod0: Sync thread 15 fs: xfs
-[  145.668405] misc test_kmod0: Sync thread 16 fs: xfs
-[  145.669113] misc test_kmod0: Sync thread 17 fs: xfs
-[  145.669823] misc test_kmod0: Sync thread 18 fs: xfs
-[  145.670634] misc test_kmod0: Sync thread 19 fs: xfs
-[  145.671390] misc test_kmod0: Sync thread 20 fs: xfs
-[  145.672126] misc test_kmod0: Sync thread 21 fs: xfs
-[  145.672842] misc test_kmod0: Sync thread 22 fs: xfs
-[  145.673561] misc test_kmod0: Sync thread 23 fs: xfs
-[  145.674327] misc test_kmod0: Sync thread 24 fs: xfs
-[  145.675051] misc test_kmod0: Sync thread 25 fs: xfs
-[  145.675772] misc test_kmod0: Sync thread 26 fs: xfs
-[  145.676491] misc test_kmod0: Sync thread 27 fs: xfs
-[  145.677207] misc test_kmod0: Sync thread 28 fs: xfs
-[  145.677920] misc test_kmod0: Sync thread 29 fs: xfs
-[  145.678658] misc test_kmod0: Sync thread 30 fs: xfs
-[  145.679369] misc test_kmod0: Sync thread 31 fs: xfs
-[  145.680075] misc test_kmod0: Sync thread 32 fs: xfs
-[  145.680780] misc test_kmod0: Sync thread 33 fs: xfs
-[  145.681481] misc test_kmod0: Sync thread 34 fs: xfs
-[  145.682211] misc test_kmod0: Sync thread 35 fs: xfs
-[  145.682925] misc test_kmod0: Sync thread 36 fs: xfs
-[  145.683633] misc test_kmod0: Sync thread 37 fs: xfs
-[  145.684363] misc test_kmod0: Sync thread 38 fs: xfs
-[  145.685196] misc test_kmod0: Sync thread 39 fs: xfs
-[  145.685896] misc test_kmod0: Sync thread 40 fs: xfs
-[  145.687009] misc test_kmod0: Sync thread 41 fs: xfs
-[  145.687800] misc test_kmod0: Sync thread 42 fs: xfs
-[  145.688540] misc test_kmod0: Sync thread 43 fs: xfs
-[  145.689227] misc test_kmod0: Sync thread 44 fs: xfs
-[  145.689901] misc test_kmod0: Sync thread 45 fs: xfs
-[  145.690924] misc test_kmod0: Sync thread 46 fs: xfs
-[  145.691721] misc test_kmod0: Sync thread 47 fs: xfs
-[  145.692533] misc test_kmod0: Sync thread 48 fs: xfs
-[  145.693329] misc test_kmod0: Sync thread 49 fs: xfs
-[  145.694140] misc test_kmod0: Sync thread 50 fs: xfs
-[  145.694910] misc test_kmod0: Sync thread 51 fs: xfs
-[  145.695695] misc test_kmod0: Sync thread 52 fs: NULL
-[  145.696461] misc test_kmod0: Sync thread 53 fs: xfs
-[  145.697229] misc test_kmod0: Sync thread 54 fs: xfs
-[  145.698027] misc test_kmod0: Sync thread 55 fs: xfs
-[  145.698898] misc test_kmod0: Sync thread 56 fs: xfs
-[  145.699953] misc test_kmod0: Sync thread 57 fs: xfs
-[  145.700667] misc test_kmod0: Sync thread 58 fs: xfs
-[  145.701362] misc test_kmod0: Sync thread 59 fs: xfs
-[  145.702078] misc test_kmod0: Sync thread 60 fs: xfs
-[  145.702765] misc test_kmod0: Sync thread 61 fs: xfs
-[  145.703456] misc test_kmod0: General test result: -22
+Either way, though,
 
-The key here:
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-[  145.461962] request_module: modprobe fs-xfs cannot be processed, kmod busy with 50 threads for more than 5 seconds now
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-That is not printed when the test iterates and does not fail. That
-comes from kernel/kmod.c:
+>   	if (unlikely(size <= 0))
+>   		return size ? size : -EFAULT;
+>   
+> @@ -1307,7 +1307,7 @@ static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>   	iov_iter_revert(iter, left);
+>   out:
+>   	while (i < nr_pages)
+> -		put_page(pages[i++]);
+> +		bio_release_page(bio, pages[i++]);
+>   
+>   	return ret;
+>   }
+> @@ -1342,7 +1342,7 @@ int bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter)
+>   		return 0;
+>   	}
+>   
+> -	bio_set_flag(bio, BIO_PAGE_REFFED);
+> +	bio_set_cleanup_mode(bio, iter);
+>   	do {
+>   		ret = __bio_iov_iter_get_pages(bio, iter);
+>   	} while (!ret && iov_iter_count(iter) && !bio_full(bio, 0));
+> 
 
-	if (!ret) {                                                     
-		pr_warn_ratelimited("request_module: %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-		return -ETIME;   
-	} ...
-
-ETIME however is 62 as per include/uapi/asm-generic/errno.h. The loss
-of the value comes from the fact get_fs_type() ignores error types and
-so lib/test_kmod.c just sets err_ret = -EINVAL in tally_work_test() as
-it cannot get more heuristics out of the kernel as to why get_fs_type()
-failed.
-
-This should mean that the failure observed with test 0009 on kmod is
-very likely not due to module compression but just a timing issue, and
-that compression just increases the probability of having 50 threads
-busy concurrently on modprobe in 5 seconds with that test. I've
-confirmed this by running a test with a modified kmod as follows
-*after* booting into a kernel with no compression:
-
-diff --git a/tools/modprobe.c b/tools/modprobe.c
-index 3b7897c..0b7574d 100644
---- a/tools/modprobe.c
-+++ b/tools/modprobe.c
-@@ -1012,6 +1012,8 @@ static int do_modprobe(int argc, char **orig_argv)
- 
- 	log_setup_kmod_log(ctx, verbose);
- 
-+	usleep(5000000);
-+
- 	kmod_load_resources(ctx);
- 
- 	if (do_show_config)
-
-Modules don't tend to be large in size but module compression is an
-extrapolation of what could happen without compression if we had huge
-modules often and userspace doing something wild. If you end up with 50
-concurrent threads running modprobe for more than 5 seconds the kernel
-pr_warn_ratelimited() would print though and it surely is a sign userspace
-is doing something stupid. The sad part though is that a filesystem
-mount *can* be triggered in these cases and so can fail to boot.
-
-The above test were run with next-20230119 without the patch on this
-thread, and so as noted before this doesn't create a regression, this is
-a known issue now. And so -- further confirmation I'll move forward with
-this patch for the next rc.
-
-Note kernel/kmod.c in the kernel states:
-
-/*                                                                              
- * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads            
- * running at the same time without returning. When this happens we             
- * believe you've somehow ended up with a recursive module dependency           
- * creating a loop.                                                             
- *                                                                              
- * We have no option but to fail.                                               
- *                                                                              
- * Userspace should proactively try to detect and prevent these.                
- */                                                                             
-#define MAX_KMOD_ALL_BUSY_TIMEOUT 5 
-
-I can update the docs to reflect that this can be triggered by
-the kernel trying to auto-loading DoS or each CPU count triggering
-tons of unecessary duplicate auto-loading module requests. This is a self
-kernel inflicted situation.
-
-As for the DoS Vegard Nossum did report that user namespaces *could*
-trigger / abuse kernel module autoloading and that they shouldn't be allowed
-to do that as they can't load modules directly anyway (finit_module() won't work
-for them). I'm waiting for a proper patch follow up from him, but *that* in
-theory could then be another way to trigger this issue other than kmod test
-0009, abuse user namespaces so to trigger a module failure by going over board on
-auto-module loading. Boot likely can't be compromised unless creation of user
-namespaces is allowed to be exploited early on boot. But post boot
-kernel module auto-loading could be DoS'd with user namespaces.
-
-As for the other case -- each additional CPU causing more module
-auto-loading than before -- this is a real issue to monitor for and likely
-can cause odd boot failures. This thread already dealt with
-cpu-frequency modules as an example of abuse in the kernel for this.
-Folks are working to fix this though but older kernels will have these
-issues.
-
-Since the kernel is the one that *is* dealing with throttling of this
-auto-load situation, fixing these cases in-kernel is the right solution.
-I don't think userspace can do much here as the limit hit is inherent to
-auto-loading.
-
-Perhaps the we should upgrade the pr_warn_ratelimited() to WARN_ONCE()?
-
-[0] https://lore.kernel.org/all/Y8HkC1re3Fo46Ne3@bombadil.infradead.org/T/#u
-
-  Luis
