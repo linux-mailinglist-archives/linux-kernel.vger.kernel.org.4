@@ -2,64 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6041667A204
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D17D67A20A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbjAXTAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        id S234348AbjAXTBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjAXTAq (ORCPT
+        with ESMTP id S233239AbjAXTB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:00:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F024B4AD;
-        Tue, 24 Jan 2023 11:00:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=fTKrUGmo2xI76Ulk1fO6voz5sz
-        eEGFkip66Lx9z7P3mwJFubsvITYNyFty+6QLTASmuE7wu0dfpnoajUG8LNVxkasVpsDq/BvmvZNgJ
-        fQyDyRgDBDbF7ix2r9OsWOemSiRqfQ1T+eDYz7EDhzJno83ADOb7PAR20+UE8OX1MMtfOXshp4CY7
-        3FwoB/DPCX1zp0AdQM2OrVlhwox0rS9x+KeFzT+/xAcw78PaJG1j7nXw3ffaYv0CKjuMbrpsVlVLd
-        VUHxPOaOp2Jn8poKyGvdeKMh3/YOenKl6xtTuGtHPEMc28gvz5rK2wrt8bZkUD8leVVKTtD1+ZBHd
-        WrhREpHg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKOX8-004zxq-Vl; Tue, 24 Jan 2023 19:00:38 +0000
-Date:   Tue, 24 Jan 2023 11:00:38 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
-Subject: Re: [PATCH v9 2/8] iov_iter: Add a function to extract a page list
- from an iterator
-Message-ID: <Y9Aq1skiAoNRMnt6@infradead.org>
-References: <20230124170108.1070389-1-dhowells@redhat.com>
- <20230124170108.1070389-3-dhowells@redhat.com>
+        Tue, 24 Jan 2023 14:01:27 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A01B4DBCB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:01:25 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id k18so15667911pll.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SEJDfnpuHczelrJ6vp0fb1JDaeIwWS2iq2BACn7e/IE=;
+        b=ZPjYuk0ya4aeNvJO7qCFVWhUdg0oqrtCfCmpbpBLA+ntney22BIz/3+x+FcjsEArwy
+         EhC1rTUOzPpnWRcgDlgTPkpWxjQVhxbNJKGVBjVKQb4u+qsL8owwjnObWFkBj3oGR3sl
+         BW7yKEPe0fUVC9ATGwooiBc7H5EhIV8q26nao=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SEJDfnpuHczelrJ6vp0fb1JDaeIwWS2iq2BACn7e/IE=;
+        b=Ujd+jSFmdHOteevjuLLVv3BfRI89foxgAUpZz9PSdY5BWWE0ciNauv0JIrMjJ8YlFd
+         NJHwKDi/l6E1zvy5K1WlAscDV7a4vqBnt4jdu34IMwaE+/4X4ma4U4PJKqpsrq1uOr/e
+         bhCcNJv2LmOu/QySfcYe2N8c8R0eZkqZXGV6ttVTwLnZDDAO0pA0U61+ex6HSiKjXi3n
+         KJay62KSVpfJ3O5f7rsyqcaX+bwz4dIr+1JBGOjGBFrUFB3gXSNZmvpC2NUXmrV7yhqA
+         lGz/XwohXnEujatg9LgeeCq3jC5zKEgMxp8MvEIaOvUIKnGkONzST68ebxRRu+PsXzNi
+         /TKA==
+X-Gm-Message-State: AO0yUKUARC13Od4nEDK/chew8TEU9rzb2tjC29Rt9pY4aY5f+PiRtChB
+        Y570K1MJOZQuF6Nn7L4mj11qDw==
+X-Google-Smtp-Source: AK7set9PfKKjjgxVS13+YwcKa14yZ/3qzh0IOTUKCI7B6Y/ZCJe76Mnqs2L7VttHh0r/YqkC2bCS7Q==
+X-Received: by 2002:a17:902:e747:b0:196:1d89:7002 with SMTP id p7-20020a170902e74700b001961d897002mr1941570plf.31.1674586884928;
+        Tue, 24 Jan 2023 11:01:24 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:7b28:de8d:ee0:2cd6])
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001948720f6bdsm2010415plt.98.2023.01.24.11.01.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 11:01:24 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Youghandhar Chintala <quic_youghand@quicinc.com>,
+        junyuu@chromium.org, Kalle Valo <kvalo@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 1/2] wifi: ath11k: Use platform_get_irq() to get the interrupt
+Date:   Tue, 24 Jan 2023 11:01:00 -0800
+Message-Id: <20230124110057.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124170108.1070389-3-dhowells@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+For the same reasons talked about in commit 9503a1fc123d ("ath9k: Use
+platform_get_irq() to get the interrupt"), we should be using
+platform_get_irq() in ath11k. Let's make the switch.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Without this change, WiFi wasn't coming up on my Qualcomm sc7280-based
+hardware. Specifically, "platform_get_resource(pdev, IORESOURCE_IRQ,
+i)" was failing even for i=0. Digging into the platform device there
+truly were no IRQs present in the list of resources when the call was
+made.
+
+I didn't dig into what changed between 5.15 (where
+platform_get_resource() seems to work) and mainline Linux (where it
+doesn't). Given the zeal robot report for ath9k I assume it's a known
+issue. I'll mark this as "fixing" the patch that introduced the
+platform_get_resource() call since it should have always been fine to
+just call platform_get_irq() and that'll make sure it goes back as far
+as it needs to go.
+
+Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
+
+Fixes: 00402f49d26f ("ath11k: Add support for WCN6750 device")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/net/wireless/ath/ath11k/ahb.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath11k/ahb.c b/drivers/net/wireless/ath/ath11k/ahb.c
+index d34a4d6325b2..f70a119bb5c8 100644
+--- a/drivers/net/wireless/ath/ath11k/ahb.c
++++ b/drivers/net/wireless/ath/ath11k/ahb.c
+@@ -859,11 +859,11 @@ static int ath11k_ahb_setup_msi_resources(struct ath11k_base *ab)
+ 	ab->pci.msi.ep_base_data = int_prop + 32;
+ 
+ 	for (i = 0; i < ab->pci.msi.config->total_vectors; i++) {
+-		res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+-		if (!res)
+-			return -ENODEV;
++		ret = platform_get_irq(pdev, i);
++		if (ret < 0)
++			return ret;
+ 
+-		ab->pci.msi.irqs[i] = res->start;
++		ab->pci.msi.irqs[i] = ret;
+ 	}
+ 
+ 	set_bit(ATH11K_FLAG_MULTI_MSI_VECTORS, &ab->dev_flags);
+-- 
+2.39.1.405.gd4c25cc71f-goog
+
