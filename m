@@ -2,132 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B3967A6B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E6467A6C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbjAXXKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 18:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S229933AbjAXXQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 18:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjAXXKB (ORCPT
+        with ESMTP id S234126AbjAXXQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:10:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6835D1C318;
-        Tue, 24 Jan 2023 15:10:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E555B816A2;
-        Tue, 24 Jan 2023 23:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC5FC433D2;
-        Tue, 24 Jan 2023 23:09:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674601797;
-        bh=wGkrTvwbUrvsMXFde+BwpUrtWLtdKcEhQ4ZYux9Jo2Y=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=pcdTUIPNx9Zu3k5T2uBy9ivkf/HvJ+OXoumhCiDjxtptmUFkCNHKn1X6bX3cPeDR5
-         4+5zqBl2Z25nNzxSXZ3AWBQ/ApnSOT3W4OOppBX+CVlIaETHASWqyuEUgFWADAfSo4
-         jbpVzVejtO92IaMfszWqPu65zpGEhfXZ0efNQNuDqC4Tz+lGUPUbYVfgihnP98sMrT
-         GmptyJ/kOLHqRp+NANz+76X8pPYBUV/T34zp+S848L74Feg4ONFcu00DXh9ED9t+m8
-         KsxJ26FUqSY/e5ZxgHvNXWwieONWLcV8ZevkV7Q+dRp7fXCZmvPAttHGB9aUJEgUJ1
-         JISFOnWySeBzw==
-Date:   Tue, 24 Jan 2023 15:09:51 -0800
-From:   Kees Cook <kees@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-CC:     Seth Jenkins <sethjenkins@google.com>,
-        SeongJae Park <sj@kernel.org>, Jann Horn <jannh@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        tangmeng <tangmeng@uniontech.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        David Gow <davidgow@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] exit: Put an upper limit on how often we can oops
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y9AzndICHRElk4jI@sol.localdomain>
-References: <20221117234328.594699-2-keescook@chromium.org> <20230119201023.4003-1-sj@kernel.org> <CALxfFW76Ey=QNu--Vp59u2wukr6dzvOE25PkOHVw0b13YoCSiA@mail.gmail.com> <202301191627.FC1E24ED5@keescook> <Y9ApdF5LaUl9dNFm@sol.localdomain> <Y9AzndICHRElk4jI@sol.localdomain>
-Message-ID: <E5988762-D1D7-4C8A-ACC8-E623D4B29A11@kernel.org>
+        Tue, 24 Jan 2023 18:16:54 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79D7EC64
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:16:52 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15ff0a1f735so11268909fac.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O6FG0rZSsowFESqKod3eAgl51fl1/NMrQnVO/Zh39hI=;
+        b=eR1U7BkGEuJ+TCHIVXpFwddImI5S3U2vXU1zewsNhfCxSMVc/26xsyZBaRgZQOW+ZL
+         HnkKvbbBG+tuWBdrDCFZkTrSk2X9Y2NjywIGHOuLnidslxFJXZ5uSHs4KmPXSOuFWMsP
+         ZQf//u33Y2C6UYKLift0E23EGwHm+VeUA9/cBPNor6648uC15rHXsqWmJmBnFSGW09GT
+         8Y33o1T2FEGPi71gVa9fNcG7XYFOYKm9lsLUhUXnyKt7nGYWv9+s/a3SEkLUZf9AvG3+
+         3hTAtup8gHP74IYXFyVCNch9uobWHS1mCZdlzaU/v93rRfn4MJuih1A9+BFpqpX3ObgE
+         /jvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O6FG0rZSsowFESqKod3eAgl51fl1/NMrQnVO/Zh39hI=;
+        b=7A0Zx19I9KVR/0blAwls1ZxYoNkROSJo5ECc4J2x8fZ5C5+9xidUZWuVTxFF6P/OaQ
+         RxebtnMEshJy3h5300H963Zh1cu1CONGwvGC6IIAcvYwoplZW80aKhdcCH1eAqcbkOU8
+         V1kYoNwxu8EbVBPL6k31QPgu/kfdQU3aVE3QFaaDL2Bqbs4J+HnHpRPX7MRRctvwi5G0
+         kzbCi7o/eO/HK1pk4EEmK43rPS89b3kyTdcDt7rdn0fPJZyLkoTdc8qMoBBK8G+zj77X
+         wmeJvIp/ABppy+y8vHpBtI0n0TCQzQ1CqwI3MFEgtPQMT9CsM1UMMA4rg4Ry1ScGVCAW
+         cnRQ==
+X-Gm-Message-State: AO0yUKW6xDtCGcaEvSC6Y++IZITHPggLgS+AKJ9ESQIImEk2F6Hww5Z9
+        sG+aruY/ZZGuEK9mdYcRC1Mr+SiJ8VafZBLbiG7A7Q==
+X-Google-Smtp-Source: AK7set8qpmlTZgkaUMcLNSDdmgMOL4CvGDG0uVtE6IwrUSmYA+gizCDKzIty6cgsFhGPXfg7G/uh/jeVCJmdTCdbZ6M=
+X-Received: by 2002:a05:6871:6ca5:b0:160:3235:9c33 with SMTP id
+ zj37-20020a0568716ca500b0016032359c33mr389603oab.103.1674602211611; Tue, 24
+ Jan 2023 15:16:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027092036.2698180-1-pbonzini@redhat.com>
+In-Reply-To: <20221027092036.2698180-1-pbonzini@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 24 Jan 2023 15:16:40 -0800
+Message-ID: <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On January 24, 2023 11:38:05 AM PST, Eric Biggers <ebiggers@kernel=2Eorg> w=
-rote:
->On Tue, Jan 24, 2023 at 10:54:57AM -0800, Eric Biggers wrote:
->> On Thu, Jan 19, 2023 at 04:28:42PM -0800, Kees Cook wrote:
->> > On Thu, Jan 19, 2023 at 03:19:21PM -0500, Seth Jenkins wrote:
->> > > > Do you have a plan to backport this into upstream LTS kernels?
->> > >=20
->> > > As I understand, the answer is "hopefully yes" with the big
->> > > presumption that all stakeholders are on board for the change=2E Th=
-ere
->> > > is *definitely* a plan to *submit* backports to the stable trees, b=
-ut
->> > > ofc it will require some approvals=2E
->> >=20
->> > I've asked for at least v6=2E1=2Ex (it's a clean cherry-pick)=2E Earl=
-ier
->> > kernels will need some non-trivial backporting=2E Is there anyone tha=
-t
->> > would be interested in stepping up to do that?
->> >=20
->> > https://lore=2Ekernel=2Eorg/lkml/202301191532=2EAEEC765@keescook
->> >=20
->>=20
->> I've sent out a backport to 5=2E15:
->> https://lore=2Ekernel=2Eorg/stable/20230124185110=2E143857-1-ebiggers@k=
-ernel=2Eorg/T/#t
+On Thu, Oct 27, 2022 at 2:21 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
->Also 5=2E10, which wasn't too hard after doing 5=2E15:
->https://lore=2Ekernel=2Eorg/stable/20230124193004=2E206841-1-ebiggers@ker=
-nel=2Eorg/T/#t
+> Passing the host topology to the guest is almost certainly wrong
+> and will confuse the scheduler.  In addition, several fields of
+> these CPUID leaves vary on each processor; it is simply impossible to
+> return the right values from KVM_GET_SUPPORTED_CPUID in such a way that
+> they can be passed to KVM_SET_CPUID2.
+>
+> The values that will most likely prevent confusion are all zeroes.
+> Userspace will have to override it anyway if it wishes to present a
+> specific topology to the guest.
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 14 ++++++++++++++
+>  arch/x86/kvm/cpuid.c           | 32 ++++++++++++++++----------------
+>  2 files changed, 30 insertions(+), 16 deletions(-)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index eee9f857a986..20f4f6b302ff 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8249,6 +8249,20 @@ CPU[EAX=1]:ECX[24] (TSC_DEADLINE) is not reported by ``KVM_GET_SUPPORTED_CPUID``
+>  It can be enabled if ``KVM_CAP_TSC_DEADLINE_TIMER`` is present and the kernel
+>  has enabled in-kernel emulation of the local APIC.
+>
+> +CPU topology
+> +~~~~~~~~~~~~
+> +
+> +Several CPUID values include topology information for the host CPU:
+> +0x0b and 0x1f for Intel systems, 0x8000001e for AMD systems.  Different
+> +versions of KVM return different values for this information and userspace
+> +should not rely on it.  Currently they return all zeroes.
+> +
+> +If userspace wishes to set up a guest topology, it should be careful that
+> +the values of these three leaves differ for each CPU.  In particular,
+> +the APIC ID is found in EDX for all subleaves of 0x0b and 0x1f, and in EAX
+> +for 0x8000001e; the latter also encodes the core id and node id in bits
+> +7:0 of EBX and ECX respectively.
+> +
+>  Obsolete ioctls and capabilities
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 0810e93cbedc..164bfb7e7a16 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -759,16 +759,22 @@ struct kvm_cpuid_array {
+>         int nent;
+>  };
+>
+> +static struct kvm_cpuid_entry2 *get_next_cpuid(struct kvm_cpuid_array *array)
+> +{
+> +       if (array->nent >= array->maxnent)
+> +               return NULL;
+> +
+> +       return &array->entries[array->nent++];
+> +}
+> +
+>  static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+>                                               u32 function, u32 index)
+>  {
+> -       struct kvm_cpuid_entry2 *entry;
+> +       struct kvm_cpuid_entry2 *entry = get_next_cpuid(array);
+>
+> -       if (array->nent >= array->maxnent)
+> +       if (!entry)
+>                 return NULL;
+>
+> -       entry = &array->entries[array->nent++];
+> -
+>         memset(entry, 0, sizeof(*entry));
+>         entry->function = function;
+>         entry->index = index;
+> @@ -945,22 +951,13 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>                 entry->edx = edx.full;
+>                 break;
+>         }
+> -       /*
+> -        * Per Intel's SDM, the 0x1f is a superset of 0xb,
+> -        * thus they can be handled by common code.
+> -        */
+>         case 0x1f:
+>         case 0xb:
+>                 /*
+> -                * Populate entries until the level type (ECX[15:8]) of the
+> -                * previous entry is zero.  Note, CPUID EAX.{0x1f,0xb}.0 is
+> -                * the starting entry, filled by the primary do_host_cpuid().
+> +                * No topology; a valid topology is indicated by the presence
+> +                * of subleaf 1.
+>                  */
+> -               for (i = 1; entry->ecx & 0xff00; ++i) {
+> -                       entry = do_host_cpuid(array, function, i);
+> -                       if (!entry)
+> -                               goto out;
+> -               }
+> +               entry->eax = entry->ebx = entry->ecx = 0;
+>                 break;
+>         case 0xd: {
+>                 u64 permitted_xcr0 = kvm_caps.supported_xcr0 & xstate_get_guest_group_perm();
+> @@ -1193,6 +1190,9 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>                 entry->ebx = entry->ecx = entry->edx = 0;
+>                 break;
+>         case 0x8000001e:
+> +               /* Do not return host topology information.  */
+> +               entry->eax = entry->ebx = entry->ecx = 0;
+> +               entry->edx = 0; /* reserved */
+>                 break;
+>         case 0x8000001F:
+>                 if (!kvm_cpu_cap_has(X86_FEATURE_SEV)) {
+> --
+> 2.31.1
+>
 
-Oh excellent! Thank you very much!
-
--Kees
-
-
-
---=20
-Kees Cook
+This is a userspace ABI change that breaks existing hypervisors.
+Please don't do this. Userspace ABIs are supposed to be inviolate.
