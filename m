@@ -2,124 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AF767A62C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD7167A62D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjAXWyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S233101AbjAXWyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjAXWyO (ORCPT
+        with ESMTP id S229715AbjAXWyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:54:14 -0500
-Received: from out-120.mta0.migadu.com (out-120.mta0.migadu.com [IPv6:2001:41d0:1004:224b::78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C7E474F4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:54:09 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:54:00 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674600847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=89LHdp2iidBYEJxIivMbaQf8lDKjYIbRHtNpIRtucvg=;
-        b=fnj/snkgDOwjWEdnayZeLkkYSrAgCDx9UY78BuX1gquOv8FWgO4XYZHlQH+yWFOgEW2cPx
-        UU0et3Z9AqS7glL1qv0VQ3eTk+LcVOoZXJ1/fqEiaT4HkIExSu5s/SIX/V64fFMLB9R2Bv
-        wtg9E+/6mrcp+RKIdQtOW+Mv3fPAotE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC PATCH 4/6] KVM: arm64: Optimize TLBIs in the dirty logging
- path
-Message-ID: <Y9BhiOyvMvu/L0J4@thinky-boi>
-References: <20230109215347.3119271-1-rananta@google.com>
- <20230109215347.3119271-5-rananta@google.com>
+        Tue, 24 Jan 2023 17:54:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F6E43900
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:54:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8683E61383
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:54:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D6EC433EF;
+        Tue, 24 Jan 2023 22:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674600889;
+        bh=o4uL/Ie7bBAxgdc1EkRlmNDXqSGXOokKDmYGb35nUg8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=O8+r9I2VRP4AnVr7kVaNG24QvG7zm4oYirm5+NrXMALDF1pCPBJSZSJtAPk+9l/Mz
+         /1dev6jbRPQHKAOGxW/M3t9GJ+fGDv9wx/0XHWqBh6FPmGOaY8J2OPEC7B9I8Z0pZr
+         wOwSSalBSqiThviI1uuRww7C+1rTWPL+XazPeXoji4Q/4zwoDm2pKZVl+97C0sm2IR
+         3d7gh9gcNEnJPOgtVY9TgyPi6M8vCnDo1q1WwDnZ1w6kksFpTuqos1mJvzoend8II3
+         nGTZ2VtaoCe116sgSviOVAsokc4gaQEO6O2704jJa92r/MKX36PhidSkIcAfHFchJw
+         /rl+zRTSH95hg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7C3865C1183; Tue, 24 Jan 2023 14:54:49 -0800 (PST)
+Date:   Tue, 24 Jan 2023 14:54:49 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8+8fH52iqQABYs2@andrea>
+ <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
+ <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
+ <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
+ <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230109215347.3119271-5-rananta@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghavendra,
-
-I find the commit title rather ambiguous. May I suggest:
-
-  KVM: arm64: Use range-based TLBIs for write protection
-
-On Mon, Jan 09, 2023 at 09:53:45PM +0000, Raghavendra Rao Ananta wrote:
-> Currently the dirty-logging paths, including
-> kvm_arch_flush_remote_tlbs_memslot() and kvm_mmu_wp_memory_region()
-> ivalidates the entire VM's TLB entries using kvm_flush_remote_tlbs().
-> As the range of IPAs is provided by these functions, this is highly
-> inefficient on the systems which support FEAT_TLBIRANGE. Hence,
-> use kvm_flush_remote_tlbs_range() to flush the TLBs instead.
-
-This commit message gives a rather mechanical description of the commit.
-Instead of describing the change, could you describe _why_ this is an
-improvement over the VM-wide invalidation?
-
---
-Thanks,
-Oliver
-
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->  arch/arm64/kvm/arm.c | 7 ++++++-
->  arch/arm64/kvm/mmu.c | 2 +-
->  2 files changed, 7 insertions(+), 2 deletions(-)
+On Tue, Jan 24, 2023 at 05:35:33PM -0500, Alan Stern wrote:
+> On Tue, Jan 24, 2023 at 02:15:24PM -0800, Paul E. McKenney wrote:
+> > > Ah, looking at the model now. Indeed it's forbidden, because in order to say
+> > > that something is in co, there must not be a (resulting) cycle of co and
+> > > barriers. But you'd get that here.  In the axiomatic model, this corresponds
+> > > to saying Power's "prop | co" is acyclic. The same isn't true in LKMM. So
+> > > that's probably why.
+> > 
+> > Which means that the RCU and SRCU implementations need to make (admittedly
+> > small) guarantees that cannot be expressed in LKMM.  Which is in fact
+> > what I was remembering, so I feel better now.
+> > 
+> > Not sure about the rest of you, though.  ;-)
 > 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 00da570ed72bd..179520888c697 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -1433,7 +1433,12 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
->  void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
->  					const struct kvm_memory_slot *memslot)
->  {
-> -	kvm_flush_remote_tlbs(kvm);
-> +	phys_addr_t start, end;
-> +
-> +	start = memslot->base_gfn << PAGE_SHIFT;
-> +	end = (memslot->base_gfn + memslot->npages) << PAGE_SHIFT;
-> +
-> +	kvm_flush_remote_tlbs_range(kvm, start, end);
->  }
->  
->  static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 70f76bc909c5d..e34b81f5922ce 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -976,7 +976,7 @@ static void kvm_mmu_wp_memory_region(struct kvm *kvm, int slot)
->  	write_lock(&kvm->mmu_lock);
->  	stage2_wp_range(&kvm->arch.mmu, start, end);
->  	write_unlock(&kvm->mmu_lock);
-> -	kvm_flush_remote_tlbs(kvm);
-> +	kvm_flush_remote_tlbs_range(kvm, start, end);
->  }
->  
->  /**
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
-> 
+> Can you be more explicit?  Exactly what guarantees does the kernel 
+> implementation make that can't be expressed in LKMM?
+
+I doubt that I will be able to articulate it very well, but here goes.
+
+Within the Linux kernel, the rule for a given RCU "domain" is that if
+an event follows a grace period in pretty much any sense of the word,
+then that event sees the effects of all events in all read-side critical
+sections that began prior to the start of that grace period.
+
+Here the senses of the word "follow" include combinations of rf, fr,
+and co, combined with the various acyclic and irreflexive relations
+defined in LKMM.
+
+> And are these anything the memory model needs to worry about?
+
+Given that several people, yourself included, are starting to use LKMM
+to analyze the Linux-kernel RCU implementations, maybe it does.
+
+Me, I am happy either way.
+
+							Thanx, Paul
