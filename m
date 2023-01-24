@@ -2,114 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2977567971B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4178679722
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbjAXL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:56:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S233170AbjAXL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAXL46 (ORCPT
+        with ESMTP id S229546AbjAXL7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:56:58 -0500
+        Tue, 24 Jan 2023 06:59:38 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEAE4ED8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:56:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF993C2B6;
+        Tue, 24 Jan 2023 03:59:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674561417; x=1706097417;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=phCYjbeYeH33D7C/gttd9sta4hen+i8d+oLpv9x6oaU=;
-  b=L5w+Y/PRHsoRvHQwk2gfH2B7HglNqiUbnyTwf9lTsZGiDMX8rd+RphKn
-   qCPtxmEBNBniTncMii2AuVEoIVk+mnVnpq26i9vgxOcP+q6cclKJC2zrB
-   2sbkM71clzCgmHsnLddsAnYmxg9u6mYtIM1JIJbLJt+/iu34oHQkY4NLX
-   muL0iCGF4vhmt44oxRJRPPowIPItRW/0N7Ey+YdEKhgXvwm/dyPmZ8Wta
-   YIB8svrRdP7d1y4ryxKPgyShpD/plqpE6YiisV6vcxjF2bcozgu/TsFJo
-   arZL67JCUTkf5/1XAcIbVjWl+ESPAsan3bp54Zrq2nJMI8mIY+gzjDdJT
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412509276"
+  t=1674561577; x=1706097577;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=pu6QJ5RV9LyVJNpkIVe152Ce044Cxxkxyc2BLBxj7s0=;
+  b=RD/3yl+ElryZ3vyhDqNKNxVyyme0fmvAvPeamzQMNS5YRXXGOWQkxvn3
+   Y8ZQFITjGgY5vBGYZftxNIQgJZTNjpFLPfVdu+YFSGk0ZMz6gCjqtbgn9
+   2bzpVO2DeBMRFL1mXTfZjZ1vP3hdVlvahMCBKCz8U7Xz0JozSx+5oJTDr
+   3Lkb50f3O90oGpKb9608KrnVIv3cYpuXoje6/vkj6Z0lnU3EbKrD+hjVs
+   ayA8iW4wu+1MdoPV6cXsA1MntebB3TpjxJAzJ4aPDrjOQYesc6IUr8VgG
+   ovLeZdf/eT+QpaoCTwTAmeCmY2+3Sb2TkDfJaCqcXJrVo3geRdqKQrhbQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412509689"
 X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="412509276"
+   d="scan'208";a="412509689"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:56:57 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:59:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804570487"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804571134"
 X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="804570487"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2023 03:56:54 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKHv3-0006Q5-2y;
-        Tue, 24 Jan 2023 11:56:53 +0000
-Date:   Tue, 24 Jan 2023 19:55:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Babu Moger <babu.moger@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: [tip:x86/cache 9/13] arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:13:
- warning: variable 'h' set but not used
-Message-ID: <202301241934.L4ops5VY-lkp@intel.com>
+   d="scan'208";a="804571134"
+Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2023 03:59:34 -0800
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     Marc Zyngier <maz@kernel.org>, Leon Romanovsky <leon@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        darwi@linutronix.de, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        stable@vger.kernel.org, alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH 1/2] PCI/MSI: Cache the MSIX table size
+In-Reply-To: <86fsc2n8fp.wl-maz@kernel.org>
+References: <20230119170633.40944-1-alexander.shishkin@linux.intel.com>
+ <20230119170633.40944-2-alexander.shishkin@linux.intel.com>
+ <Y8z7FPcuDXDBi+1U@unreal> <86fsc2n8fp.wl-maz@kernel.org>
+Date:   Tue, 24 Jan 2023 13:59:33 +0200
+Message-ID: <87sfg0p2hm.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
-head:   0a363fb23ee2f7beb08437ad7db86d195878d79f
-commit: dc2a3e857981f859889933cf66ded117d74edff1 [9/13] x86/resctrl: Add interface to read mbm_total_bytes_config
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301241934.L4ops5VY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=dc2a3e857981f859889933cf66ded117d74edff1
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip x86/cache
-        git checkout dc2a3e857981f859889933cf66ded117d74edff1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/resctrl/
+Marc Zyngier <maz@kernel.org> writes:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> On Sun, 22 Jan 2023 09:00:04 +0000,
+> Leon Romanovsky <leon@kernel.org> wrote:
+>> 
+>> On Thu, Jan 19, 2023 at 07:06:32PM +0200, Alexander Shishkin wrote:
+>> > A malicious device can change its MSIX table size between the table
+>> > ioremap() and subsequent accesses, resulting in a kernel page fault in
+>> > pci_write_msg_msix().
+>> > 
+>> > To avoid this, cache the table size observed at the moment of table
+>> > ioremap() and use the cached value. This, however, does not help drivers
+>> > that peek at the PCIE_MSIX_FLAGS register directly.
+>> > 
+>> > Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> > Cc: stable@vger.kernel.org
+>> > ---
+>> >  drivers/pci/msi/api.c | 7 ++++++-
+>> >  drivers/pci/msi/msi.c | 2 +-
+>> >  include/linux/pci.h   | 1 +
+>> >  3 files changed, 8 insertions(+), 2 deletions(-)
+>> 
+>> I'm not security expert here, but not sure that this protects from anything.
+>> 1. Kernel relies on working and not-malicious HW. There are gazillion ways
+>> to cause crashes other than changing MSI-X.
+>> 2. Device can report large table size, kernel will cache it and
+>> malicious device will reduce it back. It is not handled and will cause
+>> to kernel crash too.
+>> 
+>
+> Indeed, this was my exact reaction reading this patch. This only makes
+> sure the same (potentially wrong) value is used at all times. So while
+> this results in a consistent use, this doesn't give much guarantee.
 
-All warnings (new ones prefixed by >>):
+It guarantees that the MSIX table is big enough to fit all the vectors,
+so it should prevent the page faults from out-of-bounds accesses.
 
-   arch/x86/kernel/cpu/resctrl/rdtgroup.c: In function 'mon_event_config_read':
->> arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:13: warning: variable 'h' set but not used [-Wunused-but-set-variable]
-    1456 |         u32 h;
-         |             ^
+> The only way to deal with this is to actually handle the resulting
+> fault, similar to what the kernel does when accessing userspace. Not
+> sure how possible this is with something like PCIe.
 
+Do you mean replacing MMIO accesses with exception handling accessors?
+That seems like a monumental effort. And then we'd have to figure out
+how to handle errors in the __pci_write_msi_msg() path.
 
-vim +/h +1456 arch/x86/kernel/cpu/resctrl/rdtgroup.c
+Preventing page faults from happening in the first place seems like a
+more reasonable solution, or what do you think?
 
-  1451	
-  1452	static void mon_event_config_read(void *info)
-  1453	{
-  1454		struct mon_config_info *mon_info = info;
-  1455		unsigned int index;
-> 1456		u32 h;
-  1457	
-  1458		index = mon_event_config_index_get(mon_info->evtid);
-  1459		if (index == INVALID_CONFIG_INDEX) {
-  1460			pr_warn_once("Invalid event id %d\n", mon_info->evtid);
-  1461			return;
-  1462		}
-  1463		rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
-  1464	
-  1465		/* Report only the valid event configuration bits */
-  1466		mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
-  1467	}
-  1468	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+--
+Alex
