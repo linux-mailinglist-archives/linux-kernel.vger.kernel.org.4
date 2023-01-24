@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBBD6795C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FA66795C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbjAXKwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S233602AbjAXKxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbjAXKwJ (ORCPT
+        with ESMTP id S233482AbjAXKxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:52:09 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF6044B1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:52:07 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id g16so1376923ilr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:52:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PZZkl0nuhDOnpS6mpTFr8PbXxlSJ2XVVn7nhNW4knVE=;
-        b=eysX+ECnIsH4FMjfUYT/LQAt9n6rglG6tqxiFcoAUICMiQfGdw6uRCYzxropjiIHWX
-         aGm0Ai3CVpIR3vF+EduIDOySpa/9Cs7/A0TdpklPuDWKFUgQZpGb/QUx7y/gmG1+gJQT
-         R0EgI2WlD8RTdP4mKPBp2BIR3O5cm0XeN7nPZ0SG8//AUcx383pwBNqlJlupg5yLuFLh
-         /Bt4ywpI6JPeuzM6XnPuB0hUMriFJgSFDg1wnWsB4yXnlV+fcImKNZFnp8e56Zo2rLxF
-         LM6SKfI/YCy26+jyb1ULwBcIRsTXvzHOZMkpI89Kjz5MQ29Qw33zMIR8Bf4V25RxB/nC
-         pH4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PZZkl0nuhDOnpS6mpTFr8PbXxlSJ2XVVn7nhNW4knVE=;
-        b=EB2KraxfnYRCqaDowJI4ZNFx4mEYeLfLXRjfuQLamp9PGWAZuDKx6Xsv3UXKXytVZ+
-         u9uhN2R6qYdrnUvlIIuUjA7FNzHSlJTUUSXP8I+bzPPVHWRp2l2lTM+bU8MDlXxpG1K7
-         o+K8RWYpXuO5jvwjniuG91MEJPXCNdiO6J2YRs2nppvNOLA0Jbsi60DHAbKFDWlhq/f7
-         Ywap2z3Dg0RxrGiWjacdAm+JEQqHZ3TKgB+aQUbyMKTe2YvF5sh+wMJOiG8pHuxndjFl
-         jr4SVsno6RQRF8CRsNnE2tEO9rcd69mtkRXQh1F7ezGDAwoGvuOMhtPWDYNR3LpW+adb
-         qGrg==
-X-Gm-Message-State: AFqh2kq1wcEjSou6qDMH0D8RQfT71wF9qtPVs7sbnvuSCjN52wxrBOK8
-        koc9dcX+Y/rucBt9JSHaDGF0SShaXtzxkDtLhJGDqfPtiDfDs+tSeBU=
-X-Google-Smtp-Source: AMrXdXs9ga503SwE+09dmDEVZS1/XV2RvPbDoA7tJR1Y92okF1PYzLfNb1qZ9UTKSZ00MIBxwWsvnEHJ4Bii4h03Zso=
-X-Received: by 2002:a05:6e02:88d:b0:30f:5d21:e56 with SMTP id
- z13-20020a056e02088d00b0030f5d210e56mr1230055ils.192.1674557526609; Tue, 24
- Jan 2023 02:52:06 -0800 (PST)
+        Tue, 24 Jan 2023 05:53:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC9CE07E;
+        Tue, 24 Jan 2023 02:53:02 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A82A36602E2A;
+        Tue, 24 Jan 2023 10:52:59 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674557580;
+        bh=NWmvmgqxjDN/jBCODDrbg9zNDiVikX7EO6ENO6c0Zic=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=SNGCsNsHMDAFLtYIBRduuK0sPohTqsI2e0iD9w9vTLgyTcecBXdCzzSuyYX5oYdws
+         5lS2QTvUq6tENa2iDq84UgIT5m147bmipMRolxkbBv9s2LYDScN5l9sgUptByyUSP2
+         jzZPMOB9EpnWofduuZr/9SA7ZKT0KMb5xu32LcOhWZOSV7807S30YW93T7lLFF5If8
+         xOTowb3FWCsrWLUEOeQsfmz72K4+jptuFr3OGPd/u26uz5Idbidx5l5YH5/ymm1vHi
+         0p6Y3eQ2sB9bGfi5sluVrRxGqFlwvr+8QO4riFTTvrNiN7VhU7ud+IKPvrcjeiNbZl
+         6GxNtpeSeN4GA==
+Message-ID: <dec754f9-e79d-e1ce-e3ef-5a7eb4385dd7@collabora.com>
+Date:   Tue, 24 Jan 2023 11:52:57 +0100
 MIME-Version: 1.0
-References: <20221121112134.407362-1-glider@google.com> <20221121112134.407362-4-glider@google.com>
-In-Reply-To: <20221121112134.407362-4-glider@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 24 Jan 2023 11:51:30 +0100
-Message-ID: <CAG_fn=WDjw1MVYhEh7K4HOpGNBWsq6YuyG6Xx7XcP4Xpu+KhZg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] fs: hfs: initialize fsdata in hfs_file_truncate()
-To:     glider@google.com
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
-        chao@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        Eric Biggers <ebiggers@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v8 9/9] arm64: dts: mediatek: Initial mt8365-evk support
+Content-Language: en-US
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
+        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
+        allen-kh.cheng@mediatek.com, nfraprado@collabora.com,
+        andrew@lunn.ch, gtk3@inbox.ru, sean.wang@mediatek.com,
+        zhiyong.tao@mediatek.com
+References: <20230123163833.1007181-1-bero@baylibre.com>
+ <20230123163833.1007181-10-bero@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230123163833.1007181-10-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:21 PM Alexander Potapenko <glider@google.com> wrote:
->
-> When aops->write_begin() does not initialize fsdata, KMSAN may report
-> an error passing the latter to aops->write_end().
->
-> Fix this by unconditionally initializing fsdata.
->
-> Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+Il 23/01/23 17:38, Bernhard Rosenkränzer ha scritto:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> This adds minimal support for the Mediatek 8365 SOC and the EVK reference
+> board, allowing the board to boot to initramfs with serial port I/O.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> [bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups, add CPU cache layout, add systimer, fix GIC]
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/Makefile       |   1 +
+>   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 169 +++++++++
+>   arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 378 ++++++++++++++++++++
+>   3 files changed, 548 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> 
 
-Dear FS maintainers,
+..snip..
 
-HFS/HFSPLUS are orphaned, can someone take this patch to their tree?
-Thanks in advance!
-(same for "fs: hfsplus: initialize fsdata in hfsplus_file_truncate()":
-https://lore.kernel.org/all/20221121112134.407362-5-glider@google.com/)
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> new file mode 100644
+> index 0000000000000..04c666cab506a
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> @@ -0,0 +1,378 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * (C) 2018 MediaTek Inc.
+> + * Copyright (C) 2022 BayLibre SAS
+> + * Fabien Parent <fparent@baylibre.com>
+> + * Bernhard Rosenkränzer <bero@baylibre.com>
+> + */
+> +#include <dt-bindings/clock/mediatek,mt8365-clk.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/phy/phy.h>
+> +#include <dt-bindings/thermal/thermal.h>
+
+thermal.h is unused... please remove it for now and add it back in a commit
+where you add the thermal node.
+
+Otherwise,
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
