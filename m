@@ -2,171 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF3B679C1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8719679C1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbjAXOiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S234350AbjAXOi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbjAXOiK (ORCPT
+        with ESMTP id S234404AbjAXOiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:38:10 -0500
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20B91BF2;
-        Tue, 24 Jan 2023 06:37:51 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id x4so17317986ybp.1;
-        Tue, 24 Jan 2023 06:37:51 -0800 (PST)
+        Tue, 24 Jan 2023 09:38:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B066827D6D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:37:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674571067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F2x/J0bGGkJ5eISXSY0hav/Re/JEb7A0J6D4E1fdc+E=;
+        b=IAwH7/TfR99q0Xm63K9rHesNxZstOiZpmPllDzHe92+tmPrvOcg5qYMEP2jDdKEaLn+FSP
+        FRfsPtVXPkezLDxGGyI+iUaSEL+jgMAsWnuhwgbqG1dxtLwyuw+Dt8j4Q2/QmgsbVsASip
+        SPX7UpIykexPAmLGPnlwIqZeecm94XE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-36-3V64sFZtPpaR-5MCO1f7-g-1; Tue, 24 Jan 2023 09:37:46 -0500
+X-MC-Unique: 3V64sFZtPpaR-5MCO1f7-g-1
+Received: by mail-wm1-f72.google.com with SMTP id n16-20020a05600c3b9000b003db127e03c5so838656wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:37:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fwQfABfjeUpAENjvZS1Bzp2l/oFZWuf9OyqZm9wvBas=;
-        b=ZzZR7L8fiD6YcAE7qKBa2/A6NUxjN+DrzmAFSoIYXQIEj6gBtAtCB4HmOBlQl8eGj8
-         PL/OmRwwEfy9kPX0A7rzZ+L8nyGkkKwe7wj0seehgPDhvtlT50AjzbuAp37hVgu6CX34
-         4LKmtLiXtLNx3gydVQpw70OXg70O55jC5UJGTn1DQV3+8kJMma1FHgVCGwlNljpxh5D3
-         YW9hvkIl8PYfmDTNMcw9f5dsmBy+oYoeQ0jzSxVxtImCybR1FjrU9SCsHNEZAK4r77zL
-         Vqm+YSWL9bN2QLTebVfEBxMMfC2hlL0455VJCLUfW2GUz+uPXqJnze2J2vBBbt/2xYAf
-         4HWw==
-X-Gm-Message-State: AFqh2kqKap9o7TgGIYSS1N14vdqNacd0E/srUm3HyzgiCOhsE374rZAc
-        oUXiWdoYRv1yInBReIh2jWCj+fFf+a7IFw==
-X-Google-Smtp-Source: AMrXdXsfhmnJBXFIpMWrzBVwBnsCiSV2sT1O2ffB00DL/nq9QVFHKd5uf/B5U0tuPC6yxrNjJxnZQA==
-X-Received: by 2002:a05:6902:1406:b0:706:f09b:5297 with SMTP id z6-20020a056902140600b00706f09b5297mr39143664ybu.12.1674571070643;
-        Tue, 24 Jan 2023 06:37:50 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id k6-20020a05620a0b8600b00705b4001fbasm1456516qkh.128.2023.01.24.06.37.50
+        bh=F2x/J0bGGkJ5eISXSY0hav/Re/JEb7A0J6D4E1fdc+E=;
+        b=ReUOtg1JyP6EVHRKS9CcYizUyESs4qhmYRGMt1+zoUD/Nxt98QyMdFrQdCP3OJQ1RB
+         gLYECVIUg0sSe//uOx+TpIeVOBy5OYsZhDtW53mk3WtGNZ45yDCfgzsHlM6WnpTP7JG4
+         WkTKgtttkYt/FIaI2GiQkS8aUVgFL9hRdxSdhmt1kWsKB6+hcoRo/V8E0RwtKpOFw9jc
+         SVbZEl8tBNrKH/bApH9u9MVi37MbgWI4o2wePwgkMWWP76rdK09TNcT1kpjlgXrlY4Zm
+         /bHbMtibimB2edakjacFVz2TKfzMaCumtcWjPdG2QMgGORPOzWQnnWaIPuCgBCw1gNGh
+         fcfw==
+X-Gm-Message-State: AFqh2kr6iEeiRFkeL0FyiekCYq1Mx+/GU4myQPLsLY5ExSA5ldMFwI6E
+        z1cma+JjVTuU8PcAXxNoIZszXkKjdo/Y7r01mv4NUyRYy6n7xT8tsM53IkmsSsSiszlk3whz6do
+        k0ZnQl9ziKSXAYSOV2kMuuRy4
+X-Received: by 2002:a05:600c:4687:b0:3db:2e06:4091 with SMTP id p7-20020a05600c468700b003db2e064091mr17927350wmo.37.1674571065226;
+        Tue, 24 Jan 2023 06:37:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsTPiQ8xro+N8cTZHPqCpvzQVYFmoI1YAEYsyNxhplELggRoT15RtOz9oihNoQhKICc6Aksgg==
+X-Received: by 2002:a05:600c:4687:b0:3db:2e06:4091 with SMTP id p7-20020a05600c468700b003db2e064091mr17927322wmo.37.1674571064886;
+        Tue, 24 Jan 2023 06:37:44 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id t24-20020adfa2d8000000b002bdc129c8f6sm2020545wra.43.2023.01.24.06.37.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 06:37:50 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-506609635cbso6046507b3.4;
-        Tue, 24 Jan 2023 06:37:50 -0800 (PST)
-X-Received: by 2002:a05:690c:851:b0:480:fa10:459e with SMTP id
- bz17-20020a05690c085100b00480fa10459emr2280374ywb.283.1674571069883; Tue, 24
- Jan 2023 06:37:49 -0800 (PST)
+        Tue, 24 Jan 2023 06:37:44 -0800 (PST)
+Message-ID: <5bc85aff-e21e-ab83-d47a-e7b7c1081ab0@redhat.com>
+Date:   Tue, 24 Jan 2023 15:37:43 +0100
 MIME-Version: 1.0
-References: <20221215181848.129326-1-helgaas@kernel.org> <CAMuHMdUuPKyMDwAHvUxC_s-Cqv_aui=1+eHCMypkpQSmvz=uuQ@mail.gmail.com>
- <CAJZ5v0jaFsGc23pNVumxnA955PtGpJjry07CU+2eMJEx=CDw4A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jaFsGc23pNVumxnA955PtGpJjry07CU+2eMJEx=CDw4A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 Jan 2023 15:37:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVRnAVtff2ZrYzf4VGfhTPrUXmn+8o5NyXopLQFm4HuMQ@mail.gmail.com>
-Message-ID: <CAMuHMdVRnAVtff2ZrYzf4VGfhTPrUXmn+8o5NyXopLQFm4HuMQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v8 02/10] iov_iter: Add a function to extract a page list
+ from an iterator
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
+References: <1b1eb3d8-c6b4-b264-1baa-1b3eb088173d@redhat.com>
+ <20230123173007.325544-1-dhowells@redhat.com>
+ <20230123173007.325544-3-dhowells@redhat.com>
+ <874093.1674570959@warthog.procyon.org.uk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <874093.1674570959@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+On 24.01.23 15:35, David Howells wrote:
+> David Hildenbrand <david@redhat.com> wrote:
+> 
+>>> +#define iov_iter_extract_mode(iter) (user_backed_iter(iter) ? FOLL_PIN : 0)
+>>> +
+>>
+>> Does it make sense to move that to the patch where it is needed? (do we need
+>> it at all anymore?)
+> 
+> Yes, we need something.  Granted, there are now only two alternatives, not
+> three: either the pages are going to be pinned or they're not going to be
+> pinned, but I would rather have a specific function that tells you than just
+> use, say, user_backed_iter() to make it easier to adjust it later if we need
+> to - and easier to find the places where we need to adjust.
+> 
+> But if it's preferred we could require people to use user_backed_iter()
+> instead.
 
-On Tue, Jan 24, 2023 at 3:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Tue, Jan 24, 2023 at 12:20 PM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> >
-> > Hi Bjorn,
-> >
-> > On Thu, Dec 15, 2022 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > >
-> > > Simplify __rpm_get_callback() slightly by returning as soon as the return
-> > > value is known.  No functional change intended.
-> > >
-> > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Thanks for your patch, which is now commit 650bdddb6b311705 ("PM:
-> > runtime: Simplify __rpm_get_callback()") in pm/linux-next.
-> >
-> > > --- a/drivers/base/power/runtime.c
-> > > +++ b/drivers/base/power/runtime.c
-> > > @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
-> > >
-> > >  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
-> > >  {
-> > > -       pm_callback_t cb;
-> > > -       const struct dev_pm_ops *ops;
-> > > +       const struct dev_pm_ops *ops = NULL;
-> > >
-> > >         if (dev->pm_domain)
-> > >                 ops = &dev->pm_domain->ops;
-> > > @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
-> > >                 ops = dev->class->pm;
-> > >         else if (dev->bus && dev->bus->pm)
-> > >                 ops = dev->bus->pm;
-> > > -       else
-> > > -               ops = NULL;
-> > >
-> > >         if (ops)
-> > > -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
-> > > -       else
-> > > -               cb = NULL;
-> > > +               return *(pm_callback_t *)((void *)ops + cb_offset);
-> >
-> > This is a change in behavior in case the callback turns out to be NULL:
-> >   - before, it would fall back to the driver-specific callback below,
-> >   - after, it always returns NULL.
->
-> Good point and sorry for missing this!
->
-> > >
-> > > -       if (!cb && dev->driver && dev->driver->pm)
-> > > -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-> > > +       if (dev->driver && dev->driver->pm)
-> > > +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-> > >
-> > > -       return cb;
-> > > +       return NULL;
-> > >  }
-> >
->
-> Something like the patch below (modulo gmail-induced whitespace
-> breakage) should restore the previous behavior if I'm not mistaken:
->
-> ---
->  drivers/base/power/runtime.c |    9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -31,8 +31,13 @@ static pm_callback_t __rpm_get_callback(
->      else if (dev->bus && dev->bus->pm)
->          ops = dev->bus->pm;
->
-> -    if (ops)
-> -        return *(pm_callback_t *)((void *)ops + cb_offset);
-> +    if (ops) {
-> +        pm_callback_t cb;
-> +
-> +        cb = *(pm_callback_t *)((void *)ops + cb_offset);
-> +        if (cb)
-> +            return cb;
-> +    }
->
->      if (dev->driver && dev->driver->pm)
->          return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+At least reduces the occurrences of FOLL_PIN :)
 
-Which is now more complex than the original?
+-- 
+Thanks,
 
-Gr{oetje,eeting}s,
+David / dhildenb
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
