@@ -2,98 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316E4679191
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6C1679195
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbjAXHG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S233419AbjAXHH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbjAXHG4 (ORCPT
+        with ESMTP id S233416AbjAXHHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:06:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A85F367D2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:06:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674543967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rhCMs9O93TP3iVRzGs1BbEvUjRACrPO+EAB004pe+8U=;
-        b=asLu/+JkqdjX0gLWg4OOoTvCHiUQ8T1yAhMzgg3WUtdYtDp7Fw9qGP7gq819sVt1Y239Av
-        yyW3skx0giuzuA1a41YVoDP/nZGVwo5hzfNSgCeivkwkHNX0MKVURLntwqOcgIGka0E62m
-        0sJNn1H8jYIvux4J/tvkoGQS2HMjicY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-134-E8IQKbPzP6aPaqoZBUn9Iw-1; Tue, 24 Jan 2023 02:06:00 -0500
-X-MC-Unique: E8IQKbPzP6aPaqoZBUn9Iw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9D02811E6E;
-        Tue, 24 Jan 2023 07:05:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 83142C15BA0;
-        Tue, 24 Jan 2023 07:05:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com>
-References: <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-11-dhowells@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Christoph Hellwig" <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
+        Tue, 24 Jan 2023 02:07:25 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9963E367CD
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:07:24 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id be8so980066plb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L9jFSQ8mdeqsmEVUALV4Gp1y0y5Lx66P8GceIQj1RzY=;
+        b=Gc4km+xfpIM2HIuzurHHvBvTgwuwuD/5sTCT8pqUQVEPKJeMSuH/NuIfQpgxpmAbg+
+         7TMGpeeIP6Xi9IQrZVnkrQAHB5ioZXHVmUIZ/CQkepABbLdHnxVfuctOPoDFkG4ao+VC
+         nYw05jug3eIee+G1JDd/3Ola8chBa6GPWrlbA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L9jFSQ8mdeqsmEVUALV4Gp1y0y5Lx66P8GceIQj1RzY=;
+        b=sSy1uFnNluYAeppbNLSuZ6PfFj147P2RfSyyBO3ZQlYYnSIUBwWR/JcLeAqtZg1Oa4
+         g+Y6zhYpyM8uuSz5NuEzM+gx6vQNzBBys5Hce5Sf8ZX+o+ilfUlHyq6wPivQZsaLiuVm
+         q2/65GMWBXS2DKebq9MPGQ/7vlwhJZin3ZJ9Ecy00dJBw0y1RT83m54f9CQeEM+Cwm7y
+         g7oSGCzbtVXCmiklrw7cwxBHR0cnQ35P3wRDvxpH9MubrTy30Ad2vsWgddby0nwywLy/
+         88aE0+69vDHxyeO22wir8IApe2R9jFOl3P9tkiud9bydnkYD2JfC3fnMym6b9om7tTKb
+         +TMQ==
+X-Gm-Message-State: AFqh2kqjgKmwzPeA7PPTglR7GatadIAPjSK5HjfGqWY0xxiO86wLO5Nv
+        AZAf8z48DQ3eerLUOFJUMhoAMr4jSLGa00I5NiDrQGhrwPmcpQ==
+X-Google-Smtp-Source: AMrXdXt5ZrM4Mt1JyHrJp51N07+176ED5ViMdnJRmKHF90dFCzNLDwgcF+E4NxT/E78psOdV/szeamRJciiztfm0yms=
+X-Received: by 2002:a17:90a:7d10:b0:228:e3ab:18ce with SMTP id
+ g16-20020a17090a7d1000b00228e3ab18cemr3232722pjl.3.1674544044044; Mon, 23 Jan
+ 2023 23:07:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <545460.1674543956.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 24 Jan 2023 07:05:56 +0000
-Message-ID: <545461.1674543956@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+References: <20230120060535.83087-1-ajit.khaparde@broadcom.com>
+ <20230120060535.83087-2-ajit.khaparde@broadcom.com> <20230123223305.30c586ee@kernel.org>
+ <Y89964YCQKwKlyB1@kroah.com>
+In-Reply-To: <Y89964YCQKwKlyB1@kroah.com>
+From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
+Date:   Mon, 23 Jan 2023 23:07:07 -0800
+Message-ID: <CACZ4nhs2pSq73wEiySUgP8Gczmb=rz90pJOe747VtjKmm0yJbA@mail.gmail.com>
+Subject: Re: [PATCH net-next v8 1/8] bnxt_en: Add auxiliary driver support
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, andrew.gospodarek@broadcom.com,
+        davem@davemloft.net, edumazet@google.com, jgg@ziepe.ca,
+        leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        selvin.xavier@broadcom.com, Leon Romanovsky <leonro@nvidia.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ed494205f2fd2a3b"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-John Hubbard <jhubbard@nvidia.com> wrote:
+--000000000000ed494205f2fd2a3b
+Content-Type: text/plain; charset="UTF-8"
 
-> > Renumber FOLL_PIN and FOLL_GET down to bit 0 and 1 respectively so tha=
-t
-> > they are coincidentally the same as BIO_PAGE_PINNED and BIO_PAGE_REFFE=
-D and
-> > also so that they can be stored in the bottom two bits of a page point=
-er
-> > (something I'm looking at for zerocopy socket fragments).
-> > (Note that BIO_PAGE_REFFED should probably be got rid of at some point=
-,
-> > hence why FOLL_PIN is at 0.)
-> > Also renumber down the other FOLL_* flags to close the gaps.
-> =
+On Mon, Jan 23, 2023 at 10:42 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jan 23, 2023 at 10:33:05PM -0800, Jakub Kicinski wrote:
+> > On Thu, 19 Jan 2023 22:05:28 -0800 Ajit Khaparde wrote:
+> > > @@ -13212,6 +13214,7 @@ static void bnxt_remove_one(struct pci_dev *pdev)
+> > >     kfree(bp->rss_indir_tbl);
+> > >     bp->rss_indir_tbl = NULL;
+> > >     bnxt_free_port_stats(bp);
+> > > +   bnxt_aux_priv_free(bp);
+> > >     free_netdev(dev);
+> >
+> > You're still freeing the memory in which struct device sits regardless
+> > of its reference count.
+> >
+> > Greg, is it legal to call:
+> >
+> >       auxiliary_device_delete(adev);  // AKA device_del(&auxdev->dev);
+> >       auxiliary_device_uninit(adev);  // AKA put_device(&auxdev->dev);
+> >       free(adev);                     // frees struct device
+>
+> Ick, the aux device release callback should be doing the freeing of the
+> memory, you shouldn't ever have to free it "manually" like this.  To do
+> so would be a problem (i.e. the release callback would then free it
+> again, right?)
+Yikes!
+Thanks for the refresher.
 
-> Should we also get these sorted into internal-to-mm and public sets?
-> Because Jason (+Cc) again was about to split them apart into
-> mm/internal.h [1] and that might make that a little cleaner.
+>
+> > ? I tried to explain this three times, maybe there's some wait during
+> > device_del() I'm not seeing which makes this safe :S
+Apologies.
+I thought since the driver was allocating the memory, it had to free it.
+I stand corrected.
 
-My plan was to push this patch by itself through akpm since it's only an
-optimisation and not necessary to the rest of the patches here.
+Thanks
+Ajit
 
-David
+>
+> Nope, no intentional wait normally.  You can add one by enabling a
+> debugging option to find all of the places where people are doing bad
+> things like this by delaying the freeing of the device memory until a
+> few seconds later, but that's generally not something you should run in
+> a production kernel as it finds all sorts of nasty bugs...
+>
+> thanks,
+>
+> greg k-h
 
+--000000000000ed494205f2fd2a3b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
+K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
+xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
+OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
+aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
+KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
+aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
+u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
+4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINch/U90Z+3s66N26cHL
+hE8g9xHaVWOALGZo52l77AtnMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIzMDEyNDA3MDcyNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCCy85PB9kJsz61DQitGGpgv60vocAfem2LdNng
+Rv3GdrADY1Y8NXt1jM3NXY5TQhCexpT9zC5GayDRtzo8Hwnvi6cb7at8NbFgXU5nPN4H/og86Fy5
+TkLXIKLRNGHDKq/s+8FNPwT0l49Y4DLM06cVFLvXmQRqVJv8Vx9o9JFvylyxfQzBT94y6LtvZnYs
+xd66XEtvmJuLbBLlHjTWGbHUKWF+JHa+B4w0c5w9LYWq1zQXuZaCivYWhekLOQTnNOhDgS2xye1H
+wZrAi3CMhr5c2DFwKyCM7obhqh/3l5MB+TMC5Z1Xnf8CEQXeDOSjso0HiB64lsZZb5aPHSlUtuQu
+--000000000000ed494205f2fd2a3b--
