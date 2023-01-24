@@ -2,98 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D2A679383
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B775679385
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbjAXIyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S233313AbjAXIzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjAXIy3 (ORCPT
+        with ESMTP id S231629AbjAXIzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:54:29 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B5D38039
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:54:27 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-122-9RJp0W1SNBKAvoVKfHTvLQ-1; Tue, 24 Jan 2023 08:54:25 +0000
-X-MC-Unique: 9RJp0W1SNBKAvoVKfHTvLQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Tue, 24 Jan
- 2023 08:54:25 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Tue, 24 Jan 2023 08:54:25 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mateusz Guzik' <mjguzik@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>, Uros Bizjak <ubizjak@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
-Thread-Topic: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
-Thread-Index: AQHZK4esPiXIxoxXL0qMusgAkdAn7q6lrzIwgAcKieqAAI8WsA==
-Date:   Tue, 24 Jan 2023 08:54:24 +0000
-Message-ID: <7d506ede564d425db116ff646f267f4f@AcuMS.aculab.com>
-References: <20230118150703.4024-1-ubizjak@gmail.com>
- <20230118131825.c6daea81ea1e2dc6aa014f38@linux-foundation.org>
- <CAFULd4ZQGG+N3f7xDuoiNG1jY128pqaH0F4eLKO+fhvSNAbKfA@mail.gmail.com>
- <CAFULd4b5szcTHTVbGJ9WiciG_+8kANiPZYP_pkEZUhnz_HHy-g@mail.gmail.com>
- <913c01d41f824fa8b3400384437fa0d8@AcuMS.aculab.com>
- <CAFULd4aDORSrq7zf_LcAZRP8HOHcrq2-rGMaroKyG2zQDHNpOA@mail.gmail.com>
- <CAGudoHF6zbyzza6xysuCjcxjHAUgeAVvgW0sqxDAFQNwz9u7wg@mail.gmail.com>
- <CAHk-=whUSZk1dZrJuhxeb4qB3POstVRwOZCN8PXd3W7ztbqQBg@mail.gmail.com>
- <CAGudoHH+SmRoyXvppjBEoK=dvVdy1jvKNHDLEVf9mLnzsEds6Q@mail.gmail.com>
-In-Reply-To: <CAGudoHH+SmRoyXvppjBEoK=dvVdy1jvKNHDLEVf9mLnzsEds6Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 24 Jan 2023 03:55:07 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F204F38039
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:55:05 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id q125so15829053vsb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MAttpzueGAYsfaY0baImq0QHsztmrAcw7EcUju76EJQ=;
+        b=fcSq88q+gQ5eVNKYLGRZEx6kB2ONx1zmeU1qez4U7QDuktWoB7lmK8aFdS8VEwL2sF
+         PqRyzTb/krZQ/E6MNFy/FA1lmeSZrGz9OuE3hfzJnVAn5gjLStKs5nKjLskBjGNgEX+a
+         YvZ9MCVRO7PQuFmEglWWmEmb+hxORUDq8tRkSeNdPH7F0BjUkaWHn6Jawxyx4gAJLIP0
+         Ij2tlUSvYSzLMYiAISia27aJ0WyL94BUUrKb4PGOCcgfpDLtEspYmMKG1qAGRPPptmcI
+         M97E6qQyMzqvnQ6Akhx5OuCGoLUCrExeCDmy7oGGhoaRbd8eJYxVyW0aIOi57DvFv1Cc
+         PvWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MAttpzueGAYsfaY0baImq0QHsztmrAcw7EcUju76EJQ=;
+        b=GuOjD4UMBsPGMGVHzXyVeMSV4/OZWaVycSEQQfqq6gDhHaM4W/1J08laaaPDV4vU9a
+         4Bvd3mUw+KP9udc05Y8GlvS9Jy3gXbEc5c5Fepn5ob0OVF9AWFXUKzURMmLdidyrpws8
+         NT5nV4fX1D1CYe+6grKGELMjaQjVX00laT3xBrQ2Le6v16sQwAHTMRY2+Muxi6l9MtmS
+         oZ1BJQo34BnIcot3Gj0tx1lNROPnRdiGnaXt/evYxryT1Kn6M+VW31gadrLdyp+lWXzq
+         RCzWj2cWEDfX1AKbZ+SbrUMKCZNZ43UyPQYDz2+1cMz5hD8X0FatiQeoh8Sifz9WuGpz
+         TM9Q==
+X-Gm-Message-State: AFqh2kqjv+4cLjziMcpT5MnJdlzo1yN2XrEwIqbsqNT2EQLs6d38Rl5A
+        6YUlFEiWYlhO9PTNvdMa5/b5dxnWXKIZINbW18YeAw==
+X-Google-Smtp-Source: AMrXdXuUoP42kHvOc0dUiqLBSTR/RBqOZsA4WwAH+/UWLlRHw2aHIpQhFqNrjzSKRhS4tuFWBcImWJSY29BLSdLdnhI=
+X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
+ a26-20020a67f2da000000b003d3d90c5ef2mr4449498vsn.17.1674550505097; Tue, 24
+ Jan 2023 00:55:05 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124013138.358595-1-pierluigi.p@variscite.com>
+In-Reply-To: <20230124013138.358595-1-pierluigi.p@variscite.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 24 Jan 2023 09:54:54 +0100
+Message-ID: <CAMRc=Mcf+PA-uhT+3Sq5AxHUMb-K_ogw=kBtGV6-wK00PtXGkw@mail.gmail.com>
+Subject: Re: [PATCH v3] gpiolib: fix linker errors when GPIOLIB is disabled
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc:     linus.walleij@linaro.org, yamada.masahiro@socionext.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sfr@canb.auug.org.au, eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.passaro@gmail.com,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWF0ZXVzeiBHdXppaw0KPiBTZW50OiAyNCBKYW51YXJ5IDIwMjMgMDA6MTENCi4uLg0K
-PiBTbyBpZiB5b3Ugc3RyYWNlIHNvbWV0aGluZyBsaWtlIGdjYyBjb21waWxpbmcgc3R1ZmYgeW91
-IHdpbGwgZmluZDoNCj4gLSBzb21lIGFjY2VzcyBjYWxscyBvbiBzaGFyZWQgZGlycywgZm9yIGV4
-YW1wbGU6DQo+IDc4NTMzIGFjY2VzcygiL3Vzci9saWIvZ2NjL3g4Nl82NC1saW51eC1nbnUvMTEv
-IiwgWF9PSykgPSAwDQo+IDc4NTMzIGFjY2VzcygiL3Vzci9saWIvZ2NjL3g4Nl82NC1saW51eC1n
-bnUvMTEvIiwgWF9PSykgPSAwDQo+IDc4NTMzIGFjY2VzcygiL3Vzci9saWIvZ2NjL3g4Nl82NC1s
-aW51eC1nbnUvMTEvIiwgWF9PSykgPSAwDQoNCkFyZSB0aGV5IGJhY2sgdG8gYmFjaz8gV2hpY2gg
-aXMganVzdCBzdHVwaWQuDQpPbmNlIHBlciBpbnZvY2F0aW9uIG9mIGdjYyB3b3VsZCBiZSBub2lz
-ZS4NCg0KPiAtIHNhbWUgd2l0aCBuZXdmc3RhdGF0Og0KPiA4NzQyOCBuZXdmc3RhdGF0KEFUX0ZE
-Q1dELCAiLi9hcmNoL3g4Ni9pbmNsdWRlIiwge3N0X21vZGU9U19JRkRJUnwwNzU1LCBzdF9zaXpl
-PTQwOTYsIC4uLn0sIDApID0gMA0KPiA4NzQyOCBuZXdmc3RhdGF0KEFUX0ZEQ1dELCAiLi9hcmNo
-L3g4Ni9pbmNsdWRlL2dlbmVyYXRlZCIsIHtzdF9tb2RlPVNfSUZESVJ8MDc1NSwgc3Rfc2l6ZT00
-MDk2LCAuLi59LCAwKSA9IDANCj4gODc0MjggbmV3ZnN0YXRhdChBVF9GRENXRCwgIi4vaW5jbHVk
-ZSIsIHtzdF9tb2RlPVNfSUZESVJ8MDc1NSwgc3Rfc2l6ZT00MDk2LCAuLi59LCAwKSA9IDANCj4g
-ODc0MjggbmV3ZnN0YXRhdChBVF9GRENXRCwgIi4vYXJjaC94ODYvaW5jbHVkZS91YXBpIiwge3N0
-X21vZGU9U19JRkRJUnwwNzU1LCBzdF9zaXplPTQwOTYsIC4uLn0sIDApID0gMA0KPiAtIHRoZXJl
-IGlzIGFsc28gcXVpdGUgYSBiaXQgb2YgcmVhZGxpbms6DQo+IDg3NTAyIHJlYWRsaW5rKCIvdG1w
-IiwgMHg3ZmZlMjg4NDdhYzAsIDEwMjMpID0gLTEgRUlOVkFMIChJbnZhbGlkIGFyZ3VtZW50KQ0K
-PiA4NzUwMiByZWFkbGluaygiL3RtcC9jY1RoMzdvSS5zIiwgMHg3ZmZlMjg4NDdhYzAsIDEwMjMp
-ID0gLTEgRUlOVkFMIChJbnZhbGlkIGFyZ3VtZW50KQ0KPiANCj4gdGhhdCBsYXN0IGJpdCBpcyBn
-bGliYyBkb2luZyByZWFscGF0aCgpLiBBIGNhc2UgY2FuIGJlIG1hZGUgZm9yIG1ha2luZw0KPiBy
-ZWFscGF0aCBpbnRvIGEgc3lzY2FsbCBpbnN0ZWFkLCBidXQgSSdtIG5vdCBnb2luZyB0byBmbGFt
-ZSBvdmVyIGZvcg0KPiB0aGUgdGltZSBiZWluZy4gOikNCg0KSSByZW1lbWJlciBsb29raW5nIGF0
-IHN5c2NhbGwgY291bnRzIGR1cmluZyBhIChOZXRCU0QpIGJ1aWxkDQphbmQgZGVjaWRpbmcgdGhh
-dCB0aGUgZG9taW5hbnQgc3lzdGVtIGNhbGwgd2FzIGFjdHVhbGx5IGZhaWxlZA0Kb3BlbnMgZnJv
-bSB0aGUgY29tcGlsZXIgc2VhcmNoaW5nIGxvbmcgLUkgcGF0aHMgbG9va2luZyBmb3INCmhlYWRl
-cnMuDQpZb3UgY2FuIHNwZWVkIHRoaW5ncyB1cCBieSBjb3B5aW5nIGFsbCB0aGUgLmggZmlsZXMg
-ZnJvbSB0aGUNCmZpeGVkIC1JIHBhdGggbGlzdCBpbnRvIGEgc2luZ2xlIGRpcmVjdG9yeS4NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+On Tue, Jan 24, 2023 at 2:31 AM Pierluigi Passaro
+<pierluigi.p@variscite.com> wrote:
+>
+> Both the functions gpiochip_request_own_desc and
+> gpiochip_free_own_desc are exported from
+>     drivers/gpio/gpiolib.c
+> but this file is compiled only when CONFIG_GPIOLIB is enabled.
+> Move the prototypes under "#ifdef CONFIG_GPIOLIB" and provide
+> reasonable definitions and includes in the "#else" branch.
+>
+> Fixes: 9091373ab7ea ("gpio: remove less important #ifdef around declarations")
+> Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+> Changes in v2:
+> - add Fixes tag
+> Changes in v3:
+> - add includes to fix builds against x86_64-defconfig
+>
 
+Hey Pierluigi!
+
+Thanks for the quick fix. When this happens - a bug report after a
+patch was applied - please generally submit a fix based on what's
+already in next, not another version. This time, I'll back it out of
+next because I have some comments on this, so please do send a v4.
+
+>  include/linux/gpio/driver.h | 23 +++++++++++++++++++++--
+>  1 file changed, 21 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index 44783fc16125..e00eaba724dc 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -758,6 +758,8 @@ gpiochip_remove_pin_ranges(struct gpio_chip *gc)
+>
+>  #endif /* CONFIG_PINCTRL */
+>
+> +#ifdef CONFIG_GPIOLIB
+> +
+>  struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+>                                             unsigned int hwnum,
+>                                             const char *label,
+> @@ -765,8 +767,6 @@ struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+>                                             enum gpiod_flags dflags);
+>  void gpiochip_free_own_desc(struct gpio_desc *desc);
+>
+> -#ifdef CONFIG_GPIOLIB
+> -
+>  /* lock/unlock as IRQ */
+>  int gpiochip_lock_as_irq(struct gpio_chip *gc, unsigned int offset);
+>  void gpiochip_unlock_as_irq(struct gpio_chip *gc, unsigned int offset);
+> @@ -776,6 +776,25 @@ struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc);
+>
+>  #else /* CONFIG_GPIOLIB */
+>
+> +#include <linux/gpio/machine.h>
+> +#include <linux/gpio/consumer.h>
+
+Please move those headers to the top and arrange them alphabetically
+with the rest of the <linux/ headers. Since you're now including
+those, remove any forward declarations of the types in question.
+
+Bart
+
+> +
+> +static inline struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+> +                                           unsigned int hwnum,
+> +                                           const char *label,
+> +                                           enum gpio_lookup_flags lflags,
+> +                                           enum gpiod_flags dflags)
+> +{
+> +       /* GPIO can never have been requested */
+> +       WARN_ON(1);
+> +       return ERR_PTR(-ENODEV);
+> +}
+> +
+> +static inline void gpiochip_free_own_desc(struct gpio_desc *desc)
+> +{
+> +       WARN_ON(1);
+> +}
+> +
+>  static inline struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc)
+>  {
+>         /* GPIO can never have been requested */
+> --
+> 2.34.1
+>
