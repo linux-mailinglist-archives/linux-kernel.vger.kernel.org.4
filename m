@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD6A679E0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E98C679E12
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234001AbjAXP4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S234257AbjAXP5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:57:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjAXP4j (ORCPT
+        with ESMTP id S234088AbjAXP5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:56:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C4448618
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:56:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AF9FB812A1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 15:56:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95830C433D2;
-        Tue, 24 Jan 2023 15:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674575794;
-        bh=QFLsB9JzqKvY6nPNDIwdmPSNhyi2EdnFP1HCsqJz3cA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LpRCFrDSqI5jNzzJ0XZ2qQigyajvL3okiqw1XRGNem00t+6zi4LleNjCjB8rkSk97
-         R9L+tm4cCLY1U4MENsk88mSr0yNXXiFdKmgXroHwLh8ObasYdLQl3E4s/t7MB58M37
-         6+TI8ZzMQ4QqGBT7zMlC6IFGCgzhKjLir2ViLI7N9xqteppht2xwmbZGhc+BpuZjhZ
-         L5XUWNBFaIcG3Ig40pCj8PJeGrRHNB3nOqF9mH0jw6KmCzS9h4/praNOEEndhz/gKE
-         GpPy1I7+Y6c7+3T0r3pSdAF9Z8SCtDMaQJysTEIreK6xgKQOHcRu4L0i9AmhlY85MC
-         R8+MhNOXjkJlQ==
-Date:   Tue, 24 Jan 2023 08:56:30 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>
-Subject: Re: [PATCH] nvme-pci: Switch back to sync probe to fix rootfs mount
- regression
-Message-ID: <Y8//roUT5byp59UP@kbusch-mbp.dhcp.thefacebook.com>
-References: <20230124004542.29659-1-ville.syrjala@linux.intel.com>
- <20230124062140.GA29175@lst.de>
- <Y8+bP2Oqy3B2XyuJ@intel.com>
- <20230124134134.GC25796@lst.de>
+        Tue, 24 Jan 2023 10:57:39 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7264A1FF;
+        Tue, 24 Jan 2023 07:57:38 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id jm10so15091519plb.13;
+        Tue, 24 Jan 2023 07:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hqolBxXCNuOBmobd0DkrzxBEkxNCJTU7jxiH5MLZ5rw=;
+        b=VF7hIVFm9tEJXxqAAb0rT9WiklBsCz88lSzN/0M+/jCBVz+OddZ6zSXuzXjPF1/Iiz
+         JRgnR9Cfjd+dCpQJWHo5dXLjNAVtGVTDmeVKTdr7eiBWa+dm4XreQsETmoLM+aEy/g6d
+         udi2YadJqdKylNnYxEsV0apiMAzgE0qJeNG23GnoIKCa0Ly9azN/GS2IWSe4LT6X6568
+         wDNtxMw98ByheGDBbdlU45EZYgDRc0MJozQmF5Ww7AuD2rc3fX2ZZLhWnyq4fOcMe6L3
+         o3f5sIx+5s84l9UPQqQDbqBMY9GRLNz0pae5fUEM4oH4RcoBe+q3dc9wz7tGly0W1aWa
+         8s+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hqolBxXCNuOBmobd0DkrzxBEkxNCJTU7jxiH5MLZ5rw=;
+        b=q/iJP0/ADwDVD6wbldhnJQ0B9An639UHbWSCmqjCfH2PXWzG5htzH0MSSBGFZZskpm
+         82+YdszLkdC3JkCGwkii6J9AmuYLq60lwwVhwNza06G4XVPcP1EUupbOfzez84R0AZvM
+         6QjfGMtaUr5vUGqELk4CAIk8bnbg8q5gFG9dbqOdhreBTtTTx6dyLPTS7XctFHiveqKi
+         E31TQGn46hYCH5kDzrT2VecvYD4Y93KM1U9heqJp+vPONna+M6+9yn+wNi8CnNYZTcQo
+         t9vizaA1LY7akFoMsQ88GF27vvRS4n4dg7qAx1+67aZ22PC5dJWrNdAU7sep+7jKfobe
+         ABaQ==
+X-Gm-Message-State: AO0yUKUt82IjO/s/8IE0NPSAvI3waNWGd89qNNFAu+axklzDC6VY+ebW
+        MMZGYuUANnYzbW1w1q1wYQhQ0s0EDhs=
+X-Google-Smtp-Source: AK7set/kfxCTTixwnKqQQKv0TFk9Ak4D/IsCJdHqSVJy+e6AyuWjQDmIdKoIa3+JnmnpLKV3A+QV/Q==
+X-Received: by 2002:a17:90a:191c:b0:22b:e71b:1fde with SMTP id 28-20020a17090a191c00b0022be71b1fdemr3822120pjg.15.1674575857534;
+        Tue, 24 Jan 2023 07:57:37 -0800 (PST)
+Received: from [192.168.0.128] ([98.97.116.5])
+        by smtp.googlemail.com with ESMTPSA id b26-20020a63931a000000b00478e7f87f3bsm1609790pge.67.2023.01.24.07.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 07:57:36 -0800 (PST)
+Message-ID: <f3d079ce930895475f307de3fdaed0b85b4f2671.camel@gmail.com>
+Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented
+ allocation
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
+Date:   Tue, 24 Jan 2023 07:57:35 -0800
+In-Reply-To: <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+References: <20230124124300.94886-1-nbd@nbd.name>
+         <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230124134134.GC25796@lst.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:41:34PM +0100, Christoph Hellwig wrote:
-> On Tue, Jan 24, 2023 at 10:47:59AM +0200, Ville Syrjälä wrote:
-> > On Tue, Jan 24, 2023 at 07:21:40AM +0100, Christoph Hellwig wrote:
-> > > Err, no.  We're not going to randomly revert things.  If you want
-> > > to be productive check the one liner Keith reported in reply to the
-> > > last report.
-> > 
-> > No idea what that previous report is. Care to share a link?
-> 
-> https://lore.kernel.org/linux-nvme/849c43bc-7488-72a6-f6fc-8700639b0c79@leemhuis.info/T/#m759092f541ea29fcb41911890307e70868636a45
-> 
-> Patch to test:
-> 
-> https://lore.kernel.org/linux-nvme/849c43bc-7488-72a6-f6fc-8700639b0c79@leemhuis.info/T/#md13c22b29cd81bd0ce9167c271c582005ba30550
+On Tue, 2023-01-24 at 16:11 +0200, Ilias Apalodimas wrote:
+> Hi Felix,
+>=20
+> ++cc Alexander and Yunsheng.
+>=20
+> Thanks for the report
+>=20
+> On Tue, 24 Jan 2023 at 14:43, Felix Fietkau <nbd@nbd.name> wrote:
+> >=20
+> > While testing fragmented page_pool allocation in the mt76 driver, I was=
+ able
+> > to reliably trigger page refcount underflow issues, which did not occur=
+ with
+> > full-page page_pool allocation.
+> > It appears to me, that handling refcounting in two separate counters
+> > (page->pp_frag_count and page refcount) is racy when page refcount gets
+> > incremented by code dealing with skb fragments directly, and
+> > page_pool_return_skb_page is called multiple times for the same fragmen=
+t.
+> >=20
+> > Dropping page->pp_frag_count and relying entirely on the page refcount =
+makes
+> > these underflow issues and crashes go away.
+> >=20
+>=20
+> This has been discussed here [1].  TL;DR changing this to page
+> refcount might blow up in other colorful ways.  Can we look closer and
+> figure out why the underflow happens?
+>=20
+> [1] https://lore.kernel.org/netdev/1625903002-31619-4-git-send-email-liny=
+unsheng@huawei.com/
+>=20
+> Thanks
+> /Ilias
+>=20
+>=20
 
-I'll post the official patch if someone can let me know if it's
-successful. Or I can potentially setup a VM to verify myself, but I
-probably won't be able to get to that till next week.
+The logic should be safe in terms of the page pool itself as it should
+be holding one reference to the page while the pp_frag_count is non-
+zero. That one reference is what keeps the two halfs in sync as the
+page shouldn't be able to be freed until we exhaust the pp_frag_count.
+
+To have an underflow there are two possible scenarios. One is that
+either put_page or free_page is being called somewhere that the
+page_pool freeing functions should be used. The other possibility is
+that a pp_frag_count reference was taken somewhere a page reference
+should have.
+
+Do we have a backtrace for the spots that are showing this underrun? If
+nothing else we may want to look at tracking down the spots that are
+freeing the page pool pages via put_page or free_page to determine what
+paths these pages are taking.
