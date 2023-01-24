@@ -2,144 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E97679146
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7F167914F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233182AbjAXGtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 01:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S233250AbjAXGxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 01:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbjAXGtr (ORCPT
+        with ESMTP id S231599AbjAXGxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 01:49:47 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80206166C0;
-        Mon, 23 Jan 2023 22:49:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674542986; x=1706078986;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n9X5M2Ffay588usGJyjJIiPY/GxCh6U0rf1vzfy0lEY=;
-  b=eP//zdmNncjYBpjB8cWmHEJF7xYRyvub2apcQYQztIwDzZN1xTtT8nT7
-   /qw9Pxf6gzoex7lnvDHm2QMumA0mZqDhxVlzZZtM624KxCF/yNDq7LpFg
-   VH2j8OhOBKNMKPwVH1jOEpEEXV0tktkhojWs3NlhrwZV+8wACDi5As0WY
-   QDLF7seMSu3QBj+Xh4XcWCy19uxGykmSf5pli/lVoUpOLa27K7Xso0VN/
-   ivDn+qftWJ9mEVm0wKZO3YuwGdCMMvpoSF7EztxGgh2oziJg5gxAg9a7B
-   1HSQfjsv2y7A8DjujQGVGTc+rIgJ4ohb9clFxtwFFwYHvINSyg7YlH76l
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="323930766"
-X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
-   d="scan'208";a="323930766"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 22:49:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="990758621"
-X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
-   d="scan'208";a="990758621"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jan 2023 22:49:43 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKD7m-0006DQ-2E;
-        Tue, 24 Jan 2023 06:49:42 +0000
-Date:   Tue, 24 Jan 2023 14:49:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc:     oe-kbuild-all@lists.linux.dev, hannes@cmpxchg.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        bfoster@redhat.com, willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH v7 2/3] cachestat: implement cachestat syscall
-Message-ID: <202301241402.CeUdAtDh-lkp@intel.com>
-References: <20230124021118.154078-3-nphamcs@gmail.com>
+        Tue, 24 Jan 2023 01:53:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D0A3346A;
+        Mon, 23 Jan 2023 22:53:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00E3EB810D9;
+        Tue, 24 Jan 2023 06:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27938C433D2;
+        Tue, 24 Jan 2023 06:53:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674543224;
+        bh=nHpHX6/+wyWuj2Y4QnlYm5vYfNUU5MLJAuaOKbp/Gq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LAbcsySmTVzlG0xf2zn8yImJgdNeKCR/+1QBKBPvSMp3Q57GyB4dSorot4n32MTOL
+         lpwbFZnOAaKAJ7eYkyC0HVbi+p5Halld2qmO21+JijiErymUOaWSEPj28tty01wE50
+         SS1DHyBEVdStkdXxXaAl1I4wMYdOf13o9RL6Rkc1A8ViqsPOJfhrVPv486KNxIPoR2
+         P+x1FlC5N9UPCpxaCzZTLSQHG/jC+mcbUiQ8UIMthIjKcKI6HNkw6X4xozn/H+scU4
+         h2RPdYdQn/8J9QTQzJWU/01F8wnkqfj3OD/o4btPng6E1TGsSBRTAo8L1ebWHr42Bf
+         Ojv5KYbgTKv5A==
+Date:   Tue, 24 Jan 2023 08:49:19 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        andrew.gospodarek@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        selvin.xavier@broadcom.com
+Subject: Re: [PATCH net-next v8 1/8] bnxt_en: Add auxiliary driver support
+Message-ID: <Y89/b4kdiXlFzkOl@unreal>
+References: <20230120060535.83087-1-ajit.khaparde@broadcom.com>
+ <20230120060535.83087-2-ajit.khaparde@broadcom.com>
+ <20230123223305.30c586ee@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124021118.154078-3-nphamcs@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230123223305.30c586ee@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nhat,
+On Mon, Jan 23, 2023 at 10:33:05PM -0800, Jakub Kicinski wrote:
+> On Thu, 19 Jan 2023 22:05:28 -0800 Ajit Khaparde wrote:
+> > @@ -13212,6 +13214,7 @@ static void bnxt_remove_one(struct pci_dev *pdev)
+> >  	kfree(bp->rss_indir_tbl);
+> >  	bp->rss_indir_tbl = NULL;
+> >  	bnxt_free_port_stats(bp);
+> > +	bnxt_aux_priv_free(bp);
+> >  	free_netdev(dev);
+> 
+> You're still freeing the memory in which struct device sits regardless
+> of its reference count.
 
-Thank you for the patch! Perhaps something to improve:
+BTW, Ajit does the same wrong kfree in bnxt_rdma_aux_device_add() too.
++	ret = auxiliary_device_add(aux_dev);
++	if (ret)
++		goto aux_dev_uninit;
++
+...
++aux_dev_uninit:
++	auxiliary_device_uninit(aux_dev);
++free_edev:
++	kfree(edev); <----- wrong
++	bp->edev = NULL;
 
-[auto build test WARNING on 1440f576022887004f719883acb094e7e0dd4944]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
-base:   1440f576022887004f719883acb094e7e0dd4944
-patch link:    https://lore.kernel.org/r/20230124021118.154078-3-nphamcs%40gmail.com
-patch subject: [PATCH v7 2/3] cachestat: implement cachestat syscall
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301241402.CeUdAtDh-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f902a360bb453bd6885cd89d4f9ad4a40205fd15
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
-        git checkout f902a360bb453bd6885cd89d4f9ad4a40205fd15
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
---
->> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
---
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      26 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      78 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      92 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-     108 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     136 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     179 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:213:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     213 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:248:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
-     248 | void output_signal_defined(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:315:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
-     315 | void output_pbe_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:327:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
-     327 | void output_pm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:341:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     341 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:385:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
-     385 | void output_cps_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
->> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks
