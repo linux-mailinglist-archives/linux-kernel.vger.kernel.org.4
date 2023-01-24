@@ -2,200 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A0D6798F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9656798FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbjAXNOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 08:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S233633AbjAXNPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 08:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbjAXNOp (ORCPT
+        with ESMTP id S232855AbjAXNPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:14:45 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAF310ABF
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:14:42 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P1S0f6FPLz9v7Yt
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 21:06:42 +0800 (CST)
-Received: from [10.48.129.122] (unknown [10.48.129.122])
-        by APP1 (Coremail) with SMTP id LxC2BwBn7Qie2c9jCMfCAA--.14182S2;
-        Tue, 24 Jan 2023 14:14:18 +0100 (CET)
-Message-ID: <1a189694-57b4-81d0-625a-64dd069b1953@huaweicloud.com>
-Date:   Tue, 24 Jan 2023 14:14:03 +0100
+        Tue, 24 Jan 2023 08:15:23 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FEA3C286;
+        Tue, 24 Jan 2023 05:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1674566114;
+  x=1706102114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X4ohU+IZCiap51TFkcMjgBOhcJ2qkxrD93kr53aJ4Ho=;
+  b=SIMf9frKpHZKmaqGb/Ne7xa/ud0zL2zj/KIyA7x2qDPrRReJEpwBuQl+
+   6iDE1hSD2d6MGQTT45OLGfhqu/LIZCcCmxMuSZDDcEpv6tQZgAcAEU8+m
+   4c9ogFODHNysFzkNQdXk+C/HqZSw4X5XKVB6NmUvAn4IYlFIaUSuIXXl0
+   OBfo9H1BD0IEbtXdPKlYsECSqIHBqnhyNnpgz6UpBhwU1CPEm35GrQ+V+
+   KaN5ckVLhWiVH5c5EH6yyk8uDhPNogpDRK+XSMIAfR3+VoYwCvhRI6Jrq
+   uW1RtSXOTKsK8bd4KwGE+EPs0rTsrMiRPo5BcH8jw6sQ/xDjSoHaJMvhW
+   g==;
+Date:   Tue, 24 Jan 2023 14:15:11 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, Lee Jones <lee@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] mfd: Add Simple PCI MFD driver
+Message-ID: <Y8/Z3+clVN4MbH/i@axis.com>
+References: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
+ <Y86op9oh5ldrZQyG@google.com>
+ <Y86vm0zDOeb1G3zh@axis.com>
+ <CAL_JsqLHi_1QJ4s28uM1b_Z2f+Nsu_CusAsqsx6vVOCCAPLMgw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-References: <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
- <75c74fe1-a846-aed8-c00c-45deeb1cfdda@huaweicloud.com>
- <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
- <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
- <Y8rCBOkM/hY+Z27t@rowland.harvard.edu>
- <2f656643-deef-552e-e489-b7afd0dc777f@huaweicloud.com>
- <Y8xRe1Gr6LNjKD4S@rowland.harvard.edu>
- <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
- <Y87D0ekKCHFLjzeP@rowland.harvard.edu>
- <8908438d-da93-b843-f0e0-831ba7070c86@huaweicloud.com>
- <Y873uBB5rAW8tjdd@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y873uBB5rAW8tjdd@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBn7Qie2c9jCMfCAA--.14182S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFW7uF1ruryfAF1xJFW3Awb_yoW7Xw1xpa
-        y3KanFkF1DAr4S9wn2yrnYqryS9w4kAF4rJrn8A39Ykws8Wa1IkF4fKr4YyF9rXrs7Ca1j
-        vF45ZF9rZFy5Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLHi_1QJ4s28uM1b_Z2f+Nsu_CusAsqsx6vVOCCAPLMgw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 05:36:06PM +0100, Rob Herring wrote:
+> On Mon, Jan 23, 2023 at 10:02 AM Vincent Whitchurch
+> <vincent.whitchurch@axis.com> wrote:
+> dtc should complain about this...
 
+It probably does, the test framework currently doesn't report these to
+the test runner/writer; maybe it should.
 
-On 1/23/2023 10:10 PM, Alan Stern wrote:
-> On Mon, Jan 23, 2023 at 08:33:42PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/23/2023 6:28 PM, Alan Stern wrote:
->>
->>>
->>> I guess one would have to put
->>>
->>> 	(cumul-fence+ ; [W])?
->>>
->>> or something like it in the definition.
->> I suppose it's true that Y being a load would be an exception, but that
->> would only be if the cumul-fence+ sequence either ends in a strong-fence, or
->> in po-unlock-lock-po.
->>
->> We can ignore the first case (and the ordering would be provided anyways
->> through pb at that point).
->> For the po-unlock-lock-po, you can just take Y:=the LKW event of the unlock
->> and repeat the argument.
-> And yet you complained about the reasoning needed to understand that
-> (pb ; hb) <= pb!
+> >         compatible = "virtio,uml";
+> 
+> Binding?
 
-Eh, I can't help it, my first instinct is always going to be to make 
-things shorter :D
+There was some discussion earlier about whether a binding was needed
+here (you were on CC):
 
-> Not to mention the brittleness of this argument; what
-> if in the future cumul-fence gets another term ending in a load?
+ https://lore.kernel.org/lkml/20211222103417.GB25135@axis.com/
 
-After mulling it over a bit in my big old head, I consider that even 
-though dropping the [W] may be shorter, it might make for the simpler 
-model by excluding lots of cases.
-That makes me think you should do it for real in the definition of prop. 
-And not just at the very end, because in fact each cumul-fence link 
-might come from a non-A-cumulative fence. So the same argument you are 
-giving should be applied recursively.
-Either
+> 
+> >         virtio-device-id = <1234>;
+> >         ranges;
+> >
+> >         pci {
+> >                 #address-cells = <3>;
+> >                 #size-cells = <2>;
+> >                 ranges = <0x0000000 0 0 0 0xf0000000 0 0x20000>;
+> >                 compatible = "virtio,device4d2", "pci";
+> 
+> "pci" is not a valid compatible string.
 
-	prop = (overwrite & ext)? ; (cumul-fence; [W])* ; rfe?
+I think it's there since I based this tree off from
+arch/x86/platform/ce4100/falconfalls.dts.  I see that there is some code
+in arch/x86/kernel/devicetree.c to handle this compatible and register
+all platform devices under that.  Do we need something like that for UML
+instead of this patch?
 
-or integrate it directly into cumul-fence.
+> 
+> >                 device_type = "pci";
+> >                 bus-range = <0 0>;
+> >
+> >                 platform_parent: device@0,0 {
+> >                         compatible = "pci494f,dc8";
+> >                         reg = <0x00000 0 0 0x0 0x10000>;
+> >                         ranges;
+> >
+> >                         uart@10000 {
+> >                                 compatible = "google,goldfish-tty";
+> >                                 reg = <0x00000 0 0x10000 0 0x10000>;
+> 
+> This is not a PCI device, so it shouldn't be using PCI addressing.
+> 'ranges' needs an entry (for each BAR) to translate to just a normal
+> MMIO bus with 1 or 2 address/size cells. Maybe we want a 'simple-bus'
+> node for each BAR. The FPGA series needs the same things, but that
+> aspect hasn't really been addressed as the first issue is populating
+> the PCI devices dynamically.
 
+Yes, this ranges stuff can be fixed in the Python code which generates
+these trees.
 
->> So I don't think the [W] is necessary. (and if it was maybe it would also be
->> necessary in the definition of prop/cumul-fence itself, to account for all
->> the non-A-cumulative fences in there).
->>
->> I think part of my weird feeling comes from this asymmetry between A-cumul()
->> putting the rfe? to the left and prop putting the rfe? to the right. Or more
->> precisely, that the latter is sometimes in anticipation of an A-cumulative
->> fence (where the A-cumul would normally take it to the left of that fence)
->> and sometimes just to express the idea of propagation, and that these are
->> the same, which should somehow lead to a simpler definition but doesn't.
-> Well, consider that maybe they aren't the same.  :-)
->
-> The definition of prop is a little more complicated than one might
-> expect, because the overwrite and cumul-fence parts are both optional.
-> Leaving one or both of them out is valid, but it requires a little extra
-> thought to see why.
-Let's at this point in time not get started on the overwrite part being 
-optional :D (see, this is me successfully holding myself back from 
-opening another discussion! I can do it!).
+In my cases the devicetree blob contains all the devices under the PCI
+devices, see my other email.
 
->
->>>> I'm not against this partially overlapping kind of redundancy, but I dislike
->>>> subsuming kind of redundancy where some branches of the logic just never
->>>> need to be used.
->>> Consider: Could we remove all propagation-ordering fences from ppo
->>> because they are subsumed by prop?  (Or is that just wrong?)
->> Surely not, since prop doesn't usually provide ordering by itself.
-> Sorry, I meant the prop-related non-ppo parts of hb and pb.
+> The DT address translation code should support all this
+> (MMIO->PCI->MMIO), but I don't think there's any existing examples. An
+> example (that I can test) would be great. If the unittest had that
+> example, I'd be thrilled.
 
-I still don't follow :( Can you write some equations to show me what you 
-mean?
+Anyone can run what I'm running since it uses UML and there is no real
+hardware, but the setup is a bit more complicated than an in-kernel
+unit test since there is a virtio backend in userspace which implements
+the "hardware".  If you want to try it:
 
->>>>> In fact, I wouldn't mind removing the happens-before, propagation, and
->>>>> rcu axioms from LKMM entirely, replacing them with the single
->>>>> executes-before axiom.
->>>> I was planning to propose the same thing, however, I would also propose to
->>>> redefine hb and rb by dropping the hb/pb parts at the end of these
->>>> relations.
->>>>
->>>>    hb = ....
->>>>    pb = prop ; strong-fence ; [Marked]
->>>>    rb = prop ; rcu-fence ; [Marked]
->>>>
->>>>    xb = hb|pb|rb
->>>>    acyclic xb
->>> I'm not so sure that's a good idea.  For instance, it would require the
->>> definitions of rcu-link and rb to be changed from having (hb* ; pb*) to
->>> having (hb | pb)*.
->> I think that's an improvement. It's obvious that (hb | pb)* is right and so
->> is (pb | hb)*.
->> For (hb* ; pb*), the first reaction is "why do all the hb edges need to be
->> before the pb edges?", until one realizes that pb actually allows hb* at the
->> end, so in a sense this is  hb* ; (pb ; hb*)*, and then one has to
->> understand that this means that the prop;strong-fence edges can appear any
->> number of times at arbitrary locations. It just seems like defining (pb |
->> hb)* with extra steps.
-> This can be mentioned explicitly as a comment or in explanation.txt.
-Ok, but why not just use  (pb|hb)* and (pb|hb|rb)* and not worry about 
-having to explain anything?
-And make the hb and rb definitions simpler at the same time?
+ git remote add vwax https://github.com/vwax/linux.git
+ git fetch vwax
+ git checkout vmax/roadtest/platform-wip
+ make -C tools/testing/roadtest/ -j24 OPTS="-v -k platform"
 
->> The order of nesting seems to be also somewhat a matter of preference,
->> perhaps in some weird alternative universe the LKMM says pb = (prop\id)&int
->> | prop;strong-fence  and hb = (rfe | ppo);pb*. (Personally I think the
->> current way is more reasonable than this one, but that might be because our
->> preferences happen to align in this instance.)
-> You can't define hb that way, because the definition of hb appears
-> before the definition of pb.  And it has to be this way, because hb is
-> used in the definition of pb.
-Note that in that alternative universe,
-
-     pb = (prop\id)&int | prop;strong-fence
-
-which doesn't require any definition of hb.
-
-Best wishes,
-jonas
-
+You should see a "PASSED roadtest/tests/base/test_platform.py::test_foo"
+if it works.  See Documentation/dev-tools/roadtest.rst for more info.
+As mentioned in the other email, the only patches to the kernel proper
+in that tree are already posted ones and WIP fixes.
