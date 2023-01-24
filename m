@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4DF679665
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBBD6795C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbjAXLP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S233439AbjAXKwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233915AbjAXLPz (ORCPT
+        with ESMTP id S233482AbjAXKwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:15:55 -0500
-X-Greylist: delayed 901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 03:15:48 PST
-Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21813E63F;
-        Tue, 24 Jan 2023 03:15:47 -0800 (PST)
-From:   Denis Arefev <arefev@swemel.ru>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-        t=1674557437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aD4/h9d4fdnCay6mck+bYpcLc26YjKd4Wc2Mq5yvcbU=;
-        b=kAotjoS+d+k9Lh4ogAm7MW/ZgGTPfW79NNEjl8gEv4rnxU/Xb1Tddt+3YMXPUpPLwKXfkp
-        VIA3w+ahpW5+XvvAn9oBzTGPzL1W85NiQ2RV3HqLVZQ9dr4Tj3Wbs0hV29GgzJPafPdfkS
-        +JftDJcFoxCQE3Duax3BwNwr1Wvfpoo=
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trufanov@swemel.ru, vfh@swemel.ru
-Subject: [PATCH] smackfs: Added check catlen
-Date:   Tue, 24 Jan 2023 13:50:37 +0300
-Message-Id: <20230124105037.23108-1-arefev@swemel.ru>
+        Tue, 24 Jan 2023 05:52:09 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF6044B1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:52:07 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id g16so1376923ilr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:52:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PZZkl0nuhDOnpS6mpTFr8PbXxlSJ2XVVn7nhNW4knVE=;
+        b=eysX+ECnIsH4FMjfUYT/LQAt9n6rglG6tqxiFcoAUICMiQfGdw6uRCYzxropjiIHWX
+         aGm0Ai3CVpIR3vF+EduIDOySpa/9Cs7/A0TdpklPuDWKFUgQZpGb/QUx7y/gmG1+gJQT
+         R0EgI2WlD8RTdP4mKPBp2BIR3O5cm0XeN7nPZ0SG8//AUcx383pwBNqlJlupg5yLuFLh
+         /Bt4ywpI6JPeuzM6XnPuB0hUMriFJgSFDg1wnWsB4yXnlV+fcImKNZFnp8e56Zo2rLxF
+         LM6SKfI/YCy26+jyb1ULwBcIRsTXvzHOZMkpI89Kjz5MQ29Qw33zMIR8Bf4V25RxB/nC
+         pH4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PZZkl0nuhDOnpS6mpTFr8PbXxlSJ2XVVn7nhNW4knVE=;
+        b=EB2KraxfnYRCqaDowJI4ZNFx4mEYeLfLXRjfuQLamp9PGWAZuDKx6Xsv3UXKXytVZ+
+         u9uhN2R6qYdrnUvlIIuUjA7FNzHSlJTUUSXP8I+bzPPVHWRp2l2lTM+bU8MDlXxpG1K7
+         o+K8RWYpXuO5jvwjniuG91MEJPXCNdiO6J2YRs2nppvNOLA0Jbsi60DHAbKFDWlhq/f7
+         Ywap2z3Dg0RxrGiWjacdAm+JEQqHZ3TKgB+aQUbyMKTe2YvF5sh+wMJOiG8pHuxndjFl
+         jr4SVsno6RQRF8CRsNnE2tEO9rcd69mtkRXQh1F7ezGDAwoGvuOMhtPWDYNR3LpW+adb
+         qGrg==
+X-Gm-Message-State: AFqh2kq1wcEjSou6qDMH0D8RQfT71wF9qtPVs7sbnvuSCjN52wxrBOK8
+        koc9dcX+Y/rucBt9JSHaDGF0SShaXtzxkDtLhJGDqfPtiDfDs+tSeBU=
+X-Google-Smtp-Source: AMrXdXs9ga503SwE+09dmDEVZS1/XV2RvPbDoA7tJR1Y92okF1PYzLfNb1qZ9UTKSZ00MIBxwWsvnEHJ4Bii4h03Zso=
+X-Received: by 2002:a05:6e02:88d:b0:30f:5d21:e56 with SMTP id
+ z13-20020a056e02088d00b0030f5d210e56mr1230055ils.192.1674557526609; Tue, 24
+ Jan 2023 02:52:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121112134.407362-1-glider@google.com> <20221121112134.407362-4-glider@google.com>
+In-Reply-To: <20221121112134.407362-4-glider@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 24 Jan 2023 11:51:30 +0100
+Message-ID: <CAG_fn=WDjw1MVYhEh7K4HOpGNBWsq6YuyG6Xx7XcP4Xpu+KhZg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] fs: hfs: initialize fsdata in hfs_file_truncate()
+To:     glider@google.com
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
+        chao@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  If the catlen is 0, the memory for the netlbl_lsm_catmap
-  structure must be allocated anyway, otherwise the check of
-  such rules is not completed correctly.
+On Mon, Nov 21, 2022 at 12:21 PM Alexander Potapenko <glider@google.com> wrote:
+>
+> When aops->write_begin() does not initialize fsdata, KMSAN may report
+> an error passing the latter to aops->write_end().
+>
+> Fix this by unconditionally initializing fsdata.
+>
+> Suggested-by: Eric Biggers <ebiggers@kernel.org>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
----
- security/smack/smackfs.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Dear FS maintainers,
 
-diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 4b58526450d4..d45f4395a6ce 100644
---- a/security/smack/smackfs.c
-+++ b/security/smack/smackfs.c
-@@ -830,7 +830,7 @@ static int smk_open_cipso(struct inode *inode, struct file *file)
- static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
- 				size_t count, loff_t *ppos, int format)
- {
--	struct netlbl_lsm_catmap *old_cat;
-+	struct netlbl_lsm_catmap *old_cat, *new_cat = NULL;
- 	struct smack_known *skp;
- 	struct netlbl_lsm_secattr ncats;
- 	char mapcatset[SMK_CIPSOLEN];
-@@ -917,8 +917,19 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
- 
- 		smack_catset_bit(cat, mapcatset);
- 	}
--
--	rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
-+	ncats.flags = 0;
-+	if (catlen == 0) {
-+		ncats.attr.mls.cat = NULL;
-+		ncats.attr.mls.lvl = maplevel;
-+		new_cat = netlbl_catmap_alloc(GFP_ATOMIC);
-+		if (new_cat)
-+			new_cat->next = ncats.attr.mls.cat;
-+		ncats.attr.mls.cat = new_cat;
-+		skp->smk_netlabel.flags &= ~(1U << 3);
-+		rc = 0;
-+	} else {
-+		rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
-+	}
- 	if (rc >= 0) {
- 		old_cat = skp->smk_netlabel.attr.mls.cat;
- 		skp->smk_netlabel.attr.mls.cat = ncats.attr.mls.cat;
--- 
-2.25.1
-
+HFS/HFSPLUS are orphaned, can someone take this patch to their tree?
+Thanks in advance!
+(same for "fs: hfsplus: initialize fsdata in hfsplus_file_truncate()":
+https://lore.kernel.org/all/20221121112134.407362-5-glider@google.com/)
