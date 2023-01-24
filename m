@@ -2,505 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D9678C9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6B2678C96
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjAXAJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S231905AbjAXAJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjAXAJm (ORCPT
+        with ESMTP id S231676AbjAXAJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:09:42 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C622BF16;
-        Mon, 23 Jan 2023 16:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674518978; x=1706054978;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2lYJ2FzXDDNTR04FHN+LTc4RzQpUQbtmj+HhVlbc2Jg=;
-  b=RzAcGUcvyayRAHhpFfnragB//Je9hTkIHHjDZcmtVxIoIt5p3O2K2jLh
-   02F6cO5jvj5hQ6V4HRiWRTxdJ6xnOg0X4WKCzpCfyAqzhrLxGHoBwOKd5
-   2cjX7DPMYL3H+yjAaY9aMdEnExi4qXonNTgFYf65u/cEtZf9G3V6FnkW/
-   PlkjXJjQKwbRQKaezM8YUVSXcS7BYYKOs3eeckUAeHW3secqPVoY0WrKg
-   zlwGSkG66RfzXzoFGcRSx+uOpeD1yshE3YoFISLL60bE6cHI0Ok+lydeq
-   PAvsMj2ycS0DopgdGAW7iBLuVpBZwZWxxYFwYODj3xY4phISv219I41sT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412424211"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="412424211"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 16:09:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804384325"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="804384325"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Jan 2023 16:09:33 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pK6sR-0005y0-10;
-        Tue, 24 Jan 2023 00:09:27 +0000
-Date:   Tue, 24 Jan 2023 08:08:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, quic_sbillaka@quicinc.com,
-        linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
-        linux-kernel@vger.kernel.org,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v1 05/14] drm/msm/dp: upgrade tu calculation base on
- newest algorithm
-Message-ID: <202301240854.5yJVG3RR-lkp@intel.com>
-References: <1674498274-6010-6-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 23 Jan 2023 19:09:33 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27FC3C2B;
+        Mon, 23 Jan 2023 16:09:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1674518969; x=1706054969;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=HuWMV4ZQUcsxiaasaJMrNYOD8MZEWm7fDBH40ZxIv4k=;
+  b=h03QDIQpRg4kLrdy/I+q/mjP3BcsIM1siUuaj8vzOSacwkO+QbJkKyEX
+   r0F8MTfGzUOVfbn0k+niqNKbMl4zRuDyiFdkWFU95nTMwZsQXJmX3lRYw
+   Sr9Z2P+4lMiaKMQ3clfIdLK0A9lST1y/iWWls+WYnZQWRFf0WiFcHRJek
+   KG/vYbnQ2BXkYWPSKUPz8joDF7fTLyA+zKZe45LWeOVzEQ1gIpdauRBN2
+   DqtkOK8lLwqh2lOeLy+jSFHdnUNqF0KIVDjeYqwJyiWitZJAxMkaX8cSu
+   rxfPXSQ6M2UocopkNv3YzmPcCod6qArb9fEGL0wYBJXznGnHLqpz4+XJ6
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,240,1669046400"; 
+   d="scan'208";a="325891853"
+Received: from mail-dm6nam11lp2171.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.171])
+  by ob1.hgst.iphmx.com with ESMTP; 24 Jan 2023 08:09:27 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BhrN3lmxvbsLmYAGHCssD149VNNmTGMSEH/66BQbAQt4h+a+Q4Kccf7t9q0hcehJBdD+9UT+Lisx3eG8gtBBlwh46aVbyzV31tTDAJ1QNGcEkLidzApQbVPQpQPlekERP4LtZHW6PTo6MZSSe7s96io2o7en6xAwhL6yveLyktgJ7YJwe4FLRy8dEls1p8kEwj+7sYdLm2Aap/WFRgoUi0zY4Hjj0jSod6hlkOT7keSUe/EyuzSetB0f/pScJNc9TGQDmUjkQIBxFjqiyxs88Z7YsZPAXmobB9LZMcy06QT8tgpwG3QDdYzzFo/B15sj9s8oAOmQvLbC0zj8soFcGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K/tipZoAlpuQrHapEU0k7KITm6Ygr1oWSQQAtecTwt4=;
+ b=DF8tY7koqiMC2Av9zaGKWEA1NxD9wOeXmndAnpJk/0P8MqRhNMoPUtrFyfwM3NsNXq18bmg6hmPqX3ULrJGhbUcxr4LTSE04biAq/EAmb3RrYIVWc4Wk4ZDm3f8iwrJ6XgivxVKI54S8v9fYUObyTlYyfisUnRf4YFTTdIkViueUB8dYWUSb/omHBIEzYDwtgt2Eot9jfcl+NDSTmB2LN88r8hgHfAKy8+x3O8uQ6kKKc56oGc2/dAosq4hxScP+K2mz8BKAdQe3aeVfUSE194CjqraxP1RGaZ6tqSGlC4ncWFlUxkTdOekaG2XQ+gHKzzJLddKLxtQf8uMOj3PUeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K/tipZoAlpuQrHapEU0k7KITm6Ygr1oWSQQAtecTwt4=;
+ b=klr5Ncqs6zEnEurci1Dqz6UK8xcVoAQlVba3rQktVE9jBYtlGtAj4o+3Kjc3x2d1GM7ZV5Vtnecq3n3923ZPlpWNuX6bbzyLkc+W9YbcgQvq+LlcnIRKzhHVu8yQi7kXY7V0/TmjQujVbegl79JRszsRFP2W6fJ49NXZ6+G04f8=
+Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
+ BY5PR04MB7043.namprd04.prod.outlook.com (2603:10b6:a03:223::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.33; Tue, 24 Jan 2023 00:09:26 +0000
+Received: from DM8PR04MB8037.namprd04.prod.outlook.com
+ ([fe80::e5db:3a3e:7571:6871]) by DM8PR04MB8037.namprd04.prod.outlook.com
+ ([fe80::e5db:3a3e:7571:6871%9]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 00:09:25 +0000
+From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+CC:     "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "paolo.valente@linaro.org" <paolo.valente@linaro.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yukuai1@huaweicloud.com" <yukuai1@huaweicloud.com>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "yangerkun@huawei.com" <yangerkun@huawei.com>
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+Thread-Topic: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+Thread-Index: AQHZJzA0qxnUmy4g8k267BQ5n6rMJa6swduA
+Date:   Tue, 24 Jan 2023 00:09:25 +0000
+Message-ID: <20230124000925.pfosl6pfuhjyggbp@shindev>
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
+In-Reply-To: <20230113094410.2907223-1-yukuai3@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR04MB8037:EE_|BY5PR04MB7043:EE_
+x-ms-office365-filtering-correlation-id: 6352303a-6f62-4f2a-458c-08dafd9f40ec
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hE90u2niqicGZNn/FlLuOltOZceuh+zSGJGx1mYcYcFI0yWqW+iLQ9GfqXmv8xtANLBj3swt2J/eZqzZrjNoX/NNL5IB/JZM8pJvnN57GJBDiW7ajPqtFaZob+wkl/j8EZpxTIZFimX/Ugmh7uNhjY2+ZdTPCwmlVuv/CzFIvyd3oRKCi7D6SzWTBymWGa7oHzObIvcjU6QOHMXxwtyqNXpqpnb4JXXmT4CsFY5qnnacHBq5yCou7cowhH/ozOuJe58KFvn59GpEY42mrB8O6XFnrphMG1rGz9V4y+Mo0ANeb6yvWsJ9oL05uYlW7z8HPmr4yYkKzQ0sbOF70dp4fy6OV8t6lcAey+HvZUvIDO6QbS2G7yg7r8wjuB5G0FE89gQ21lNqF2uepV13FDcWg7SM7sCCvz4qoEYErUNVfqYN/vhSgBIhB0/8VEOsKvYZnbo33KC9ZI9pJ92Jjobu4aW9eYGsRD1x8WC/yB1lFB1yYTyt+JPco6w3ipdV4vYxeBe2qqSVekS2ufau2QfavSUmuJASK+S6QHzZdhkTP6aDBRUVMsY/NkSe6sGfhgn/5TXexUrUa95cUcC4B170UqvnnfoWgd0Hu7my1rAfduy3ZSSBSe3eojtF+9T5p6/guU7jLEEAa3902321I66TRHK6XEsdXDigfWiImEvPDy7IIxOMe3JZMXSAAuC+qkJdG3t7YRS7WNyqo/DoqbBLyA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199015)(122000001)(38100700002)(82960400001)(38070700005)(54906003)(86362001)(33716001)(26005)(186003)(6506007)(1076003)(83380400001)(91956017)(66446008)(4326008)(64756008)(8676002)(6916009)(316002)(66556008)(76116006)(66476007)(66946007)(6486002)(6512007)(478600001)(71200400001)(9686003)(2906002)(7416002)(44832011)(5660300002)(41300700001)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kfaMqeaASTXjS3Z2hz8rT7kJm9oqYRG7o4w0C+8r1XPxeBNlJZkE3cCLosW3?=
+ =?us-ascii?Q?BuB8sziKgCzBXwrwJG6ITq3NU9+Y1yxDlPJdEmew4v+Un757r3GgFPZkOeSl?=
+ =?us-ascii?Q?6UPdtBBk5MqiBCCNCJrVlCLdqE6fwuHs0jf1o7eRCNVGp53Q5+5BCf1Qq3OZ?=
+ =?us-ascii?Q?b9n1ae7xssomXEP7IfjNsnB89IRjdRBK9N543Zem89QLuKfTgAMBDmM0dB68?=
+ =?us-ascii?Q?QgAXVccBIR1bBo+ixAPBXiVqqwApgXI+5/hmsKv8kpoSGjUTaMpgk4Ad/swl?=
+ =?us-ascii?Q?w/gRpIsdzI6E3Dx75K0bLX51635kE6TxjDzJLMsI0wlaWD9VybywUNYkDzQo?=
+ =?us-ascii?Q?MiKE75VzUTRFoEIoulkls57INA8TP5GeG64f2nOkKJfJ75tiZxfJdxZ9KbN7?=
+ =?us-ascii?Q?35f0Aeur4+uWoZchp/VwAoS17wG2Pek4nelxut8o4fpnhXb9FsCJ7lEQwnh2?=
+ =?us-ascii?Q?Z9OnC4LJayszjf3EH42PAmUS/9hWgwGUc/W8Q+GbZWpdJgTlK2k3lAsl77oo?=
+ =?us-ascii?Q?WwieYESQ4s4GMqNyhLvA6xGmQ1vNirY6MxkXkQBciMcdGNeZvO7zgQCimcc8?=
+ =?us-ascii?Q?6/RGrLl3r59PQvpPEwMNxfrAhb8sqNGxzqzu183d45QVuwcKw17lc6zC7Pnw?=
+ =?us-ascii?Q?cnvhxJdlWSTPX1oae1KBwISyAlklCHh9G3ueNPFGp0nRJBEbB42idcNPDaXJ?=
+ =?us-ascii?Q?fjKbX4L+q6OV+uUHewfCBrEInZ0iC/PTvbCfnoDf/FT3CS9pTa3EorNy8uKf?=
+ =?us-ascii?Q?22pC8eFI8BTvQfAav1upQYiSdYpzWsHbNsDBhQIKGwC7Ep45OKpSTAlz/wIy?=
+ =?us-ascii?Q?9uuoDQGqu/nw8uN0EtQMKCEnaU1nWpTXN24P9W52g2FEQQxBJ5BnJhTJqiAo?=
+ =?us-ascii?Q?idRLn1NdO7YOcJBs3pjtScmemQAHjwt6j1TebtSViU2oP+4SKsADXGpmKKzE?=
+ =?us-ascii?Q?RHVYKkWfxJ3sNvnEzFvwctOnUWU2W1dyGZ16SZL+TkmS9elWDx9FRD3dtt2t?=
+ =?us-ascii?Q?Dg/NU2VK4GTYq8mJAwc4ZUbfos4RC3ilAaPGB61SXvFTHw3ay+2vusMIi5mi?=
+ =?us-ascii?Q?//j928viGbPinjmQicJ+zGG/47IVY/PfTBGSZeTe+aHP3FaN9nebCHWF8jij?=
+ =?us-ascii?Q?qGlOpxAdeHQYFlSoI/PfGfO7pWXufKEBLDjeL79eVErRKWztW52Tncy/AOam?=
+ =?us-ascii?Q?EMpSeXy3RXBF0A1l/EBiQBUttPei86xI2LoOmx2mrw0MN3C1MBg5okxJspeo?=
+ =?us-ascii?Q?GBj/5z5nl0mXXK/JhceXAEAH2Xbn3U3Bqh3OcYkBEBebngD3Cx0mpvo0OYMi?=
+ =?us-ascii?Q?KFIQiiaiw+XL2QdCldd575ZmDMVtHSkEEEylCSjZZryMO3iWD/52CEK3rSHz?=
+ =?us-ascii?Q?3UDqYuQq+TrwVyLW2LJ332Bto9Vn8Ftig2NKB9fCiSAsc4fuxnw9+IQ3KRzY?=
+ =?us-ascii?Q?qYsuaZysxeUw3cDyrTdM71f99ZsyNtHG+IaU5wrkAze0jJQV1U0VWTSSkyT0?=
+ =?us-ascii?Q?2gfOcppCZMWA8eMai0mvVYTO8fxn+ZISKK3IC5uRP6UP4wH7kq75WJ2XM7kg?=
+ =?us-ascii?Q?wqBNuSC4AV+8ATjZ8Ie6FS5PKSTHWqjbPIHjwGAMlwxru9vC6j1ZDg/ttaLf?=
+ =?us-ascii?Q?yHG6Vdzu5CrY2dcGQYCU3q4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6C91E2F8801FB64D86D91C3DA08A2915@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674498274-6010-6-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?65mHBDWMGIfJP7UfFRYFOfx0aWpZ8Srv8OcT1JoY37p7OT4oQNhOhk012NyJ?=
+ =?us-ascii?Q?660mBhcvKD0xNSJwva9Z5DMo7MGB4hXY3jfOnVaWwgPCRPkAeFToFrMHfg9j?=
+ =?us-ascii?Q?526hr7blFMhMDZS1nD0lZhPJOT31r6S5UmIGLgZ/wbiw4eTYsE3hemPG2tHp?=
+ =?us-ascii?Q?SGrHX8K4NXclAYEDOwRMX8HVetJmN/Oq2AJQ1D5Qd/RwsvqorU25qHZv37PT?=
+ =?us-ascii?Q?+BUlYFqB/5iBmDY+3X4CsmpeJz1/DiTBSh1Gs8cQKV0PHswxCLmnHgKe1l5r?=
+ =?us-ascii?Q?TvPZHVyFg8vCg2+842OXbFRAnNT/g8k+CeNc897tGK2St+8Z3ON870pFqTJs?=
+ =?us-ascii?Q?sDrLqQAx00d04xmdZEpIBj57dgkgiN7W7im+DFNhLDzvSUPlMEVNS+SXgrH/?=
+ =?us-ascii?Q?fVUPr4MmXZ47N9ZABJF+lV7hY6CWfoWEhmV2UKWkJd+GLH9LT5kzxVCGzjQI?=
+ =?us-ascii?Q?kcYh84XwP8vuRsfnQ8335gopAQv0Pw47arEfYe3yMEaxtGXb4DRtKVlyOGsX?=
+ =?us-ascii?Q?TMIWhXRuBuKxKDXSHhDD8+pSAdeJlM/6SSreOk0R90d7KdI0Dxc/XijDi6lf?=
+ =?us-ascii?Q?cKfNe6ASvXTyug1OgDQClkeJln/bYaCmWS+ASb8I/c1NcTTpMLGS3yYE43Q5?=
+ =?us-ascii?Q?xdzCmmagVxJLP3043/jOGJtz496vq/BkY5IvGn0XneMNKPl4STviJ414iYLf?=
+ =?us-ascii?Q?0k2x+owJoC01zDC/7d+VEoO4vMCaWSD1/fwnqCRn2ivxH4Jp6XFNzDGGa5Pd?=
+ =?us-ascii?Q?W8ZoBF0e0/x6zzL4K6g6aqbZsZWU6JAzzEKrxFWQq1ZjjlB2USe3++RE1yf9?=
+ =?us-ascii?Q?q/jKXG1UoDQ+D1z/fUFelsspk5WegG57IaxD1Ib6EcEOLnO8BdPzLBbd1Gks?=
+ =?us-ascii?Q?Dpd8Fas/b0gTUbCfbvDaRG5cM4SWLRZIj83xAYzBmylWjBJc8pHAYdJkzVty?=
+ =?us-ascii?Q?JFS8SypZnWLQzZ4okBbHaBxN2Uh+EWNK/cacBB8mGJAjbDdlnqpj1iRWkbRa?=
+ =?us-ascii?Q?b2WT?=
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6352303a-6f62-4f2a-458c-08dafd9f40ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jan 2023 00:09:25.6574
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HZNKIsbDfvHyHrUNOzeJ1YFmDpeWbSv9oRc7oNmlv8jwQjQeWlu2r7UqcMypCwUGNtgQzXF8PWtmhOoOi2wbohbTki4BM9vR3H4HX9FqPmg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB7043
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kuogee,
+On Jan 13, 2023 / 17:44, Yu Kuai wrote:
+> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"=
+),
+> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+> bic->bfqq will be freed first, and bic_set_bfqq() is called with the free=
+d
+> bic->bfqq.
+>=20
+> Fix the problem by always freeing bfqq after bic_set_bfqq().
+>=20
+> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+> Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  block/bfq-cgroup.c  | 2 +-
+>  block/bfq-iosched.c | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index a6e8da5f5cfd..feb13ac25557 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -749,8 +749,8 @@ static void bfq_sync_bfqq_move(struct bfq_data *bfqd,
+>  		 * old cgroup.
+>  		 */
+>  		bfq_put_cooperator(sync_bfqq);
+> -		bfq_release_process_ref(bfqd, sync_bfqq);
+>  		bic_set_bfqq(bic, NULL, true, act_idx);
+> +		bfq_release_process_ref(bfqd, sync_bfqq);
+>  	}
+>  }
+> =20
 
-Thank you for the patch! Perhaps something to improve:
+Yu, thanks for posting this fix, but it can not be applied to v6.2-rc5. The
+hunk above looks different from the patch I tested. Could you take a look?
 
-[auto build test WARNING on next-20230123]
-[also build test WARNING on linus/master v6.2-rc5]
-[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.2-rc5 v6.2-rc4 v6.2-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuogee-Hsieh/drm-msm-dp-add-dpcd-read-of-both-dsc-and-fec-capability/20230124-022759
-patch link:    https://lore.kernel.org/r/1674498274-6010-6-git-send-email-quic_khsieh%40quicinc.com
-patch subject: [PATCH v1 05/14] drm/msm/dp: upgrade tu calculation base on newest algorithm
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230124/202301240854.5yJVG3RR-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/286a3dd6028ada56b471b5cb977f5ed461b094e4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuogee-Hsieh/drm-msm-dp-add-dpcd-read-of-both-dsc-and-fec-capability/20230124-022759
-        git checkout 286a3dd6028ada56b471b5cb977f5ed461b094e4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/msm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/msm/dp/dp_ctrl.c: In function '_tu_param_compare':
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:282:20: warning: variable 'b_frac' set but not used [-Wunused-but-set-variable]
-     282 |         u32 b_int, b_frac, b_sign;
-         |                    ^~~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:282:13: warning: variable 'b_int' set but not used [-Wunused-but-set-variable]
-     282 |         u32 b_int, b_frac, b_sign;
-         |             ^~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:281:20: warning: variable 'a_frac' set but not used [-Wunused-but-set-variable]
-     281 |         u32 a_int, a_frac, a_sign;
-         |                    ^~~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:281:13: warning: variable 'a_int' set but not used [-Wunused-but-set-variable]
-     281 |         u32 a_int, a_frac, a_sign;
-         |             ^~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c: In function 'dp_panel_update_tu_timings':
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:344:13: warning: variable 'overhead_dsc' set but not used [-Wunused-but-set-variable]
-     344 |         s64 overhead_dsc;
-         |             ^~~~~~~~~~~~
-   In file included from drivers/gpu/drm/msm/dp/dp_ctrl.c:18:
-   drivers/gpu/drm/msm/dp/dp_ctrl.c: In function '_dp_ctrl_calc_tu':
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:823:27: warning: format '%d' expects argument of type 'int', but argument 4 has type 's64' {aka 'long long int'} [-Wformat=]
-     823 |                 DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~
-         |                                                                             |
-         |                                                                             s64 {aka long long int}
-   include/drm/drm_print.h:524:65: note: in definition of macro '__drm_dbg'
-     524 | #define __drm_dbg(fmt, ...)             ___drm_dbg(NULL, fmt, ##__VA_ARGS__)
-         |                                                                 ^~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:823:17: note: in expansion of macro 'DRM_DEBUG'
-     823 |                 DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-         |                 ^~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:823:61: note: format string is defined here
-     823 |                 DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-         |                                                            ~^
-         |                                                             |
-         |                                                             int
-         |                                                            %lld
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:823:27: warning: format '%d' expects argument of type 'int', but argument 5 has type 's64' {aka 'long long int'} [-Wformat=]
-     823 |                 DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     824 |                         HBLANK_MARGIN_EXTRA);
-         |                         ~~~~~~~~~~~~~~~~~~~
-         |                         |
-         |                         s64 {aka long long int}
-   include/drm/drm_print.h:524:65: note: in definition of macro '__drm_dbg'
-     524 | #define __drm_dbg(fmt, ...)             ___drm_dbg(NULL, fmt, ##__VA_ARGS__)
-         |                                                                 ^~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:823:17: note: in expansion of macro 'DRM_DEBUG'
-     823 |                 DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-         |                 ^~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:823:70: note: format string is defined here
-     823 |                 DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-         |                                                                     ~^
-         |                                                                      |
-         |                                                                      int
-         |                                                                     %lld
-   drivers/gpu/drm/msm/dp/dp_ctrl.c: In function '_dp_ctrl_calc_tu.constprop':
->> drivers/gpu/drm/msm/dp/dp_ctrl.c:1072:1: warning: the frame size of 1084 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    1072 | }
-         | ^
-
-
-vim +1072 drivers/gpu/drm/msm/dp/dp_ctrl.c
-
-286a3dd6028ada Kuogee Hsieh     2023-01-23   743  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   744  
-202aceac8bb3ae Kuogee Hsieh     2022-02-17   745  static void _dp_ctrl_calc_tu(struct dp_ctrl_private *ctrl,
-202aceac8bb3ae Kuogee Hsieh     2022-02-17   746  				struct dp_tu_calc_input *in,
-c943b4948b5848 Chandan Uddaraju 2020-08-27   747  				struct dp_vc_tu_mapping_table *tu_table)
-c943b4948b5848 Chandan Uddaraju 2020-08-27   748  {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   749  	struct tu_algo_data tu;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   750  	int compare_result_1, compare_result_2;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   751  	u64 temp = 0, temp1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   752  	s64 temp_fp = 0, temp1_fp = 0, temp2_fp = 0;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   753  
-c943b4948b5848 Chandan Uddaraju 2020-08-27   754  	s64 LCLK_FAST_SKEW_fp = drm_fixp_from_fraction(6, 10000); /* 0.0006 */
-c943b4948b5848 Chandan Uddaraju 2020-08-27   755  	s64 RATIO_SCALE_fp = drm_fixp_from_fraction(1001, 1000);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   756  
-c943b4948b5848 Chandan Uddaraju 2020-08-27   757  	u8 DP_BRUTE_FORCE = 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   758  	s64 BRUTE_FORCE_THRESHOLD_fp = drm_fixp_from_fraction(1, 10); /* 0.1 */
-c943b4948b5848 Chandan Uddaraju 2020-08-27   759  	uint EXTRA_PIXCLK_CYCLE_DELAY = 4;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   760  	s64 HBLANK_MARGIN = drm_fixp_from_fraction(4, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   761  	s64 HBLANK_MARGIN_EXTRA = 0;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   762  
-c943b4948b5848 Chandan Uddaraju 2020-08-27   763  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   764  	memset(&tu, 0, sizeof(tu));
-c943b4948b5848 Chandan Uddaraju 2020-08-27   765  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   766  	dp_panel_update_tu_timings(in, &tu);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   767  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   768  	tu.err_fp = drm_fixp_from_fraction(1000, 1); /* 1000 */
-c943b4948b5848 Chandan Uddaraju 2020-08-27   769  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   770  	temp1_fp = drm_fixp_from_fraction(4, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   771  	temp2_fp = drm_fixp_mul(temp1_fp, tu.lclk_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   772  	temp_fp = drm_fixp_div(temp2_fp, tu.pclk_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   773  	tu.extra_buffer_margin = fixp2int_ceil(temp_fp);
-cc9014bf63a4d8 Lee Jones        2020-11-24   774  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   775  	if (in->compress_ratio == 375 && tu.bpp == 30)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   776  		temp1_fp = drm_fixp_from_fraction(24, 8);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   777  	else
-286a3dd6028ada Kuogee Hsieh     2023-01-23   778  		temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
-cc9014bf63a4d8 Lee Jones        2020-11-24   779  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   780  	temp2_fp = drm_fixp_mul(tu.pclk_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   781  	temp1_fp = drm_fixp_from_fraction(tu.nlanes, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   782  	temp2_fp = drm_fixp_div(temp2_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   783  	tu.ratio_fp = drm_fixp_div(temp2_fp, tu.lclk_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   784  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   785  	tu.original_ratio_fp = tu.ratio_fp;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   786  	tu.boundary_moderation_en = false;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   787  	tu.upper_boundary_count = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   788  	tu.lower_boundary_count = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   789  	tu.i_upper_boundary_count = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   790  	tu.i_lower_boundary_count = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   791  	tu.valid_lower_boundary_link = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   792  	tu.even_distribution_BF = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   793  	tu.even_distribution_legacy = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   794  	tu.even_distribution = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   795  	tu.hbp_delayStartCheck = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   796  	tu.pre_tu_hw_pipe_delay = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   797  	tu.post_tu_hw_pipe_delay = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   798  	tu.link_config_hactive_time = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   799  	tu.delay_start_link_lclk = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   800  	tu.tu_active_cycles = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   801  	tu.resolution_line_time = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   802  	tu.last_partial_lclk = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   803  	tu.delay_start_time_fp = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   804  	tu.second_loop_set = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   805  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   806  	tu.err_fp = drm_fixp_from_fraction(1000, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   807  	tu.n_err_fp = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   808  	tu.n_n_err_fp = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   809  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   810  	temp = drm_fixp2int(tu.lwidth_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   811  	if ((((u32)temp % tu.nlanes) != 0) && (_tu_param_compare(tu.ratio_fp, DRM_FIXED_ONE) == 2)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   812  			&& (tu.dsc_en == 0)) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   813  		tu.ratio_fp = drm_fixp_mul(tu.ratio_fp, RATIO_SCALE_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   814  		if (_tu_param_compare(tu.ratio_fp, DRM_FIXED_ONE) == 1)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   815  			tu.ratio_fp = DRM_FIXED_ONE;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   816  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27   817  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   818  	if (_tu_param_compare(tu.ratio_fp, DRM_FIXED_ONE) == 1)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   819  		tu.ratio_fp = DRM_FIXED_ONE;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   820  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   821  	if (HBLANK_MARGIN_EXTRA != 0) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   822  		HBLANK_MARGIN += HBLANK_MARGIN_EXTRA;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   823  		DRM_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
-286a3dd6028ada Kuogee Hsieh     2023-01-23   824  			HBLANK_MARGIN_EXTRA);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   825  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27   826  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   827  	for (tu.tu_size = 32; tu.tu_size <= 64; tu.tu_size++) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   828  		temp1_fp = drm_fixp_from_fraction(tu.tu_size, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   829  		temp2_fp = drm_fixp_mul(tu.ratio_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   830  		temp = fixp2int_ceil(temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   831  		temp1_fp = drm_fixp_from_fraction(temp, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   832  		tu.n_err_fp = temp1_fp - temp2_fp;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   833  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   834  		if (tu.n_err_fp < tu.err_fp) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   835  			tu.err_fp = tu.n_err_fp;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   836  			tu.tu_size_desired = tu.tu_size;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   837  		}
-c943b4948b5848 Chandan Uddaraju 2020-08-27   838  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27   839  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   840  	tu.tu_size_minus1 = tu.tu_size_desired - 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   841  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   842  	temp1_fp = drm_fixp_from_fraction(tu.tu_size_desired, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   843  	temp2_fp = drm_fixp_mul(tu.ratio_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   844  	tu.valid_boundary_link = fixp2int_ceil(temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   845  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   846  	temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   847  	temp2_fp = tu.lwidth_fp;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   848  	temp2_fp = drm_fixp_mul(temp2_fp, temp1_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   849  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   850  	temp1_fp = drm_fixp_from_fraction(tu.valid_boundary_link, 1);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   851  	temp2_fp = drm_fixp_div(temp2_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   852  	tu.n_tus = drm_fixp2int(temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   853  	if ((temp2_fp & 0xFFFFFFFF) > 0xFFFFF000)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   854  		tu.n_tus += 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   855  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   856  	tu.even_distribution_legacy = tu.n_tus % tu.nlanes == 0 ? 1 : 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   857  	DRM_DEBUG("Info: n_sym = %d, num_of_tus = %d\n",
-286a3dd6028ada Kuogee Hsieh     2023-01-23   858  		tu.valid_boundary_link, tu.n_tus);
-202aceac8bb3ae Kuogee Hsieh     2022-02-17   859  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   860  	_dp_calc_extra_bytes(&tu);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   861  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   862  	tu.filler_size = tu.tu_size_desired - tu.valid_boundary_link;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   863  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   864  	temp1_fp = drm_fixp_from_fraction(tu.tu_size_desired, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   865  	tu.ratio_by_tu_fp = drm_fixp_mul(tu.ratio_fp, temp1_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   866  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   867  	tu.delay_start_link = tu.extra_pclk_cycles_in_link_clk +
-286a3dd6028ada Kuogee Hsieh     2023-01-23   868  				tu.filler_size + tu.extra_buffer_margin;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   869  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   870  	tu.resulting_valid_fp =
-286a3dd6028ada Kuogee Hsieh     2023-01-23   871  			drm_fixp_from_fraction(tu.valid_boundary_link, 1);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   872  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   873  	temp1_fp = drm_fixp_from_fraction(tu.tu_size_desired, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   874  	temp2_fp = drm_fixp_div(tu.resulting_valid_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   875  	tu.TU_ratio_err_fp = temp2_fp - tu.original_ratio_fp;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   876  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   877  	temp1_fp = drm_fixp_from_fraction((tu.hbp_relative_to_pclk - HBLANK_MARGIN), 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   878  	tu.hbp_time_fp = drm_fixp_div(temp1_fp, tu.pclk_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   879  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   880  	temp1_fp = drm_fixp_from_fraction(tu.delay_start_link, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   881  	tu.delay_start_time_fp = drm_fixp_div(temp1_fp, tu.lclk_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   882  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   883  	compare_result_1 = _tu_param_compare(tu.hbp_time_fp,
-286a3dd6028ada Kuogee Hsieh     2023-01-23   884  					tu.delay_start_time_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   885  	if (compare_result_1 == 2) /* hbp_time_fp < delay_start_time_fp */
-286a3dd6028ada Kuogee Hsieh     2023-01-23   886  		tu.min_hblank_violated = 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   887  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   888  	tu.hactive_time_fp = drm_fixp_div(tu.lwidth_fp, tu.pclk_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   889  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   890  	compare_result_2 = _tu_param_compare(tu.hactive_time_fp,
-286a3dd6028ada Kuogee Hsieh     2023-01-23   891  						tu.delay_start_time_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   892  	if (compare_result_2 == 2)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   893  		tu.min_hblank_violated = 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   894  
-c943b4948b5848 Chandan Uddaraju 2020-08-27   895  	/* brute force */
-c943b4948b5848 Chandan Uddaraju 2020-08-27   896  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   897  	tu.delay_start_link_extra_pixclk = EXTRA_PIXCLK_CYCLE_DELAY;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   898  	tu.diff_abs_fp = tu.resulting_valid_fp - tu.ratio_by_tu_fp;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   899  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   900  	temp = drm_fixp2int(tu.diff_abs_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   901  	if (!temp && tu.diff_abs_fp <= 0xffff)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   902  		tu.diff_abs_fp = 0;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   903  
-c943b4948b5848 Chandan Uddaraju 2020-08-27   904  	/* if(diff_abs < 0) diff_abs *= -1 */
-286a3dd6028ada Kuogee Hsieh     2023-01-23   905  	if (tu.diff_abs_fp < 0)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   906  		tu.diff_abs_fp = drm_fixp_mul(tu.diff_abs_fp, -1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   907  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   908  	tu.boundary_mod_lower_err = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   909  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   910  	temp1_fp = drm_fixp_div(tu.orig_lclk_fp, tu.orig_pclk_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   911  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   912  	temp2_fp = drm_fixp_from_fraction(tu.orig_lwidth + tu.orig_hbp, 2);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   913  	temp_fp = drm_fixp_mul(temp1_fp, temp2_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   914  	tu.resolution_line_time = drm_fixp2int(temp_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   915  	tu.pre_tu_hw_pipe_delay = fixp2int_ceil(temp1_fp) + 2 /*cdc fifo write jitter+2*/
-286a3dd6028ada Kuogee Hsieh     2023-01-23   916  				+ 3 /*pre-delay start cycles*/
-286a3dd6028ada Kuogee Hsieh     2023-01-23   917  				+ 3 /*post-delay start cycles*/ + 1 /*BE on the link*/;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   918  	tu.post_tu_hw_pipe_delay = 4 /*BS_on_the_link*/ + 1 /*BE_next_ren*/;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   919  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   920  	temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   921  	temp1_fp = drm_fixp_mul(tu.lwidth_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   922  	tu.n_symbols = fixp2int_ceil(temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   923  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   924  	if (tu.rb2) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   925  		temp1_fp = drm_fixp_mul(tu.delay_start_time_fp, tu.lclk_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   926  		tu.delay_start_link_lclk = fixp2int_ceil(temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   927  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   928  		tu.new_valid_boundary_link = tu.valid_boundary_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   929  		tu.i_upper_boundary_count = 1;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   930  		tu.i_lower_boundary_count = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   931  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   932  		temp1 = tu.i_upper_boundary_count * tu.new_valid_boundary_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   933  		temp1 += tu.i_lower_boundary_count * (tu.new_valid_boundary_link - 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   934  		tu.average_valid2_fp = drm_fixp_from_fraction(temp1,
-286a3dd6028ada Kuogee Hsieh     2023-01-23   935  				(tu.i_upper_boundary_count + tu.i_lower_boundary_count));
-286a3dd6028ada Kuogee Hsieh     2023-01-23   936  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   937  		temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   938  		temp1_fp = drm_fixp_mul(tu.lwidth_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   939  		temp2_fp = drm_fixp_div(temp1_fp, tu.average_valid2_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   940  		tu.n_tus = drm_fixp2int(temp2_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   941  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   942  		tu.n_tus_per_lane = tu.n_tus / tu.nlanes;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   943  		tu.paired_tus = (int)((tu.n_tus_per_lane) /
-286a3dd6028ada Kuogee Hsieh     2023-01-23   944  				(tu.i_upper_boundary_count + tu.i_lower_boundary_count));
-286a3dd6028ada Kuogee Hsieh     2023-01-23   945  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   946  		tu.remainder_tus = tu.n_tus_per_lane - tu.paired_tus *
-286a3dd6028ada Kuogee Hsieh     2023-01-23   947  				(tu.i_upper_boundary_count + tu.i_lower_boundary_count);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   948  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   949  		if (tu.remainder_tus > tu.i_upper_boundary_count) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   950  			temp = (tu.remainder_tus - tu.i_upper_boundary_count) *
-286a3dd6028ada Kuogee Hsieh     2023-01-23   951  							(tu.new_valid_boundary_link - 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   952  			temp += (tu.i_upper_boundary_count * tu.new_valid_boundary_link);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   953  			temp *= tu.nlanes;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   954  		} else {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   955  			temp = tu.nlanes * tu.remainder_tus * tu.new_valid_boundary_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   956  		}
-c943b4948b5848 Chandan Uddaraju 2020-08-27   957  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   958  		temp1 = tu.i_lower_boundary_count * (tu.new_valid_boundary_link - 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   959  		temp1 += tu.i_upper_boundary_count * tu.new_valid_boundary_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   960  		temp1 *= tu.paired_tus * tu.nlanes;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   961  		temp1_fp = drm_fixp_from_fraction(tu.n_symbols - temp1 - temp, tu.nlanes);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   962  		tu.last_partial_lclk = fixp2int_ceil(temp1_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   963  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   964  		tu.tu_active_cycles = (int)((tu.n_tus_per_lane * tu.tu_size) +
-286a3dd6028ada Kuogee Hsieh     2023-01-23   965  								tu.last_partial_lclk);
-c943b4948b5848 Chandan Uddaraju 2020-08-27   966  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   967  		temp = tu.pre_tu_hw_pipe_delay + tu.delay_start_link_lclk +
-286a3dd6028ada Kuogee Hsieh     2023-01-23   968  						tu.tu_active_cycles + tu.post_tu_hw_pipe_delay;
-cc9014bf63a4d8 Lee Jones        2020-11-24   969  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   970  		if (tu.fec_en == 1) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   971  			if (tu.nlanes == 1) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   972  				temp1_fp = drm_fixp_from_fraction(temp, 500);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   973  				tu.parity_symbols = fixp2int_ceil(temp1_fp) * 12 + 1;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   974  			} else {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   975  				temp1_fp = drm_fixp_from_fraction(temp, 250);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   976  				tu.parity_symbols = fixp2int_ceil(temp1_fp) * 6 + 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   977  			}
-286a3dd6028ada Kuogee Hsieh     2023-01-23   978  		} else { //no fec BW impact
-286a3dd6028ada Kuogee Hsieh     2023-01-23   979  			tu.parity_symbols = 0;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   980  		}
-286a3dd6028ada Kuogee Hsieh     2023-01-23   981  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   982  		tu.link_config_hactive_time = temp + tu.parity_symbols;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   983  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   984  		if (tu.link_config_hactive_time + 1 /*margin*/ >= tu.resolution_line_time)
-286a3dd6028ada Kuogee Hsieh     2023-01-23   985  			tu.min_hblank_violated = 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27   986  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27   987  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   988  	tu.delay_start_time_fp = 0;
-286a3dd6028ada Kuogee Hsieh     2023-01-23   989  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   990  	if ((tu.diff_abs_fp != 0 &&
-286a3dd6028ada Kuogee Hsieh     2023-01-23   991  			((tu.diff_abs_fp > BRUTE_FORCE_THRESHOLD_fp) ||
-286a3dd6028ada Kuogee Hsieh     2023-01-23   992  			 (tu.even_distribution_legacy == 0) ||
-286a3dd6028ada Kuogee Hsieh     2023-01-23   993  			 (DP_BRUTE_FORCE == 1))) ||
-286a3dd6028ada Kuogee Hsieh     2023-01-23   994  			(tu.min_hblank_violated == 1)) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23   995  		_dp_calc_boundary(&tu);
-286a3dd6028ada Kuogee Hsieh     2023-01-23   996  
-286a3dd6028ada Kuogee Hsieh     2023-01-23   997  		if (tu.boundary_moderation_en) {
-c943b4948b5848 Chandan Uddaraju 2020-08-27   998  			temp1_fp = drm_fixp_from_fraction(
-286a3dd6028ada Kuogee Hsieh     2023-01-23   999  					(tu.upper_boundary_count *
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1000  					tu.valid_boundary_link +
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1001  					tu.lower_boundary_count *
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1002  					(tu.valid_boundary_link - 1)), 1);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1003  			temp2_fp = drm_fixp_from_fraction(
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1004  					(tu.upper_boundary_count +
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1005  					tu.lower_boundary_count), 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1006  			tu.resulting_valid_fp =
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1007  					drm_fixp_div(temp1_fp, temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1008  
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1009  			temp1_fp = drm_fixp_from_fraction(
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1010  					tu.tu_size_desired, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1011  			tu.ratio_by_tu_fp =
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1012  				drm_fixp_mul(tu.original_ratio_fp, temp1_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1013  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1014  			tu.valid_lower_boundary_link =
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1015  				tu.valid_boundary_link - 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1016  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1017  			temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1018  			temp1_fp = drm_fixp_mul(tu.lwidth_fp, temp1_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1019  			temp2_fp = drm_fixp_div(temp1_fp,
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1020  						tu.resulting_valid_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1021  			tu.n_tus = drm_fixp2int(temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1022  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1023  			tu.tu_size_minus1 = tu.tu_size_desired - 1;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1024  			tu.even_distribution_BF = 1;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1025  
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1026  			temp1_fp =
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1027  				drm_fixp_from_fraction(tu.tu_size_desired, 1);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1028  			temp2_fp =
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1029  				drm_fixp_div(tu.resulting_valid_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1030  			tu.TU_ratio_err_fp = temp2_fp - tu.original_ratio_fp;
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1031  		}
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1032  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1033  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1034  	if (tu.async_en) {
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1035  		temp2_fp = drm_fixp_mul(LCLK_FAST_SKEW_fp, tu.lwidth_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1036  		temp = fixp2int_ceil(temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1037  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1038  		temp1_fp = drm_fixp_from_fraction(tu.nlanes, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1039  		temp2_fp = drm_fixp_mul(tu.original_ratio_fp, temp1_fp);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1040  		temp1_fp = drm_fixp_from_fraction(tu.bpp, 8);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1041  		temp2_fp = drm_fixp_div(temp1_fp, temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1042  		temp1_fp = drm_fixp_from_fraction(temp, 1);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1043  		temp2_fp = drm_fixp_mul(temp1_fp, temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1044  		temp = drm_fixp2int(temp2_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1045  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1046  		tu.delay_start_link += (int)temp;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1047  	}
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1048  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1049  	temp1_fp = drm_fixp_from_fraction(tu.delay_start_link, 1);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1050  	tu.delay_start_time_fp = drm_fixp_div(temp1_fp, tu.lclk_fp);
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1051  
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1052  	/* OUTPUTS */
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1053  	tu_table->valid_boundary_link       = tu.valid_boundary_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1054  	tu_table->delay_start_link          = tu.delay_start_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1055  	tu_table->boundary_moderation_en    = tu.boundary_moderation_en;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1056  	tu_table->valid_lower_boundary_link = tu.valid_lower_boundary_link;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1057  	tu_table->upper_boundary_count      = tu.upper_boundary_count;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1058  	tu_table->lower_boundary_count      = tu.lower_boundary_count;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1059  	tu_table->tu_size_minus1            = tu.tu_size_minus1;
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1060  
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1061  	DRM_DEBUG("TU: valid_boundary_link: %d\n", tu_table->valid_boundary_link);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1062  	DRM_DEBUG("TU: delay_start_link: %d\n", tu_table->delay_start_link);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1063  	DRM_DEBUG("TU: boundary_moderation_en: %d\n",
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1064  			tu_table->boundary_moderation_en);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1065  	DRM_DEBUG("TU: valid_lower_boundary_link: %d\n",
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1066  			tu_table->valid_lower_boundary_link);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1067  	DRM_DEBUG("TU: upper_boundary_count: %d\n",
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1068  			tu_table->upper_boundary_count);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1069  	DRM_DEBUG("TU: lower_boundary_count: %d\n",
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1070  			tu_table->lower_boundary_count);
-286a3dd6028ada Kuogee Hsieh     2023-01-23  1071  	DRM_DEBUG("TU: tu_size_minus1: %d\n", tu_table->tu_size_minus1);
-c943b4948b5848 Chandan Uddaraju 2020-08-27 @1072  }
-c943b4948b5848 Chandan Uddaraju 2020-08-27  1073  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Shin'ichiro Kawasaki=
