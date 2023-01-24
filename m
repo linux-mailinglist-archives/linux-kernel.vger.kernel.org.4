@@ -2,182 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBF6679E59
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CE2679E5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbjAXQO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S233185AbjAXQQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjAXQOz (ORCPT
+        with ESMTP id S232855AbjAXQQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:14:55 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538132BF23;
-        Tue, 24 Jan 2023 08:14:54 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id g16so11400935qtu.2;
-        Tue, 24 Jan 2023 08:14:54 -0800 (PST)
+        Tue, 24 Jan 2023 11:16:02 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C53A303CE
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:15:57 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z13so15189920plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:15:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPk9FnaXAHwLaHrt31b8O1lKJt10Zrrny18ftuYst2s=;
+        b=LYqDojeaQHL2HoA1wSz+SoLc9c2QOrTIbQbIpqZSAx0eM0iHqcmd08JhEl7Ul7xxl2
+         LYHVkfSXEDLeUavkJCPh3ZEVEG7VMDoYBKj4D05y10tV8KuLQHcxIjp+u24F5rSEyZ60
+         RmWRMJ1tXGlBKA13FAcjpzeUrnZEknGWR7osSZ1nuuB+45ddbxuxvANrWwjG7nEKuHmF
+         FNFwL/oxOqpa4kSMxKAotuetta/cCpRLo3sA46mrdUsw6HqEz8/AGoyM/UCyrNoHO5QZ
+         UDlXj9vOygeANg/36j0R1ei2MNxbLDfxoE8jjSfH8lx87qrS1+E0AMXorMkFsOsnqq4O
+         +HMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JX2JBJxQ8wkqLQs9Y080UKEGGFV8tzJcSA1x25jIm98=;
-        b=ZTy6MDFsWoLrf7AviSCmOJVym00gpvpWV96kViedjIqDheDmCY1tVtm4kIfLT67lhW
-         TRFh7dKwWHQoM/ZPtmqbR7Gu6W6ydj6Rh66FLWFULlmuotbd6FoNWq2EjeZeCN8Mpo/e
-         yEwTWp5vQTVQIJ0EVFAQA4yubNy27IyeQoWJSWw4TPR/F5ZJu7CpuhKWCCvVhGNJ9AEh
-         JsrdHEZ8M+F8Q+jUqjjm5+G+caraZvUZshIwigyvFxY7B7211iq00KagTndfdVwbOVm9
-         F44/3TIajjGxg4pwGr9Ov+NELSshmk8Dh/zdfyMgdRzYaApehz94FzxQfP5hwylAMRme
-         iaPw==
-X-Gm-Message-State: AFqh2kqF2ztkQpSACOi1vE2UxruYjwQvo/3IRVkP6x95/8aAXO0SYk/b
-        z4IWQ/YZrsVmgR5wrdz0pxh9Oc2hOJeUKA==
-X-Google-Smtp-Source: AMrXdXvBgAFkrJ9Ra7GbeiDBFmKr3xQHrKX+/h8iWfiLpEVD9H21wt3LrVDRZISI61uPQvJQiD+2eg==
-X-Received: by 2002:ac8:7ec2:0:b0:3b4:7efb:36a7 with SMTP id x2-20020ac87ec2000000b003b47efb36a7mr55377748qtj.27.1674576893289;
-        Tue, 24 Jan 2023 08:14:53 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id n6-20020ac81e06000000b003b7ea9814b9sm1513687qtl.10.2023.01.24.08.14.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 08:14:52 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id t16so14827678ybk.2;
-        Tue, 24 Jan 2023 08:14:52 -0800 (PST)
-X-Received: by 2002:a25:37d4:0:b0:80b:8602:f3fe with SMTP id
- e203-20020a2537d4000000b0080b8602f3femr106304yba.36.1674576892426; Tue, 24
- Jan 2023 08:14:52 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aPk9FnaXAHwLaHrt31b8O1lKJt10Zrrny18ftuYst2s=;
+        b=tiy1AWeUX6zkrGMfHByukwoc9p20zoRqHaDIeSMaWQjpJx6XzI20GDipa2lwJ3eYQP
+         HcMPG8T3gYIiGearws2CqNunFhUWqneuQIS1Kts98yccgJv1QpXgSJSklQYPQr5OOEyl
+         fxCjvM7wg+DEdGgA2WRIJtc8dO8SdfeWC0sLD1vCK7ee1/VUr8qZqwBYq2x+cyPjk+yD
+         Sz3AI1lFQr7qaTRrl4jlS1lRApLLrLWX0qTo32K9YO9iirS7xttl/oqCN10qZG0pSk4Z
+         4Azjtrb+BxQQUdEqypzXRwn/zULO9uUE+qc9rkREp9PhJMTfTnSk7VeicQrSp7sGMTf0
+         tVUQ==
+X-Gm-Message-State: AO0yUKXHDUJRFhFaTSNyb6+V7rk7h6xdqd2C9IeqOANqwVjw9pfi5X1E
+        XMuQ3kdNV3tiTr8E80TIuvgqQQ==
+X-Google-Smtp-Source: AK7set8JayVzD/gktjyzi9/78oGfLr8uiYVAMw/+8m3wzEK0vHjiGUPHfsfLpijOnQN0Uno91anBiA==
+X-Received: by 2002:a17:902:74c3:b0:194:6d3c:38a5 with SMTP id f3-20020a17090274c300b001946d3c38a5mr175718plt.1.1674576956432;
+        Tue, 24 Jan 2023 08:15:56 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id ba1-20020a170902720100b00192e1590349sm1833789plb.216.2023.01.24.08.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 08:15:55 -0800 (PST)
+Date:   Tue, 24 Jan 2023 16:15:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        KVM <kvm@vger.kernel.org>,
+        Christoffer Dall <cdall@cs.columbia.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the kvm-x86 tree
+Message-ID: <Y9AEOHooQhbpGFka@google.com>
+References: <20230124125515.7c88c9fb@canb.auug.org.au>
+ <86a628mi9q.wl-maz@kernel.org>
+ <CABgObfZxjbG+ZofDPfOdiY_QP4j09XtTNwQVmGnbwoc+oaocxA@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAJZ5v0j4m-=twN3oH-Q_MDHLi-VnktMhFcGbGbGCC-x+0TXM_w@mail.gmail.com>
- <20230124150558.GA1061961@bhelgaas>
-In-Reply-To: <20230124150558.GA1061961@bhelgaas>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 Jan 2023 17:14:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXjQqC41i5iJPNuOFdMYYgq+DOjaOGBn9uEG6heVCCKfA@mail.gmail.com>
-Message-ID: <CAMuHMdXjQqC41i5iJPNuOFdMYYgq+DOjaOGBn9uEG6heVCCKfA@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABgObfZxjbG+ZofDPfOdiY_QP4j09XtTNwQVmGnbwoc+oaocxA@mail.gmail.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,GUARANTEED_100_PERCENT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-On Tue, Jan 24, 2023 at 4:06 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Tue, Jan 24, 2023 at 03:45:50PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Jan 24, 2023 at 3:37 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Tue, Jan 24, 2023 at 3:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > On Tue, Jan 24, 2023 at 12:20 PM Geert Uytterhoeven
-> > > > <geert@linux-m68k.org> wrote:
-> > > > > On Thu, Dec 15, 2022 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > > > > >
-> > > > > > Simplify __rpm_get_callback() slightly by returning as soon as the return
-> > > > > > value is known.  No functional change intended.
-> > > > > >
-> > > > > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > > > >
-> > > > > Thanks for your patch, which is now commit 650bdddb6b311705 ("PM:
-> > > > > runtime: Simplify __rpm_get_callback()") in pm/linux-next.
-> > > > >
-> > > > > > --- a/drivers/base/power/runtime.c
-> > > > > > +++ b/drivers/base/power/runtime.c
-> > > > > > @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
-> > > > > >
-> > > > > >  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
-> > > > > >  {
-> > > > > > -       pm_callback_t cb;
-> > > > > > -       const struct dev_pm_ops *ops;
-> > > > > > +       const struct dev_pm_ops *ops = NULL;
-> > > > > >
-> > > > > >         if (dev->pm_domain)
-> > > > > >                 ops = &dev->pm_domain->ops;
-> > > > > > @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
-> > > > > >                 ops = dev->class->pm;
-> > > > > >         else if (dev->bus && dev->bus->pm)
-> > > > > >                 ops = dev->bus->pm;
-> > > > > > -       else
-> > > > > > -               ops = NULL;
-> > > > > >
-> > > > > >         if (ops)
-> > > > > > -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
-> > > > > > -       else
-> > > > > > -               cb = NULL;
-> > > > > > +               return *(pm_callback_t *)((void *)ops + cb_offset);
-> > > > >
-> > > > > This is a change in behavior in case the callback turns out to be NULL:
-> > > > >   - before, it would fall back to the driver-specific callback below,
-> > > > >   - after, it always returns NULL.
-> > > >
-> > > > Good point and sorry for missing this!
-> > > >
-> > > > > >
-> > > > > > -       if (!cb && dev->driver && dev->driver->pm)
-> > > > > > -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-> > > > > > +       if (dev->driver && dev->driver->pm)
-> > > > > > +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-> > > > > >
-> > > > > > -       return cb;
-> > > > > > +       return NULL;
-> > > > > >  }
-> > > > >
-> > > >
-> > > > Something like the patch below (modulo gmail-induced whitespace
-> > > > breakage) should restore the previous behavior if I'm not mistaken:
-> > > >
-> > > > ---
-> > > >  drivers/base/power/runtime.c |    9 +++++++--
-> > > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > >
-> > > > Index: linux-pm/drivers/base/power/runtime.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/base/power/runtime.c
-> > > > +++ linux-pm/drivers/base/power/runtime.c
-> > > > @@ -31,8 +31,13 @@ static pm_callback_t __rpm_get_callback(
-> > > >      else if (dev->bus && dev->bus->pm)
-> > > >          ops = dev->bus->pm;
-> > > >
-> > > > -    if (ops)
-> > > > -        return *(pm_callback_t *)((void *)ops + cb_offset);
-> > > > +    if (ops) {
-> > > > +        pm_callback_t cb;
-> > > > +
-> > > > +        cb = *(pm_callback_t *)((void *)ops + cb_offset);
-> > > > +        if (cb)
-> > > > +            return cb;
-> > > > +    }
-> > > >
-> > > >      if (dev->driver && dev->driver->pm)
-> > > >          return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+On Tue, Jan 24, 2023, Paolo Bonzini wrote:
+> On Tue, Jan 24, 2023 at 9:47 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > Hi Stephen,
+> >
+> > On Tue, 24 Jan 2023 01:55:15 +0000,
+> > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > > >
-> > > Which is now more complex than the original?
+> > > Hi all,
+> > >
+> > > The following commits are also in other tree(s?) as different
+> > > commits (but the same patches):
+> > >
+> > >   0b6639e8ed87 ("KVM: s390: Move hardware setup/unsetup to init/exit")
+> > >   0c2be59e0b53 ("KVM: x86: Use KBUILD_MODNAME to specify vendor module name")
+> > >   1334f214d19f ("KVM: s390: Unwind kvm_arch_init() piece-by-piece() if a step fails")
 > >
-> > Arguably so.
+> > [...]
 > >
-> > OK, I'll drop the commit in question then, sorry Bjorn.
->
-> Really sorry about this.  Think I'm all out of brown paper bags :(
-> Thanks for catching this, Geert, and sorry for all the time you had to
+> > > I guess someone has rebased one of the kvm trees and it had already been
+> > > merged into another (like the kvm or kvm-arm trees).
+> >
+> > Huh, that's worrying. I'm carrying the kvm-hw-enable-refactor branch
+> > from the KVM tree, which I understood to be a stable branch[1], and
+> > which I merged to avoid conflicts to be propagated everywhere.
+> 
+> It wasn't 100% guaranteed to be stable because it was meant to be
+> tested and have fixes squashed in. But since I had no issues reported
+> from either maintainers or bots,
 
-Np, no time was wasted on debugging.
-I just noticed because I have some local debug code on top, which no
-longer applied 8^)
+There's one issue, but I didn't explicitly call out that it could be squashed.
 
-Gr{oetje,eeting}s,
+https://lore.kernel.org/all/20230119182158.4026656-1-seanjc@google.com
 
-                        Geert
+> I will indeed merge commit 9f1a4c004869 aka kvm/kvm-hw-enable-refactor into
+> kvm/next. Sean, please rebase to drop the duplicate commits.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Will do.
