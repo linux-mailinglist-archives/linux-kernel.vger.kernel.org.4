@@ -2,113 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EDF67909B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110CC679079
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233197AbjAXGB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 01:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
+        id S231561AbjAXFvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 00:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbjAXGBY (ORCPT
+        with ESMTP id S233185AbjAXFvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 01:01:24 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EB9105;
-        Mon, 23 Jan 2023 22:01:22 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A4A7E42651;
-        Tue, 24 Jan 2023 05:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1674539148; bh=HljMxe7jrBTG1Genyu+Pm2rYswosR8p2EtuxuYI1k5k=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=tGJDNdnjFM7diTyJhByzlPW+Qgjt+NJVZE3JfiWvoqqTN22OFEMWJCJu2Ml1pOsAO
-         r0/W8qLAIOzYaNHY8izHRJlBZMIadNunPGWmPwbEb40y1c6VosRAOpZ3Wcs4aMWegs
-         XbuvONOwx1zSvJYikQceLhiAJggA2UD6cvlPAdRG3c6kHqxdgYFDuUkADi9HPGh5Iv
-         0wfqvQC+iXGieASzeODYfH1Ol3XFtpUDplCyJZqQsIPWXhbLyyI6/TLH14CQRMCzGs
-         /k/FBLs2Gdm6AmXg+b0qJZwx9ZtzOaW60Td3qkL6/m3omSubjkfWbCU4KWlUN6s7C8
-         0z/OcdYARoLFA==
-Message-ID: <d7575a8e-035e-b729-bd16-7fd10b2c56c5@marcan.st>
-Date:   Tue, 24 Jan 2023 14:45:31 +0900
+        Tue, 24 Jan 2023 00:51:03 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DC33D087
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 21:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674539435; x=1706075435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OzWihTV77CXUJPR2F/JLCAMf2dU1W7zKj6fkn1qeVi4=;
+  b=DqHJvYaMpP3IZvUxxC3oeunkcO0ZJU9GkRSIGBQ6ZoPWojHqgxKN3imB
+   5WfoVg0NmejSaOAegFF3Rqbw4/BwB0LH+Ml92Z2MUQ0LmlRPpjI6lb2r3
+   AXZN0pbrJqr4Ho/qwMqM4Tu4aDXf8fhG+0Z1NmPefr27PNN/kqMRCRxh0
+   JQXyDV2NXusZJr3en2jxP8XMBdYULfKypmcBRILMxHa7tHBzdFEHZZdVa
+   PGc7KdRF1mvzu63uMcwUX9BH9w67reG00H4v7fXqLBG/+8D4kpvhMihH/
+   LfmJLbLLvt3nO27cjCUIGUcNf7snIbBYbVehlzQ5H2C6q2yId5Tp63Hjp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="306587586"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="306587586"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 21:47:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="835859363"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="835859363"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Jan 2023 21:47:42 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKC9l-0006Au-0V;
+        Tue, 24 Jan 2023 05:47:41 +0000
+Date:   Tue, 24 Jan 2023 13:46:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     George Prekas <george@enfabrica.net>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christoph Lameter <cl@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        George Prekas <george@enfabrica.net>
+Subject: Re: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
+Message-ID: <202301241355.ytFzL2p6-lkp@intel.com>
+References: <20230123170419.7292-2-george@enfabrica.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] dt-bindings: dma: drop unneeded quotes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Olivier Dautricourt <olivierdautricourt@gmail.com>,
-        Stefan Roese <sr@denx.de>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Green Wan <green.wan@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?B?77+9ZXI=?= <povik+lin@cutebit.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        - <chuanhua.lei@intel.com>, Long Cheng <long.cheng@mediatek.com>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Palmer Debbelt <palmer@sifive.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-References: <20230118180144.364756-1-krzysztof.kozlowski@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20230118180144.364756-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123170419.7292-2-george@enfabrica.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/01/2023 03.01, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs and redundant blank lines.
-> No functional impact except adjusting to preferred coding style.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Hi George,
 
-For the Apple stuff,
+Thank you for the patch! Perhaps something to improve:
 
-Acked-by: Hector Martin <marcan@marcan.st>
+[auto build test WARNING on vbabka-slab/for-next]
+[also build test WARNING on linus/master v6.2-rc5 next-20230123]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-- Hector
+url:    https://github.com/intel-lab-lkp/linux/commits/George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
+patch link:    https://lore.kernel.org/r/20230123170419.7292-2-george%40enfabrica.net
+patch subject: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
+config: arc-randconfig-r043-20230123 (https://download.01.org/0day-ci/archive/20230124/202301241355.ytFzL2p6-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f0d9df4305849ecea4402bc614cadb0dd357da77
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
+        git checkout f0d9df4305849ecea4402bc614cadb0dd357da77
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   mm/kmemleak.c: In function 'kmemleak_mark_stack':
+>> mm/kmemleak.c:1244:46: warning: passing argument 1 of 'find_and_get_object' makes integer from pointer without a cast [-Wint-conversion]
+    1244 |                 object = find_and_get_object(ptr, 0);
+         |                                              ^~~
+         |                                              |
+         |                                              const void *
+   mm/kmemleak.c:561:66: note: expected 'long unsigned int' but argument is of type 'const void *'
+     561 | static struct kmemleak_object *find_and_get_object(unsigned long ptr, int alias)
+         |                                                    ~~~~~~~~~~~~~~^~~
+
+
+vim +/find_and_get_object +1244 mm/kmemleak.c
+
+  1233	
+  1234	/**
+  1235	 * kmemleak_mark_stack - mark the allocated object as a kernel stack
+  1236	 *
+  1237	 * @ptr:	pointer to beginning of the object
+  1238	 */
+  1239	void __ref kmemleak_mark_stack(const void *ptr)
+  1240	{
+  1241		struct kmemleak_object *object;
+  1242	
+  1243		if (kmemleak_enabled && ptr && !IS_ERR(ptr)) {
+> 1244			object = find_and_get_object(ptr, 0);
+  1245			if (object) {
+  1246				object->flags |= OBJECT_STACK;
+  1247				put_object(object);
+  1248			}
+  1249		}
+  1250	}
+  1251	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
