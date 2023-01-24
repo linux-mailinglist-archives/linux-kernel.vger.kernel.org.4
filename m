@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D159767A104
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4397D67A107
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbjAXSQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 13:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S233817AbjAXSRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 13:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbjAXSQx (ORCPT
+        with ESMTP id S230214AbjAXSRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:16:53 -0500
+        Tue, 24 Jan 2023 13:17:03 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DD74DE2F;
-        Tue, 24 Jan 2023 10:16:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062924C6FA
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:16:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=udUpLgayI0SdNW12BCKKvCoh/6uaxuELj1ZkskTToMw=; b=xjAtajNIaLTa81A4ZM07krYwIi
-        Sbku/EETtE1MA5+8k0vPJ3JaCU0HXAy1cTU8zsbOonywMZHxE6CAX5NCpeTYEn4P+n9fOh7IwKPMX
-        qn3X066C+JBLVXGc3zsb/Nfrj/dCrmQyBbGrNpalO8RLVb7vzlgJ6ulB7F199haLSIfshp2uuBqMv
-        ZRm1S8XsZwCkJTtfVbTQ72s5161qMcxjtkmPECsniP59EUxyR+hhbnY5aT4sbT+2Xm4XzpHNqez9h
-        ECIAkJknXcDXpgdrohymX0nPZXK6DH2bG+bqYI8R41Ce5wCjhZN4xM/7Yllw4VyELO+jz7gtzhddg
-        TgTv9XoQ==;
+        bh=m/pasOdyMBc4nWtkzhzrsJ06EVonqIIgK3nxwNuLfaY=; b=uqSc5bi6l2Y16Asr6UUphEuoQb
+        0+Cud98MUBjc0W8ZSt15kbrkK66ZueE99C8uitOSr9J9boRR2rWAWP1ja+UgrWp+vpRPzXJtZearF
+        yNQOg2aHckb82r/vriNQXZLi2gURGQlwDip1wsmgEHkSrh3vYrzH14SvuN1joBr8BtmOYuxWIskpv
+        J0osCvYGulVfUONgWA3pj9CJmci0V6shu6xRBvbjbCi5Js0pp9jSa/V1xN+tjnppbgg6ktCYVB6jL
+        EDiDS0cKPgqGLDvVeqMh2lPf32ocybiiOve22OOa3sdUhPb3eRzi2CxJYx3KIA7W7N8DcQ/+vRzPT
+        Fieb2Avw==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKNqi-004vab-93; Tue, 24 Jan 2023 18:16:48 +0000
+        id 1pKNqq-004vdD-CS; Tue, 24 Jan 2023 18:16:56 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org
-Subject: [PATCH] trace: Kconfig: fix spelling/grammar/punctuation
-Date:   Tue, 24 Jan 2023 10:16:47 -0800
-Message-Id: <20230124181647.15902-1-rdunlap@infradead.org>
+        kasan-dev@googlegroups.com
+Subject: [PATCH] lib: Kconfig: fix spellos
+Date:   Tue, 24 Jan 2023 10:16:55 -0800
+Message-Id: <20230124181655.16269-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,38 +51,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix some editorial nits in trace Kconfig.
+Fix spelling in lib/ Kconfig files.
+(reported by codespell)
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org
+Cc: kasan-dev@googlegroups.com
 ---
- kernel/trace/Kconfig |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ lib/Kconfig.debug |    2 +-
+ lib/Kconfig.kcsan |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/kernel/trace/Kconfig b/kernel/trace/Kconfig
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -933,8 +933,8 @@ config RING_BUFFER_RECORD_RECURSION
- 	default y
+diff -- a/lib/Kconfig.debug b/lib/Kconfig.debug
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1876,7 +1876,7 @@ config FUNCTION_ERROR_INJECTION
  	help
- 	  The ring buffer has its own internal recursion. Although when
--	  recursion happens it wont cause harm because of the protection,
--	  but it does cause an unwanted overhead. Enabling this option will
-+	  recursion happens it won't cause harm because of the protection,
-+	  but it does cause unwanted overhead. Enabling this option will
- 	  place where recursion was detected into the ftrace "recursed_functions"
- 	  file.
+ 	  Add fault injections into various functions that are annotated with
+ 	  ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
+-	  value of theses functions. This is useful to test error paths of code.
++	  value of these functions. This is useful to test error paths of code.
  
-@@ -1017,8 +1017,8 @@ config RING_BUFFER_STARTUP_TEST
- 	 The test runs for 10 seconds. This will slow your boot time
- 	 by at least 10 more seconds.
+ 	  If unsure, say N
  
--	 At the end of the test, statics and more checks are done.
--	 It will output the stats of each per cpu buffer. What
-+	 At the end of the test, statistics and more checks are done.
-+	 It will output the stats of each per cpu buffer: What
- 	 was written, the sizes, what was read, what was lost, and
- 	 other similar details.
+diff -- a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -194,7 +194,7 @@ config KCSAN_WEAK_MEMORY
+ 	  Enable support for modeling a subset of weak memory, which allows
+ 	  detecting a subset of data races due to missing memory barriers.
  
+-	  Depends on KCSAN_STRICT, because the options strenghtening certain
++	  Depends on KCSAN_STRICT, because the options strengthening certain
+ 	  plain accesses by default (depending on !KCSAN_STRICT) reduce the
+ 	  ability to detect any data races invoving reordered accesses, in
+ 	  particular reordered writes.
