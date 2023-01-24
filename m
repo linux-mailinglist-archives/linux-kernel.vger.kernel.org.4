@@ -2,134 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E98C679E12
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABD8679E15
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbjAXP5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S234088AbjAXP5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbjAXP5j (ORCPT
+        with ESMTP id S234330AbjAXP5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:57:39 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7264A1FF;
-        Tue, 24 Jan 2023 07:57:38 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jm10so15091519plb.13;
-        Tue, 24 Jan 2023 07:57:38 -0800 (PST)
+        Tue, 24 Jan 2023 10:57:51 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F687768C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:57:48 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id v81so7812531vkv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:57:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hqolBxXCNuOBmobd0DkrzxBEkxNCJTU7jxiH5MLZ5rw=;
-        b=VF7hIVFm9tEJXxqAAb0rT9WiklBsCz88lSzN/0M+/jCBVz+OddZ6zSXuzXjPF1/Iiz
-         JRgnR9Cfjd+dCpQJWHo5dXLjNAVtGVTDmeVKTdr7eiBWa+dm4XreQsETmoLM+aEy/g6d
-         udi2YadJqdKylNnYxEsV0apiMAzgE0qJeNG23GnoIKCa0Ly9azN/GS2IWSe4LT6X6568
-         wDNtxMw98ByheGDBbdlU45EZYgDRc0MJozQmF5Ww7AuD2rc3fX2ZZLhWnyq4fOcMe6L3
-         o3f5sIx+5s84l9UPQqQDbqBMY9GRLNz0pae5fUEM4oH4RcoBe+q3dc9wz7tGly0W1aWa
-         8s+g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rt1mrhGHV+ldz6z6aqQgrdha6p8O6lh39DequDEH0yE=;
+        b=IjSHFd+Vn2/fkqTe5+VAtDGku8zfUzzP+8BcO4Ir/3IcZDAaLVJDmxAiuWr2TeDmu/
+         ER8u67yjuXwboLQIohzs9q9q1U8SE5E7/7s+Pv3PzURjz8lKjKh1Eyw2sCA+nfffpozh
+         oBLz26dFnnbIza3QIq1HQGbQJxHUclbHsX0HHmw+2UwCK4HgVmT7eBRt5kQXMl8aWJPU
+         53X0p2ObmgjnPCvPVjyX82MDF3oQqeH/KGnjC+1w+O3TOzWdD/WVf6/Owmgsoetq0Wy3
+         sIBOTe1z/WpXqq2CUItkNHyMPU+iKp8/asuaastuRVXBBfC7o/8fAKX0eCgvfau5MO7X
+         FUVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hqolBxXCNuOBmobd0DkrzxBEkxNCJTU7jxiH5MLZ5rw=;
-        b=q/iJP0/ADwDVD6wbldhnJQ0B9An639UHbWSCmqjCfH2PXWzG5htzH0MSSBGFZZskpm
-         82+YdszLkdC3JkCGwkii6J9AmuYLq60lwwVhwNza06G4XVPcP1EUupbOfzez84R0AZvM
-         6QjfGMtaUr5vUGqELk4CAIk8bnbg8q5gFG9dbqOdhreBTtTTx6dyLPTS7XctFHiveqKi
-         E31TQGn46hYCH5kDzrT2VecvYD4Y93KM1U9heqJp+vPONna+M6+9yn+wNi8CnNYZTcQo
-         t9vizaA1LY7akFoMsQ88GF27vvRS4n4dg7qAx1+67aZ22PC5dJWrNdAU7sep+7jKfobe
-         ABaQ==
-X-Gm-Message-State: AO0yUKUt82IjO/s/8IE0NPSAvI3waNWGd89qNNFAu+axklzDC6VY+ebW
-        MMZGYuUANnYzbW1w1q1wYQhQ0s0EDhs=
-X-Google-Smtp-Source: AK7set/kfxCTTixwnKqQQKv0TFk9Ak4D/IsCJdHqSVJy+e6AyuWjQDmIdKoIa3+JnmnpLKV3A+QV/Q==
-X-Received: by 2002:a17:90a:191c:b0:22b:e71b:1fde with SMTP id 28-20020a17090a191c00b0022be71b1fdemr3822120pjg.15.1674575857534;
-        Tue, 24 Jan 2023 07:57:37 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.116.5])
-        by smtp.googlemail.com with ESMTPSA id b26-20020a63931a000000b00478e7f87f3bsm1609790pge.67.2023.01.24.07.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 07:57:36 -0800 (PST)
-Message-ID: <f3d079ce930895475f307de3fdaed0b85b4f2671.camel@gmail.com>
-Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented
- allocation
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Felix Fietkau <nbd@nbd.name>
-Cc:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
-Date:   Tue, 24 Jan 2023 07:57:35 -0800
-In-Reply-To: <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
-References: <20230124124300.94886-1-nbd@nbd.name>
-         <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rt1mrhGHV+ldz6z6aqQgrdha6p8O6lh39DequDEH0yE=;
+        b=0HaES5MFxEfcHpAftRztNXkWztoa/ErtM0XxNs7oseEEgpkjfntT1KHtMeQyI1ehGR
+         eCUj0jKFuGu78t+857swM+GOhWFBkPklbYoP2b846szLrFkb0cewjmkb/ev6m3FrywQF
+         lpkJ1xV+lSc3atn02IBRDQo2T9fafXbVpNdlRdcl/LqRjtsLPEwcEFyRcjAGwUjplxmv
+         VWMc3PCd87Z130ClbQueKiFwazS8evNqftMYzKJz92TsoZAjAX1Bq6brdervKk2iGo+U
+         kJVamwFPJp+poZUKKroi6dF9kn3+Mwq5x3hHmeYp9YTpSPz8W2nJ2vx9V67cvOJ/aPWO
+         2Sww==
+X-Gm-Message-State: AFqh2kqY7gm3OFcIvA0JMEEDYKwVA+UeVVdRlytut4mO/2/STHMz1dbp
+        w9CGabsaAJ0DuxbEC5FwaWoeUjJvKDeYaIh7nqKvaQ==
+X-Google-Smtp-Source: AMrXdXtqs9pmeYKVlp5gkQOIDBOvbJ1s4bxzVrVQmF0oYHrigv63uukiEf1yx9kbm/7UGTA+8RQ5NOhfeA5Sc0vj+8s=
+X-Received: by 2002:a1f:2e58:0:b0:3e1:5761:fdbb with SMTP id
+ u85-20020a1f2e58000000b003e15761fdbbmr3626747vku.7.1674575867112; Tue, 24 Jan
+ 2023 07:57:47 -0800 (PST)
+MIME-Version: 1.0
+References: <20230122150246.321043584@linuxfoundation.org> <CA+G9fYsS1GLzMoeh-jz8eOMbomJ=XBg_3FjQ+4w_=Dw1Mwr3rQ@mail.gmail.com>
+ <20230123191128.ewfyc5cdbbdx5gtl@oracle.com> <20230123194218.47ssfzhrpnv3xfez@oracle.com>
+ <CA+G9fYvLh=epzy_KEZObfFn1kVCugKvuVWF08X9eEiPe4ehe3g@mail.gmail.com> <20230124125445.gqko2lyvp3vmecto@oracle.com>
+In-Reply-To: <20230124125445.gqko2lyvp3vmecto@oracle.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 24 Jan 2023 21:27:35 +0530
+Message-ID: <CA+G9fYvOdYfsvprxtFqdGdfBOK88CDRU4i=d6aH1WBUc+tZ5RQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
+To:     Tom Saeger <tom.saeger@oracle.com>
+Cc:     Rich Felker <dalias@libc.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dennis Gilmore <dennis@ausil.us>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-sh@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-24 at 16:11 +0200, Ilias Apalodimas wrote:
-> Hi Felix,
->=20
-> ++cc Alexander and Yunsheng.
->=20
-> Thanks for the report
->=20
-> On Tue, 24 Jan 2023 at 14:43, Felix Fietkau <nbd@nbd.name> wrote:
-> >=20
-> > While testing fragmented page_pool allocation in the mt76 driver, I was=
- able
-> > to reliably trigger page refcount underflow issues, which did not occur=
- with
-> > full-page page_pool allocation.
-> > It appears to me, that handling refcounting in two separate counters
-> > (page->pp_frag_count and page refcount) is racy when page refcount gets
-> > incremented by code dealing with skb fragments directly, and
-> > page_pool_return_skb_page is called multiple times for the same fragmen=
-t.
-> >=20
-> > Dropping page->pp_frag_count and relying entirely on the page refcount =
-makes
-> > these underflow issues and crashes go away.
-> >=20
->=20
-> This has been discussed here [1].  TL;DR changing this to page
-> refcount might blow up in other colorful ways.  Can we look closer and
-> figure out why the underflow happens?
->=20
-> [1] https://lore.kernel.org/netdev/1625903002-31619-4-git-send-email-liny=
-unsheng@huawei.com/
->=20
-> Thanks
-> /Ilias
->=20
->=20
+On Tue, 24 Jan 2023 at 18:25, Tom Saeger <tom.saeger@oracle.com> wrote:
+>
+> On Tue, Jan 24, 2023 at 05:41:22PM +0530, Naresh Kamboju wrote:
+> > Hi Tom,
+> >
+> > On Tue, 24 Jan 2023 at 01:12, Tom Saeger <tom.saeger@oracle.com> wrote:
+> > >
+> > > On Mon, Jan 23, 2023 at 01:11:32PM -0600, Tom Saeger wrote:
+> > > > On Mon, Jan 23, 2023 at 01:39:11PM +0530, Naresh Kamboju wrote:
+> > > > > On Sun, 22 Jan 2023 at 20:51, Greg Kroah-Hartman
+> > > > >
+> > > > > Results from Linaro=E2=80=99s test farm.
+> > > > >
+> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > > >
+> > > > > * sh, build
+> > > > >   - gcc-8-dreamcast_defconfig
+> > > > >   - gcc-8-microdev_defconfig
+> > > >
+> > > > Naresh, any chance you could test again adding the following:
+> > > >
+> > > > diff --git a/arch/sh/kernel/vmlinux.lds.S b/arch/sh/kernel/vmlinux.=
+lds.S
+> > > > index 3161b9ccd2a5..b6276a3521d7 100644
+> > > > --- a/arch/sh/kernel/vmlinux.lds.S
+> > > > +++ b/arch/sh/kernel/vmlinux.lds.S
+> > > > @@ -4,6 +4,7 @@
+> > > >   * Written by Niibe Yutaka and Paul Mundt
+> > > >   */
+> > > >  OUTPUT_ARCH(sh)
+> > > > +#define RUNTIME_DISCARD_EXIT
+> > > >  #include <asm/thread_info.h>
+> > > >  #include <asm/cache.h>
+> > > >  #include <asm/vmlinux.lds.h>
+> > > >
+> > > >
+> > > > My guess is build environment is using ld < 2.36??
+> > > > and this is probably similar to:
+> > > > a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error =
+with GNU ld < 2.36")
+> > > > 4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
+> > > >
+> > > >
+> > > > Regards,
+> > > >
+> > > > --Tom
+> > > >
+> > > > >
+> > > > >
+> > > > > Build error logs:
+> > > > > `.exit.text' referenced in section `__bug_table' of crypto/algbos=
+s.o:
+> > > > > defined in discarded section `.exit.text' of crypto/algboss.o
+> > > > > `.exit.text' referenced in section `__bug_table' of
+> > > > > drivers/char/hw_random/core.o: defined in discarded section
+> > > > > `.exit.text' of drivers/char/hw_random/core.o
+> > > > > make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux]=
+ Error 1
+> > >
+> > >
+> > > This is also occurring in latest upstream:
+> >
+> > Right !
+> > build/gcc-8-dreamcast_defconfig
+> > build/gcc-8-microdev_defconfig
+> >
+> > These build errors started from v6.2-rc2 on the mainline [1] & [2].
+> >
+> > >
+> > > =E2=9D=AF git describe HEAD
+> > > v6.2-rc5-13-g2475bf0250de
+> > >
+> > > =E2=9D=AF tuxmake --runtime podman --target-arch sh --toolchain gcc-8=
+ --kconfig microdev_defconfig
+> > >
+> > > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:=
+ defined in discarded section `.exit.text' of crypto/algboss.o
+> > > `.exit.text' referenced in section `__bug_table' of drivers/char/hw_r=
+andom/core.o: defined in discarded section `.exit.text' of drivers/char/hw_=
+random/core.o
+> > > make[2]: *** [/home2/tsaeger/linux/linux-upstream/scripts/Makefile.vm=
+linux:35: vmlinux] Error 1
+> > > make[2]: Target '__default' not remade because of errors.
+> > > make[1]: *** [/home2/tsaeger/linux/linux-upstream/Makefile:1264: vmli=
+nux] Error 2
+> > > make[1]: Target '__all' not remade because of errors.
+> > > make: *** [Makefile:242: __sub-make] Error 2
+> > > make: Target '__all' not remade because of errors.
+> > >
+> > >
+> > > FWIW, the above patch resolves this.
+> > Yes. Tested and confirmed it fixes the reported problem.
+> >
+> > > How many more architectures need something similar?
+> > Now I see it on sh with gcc-8 only on the mainline.
+> >
+> > OTOH,
+> > It was noticed on earlier stable-rc 5.4 for x86, i386, powerpc, sh and =
+s390.
+> >
+> > git_describe : v5.4.228-679-g79cbaf4448f3
+> > kernel_version: 5.4.230-rc1
+> >
+> > Regressions found on sh: [1] & [2] mainline and below
+> >     - build/gcc-8-dreamcast_defconfig
+> >     - build/gcc-8-microdev_defconfig
+> >
+> > Regressions found on i386: [3]
+> >     - build/gcc-8-i386_defconfig
+> >
+> > Regressions found on powerpc:  [4]
+> >     - build/gcc-8-mpc83xx_defconfig
+> >     - build/gcc-8-ppc64e_defconfig
+> >     - build/gcc-8-maple_defconfig
+> >     - build/gcc-8-ppc6xx_defconfig
+> >     - build/gcc-8-defconfig
+> >     - build/gcc-8-tqm8xx_defconfig
+> >     - build/gcc-8-cell_defconfig
+> >
+> > Regressions found on s390: [5]
+> >     - build/gcc-8-defconfig-fe40093d
+> >
+> > Regressions found on x86_64: [6]
+> >     - build/gcc-8-x86_64_defconfig
+>
+> v5.4 needs:
+> 84d5f77fc2ee ("x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to generic DISC=
+ARDS")
+>
+> which didn't hit Linus's tree until: v5.7-rc1~164^2~1
+> This explains why v5.4 blew-up and v5.10 didn't.
+>
+> I'm testing the following for v5.4
+>
+> 84d5f77fc2ee ("x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to generic DISC=
+ARDS")
+> This needed a little massaging to apply.
+>
+> 99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv")
+> 4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
+> 07b050f9290e ("powerpc/vmlinux.lds: Don't discard .rela* for relocatable =
+builds")
+> a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error with G=
+NU ld < 2.36")
+> + the arch/sh patch https://lore.kernel.org/all/9166a8abdc0f979e50377e617=
+80a4bba1dfa2f52.1674518464.git.tom.saeger@oracle.com/
+>
+>
+> I'd be grateful if you could confirm - so I can send this full series to
+> Greg.
+>
+> If you'd rather - I can send the patch-series now for testing?
 
-The logic should be safe in terms of the page pool itself as it should
-be holding one reference to the page while the pp_frag_count is non-
-zero. That one reference is what keeps the two halfs in sync as the
-page shouldn't be able to be freed until we exhaust the pp_frag_count.
+Please send your repo and branch. I will pick up and run tests on it.
 
-To have an underflow there are two possible scenarios. One is that
-either put_page or free_page is being called somewhere that the
-page_pool freeing functions should be used. The other possibility is
-that a pp_frag_count reference was taken somewhere a page reference
-should have.
-
-Do we have a backtrace for the spots that are showing this underrun? If
-nothing else we may want to look at tracking down the spots that are
-freeing the page pool pages via put_page or free_page to determine what
-paths these pages are taking.
+- Naresh
