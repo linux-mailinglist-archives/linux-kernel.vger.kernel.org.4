@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD1367A4BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773CB67A4C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234884AbjAXVPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S234896AbjAXVQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbjAXVP1 (ORCPT
+        with ESMTP id S234882AbjAXVPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:15:27 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6F4518C1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:15:19 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id i16-20020a17090332d000b00194a7b146b2so9692869plr.20
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:15:19 -0800 (PST)
+        Tue, 24 Jan 2023 16:15:38 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1EA4903A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:15:23 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id a18-20020a62bd12000000b0056e7b61ec78so7285973pff.17
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:15:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qdpYTJi6DrEaArTeHPrwK423y1IyzC0SEKOtBYqJqyA=;
-        b=O1Znx44one+S9tJCsVeqZG//Oy3Z7HiLbbNBfLhe6leUWQJn3PlKWZSGEYrC3B0b3F
-         LszMM8V42gGpWxFUZdIY3wy0EVJb5wUQtdtXd1PgO54dpOq0cg4M4r0BJ+867iywOHOe
-         jXyLCVER6VkvmEg6OMf2scfzbp6NjBYfjSfnRK32JzFKSmqhFywFdu5kklgaLO70TU68
-         oOthsxyqYem+l4Ofc0Wd32iNnTKHGI3P49d+eLhYRCczKyIQ5hnoa6MdvzTBYWZucFdV
-         xcHXJzsM8E14arwQbS711ccDB/p4ZlzywtyCbRHEDTsKYftipEmpqzrFtBrzXxPDAha1
-         A/FQ==
+        bh=nI8g4HK84XEnirb7lePLViKdpyhNA5CP1Cst9JmMi5Y=;
+        b=qIKw7KlhcMtg+UFKVLR/9KFMYZ9rcvDTnnOKXWbscj7BPR6fhxV2gx8g85b1FV27NK
+         n+EGQ1CV2OY0QTHRc+cKsaR1WG13o6ygQ9l57sVS/W0ezXA/ca0m6j5jLSDmBFzayoDb
+         jHo0b8xPwC4d5yRoJpIDDE4lK7BBDvc2T2Ru43p3K9VjR/3dl3DGHL2x6khfULc2p/Xw
+         h9qyhUXVbBqX26FcQyxKMUTCAJdUn1V+l291NTs1vYTP5rLif+XhAc6AWYbKFbD6LgAa
+         49a23IVGxqJQBAVHtN+VAYfb1Bab/KqdYIxTaRVKOSBAFmziqwhTdcXloQinjZXrigDp
+         kdmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qdpYTJi6DrEaArTeHPrwK423y1IyzC0SEKOtBYqJqyA=;
-        b=QyVPKzt3i1PAnKmwBlsXj1feY59d4J5ALkfN/8MUStI7KXNsgulvUk/EC2UklgYoo/
-         RKETxfQAQe98wcuLG7gAXUg8XrJ06Y13U/rMdAfEoZMrf8a9/fYEpIfilWCAehkJphgJ
-         bqupyzALZGuTN4rPih/V7fTR44jikEmh7o8oTfrbnrMq3BIl2Iem5p1FFiW3m1FZ4Orx
-         gD39dhsCUpJi0VUHBHwaE3N9WUKJao8C7e+Ay5WcBLijkbJ6X3GTKYPfmuVTd+zDJBtE
-         OnFAODvb/vQBcGW2evwrQWFZlQaa/Pu1xOkrs0MDbhZQivrcya9oOdKsrfL3cfVvhIeE
-         hBDg==
-X-Gm-Message-State: AO0yUKUrpgVVSPAxr2o90IiWXIlFl2Q26nDlEhzca2v1yi5VrCfwboRU
-        hcbXdYCV4VoQ2ZcdtSPd0pY1Nvggo/qxWuPnsrGkrN1pwQT8iznqNhA+75SEGZqZJrtL1OZV6pC
-        1pZz/YRtASDTWJ5NwQ7MX9UP6i0DV4c6C0EkZymEkLEFL4YT6Nl+LJ/2PQUKZ/Tb4deBUkHR15O
-        T4P3DCFtc=
-X-Google-Smtp-Source: AK7set/UybPnVRpB/0RbOsG8/I8hrXyhSIq90L9hS3r0XIRTcNgVIlT5CvcsCFzlPEELqiNxorn9Pbggci7ho9pY3w==
+        bh=nI8g4HK84XEnirb7lePLViKdpyhNA5CP1Cst9JmMi5Y=;
+        b=DpaWFEJI1APcjHxwft/eGMHa6ffq174tDmvnEGn1ZJVdj4iDTqApMffhOTqtRa+2sq
+         bINx6ightdR1PWCZ7kFILbRXZqNmlP5PPQvFuUTpb/+xAjUFXG4LZ8aO4Lg5fDYzh4tv
+         MH+pqMCFJgl9Gafy7nNxzCJK6M7uySkHBWbNbqI/rSB0fWw8Y8uLMiXVWUmlXvDIPwSc
+         AUW37J7fDbiKSlw36WhU8IUjmoRGHIvxrctUSOA35ogm3jxeW96o3qIkwIFDHT9ozAm3
+         7+NoXdRgSKqpZICIb7vQiNQBHiKMDdS1nb1CosWnsxZ4ECccSrgThb+5FJ3rbdMQrDaX
+         SpMQ==
+X-Gm-Message-State: AO0yUKVut0clIsrjFU29eztBC20vDggW4ngjF396gimhg1jY60pMt1H7
+        SsAL6RatJ/tLaPHftqYyoF4gHofBS7q7MU3O9Xn7k5ZEt511kNTa8Ffhm9C/KwCMsHDVCnL9h7L
+        ZPzGs8gwku5uqVIJor39vDVhfBVR4Cg6iY4cf5n6R00MpTa/tSc5Q+qWM949KNsVi0hB7eSHDz7
+        bz7aAdkS8=
+X-Google-Smtp-Source: AK7set9hAYuLijlZZ/UKUkVmnthi6QP0tHYRF+o2x0weNdcjzHb0WPB6xHGhbNGWQ9B09ym+P7SV7kzXwuPW9JG6+g==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:903:485:b0:196:10e1:bd69 with SMTP
- id jj5-20020a170903048500b0019610e1bd69mr616333plb.8.1674594919163; Tue, 24
- Jan 2023 13:15:19 -0800 (PST)
-Date:   Tue, 24 Jan 2023 21:14:52 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a17:90a:8b8d:b0:225:eaa2:3f5d with
+ SMTP id z13-20020a17090a8b8d00b00225eaa23f5dmr55767pjn.2.1674594921092; Tue,
+ 24 Jan 2023 13:15:21 -0800 (PST)
+Date:   Tue, 24 Jan 2023 21:14:53 +0000
 In-Reply-To: <20230124211455.2563674-1-dionnaglaze@google.com>
 Mime-Version: 1.0
 References: <20230124211455.2563674-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
-Message-ID: <20230124211455.2563674-2-dionnaglaze@google.com>
-Subject: [PATCH v13 1/4] virt/coco/sev-guest: Add throttling awareness
+Message-ID: <20230124211455.2563674-3-dionnaglaze@google.com>
+Subject: [PATCH v13 2/4] crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
+Cc:     Peter Gonda <pgonda@google.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Andy Lutomirsky <luto@kernel.org>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Borislav Petkov <Borislav.Petkov@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
+        Dionna Glaze <dionnaglaze@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -82,122 +78,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The host is permitted and encouraged to throttle guest requests to the
-AMD-SP since it is a shared resource across all VMs. Without
-throttling-awareness, the host returning an error will immediately lock
-out access to the VMPCK, which makes the VM less useful as it can't
-attest itself. Since throttling is expected to be a common occurrence, a
-cooperative host can return a VMM error code that the request was
-throttled.
+From: Peter Gonda <pgonda@google.com>
 
-The driver interprets the upper 32 bits of exitinfo2 as a VMM error code.
-For safety, since the encryption algorithm in GHCBv2 is AES_GCM, control
-must remain in the kernel to complete the request with the current
-sequence number. Returning without finishing the request allows the the
-guest to make another request but with different message contents. This
-is IV reuse, and breaks cryptographic protections.
+The PSP can return a "firmware error" code of -1 in circumstances where
+the PSP is not actually called. To make this protocol unambiguous, the
+value is named SEV_RET_NO_FW_CALL.
 
-A guest request may not make it to the AMD-SP before the host returns to
-the guest, so the err local variable in handle_guest_request must be
-initialized the same way fw_err is. snp_issue_guest_request similarly
-should set fw_err whether or not the value is non-zero, in order to
-appropriately clear the error value when zero.
-
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Andy Lutomirsky <luto@kernel.org>
+Cc: John Allen <john.allen@amd.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Borislav Petkov <Borislav.Petkov@amd.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Venu Busireddy <venu.busireddy@oracle.com>
-Cc: Michael Roth <michael.roth@amd.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Michael Sterritt <sterritt@google.com>
 
-Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request
-NAEs")
-
+Signed-off-by: Peter Gonda <pgonda@google.com>
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 ---
- arch/x86/include/asm/sev-common.h       |  3 ++-
- arch/x86/kernel/sev.c                   |  3 +--
- drivers/virt/coco/sev-guest/sev-guest.c | 11 ++++++++++-
- 3 files changed, 13 insertions(+), 4 deletions(-)
+ Documentation/virt/coco/sev-guest.rst |  2 +-
+ drivers/crypto/ccp/sev-dev.c          | 22 ++++++++++++++--------
+ include/uapi/linux/psp-sev.h          |  7 +++++++
+ 3 files changed, 22 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index b8357d6ecd47..b63be696b776 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -128,8 +128,9 @@ struct snp_psc_desc {
- 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
- } __packed;
+diff --git a/Documentation/virt/coco/sev-guest.rst b/Documentation/virt/coco/sev-guest.rst
+index bf593e88cfd9..e76393e389eb 100644
+--- a/Documentation/virt/coco/sev-guest.rst
++++ b/Documentation/virt/coco/sev-guest.rst
+@@ -41,7 +41,7 @@ The guest ioctl should be issued on a file descriptor of the /dev/sev-guest devi
+ The ioctl accepts struct snp_user_guest_request. The input and output structure is
+ specified through the req_data and resp_data field respectively. If the ioctl fails
+ to execute due to a firmware error, then fw_err code will be set otherwise the
+-fw_err will be set to 0x00000000000000ff.
++fw_err will be set to 0x00000000ffffffff, i.e., the lower 32-bits are -1.
  
--/* Guest message request error code */
-+/* Guest message request error codes */
- #define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
-+#define SNP_GUEST_REQ_ERR_BUSY		BIT_ULL(33)
+ The firmware checks that the message sequence counter is one greater than
+ the guests message sequence counter. If guest driver fails to increment message
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 06fc7156c04f..ac205f78a595 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -440,12 +440,19 @@ static int __sev_init_ex_locked(int *error)
+ 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
+ }
  
- #define GHCB_MSR_TERM_REQ		0x100
- #define GHCB_MSR_TERM_REASON_SET_POS	12
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 679026a640ef..a908ffc2dfba 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -2212,14 +2212,13 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (ret)
- 		goto e_put;
++static inline int __sev_do_init_locked(int *psp_ret)
++{
++	if (sev_init_ex_buffer)
++		return __sev_init_ex_locked(psp_ret);
++	else
++		return __sev_init_locked(psp_ret);
++}
++
+ static int __sev_platform_init_locked(int *error)
+ {
+ 	struct psp_device *psp = psp_master;
+ 	struct sev_device *sev;
+-	int rc = 0, psp_ret = -1;
+-	int (*init_function)(int *error);
++	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
  
-+	*fw_err = ghcb->save.sw_exit_info_2;
- 	if (ghcb->save.sw_exit_info_2) {
- 		/* Number of expected pages are returned in RBX */
- 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
- 		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
- 			input->data_npages = ghcb_get_rbx(ghcb);
+ 	if (!psp || !psp->sev_data)
+ 		return -ENODEV;
+@@ -456,15 +463,12 @@ static int __sev_platform_init_locked(int *error)
+ 		return 0;
  
--		*fw_err = ghcb->save.sw_exit_info_2;
--
- 		ret = -EIO;
+ 	if (sev_init_ex_buffer) {
+-		init_function = __sev_init_ex_locked;
+ 		rc = sev_read_init_ex_file();
+ 		if (rc)
+ 			return rc;
+-	} else {
+-		init_function = __sev_init_locked;
  	}
  
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 4ec4174e05a3..3d6551fdf06f 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -322,7 +322,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
- 				u32 resp_sz, __u64 *fw_err)
- {
--	unsigned long err;
-+	unsigned long err = 0xff;
- 	u64 seqno;
- 	int rc;
- 
-@@ -338,6 +338,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	if (rc)
- 		return rc;
- 
-+retry:
- 	/*
- 	 * Call firmware to process the request. In this function the encrypted
- 	 * message enters shared memory with the host. So after this call the
-@@ -346,6 +347,14 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	 */
- 	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
- 
-+	/*
-+	 * The host may return SNP_GUEST_REQ_ERR_EBUSY if the request has been
-+	 * throttled. Retry in the driver to avoid returning and reusing the
-+	 * message sequence number on a different message.
-+	 */
-+	if (err == SNP_GUEST_REQ_ERR_BUSY)
-+		goto retry;
+-	rc = init_function(&psp_ret);
++	rc = __sev_do_init_locked(&psp_ret);
+ 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
+ 		/*
+ 		 * Initialization command returned an integrity check failure
+@@ -473,9 +477,11 @@ static int __sev_platform_init_locked(int *error)
+ 		 * initialization function should succeed by replacing the state
+ 		 * with a reset state.
+ 		 */
+-		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
+-		rc = init_function(&psp_ret);
++		dev_err(sev->dev,
++"SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
++		rc = __sev_do_init_locked(&psp_ret);
+ 	}
 +
- 	/*
- 	 * If the extended guest request fails due to having too small of a
- 	 * certificate data buffer, retry the same guest request without the
+ 	if (error)
+ 		*error = psp_ret;
+ 
+diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
+index 91b4c63d5cbf..e8cfb8bde0d7 100644
+--- a/include/uapi/linux/psp-sev.h
++++ b/include/uapi/linux/psp-sev.h
+@@ -36,6 +36,13 @@ enum {
+  * SEV Firmware status code
+  */
+ typedef enum {
++	/*
++	 * This error code is not in the SEV spec but is added to convey that
++	 * there was an error that prevented the SEV Firmware from being called.
++	 * The SEV API error codes are 16 bits, so the -1 value will not overlap
++	 * with possible values from the specification.
++	 */
++	SEV_RET_NO_FW_CALL = -1,
+ 	SEV_RET_SUCCESS = 0,
+ 	SEV_RET_INVALID_PLATFORM_STATE,
+ 	SEV_RET_INVALID_GUEST_STATE,
 -- 
 2.39.1.405.gd4c25cc71f-goog
 
