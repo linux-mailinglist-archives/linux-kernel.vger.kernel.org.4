@@ -2,248 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D363679E9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0E9679E9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbjAXQ1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S234288AbjAXQ3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjAXQ1c (ORCPT
+        with ESMTP id S232776AbjAXQ3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:27:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DE299742;
-        Tue, 24 Jan 2023 08:27:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CEF94B3;
-        Tue, 24 Jan 2023 08:28:12 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.11.85])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF8D83F5A1;
-        Tue, 24 Jan 2023 08:27:29 -0800 (PST)
-Date:   Tue, 24 Jan 2023 16:27:23 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>, chriscli@google.com
-Subject: Re: [PATCH] ftrace: Show a list of all functions that have ever been
- enabled
-Message-ID: <Y9AG63mgkyzSEbSa@FVFF77S0Q05N>
-References: <20230124095653.6fd1640e@gandalf.local.home>
+        Tue, 24 Jan 2023 11:29:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D545211EA1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674577709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ySlJVrmItDOerr+H1CEk6K2XPX97r28SzTHxaNzIPCg=;
+        b=MLiz58jfM/7G98MLLSJhvWtP5Od0sx9QwjMWBR82iIQfJg2AU0Xa69q/rgzVp+c/eUjjQY
+        1zw/kR96wwO5xd7Wb8LE2dji2SCMwSQaF2twSaQqkm2QjL2b3Zly3LiTI2GkqFkULaDdiU
+        bEVMOP5RyqbARL8gppHDxb1siq5UPxY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-130-a8fjlNhrPKOCMqvAcoo1KA-1; Tue, 24 Jan 2023 11:28:27 -0500
+X-MC-Unique: a8fjlNhrPKOCMqvAcoo1KA-1
+Received: by mail-wm1-f69.google.com with SMTP id c7-20020a1c3507000000b003d355c13ba8so9436378wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:28:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ySlJVrmItDOerr+H1CEk6K2XPX97r28SzTHxaNzIPCg=;
+        b=xVNB0GBlujCvgzkUIjHQJYrZFlNQ2Y7mb8VFstbs8qsXy/fS7Ai4s/SnmcTj8yYks/
+         zkR06pS38X97IFO5Rj9UmM4IHQDbHQ1Z1tyKQ9xRK5Mn5CsWZhzs/TfzUFpriS89D09J
+         PJmTkVcURTqnRIdtDkG9RGmsQHX56dgQjayTApBSN6a37YVOvh7SAlsos8376c3B03Dj
+         PfLXPhgl0SiXUJiIMzVQC1SDG5wjGWiVP6n+Rq+GZegDcnkoNMDnBnl03xFW0nc877v+
+         bahDpgIQbFgUgriWouf1QciI7XKivOCDFJrD4Low/vp1vhrPCQnEEbDHGLYkiCfhWYUx
+         47cw==
+X-Gm-Message-State: AFqh2krkjs9nvA1TzFuV0yIXOPrR9lGg1R4mcQnSN3l02RBvB4dzTj7A
+        ACMNKG5CxgWlGVC/X7P/kZp3qCfRDDNKUvZ/JoG9lRpPxfRNodCuWw16KyQh9YrmujaeuJiLP/H
+        wBK8/u6QljdsKPQpCTv3eicaX
+X-Received: by 2002:adf:df10:0:b0:26a:3eee:dde4 with SMTP id y16-20020adfdf10000000b0026a3eeedde4mr23657068wrl.8.1674577706142;
+        Tue, 24 Jan 2023 08:28:26 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv9Sv+gszxHCBZj/Xm9GV3TOnkrQ2UmBhTzEl1d7Z6kmqZ7MMwUJonsHw8WPEvQXnKOrfZd7Q==
+X-Received: by 2002:adf:df10:0:b0:26a:3eee:dde4 with SMTP id y16-20020adfdf10000000b0026a3eeedde4mr23657025wrl.8.1674577705812;
+        Tue, 24 Jan 2023 08:28:25 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id bv17-20020a0560001f1100b002be2f18938csm2248680wrb.41.2023.01.24.08.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 08:28:25 -0800 (PST)
+Message-ID: <c45ea1da-1531-8c33-f060-c06225a413da@redhat.com>
+Date:   Tue, 24 Jan 2023 17:28:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124095653.6fd1640e@gandalf.local.home>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 10/39] x86/mm: Introduce _PAGE_COW
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-11-rick.p.edgecombe@intel.com>
+ <634aa365-1f51-8684-24ae-3b68aba1e12a@redhat.com>
+ <bbc4f4df98ec798ae15e5daa6b5ceab41bcc66f9.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <bbc4f4df98ec798ae15e5daa6b5ceab41bcc66f9.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 09:56:53AM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 23.01.23 21:56, Edgecombe, Rick P wrote:
+> Trying to answer both questions to this patch on this one.
 > 
-> When debugging a crash that appears to be related to ftrace, but not for
-> sure, it is useful to know if a function was ever enabled by ftrace or
-> not. It could be that a BPF program was attached to it, or possibly a live
-> patch.
+> On Mon, 2023-01-23 at 10:28 +0100, David Hildenbrand wrote:
+>>> +/*
+>>> + * Normally COW memory can result in Dirty=1,Write=0 PTEs. But in
+>>> the case
+>>> + * of X86_FEATURE_USER_SHSTK, the software COW bit is used, since
+>>> the
+>>> + * Dirty=1,Write=0 will result in the memory being treated as
+>>> shadow stack
+>>> + * by the HW. So when creating COW memory, a software bit is used
+>>> + * _PAGE_BIT_COW. The following functions pte_mkcow() and
+>>> pte_clear_cow()
+>>> + * take a PTE marked conventionally COW (Dirty=1) and transition
+>>> it to the
+>>> + * shadow stack compatible version of COW (Cow=1).
+>>> + */
+>>
+>> TBH, I find that all highly confusing.
+>>
+>> Dirty=1,Write=0 does not indicate a COW page reliably. You could
+>> have
+>> both, false negatives and false positives.
+>>
+>> False negative: fork() on a clean anon page.
+>>
+>> False positives: wrpotect() of a dirty anon page.
+>>
+>>
+>> I wonder if it really has to be that complicated: what you really
+>> want
+>> to achieve is to disallow "Dirty=1,Write=0" if it's not a shadow
+>> stack
+>> page, correct?
 > 
-> We are having crashes in the field where this information is not always
-> known. But having ftrace set a flag if a function has ever been attached
-> since boot up helps tremendously in trying to know if a crash had to do
-> with something using ftrace.
+> The other thing is to save that the PTE is/was Dirty=1 somewhere (for
+> non-shadow stack memory). A slightly different but related thing. But
+> losing that information would would introduce differences for
+> pte_dirty() between when shadow stack was enabled or not. GUP/COW
+> doesn't need this anymore but there are lots of other places it gets
+> checked.
 > 
-> For analyzing crashes, the use of a kdump image can have access to the
-> flags. When looking at issues where the kernel did not panic, the
-> touched_functions file can simply be used.
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
-> 
-> [
->   This patch will conflict with Mark's patch that is going through the ARM
->   tree. I will hold off pulling this patch until the next merge window, and
->   rebase it on top of the changes when the tracing tree merges with upstream
->   that has the changes from the ARM tree.
-> ]
+> Perhaps following your GUP changes, _PAGE_COW is just now the wrong
+> name for it. _PAGE_SAVED_DIRTY maybe?
 
-Sorry for the conflict!
+It goes into the direction of my other proposal/idea, yes. Not sure if 
+_PAGE_SAVED_DIRTY would currently mimic what's happening here ... 
+_PAGE_COW is certainly wrong and misleading.
 
-The patch looks good to me; I just gave it a spin on arm64 (resolving the
-conflcit with my changes by moving FTRCE_FL_TOUCHED to bit 20, and
-FTRACE_REF_MAX_SHIFT down to 20), and from a naive test that seems happy:
-
-| # cat /sys/kernel/tracing/touched_functions 
-| # echo do_el0_svc > /sys/kernel/tracing/set_ftrace_filter 
-| # echo function_graph > /sys/kernel/tracing/current_tracer 
-| # cat /sys/kernel/tracing/touched_functions 
-| do_el0_svc (1)       O  ops: graph_ops+0x0/0xb8 (ftrace_graph_func+0x0/0x58)
-| # echo nop > /sys/kernel/tracing/current_tracer 
-| # cat /sys/kernel/tracing/touched_functions 
-| do_el0_svc (0) 
-
+-- 
 Thanks,
-Mark.
 
-> 
->  include/linux/ftrace.h |  5 ++++-
->  kernel/trace/ftrace.c  | 51 +++++++++++++++++++++++++++++++++++++-----
->  2 files changed, 50 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 99f1146614c0..76baba9bd21b 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -563,6 +563,7 @@ bool is_ftrace_trampoline(unsigned long addr);
->   *  IPMODIFY - the record allows for the IP address to be changed.
->   *  DISABLED - the record is not ready to be touched yet
->   *  DIRECT   - there is a direct function to call
-> + *  TOUCHED  - A callback was added since boot up
->   *
->   * When a new ftrace_ops is registered and wants a function to save
->   * pt_regs, the rec->flags REGS is set. When the function has been
-> @@ -580,9 +581,10 @@ enum {
->  	FTRACE_FL_DISABLED	= (1UL << 25),
->  	FTRACE_FL_DIRECT	= (1UL << 24),
->  	FTRACE_FL_DIRECT_EN	= (1UL << 23),
-> +	FTRACE_FL_TOUCHED	= (1UL << 22),
->  };
->  
-> -#define FTRACE_REF_MAX_SHIFT	23
-> +#define FTRACE_REF_MAX_SHIFT	22
->  #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
->  
->  #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
-> @@ -641,6 +643,7 @@ enum {
->  	FTRACE_ITER_PROBE	= (1 << 4),
->  	FTRACE_ITER_MOD		= (1 << 5),
->  	FTRACE_ITER_ENABLED	= (1 << 6),
-> +	FTRACE_ITER_TOUCHED	= (1 << 7),
->  };
->  
->  void arch_ftrace_update_code(int command);
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 442438b93fe9..7687f413ab36 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -45,6 +45,9 @@
->  #include "trace_output.h"
->  #include "trace_stat.h"
->  
-> +/* Flags that do not get reset */
-> +#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED)
-> +
->  #define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
->  
->  #define FTRACE_WARN_ON(cond)			\
-> @@ -2196,7 +2199,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
->  		flag ^= rec->flags & FTRACE_FL_ENABLED;
->  
->  		if (update) {
-> -			rec->flags |= FTRACE_FL_ENABLED;
-> +			rec->flags |= FTRACE_FL_ENABLED | FTRACE_FL_TOUCHED;
->  			if (flag & FTRACE_FL_REGS) {
->  				if (rec->flags & FTRACE_FL_REGS)
->  					rec->flags |= FTRACE_FL_REGS_EN;
-> @@ -2251,7 +2254,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
->  	if (update) {
->  		/* If there's no more users, clear all flags */
->  		if (!ftrace_rec_count(rec))
-> -			rec->flags &= FTRACE_FL_DISABLED;
-> +			rec->flags &= FTRACE_NOCLEAR_FLAGS;
->  		else
->  			/*
->  			 * Just disable the record, but keep the ops TRAMP
-> @@ -3067,7 +3070,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
->  		struct dyn_ftrace *rec;
->  
->  		do_for_each_ftrace_rec(pg, rec) {
-> -			if (FTRACE_WARN_ON_ONCE(rec->flags & ~FTRACE_FL_DISABLED))
-> +			if (FTRACE_WARN_ON_ONCE(rec->flags & ~FTRACE_NOCLEAR_FLAGS))
->  				pr_warn("  %pS flags:%lx\n",
->  					(void *)rec->ip, rec->flags);
->  		} while_for_each_ftrace_rec();
-> @@ -3518,7 +3521,10 @@ t_func_next(struct seq_file *m, loff_t *pos)
->  		     !ftrace_lookup_ip(iter->hash, rec->ip)) ||
->  
->  		    ((iter->flags & FTRACE_ITER_ENABLED) &&
-> -		     !(rec->flags & FTRACE_FL_ENABLED))) {
-> +		     !(rec->flags & FTRACE_FL_ENABLED)) ||
-> +
-> +		    ((iter->flags & FTRACE_ITER_TOUCHED) &&
-> +		     !(rec->flags & FTRACE_FL_TOUCHED))) {
->  
->  			rec = NULL;
->  			goto retry;
-> @@ -3777,7 +3783,7 @@ static int t_show(struct seq_file *m, void *v)
->  		return 0;
->  	}
->  
-> -	if (iter->flags & FTRACE_ITER_ENABLED) {
-> +	if (iter->flags & (FTRACE_ITER_ENABLED | FTRACE_ITER_TOUCHED)) {
->  		struct ftrace_ops *ops;
->  
->  		seq_printf(m, " (%ld)%s%s%s",
-> @@ -3869,6 +3875,31 @@ ftrace_enabled_open(struct inode *inode, struct file *file)
->  	return 0;
->  }
->  
-> +static int
-> +ftrace_touched_open(struct inode *inode, struct file *file)
-> +{
-> +	struct ftrace_iterator *iter;
-> +
-> +	/*
-> +	 * This shows us what functions have ever been enabled
-> +	 * (traced, direct, patched, etc). Not sure if we want lockdown
-> +	 * to hide such critical information for an admin.
-> +	 * Although, perhaps it can show information we don't
-> +	 * want people to see, but if something had traced
-> +	 * something, we probably want to know about it.
-> +	 */
-> +
-> +	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
-> +	if (!iter)
-> +		return -ENOMEM;
-> +
-> +	iter->pg = ftrace_pages_start;
-> +	iter->flags = FTRACE_ITER_TOUCHED;
-> +	iter->ops = &global_ops;
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * ftrace_regex_open - initialize function tracer filter files
->   * @ops: The ftrace_ops that hold the hash filters
-> @@ -6137,6 +6168,13 @@ static const struct file_operations ftrace_enabled_fops = {
->  	.release = seq_release_private,
->  };
->  
-> +static const struct file_operations ftrace_touched_fops = {
-> +	.open = ftrace_touched_open,
-> +	.read = seq_read,
-> +	.llseek = seq_lseek,
-> +	.release = seq_release_private,
-> +};
-> +
->  static const struct file_operations ftrace_filter_fops = {
->  	.open = ftrace_filter_open,
->  	.read = seq_read,
-> @@ -6601,6 +6639,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
->  	trace_create_file("enabled_functions", TRACE_MODE_READ,
->  			d_tracer, NULL, &ftrace_enabled_fops);
->  
-> +	trace_create_file("touched_functions", TRACE_MODE_READ,
-> +			d_tracer, NULL, &ftrace_touched_fops);
-> +
->  	ftrace_create_filter_files(&global_ops, d_tracer);
->  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> -- 
-> 2.39.0
-> 
+David / dhildenb
+
