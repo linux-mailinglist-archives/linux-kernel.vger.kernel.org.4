@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDBC67982F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E983679834
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbjAXMis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S233856AbjAXMke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjAXMip (ORCPT
+        with ESMTP id S232547AbjAXMkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:38:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C2237B7D;
-        Tue, 24 Jan 2023 04:38:29 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OC1lmh001235;
-        Tue, 24 Jan 2023 12:38:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=la4YFSxXOheE6TzxwQqP3ufcbSsJu2d3J+0QKvARdUA=;
- b=Wm5oAfHgvTjJqjhG2IwBuOz/c2q+xWwpchqHD3qZfCjwaFWhMy+7o91tiGMuXZ8Ov4ty
- rKpYlVUT8s6u0C6K1BK1fR9qumKy6BoSQ0XC/YsPXNuplMn/Tvtj9qUZf4erEB0+icNh
- +0iOKdYgobjic1x1NHeun7AqAvwpWnR5ErISYAiGPCqamUf7pYysTw95z3fZYMb4D0F1
- WAE7LcMjoCobuYBSYS6MERH8VMpy2d2tBMFAG9b4ZrV3/h52YdAb8k1la4xGRbglxnX5
- SjQqZ5F68AvjnRCF2hQIiFS5W0E2V37iQNzkKCvV9GmGBq7QJNotr84RAxQzeKs6ktNl ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg0mec8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 12:38:13 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30OBuxcG000304;
-        Tue, 24 Jan 2023 12:38:12 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg0meba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 12:38:12 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBfIqt006849;
-        Tue, 24 Jan 2023 12:38:10 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7a1vf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Jan 2023 12:38:10 +0000
-Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCc9tJ10486320
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Jan 2023 12:38:09 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1AC97805E;
-        Tue, 24 Jan 2023 14:24:59 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1B0F7805C;
-        Tue, 24 Jan 2023 14:24:56 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.163.35.100])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 Jan 2023 14:24:56 +0000 (GMT)
-Message-ID: <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     William Roberts <bill.c.roberts@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Date:   Tue, 24 Jan 2023 07:38:04 -0500
-In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
-         <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
-         <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
-         <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
-         <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
-         <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
-         <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
-         <Y8tcEtr8Kl3p4qtA@kernel.org>
-         <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 24 Jan 2023 07:40:32 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D39F2BEF8;
+        Tue, 24 Jan 2023 04:40:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jC04i1Zu9XaZ6W7JdBwiM9voUwwR4W04Ge/TEM9K7GlkllAf/CKPhfw1nmvtNskbXLIsHHmmcr2R4RFVXRIM8htntNjuYxc4fosAI+l4yVjdSvEgttTpnSZqR5iB76EtOdNXnfyRhbn1F04KBe0HUSoUXLlTgH8O0UCmeH1zDR9MRyHl4yRnOBZ02OWnNPc/AE3N9GY6S+Xpxu6i+oRgHJAPYFWIOeGpWVgEjhT9boxK6Err0OqnM4HBhG17JF52iREEUpWqIdFH/SNn6i05rgYCUCRMJJMtRLqn6ZHqbqjcTP2WIdTnLAH8EiWpEp7xymV/XZ1Y3Ss+tpHOexxPbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q3sDErdvY8VCPFQi6UyZRjZqrr3bln57UNwSa9gkqfo=;
+ b=TcwsY6UWNxX4p+ty9n+n1xbqVJZ8Q9gKpCka34JUoBYIK8T0rhy1tdDZ3bc8F1qgz1cevJ2K0w38nmfFvnub+5PEM3qau/LUH4UBQlS/tlJo7AB/0Kv6ePNKfJHROuR6bR8m1lF41YHAbHvg9NZnZ2r/1qfrMxe9RVxKkP9swvLQdYsqDpR+fsZeaV7xZsVBzvzKomGgxcnTv5l8YYdDtJKPRaemFa0+m4P557iSxVhn0vbYQg4seSj2XAeS3JbluCM0yycw3Re7rAk5f8bF5WNEf4IqSRcibjjzXaJMryAN5ZPl7n/thO2Jz1PbG7bbVDfLbJj2rMy6az4J/MbmYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q3sDErdvY8VCPFQi6UyZRjZqrr3bln57UNwSa9gkqfo=;
+ b=s0U7wSVLWSZrntzWy7ZVfdUNmwoKb96hSOwNp8TpZ2STFKkN5hGWvgBP4ovxMJcUEL64UkEuluU2xvoBHm6BF9DGk1wYhea3bUovJSxbGdByW6q/xYeSGGodZzUACd6tIKsJ9JsdIrnbyKT1jgbhQArOCjLdOUm4mYMHUYCpcLE=
+Received: from BN9PR03CA0701.namprd03.prod.outlook.com (2603:10b6:408:ef::16)
+ by IA1PR12MB6018.namprd12.prod.outlook.com (2603:10b6:208:3d6::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 12:40:29 +0000
+Received: from BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ef:cafe::a9) by BN9PR03CA0701.outlook.office365.com
+ (2603:10b6:408:ef::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
+ Transport; Tue, 24 Jan 2023 12:40:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT026.mail.protection.outlook.com (10.13.177.51) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6043.17 via Frontend Transport; Tue, 24 Jan 2023 12:40:28 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 24 Jan
+ 2023 06:40:26 -0600
+Date:   Tue, 24 Jan 2023 13:40:24 +0100
+From:   Robert Richter <rrichter@amd.com>
+To:     Alison Schofield <alison.schofield@intel.com>
+CC:     Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cxl/mbox: Add debug messages for supported mailbox
+ commands
+Message-ID: <Y8/RuADVoRiC4d0+@rric.localdomain>
+References: <20230119130450.107519-1-rrichter@amd.com>
+ <Y84dleBbsQhE0Dic@aschofie-mobl2>
+ <Y85+dwjO9JjtFtGa@rric.localdomain>
+ <Y87ff+zqVKf4oOJ/@aschofie-mobl2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: W6lhHVrCJEXLOG1WcinsU_3DsgBdNAVC
-X-Proofpoint-GUID: TTPoKd1_ay6imEY8KQ5opjuTd2SWTtph
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301240114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y87ff+zqVKf4oOJ/@aschofie-mobl2>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT026:EE_|IA1PR12MB6018:EE_
+X-MS-Office365-Filtering-Correlation-Id: 03eabfea-8190-48b5-1eb2-08dafe082cc0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ucPEGXVsJi+L44uyOEILrSZsxMSH0Y9inla8OC3+6XJ8GyqgW9ZsJ6FwP1ymRG763lrzvG8f1xAdySLtU0G3b50HX7LE0iKayDrEMr9KqShmrdbP9hiNDDPgcv6M1OhHaB/B3ZDS9dUaRHbiPhBI7KVkSpPFYJpCuTsJC6juGheBzfpUanndCuKcaO7TelicGWjUooXaYw0xX1Ym2xAMRTekyIcO75ptbjyJ1Ns1jMZEQFqKV9jSJgeRbdFa+5TrsRQMVPSM7/mAvW2+8hIq6fnC5d2YzQZ7OEpAfgH0hpF2zK6jlE5x79hxZnRIwawZOJl0lDTnAoRbzI8RWrcE0e6cK64xtjfkROXSBHG65YdIyXFv7QasH2NS4tu1PBpIlsJ8vDwaGInw82srb2eDR9lblNWCadE2mfhS6aNnFZ3wzKMMtohQGsAuepgFHtJbavmECy+gQd+6jZa60ILcPh/cG+u6Xs4Tw4StNZjg17QtH1P/g0PqKYMoyt0MLfCR3r/mymkGRUm02se6dCnebFdFp/1kkUVqpNrziANVX/JfNCuUdyhthrid0YWDr3mcuxllAFw99YRHN+Y64p0oBFwtw8N0xz+4JHNYtpYlJ+osz9E9wsJC6T6NhQnfNLfkmlCuLadjEIWQ3ZvX9SwxtrCPs1ZxJpuFDFBo8PYF4Vsj2cRLEAAeNnwoa6qbcVdx1plMzYRQQ/qxH2tHorWUHqLaBM0Kp09VaR3YgpFJXHU=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199015)(40470700004)(36840700001)(46966006)(70586007)(70206006)(426003)(47076005)(4326008)(6916009)(40460700003)(8676002)(316002)(336012)(54906003)(82740400003)(36860700001)(82310400005)(8936002)(40480700001)(83380400001)(55016003)(41300700001)(2906002)(81166007)(15650500001)(5660300002)(478600001)(186003)(26005)(356005)(16526019)(9686003)(53546011)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 12:40:28.9859
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03eabfea-8190-48b5-1eb2-08dafe082cc0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6018
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,80 +106,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
-> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
-> wrote:
+On 23.01.23 11:26:55, Alison Schofield wrote:
+> On Mon, Jan 23, 2023 at 01:32:55PM +0100, Robert Richter wrote:
+> > Hi Alison,
 > > 
-> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > <bill.c.roberts@gmail.com> wrote:
-> > > > 
-> > > > > What's the use case of using the creation data and ticket in
-> > > > > this context? Who gets the creationData and the ticket?
-> > > > > Could a user supplied outsideInfo work? IIRC I saw some
-> > > > > patches flying around where the sessions will get encrypted
-> > > > > and presumably correctly as well. This would allow the
-> > > > > transfer of that outsideInfo, like the NV Index PCR value to
-> > > > > be included and integrity protected by the session HMAC.
-> > > > 
-> > > > The goal is to ensure that the key was generated by the kernel.
-> > > > In the absence of the creation data, an attacker could generate
-> > > > a hibernation image using their own key and trick the kernel
-> > > > into resuming arbitrary code. We don't have any way to pass
-> > > > secret data from the hibernate kernel to the resume kernel, so
-> > > > I don't think there's any easy way to do it with outsideinfo.
+> > On 22.01.23 21:39:33, Alison Schofield wrote:
+> > > On Thu, Jan 19, 2023 at 02:04:50PM +0100, Robert Richter wrote:
+> > > > Only unsupported mailbox commands are reported in debug messages. A
+> > > > list of supported commands is useful too. Change debug messages to
+> > > > also report the opcodes of supported commands.
 > > > 
-> > > Can we go back again to why you can't use locality?  It's exactly
-> > > designed for this since locality is part of creation data. 
-> > > Currently everything only uses locality 0, so it's impossible for
-> > > anyone on Linux to produce a key with anything other than 0 in
-> > > the creation data for locality.  However, the dynamic launch
-> > > people are proposing that the Kernel should use Locality 2 for
-> > > all its operations, which would allow you to distinguish a key
-> > > created by the kernel from one created by a user by locality.
-> > > 
-> > > I think the previous objection was that not all TPMs implement
-> > > locality, but then not all laptops have TPMs either, so if you
-> > > ever come across one which has a TPM but no locality, it's in a
-> > > very similar security boat to one which has no TPM.
+> > > Hi Robert,
+> > > I wonder if you can get this info another way. When I try this 
+> > > loading cxl_test today, I get 99 new messages. Is this going to
+> > > create too much noise with debug kernels?
 > > 
-> > Kernel could try to use locality 2 and use locality 0 as fallback.
+> > There are 26 commands supported by the driver, so I assume there are
+> > at least 4 cards in your system? To me the number of messages looks ok
+> > for a debug kernel. And, most kernels have dyndbg enabled allowing to
+> > enable only messages of interest? Esp. if card initialization fails
+> > there is no way to get this information from userland. The list of
+> > unsupported commands is of less use than the one for supported. That
+> > is the intention for the change.
 > 
-> I don't think that would work for Matthew, they need something
-> reliable to indicate key provenance.
+> cxl_walk_cel() job is to create the enabled_cmds list for the device.
+> How about we use that language in the message, like:
+> 
+> 		set_bit(cmd->info.id, cxlds->enabled_cmds);
+> -               dev_dbg(cxlds->dev, "Opcode 0x%04x supported by driver\n", opcode);
+> +               dev_dbg(cxlds->dev, "Opcode 0x%04x enabled\n", opcode);
+> 
+> Because when we say, "Opcode 0x%04x supported by driver\n", that comes
+> with the assumption that the device supported it too. By saying
+> 'enabled', it's clear device and driver are aligned.
 
-No, I think it would be good enough: locality 0 means anyone (including
-the kernel on a machine which doesn't function correctly) could have
-created this key.  Locality 2 would mean only the kernel could have
-created this key.
+Yes, that message is more meaningful.
 
-By the time the kernel boots and before it loads the hibernation image
-it will know the answer to the question "does my TPM support locality
-2", so it can use that in its security assessment: if the kernel
-supports locality 2 and the key wasn't created in locality 2 then
-assume an attack.  Obviously, if the kernel doesn't support locality 2
-then the hibernation resume has to accept any old key, but that's the
-same as the situation today.
+Thanks,
 
-> I was informed that all 5 localities should be supported starting
-> with Gen 7 Kaby Lake launched in 2016. Don't know if this is
-> still "too new".
-
-It's probably good enough.  Current laptops which can't use locality 2
-are in the same position as now, but newer ones can provide more
-security guarantees.
-
-There is, however, another wrinkle: can Kaby Lake be persuaded, though
-bios settings perhaps, to shut off the non zero localities?  This would
-allow for a downgrade attack where you shut off locality 2 then present
-a forged locality 0 key and hibernation image; the kernel will think,
-because it can't access locality 2, that it's in a reduced security
-environment so the key might be OK.  We could fix this by requiring
-Kaby Lake and beyond to have locality 2 and refusing to hibernate if it
-can't be accessed and building "is this Kaby lake or beyond" into the
-check for should I have locality 2, but this is getting complex and
-error prone.
-
-James
-
+-Robert
