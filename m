@@ -2,119 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900D967A480
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5ED967A488
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbjAXVBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S233062AbjAXVD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbjAXVBd (ORCPT
+        with ESMTP id S229487AbjAXVD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:01:33 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5A141B43
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:01:32 -0800 (PST)
-Received: from dslb-188-096-139-204.188.096.pools.vodafone-ip.de ([188.96.139.204] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1pKQQ3-0001xR-Hz; Tue, 24 Jan 2023 22:01:27 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 4/4] staging: r8188eu: remove usb_ops_linux.h
-Date:   Tue, 24 Jan 2023 22:01:08 +0100
-Message-Id: <20230124210108.62170-5-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230124210108.62170-1-martin@kaiser.cx>
-References: <20230124210108.62170-1-martin@kaiser.cx>
+        Tue, 24 Jan 2023 16:03:27 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18BE2685;
+        Tue, 24 Jan 2023 13:03:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ph/B8CA5XEjvPhXzOrcnAHQMPGq8rPd6A2i264YU/7g=; b=Kuro7FXNmc40mV3DPu/8jZt3Sf
+        mu0L+F+vhjZYc5XULMBMysSHEBuTjO6J8c5ZvYKTnNboBboXezYcGBlqLPwMGEPd0g4mbaEsfNDBM
+        Hl7cahF+dEXdG7EoEt5IIB//bUIPp5epnCWEUYH3VuCCZxHLbFD+oyr0Z/Ae8qGKLS8U=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pKQRg-0033JP-3G; Tue, 24 Jan 2023 22:03:08 +0100
+Date:   Tue, 24 Jan 2023 22:03:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] net: phy: C45-over-C22 access
+Message-ID: <Y9BHjEUSvIRI2Mrz@lunn.ch>
+References: <20230120224011.796097-1-michael@walle.cc>
+ <Y87L5r8uzINALLw4@lunn.ch>
+ <Y87WR/T395hKmgKm@shell.armlinux.org.uk>
+ <dcea8c36e626dc31ee1ddd8c867eb999@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcea8c36e626dc31ee1ddd8c867eb999@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's only two defines left in usb_ops_linux.h. Move those defines to
-usb_ops_linux.c, where they are used.
+> Btw. for the DT case, it seems we need yet another property
+> to indicate broken MDIO busses.
 
-Remove the now empty file usb_ops_linux.h.
+I would prefer to avoid that. I would suggest you do what i did for
+the none DT case. First probe using C22 for all devices known in DT.
+Then call mdiobus_prevent_c45_scan() which will determine if any of
+the found devices are FUBAR and will break C45. Then do a second probe
+using C45 and/or C45 over C22 for those devices in DT with the c45
+compatible.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/hal/usb_ops_linux.c     |  4 ++++
- drivers/staging/r8188eu/include/usb_ops.h       |  2 --
- drivers/staging/r8188eu/include/usb_ops_linux.h | 11 -----------
- drivers/staging/r8188eu/os_dep/usb_ops_linux.c  |  1 -
- 4 files changed, 4 insertions(+), 14 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/include/usb_ops_linux.h
-
-diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-index 0f789d5250db..9c940ab8fd41 100644
---- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
-+++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-@@ -7,6 +7,10 @@
- #include "../include/usb_ops.h"
- #include "../include/rtl8188e_hal.h"
- 
-+#define VENDOR_CMD_MAX_DATA_LEN	254
-+
-+#define RTW_USB_CONTROL_MSG_TIMEOUT	500/* ms */
-+
- static int usb_read(struct adapter *adapt, u16 value, void *data, u8 size)
- {
- 	struct dvobj_priv *dvobjpriv = adapter_to_dvobj(adapt);
-diff --git a/drivers/staging/r8188eu/include/usb_ops.h b/drivers/staging/r8188eu/include/usb_ops.h
-index ddc46cb44358..5bd8ce37aebf 100644
---- a/drivers/staging/r8188eu/include/usb_ops.h
-+++ b/drivers/staging/r8188eu/include/usb_ops.h
-@@ -17,8 +17,6 @@
- #define MAX_VENDOR_REQ_CMD_SIZE	254	/* 8188cu SIE Support */
- #define MAX_USB_IO_CTL_SIZE	(MAX_VENDOR_REQ_CMD_SIZE + ALIGNMENT_UNIT)
- 
--#include "usb_ops_linux.h"
--
- /*
-  * Increase and check if the continual_urb_error of this @param dvobjprivei
-  * is larger than MAX_CONTINUAL_URB_ERR
-diff --git a/drivers/staging/r8188eu/include/usb_ops_linux.h b/drivers/staging/r8188eu/include/usb_ops_linux.h
-deleted file mode 100644
-index b149df7957dd..000000000000
---- a/drivers/staging/r8188eu/include/usb_ops_linux.h
-+++ /dev/null
-@@ -1,11 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#ifndef __USB_OPS_LINUX_H__
--#define __USB_OPS_LINUX_H__
--
--#define VENDOR_CMD_MAX_DATA_LEN	254
--
--#define RTW_USB_CONTROL_MSG_TIMEOUT	500/* ms */
--
--#endif
-diff --git a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
-index 583533631133..c9ee1173a1d6 100644
---- a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
-@@ -4,7 +4,6 @@
- #define _USB_OPS_LINUX_C_
- 
- #include "../include/drv_types.h"
--#include "../include/usb_ops_linux.h"
- #include "../include/rtl8188e_recv.h"
- 
- static unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
--- 
-2.30.2
-
+	Andrew
