@@ -2,189 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFCA6794C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2F86794C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjAXKHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+        id S233632AbjAXKIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbjAXKHV (ORCPT
+        with ESMTP id S233318AbjAXKIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:07:21 -0500
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBB73EC7B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:07:17 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id v5so17700284edc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:07:17 -0800 (PST)
+        Tue, 24 Jan 2023 05:08:10 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CAE55AC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:08:08 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so10514527wmc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BFAsoCM7lTTy8pzMkhBP/3Y7R7BLbBDpiacpk1e+svk=;
+        b=zbc1Kh29haSWpTL482axZTwaQ+BCuuBVWHm9Wm9CefPtdVb2/WcPKQtJBGwMv8h1Xa
+         Uu3j/8TozWnXngaG9EMppKbhb+OEJAx2cDFrbg/7y9Apf3rS0ImEdwsm/sQ2qEPKbPY/
+         g5VdPz5btDNmrLcJsNN39oIPiUWQWPqMqR4HmfMtKZVrUEsJNAYyYB7VPDWlA4RZyGlj
+         RSOf1frU64pubP9yex7qfz6s5oKkc9G36D/M/6370N4aSnqEDDbxsgwFeDlpXeMHcZ1t
+         tMSzZcOvNm6JIKGPVWLu2QTY8+TQV51tFYQV2t4z7lyzacaDeZmajykwGoSJkI8DBgYD
+         lRvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+zHkweA6iYFq5hv3LlLMfnp5HhSGrGkvJmG6beL3iC4=;
-        b=JPj/xZYLvB3WduU5dW/14nuDHkeHy+N/VzpCnWI+6Ylrm+mWvtgMjzQtHiVQy5amMr
-         uhUHNBCPGLNCY76mG9QXKSoDQQKYJ5Ya0HgJRpn933Rm/Fuf/jSggILB2dYWA6vlz7Av
-         Y/z6FtrXi9/1/aK50KXZjiXWVhQTFh7SbQ0mzWKYNrOflIuyjN8Iiti+FBh+VqlfRBw2
-         0/qtkuyb81ucpNy1emxX8ufNrSqGBLigFhCETFByw+ts7RCsRdWl9KtzTLBPZIrBIWcR
-         wnoB/AF6J/45EhIXy36EHmx0JvPDpVqTYM0Md1nyllyBBp5Y7TcZ2mAZWjHLesr4hNKO
-         ur+Q==
-X-Gm-Message-State: AFqh2kr6MMrjECgqTGr3WvSmYZyCUttwqPGjZKg1I3epW5UnBajGsEgC
-        Aq/thBIZAV4TW1N4grdcIpk=
-X-Google-Smtp-Source: AMrXdXvDYxqG0b9CPsfApoyf6KbrzAxGDXnis8L/DvXUEc/CNbqpJJAC1GfQBmAXWOolljbeMEt5Iw==
-X-Received: by 2002:a05:6402:1cb2:b0:49e:f052:d9d3 with SMTP id cz18-20020a0564021cb200b0049ef052d9d3mr13193053edb.15.1674554835955;
-        Tue, 24 Jan 2023 02:07:15 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056402180c00b00499703df898sm834191edy.69.2023.01.24.02.07.14
+        bh=BFAsoCM7lTTy8pzMkhBP/3Y7R7BLbBDpiacpk1e+svk=;
+        b=cQJ4x5AZpTo8ZY4t/WSDUqlCphnhs9fSD+6dambYcUiWhsE8f0XdKUwYrrevtP9ti1
+         HYnuGPfM2ieK1vACaKSY9QKkk0J65H21xOug8K4atjKcOyff4iEU+hWtpEi4TnSWggLu
+         kQjtr8N544qwLrLSlugcjRLwrLaN9OQnZmxLb3V+XSyUKdy0OIKHpm1JM7gJZVqTqFJB
+         rTDoFpFSfNiqfxn4hs+zjYIuIQFtVRwezZCM1w22O80uxzfrqiytZ1+pYG8vDkITIIEW
+         HB6r3jsOMxCv78VPpVhMDnhH18aw5atZWWB0Oh4wOtRDlOslfX+3X6ouZQwZnCB1AOpP
+         zbCg==
+X-Gm-Message-State: AFqh2kpmQpocf3Oeqq4euizuvNeEupSFS9x5cdR3yxzzYqZfqYVYV3y7
+        dKOIj9gk/poKWLngIqnCTAOe5w==
+X-Google-Smtp-Source: AMrXdXtnSVR3GOqGkK+I/1saZYRYhFvhUquzJUpk3lftfHhjGUEtOPza9mC7F8QU6s/MYeXc3UoNng==
+X-Received: by 2002:a05:600c:3556:b0:3db:331b:bd2d with SMTP id i22-20020a05600c355600b003db331bbd2dmr15705410wmq.18.1674554886768;
+        Tue, 24 Jan 2023 02:08:06 -0800 (PST)
+Received: from [192.168.99.137] ([95.178.111.30])
+        by smtp.gmail.com with ESMTPSA id az41-20020a05600c602900b003dab77aa911sm13183099wmb.23.2023.01.24.02.08.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 02:07:15 -0800 (PST)
-Message-ID: <30855835-d455-fbf0-ccb1-0bcaf5b9f622@kernel.org>
-Date:   Tue, 24 Jan 2023 11:07:14 +0100
+        Tue, 24 Jan 2023 02:08:06 -0800 (PST)
+Message-ID: <d3daece0-ed23-fae7-9bc8-c6e53b84e8e7@baylibre.com>
+Date:   Tue, 24 Jan 2023 11:08:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] vc_screen: reload & check struct vc_data pointer in
- vcs_read() to avoid UAF
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Michael Kao <michael.kao@mediatek.com>,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
+ <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
+ <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
+ <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
+ <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
+ <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
+ <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
 Content-Language: en-US
-To:     George Kennedy <george.kennedy@oracle.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1674514099-17696-1-git-send-email-george.kennedy@oracle.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1674514099-17696-1-git-send-email-george.kennedy@oracle.com>
+In-Reply-To: <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 01. 23, 23:48, George Kennedy wrote:
-> After a call to console_unlock() in vcs_read() the vc_data struct can be
-> freed by vc_deallocate(). Because of that, the struct vc_data pointer needs
-> to be reloaded and checked for NULL to avoid the UAF below when vcs_size()
-> is called.
-> 
-> Syzkaller reported a UAF in vcs_size().
-> 
-> BUG: KASAN: use-after-free in vcs_size (drivers/tty/vt/vc_screen.c:215)
-> Read of size 4 at addr ffff8881137479a8 by task 4a005ed81e27e65/1537
+Hi Daniel,
 
-Could you trim the stack traces a bit, for example as follows?
+On 1/19/23 18:03, Amjad Ouled-Ameur wrote:
+> Hi Daniel,
+>
+> On 12/29/22 16:49, Daniel Lezcano wrote:
+>> On 06/12/2022 10:18, Amjad Ouled-Ameur wrote:
+>>> Hi Daniel,
+>>> On Mon Dec 5, 2022 at 8:39 PM CET, Daniel Lezcano wrote:
+>>>>
+>>>> Hi Amjad,
+>>>>
+>>>>
+>>>> On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>>>>>>>             platform_set_drvdata(pdev, mt);
+>>>>>>>     -    tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+>>>>>>> -                          &mtk_thermal_ops);
+>>>>>>> -    if (IS_ERR(tzdev)) {
+>>>>>>> -        ret = PTR_ERR(tzdev);
+>>>>>>> -        goto err_disable_clk_peri_therm;
+>>>>>>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+>>>>>>> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+>>>>>>> +        if (!tz)
+>>>>>>> +            return -ENOMEM;
+>>>>>>> +
+>>>>>>> +        tz->mt = mt;
+>>>>>>> +        tz->id = i;
+>>>>>>> +
+>>>>>>> +        tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
+>>>>>>> +                                 &mtk_thermal_ops :
+>>>>>>> + &mtk_thermal_sensor_ops);
+>>>>>>
+>>>>>> Here you use again the aggregation
+>>>>> I addressed this concern in V6, could you please take a look and let me
+>>>>> know what you think [0].
+>>>>>
+>>>>> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
+>>>>
+>>>> May I misunderstanding but AFAICS, this patch is setting the
+>>>> mtk_thermal_ops if the sensor id is zero. The get_temp is computing the
+>>>> max temperature in this ops which is what we don't want to do.
+>>>
+>>> Correct, but I think that is out of scope of this patchset, as the current
+>>> driver already uses mtk_thermal_ops for sensor 0. The focus of this patchset
+>>> is to add support for the other sensors.
+>>>
+>>> Besides, what do you suggest as a clean implementation if the current one
+>>> no longer meets thermal core requirements ?
+>>
+>> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 Little, right ?
+>
+> MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per sensor. Thermal zone 0 corresponds
+>
+> to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has nothing to do with CPUs. The cooling device type
+>
+> used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are present in the SoC for debug-purpose only, they are not supposed
+>
+> to be used for production.
+>
+After reconsidering the fact that zones 1, 2 and 3 are only used for dev/debug, it might be best to avoid
 
-> CPU: 0 PID: 1537 Comm: 4a005ed81e27e65 Not tainted 6.2.0-rc5 #1
-> Hardware name: Red Hat KVM, BIOS 1.15.0-2.module
-> Call Trace:
->   <TASK>
-> __asan_report_load4_noabort (mm/kasan/report_generic.c:350)
-> vcs_size (drivers/tty/vt/vc_screen.c:215)
-> vcs_read (drivers/tty/vt/vc_screen.c:415)
-> vfs_read (fs/read_write.c:468 fs/read_write.c:450)
-> ...
->   </TASK>
-> 
-> Allocated by task 1191:
- > ...
- > kmalloc_trace (mm/slab_common.c:1069)
-> vc_allocate (./include/linux/slab.h:580 ./include/linux/slab.h:720
->      drivers/tty/vt/vt.c:1128 drivers/tty/vt/vt.c:1108)
-> con_install (drivers/tty/vt/vt.c:3383)
-> tty_init_dev (drivers/tty/tty_io.c:1301 drivers/tty/tty_io.c:1413
->      drivers/tty/tty_io.c:1390)
-> tty_open (drivers/tty/tty_io.c:2080 drivers/tty/tty_io.c:2126)
-> chrdev_open (fs/char_dev.c:415)
-> do_dentry_open (fs/open.c:883)
-> vfs_open (fs/open.c:1014)
-> ...
-> 
-> Freed by task 1548:
- > ...
-> kfree (mm/slab_common.c:1021)
-> vc_port_destruct (drivers/tty/vt/vt.c:1094)
-> tty_port_destructor (drivers/tty/tty_port.c:296)
-> tty_port_put (drivers/tty/tty_port.c:312)
-> vt_disallocate_all (drivers/tty/vt/vt_ioctl.c:662 (discriminator 2))
-> vt_ioctl (drivers/tty/vt/vt_ioctl.c:903)
-> tty_ioctl (drivers/tty/tty_io.c:2776)
-> ...
-> 
-> The buggy address belongs to the object at ffff888113747800
->   which belongs to the cache kmalloc-1k of size 1024
-> The buggy address is located 424 bytes inside of
->   1024-byte region [ffff888113747800, ffff888113747c00)
-> 
-> The buggy address belongs to the physical page:
-> page:00000000b3fe6c7c refcount:1 mapcount:0 mapping:0000000000000000
->      index:0x0 pfn:0x113740
-> head:00000000b3fe6c7c order:3 compound_mapcount:0 subpages_mapcount:0
->      compound_pincount:0
-> anon flags: 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
-> raw: 0017ffffc0010200 ffff888100042dc0 0000000000000000 dead000000000001
-> raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> 
-> Memory state around the buggy address:
->   ffff888113747880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff888113747900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->> ffff888113747980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                                    ^
->   ffff888113747a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff888113747a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
-> Disabling lock debugging due to kernel taint
-> 
-> Fixes: ac751efa6a0d ("console: rename acquire/release_console_sem() to console_lock/unlock()")
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-> ---
->   drivers/tty/vt/vc_screen.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-> index 1850bacdb5b0..efa4f14fc9c0 100644
-> --- a/drivers/tty/vt/vc_screen.c
-> +++ b/drivers/tty/vt/vc_screen.c
-> @@ -403,7 +403,7 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->   		poll->event = 0;
->   	read = 0;
->   	ret = 0;
-> -	while (count) {
-> +	while (vc && count) {
->   		unsigned int this_round, skip = 0;
->   		int size;
->   
-> @@ -465,9 +465,17 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->   		pos += this_round;
->   		read += this_round;
->   		count -= this_round;
-> +
-> +		/* Reload if more to do. May have been freed by vc_deallocate()
-> +		 * after console_unlock()
-> +		 */
-> +		if (count)
-> +			vc = vcs_vc(inode, &viewed);
->   	}
->   	*ppos += read;
-> -	if (read)
-> +	if (!vc)
-> +		ret = -ENXIO;
+aggregation as you suggested, and keep only support for zone 0 in this driver. Thus I suggest I send a V8
 
-Wouldn't it make more sense to simply return from the loop immediately 
-(goto unlock_out)? So that you wouldn't need to add vc to the while 
-condition and the added 'if (count)' would contain also this 'if (!vc)?
+where I keep only below fixes for this patch if that's okay with you:
 
-> +	else if (read)
->   		ret = read;
->   unlock_out:
->   	console_unlock();
+- Define "raw_to_mcelsius" function pointer for "struct thermal_bank_cfg".
 
-thanks,
--- 
-js
-suse labs
+- Fix "mtk_thermal" variable in mtk_read_temp().
 
+- Set "mt->raw_to_mcelsius" in probe().
+
+
+For zones 1, 2 and 3 we can later add a different driver specific for dev/debug to probe them to
+
+avoid confusion.
+
+
+Regards,
+
+Amjad
+
+>
+> Regards,
+>
+> Amjad
+>
+>>
+>> If it is the case, then a thermal zone per sensor with the trip points and a cooling device for each of them.
+>>
+>> The two thermal zones for the big will share the same cooling device. The little thermal zone will have its own cooling device.
+>>
+>> If there is the GPU, then its own cooling device also with devfreq.
+>>
+>>
+>>>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>>>>
+>>>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+>>>> <http://twitter.com/#!/linaroorg> Twitter |
+>>>> <http://www.linaro.org/linaro-blog/> Blog
+>>>
+>>
