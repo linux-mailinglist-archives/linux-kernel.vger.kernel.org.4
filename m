@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960B6679DD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13EC679DCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbjAXPqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S235014AbjAXPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234042AbjAXPqB (ORCPT
+        with ESMTP id S234578AbjAXPnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:46:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA626A45
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:45:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674575112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XgNWZKzEAVfMhQwxbccXuuNkJcR/zVuKuBglg9QVv/s=;
-        b=E9nElvGl6kiLqP5oho40+HjHbfHBqGzWjAfuEyCsdbVLpO6JeBzoJte4r2o/j5yxNT6U8h
-        ul60OI7gDI7l3kCWlmsx7EqRqbaV2WQFRiCfsfZj7QCUajfDQEwZW1rEsAyLCgTIQL6XFW
-        YopQKYguloctUxipMruz4yf+Bfr0yZI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-414-zoVg3GfuPx6IYsU_6JPvRw-1; Tue, 24 Jan 2023 10:42:27 -0500
-X-MC-Unique: zoVg3GfuPx6IYsU_6JPvRw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B49382802E2B;
-        Tue, 24 Jan 2023 15:42:26 +0000 (UTC)
-Received: from [10.22.10.191] (unknown [10.22.10.191])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A5E5C492B00;
-        Tue, 24 Jan 2023 15:42:25 +0000 (UTC)
-Message-ID: <d1e28124-b7a7-ae19-87ec-b1dcd3701b61@redhat.com>
-Date:   Tue, 24 Jan 2023 10:42:24 -0500
+        Tue, 24 Jan 2023 10:43:25 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DBE4C0D9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:43:09 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l8so11760730wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:43:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N/a+6+PTNK+EgdrHpwsWimSpIXxnD79ClgSYevcrnuE=;
+        b=yf89n9wHbV/XnkigjdbRLaTnDYXsvazoQNIyN4X9VfmFm/yRnOxKuD2VSDfh5nnAp6
+         j4iTCxnMuig5YSDyZo8Erw2bTT2twrR2zWWFhJy6JFPsnAcAcdTGVctCKCp9UWLgE4+m
+         3Zi1q2MGqqELl250sQRxjmNJ0u7dcRA6gGRtqvEmswNkmgTPhecSFQp0Il/496oc8U0/
+         YdfTzSMYOXEck4uhxPAIyQRXI+zoKOVzm9a5QSHHp61yj+d8NPyK6ZRiRzTixITkkm6w
+         gciX8E0C3kDc17akCA4xh1Di4UAEoZQsJSGgqIo/e9jYsdup1v6zagNvDeIvivrAfAuw
+         HUuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N/a+6+PTNK+EgdrHpwsWimSpIXxnD79ClgSYevcrnuE=;
+        b=WNhZCDON4hL5ldNqt4lpKRtTLydSXOhaY1TZzSvrBcGLl5J97G0qREfuDMvnh4wyx1
+         /gtU36lyyCX2VLhfIgmwcRlGsYJNSa1WIZnHsvBFLzcRWhQQld4vJjLfKRKrFXaL46ZZ
+         aQyCyGg4yAD1njf6MxozOTqXI9CWALSwc/TeDwF9HJfbGHjvP+XiBZxzGTCqUiHItwzM
+         2dGMnul+5r4ArpxpSD1iBk8poynXJyhQp5fOBiGU5p+Q7RJCiWqM4W6+Sf34kc+XCdfF
+         hPvvQNsHCj98mMnD5RGGyJht0OOHHMVAbouQKfkgOtLhIt7v/hCawPC/u2EDB2hbfVnM
+         9P+A==
+X-Gm-Message-State: AFqh2krD1Pw+S9Co17qpR9W1iZEiGqH/s7bFVgSiSoJrlVjM2082UDxm
+        By6u3OhrZHjcyJDq22C4Yz30a0rB+eL0esFE
+X-Google-Smtp-Source: AMrXdXuYOE3dT+VE3oSwdKK67My+x+RmBaEi/JYTrdmPi+C9tVhvtgV7Z5YjOeHbO2Ewx7v3D/2lrg==
+X-Received: by 2002:a05:600c:1d12:b0:3da:ff82:f627 with SMTP id l18-20020a05600c1d1200b003daff82f627mr29438313wms.25.1674574987235;
+        Tue, 24 Jan 2023 07:43:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t16-20020a5d49d0000000b002bfb0c5527esm1611046wrs.109.2023.01.24.07.43.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 07:43:06 -0800 (PST)
+Message-ID: <e34dd560-1fb5-bd27-a659-eec465fe584a@linaro.org>
+Date:   Tue, 24 Jan 2023 16:43:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
+ controller
 Content-Language: en-US
-To:     Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
-        paulmck@kernel.org
-Cc:     Arjan van de Ven <arjan@linux.intel.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com,
-        akpm@osdl.org, tglx@linutronix.de, joel@joelfernandes.org,
-        stern@rowland.harvard.edu, diogo.behrens@huawei.com,
-        jonas.oberhauser@huawei.com, linux-kernel@vger.kernel.org,
-        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
-        stable@vger.kernel.org
-References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
- <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
- <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
- <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230113103759.327698-1-herve.codina@bootlin.com>
+ <20230113103759.327698-6-herve.codina@bootlin.com>
+ <316ddb81-8d13-71dd-3396-412e31cfb880@linaro.org>
+ <20230124104232.183cc9ff@bootlin.com>
+ <37a95380-ee68-5c3a-3b96-48cc8b525f19@linaro.org>
+ <20230124122347.1a531d0f@bootlin.com>
+ <81f80190-a05c-5d0d-11b2-a80573b86e1c@linaro.org>
+ <20230124151514.58d77765@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124151514.58d77765@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/24/23 09:57, Hernan Ponce de Leon wrote:
->> In the case, the value read is passed into cmpxchg_relaxed(), which
->> checks the value against memory.  In this case, as Arjan noted, the only
->> compiler-and-silicon difference between data_race() and READ_ONCE()
->> is that use of data_race() might allow the compiler to do things like
->> tear the load, thus forcing the occasional spurious cmpxchg_relaxed()
->> failure.  In contrast, LKMM (by design) throws up its hands when it sees
->> a data race.  Something about not being eager to track the 
->> idiosyncrasies
->> of many compiler versions.
+On 24/01/2023 15:15, Herve Codina wrote:
+>>> Is that what you were thinking about ?  
 >>
->> My approach in my own code is to use *_ONCE() unless it causes a visible
->> performance regression or if it confuses KCSAN.  An example of the 
->> latter
->> can be debug code, in which case use of data_race() avoids suppressing
->> KCSAN warnings (and also false positives, depending).
->
-> I understand that *_ONCE() might avoid some compiler optimization and 
-> reduce performance in the general case. However, if I understand your 
-> first paragraph correctly, in this particular case data_race() could 
-> allow the CAS to fail more often, resulting in more spinning 
-> iterations and degraded performance. Am I right?
->
+>> Yes, except again, so third time, why calling this "cell"? Move it to
+>> fsl,tsa.
 >>
->> Except that your other email seems to also be arguing that additional
->> ordering is required.  So is https://lkml.org/lkml/2023/1/20/702 really
->> sufficient just by itself, or is additional ordering required?
->
-> I do not claim that we need to mark the read to add the ordering that 
-> is needed for correctness (mutual exclusion). What I claim in this 
-> patch is that there is a data race, and since it can affect ordering 
-> constrains in subtle ways, I consider it harmful and thus I want to 
-> fix it.
->
-> What I explain in the other email is that if we fix the data race, 
-> either the fence or the acquire store might be relaxed (because 
-> marking the read gives us some extra ordering guarantees). If the race 
-> is not fixed, both the fence and the acquire are needed according to 
-> LKMM. The situation is different wrt hardware models. In that case the 
-> tool cannot find any violation even if we don't fix the race and we 
-> relax the store / remove the fence.
+> 
+> Why calling this "cell" ? Just because we reference a "cell" using the TSA
+> cell ID inside TSA and not the TSA itself.
+> 
+> Maybe the problem is the term "cell" as it is not the DT definition of
+> "cell" but the source/destination of the TSA routing.
+> 
+> TSA can route data from/to some "serial controller".
+> These serial controllers are :
+> - SCC (Serial Communication Controller)
+> - SMC (Serial Management Controller)
+> - UCC (Unified Communication Controller)
+> 
+> Only SCCs are handled here.
+> 
+> Maybe the term "serial" makes more sense which will lead to
+>   fsl,tsa-serial = <&tsa, SCC4>;
 
-I would suggest to do it as suggested by PeterZ. Instead of set_bit(), 
-however, it is probably better to use atomic_long_or() like
+Yes, that's better. Thanks.
 
-atomic_long_or_relaxed(RT_MUTEX_HAS_WAITERS, (atomic_long_t *)&lock->owner)
-
-The mutex code stores the lock owner as atomic_long_t. So it is natural 
-to treat &lock->owner as atomic_long_t here too.
-
-Cheers,
-Longman
-
+Best regards,
+Krzysztof
 
