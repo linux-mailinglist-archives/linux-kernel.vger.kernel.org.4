@@ -2,77 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1553679240
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFFE679259
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjAXHq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S232947AbjAXHxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbjAXHq4 (ORCPT
+        with ESMTP id S231749AbjAXHxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:46:56 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C3F3D912
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:46:53 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id qx13so36605467ejb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:46:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6g19/O4k5AwG/SXLw3kDzRcWbvy7LZU8yJW74odXy5E=;
-        b=HVef/kjrTpFoFyiY1MmMmgpapa8gv9v1k/kcKhEG05OxvgATNlTU+soQKjbtKfe+MA
-         Q1rnZcf6SUX9ETiybl9WqCQhDVQzUBy52QcONub4EHWVRuyPoOjB5Ox6vMhyKanK2Mr5
-         Z5DaSIYDGBNcvBrHMsO0Vi9g+/WzEHxFnGZ/k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6g19/O4k5AwG/SXLw3kDzRcWbvy7LZU8yJW74odXy5E=;
-        b=cTTg+F2xP+tJH3DNgr2sSeLfYeRtOVOMzlHrVh7+hubFkZBAwYVCyXnWLu0tZt7xhG
-         TVz+zq1NnsrO5LAEVwdo06IIL7t2I4T5FHjw6Arg3XV5qoehY6lod7I11uj+6qGlF/HM
-         IgjTcXBLc4jjtRfPZnmfvAbumEij0J+NP73/v/fJ4gBFnjCucKwjFs8e/8Bm/FzExkXx
-         F1Jxu+Il3JMvIGhAAyYR4oFEu/OIO2g0OHLo9UNIk7wW5bv1iOydCkF2hx2LFU+ZOpv0
-         FD5idZl0EDxAMRZsJDWKGVxe6ErcU2VnyBqjuGJtpf7YSPVB31Zc82G+ooYhaAZEg57k
-         Krow==
-X-Gm-Message-State: AFqh2koc6FzqCwL3i8iBZ9+rEuUAPnnMfTGm+yXyvXWrlE7QorPwL191
-        Ycpj993hnxmJm3FpQPHw5qBt4XW7Ka0MwPvV6L4=
-X-Google-Smtp-Source: AMrXdXvcEpRCFAnJlT0s6krj+KWm0nKpNhi0WDmMMsL1iLqHymNnmqS8nuSRGhG+OVcU/OVw5IV/fQ==
-X-Received: by 2002:a17:906:89a4:b0:852:dc8d:3a01 with SMTP id gg36-20020a17090689a400b00852dc8d3a01mr26563608ejc.55.1674546411974;
-        Mon, 23 Jan 2023 23:46:51 -0800 (PST)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id cf5-20020a170906b2c500b0084d37cc06fesm524582ejb.94.2023.01.23.23.46.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 23:46:50 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12186386wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:46:50 -0800 (PST)
-X-Received: by 2002:a05:600c:2247:b0:3d9:9de9:da92 with SMTP id
- a7-20020a05600c224700b003d99de9da92mr1487835wmm.50.1674546409620; Mon, 23 Jan
- 2023 23:46:49 -0800 (PST)
+        Tue, 24 Jan 2023 02:53:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB23844A9;
+        Mon, 23 Jan 2023 23:53:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E57DA1F889;
+        Tue, 24 Jan 2023 07:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674546816; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ruXNUJNdlgxTcKpGQIIryFyEkOXceoGZmlzFPRxeoas=;
+        b=KBZy/6rf1TQ67g44L7GTiJ8oSbfhPfVBczpwAWnzfsUxhfC2iuCIk6qk9LBZzqbdqHS9ij
+        Xo/ephBOmafeSayjs7c5/FPCJUSd2Msf8a1NMzxX8FC7m33OJCMAr4kwrcZhMcXrY5NeLZ
+        PTRszq6e6uAR3JoT+NAAk5grhZN/cnk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674546816;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ruXNUJNdlgxTcKpGQIIryFyEkOXceoGZmlzFPRxeoas=;
+        b=5qR8OroDRbnLzHCA3YaBwq02hXFJllZS99kT3/fzfEAfh1RBI9ipdG1fjVOHFRLXyqtRUK
+        okE5lPcauQAR8tCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA32C139FB;
+        Tue, 24 Jan 2023 07:53:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E4c3MH+Oz2OlHgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 24 Jan 2023 07:53:35 +0000
+Message-ID: <8ac234a3-9dc3-3ebf-309a-b4a6bcb72d2d@suse.cz>
+Date:   Tue, 24 Jan 2023 08:51:43 +0100
 MIME-Version: 1.0
-References: <20230124061521.v2.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
- <CABXOdTeFw_puhp5t=UUWLwrtqaoLo9ys6Z8r9Gd4HXZ3te8jdQ@mail.gmail.com>
-In-Reply-To: <CABXOdTeFw_puhp5t=UUWLwrtqaoLo9ys6Z8r9Gd4HXZ3te8jdQ@mail.gmail.com>
-From:   Victor Ding <victording@chromium.org>
-Date:   Tue, 24 Jan 2023 18:46:13 +1100
-X-Gmail-Original-Message-ID: <CANqTbdY97fMCrw3w=dFwpYFNqib5zV4MQ-PnKOwFsR4WZEA8jA@mail.gmail.com>
-Message-ID: <CANqTbdY97fMCrw3w=dFwpYFNqib5zV4MQ-PnKOwFsR4WZEA8jA@mail.gmail.com>
-Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: allow deferred probe
- of switch handles
-To:     Guenter Roeck <groeck@google.com>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        dustin@howett.net, lee.jones@linaro.org, bleung@chromium.org,
-        dnojiri@chromium.org, sebastian.reichel@collabora.com,
-        gregkh@linuxfoundation.org, pmalani@chromium.org,
-        gustavoars@kernel.org, groeck@chromium.org,
-        enric.balletbo@collabora.com, tinghan.shen@mediatek.com,
-        heikki.krogerus@linux.intel.com, tzungbi@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Hocko, Michal" <mhocko@suse.com>,
+        "tabba@google.com" <tabba@google.com>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dhildenb@redhat.com" <dhildenb@redhat.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "ddutile@redhat.com" <ddutile@redhat.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Annapurve, Vishal" <vannapurve@google.com>,
+        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
+        "hughd@google.com" <hughd@google.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "steven.price@arm.com" <steven.price@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
+References: <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
+ <20221219075313.GB1691829@chaop.bj.intel.com>
+ <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
+ <20221220072228.GA1724933@chaop.bj.intel.com>
+ <126046ce506df070d57e6fe5ab9c92cdaf4cf9b7.camel@intel.com>
+ <20221221133905.GA1766136@chaop.bj.intel.com>
+ <b898e28d7fd7182e5d069646f84b650c748d9ca2.camel@intel.com>
+ <010a330c-a4d5-9c1a-3212-f9107d1c5f4e@suse.cz>
+ <0959c72ec635688f4b6c1b516815f79f52543b31.camel@intel.com>
+ <Y88aX+MIZeteDQju@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y88aX+MIZeteDQju@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,104 +129,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 5:57 PM Guenter Roeck <groeck@google.com> wrote:
->
-> On Mon, Jan 23, 2023 at 10:16 PM Victor Ding <victording@chromium.org> wrote:
-> >
-> > `fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
-> > which is called from `cros_typec_get_switch_handles`. When this happens,
-> > it does not indicate absence of switches; instead, it only hints that
-> > probing of switches should occur at a later time.
-> >
-> > Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
-> > probing switches as a better time.
-> >
-> > Signed-off-by: Victor Ding <victording@chromium.org>
-> > ---
-> >
-> > Changes in v2:
-> > - Coverted switch-block to nested if-blocks.
-> >
-> >  drivers/platform/chrome/cros_ec_typec.c | 26 ++++++++++++++++---------
-> >  1 file changed, 17 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> > index 59de4ce01fab..580f3bdf091c 100644
-> > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > @@ -145,31 +145,37 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
-> >                                          struct fwnode_handle *fwnode,
-> >                                          struct device *dev)
-> >  {
-> > +       int ret = 0;
-> > +
-> >         port->mux = fwnode_typec_mux_get(fwnode, NULL);
-> >         if (IS_ERR(port->mux)) {
-> > -               dev_dbg(dev, "Mux handle not found.\n");
-> > +               ret = PTR_ERR(port->mux);
-> > +               dev_dbg(dev, "Mux handle not found: %d.\n", ret);
-> >                 goto mux_err;
-> >         }
-> >
-> >         port->retimer = fwnode_typec_retimer_get(fwnode);
-> >         if (IS_ERR(port->retimer)) {
-> > -               dev_dbg(dev, "Retimer handle not found.\n");
-> > +               ret = PTR_ERR(port->retimer);
-> > +               dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
-> >                 goto retimer_sw_err;
-> >         }
-> >
-> >         port->ori_sw = fwnode_typec_switch_get(fwnode);
-> >         if (IS_ERR(port->ori_sw)) {
-> > -               dev_dbg(dev, "Orientation switch handle not found.\n");
-> > +               ret = PTR_ERR(port->ori_sw);
-> > +               dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
-> >                 goto ori_sw_err;
-> >         }
-> >
-> >         port->role_sw = fwnode_usb_role_switch_get(fwnode);
-> >         if (IS_ERR(port->role_sw)) {
-> > -               dev_dbg(dev, "USB role switch handle not found.\n");
-> > +               ret = PTR_ERR(port->role_sw);
-> > +               dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
-> >                 goto role_sw_err;
-> >         }
-> >
-> > -       return 0;
-> > +       return ret;
-> >
->
-> This change is pointless.
-Sure, I'll revert this line to `return 0` in the next revision.
->
-> Guenter
->
-> >  role_sw_err:
-> >         typec_switch_put(port->ori_sw);
-> > @@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
-> >         typec_mux_put(port->mux);
-> >         port->mux = NULL;
-> >  mux_err:
-> > -       return -ENODEV;
-> > +       return ret;
-> >  }
-> >
-> >  static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
-> > @@ -423,9 +429,11 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
-> >                 }
-> >
-> >                 ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
-> > -               if (ret)
-> > -                       dev_dbg(dev, "No switch control for port %d\n",
-> > -                               port_num);
-> > +               if (ret) {
-> > +                       dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
-> > +                       if (ret == -EPROBE_DEFER)
-> > +                               goto unregister_ports;
-> > +               }
-> >
-> >                 ret = cros_typec_register_port_altmodes(typec, port_num);
-> >                 if (ret) {
-> > --
-> > 2.39.1.405.gd4c25cc71f-goog
-> >
+On 1/24/23 00:38, Sean Christopherson wrote:
+> On Mon, Jan 23, 2023, Huang, Kai wrote:
+>> On Mon, 2023-01-23 at 15:03 +0100, Vlastimil Babka wrote:
+>>> On 12/22/22 01:37, Huang, Kai wrote:
+>>>>>> I argue that this page pinning (or page migration prevention) is not
+>>>>>> tied to where the page comes from, instead related to how the page will
+>>>>>> be used. Whether the page is restrictedmem backed or GUP() backed, once
+>>>>>> it's used by current version of TDX then the page pinning is needed. So
+>>>>>> such page migration prevention is really TDX thing, even not KVM generic
+>>>>>> thing (that's why I think we don't need change the existing logic of
+>>>>>> kvm_release_pfn_clean()). 
+>>>>>>
+>>>> This essentially boils down to who "owns" page migration handling, and sadly,
+>>>> page migration is kinda "owned" by the core-kernel, i.e. KVM cannot handle page
+>>>> migration by itself -- it's just a passive receiver.
+>>>>
+>>>> For normal pages, page migration is totally done by the core-kernel (i.e. it
+>>>> unmaps page from VMA, allocates a new page, and uses migrate_pape() or a_ops-
+>>>>> migrate_page() to actually migrate the page).
+>>>> In the sense of TDX, conceptually it should be done in the same way. The more
+>>>> important thing is: yes KVM can use get_page() to prevent page migration, but
+>>>> when KVM wants to support it, KVM cannot just remove get_page(), as the core-
+>>>> kernel will still just do migrate_page() which won't work for TDX (given
+>>>> restricted_memfd doesn't have a_ops->migrate_page() implemented).
+>>>>
+>>>> So I think the restricted_memfd filesystem should own page migration handling,
+>>>> (i.e. by implementing a_ops->migrate_page() to either just reject page migration
+>>>> or somehow support it).
+>>>
+>>> While this thread seems to be settled on refcounts already, 
+>>>
+>>
+>> I am not sure but will let Sean/Paolo to decide.
+> 
+> My preference is whatever is most performant without being hideous :-)
+> 
+>>> just wanted
+>>> to point out that it wouldn't be ideal to prevent migrations by
+>>> a_ops->migrate_page() rejecting them. It would mean cputime wasted (i.e.
+>>> by memory compaction) by isolating the pages for migration and then
+>>> releasing them after the callback rejects it (at least we wouldn't waste
+>>> time creating and undoing migration entries in the userspace page tables
+>>> as there's no mmap). Elevated refcount on the other hand is detected
+>>> very early in compaction so no isolation is attempted, so from that
+>>> aspect it's optimal.
+>>
+>> I am probably missing something,
+> 
+> Heh, me too, I could have sworn that using refcounts was the least efficient way
+> to block migration.
+
+Well I admit that due to my experience with it, I do mostly consider
+migration through memory compaction POV, which is a significant user of
+migration on random pages that's not requested by userspace actions on
+specific ranges.
+
+And compaction has in isolate_migratepages_block():
+
+/*
+ * Migration will fail if an anonymous page is pinned in memory,
+ * so avoid taking lru_lock and isolating it unnecessarily in an
+ * admittedly racy check.
+ */
+mapping = page_mapping(page);
+if (!mapping && page_count(page) > page_mapcount(page))
+        goto isolate_fail;
+
+so that prevents migration of pages with elevated refcount very early,
+before they are even isolated, so before migrate_pages() is called.
+
+But it's true there are other sources of "random pages migration" - numa
+balancing, demotion in lieu of reclaim... and I'm not sure if all have
+such early check too.
+
+Anyway, whatever is decided to be a better way than elevated refcounts,
+would ideally be checked before isolation as well, as that's the most
+efficient way.
+
+>> but IIUC the checking of refcount happens at very last stage of page migration too 
+
