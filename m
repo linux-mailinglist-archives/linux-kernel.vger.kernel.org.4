@@ -2,49 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5378D679FE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB9A679FE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234524AbjAXROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S234687AbjAXROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234083AbjAXROL (ORCPT
+        with ESMTP id S234660AbjAXROk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:14:11 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 878FA173B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:09 -0800 (PST)
-Received: (qmail 173647 invoked by uid 1000); 24 Jan 2023 12:14:08 -0500
-Date:   Tue, 24 Jan 2023 12:14:08 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y9AR4Gr10SyCKovo@rowland.harvard.edu>
-References: <Y8mirwPeCBWY7tCH@rowland.harvard.edu>
- <d941c33e-27db-8764-3a9e-515dfb481cca@huaweicloud.com>
- <Y8rCBOkM/hY+Z27t@rowland.harvard.edu>
- <2f656643-deef-552e-e489-b7afd0dc777f@huaweicloud.com>
- <Y8xRe1Gr6LNjKD4S@rowland.harvard.edu>
- <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
- <Y87D0ekKCHFLjzeP@rowland.harvard.edu>
- <8908438d-da93-b843-f0e0-831ba7070c86@huaweicloud.com>
- <Y873uBB5rAW8tjdd@rowland.harvard.edu>
- <1a189694-57b4-81d0-625a-64dd069b1953@huaweicloud.com>
+        Tue, 24 Jan 2023 12:14:40 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922AE3D091
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:35 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id jr19so12408804qtb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=spY1Ga4Htt/e4/S3YR+lJ4bQ2N92evKYOkZEiqiKzXc=;
+        b=OdfpXJDvwGfjoa/f0B3U31apaRVO+bHLetpe4JZQeT9jcGD15bvQ0ANB1i2v8cy/0e
+         ZAvaAK8BR5efiy/dEM/Rdur3S8J8CNsF/ZTG/wknYZFmNOY0JTvlRw1ZWLbMnXAuDhB2
+         gcfq49QV6SqUItxv2HJN+/3Z0MAIXynTjELL8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=spY1Ga4Htt/e4/S3YR+lJ4bQ2N92evKYOkZEiqiKzXc=;
+        b=O2fzVH4cXcft7u+6qxCVvOLaZsr2oJcBfIPjVDTK8i9lhtZuNmjOuVV4twuPWkxKud
+         HHEGRsj5aV2VnNms0Qba1U2RFWLQPVYG+TXN5RdZut+rcXnSMxuqVAoPpZ61hzyIejSv
+         sMEBDEriuVGRWOL5lDJANeHVcDOx6SHS4Dc1hBbk6PAvcIq9XjKnZWX/7dU+1TN1oZ7r
+         HLBMwv7R8/W0dirSCX2883rK3TAgA6JGekE2yC1pZ8bP2k0NogEPnBG47k6UymGRfzcZ
+         Fb5dJm5RUXcJpatprcyEFRFm7XZbAybH4Dd0E0glGwlyEknUBUZzM0+BbRx27qbCpdou
+         6m7g==
+X-Gm-Message-State: AFqh2kpeK+ArBpeQl6uI5RQbk1I/xUjmqpL8XoYhM8SohUCp1q8+R8e7
+        jpMAoAnhbeJu8PTp1QyaqJ7zXz8Ye669WPrP
+X-Google-Smtp-Source: AMrXdXuGlJED8fsY9PUNK7q4q7WUE7Aitb/ZZJ0+StlJI/etduj+0SOGIgBpCq92gqWQfPzqsxKm+A==
+X-Received: by 2002:ac8:60c8:0:b0:3b0:d422:1cbe with SMTP id i8-20020ac860c8000000b003b0d4221cbemr46270748qtm.10.1674580474403;
+        Tue, 24 Jan 2023 09:14:34 -0800 (PST)
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac8428b000000b003b6347595c9sm1581316qtl.12.2023.01.24.09.14.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 09:14:34 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id u20so12131378qvq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:14:33 -0800 (PST)
+X-Received: by 2002:a05:6214:5f82:b0:534:252f:b091 with SMTP id
+ ls2-20020a0562145f8200b00534252fb091mr1278555qvb.130.1674580473657; Tue, 24
+ Jan 2023 09:14:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a189694-57b4-81d0-625a-64dd069b1953@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230116212105.1840362-1-mjguzik@gmail.com> <20230116212105.1840362-2-mjguzik@gmail.com>
+ <CAHC9VhSKEyyd-s_j=1UbA0+vOK7ggyCp6e-FNSG7XVYvCxoLnA@mail.gmail.com>
+ <CAGudoHF+bg0qiq+ByVpysa9t8J=zpF8=d1CqDVS5GmOGpVM9rQ@mail.gmail.com>
+ <CAHC9VhTnpWKnKRu3wFTNfub_qdcDePdEXYZWOpvpqL0fcfS_Uw@mail.gmail.com>
+ <CAGudoHEWQJKMS=pL9Ate4COshgQaC-fjQ2RN3LiYmdS=0MVruA@mail.gmail.com> <CAHC9VhSYg-BbJvNBZd3dayYCf8bzedASoidnX23_i4iK7P-WxQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhSYg-BbJvNBZd3dayYCf8bzedASoidnX23_i4iK7P-WxQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 24 Jan 2023 09:14:17 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
+Message-ID: <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Mateusz Guzik <mjguzik@gmail.com>, viro@zeniv.linux.org.uk,
+        serge@hallyn.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,90 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:14:03PM +0100, Jonas Oberhauser wrote:
-> After mulling it over a bit in my big old head, I consider that even though
-> dropping the [W] may be shorter, it might make for the simpler model by
-> excluding lots of cases.
-> That makes me think you should do it for real in the definition of prop. And
-> not just at the very end, because in fact each cumul-fence link might come
-> from a non-A-cumulative fence. So the same argument you are giving should be
-> applied recursively.
-> Either
-> 
-> 	prop = (overwrite & ext)? ; (cumul-fence; [W])* ; rfe?
-> 
-> or integrate it directly into cumul-fence.
+On Tue, Jan 24, 2023 at 9:00 AM Paul Moore <paul@paul-moore.com> wrote:
+>
+> My main concern is the duplication between the cred check and the cred
+> override functions leading to a bug at some unknown point in the
+> future.
 
-I dislike this sort of argument.  I understand the formal memory model 
-by relating it to the informal operational model.  Thus, cumul-fence 
-links a write W to another event E when the fence guarantees that W will 
-propagate to E's CPU before E executes.  That's how the memory model 
-expresses the propagation properties of these fences.  I don't want to 
-rule out the possibility that E is a read merely because cumul-fence 
-might be followed by another, A-cumulative fence.  If E=read were ruled 
-out then cumul-fence would not properly express the propagation 
-properties of the fences.
+Yeah, it might be good to try to have some common logic for this,
+although it's kind of messy.
 
-> > > > Consider: Could we remove all propagation-ordering fences from ppo
-> > > > because they are subsumed by prop?  (Or is that just wrong?)
-> > > Surely not, since prop doesn't usually provide ordering by itself.
-> > Sorry, I meant the prop-related non-ppo parts of hb and pb.
-> 
-> I still don't follow :( Can you write some equations to show me what you
-> mean?
+The access_override_creds() logic is fairly different from the "do I
+need to create new creds" decision, since instead of *testing* whether
+the fs[ug]id and [ug]id matches, it just sets the fs[ug]id to the
+expected values.
 
-Consider:
+So that part of the test doesn't really exist.
 
-	Rx=1			Ry=1
-	Wrelease Y=1		Wx=1
+And the same is true of the !SECURE_NO_SETUID_FIXUP logic case - the
+current access() override doesn't _test_ those variables for equality,
+it just sets them.
 
-Here we have Wx=1 ->hb* Ry=1 by (prop \ id) & int, using the fact that 
-Wy=1 is an A-cumulative release fence.  But we also have
+So Mateusz' patch doesn't really duplicate any actual logic, it just
+has similarities in that it checks "would that new cred that
+access_override_creds() would create be the same as the old one".
 
-	Wx=1 ->rfe Rx=1 ->ppo Wy=1 ->rfe Ry=1.
+So sharing code is hard, because the code is fundamentally not the same.
 
-Thus there are two distinct ways of proving that Wx=1 ->hb* Ry=1.  If we 
-removed the fence term from the definition of ppo (or weakened it to 
-just rmb | acq), we would eliminate the second, redundant proof.  Is 
-this the sort of thing you think we should do?
+The new access_need_override_creds() function is right next to the
+pre-existing access_override_creds() one, so at least they are close
+to each other. That may be the best that can be done.
 
-> > > > > > In fact, I wouldn't mind removing the happens-before, propagation, and
-> > > > > > rcu axioms from LKMM entirely, replacing them with the single
-> > > > > > executes-before axiom.
-> > > > > I was planning to propose the same thing, however, I would also propose to
-> > > > > redefine hb and rb by dropping the hb/pb parts at the end of these
-> > > > > relations.
-> > > > > 
-> > > > >    hb = ....
-> > > > >    pb = prop ; strong-fence ; [Marked]
-> > > > >    rb = prop ; rcu-fence ; [Marked]
-> > > > > 
-> > > > >    xb = hb|pb|rb
-> > > > >    acyclic xb
-> > > > I'm not so sure that's a good idea.  For instance, it would require the
-> > > > definitions of rcu-link and rb to be changed from having (hb* ; pb*) to
-> > > > having (hb | pb)*.
-> > > I think that's an improvement. It's obvious that (hb | pb)* is right and so
-> > > is (pb | hb)*.
-> > > For (hb* ; pb*), the first reaction is "why do all the hb edges need to be
-> > > before the pb edges?", until one realizes that pb actually allows hb* at the
-> > > end, so in a sense this is  hb* ; (pb ; hb*)*, and then one has to
-> > > understand that this means that the prop;strong-fence edges can appear any
-> > > number of times at arbitrary locations. It just seems like defining (pb |
-> > > hb)* with extra steps.
-> > This can be mentioned explicitly as a comment or in explanation.txt.
-> Ok, but why not just use  (pb|hb)* and (pb|hb|rb)* and not worry about
-> having to explain anything?
-> And make the hb and rb definitions simpler at the same time?
+Maybe some of the "is it the root uid" logic could be shared, though.
+Both cases do have this part in common:
 
-Do you think (pb | hb)* is simpler than pb* (as in the statement of the 
-propagation axiom)?
+        if (!issecure(SECURE_NO_SETUID_FIXUP)) {
+                /* Clear the capabilities if we switch to a non-root user */
+                kuid_t root_uid = make_kuid(override_cred->user_ns, 0);
+                if (!uid_eq(override_cred->uid, root_uid))
 
-Besides, remember what I said about understanding the formal memory 
-model in terms of the operational model.  pb relates a write W to 
-another event E when the strong fence guarantees that W will propagate 
-to E's CPU before E executes.  If the hb* term were omitted from the 
-definition of pb, this wouldn't be true any more.  Or at least, not as 
-true as it should be.
+and that is arguably the nastiest part of it all.
 
-Alan
+I don't think it's all that likely to change in the future, though
+(except for possible changes due to user_ns re-orgs, but then changing
+both would be very natural).
+
+               Linus
