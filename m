@@ -2,102 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CC2679D53
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D3A679D56
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbjAXPXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S234803AbjAXPXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbjAXPXI (ORCPT
+        with ESMTP id S233655AbjAXPXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:23:08 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2043.outbound.protection.outlook.com [40.92.98.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388497DAF
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:23:07 -0800 (PST)
+        Tue, 24 Jan 2023 10:23:36 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112AD7DAF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:23:31 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OEnPG6012233;
+        Tue, 24 Jan 2023 15:23:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=hy6jCI7pFfU3MAsFB7t1PplYcEQPLc/a/45P3Pywvg8=;
+ b=oM34hkwtCH9AzZP4Uv9sENB4Bj6DcTz3LN2P1HrNJlZGm8i58KHLGfSds7tmkzS8AlVJ
+ +809vgnbadaN2VzVIJ6bljAxAiDEQThid4BFpGmsnAXsnArQT4cEHeRtUjM+8VmAHa08
+ WNJyvrD2+A5WLDHVxuEI0hkMhWp3SEJgHztSHMlHukH9li3mXr0a6z8J0zgpFWWeFYci
+ c97SI0cSBySs6X64kNg4HMyXiOg32gt48fUywEqve+c1v+gmPgDi1zh87mBnysn3kO6H
+ cJa7CtFJ+nyjkzuWjabVh9AAs7biJRgU71xdbazo2YAPXXUkbiDrR5Mm9Z7lzBzag274 bA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n88ktwf8q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 15:23:13 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30OE7I1P005971;
+        Tue, 24 Jan 2023 15:23:12 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g51va2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 15:23:12 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BpqqXl2UHVQ0P4oKRWQutwiLS0aRA19EybNTqqVuMCIiGVJKsKqvq3ZGCYJg5XF4S6ejIZ1zAl00pSbJ0YL1hVZ382+QbkQix5A9J9pF+yA0WIIfCYokLusjMuUKF8H9JD5dBdYlb3KjexczdGR63aO41SiOiby+Tc993hAKM5Un4QzjG/5AaSAAeTDftIIBcyeAxd97hFA26Zm1sl8abZRJS4LVldQKneXeHJq+MenZA6PM4+iUpLqTii6+j9VrpkDDOO+zKG6hBk7KqIgSWhWBsU2PxyXh0hdkUI4inFiCYX31JxEY8Jbgy8ti4iscTHSpK37bivJj0qaeMmZ9ww==
+ b=mk0AnhB28ZwBvjN6OwLBoLdWmL87gbr9s2bQ3h6I0hDjPNL8AAyo3wqb8ny61nX2QTFwYWvTksD6uyead2uEDTBbfmxvsU2DVTTwSnK6JJwie/THxua0ydN+M62XyrcJ3lasdTu5ihAMu+Gw0xCDHcaFf65cgJmlGvSY4N4BMuPm/vURekqovzL2CFzSF/dFfbOh/8qVwobE98MgWLDqmR6/iHljIlmlB26jl8ZMPV5kE/z8DcQziufJ7ffDskEIubEANsl+ugxzepOHOpMtn23luGHLTmGKNNMWx3w3T88t5a1RImx2jMfihVdKzRHtpHEttgXsQT0o6+8fqQ9wQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EBIGsKHEX2bRKOKcbKQhN2AK25vY+z5pF+liKPuE6yQ=;
- b=JM4og65Sz6zJJ79wg2WowP2+LqLpwvIdFjArAIQdHeZNSNrOzNal0DZJB2OG1K4h4khg+N8Ly2lw5T4vv+46biovAfcOOrXhDBYKDAKCe8k70EYX1w5Wtm4D4uSkGi0gkE1nnPGzkmhPXdlL8maz5qm930m8AWa0K/Gj1asftJ7hadV/j7umPnoBCsN/HjzMA0g6wdhwewFTCywHiI+ndo54DDRO61kyQ3YkLF7qttNnD42tu+WD+jKYgn3tJJbwHdZnkk3K3v20uEL8vvLp0sc89ZBwJre+0YZ7afN/OZO0vJSZXDkpgWCYRct5xhM480nCm9ZZGmjY8gLAFNbOeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=hy6jCI7pFfU3MAsFB7t1PplYcEQPLc/a/45P3Pywvg8=;
+ b=Tak9TkLdIYA8GfuXv5rz5CyRKMbjViN1WfBMMocLAHvcopyjmtKmm1H0XSU3E+xFhW8QwgpRiih4V6aRDl0KFvgz6f9jSII7y4e7me3Z1k2EWrTGhZPjnQPucDcCuGi/xZfxHzenaA1P532dUv0ocs66EU7ZZrxVOOnqcxepSjYtt1pTWOxJV4JpkvlyXYzipAS/YJHjd/44TjwiScUoUsCBvD2RmScP+VWeK+dKv7wvJr3oWJNqtCn+bJrrtjXehDMVjkvSFJhWgHfKxnxw9gIX4ppUm42pUi1rLh4fILOfom0tRjZZv5idZBACyYzKmar5OQ4/YmLh5kWpUqMoTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EBIGsKHEX2bRKOKcbKQhN2AK25vY+z5pF+liKPuE6yQ=;
- b=GpaNXu8puosVI+d5EpvKhd6p1Db8FJaWuZLlQLAN57Bm9Yzh+6ukbei+TVr/whvXb4Wi7dawib42VOhUCO8Uwe9Xmdw4DNE6NpISvqP+4OzdyBeObI01rxGq5+wYw5CU3CKaL/K5iVxxZQpHCNSBS2hU4sVKMgaLzeqKCpqBfon64q6kgDDy5LLiaz4euWRpQE8VoBPeCwUv8Wwr+aF+PRKcSoPhPiCbxg87s/8LCrAm1vVhn0HZJn7T0LR69hk8OkERH1MExNwImAHeBaA/5EH5EC1pyT3arQf+ZiaTSvlVVeGIfa7MfdsUxzb5cLDIgnrQxwdOCZy9/iC4Cm1CdQ==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TY3P286MB2753.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:255::13) with
+ bh=hy6jCI7pFfU3MAsFB7t1PplYcEQPLc/a/45P3Pywvg8=;
+ b=Oqrpo+akbw0ZqeNWOwn4pHosHveJFsUUZvJ702GXBXWnmouR2XYXoM2LAzYwYci3Rs/5F3IXA99ggLVPlAOgPJA29EMrHP0T6V0g8uojNSlIMl8WPPl6E2yEEhjtbf/3uX0DdIFzpMTjU68ZKuHXWPnDpAXyB4rbMzdcow6KRlU=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by PH7PR10MB6131.namprd10.prod.outlook.com (2603:10b6:510:1f5::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 15:23:04 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ff96:9cb6:e047:c605%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
- 15:23:04 +0000
-Date:   Tue, 24 Jan 2023 23:23:00 +0800
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     johannes@sipsolutions.net, perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ALSA: aoa: make remove callback of soundbus driver
- void returned
-Message-ID: <TYCP286MB2323EC6EFF71A5FCE0CC04AFCAC99@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB23234FED40A3AE6797DEBAB7CAFB9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.17; Tue, 24 Jan
+ 2023 15:23:09 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::7306:828b:8091:9674]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::7306:828b:8091:9674%5]) with mapi id 15.20.6043.017; Tue, 24 Jan 2023
+ 15:23:09 +0000
+Date:   Tue, 24 Jan 2023 10:23:06 -0500
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH] maple_tree: Remove GFP_ZERO from kmem_cache_alloc() and
+ kmem_cache_alloc_bulk()
+Message-ID: <20230124152306.wozuqyl7ehl7mzjx@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230105160427.2988454-1-Liam.Howlett@oracle.com>
+ <Y7fNo4IElYXCyPmd@kernel.org>
+ <20230106183559.mpdywid4szzpghlk@revolver>
+ <de1ed6a6-6f74-2664-dad4-3467efd83483@redhat.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TYCP286MB23234FED40A3AE6797DEBAB7CAFB9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-TMN:  [/c8Epj8+MSnxmSETjww37obnUlRwDpz4]
-X-ClientProxiedBy: SG2PR02CA0128.apcprd02.prod.outlook.com
- (2603:1096:4:188::20) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20230124152300.GB2227@wendao-VirtualBox>
+In-Reply-To: <de1ed6a6-6f74-2664-dad4-3467efd83483@redhat.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0126.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d5::14) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TY3P286MB2753:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73d56bb6-19e2-41e2-e8c9-08dafe1ee35e
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|PH7PR10MB6131:EE_
+X-MS-Office365-Filtering-Correlation-Id: cc2cb606-ffcf-4e38-3cc4-08dafe1ee675
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cwGHSz2flWtKb2W6Zm975ppvM3NMLADJRV560MhzRjXzeswJnBxbL22+yxj4727YiOQsi38jIqClXGOXIwGU2UOdUOqRi2+P7Oz0Fo47oXKzZYFJtqSFLqiktbGz2Vc0UxtH3Vgx8uEgtXAvE5I3PP5+RIaGRhksaUcYSR5C/ampd1m36bKnYeI7E79CqVmV/g4p36Y2/Aws7kHTUhVHVJhQ1Jkf1ZzYH6QDkud5amaW+EvY6cGKMQ8prg3d8NygJFSqJPG8FAWhQAoWFy5UXMB27eqTZVj47NVqGxkwkz87tubywBsnIvGPit3hL9j3Tc/hsl/joc8E0wTIC1A/t9DsgRP9rpY1UXzqQSqoeG3aZLPV4MceCMuiXUNCYfrXApsodEjcNj8zvN8yD4PRpERVQTCXC/34OFDWwLwV1cb6hSg8li6qIUKuMlZOgGlxpLRAiwKCjapPw4so8xGcZ9M0oI1XuAv162BFvk/d5ekqjA5nOzhiz3HvHaHuv7oW6/RNvKVl1Ge4mS7HUI/uulJdg2HXhTCkzp2BgkgI5QEym4UnS4bC3SJTMExe7VVfLjw+gzqoLDxlMqSlVOMm6BPs3TWZU2aehtbaagz40VYXrgahq50iXPnru52W2SkgPzPdLfLrS9Z32h7PCju7ew==
+X-Microsoft-Antispam-Message-Info: NupngwFwDJUait4KG9dZeZDdc4PYrusDqrc9GCWDtDppFbM/J5ShijoxnXkvpVpjhD/taz7rZi+AqQ0LaXUEQacg+RuEmBnk/g/550PeTV6/TdL9YL4Oc5aN5rTcmbeGXXgMhJO3IhKy4Ip8fuLqjggVYX2B4E7KcXdDpmGi+XOTwfU1EDYwZStMNCOuFJ32AD6Iuk3ZKEZqg8biL7IaZq131ndHcmQDpkPaZVxWEMa11Up7zMMlYSHUbvUfpCrcckvZ1DDAKq6UaKTbHHCQl6kuV5UjMyUG1JYSzVM9aa3Oyw/gJtV4upuCJpGCqmVtA/G8KHPE6jRHcjXhONa27H/nSBQVp6KbftnNe0FXzhkaE2iLUV5OdyAEl/S0DbbtbpNFbptlKTTqPcvT1rcxamlBmWI0lWQoodDL8kF9rQ3rjy7VVEkSnA8qbFwxJcM3vsfLhNDzK7fDGlkdMJSyHkTMIRBorrzWOCLf1Gb5PoWIckAkDDKtpeKL/DRKaOmWaDYFAw9W2NL51BkVjsQG96/o5KjlYEklLG3ijmW/cbmy0TFyZAVY92AZ8+aogtugsbBIrghKjtYr0idS9v7uKHwQPpGcjA9ETCDt+urSVskKjzM25TK67YYcfj2cSmJN1Vul4zFX6PetZPwcrQrAXgwCNH+mQznhStIafONeUFM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(136003)(39860400002)(346002)(396003)(366004)(451199015)(33716001)(478600001)(2906002)(5660300002)(6486002)(6666004)(186003)(966005)(6512007)(9686003)(26005)(8936002)(54906003)(316002)(53546011)(66556008)(66946007)(8676002)(4326008)(6916009)(66476007)(1076003)(6506007)(83380400001)(41300700001)(86362001)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bfDNX0nQbS9nrpEyWfqFh9U4FLVo1uBP5FtZKfbpteM/dF1TuYX5VSXOHaLy?=
- =?us-ascii?Q?dweCRPi+hQltiS5Gx+Sfn+syApUkt1ZgUcEoAqgA+/MHFq3QmRcP1oi+Ufsw?=
- =?us-ascii?Q?gkvR732YtBAYSVL3XKra7Zmue/siMjYXBiqV8hs0l+aQXoMCdGC3F3iqKjE3?=
- =?us-ascii?Q?jyMnWb71mjI7qXn6flWnpwWfMEWwRzCraB+Ga2aQo34+KFwx91uE5xrM5Rqx?=
- =?us-ascii?Q?/HwkKudcK5b4AMEk1HWzqruq1gmsEefSIXwpkxa/khqYMNruk+vY9SdUn36G?=
- =?us-ascii?Q?KWEmOpsH85TTnmslIVCGP7DcfeV9ASAt7NsKF/5F+kABgHSuoAC9n6sPuDRW?=
- =?us-ascii?Q?48bZvaRzP/kuRP1O2Y3mEHo3yOcy7dIKVLCxTpm6uxkmwnVFuCVr7nw1b/WJ?=
- =?us-ascii?Q?RbR4wj0B3ZtfadA2rnHR32rPdBAc0HA+9Kf/bLeYYyK8NTZ+mv/SiqnxGzRD?=
- =?us-ascii?Q?/wZUFScy85UKJ4oTPLnIYFxIImsejxrKLwgyNJueDHSczCAwihHKyKlbnbBG?=
- =?us-ascii?Q?UQSgQ+BedKq1GnB3IZh2B5ddOLTMraZohenERt8/HGy4HiKbAVE+MeZx94kH?=
- =?us-ascii?Q?plBPaf4ABzDpuPId5ED9pGzqEgTzMBSJwUjz/Fywe8PX+V+BEGtUKVMti95Z?=
- =?us-ascii?Q?jlIdR+RC6XKisbH4SdCJuyB6rR/QychvTctwclorpGND2fY0PZQIfQmA3ZSw?=
- =?us-ascii?Q?1pjA7IVGqyWoATTTAK9uLm4JXMFbvbwVSYpY5zSiY35Z2wp6LbQk8GW3u4VP?=
- =?us-ascii?Q?eWTHBbi+AmucvKjWoZUUR3u17O0lhylUHIp3nQmhk6+iIfGpLpRPpgbpFqBU?=
- =?us-ascii?Q?z2k/oJ3iCs3bPvd3xii2DBiCslkDCybBGkaTjz1s1S3dvd6C/7ZqNmqQLM5K?=
- =?us-ascii?Q?KQ8DJXqW44yzdO2wMZ8pqpIwpV+Pm5m5ld24JER+5jxKH2lJDU7XyZDnsROl?=
- =?us-ascii?Q?4KB1mj1rrDxg8TBF8vhOxg7tlZe4hQjTm4WMDASEva5Vv7yBsdpQjlL5KTRL?=
- =?us-ascii?Q?31BA/Zv76yw7yWgxYFcU2nIQMelLvnw8t3RuMCerSxBDUojXUCi1UIQspDoj?=
- =?us-ascii?Q?Lwxccz1i0mcxs/LGwONMlf3wVA7bKjekvWD/EL3qiJJOUXaSFeV3XxW1yViA?=
- =?us-ascii?Q?aYRkUOCG4DrwxetTDrrArpWdnK9A4tkXs/+c1/WoMN2SfR2JFpgri5GhLaQF?=
- =?us-ascii?Q?4yvrBfPW7VPJX7j9M2ewE7JusvcNB4bvc6fNtU91+o3tzmIJdMGtksSZJRo3?=
- =?us-ascii?Q?6KUzGLoMQLJpnqOxDXPcKTVQP7Vv+gbST7z5lavycw=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73d56bb6-19e2-41e2-e8c9-08dafe1ee35e
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R73tzXHUwH+ZRUFk1pKTHEJo9nyJvMEMH+XCRYayTlP5T+IaY61Z0QLrMmch?=
+ =?us-ascii?Q?LJGlCO32mOp4Ty1d+iOwj6wRLdBuvV5c/QtlGYZCOE63D5N/DXUB25FI3t2V?=
+ =?us-ascii?Q?+hI/TCxCoPbD+ozOHk+CyYaRjmynX8vpqwKm2KfQNWYqK2eBd+DTc1ONijXp?=
+ =?us-ascii?Q?LxPP1mzWRkdpb0Kzick+H0EusVNMCGq5ickCmQqALurmtFjp6WkEPaHcdJln?=
+ =?us-ascii?Q?FCkOnXeNeUOjmHiSZasPQCjzF3AmwoEcfMQIZ5XzU2D4aI66QmUAF55fErr7?=
+ =?us-ascii?Q?R2FB43O0XNzNlkaGbHbJW8IhtYBx3lYlMU46U+Pp3MLYWUgycbFTqpfLSj8e?=
+ =?us-ascii?Q?GHei/LsyU/NBx5Twxg9TKcSd7io16Ch3w2u98CoIN2HIY1PJwe+heLr/UAWt?=
+ =?us-ascii?Q?dqA6Il2UYMwy1SfsIG/1/UM7bS2kS9IuE30yqUIz3rq7sceRau/IHrcwkl96?=
+ =?us-ascii?Q?lLhpjII1MI6tVqL0Mi1aVAmgZAwL3aDncyQBpF3o6joi5WfIrEAwky4SJHeq?=
+ =?us-ascii?Q?NXBRqD0lMeSPjSfoGRt0O2qTwe9jEMewI8j9JE847LjHi3bhsnTEgIsnBqgg?=
+ =?us-ascii?Q?ch+LHvBab3qqvDpmXK2+FN3LlUxKTjB52fPsLZmFjhwFS1ZtlAoQcT4HcxT7?=
+ =?us-ascii?Q?4s1s+Ebm8/gkOWC7PDgPn3enouWfe8VuoYfqbwFuON/O7BG7lidUWgruCN7S?=
+ =?us-ascii?Q?evjXQyGZ8ax7L0of8uMcXmjm8JCf3EWsKipG+kzcAB+2bzPkBHYXwltMaEH0?=
+ =?us-ascii?Q?ObHHILuWpT2VGO8m9n/qCIbcauuTYcBcTQyvroCFi6fDif1DLeyuUagOQVOU?=
+ =?us-ascii?Q?Ve+fDjMLYT+scJvVYJMouAlNhESSi2GIaIJ/VwuDvFe+ga3HgEB87nTZCENQ?=
+ =?us-ascii?Q?h6wR6ft1pi7wW3+pBICh7FWAqzEr/HFeECsrMQbgzEGgYWZjcspvOlp/43nA?=
+ =?us-ascii?Q?JWFXcn1eJA38lmBiIpcz40exsLpe4MMLAEXv4z/ukY9c1SiiKTDLTvb3D6AX?=
+ =?us-ascii?Q?BkIDvuYGEdX0K48BDHLbWUErasbSHXhfQLPd2USJwzpbvGWKh335DIGPfBPO?=
+ =?us-ascii?Q?+IyGzzFvz3gklnCQ1jXPFuAlT9IgIC3X8nq2pLGkxFZcgjzKnZ4TmIvEDews?=
+ =?us-ascii?Q?ASjD97DMMoxushjvKWLinrMdiTwgRxyLHVgUDUBPX/Refgv7y3uNyiCmQu/C?=
+ =?us-ascii?Q?hKq2ZSbbM5JaZRk1Za+KTy7B6XpYBK25G8XLsORCVCAfXTeQrhSxNGfDmt/K?=
+ =?us-ascii?Q?xzKdj6ciFBqy0xza0QY35E/H2Qr++3XN7SUHRnQ3unPkohgDsivQhWdzr42/?=
+ =?us-ascii?Q?ITDsicleoVwODA6H0JmF/Kkyrc0sodyEo8XSc6dhX9qtmOi/te7cSx5M0Ehf?=
+ =?us-ascii?Q?4u2PMIm30ouudAxBZEP/u6KMTbCDjUTtO9usvdAqQaAiQvY8rTk7KfLmy6xH?=
+ =?us-ascii?Q?KiGw6bdKRg7yHU7Qo6jzrpZ+uGrdpCLNY+vkfZf0jZPo8w1OndtVThdwGNFG?=
+ =?us-ascii?Q?DrzvPq6jaHWyc8KpnvcZnKexaHlOQL0AWLBiNyqzFHtaJF0gtuz1Rqwx3MBz?=
+ =?us-ascii?Q?dD8eRZ3eWuB92mZZyOMBB0aR83HJ4AQb4NfRqBGojTuF1F4jm6Px3usKNYeG?=
+ =?us-ascii?Q?9w=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?PKUMa6LLz8XR6fI4Yz/HgDVYvJYHcLs8oDmqTDB+3dnK+3UiSfCz8w2+kcOT?=
+ =?us-ascii?Q?fsFsVUWFbM1LxtPKdzMLCyNRtKXLbG+aVsBbxLYN3jhgidMMicInausifZFv?=
+ =?us-ascii?Q?uBxRXFFkx6joTwwkty3RA+uiPeMjAWO0crxqSioaZbB+bpjy9zFJR/XpT6cG?=
+ =?us-ascii?Q?NffaPI4dWy+9Ywv8tEerG+aIVhWW7+LJ/ckcZTnqo8UGO1YsUny+bDQcdc2p?=
+ =?us-ascii?Q?wB7aREijkeV4r1detluB6Iu6J795N3fNSSIDFc+b1M4H2805UG1iX3Gc2d15?=
+ =?us-ascii?Q?NqyXUVGu5+L+NxnI3mVYu6z+BnL2ASqBQCs7EvOKU5D1IkOpAQwPgzSN8GyQ?=
+ =?us-ascii?Q?I2jxHk/Yc0CgGXuTK0jzorV9AzAEp6CU3cKdVqu0lo77iy1l6pxbePsAcq+7?=
+ =?us-ascii?Q?f+q/D6XpswxdjRjQRaEf8pMqdXhx8mB073A3HVptyEj0kR3pw38gUmFrtaTj?=
+ =?us-ascii?Q?uU7Oz0srzOip/5ZdW4iLkPPEaHgVciMGTIARQrQbFwMmIbHcv3HvHPJqf2dh?=
+ =?us-ascii?Q?PYgV8Jsx/6bVB7czBZs7svHWU02h4jYO4gKOK2LVQcStitRShWBFqpaCubxm?=
+ =?us-ascii?Q?M/bMV4EM8DlpnhUdwiqDKhMl4WDJ4vuvcQerytGCwIKPtW8+DR3bm7NT3Qui?=
+ =?us-ascii?Q?s5BchYxFFGAIpCUCDWIDmR/HFzSGhmPXgLvL6riz0wtXFXN/GUjsgBYwV11v?=
+ =?us-ascii?Q?cVhFN6ufGbsMR/ZBn117RqDKkGwNoPB326WE+3yEga0SxGGtTKnWXJBe8ZaX?=
+ =?us-ascii?Q?veyB9wzIJf5V243Qe3RrMJ+bS1iCUggTDHyeG77jm/+16Xju3aZj8DqOIvl9?=
+ =?us-ascii?Q?XJt3iXt5SHCCN3bzxFB22T2o/jaahnDm5VqBzNB3bdAClQMZElDvVsAVeeGo?=
+ =?us-ascii?Q?Jm7IQkXF168ET6WSmSk6uvV4TaY92UBYus5bIk8ohtecK5uuJJPRKJ3banFS?=
+ =?us-ascii?Q?Ne6HPKPVLAdr4Tqe22W3sfpMUk4O3Z2XPl4zGl0ShQg=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc2cb606-ffcf-4e38-3cc4-08dafe1ee675
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 15:23:04.6905
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 15:23:09.7138
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3P286MB2753
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nJ1MUsdiddYRrcyaHafJHFJn9MUih3HtwEnNAd0g44zxIeA3mzcAOAwWxQKozUAn/IIdHF3i/GfztmXB08yFMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6131
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240140
+X-Proofpoint-GUID: ckIdP9M48K3K_rIckpCDVJmCLYu2Sclt
+X-Proofpoint-ORIG-GUID: ckIdP9M48K3K_rIckpCDVJmCLYu2Sclt
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,65 +181,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 11:17:46PM +0800, Dawei Li wrote:
-> Since commit fc7a6209d571 ("bus: Make remove callback return void")
-> forces bus_type::remove be void-returned, it doesn't make much sense
-> for any bus based driver implementing remove callbalk to return
-> non-void to its caller.
+* David Hildenbrand <david@redhat.com> [230124 08:18]:
+> On 06.01.23 19:36, Liam Howlett wrote:
+> > * Mike Rapoport <rppt@kernel.org> [230106 02:28]:
+> > > On Thu, Jan 05, 2023 at 04:05:34PM +0000, Liam Howlett wrote:
+> > > > Preallocations are common in the VMA code to avoid allocating under
+> > > > certain locking conditions.  The preallocations must also cover the
+> > > > worst-case scenario.  Removing the GFP_ZERO flag from the
+> > > > kmem_cache_alloc() (and bulk variant) calls will reduce the amount of
+> > > > time spent zeroing memory that may not be used.  Only zero out the
+> > > > necessary area to keep track of the allocations in the maple state.
+> > > > Zero the entire node prior to using it in the tree.
+> > > > 
+> > > > This required internal changes to node counting on allocation, so the
+> > > > test code is also updated.
+> > > > 
+> > > > This restores some micro-benchmark performance:
+> > > > up to +9% in mmtests mmap1 by my testing
+> > > > +10% to +20% in mmap, mmapaddr, mmapmany tests reported by Red Hat
+> > > > 
+> > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=2149636
+> > > > Reported-by: Jirka Hladky <jhladky@redhat.com>
+> > > > Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > > Signed-off-by: Liam Howlett <Liam.Howlett@oracle.com>
+> > > > ---
+> > > >   lib/maple_tree.c                 | 80 +++++++++++++++++---------------
+> > > >   tools/testing/radix-tree/maple.c | 18 +++----
+> > > >   2 files changed, 52 insertions(+), 46 deletions(-)
+> > > > 
+> > > > diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> > > > index 26e2045d3cda..82a8121fe49b 100644
+> > > > --- a/lib/maple_tree.c
+> > > > +++ b/lib/maple_tree.c
+> > > > @@ -149,13 +149,12 @@ struct maple_subtree_state {
+> > > >   /* Functions */
+> > > >   static inline struct maple_node *mt_alloc_one(gfp_t gfp)
+> > > >   {
+> > > > -	return kmem_cache_alloc(maple_node_cache, gfp | __GFP_ZERO);
+> > > > +	return kmem_cache_alloc(maple_node_cache, gfp);
+> > > >   }
+> > > >   static inline int mt_alloc_bulk(gfp_t gfp, size_t size, void **nodes)
+> > > >   {
+> > > > -	return kmem_cache_alloc_bulk(maple_node_cache, gfp | __GFP_ZERO, size,
+> > > > -				     nodes);
+> > > > +	return kmem_cache_alloc_bulk(maple_node_cache, gfp, size, nodes);
+> > > >   }
+> > > >   static inline void mt_free_bulk(size_t size, void __rcu **nodes)
+> > > > @@ -1127,9 +1126,10 @@ static inline struct maple_node *mas_pop_node(struct ma_state *mas)
+> > > >   {
+> > > >   	struct maple_alloc *ret, *node = mas->alloc;
+> > > >   	unsigned long total = mas_allocated(mas);
+> > > > +	unsigned int req = mas_alloc_req(mas);
+> > > >   	/* nothing or a request pending. */
+> > > > -	if (unlikely(!total))
+> > > > +	if (WARN_ON(!total))
+> > > 
+> > > Hmm, isn't WARN_ON() here too much?
+> > 
+> > I don't think so.  If we get to the point of asking for a node while we
+> > don't have any to give, then it's too late.  It means we (I) have
+> > calculated the necessary nodes incorrectly and we won't have enough
+> > memory to fit things into the tree.  It should never happen.
 > 
-> As such, change the remove function for soundbus based drivers to
-> return void.
+> Either way, the suggestion is to use WARN_ON_ONCE() instead of WARN_ON().
 > 
-> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ... now documented in Documentation/process/coding-style.rst
+> 
 
-Gentle ping
+Thanks, this is good information.  I was actually debating a BUG_ON()
+but it has been documented to that WARN_ON() is better, but
+WARN_ON_ONCE() is best.
 
-> ---
-> v1 -> v2
-> - Update commit message.
-> - Rebased to latest sound/for-next.
-> 
-> v1
-> - https://lore.kernel.org/all/TYCP286MB2323BBFCE929111043E60D3BCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
-> ---
->  sound/aoa/fabrics/layout.c    | 3 +--
->  sound/aoa/soundbus/soundbus.h | 2 +-
->  2 files changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/sound/aoa/fabrics/layout.c b/sound/aoa/fabrics/layout.c
-> index ec4ef18555bc..850dc8c53e9b 100644
-> --- a/sound/aoa/fabrics/layout.c
-> +++ b/sound/aoa/fabrics/layout.c
-> @@ -1094,7 +1094,7 @@ static int aoa_fabric_layout_probe(struct soundbus_dev *sdev)
->  	return -ENODEV;
->  }
->  
-> -static int aoa_fabric_layout_remove(struct soundbus_dev *sdev)
-> +static void aoa_fabric_layout_remove(struct soundbus_dev *sdev)
->  {
->  	struct layout_dev *ldev = dev_get_drvdata(&sdev->ofdev.dev);
->  	int i;
-> @@ -1123,7 +1123,6 @@ static int aoa_fabric_layout_remove(struct soundbus_dev *sdev)
->  	kfree(ldev);
->  	sdev->pcmid = -1;
->  	sdev->pcmname = NULL;
-> -	return 0;
->  }
->  
->  #ifdef CONFIG_PM_SLEEP
-> diff --git a/sound/aoa/soundbus/soundbus.h b/sound/aoa/soundbus/soundbus.h
-> index 3a99c1f1a3ca..db40f9d042b4 100644
-> --- a/sound/aoa/soundbus/soundbus.h
-> +++ b/sound/aoa/soundbus/soundbus.h
-> @@ -185,7 +185,7 @@ struct soundbus_driver {
->  	/* we don't implement any matching at all */
->  
->  	int	(*probe)(struct soundbus_dev* dev);
-> -	int	(*remove)(struct soundbus_dev* dev);
-> +	void	(*remove)(struct soundbus_dev *dev);
->  
->  	int	(*shutdown)(struct soundbus_dev* dev);
->  
-> -- 
-> 2.25.1
-> 
+I would like the stack trace for any code path that happens to cause it
+even if there was a previous code path that has already triggered the
+backtrace.
+
+The memory should have all been obtained or entered a previous error
+path so an OOM issue will not cause a cascade of flooding backtraces.
+
+This would also result in a null pointer dereference today, so I think
+it's safe to say it's rare.
+
+Thanks,
+Liam
