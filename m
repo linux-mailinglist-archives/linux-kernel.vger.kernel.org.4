@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC6567955D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800F267955E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbjAXKfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S233830AbjAXKfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbjAXKej (ORCPT
+        with ESMTP id S233668AbjAXKek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:34:39 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A8341B50
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:31 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id z5so13406137wrt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:31 -0800 (PST)
+        Tue, 24 Jan 2023 05:34:40 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B2F41B43
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:32 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id r2so13396187wrv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:34:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kf92k+BW04Wt2vsFzZg0r4ZmptHsw49XtqGj3I0e/gc=;
-        b=jvsJwzM/WIeTejyhikwsX5mpm0TVybiCfIxP/71kr1GZMc7/ezpjsa8XUhFkGX7puh
-         ZMuOv/5ZiCFMtAZ1uZzgmWt97VxMfRXWPhJO9VfNifWHv1ifJiOywmu4Av3NhB2km6xZ
-         3ur6XeX2eyxBZ37FC2jeyuLFWTWBVe4adkx8cAyQ0+VwndjrT+2Yt/hUNVq3aU2285w2
-         7k73fV6TapSmRZ2hXupU75EVU/NHjMkyPgrVz8qp4Rv+lLZSDvYmdrRwFIy4ZVTeAvQJ
-         nLa7Xw21MO+kfVmP+QRWYqc4bvknfe7A6JFUnFPGXKzGtXfaPpIuVz5iA/TsQTpuxn1X
-         CxmA==
+        bh=ifzjlY99+yJztqe7FARfMu6jlp+GfQJvBGzzQqxPZBs=;
+        b=kxWYxI2FutjBslqyG+lI10Qg4rhf4tUQt3JHpMJJWwfz4koO2rIOm+ynasq88387Z4
+         kUwqSz7A5mHvVNXV++U/VXQAKv0joDyCW0ceLE8FySgkUUSTz36B6G8xnAMnt3MDaPUD
+         2PvZZPzHf4JL+Nmvl6KZWFedklhlUPBA/zJ22FC25vTDf3Wn4pY5IA34VgKsgjAhydUc
+         G8rFsd2dSJCt16FLpk33voTzZnnacB90ugckjbQ1NSqmJO9CQt9yvmeOl16t6jR0EjwR
+         6Hlj8drZR/p+2ThYCrNM4OZYFqvCidrUyA0Wb+nKRWBesvN0gq86pgJDkUwOuj/yHmXc
+         MvXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kf92k+BW04Wt2vsFzZg0r4ZmptHsw49XtqGj3I0e/gc=;
-        b=sHr+YgSorT3RfN9JIxIXaRN5a+aoMyLpAkokLnFaGkrPX0baifgIXkZcjfS78yQwLH
-         KRI3m9iUvujyFcC5pXo0i382SVMvWpl7WJQUxMFO0LGF51NfWcr1D6nXX1Ch7iDFVgLX
-         J/+4PcnhShCkEcHLLB8eZsDi4OfoMdch4fR3PE91nK5M50avPneXGsWbZFwX07oPMKdp
-         z9zJdZGMwysfvKEuSQl6NcP85Q/N3pdaetgJR8/PrBRD1Dss/J9ZwpjO9xVPQ6q27Fl7
-         XfQaJG0oncAqQ96eNF+rqOeD/PyYBDmQr3zkEH0lFKWQTK6u+emRvJ5JvUBSSCOVKop8
-         K42g==
-X-Gm-Message-State: AFqh2kqzMc5rYkiU8G2b6W4e+IOgoEtNpYvifhmqkQk6kmMHbLzzYzxd
-        Fgg2UWgGLbGWgT/BkC3B4rD9Zg==
-X-Google-Smtp-Source: AMrXdXtFdlMAU+HvZRltbYof9inRjog/t9q6bI6+HheCM54YOdhqSLbC4id1iR0wJiRra4F20MtkCw==
-X-Received: by 2002:adf:f3cd:0:b0:2be:c5d:3564 with SMTP id g13-20020adff3cd000000b002be0c5d3564mr25812727wrp.19.1674556470022;
+        bh=ifzjlY99+yJztqe7FARfMu6jlp+GfQJvBGzzQqxPZBs=;
+        b=tDX5mLpflbRmgDPDoLkSQgula18xQ4CrUjA3NTaMWhS3gQqEqjt1kEa3+XF5nYN4tt
+         uyF3TYYj1hyQcXuue/P4kRYhHLaaWO5q463iF1fjX0slhrqe/ieRk91tJ69MWMEDA0RJ
+         2eIgLHfn0foXcMwt/+TsdhKj+tQN0yvjRU9W98b9cFcNDxicOxWBjD4FqXd3iUsB19Cg
+         hC/J1MULOye0tV+j5LksuTLH6mMEBUQaDatZk3dRmPTaO3Uui6Ft0niUORyLB4cxD8kg
+         ZVOYG/EQHsEU4iAb1nn3CDVaBu64c5QLuYLgzHRsq1H39Nd7hQXnTnTfwERD2fk+L7Mb
+         /L5Q==
+X-Gm-Message-State: AFqh2koWEXcQLyUCqbuX/fdZFAMjzK0ndfJI8/pQsKwZu1QW2aZTFiKf
+        Vr7WERh4ATGzkLTRbpzIpEhd/g==
+X-Google-Smtp-Source: AMrXdXvnRcBiwv9p96+TSCf4nh3ZFbnS+Q3RT5HiQV9H2MVRSLIYvXTjdAhVfme5LdIwlx1KSHL33A==
+X-Received: by 2002:a05:6000:1816:b0:2bd:fe5a:b579 with SMTP id m22-20020a056000181600b002bdfe5ab579mr22265168wrh.70.1674556470825;
         Tue, 24 Jan 2023 02:34:30 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id q6-20020adfcd86000000b002bded7da2b8sm1551889wrj.102.2023.01.24.02.34.29
+        by smtp.gmail.com with ESMTPSA id q6-20020adfcd86000000b002bded7da2b8sm1551889wrj.102.2023.01.24.02.34.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 02:34:29 -0800 (PST)
+        Tue, 24 Jan 2023 02:34:30 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 24 Jan 2023 11:34:27 +0100
-Subject: [PATCH 06/14] arm64: dts: amlogic: meson-gx: add missing unit
- address to rng node name
+Date:   Tue, 24 Jan 2023 11:34:28 +0100
+Subject: [PATCH 07/14] arm64: dts: amlogic:
+ meson-gxl-s905w-jethome-jethub-j80: fix invalid rtc node name
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230124-b4-amlogic-bindings-fixups-v1-6-44351528957e@linaro.org>
+Message-Id: <20230124-b4-amlogic-bindings-fixups-v1-7-44351528957e@linaro.org>
 References: <20230124-b4-amlogic-bindings-fixups-v1-0-44351528957e@linaro.org>
 In-Reply-To: <20230124-b4-amlogic-bindings-fixups-v1-0-44351528957e@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -71,8 +71,7 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,26 +79,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Fixes:
-bus@c8834000: rng: {...} should not be valid under {'type': 'object'}
+pcf8563@51: $nodename:0: 'pcf8563@51' does not match '^rtc(@.*|-[0-9a-f])*$'
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 2 +-
+ arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-index 11f3b3a4df97..1f9cfbf4fa0e 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-@@ -532,7 +532,7 @@ periphs: bus@c8834000 {
- 			#size-cells = <2>;
- 			ranges = <0x0 0x0 0x0 0xc8834000 0x0 0x2000>;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+index bb7412070cb2..a18d6d241a5a 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+@@ -239,7 +239,7 @@ &i2c_B {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c_b_pins>;
  
--			hwrng: rng {
-+			hwrng: rng@0 {
- 				compatible = "amlogic,meson-rng";
- 				reg = <0x0 0x0 0x0 0x4>;
- 			};
+-	pcf8563: pcf8563@51 {
++	pcf8563: rtc@51 {
+ 		compatible = "nxp,pcf8563";
+ 		reg = <0x51>;
+ 		status = "okay";
 
 -- 
 2.34.1
