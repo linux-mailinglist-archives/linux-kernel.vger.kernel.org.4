@@ -2,116 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63DD679D9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F151C679DA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbjAXPg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S235244AbjAXPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbjAXPgZ (ORCPT
+        with ESMTP id S234850AbjAXPhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:36:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B8015552;
-        Tue, 24 Jan 2023 07:36:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 24 Jan 2023 10:37:01 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BA111E85;
+        Tue, 24 Jan 2023 07:37:00 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 659C3B8126A;
-        Tue, 24 Jan 2023 15:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67D9C433D2;
-        Tue, 24 Jan 2023 15:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674574581;
-        bh=XrRqwbhfGcJet/92ke8rwPTG+8hf0GkoJkUDe6Xs0D4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gqBcHv5ttUZszZ25uk0blrw48MFW2fDKbF19urI4YT+wbVGwlNeFhyqPoCi9NvAYJ
-         jqFDPXrIlcIaEzLBk7GvfcGC7ZVOZXFe+dKfK9xRHmEqgqlPuq1jfhvSDlF2i+7NSu
-         Xk4gAWA81zdkW3VpLWPIZ01yJaYaG5eBMTiArpfM=
-Date:   Tue, 24 Jan 2023 16:36:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Joe Perches <joe@perches.com>, Julian Scheel <julian@jusst.de>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2] usb: gadget: f_uac2: Fix incorrect increment of
- bNumEndpoints
-Message-ID: <Y8/68L3Se8094kru@kroah.com>
-References: <1674559787-25928-1-git-send-email-quic_prashk@quicinc.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AA527660086F;
+        Tue, 24 Jan 2023 15:36:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674574618;
+        bh=DAN03XI3Z/7ojtABDu3TB1hWNZMR5YeSDQHCvDRNq80=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GiRx+1YdjIFZg5iyrkKgmtpRWNskZerRRgS9g/OrR+aMjCZCBgkmelY1QWkkKwftu
+         tcharaRfMwvIY4Vx8q6REpt2ByZZQFkMgL6yNsXiJmQcmiWQhzzLuAEe2D2jXkTBQx
+         De8lViH0eDkWE4G8ftFwzLsnfo5m1yruOIhrtXzTizzrWHsxWj1hGzMbwBS33DWkey
+         DgwS7nUyUPLwEZ910/CUf50qVURaphvsnptVZCHaoaqE6nuIwlv6hzgP7Du8RJT4ME
+         lMVkYl6Y4WXgti5pJdTri8n3xb4Tc4qXKUcLxCsMyE3jliI6swhxiRkxl5V6AlNJQz
+         mMtD4+swARNCA==
+Message-ID: <948d2c55-872d-ae28-bd94-af56d800e6f7@collabora.com>
+Date:   Tue, 24 Jan 2023 16:36:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674559787-25928-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v11 6/6] arm64/dts/mt8195: Add temperature mitigation
+ threshold
+Content-Language: en-US
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230124131717.128660-1-bchihi@baylibre.com>
+ <20230124131717.128660-7-bchihi@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230124131717.128660-7-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 04:59:47PM +0530, Prashanth K wrote:
-> Currently connect/disconnect of USB cable calls afunc_bind and
-> eventually increments the bNumEndpoints. Performing multiple
-> plugin/plugout will increment bNumEndpoints incorrectly, and on
-> the next plug-in it leads to invalid configuration of descriptor
-> and hence enumeration fails.
+Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Fix this by resetting the value of bNumEndpoints to 1 on every
-> afunc_bind call.
+> The mt8195 SoC has several hotspots around the CPUs. Specify the
+> targeted temperature threshold when to apply the mitigation and define
+> the associated cooling devices.
 > 
-> Fixes: 40c73b30546e ("usb: gadget: f_uac2: add adaptive sync support for capture")
-> Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> ---
->  drivers/usb/gadget/function/f_uac2.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index 08726e4..0219cd7 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -1142,6 +1142,7 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
->  		}
->  		std_as_out_if0_desc.bInterfaceNumber = ret;
->  		std_as_out_if1_desc.bInterfaceNumber = ret;
-> +		std_as_out_if1_desc.bNumEndpoints = 1;
->  		uac2->as_out_intf = ret;
->  		uac2->as_out_alt = 0;
->  
-> -- 
-> 2.7.4
-> 
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 
-Hi,
+Commit title prefix
+- arm64: dts: mt8195:
+or
+- arm64: dts: mediatek: mt8195:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+otherwise,
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
