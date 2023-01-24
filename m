@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7842767942C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F3E67942D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbjAXJ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S233628AbjAXJ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbjAXJ0o (ORCPT
+        with ESMTP id S233512AbjAXJ0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:26:44 -0500
+        Tue, 24 Jan 2023 04:26:54 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90989166FE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C403EC6F;
         Tue, 24 Jan 2023 01:26:42 -0800 (PST)
-Date:   Tue, 24 Jan 2023 09:26:37 -0000
+Date:   Tue, 24 Jan 2023 09:26:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1674552398;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D9+4FqzVN6yHwsZH8nmnirIPk/S9zmiwRVxT8drMYYs=;
-        b=wc3DZmkhjRDSDejd9PKHVAtlgKYPZKaAIEte1KDNuEkwBtracP4UQ6+HgQbvYQe7F0SveF
-        DrxOUIniT7sHsYveZhl1mt7ITSJn1cbS4sDAgVSwYGfTpS9VjZ87Iw+84BRcBFuWB2Co7j
-        JTKbyNe1Wpb3v5GrtiuySCSvr8aBsHoe9zpTDxtHtnbs6Fbetik6sopLEJkwPuhnEecLRk
-        l272aT+JBBhfW90FBj7hLNDQYAs4j8FRpGday8rH42PJl8Q9IKzP6iF5teysYf51D4d5rD
-        sha6zjq0Q0kAsBgDpRyzxQ252iPlNOBQCK/QRhnqYR71Ai/F8nWZLrU6hh2/ZA==
+        bh=qBHFgcaEcxCbJ7SxUpWAqaqoMPzAcjZlzyfygvrnkQk=;
+        b=RXdOuvn6rlxrkus98XtVA4j1lMLAuVPzgjhnIy1hrkajWPfPtOPtQWDNO5RvIlyV4+/p8e
+        e9a6rrkFH4l7qSyq4/EbzZXHaADTfHMRlEWuO+w3Fy487jUsXTXBaZX0TD7+oHSNEuLmG0
+        pWp08OcU80uYRQ/gC9QQoK/ifT9f/32J/GJFeflRuVksAWKWAys1J96GbaKtDb58xaSySI
+        wc1ttxRT2Ka05wI+WJjRMy5zhnfZit6773+b/6NUuANTYqgPHjR5puS5yVnrnt0Q0XFEjF
+        SyTyk7CMbc3ykOK5j38TFxfkUc1t7I3Qv2iVnYrUxqm4svx9Fw0hjkqY2L46mQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1674552398;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D9+4FqzVN6yHwsZH8nmnirIPk/S9zmiwRVxT8drMYYs=;
-        b=0pzs2sBCoVe/q5wfPUamKAWz9+l4+NNEo5iWckcziG+zZcH7XIdw3p3wEqtp4e0mwMQvYv
-        9ZpVNmQCYQ6r6DCw==
+        bh=qBHFgcaEcxCbJ7SxUpWAqaqoMPzAcjZlzyfygvrnkQk=;
+        b=LWQqDlGWxF8wxMVnsHqmQEpMBjyiDBxP89FomWdWb2eUD2xQ4UDmM1VE+lu4eW44cg9v6K
+        vds0Aw0aLjT4obAA==
 From:   "tip-bot2 for Babu Moger" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/cpufeatures: Add Bandwidth Monitoring Event
- Configuration feature flag
+Subject: [tip: x86/cache] x86/cpufeatures: Add Slow Memory Bandwidth
+ Allocation feature flag
 Cc:     Babu Moger <babu.moger@amd.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
         Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230113152039.770054-5-babu.moger@amd.com>
-References: <20230113152039.770054-5-babu.moger@amd.com>
+In-Reply-To: <20230113152039.770054-3-babu.moger@amd.com>
+References: <20230113152039.770054-3-babu.moger@amd.com>
 MIME-Version: 1.0
-Message-ID: <167455239782.4906.6251371979031301999.tip-bot2@tip-bot2>
+Message-ID: <167455239836.4906.13232602625549629109.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,99 +68,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     78335aac6156eadad0025ab34469e2adcc60218b
-Gitweb:        https://git.kernel.org/tip/78335aac6156eadad0025ab34469e2adcc60218b
+Commit-ID:     f334f723a63cfc25789b1cdf70a08ffbaea4bf2e
+Gitweb:        https://git.kernel.org/tip/f334f723a63cfc25789b1cdf70a08ffbaea4bf2e
 Author:        Babu Moger <babu.moger@amd.com>
-AuthorDate:    Fri, 13 Jan 2023 09:20:30 -06:00
+AuthorDate:    Fri, 13 Jan 2023 09:20:28 -06:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 23 Jan 2023 17:38:31 +01:00
+CommitterDate: Mon, 23 Jan 2023 17:38:17 +01:00
 
-x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature flag
+x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag
 
-Newer AMD processors support the new feature Bandwidth Monitoring Event
-Configuration (BMEC).
+Add the new AMD feature X86_FEATURE_SMBA. With it, the QOS enforcement policies
+can be applied to external slow memory connected to the host. QOS enforcement is
+accomplished by assigning a Class Of Service (COS) to a processor and specifying
+allocations or limits for that COS for each resource to be allocated.
 
-The feature support is identified via CPUID Fn8000_0020_EBX_x0[3]: EVT_CFG -
-Bandwidth Monitoring Event Configuration (BMEC)
+This feature is identified by the CPUID function 0x8000_0020_EBX_x0[2]:
+L3SBE - L3 external slow memory bandwidth enforcement.
 
-The bandwidth monitoring events mbm_total_bytes and mbm_local_bytes are set to
-count all the total and local reads/writes, respectively. With the introduction
-of slow memory, the two counters are not enough to count all the different types
-of memory events. Therefore, BMEC provides the option to configure
-mbm_total_bytes and mbm_local_bytes to count the specific type of events.
+CXL.memory is the only supported "slow" memory device. With SMBA, the hardware
+enables bandwidth allocation on the slow memory devices.  If there are multiple
+slow memory devices in the system, then the throttling logic groups all the slow
+sources together and applies the limit on them as a whole.
 
-Each BMEC event has a configuration MSR which contains one field for each
-bandwidth type that can be used to configure the bandwidth event to track any
-combination of supported bandwidth types. The event will count requests from
-every bandwidth type bit that is set in the corresponding configuration
-register.
+The presence of the SMBA feature (with CXL.memory) is independent of whether
+slow memory device is actually present in the system. If there is no slow memory
+in the system, then setting a SMBA limit will have no impact on the performance
+of the system.
 
-Following are the types of events supported:
+Presence of CXL memory can be identified by the numactl command:
 
-  ====    ========================================================
-  Bits    Description
-  ====    ========================================================
-  6       Dirty Victims from the QOS domain to all types of memory
-  5       Reads to slow memory in the non-local NUMA domain
-  4       Reads to slow memory in the local NUMA domain
-  3       Non-temporal writes to non-local NUMA domain
-  2       Non-temporal writes to local NUMA domain
-  1       Reads to memory in the non-local NUMA domain
-  0       Reads to memory in the local NUMA domain
-  ====    ========================================================
+  $numactl -H
+  available: 2 nodes (0-1)
+  node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+  node 0 size: 63678 MB node 0 free: 59542 MB
+  node 1 cpus:
+  node 1 size: 16122 MB
+  node 1 free: 15627 MB
+  node distances:
+  node   0   1
+     0:  10  50
+     1:  50  10
 
-By default, the mbm_total_bytes configuration is set to 0x7F to count
-all the event types and the mbm_local_bytes configuration is set to 0x15 to
-count all the local memory events.
+CPU list for CXL memory will be empty. The cpu-cxl node distance is greater than
+cpu-to-cpu distances. Node 1 has the CXL memory in this case. CXL memory can
+also be identified using ACPI SRAT table and memory maps.
 
 Feature description is available in the specification, "AMD64 Technology
-Platform Quality of Service Extensions, Revision: 1.03 Publication" at
+Platform Quality of Service Extensions, Revision: 1.03 Publication # 56375
+Revision: 1.03 Issue Date: February 2022" at
 https://bugzilla.kernel.org/attachment.cgi?id=301365
+
+See also https://www.amd.com/en/support/tech-docs/amd64-technology-platform-quality-service-extensions
 
 Signed-off-by: Babu Moger <babu.moger@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Link: https://lore.kernel.org/r/20230113152039.770054-5-babu.moger@amd.com
+Link: https://lore.kernel.org/r/20230113152039.770054-3-babu.moger@amd.com
 ---
  arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/kernel/cpu/cpuid-deps.c   | 2 ++
  arch/x86/kernel/cpu/scattered.c    | 1 +
- 3 files changed, 4 insertions(+)
+ 2 files changed, 2 insertions(+)
 
 diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 3f5f64b..f6a41ec 100644
+index 6101247..3f5f64b 100644
 --- a/arch/x86/include/asm/cpufeatures.h
 +++ b/arch/x86/include/asm/cpufeatures.h
-@@ -308,6 +308,7 @@
+@@ -307,6 +307,7 @@
+ #define X86_FEATURE_SGX_EDECCSSA	(11*32+18) /* "" SGX EDECCSSA user leaf function */
  #define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
  #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
- #define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
-+#define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
++#define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
  
  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index d952211..f6748c8 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -68,6 +68,8 @@ static const struct cpuid_dep cpuid_deps[] = {
- 	{ X86_FEATURE_CQM_OCCUP_LLC,		X86_FEATURE_CQM_LLC   },
- 	{ X86_FEATURE_CQM_MBM_TOTAL,		X86_FEATURE_CQM_LLC   },
- 	{ X86_FEATURE_CQM_MBM_LOCAL,		X86_FEATURE_CQM_LLC   },
-+	{ X86_FEATURE_BMEC,			X86_FEATURE_CQM_MBM_TOTAL   },
-+	{ X86_FEATURE_BMEC,			X86_FEATURE_CQM_MBM_LOCAL   },
- 	{ X86_FEATURE_AVX512_BF16,		X86_FEATURE_AVX512VL  },
- 	{ X86_FEATURE_AVX512_FP16,		X86_FEATURE_AVX512BW  },
- 	{ X86_FEATURE_ENQCMD,			X86_FEATURE_XSAVES    },
 diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index d925753..0dad49a 100644
+index f53944f..d925753 100644
 --- a/arch/x86/kernel/cpu/scattered.c
 +++ b/arch/x86/kernel/cpu/scattered.c
-@@ -46,6 +46,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+@@ -45,6 +45,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+ 	{ X86_FEATURE_CPB,		CPUID_EDX,  9, 0x80000007, 0 },
  	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
  	{ X86_FEATURE_MBA,		CPUID_EBX,  6, 0x80000008, 0 },
- 	{ X86_FEATURE_SMBA,		CPUID_EBX,  2, 0x80000020, 0 },
-+	{ X86_FEATURE_BMEC,		CPUID_EBX,  3, 0x80000020, 0 },
++	{ X86_FEATURE_SMBA,		CPUID_EBX,  2, 0x80000020, 0 },
  	{ X86_FEATURE_PERFMON_V2,	CPUID_EAX,  0, 0x80000022, 0 },
  	{ X86_FEATURE_AMD_LBR_V2,	CPUID_EAX,  1, 0x80000022, 0 },
  	{ 0, 0, 0, 0, 0 }
