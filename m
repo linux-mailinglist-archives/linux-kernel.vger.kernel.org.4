@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7253167A614
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCB067A61E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbjAXWmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S235101AbjAXWpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235218AbjAXWmJ (ORCPT
+        with ESMTP id S229958AbjAXWpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:42:09 -0500
-Received: from out-235.mta0.migadu.com (out-235.mta0.migadu.com [91.218.175.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2C64A1D6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:42:07 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
-        t=1674600125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=36Vs8J0xhZS4TyMPNV0MC8jbKBVP8w8N3cOPO33G5Wk=;
-        b=NDz7l4pPA+sUvoQ0mDQNcUtYzr72ERejOPwyYOT4DtmFUwQqUNTU257VyRO0+JF/FswAXH
-        o+DK4x7vQ2KpVpyASwIA8gwOmP/oGcIzYvE/zqTEcqeFrGuPgG7NvzXYM8TEz1lj5rJldo
-        K7Dqn36RngXMNaaFLCEqxRHj8zJe9GU=
-From:   Rayyan Ansari <rayyan@ansari.sh>
-To:     dri-devel@lists.freedesktop.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
-        janne@jannau.net, Rayyan Ansari <rayyan@ansari.sh>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>, devicetree@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 2/2] dt-bindings: display: simple-framebuffer: Document physical width and height properties
-Date:   Tue, 24 Jan 2023 22:41:42 +0000
-Message-Id: <20230124224142.7133-3-rayyan@ansari.sh>
-In-Reply-To: <20230124224142.7133-1-rayyan@ansari.sh>
-References: <20230124224142.7133-1-rayyan@ansari.sh>
+        Tue, 24 Jan 2023 17:45:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA285E387;
+        Tue, 24 Jan 2023 14:45:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1hr00yZ4z4xN4;
+        Wed, 25 Jan 2023 09:45:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674600304;
+        bh=Atn3eWRDI66HflQCMZ+O4q/A4r+2SexvGb0jCedP+Oo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PEyYI5EapkxVzosUPa6INcV4ljBUZQMusbYTsblZhW+ecCY2XYnQIeGucK/3aoA2P
+         m1Xu5lKyke2B+6/0hVriITcFylMCy3XAiZP9WXY8XFMj7A/PU65zrp1tbpMmmn0+5y
+         5J86pHJq7dytVvSyRBpUtqtAxQaEm/Q2Spzhvs7LBf1zQWqEKXBLVL2U0fkmqNYIEi
+         cRrb880eHwwzKC29fb4JAffPij71vnUZlEb684mouHFAD/shLkcNaMS5NIMWXMT/fH
+         SZkpuqM7bJvPI/gRnrmypzAS1tlEWu8R84xJjfZ5WTJ1kHXSXBZvl9Ebhs6OfZPh2E
+         vriJli1V92bcw==
+Date:   Wed, 25 Jan 2023 09:45:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: linux-next: manual merge of the thermal tree with the pm tree
+Message-ID: <20230125094503.5066c70f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/V2wz9pOaNEWU0rtx.esSwwv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the optional width-mm and height-mm simple-framebuffer
-properties.
+--Sig_/V2wz9pOaNEWU0rtx.esSwwv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
----
- .../devicetree/bindings/display/simple-framebuffer.yaml     | 6 ++++++
- 1 file changed, 6 insertions(+)
+Hi all,
 
-diff --git a/Documentation/devicetree/bindings/display/simple-framebuffer.yaml b/Documentation/devicetree/bindings/display/simple-framebuffer.yaml
-index dd64f70b5014..4ae33a4d2da9 100644
---- a/Documentation/devicetree/bindings/display/simple-framebuffer.yaml
-+++ b/Documentation/devicetree/bindings/display/simple-framebuffer.yaml
-@@ -106,6 +106,12 @@ properties:
-       - x2r10g10b10
-       - x8r8g8b8
- 
-+  width-mm:
-+    description: Physical width of the display in millimetres
-+
-+  height-mm:
-+    description: Physical height of the display in millimetres
-+
-   display:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: Primary display hardware node
--- 
-2.39.1
+Today's linux-next merge of the thermal tree got a conflict in:
 
+  drivers/thermal/thermal_acpi.c
+
+between commit:
+
+  7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
+
+from the pm tree and commit:
+
+  4bb6439371e9 ("thermal/acpi: Add ACPI trip point routines")
+
+from the thermal tree.
+
+These commits are very similar, and I just used the former (as it
+is newer).
+
+I fixed it up (see above) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/V2wz9pOaNEWU0rtx.esSwwv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPQX28ACgkQAVBC80lX
+0GyjGQf/YnyTvsBSJ/qKNWJVMi0P5e+aPUQGSO6yXhXVHp9EX4VGR2vLDl17PnGv
+CcRa+P4I0KVCO50iy/cTdyra/6Q/v62+tcARPxKt2n8vYAjvT2xvPlNsI06DiMn3
+Kn6UV1hihSeMnwYrjomhp/Ux8vViUslRGdw6ANZumcgZIR9dPwIdef9CYjmb4WdM
+fu2m3a0JEda4KXokZPA81apd/hMeaCBrWvuP7VutfMTbuUjQ+9k8/YoyxHu8SYPN
+GwbIyYxooWZrSeZxBTEe53cq2hSoOxwA+jp81tlWrnQHgfG6nK/W03hFgSzDfxdQ
+DoARJv4rq8RQucBIP5XQkUhemoDxlA==
+=+aIw
+-----END PGP SIGNATURE-----
+
+--Sig_/V2wz9pOaNEWU0rtx.esSwwv--
