@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8DA678E8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1970678E93
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjAXCt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S229989AbjAXCv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbjAXCt4 (ORCPT
+        with ESMTP id S229930AbjAXCvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:49:56 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A877634C26;
-        Mon, 23 Jan 2023 18:49:54 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id p185so12191835oif.2;
-        Mon, 23 Jan 2023 18:49:54 -0800 (PST)
+        Mon, 23 Jan 2023 21:51:23 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC2512875;
+        Mon, 23 Jan 2023 18:51:21 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id n7so12565080wrx.5;
+        Mon, 23 Jan 2023 18:51:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X86lwB3K6qQT9EBDO+x3sCvlNaBGJ0K6Kl/k/JA7UI8=;
-        b=krA7WJ4TMyuOR3dd7H6AipFrcxlQqvEOz5xkhXQ0vxtvQ/ZtK2xMyAhUGtRsV1QoU6
-         XJnZvEMyJfesK23PSSMC6a0FiphHXjM+ria+6RpyB+OpILLOBvOfim1p9vsMagm7i3O+
-         cVkpvh025Cw2/gBAODAfah09Qvu5BEOZDu0QYhSw3rZHNdTOr+C/2aZL+NnTy8oMZBGw
-         QbvRCwmJObF9bTknxUaHX6bc1GuSFM+5dHB9N247k1dTEX6sn0eG44aVGO19TqGu4C0o
-         OqWPvwRi6ilw95sRgXiy9Ko+xg1RRLVfRENumexDuKNeQp9hV6ofEjWktC2xcqY1iyrX
-         waKQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gAY8vTZyGk4M83RejMJDWSVQbhO5UIeP+/JnuniVPrg=;
+        b=S2EsGrQuOEU3Y4RGr7uuVf6dI5nPSlI0GiuLVrqgLazzWYX90iOjMzZYyVgMddzVsX
+         w25hR1vptvZlEFwB0eyVraN5Qvzn84zZ8lb9TG3E8lT8wKDXRpBUzLyopqBno9Be3kAu
+         HsJ1gZ60PCggsTDTxlLQ/D8o5TDpJcmshYmhqLneSeHjAOSyU4GNB3nfsfYgPjbzcD9N
+         PrNH+lW9zs8irTLqDMrkXcNHjI0a27JOWm9htzAag+2PFbTHoZSMmoxOstSbPBiLdZbr
+         MStHGVmBFjOlqlj4cVKQmTCLeen9k0uw9biauAa4u0l8JJgxOtx8DQb8shfd9H5ZDECp
+         MQdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X86lwB3K6qQT9EBDO+x3sCvlNaBGJ0K6Kl/k/JA7UI8=;
-        b=U6+mATgHKzVaDl8spvf3biDUOkZqapAHd79xhdRmu/xCIKC/xHoAni3/RUNIpBWlyO
-         CYMqTwuu5Zc/2ql0VvLqL3ZaCfUQhHpVC5CF6lcVAqcYZE4TabN1OtoqdjB9AuqlvTna
-         Ri3hjZ1pc4pNta5JTyzUiLugRgkbyyxkATMR1VQdAAHdkdMPcthFBo4C/y7Ry0elBieL
-         uaH2+BpWmIwFU5Oozaphwr8ya/Gyx+pvogIdzw19U9RGBjlJodtWs6iMx4ZqvbIOwY/C
-         E2uc6KIzelgTgI5l4EC8mLB6zTDWNBrVIcyDmrS4It2IEIvn7zQ0B6pkBFMv7OSy5vsF
-         3MbA==
-X-Gm-Message-State: AFqh2kq5vFgGhBUrp8lqocLAKtJnhOJruyekTzJn3J4NCfcEAQF+rQB5
-        fMp2anesNXYs7Y2izYaZ7P4=
-X-Google-Smtp-Source: AMrXdXudWHmqckEuJORV+M8lJTUXqcJkZ8AuZq+6QGE547MiIpL2AbiKgFGPazKe2lYugY3Dc0f5WA==
-X-Received: by 2002:a05:6808:2895:b0:35c:3a60:6ab7 with SMTP id eu21-20020a056808289500b0035c3a606ab7mr12982412oib.49.1674528593970;
-        Mon, 23 Jan 2023 18:49:53 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r21-20020a056808211500b0036e3bb67a20sm488462oiw.38.2023.01.23.18.49.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 18:49:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 23 Jan 2023 18:49:52 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/188] 6.1.8-rc2 review
-Message-ID: <20230124024952.GF1495310@roeck-us.net>
-References: <20230123094931.568794202@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gAY8vTZyGk4M83RejMJDWSVQbhO5UIeP+/JnuniVPrg=;
+        b=F+CaRI50BwA2THGPdYkSdt0jm/VauLkQTqYNhoYzD1sQQEZzKkRPtdhZZq/RachUnW
+         mndZbsdmYcdhl1D2Tg0zSSUucOT51cTqMbD3HZ5h+UyK9WyOR0lsqqRjfTHssXAFstHU
+         B98P+jgEKVXFHRTdf9RqoKNpvPuYIxEc2X1HN56TSG4LrkPzlLVrGw+KC2D15G8SrHkc
+         f2e00zUFQACJFCK6V8EQ7b+udj+VNAPV+zA41if4n+s7f34ZklQUz6SN7B+kqp/A2/Xf
+         gDUc1HGhpdujbtgcPIPU/IKoo/53UfMD4J4DfyM4+2C8s8+oaYlAgsn/mXUtt0C/RQjr
+         LXSw==
+X-Gm-Message-State: AFqh2krIOW6KBbdVUz/Z96iIRDp6mwrMx48l389SK1zPWnNlJJQcb93L
+        h2oaEwGFBpo7kL9YYlIsAlrbv69dZdIXWRiBe0M=
+X-Google-Smtp-Source: AMrXdXtE2KHUJeDVXhPQUTYkHKp8SQa1hujduK30aDNEeyEHd80uFa/sA9H62IvvTm5YgT/eugKtTOl8LOGRi8K5uU8=
+X-Received: by 2002:a5d:4851:0:b0:2be:575:2e07 with SMTP id
+ n17-20020a5d4851000000b002be05752e07mr675943wrs.111.1674528680274; Mon, 23
+ Jan 2023 18:51:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123094931.568794202@linuxfoundation.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230123032942.18263-1-gregory.price@memverge.com> <20230123032942.18263-4-gregory.price@memverge.com>
+In-Reply-To: <20230123032942.18263-4-gregory.price@memverge.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Mon, 23 Jan 2023 18:51:07 -0800
+Message-ID: <CANaxB-x86NUAYG1F2+-uOj676weVOdy9aKnmxjaHTuNxek28gg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for
+ sud configuration
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +72,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:52:24AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.8 release.
-> There are 188 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
-> 
+On Sun, Jan 22, 2023 at 8:22 PM Gregory Price <gourry.memverge@gmail.com> wrote:
+<snip>
+>
+> +#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
+> +#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
+> +struct syscall_user_dispatch_config {
+> +       __u64 mode;
+> +       __s8 *selector;
+> +       __u64 offset;
+> +       __u64 len;
+> +       __u8 on_dispatch;
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 502 pass: 502 fail: 0
+Sorry, I didn't notice this in the previous version. on_dispatch looks
+like an internal
+property and I don't see how we can stop a process with ptrace when on_dispatch
+is set to a non-zero value. I am not sure that we need to expose it to
+user-space.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Other than that, the patch looks good to me.
 
-Guenter
+Thanks,
+Andrei
