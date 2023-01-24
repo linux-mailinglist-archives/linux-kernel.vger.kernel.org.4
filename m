@@ -2,229 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D546679CB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F763679CBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbjAXO5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S234047AbjAXO7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235168AbjAXO46 (ORCPT
+        with ESMTP id S235094AbjAXO7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:56:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9F76B3;
-        Tue, 24 Jan 2023 06:56:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D48616122D;
-        Tue, 24 Jan 2023 14:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88650C433EF;
-        Tue, 24 Jan 2023 14:56:55 +0000 (UTC)
-Date:   Tue, 24 Jan 2023 09:56:53 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, chriscli@google.com
-Subject: [PATCH] ftrace: Show a list of all functions that have ever been
- enabled
-Message-ID: <20230124095653.6fd1640e@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 24 Jan 2023 09:59:06 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9596211C;
+        Tue, 24 Jan 2023 06:59:04 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P1VK26lYJz9v7Hb;
+        Tue, 24 Jan 2023 22:51:02 +0800 (CST)
+Received: from [10.221.98.77] (unknown [10.221.98.77])
+        by APP1 (Coremail) with SMTP id LxC2BwD3gAwT8s9jVBrDAA--.44223S2;
+        Tue, 24 Jan 2023 15:58:40 +0100 (CET)
+Message-ID: <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
+Date:   Tue, 24 Jan 2023 15:57:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Arjan van de Ven <arjan@linux.intel.com>, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, akpm@osdl.org, tglx@linutronix.de,
+        joel@joelfernandes.org, stern@rowland.harvard.edu,
+        diogo.behrens@huawei.com, jonas.oberhauser@huawei.com,
+        linux-kernel@vger.kernel.org,
+        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
+        stable@vger.kernel.org
+References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
+ <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
+ <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
+ <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+In-Reply-To: <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwD3gAwT8s9jVBrDAA--.44223S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxury5uF4UXw4UXw13GryrCrg_yoWrXrWDpF
+        WrKayktFyDJrs2qr1IqF4xW34Fy39YkFy3Xw1UGryxAas0gF1fAr43C3y3Wryjqr1kt3yY
+        vr45Z3429F1DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 1/23/2023 5:40 PM, Paul E. McKenney wrote:
+> On Sun, Jan 22, 2023 at 04:24:21PM +0100, Hernan Ponce de Leon wrote:
+>> On 1/20/2023 4:54 PM, Paul E. McKenney wrote:
+>>> On Fri, Jan 20, 2023 at 06:58:20AM -0800, Arjan van de Ven wrote:
+>>>> On 1/20/2023 5:55 AM, Hernan Ponce de Leon wrote:
+>>>>> From: Hernan Ponce de Leon <hernanl.leon@huawei.com>
+>>>>>
+>>>>
+>>>>>     kernel/locking/rtmutex.c | 2 +-
+>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+>>>>> index 010cf4e6d0b8..7ed9472edd48 100644
+>>>>> --- a/kernel/locking/rtmutex.c
+>>>>> +++ b/kernel/locking/rtmutex.c
+>>>>> @@ -235,7 +235,7 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
+>>>>>     	unsigned long owner, *p = (unsigned long *) &lock->owner;
+>>>>>     	do {
+>>>>> -		owner = *p;
+>>>>> +		owner = READ_ONCE(*p);
+>>>>>     	} while (cmpxchg_relaxed(p, owner,
+>>>>
+>>>>
+>>>> I don't see how this makes any difference at all.
+>>>> *p can be read a dozen times and it's fine; cmpxchg has barrier semantics for compilers afaics
+>>>
+>>> Doing so does suppress a KCSAN warning.  You could also use data_race()
+>>> if it turns out that the volatile semantics would prevent a valuable
+>>> compiler optimization.
+>>
+>> I think the import question is "is this a harmful data race (and needs to be
+>> fixed as proposed by the patch) or a harmless one (and we should use
+>> data_race() to silence tools)?".
+>>
+>> In https://lkml.org/lkml/2023/1/22/160 I describe how this data race can
+>> affect important ordering guarantees for the rest of the code. For this
+>> reason I consider it a harmful one. If this is not the case, I would
+>> appreciate some feedback or pointer to resources about what races care to
+>> avoid spamming the mailing list in the future.
+> 
+> In the case, the value read is passed into cmpxchg_relaxed(), which
+> checks the value against memory.  In this case, as Arjan noted, the only
+> compiler-and-silicon difference between data_race() and READ_ONCE()
+> is that use of data_race() might allow the compiler to do things like
+> tear the load, thus forcing the occasional spurious cmpxchg_relaxed()
+> failure.  In contrast, LKMM (by design) throws up its hands when it sees
+> a data race.  Something about not being eager to track the idiosyncrasies
+> of many compiler versions.
+> 
+> My approach in my own code is to use *_ONCE() unless it causes a visible
+> performance regression or if it confuses KCSAN.  An example of the latter
+> can be debug code, in which case use of data_race() avoids suppressing
+> KCSAN warnings (and also false positives, depending).
 
-When debugging a crash that appears to be related to ftrace, but not for
-sure, it is useful to know if a function was ever enabled by ftrace or
-not. It could be that a BPF program was attached to it, or possibly a live
-patch.
+I understand that *_ONCE() might avoid some compiler optimization and 
+reduce performance in the general case. However, if I understand your 
+first paragraph correctly, in this particular case data_race() could 
+allow the CAS to fail more often, resulting in more spinning iterations 
+and degraded performance. Am I right?
 
-We are having crashes in the field where this information is not always
-known. But having ftrace set a flag if a function has ever been attached
-since boot up helps tremendously in trying to know if a crash had to do
-with something using ftrace.
+> 
+> Except that your other email seems to also be arguing that additional
+> ordering is required.  So is https://lkml.org/lkml/2023/1/20/702 really
+> sufficient just by itself, or is additional ordering required?
 
-For analyzing crashes, the use of a kdump image can have access to the
-flags. When looking at issues where the kernel did not panic, the
-touched_functions file can simply be used.
+I do not claim that we need to mark the read to add the ordering that is 
+needed for correctness (mutual exclusion). What I claim in this patch is 
+that there is a data race, and since it can affect ordering constrains 
+in subtle ways, I consider it harmful and thus I want to fix it.
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
+What I explain in the other email is that if we fix the data race, 
+either the fence or the acquire store might be relaxed (because marking 
+the read gives us some extra ordering guarantees). If the race is not 
+fixed, both the fence and the acquire are needed according to LKMM. The 
+situation is different wrt hardware models. In that case the tool cannot 
+find any violation even if we don't fix the race and we relax the store 
+/ remove the fence.
 
-[
-  This patch will conflict with Mark's patch that is going through the ARM
-  tree. I will hold off pulling this patch until the next merge window, and
-  rebase it on top of the changes when the tracing tree merges with upstream
-  that has the changes from the ARM tree.
-]
-
- include/linux/ftrace.h |  5 ++++-
- kernel/trace/ftrace.c  | 51 +++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 50 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 99f1146614c0..76baba9bd21b 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -563,6 +563,7 @@ bool is_ftrace_trampoline(unsigned long addr);
-  *  IPMODIFY - the record allows for the IP address to be changed.
-  *  DISABLED - the record is not ready to be touched yet
-  *  DIRECT   - there is a direct function to call
-+ *  TOUCHED  - A callback was added since boot up
-  *
-  * When a new ftrace_ops is registered and wants a function to save
-  * pt_regs, the rec->flags REGS is set. When the function has been
-@@ -580,9 +581,10 @@ enum {
- 	FTRACE_FL_DISABLED	= (1UL << 25),
- 	FTRACE_FL_DIRECT	= (1UL << 24),
- 	FTRACE_FL_DIRECT_EN	= (1UL << 23),
-+	FTRACE_FL_TOUCHED	= (1UL << 22),
- };
- 
--#define FTRACE_REF_MAX_SHIFT	23
-+#define FTRACE_REF_MAX_SHIFT	22
- #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
- 
- #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
-@@ -641,6 +643,7 @@ enum {
- 	FTRACE_ITER_PROBE	= (1 << 4),
- 	FTRACE_ITER_MOD		= (1 << 5),
- 	FTRACE_ITER_ENABLED	= (1 << 6),
-+	FTRACE_ITER_TOUCHED	= (1 << 7),
- };
- 
- void arch_ftrace_update_code(int command);
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 442438b93fe9..7687f413ab36 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -45,6 +45,9 @@
- #include "trace_output.h"
- #include "trace_stat.h"
- 
-+/* Flags that do not get reset */
-+#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED)
-+
- #define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
- 
- #define FTRACE_WARN_ON(cond)			\
-@@ -2196,7 +2199,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 		flag ^= rec->flags & FTRACE_FL_ENABLED;
- 
- 		if (update) {
--			rec->flags |= FTRACE_FL_ENABLED;
-+			rec->flags |= FTRACE_FL_ENABLED | FTRACE_FL_TOUCHED;
- 			if (flag & FTRACE_FL_REGS) {
- 				if (rec->flags & FTRACE_FL_REGS)
- 					rec->flags |= FTRACE_FL_REGS_EN;
-@@ -2251,7 +2254,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 	if (update) {
- 		/* If there's no more users, clear all flags */
- 		if (!ftrace_rec_count(rec))
--			rec->flags &= FTRACE_FL_DISABLED;
-+			rec->flags &= FTRACE_NOCLEAR_FLAGS;
- 		else
- 			/*
- 			 * Just disable the record, but keep the ops TRAMP
-@@ -3067,7 +3070,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 		struct dyn_ftrace *rec;
- 
- 		do_for_each_ftrace_rec(pg, rec) {
--			if (FTRACE_WARN_ON_ONCE(rec->flags & ~FTRACE_FL_DISABLED))
-+			if (FTRACE_WARN_ON_ONCE(rec->flags & ~FTRACE_NOCLEAR_FLAGS))
- 				pr_warn("  %pS flags:%lx\n",
- 					(void *)rec->ip, rec->flags);
- 		} while_for_each_ftrace_rec();
-@@ -3518,7 +3521,10 @@ t_func_next(struct seq_file *m, loff_t *pos)
- 		     !ftrace_lookup_ip(iter->hash, rec->ip)) ||
- 
- 		    ((iter->flags & FTRACE_ITER_ENABLED) &&
--		     !(rec->flags & FTRACE_FL_ENABLED))) {
-+		     !(rec->flags & FTRACE_FL_ENABLED)) ||
-+
-+		    ((iter->flags & FTRACE_ITER_TOUCHED) &&
-+		     !(rec->flags & FTRACE_FL_TOUCHED))) {
- 
- 			rec = NULL;
- 			goto retry;
-@@ -3777,7 +3783,7 @@ static int t_show(struct seq_file *m, void *v)
- 		return 0;
- 	}
- 
--	if (iter->flags & FTRACE_ITER_ENABLED) {
-+	if (iter->flags & (FTRACE_ITER_ENABLED | FTRACE_ITER_TOUCHED)) {
- 		struct ftrace_ops *ops;
- 
- 		seq_printf(m, " (%ld)%s%s%s",
-@@ -3869,6 +3875,31 @@ ftrace_enabled_open(struct inode *inode, struct file *file)
- 	return 0;
- }
- 
-+static int
-+ftrace_touched_open(struct inode *inode, struct file *file)
-+{
-+	struct ftrace_iterator *iter;
-+
-+	/*
-+	 * This shows us what functions have ever been enabled
-+	 * (traced, direct, patched, etc). Not sure if we want lockdown
-+	 * to hide such critical information for an admin.
-+	 * Although, perhaps it can show information we don't
-+	 * want people to see, but if something had traced
-+	 * something, we probably want to know about it.
-+	 */
-+
-+	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
-+	if (!iter)
-+		return -ENOMEM;
-+
-+	iter->pg = ftrace_pages_start;
-+	iter->flags = FTRACE_ITER_TOUCHED;
-+	iter->ops = &global_ops;
-+
-+	return 0;
-+}
-+
- /**
-  * ftrace_regex_open - initialize function tracer filter files
-  * @ops: The ftrace_ops that hold the hash filters
-@@ -6137,6 +6168,13 @@ static const struct file_operations ftrace_enabled_fops = {
- 	.release = seq_release_private,
- };
- 
-+static const struct file_operations ftrace_touched_fops = {
-+	.open = ftrace_touched_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = seq_release_private,
-+};
-+
- static const struct file_operations ftrace_filter_fops = {
- 	.open = ftrace_filter_open,
- 	.read = seq_read,
-@@ -6601,6 +6639,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
- 	trace_create_file("enabled_functions", TRACE_MODE_READ,
- 			d_tracer, NULL, &ftrace_enabled_fops);
- 
-+	trace_create_file("touched_functions", TRACE_MODE_READ,
-+			d_tracer, NULL, &ftrace_touched_fops);
-+
- 	ftrace_create_filter_files(&global_ops, d_tracer);
- 
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
--- 
-2.39.0
+Hernan
 
