@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F53679D3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8D4679CF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbjAXPS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S234755AbjAXPIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbjAXPSo (ORCPT
+        with ESMTP id S229832AbjAXPIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:18:44 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7CBB98;
-        Tue, 24 Jan 2023 07:18:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674573523; x=1706109523;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=//VSMjNdevkRsXA1LhVyGUuUXQy2F2dme5uYujX+xQ8=;
-  b=COYI/bj3Lfj3b10EyZZNnGmJETzkqFiz8i4D9vK3eEQIyLtp2DUi+/Xk
-   6I4TKqh3Rv1rjrqYhCeJ/ijl80QIz9JZngRgImwBsZ7ncn4EzHnus8I++
-   EkrI+Xz99mu8heTNjHvyE4NGNRAwkEgYf3BEmfCeHR7pMlUKfHfWf/wIa
-   D/pRc5Wd9QkIKUr1ktM1qvI8AeDNKKvA/EBhwSdA0KMxqFYSN8kQXejMF
-   Z1PPqNPg3cE6py2izqtApPB1f+jDgjS0dy1IS91Ktb9RrmVk774HdjvnA
-   AIAqx92rS2wG5V3WzZKW9MwqQNZOHYQDJvEMnSQ1WygxR0jp/fXagoiHG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328404091"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="328404091"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 07:18:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804639402"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="804639402"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2023 07:18:40 -0800
-Date:   Tue, 24 Jan 2023 23:08:09 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] fpga: bridge: return errors in the show() method of
- the "state" attribute
-Message-ID: <Y8/0WRFLTh5p/BfN@yilunxu-OptiPlex-7050>
-References: <20230124113050.117645-1-marpagan@redhat.com>
+        Tue, 24 Jan 2023 10:08:35 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BBC2ED4E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:08:33 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m15so11674475wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:08:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IpD93/8saSG6FVl0mrJA18o+SgZIDhyy6bHZSPa5ZVc=;
+        b=ywrKQyy0bnPygWmgskVktLWTsk0nGFr9JL24yTYTjBfxOfOGMM1oqYqwqQNUjhy7hx
+         9mOOQLl6uVy45xAg2DZJsnZerovFXi8dr1ECqtVZ8704hvKFzipMrxJHEA2HGgFY0gBE
+         a2DHIi6oipZ+37umeiA3xie74yPLiJRaqu+ScVmPMRCyGcao4I8/rcxaCGzU4E0skQfs
+         07U/0ppGeh+z07ehD2R40KuFP1C94NkUCm2lXy0JFPKG2CKFt9yUhnF4sU2y6rVzwzdk
+         pVkzKUqhYKlzafk1bpx90WuSlksrz2l7yPxVeC/4K1NnvVv494wOyuxmh8X7i/oUr9uM
+         RnSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IpD93/8saSG6FVl0mrJA18o+SgZIDhyy6bHZSPa5ZVc=;
+        b=vsfp8ga8MnDuEMPQxgzj8/YjhTs3creT5paoSma/irimlVdxZcpyFwsbwmU583C9fL
+         pi2H+MR/Q+7LZpnnB4sJyKZpkem5EO2y8XgOkFryuxLknQedWon5T+sgFyQYFrC7PKdn
+         4YHSLIo1+eVFiYkRFNxAM9LIyMiuQR5mYyZ2+TJnL13Mi7Udy71VPGtM8IZyZTpv7wbM
+         nUxkdxRFwW1s5K1Ah1oyOhZSP/1PlmTOfY1fp5JpTacoD83hPkfxvLd8qZcr6EmLPNRW
+         9deDBpyi4Q+2NR6K7Tx+kR0TX9eJwxModw30pF7w0NvJfn+BJJu2+c9h0U+eIqsx7z1/
+         be4Q==
+X-Gm-Message-State: AFqh2koYi/hEXZKHIuHCtB27xTEXDKvAcbwc3QwKdQwU+hIPGkseODMO
+        TU2JJiekqOidhd3hNf00meEj+Q==
+X-Google-Smtp-Source: AMrXdXuR9Rz59Cyw6wMqS/D+Ij0Tq/psvx455YdozuOm1SlY4s9AJQfWEJNBvL1Gg5GRPaH+L7RJDQ==
+X-Received: by 2002:a7b:c5cb:0:b0:3da:fac4:7da3 with SMTP id n11-20020a7bc5cb000000b003dafac47da3mr28143582wmk.36.1674572912292;
+        Tue, 24 Jan 2023 07:08:32 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1c7912000000b003db00747fdesm13625469wme.15.2023.01.24.07.08.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 07:08:31 -0800 (PST)
+Message-ID: <0b2737b2-ae24-2c2d-f258-5c374d8f04f5@linaro.org>
+Date:   Tue, 24 Jan 2023 16:08:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124113050.117645-1-marpagan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V1 3/8] dt-bindings: pinctrl: qcom: Document IPQ9574
+ pinctrl driver
+Content-Language: en-US
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+ <20230124141541.8290-4-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124141541.8290-4-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-24 at 12:30:50 +0100, Marco Pagani wrote:
-> This patch changes the show() method of the "state" sysfs attribute to
-> return an error if the bridge's enable_show() op returns an error code.
-> In this way, the userspace can distinguish between when the bridge is
-> actually "enabled" (i.e., allowing signals to pass) or "disabled"
-> (i.e., gating signals), or when there is an error (e.g., the state of
-> the bridge cannot be determined).
-
-Maybe we remove the example for "error" here. This patch is just to
-propagate the errors from low level drivers.
-
+On 24/01/2023 15:15, devi priya wrote:
+> Document the pinctrl driver for IPQ9574
 > 
-> Currently, enable_show() returns an integer representing the bridge's
-> state (enabled or disabled) or an error code. However, this integer
-> value is interpreted in state_show() as a bool, resulting in the method
-> printing "enabled" (i.e., the bridge allows signals to pass), without
-> propagating the error, even when enable_show() returns an error code.
-> 
-> Another possibility could be to change the signature of enable_show()
-> to return a bool for symmetry with the enable_set() "setter" method.
-> However, this would prevent enable_show() from returning error codes
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
 
-Returning error codes is good to me.
+Did anything changed here?
 
-> and may break the HPS bridge driver (altera-hps2fpga.c +53).
-> 
-> Thanks
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/fpga-bridge.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
-> index 727704431f61..5cd40acab5bf 100644
-> --- a/drivers/fpga/fpga-bridge.c
-> +++ b/drivers/fpga/fpga-bridge.c
-> @@ -293,12 +293,15 @@ static ssize_t state_show(struct device *dev,
->  			  struct device_attribute *attr, char *buf)
->  {
->  	struct fpga_bridge *bridge = to_fpga_bridge(dev);
-> -	int enable = 1;
-> +	int state = 1;
->  
-> -	if (bridge->br_ops && bridge->br_ops->enable_show)
-> -		enable = bridge->br_ops->enable_show(bridge);
-> +	if (bridge->br_ops && bridge->br_ops->enable_show) {
-> +		state = bridge->br_ops->enable_show(bridge);
-> +		if (state < 0)
-> +			return state;
-> +	}
->  
-> -	return sprintf(buf, "%s\n", enable ? "enabled" : "disabled");
-> +	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
+b4 diff fails on this patch, there is no detailed changelog.
 
-The code looks good to me. You may remove RFC prefix in next version.
+Subject looks not fixed - why "driver" appeared there? Bindings do not
+document driver.
 
-Thanks,
-Yilun
+Best regards,
+Krzysztof
 
->  }
->  
->  static DEVICE_ATTR_RO(name);
-> -- 
-> 2.39.1
-> 
