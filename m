@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EA76795DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6B96795F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbjAXK6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S233700AbjAXLCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjAXK62 (ORCPT
+        with ESMTP id S233657AbjAXLCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:58:28 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93977DA5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:58:27 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id b81so7404697vkf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:58:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3AN0CZj1or5oyCoIIviJcOK3a+NvicCbaz4Rv9urqNc=;
-        b=vRhWh+Fgiqu9tk/Q+CB5dp1yislUK717FuGM/E4mxRr8C3/E3466AGjMQtKI1JFN2F
-         dimH1VrYKI1rHnbxvw/Om6ye5e44IRCvRmcv5j11uqLL9mbe1Tk5u1VCUA5+85NfNTO4
-         o8gq65eOigTJbcUzIXu8T0r9GrbLO9xB0piha75W0YAcouWqWLM+dZ/Fdyi3XxfIMmoK
-         m4RNx81MXoCwGvQi4aKSYdslTjQy2HC3Gv3Hm6gVR83ps+9sC1dmtaaj7yMFBHGMRPvf
-         +O+c4h3oJGUUjOCmR6dLLUDogfT5FHQl3PCdqn6ZLBWjp9Or2bDeYQlp5CU/9giOaWYn
-         nstg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3AN0CZj1or5oyCoIIviJcOK3a+NvicCbaz4Rv9urqNc=;
-        b=wzVh5iGVajdqMisqnEzsXVjWFJbRCI2I1kzyktk/HqvDt1FLC554nTlS9H7uPmVfdj
-         U6r8C0LhAnyyyfMZMhbLssgz075YqL7KQfwz5FVwWzNnBCyA72zGpeWeilyltKtRUbz8
-         c6UXTo/cO4lSkMzFF5AUHSFmSp2gPpM2aWMmIdZEYZxNo7qECuF1oDVV4kv4N1vTI7pe
-         WqWBO19DMV8e1vmigQhltjyR8AQ/tB62xHsR8xAm8Wamk1ycCNOAU2dVBnLbvW8oPl2+
-         /rf9nGPMmIQkS8SPjHJGCceA8hpw9dLAsn79XlfPCs6/MkubWQao2EuQ/U4vJDtaDxDJ
-         Ur8w==
-X-Gm-Message-State: AFqh2koXKhLyjMBJZ7UoHDwNp950xMLALqAuU3ld6cVq/SYqeB48RDut
-        1tuH/9JUKxmU7V2vLwa5k9VAJ3bXDeqvXLU6/uLoYw==
-X-Google-Smtp-Source: AMrXdXtNASeAksMLwvaG7RnZsQaQpwgnqfOR9+W+mZyQmfARh+TUKh5vgCVrtPK90D8OaknMuiu+o7bR+9w4kIs+bag=
-X-Received: by 2002:a1f:5dc1:0:b0:3e1:9fdf:7740 with SMTP id
- r184-20020a1f5dc1000000b003e19fdf7740mr3558952vkb.20.1674557906633; Tue, 24
- Jan 2023 02:58:26 -0800 (PST)
+        Tue, 24 Jan 2023 06:02:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B021E394;
+        Tue, 24 Jan 2023 03:02:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DFAD0219D4;
+        Tue, 24 Jan 2023 11:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674558119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qIPJ4BajorMcKBe9rM/oMiSejSUgyU9LsAd5Im2601Y=;
+        b=FGGJ6r+LfUZwKs12imYsOsTvCtHr1dK5SRTnB90Urs0AhVwA0sCMIVSo6Ua6Z2KRtpEnmz
+        TnBb0ets/fOq2VLPfvHvNm9yBRezNpeJPnxrvaCqqCpIEneHW9R8MrW1aSajIHZOEi+n7u
+        D/YAlp1ixlViSjRwyIfqf0XOPN6OJ9E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674558119;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qIPJ4BajorMcKBe9rM/oMiSejSUgyU9LsAd5Im2601Y=;
+        b=go7yQVD8PcQWxFnVVPJZmZehh/PwKtzb2vxbSKcVcnFVbz40SebNeyBFyj+xmdV+M/mB3e
+        F36+7lj5eNbu3uBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D4EF13487;
+        Tue, 24 Jan 2023 11:01:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6I9mHae6z2MVCgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 24 Jan 2023 11:01:59 +0000
+Message-ID: <bea284c3-fe7c-f55a-449d-07f47a364c1c@suse.cz>
+Date:   Tue, 24 Jan 2023 12:00:07 +0100
 MIME-Version: 1.0
-References: <20230123094907.292995722@linuxfoundation.org>
-In-Reply-To: <20230123094907.292995722@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 Jan 2023 16:28:15 +0530
-Message-ID: <CA+G9fYto2Z1UogmgUSWR0cbQjicQL2qi6S+CD=yK=HwBcefWNw@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/51] 5.4.230-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 1/1] docs/mm: Physical Memory: add structure,
+ introduction and nodes description
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Michal Hocko <mhocko@suse.com>
+References: <20230115184212.996298-1-rppt@kernel.org>
+ <20230115184212.996298-2-rppt@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230115184212.996298-2-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,166 +82,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 at 15:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.230 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.230-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 1/15/23 19:42, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Add structure, introduction and Nodes section to Physical Memory
+> chapter.
+> 
+> As the new documentation references core-api/dma-api and mm/page_reclaim,
+> add page labels to those documents.
+> 
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+A small bug to fix below?
 
-## Build
-* kernel: 5.4.230-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: c4ab8d7671d5c73e2b9882577257409b6364ba7a
-* git describe: v5.4.228-675-gc4ab8d7671d5
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-28-675-gc4ab8d7671d5
+<snip>
 
-## Test Regressions (compared to v5.4.228-623-g11f7238df0b4)
+> +
+> +Along with the node structures, kernel maintains an array of ``nodemask_t``
+> +bitmasks called ``node_states``. Each bitmask in this array represents a set of
+> +nodes with particular properties as defined by ``enum node_states``:
+> +
+> +``N_POSSIBLE``
+> +  The node could become online at some point.
+> +``N_ONLINE``
+> +  The node is online.
+> +``N_NORMAL_MEMORY``
+> +  The node has regular memory.
+> +``N_HIGH_MEMORY``
+> +  The node has regular or high memory. When ``CONFIG_HIGHMEM`` is disabled
+> +  aliased to ``N_NORMAL_MEMORY``.
 
-## Metric Regressions (compared to v5.4.228-623-g11f7238df0b4)
+Noted.
 
-## Test Fixes (compared to v5.4.228-623-g11f7238df0b4)
+> +``N_MEMORY``
+> +  The node has memory(regular, high, movable)
+> +``N_CPU``
+> +  The node has one or more CPUs
+> +
+> +For each node that has a property described above, the bit corresponding to the
+> +node ID in the ``node_states[<property>]`` bitmask is set.
+> +
+> +For example, for node 2 with normal memory and CPUs, bit 2 will be set in ::
+> +
+> +  node_states[N_POSSIBLE]
+> +  node_states[N_ONLINE]
+> +  node_states[N_NORMAL_MEMORY]
+> +  node_states[N_MEMORY]
+> +  node_states[N_CPU]
 
-## Metric Fixes (compared to v5.4.228-623-g11f7238df0b4)
+Should it be set also in node_states[N_HIGH_MEMORY]?
 
-## Test result summary
-total: 131200, pass: 103770, fail: 3090, skip: 23968, xfail: 372
 
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 150 total, 149 passed, 1 failed
-* arm64: 48 total, 44 passed, 4 failed
-* i386: 28 total, 22 passed, 6 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 16 total, 13 passed, 3 failed
-* s390: 8 total, 8 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 41 total, 39 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
