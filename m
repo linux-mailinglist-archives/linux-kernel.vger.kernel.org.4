@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7FF678D27
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7137678D2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbjAXBOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S232617AbjAXBO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbjAXBOE (ORCPT
+        with ESMTP id S232569AbjAXBO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:14:04 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29678728E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:14:04 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id i17so6842005ila.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:14:04 -0800 (PST)
+        Mon, 23 Jan 2023 20:14:58 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E73D728E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:14:56 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id p24so13225706plw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:14:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CCYNt7URGQ7oBqyQbd15UA8FF1tOX4zB7NKqLZYoh5A=;
-        b=E2Nhqn0AphtGOlrnMlqIO1XTLWnQ7WRtNvzoix1QfdqN9k5oRhXWRE1Cm3waPhsYyJ
-         DqhhHSL7w+GSMIgoha11/5DyfGkXAyHJpcSH4VtXOJu+lnIbNygUyfdHRkqUWw3OxT1O
-         8vB/N0GlGP0u8Avm3q4EfdOYEVACxKvCMQC6I=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=70xdsOEHAveqye/Jur5if/nOX8gXKvDXgJeMv3ZrfA4=;
+        b=mkjxM6wwi/KTaBjYdQqu7iDPLKbJWQMh+nAD6L9YOIM7lqJ8aPLDFLzuOjPX8nMzAK
+         lbYsoX14WtWmR2c//JOwqiMxoy8FzGzKtWRkXw43o9AYW8L4GCkx2LoXGrjN4IsEmRcW
+         8E4+f8UcQGLrP6ZyjXvR2Di+hm/hm8+SWQVvU/pBtautyucKzVkpA6ZNmFQiq/E35hZy
+         NPM1dRWrJY3DFfjcvWWZ0S1JpvCON5ArMcqvkYJW2uABw9IDa2YT4lkMOo4EhUvCOBrD
+         V1pNyXiMsiNXVYO8q44g815MMYIU/Cz77Kh2i6hAmEehUv575E3rDImHYgCVEnpHo4Fc
+         GbcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CCYNt7URGQ7oBqyQbd15UA8FF1tOX4zB7NKqLZYoh5A=;
-        b=yxgGXaP7SkMCbm8NlxpYnx7d4c3dNhVcGLep+rSfL4ryoTJk67Gab1URyvwx2AHOpB
-         iAvo0GC2FpWkDl/Jkw/iCD0EZ+8fUKyw75AnDxlx653rUSKt/Rf5VxSm5jNl6rKIhQ+Q
-         NHqKArK0p4aFTWsjbWxKn+xwJriq1tX2QLojqKlvx5XwljwCBQekp7TYWS+qre0heuwF
-         JCak8QvObErF2bPMIzR2UU4iHyQbHKGmD0heedVUrWcbQsdJXqfZhePrlBjD8oOF+zgs
-         U2O54rQC/VNElZCBMWr5ujh14rkWQTqzjU8clRsP02aqIxn+9Eoya0fymSBmnrYXFgjz
-         0+ng==
-X-Gm-Message-State: AFqh2kqQJ0K4jAd42VucD794HGsAi8vfE5ofiMpoCZtoceRPG8BMBYNT
-        IvvvtPY70r5hOw4n2lLLPOSsuw==
-X-Google-Smtp-Source: AMrXdXtg98qKzdHR3i1QLOOQbNk98aeenCp4sK3eBWGTI5KRfYQw404brU68awG65sVmE4XWhrahyg==
-X-Received: by 2002:a05:6e02:ed1:b0:30d:c502:a9de with SMTP id i17-20020a056e020ed100b0030dc502a9demr3957277ilk.2.1674522843415;
-        Mon, 23 Jan 2023 17:14:03 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id e32-20020a026d60000000b003a174bd44eesm236174jaf.81.2023.01.23.17.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 17:14:02 -0800 (PST)
-Message-ID: <d94fe79e-e7f2-a4e1-131a-715426e5d21e@linuxfoundation.org>
-Date:   Mon, 23 Jan 2023 18:14:01 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=70xdsOEHAveqye/Jur5if/nOX8gXKvDXgJeMv3ZrfA4=;
+        b=oGMQolnBym6O8GPDlbLzfZycuTZ29nVKukYfj3PJYOSJwhLuIfrhcx6wCIfIl9aAnC
+         26zMeVSGI0GxohvUVNY1lnNcx/aSlOXNt/HCmqkmh8MbAmaz/tcKNfeaWuKyY95w4Bdu
+         igJWk+bkqjGmZ/xa+9lY0MqH1d+l4B6IHPh8K/trQQdXbDosiM2pzkBlb8aCwF7kQZd9
+         AkBUL85L/Ehg+cK35Ag5oC5NFssC70epr/JFgNMcHxyVyJFlYGXVJ5QfelENPpEVvEol
+         fSISpiBDt9xPeK8WK2HG/PINpgSrThkD+3LeaAofuyufO5puhLkCJyxfY2XOUy7GBvy3
+         JOQw==
+X-Gm-Message-State: AO0yUKWHVwm3LwvAvgoFc2iQGLC3ZDknyEvMOePQTUhBRqixSbmxjjso
+        a/zihuI3bQIW0mNtJvoK/ek8iQ==
+X-Google-Smtp-Source: AK7set/x3Ypl61MzTS/rqvKmF2ePi9547FHE+Ei0q/V919hGCzgGRyzY1k/iXxGxOOrwrbEBTFI2CQ==
+X-Received: by 2002:a17:902:9894:b0:189:b910:c6d2 with SMTP id s20-20020a170902989400b00189b910c6d2mr3688plp.1.1674522895863;
+        Mon, 23 Jan 2023 17:14:55 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id ij18-20020a170902ab5200b001947982eb8fsm346525plb.60.2023.01.23.17.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 17:14:55 -0800 (PST)
+Date:   Tue, 24 Jan 2023 01:14:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kim Phillips <kim.phillips@amd.com>
+Cc:     x86@kernel.org, Borislav Petkov <bp@alien8.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/8] x86/cpu, kvm: Move open-coded cpuid leaf
+ 0x80000021 EAX bit propagation code
+Message-ID: <Y88xDAhW+hiMeWSU@google.com>
+References: <20230123225700.2224063-1-kim.phillips@amd.com>
+ <20230123225700.2224063-3-kim.phillips@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.4 00/51] 5.4.230-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230123094907.292995722@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230123094907.292995722@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123225700.2224063-3-kim.phillips@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,29 +89,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 02:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.230 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.230-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Nit, shortlog for this should be
 
-Compiled and booted on my test system. No dmesg regressions.
+  KVM: x86:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+since this touches only KVM code.
 
-thanks,
--- Shuah
+On Mon, Jan 23, 2023, Kim Phillips wrote:
+> Move code from __do_cpuid_func() to kvm_set_cpu_caps() in preparation
+> for adding the features in their native leaf.
+
+Huh, this wasn't why I was expecting, but this is better than what I had in mind.
+Moving everything all at once wouldn't work well because of the kernel dependencies.
+
+> Also drop the bit description comments as it will be more self-
+> describing once the individual features are added.
+> 
+> Whilst there, switch to using the more efficient cpu_feature_enabled()
+> instead of static_cpu_has().
+
+One more nit/request.  Can you add a blurb about the synthetic features?  That
+part is easy to miss and will be confusing after the fact.  E.g.
+
+ Note, LFENCE_RDTSC and "NULL selector clears base" are is currently
+ synthetic, Linux-defined feature flags as Linux tracking of the features
+ predates AMD's definition.  Keep the manual propagation of the flags from
+ their synthetic counterparts until the kernel fully converts to AMD's
+ definition, otherwise KVM would  stop synthesizing the flags as intended.
+ 
+> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+> ---
+>  arch/x86/kvm/cpuid.c | 30 +++++++++++-------------------
+>  1 file changed, 11 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 596061c1610e..3930452bf06e 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -741,6 +741,16 @@ void kvm_set_cpu_caps(void)
+>  		0 /* SME */ | F(SEV) | 0 /* VM_PAGE_FLUSH */ | F(SEV_ES) |
+>  		F(SME_COHERENT));
+>  
+> +	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
+> +		BIT(0) /* NO_NESTED_DATA_BP */ | 0 /* SmmPgCfgLock */ |
+
+Uber nit, to make this a bit closer to pure code movement, this should include
+BIT(2) as well.  Mainly because BIT(6) is also kept even though it too may be
+synthesized by KVM.
+
+> +		BIT(6) /* NULL_SEL_CLR_BASE */ | 0 /* PrefetchCtlMsr */
+> +	);
+> +	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
+> +		kvm_cpu_caps[CPUID_8000_0021_EAX] |= BIT(2) /* LFENCE Always serializing */;
+> +	if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
+> +		kvm_cpu_caps[CPUID_8000_0021_EAX] |= BIT(6) /* NULL_SEL_CLR_BASE */;
+> +	kvm_cpu_caps[CPUID_8000_0021_EAX] |= BIT(9) /* NO_SMM_CTL_MSR */;
+> +
+>  	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,
+>  		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |
+>  		F(ACE2) | F(ACE2_EN) | F(PHE) | F(PHE_EN) |
