@@ -2,144 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9002679668
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E85267965F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbjAXLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S233874AbjAXLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbjAXLQL (ORCPT
+        with ESMTP id S233560AbjAXLP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:16:11 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C39F44BE8;
-        Tue, 24 Jan 2023 03:16:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674558961; x=1706094961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Gjg+HfkBeuVjZTj6C5ci+xHOXoMLVICSukM3nzPdYbw=;
-  b=WG87Ux89cnCJSj58WFZiX49W2Om08gPH3q4qBUOI3XvYMp2mUclRuByT
-   A8EAUaH8ON8ifNCPecbDEwQfLdeD5Sy+L8H6oXyjfTBIz1yAM6dUDOeyv
-   AvlLae3frvfR9FvwTKA/QG57AwnENDO0L4gSj6BsvEIwA03Eh4oT/905u
-   Fcfe69QdZxIU8G8IfadDQoqppky8vnlJIii9tIgx3l/V7qrnebSNFID8f
-   OdkapJT0HtqlvcIdzxDhFKcQ3YUwMqUtNzKq8Vq9PxbXpVKiI+4pqhhYh
-   5fJ+Brwtn0xNo2GD+GTlk04HyRUUIcaWfwNsOxd27TRHbOX8kCY1QfnlY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412502376"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="412502376"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:15:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="664035238"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="664035238"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2023 03:15:52 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKHHL-0006NM-0z;
-        Tue, 24 Jan 2023 11:15:51 +0000
-Date:   Tue, 24 Jan 2023 19:15:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
-Message-ID: <202301241830.KlT5Xcjy-lkp@intel.com>
-References: <20230124084323.1363825-2-usama.anjum@collabora.com>
+        Tue, 24 Jan 2023 06:15:28 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24781284C;
+        Tue, 24 Jan 2023 03:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674558927; x=1706094927;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zg8/P28ps+IaW6WtOh6SZ9l5jzbkeb7NOV6ctj41Lo8=;
+  b=l0X3EccSe0Y1l7pDcDM5U1Y83me05n0Pits6sKR+W2RFHl6gU1KNhWm/
+   8CBXPTDwLESklPqZsmQ5COYRaOgR1CxMFG6zbnvYhzsdYciEXI+oHNJ+H
+   hsArB1ivDxV+HgxBAZSvo2+8eiCvu24+7kMa5s0DMWndWDaeitln55SnV
+   sfoa5tPxVzFIoajCjoniYPRC/HQgCyQsCfZGh5wrkhWnpMOO0fYSCFtgY
+   VG4bEtgnNrTeO77cRKvDTnhaljOLXKjMpoDxzYzQa0rL28FPekTpJDOkh
+   3+gCddnuTSFk2rCl/anDv6UhAYT+GV38Fd23VWXQYCMjHqo4icvSm/uiN
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,242,1669071600"; 
+   d="scan'208";a="28617118"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 24 Jan 2023 12:15:25 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 24 Jan 2023 12:15:25 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 24 Jan 2023 12:15:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674558925; x=1706094925;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zg8/P28ps+IaW6WtOh6SZ9l5jzbkeb7NOV6ctj41Lo8=;
+  b=OGe/gy68+eRmjcQPpwad8KlMcG7R1LsxyZOj9cfLmezWiGUUg0fEI9RU
+   pEfAdbqSAOoQvS/9MrZCa1ws33E+i42B6Rse2/n4/wUutnoo3Q1hPke5v
+   ghB/g9sPoxtZaeuE/Rv2MAv7QvO1gHJPR0zQLxyU/ErlY4al2Sc7A/tct
+   qoAxUUBil3RSa8rvnfGPAj7sMkqSy4ZnNlusySFcyIG2YJbtzGP1m/SpV
+   nCdbMQ9L5D3U5mye6BRcBvjd+oT+FaKgIhL68X7Y+TXwih2ycBikTcmEb
+   HZkdZPAI/djBy51Ah2zpwY8gcrIY7g93YInb1GBBA1N+Jog4tYd1Uo9Jx
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,242,1669071600"; 
+   d="scan'208";a="28617117"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 24 Jan 2023 12:15:25 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C3AFF280056;
+        Tue, 24 Jan 2023 12:15:24 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liu Ying <victor.liu@nxp.com>
+Cc:     Marek Vasut <marex@denx.de>, s.hauer@pengutronix.de,
+        robh+dt@kernel.org, linux-imx@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 2/2] drm: lcdif: Add i.MX93 LCDIF support
+Date:   Tue, 24 Jan 2023 12:15:24 +0100
+Message-ID: <13189854.uLZWGnKmhe@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <7ac57bc28da40df054c81fd74f69207af66ad97b.camel@nxp.com>
+References: <20230123072358.1060670-1-victor.liu@nxp.com> <ace76615-533a-9295-8271-95262859d287@denx.de> <7ac57bc28da40df054c81fd74f69207af66ad97b.camel@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124084323.1363825-2-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Muhammad,
+Hi,
 
-Thank you for the patch! Yet something to improve:
+Am Dienstag, 24. Januar 2023, 08:59:39 CET schrieb Liu Ying:
+> On Mon, 2023-01-23 at 16:57 +0100, Marek Vasut wrote:
+> > On 1/23/23 08:23, Liu Ying wrote:
+> > > The LCDIF embedded in i.MX93 SoC is essentially the same to those
+> > > in i.MX8mp SoC.  However, i.MX93 LCDIF may connect with MIPI DSI
+> > > controller through LCDIF cross line pattern(controlled by mediamix
+> > > blk-ctrl) or connect with LVDS display bridge(LDB) directly or a
+> > > parallel display(also through mediamix blk-ctrl), so add multiple
+> > > encoders(with DRM_MODE_ENCODER_NONE encoder type) support in the
+> > > LCDIF DRM driver and find a bridge to attach the relevant encoder's
+> > > chain when needed.  While at it, derive lcdif_crtc_state structure
+> > > from drm_crtc_state structure to introduce bus_format and bus_flags
+> > > states so that the next downstream bridges may use consistent bus
+> > > format and bus flags.
+> > 
+> > Would it be possible to split this patch into preparatory clean up
+> > and
+> > i.MX93 addition ? It seems like the patch is doing two things
+> > according
+> > to the commit message.
+> 
+> IMHO, all the patch does is for i.MX93 addition, not for clean up.
+> Note that the single LCDIF embedded in i.MX93 SoC may connect with MIPI
+> DSI/LVDS/parallel related bridges to drive triple displays
+> _simultaneously_ in theory, while the three LCDIF instances embedded in
+> i.MX8mp SoC connect with MIPI DSI/LVDS/HDMI displays respectively(one
+> LCDIF maps to one display).  The multiple encoders addition and the new
+> checks for consistent bus format and bus flags are only for i.MX93
+> LCDIF, not for i.MX8mp LCDIF.  Also, I think the multiple encoders
+> addition and the new checks should be done together - if the new checks
+> come first, then the new checks do not make sense(no multiple displays
+> driven by LCDIF); 
 
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes linus/master v6.2-rc5 next-20230124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You are right on this one, but on the other hand there are lot of preparing 
+patches already. Even if it is useless by itself, having the bus format & flag 
+checks in a separate patch, it is easier to review, IMHO.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230124-164601
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20230124084323.1363825-2-usama.anjum%40collabora.com
-patch subject: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230124/202301241830.KlT5Xcjy-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/59e98aec663b7ca8fd5f3b3d2a0f17f777f425c4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230124-164601
-        git checkout 59e98aec663b7ca8fd5f3b3d2a0f17f777f425c4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+> if the new checks come later, then it would be a bug
+> to allow inconsistent bus format and bus flags across the next
+> downstream bridges when only adding multiple encoders support(also, I
+> don't know which encoder's bridge should determine the LCDIF output bus
+> format and bus flags, since the three encoders come together with the
+> three next bridges).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Agreed, this order is a no-go.
 
-All errors (new ones prefixed by >>):
+Best regards,
+Alexander
 
-   In file included from include/linux/hugetlb.h:14,
-                    from arch/powerpc/kernel/setup-common.c:37:
->> include/linux/userfaultfd_k.h:278:5: error: no previous prototype for 'userfaultfd_wp_async' [-Werror=missing-prototypes]
-     278 | int userfaultfd_wp_async(struct vm_area_struct *vma)
-         |     ^~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+> Regards,
+> Liu Ying
 
 
-vim +/userfaultfd_wp_async +278 include/linux/userfaultfd_k.h
 
-   277	
- > 278	int userfaultfd_wp_async(struct vm_area_struct *vma)
-   279	{
-   280		return false;
-   281	}
-   282	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
