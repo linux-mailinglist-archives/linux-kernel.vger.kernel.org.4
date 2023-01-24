@@ -2,171 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89914679884
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58772679889
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbjAXMtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S233374AbjAXMvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbjAXMsW (ORCPT
+        with ESMTP id S229832AbjAXMvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:48:22 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300C930D6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:47:43 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id l8so11351100wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bmxwKRwgMkvDoX/KnOxwn8Oad6lb6c+WQifHQxcxOEc=;
-        b=FYiBwKa35DWkzQ7j81Fy1fx9TUTExvKgXy2CCwctwSdzBVeheK+IttrEAC/ETe1EeK
-         W6pTqY6vdQIu5OeMoBi5ykV0bNXQEQcNlYLhEYl/c/hrjXANIeZJBSVq53+wCX20yCoX
-         yyBHuad2Xj6DD7X6AVd0P370eE5eOtgxau8Q+6ib8pXb8Ky3+mPDj63Ek5P6dieIhWy2
-         +rQ65PjSPosaZRvZRLx8jp6HXLm6WdvchQifiY0vM22iny8Ak4zyhJw3y8OsiJ9xXJ2+
-         PeFG3pWzrbd3Blz/YIqBS1GCtPU/bpGc6SYAS/5ZXC1L9Fhnzv89cxz59co5dW1obqnN
-         PiIQ==
+        Tue, 24 Jan 2023 07:51:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4866182
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:49:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674564515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mKlGGN/Cv/e/LCDkUt1uykWKamvG2Ui1ifnCT6XaOdM=;
+        b=jO1FbBraUjza6PFxu53p6dZgo6PdL4ggeAeYVH7RuPEuXV0cHB8Hmz8EnkV31aeBJqSxiI
+        TvAfsZouLo7KDwxtpX4kMcjRBjg86Kb5k1OhoQ3B/CBti+2YENmr3DdqM4cWHIJOlaRvHT
+        3nWOlwFLjmilenJ0cBTvDmX2hy4Vw2c=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-641-3cNk3hH2O5qtnyApOK1X-A-1; Tue, 24 Jan 2023 07:48:34 -0500
+X-MC-Unique: 3cNk3hH2O5qtnyApOK1X-A-1
+Received: by mail-ej1-f70.google.com with SMTP id gb18-20020a170907961200b008715e951f02so9817369ejc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:48:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bmxwKRwgMkvDoX/KnOxwn8Oad6lb6c+WQifHQxcxOEc=;
-        b=KmmVS+DhafhkpL1Yi95hwSQj2HiumhmFYe59xit5UVbpmq2trWVPtFm0ZIQgzravuq
-         FsIA+nIi1NP+KpGK9NxwZk0hr1mGGBnwOM8kvcnv/MaKohcXorCxgKeY94M/KHC9+DeX
-         XFbfyGV1DqAjBbb7VIMa0++rHoPd28Mm+//UUdUfbq1rU5XKONVrhUw7WbNfPXEHvlMT
-         sSwmQba9F9i94CzyW5P+3976yWtdLOpY1UCkGGFeIwLPSGtVlfOOMCJhgVdSyfYDTmyX
-         aZZYLcyt5mQgWFAHQ6fLLRhyjgncfqeHdJUNuKVhEAj2nvzh8OJ2IcuVKn4Hn5GrQflC
-         +3bw==
-X-Gm-Message-State: AFqh2koCGbZQgJhQPgI6wDEAEi6S47kBey6+A2FTmRsmhFWOWGtDTSxl
-        h48JooMpVP7xxJX7LbHnmtfaGg==
-X-Google-Smtp-Source: AMrXdXvAgpKt63Oz3NCXx6cY0Sb1j3ZgYXfQIwSjkUsBwo/uBUEf/kEPiUkYZk/vC91kl4DwXQ+Dog==
-X-Received: by 2002:a05:600c:6001:b0:3da:f80a:5e85 with SMTP id az1-20020a05600c600100b003daf80a5e85mr27274855wmb.26.1674564460550;
-        Tue, 24 Jan 2023 04:47:40 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id a5-20020a5d5705000000b002bdbde1d3absm1766840wrv.78.2023.01.24.04.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 04:47:39 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v5 12/12] arm64: dts: qcom: sm8550-mtp: Add PCIe PHYs and controllers nodes
-Date:   Tue, 24 Jan 2023 14:47:14 +0200
-Message-Id: <20230124124714.3087948-13-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230124124714.3087948-1-abel.vesa@linaro.org>
-References: <20230124124714.3087948-1-abel.vesa@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mKlGGN/Cv/e/LCDkUt1uykWKamvG2Ui1ifnCT6XaOdM=;
+        b=QAYpvUy7LJhdttlX9i1+/CWRKi6/sfFRchbSbMQBC8qP8tWdx7jxgWkQN+NZ37Pbtd
+         bzUmW2dXthYUfD7mmxk/TQoDbx/cn6G1ii9omqcd5kF9sgM9sriuBdEaJlc4KdA2DqKL
+         b1dpk0ad5dOP3eyYA9JRxshrFqOcY1wxp09bAkJsxIaJ3synQFFEfh2L6Maz1oaWCdsU
+         bWX6cUP3B8r0uImBoYgj/QFxTrSKVQJDUMzk9k/CBMAUQ5RcLbhX6vhHb+Ady6fvh5ll
+         9VZ6+oyL1smc6fvTF6Cr5KCsM8DqNacrZ4Z/3AoqBP7wyGuMQsErhj8zTayEsDA8+nRU
+         c0AQ==
+X-Gm-Message-State: AFqh2kq2BgSri0Iyrh8MCXZMashPMnsProWwNCrTCfjWSP7LZVgW8eGr
+        PCYFVmh8ugJ0F4pBs3Asp9Z5ol3+2TpyP4J/FO90OBMQpFStlduCBtMD/RDtisFFkoZEdcxvkHw
+        L+Wx3NNjO/zEPiFyPvzOYhRUh
+X-Received: by 2002:a17:906:4557:b0:84d:3a95:cdf5 with SMTP id s23-20020a170906455700b0084d3a95cdf5mr27820475ejq.10.1674564513148;
+        Tue, 24 Jan 2023 04:48:33 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuwf/QaQ7ssTfZKYy6xP8WjtnjSROX4nzzKhPAhI8xZEqFVaTmzVbtai61Rp493mGogj1b/Iw==
+X-Received: by 2002:a17:906:4557:b0:84d:3a95:cdf5 with SMTP id s23-20020a170906455700b0084d3a95cdf5mr27820466ejq.10.1674564512969;
+        Tue, 24 Jan 2023 04:48:32 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m23-20020a1709060d9700b007aef930360asm861276eji.59.2023.01.24.04.48.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 04:48:32 -0800 (PST)
+Message-ID: <73853dc1-e925-de93-aefa-aebc1a23ccc2@redhat.com>
+Date:   Tue, 24 Jan 2023 13:48:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] platform/x86: hp-wmi: Ignore Win-Lock key events
+Content-Language: en-US, nl
+To:     Rishit Bansal <rishitbansal0@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230123214150.62597-1-rishitbansal0@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230123214150.62597-1-rishitbansal0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable PCIe controllers and PHYs nodes on SM8550 MTP board.
+Hi,
 
-Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+On 1/23/23 22:41, Rishit Bansal wrote:
+> Follow up from https://lore.kernel.org/all/20230120221214.24426-1-rishitbansal0@gmail.com/
+> 
+> There is a "Win-Lock" key on HP Omen Laptops which supports
+> enabling and disabling the Windows key, which trigger commands 0x21a4
+> and 0x121a4 respectively. Currently the hp-wmi driver throws warnings
+> for this event. These can be ignored using KE_IGNORE as the
+> functionality is handled by the keyboard firmware itself.
+> 
+> Signed-off-by: Rishit Bansal <rishitbansal0@gmail.com>
 
-This patch does not have a v3, but since it is now part of the same
-patchset with the controller and the phy drivers patches, I had to
-bump the version to 4.
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-The v4 was here:
-https://lore.kernel.org/all/20230118230526.1499328-3-abel.vesa@linaro.org/
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-Changes since v4:
- * moved here the pinctrl properties and out of dtsi file
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-Changes since v2:
- * none
+Regards,
 
-Changes since v1:
- * ordered pcie related nodes alphabetically in MTP dts
- * dropped the pipe_mux, phy_pipe and ref clocks from the pcie nodes
- * dropped the child node from the phy nodes, like Johan suggested,
-   and updated to use the sc8280xp binding scheme
- * changed "pcie_1_nocsr_com_phy_reset" 2nd reset name of pcie1_phy
-   to "nocsr"
- * reordered all pcie nodes properties to look similar to the ones
-   from sc8280xp
+Hans
 
 
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 37 +++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index 81fcbdc6bdc4..31e039f10a1b 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -359,6 +359,43 @@ vreg_l3g_1p2: ldo3 {
- 	};
- };
- 
-+&pcie_1_phy_aux_clk {
-+	clock-frequency = <1000>;
-+};
-+
-+&pcie0 {
-+	wake-gpios = <&tlmm 96 GPIO_ACTIVE_HIGH>;
-+	perst-gpios = <&tlmm 94 GPIO_ACTIVE_LOW>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie0_default_state>;
-+
-+	status = "okay";
-+};
-+
-+&pcie0_phy {
-+	vdda-phy-supply = <&vreg_l1e_0p88>;
-+	vdda-pll-supply = <&vreg_l3e_1p2>;
-+	status = "okay";
-+};
-+
-+&pcie1 {
-+	wake-gpios = <&tlmm 99 GPIO_ACTIVE_HIGH>;
-+	perst-gpios = <&tlmm 97 GPIO_ACTIVE_LOW>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie1_default_state>;
-+
-+	status = "okay";
-+};
-+
-+&pcie1_phy {
-+	vdda-phy-supply = <&vreg_l3c_0p91>;
-+	vdda-pll-supply = <&vreg_l3e_1p2>;
-+	vdda-qref-supply = <&vreg_l1e_0p88>;
-+	status = "okay";
-+};
-+
- &pm8550_gpios {
- 	sdc2_card_det_n: sdc2-card-det-state {
- 		pins = "gpio12";
--- 
-2.34.1
+> ---
+>  drivers/platform/x86/hp/hp-wmi.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+> index 0a99058be813..009cf0bda756 100644
+> --- a/drivers/platform/x86/hp/hp-wmi.c
+> +++ b/drivers/platform/x86/hp/hp-wmi.c
+> @@ -216,6 +216,8 @@ static const struct key_entry hp_wmi_keymap[] = {
+>  	{ KE_KEY, 0x213b,  { KEY_INFO } },
+>  	{ KE_KEY, 0x2169,  { KEY_ROTATE_DISPLAY } },
+>  	{ KE_KEY, 0x216a,  { KEY_SETUP } },
+> +	{ KE_IGNORE, 0x21a4, }, /* Win Lock On */
+> +	{ KE_IGNORE, 0x121a4, }, /* Win Lock Off */
+>  	{ KE_KEY, 0x21a9,  { KEY_TOUCHPAD_OFF } },
+>  	{ KE_KEY, 0x121a9, { KEY_TOUCHPAD_ON } },
+>  	{ KE_KEY, 0x231b,  { KEY_HELP } },
 
