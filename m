@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7AB679C3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D49C679C3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbjAXOmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S234291AbjAXOmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjAXOma (ORCPT
+        with ESMTP id S233621AbjAXOm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:42:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFE64A209
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674571300;
+        Tue, 24 Jan 2023 09:42:28 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3FD4A239;
+        Tue, 24 Jan 2023 06:42:01 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id CF79238;
+        Tue, 24 Jan 2023 15:41:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1674571316;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=d37L5XoD9UmKyFiIbLoq3/jcaRqHcwYhpCXewMHEs3Q=;
-        b=KulrHf7lP+O2hXR7K50RbiDBBbH6nmEw8/fQpA3fZYqdOWRw6FaBsDjFOcUV3ud+3r6m7J
-        kf1sdXtPN2dnHFUTFuwYkONyYxJWdTfapjo2Puq6GSoS0VZElKy3T5UZpTJz0jsOnD8+2D
-        qcOMYn28U6cc4PFdhB38A8K56fRq4s0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-137-jr89MHhgPKaL45ENIVsbsg-1; Tue, 24 Jan 2023 09:41:37 -0500
-X-MC-Unique: jr89MHhgPKaL45ENIVsbsg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC22D858F09;
-        Tue, 24 Jan 2023 14:41:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D4ED2026D2B;
-        Tue, 24 Jan 2023 14:41:34 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <fc18c4c9-09f2-0ca1-8525-5ce671db36c5@redhat.com>
-References: <fc18c4c9-09f2-0ca1-8525-5ce671db36c5@redhat.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-4-dhowells@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v8 03/10] mm: Provide a helper to drop a pin/ref on a page
+        bh=9yw77V4shCHNv/4/RPjmgehtlFoZNBUhxM9+dg++5ks=;
+        b=fAmhEVGugApXBkM0Lo9pKHUI/2DzBsUePMcd2De47QXNppMsai2IBvsoDb08Y7+QoilFqC
+        8oEX8xIQQpKQTleidlzQGTAiqPm/jyqGT1pXiK59LMD2TwLAFhXvgUZJok2zsYkkI2446e
+        dNJVBE7ISfjc/dm64pe5AlCdDZ02QabQ6Az4zhllVcHMdy2YL3LDwkvrWCIVqn7gpCZy1p
+        P6x5cNOs5bU71r9LpLHUCbDZO9iAjSKnnMgMhdoj+jIvNz9+NLqNRD8Nl/60wnWYuHey4c
+        ZIDpr1LLfXiwvt9Q3t0IbVb2fNN72a3hD8GzwdN1Y4aGsOG5TLKFfjb8UrUHTQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <874545.1674571293.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 24 Jan 2023 14:41:33 +0000
-Message-ID: <874546.1674571293@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Tue, 24 Jan 2023 15:41:56 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] net: phy: C45-over-C22 access
+In-Reply-To: <Y87WR/T395hKmgKm@shell.armlinux.org.uk>
+References: <20230120224011.796097-1-michael@walle.cc>
+ <Y87L5r8uzINALLw4@lunn.ch> <Y87WR/T395hKmgKm@shell.armlinux.org.uk>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <dcea8c36e626dc31ee1ddd8c867eb999@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> wrote:
+>> The problem is in the middle.  get_phy_c45_devs_in_pkg() uses
+>> mdiobus_c45_read(). Does mdiobus_c45_read() mean perform a C45 bus
+>> transaction, or access the C45 address space? I would say it means
+>> perform a C45 bus transaction. It does not take a phydev, so we are
+>> below the concept of PHYs, and so C45 over C22 does not exist at this
+>> level.
+> 
+> C45-over-C22 is a PHY thing, it isn't generic. We shouldn't go poking
+> at the PHY C45-over-C22 registers unless we know for certain that the
+> C22 device we are accessing is a PHY, otherwise we could be writing
+> into e.g. a switch register or something else.
+> 
+> So, the mdiobus_* API should be the raw bus API. If we want C45 bus
+> cycles then mdiobus_c45_*() is the API that gives us that, vs C22 bus
+> cycles through the non-C45 API.
+> 
+> C45-over-C22 being a PHY thing is something that should be handled by
+> phylib, and currently is. The phylib accessors there will use C45 or
+> C45-over-C22 as appropriate.
 
-> > Provide a helper in the get_user_pages code to drop a pin or a ref on =
-a
-> > page based on being given FOLL_GET or FOLL_PIN in its flags argument o=
-r do
-> > nothing if neither is set.
-> =
+I think the crux is get_phy_device(). It is used for two different
+cases:
+  (1) to scan the mdio bus
+  (2) to add a c45 phy, i.e. in the DT/fwnode case
 
-> Does the FOLL_GET part still apply to this patch set?
+For (1) we must not use indirect access. And for (2) we know for
+a fact that it must be a PHY and thus we can (and have to) fall back
+to c45-over-c22.
 
-Yes.  Christoph insisted that the bio conversion patch be split up.  That
-means there's an interval where you can get FOLL_GET from that.  However,
-since Jason wants to hide FOLL_PUT, this is going to have to be removed an=
-d
-the switching done in the bio code for the bio case (until that reduces to
-just pinning) and the skbuff cleanup code (when that is eventually done - =
-that
-will have the possibility of skbuffs comprising a mix of ref'd, pinned and
-unpinned data, albeit in separate fragments; I've posted patches that
-illustrate this[1]).
+Btw. for the DT case, it seems we need yet another property
+to indicate broken MDIO busses.
 
-David
-
-https://lore.kernel.org/all/167391047703.2311931.8115712773222260073.stgit=
-@warthog.procyon.org.uk/ [1] Patches 33-34
-
+-michael
