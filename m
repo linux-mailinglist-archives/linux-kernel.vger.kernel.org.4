@@ -2,76 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AAA6794D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDD86794F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbjAXKMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S229838AbjAXKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXKMR (ORCPT
+        with ESMTP id S233559AbjAXKN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:12:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ABE6EAF;
-        Tue, 24 Jan 2023 02:12:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B421ECE19CE;
-        Tue, 24 Jan 2023 10:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393B9C433D2;
-        Tue, 24 Jan 2023 10:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674555132;
-        bh=Hikckpna3DVXXZPGZ4BuFVYPSnZbNR3v/om5urasXP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jvS8tFYynVdhY+yLg/Uo8uGL7xBxvivN7Dj+2pb5uR00svQO750DkL7jkIcs8kxEz
-         /qr1QDFUHdIIuaYYn0MsgtVe/07se6catfUuNh7FLGIMb2tR/viH5ROJRNF6vLRI3Y
-         mftyt3O+8jzURwwcJ+k4EizDX6UfnTBrg57Ym+V6lbxWYZEvvMDbxtTXTKp6LQ9Kac
-         HMhWxO3evQAAYoHX73patO6mAOVKmp5Oi94nlj4NDZcL9LJPqPJCPSy4H/vanOOL1q
-         pmV19yMGDJjwF8HID2HvxUyd0qIMLC99Q4IylZm9gZvl8vRUIMlWayW55xN4G1A+Jd
-         +eX5NfNWoxZNw==
-Date:   Tue, 24 Jan 2023 11:12:07 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH] fs: Use CHECK_DATA_CORRUPTION() when kernel bugs are
- detected
-Message-ID: <20230124101207.ofqr6qv2yla24jyd@wittgenstein>
-References: <20230116191425.458864-1-jannh@google.com>
+        Tue, 24 Jan 2023 05:13:27 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4253D09E;
+        Tue, 24 Jan 2023 02:13:25 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30OACdf1062044;
+        Tue, 24 Jan 2023 04:12:39 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674555159;
+        bh=gviSn9vb49cpzvtHbSo3QRdOijS+3xM9ZngoeJVs8kI=;
+        h=From:To:CC:Subject:Date;
+        b=XHy9sHQVFuVI/50lkjqrIOB2PTooqm1ouxm0BMDtL9onNCKMNq88bZnnYfcwNH6tu
+         6sWasbP4AioszP0Bhn5dMVHRImYTXAk948WGmfVrYx2+edOz/7e0eJDe/4shKlBWvp
+         2uhU7Zkq+NfGoyRw74a/ywEyl5/Yy+5dCHEMhFOw=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30OACd22038297
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 24 Jan 2023 04:12:39 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 24
+ Jan 2023 04:12:39 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 24 Jan 2023 04:12:39 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30OACc7f005965;
+        Tue, 24 Jan 2023 04:12:39 -0600
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [PATCH v2 0/4] dt-bindings: Introduce dual-link panels & panel-vendors
+Date:   Tue, 24 Jan 2023 15:42:34 +0530
+Message-ID: <20230124101238.4542-1-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230116191425.458864-1-jannh@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 08:14:25PM +0100, Jann Horn wrote:
-> Currently, filp_close() and generic_shutdown_super() use printk() to log
-> messages when bugs are detected. This is problematic because infrastructure
-> like syzkaller has no idea that this message indicates a bug.
-> In addition, some people explicitly want their kernels to BUG() when kernel
-> data corruption has been detected (CONFIG_BUG_ON_DATA_CORRUPTION).
-> And finally, when generic_shutdown_super() detects remaining inodes on a
-> system without CONFIG_BUG_ON_DATA_CORRUPTION, it would be nice if later
-> accesses to a busy inode would at least crash somewhat cleanly rather than
-> walking through freed memory.
-> 
-> To address all three, use CHECK_DATA_CORRUPTION() when kernel bugs are
-> detected.
-> 
-> Signed-off-by: Jann Horn <jannh@google.com>
-> ---
+Hi all,
 
-Looks good,
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Microtips Technology Solutions USA, and Lincoln Technology Solutions are
+2 display panel vendors, and the first 2 patches add their vendor
+prefixes.
+
+The third patch introduces a dt-binding for generic dual-link LVDS
+panels. These panels do not have any documented constraints, except for
+their timing characteristics. Further, these panels have 2 pixel-sinks.
+In a dual-link connection between an LVDS encoder and the panel, one
+sink accepts the odd set of LVDS pixels and the other, the even set.
+
+The fourth patch introduces driver support for the 'panel-dual-lvds'
+in the panel-lvds driver, by adding the compatible.
+
+A lot of this has been based from the Advantech,idk-2121wr dual-link
+panel[1] and Maxime's patches for generic LVDS panels[2] (which are
+single-link by default.) and the discussions that happened before they
+were finally merged.
+
+Thank you!
+
+[1]: https://patchwork.freedesktop.org/patch/357122/
+[2]: https://patchwork.freedesktop.org/patch/471228/
+
+Changes in V2:
+==============
+  - Rebased to latest linux-next.
+  - Made dt-binding syntax corrections in Patch 3/4, based on comments
+    by Krzysztof Kozlowski and Laurent Pinchart.
+
+V1: https://lore.kernel.org/all/20230103064615.5311-1-a-bhatia1@ti.com/
+
+Aradhya Bhatia (4):
+  dt-bindings: vendor-prefixes: Add microtips
+  dt-bindings: vendor-prefixes: Add lincolntech
+  dt-bindings: panel: Introduce dual-link LVDS panel
+  drm: panel-lvds: Introduce dual-link panels
+
+ .../display/panel/panel-dual-lvds.yaml        | 149 ++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ MAINTAINERS                                   |   1 +
+ drivers/gpu/drm/panel/panel-lvds.c            |   1 +
+ 4 files changed, 155 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+
+-- 
+2.39.0
+
