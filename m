@@ -2,190 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603AA679BA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574CA679BBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234856AbjAXOXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
+        id S234853AbjAXO0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbjAXOW5 (ORCPT
+        with ESMTP id S232818AbjAXO0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:22:57 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DCA975C;
-        Tue, 24 Jan 2023 06:22:54 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id bk15so39348229ejb.9;
-        Tue, 24 Jan 2023 06:22:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kPc3U4Ryl/mKkmIF4TQfdebgB3N7QRmFQxK1chu2YlA=;
-        b=2tmFWYrKzssuM4zOjzpJ0mYZwmNXPYjaD1JnTovhCIY3n6vdC7f6TS/DxXRlnJ6QAU
-         1FmBl/vsfVnIVTHnkDGA1JTFWCP7Xw4foCDkdB4YjakMVkmYJaZcakX8nZbavOmpgbSO
-         VFyhePz8enIMZL1TlFG7XQmHffv24gh93jVf7ioS/reMigtR53fqjCJc028pgIYddytv
-         YtEBzN+oOixqBBPBe5TXmmIbsMzTj/CmzzYKYXfCg1VXCxHYzK5reyrTdMT0HZ/VQZlP
-         DO39A+IV0HuanVP8qw7PjH/A+IaZ1UWVttJJPZDtJIBMhaoV31mM/8kDhOTCjf2lXMZQ
-         aBIQ==
-X-Gm-Message-State: AFqh2koC/Qq/Q30rWE/fpIbpComk58uWwbUShGwmhRuHjt0U0lcjS5wr
-        oDIXkmOJLpjw2b0+5u/1Y8ymVJq/KnF32ylDpcI+IYCpqlU=
-X-Google-Smtp-Source: AMrXdXu+rGhC8WBT9vbLib8ObZ1uG95VEsfdO04HPSRxNtifH6eat1pm5i4fopQPo622QseNL0mFWmhEmRSArGHIzfE=
-X-Received: by 2002:a17:906:4e9a:b0:84d:4dc6:1c08 with SMTP id
- v26-20020a1709064e9a00b0084d4dc61c08mr4678764eju.421.1674570173334; Tue, 24
- Jan 2023 06:22:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20230123163046.358879-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230123163046.358879-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Jan 2023 15:22:41 +0100
-Message-ID: <CAJZ5v0iK-ob4Mhh-Upq01gq6SPsYuAD22E-o0zwcoL1hLiP3JQ@mail.gmail.com>
-Subject: Re: [PATCH v3] thermal: int340x_thermal: Add production mode attribute
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 09:26:42 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AC85BA7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:26:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674570343; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ecxiYJRPOFguwpII6bMd2+EtQFxxfAdETLuW7M/8NM8r62s6v0iDevTkkRAJqAmSCo81rpYXjvLP7FbPbysfyTc3wjJ2ELVmZP4WdKi+i1XBTEd5QRXAPVVjGQ5SXhbk0dTf0ghlUeh/COZCqHbsL8zB+hTWb0X8EdF/h9O9Ku8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674570343; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=1tZx0l6tqdPaIaiDy9rt51u3oY4w9+nvUzDdw1F9RCs=; 
+        b=aqkJZqnD8AIk8gBjrIV3H+F7ZcJBC9cOT8M/18+Y3eA2OvicQwOFoolIaAyT6qLji4F1AOp4E9xrjhd6l8SKh8soE4WK8HGLnv+GH8Ui/0jyOtxDvSniGB/NSnvO/iwrDIpLhf/J2L3jkYoxk4iZqqOKe3yQ5nGsPEz95yDLm+U=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674570343;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=1tZx0l6tqdPaIaiDy9rt51u3oY4w9+nvUzDdw1F9RCs=;
+        b=kjEnIl/ARQuNXeFqxCNvrzZDEHuBxnqLonguYC+capWQs0sOVehQ/hurzm9rPxH2
+        /vTnRWzylPNyXkKi0j43IKPuNuSZURTSFIknXLo2QGPiLyrzkS6KsI72OTmSS+OPW20
+        lNc5HFTVX6pmxyZJ6QjVDNDTwAXapQOUg6uM+HSA=
+Received: from lchen-xiaoxin.linux.beauty (221.225.241.248 [221.225.241.248]) by mx.zohomail.com
+        with SMTPS id 1674570337034387.24509939991617; Tue, 24 Jan 2023 06:25:37 -0800 (PST)
+Date:   Tue, 24 Jan 2023 22:24:49 +0800
+Message-ID: <87pmb4qaby.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     <Conor.Dooley@microchip.com>
+Cc:     <lchen@ambarella.com>, <arnd@arndb.de>, <heiko@sntech.de>,
+        <lkundrak@v3.sk>, <robert.jarzmik@free.fr>, <sven@svenpeter.dev>,
+        <zhuyinbo@loongson.cn>, <briannorris@chromium.org>,
+        <hasegawa-hitomi@fujitsu.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 06/15] soc: add Ambarella driver
+In-Reply-To: <578e034a-d75f-3b50-76dd-8eb90a127258@microchip.com>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-7-lchen@ambarella.com>
+        <bc50c6c2-bdfb-0b6c-0f89-dc8cfe845202@microchip.com>
+        <87zga8gww0.wl-me@linux.beauty>
+        <578e034a-d75f-3b50-76dd-8eb90a127258@microchip.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 5:31 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> It is possible that the system manufacturer locks down thermal tuning
-> beyond what is usually done on the given platform. In that case user
-> space calibration tools should not try to adjust the thermal
-> configuration of the system.
->
-> To allow user space to check if that is the case, add a new sysfs
-> attribute "production_mode" that will be present when the ACPI DCFG
-> method is present under the INT3400 device object in the ACPI Namespace.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v3:
-> Build warning reported by for missing static
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> v2
-> Addressed comments from Rafael:
-> - Updated commit excatly same as Rafael wrote
-> - Removed production_mode_support bool
-> - Use sysfs_emit
-> - Update documentation
->
->  .../driver-api/thermal/intel_dptf.rst         |  3 ++
->  .../intel/int340x_thermal/int3400_thermal.c   | 48 +++++++++++++++++++
->  2 files changed, 51 insertions(+)
->
-> diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-> index 372bdb4d04c6..f5c193cccbda 100644
-> --- a/Documentation/driver-api/thermal/intel_dptf.rst
-> +++ b/Documentation/driver-api/thermal/intel_dptf.rst
-> @@ -84,6 +84,9 @@ DPTF ACPI Drivers interface
->         https:/github.com/intel/thermal_daemon for decoding
->         thermal table.
->
-> +``production_mode`` (RO)
-> +       When different from zero, manufacturer locked thermal configuration
-> +       from further changes.
->
->  ACPI Thermal Relationship table interface
->  ------------------------------------------
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index db8a6f63657d..23ea21238bbd 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -60,6 +60,7 @@ struct int3400_thermal_priv {
->         int odvp_count;
->         int *odvp;
->         u32 os_uuid_mask;
-> +       int production_mode;
->         struct odvp_attr *odvp_attrs;
->  };
->
-> @@ -315,6 +316,44 @@ static int int3400_thermal_get_uuids(struct int3400_thermal_priv *priv)
->         return result;
->  }
->
-> +static ssize_t production_mode_show(struct device *dev, struct device_attribute *attr,
-> +                                    char *buf)
-> +{
-> +       struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
-> +
-> +       return sysfs_emit(buf, "%d\n", priv->production_mode);
-> +}
-> +
-> +static DEVICE_ATTR_RO(production_mode);
-> +
-> +static int production_mode_init(struct int3400_thermal_priv *priv)
-> +{
-> +       unsigned long long mode;
-> +       acpi_status status;
-> +       int ret;
-> +
-> +       priv->production_mode = -1;
-> +
-> +       status = acpi_evaluate_integer(priv->adev->handle, "DCFG", NULL, &mode);
-> +       /* If the method is not present, this is not an error */
-> +       if (ACPI_FAILURE(status))
-> +               return 0;
-> +
-> +       ret = sysfs_create_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
-> +       if (ret)
-> +               return ret;
-> +
-> +       priv->production_mode = mode;
-> +
-> +       return 0;
-> +}
-> +
-> +static void production_mode_exit(struct int3400_thermal_priv *priv)
-> +{
-> +       if (priv->production_mode >= 0)
-> +               sysfs_remove_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
 
-Isn't it OK to call sysfs_remove_file() if the given attribute is not there?
+Hi Conor.Dooley,
 
-If so, the above check is unnecessary and the assignment to -1 above
-too (as this is the only place where the value is tested).
+On Tue, 24 Jan 2023 16:46:41 +0800,
+<Conor.Dooley@microchip.com> wrote:
+> 
+> Hey,
+> 
+> >>> +++ b/drivers/soc/ambarella/Makefile
+> >>> @@ -0,0 +1,3 @@
+> >>> +# SPDX-License-Identifier: GPL-2.0-only
+> >>> +
+> >>> +obj-$(CONFIG_ARCH_AMBARELLA) += soc.o
+> >>
+> >> The subdirectory is already gated by this symbol, so is there much point
+> >> gating it on the same one again?
+> > 
+> > Yeah, it lookgs kind of redundant now, but I will upstream other drivers after
+> > this series get merged, which are not gated by this symbol.
+> 
+> You could make the directory by obj-y, and therefore always included,
+> and have various drivers controlled by their own Kconfig symbols.
+> 
+> Or else, you could leave the directory controlled by ARCH_AMBARELLA
+> and make the above `obj-y += soc.o` instead, since it's always
+> going to be built if the directory is included.
 
-> +}
-> +
->  static ssize_t odvp_show(struct device *dev, struct device_attribute *attr,
->                          char *buf)
->  {
-> @@ -610,8 +649,15 @@ static int int3400_thermal_probe(struct platform_device *pdev)
->         if (result)
->                 goto free_sysfs;
->
-> +       result = production_mode_init(priv);
-> +       if (result)
-> +               goto free_notify;
-> +
->         return 0;
->
-> +free_notify:
-> +       acpi_remove_notify_handler(priv->adev->handle, ACPI_DEVICE_NOTIFY,
-> +                                  int3400_notify);
->  free_sysfs:
->         cleanup_odvp(priv);
->         if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
-> @@ -638,6 +684,8 @@ static int int3400_thermal_remove(struct platform_device *pdev)
->  {
->         struct int3400_thermal_priv *priv = platform_get_drvdata(pdev);
->
-> +       production_mode_exit(priv);
-> +
->         acpi_remove_notify_handler(
->                         priv->adev->handle, ACPI_DEVICE_NOTIFY,
->                         int3400_notify);
-> --
+Gotcha, I will fix it in v2. Thanks for your kindness!
+
+Regards,
+Li
