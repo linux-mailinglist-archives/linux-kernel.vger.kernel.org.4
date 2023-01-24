@@ -2,127 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E71679D20
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F41679D22
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234262AbjAXPPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 10:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S234306AbjAXPPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235039AbjAXPO4 (ORCPT
+        with ESMTP id S234552AbjAXPPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:14:56 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFE84708E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:14:53 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id y1so9713697wru.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 07:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fa3NonT7uFixEjw+mFXts/QRHz1QGTzg+aYFZ1DSamI=;
-        b=ZDwoRWXjszEA2Uri4ulJorf3U8qeYpMCzR9w95It/1gUBf49Qp2To8luIc8kDHdrxW
-         FO9g8eIkGybfAuaMkAa7qWlRjQKZia6gZzzuEMba/PBpQbZj1vsW7IiTtxk2BaCH6u2g
-         WuY8nWWaaQZesAhD1Hp/CkPGxt+c73uqhP8N9iH4sqYsfkhAcz+YH4CYpjPbr6j9NPtv
-         JxdnlmhmAEJupOZdHv/cSBJi772XxQ1gunch/yWVVhkzzd27ePiVcvcS1ch7I6bM+mbN
-         3Vp0oCwj6XDip/JpghvWcM6pCB5D5rCwK2bxnp08+BJutG4B+3YIVslD9+EB+fibY2+p
-         qZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fa3NonT7uFixEjw+mFXts/QRHz1QGTzg+aYFZ1DSamI=;
-        b=upQdR4lvPO0fKU9UhCbeQl715Tju5RMQg9qMmW3T/8YkFAfYaUbNOJOMoKMoIVHayZ
-         eL5pH7yg0qb+xkxZg7EeKm/GmeJJq0P+gLU+JcBiFrBTjahJQ964fO81QVw2y000kB0z
-         /LRtqr1U/tAtMGd+KMP3lihKPCGbk7ZbxOIPpoBVhyrCboBBzZLlhut2ulsj7HqQRDsA
-         stD1K/4F6OSq+79VpxKcXW/bfGFPx6YvOfIBz+kfUELxDBRWLIOVHlZNs85Yg1BrLs2R
-         Nkphj/vXQVTO3e5S9Om0ubQk369sj8Gr4O0wN88YbDr7tPneBhA650akkodQN1i9nJBa
-         v9Hg==
-X-Gm-Message-State: AFqh2kr7hIKEnKtGB/AYhK2Ar2YFGZYaBZF5RXJ68Dmb1IZ7r5+vMF9Z
-        ghy/3xzU9XOVWmxbNGN4VfRdog==
-X-Google-Smtp-Source: AMrXdXvK51H0IbshntMwpUlZI+AFdA28RuhJbW5H0nwtSX5T9NKgvLN4T82oPMNUoBjZnUPRsi2oJA==
-X-Received: by 2002:adf:e883:0:b0:2be:4624:dd81 with SMTP id d3-20020adfe883000000b002be4624dd81mr16218138wrm.58.1674573292454;
-        Tue, 24 Jan 2023 07:14:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s9-20020adfdb09000000b002238ea5750csm2644979wri.72.2023.01.24.07.14.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 07:14:52 -0800 (PST)
-Message-ID: <adb66162-6ff3-184e-fe92-109bdef8ed1c@linaro.org>
-Date:   Tue, 24 Jan 2023 16:14:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V1 7/8] arm64: dts: qcom: Add ipq9574 SoC and AL02 board
- support
-Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
- <20230124141541.8290-8-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124141541.8290-8-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 24 Jan 2023 10:15:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E494B490;
+        Tue, 24 Jan 2023 07:15:08 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ODuoHa024626;
+        Tue, 24 Jan 2023 15:14:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=SKlWUkhibLKyGL2pkbPla6v3326+q/H8/sBojv/+5ec=;
+ b=qKLK+RwifLxJBHY/PTZ5oV2BqPVrQA4clt+I3W9/lEmw2bvdMvdHydJJvosbvkAz99yJ
+ RWN31OK0NflVapyl75GBJxHeHfgl8xTSv/kphoGHSj7uw4kfXTLWn5tKHni623tno5uk
+ EzjZ989yKX/kTBxgPadvNzY0cjC2OXzlvp+pIeUYge4vIxzH3yiCHaBNvVPd7fRqCnQX
+ FO95hgDXUxkD+J0qKQmeF6BmdVsWqzKRbh21hxhzCiiBkQ5kAjcwWl02c+0wfNeZyPuM
+ ewae316OMMll08OSs2k4Ex0pIMjmEJYSPwFuj+CQuoFxRqbzcDJFpWq4lGJmzUlmhXu/ 8Q== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac958p65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 15:14:56 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OCHP0L007908;
+        Tue, 24 Jan 2023 15:14:55 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3n87p6tsvc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 15:14:55 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OFEsHF64553392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 15:14:54 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 421DA58056;
+        Tue, 24 Jan 2023 15:14:54 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5A3F5803F;
+        Tue, 24 Jan 2023 15:14:52 +0000 (GMT)
+Received: from sig-9-65-196-40.ibm.com (unknown [9.65.196.40])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 15:14:52 +0000 (GMT)
+Message-ID: <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
+ pseries secvar
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ruscur@russell.cc, mpe@ellerman.id.au, gjoyce@linux.ibm.com,
+        sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        joel@jms.id.au
+Date:   Tue, 24 Jan 2023 10:14:52 -0500
+In-Reply-To: <20230120074306.1326298-25-ajd@linux.ibm.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-25-ajd@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iMPfIwpgug5KNB5appsq8SwGgbZCR_4G
+X-Proofpoint-ORIG-GUID: iMPfIwpgug5KNB5appsq8SwGgbZCR_4G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240136
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 15:15, devi priya wrote:
-> From: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+On Fri, 2023-01-20 at 18:43 +1100, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
 > 
-> Add initial device tree support for Qualcomm IPQ9574 SoC
-> and AL02 board
+> The secvar object format is only in the device tree under powernv.
+> We now have an API call to retrieve it in a generic way, so we should
+> use that instead of having to handle the DT here.
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
+> The object format is expected to be the same, so there shouldn't be any
+> functional differences between objects retrieved from powernv and
+> pseries.
+> 
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> 
 > ---
->  arch/arm64/boot/dts/qcom/Makefile            |   1 +
->  arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  78 +++++
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 285 +++++++++++++++++++
->  3 files changed, 364 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 3e79496292e7..872c62028a0b 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
+> v3: New patch
+> 
+> v4: Pass format buffer size (stefanb, npiggin)
+> ---
+>  .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
+> index dee51606d5f4..d4ce91bf3fec 100644
+> --- a/security/integrity/platform_certs/load_powerpc.c
+> +++ b/security/integrity/platform_certs/load_powerpc.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/cred.h>
+>  #include <linux/err.h>
+>  #include <linux/slab.h>
+> -#include <linux/of.h>
+>  #include <asm/secure_boot.h>
+>  #include <asm/secvar.h>
+>  #include "keyring_handler.h"
+> @@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
+>  	void *db = NULL, *dbx = NULL;
+>  	u64 dbsize = 0, dbxsize = 0;
+>  	int rc = 0;
+> -	struct device_node *node;
+> +	ssize_t len;
+> +	char buf[32];
+>  
+>  	if (!secvar_ops)
+>  		return -ENODEV;
+>  
+> -	/* The following only applies for the edk2-compat backend. */
+> -	node = of_find_compatible_node(NULL, NULL, "ibm,edk2-compat-v1");
+> -	if (!node)
+> +	len = secvar_ops->format(buf, 32);
 
-This does not match current tree, so I could not apply it for tests. I
-think you based it on a bit older version.
+"powerpc/secvar: Handle format string in the consumer"  defines
+opal_secvar_format() for the object format "ibm,secvar-backend".  Here
+shouldn't it being returning the format for "ibm,edk2-compat-v1"?
 
-Best regards,
-Krzysztof
+Mimi
+
+> +	if (len <= 0)
+>  		return -ENODEV;
+>  
+> +	// Check for known secure boot implementations from OPAL or PLPKS
+> +	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf)) {
+> +		pr_err("Unsupported secvar implementation \"%s\", not loading certs\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+>  	/*
+>  	 * Get db, and dbx. They might not exist, so it isn't an error if we
+>  	 * can't get them.
+> @@ -103,8 +108,6 @@ static int __init load_powerpc_certs(void)
+>  		kfree(dbx);
+>  	}
+>  
+> -	of_node_put(node);
+> -
+>  	return rc;
+>  }
+>  late_initcall(load_powerpc_certs);
+
 
