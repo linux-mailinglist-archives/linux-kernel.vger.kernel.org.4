@@ -2,132 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00539679C08
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 605C2679C28
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbjAXOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
+        id S234563AbjAXOlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbjAXOf5 (ORCPT
+        with ESMTP id S234099AbjAXOlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:35:57 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5BC5B84
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:35:55 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P1TpJ1bNkz9xqdF
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:27:52 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.206.133.88])
-        by APP2 (Coremail) with SMTP id GxC2BwD3xl2n7M9jRCHBAA--.13278S2;
-        Tue, 24 Jan 2023 15:35:30 +0100 (CET)
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-To:     paulmck@kernel.org
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Subject: [PATCH] tools/memory-model Flag suspicious use of srcu cookies
-Date:   Tue, 24 Jan 2023 15:39:51 +0100
-Message-Id: <20230124143951.23372-1-jonas.oberhauser@huaweicloud.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: GxC2BwD3xl2n7M9jRCHBAA--.13278S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZry3CrWDAFykWrWrury3urg_yoW5Aw1kpr
-        W8ta4rKw4DtFyfuwn2g347uFyrXas7XrZFyrn3Ja48Z3W5ZrnrCryxKas0qw43tF17ta18
-        ZryYqFsFy3WkJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF0
-        eHDUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 09:41:06 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D91E305E0;
+        Tue, 24 Jan 2023 06:41:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674571265; x=1706107265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LW+kv6TOdMtz0nh46n0wIo2Rr8WZf++Ct0D8mbH2UMs=;
+  b=WOvjXCpkPnTxP4ZfhZnDTj4SLVpBsI6kMC1M5A31ZUxfHs7TyQyv2rOG
+   OZ/iMdacQkyUvGJzXoi8+29pUXeElyjD2J9j7SfR/QfRxmGdWDtm/cAr/
+   g5d1A6lQ0y74uehZS0I9p3LlgpEdz15lRWgEkjZ763DPNJemVduicFxn1
+   zKFV52K2HpxHQ30ZLyF9iDPGJRFRmA23+KOUFhiy+twQFkLLTipZdKVB3
+   gXYa2UzX1pDSiUxzTzgw4ZPWTMjJea/G6JemjiFKZA/zDKZaEbCO+KreZ
+   kCs/T8IXMxuNDvoubvdCXLBcUcnwVhdEY0CD/lSCovcjLkquwiKPKuRx8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="324983419"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="324983419"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 06:41:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="725494134"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="725494134"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2023 06:41:02 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKKTt-0006XM-2h;
+        Tue, 24 Jan 2023 14:41:01 +0000
+Date:   Tue, 24 Jan 2023 22:40:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manuel Traut <manuel.traut@mt.com>, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 1/3 v6] input: pwm-beeper: add feature to set volume level
+Message-ID: <202301242226.E9z7kZKT-lkp@intel.com>
+References: <Y8+9L7UincSjIaD9@mt.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8+9L7UincSjIaD9@mt.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The herd model of LKMM deviates from actual implementations in the
-range of cookies that might be returned by srcu_lock() and similar
-functions.  As a consequence, code that relies on srcu_lock()
-returning specific values might pass on the herd model but fail in
-the real world.
+Hi Manuel,
 
-This patch flags any code that looks at the value of a cookie
-without passing it on to an srcu_unlock().  This indicates that the
-cookie value might be being used in ways that can lead herd to
-produce incorrect results, as in the following (contrived) case:
+Thank you for the patch! Perhaps something to improve:
 
-P0(struct srcu_struct *ss)
-{
-	int r = srcu_read_lock(ss);
-	if (r==0)
-		srcu_read_unlock(ss, r);
-}
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on dtor-input/for-linus linus/master v6.2-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Without this patch, the code passes herd7 without any warnings.
+url:    https://github.com/intel-lab-lkp/linux/commits/Manuel-Traut/input-pwm-beeper-add-feature-to-set-volume-level/20230124-191549
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/Y8%2B9L7UincSjIaD9%40mt.com
+patch subject: [PATCH 1/3 v6] input: pwm-beeper: add feature to set volume level
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301242226.E9z7kZKT-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/3468440a8e674e649dcf11e23f3fb3d229555e7c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Manuel-Traut/input-pwm-beeper-add-feature-to-set-volume-level/20230124-191549
+        git checkout 3468440a8e674e649dcf11e23f3fb3d229555e7c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/misc/
 
-With this patch, this code is flagged with illegal-srcu-cookie-ctrl,
-indicating that a cookie is used to compute a control condition.
-Such scenarios potentially lead to other branches of the code that
-are possible in real usage not being evaluated by herd7.  In this
-example, this affects the branch where r!=0, which would lead to
-an unmatched read side critical section and thus to hangs of
-synchronize_srcu() calls.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Besides use of cookies in control conditions, the patch also flags
-use in address computation and any time a cookie is inspected but
-not later passed to srcu_read_unlock().
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
----
- tools/memory-model/linux-kernel.bell | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+   drivers/input/misc/pwm-beeper.c:73:62: error: macro "DEVICE_ATTR_RW" passed 4 arguments, but takes just 1
+      73 | static DEVICE_ATTR_RW(volume, 0644, volume_show, volume_store);
+         |                                                              ^
+   In file included from include/linux/input.h:19,
+                    from drivers/input/misc/pwm-beeper.c:11:
+   include/linux/device.h:131: note: macro "DEVICE_ATTR_RW" defined here
+     131 | #define DEVICE_ATTR_RW(_name) \
+         | 
+   drivers/input/misc/pwm-beeper.c:73:8: error: type defaults to 'int' in declaration of 'DEVICE_ATTR_RW' [-Werror=implicit-int]
+      73 | static DEVICE_ATTR_RW(volume, 0644, volume_show, volume_store);
+         |        ^~~~~~~~~~~~~~
+   drivers/input/misc/pwm-beeper.c:77:10: error: 'dev_attr_volume' undeclared here (not in a function); did you mean 'dev_attr_max_volume'?
+      77 |         &dev_attr_volume.attr,
+         |          ^~~~~~~~~~~~~~~
+         |          dev_attr_max_volume
+>> drivers/input/misc/pwm-beeper.c:73:8: warning: 'DEVICE_ATTR_RW' defined but not used [-Wunused-variable]
+      73 | static DEVICE_ATTR_RW(volume, 0644, volume_show, volume_store);
+         |        ^~~~~~~~~~~~~~
+   drivers/input/misc/pwm-beeper.c:54:16: warning: 'volume_store' defined but not used [-Wunused-function]
+      54 | static ssize_t volume_store(struct device *dev,
+         |                ^~~~~~~~~~~~
+   drivers/input/misc/pwm-beeper.c:38:16: warning: 'volume_show' defined but not used [-Wunused-function]
+      38 | static ssize_t volume_show(struct device *dev,
+         |                ^~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-index 6e702cda15e1..db5993acc241 100644
---- a/tools/memory-model/linux-kernel.bell
-+++ b/tools/memory-model/linux-kernel.bell
-@@ -58,7 +58,8 @@ flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-unlock
- 
- (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
- let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
--let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
-+let pass-cookie = carry-srcu-data ; data
-+let srcu-rscs = ([Srcu-lock] ; pass-cookie ; [Srcu-unlock]) & loc
- 
- (* Validate nesting *)
- flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-lock
-@@ -71,6 +72,15 @@ flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
- (* Validate SRCU dynamic match *)
- flag ~empty different-values(srcu-rscs) as bad-srcu-value-match
- 
-+(*
-+ * Check that srcu cookies are only used for passing to srcu_unlock()
-+ * Note: this check is only approximate
-+ *)
-+flag ~empty [Srcu-lock] ; pass-cookie ; rf ;
-+	[~ domain(pass-cookie ; [Srcu-unlock])] as suspicious-srcu-cookie-use
-+flag ~empty [Srcu-lock] ; carry-srcu-data ; ctrl as illegal-srcu-cookie-ctrl
-+flag ~empty [Srcu-lock] ; carry-srcu-data ; addr as illegal-srcu-cookie-addr
-+
- (* Compute marked and plain memory accesses *)
- let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
- 		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
+
+vim +/DEVICE_ATTR_RW +73 drivers/input/misc/pwm-beeper.c
+
+    72	
+  > 73	static DEVICE_ATTR_RW(volume, 0644, volume_show, volume_store);
+    74	static DEVICE_ATTR(max_volume, 0644, max_volume_show, NULL);
+    75	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
