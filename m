@@ -2,298 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D623167A39F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969FC67A3A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjAXUJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S229781AbjAXUMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjAXUJn (ORCPT
+        with ESMTP id S229625AbjAXUMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:09:43 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401B242DFD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:09:42 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id i188so17681552vsi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:09:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jLzej8DUoO0LIZzxboqdf6rkDIFYeOBsWPxN5RZAIeI=;
-        b=e2sbwnbmfoxwQ0Vfkg0AAK6M/9srLo7/tuUF5CQJJTnmZ4/SbudRwC6i/BbPHcDf0X
-         28HRBbYVd532r/Dnw3N3LhOvt6GZ/k14hd4fi0kqlobdUekDNp4DwaNznNG52RrFuixg
-         Xm49uMcCiAuLPor6huQ13ckwO7zFSF/xtn1GoJ8PGgtAVhaCfm2UK8qBZTbAjTtivIqv
-         /7LkdERMECmD7qnQxcnEBnV+RphSk7rwugjF6y82pS/9IVA+lKK87YQD7jEw1dcDHo94
-         WdCKZQn0w2IFcPCsisjVhVzeKa9Uv5QUE8erbIStQLEA424P+aHL2PBQ4TEfliPk5EmI
-         B85w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jLzej8DUoO0LIZzxboqdf6rkDIFYeOBsWPxN5RZAIeI=;
-        b=LG8pnO+QwLFm82VzMkop6KgqqOT+oKbs+hLDK99CO2qYyrpBXZykIPtglzgdJzPrWg
-         4aNS2YLP3P9A6FzTb0pf/ULKzGbC51HpIzFnJeIUeaCzuTMybZ5w2Dix6MrhkqtenoTt
-         PslGIgvJtl6JrwXpPNOTXPuWTXTyFaSX6eQDLw/r9+8QAhDfBdBpmm4HXlEsJVg2qHl3
-         kB3RFpgyCKDxCD7rIb2M/H54Z1rJ/8quOeKs3FlG+U+zBgfsunKPpbW0wW0remflPlH6
-         SzlaLgcPQmBaPnz6mnJFWyKY0jaD3yPDYtYKRUBnV7Ww95RMnjDI71Te2UBH3R+G99rp
-         v2Tw==
-X-Gm-Message-State: AFqh2kqCKATx1e6tzjQcBawzg02Nb/Wuni6iVWEaFIxpZBz0EHzNazS0
-        uSwcfL5QWhKWpiqLF6q2EoZqeE5IddmHfFT8Wnx5UlmDN3r/wpxO9A==
-X-Google-Smtp-Source: AMrXdXtWEdoZdiAyGSF3uLGkSxVDtvgOR4q2cMRwbWTyJnz6xMAIcL3eo0rLVxN4Z6p29UCiupiF4fQzoWRInMmjUig=
-X-Received: by 2002:a05:6102:3309:b0:3d4:a3a:3e9b with SMTP id
- v9-20020a056102330900b003d40a3a3e9bmr3577830vsc.39.1674590981132; Tue, 24 Jan
- 2023 12:09:41 -0800 (PST)
+        Tue, 24 Jan 2023 15:12:06 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73848A05;
+        Tue, 24 Jan 2023 12:12:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DMUIm2wImMDbwE2ZkJrsVdEcEsr/59V5BqQOVwdqNPxryF1wKayLDYz300fXOOx8mbth3E7vEKxBFz6mrBigx2eGpNNB4DJgabKWJG6n0sT8x2R4XwhBPmymLVOS3STC53SqhMZ8e5NR6cw7TSCHl7nBdQneI55Gw3xtUpenZFjvzKLGvOX5JDSoKp9pcgyH2zjbD11d18f/OkeQzJn5kbTe+/Vi1lIzL7QgE2cvBQb4/2k+V2k/1yB+zq3ilunGymfg7HuikALVUeKzBeIoorwKUT5VDT1EWzzT8uAYnYZHpqx8nbPjRq2/XYWsDS7/CrzAfZ4BRx2W2UJlEVH37w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wfSdJyyULtrOpfbSVhYDUgYUP+Kcr0i4zzjub7Vqyzg=;
+ b=W8s/IWVLQ1hvbEI62XxroxTqt88rYRP0tXxxeYjmbvfIprlDztw4+aWB4384Jqww2VT+6eibzNsnnLq4VfGF58v4d2ybmGL2So62TNCwkfKRG2UggV9axQUchS8HcxMOw0j3gNoAO3Qc3oyW+9fr+RGjYBEWLXO3i0pJ4DHR/O09/zom2763IU/obc3y2y/EoC0Uib+nHNqT/pR3J/+w3MOYU0suvT41fcKzXEfLNpboWNca5e0N4961lOWIABqSG0SCc2val/OmLLkT/z1hlGrlmnJDnnr9sISqBf8W6+bAQeqmGW6sCIuspnZKkg6Jgk4+huJAUR1sSAwrlkGWQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wfSdJyyULtrOpfbSVhYDUgYUP+Kcr0i4zzjub7Vqyzg=;
+ b=jCc/4Xi3cG4QC8+cTl98C0JhhPrXgsiOQ+vFDcUm8/oFr5jXi3ji/4NLcUe+52qT5O0bl6kWepfKanv6k5OTE35UIbcReoK3RqdzJ7u2PmflmMfE8aIUVUFNLWUGrhtpJJzxdl1EArKxIkCPP386KKW3pJ4+2HcXwsPADZCiqUoB/wgGDciI2esHZTmOfYSez7prE/qMq8rccA5fXVDsrd5rLw8d7o+eokxRdukW+rZZ6ffPJqmp3roIY3QUBD4SSYPgHGl/aojC8jCefyOQYGI40pW6UulFbxnlAkBHed5zZBEY6i0cMijI3p7KnrSXE0IuW/D1cdtprEM9JwTORA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB8444.namprd12.prod.outlook.com (2603:10b6:8:128::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 20:12:02 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 20:12:02 +0000
+Date:   Tue, 24 Jan 2023 16:12:00 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch
+Subject: Re: [RFC PATCH 00/19] mm: Introduce a cgroup to limit the amount of
+ locked and pinned memory
+Message-ID: <Y9A7kDjm3ZFAttRR@nvidia.com>
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+X-ClientProxiedBy: BL1PR13CA0026.namprd13.prod.outlook.com
+ (2603:10b6:208:256::31) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20230109234312.2870846-1-yabinc@google.com> <a7edcb0a-5f12-f6ab-8897-479fefe54c2f@arm.com>
- <CAJ9a7Vj=e6rSbD9ONKDY1vyuxms161f-vp0Y4mxkQgpm1oz6uA@mail.gmail.com>
- <3eae7596-2ad8-1574-22d1-696184a3fa30@arm.com> <CALJ9ZPMaAQu4Pug-m-h6KM40pOofhpE1EkddBKz37WyBQGzEEA@mail.gmail.com>
-In-Reply-To: <CALJ9ZPMaAQu4Pug-m-h6KM40pOofhpE1EkddBKz37WyBQGzEEA@mail.gmail.com>
-From:   Yabin Cui <yabinc@google.com>
-Date:   Tue, 24 Jan 2023 12:09:29 -0800
-Message-ID: <CALJ9ZPNa41rO3iG1WhWAF5fBTUGF1ULUG62_zMTA0EwzGnw=8w@mail.gmail.com>
-Subject: Re: [PATCH] coresight: tmc-etr: Don't enable ETR when it's not ready
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB8444:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ac5b171-42c8-4290-8ead-08dafe47416a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fH4lbLYzFM8njS9g+qWFlzjJRQlVCo5Ex+/uXG+OFKNeEgR7kCdB2s4sdD/7BwN3CrBShmKBLX1T/vx+8dhaJNVgQrG+hSQGea2sJsACXSIJOuXM8hG8EEkjH42j8Uk9iQKjrakRYxdiFNG022WLYG2dVCAnuKy2lSbQCE59VzeORXgk+AW2C+emM2Nm3JR0N+qkb4Hd1/b0OfYycXZICEfbOB9afsNhO5JMjCfnHIN8ypnawsWUv7PVmPDNQLbFCs875AbJdpTk0BKNCekVNxLEtEWijQETHfEOWzXITbUHWxrw0JjWDCTTgbMgIyZFbB6ZqQmkswADr3AaYK/+l5Wl8NVISA8EqzG6f4gKEVjYuoLi1pInbqexnrf44tIDrJKMgVS7cMpz/51+AdBZH1IVIkHXrsZL0fWE2CfybNzbMRyPtuw4RbIQ3L0WD4GOxpQvDQ8IzvIiS6GUdyzQgGnVzwLcqo/SR5ABLbSlP6BvNuYIXtBdxkjnAGy3LDiwxUmQ2dzTtQGQ6Hsm0fIrAQUXdcSZE73U17w4eb72fKuWxipYsQiF6iOpUporc6diQSW+QzVfN+Dq8msjzZn8PIY/xQKK6wq48LYuBOT6lFONOzM/ftj5IcKFc0vO3QZFBKvxPGoY9GfG0YJTuG0DWA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(366004)(39860400002)(136003)(396003)(451199018)(83380400001)(38100700002)(316002)(2616005)(66946007)(86362001)(66556008)(478600001)(6506007)(66476007)(6486002)(36756003)(37006003)(6636002)(41300700001)(2906002)(5660300002)(8676002)(26005)(186003)(6512007)(4326008)(6862004)(8936002)(66899018);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UBbpAhYJw5HFSmKuJaThlDeNMJ6oPhugiKHsvaOV8tB3dUCBLQNvEfBU9u6q?=
+ =?us-ascii?Q?YVmj6ukVBIp87EP8g0pYsbEH0X69zKHkYgz1gOvbGcCd5iyGFzT5zQjwLgEn?=
+ =?us-ascii?Q?ANJDF3KZKFTzu00ylgXqSlJASSvIBWushYa+dhqpI1fKnzSyC5t8vqGmfxeC?=
+ =?us-ascii?Q?iNj8xpSTd8uqsHvC99HK37jW9Q/EkmPq//WD183g90JL3JMcuCxE/ILLtahy?=
+ =?us-ascii?Q?U+jBkOed+g9Qbu7Ype6yULJdIK2MFey7ANKShMfm9nGtAT4wL/CII9sOD++A?=
+ =?us-ascii?Q?XFP9ZZV0mIq2AwgHtuOQolcrAfUrEvtB/1uZ7mLqlrip8ex+pWWZlrfSZSiY?=
+ =?us-ascii?Q?RZHP6ArB3X19+8+ls/mIZva6aizy2ITshCbqk3XgMNrj/n4R8uVdjAFG9696?=
+ =?us-ascii?Q?1eRcxMZhE0qW1nmRGXY/pnEqgf4KN2zLjhWrg3HIbV7fUzcuytOzQyK1BGvd?=
+ =?us-ascii?Q?5Xio4SCQ9qN+SA+kNYWd/hnBAA1MA/TAn72yXdCq8Q9vz02R9TOfa1WGW/L3?=
+ =?us-ascii?Q?yaShsdCSy1qb2GvfWyAZRJ/JB+8O+jSa/u+9XDmG3kpztDs77/k5y4kEgaxY?=
+ =?us-ascii?Q?HgHb40EzRtpgefy2k/uQQLVOknKZGvGmPB/PwSRVRRdub3q/3Yrb0yP++krU?=
+ =?us-ascii?Q?Z8q2S+1RuU+iDttEzBdH1TkpFuCN5XePQ70pmjRx6gu7AtQQ41Raa4JIYpfN?=
+ =?us-ascii?Q?gRkBh9zv/vDcZVza820AC3KKgEknyEsZScGW0ylLVN97hPtQupXE3lrm3enV?=
+ =?us-ascii?Q?5H72SyAnmYfzH0L/3nmc5Se8yvh0Bg7vZNmSSdkB/cpY2g2eT0mJLV8UCfT/?=
+ =?us-ascii?Q?eXPSGpEZpuN5emarbbnLqQvTUHrt1L9w7wn443hAp2tySie9Kz5qezx4Nu5U?=
+ =?us-ascii?Q?l/k28e7sPOyREP9ybRaevyttrZO1OvUCgovE9YcqTNY1dOgZXjWwdBgdNSxZ?=
+ =?us-ascii?Q?ExqpFb4m9ZK7r8/01SEAcZSLc6LhE8+l3wzYckqq3VEwkBl2qz/5vqcqxeho?=
+ =?us-ascii?Q?eh2L2tKEvkFeXxsDS/2FjTNuIE+CS8hRQW6eKx9NuNt8z805O9gptZfs1QEr?=
+ =?us-ascii?Q?xoFOGJ8u1oH0VhWAdp7TEUUdsAw460LLSXFqMOxmrE5LAGFc4o5Quxi21zEj?=
+ =?us-ascii?Q?D/ZhLxbJUkLqIlgjvfjQ3+aSByY5pwtFxgYhKkO3dFpL3VqiBlmdUUw7GEaG?=
+ =?us-ascii?Q?f7KwesIPD8zoQ0Gsoz7+uVCKgmFyHhjulVnB/6zK+u98H+Kr0UFk4Q69bMf7?=
+ =?us-ascii?Q?eZZF4DTdgfypODbCVoHzkb18tDrnoX2aqmpR0i+0EB0Fj5kaeHzunBOQlne+?=
+ =?us-ascii?Q?MAZAZGJYeFLIiRmZesfYWsucEYyxwAh519FUPxAecbQs2HDVmWX5xAgFEi9U?=
+ =?us-ascii?Q?+0ALW7WB/MojHoDeFoKHFDgj1XL/sFNyj/mNbNt578kOTlify/G4rXPTQh0/?=
+ =?us-ascii?Q?M43HUS/4qhw7tkVtrgrk94YU4mOxGqSC1qDByI+w3Uuk9UOEBvkIEztZLmED?=
+ =?us-ascii?Q?rLeeLLRGD0D6d+AyvYuOwVBSAl74ro1/e0B8goyQwzV486KYReNnKBkRSojI?=
+ =?us-ascii?Q?6ITKvKQuIcwGwCETl2vNMQTQBz3Cf+Hni6TDYTmb?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ac5b171-42c8-4290-8ead-08dafe47416a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 20:12:02.0919
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5WaHRsTIxHhYDAj2WHwcVLfJuDjjwu5T1AIz1JO43TXAT0GNoo5HxxuK/GmO09zT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8444
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping for review. And I still can't reproduce it, even if I reduced the
-timeout to 2us and tried different workloads. Any suggestions for how
-to reproduce it?
+On Tue, Jan 24, 2023 at 04:42:29PM +1100, Alistair Popple wrote:
+> Having large amounts of unmovable or unreclaimable memory in a system
+> can lead to system instability due to increasing the likelihood of
+> encountering out-of-memory conditions. Therefore it is desirable to
+> limit the amount of memory users can lock or pin.
+> 
+> From userspace such limits can be enforced by setting
+> RLIMIT_MEMLOCK. However there is no standard method that drivers and
+> other in-kernel users can use to check and enforce this limit.
+> 
+> This has lead to a large number of inconsistencies in how limits are
+> enforced. For example some drivers will use mm->locked_mm while others
+> will use mm->pinned_mm or user->locked_mm. It is therefore possible to
+> have up to three times RLIMIT_MEMLOCKED pinned.
+> 
+> Having pinned memory limited per-task also makes it easy for users to
+> exceed the limit. For example drivers that pin memory with
+> pin_user_pages() it tends to remain pinned after fork. To deal with
+> this and other issues this series introduces a cgroup for tracking and
+> limiting the number of pages pinned or locked by tasks in the group.
+> 
+> However the existing behaviour with regards to the rlimit needs to be
+> maintained. Therefore the lesser of the two limits is
+> enforced. Furthermore having CAP_IPC_LOCK usually bypasses the rlimit,
+> but this bypass is not allowed for the cgroup.
+> 
+> The first part of this series converts existing drivers which
+> open-code the use of locked_mm/pinned_mm over to a common interface
+> which manages the refcounts of the associated task/mm/user
+> structs. This ensures accounting of pages is consistent and makes it
+> easier to add charging of the cgroup.
+> 
+> The second part of the series adds the cgroup and converts core mm
+> code such as mlock over to charging the cgroup before finally
+> introducing some selftests.
+>
+> As I don't have access to systems with all the various devices I
+> haven't been able to test all driver changes. Any help there would be
+> appreciated.
 
-Thanks,
-Yabin
+I'm excited by this series, thanks for making it.
 
-On Tue, Jan 10, 2023 at 1:06 PM Yabin Cui <yabinc@google.com> wrote:
->
-> > Do you have a reproducer for this or some more info?
-> > For example is it a regression or has it always been there? And on which
-> > platform.
->
-> It happens on Pixel 6 and 7. We collect ETM data periodically from some
-> internal dogfood devices. The problem has happened several times on
-> dogfood devices. But I am still trying to reproduce it locally.
->
-> We use the scatter-gather mode of ETR, and allocate a 4M buffer. In userspace,
-> we use simpleperf in Android to collect system wide ETM data. What is special
-> is, simpleperf disables and reenables perf events every 100ms to flush ETM
-> data to perf aux buffer.
->
-> Pixel 6 and 7 have hardware monitoring AXI traffic. The hardware finds ETR is
-> trying to read from or write to a low invalid address (like 0x2E0000). The
-> problem always happens right after the "tmc_etr: timeout while waiting for TMC
-> to be Ready" message. And in almost all cases, I can find a "timeout while
-> waiting for completion of Manual Flush" message from the previous session.
->
-> One log history is below:
-> [11484.610008][    C0] coresight tmc_etr0: timeout while waiting for
-> completion of Manual Flush
-> [11484.610177][    C0] coresight tmc_etr0: timeout while waiting for
-> TMC to be Ready
-> [11484.615367][    C0] coresight tmc_etr0: timeout while waiting for
-> completion of Manual Flush
-> [11484.615534][    C0] coresight tmc_etr0: timeout while waiting for
-> TMC to be Ready
-> [12089.486044][    C0] coresight tmc_etr0: timeout while waiting for
-> TMC to be Ready
-> AXI error report reading from invalid address
->
-> Another log history is below:
-> [76709.382650][    C5] coresight tmc_etf1: timeout while waiting for
-> TMC to be Ready
-> [76709.382852][    C7] coresight tmc_etr0: timeout while waiting for
-> completion of Manual Flush
-> [76709.382995][    C7] coresight tmc_etr0: timeout while waiting for
-> TMC to be Ready
-> [76709.384510][    C7] coresight tmc_etr0: timeout while waiting for
-> completion of Manual Flush
-> [76709.384649][    C7] coresight tmc_etr0: timeout while waiting for
-> TMC to be Ready
-> [76709.384838][    C0] coresight tmc_etr0: timeout while waiting for
-> TMC to be Ready
-> AIX error report writing to invalid address
->
-> It seems if the previous manual flush doesn't finish gracefully, ETR may not be
-> ready for the next enable (even after 10min as in the first log). And if we
-> continue to enable ETR, an invalid AXI IO may happen.
->
-> Thanks,
-> Yabin
->
-> On Tue, Jan 10, 2023 at 10:04 AM Suzuki K Poulose
-> <suzuki.poulose@arm.com> wrote:
-> >
-> > On 10/01/2023 17:48, Mike Leach wrote:
-> > > Hi,
-> > >
-> > > On Tue, 10 Jan 2023 at 09:30, James Clark <james.clark@arm.com> wrote:
-> > >>
-> > >>
-> > >>
-> > >> On 09/01/2023 23:43, Yabin Cui wrote:
-> > >>> Otherwise, it may cause error in AXI bus and result in a kernel panic.
-> > >>
-> > >> Hi Yabin,
-> > >>
-> > >> Thanks for the fix. Do you have a reproducer for this or some more info?
-> > >> For example is it a regression or has it always been there? And on which
-> > >> platform.
-> > >>
-> > >> Thanks
-> > >> James
-> > >>
-> > >>>
-> > >>> Signed-off-by: Yabin Cui <yabinc@google.com>
-> > >>> ---
-> > >>>   .../hwtracing/coresight/coresight-tmc-core.c   |  4 +++-
-> > >>>   .../hwtracing/coresight/coresight-tmc-etr.c    | 18 +++++++++++++++---
-> > >>>   drivers/hwtracing/coresight/coresight-tmc.h    |  2 +-
-> > >>>   3 files changed, 19 insertions(+), 5 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
-> > >>> index 07abf28ad725..c106d142e632 100644
-> > >>> --- a/drivers/hwtracing/coresight/coresight-tmc-core.c
-> > >>> +++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
-> > >>> @@ -31,7 +31,7 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
-> > >>>   DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
-> > >>>   DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
-> > >>>
-> > >>> -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> > >>> +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> > >>>   {
-> > >>>        struct coresight_device *csdev = drvdata->csdev;
-> > >>>        struct csdev_access *csa = &csdev->access;
-> > >>> @@ -40,7 +40,9 @@ void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> > >>>        if (coresight_timeout(csa, TMC_STS, TMC_STS_TMCREADY_BIT, 1)) {
-> > >>>                dev_err(&csdev->dev,
-> > >>>                        "timeout while waiting for TMC to be Ready\n");
-> > >>> +             return -EBUSY;
-> > >>>        }
-> > >>> +     return 0;
-> > >>>   }
-> > >>>
-> > >>>   void tmc_flush_and_stop(struct tmc_drvdata *drvdata)
-> > >>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> > >>> index 867ad8bb9b0c..2da99dd41ed6 100644
-> > >>> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> > >>> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> > >>> @@ -983,15 +983,21 @@ static void tmc_sync_etr_buf(struct tmc_drvdata *drvdata)
-> > >>>        etr_buf->ops->sync(etr_buf, rrp, rwp);
-> > >>>   }
-> > >>>
-> > >>> -static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> > >>> +static int __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> > >>>   {
-> > >>>        u32 axictl, sts;
-> > >>>        struct etr_buf *etr_buf = drvdata->etr_buf;
-> > >>> +     int rc = 0;
-> > >>>
-> > >>>        CS_UNLOCK(drvdata->base);
-> > >>>
-> > >>>        /* Wait for TMCSReady bit to be set */
-> > >>> -     tmc_wait_for_tmcready(drvdata);
-> > >>> +     rc = tmc_wait_for_tmcready(drvdata);
-> > >>> +     if (rc) {
-> > >>> +             dev_err(&drvdata->csdev->dev, "not ready ETR isn't enabled\n");
-> > >>> +             CS_LOCK(drvdata->base);
-> > >>> +             return rc;
-> > >>> +     }
-> > >>>
-> > >>>        writel_relaxed(etr_buf->size / 4, drvdata->base + TMC_RSZ);
-> > >>>        writel_relaxed(TMC_MODE_CIRCULAR_BUFFER, drvdata->base + TMC_MODE);
-> > >>> @@ -1032,6 +1038,7 @@ static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> > >>>        tmc_enable_hw(drvdata);
-> > >>>
-> > >>>        CS_LOCK(drvdata->base);
-> > >>> +     return rc;
-> > >>>   }
-> > >>>
-> > >>>   static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
-> > >>> @@ -1060,7 +1067,12 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
-> > >>>        rc = coresight_claim_device(drvdata->csdev);
-> > >>>        if (!rc) {
-> > >>>                drvdata->etr_buf = etr_buf;
-> > >>> -             __tmc_etr_enable_hw(drvdata);
-> > >>> +             rc = __tmc_etr_enable_hw(drvdata);
-> > >>> +             if (rc) {
-> > >>> +                     drvdata->etr_buf = NULL;
-> > >>> +                     coresight_disclaim_device(drvdata->csdev);
-> > >>> +                     tmc_etr_disable_catu(drvdata);
-> > >>> +             }
-> > >>>        }
-> > >>>
-> > >>>        return rc;
-> > >>> diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-> > >>> index 66959557cf39..01c0382a29c0 100644
-> > >>> --- a/drivers/hwtracing/coresight/coresight-tmc.h
-> > >>> +++ b/drivers/hwtracing/coresight/coresight-tmc.h
-> > >>> @@ -255,7 +255,7 @@ struct tmc_sg_table {
-> > >>>   };
-> > >>>
-> > >>>   /* Generic functions */
-> > >>> -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
-> > >>> +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
-> > >>>   void tmc_flush_and_stop(struct tmc_drvdata *drvdata);
-> > >>>   void tmc_enable_hw(struct tmc_drvdata *drvdata);
-> > >>>   void tmc_disable_hw(struct tmc_drvdata *drvdata);
-> > >
-> > > There is no point in waiting for a timeout, and then carrying on even
-> > > when it is exceeded. As such this patch seems reasonable.
-> > > We should also apply the same principle to the ETF and ETB devices
-> > > which use the same tmc_wait_for_tmcready() function.
-> >
-> > +1
-> >
-> > I am fine with pushing this change, as it is doing the right thing.
-> >
-> > >
-> > > However - the concern is that this appears to be happening on starting
-> > > the ETR - there should be no outstanding AXI operations that cause the
-> > > system to not be ready - as we will either be using this the first
-> > > time after reset, or we should have successfully stopped and flushed
-> > > the ETR from the previous operation. This warrants further
-> > > investigation - should we be extending the timeout - which is already
-> > > at a rather generous 100uS, and do we also need to check the MemErr
-> > > bit in the status register?
-> >
-> > It would be good to dump the value of TMC_STATUS to see what is going
-> > on.
-> >
-> > >
-> > > As James says, we need details of when and how the problem occurs  -
-> > > as far as I know it has not been seen on any systems we currently use
-> > > (though could have been missed given the current code)
-> >
-> > +1
-> >
-> > Kind regards
-> > Suzuki
-> >
-> >
-> > >
-> > > Regards
-> > >
-> > > Mike
-> > >
-> > >
-> > > --
-> > > Mike Leach
-> > > Principal Engineer, ARM Ltd.
-> > > Manchester Design Centre. UK
-> >
+The pin accounting has been a long standing problem and cgroups will
+really help!
+
+Jason
