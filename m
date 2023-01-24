@@ -2,169 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5EC678CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8539678CA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjAXAKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        id S232027AbjAXALc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbjAXAKk (ORCPT
+        with ESMTP id S231898AbjAXALa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:10:40 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0784F2BF16
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:10:21 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id v10so16559614edi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:10:20 -0800 (PST)
+        Mon, 23 Jan 2023 19:11:30 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCC21204B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:11:20 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id r132so11904599oif.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:11:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h9InQuEAasegQPkXBmgOapwHP1eVXkQE74+WMtrPDbE=;
-        b=n0d5aadnK5xFzNiAbzjpBW8R1l0Un59NvTRG1eyLJUD+LelcC2fwacIAV96lEkWBng
-         Ps5AnB7P+ZA+bzI3isUuTldYxb01kM2SeJefXkRc5ssrGT4R9OXGYoxSKsbTS8D4pta7
-         wtvI4p+bqWII0vVZ7zavVgtRpraGMypz2tTS93WQ3zeuvNqAGMF7COloHZcH7q70R/a4
-         hIaeKldWuvTI9SnefBEOjGw7EbRJTDKTBUo1ZLQ46vY9UTLpnzBU/3kij/7qOMxmprZT
-         aOrYwPfkcyC/NzHQw9Jgw165COyiMcz+PvptiyEmRnqVxfkh7gHBeYLe8UaznEO3Wunm
-         mqEw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMGBITMz/lZXCdFVps8h/n7rt2b1zZj8hAlJn9lprRY=;
+        b=lUUPMeHekcwzu5xQppi84GAUJeT5ZVQiZA4fOCOTC01Tgysoh8T9a5HNjOylL5O8q+
+         4cM0yW1dA3OIT7AJOzGT9Y44wf3eslxaLFQ3WhPRKrRTK89ydRkXq4ywvnLfppRyUSTE
+         LgAMsOdS/tTEBKUnpnLvJ/SD/thpV5yKZSPSqxeewmTv0W49GIUtTQmLaqfCSRYZalqo
+         LneYb64SbHjXwDLN7e7unTgVEHg1yskwcY79z9/fBnrNVENr+QU8YO/uikCq4dyE2ptY
+         kZNrMnePJ1+AIww23aB3LQBe+cWijGXwkAjGLr0LraZ8U2YZ/s/1xVJI3tw4dgqN2E+O
+         OQZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h9InQuEAasegQPkXBmgOapwHP1eVXkQE74+WMtrPDbE=;
-        b=wPoojkWeMRQUfUesOejrflzktqRomF4coKuA7cZjgB8ydiqi2Is9W0QtTMXs0Chv9/
-         xIYsMo0A927pwU6s9zCVjWGQouEw8U+kH98++fx3lFKNA88mEL8KmZvQ1JfF03p+SeZi
-         HmKfJ1SqSw9c3/EEQNk//BPPHqCeaMnnP53e9CNPEog60Mq9HPRZzgjgQWHSAOKIVnAl
-         c0GIhLutsD2CqdigCdatGmxghBEP+gIiR0dsFaeULpnFlWMneezZSYdIHZy2qfkbDFY9
-         dK61+zMRwC8j2xAKoYdVEyGO8di9EbPQ3V56dqq6aX9dvWNE0UBPdO9dY20iRK8p15ir
-         JqSg==
-X-Gm-Message-State: AFqh2krsdHts1sBwZYCoMLJ4pWYzSjOwAyKqLl8f2sVafSmugPZ+hd9r
-        MzFwbzA743CDJ56aCwSaZ3TFnw==
-X-Google-Smtp-Source: AMrXdXtXulxVSbBQgMkYnJtdz0QccnWBdhLLidrfMwJJJJGe2vfdHo5UH5h1VYj1vWYqVX0iOXDijA==
-X-Received: by 2002:a05:6402:493:b0:46d:53d7:d21e with SMTP id k19-20020a056402049300b0046d53d7d21emr26582675edv.27.1674519019241;
-        Mon, 23 Jan 2023 16:10:19 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id d29-20020a50cd5d000000b0049e19136c22sm330354edj.95.2023.01.23.16.10.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 16:10:18 -0800 (PST)
-Message-ID: <47c83e8c-09f1-d1dd-ca79-574122638256@linaro.org>
-Date:   Tue, 24 Jan 2023 02:10:17 +0200
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CMGBITMz/lZXCdFVps8h/n7rt2b1zZj8hAlJn9lprRY=;
+        b=0Ye/vDGMfv+ZFfSComZNZGtedd2ItruyR0KXrsebOPHHRS6q3W8UlUK0gXMROx64fB
+         VJGNGL4uOoCcAmUaS6ZJ4Fn9Ynm9koYv7VXWmHwIYXnNTuHQh7xmeY98jMUo7Y3EcDh7
+         xcyojWEYmFGFwBuuLcnVVVsYtpJKMnzZY82KoMSbSWb6GVl6vyj6AmO/JV50uaprWHVa
+         Zv63/z68yUJ0dHBXSOs48VxtIlGbMJI6TuU5/tmPXhkQ/z1aD9GzYW4NJOR16AiwywzB
+         /gylvIXzAl9LOEbPZzzH50glU0qfYIOs4rZDq2EDq5avpmO1F3FGu9xGDIcIy/qfrgHQ
+         r+hA==
+X-Gm-Message-State: AFqh2ko/ooVphUN3ywHJhCtlVnDuelBfyP+j5o6ES7C5logzJo2C1X8N
+        9CGH+r9QeYvLmYD7bVZb2anGNbXglI1f9Myj6FpKdK5r
+X-Google-Smtp-Source: AMrXdXsNzX8wnMzrzwoysweIyE0AFToe00bJ4Iyyja138RtBGRebyrXJAnDgp2CG+BTJqX3WEPIFE0nCpqgcglEroyU=
+X-Received: by 2002:aca:2107:0:b0:365:64a:b3a1 with SMTP id
+ 7-20020aca2107000000b00365064ab3a1mr1021061oiz.81.1674519080060; Mon, 23 Jan
+ 2023 16:11:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 00/14] add display port DSC feature
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a8a:ad6:0:b0:49c:e11d:f815 with HTTP; Mon, 23 Jan 2023
+ 16:11:19 -0800 (PST)
+In-Reply-To: <CAHk-=whUSZk1dZrJuhxeb4qB3POstVRwOZCN8PXd3W7ztbqQBg@mail.gmail.com>
+References: <20230118150703.4024-1-ubizjak@gmail.com> <20230118131825.c6daea81ea1e2dc6aa014f38@linux-foundation.org>
+ <CAFULd4ZQGG+N3f7xDuoiNG1jY128pqaH0F4eLKO+fhvSNAbKfA@mail.gmail.com>
+ <CAFULd4b5szcTHTVbGJ9WiciG_+8kANiPZYP_pkEZUhnz_HHy-g@mail.gmail.com>
+ <913c01d41f824fa8b3400384437fa0d8@AcuMS.aculab.com> <CAFULd4aDORSrq7zf_LcAZRP8HOHcrq2-rGMaroKyG2zQDHNpOA@mail.gmail.com>
+ <CAGudoHF6zbyzza6xysuCjcxjHAUgeAVvgW0sqxDAFQNwz9u7wg@mail.gmail.com> <CAHk-=whUSZk1dZrJuhxeb4qB3POstVRwOZCN8PXd3W7ztbqQBg@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Tue, 24 Jan 2023 01:11:19 +0100
+Message-ID: <CAGudoHH+SmRoyXvppjBEoK=dvVdy1jvKNHDLEVf9mLnzsEds6Q@mail.gmail.com>
+Subject: Re: [PATCH] lib/genalloc: use try_cmpxchg in {set,clear}_bits_ll
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Uros Bizjak <ubizjak@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 20:24, Kuogee Hsieh wrote:
-> This patch add DSC related supporting functions into to both dp controller and dpu enccoder
-> 
-> Kuogee Hsieh (14):
->    drm/msm/dp: add dpcd read of both dsc and fec capability
->    drm/msm/dp: add dsc factor into calculation of supported bpp
->    drm/msm/dp: add configure mainlink_levels base on lane number
->    drm/msm/dp: correct configure Colorimetry Indicator Field at MISC0
->    drm/msm/dp: upgrade tu calculation base on newest algorithm
->    drm/msm/dp: add display compression related struct
->    drm/msm/dp: add dsc helper functions
->    drm/msm/dp: add dsc supporting functions to DP controller
->    drm/msm/dsi: export struct msm_compression_info to dpu encoder
->    drm/msm/disp/dpu: add supports of DSC encoder v1.2 engine
->    drm/msm/disp/dpu1: add supports of new flush mechanism
->    drm/msm/disp/dpu1: revise timing engine programming to work for DSC
->    drm/msm/disp/dpu1: add dsc supporting functions to dpu encoder
->    drm/msm/disp/dpu1: add sc7280 dsc block and sub block
+On 1/23/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Mon, Jan 23, 2023 at 7:59 AM Mateusz Guzik <mjguzik@gmail.com> wrote:
+>> Basic idea would be to have competing CPUs aggregate the total change
+>> on the lock and then have one of them make it happen across the
+>> interconnect -- so instead of add/sub 1 you would add/sub n, where n
+>> can very well be quite big.
+>
+> No. The use is literally serialized, and done one at a time, and needs
+> to be synchronous.
+>
+> We're talking about looking up a <i>single</i> path component, while
+> at the same time making sure that that path component isn't being
+> removed by another CPU - and there is by definition no other locking
+> going on, because the lockref *is* the locking.
+>
+[snip]
+>
+> Thanks to RCU pathname lookup, the lockref thing *should* come into
+> play only when  you actually fall out of RCU mode, ie for the last
+> component. That's a huge win, because that's what avoids the whole
+> "everybody hammers on the root/pwd dentry counts".
+>
+> Your benchmark that looked up the *same* last component in parallell
+> and all the time is not really a real load.
+>
+[snip2]
+>
+> So I'm not claiming lockref is perfect, but I do suspect you're
+> barking up the wrong tree here. The optimizations you are talking
+> about are either not realistic in the first place (because
+> serialization and locking) or have already mostly been done (ie
+> avoiding the op entirely except for the last component).
+>
 
-Some generic notes regarding the series. I understand that the the 
-series is complex, but following points might ease both your work and 
-the review proces.
+That was a minor remark in the spirit of attempting to reduce pingpong,
+only made because of the paper. It was not a serious proposal, but
+perhaps I failed to make it clear enough.
 
-First, atomicity. If your commit message says 'do this and that', it is 
-highly likely that the patch should be split into smaller parts.
+A more serious remark was in the last paragraph.
 
-Second, please pay attention to the history. If some part of the code or 
-  the data structure was removed, you have to justify bringing it back. 
-This is extremely important in your case, as significant parts of the 
-code come from the vendor code, thut it is easy to step on the same rake 
-again. And if the previous removal was incorrect, please describe why.
+> HOWEVER. There is one special exception that might be interesting and
+> that has never been done: 'fstat()' and friends could possibly avoid
+> the "try_to_unlazy()" even for the last component.
+>
+> IOW, we might be able to do fstatat() without ever even finalizing the
+> RCU state of the pathname, and actually looking up the stat
+> information while still in RCU mode, and instead of doing the actual
+> final lockref_get_not_dead() to turn an RCU path into a real
+> ref-counted path, we could just do the "get the stat info, then do
+> read_seqcount_retry() to verify that the RCU walk _and_ the stat info
+> is still valid".
+>
 
-If we went through 10 revisions of a patch a year ago, it's not worth 
-sending again a patch that closely remedies one of early iterations. It 
-doesn't stand a chance of getting through.
+Ignoring mentioning specific routines by name is precisely what
+I proposed in that e-mail. To quote myself:
 
-Next. Obvious item. ./scripts/checkpatch.pl should be your friend. It is 
-not.
+> Personally, for lockref, I think the way to go forward is to use it less
+> to begin with and to look for ways to convert it into a lock xadd-able
+> primitive instead. The "doing it less thing" could be done by
+> implementing a RCU-only mode for select syscalls, which defaults to
+> opportunistically avoid refing squat. If the caller manages to do what
+> it needed to do, that is a massive win; otherwise refs get taken. This
+> could work well in the common case for syscalls like statx and access,
+> but would not for open. Frankly I'm surprised something like this is
+> not already implemented (maybe I missed a major showstopper?).
 
-Last, but not least. Please follow the mailing list. Less than a week 
-ago one of reviews pointed out that commit messages like 'this patch 
-does this and that' are not really welcomed. By sending the same kind of 
-commit messages, you stand a high chance of receiveing the same 
-response. Please go through the recommendations in 
-Documentation/process/submitting-patches.rst.
+Now back to your response:
 
-> 
->   drivers/gpu/drm/msm/Makefile                       |   2 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c     | 537 +++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h     |  25 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 341 +++++++--
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |   4 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h   |   7 +-
->   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  43 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  50 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  74 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  43 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  21 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c         |  23 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  23 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 371 +++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 132 ++--
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  10 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    |   3 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h         |   6 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |  10 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |  10 +-
->   drivers/gpu/drm/msm/dp/dp_catalog.c                | 176 ++++-
->   drivers/gpu/drm/msm/dp/dp_catalog.h                |  97 ++-
->   drivers/gpu/drm/msm/dp/dp_ctrl.c                   | 839 ++++++++++++++-------
->   drivers/gpu/drm/msm/dp/dp_display.c                |  61 +-
->   drivers/gpu/drm/msm/dp/dp_link.c                   |  29 +-
->   drivers/gpu/drm/msm/dp/dp_panel.c                  | 749 +++++++++++++++++-
->   drivers/gpu/drm/msm/dp/dp_panel.h                  |  67 +-
->   drivers/gpu/drm/msm/dp/dp_reg.h                    |  40 +-
->   drivers/gpu/drm/msm/dsi/dsi.c                      |   3 +-
->   drivers/gpu/drm/msm/dsi/dsi.h                      |   3 +-
->   drivers/gpu/drm/msm/dsi/dsi_host.c                 |  14 +-
->   drivers/gpu/drm/msm/msm_drv.h                      | 113 ++-
->   32 files changed, 3429 insertions(+), 497 deletions(-)
->   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.c
->   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_dsc_helper.h
->   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
-> 
+> But I'm not convinced that final complexity would be worth it. It
+> sounds like a potentially fun and interesting exercise (Al Viro added
+> to particupants so that he can say "No! That's not 'fun and exciting',
+> that's just crazy!") if somebody really wants to, but see above: the
+> last path component is very seldom something that sees contention. You
+> look up the same root/pwd over and over again, but nobody sane looks
+> up the same full pathname over and over again.
+>
+[snip]
+> But since you clearly were looking at fstatat() performance, I can
+> only point you at this case and say "There's _potentially_ upside
+> there".
+>
+
+So if you strace something like gcc compiling stuff you will find:
+- some access calls on shared dirs, for example:
+78533 access("/usr/lib/gcc/x86_64-linux-gnu/11/", X_OK) = 0
+78533 access("/usr/lib/gcc/x86_64-linux-gnu/11/", X_OK) = 0
+78533 access("/usr/lib/gcc/x86_64-linux-gnu/11/", X_OK) = 0
+- same with newfstatat:
+87428 newfstatat(AT_FDCWD, "./arch/x86/include",
+{st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+87428 newfstatat(AT_FDCWD, "./arch/x86/include/generated",
+{st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+87428 newfstatat(AT_FDCWD, "./include", {st_mode=S_IFDIR|0755,
+st_size=4096, ...}, 0) = 0
+87428 newfstatat(AT_FDCWD, "./arch/x86/include/uapi",
+{st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+- there is also quite a bit of readlink:
+87502 readlink("/tmp", 0x7ffe28847ac0, 1023) = -1 EINVAL (Invalid argument)
+87502 readlink("/tmp/ccTh37oI.s", 0x7ffe28847ac0, 1023) = -1 EINVAL
+(Invalid argument)
+
+that last bit is glibc doing realpath(). A case can be made for making
+realpath into a syscall instead, but I'm not going to flame over for
+the time being. :)
+
+Anyhow, my point is that 2 gcc compiling different files do invoke path
+lookups with the same terminal path components and lockref stuff gets
+bounced around when it happens.
+
+On another point how to end up dealing with lockref less, I have to
+note glibc switched fstat(fd, buf) to use newfstatat(fd, "", buf,
+AT_EMPTY_PATH) internally. This adds a lot of work single-threaded as
+it forces a path lookup with associated stac/clac trip, but more
+importantly the kernel no longer relies on liveness of the dentry
+provided by the file object, but uses lockref instead. Something which
+allows to get data produced by newfstatat without forcing a lookup
+sounds like a welcome addition. Same goes for statx which seems to be
+the recommended syscall. I'll be writing about this to -fsdevel some
+time later.
 
 -- 
-With best wishes
-Dmitry
-
+Mateusz Guzik <mjguzik gmail.com>
