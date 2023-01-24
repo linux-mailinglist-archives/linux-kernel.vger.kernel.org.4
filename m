@@ -2,165 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE9E67A369
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AC567A374
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbjAXTw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S231593AbjAXT5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjAXTw1 (ORCPT
+        with ESMTP id S233568AbjAXT53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:52:27 -0500
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [IPv6:2001:41d0:1004:224b::ac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795FD9EFF
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:52:25 -0800 (PST)
-Message-ID: <57a2e223-6fe8-7b7b-1b02-800665673ad1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674589942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EPvGC2hjaO++BXZiINbs+zndP1/Wv/zj1n82glt9rFs=;
-        b=OsXzY8BZkhWo9zklBPTbt7YwWYaKFVV7IiMJlyM6awVivxHXEbocqMQ6s5VgLU3lUMDErb
-        OxRsNdTbbqyymzYrPcx+KCutDs3Lj3raBELStZNnYJRTLm58S85j9xvzdHPzn3vlykrd5d
-        /pIKTPH2j9PsgSTV1CrZha8xbJkNkds=
-Date:   Tue, 24 Jan 2023 11:52:17 -0800
+        Tue, 24 Jan 2023 14:57:29 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E25546D73
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id b7so15010771wrt.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
+        b=YiZbCsTkWX7qaBcx9slMjH6+effXtwjymWr3GN8IP7nGKDffEFwF+GniYQJGxRDdij
+         ddxnoXiPHLtD1J2xu06stt50XG7TMZHlU4vUx1FUq5u1vVJ1iFg138K5ObVFl5VqTbij
+         vgJu63fNHqpEAcA70RBCp7uEoqgSo8vC4mMsXr1eFSwwyt5n7FebqWFUxG22D15WSOLx
+         rr65vwxKSRjpn0Q/Phw+MaIIrh5QNbS8PF3uygWX27Z16dxkYQc/uZt6NRcmIevTJ0To
+         TDTM2yGHMo7TX+Uiq+7ajTJHTvsLOzLdPh7rrhMVO04WMLFrxkUZDic+0tnVmERM7//X
+         EyTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
+        b=sOpCmWvHARc2JMTReTPpAUTkT7txrNbswpFHtIS8BKcnlynRuyEdgmB7rfeL7A5Pia
+         ZlGveL+BWYUmah4WVyg18tnsLQLJFDjKuEvRoNjuiLyHSaxeu8gKfqp+6VfXsfYCjx5L
+         a6rn3LIOhGoua/osi3CW1hu0FMoCqt4aBXUJEmvf1d6F526PuJZdQLlyx7/tV1zm3zSc
+         HFiJkUQ19SJPDVHiX+6F/w3FtiSWknaYA1kFFrHjAl6/Wh14pCPl+97HeM1/9T8NAEe1
+         gbVpbySJVfNQXgjorkXgYerGKJzxFXdqxxic8Qjh2ZRIMIYhc6FGdS5QgnrHfhThQDvb
+         pfpg==
+X-Gm-Message-State: AFqh2kpgdkpaRCGUFaI5hSRn3Q26zr/Xm3Ad8O+witVPlIFriurC4NAG
+        dT614Hvob10aWx0GKBj8W/mJhw==
+X-Google-Smtp-Source: AMrXdXsxJ+yxlj1AkbpDDlit6M5S/lntxDSsaXZO6X121kBm1RStBcF/mVtX9lX/QgH1/sqY8z727Q==
+X-Received: by 2002:a5d:404c:0:b0:2be:1258:897d with SMTP id w12-20020a5d404c000000b002be1258897dmr25315390wrp.43.1674590245043;
+        Tue, 24 Jan 2023 11:57:25 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q3-20020adff943000000b002bfae43109fsm2473693wrr.93.2023.01.24.11.57.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 11:57:24 -0800 (PST)
+Message-ID: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+Date:   Tue, 24 Jan 2023 20:57:23 +0100
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 4/4] bpf/selftests: Verify struct_ops prog
- sleepable behavior
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
 Content-Language: en-US
-To:     David Vernet <void@manifault.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, tj@kernel.org, bpf@vger.kernel.org
-References: <20230124160802.1122124-1-void@manifault.com>
- <20230124160802.1122124-5-void@manifault.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230124160802.1122124-5-void@manifault.com>
+To:     Thierry Reding <thierry.reding@gmail.com>, Wei Ni <wni@nvidia.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
+ usage
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Johan Hovold <johan@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 8:08 AM, David Vernet wrote:
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 50123afab9bf..64034311c5f7 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1474,6 +1474,7 @@ struct bpf_dummy_ops {
->   	int (*test_1)(struct bpf_dummy_ops_state *cb);
->   	int (*test_2)(struct bpf_dummy_ops_state *cb, int a1, unsigned short a2,
->   		      char a3, unsigned long a4);
-> +	int (*test_3)(struct bpf_dummy_ops_state *cb);
 
-nit. May be a self describe name like test_sleepable().
+Hi,
 
->   };
->   
->   int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
-> diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
-> index 1ac4467928a9..46099737d1da 100644
-> --- a/net/bpf/bpf_dummy_struct_ops.c
-> +++ b/net/bpf/bpf_dummy_struct_ops.c
-> @@ -154,6 +154,23 @@ static bool bpf_dummy_ops_is_valid_access(int off, int size,
->   	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
->   }
->   
-> +static int bpf_dummy_ops_check_member(const struct btf_type *t,
-> +				      const struct btf_member *member,
-> +				      const struct bpf_prog *prog)
-> +{
-> +	u32 moff = __btf_member_bit_offset(t, member) / 8;
-> +
-> +	switch (moff) {
-> +	case offsetof(struct bpf_dummy_ops, test_3):
-> +		break;
-> +	default:
-> +		if (prog->aux->sleepable)
-> +			return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int bpf_dummy_ops_btf_struct_access(struct bpf_verifier_log *log,
->   					   const struct bpf_reg_state *reg,
->   					   int off, int size, enum bpf_access_type atype,
-> @@ -208,6 +225,7 @@ static void bpf_dummy_unreg(void *kdata)
->   struct bpf_struct_ops bpf_bpf_dummy_ops = {
->   	.verifier_ops = &bpf_dummy_verifier_ops,
->   	.init = bpf_dummy_init,
-> +	.check_member = bpf_dummy_ops_check_member,
->   	.init_member = bpf_dummy_init_member,
->   	.reg = bpf_dummy_reg,
->   	.unreg = bpf_dummy_unreg,
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 8da0d73b368e..33ea57d34c0b 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -730,6 +730,10 @@ noinline void bpf_kfunc_call_test_destructive(void)
->   {
->   }
->   
-> +noinline void bpf_kfunc_call_test_sleepable(void)
-> +{
-> +}
-> +
->   __diag_pop();
->   
->   BTF_SET8_START(bpf_test_modify_return_ids)
-> @@ -767,6 +771,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
->   BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
->   BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS)
->   BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
-> +BTF_ID_FLAGS(func, bpf_kfunc_call_test_sleepable, KF_SLEEPABLE)
+does anyone know what is the purpose of the get_thermal_instance() usage 
+in this code:
 
-KF_SLEEPABLE kfunc is not specific to the struct_ops prog. I hope a test has 
-already covered that KF_SLEEPABLE kfunc can only be called from sleepable prog. 
-eg. there is bpf_fentry_test1.
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
 
-This new kfunc could then be omitted and make the test simpler. There is no need 
-to add the test to the DENYLIST.s390x: 
-https://github.com/kernel-patches/bpf/actions/runs/3998188872/jobs/6861920516
+The driver is using a function which is reserved for the thermal core. 
+It should not.
 
-> diff --git a/tools/testing/selftests/bpf/progs/dummy_st_ops_common.h b/tools/testing/selftests/bpf/progs/dummy_st_ops_common.h
-> new file mode 100644
-> index 000000000000..7d0761594b69
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/dummy_st_ops_common.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-> +
-> +#ifndef _DUMMY_ST_OPS_COMMON_H
-> +#define _DUMMY_ST_OPS_COMMON_H
-> +
-> +struct bpf_dummy_ops_state {
-> +	int val;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct bpf_dummy_ops {
-> +	int (*test_1)(struct bpf_dummy_ops_state *state);
-> +	int (*test_2)(struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
-> +		      char a3, unsigned long a4);
-> +	int (*test_3)(struct bpf_dummy_ops_state *state);
-> +};
+Is the following change ok ?
 
-Instead of adding a new dummy_st_ops_common.h header, try to directly include 
-vmlinux.h in the dummy_st_ops_{success,fail}.c.
+diff --git a/drivers/thermal/tegra/soctherm.c 
+b/drivers/thermal/tegra/soctherm.c
+index 220873298d77..5f552402d987 100644
+--- a/drivers/thermal/tegra/soctherm.c
++++ b/drivers/thermal/tegra/soctherm.c
+@@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct 
+thermal_zone_device *tz, int trip
+  				continue;
 
-> +
-> +void bpf_kfunc_call_test_sleepable(void) __ksym;
+  			cdev = ts->throt_cfgs[i].cdev;
+-			if (get_thermal_instance(tz, cdev, trip_id))
+-				stc = find_throttle_cfg_by_name(ts, cdev->type);
+-			else
++			stc = find_throttle_cfg_by_name(ts, cdev->type);
++			if (!stc)
+  				continue;
 
+  			return throttrip_program(dev, sg, stc, temp);
+@@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device 
+*dev,
+  			continue;
+
+  		cdev = ts->throt_cfgs[i].cdev;
+-		if (get_thermal_instance(tz, cdev, trip))
+-			stc = find_throttle_cfg_by_name(ts, cdev->type);
+-		else
++
++		stc = find_throttle_cfg_by_name(ts, cdev->type);
++		if (!stc)
+  			continue;
+
+  		ret = throttrip_program(dev, sg, stc, temperature);
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
