@@ -2,123 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4369679E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02551679E7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbjAXQUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S231588AbjAXQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjAXQUd (ORCPT
+        with ESMTP id S231544AbjAXQV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:20:33 -0500
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD78193FF;
-        Tue, 24 Jan 2023 08:20:32 -0800 (PST)
-Received: by mail-vk1-f172.google.com with SMTP id q141so7818091vkb.13;
-        Tue, 24 Jan 2023 08:20:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uRvaOYyC5sNficHNcLmGLW/x7PtaUYBGZNW6Hwgjd9c=;
-        b=jDZLGDNDmqDYpClhO6vDirABVVZlLBWaxiGyGt9zR81400MfI+RCW+smVchbZl8Sb6
-         IGzkVbr6vfMgx8+tt8IqFJBUYZ20XvzZiRFmqHHfv9DSFcMT1mLW0AV8UgUpKd6ZduAJ
-         a/S5Df5FD2WyZxA8JZ8u2Uy2HlCtf8ys7/7DJIc7SJeGowfV5QcT0IxJcVFJqgglI/D+
-         EuOQ+Nuusd6fjEmKKS3UideB/u/crVtqn2Bn/b0gAN8JbK6DY4VPY9r1qA3vMoSUkr2n
-         /1v45L411OlRJeZb6DuN5fB1KsF9+c6Ts3Y29TU9SnTi8cpK1H/yEfP+u4uuhtdgOQqs
-         Tp3Q==
-X-Gm-Message-State: AFqh2koMXZSA4WB3WSmLoeoLMOmlNzLGRgJJ7L/X9xDSLvfosONhYF73
-        8ueIokE/zV+dRzLd7FcgIXo=
-X-Google-Smtp-Source: AMrXdXsx6Hfo6IZT2JN9cIDAItjHKN5wOzRXKiCaXLDNj+g9Y7uqE/BTR52DfhoMyVekfZ6xhUv7hg==
-X-Received: by 2002:a1f:f881:0:b0:3c0:f6d6:3722 with SMTP id w123-20020a1ff881000000b003c0f6d63722mr18242290vkh.11.1674577231221;
-        Tue, 24 Jan 2023 08:20:31 -0800 (PST)
-Received: from maniforge.lan ([2620:10d:c091:480::1:93a0])
-        by smtp.gmail.com with ESMTPSA id r13-20020a05620a03cd00b006f9e103260dsm1638361qkm.91.2023.01.24.08.20.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 08:20:30 -0800 (PST)
-Date:   Tue, 24 Jan 2023 10:20:31 -0600
-From:   David Vernet <void@manifault.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, memxor@gmail.com, hch@infradead.org
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
- definitions
-Message-ID: <Y9AFT4pTydKh+PD3@maniforge.lan>
-References: <20230123171506.71995-1-void@manifault.com>
- <20230123171506.71995-4-void@manifault.com>
- <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
- <Y87We/92xiv5/+g+@maniforge.lan>
- <20230123185434.ybfhrmbootcnjuoj@macbook-pro-6.dhcp.thefacebook.com>
- <ebff2166-8a70-af62-b859-6b5c6b008b36@iogearbox.net>
- <87o7qphspq.fsf@meer.lwn.net>
- <Y88sMlmrq0wCFSRP@maniforge.lan>
- <87lelsgf60.fsf@meer.lwn.net>
+        Tue, 24 Jan 2023 11:21:56 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7364A1EB;
+        Tue, 24 Jan 2023 08:21:53 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C4B09FFC;
+        Tue, 24 Jan 2023 16:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C4B09FFC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674577313; bh=e9Ms9NIy69DBSpc92O0jPbndqt+BbCrpQpQKJy7enug=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WPbLObmI5eAb0UsjPjiNUr79jLBFhGBDmCGswQ79irtiddDZD2UhaHwuf8wU5gtfI
+         2jAAKuH+RBriYMbp7LixiK6L7pNeOUSxZFezSVb/0m50PA3orzwhQC4NuRPNqwGCwB
+         XDrYpBoLrZhu/1rM+RSTjEWiP7ym60bfW/4Vo1Lg/rKXyJovUrqZu7VNX82OlQTAZC
+         ZyjzajqT1YDtnHxcrXFSGDlm8v77Ug8RcmouOhagCzpz0AYS92XrGo6W7CfyimkdKa
+         Jf1qzBf10+bNkiATeHsiLRqWoz2H91c1xuBWPntnymecG7+43dW6zNirv1E1MWCaQ7
+         YZ0dyfisBnmwQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [RESEND RFC PATCH v1 10/20] docs: document general_profit sysfs
+ knob
+In-Reply-To: <Y89Zko/TWYcphmJA@debian.me>
+References: <20230123173748.1734238-1-shr@devkernel.io>
+ <20230123173748.1734238-11-shr@devkernel.io> <Y89Zko/TWYcphmJA@debian.me>
+Date:   Tue, 24 Jan 2023 09:21:51 -0700
+Message-ID: <87h6wfhpi8.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87lelsgf60.fsf@meer.lwn.net>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 07:50:31AM -0700, Jonathan Corbet wrote:
-> David Vernet <void@manifault.com> writes:
-> 
-> > I was perhaps a bit naive to think we could just throw a __bpf_kfunc
-> > macro onto the function signatures and call it a day :-) I think it's
-> > probably best to table this for now, and either I or someone else can
-> > come back to it when we have bandwidth to solve the problem more
-> > appropriately.
-> 
-> Now I feel bad ... I was just tossing out a thought, not wanting to
-> bikeshed this work into oblivion.  If what you have solves a real
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-No apologies necessary. I don't think this qualifies as bikeshedding.
-IMO folks are raising legitimate UX concerns, which is important and
-worth getting right.
+> Seems like the wording is confusing me, so I write the improv:
+>
+> ---- >8 ----
+> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-ksm b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+> index 7768e90f7a8fef..5309a912ab679b 100644
+> --- a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+> @@ -56,6 +56,6 @@ What:		/sys/kernel/mm/ksm/general_profit
+>  Date:		January 2023
+>  KernelVersion:  6.1
+>  Contact:	Linux memory management mailing list <linux-mm@kvack.org>
+> -Description:	Measure how effective KSM is.
+> -		general_profit: how effective is KSM. The formula for the
+> -		calculation is in Documentation/admin-guide/mm/ksm.rst.
+> +Description:	Measure the KSM profit. See
+> +		:ref:`KSM documentation <monitoring-ksm-profit>` for details
+> +		on the calculated formula.
 
-> problem and is the best that can be done now, perhaps it should just go
-> in and a "more appropriate" solution can be adopted later, should
-> somebody manage to come up with it?
+So the original at least attempted to tell us what "KSM profit" is; the
+"improved" version makes no such effort.  I don't think that is actually
+better.
 
-That would be my preference, but I also understand folks' sentiment of
-wanting to keep out what they feel like is odd syntax, as Christoph said
-in [0], and Daniel alluded to earlier in this thread.
-
-[0]: https://lore.kernel.org/all/Y8+FeH7rz8jDTubt@infradead.org/
-
-I tested on an LTO build and wrapper kfuncs (with external linkage) were
-not being stripped despite not being called from anywhere else in the
-kernel, so for now I _think_ it's safe to call this patch set more of a
-cleanup / future-proofing than solving an immediate and pressing problem
-(as long as anyone adding kfuncs carefully follows the directions in
-[1]). In other words, I think we have some time to do this the right way
-without paying too much of a cost later. If we set up the UX correctly,
-just adding an EXPORT_SYMBOL_KFUNC call (or something to that effect,
-including just using BTF_ID_FLAGS) should be minimal effort even if
-there are a lot more kfuncs by then.
-
-[1]: https://docs.kernel.org/bpf/kfuncs.html
-
-If it turns out that we start to observe problems in LTO builds without
-specifying __used and/or noinline, or if folks are repeatedly making
-mistakes when adding kfuncs (by e.g. not giving wrapper kfuncs external
-linkage) then I think it would be a stronger case to get this in now and
-fix it up later.
-
-Thanks,
-David
+jon
