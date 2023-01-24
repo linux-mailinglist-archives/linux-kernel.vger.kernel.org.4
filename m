@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A0167A558
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A2B67A55C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbjAXWEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S235148AbjAXWFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbjAXWEv (ORCPT
+        with ESMTP id S235140AbjAXWFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:04:51 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E159360A0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:04:28 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so58148wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:04:28 -0800 (PST)
+        Tue, 24 Jan 2023 17:05:04 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F4D5140D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:04:45 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so39169wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMf09+fC4QI99DmXPRyQuRL+tFfoSe44zXEcxxr3d1Q=;
-        b=IEgYNIvNCC9mddSqNfaCCAz0oUCnF7np9L8WKM+zB3789lBGkDNb9niMNvK9QHJ1+h
-         ImSB5ok4C9Hu2t3IGHmEc5lH9BC7SIN/CrBtaM4cKBuRFswjHrcr5Slew7e/VBEQ49+C
-         SRJFX8/J07sByHNIZYD1cuH3TNsIbmhBRK64eR2FKk7B7jYW2R/kpvAqSQT+J+OzVOWZ
-         jM9wZZV8Ad/Ljy1qQZV2HfIAfz2zLAE5aFYX+CnkJHNAhlforaQv1xLqoNH8Q0CviLmz
-         QSZn3rol5PqQdvSu9RWkEX06cEfkwtFK1yhhpeSQnG/GuEcAWu3P3F7XPxZcs0AkQoxV
-         yWJA==
+        bh=NDxe4oIJJSUOqPRwp3G0IGOgJo50hIDpNvcK0HbcW+I=;
+        b=WBkvXYXkvoKDXytnJfUU8oWA+parU/KCWf/I5sg/p3eClZPsxIvW7DeUIiwOvH4Fj3
+         YlCE0XCIY1laBfVZPEPVSalqFcfhOSB+YDt14gYlwJ0M4e8zOjXdpdEhi6w9yJDn+CPo
+         Er42ROETd++Gt9iprGqRzUYfy6e1IX+kVPp98lJz8C8iRn/bn7k7ZGIN1M/1hExJitRQ
+         G9RhNts8dN939D3TP93LgjGPuZ0DTwjXh0CyW0KRsn2dNQK0pcovmQNqZ651WyL3X/OF
+         /84Kv89aQwLEfWXz5zqHeVFjwEdPHnlyyTUkibhbbrLuSPPG5GOCx2Wnejt9PySD3ZLk
+         yuMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gMf09+fC4QI99DmXPRyQuRL+tFfoSe44zXEcxxr3d1Q=;
-        b=M+EK0QGH/NMo6/yvm9L/0KpiWmCn/kS74Tmh0dahcdE8ZCC+Fu+aqKvj9OqrxHhPb+
-         DJOs4d7ceFFV/AsMvZ+F94OrtBsR+c3fWhlJWlZhPuDS6JMS9ncvEZEo+qLfC/B/Us7O
-         eW/GvDyfy85VOHTnGScgbYmvEtrVFWFeAoXHqeD+1+FgQoCVfeUpMtorRZsFGLfSF0XE
-         kvtWTdgZeSEDW/Mh1pojMkF3Yu2HoLqwyAiIAp+jkiu15GVQlWLgZ8QbRtAmWLTyft+x
-         efOqZfDVTBswaWHZJgI5Lc/Sql0kqnrZxCSCaIbQzxTmKgUAwyd9AuCC0jmOxtVBT1zG
-         4kLA==
-X-Gm-Message-State: AFqh2kq4xkKSdqWDwcyuVniH1/hlvqaqvFUNgxjowBUGLDuccKM2CsDn
-        q0O8NMsepnGZKxtDvlIP96M=
-X-Google-Smtp-Source: AMrXdXsnj6kmeablVOb7yN/mrc+AkioXK5nvirlDwTX8g+li8SL1iwUQaxj6RRvIlKTm8qgxNF+50g==
-X-Received: by 2002:a05:600c:3b8c:b0:3c6:c5d9:dad3 with SMTP id n12-20020a05600c3b8c00b003c6c5d9dad3mr7996420wms.0.1674597865822;
-        Tue, 24 Jan 2023 14:04:25 -0800 (PST)
+        bh=NDxe4oIJJSUOqPRwp3G0IGOgJo50hIDpNvcK0HbcW+I=;
+        b=n0jM+M1+gadKlndfPa8aARkMjlDoLlwvWOQdC/7GUGwoo/K7/f43ocpzNdk09mC7/D
+         AgxVp4taZg5mUAGLRrYWWgvg2FtavCGNygxc0sK7sqOefZ1IqqQBRLTzim5Iw8zYz888
+         8qEyP5byBTArcWezo5XCZ8TrJEx3uIFWDHYvWnGq5R1hHQDIEdfzN8R6s6nReDdle/hW
+         mUR5nGImqQsifD1UfkJ+RGqRQIRig8QLW0SvBcFOF793rp6A1P04rSTL/MkBY4bY408G
+         NZ2KmwPX/e8W4cUMfr5JKDRksXbls6RwkzwQ5LEqKdZCYXzXge3sV6EVrZ1dk5aQcH2J
+         WAoA==
+X-Gm-Message-State: AFqh2kp4m6oxeqVhQsczrR8EtfRhQ7IB/nE0WPiuqknZxuw6kkEl+HhT
+        RLGnjIed2mEOnhi9I4XZaUGnUHhPots=
+X-Google-Smtp-Source: AMrXdXvbJ+ZGoez6kgmrT3njEyJRbIcpsgf36SFSsjNMJoZqRUMrig2dz8kXsww2MkR8pm4anfOVlg==
+X-Received: by 2002:a05:600c:1695:b0:3da:f452:a975 with SMTP id k21-20020a05600c169500b003daf452a975mr6480278wmn.1.1674597873237;
+        Tue, 24 Jan 2023 14:04:33 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
-        by smtp.gmail.com with ESMTPSA id y4-20020adfd084000000b0028e55b44a99sm2735451wrh.17.2023.01.24.14.04.24
+        by smtp.gmail.com with ESMTPSA id j8-20020adff008000000b00297dcfdc90fsm2825015wro.24.2023.01.24.14.04.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 14:04:25 -0800 (PST)
-Date:   Tue, 24 Jan 2023 23:04:23 +0100
+        Tue, 24 Jan 2023 14:04:32 -0800 (PST)
+Date:   Tue, 24 Jan 2023 23:04:30 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 09/11] staging: rtl8192e: Remove unused variables txviok..,
- txvook.. and txbea..
-Message-ID: <1500a146bd4f46e8c49ff35f71c21def978fe9d6.1674596722.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 10/11] staging: rtl8192e: Remove unused variables txbeac..,
+ txman.. and txcmdp..
+Message-ID: <e18b8ce4a253f9ed24d30296a924ba13d13997bc.1674596722.git.philipp.g.hortmann@gmail.com>
 References: <cover.1674596722.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,57 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-txviokint, txvookint and txbeaconokint are initialized and increased but
-never read. Remove dead code.
+txbeaconerr, txmanageokint and txcmdpktokint are initialized and increased
+but never read. Remove dead code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 5 -----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 8 +-------
  drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 3 ---
- 2 files changed, 8 deletions(-)
+ 2 files changed, 1 insertion(+), 10 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 768324cbe253..4cc90425fa4c 100644
+index 4cc90425fa4c..2c5edda74e73 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -2139,9 +2139,6 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
+@@ -2139,11 +2139,7 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
  		goto done;
  	}
  
--	if (inta & IMR_TBDOK)
--		priv->stats.txbeaconokint++;
+-	if (inta & IMR_TBDER)
+-		priv->stats.txbeaconerr++;
 -
- 	if (inta & IMR_TBDER)
- 		priv->stats.txbeaconerr++;
- 
-@@ -2192,13 +2189,11 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
+ 	if (inta  & IMR_MGNTDOK) {
+-		priv->stats.txmanageokint++;
+ 		_rtl92e_tx_isr(dev, MGNT_QUEUE);
+ 		spin_unlock_irqrestore(&priv->irq_th_lock, flags);
+ 		if (priv->rtllib->ack_tx_to_ieee) {
+@@ -2155,10 +2151,8 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
+ 		spin_lock_irqsave(&priv->irq_th_lock, flags);
  	}
  
- 	if (inta & IMR_VIDOK) {
--		priv->stats.txviokint++;
- 		priv->rtllib->link_detect_info.NumTxOkInPeriod++;
- 		_rtl92e_tx_isr(dev, VI_QUEUE);
- 	}
+-	if (inta & IMR_COMDOK) {
+-		priv->stats.txcmdpktokint++;
++	if (inta & IMR_COMDOK)
+ 		_rtl92e_tx_isr(dev, TXCMD_QUEUE);
+-	}
  
- 	if (inta & IMR_VODOK) {
--		priv->stats.txvookint++;
- 		priv->rtllib->link_detect_info.NumTxOkInPeriod++;
- 		_rtl92e_tx_isr(dev, VO_QUEUE);
- 	}
+ 	if (inta & IMR_HIGHDOK)
+ 		_rtl92e_tx_isr(dev, HIGH_QUEUE);
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 96d340f686e9..f8b2201ea288 100644
+index f8b2201ea288..c6a4ac6ce959 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 @@ -184,9 +184,6 @@ enum reset_type {
  
  struct rt_stats {
  	unsigned long received_rate_histogram[4][32];
--	unsigned long txviokint;
--	unsigned long txvookint;
--	unsigned long txbeaconokint;
- 	unsigned long txbeaconerr;
- 	unsigned long txmanageokint;
- 	unsigned long txcmdpktokint;
+-	unsigned long txbeaconerr;
+-	unsigned long txmanageokint;
+-	unsigned long txcmdpktokint;
+ 	unsigned long txbytesmulticast;
+ 	unsigned long txbytesbroadcast;
+ 	unsigned long txbytesunicast;
 -- 
 2.39.1
 
