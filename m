@@ -2,94 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E7967A628
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AF767A62C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjAXWur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S229932AbjAXWyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjAXWuo (ORCPT
+        with ESMTP id S229715AbjAXWyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:50:44 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB611E86;
-        Tue, 24 Jan 2023 14:50:44 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id be8so3338476plb.7;
-        Tue, 24 Jan 2023 14:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m3d2xUJzcuTZwxJedz3ZzVGOlQpQeoNyDwzZ+VWtnWw=;
-        b=bntIqt6hWU2W3cGziRRZV3oC6YWNpg8GpErUTMXsWMqAKG5BlJLnk6/k8Lm0o4vuMV
-         v+6oLpXAHLxTugmoAVORIcpanh/rNWCayI7FZiBCKImbA7yhNGlkaKAVcLPWoJFZ4LM/
-         gqqO7bckhbOUwZshLtDBu6iwzUmJLk7a4eXSOGTLCobQy/Z2AAQ1lMyZvlJ25ZWRMgGa
-         hQPRIOz9cFBHUTbvpC1z4PgqwFvhE8bxp0pqoxkSWxsW6/hlwzXYHv8ajBQ+2BWpukvd
-         crWgVvufgJyZtO7yQ4a9Llbrlt+GoZoib6MOgDAQHKYHmhSSPowLa8u6P93/I4O5uYdQ
-         8FaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m3d2xUJzcuTZwxJedz3ZzVGOlQpQeoNyDwzZ+VWtnWw=;
-        b=hrnS22PfecyX1B9B++fOZLvm1GPle/aWxcR/Lz9iFCdbKBlTf8Rajt3U11rTcHzZzK
-         uq1QAKVGgoJ5G/kT3uakSIk5ZGNN5oHBQHecVR58hUWZ4SU1hzqkdHm3lpecQQHwjSl9
-         GBczJqf5qwwfrD/MZou9YJeNyRARlIN8R7HNstu8KE1O5/C1bHlfI26/LJz5YS1COb7h
-         UXdTR0IJcJVWDoZKJNHBCUp1w+OxjG+SKS23Qr3dz3gvUKAekhybQlKqETDHJUo481Xw
-         QzGMxTbBb6uvquEn0aTYh0Y+Eg51gCs6hNkh1a8Uhfn84MaeGkd71dHBmma6UJS4HJxr
-         AG2g==
-X-Gm-Message-State: AFqh2kqpKCfzxMglW1RWz0uH5DqV93op475glyVhzXMH7sT4rIMDGBYz
-        wCjtaUn103NuHIp18nRoTP+UXpjTJnefWw==
-X-Google-Smtp-Source: AMrXdXsR/vURbmZYx/xStcEi7ddQ/TJMFPrjoT1oHcobziT+TBb6hSDR+4Ap5lpLJAfTx6FCIZif+w==
-X-Received: by 2002:a05:6a20:45b:b0:b9:5fc4:6e3b with SMTP id b27-20020a056a20045b00b000b95fc46e3bmr17802418pzb.34.1674600643280;
-        Tue, 24 Jan 2023 14:50:43 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id pg4-20020a17090b1e0400b0020b21019086sm5095625pjb.3.2023.01.24.14.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 14:50:42 -0800 (PST)
-Message-ID: <f6022623-23c2-6e1e-596d-e092f7259f2e@gmail.com>
-Date:   Tue, 24 Jan 2023 14:50:40 -0800
+        Tue, 24 Jan 2023 17:54:14 -0500
+Received: from out-120.mta0.migadu.com (out-120.mta0.migadu.com [IPv6:2001:41d0:1004:224b::78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C7E474F4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:54:09 -0800 (PST)
+Date:   Tue, 24 Jan 2023 14:54:00 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1674600847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=89LHdp2iidBYEJxIivMbaQf8lDKjYIbRHtNpIRtucvg=;
+        b=fnj/snkgDOwjWEdnayZeLkkYSrAgCDx9UY78BuX1gquOv8FWgO4XYZHlQH+yWFOgEW2cPx
+        UU0et3Z9AqS7glL1qv0VQ3eTk+LcVOoZXJ1/fqEiaT4HkIExSu5s/SIX/V64fFMLB9R2Bv
+        wtg9E+/6mrcp+RKIdQtOW+Mv3fPAotE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 4/6] KVM: arm64: Optimize TLBIs in the dirty logging
+ path
+Message-ID: <Y9BhiOyvMvu/L0J4@thinky-boi>
+References: <20230109215347.3119271-1-rananta@google.com>
+ <20230109215347.3119271-5-rananta@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 14/14] MAINTAINERS: Add entry for Broadcom Broadband
- SoC HS SPI drivers
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com, linux-kernel@vger.kernel.org
-References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-15-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230124221218.341511-15-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109215347.3119271-5-rananta@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 14:12, William Zhang wrote:
-> The driver and device tree doc were originally authored by Jonas Gorski
-> and it has been updated from Broadcom recently including the dts yaml
-> file and a new driver for the updated controller. Add Jonas Gorski and
-> Broadcom engineers William Zhang and Kursad Oney as the maintainers.
+Hi Raghavendra,
+
+I find the commit title rather ambiguous. May I suggest:
+
+  KVM: arm64: Use range-based TLBIs for write protection
+
+On Mon, Jan 09, 2023 at 09:53:45PM +0000, Raghavendra Rao Ananta wrote:
+> Currently the dirty-logging paths, including
+> kvm_arch_flush_remote_tlbs_memslot() and kvm_mmu_wp_memory_region()
+> ivalidates the entire VM's TLB entries using kvm_flush_remote_tlbs().
+> As the range of IPAs is provided by these functions, this is highly
+> inefficient on the systems which support FEAT_TLBIRANGE. Hence,
+> use kvm_flush_remote_tlbs_range() to flush the TLBs instead.
+
+This commit message gives a rather mechanical description of the commit.
+Instead of describing the change, could you describe _why_ this is an
+improvement over the VM-wide invalidation?
+
+--
+Thanks,
+Oliver
+
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  arch/arm64/kvm/arm.c | 7 ++++++-
+>  arch/arm64/kvm/mmu.c | 2 +-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 00da570ed72bd..179520888c697 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1433,7 +1433,12 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+>  void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
+>  					const struct kvm_memory_slot *memslot)
+>  {
+> -	kvm_flush_remote_tlbs(kvm);
+> +	phys_addr_t start, end;
+> +
+> +	start = memslot->base_gfn << PAGE_SHIFT;
+> +	end = (memslot->base_gfn + memslot->npages) << PAGE_SHIFT;
+> +
+> +	kvm_flush_remote_tlbs_range(kvm, start, end);
+>  }
+>  
+>  static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 70f76bc909c5d..e34b81f5922ce 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -976,7 +976,7 @@ static void kvm_mmu_wp_memory_region(struct kvm *kvm, int slot)
+>  	write_lock(&kvm->mmu_lock);
+>  	stage2_wp_range(&kvm->arch.mmu, start, end);
+>  	write_unlock(&kvm->mmu_lock);
+> -	kvm_flush_remote_tlbs(kvm);
+> +	kvm_flush_remote_tlbs_range(kvm, start, end);
+>  }
+>  
+>  /**
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
+> 
