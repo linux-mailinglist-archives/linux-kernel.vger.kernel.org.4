@@ -2,97 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3660367A192
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961AE67A197
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbjAXSnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 13:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S234130AbjAXSnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 13:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjAXSnC (ORCPT
+        with ESMTP id S233977AbjAXSnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:43:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B3261BB;
-        Tue, 24 Jan 2023 10:42:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C782461324;
-        Tue, 24 Jan 2023 18:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37236C433A8;
-        Tue, 24 Jan 2023 18:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674585767;
-        bh=DBSo7OynaPiD3LOZ5Et+hWfS1NPFDENYrFZZTqaJ4Zo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RuxlPFOPF6nG3xhTMWTioiwTQkM78eHKGibjNQ4Ld2qVM6eMg+Pqb+1pVDyLlEO88
-         pCYdM+O5ReIsLpkyvLRIL8D6J8ybMRFahWkSUIYHGGmpS8jhZzaK8678isY2qke6J2
-         Cc4WWweSKl5bPOqJYmyqqauDgUrccGrX1l18oSf5R4CHQZk/4niQE1RwVUAD8XWJaR
-         TwCmM300aL9mG3rYbQBV7zQVXNTDypTmog+KVAjaRBT2nOh06Tg7xGq2KZH3P2MUdk
-         IYGcne5XS33CH7MmDjhdgIB4U4YYi0kmVixCDf3HSDRQD921jyFvl2U+H5qXGNjAMO
-         DsXd2ZRZKdUcA==
-Received: by mail-vs1-f49.google.com with SMTP id t10so17452873vsr.3;
-        Tue, 24 Jan 2023 10:42:47 -0800 (PST)
-X-Gm-Message-State: AFqh2kogD8gk997Ly8jqKxhPwk/3wFcKmHnlw6wmkYwFdlWvhxipBIbr
-        XNiUK+W5oJ0jD+EUXb9955/nCw9QPqs22iOIDQ==
-X-Google-Smtp-Source: AMrXdXvM0olT9jSHiUMDJsNqRTneaeFB/92hij1cU2Y+/6V74N/GT/dxRky2xzkFIbykeif2r193/563hWiLeZlWlho=
-X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
- bk16-20020a056102549000b003b51fe4f1c2mr3941513vsb.0.1674585766048; Tue, 24
- Jan 2023 10:42:46 -0800 (PST)
+        Tue, 24 Jan 2023 13:43:04 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19209166DE;
+        Tue, 24 Jan 2023 10:42:57 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15b9c93848dso18749142fac.1;
+        Tue, 24 Jan 2023 10:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wiC7R/H94hYc1SsjxtFjmBRg+lLwk6SCWMFgpc1MdSs=;
+        b=TWgfRWQ1fiNK9XA0MeyWCulPPMMPqNScBqLHRvlK6asoKbQj9I0w6ySJijKI+mhMT8
+         pRnZDojAvcUNveVWtL1UWkAJ6zTSCUAbo5UNdTdmSaW6AV/Wr33UDUBcr6cO+2pHFkwe
+         G/piuIrO5Vb167eQnFEvCsEi1aq8oJzQSZjLzScoLNLbF5GdveawKeGu0G2+8/tGRMbl
+         E9ajFnwZuXJNlk/ROCjHZzvanQHNAUxvWie/YsD3BvzPxx5DpEoGTePvjKBYSvAbcQEe
+         MLrcimPt1cSVDJ+Q9Detk45kXFYiVobuCsfoRzp3IWBharfpwmF1HBtC87H3MSYidHIG
+         gdag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wiC7R/H94hYc1SsjxtFjmBRg+lLwk6SCWMFgpc1MdSs=;
+        b=0UBYV48mrppEyAaHGAAaa5036iKRK4Kl0D8mbLvPcQcGO7U7+Kf4AmBVG0E5dYSM80
+         GkB9vQDnvgiUW93Yhle3wHkSoUOybHfH1LvDiD6zGzEfgsoQoLBwmdE6fBk03fg7im3n
+         es8AhKSLdz69Ruuvuz9GIcUs6TEm+OEfU/WjB6H4G2cFvKeB721h6ezNKkVWCebvk9/H
+         FOvlybTSx4nv2QUMTCQcxPxiEjLpUhCVwmFy6ej2t7bxuPcHaACsiE8n2o0SZyZAHZQT
+         Go6FDeMNa68soYWyw8tK34XL69GS+qxODHOqM9CUTK44m3Ce8QQjYBTKrS3UlAvKsosD
+         4kDg==
+X-Gm-Message-State: AO0yUKVgFtHjyK+Cm2QAC9bsAaQQQNO8ZrQW2iidzotLT4UIQ/AbgWpj
+        f7w3X/yF02TX+eMuqPrXq45Rc1yAClEH3zMaKEs=
+X-Google-Smtp-Source: AK7set/yUllb1k65k/qoEf6g8aCEBffXa0VIT5A8LJQ/UtfJd94cYwGOrF92P7dAa0f9KBNc/egCyQP7T7Rgfgrct00=
+X-Received: by 2002:a05:6870:1115:b0:163:1d2a:aa5d with SMTP id
+ 21-20020a056870111500b001631d2aaa5dmr124635oaf.81.1674585776376; Tue, 24 Jan
+ 2023 10:42:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20230110-dt-usb-v3-0-5af0541fcf8c@kernel.org> <Y9ASq0VZ6G7Efe7s@kroah.com>
-In-Reply-To: <Y9ASq0VZ6G7Efe7s@kroah.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 24 Jan 2023 12:42:34 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJJ8tFUCw-MbAsfJ7vKssRxu=p+3jG7dURmB77DOYoiSg@mail.gmail.com>
-Message-ID: <CAL_JsqJJ8tFUCw-MbAsfJ7vKssRxu=p+3jG7dURmB77DOYoiSg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] dt-bindings: usb: Convert some more simple
- OHCI/EHCI bindings
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Lee Jones <lee@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, openbmc@lists.ozlabs.org
+Received: by 2002:a8a:ad6:0:b0:49c:e11d:f815 with HTTP; Tue, 24 Jan 2023
+ 10:42:55 -0800 (PST)
+In-Reply-To: <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
+References: <20230116212105.1840362-1-mjguzik@gmail.com> <20230116212105.1840362-2-mjguzik@gmail.com>
+ <CAHC9VhSKEyyd-s_j=1UbA0+vOK7ggyCp6e-FNSG7XVYvCxoLnA@mail.gmail.com>
+ <CAGudoHF+bg0qiq+ByVpysa9t8J=zpF8=d1CqDVS5GmOGpVM9rQ@mail.gmail.com>
+ <CAHC9VhTnpWKnKRu3wFTNfub_qdcDePdEXYZWOpvpqL0fcfS_Uw@mail.gmail.com>
+ <CAGudoHEWQJKMS=pL9Ate4COshgQaC-fjQ2RN3LiYmdS=0MVruA@mail.gmail.com>
+ <CAHC9VhSYg-BbJvNBZd3dayYCf8bzedASoidnX23_i4iK7P-WxQ@mail.gmail.com> <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Tue, 24 Jan 2023 19:42:55 +0100
+Message-ID: <CAGudoHG22iS3Bt1rh_kEJDEstj3r1Mj4Z305vqRbP8vBjQZ3dg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] vfs: avoid duplicating creds in faccessat if possible
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Paul Moore <paul@paul-moore.com>, viro@zeniv.linux.org.uk,
+        serge@hallyn.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 11:17 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On 1/24/23, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Tue, Jan 24, 2023 at 9:00 AM Paul Moore <paul@paul-moore.com> wrote:
+>>
+>> My main concern is the duplication between the cred check and the cred
+>> override functions leading to a bug at some unknown point in the
+>> future.
 >
-> On Mon, Jan 23, 2023 at 09:05:15PM -0600, Rob Herring wrote:
-> > The 'ohci-usb' compatible is another 'generic' compatible for OHCI, but
-> > isn't documented with a schema. Let's add it to generic-ohci.yaml
-> > schema. While looking at this, I found a few other USB host bindings
-> > which are simple enough to use the 'generic' schemas.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
+> Yeah, it might be good to try to have some common logic for this,
+> although it's kind of messy.
 >
-> Am I supposed to take these in my USB tree?
+> The access_override_creds() logic is fairly different from the "do I
+> need to create new creds" decision, since instead of *testing* whether
+> the fs[ug]id and [ug]id matches, it just sets the fs[ug]id to the
+> expected values.
+>
+> So that part of the test doesn't really exist.
+>
+> And the same is true of the !SECURE_NO_SETUID_FIXUP logic case - the
+> current access() override doesn't _test_ those variables for equality,
+> it just sets them.
+>
+> So Mateusz' patch doesn't really duplicate any actual logic, it just
+> has similarities in that it checks "would that new cred that
+> access_override_creds() would create be the same as the old one".
+>
+> So sharing code is hard, because the code is fundamentally not the same.
+>
+> The new access_need_override_creds() function is right next to the
+> pre-existing access_override_creds() one, so at least they are close
+> to each other. That may be the best that can be done.
+>
+> Maybe some of the "is it the root uid" logic could be shared, though.
+> Both cases do have this part in common:
+>
+>         if (!issecure(SECURE_NO_SETUID_FIXUP)) {
+>                 /* Clear the capabilities if we switch to a non-root user
+> */
+>                 kuid_t root_uid = make_kuid(override_cred->user_ns, 0);
+>                 if (!uid_eq(override_cred->uid, root_uid))
+>
+> and that is arguably the nastiest part of it all.
+>
+> I don't think it's all that likely to change in the future, though
+> (except for possible changes due to user_ns re-orgs, but then changing
+> both would be very natural).
+>
 
-Yes, please.
+You could dedup make_kuid + uid_eq check, but does it really buy
+anything?
 
-> I'm still confused if you all want me to take these types of things or
-> not...
+ns changes which break compilation will find both spots. Similarly
+any grep used to find one should also automagically find the other
+one.
 
-Yes. I try to only pick up what has less responsive subsys
-maintainers, treewide (binding) cleanups, or otherwise falls thru the
-cracks.
+I think this patch generated way more discussion than it warrants,
+especially since I deliberately went for the trivial approach in
+hopes of avoiding this kind of stuff.
 
-Rob
+So how about I simply respin with the comment I mailed earlier,
+repasted here for reference (with a slight tweak):
+
+diff --git a/fs/open.c b/fs/open.c
+index 3c068a38044c..756177b94b04 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -407,6 +407,11 @@ static const struct cred *access_override_creds(void)
+        if (!override_cred)
+                return NULL;
+
++       /*
++        * XXX access_need_override_creds performs checks in hopes of
++        * skipping this work. Make sure it stays in sync if making any
++        * changes in this routine.
++        */
+        override_cred->fsuid = override_cred->uid;
+        override_cred->fsgid = override_cred->gid;
+
+sounds like a plan?
+
+-- 
+Mateusz Guzik <mjguzik gmail.com>
