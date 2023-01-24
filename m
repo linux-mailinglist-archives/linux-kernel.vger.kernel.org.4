@@ -2,76 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EC0679F18
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F390B679F1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbjAXQpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S234609AbjAXQp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234631AbjAXQo7 (ORCPT
+        with ESMTP id S234565AbjAXQpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:44:59 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FAB172B;
-        Tue, 24 Jan 2023 08:44:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uF0axQznaLLzT1o+qlzPR5UW2G9GEhXvNq93Ci6vsQI=; b=O0gy0ZqSFby9QJvWGBYgwkLVbk
-        3JJ8HNWudzHiIh7Xlz/8vlaJcDa9JbO3OBbL7q2RPfisWNq29cO1VFqg0RMbhd+Kx+EPRRPU8Mqb+
-        NrxFlN/dt0pkirEqgSo6BOrHod3HoecMBqfm7XusbtMrtKH39rEwLmVcRnwENf96Lzg05UZnIQtIs
-        WsBafmY+/WkMU1vrunNLLm/BPmX6tz4pehRE8TO/gC0ZrmBaePx3r02i+fUV+ApWX374/0e3DIjtS
-        7d4KE/YVSPyVDuKvKHb2o3q6enpmDCPeSNofSSiIttY7JF95aC7MCtv7xUHePylYNJ1ogmnz6zYw3
-        rW5d3iMQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKMPb-004iS7-16; Tue, 24 Jan 2023 16:44:43 +0000
-Date:   Tue, 24 Jan 2023 08:44:43 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
-Message-ID: <Y9AK+yW7mZ2SNMcj@infradead.org>
-References: <Y8/xApRVtqK7IlYT@infradead.org>
- <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com>
- <20230123173007.325544-1-dhowells@redhat.com>
- <20230123173007.325544-8-dhowells@redhat.com>
- <874829.1674571671@warthog.procyon.org.uk>
- <875433.1674572633@warthog.procyon.org.uk>
+        Tue, 24 Jan 2023 11:45:22 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF784C6C0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:45:15 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id t16so14948800ybk.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QqylS5Lo3YH2jz2661PX4pOVQQ/ziJPTaE7wN+OoHEs=;
+        b=OpIDwdu/r4cU3OtbGrTpTUn1uaGaVsKSXep/L98p5R65QQm1cokpwVtTor3unuqYty
+         Hurk2yVfcMTTBcT2zcEyrMiXheKNkOtYFRwf1NBoCpdaKZE9b2nW7SbiOl1/pw+ORK60
+         OZCWIB5l7bShpG0e8HkeNDKzzM4aeKQPLPaqXQdV2ckfyDC4mBm3cWdJsUU5jr6kOVtJ
+         84qrTJMR8Cey96o9a0TAEHmKW9l/Id+mOvXPzCFaW4QU+4ggQK5ELW3i2rjuaiCK7VST
+         wLuCcF3sjKgM+C8Zfyu1vpQ0X/SeXHKucd5PsGaE1DB0byyPkICaol7swVq9Vwpij8GA
+         SAOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QqylS5Lo3YH2jz2661PX4pOVQQ/ziJPTaE7wN+OoHEs=;
+        b=OumQRchH8kQXUn20LgNcnxWD0lQ220wJWqcQu90BOFS7QVm40D88rvW7oHcNgVomvN
+         xkWtzhcj75RhtKHFLWsl/iKM9HOcn5rdQZWvpIIT7R1TfOBQTDY9peVCUXL11fvuM6QE
+         EJOFyy+P2JVIB/mubaOqU9BwNpn1nBHZ2fBlX3Qp9YBHLuWGVM7tHpSzVafTFmtJSkvo
+         7u/lmpT3KUf2G7XJenJ5y0JgPN6BzdH/z767yD1IAJ3KsC2198Ps0m410w8c47sI3DOC
+         Vl3kJGPLTWU3jETArAAGmLgx7JvyF6gY//wpaPnjOjUeY3Q2KL+qkLgYmHcKSvs9RLHp
+         sLKw==
+X-Gm-Message-State: AFqh2krdfyFvf8BtPEYI4wRFYg8yF3nYA03gelVNXvRKLx7/nRF/92ID
+        hbf0y1nh3IdS0Y72OdmY5iSct98NSkIyGCKNa4qw5w==
+X-Google-Smtp-Source: AMrXdXtZPEVLbt4E2y7ClbN4olSQU0OIa8qgWqubL2tDIH+VU4Fh/bQQNeOcjXxjCOKFPpXRS+UVtpEo3UMHpXeoYjs=
+X-Received: by 2002:a25:99c7:0:b0:6e0:c7d3:f026 with SMTP id
+ q7-20020a2599c7000000b006e0c7d3f026mr3293665ybo.275.1674578714375; Tue, 24
+ Jan 2023 08:45:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875433.1674572633@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <1674138393-475-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1674138393-475-6-git-send-email-quic_vpolimer@quicinc.com>
+ <4a359748-e53c-a178-de09-2c999eb69013@linaro.org> <BN0PR02MB8173B73AC4E3DB9A7D0509DCE4C99@BN0PR02MB8173.namprd02.prod.outlook.com>
+In-Reply-To: <BN0PR02MB8173B73AC4E3DB9A7D0509DCE4C99@BN0PR02MB8173.namprd02.prod.outlook.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 24 Jan 2023 18:45:03 +0200
+Message-ID: <CAA8EJpr_YAD185VKtLD2TDmbYPpe7S4KPkoP-8N95nwKRt9Y=g@mail.gmail.com>
+Subject: Re: [PATCH Resend v11 05/15] drm/msm/dp: disable self_refresh_aware
+ after entering psr
+To:     Vinod Polimera <vpolimer@qti.qualcomm.com>
+Cc:     "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        "Vishnuvardhan Prodduturi (QUIC)" <quic_vproddut@quicinc.com>,
+        "Bjorn Andersson (QUIC)" <quic_bjorande@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 03:03:53PM +0000, David Howells wrote:
-> Christoph Hellwig <hch@infradead.org> wrote:
-> 
-> > It can't.  Per your latest branch:
-> 
-> Yes it can.  Patch 6:
+On Tue, 24 Jan 2023 at 17:10, Vinod Polimera <vpolimer@qti.qualcomm.com> wrote:
+> > -----Original Message-----
+> > From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Sent: Tuesday, January 24, 2023 5:52 AM
+> > To: Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>; dri-
+> > devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
+> > freedreno@lists.freedesktop.org; devicetree@vger.kernel.org
+> > Cc: Sankeerth Billakanti (QUIC) <quic_sbillaka@quicinc.com>; linux-
+> > kernel@vger.kernel.org; robdclark@gmail.com; dianders@chromium.org;
+> > swboyd@chromium.org; Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>;
+> > Kuogee Hsieh (QUIC) <quic_khsieh@quicinc.com>; Vishnuvardhan
+> > Prodduturi (QUIC) <quic_vproddut@quicinc.com>; Bjorn Andersson (QUIC)
+> > <quic_bjorande@quicinc.com>; Abhinav Kumar (QUIC)
+> > <quic_abhinavk@quicinc.com>
+> > Subject: Re: [PATCH Resend v11 05/15] drm/msm/dp: disable
+> > self_refresh_aware after entering psr
+> >
+> > WARNING: This email originated from outside of Qualcomm. Please be wary
+> > of any links or attachments, and do not enable macros.
 
-This never involves the cleanup mode as input.  And as I pointed out
-in the other mail, there is no need for the FOLL_ flags on the
-cleanup side.  You can just check the bio flag in bio_release_apges
-and call either put_page or unpin_user_page on that.  The direct
-callers of bio_release_page never mix them pin and get cases anyway.
-Let me find some time to code this up if it's easier to understand
-that way.
+I hope such headers can be fixed on your side rather than being sent to the ML.
+
+> >
+> > On 19/01/2023 16:26, Vinod Polimera wrote:
+> > > From: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> > >
+> > > Updated frames get queued if self_refresh_aware is set when the
+> > > sink is in psr. To support bridge enable and avoid queuing of update
+> > > frames, reset the self_refresh_aware state after entering psr.
+> >
+> > I'm not convinced by this change. E.g. analogix code doesn't do this.
+> > Could you please clarify, why do you need to toggle the
+> > self_refresh_aware flag?
+> >
+> This was done to fix a bug reported by google. The use case is as follows:
+>         CPU was running in a low frequency with debug build.
+>         When self refresh was triggered by the library, due to system latency, the queued work was not scheduled.
+>         There in another commit came and reinitialized the timer for the next PSR trigger.
+>         This sequence happened multiple times  and we found there were multiple works which are stuck and yet to be run.
+
+Where were workers stuck? Was it a busy loop around -EDEADLK /
+drm_modeset_backoff()? Also, what were ther ewma times for entry/exit
+avg times?
+
+I'm asking because the issue that you are describing sounds like a
+generic one, not the driver-specific issue. And being generic it
+should be handled in a generic fascion, in drm_self_refresh_helper.c.
+
+For example, I can imagine adding a variable to sr_data telling that
+the driver is in the process of transitioning to SR. Note: I did not
+perform a full research if it is a working solution or not. But from
+your description the driver really has to bail out early from
+drm_self_refresh_helper_entry_work().
+
+>         As PSR trigger is guarded by self_refresh_aware, we initialized the variable such that, if we are in PSR then until PSR exit, there cannot be any further PSR entry again.
+>                 https://chromium.googlesource.com/chromiumos/third_party/kernel/+/refs/tags/v5.15.90/drivers/gpu/drm/drm_self_refresh_helper.c#105
+
+Yes, and that's what triggered my attention. We are using a set of
+helpers, that depend on the self_refresh_aware being true. And
+suddenly under the hood we disable this flag. I'd say that I can not
+predict the effect this will have on the helpers library behaviour.
+
+>         This has solved few flicker issues during the stress testing.
+> > >
+> > > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> > > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> > > ---
+> > >   drivers/gpu/drm/msm/dp/dp_drm.c | 27
+> > ++++++++++++++++++++++++++-
+> > >   1 file changed, 26 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c
+> > b/drivers/gpu/drm/msm/dp/dp_drm.c
+> > > index 029e08c..92d1a1b 100644
+> > > --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+> > > +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+> > > @@ -134,6 +134,8 @@ static void edp_bridge_atomic_enable(struct
+> > drm_bridge *drm_bridge,
+> > >       struct drm_crtc_state *old_crtc_state;
+> > >       struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+> > >       struct msm_dp *dp = dp_bridge->dp_display;
+> > > +     struct drm_connector *connector;
+> > > +     struct drm_connector_state *conn_state = NULL;
+> > >
+> > >       /*
+> > >        * Check the old state of the crtc to determine if the panel
+> > > @@ -150,10 +152,22 @@ static void edp_bridge_atomic_enable(struct
+> > drm_bridge *drm_bridge,
+> > >
+> > >       if (old_crtc_state && old_crtc_state->self_refresh_active) {
+> > >               dp_display_set_psr(dp, false);
+> > > -             return;
+> > > +             goto psr_aware;
+> > >       }
+> > >
+> > >       dp_bridge_atomic_enable(drm_bridge, old_bridge_state);
+> > > +
+> > > +psr_aware:
+> > > +     connector =
+> > drm_atomic_get_new_connector_for_encoder(atomic_state,
+> > > +                                                     drm_bridge->encoder);
+> > > +     if (connector)
+> > > +             conn_state =
+> > drm_atomic_get_new_connector_state(atomic_state,
+> > > +                                                             connector);
+> > > +
+> > > +     if (conn_state) {
+> > > +             conn_state->self_refresh_aware = dp->psr_supported;
+> > > +     }
+> >
+> > No need to wrap a single line statement in brackets.
+> >
+> > > +
+> > >   }
+> > >
+> > >   static void edp_bridge_atomic_disable(struct drm_bridge *drm_bridge,
+> > > @@ -164,6 +178,14 @@ static void edp_bridge_atomic_disable(struct
+> > drm_bridge *drm_bridge,
+> > >       struct drm_crtc_state *new_crtc_state = NULL, *old_crtc_state = NULL;
+> > >       struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+> > >       struct msm_dp *dp = dp_bridge->dp_display;
+> > > +     struct drm_connector *connector;
+> > > +     struct drm_connector_state *conn_state = NULL;
+> > > +
+> > > +     connector =
+> > drm_atomic_get_old_connector_for_encoder(atomic_state,
+> > > +                                                     drm_bridge->encoder);
+> > > +     if (connector)
+> > > +             conn_state =
+> > drm_atomic_get_new_connector_state(atomic_state,
+> > > +                                                             connector);
+> > >
+> > >       crtc = drm_atomic_get_old_crtc_for_encoder(atomic_state,
+> > >                                                  drm_bridge->encoder);
+> > > @@ -190,6 +212,9 @@ static void edp_bridge_atomic_disable(struct
+> > drm_bridge *drm_bridge,
+> > >        * when display disable occurs while the sink is in psr state.
+> > >        */
+> > >       if (new_crtc_state->self_refresh_active) {
+> > > +             if (conn_state)
+> > > +                     conn_state->self_refresh_aware = false;
+> > > +
+> > >               dp_display_set_psr(dp, true);
+> > >               return;
+> > >       } else if (old_crtc_state->self_refresh_active) {
+> >
+> > --
+> > With best wishes
+> > Dmitry
+>
+> Thanks,
+> Vinod P.
+>
+
+
+-- 
+With best wishes
+Dmitry
