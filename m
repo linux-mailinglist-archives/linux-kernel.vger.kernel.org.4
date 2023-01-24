@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958BB67937A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF0167937D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjAXIuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S233037AbjAXIuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233037AbjAXIuB (ORCPT
+        with ESMTP id S233306AbjAXIuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:50:01 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BA83EFC6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:49:59 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id g10so10851406wmo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:49:59 -0800 (PST)
+        Tue, 24 Jan 2023 03:50:04 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8855F3FF04
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:50:01 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12303725wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:50:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NQlLH4F//e+0nGhuiqUoN7kmS+jtFMZHtOpvMPzVDqA=;
-        b=T9gSe8QWoUu2K8raTJP98YBDUSrKM5n38pF//yl1mCiL/e84RR403Dv6hGGoLSPgmH
-         vtBEaXSWVr30gj3VVZVNEDfKoZon2Q9LCvyPcQZVluc6RzZiHyD68n+Jmy8N9sKYr0Dk
-         uJfhVvvitkbzZ1fx8JFwi0n6SchH132lbKq3qf7oi+IDGeWfylGNx5HXkOO2pMqZEnk4
-         MaG+GyuFBg6FdtXsqWMsz7IBka4GSJ9SWxiU3A+1kq2peRu6YbuMosSIyfHaEFTnTrvE
-         WVfoeqE/Zi/LZpaAz6LlW6jfjzYmFaUOHMLtb2+paiz8OBo2Gdp0lfXBs+VReJfKpW3u
-         LcwQ==
+        bh=oD52YgTCemzXDaGqkXika2VPrKf8oXYMlqk9+OcA3a0=;
+        b=fb8siKApjjN82Y79a4FaMmlnBqfE9/H75opK/f+BiT+gO+kwA1oN1Lerem+/XP9TPa
+         tB7wKiA5CIn0uyEmpEAIuu8P8up1wNzfdTmPP2QBpHwTPx4coDJLNG3iDwRj1U7VLJVZ
+         e3PHLTW33hUx/ogizpxIWqL0vYQnkhIl1C75a0F3Ipb/3jz7CSUlZKSaMJU4Cr2pTXjM
+         7QM37Vab/DuCIXj3miWb730VWkxQOlK5Kya8Hm/fMKg6D7G76BcInKWDAbbxr+tHVeHg
+         skyc7chFX53yZZWQwKHZPRI5hg9LLmJw9fJ53IvinsQ7t6cMZoNQwpceeUmsGP/qvHP9
+         ksiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NQlLH4F//e+0nGhuiqUoN7kmS+jtFMZHtOpvMPzVDqA=;
-        b=EncwfrK2FXPtyrgY93RI4idmRZ3xfefOkpX80QH+LQUiNl/IGJVz1NfitHqf1NBPOt
-         7ltW92ae/Vo1HovjNmLfh1m2B0b06J45y7nv7m6HGoGvGSsBk0W/PBafkJNHYmmFEqAO
-         McWL0BNeWj635PsOjU74Rs96z4kqXVSB7eG5dvLio+5MnZCtrEXUXFLISGYn7NfhYX3I
-         BoIaj6IctmQydVybvF3o5o9D1jG/v7J4ngiM1ydvnfGAah0kBfX+8/oAw3TV2KyTF6YW
-         VH6chwIwFPSEzr+DsyXE6m+ODemGGecvwBJKE+JP8oalf1F0AcHNSQzoNdzbo2ZgMRIN
-         09Sg==
-X-Gm-Message-State: AFqh2kouGVlCEOQs3qDtddgR0CcMc39tG1grLaLNmUXziAaKlmdh6aGn
-        2jo18BoqAg3lQYXd4vzqBbB1+w==
-X-Google-Smtp-Source: AMrXdXsTxrvjnCKmdKx3Km164P4kObSZG/qOX8Az9C7Qsi/aa2jKQA+ghn/KxkgfSfH7C0rwCYrcag==
-X-Received: by 2002:a05:600c:3c92:b0:3d3:4007:9c88 with SMTP id bg18-20020a05600c3c9200b003d340079c88mr27272624wmb.18.1674550198260;
-        Tue, 24 Jan 2023 00:49:58 -0800 (PST)
+        bh=oD52YgTCemzXDaGqkXika2VPrKf8oXYMlqk9+OcA3a0=;
+        b=P+oh7s6NS3jmml1D3MGTAxG1iK6/fWkbvPZ7K8NuLDM2aY4WslIDwOioTcNJhR8Csp
+         /Ze0rfJxNr/68axRjmaiv90Y6KaPhXN1dcch6J4aPLu5KRmibRc0aXPUd8bszxlvXY3t
+         9rjaZJOls4ed2zXUBVgn2AXLKmgD68nPWam2gWzMSvu9aJUy9Va+2AR/7MIFNCkQ07s8
+         dhxMivtKcBa0sJQLZvE00RBNy9ybZLiFwSI9f0hK7Wq0q4D6UcHL/WakoeunVLv0itO5
+         fF1YVNZmAYUDdL/p+emca8lBENANffAuF1MBz3qZUs6BHSyJtqgLUP8AH7HJJZmoCLHA
+         B4UQ==
+X-Gm-Message-State: AFqh2kp3oYu1bllW8MCW1riUQLtWGKWHY9eIMkmXwgQG6LK+wbQApA2P
+        Zep9WsHglC/rNmk8QUEh/rZMqg==
+X-Google-Smtp-Source: AMrXdXtz0Z3lKjCTtHVwHjLx/OF0OYLE6Qqbyu693AjZj7Epf9NcbIQvDwOTDl1IHJZQi5ByQDH1TA==
+X-Received: by 2002:a05:600c:a29e:b0:3d9:ee01:ae5b with SMTP id hu30-20020a05600ca29e00b003d9ee01ae5bmr26905766wmb.12.1674550200082;
+        Tue, 24 Jan 2023 00:50:00 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p18-20020a05600c431200b003dab40f9eafsm1340036wme.35.2023.01.24.00.49.55
+        by smtp.gmail.com with ESMTPSA id p18-20020a05600c431200b003dab40f9eafsm1340036wme.35.2023.01.24.00.49.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 00:49:57 -0800 (PST)
+        Tue, 24 Jan 2023 00:49:59 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/4] arm64: dts: qcom: sm8350: drop incorrect cells from serial
-Date:   Tue, 24 Jan 2023 09:49:49 +0100
-Message-Id: <20230124084951.38195-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 3/4] arm64: dts: qcom: sm8450: drop incorrect cells from serial
+Date:   Tue, 24 Jan 2023 09:49:50 +0100
+Message-Id: <20230124084951.38195-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230124084951.38195-1-krzysztof.kozlowski@linaro.org>
 References: <20230124084951.38195-1-krzysztof.kozlowski@linaro.org>
@@ -83,7 +83,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The serial/UART device node does not have children with unit addresses,
 so address/size cells are not correct.
 
-Fixes: cf03cd7e12bd ("arm64: dts: qcom: sm8350: Set up WRAP0 QUPs")
+Fixes: f5837418479a ("arm64: dts: qcom: sm8450: add uart20 node")
+Fixes: 5188049c9b36 ("arm64: dts: qcom: Add base SM8450 DTSI")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
@@ -96,22 +97,31 @@ Changes since v2:
 Changes since v1:
 1. None
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index fafd92edc855..f9a05bdcc364 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1048,8 +1048,6 @@ uart2: serial@98c000 {
- 				interrupts = <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&rpmhpd SM8350_CX>;
- 				operating-points-v2 = <&qup_opp_table_100mhz>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 5ba65780166e..873bc9c412f2 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -1007,8 +1007,6 @@ uart20: serial@894000 {
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&qup_uart20_default>;
+ 				interrupts = <GIC_SPI 587 IRQ_TYPE_LEVEL_HIGH>;
 -				#address-cells = <1>;
 -				#size-cells = <0>;
  				status = "disabled";
  			};
  
+@@ -1401,8 +1399,6 @@ uart7: serial@99c000 {
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&qup_uart7_tx>, <&qup_uart7_rx>;
+ 				interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+ 				status = "disabled";
+ 			};
+ 		};
 -- 
 2.34.1
 
