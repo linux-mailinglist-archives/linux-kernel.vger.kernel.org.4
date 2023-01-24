@@ -2,144 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE3367A331
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6CE67A2F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234953AbjAXTgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S234510AbjAXTbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbjAXTfw (ORCPT
+        with ESMTP id S230214AbjAXTbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:35:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8A611EAB;
-        Tue, 24 Jan 2023 11:35:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E8BDB816CE;
-        Tue, 24 Jan 2023 19:35:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C05C433A7;
-        Tue, 24 Jan 2023 19:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674588927;
-        bh=Zy1RraKZmq/HXrRYDNwCyTD3uNkSwVS4rzLVDGA9LyA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NptYpFp+r0IIRw5L3bTrzx4thCHBIZEUr94IzxUKdbR6V5p1dY2lYGeI9EvUBV5iZ
-         sstD9CduqEFNz5RTWt4n/lZM89BEn5898/4uVxud+7SVC9+oL4smuC5NRHgSqo8jNj
-         K4NhxEkky7zq7Bjt72wgZ9wTATPaDb8g8Hw/JAhntMcMqgqc3lNqpVKmJYzITia3k1
-         hORE0CaSJ4SR+0DvvuJ+UPszMsnYwCm9buzjnuDiY6uRIWvL0jnnFntMzvxNNIRb0c
-         ZXtYlXiRNtr1bQ7ayX6pUjJimfRzAEwYjYzqX+XvJQ4iRGceP+76oB+HuVFZnQb8Kp
-         ZLWh4Rslhe41g==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, SeongJae Park <sj@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Jann Horn <jannh@google.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Marco Elver <elver@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 5.10 20/20] exit: Use READ_ONCE() for all oops/warn limit reads
-Date:   Tue, 24 Jan 2023 11:30:04 -0800
-Message-Id: <20230124193004.206841-21-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230124193004.206841-1-ebiggers@kernel.org>
-References: <20230124193004.206841-1-ebiggers@kernel.org>
+        Tue, 24 Jan 2023 14:31:13 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE8A4FC24
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:30:47 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P1cLT0M5Gz9xFmQ
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:22:41 +0800 (CST)
+Received: from [10.45.158.189] (unknown [10.45.158.189])
+        by APP1 (Coremail) with SMTP id LxC2BwD3fQnDMdBjMunDAA--.14846S2;
+        Tue, 24 Jan 2023 20:30:23 +0100 (CET)
+Message-ID: <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
+Date:   Tue, 24 Jan 2023 20:30:08 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+To:     paulmck@kernel.org
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <20230120212037.GW2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y82dWEW4RwclDTGM@rowland.harvard.edu>
+ <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
+ <Y88/5ib7zYl67mcE@rowland.harvard.edu>
+ <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8+8fH52iqQABYs2@andrea>
+ <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
+ <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
+ <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwD3fQnDMdBjMunDAA--.14846S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF45Ww4xGr4DKrWrXry7KFg_yoW5AF4rpF
+        Z3tanrAFn5XrZ5CrnFvwsFgr9a93W8GF15Xws8Xw1IyFnIkFn3AF45tryF9FyUXr97Gw1j
+        qrWUKay3Ar1DCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUFDGOUUUUU
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
 
-commit 7535b832c6399b5ebfc5b53af5c51dd915ee2538 upstream.
 
-Use a temporary variable to take full advantage of READ_ONCE() behavior.
-Without this, the report (and even the test) might be out of sync with
-the initial test.
+On 1/24/2023 6:26 PM, Paul E. McKenney wrote:
+> On Tue, Jan 24, 2023 at 05:39:53PM +0100, Jonas Oberhauser wrote:
+>>
+>> On 1/24/2023 5:22 PM, Paul E. McKenney wrote:
+>>> I clearly recall some
+>>> store-based lack of ordering after a grace period from some years back,
+>>> and am thus far failing to reproduce it.
+>>>
+>>> And here is another attempt that herd7 actually does allow.
+>>>
+>>> So what did I mess up this time?  ;-)
+>>>
+>>> 							Thanx, Paul
+>>>
+>>> ------------------------------------------------------------------------
+>>>
+>>> C C-srcu-observed-4
+>>>
+>>> (*
+>>>    * Result: Sometimes
+>>>    *
+>>>    * The Linux-kernel implementation is suspected to forbid this.
+>>>    *)
+>>>
+>>> {}
+>>>
+>>> P0(int *x, int *y, int *z, struct srcu_struct *s)
+>>> {
+>>> 	int r1;
+>>>
+>>> 	r1 = srcu_read_lock(s);
+>>> 	WRITE_ONCE(*y, 2);
+>>> 	WRITE_ONCE(*x, 1);
+>>> 	srcu_read_unlock(s, r1);
+>>> }
+>>>
+>>> P1(int *x, int *y, int *z, struct srcu_struct *s)
+>>> {
+>>> 	int r1;
+>>>
+>>> 	WRITE_ONCE(*y, 1);
+>>> 	synchronize_srcu(s);
+>>> 	WRITE_ONCE(*z, 2);
+>>> }
+>>>
+>>> P2(int *x, int *y, int *z, struct srcu_struct *s)
+>>> {
+>>> 	WRITE_ONCE(*z, 1);
+>>> 	smp_store_release(x, 2);
+>>> }
+>>>
+>>> exists (x=1 /\ y=1 /\ z=1)
+>> I think even if you implement the unlock as mb() followed by some store that
+>> is read by the gp between mb()s, this would still be allowed.
+> The implementation of synchronize_srcu() has quite a few smp_mb()
+> invocations.
+>
+> But exactly how are you modeling this?  As in what additional accesses
+> and memory barriers are you placing in which locations?
 
-Reported-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/lkml/Y5x7GXeluFmZ8E0E@hirez.programming.kicks-ass.net
-Fixes: 9fc9e278a5c0 ("panic: Introduce warn_limit")
-Fixes: d4ccd54d28d3 ("exit: Put an upper limit on how often we can oops")
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Marco Elver <elver@google.com>
-Cc: tangmeng <tangmeng@uniontech.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- kernel/exit.c  | 6 ++++--
- kernel/panic.c | 7 +++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+Along these lines:
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 8c820aa7b9c5d..bacdaf980933b 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -916,6 +916,7 @@ void __noreturn make_task_dead(int signr)
- 	 * Take the task off the cpu after something catastrophic has
- 	 * happened.
- 	 */
-+	unsigned int limit;
- 
- 	/*
- 	 * Every time the system oopses, if the oops happens while a reference
-@@ -927,8 +928,9 @@ void __noreturn make_task_dead(int signr)
- 	 * To make sure this can't happen, place an upper bound on how often the
- 	 * kernel may oops without panic().
- 	 */
--	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit) && oops_limit)
--		panic("Oopsed too often (kernel.oops_limit is %d)", oops_limit);
-+	limit = READ_ONCE(oops_limit);
-+	if (atomic_inc_return(&oops_count) >= limit && limit)
-+		panic("Oopsed too often (kernel.oops_limit is %d)", limit);
- 
- 	do_exit(signr);
- }
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 6e30455eb2e7c..bc39e2b27d315 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -222,12 +222,15 @@ static void panic_print_sys_info(void)
- 
- void check_panic_on_warn(const char *origin)
- {
-+	unsigned int limit;
-+
- 	if (panic_on_warn)
- 		panic("%s: panic_on_warn set ...\n", origin);
- 
--	if (atomic_inc_return(&warn_count) >= READ_ONCE(warn_limit) && warn_limit)
-+	limit = READ_ONCE(warn_limit);
-+	if (atomic_inc_return(&warn_count) >= limit && limit)
- 		panic("%s: system warned too often (kernel.warn_limit is %d)",
--		      origin, warn_limit);
-+		      origin, limit);
- }
- 
- /**
--- 
-2.39.1
+P0(int *x, int *y, int *z, int *magic_location)
+{
+	int r1;
+
+
+	WRITE_ONCE(*y, 2);
+	WRITE_ONCE(*x, 1);
+
+         smp_mb();
+	WRITE_ONCE(*magic_location, 1);
+
+}
+
+P1(int *x, int *y, int *z, int *magic_location)
+{
+	int r1;
+
+	WRITE_ONCE(*y, 1);
+
+         smp_mb();
+         while (! READ_ONCE(*magic_location))
+		;
+	smp_mb();
+	WRITE_ONCE(*z, 2);
+}
+
+
+P2(int *x, int *y, int *z, struct srcu_struct *s)
+{
+	WRITE_ONCE(*z, 1);
+	smp_store_release(x, 2);
+}
+
+
+
+Note that you can add as many additional smp_mb() and other accesses as 
+you want around the original srcu call sites. I don't see how they could 
+influence the absence of a cycle.
+
+(Also, to make it work with herd it seems you need to replace the loop 
+with a single read and state in the exists clause that it happens to 
+read a 1.)
+
+>> I have already forgotten the specifics, but I think the power model allows
+>> certain stores never propagating somewhere?
+> PowerPC would forbid the 3.2W case, where each process used an
+> smp_store_release() as its sole ordering (no smp_mb() calls at all).
+>
+> [...]
+>
+> This propagation is modulated by the memory barriers, though.
+
+Ah, looking at the model now. Indeed it's forbidden, because in order to 
+say that something is in co, there must not be a (resulting) cycle of co 
+and barriers. But you'd get that here.  In the axiomatic model, this 
+corresponds to saying Power's "prop | co" is acyclic. The same isn't 
+true in LKMM. So that's probably why.
+
+Have fun, jonas
 
