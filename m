@@ -2,98 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF48E67A3F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD1967A3FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjAXUcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S234006AbjAXUdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjAXUch (ORCPT
+        with ESMTP id S229646AbjAXUdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:32:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361B8485B7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:31:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674592308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uh/+HvzKrTBUoVxhArKOizvvmhv3uYpJ6dJ2xzDMsaI=;
-        b=WN530v4rMdaQbnPJAnQeNfkuH5xTJ1xsL1z2Fib7PmVGuWim3st7nv9pnQrWJ3TAOP54uY
-        5QOItALlC9D9ib93zinQeLrEdKpXI9Isx4vQso4sMy60ZK3UFIWUeOVgGoRo9fpEJ8Kh7K
-        3PB2QsjK5MYF9HgPsRdUGHKKs6HXLFs=
-Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
- [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-462-s5dZmYzJO9q8-HxU2S3aNA-1; Tue, 24 Jan 2023 15:31:47 -0500
-X-MC-Unique: s5dZmYzJO9q8-HxU2S3aNA-1
-Received: by mail-vs1-f72.google.com with SMTP id d187-20020a671dc4000000b003c3a754b594so3995655vsd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:31:47 -0800 (PST)
+        Tue, 24 Jan 2023 15:33:07 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932346A5;
+        Tue, 24 Jan 2023 12:33:02 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id w11so4316171edv.0;
+        Tue, 24 Jan 2023 12:33:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uh/+HvzKrTBUoVxhArKOizvvmhv3uYpJ6dJ2xzDMsaI=;
-        b=Q2SLr01udhXj70/5mkBYBUsSYUK1X3HKjPcBTVP82VPSBi1oi2krOR9OUu0RMeCbKk
-         L55rgqwoNaKDw0IGqqBBPdNPLJbKf1Ge0HiWJcvzstAbBQeizuEvw8lXtn4Yvop7OJng
-         Hhj3kFuCeWEWC+QAoe5x92kHUmP4miiNAFtrFfFeSHkMb1XJIxAqvR5WKFPJ60rcUhDp
-         kgF/XngMA0Xxxj8/GHzegkAY7pUILZJpTJvdqFRHpyUSL/8gKkhgpobFLuM4r3Db5xrY
-         g8IL9OrbFF7As/AmeYKtx9PXSrflYPcc4hIjsYHU+NAFNUHSv3sjTGTsXFyJbdQtjfss
-         P1pQ==
-X-Gm-Message-State: AFqh2krnmv1piHTCpSVsx2kIEoUm/7C4y4HA6zGdRousmnfI7lLEWHgl
-        6/Rl4SlPhZ66ky4yTk1Lagl3wptHhP8eNHO6c0+dBzq7uUpF7QzWX7Y9xUiXpH8KF0xNP3ZGMUJ
-        PD9v4uPO7L/GiNWEGI9v1ZkxY
-X-Received: by 2002:a67:f049:0:b0:3d3:cc3e:1cb8 with SMTP id q9-20020a67f049000000b003d3cc3e1cb8mr21478516vsm.6.1674592306013;
-        Tue, 24 Jan 2023 12:31:46 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvXX350O2gooqvZotJtjKqUSnAbPCSKlHgvw3iaV0OvujJ5QBCAbrLbpwxP6w+E8eexeRm2fw==
-X-Received: by 2002:a67:f049:0:b0:3d3:cc3e:1cb8 with SMTP id q9-20020a67f049000000b003d3cc3e1cb8mr21478495vsm.6.1674592305816;
-        Tue, 24 Jan 2023 12:31:45 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id y27-20020a05620a09db00b006cfc9846594sm2048624qky.93.2023.01.24.12.31.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 12:31:45 -0800 (PST)
-Date:   Tue, 24 Jan 2023 15:31:44 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sa8540p-ride: Fix some i2c pinctrl
- settings
-Message-ID: <Y9BAMO+qLqiYZkr7@x1>
-References: <20230124192351.695838-1-ahalaney@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hLMuamyiEkVxFlo4bpu/j50H3Gmc39mnq5ps46HJInM=;
+        b=B7Uf301KQdUEU4wLXYWeo5Xt/tHFq/mYNwm8GQ7en0DSI5/MUUiytmvGUlVfGzMFpN
+         FYHZWvlvt5pNHy9+FhlcXHyn7Y0lYBGZbL7zasVE78Dbg52QO7aaaXf+CSP1g0jUYOcy
+         lh7Lq0XJ+Ak+gLi91cn9329gdcn4qqoOemxMO/CZumzFHq3jP0SB/8lH8kA+OS1LMhDz
+         SViJAUPkJQ0mZYC3oBWHpImb2H8jd/ZzFY8WYRCI6Evr+jeq5NwLVDZcPZWvNYnW5btD
+         47Op6xdE0mntdiA+CDDdUldEaDqD9fc2tsTXaS7HwGgM5f/kHsRWUWtODlkIVpAJlHrJ
+         Q+7g==
+X-Gm-Message-State: AFqh2ko2bnT5YOrfM0c2djfIph+RLFzr06YeM/GJVAY4MTYtgxdxhzTI
+        U0z4EBPym9uN8a7dAKkESzYzNwD3ohndOz4cyKA=
+X-Google-Smtp-Source: AMrXdXsi9Z4o6NR9nxS+XvbV4TvF/2sYLkf+RWnW0dEd8aSqKvrYiEcKljqXfFK0PjovolbaZHJ9xkgq3p1zbIIwfwY=
+X-Received: by 2002:a05:6402:1002:b0:49a:1676:4280 with SMTP id
+ c2-20020a056402100200b0049a16764280mr3625796edu.16.1674592380903; Tue, 24 Jan
+ 2023 12:33:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124192351.695838-1-ahalaney@redhat.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Jan 2023 21:32:49 +0100
+Message-ID: <CAJZ5v0hBy2Jgezhuamz+++_EVfrO2gyuaC8vXvRMHvE5MjxtXw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: int340x: Protect trip temperature from
+ dynamic update
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 01:23:50PM -0600, Andrew Halaney wrote:
-> Some of the pinctrl groups were invalid for the selected pins. Select
-> the proper qup group to fix these warnings:
-> 
-> [    6.523566] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio135" for function "qup15"
-> [    6.535042] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio136" for function "qup15"
-> [    6.597536] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio158" for function "qup15"
-> [    6.597544] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio159" for function "qup15"
-> [    6.597991] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio0" for function "qup15"
-> [    6.597996] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio1" for function "qup15"
-> 
-> Fixes: e073899ec3e1 ("arm64: dts: qcom: sa8540p-ride: add i2c nodes")
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+On Mon, Jan 23, 2023 at 6:26 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Trip temperatures are read using ACPI methods and stored in the memory
+> during zone initializtion and when the firmware sends a notification for
+> change. This trip temperature is returned when the thermal core calls via
+> callback get_trip_temp().
+>
+> But it is possible that while updating the memory copy of the trips when
+> the firmware sends a notification for change, thermal core is reading the
+> trip temperature via the callback get_trip_temp(). This may return invalid
+> trip temperature.
+>
+> To address this add a mutex to protect the invalid temperature reads in
+> the callback get_trip_temp() and int340x_thermal_read_trips().
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org # 5.0+
+> ---
+> v2:
+> - rebased on linux-next
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+So I've rebased it back onto 6.2-rc5 and pushed the result into the
+thermal-intel-fixes branch.  Please see if it looks good to you and
+let me know.
 
+I'd prefer to push it for 6.2-rc.
+
+> - Add ret variable and remove return as suugested by Rafael
+
+Thanks!
+
+>  .../int340x_thermal/int340x_thermal_zone.c     | 18 +++++++++++++++---
+>  .../int340x_thermal/int340x_thermal_zone.h     |  1 +
+>  2 files changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> index 228f44260b27..5fda1e67b793 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> @@ -41,7 +41,9 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>                                          int trip, int *temp)
+>  {
+>         struct int34x_thermal_zone *d = zone->devdata;
+> -       int i;
+> +       int i, ret = 0;
+> +
+> +       mutex_lock(&d->trip_mutex);
+>
+>         if (trip < d->aux_trip_nr)
+>                 *temp = d->aux_trips[trip];
+> @@ -60,10 +62,12 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>                         }
+>                 }
+>                 if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
+> -                       return -EINVAL;
+> +                       ret = -EINVAL;
+>         }
+>
+> -       return 0;
+> +       mutex_unlock(&d->trip_mutex);
+> +
+> +       return ret;
+>  }
+>
+>  static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
+> @@ -165,6 +169,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+>         int trip_cnt = int34x_zone->aux_trip_nr;
+>         int i;
+>
+> +       mutex_lock(&int34x_zone->trip_mutex);
+> +
+>         int34x_zone->crt_trip_id = -1;
+>         if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
+>                                              &int34x_zone->crt_temp))
+> @@ -192,6 +198,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+>                 int34x_zone->act_trips[i].valid = true;
+>         }
+>
+> +       mutex_unlock(&int34x_zone->trip_mutex);
+> +
+>         return trip_cnt;
+>  }
+>  EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
+> @@ -215,6 +223,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+>         if (!int34x_thermal_zone)
+>                 return ERR_PTR(-ENOMEM);
+>
+> +       mutex_init(&int34x_thermal_zone->trip_mutex);
+> +
+>         int34x_thermal_zone->adev = adev;
+>
+>         int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+> @@ -277,6 +287,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+>  err_trip_alloc:
+>         kfree(int34x_thermal_zone->ops);
+>  err_ops_alloc:
+> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
+>         kfree(int34x_thermal_zone);
+>         return ERR_PTR(ret);
+>  }
+> @@ -289,6 +300,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
+>         acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
+>         kfree(int34x_thermal_zone->aux_trips);
+>         kfree(int34x_thermal_zone->ops);
+> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
+>         kfree(int34x_thermal_zone);
+>  }
+>  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
+> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> index e28ab1ba5e06..6610a9cc441b 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> @@ -32,6 +32,7 @@ struct int34x_thermal_zone {
+>         struct thermal_zone_device_ops *ops;
+>         void *priv_data;
+>         struct acpi_lpat_conversion_table *lpat_table;
+> +       struct mutex trip_mutex;
+>  };
+>
+>  struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
+> --
+> 2.31.1
+>
