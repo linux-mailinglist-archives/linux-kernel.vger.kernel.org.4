@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C581967A45E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9311967A466
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbjAXUzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S234520AbjAXU4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjAXUzJ (ORCPT
+        with ESMTP id S234433AbjAXU4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:55:09 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B914F213F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:55:08 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id g68so12108898pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:55:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4iif8uOvCWoECAPC960J0vT0zRUyTNY5Xp1ISUwKG1o=;
-        b=lq2fSJtIZK8svWsVJH3RAgO00ixB7IhxPLOv95YiLUyzutJxolmr/3OMwrSctvHOGc
-         Sg3R9z97VLF7Zl6Su8Jt616hCNVFi+D4KhpUbMxuE+Snxg/M0HUJpJDezv2gs0raPsOv
-         69y6dKa+lGeK3Ujy+sk1zSy1LogbWVKSyJQEcmsmcz7F4Bhy8CWxo/CW2S9eS0fjMmQF
-         GTTJA7qbuRBmhyFXlQiSlNSEHaYYKwyVtY3adttlhyM3KiqGoYcXYf6eccahPiJzLKtt
-         lkDof1e6ORlcGJxeXC27Q9Xv0xQlF7hEoQfec8Fe1ycIObeLD+avF4V4G7idurb3qpMw
-         i2NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4iif8uOvCWoECAPC960J0vT0zRUyTNY5Xp1ISUwKG1o=;
-        b=jHLVGPl2NU7rGJ+6YJXASCQXQpkdYAUiAGswHeYP1CDiSseEi0N3eg7qQEjglGqS+w
-         jBJbJ/O0ZjTJ3drKR4zlCCvvdr5zgxbrQNpLZPozr5nDr6nLIxvPgNjip/lXWmhjlhuJ
-         32KKjURxP+3z5yyj+nCAR1N1oNVY/L7lrNGAGKg+WVHXGrp631oyxZFJEcFAHJHkfAhL
-         UxWmxGe9ZGL3NgGYtPxN9XvpX8J9i1lyJHypDubDFpCzQY9IR756RBKQM9ok+itTiDre
-         SfOyvB57Tty5FtmbEhBR1+ubyf6jbDfuHuy7lfHVlw47fBCdm+d0p6n6xSSoCez8ORPj
-         Sl3Q==
-X-Gm-Message-State: AO0yUKU86ytCCxEwNIG1HQHEpk1hhMQYQ3CwXkBPHmTQpjp+w7k+KrCq
-        kA9Va9mCluqSeE8ybUyTs6yF4Q==
-X-Google-Smtp-Source: AK7set9bk+Z6mIxbxK6n+1smZ+XJVNFEetrz2jVIJ+/M2MgwAdcDlChSfdCNcRW9J/xj95CcEpRw7Q==
-X-Received: by 2002:a62:7988:0:b0:58b:cb1b:978f with SMTP id u130-20020a627988000000b0058bcb1b978fmr303379pfc.1.1674593708105;
-        Tue, 24 Jan 2023 12:55:08 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c7-20020a056a00008700b005769b23260fsm2111261pfj.18.2023.01.24.12.55.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 12:55:07 -0800 (PST)
-Date:   Tue, 24 Jan 2023 20:55:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michal Luczaj <mhal@rbox.co>
-Cc:     Wei Wang <wei.w.wang@intel.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        =?utf-8?B?5p+z6I+B5bOw?= <liujingfeng@qianxin.com>
-Subject: Re: [PATCH v1] KVM: destruct kvm_io_device while unregistering it
- from kvm_io_bus
-Message-ID: <Y9BFqIK04V6fBMz7@google.com>
-References: <20221229123302.4083-1-wei.w.wang@intel.com>
- <Y88XYR0L2DyiKnIM@google.com>
- <85285ccd-7b1a-9a94-5471-8036cb824b28@rbox.co>
+        Tue, 24 Jan 2023 15:56:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E65086B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674593721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qNCOU909aa74UNFHbyBgSXR7UD8dRUqMYVcens2n3wM=;
+        b=eHs5l4FNh0iLwRaXBUtwjsWYCHPkULJcW0WH+oYoi7cYsve2NFxgF1uFJshLU+oCgWLH74
+        i2b8eVAv14FEumfyhTmKPiTAa4Y0CF5DlVRIRecq1ILah19eRJdFXfwyIJbLFO8ijvRE08
+        8IcNERoF/jcXURjwpO3Zis6giD2jTls=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-LmiuCjddOAS3qunVR-7sEA-1; Tue, 24 Jan 2023 15:55:15 -0500
+X-MC-Unique: LmiuCjddOAS3qunVR-7sEA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64F15811E6E;
+        Tue, 24 Jan 2023 20:55:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88002492C14;
+        Tue, 24 Jan 2023 20:55:12 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <ad671496-2461-0b25-48c8-bf474fffe41d@nvidia.com>
+References: <ad671496-2461-0b25-48c8-bf474fffe41d@nvidia.com> <20230124170108.1070389-1-dhowells@redhat.com> <20230124170108.1070389-5-dhowells@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Christoph Hellwig" <hch@lst.de>
+Subject: Re: [PATCH v9 4/8] block: Fix bio_flagged() so that gcc can better optimise it
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85285ccd-7b1a-9a94-5471-8036cb824b28@rbox.co>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1297524.1674593711.1@warthog.procyon.org.uk>
+Date:   Tue, 24 Jan 2023 20:55:11 +0000
+Message-ID: <1297525.1674593711@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,71 +72,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023, Michal Luczaj wrote:
-> On 1/24/23 00:25, Sean Christopherson wrote:
-> > On Thu, Dec 29, 2022, Wei Wang wrote:
-> >> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-> >> index 2a3ed401ce46..1b277afb545b 100644
-> >> --- a/virt/kvm/eventfd.c
-> >> +++ b/virt/kvm/eventfd.c
-> >> @@ -898,7 +898,6 @@ kvm_deassign_ioeventfd_idx(struct kvm *kvm, enum kvm_bus bus_idx,
-> >>  		bus = kvm_get_bus(kvm, bus_idx);
-> >>  		if (bus)
-> >>  			bus->ioeventfd_count--;
-> >> -		ioeventfd_release(p);
-> >>  		ret = 0;
-> >>  		break;
-> >>  	}
-> 
-> I was wondering: would it make sense to simplify from
-> list_for_each_entry_safe() to list_for_each_entry() in this loop?
+John Hubbard <jhubbard@nvidia.com> wrote:
 
-Ooh, yeah, that's super confusing, at least to me, because the "safe" part implies
-that the loop processes entries after kvm_io_bus_unregister_dev(), i.e. needs to
-guard against failure same as the coalesced MMIO case.
+> I don't know how you noticed that this was even a problem! Neatly
+> fixed.
 
-Wei, want to tack on a patch in v2?
+I wanted BIO_PAGE_REFFED/PINNED to translate to FOLL_GET/PIN with no more than
+a single AND instruction, assuming they were assigned to the same values (1 &
+2), so I checked to see what assembly was produced by:
 
-> >> @@ -5453,18 +5459,18 @@ int kvm_io_bus_unregister_dev(struct kvm *kvm, enum kvm_bus bus_idx,
-> >>  	rcu_assign_pointer(kvm->buses[bus_idx], new_bus);
-> >>  	synchronize_srcu_expedited(&kvm->srcu);
-> >>  
-> >> -	/* Destroy the old bus _after_ installing the (null) bus. */
-> >> +	/*
-> >> +	 * If (null) bus is installed, destroy the old bus, including all the
-> >> +	 * attached devices. Otherwise, destroy the caller's device only.
-> >> +	 */
-> >>  	if (!new_bus) {
-> >>  		pr_err("kvm: failed to shrink bus, removing it completely\n");
-> >> -		for (j = 0; j < bus->dev_count; j++) {
-> >> -			if (j == i)
-> >> -				continue;
-> >> -			kvm_iodevice_destructor(bus->range[j].dev);
-> >> -		}
-> >> +		kvm_io_bus_destroy(bus);
-> >> +		return -ENOMEM;
-> > 
-> > Returning an error code is unnecessary if unregister_dev() destroys the bus.
-> > Nothing ultimately consumes the result, e.g. kvm_vm_ioctl_unregister_coalesced_mmio()
-> > intentionally ignores the result other than to bail from the loop, and destroying
-> > the bus means it will immediately bail from the loop anyways.
-> 
-> But it is important to know _if_ the bus was destroyed, right?
-> IOW, doesn't your comment from commit 5d3c4c79384a still hold?
+	gup_flags |= bio_flagged(bio, BIO_PAGE_REFFED) ? FOLL_GET : 0;
+	gup_flags |= bio_flagged(bio, BIO_PAGE_PINNED) ? FOLL_PIN : 0;
 
-/facepalm
+Complicated though it looks, it should optimise down to something like:
 
-Yes, it matters.  I somehow got on the train of thought that list_for_each_entry_safe()
-magically bails if the list is purged, but the safe variant only plays nice with
-the _current_ entry being deleted.
+	and $3,%eax
 
-So yeah, the return code needs to stay.
+assuming something like REFFED/GET == 0x1 and PINNED/PIN == 0x2.
 
->     (...) But, it doesn't tell the caller that it obliterated the
->     bus and invoked the destructor for all devices that were on the bus.  In
->     the coalesced MMIO case, this can result in a deleted list entry
->     dereference due to attempting to continue iterating on coalesced_zones
->     after future entries (in the walk) have been deleted.
-> 
-> Michal
-> 
+David
+
