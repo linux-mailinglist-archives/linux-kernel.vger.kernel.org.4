@@ -2,106 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5AF679432
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B486F679437
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbjAXJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
+        id S233556AbjAXJ3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbjAXJ14 (ORCPT
+        with ESMTP id S232064AbjAXJ3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:27:56 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E242DCF;
-        Tue, 24 Jan 2023 01:27:18 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id tz11so37407653ejc.0;
-        Tue, 24 Jan 2023 01:27:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ri9z+xYMt218fYVVMTgtEzsjvMbOGDhhgvVh2Oo1De8=;
-        b=W3K8YVr1IJt2kf6zQVyQ0lGjB39bSPnyPcWb1aNfRHJ783tH83bdr066LTuIyrmqsn
-         DIvSkmkZrv9W0yhKsQNDUSSbQ3+9+iizwuMhTNIUejhs0ZUwKrYmu96D1DpGbM5LiBtF
-         gnQ1PhxzsRv2Kg6yKKTliJgTlQUNDYyiaSFqlNrELEL6cd6FjVTI88A6MJONnJ8Nyxu1
-         i9MOX0WG9VaPY+iM8uukCbe4ceNudde0DLGP3Ok2YlgjdcBW3w+bVCFVJSo5Qd2BWidg
-         Wg4cCyV1sMdO490g3XrGW0N95Rk8PqiSQ1rsd4j61wHE0kDYL5J43uptI/vWj9w97lOj
-         QCGQ==
+        Tue, 24 Jan 2023 04:29:37 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B661086A9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:29:14 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id w10-20020a056e021c8a00b0030efad632e0so10171784ill.22
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:29:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ri9z+xYMt218fYVVMTgtEzsjvMbOGDhhgvVh2Oo1De8=;
-        b=lLiFodZCRnYfWV9njZZBBtDX7Ugzi689hqFYD+VpKK6oFoDqUYqObwEeiN2VQAF6HR
-         W49TLy15FgFazTQ5mulE6hRE8pYBTC8C6jGzf50h2w+29Tws47BP9DF4Km9Ogo/wpl6T
-         bkvGeGM9o9CGan2YE8KNx94L77tAo5hKORf/zHhIB5IVfNiVMMPvXnjcVn0YzHWXxUFk
-         SgxZ1JgBnxN+hycpP1nPvzD0W/Dor9I3Djj2gBVoN853RPa3NATP2wdtAkMlAnoA+M+8
-         yQhbOtiH4bRsFzNwRrNAYoDwZ3CXqCN/ndTB4zJI9ixwWebBRdJKVmFN76gJTioD1M2S
-         pH1g==
-X-Gm-Message-State: AFqh2koTWXl5MZ0gOg/fXx07o21f80cQR96bpjYwhg0BJWWc64BpJF6G
-        2DQO9ij0qOSIjhUb/5bICN5wHuW/Wa3LBg==
-X-Google-Smtp-Source: AMrXdXsUj1glqQxDmzX1OGu4Y3daRhi/uusOo0IVPnQ+CKFKRQvRm9/clO/fhoqEcq77C00Yj1So7Q==
-X-Received: by 2002:a17:907:c319:b0:877:609c:edc3 with SMTP id tl25-20020a170907c31900b00877609cedc3mr26701799ejc.18.1674552435983;
-        Tue, 24 Jan 2023 01:27:15 -0800 (PST)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id fx18-20020a170906b75200b0084d35ffbc20sm639419ejb.68.2023.01.24.01.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 01:27:15 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id A8861BE2DE0; Tue, 24 Jan 2023 10:27:14 +0100 (CET)
-Date:   Tue, 24 Jan 2023 10:27:14 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: amd_pmc module not autoloading on Thinkpad X13 Gen 2a
-Message-ID: <Y8+kclibAb32JCIp@eldamar.lan>
-References: <Y80NXKyaj25CtSBt@eldamar.lan>
- <MN0PR12MB6101ACCD8A5003CBB4BEF58DE2CB9@MN0PR12MB6101.namprd12.prod.outlook.com>
- <Y81Ja5Y/tgPXk5FA@eldamar.lan>
- <MN0PR12MB61019EC33FA0F91C0E79967BE2CB9@MN0PR12MB6101.namprd12.prod.outlook.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qix3BlIZt4/7lxlsy/Luy1grphswwUevoArRhNmK25Y=;
+        b=67PkFc+1BUeMfQHPhcRDdiPjfxyanuT+B4Zte4SylSeS4W3xz0DDHu511dyzGtXkbd
+         VuXUM3dZE1Z1UPNMp+zTlHcqbuh6w7ly0Fz7lXwhNAjWJr64xjB2ssJUcR3FPiy+EkQi
+         QauWmjxfFRgHXHiMZk8Fne5z7lpiCIHERniZ7uB0p7+iYZXmqF76cIdm6Jj4y6HHsC7W
+         VQMZqIxXQ35a43hT4hU3jhjEhP0LEiMkJZUcygGQD/JTc72UsjK4Udm+tkYi8S8blECp
+         4UmKYPtPFnLEla+AoFwVZN4xx+da5ySH5E6QGgQnFMP8HPtnK5oAN9QfxGc5Df8niWLi
+         WJ9A==
+X-Gm-Message-State: AFqh2krvL2byYkSS474NZkE7f+ZcnUV6TLZNaDS58Fp39JkqQP61AuOa
+        GjypFf/8bNAV6FrRSFfw3o6JRxxiT8CY9KSpYHK9Odm6nYPr
+X-Google-Smtp-Source: AMrXdXshXzUvSKSyY+KYqtrkmzIz3VeTfEU/0A89eVF4G0gfItkAwASrIyrwfiXQSOI3KePp59zwaYI0FJ3soCMQXdOyjqbbXgt3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN0PR12MB61019EC33FA0F91C0E79967BE2CB9@MN0PR12MB6101.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:bf0b:0:b0:30e:fab6:3561 with SMTP id
+ z11-20020a92bf0b000000b0030efab63561mr1987269ilh.48.1674552518677; Tue, 24
+ Jan 2023 01:28:38 -0800 (PST)
+Date:   Tue, 24 Jan 2023 01:28:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000089cea05f2ff246a@google.com>
+Subject: [syzbot] [xfs?] KASAN: slab-out-of-bounds Read in xfs_btree_del_cursor
+From:   syzbot <syzbot+fdd050b6b63ef0e6e29f@syzkaller.appspotmail.com>
+To:     dchinner@redhat.com, djwong@kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+Hello,
 
-On Sun, Jan 22, 2023 at 03:34:55PM +0000, Limonciello, Mario wrote:
-> [AMD Official Use Only - General]
-> 
-> Salvatore,
-> 
-> I don't think we have a bug here. The reporters said it's working
-> for s0ix.
-> 
-> It will only load by default when the system is set to Modern
-> Standby/s2idle mode in BIOS. On Lenovo systems they call this
-> "Windows" sleep mode for some systems.
+syzbot found the following issue on:
 
-Thanks, reporter confirmed that it's actually working (possibly just a
-confusion initially on testing the scenarios):
+HEAD commit:    081edded9b38 Merge tag 'zonefs-6.2-rc5' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e2a4fe480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d24faf5fc10540ae
+dashboard link: https://syzkaller.appspot.com/bug?extid=fdd050b6b63ef0e6e29f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1029356#74
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Thanks for your time looking into it,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e03f6355f8c4/disk-081edded.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ba84ff280ef5/vmlinux-081edded.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6ba2dbf91192/bzImage-081edded.xz
 
-Regards,
-Salvatore
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fdd050b6b63ef0e6e29f@syzkaller.appspotmail.com
+
+XFS (loop0): Metadata corruption detected at xfs_btree_lookup_get_block+0x565/0x6d0 fs/xfs/libxfs/xfs_btree.c:1846, xfs_refcountbt block 0x28
+XFS (loop0): Unmount and run xfs_repair
+==================================================================
+BUG: KASAN: slab-out-of-bounds in xfs_btree_del_cursor+0x96/0x2a0 fs/xfs/libxfs/xfs_btree.c:439
+Read of size 8 at addr ffff88801e8735f0 by task syz-executor.0/27912
+
+CPU: 1 PID: 27912 Comm: syz-executor.0 Not tainted 6.2.0-rc4-syzkaller-00069-g081edded9b38 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:306
+ print_report+0x107/0x1f0 mm/kasan/report.c:417
+ kasan_report+0xcd/0x100 mm/kasan/report.c:517
+ xfs_btree_del_cursor+0x96/0x2a0 fs/xfs/libxfs/xfs_btree.c:439
+ xfs_refcount_recover_cow_leftovers+0x2df/0xa60 fs/xfs/libxfs/xfs_refcount.c:1948
+ xfs_reflink_recover_cow+0xab/0x1b0 fs/xfs/xfs_reflink.c:928
+ xlog_recover_finish+0x824/0x920 fs/xfs/xfs_log_recover.c:3493
+ xfs_log_mount_finish+0x1ec/0x3d0 fs/xfs/xfs_log.c:829
+ xfs_mountfs+0x146a/0x1ef0 fs/xfs/xfs_mount.c:933
+ xfs_fs_fill_super+0xf95/0x11f0 fs/xfs/xfs_super.c:1666
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9795c8d5fa
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9796aacf88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00000000000097a0 RCX: 00007f9795c8d5fa
+RDX: 0000000020000040 RSI: 0000000020000180 RDI: 00007f9796aacfe0
+RBP: 00007f9796aad020 R08: 00007f9796aad020 R09: 0000000000800003
+R10: 0000000000800003 R11: 0000000000000202 R12: 0000000020000040
+R13: 0000000020000180 R14: 00007f9796aacfe0 R15: 0000000020000080
+ </TASK>
+
+Allocated by task 27912:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x65/0x70 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:761 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x1b3/0x350 mm/slub.c:3476
+ kmem_cache_zalloc include/linux/slab.h:710 [inline]
+ xfs_btree_alloc_cursor fs/xfs/libxfs/xfs_btree.h:592 [inline]
+ xfs_refcountbt_init_common fs/xfs/libxfs/xfs_refcount_btree.c:336 [inline]
+ xfs_refcountbt_init_cursor+0x84/0x330 fs/xfs/libxfs/xfs_refcount_btree.c:363
+ xfs_refcount_recover_cow_leftovers+0x213/0xa60 fs/xfs/libxfs/xfs_refcount.c:1939
+ xfs_reflink_recover_cow+0xab/0x1b0 fs/xfs/xfs_reflink.c:928
+ xlog_recover_finish+0x824/0x920 fs/xfs/xfs_log_recover.c:3493
+ xfs_log_mount_finish+0x1ec/0x3d0 fs/xfs/xfs_log.c:829
+ xfs_mountfs+0x146a/0x1ef0 fs/xfs/xfs_mount.c:933
+ xfs_fs_fill_super+0xf95/0x11f0 fs/xfs/xfs_super.c:1666
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88801e873528
+ which belongs to the cache xfs_refcbt_cur of size 200
+The buggy address is located 0 bytes to the right of
+ 200-byte region [ffff88801e873528, ffff88801e8735f0)
+
+The buggy address belongs to the physical page:
+page:ffffea00007a1cc0 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88801e873000 pfn:0x1e873
+anon flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff88814639e8c0 0000000000000000 0000000000000001
+raw: ffff88801e873000 00000000800f0006 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL), pid 5813, tgid 5812 (syz-executor.1), ts 240974207332, free_ts 240939470118
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
+ alloc_slab_page+0xbd/0x190 mm/slub.c:1851
+ allocate_slab+0x5e/0x3c0 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0x782/0xe20 mm/slub.c:3193
+ __slab_alloc mm/slub.c:3292 [inline]
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x268/0x350 mm/slub.c:3476
+ kmem_cache_zalloc include/linux/slab.h:710 [inline]
+ xfs_btree_alloc_cursor fs/xfs/libxfs/xfs_btree.h:592 [inline]
+ xfs_refcountbt_init_common fs/xfs/libxfs/xfs_refcount_btree.c:336 [inline]
+ xfs_refcountbt_init_cursor+0x84/0x330 fs/xfs/libxfs/xfs_refcount_btree.c:363
+ xfs_refcount_recover_cow_leftovers+0x213/0xa60 fs/xfs/libxfs/xfs_refcount.c:1939
+ xfs_reflink_recover_cow+0xab/0x1b0 fs/xfs/xfs_reflink.c:928
+ xlog_recover_finish+0x824/0x920 fs/xfs/xfs_log_recover.c:3493
+ xfs_log_mount_finish+0x1ec/0x3d0 fs/xfs/xfs_log.c:829
+ xfs_mountfs+0x146a/0x1ef0 fs/xfs/xfs_mount.c:933
+ xfs_fs_fill_super+0xf95/0x11f0 fs/xfs/xfs_super.c:1666
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare+0x751/0x780 mm/page_alloc.c:1496
+ free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+ free_unref_page_list+0xb2/0x830 mm/page_alloc.c:3510
+ release_pages+0x233e/0x25e0 mm/swap.c:1076
+ tlb_batch_pages_flush mm/mmu_gather.c:97 [inline]
+ tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+ tlb_flush_mmu+0x860/0xa80 mm/mmu_gather.c:299
+ tlb_finish_mmu+0xcd/0x200 mm/mmu_gather.c:391
+ exit_mmap+0x275/0x630 mm/mmap.c:3100
+ __mmput+0x114/0x3b0 kernel/fork.c:1207
+ exec_mmap+0x4af/0x530 fs/exec.c:1033
+ begin_new_exec+0x772/0xfb0 fs/exec.c:1292
+ load_elf_binary+0x8f0/0x2830 fs/binfmt_elf.c:996
+ search_binary_handler fs/exec.c:1735 [inline]
+ exec_binprm fs/exec.c:1777 [inline]
+ bprm_execve+0x8dc/0x1590 fs/exec.c:1851
+ do_execveat_common+0x598/0x750 fs/exec.c:1956
+ do_execve fs/exec.c:2030 [inline]
+ __do_sys_execve fs/exec.c:2106 [inline]
+ __se_sys_execve fs/exec.c:2101 [inline]
+ __x64_sys_execve+0x8e/0xa0 fs/exec.c:2101
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88801e873480: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
+ ffff88801e873500: fc fc fc fc fc 00 00 00 00 00 00 00 00 00 00 00
+>ffff88801e873580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc
+                                                             ^
+ ffff88801e873600: fc fc fc fc fc fc fb fb fb fb fb fb fb fb fb fb
+ ffff88801e873680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
