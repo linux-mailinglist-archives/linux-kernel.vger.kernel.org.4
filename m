@@ -2,188 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49B167919C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE9C6791A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbjAXHIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S233367AbjAXHMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 02:12:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbjAXHIs (ORCPT
+        with ESMTP id S232535AbjAXHMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:08:48 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1052193D0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:08:47 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so754813pjq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:08:47 -0800 (PST)
+        Tue, 24 Jan 2023 02:12:21 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186C2193D0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:12:20 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id k18so13876303pll.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:12:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sxuznb1OZDQl4Kxtid0HohK4PYafvANdR8zQK6nMvJo=;
-        b=G2hfGzkYFu5z5Zd1njxi5x7TVGw2aNJWHFd7ejBtn/eBn07ixeOXYWgpeCPUi3NIHT
-         N9eSWS6S8DkD6qSaGeH4g+GPz3fmraYvbJv8HlaPzpE7U4brm+iv8UHfDuLKYTwHlnNf
-         xgyHM5tMk3HUaEnOrtmvSgS+a5LNEBRiT0hus=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7v3vKH0OUQa3EkOREw3bJ+B1AKEzvWHCw7MB+vHd9t4=;
+        b=ZJSVtuBM+BhRrNs+A16J+fidiLqSEIJPMS2kMxaVz2bmdHms1q36mXFxsQNLsoleJK
+         O6iXXm00waWsaNuJYNPCn/UlhEcrzuT7lzfjNQ3XSjscM1VYmkbYhIcbSViY08bH6uDJ
+         EFlEFyFUz6WTD+jM4FV5qsbIP/yeOpKqZbEbis5ukW/K5skZJi2E3eYtpJJ7fwqYgspd
+         EGC7a/y2PzCSQygcfX3t3NvD6SjZvShZpko//uPvG/qA7olPKwoG1iDm4r8ZpdIlnbv5
+         F+V0B0Sk8poONvMIWht3ogYwciMwpBNi1sGiCJU3k6NuKb1kGyjGef3P2CDomr8k5oTk
+         j3oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sxuznb1OZDQl4Kxtid0HohK4PYafvANdR8zQK6nMvJo=;
-        b=pE5Odh8ZVDNNgHRGio0Y+j0Y9y2qZ04VY7iuaRe7iShj3SEM0z7Lh18qPRK+rvDc0C
-         q76FxmEF553mI466poVWFaRHKgymWXEPDkwV/NtoacCY9Rv3BsA9SsXqRNZbIKM/zF7H
-         Sfu5EexkLAs1qRHggNSWsJUKzJJc9rUpuYs3Bko4JJqRZT87FfZFkn+e219GX6ABJenC
-         AeDlRFJwViiCYGujxMv2gsTpnNghS+/gsnMUZBD3P+PkelWPuPOLnWRAbNJ+OidvoFS5
-         SmXty7kUEF38sELGHHPKBdqeQCM26hyEhRUtkYRmGCVRLW6kX4VQbfn4HuktwB6nch8C
-         n5+A==
-X-Gm-Message-State: AFqh2koR8LNiSvFWXWcN7CcmrKBdoNJoRlBsQO8SDNRysEniIybzPQks
-        jRG4dWreJR28A08K0b35wYZq7KFh2Fr/exxx2SGZ8g==
-X-Google-Smtp-Source: AMrXdXvoG6790CywueUBKHR3fXHdrH099G4GUmqiLK8rbpkxxckjH5v1btOBkpEDTHdytTo7P2KDRKbaWn4ksfSVMi8=
-X-Received: by 2002:a17:90a:62ca:b0:229:ab8:5f1d with SMTP id
- k10-20020a17090a62ca00b002290ab85f1dmr2898161pjs.15.1674544127228; Mon, 23
- Jan 2023 23:08:47 -0800 (PST)
+        bh=7v3vKH0OUQa3EkOREw3bJ+B1AKEzvWHCw7MB+vHd9t4=;
+        b=hQN6KS0VeNlGY6bA9m3BOOgHSg1dRZmNFFDfS9FKDVOVVr7CEPDHwWBRX4ZZln2wy+
+         luGDXXwdbG5RyzCW2b+ZIa/A99YqUfPovTFDIoo8ZMgxpWlZpkzhrn8i1XVK6FIkQiL1
+         yHolmuypsc4sfv0WGxnruquNWZki8yrY5IcfpLgnCLyYFr3gfgHLcKAvFF5LNoAe9xkq
+         MErO13/g8VqiXfprTaLrafUKjL9GpnhRhkliru+rcadWvRhJjtsYTxRpuofjZCiavzPh
+         F3opD7XLreTz01D1Tx1XEayB6UTOD9V/PpRfEaHUcKmPfY+QkLwKP9LxDP0gBuebxqL7
+         QByg==
+X-Gm-Message-State: AFqh2kqNXgIj/Duc03Mc6uZetT+LqzLVyv5F/YefcH8TVLLFc18CEfCm
+        sHuMZM1qYZdMpr0NUPR8rg8W
+X-Google-Smtp-Source: AMrXdXsW7QSNkm4uOigZ/myGZxmMqpOzvzzypL4fJeke5jbE8aqCHXJGUWDZeA4LkX4bcoYOSSQfsg==
+X-Received: by 2002:a17:90b:35c9:b0:229:8e0c:68b0 with SMTP id nb9-20020a17090b35c900b002298e0c68b0mr29172185pjb.19.1674544339457;
+        Mon, 23 Jan 2023 23:12:19 -0800 (PST)
+Received: from localhost.localdomain ([117.193.209.165])
+        by smtp.gmail.com with ESMTPSA id 7-20020a17090a174700b00219220edf0dsm736041pjm.48.2023.01.23.23.12.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 23:12:18 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v5 0/5] PCI: endpoint: Rework the EPC to EPF notification
+Date:   Tue, 24 Jan 2023 12:41:53 +0530
+Message-Id: <20230124071158.5503-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230120060535.83087-1-ajit.khaparde@broadcom.com>
- <20230120060535.83087-2-ajit.khaparde@broadcom.com> <20230123223305.30c586ee@kernel.org>
- <Y89/b4kdiXlFzkOl@unreal>
-In-Reply-To: <Y89/b4kdiXlFzkOl@unreal>
-From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
-Date:   Mon, 23 Jan 2023 23:08:30 -0800
-Message-ID: <CACZ4nhtek5W2Sp2AUP546RGHmeAxwZ-8x6no3PNVPigTWFJLPw@mail.gmail.com>
-Subject: Re: [PATCH net-next v8 1/8] bnxt_en: Add auxiliary driver support
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        selvin.xavier@broadcom.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e31dc705f2fd2f6a"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000e31dc705f2fd2f6a
-Content-Type: text/plain; charset="UTF-8"
+Hello,
 
-On Mon, Jan 23, 2023 at 10:53 PM Leon Romanovsky <leon@kernel.org> wrote:
->
-> On Mon, Jan 23, 2023 at 10:33:05PM -0800, Jakub Kicinski wrote:
-> > On Thu, 19 Jan 2023 22:05:28 -0800 Ajit Khaparde wrote:
-> > > @@ -13212,6 +13214,7 @@ static void bnxt_remove_one(struct pci_dev *pdev)
-> > >     kfree(bp->rss_indir_tbl);
-> > >     bp->rss_indir_tbl = NULL;
-> > >     bnxt_free_port_stats(bp);
-> > > +   bnxt_aux_priv_free(bp);
-> > >     free_netdev(dev);
-> >
-> > You're still freeing the memory in which struct device sits regardless
-> > of its reference count.
->
-> BTW, Ajit does the same wrong kfree in bnxt_rdma_aux_device_add() too.
-I will address this in the next version. Thanks again.
+During the review of the patch that fixes DBI access in PCI EP, Rob
+suggested [1] using a fixed interface for passing the events from EPC to
+EPF instead of the in-kernel notifiers.
 
-Thanks
-Ajit
-> +       ret = auxiliary_device_add(aux_dev);
-> +       if (ret)
-> +               goto aux_dev_uninit;
-> +
-> ...
-> +aux_dev_uninit:
-> +       auxiliary_device_uninit(aux_dev);
-> +free_edev:
-> +       kfree(edev); <----- wrong
-> +       bp->edev = NULL;
->
-> Thanks
+This series introduces a simple callback based mechanism for passing the
+events from EPC to EPF. This interface is chosen for satisfying the below
+requirements:
 
---000000000000e31dc705f2fd2f6a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+1. The notification has to reach the EPF drivers without any additional
+latency.
+2. The context of the caller (EPC) needs to be preserved while passing the
+notifications.
 
-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
-pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
-K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
-xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
-OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
-aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
-KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
-aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
-u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
-4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFY8INA+GoxH+DtW4hbR
-gQNGDE/QgX4M2ZvLMMcq4E6XMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIzMDEyNDA3MDg0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAgGTX7LsRmsfXF74Vq+1bJ8d0ZU1+dpZdSXKHN
-qmflpSb2+jxj3iQrJ8cGMZXGD1ZuEaZ5kidWd3nMPdQoZI8/JrAMdjoYXO92hXLljijWC1bI8VY2
-q4CZJVmnF+lhaNOTfSkPXtOsKzHgtspOcEGoLjCtfbzYeoa0mV/OMmWq6EXPhtoV4D7pcnTjvVg/
-ByxAyEzZRmXZzsK+VaoyGMr+nzFrS2HzZyx13MtHx9yXQVhhZ6vBVwyh8XoZ3yViXQRzVphJRiTt
-NSbedPGH6hbJJllda+vE8441Gxk4ipcdsZxsXcXSgyKEwJS+cYV4lc9/pXKLrJx5NTTHe8/MaRvr
---000000000000e31dc705f2fd2f6a--
+With the existing notifier mechanism, the 1st case can be satisfied since
+notifiers aren't adding any huge overhead. But the 2nd case is clearly not
+satisfied, because the current atomic notifiers forces the EPF
+notification context to be atomic even though the caller (EPC) may not be
+in atomic context. In the notification function, the EPF drivers are
+required to call several EPC APIs that might sleep and this triggers a
+sleeping in atomic bug during runtime.
+
+The above issue could be fixed by using a blocking notifier instead of
+atomic, but that proposal was not accepted either [2].
+
+So instead of working around the issues within the notifiers, let's get rid
+of it and use the callback mechanism.
+
+NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
+on the real platforms is greatly appreciated.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
+[2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
+
+Changes in v5:
+
+* Collected review tag from Vidya
+* Fixed the issue reported by Kbot regarding missing declaration
+
+Changes in v4:
+
+* Added check for the presence of event_ops before involing the callbacks (Kishon)
+* Added return with IRQ_WAKE_THREAD when link_up event is found in the hard irq
+  handler of tegra194 driver (Vidya)
+* Collected review tags
+
+Changes in v3:
+
+* As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
+  call the LINK_UP callback in threaded IRQ handler.
+
+Changes in v2:
+
+* Introduced a new "list_lock" for protecting the epc->pci_epf list and
+  used it in the callback mechanism.
+
+Manivannan Sadhasivam (5):
+  PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+  PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
+  PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
+  PCI: endpoint: Use callback mechanism for passing events from EPC to
+    EPF
+  PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+
+ drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
+ drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
+ drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
+ drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
+ include/linux/pci-epc.h                       | 10 +----
+ include/linux/pci-epf.h                       | 19 ++++++----
+ 6 files changed, 59 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+
