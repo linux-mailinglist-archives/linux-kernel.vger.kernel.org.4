@@ -2,180 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D0D679BF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591EB679BEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234963AbjAXOdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S234947AbjAXOca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234973AbjAXOdP (ORCPT
+        with ESMTP id S234385AbjAXOc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:33:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5037647083
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:32:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674570744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ssi9a0fXxukUDI5CAe/hc0P8ZWaxCEQMPLMC242trI4=;
-        b=bEDcj8AGwsw6M9+cMdQRYMoe50XqZFU9vj4zE+sX3oEg8d1AbiJuWEQsmcQckBlNggdLER
-        jPNPdyxyFtNVXAQ/QgWlimLxaqvWzhX9Zvc1/EiNXy+go9T0ytZDZyXl+jzxFfam755o/p
-        qKdYycKqwvLU5V8c4n8Abs+UlcYipE0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-540-bmc4QTDKPp2p2eaVDB_A1Q-1; Tue, 24 Jan 2023 09:32:22 -0500
-X-MC-Unique: bmc4QTDKPp2p2eaVDB_A1Q-1
-Received: by mail-wm1-f70.google.com with SMTP id z11-20020a1c4c0b000000b003db062505b9so4005347wmf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:32:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ssi9a0fXxukUDI5CAe/hc0P8ZWaxCEQMPLMC242trI4=;
-        b=SwmyUu2Jz7MYiwNNdbbvN4H+5Vem6tU6GIndD8UllcgWocDnquQxLSbval33s9ZHaw
-         oTz3VrlS9W0w3YgvAlldNdhYdc43ZsRY0BDfgl9y4OxFBmSbghTgSL8YyPIpEnrEWzRI
-         tq4Eo7Trd+Ncb4w3E/sQyKX06Cg4PUBIy7nbLkVQKAD3I6G8JIVW3ywy6oskKc0qMnoK
-         2u467A521TJB9ORMCzqw0mZsR0qjqlTyQYFrAadiD7Fn/l2mSs4tqLjDYKwFs8bTKk9R
-         Z4LeEZcoufy/tiWUrZxgcIhIyvGpxz6DlVRbLYVfr/88aw8+Akl+fmkZXZC3xVA6aj+x
-         wMAA==
-X-Gm-Message-State: AFqh2kpqxkw0VwDhkH1S/NM0fTFrUpzzn0G+WX2M9OEtkHZ32p5uebH5
-        LmwWhtF0EY0GJeR/htPCxEJtgxaLkcjeH1/VBHOTspLWvG8V46LgZKk/xFjWu2bknYIOSFBvXZO
-        FqCZF9ZMWupqSIoLmg47MOgg0
-X-Received: by 2002:a05:600c:d2:b0:3da:f475:6480 with SMTP id u18-20020a05600c00d200b003daf4756480mr28402440wmm.7.1674570739982;
-        Tue, 24 Jan 2023 06:32:19 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtRWlNcvst1DEvQuLfVrVHZBU0A4XvHlCjyUiRVH7rVJzvE+jdvk8iKpcXJsytHRXeuqnR1Ag==
-X-Received: by 2002:a05:600c:d2:b0:3da:f475:6480 with SMTP id u18-20020a05600c00d200b003daf4756480mr28402409wmm.7.1674570739663;
-        Tue, 24 Jan 2023 06:32:19 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
-        by smtp.gmail.com with ESMTPSA id b5-20020a05600c150500b003cffd3c3d6csm2064367wmg.12.2023.01.24.06.32.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 06:32:19 -0800 (PST)
-Message-ID: <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com>
-Date:   Tue, 24 Jan 2023 15:32:18 +0100
+        Tue, 24 Jan 2023 09:32:27 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E09448596;
+        Tue, 24 Jan 2023 06:32:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bjdsqVIBzAFjcpch2AlDdp/1oStpJWcNAVmFi/08xeG64S4qX9yDhpBAmd2oDs6teqmjU/uHoab8zjtax6UAkGtxG5mO3MRllYhcUOBnPHH1S6gWYf0UDUg9cFbFLQoy9JtcbuzOKgWqovSpTX7JAOYOK8I4W7JDb87HOxObN7CwRilavsboC8gAhyB5QfGIRP69F0WoLhsDxcWqBvjVy5wVFs5PVaPqeDW8y1t6N7n06MFfJcGdcGElx+7D7VF95yX4c3UPZVPGC8VTTClt8PnTacfd2+LkPVdDwEZzhz+H/790RBtsrYQw8PZGsxvWKfYCY4O6hx3rSxn0OeYBVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vsBlTKh5R4cJPeMAqeQeMUgK8zdy+41wL/FQjMAupEQ=;
+ b=gqCu64KKIMZD+9t5DX2ouvQyF24GM9F1+57VOOQ2CrgE5rAmGFfECs1mO/18RFZe5EEPt9GenJJ5OkaRM+5OOAkdqalPKMEJVF0VtM+XtoUswZ40wmGm2q2vHvriLmSKp+7SQ4SzYABBYkKJhPq0/ScRHjEuMQiReHf2uvn4Rl8cE8YvMW0GEWmKSyhRAbfUZRyLGq6vjsfWfiDMT32h/587z5TJ6CWQKf26sJXUBKgXBBuxBhGEYS/sxsIosKeXU6tRHOUptt5xVujdbkngSWadAxyp/uKWE6KNkW6Ngk9/kIF3/lEruots00llPPFho3bunyf8JNXg4TBZJ/MVOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vsBlTKh5R4cJPeMAqeQeMUgK8zdy+41wL/FQjMAupEQ=;
+ b=fIB4EZKTLSWqGqDyFD6rLHiA0hEEZq8edtlzWQ/2L+zHACQn4KTST7CbpiwLnI8bymb8nf1LEfc/Ut57ufMteWd5Qagx2Zb0nWCVzpQaXBESethtqQb3dPJ6S3XimrqURbI/xWSDS1xgT+J0vtqUohKVJM7vvwrLj9IP98ZVj0ZjD7LDXEBOLbolgCAgeizwI4KexKRBb2CRivjmAHxWton34Shj0+1jJJloDTVBM7otOkSSgY0IIRwRPEXpD/0gt9lRj6zXsP/e69hIn9T0c1a7CxcBNLesEq1MlqCAPbPSyKGQ3OV5cfOWiXPbeCeeB4u5jNinP9v61A/NWNXYkg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4353.namprd12.prod.outlook.com (2603:10b6:5:2a6::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 14:32:23 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
+ 14:32:23 +0000
+Date:   Tue, 24 Jan 2023 10:32:23 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
+        linux-fpga@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 01/19] mm: Introduce vm_account
+Message-ID: <Y8/r91PGGiY5JJvE@nvidia.com>
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+ <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
+X-ClientProxiedBy: MN2PR08CA0021.namprd08.prod.outlook.com
+ (2603:10b6:208:239::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-References: <20230123173007.325544-1-dhowells@redhat.com>
- <20230123173007.325544-8-dhowells@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230123173007.325544-8-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4353:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6fba86b-cbab-4703-a200-08dafe17cf02
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bpjBOe+AyQreOlwg43PuBAgXiFFmYCCTbEFwZ2w7fcfIlBwNunCOD2rZNMXxnqe8WN05r1zd0oe2W0eZXhxbUlwdHmywxID+ZSy2rEa8fzASysNwbHxILzHFjnv8kD9zfHWADOs9iNMJN3+sqG6aAztztWSGZxT4uSW9AH3r7ALSRC1I5CrdaxTG+j79brO5Von3l1WIUUCvWv3In2k0zD/SAKxMvxTe0IHStIxh5txFjzBsygvSIR9Idcn1SmVd1FOq3eUA9FJtBzJFZ/TJvxfDFnPgDSenWIja9FqRgwGSa7Q3tLMC6N3SVBYgNQempO4cA4QpH297IOlfT6+PpqO/Nsj8e/+xjRwjgVYHs2/f/2GpVqooqXh/owiNOSW6NbqjIDMAx6Ke1yp9CfwME9voi1cBW+z+VpdfxUloWrhj9tavyLNQqEI6z7FGtd/UkVO/c1CkqZWvYIrhxg2V7WQZvuH1B0wCr97/4Wd3CAM0gfwt3jjtU34F1K532UuXJK+IYcIM/ZppzCRDnFOupmMP7yPREsX+VxQW8GBhR6xWm9aGHjNd4VcB3T7mEN9jJeCnQSze2nHizfIeBHYor1PpRTh6T2whll/Gh91eZUlYt0e51Ev9MAshaJZRPj3OMYnKTgG5IctE3Y4EWFv4bQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(451199015)(36756003)(41300700001)(86362001)(7416002)(8936002)(5660300002)(4326008)(6862004)(2906002)(83380400001)(38100700002)(6486002)(478600001)(66946007)(6512007)(26005)(6506007)(186003)(8676002)(316002)(37006003)(2616005)(6636002)(66476007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iqD/moe6RmhzboXaYo1NEZEX7vca62fKm3eg/SmFVpSe/1a+sImdMc1AvRHe?=
+ =?us-ascii?Q?fHRR99xnfiB5iA6u67q+z/HbGMjZrd8Kx/MZAVRJtsMDRJK4CUL0EB5T/4ne?=
+ =?us-ascii?Q?Ta5R36WXyAfobPRXHTzfdEqraA6n6ZBaNhyz+C+FPsJEmyCFq9O/sKptqsql?=
+ =?us-ascii?Q?WZ/RqnW8PXuV2sj7q5iiXylMMkpWnFNOVoqOPaYLX0KNRim3BGLlQNZSkZ5r?=
+ =?us-ascii?Q?fqsharArSnrx73l5WGwQGyFbMkTi7ClmEcukIOCp92aXfaxSTcHw8UiU2vFt?=
+ =?us-ascii?Q?w0n9vky9tVSUEKcuzrctnb5XWpddOu7SB6FnRBUZd2DcAGBXAQ/PB9kh/FTX?=
+ =?us-ascii?Q?5MEbb2eaelIwGwHQlya4o7h49OBDH+ycScKFK48Fh6YxZngFdaMx3Swx+vrq?=
+ =?us-ascii?Q?yBNzpqW1SATEQ3YJq/awWdqdY55xrtn5xdz9MKQDCySDwvbL3apSCil0+0ib?=
+ =?us-ascii?Q?uAlQh6OyWQc6kKKO1v6zc4hol+qW80SQkan4++xxmoJIns1WsVkvTa50S/BL?=
+ =?us-ascii?Q?CNBgDmWjl/QthibbegowI3kYkXA9LAhPmPTz8kv5m0j0BxIGvVQlU7ptEZ+5?=
+ =?us-ascii?Q?LNl7B+t3zHfL6VNY+Y+Du+ErebknddA3mYyUo9+sHHWZ0tAQ8PcIzNEh3LCx?=
+ =?us-ascii?Q?R6aduizD/PaSlbUndG1mVvWbi+cvoIISu822lPKVuH1r6Aqh1EUl0OvWHqQ8?=
+ =?us-ascii?Q?YfHRxLrf2lbOdak7P2li9emcAADOYlWVKBQX2bFsrBdwaTNhclwqpxZjlqx0?=
+ =?us-ascii?Q?hLedvwDhh87HCRwdpVjtmPtPqfn0CkGDh6qFqjV0l8QAR6MNPrROCfRfn5CD?=
+ =?us-ascii?Q?u4ymfGRaso6T14UhfP4ZOYcYEx6+WChCH2tYFKkSAod5MGGoaOPNdDqkVOqG?=
+ =?us-ascii?Q?aQTtbD+lqMJOF17SqUnMV4C/G0j+r8NuAS3MPHuP4eUIJNiNy5mOf1bQ/E7a?=
+ =?us-ascii?Q?OEGBj/gAaZio5aE0MlstA5MVcLqSG2tN60KrzlPtiy4Ef45bhJlLe8H0ZhYu?=
+ =?us-ascii?Q?+lAPEOb5Qu9/RwyH0mz5QWGuGu3dzEMlpCJTlHsD2rgIYs8pBZ8QItQU24rf?=
+ =?us-ascii?Q?NMK+kIzTwMwowXtjivosLhqyW67RzRRzV9Lh3KUDfMtzbZMgz5SO2lnFAyNc?=
+ =?us-ascii?Q?1K11+GvOKmlhTK2pv9wgG5Mpg4T6GOF4WGFv7wbw/xgaWptjU4yF9R2Jjk/x?=
+ =?us-ascii?Q?uIOdNBRWaLJv2iiVsZcqoHHdwVJS4/jT93+a7DofIX7Hvcgn1Zcajtddozzq?=
+ =?us-ascii?Q?D7zW30xtz01pzL9X1loBya5U2ytMs06+mqBpN0Soqa70swhUb1xCYQE1n0gv?=
+ =?us-ascii?Q?m8pBPEuK1iPkjqH3ndEEtbXT7QcttcoxagoNzmPHk9ypgsHBDaS6fratdHj5?=
+ =?us-ascii?Q?cpZsllh/AYXPXOGkaLbbUkKA9I6YPEOLEG5aIcUXBnQF5S/8K0kbDtoiqmkp?=
+ =?us-ascii?Q?bw6Pm6bUxMEZfPmWvy95AT05rwqPLFVw7ImA7TGu3RfcGRs0oGO3Me/Lawbb?=
+ =?us-ascii?Q?hObM8oMyxN1KJFpiX29Lqr9PECqB+ppiOgxIzCu2OHgCDCInySzY4+AzBG1I?=
+ =?us-ascii?Q?HrzVWHZAkdi8+iy+USoy3adIYQfXCd0dqcZOVYoE?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6fba86b-cbab-4703-a200-08dafe17cf02
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 14:32:23.8355
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oMSKI9iOCEC2XSC2VoTJqBt/X5rOcq2vFitihoENlRaaMkBKWBOuVsWE30CUtqjs
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4353
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 18:30, David Howells wrote:
-> Add BIO_PAGE_PINNED to indicate that the pages in a bio are pinned
-> (FOLL_PIN) and that the pin will need removing.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Jan Kara <jack@suse.cz>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: Logan Gunthorpe <logang@deltatee.com>
-> cc: linux-block@vger.kernel.org
-> ---
-> 
-> Notes:
->      ver #8)
->       - Move the infrastructure to clean up pinned pages to this patch [hch].
->       - Put BIO_PAGE_PINNED before BIO_PAGE_REFFED as the latter should
->         probably be removed at some point.  FOLL_PIN can then be renumbered
->         first.
-> 
->   block/bio.c               |  7 ++++---
->   block/blk.h               | 28 ++++++++++++++++++++++++++++
->   include/linux/bio.h       |  3 ++-
->   include/linux/blk_types.h |  1 +
->   4 files changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/block/bio.c b/block/bio.c
-> index 40c2b01906da..6f98bcfc0c92 100644
-> --- a/block/bio.c
-> +++ b/block/bio.c
-> @@ -1170,13 +1170,14 @@ bool bio_add_folio(struct bio *bio, struct folio *folio, size_t len,
->   
->   void __bio_release_pages(struct bio *bio, bool mark_dirty)
->   {
-> +	unsigned int gup_flags = bio_to_gup_flags(bio);
->   	struct bvec_iter_all iter_all;
->   	struct bio_vec *bvec;
->   
->   	bio_for_each_segment_all(bvec, bio, iter_all) {
->   		if (mark_dirty && !PageCompound(bvec->bv_page))
->   			set_page_dirty_lock(bvec->bv_page);
-> -		put_page(bvec->bv_page);
-> +		page_put_unpin(bvec->bv_page, gup_flags);
->   	}
->   }
->   EXPORT_SYMBOL_GPL(__bio_release_pages);
-> @@ -1496,8 +1497,8 @@ void bio_set_pages_dirty(struct bio *bio)
->    * the BIO and re-dirty the pages in process context.
->    *
->    * It is expected that bio_check_pages_dirty() will wholly own the BIO from
-> - * here on.  It will run one put_page() against each page and will run one
-> - * bio_put() against the BIO.
-> + * here on.  It will run one page_put_unpin() against each page and will run
-> + * one bio_put() against the BIO.
->    */
->   
->   static void bio_dirty_fn(struct work_struct *work);
-> diff --git a/block/blk.h b/block/blk.h
-> index 4c3b3325219a..294044d696e0 100644
-> --- a/block/blk.h
-> +++ b/block/blk.h
-> @@ -425,6 +425,34 @@ int bio_add_hw_page(struct request_queue *q, struct bio *bio,
->   		struct page *page, unsigned int len, unsigned int offset,
->   		unsigned int max_sectors, bool *same_page);
->   
-> +/*
-> + * Set the cleanup mode for a bio from an iterator and the extraction flags.
-> + */
-> +static inline void bio_set_cleanup_mode(struct bio *bio, struct iov_iter *iter)
+On Tue, Jan 24, 2023 at 04:42:30PM +1100, Alistair Popple wrote:
+> +/**
+> + * enum vm_account_flags - Determine how pinned/locked memory is accounted.
+> + * @VM_ACCOUNT_TASK: Account pinned memory to mm->pinned_vm.
+> + * @VM_ACCOUNT_BYPASS: Don't enforce rlimit on any charges.
+> + * @VM_ACCOUNT_USER: Accounnt locked memory to user->locked_vm.
+> + *
+> + * Determines which statistic pinned/locked memory is accounted
+> + * against. All limits will be enforced against RLIMIT_MEMLOCK and the
+> + * pins cgroup if CONFIG_CGROUP_PINS is enabled.
+> + *
+> + * New drivers should use VM_ACCOUNT_TASK. VM_ACCOUNT_USER is used by
+> + * pre-existing drivers to maintain existing accounting against
+> + * user->locked_mm rather than mm->pinned_mm.
+
+I thought the guidance was the opposite of this, it is the newer
+places in the kernel that are using VM_ACCOUNT_USER?
+
+I haven't got to the rest of the patches yet, but isn't there also a
+mm->pinned_vm vs mm->locked_vm variation in the current drivers as
+well?
+
+> +void vm_account_init_current(struct vm_account *vm_account)
 > +{
-> +	unsigned int cleanup_mode = iov_iter_extract_mode(iter);
-> +
-> +	if (cleanup_mode & FOLL_GET)
-> +		bio_set_flag(bio, BIO_PAGE_REFFED);
-> +	if (cleanup_mode & FOLL_PIN)
-> +		bio_set_flag(bio, BIO_PAGE_PINNED);
+> +	vm_account_init(vm_account, current, NULL, VM_ACCOUNT_TASK);
+> +}
+> +EXPORT_SYMBOL_GPL(vm_account_init_current);
 
-Can FOLL_GET ever happen?
+This can probably just be a static inline
 
-IOW, can't this even be
+You might consider putting all this in some new vm_account.h - given
+how rarely it is used? Compile times and all
 
-if (user_backed_iter(iter))
-	bio_set_flag(bio, BIO_PAGE_PINNED);
-
--- 
-Thanks,
-
-David / dhildenb
-
+Jason
