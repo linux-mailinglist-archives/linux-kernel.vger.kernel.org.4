@@ -2,107 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB83167936D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6681E67936F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbjAXIrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 03:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S233190AbjAXIsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbjAXIrK (ORCPT
+        with ESMTP id S231871AbjAXIsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:47:10 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F4A3A878
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:47:04 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 87C0B21A16;
-        Tue, 24 Jan 2023 08:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674550023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lCCPo/qZKUgkl1A1uwAl5uAdTqTdM1xEfDlBTbLn/sw=;
-        b=PS0to3KIyVNOqVWaWb8uciLw2/AD8C5Raxn2gNJyjC04sN09tsS5RzuvUpY2j8/CPPR3YI
-        JFArz3piz9mR3niFZXA91+/m1Uv3odaDimFTcWobJsd1Ue0pth41U9pJ34yI90UBL3dCqD
-        hcb+kOOP80to2jRCGv4XBiCVLqzUs5k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674550023;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lCCPo/qZKUgkl1A1uwAl5uAdTqTdM1xEfDlBTbLn/sw=;
-        b=JkUvuLLU8hka+YKOB8vSvoeEtCLcXyG56fTKgupelAVsoa6PylVlU53q9xr/oVJD0fnVFn
-        LAmjQ7aXymiAkBAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7144113487;
-        Tue, 24 Jan 2023 08:47:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yp+iGwebz2NSOwAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 24 Jan 2023 08:47:03 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 65E57A06B5; Tue, 24 Jan 2023 09:47:02 +0100 (CET)
-Date:   Tue, 24 Jan 2023 09:47:02 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Vladislav Efanov <VEfanov@ispras.ru>
-Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] udf: Check return code from udf_update_extents
-Message-ID: <20230124084702.xew5wmbvmj6gz4j6@quack3>
-References: <20230120091028.1591622-1-VEfanov@ispras.ru>
+        Tue, 24 Jan 2023 03:48:04 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA299F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:48:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674550084; x=1706086084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Dl7rXKEdq8PvoijCs/oOyLxW6MYTFYAWUkJ0i39JYpA=;
+  b=bhEzXO3PpJJ5kvHEs7fYzzXgCS9jaI3yVsP4Zvgc8KhRP+APkSQwdhwB
+   bckAGS1nvUH/UsHrfQ5v/anJc7NSAaIika+w3FccS/vEBei0E/tblYDxX
+   5YKk2ibp+gp086Fgcd1cJAOnee29LSWvZ55QaXItL5DWl6Qge9Ugw9wWU
+   zqgQAd+ogJANJA57pkRd8k6TH+GqQ2+gW7SHdVRK0YfHiXYl4myYahLHk
+   3FE/jPD6VsEMZGt2w1aT5b661GDeNgEdeS+rD6uXBzwBV+s+aGp7gfz9T
+   NGajy+W2SYZ2hTkQqXVElhXwXHa9yfPCI9naBDytPprBXQ/9EcPMwnNl9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="390756801"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="390756801"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 00:48:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="804508982"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="804508982"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.55])
+  by fmsmga001.fm.intel.com with SMTP; 24 Jan 2023 00:48:00 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 24 Jan 2023 10:47:59 +0200
+Date:   Tue, 24 Jan 2023 10:47:59 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>
+Subject: Re: [PATCH] nvme-pci: Switch back to sync probe to fix rootfs mount
+ regression
+Message-ID: <Y8+bP2Oqy3B2XyuJ@intel.com>
+References: <20230124004542.29659-1-ville.syrjala@linux.intel.com>
+ <20230124062140.GA29175@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230120091028.1591622-1-VEfanov@ispras.ru>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230124062140.GA29175@lst.de>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 20-01-23 12:10:28, Vladislav Efanov wrote:
-> udf_add_aext() does not create new extent and returns ENOSPC if new
-> block was not created by udf_bitmap_new_block(). The caller,
-> udf_insert_aext(), does not check this return code and returns OK to
-> its caller(udf_update_extents). Finally the error is being lost. So
-> an inconsistency in inode.i_size and extents length becomes.
-> 
-> Later this inconsistency leads to WARNING:
-> 
-> WARNING: CPU: 3 PID: 1104 at fs/udf/truncate.c:226
->         udf_truncate_extents+0x7e0/0x8e0 fs/udf/truncate.c:226
-> 
-> RIP: 0010:udf_truncate_extents+0x7e0/0x8e0 fs/udf/truncate.c:226
-> Call Trace:
->  udf_write_failed.isra.0+0x173/0x1c0 fs/udf/inode.c:179
->  udf_write_begin+0x8d/0xb0 fs/udf/inode.c:214
->  generic_perform_write+0x20a/0x4e0 mm/filemap.c:3333
->  __generic_file_write_iter+0x252/0x610 mm/filemap.c:3462
->  udf_file_write_iter+0x2cc/0x4e0 fs/udf/file.c:168
->  call_write_iter include/linux/fs.h:1904 [inline]
->  new_sync_write+0x42c/0x660 fs/read_write.c:518
->  vfs_write+0x75b/0xa40 fs/read_write.c:605
-> 
-> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+On Tue, Jan 24, 2023 at 07:21:40AM +0100, Christoph Hellwig wrote:
+> Err, no.  We're not going to randomly revert things.  If you want
+> to be productive check the one liner Keith reported in reply to the
+> last report.
 
-Thanks for the fix but I have a very similar fix already queued in my tree
-in linux-next: 19fd80de0a8 ("udf: Handle error when adding extent to a
-file").
+No idea what that previous report is. Care to share a link?
 
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Ville Syrjälä
+Intel
