@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D252967A479
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BFD67A486
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbjAXVAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:00:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S233809AbjAXVCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjAXVAE (ORCPT
+        with ESMTP id S229487AbjAXVCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:00:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E3241B6B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:59:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674593959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ITSRXrxe9LThDX6/w0/l0eds/y424Ud/UX3BCP7I4YI=;
-        b=DXZEQJcXwxWHsfm71INuwx+7/DivOMvIpiZ58Xd0r7iCncvhvYnwlmBiiOkKT8kQ2HjaT2
-        9LaubgfVzDP9PNhFh520KT3Xnbo1GFbA28Tf6O7OjCo60vDK19nom8tyhCOzFBUzr2kwZg
-        0MdxlMX/xh+ivUy7ehYomtA9K8E+1KU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-78-W5n_P-06OaynFbzeqK7EDQ-1; Tue, 24 Jan 2023 15:59:14 -0500
-X-MC-Unique: W5n_P-06OaynFbzeqK7EDQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B86EA101A521;
-        Tue, 24 Jan 2023 20:59:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 09C2E1121330;
-        Tue, 24 Jan 2023 20:59:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y9ArYfXEix7t3gVI@infradead.org>
-References: <Y9ArYfXEix7t3gVI@infradead.org> <20230124170108.1070389-1-dhowells@redhat.com> <20230124170108.1070389-7-dhowells@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v9 6/8] block: Switch to pinning pages.
+        Tue, 24 Jan 2023 16:02:42 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A672141B6B;
+        Tue, 24 Jan 2023 13:02:39 -0800 (PST)
+Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30OKxS182864905
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 24 Jan 2023 12:59:28 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30OKxS182864905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674593970;
+        bh=9DoeK4pzKCZ3oaVq5FOrw6uKFJ44twkQ98xAmRhBhKE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ePbJFTc0iGeSoXi2dUxZBxD7tYcuZnLph7f5toU8zeVvCxLnEiVMWPmNyqUs6qpxc
+         gc93d23/ifog6fq+BYPcZQs6I1dJtP6i5dNpW1zrmKyDpFRtkg+8xNh1mUzQdrUJN7
+         /YLxM3sPU+WF3dcfnQVTvWNxtRsR8coafLnRNuPgjz4ze8dbDf/9oNUjfRDNNO0r39
+         BJd5aosDQPCp+CEMjtN7QsvUGOQP/ae+TqW3XDD6EtymLb3Xp6OPNw/9cpDwMwa131
+         tOYpFtzEYvmwKNEA6TG1XyymYaQzYfng+1voObl+lAbOWIvg10IIzkz4Jw+URsxSIW
+         Aj0SkIlbRuZpw==
+Message-ID: <48072ce2-e28d-9267-1f8e-3c76682fb782@zytor.com>
+Date:   Tue, 24 Jan 2023 12:59:23 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1297803.1674593951.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 24 Jan 2023 20:59:11 +0000
-Message-ID: <1297804.1674593951@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH v3 2/2] selftests/x86: sysret_rip: Add more syscall
+ tests with respect to `%rcx` and `%r11`
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xin Li <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
+ <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230124100926.637335-1-ammarfaizi2@gnuweeb.org>
+ <20230124100926.637335-3-ammarfaizi2@gnuweeb.org>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20230124100926.637335-3-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
 
-> > Add BIO_PAGE_PINNED to indicate that the pages in a bio are pinned
-> > (FOLL_PIN) and that the pin will need removing.
-> =
 
-> The subject is odd when this doesn't actually switch anything,
-> but just adds the infrastructure to unpin pages.
+On 1/24/23 02:09, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> 
+> Test that:
+> 
+>   - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+>   - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+> 
+> Test them out with a trivial system call like __NR_getppid and friends
+> which are extremely likely to return with SYSRET on an IDT system.
+> 
+> Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
+> Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-How about:
+Add to the description that the purpose of this is to ensure that 
+various system calls are *consistent*, as per the comment immediately 
+below your code.
 
-	block: Add BIO_PAGE_PINNED and associated infrastructure
-
-> > +static inline void bio_set_cleanup_mode(struct bio *bio, struct iov_i=
-ter *iter)
-> ...
-> At this point I'd be tempted to just open code these two lines
-> instead of adding a helper, but I can live with the helper if you
-> prefer it.
-
-I can do that.  It makes sense to put the call to that next to the call to
-iov_iter_extract_pages().
-
-David
+	-hpa
 
