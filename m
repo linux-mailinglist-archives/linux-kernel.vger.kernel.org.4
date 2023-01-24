@@ -2,228 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A512679758
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB35679780
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbjAXMLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S233563AbjAXMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjAXMLf (ORCPT
+        with ESMTP id S233479AbjAXMQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:11:35 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EAB42DD9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:11:34 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id l129so7483566vkh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:11:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dISAn78vCWS4e6xdAYVii8dXCJmdFpiXIP1pmSRbb/8=;
-        b=ZLjWXwX3EYWpqYpHXvt912h/2ETFWRj0hqQqB9cwIGQR9I1ti6KmgBoCv5JV0E6NH+
-         Ao2ZJYcXe2AOfsuXLtgZ9tSvuZztJ4nLvMRv0L+m7l5dtscd4wNcR8b+evAdvi6YSwBm
-         J74A/HUMs3P+Q5V0OxK2IHgJ/pzRL9XZlIz6pcGiwjFElBvOmELb5dZ42o1ycTXMfB3j
-         IcSsFeRx0f4jjxajJOXa2wb+ojQggPAr2lXXo/ZhkorUHf6Mrf2DfpAeaYTihBvQooDu
-         FnIedSqwFO6bEEos2h+7Ra1xfBbLcZLVLI3OV68Gs/aDRTk9YZVUx46j3RGigz5EbpYJ
-         361g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dISAn78vCWS4e6xdAYVii8dXCJmdFpiXIP1pmSRbb/8=;
-        b=KOb/nDpanTaIzDh8Mhn+iDjSlPmq/4WZUWd0PAY+No1HBrUM5Weoaaa68wx2bCnqRl
-         A6bJynxXqvDpH4BzD2lJFVVVIPXR8yYFpX++c8PVIR7aaVx8tGBKhbKd84b/f6ShEEd5
-         7QN1+aL52/cLN2QpmlipvOPM5dp6QYsCEaRtI0SVIQdNTbZlAhqwuIRgspCYaGDpq++o
-         IQG70CimGQuCqjENuCgPP6AgCVOTLSoTMK5Jwx1HpaWnoP13t9GVS8ed55+hs3HPGdw6
-         Es/YbYhtfYCIL4cfCqfTMxZvkYqXygPQbEvRhJqbPbREK/baLXidALmcLnIkKzm45xX2
-         wcFg==
-X-Gm-Message-State: AFqh2koZYs+KLdiURxk9xD/nklKU2hIZUV4tXm19PsOgp/O98wlvyMNM
-        Q/3dPLSecgioo0n17RaGUWyygMIspeL62PdYJVTvjg==
-X-Google-Smtp-Source: AMrXdXsEU8BFfIKrVdZYAVyNpNnFgFf89N+fSD9CVwbqX8GRUTMFkEfGPe87YRNQbrX7xxpbwpitSYIX8RT97AbGxdA=
-X-Received: by 2002:a1f:45cb:0:b0:3e2:3d0:929c with SMTP id
- s194-20020a1f45cb000000b003e203d0929cmr1944766vka.30.1674562293562; Tue, 24
- Jan 2023 04:11:33 -0800 (PST)
+        Tue, 24 Jan 2023 07:16:33 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06344523E;
+        Tue, 24 Jan 2023 04:16:13 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBn3WW005401;
+        Tue, 24 Jan 2023 12:16:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=f07QMuBUSg3ZarMkt3Gwjde/EaP6Bc9lH2qZXl5nyCY=;
+ b=gfreqFprsd6yG+wEqww+B7Z8olg2a6AhtG7A9foPXXeWRsW97SScghsj8+ARFWHovfLF
+ KKd3iVLa0FtJRCwrBVXpP9TL+z+BYQrJ5+WU7M/5SxtJg8AVF8NHn+zrNrbL4fn4W8re
+ 8/uvgjTblLP4SeFZoxvXUMonZhB7ZhnC8oU8ML23i5MrEXYc60B4VszTHIcYQcKquHPZ
+ 3voa7XAHQkedsymHIKwmgy4mHkPSX4MhjrdY/rQ9ns/hLJT/QhJ6M7S8QY4/bsz3WvZs
+ /xgioy0EuND+J3kWKREhXVca9hktVD/dzTgtHaTZd+yOxHn10jDrsVG4mzIsVVF+8CnI Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na9vbqkux-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:16:07 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30OCG6Gd004119;
+        Tue, 24 Jan 2023 12:16:06 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na9vbqku6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:16:06 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NNTwa9011514;
+        Tue, 24 Jan 2023 12:16:04 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6kshv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:16:04 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCG2Hn40370608
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 12:16:02 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B3CE2004D;
+        Tue, 24 Jan 2023 12:16:02 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E79952004B;
+        Tue, 24 Jan 2023 12:16:01 +0000 (GMT)
+Received: from [9.171.71.154] (unknown [9.171.71.154])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 12:16:01 +0000 (GMT)
+Message-ID: <86bb384b-0084-05ac-3a13-ef462d1c0a35@linux.ibm.com>
+Date:   Tue, 24 Jan 2023 13:16:01 +0100
 MIME-Version: 1.0
-References: <20230122150246.321043584@linuxfoundation.org> <CA+G9fYsS1GLzMoeh-jz8eOMbomJ=XBg_3FjQ+4w_=Dw1Mwr3rQ@mail.gmail.com>
- <20230123191128.ewfyc5cdbbdx5gtl@oracle.com> <20230123194218.47ssfzhrpnv3xfez@oracle.com>
-In-Reply-To: <20230123194218.47ssfzhrpnv3xfez@oracle.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 Jan 2023 17:41:22 +0530
-Message-ID: <CA+G9fYvLh=epzy_KEZObfFn1kVCugKvuVWF08X9eEiPe4ehe3g@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/193] 6.1.8-rc1 review
-To:     Tom Saeger <tom.saeger@oracle.com>
-Cc:     Rich Felker <dalias@libc.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/1] checkpatch: recognise NOKPROBE_SYMBOL for blank line
+ detection after function/struct/union/enum
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+References: <20230120114649.117018-1-borntraeger@linux.ibm.com>
+ <e092f27243feeeec282ef8fdab57d8f9ee88a32d.camel@perches.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <e092f27243feeeec282ef8fdab57d8f9ee88a32d.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: B6cJ4QtP57BqYT7t9v8F4mRo1EDn66_o
+X-Proofpoint-ORIG-GUID: oT6S8bMmXIr5ds1smx_vAzFJkC2qCxgL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240111
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom,
-
-On Tue, 24 Jan 2023 at 01:12, Tom Saeger <tom.saeger@oracle.com> wrote:
->
-> On Mon, Jan 23, 2023 at 01:11:32PM -0600, Tom Saeger wrote:
-> > On Mon, Jan 23, 2023 at 01:39:11PM +0530, Naresh Kamboju wrote:
-> > > On Sun, 22 Jan 2023 at 20:51, Greg Kroah-Hartman
-> > >
-> > > Results from Linaro=E2=80=99s test farm.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > * sh, build
-> > >   - gcc-8-dreamcast_defconfig
-> > >   - gcc-8-microdev_defconfig
-> >
-> > Naresh, any chance you could test again adding the following:
-> >
-> > diff --git a/arch/sh/kernel/vmlinux.lds.S b/arch/sh/kernel/vmlinux.lds.=
-S
-> > index 3161b9ccd2a5..b6276a3521d7 100644
-> > --- a/arch/sh/kernel/vmlinux.lds.S
-> > +++ b/arch/sh/kernel/vmlinux.lds.S
-> > @@ -4,6 +4,7 @@
-> >   * Written by Niibe Yutaka and Paul Mundt
-> >   */
-> >  OUTPUT_ARCH(sh)
-> > +#define RUNTIME_DISCARD_EXIT
-> >  #include <asm/thread_info.h>
-> >  #include <asm/cache.h>
-> >  #include <asm/vmlinux.lds.h>
-> >
-> >
-> > My guess is build environment is using ld < 2.36??
-> > and this is probably similar to:
-> > a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error with=
- GNU ld < 2.36")
-> > 4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
-> >
-> >
-> > Regards,
-> >
-> > --Tom
-> >
-> > >
-> > >
-> > > Build error logs:
-> > > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-> > > defined in discarded section `.exit.text' of crypto/algboss.o
-> > > `.exit.text' referenced in section `__bug_table' of
-> > > drivers/char/hw_random/core.o: defined in discarded section
-> > > `.exit.text' of drivers/char/hw_random/core.o
-> > > make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Err=
-or 1
->
->
-> This is also occurring in latest upstream:
-
-Right !
-build/gcc-8-dreamcast_defconfig
-build/gcc-8-microdev_defconfig
-
-These build errors started from v6.2-rc2 on the mainline [1] & [2].
-
->
-> =E2=9D=AF git describe HEAD
-> v6.2-rc5-13-g2475bf0250de
->
-> =E2=9D=AF tuxmake --runtime podman --target-arch sh --toolchain gcc-8 --k=
-config microdev_defconfig
->
-> `.exit.text' referenced in section `__bug_table' of crypto/algboss.o: def=
-ined in discarded section `.exit.text' of crypto/algboss.o
-> `.exit.text' referenced in section `__bug_table' of drivers/char/hw_rando=
-m/core.o: defined in discarded section `.exit.text' of drivers/char/hw_rand=
-om/core.o
-> make[2]: *** [/home2/tsaeger/linux/linux-upstream/scripts/Makefile.vmlinu=
-x:35: vmlinux] Error 1
-> make[2]: Target '__default' not remade because of errors.
-> make[1]: *** [/home2/tsaeger/linux/linux-upstream/Makefile:1264: vmlinux]=
- Error 2
-> make[1]: Target '__all' not remade because of errors.
-> make: *** [Makefile:242: __sub-make] Error 2
-> make: Target '__all' not remade because of errors.
->
->
-> FWIW, the above patch resolves this.
-Yes. Tested and confirmed it fixes the reported problem.
-
-> How many more architectures need something similar?
-Now I see it on sh with gcc-8 only on the mainline.
-
-OTOH,
-It was noticed on earlier stable-rc 5.4 for x86, i386, powerpc, sh and s390=
-.
-
-git_describe : v5.4.228-679-g79cbaf4448f3
-kernel_version: 5.4.230-rc1
-
-Regressions found on sh: [1] & [2] mainline and below
-    - build/gcc-8-dreamcast_defconfig
-    - build/gcc-8-microdev_defconfig
-
-Regressions found on i386: [3]
-    - build/gcc-8-i386_defconfig
-
-Regressions found on powerpc:  [4]
-    - build/gcc-8-mpc83xx_defconfig
-    - build/gcc-8-ppc64e_defconfig
-    - build/gcc-8-maple_defconfig
-    - build/gcc-8-ppc6xx_defconfig
-    - build/gcc-8-defconfig
-    - build/gcc-8-tqm8xx_defconfig
-    - build/gcc-8-cell_defconfig
-
-Regressions found on s390: [5]
-    - build/gcc-8-defconfig-fe40093d
-
-Regressions found on x86_64: [6]
-    - build/gcc-8-x86_64_defconfig
 
 
-[1] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
--20-g7bf70dbb1882/testrun/14340424/suite/build/test/gcc-8-microdev_defconfi=
-g/history/?page=3D3
-[2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
--20-g7bf70dbb1882/testrun/14340393/suite/build/test/gcc-8-dreamcast_defconf=
-ig/history/?page=3D3
+Am 20.01.23 um 17:10 schrieb Joe Perches:
+> On Fri, 2023-01-20 at 12:46 +0100, Christian Borntraeger wrote:
+>> NOKPROBE_SYMBOL should be treated like EXPORT_SYMBOL to avoid
+>> false positives.
+> []
+>> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+>> @@ -3995,6 +3995,7 @@ sub process {
+>>   		    $line =~ /^\+/ &&
+>>   		    !($line =~ /^\+\s*$/ ||
+>>   		      $line =~ /^\+\s*(?:EXPORT_SYMBOL|early_param)/ ||
+>> +		      $line =~ /^\+\s*NOKPROBE_SYMBOL/ ||
+>>   		      $line =~ /^\+\s*MODULE_/i ||
+>>   		      $line =~ /^\+\s*\#\s*(?:end|elif|else)/ ||
+>>   		      $line =~ /^\+[a-z_]*init/ ||
+> 
+> $ git grep -P -w -oh '\w*NOKPROBE_SYMBOL\w*' | sort | uniq -c
+>       60 _ASM_NOKPROBE_SYMBOL
+>        2 __NOKPROBE_SYMBOL
+>      304 NOKPROBE_SYMBOL
+> 
+> Any issue with these other variants? (it doesn't seem so)
+7
+The other variants should not matter.
+> 
+> btw: __NOKPROBE_SYMBOL has a ; at the end of its definition.
+> 
+> include/asm-generic/kprobes.h:# define __NOKPROBE_SYMBOL(fname)                         \
+> include/asm-generic/kprobes.h-static unsigned long __used                                       \
+> include/asm-generic/kprobes.h-  __section("_kprobe_blacklist")                          \
+> include/asm-generic/kprobes.h-  _kbl_addr_##fname = (unsigned long)fname;
+> 
+> And so there are extra ; uses after ever use of NOKPROBE_SYMBOL(foo);
+> 
+> $ git grep -w NOKPROBE_SYMBOL | grep ';' | wc -l
+> 285
+> 
+> There are only 10 uses of NOKPROBE_SYMBOL(foo) without a semicolon
+> 
+> $ git grep -P '\bNOKPROBE_SYMBOL\s*\(\s*\w+\s*\)\s*(?:[^\;]|$)'
+> arch/arm/kernel/traps.c:NOKPROBE_SYMBOL(do_undefinstr)
+> arch/arm/probes/kprobes/opt-arm.c:NOKPROBE_SYMBOL(optimized_callback)
+> arch/arm64/kernel/kgdb.c:NOKPROBE_SYMBOL(kgdb_brk_fn)
+> arch/powerpc/mm/cacheflush.c:NOKPROBE_SYMBOL(flush_dcache_icache_phys)
+> arch/powerpc/platforms/82xx/pq2.c:NOKPROBE_SYMBOL(pq2_restart)
+> include/asm-generic/kprobes.h:# define NOKPROBE_SYMBOL(fname)   __NOKPROBE_SYMBOL(fname)
+> include/asm-generic/kprobes.h:# define NOKPROBE_SYMBOL(fname)
+> kernel/fail_function.c:NOKPROBE_SYMBOL(fei_kprobe_handler)
+> kernel/kprobes.c:NOKPROBE_SYMBOL(__kretprobe_trampoline_handler)
+> kernel/trace/trace_eprobe.c:NOKPROBE_SYMBOL(process_fetch_insn)
+> kernel/trace/trace_kprobe.c:NOKPROBE_SYMBOL(process_fetch_insn)
+> kernel/trace/trace_uprobe.c:NOKPROBE_SYMBOL(process_fetch_insn)
+> 
+> The actual uses with NOKPROBE_SYMBOL(foo) should likely have semicolons added
+> and the __NOKPROBE_SYMBOL definition should have the semicolon removed.
 
-[3] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5=
-.4.228-679-g79cbaf4448f3/testrun/14304065/suite/build/test/gcc-8-i386_defco=
-nfig/history/
-[4] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5=
-.4.228-679-g79cbaf4448f3/testrun/14304362/suite/build/tests/
-[5] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5=
-.4.228-679-g79cbaf4448f3/testrun/14304530/suite/build/tests/
-[6] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5=
-.4.228-679-g79cbaf4448f3/testrun/14304610/suite/build/test/gcc-8-x86_64_def=
-config/history/
-
-stable-rc report on 5.4:
-https://lore.kernel.org/stable/Y85tO%2FmJOxIaWH4c@debian/T/#m6b1fdc9bcfc159=
-44e26e3cdd6b1310c878251999
-
-Best regards
-Naresh Kamboju
+That would be an independent check I guess.
+  
