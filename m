@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C421767A009
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6D867A00A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbjAXRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
+        id S231544AbjAXRWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbjAXRVo (ORCPT
+        with ESMTP id S233728AbjAXRWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:21:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667134A20D;
-        Tue, 24 Jan 2023 09:21:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 164B3B81603;
-        Tue, 24 Jan 2023 17:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD47C433D2;
-        Tue, 24 Jan 2023 17:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674580900;
-        bh=5u0HAqsMO32meB1+2hDlQk/3mQeAC0aecbaZTWGuo+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QjXkTZ0idK5z1Ix6m1yf2oBxsdcJq94aU7EsrAkDisp/SxGulfBdNMOHDckBQCvRz
-         W6llnTDs0JyFfXUOfVaSTrQzHB06mjALwb4j+Phm8EDITPUQVpWD5IHsXkZkuoBPtv
-         RURIQy6zUHAvCnxo+xVec0gIbsGD27+BhiB5s6a+NXA37TUYzDYw69k0Ue/1GNZ5pA
-         e7XeoQuYn4y8JHNQWOTkXCt0qA/tsceHAidqLU0n+M/uxducs+tOJXNBbPy0iCuj6y
-         N0r2//PY2LaeDxixTQGxip8Sr7ZhPU0erQFPtHhNXN68HP/JMuxcj/3DvEDYW4dGN9
-         YTPE1btkwci6w==
-Date:   Tue, 24 Jan 2023 11:21:39 -0600
-From:   Seth Forshee <sforshee@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] vhost: check for pending livepatches from vhost
- worker kthreads
-Message-ID: <Y9ATo5FukOhphwqT@do-x1extreme>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <20230120-vhost-klp-switching-v1-2-7c2b65519c43@kernel.org>
- <Y8/ohzRGcOiqsh69@alley>
+        Tue, 24 Jan 2023 12:22:18 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 22F844A20D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 09:22:12 -0800 (PST)
+Received: (qmail 173989 invoked by uid 1000); 24 Jan 2023 12:22:11 -0500
+Date:   Tue, 24 Jan 2023 12:22:11 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y9ATwzit6V/aUolL@rowland.harvard.edu>
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <Y8lynRI35cFeuqb5@rowland.harvard.edu>
+ <280fb8f6-f1fd-76ce-7851-cf720820c44e@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y8/ohzRGcOiqsh69@alley>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <280fb8f6-f1fd-76ce-7851-cf720820c44e@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 03:17:43PM +0100, Petr Mladek wrote:
-> On Fri 2023-01-20 16:12:22, Seth Forshee (DigitalOcean) wrote:
-> > Livepatch relies on stack checking of sleeping tasks to switch kthreads,
-> > so a busy kthread can block a livepatch transition indefinitely. We've
-> > seen this happen fairly often with busy vhost kthreads.
-> 
-> To be precise, it would be "indefinitely" only when the kthread never
-> sleeps.
-> 
-> But yes. I believe that the problem is real. It might be almost
-> impossible to livepatch some busy kthreads, especially when they
-> have a dedicated CPU.
+On Tue, Jan 24, 2023 at 04:54:42PM +0100, Jonas Oberhauser wrote:
 > 
 > 
-> > Add a check to call klp_switch_current() from vhost_worker() when a
-> > livepatch is pending. In testing this allowed vhost kthreads to switch
-> > immediately when they had previously blocked livepatch transitions for
-> > long periods of time.
+> On 1/19/2023 5:41 PM, Alan Stern wrote:
+> > On Thu, Jan 19, 2023 at 12:22:50PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 1/19/2023 3:28 AM, Alan Stern wrote:
+> > > > > This is a permanent error; I've given up. Sorry it didn't
+> > > > work out.
+> > > [It seems the e-mail still reached me through the mailing list]
+> > [For everyone else, Jonas is referring to the fact that the last two
+> > emails I sent to his huaweicloud.com address could not be delivered, so
+> > I copied them off-list to his huawei.com address.]
 > > 
-> > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > ---
-> >  drivers/vhost/vhost.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > index cbe72bfd2f1f..d8624f1f2d64 100644
-> > --- a/drivers/vhost/vhost.c
-> > +++ b/drivers/vhost/vhost.c
-> > @@ -366,6 +367,9 @@ static int vhost_worker(void *data)
-> >  			if (need_resched())
-> >  				schedule();
-> >  		}
-> > +
-> > +		if (unlikely(klp_patch_pending(current)))
-> > +			klp_switch_current();
+> > > > > I consider that a hack though and don't like it.
+> > > > It _is_ a bit of a hack, but not a huge one.  srcu_read_lock() really
+> > > > is a lot like a load, in that it returns a value obtained by reading
+> > > > something from memory (along with some other operations, though, so it
+> > > > isn't a simple straightforward read -- perhaps more like an
+> > > > atomic_inc_return_relaxed).
+> > > The issue I have with this is that it might create accidental ordering. How
+> > > does it behave when you throw fences in the mix?
+> > I think this isn't going to be a problem.  Certainly any real
+> > implementation of scru_read_lock() is going to involve some actual load
+> > operations, so any unintentional ordering caused by fences will also
+> > apply to real executions.  Likewise for srcu_read_unlock and store
+> > operations.
 > 
-> I suggest to use the following intead:
+> Note that there may indeed be reads in the implementation, but most likely
+> not from the srcu_read_unlock()s of other threads. Most probably from the
+> synchronize_srcu() calls. So the rfe edges being added are probably not
+> corresponding to any rfe edges in the implementation.
 > 
-> 		if (unlikely(klp_patch_pending(current)))
-> 			klp_update_patch_state(current);
+> That said, I believe there may indeed not be any restrictions in behavior
+> caused by this, because any code that relies on the order being a certain
+> thing would need to use some other ordering mechanism, and that would
+> probably restrict the behavior anyways.
 > 
-> We already use this in do_idle(). The reason is basically the same.
-> It is almost impossible to livepatch the idle task when a CPU is
-> very idle.
-> 
-> klp_update_patch_state(current) does not check the stack.
-> It switches the task immediately.
-> 
-> It should be safe because the kthread never leaves vhost_worker().
-> It means that the same kthread could never re-enter this function
-> and use the new code.
+> It does have the negative side-effect of creating an explosion of
+> permutations though, by ordering all unlocks() in a total way and also
+> sometimes allowing multiple options for each lock() (e.g., lock();unlock()
+> || lock();unlock()  has 4 executions instead of 1).
 
-My knowledge of livepatching internals is fairly limited, so I'll accept
-it if you say that it's safe to do it this way. But let me ask about one
-scenario.
+That's true.  It would be nice if there was a class of write-like events 
+which couldn't be read from and didn't contribute to the coherence 
+ordering.
 
-Let's say that a livepatch is loaded which replaces vhost_worker(). New
-vhost worker threads are started which use the replacement function. Now
-if the patch is disabled, these new worker threads would be switched
-despite still running the code from the patch module, correct? Could the
-module then be unloaded, freeing the memory containing the code these
-kthreads are executing?
+Alan
 
-Thanks,
-Seth
+> Anyways, not much to be done about it right now.
+> 
+> best wishes, jonas
+> 
