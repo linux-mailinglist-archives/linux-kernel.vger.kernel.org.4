@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32760679626
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024C267962F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjAXLF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S232620AbjAXLHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:07:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbjAXLFl (ORCPT
+        with ESMTP id S231828AbjAXLHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:05:41 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40FD3C21;
-        Tue, 24 Jan 2023 03:05:31 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 268D05C092A;
-        Tue, 24 Jan 2023 06:05:31 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Tue, 24 Jan 2023 06:05:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=readahead.eu; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1674558331; x=1674644731; bh=tEYZlf43dWAmtICS4wUuBE8sXSOA8yFH1Yj
-        m+gpaNlY=; b=txsl7iatIcaamMHLXf8zCa7fxGJWLBs3beJ3qWIPLnrmhAR8mkd
-        TGncrksVfnrw2IH2M/tyfIJCgC+nJ2Pm1iy1A7gaWiuANkGwaRJGigsX3QCBJzrH
-        yncwMBb1uwnu3RelAwAk7o1OiRQwSKH/b6AsSG4yhPesLEHrRnjXhqMF7gNY86op
-        N6yc5JlcERAXkKveXq53ET0NlokxxY1gT9JNjUPO0lIFHv1Cg7SlYLIWuV/CB7t8
-        +ZM45RFqA5vKnoSaS54REFYYok94sAUyknyn/YMmVpxde5F7u4Fipc1Zi3ycIffi
-        8L9FNnObaQIRZQkhqdnvDxmtPeN25ret+fQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674558331; x=
-        1674644731; bh=tEYZlf43dWAmtICS4wUuBE8sXSOA8yFH1Yjm+gpaNlY=; b=I
-        IRMCaC8HW9R8RhfwAjJzkzQR9L9J+v6Z5833TBT9/nk+2IOv0HkaL3Q+ql4QpciA
-        casH/tqUAhLB6b30QuZQPKIt6BTZdrMibpe/ORcLFWVDzVhXkqIRpt7uWNI5Nb+x
-        cDhl8Bt9qxMIr379A0pHnPisMvXawP4qouNJjTgfrn4FCVzeaXUsal+IOx8TQmUu
-        OZDtoHQvYfINJ0evvvztAviS6UCEE+hcOeNl9cd0dUpCX8gXpEjl66Uvssgc/310
-        sX8GzGGbP2ytFh10P4KFzkvbcazKNFt7iF0EzJpywSGFYqSS8wfN8efiVqFwS+HK
-        DeJ/rp6N4q22vmjwbObqg==
-X-ME-Sender: <xms:ervPY9PqKQxmW8F_Hw3upBubqdBeT7sloadYjPmus650w5xpiYKblA>
-    <xme:ervPY_-pTJMPlmQfbKMimrxA9M2sG8AzB9jnCyoB9mHrYATqiQhUo4tg8dqIXONVQ
-    U31iLcSV3ntgAy5Ylk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvtddgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedfffgrvhhi
-    ugcutfhhvghinhhssggvrhhgfdcuoegurghvihgusehrvggruggrhhgvrggurdgvuheqne
-    cuggftrfgrthhtvghrnhepveeiffetveejgfdtteevleetleejtddvvdeftdffkeejveef
-    veeguedtkefgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepuggrvhhiugesrhgvrggurghhvggrugdrvghu
-X-ME-Proxy: <xmx:ervPY8TT02hhkl4kBCUKqOeUqXT8jvKw5oHsWzVLmLBdrJnJgaCEOw>
-    <xmx:ervPY5uuBmiSPv7WRiVrRl2IArYAgG4ntwASmneewz3WYYmvNsAstA>
-    <xmx:ervPY1de3-hxqTtyw4tXQMsV7nuuGH1PEaYzm2IslwBANQDQFxZgwg>
-    <xmx:e7vPY-HMpGr6ZGh_JkcEWmhnFvNZs93AeYGQ9dk1gP7-ltkOvBBGlg>
-Feedback-ID: id2994666:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3334A1700089; Tue, 24 Jan 2023 06:05:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <320c4dba-9919-404b-8a26-a8af16be1845@app.fastmail.com>
-Date:   Tue, 24 Jan 2023 12:04:59 +0100
-From:   "David Rheinsberg" <david@readahead.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     rust-for-linux@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        x86@kernel.org, "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Borislav Petkov" <bp@alien8.de>, "Ingo Molnar" <mingo@redhat.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Subject: [PATCH] x86/insn_decoder_test: allow longer symbol-names
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 06:07:31 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4594193EB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:07:30 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id s67so11058148pgs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MhkW1FpMKSBw2LEIkWml12Y6AIM7FamikDRt0i3hkOQ=;
+        b=dn5Fz8Pc+eFnZnOhew1XCQJ2tUBOFpj2KCib49g+FwpH2PFCVZD+IYfQ1XLa8gTTnJ
+         EhKMTXz3KJFnsYxH5P7f1mjz6DM1bt5q9ce4wLzCToBTWO/gydGEwcTopJ/3x9rsgZ4l
+         2rrRMVFrsvo/uIEEidDUldoybOfb6moS5xlmfTQfp6UdhG4eV5mqKSeBWE5Zlb3xoDUI
+         IYrpopUVip3QqSk0ha42xrBOcE/LcFqmnQ+nspZyC7MtM2bH3AExosGaJ7w3+BIM4mzx
+         TuD9Sssq/RVS3rjRG5fIqcSclVkgDKKESfkt6Z8CX5PyfEJFNU6aepJcl+7CE0XJx6mY
+         Wh/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MhkW1FpMKSBw2LEIkWml12Y6AIM7FamikDRt0i3hkOQ=;
+        b=BExcDgImkMDl6jm+p5g4XR5IZHjeRdHCSIoMEC0yerUUOJ3Fq3GASyqvUMpFLv3MAx
+         RuHy+VHydN0vOFOQeXipXa9XfwrRsKmDAON/HeLAvUuzARNPVi2LR8+iJDNgsZyBDQX0
+         J1CVlvv5TBId76vwexhdzbzveLNQtK+g5XnDK8hU3Tr2w/Qfs1qg+yLIqrkomb11sUrg
+         8rz8ar4YzIocfiIcdDcLF/hD9Wy8ix5rMLCOeSTME3qG0Iu9zqefonf9HeJ9g7v5mXrV
+         Wng+ny55KCnqDJuFG+w2VkrQT4UpfpqOMmsdqxGmO0/6tQutrJH1vpGfHx+Jg9C6EOPD
+         LH4g==
+X-Gm-Message-State: AFqh2kqQBP2kDFDCAJcleoa9yt3KGJNcCUe1ydfcVavh32zLJoevJ0Qv
+        HT1C5hL1iKwxEUBsk/rQEptWOmVO7pltaczZ+Otvdg==
+X-Google-Smtp-Source: AMrXdXtOWDOmHbkDr/4rC1Lhpj2j2CSC6rKV/xVHz07rP6WvxnUEy1UeMPI4/tzJj38SUMMz9tafOXcPRTgbuxD7oek=
+X-Received: by 2002:a05:6a00:2c7:b0:577:139e:1ec8 with SMTP id
+ b7-20020a056a0002c700b00577139e1ec8mr3399448pft.40.1674558449616; Tue, 24 Jan
+ 2023 03:07:29 -0800 (PST)
+MIME-Version: 1.0
+References: <20230118045749.3913296-1-chenhuiz@axis.com>
+In-Reply-To: <20230118045749.3913296-1-chenhuiz@axis.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 24 Jan 2023 12:06:53 +0100
+Message-ID: <CAPDyKFqUnp_rDcckBSW386webSgjAhfdONN_AKYCS-kY3XwKPg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: expose MMC_CAP_AGGRESSIVE_PM to DT
+To:     Hermes Zhang <chenhuiz@axis.com>
+Cc:     kernel@axis.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Increase the allowed line-length of the insn-decoder-test to 4k to allow
-for symbol-names longer than 256 characters.
+On Wed, 18 Jan 2023 at 05:57, Hermes Zhang <chenhuiz@axis.com> wrote:
+>
+> This patch expose the MMC_CAP_AGGRESSIVE_PM flag to DT which
+> allows the host to enable it from DT.
+>
+> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+> ---
+>  drivers/mmc/core/host.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+> index d17eda753b7e..1d98a301515d 100644
+> --- a/drivers/mmc/core/host.c
+> +++ b/drivers/mmc/core/host.c
+> @@ -376,6 +376,8 @@ int mmc_of_parse(struct mmc_host *host)
+>                 host->caps |= MMC_CAP_HW_RESET;
+>         if (device_property_read_bool(dev, "cap-sdio-irq"))
+>                 host->caps |= MMC_CAP_SDIO_IRQ;
+> +       if (device_property_read_bool(dev, "cap-aggressive-pm"))
+> +               host->caps |= MMC_CAP_AGGRESSIVE_PM;
 
-The insn-decoder-test takes objdump output as input, which may contain
-symbol-names as instruction arguments. With rust-code entering the
-kernel, those symbol-names will include mangled-symbols which might
-exceed the current line-length-limit of the tool.
+I think this can be debated whether this is a description of some
+characteristics of the HW.
 
-By bumping the line-length-limit of the tool to 4k, we get a reasonable
-buffer for all objdump outputs I have seen so far. Unfortunately, ELF
-symbol-names are not restricted in length, so technically this might
-still end up failing if we encounter longer names in the future.
+That said, please add the DT list and maintainers and resend, to let
+them share their view too.
 
-My compile-failure looks like this:
+>         if (device_property_read_bool(dev, "full-pwr-cycle"))
+>                 host->caps2 |= MMC_CAP2_FULL_PWR_CYCLE;
+>         if (device_property_read_bool(dev, "full-pwr-cycle-in-suspend"))
+> --
 
-    arch/x86/tools/insn_decoder_test: error: malformed line 1152000:
-    tBb_+0xf2>
-
-..which overflowed by 10 characters reading this line:
-
-    ffffffff81458193:   74 3d                   je     ffffffff814581d2 <_RNvXse_NtNtNtCshGpAVYOtgW1_4core4iter8adapters7flattenINtB5_13FlattenCompatINtNtB7_3map3MapNtNtNtBb_3str4iter5CharsNtB1v_17CharEscapeDefaultENtNtBb_4char13EscapeDefaultENtNtBb_3fmt5Debug3fmtBb_+0xf2>
-
-Signed-off-by: David Rheinsberg <david@readahead.eu>
----
- arch/x86/tools/insn_decoder_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/tools/insn_decoder_test.c b/arch/x86/tools/insn_decoder_test.c
-index 472540aeabc2..366e07546344 100644
---- a/arch/x86/tools/insn_decoder_test.c
-+++ b/arch/x86/tools/insn_decoder_test.c
-@@ -106,7 +106,7 @@ static void parse_args(int argc, char **argv)
- 	}
- }
- 
--#define BUFSIZE 256
-+#define BUFSIZE 4096
- 
- int main(int argc, char **argv)
- {
--- 
-2.39.1
+Kind regards
+Uffe
