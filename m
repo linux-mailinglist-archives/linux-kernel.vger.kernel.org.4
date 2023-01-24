@@ -2,171 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B32679AEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB191679AFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbjAXOBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S229802AbjAXODr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234593AbjAXOBP (ORCPT
+        with ESMTP id S234321AbjAXODn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:01:15 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2061c.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8c::61c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78323F76B;
-        Tue, 24 Jan 2023 06:00:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GHU/cVu7U9Jpm8Re1QyBDK90qGmKM7qICoPB9pjr+Io3y1rZwl17Df8e4b1oeBCapoeMZCKrkXNp5brwpZCDgjzqKHr9LLNDIEHc+JR9ADVP2vXwl5usecp4F3GOvwMQhGEO60J1BYhngaCALk7Vyls47uuODIRobdaN2Zh62/ejJ4nIEu2P49nLZHxYJwtMvVEDoBmJShx6b9PccEod7bLIbYveTkRMzn6q2AqKcYAIFbYWWryU+7iczdNH71c3E4E+A4VMdQCAiVm5d60uhZzpM9nmtv1Aqt5rk8KsFAqjPRGv/qJkYEtAAF0M/J65XNET3v6DqaHcg8uZUAIBdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x/gJirx0civvafuXC3Du5UhUMe0BAjkxgUcXj6ysWE0=;
- b=b+Wc5uin7UAwfdsYnc681HHxgY++DIGerL1zrHZD4e33pV+NWq1pPY6jbQGCI/Nd4v7x/yciL1wnsW7tLoPZFm8Y1jwg1nof6JR7ZI999x44w6O76XfVdd6F099ifYkQKAk3HikqLS9F4aoWxMMu3shebEO2B5kMpNLm1ptzDYZ5733yfOqsG7mgrQWKWoC4ymN3irezfdubUDva37OfnLx4OxZTCToaQR8sS4wnrTz8es92qU3lSVNtNI7wD/TY+8LZm6aKQ3iDUV0JD4Fkd3E6yBxt17YfKVQTrzxfAKSMDX5FFhxHF4yLPlhTqpVv947rqGtVSA3/w9/a2/ld6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x/gJirx0civvafuXC3Du5UhUMe0BAjkxgUcXj6ysWE0=;
- b=BmraP7q/ZMX1QypkUed5qNEvrThuYd54tp/y7pRG1nsvkR9OGTK8h4e3OFvCQ0LkrV8vylafCrX42jxcgpkMWx2+TqT6ZLWuLa8HwPvUPqxxMqXrQqzcer4BLioxUvZT7w3AD0VtWsmXiJqjaaMA4fEvYmdhmn77qiOEyRof0o3+ezlxifvrSsB65T0gP0O5x6ol+SnHAaBtwwbP6vJ9p/uIl1/slF9pggwbnpOQ19h1b3qusNoSBsHERdSJC6PhPH+C0JD0PIdF3w0JhaDHE7xDSHT+Y1xtwhuINZIyx39iwNwp1kFEzv3ya/1ICs64Li/OK3COedNiWTw0z4kyYA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5923.namprd12.prod.outlook.com (2603:10b6:208:39a::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 14:00:30 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
- 14:00:30 +0000
-Date:   Tue, 24 Jan 2023 10:00:28 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
-Message-ID: <Y8/kfPEp1GkZKklc@nvidia.com>
-References: <Y8/hhvfDtVcsgQd6@nvidia.com>
- <Y8/ZekMEAfi8VeFl@nvidia.com>
- <20230123173007.325544-1-dhowells@redhat.com>
- <20230123173007.325544-11-dhowells@redhat.com>
- <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com>
- <84721e8d-d40e-617c-b75e-ead51c3e1edf@nvidia.com>
- <852117.1674567983@warthog.procyon.org.uk>
- <852914.1674568628@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <852914.1674568628@warthog.procyon.org.uk>
-X-ClientProxiedBy: CH2PR08CA0006.namprd08.prod.outlook.com
- (2603:10b6:610:5a::16) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 24 Jan 2023 09:03:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCA01ABF2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:03:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674569000; x=1706105000;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Xjin1MKwrS1nZTpuKEZpD395ChkPxx9UAHZP0HubY80=;
+  b=ituRYNhKmLLY/7TdZbp7titb0zkIogZE9cPm6duin2dCBSE8cI7+pbCh
+   WQGxby9X+AWP7SA2B1EsMI2Hzf0er02rzJH42/T6DLPPi+Wek6BYadlPP
+   825S+nw50rORUD/EOuDNL4aY4V0W8R3/sbBgDbLXv2dYCQG0I1Ft5XZdP
+   ZUt8Yks39YdXXUrWNyKc578jOX9BRbge1LbEYco7oupLOdOCrjam8Pe+9
+   ReG+WkNvP3LmrFsLAFQoKj9PKnmOX80zIDJXO2y20DtN3nqkxMMekYTqg
+   nzMEbdXdmwuOEexQLsYTAnVCvL4kF5g9Os+wOrY4+sUuoJ0e3HiEMXJZN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="324972621"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="324972621"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 06:01:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="907502697"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="907502697"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Jan 2023 06:00:59 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKJr8-0006Wi-2r;
+        Tue, 24 Jan 2023 14:00:58 +0000
+Date:   Tue, 24 Jan 2023 22:00:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.01.19a] BUILD SUCCESS WITH WARNING
+ e51eadce38349e7edb506a61e325cc562d49409f
+Message-ID: <63cfe486.r3s5IrzSyo05CuCq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5923:EE_
-X-MS-Office365-Filtering-Correlation-Id: 392979d9-8e53-4964-ca6f-08dafe135a59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YMKL/EQg3FK+dV7UhCV7wDYl3JykYN9K8cGVb3wM6NcthuAcPK/WL9bMPDAJe83+HWLeKngXPD6zGkm7xI/C2ipgwcgjy7wHy7HTAJ8Aq77qiR0cBM8EuERrA/rS5TplXgxU6EGk6MDFfNEQplL6niNj0LN0yEe8DjcBax9NoYYKn022mzPZDVIDv8k73VjLC1EWedhmraNTJdEw0eaQGCcv/mrK7zdojLKSi9tHJXvCt599hERXtWBQ9DoRahOPXWANf/VYLdHIaCRz5cBgS7vAfL10SIET+BxeLg0HNqirfEkWpLeeaQvU+q8MJEHQkd1IBqcO3ZzKLo+yS0u1EtLaCoQaKfgB3ji9eLUSKyd2vt4Q5MJPQEDNd8hvIJO0utkAtMMluGMoAZpM9Ls0RHG/TaYklCVr0hkfehH6nt1S3csXkQ5giITB9jYAgMSwZbnDY9zPA/OtoomWcIjgf8J4F2UnuINze8+2JfZvoJyhShRlMijgMnTEWbD0EQ2SJblA1NGGTe/1t1W4NX7/imuZ3ssNpSohwMW7W3DO/SPg7M1qIitm8bIO1xWdaa1zF13Tpma24ZHFx4TAVlU2t6rpvOr1+tKQRjajW5+ZR87IZmrVU/5XHcifYg26zACJIDGemitY9apk7oGwm8/8dg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(39860400002)(376002)(396003)(451199015)(86362001)(36756003)(54906003)(316002)(8676002)(66946007)(4326008)(6916009)(66476007)(6512007)(66556008)(26005)(186003)(478600001)(6506007)(2616005)(6486002)(38100700002)(41300700001)(8936002)(2906002)(5660300002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BUwkBA1cvgvd1xYRK16nOIPWDPIptUs/e6lOwnnvnl8N1e3kuDtF72fN2mfy?=
- =?us-ascii?Q?PBVP0J7/eM+/eAC71LAJSRB9U6VRL/g/dR5nwUNOCBgQ0fS8AiQidjrIww6+?=
- =?us-ascii?Q?KOzJ/DnlsIeRy5ORiyGiFGmX1SrR1URym5CRSzhYnUWTYBRA/Ew3fx8qzpx7?=
- =?us-ascii?Q?IBgkeQVJUqwO7CqDnZfbmXxb7OT8TNUmEkJLseizrlGymfLD9MRoDlgo07+e?=
- =?us-ascii?Q?z+Z/8jkrJmGFVjVclAt6/KaY+G10oY1S3p+x5OZo2xSKk0Tm7fUZQom4+MEb?=
- =?us-ascii?Q?mzZa6Hl6GQ1jkWb0P3U2Xd0X47VpRZQV7iRGBBZG4AoE6HdjPmgwkaIIopr7?=
- =?us-ascii?Q?5Jz2FTlhTmnb0l0/VafyYiTVKBeFnHKniMYgnpwn0vBKnFf9tdbN0sRx/43S?=
- =?us-ascii?Q?UzBV04/LIPDd9iHve+HRSeHCDLsaRLMFQ1r3tD8B3MVE38SwGp+H40Uvt9lX?=
- =?us-ascii?Q?pL1vz+EjIu0g783ypxllAj7FO2ctp45UzhtXQboBpD3LoRyVSK+J44JGAs/s?=
- =?us-ascii?Q?mTE6BbeIWpT8ITtqhow+DYOnGtgVAkso1n+WIk1FAiV2a9jyAn8hdcqnFLC+?=
- =?us-ascii?Q?SkAgxxjhlBjxq06gDt+sheNnlwgQI2CAl/tpvATwe8ePk4KqBoBxb5KUgvhd?=
- =?us-ascii?Q?oNexJbp3CKpuKwQ5eLNUV59ObeGd+71KhM4PPZDMq/S+3liOMPKDSQqrW0WG?=
- =?us-ascii?Q?nosNZnSzrzN+1V8WI3QdGJ7muSU95CD/qbo1pIJ02POfnN+jeKSajDd9WnV7?=
- =?us-ascii?Q?rSz5U148hGrXXJOwOs0hpX33RLdLIyO1E77iCT/qfP9LImtBjpN6BCLfvYRq?=
- =?us-ascii?Q?X29Exjbg51WdIOohC3+Y4tFWMQ2ngW01w8fqEZpl+cmcSg1REGA+TIxKF9zr?=
- =?us-ascii?Q?g5UIWlzlF4LPKGLJ0WnHNkLJ82r98pQhw97IntPB5DKOpIpoJSNsDjcWdisw?=
- =?us-ascii?Q?96IGDuKh7h6wLFycdderhpg7dPNHAODGkiwDYiHjrB3oHvL3EbSbY4iE9RLr?=
- =?us-ascii?Q?o3Vo6qzVEHAYUFi+XpcyPy9BUJ8XXZbVCm84MpfYT9T8LirU7rYpk/+IzR/n?=
- =?us-ascii?Q?4f30yo78azo6avdH6QaxD4oCbO3NvqPNqt2zER1/oxoYrafWkrkO9sgUfhXg?=
- =?us-ascii?Q?v8V/gWC2eWTNPoTIIJxIBb8qNpLU04WjcQn9iY99QmRKibQ+Hs0aTynYmykQ?=
- =?us-ascii?Q?F/uPN14OjrqFGgECFDzs6u4ooK9dlCnQ2jrBVr+qiKXZCa7Fah9DpiMd9qqV?=
- =?us-ascii?Q?SNWC3FrXCAW6y6DBmvsF7SQcyjvGtPZAPQAgHXVQ1r7ki6WZ0S5rn4+EULrL?=
- =?us-ascii?Q?eo5P4G102hKPz34JFsufHIHbV9iEWlps2O1OXam7p4rwlNbBaI946S1Cuq6O?=
- =?us-ascii?Q?YO428OyWu7wUJXYhv6xDC1y6sVUMZEOnHJHslyY1dbp23/wsGqnxKOZ/lBuj?=
- =?us-ascii?Q?NwUaOOuYvVfV3Rknlxei8ZJDpB5HUL4D28ZkkA8+3np/EBjlU6lDfTzkxFj7?=
- =?us-ascii?Q?qukDxZX9dNXJqBvzS5Dt1rWWD4cXry1d2abPyV0S+5H6leIc9LDyZxaZw+iZ?=
- =?us-ascii?Q?sbASgZ6Pey3xc7ZilAJaudzJz38896QK3tspq0ei?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 392979d9-8e53-4964-ca6f-08dafe135a59
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 14:00:30.1399
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u2CkGc8pHRhc2kMBi5Mv5FXoYzHDlBgmRZlSyglIAmikjvG2G7CyJYNRcfDcmnAG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5923
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 01:57:08PM +0000, David Howells wrote:
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
-> > I moved FOLL_PIN to internal.h because it is not supposed to be used
-> > outside mm/*
-> > 
-> > I would prefer to keep it that way.
-> 
-> I'll need to do something else, then, such as creating a new pair of 'cleanup'
-> flags:
-> 
-> 	[include/linux/mm_types.h]
-> 	#define PAGE_CLEANUP_UNPIN	(1U << 0)
-> 	#define PAGE_CLEANUP_PUT	(1U << 0)
-> 
-> 	[mm/gup.h]
-> 	void folio_put_unpin(struct folio *folio, unsigned int cleanup_flags)
-> 	{
-> 		unsigned int gup_flags = 0;
-> 
-> 		cleanup_flags &= PAGE_CLEANUP_UNPIN | PAGE_CLEANUP_PUT;
-> 		if (!cleanup_flags)
-> 			return;
-> 		gup_flags |= cleanup_flags & PAGE_CLEANUP_UNPIN ? FOLL_PIN : 0;
-> 		gup_flags |= cleanup_flags & PAGE_CLEANUP_PUT ? FOLL_GET : 0;
-> 		gup_put_folio(folio, 1, flags);
-> 	}
-> 	EXPORT_SYMBOL_GPL(folio_put_unpin);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.01.19a
+branch HEAD: e51eadce38349e7edb506a61e325cc562d49409f  tools/nolibc: Add gitignore to avoid git complaints about sysroot
 
+Warning reports:
 
-I suggest:
+https://lore.kernel.org/oe-kbuild-all/202301241312.yvOSgMfx-lkp@intel.com
 
-if (cleanup_flags & PAGE_CLEANUP_UNPIN)
-   gup_put_folio(folio, 1, true);
-else if (cleanup_flags & PAGE_CLEANUP_PUT)
-   gup_put_folio(folio, 1, false);
+Warning: (recently discovered and may have been fixed)
 
-or if you are really counting cycles
+kernel/rcu/rcutorture.c:3517:6: warning: variable 'cyclelenmax' set but not used [-Wunused-but-set-variable]
+kernel/rcu/rcutorture.c:3542:6: warning: variable 'cyclelenmax' set but not used [-Wunused-but-set-variable]
 
-if (cleanup_flags & PAGE_CLEANUP_NEEDED)
-   gup_put_folio(folio, 1, cleanup_flags & PAGE_CLEANUP_UNPIN)
+Unverified Warning (likely false positive, please contact us if interested):
 
-Jason
+kernel/rcu/rcutorture.c:3548 rcu_torture_init_srcu_lockdep() warn: for statement not indented
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+`-- x86_64-randconfig-m001-20230123
+    `-- kernel-rcu-rcutorture.c-rcu_torture_init_srcu_lockdep()-warn:for-statement-not-indented
+clang_recent_errors
+|-- arm64-randconfig-r004-20230124
+|   `-- kernel-rcu-rcutorture.c:warning:variable-cyclelenmax-set-but-not-used
+|-- hexagon-randconfig-r035-20230123
+|   `-- kernel-rcu-rcutorture.c:warning:variable-cyclelenmax-set-but-not-used
+|-- powerpc-randconfig-r005-20230124
+|   `-- kernel-rcu-rcutorture.c:warning:variable-cyclelenmax-set-but-not-used
+`-- x86_64-randconfig-a013-20230123
+    `-- kernel-rcu-rcutorture.c:warning:variable-cyclelenmax-set-but-not-used
+
+elapsed time: 733m
+
+configs tested: 62
+configs skipped: 2
+
+gcc tested configs:
+x86_64                            allnoconfig
+powerpc                           allnoconfig
+um                             i386_defconfig
+arc                                 defconfig
+um                           x86_64_defconfig
+alpha                               defconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+arc                  randconfig-r043-20230123
+arm                  randconfig-r046-20230123
+i386                          randconfig-a005
+x86_64                              defconfig
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+s390                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arm                                 defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a004
+x86_64                           allyesconfig
+x86_64                        randconfig-a002
+arm64                            allyesconfig
+i386                             allyesconfig
+arm                              allyesconfig
+x86_64                        randconfig-a006
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20230123
+hexagon              randconfig-r045-20230123
+i386                          randconfig-a002
+riscv                randconfig-r042-20230123
+i386                          randconfig-a004
+s390                 randconfig-r044-20230123
+x86_64               randconfig-a013-20230123
+x86_64               randconfig-a011-20230123
+x86_64               randconfig-a012-20230123
+i386                          randconfig-a006
+x86_64               randconfig-a014-20230123
+x86_64               randconfig-a016-20230123
+x86_64               randconfig-a015-20230123
+x86_64                          rhel-8.3-rust
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                 randconfig-a014-20230123
+i386                 randconfig-a012-20230123
+i386                 randconfig-a011-20230123
+i386                 randconfig-a013-20230123
+i386                 randconfig-a015-20230123
+i386                 randconfig-a016-20230123
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
