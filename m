@@ -2,108 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC93D679089
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02A667908A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 06:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbjAXF5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 00:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S232873AbjAXF6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 00:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbjAXF5U (ORCPT
+        with ESMTP id S232608AbjAXF6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 00:57:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857243344D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 21:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674539716;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9+nMn4Y7ib+ksp4an8hs+mxpzKixV/6cqrHGLxmxmZs=;
-        b=h1vl50Bcg/y7qUcrh4KpKzfxl1Bpx3aNimHScedk8BFeahynqXQY5Cs0+pm/0pD2NGQUC6
-        jGWWjC2ir1XWfu8+Mb3QAWT774gqDp5wfK+IU6UmMsOiLb4OebgScwWMHvvOyB9T+dTmZm
-        Obn2SDmcAuonEWPJ9KAmgHHReButQlg=
-Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
- [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-255-8Cllk9lcPPGi7yKmic3GYA-1; Tue, 24 Jan 2023 00:55:15 -0500
-X-MC-Unique: 8Cllk9lcPPGi7yKmic3GYA-1
-Received: by mail-vk1-f200.google.com with SMTP id u2-20020a1f6002000000b003e2481d7a4aso196972vkb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 21:55:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9+nMn4Y7ib+ksp4an8hs+mxpzKixV/6cqrHGLxmxmZs=;
-        b=uZ+lZST9NliDdppSm8OxvXcGOVt5cmbwWRoGHdbqoiBYfWXLDRFH8KISxS8n9d/Hrq
-         DSYmzC/EGErbpLsibtzNwdZ6qnuTkn8XHpekpzJ/7w7Jt4qUy8x99Xqw4atQak4XQZos
-         lzDm+2ms2QhNBB8OLhKWijFtCl/DmmZbHq3qamSIQGQt7NVywBwVOZmojSXZOB8Obf7y
-         NsnjSQ0M52w5ZqTgQGhGI7rvBhNolhexl/rsLcF3oUuHK5oqkz1k6x4+0ZUIhD+JO/iM
-         1AMt9Jofb4ChcQ8WydfJTvU+Gyhjp0tMme735DD/Di054zgJRPpbNr8gEyazzayaaKpw
-         uMpg==
-X-Gm-Message-State: AFqh2koGXZ6QGW+2npIREKhupCD1H2FUZ9RmC3iSbWlI2d6pEQCtCBI5
-        7hLzgRSK9foqV9lquPTZCK0gyMeonn3z9hRihNuH7yT8kySgcKkTEVQvlg3t6sa21ZQ2ZRGOrR1
-        yLATmmU4wIlECQGbnyDew8edI
-X-Received: by 2002:a05:6102:1517:b0:3d3:c855:bf54 with SMTP id f23-20020a056102151700b003d3c855bf54mr16402956vsv.34.1674539714875;
-        Mon, 23 Jan 2023 21:55:14 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtIO8aXO9i+HLzZc6kLGRsWHVrO9s72UFSgMG1EytTFL2SpZojIc12K4cwqrrKZT6og3irEcA==
-X-Received: by 2002:a05:6102:1517:b0:3d3:c855:bf54 with SMTP id f23-20020a056102151700b003d3c855bf54mr16402943vsv.34.1674539714642;
-        Mon, 23 Jan 2023 21:55:14 -0800 (PST)
-Received: from redhat.com ([45.144.113.7])
-        by smtp.gmail.com with ESMTPSA id r15-20020ab04a4f000000b006180bedf1b8sm83195uae.26.2023.01.23.21.55.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 21:55:14 -0800 (PST)
-Date:   Tue, 24 Jan 2023 00:55:06 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 02/19] drivers/vhost: Convert to use vm_account
-Message-ID: <20230124005356-mutt-send-email-mst@kernel.org>
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <97a17a6ab7e59be4287a2a94d43bb787300476b4.1674538665.git-series.apopple@nvidia.com>
+        Tue, 24 Jan 2023 00:58:16 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522361449F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 21:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674539871; x=1706075871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BWXT55pgTN05p8rmoGRsHN/Pu5yqlCqCpxTEG344HI0=;
+  b=d5oqGGDp9U5MdVQvm60OROIdop46wZ8GD/isgF+l94axcbn2BGBk8M9k
+   UgR9AyL1YbmX9QLbMA9c4MwuaYZAr7oLQo6R+Dd9YBsu3P9Bk25l0XY7N
+   Xmk6xMbxUbmG5PftTqLqhTPySrFjIKFRjOdMus35LIiSj6OJDOb8YiqbO
+   CgrhAqtslOHM8EELCSfGhoPOYtyUZv0pr0XBg+dZrV8al0Aw8F9pM/X9p
+   qTC6jRyKEtHuRRLpyb1nVRAKrPV0vTvjaV4WTcEJZY+7FD3aVLMEt0mpo
+   cNdf65OuBuJ2AbsP3QuDIU83KYxq1M52hn+xHQwz8VOgPSDYNkgWgClc5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="305896710"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="305896710"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 21:57:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="662001918"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="662001918"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 23 Jan 2023 21:57:42 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKCJR-0006BK-1d;
+        Tue, 24 Jan 2023 05:57:41 +0000
+Date:   Tue, 24 Jan 2023 13:57:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     George Prekas <george@enfabrica.net>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christoph Lameter <cl@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        George Prekas <george@enfabrica.net>
+Subject: Re: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
+Message-ID: <202301241309.4F6LhLvK-lkp@intel.com>
+References: <20230123170419.7292-2-george@enfabrica.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97a17a6ab7e59be4287a2a94d43bb787300476b4.1674538665.git-series.apopple@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230123170419.7292-2-george@enfabrica.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 04:42:31PM +1100, Alistair Popple wrote:
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index ec32f78..a31dd53 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
+Hi George,
 
-...
+Thank you for the patch! Yet something to improve:
 
-> @@ -780,6 +780,10 @@ static int vhost_vdpa_map(struct vhost_vdpa *v, struct vhost_iotlb *iotlb,
->  	u32 asid = iotlb_to_asid(iotlb);
->  	int r = 0;
->  
-> +	if (!vdpa->use_va)
-> +		if (vm_account_pinned(&dev->vm_account, PFN_DOWN(size)))
-> +			return -ENOMEM;
-> +
->  	r = vhost_iotlb_add_range_ctx(iotlb, iova, iova + size - 1,
->  				      pa, perm, opaque);
->  	if (r)
+[auto build test ERROR on vbabka-slab/for-next]
+[also build test ERROR on linus/master v6.2-rc5]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I suspect some error handling will have to be reworked then, no?
+url:    https://github.com/intel-lab-lkp/linux/commits/George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
+patch link:    https://lore.kernel.org/r/20230123170419.7292-2-george%40enfabrica.net
+patch subject: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
+config: riscv-randconfig-r042-20230123 (https://download.01.org/0day-ci/archive/20230124/202301241309.4F6LhLvK-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f0d9df4305849ecea4402bc614cadb0dd357da77
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
+        git checkout f0d9df4305849ecea4402bc614cadb0dd357da77
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> -- 
-> git-series 0.9.1
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   kernel/fork.c:163:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
+   void __weak arch_release_task_struct(struct task_struct *tsk)
+               ^
+   kernel/fork.c:163:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __weak arch_release_task_struct(struct task_struct *tsk)
+   ^
+   static 
+>> kernel/fork.c:320:2: error: call to undeclared function 'kmemleak_mark_stack'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           kmemleak_mark_stack(stack);
+           ^
+   kernel/fork.c:865:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
+   void __init __weak arch_task_cache_init(void) { }
+                      ^
+   kernel/fork.c:865:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_task_cache_init(void) { }
+   ^
+   static 
+   2 warnings and 1 error generated.
+
+
+vim +/kmemleak_mark_stack +320 kernel/fork.c
+
+   274	
+   275	static int alloc_thread_stack_node(struct task_struct *tsk, int node)
+   276	{
+   277		struct vm_struct *vm;
+   278		void *stack;
+   279		int i;
+   280	
+   281		for (i = 0; i < NR_CACHED_STACKS; i++) {
+   282			struct vm_struct *s;
+   283	
+   284			s = this_cpu_xchg(cached_stacks[i], NULL);
+   285	
+   286			if (!s)
+   287				continue;
+   288	
+   289			/* Reset stack metadata. */
+   290			kasan_unpoison_range(s->addr, THREAD_SIZE);
+   291	
+   292			stack = kasan_reset_tag(s->addr);
+   293	
+   294			/* Clear stale pointers from reused stack. */
+   295			memset(stack, 0, THREAD_SIZE);
+   296	
+   297			if (memcg_charge_kernel_stack(s)) {
+   298				vfree(s->addr);
+   299				return -ENOMEM;
+   300			}
+   301	
+   302			tsk->stack_vm_area = s;
+   303			tsk->stack = stack;
+   304			return 0;
+   305		}
+   306	
+   307		/*
+   308		 * Allocated stacks are cached and later reused by new threads,
+   309		 * so memcg accounting is performed manually on assigning/releasing
+   310		 * stacks to tasks. Drop __GFP_ACCOUNT.
+   311		 */
+   312		stack = __vmalloc_node_range(THREAD_SIZE, THREAD_ALIGN,
+   313					     VMALLOC_START, VMALLOC_END,
+   314					     THREADINFO_GFP & ~__GFP_ACCOUNT,
+   315					     PAGE_KERNEL,
+   316					     0, node, __builtin_return_address(0));
+   317		if (!stack)
+   318			return -ENOMEM;
+   319	
+ > 320		kmemleak_mark_stack(stack);
+   321	
+   322		vm = find_vm_area(stack);
+   323		if (memcg_charge_kernel_stack(vm)) {
+   324			vfree(stack);
+   325			return -ENOMEM;
+   326		}
+   327		/*
+   328		 * We can't call find_vm_area() in interrupt context, and
+   329		 * free_thread_stack() can be called in interrupt context,
+   330		 * so cache the vm_struct.
+   331		 */
+   332		tsk->stack_vm_area = vm;
+   333		stack = kasan_reset_tag(stack);
+   334		tsk->stack = stack;
+   335		return 0;
+   336	}
+   337	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
