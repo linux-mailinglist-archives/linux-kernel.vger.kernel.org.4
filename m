@@ -2,153 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B23F67A298
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3892967A2A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjAXTYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S234139AbjAXTZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbjAXTYM (ORCPT
+        with ESMTP id S233674AbjAXTZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:24:12 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0994C0D4;
-        Tue, 24 Jan 2023 11:24:09 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id jr19so12771993qtb.7;
-        Tue, 24 Jan 2023 11:24:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H02SARdJbOG9xHDyO4rUQCOtJbYpCr4eHoKUBzaYL6Q=;
-        b=C85m29M5lfrN780bOuZp0hcwIYmhYNu3EpCIUC5yO+IBjLEzwdVRSVjTss3vblrmTO
-         QATRwCNI055bWM2lULIfOOg1dTqsEtj7/x7T1aWQXczPgKAwNSvro1yvrqREynp/BY/P
-         KCaRyB+7mmWH8uudnalwE0g3WeJObVQUlFbuEeWGqTCVSunmEBNWkBuLcYyiLF42Vtmy
-         RPulL5QO653p3sT6zUEPCUTuzW7byd4bJ25Zu1OWQrd6lmUoZ5zcCDRim4IH3f+b86bn
-         ouQqN8M07iSpAjiG/YPu8/E92l+z8fEj7WBhCG8QWP3Gxr0Yp1uN7SVASIBkYK1h1+2f
-         wlng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H02SARdJbOG9xHDyO4rUQCOtJbYpCr4eHoKUBzaYL6Q=;
-        b=ZXvsY/QtCX6teDGJhJCudc2ff2u7z5xDIFyPd5FjqeBr998VmpiruP90c779cR5XF7
-         CA/trV9TUC6f63bb5UFSZT2bMY9XhfDFTiWWbxzUhkLw6aaulk/R+4i2LvxWjSTcg8N2
-         lUyy5Om2qjCZT117rbkiN1eKYnEFt8w+nWMx/v7fc/FxeTj9OUhy9TTWpMkne3nfQN4g
-         aT0m6/0D68/UYbx4+sLjRDEI8Ynklr0RZt5NgE626BjmVknpbJeSJWV86SwET0mPL0V/
-         YKLRYoS35symo+vJb6MihdtXMZZsqJQwH1R6Zz+LPlHF26RGLZWY5SCpXdk1qSw4AYPb
-         nXYA==
-X-Gm-Message-State: AFqh2kqdCoADQETvzDTL1XtH2jwVN5eGoiICh5sgN7X3GWKc4YvajZN6
-        57l2XoUznVhsmF+WG8Wrv+NhVOdXZdZ/4HvfKrE=
-X-Google-Smtp-Source: AMrXdXslw37tCOS4eF39s7VAH4eqhhJOdfda7JWGinfdntqqz+u1IqaESuA5KlGI4tYZV1Y805Xd6YqiehtmiIrtbbI=
-X-Received: by 2002:ac8:774d:0:b0:3b6:6669:dd20 with SMTP id
- g13-20020ac8774d000000b003b66669dd20mr850987qtu.93.1674588248442; Tue, 24 Jan
- 2023 11:24:08 -0800 (PST)
+        Tue, 24 Jan 2023 14:25:40 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2040.outbound.protection.outlook.com [40.107.96.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD026474DD;
+        Tue, 24 Jan 2023 11:25:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fphmW1u/6kSdcAL4iRMfkk65dZPTExP3yyUDbUtSNoYN85SQt2GSVMIa7nl7pX1lMAhmv0M9YsV7pGU3jjVZv5rEHLl4JpdplaUJkw/4ImWFBm2ImDUSaRaCAtFBjyLFzFZsRg9SYfanzMc6PjFeV68aXmaBMupIbbhUGIslVKfkRn60IPJPihGLxsVh++E0ZXnres/eOWGus68l+JM5UdD/LT68aMJzJROpIhRl7oblZppZjzDQeWZStinkvpfpVDLcwSFThEEgc88oibgjaHAz6SsXUEnDy60wikUVfTlxffVUeew0pj/OdQrQrCje0cJHIpviTQ6tGlhRiyfQ/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SM1OkKfp25+Qv1Y70mZQXwoUC2f8XN84N8AGzsTjEtQ=;
+ b=HvZuAG3GwSN2BM+ZILWLx2nOU331MOaWEE+vBzYx8TOgMAJ+TrPzjiydYpaVTkNb6PMbBG1U/HqNI3klhdqTpvJBHsbTeCDBurw10nlX7Kx+qUqVqJ0RvnXx/1PsB9U7ALpBRUJ+voD1MW37vX+8eFU6M23jeSeb56GMrD3oXGBhwgCnbzo14HUQplTgOVy6ATEy0QxBY9l/XMEL4E3Yxoyfzl95qbZ2GAskNWdgwN7REM+sqhcs/CQKG4QpnmTukGsG+J8FfXPo9UAaBP6fQtu6jF+jz/VIZZ6tnnacrdzyctCuQnSus2iXhIIGO77zNtWdIOt1JSnLIlirEwhKVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SM1OkKfp25+Qv1Y70mZQXwoUC2f8XN84N8AGzsTjEtQ=;
+ b=WGeHzQ928CNrIPvOgpkNlbipeGAO1Oy2tLax8QfBHs3/qUiehQagr0s/n96+VOH/SRUNoG+Vto5YiR10cuu6nkMvMYdpO/ZCJwNmhN98tpUErkgyfqwpQ7LyoJQgiPh78uU6s94XUPyItAw9I6kJmQXfqOo8Y7rmYf82M7XmlUNjt3iQZ5NUKzag0at/P5WUXMnQJiVwKdSd7dB7VtJeTh2H6Pu5RHNdf1hJyLxxRE9JzuX+SVX5pETj01GQkyz+Yfhf1duAxb2PPh3fHfS/N36DSU9ENdOC6omOqXRLcueRHe3KRQyGQEoRxL2iy6d3CxONkdXCYS0gzP8N5KTLvA==
+Received: from BN1PR10CA0011.namprd10.prod.outlook.com (2603:10b6:408:e0::16)
+ by BY5PR12MB5509.namprd12.prod.outlook.com (2603:10b6:a03:1d7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 19:25:31 +0000
+Received: from BL02EPF00010207.namprd05.prod.outlook.com
+ (2603:10b6:408:e0:cafe::ee) by BN1PR10CA0011.outlook.office365.com
+ (2603:10b6:408:e0::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
+ Transport; Tue, 24 Jan 2023 19:25:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF00010207.mail.protection.outlook.com (10.167.241.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.11 via Frontend Transport; Tue, 24 Jan 2023 19:25:31 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 11:25:17 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 11:25:16 -0800
+Message-ID: <dac764eb-ef21-4ec5-bcd8-102ca4d49f20@nvidia.com>
+Date:   Tue, 24 Jan 2023 11:25:16 -0800
 MIME-Version: 1.0
-References: <20230124021118.154078-3-nphamcs@gmail.com> <202301241402.CeUdAtDh-lkp@intel.com>
-In-Reply-To: <202301241402.CeUdAtDh-lkp@intel.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Tue, 24 Jan 2023 11:23:57 -0800
-Message-ID: <CAKEwX=P0RvicKMEWAzb+48V2Y1Cai8tdMc8oCS0GY8qoiv0g=w@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] cachestat: implement cachestat syscall
-To:     kernel test robot <lkp@intel.com>
-Cc:     akpm@linux-foundation.org, oe-kbuild-all@lists.linux.dev,
-        hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 3/8] iomap: Don't get an reference on ZERO_PAGE for
+ direct I/O block zeroing
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230124170108.1070389-1-dhowells@redhat.com>
+ <20230124170108.1070389-4-dhowells@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230124170108.1070389-4-dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00010207:EE_|BY5PR12MB5509:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a6216e5-7198-4e03-fdc9-08dafe40c1fe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ELE6y1oH/cIdjNl1skh6RYJgOBwPfv0IPjKak1fq/DTr0BQjrffzZP8wF7mcgDvyCcFYvKDeACC7ZOgEhRLdIqhFVXARGrOaCff5BFF8SWkaR9Q6tm8H3jBzhWu3KR2QyU5kS1BUELwf9P2hcmmDrlGDUp/W/EQPMDI/ShHUGYkcop4p3PY68kuACmr0qvvXX0xdzzJkDYQE36j9EbZAQcWKKEd3iIuoVJl4TrUNv6TcsHG7X/6ouwoHqNAaM4uL5HqFuvrJpSzISh+eRQLvIGETzInUcHeNa1CDYe2kZtUpFUSRaMNXEuYnTbvautCgiUYaRydqNBbhqqmmWhsuxylJ0U+AgWL7Fadh/xzr4oBauA86rPvLcFbPaZ/xANHJ71Z9t7C8JJGu1f8QhR8aLPgPCIGjn4GKvTCXXzwK7rmxQrABEpUFbo+SQawmQhYyCyUSIv5iJqAxRTMmeUPdGdU3C8Df+xOSp4sMjh6x3mGlYYehhaz5gGqohxaZCFbEKrT8APpKA3s4btLL8gBJ07/W2qp/lSgScleNLZIvpb9m9UJjzYH4YgMnEEU4ny/XKqvJQUN4I5+ZYlVWigohA71AUhNhdo677oQcI42bMYK1faYjjtFjmazyOagNmkk+eYdaz6DFf2eTS6P6dqMU1ZG3W2+GRFAYO90m+/xuUf87LDcJkBPzFJNrqcMyVYakoHJhNxjsx6exvaLdZwpkqdToA5PX47ebz6begNnZhgY=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199018)(40470700004)(46966006)(36840700001)(36860700001)(83380400001)(5660300002)(41300700001)(7416002)(86362001)(356005)(7636003)(4744005)(82740400003)(2906002)(4326008)(82310400005)(8936002)(316002)(40460700003)(16526019)(40480700001)(26005)(53546011)(16576012)(8676002)(186003)(47076005)(336012)(426003)(54906003)(2616005)(478600001)(110136005)(36756003)(31686004)(70586007)(31696002)(70206006)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 19:25:31.0546
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a6216e5-7198-4e03-fdc9-08dafe40c1fe
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010207.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5509
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:49 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Nhat,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on 1440f576022887004f719883acb094e7e0dd4944]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
-> base:   1440f576022887004f719883acb094e7e0dd4944
-> patch link:    https://lore.kernel.org/r/20230124021118.154078-3-nphamcs%40gmail.com
-> patch subject: [PATCH v7 2/3] cachestat: implement cachestat syscall
-> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230124/202301241402.CeUdAtDh-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/f902a360bb453bd6885cd89d4f9ad4a40205fd15
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
->         git checkout f902a360bb453bd6885cd89d4f9ad4a40205fd15
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
-> --
-> >> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
-> --
->    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
->    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
->    scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->    arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
->       26 | void output_ptreg_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
->       78 | void output_task_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
->       92 | void output_thread_info_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
->      108 | void output_thread_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
->      136 | void output_thread_fpu_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
->      179 | void output_mm_defines(void)
->          |      ^~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:213:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
->      213 | void output_sc_defines(void)
->          |      ^~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:248:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
->      248 | void output_signal_defined(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:315:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
->      315 | void output_pbe_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:327:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
->      327 | void output_pm_defines(void)
->          |      ^~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:341:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
->      341 | void output_kvm_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~
->    arch/mips/kernel/asm-offsets.c:385:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
->      385 | void output_cps_defines(void)
->          |      ^~~~~~~~~~~~~~~~~~
-> >> <stdin>:1565:2: warning: #warning syscall cachestat not implemented [-Wcpp]
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+On 1/24/23 09:01, David Howells wrote:
+> ZERO_PAGE can't go away, no need to hold an extra reference.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> ---
+>   fs/iomap/direct-io.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-I need to add the new syscall to mips' syscall table
-(arch/mips/kernel/syscalls/syscall_n32.tbl etc.)
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+> index 9804714b1751..47db4ead1e74 100644
+> --- a/fs/iomap/direct-io.c
+> +++ b/fs/iomap/direct-io.c
+> @@ -202,7 +202,7 @@ static void iomap_dio_zero(const struct iomap_iter *iter, struct iomap_dio *dio,
+>   	bio->bi_private = dio;
+>   	bio->bi_end_io = iomap_dio_bio_end_io;
+>   
+> -	get_page(page);
+> +	bio_set_flag(bio, BIO_NO_PAGE_REF);
+>   	__bio_add_page(bio, page, len, 0);
+>   	iomap_dio_submit_bio(iter, dio, bio, pos);
+>   }
+> 
+
