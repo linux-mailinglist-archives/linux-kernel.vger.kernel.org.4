@@ -2,142 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4598C67A0FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E7C67A0FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233910AbjAXSQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 13:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
+        id S233934AbjAXSQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 13:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbjAXSQL (ORCPT
+        with ESMTP id S233900AbjAXSQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:16:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDAD4A210;
-        Tue, 24 Jan 2023 10:16:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1799E61312;
-        Tue, 24 Jan 2023 18:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F37C433D2;
-        Tue, 24 Jan 2023 18:16:02 +0000 (UTC)
-Date:   Tue, 24 Jan 2023 13:16:01 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v2] ftrace/scripts: Update the instructions for
- ftrace-bisect.sh
-Message-ID: <20230124131601.1506b286@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 24 Jan 2023 13:16:12 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670954AA63
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:16:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=fY3WclIGTvkM31tI4bLOjCsMCGC/hbazodU9XQ98Dh0=; b=U6NSpKFt6oQhoked6gxqCbONGH
+        TtZYDEUv7ampOPer7qR1Xef23S6gEJg8JZKySWT6RWQ/XUUZJ1+O9jYwMhU7Hg1NSl1GLAEGOpquL
+        +QzhiFafc+RCkuYDS1Tb9dvoZNR+C1kbpC8IyZFBvZpRAeBBDiQZc2JXIGiVgX3xD/+GSoEmcHjHG
+        DcX/84v87CYCkEvQycZ7SXhDS314ZQ9XRWp1OFI9R9KCTgnrvIWYkb6tPT7iwNcmWMbgaa5XcgEJs
+        BBGyUunnFawM1SumBeqKMGSycbsEhlpirMvMHltyAJGtAkKVuKUI3zYgzSOIE86wCOYFBpcymFTpU
+        8081ghFQ==;
+Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKNq2-004vTi-I4; Tue, 24 Jan 2023 18:16:06 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] arm64: Kconfig: fix spelling
+Date:   Tue, 24 Jan 2023 10:16:05 -0800
+Message-Id: <20230124181605.14144-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Fix spelling typos in arm64: (reported by codespell)
+s/upto/up to/
+s/familly/family/
 
-The instructions for the ftrace-bisect.sh script, which is used to find
-what function is being traced that is causing a kernel crash, and possibly
-a triple fault reboot, uses the old method. In 5.1, a new feature was
-added that let the user write in the index into available_filter_functions
-that maps to the function a user wants to set in set_ftrace_filter (or
-set_ftrace_notrace). This takes O(1) to set, as suppose to writing a
-function name, which takes O(n) (where n is the number of functions in
-available_filter_functions).
-
-The ftrace-bisect.sh requires setting half of the functions in
-available_filter_functions, which is O(n^2) using the name method to enable
-and can take several minutes to complete. The number method is O(n) which
-takes less than a second to complete. Using the number method for any
-kernel 5.1 and after is the proper way to do the bisect.
-
-Update the usage to reflect the new change, as well as using the
-/sys/kernel/tracing path instead of the obsolete debugfs path.
-
-Cc: stable@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Fixes: f79b3f338564e ("ftrace: Allow enabling of filters via index of available_filter_functions")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
 ---
-Changes since v1: https://lkml.kernel.org/r/20230123112252.022003dd@gandalf.local.home
+ arch/arm64/Kconfig           |    2 +-
+ arch/arm64/Kconfig.platforms |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- - Slight rewrote the "Note" section. (Mark Rutland)
-
- scripts/tracing/ftrace-bisect.sh | 34 ++++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 8 deletions(-)
-
-diff --git a/scripts/tracing/ftrace-bisect.sh b/scripts/tracing/ftrace-bisect.sh
-index 926701162bc8..bb4f59262bbe 100755
---- a/scripts/tracing/ftrace-bisect.sh
-+++ b/scripts/tracing/ftrace-bisect.sh
-@@ -12,7 +12,7 @@
- #   (note, if this is a problem with function_graph tracing, then simply
- #    replace "function" with "function_graph" in the following steps).
- #
--#  # cd /sys/kernel/debug/tracing
-+#  # cd /sys/kernel/tracing
- #  # echo schedule > set_ftrace_filter
- #  # echo function > current_tracer
- #
-@@ -20,22 +20,40 @@
- #
- #  # echo nop > current_tracer
- #
--#  # cat available_filter_functions > ~/full-file
-+# Starting with v5.1 this can be done with numbers, making it much faster:
-+#
-+# The old (slow) way, for kernels before v5.1.
-+#
-+# [old-way] # cat available_filter_functions > ~/full-file
-+#
-+# [old-way] *** Note ***  this process will take several minutes to update the
-+# [old-way] filters. Setting multiple functions is an O(n^2) operation, and we
-+# [old-way] are dealing with thousands of functions. So go have coffee, talk
-+# [old-way] with your coworkers, read facebook. And eventually, this operation
-+# [old-way] will end.
-+#
-+# The new way (using numbers) is an O(n) operation, and usually takes less than a second.
-+#
-+# seq `wc -l available_filter_functions | cut -d' ' -f1` > ~/full-file
-+#
-+# This will create a sequence of numbers that match the functions in
-+# available_filter_functions, and when echoing in a number into the
-+# set_ftrace_filter file, it will enable the corresponding function in
-+# O(1) time. Making enabling all functions O(n) where n is the number of
-+# functions to enable.
-+#
-+# For either the new or old way, the rest of the operations remain the same.
-+#
- #  # ftrace-bisect ~/full-file ~/test-file ~/non-test-file
- #  # cat ~/test-file > set_ftrace_filter
- #
--# *** Note *** this will take several minutes. Setting multiple functions is
--# an O(n^2) operation, and we are dealing with thousands of functions. So go
--# have  coffee, talk with your coworkers, read facebook. And eventually, this
--# operation will end.
--#
- #  # echo function > current_tracer
- #
- # If it crashes, we know that ~/test-file has a bad function.
- #
- #   Reboot back to test kernel.
- #
--#     # cd /sys/kernel/debug/tracing
-+#     # cd /sys/kernel/tracing
- #     # mv ~/test-file ~/full-file
- #
- # If it didn't crash.
--- 
-2.39.0
-
+diff -- a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1499,7 +1499,7 @@ config ARCH_FORCE_MAX_ORDER
+ 	  This config option is actually maximum order plus one. For example,
+ 	  a value of 11 means that the largest free memory block is 2^10 pages.
+ 
+-	  We make sure that we can allocate upto a HugePage size for each configuration.
++	  We make sure that we can allocate up to a HugePage size for each configuration.
+ 	  Hence we have :
+ 		MAX_ORDER = (PMD_SHIFT - PAGE_SHIFT) + 1 => PAGE_SHIFT - 2
+ 
+diff -- a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -187,7 +187,7 @@ config ARCH_MVEBU
+ 	select PINCTRL_ARMADA_CP110
+ 	select PINCTRL_AC5
+ 	help
+-	  This enables support for Marvell EBU familly, including:
++	  This enables support for Marvell EBU family, including:
+ 	   - Armada 3700 SoC Family
+ 	   - Armada 7K SoC Family
+ 	   - Armada 8K SoC Family
