@@ -2,175 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FA667A35D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A118867A35E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjAXTrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S234711AbjAXTsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbjAXTrt (ORCPT
+        with ESMTP id S234822AbjAXTsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:47:49 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53AB2D69
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:47:45 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id c6so15813626pls.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:47:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rBOnCGCgHA+h0K4xs09JZ5tAOGOdOOhqvso345IlOIU=;
-        b=ZSXXZeemVSovNxhQzHf9Z6or5tBD3OaIxkSFLDWe9qUpCcpKApi2WezWutb4FsWmck
-         Bc7osK0nICXv5nhT5zCJxDGnASi70eG9QMju5DLCXR1o4VpFvPWu/I4+ngZNfMSa/1Kx
-         m2HRWGNIA7TvPwwDvNffxqg26m+AEK7PJBckA3m0/l6xm99vO4YuiCbGqa++A7hSZjnT
-         9za9yX11av86lgD7Sm4fSOFzFkYMfSxMxHXw3P3eJeutXeM5aRRxG+Nn0vr32Sjb7n3/
-         KpWFCVv3XctlLnWBSM4uLqYQr0F+pHRVp0GZG2PC6uu0QzOWjYPTmX1oO8DNO9yuqngj
-         +MFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rBOnCGCgHA+h0K4xs09JZ5tAOGOdOOhqvso345IlOIU=;
-        b=1vnr5lMMY71SWceMG/B4/uXV3ndhIaWVuQ5Z3nOhlNhf1W+tz2/7KLW0P/RrTozYFN
-         t05bZA44Rwf45gSROGRSWdngKJRR07lw36lxbztObzVJlVaCUY6dEPSkAyyCfCXl6l0V
-         ZxhwA31hSOgpZBlriAjufN7xEmpL5F+bFSgHdAcVg2yzD/s1NqIGhcleziOe3jgYobX3
-         pn4VaTnGY29CbUewwTDBIpPa8ZqUawZDxgUNGI7pvFaXJScCiphOLXFbzPvyZjaBrHbW
-         stnOVNFahM4+I3lC9KYIxFiMSNlXdv9ROAaHoCJBeUdZSX+JfzzVLdCLdzmVkkRaIWMw
-         HOeQ==
-X-Gm-Message-State: AO0yUKWLw9+8EM5K0C283zXP7VfE84z/u78ojIKtkbpfGLWnO0zxPbdy
-        e+pD8PFKh9dKKEPxIDCTvBp+FGMm/SZISBIFuX4=
-X-Google-Smtp-Source: AK7set8NJy9M0ezGgLaxBUVb12bBQKzoTnKgDIc66cy27BxETG1+iJHbHSZiW6otM5EdTd1HQAYjnQ==
-X-Received: by 2002:a05:6a20:4c08:b0:a4:efde:2ed8 with SMTP id fm8-20020a056a204c0800b000a4efde2ed8mr353958pzb.0.1674589665147;
-        Tue, 24 Jan 2023 11:47:45 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170902ee5200b00172fad607b3sm2030142plo.207.2023.01.24.11.47.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 11:47:44 -0800 (PST)
-Date:   Tue, 24 Jan 2023 19:47:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/8] KVM: x86/cpuid: Add X86_FEATURE_AMD_PMU_V2 as a
- KVM-only leaf entry
-Message-ID: <Y9A13G5b1tuoIRUq@google.com>
-References: <20221111102645.82001-1-likexu@tencent.com>
- <20221111102645.82001-6-likexu@tencent.com>
+        Tue, 24 Jan 2023 14:48:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3005F1115D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 11:48:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26A1C61320
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 19:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5104C433D2;
+        Tue, 24 Jan 2023 19:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674589692;
+        bh=F4gF1F3iz5i02PnKb+GE9T/ZCqrRA7tFJkyCVR5lEa4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oElI71mzWtnW4cPlpZ2UwLLbzQwVw8NtcaqjwzStST57swmH25DMwOv8LfgU4hEtd
+         Q0lqwX/KZrLXkb9Lz9o4m3fAf+oe04tgnto7ZifXK4trhvnLDyxdgfXkwH7W/7MYqd
+         3KzfyOWoj3LgwE4rYJkqQGX1lYJPlNP5ebtkDRUZkjapkXE7jyB0/RxtrRafu38JKp
+         68KXjU+j0XSYQJKRjTk9+P5jCxpAv/JLsqqDPh/S71jwRSWWijRpyevureWbr89TGL
+         AP/1CyDzqFfyzSerXsbBWaTDOWt9TlkpbHVIyX9SkKGYRbBoHFPbaLvT+PsoHJm0jq
+         j/oAZul+OyzXw==
+Date:   Tue, 24 Jan 2023 19:48:05 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+        regressions@leemhuis.info
+Subject: Re: [PATCH v2] sched: Store restrict_cpus_allowed_ptr() call state
+Message-ID: <20230124194805.GA27257@willie-the-truck>
+References: <20230121021749.55313-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111102645.82001-6-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230121021749.55313-1-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+Hi Waiman,
+
+[+Thorsten given where we are in the release cycle]
+
+On Fri, Jan 20, 2023 at 09:17:49PM -0500, Waiman Long wrote:
+> The user_cpus_ptr field was originally added by commit b90ca8badbd1
+> ("sched: Introduce task_struct::user_cpus_ptr to track requested
+> affinity"). It was used only by arm64 arch due to possible asymmetric
+> CPU setup.
 > 
-> Alias X86_FEATURE_AMD_PMU_V2 for feature AMD_PMU_V2 in KVM-only leafs that
-> aren't scattered by cpufeatures.h so that it can be used in KVM, e.g. to
-> query guest CPUID.  As a bonus, no translation is needed for these features
-> in __feature_translate().
+> Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+> cpumask"), task_struct::user_cpus_ptr is repurposed to store user
+> requested cpu affinity specified in the sched_setaffinity().
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
+> This results in a performance regression in an arm64 system when booted
+> with "allow_mismatched_32bit_el0" on the command-line. The arch code will
+> (amongst other things) calls force_compatible_cpus_allowed_ptr() and
+> relax_compatible_cpus_allowed_ptr() when exec()'ing a 32-bit or a 64-bit
+> task respectively. Now a call to relax_compatible_cpus_allowed_ptr()
+> will always result in a __sched_setaffinity() call whether there is a
+> previous force_compatible_cpus_allowed_ptr() call or not.
+
+I'd argue it's more than just a performance regression -- the affinity
+masks are set incorrectly, which is a user visible thing
+(i.e. sched_getaffinity() gives unexpected values).
+
+> In order to fix this regression, a new scheduler flag
+> task_struct::cpus_allowed_restricted is now added to track if
+> force_compatible_cpus_allowed_ptr() has been called before or not. This
+> patch also updates the comments in force_compatible_cpus_allowed_ptr()
+> and relax_compatible_cpus_allowed_ptr() and handles their interaction
+> with sched_setaffinity().
+> 
+> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+> Reported-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
->  arch/x86/kvm/reverse_cpuid.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-> index a19d473d0184..7cfedb3e47c0 100644
-> --- a/arch/x86/kvm/reverse_cpuid.h
-> +++ b/arch/x86/kvm/reverse_cpuid.h
-> @@ -13,6 +13,7 @@
->   */
->  enum kvm_only_cpuid_leafs {
->  	CPUID_12_EAX	 = NCAPINTS,
-> +	CPUID_8000_0022_EAX,
->  	NR_KVM_CPU_CAPS,
+>  include/linux/sched.h |  3 +++
+>  kernel/sched/core.c   | 46 ++++++++++++++++++++++++++++++++++---------
+>  kernel/sched/sched.h  |  2 ++
+>  3 files changed, 42 insertions(+), 9 deletions(-)
+
+I find this pretty invasive, but I guess it's up to Peter and Ingo.
+It also doesn't the whole problem for me; see below.
+
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 853d08f7562b..f93f62a1f858 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -886,6 +886,9 @@ struct task_struct {
+>  	unsigned			sched_contributes_to_load:1;
+>  	unsigned			sched_migrated:1;
 >  
->  	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
-> @@ -23,7 +24,15 @@ enum kvm_only_cpuid_leafs {
->  /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
->  #define KVM_X86_FEATURE_SGX1		KVM_X86_FEATURE(CPUID_12_EAX, 0)
->  #define KVM_X86_FEATURE_SGX2		KVM_X86_FEATURE(CPUID_12_EAX, 1)
-> +#define KVM_X86_FEATURE_AMD_PMU_V2	KVM_X86_FEATURE(CPUID_8000_0022_EAX, 0)
+> +	/* restrict_cpus_allowed_ptr() bit, serialized by scheduler locks */
+> +	unsigned			cpus_allowed_restricted:1;
+> +
+>  	/* Force alignment to the next boundary: */
+>  	unsigned			:0;
 >  
-> +/*
-> + * Alias X86_FEATURE_* to the KVM variant for features in KVM-only leafs that
-> + * aren't scattered by cpufeatures.h so that X86_FEATURE_* can be used in KVM,
-> + * e.g. to query guest CPUID.  As a bonus, no translation is needed for these
-> + * features in __feature_translate().
-> + */
-> +#define X86_FEATURE_AMD_PMU_V2      KVM_X86_FEATURE_AMD_PMU_V2
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index bb1ee6d7bdde..48234dc9005b 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2999,15 +2999,40 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
+>  	struct rq *rq;
+>  
+>  	rq = task_rq_lock(p, &rf);
+> +
+> +	if (ctx->flags & (SCA_CLR_RESTRICT | SCA_SET_RESTRICT)) {
+> +		p->cpus_allowed_restricted = 0;
 
-I gave you bad input earlier, for purely KVM-defined flags there's no need for an
-intermediate KVM_X86_FEATURE_AMD_PMU_V2, this could simply be:
+I don't think this is ever called on the SCA_SET_RESTRICT path, as
+restrict_cpus_allowed_ptr() calls __set_cpus_allowed_ptr_locked() directly.
+In my testing, we see a failure in the following sequence:
 
-  #define X86_FEATURE_AMD_PMU_V2         KVM_X86_FEATURE(CPUID_8000_0022_EAX, 0)
+  1. A 64-bit task has an affinity of 0xf
+  2. It exec()s a 32-bit program and is forcefully restricted to the set
+     of 32-bit-capable cores. Let's say that new mask is 0xc
+  3. The 32-bit task now exec()s a 64-bit program again
 
-That's a moot point though because, after much searching because I had a very hard
-time believing the kernel wouldn't want to know about this flag, I found commit
+And now we're still stuck with 0xc after step 3 whereas we should restore
+0xf.
 
-  d6d0c7f681fd ("x86/cpufeatures: Add PerfMonV2 feature bit")
+> +	} else if (p->cpus_allowed_restricted) {
+> +		/*
+> +		 * If force_compatible_cpus_allowed_ptr() has been called,
+> +		 * we can't extend cpumask to beyond what is in cpus_mask.
+> +		 */
+> +		if (!cpumask_and(rq->scratch_mask, ctx->new_mask,
+> +				 &p->cpus_mask)) {
+> +			task_rq_unlock(rq, p, &rf);
+> +			return -EINVAL;
+> +		}
 
-from nearly a year ago.  I.e. to avoid confusiong, this needs to be a scattered
-flag, not a purely KVM flag.
+Why is this masking actually needed? __sched_setaffinity() already
+takes into account the task_cpu_possible_mask(), which is why I asked you
+before [1] about cases where the saved affinity is not simply a superset
+of the effective affinity.
 
----
- arch/x86/kvm/reverse_cpuid.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks,
 
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index 4945456fd646..333e28b0a13c 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -15,6 +15,7 @@ enum kvm_only_cpuid_leafs {
- 	CPUID_12_EAX	 = NCAPINTS,
- 	CPUID_7_1_EDX,
- 	CPUID_8000_0007_EDX,
-+	CPUID_8000_0022_EAX,
- 	NR_KVM_CPU_CAPS,
- 
- 	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
-@@ -47,6 +48,9 @@ enum kvm_only_cpuid_leafs {
- /* CPUID level 0x80000007 (EDX). */
- #define KVM_X86_FEATURE_CONSTANT_TSC	KVM_X86_FEATURE(CPUID_8000_0007_EDX, 8)
- 
-+/* CPUID level 0x80000022 (EAX) */
-+#define KVM_X86_FEATURE_PERFMON_V2	KVM_X86_FEATURE(CPUID_8000_0022_EAX, 0)
-+
- struct cpuid_reg {
- 	u32 function;
- 	u32 index;
-@@ -73,6 +77,7 @@ static const struct cpuid_reg reverse_cpuid[] = {
- 	[CPUID_8000_001F_EAX] = {0x8000001f, 0, CPUID_EAX},
- 	[CPUID_7_1_EDX]       = {         7, 1, CPUID_EDX},
- 	[CPUID_8000_0007_EDX] = {0x80000007, 0, CPUID_EDX},
-+	[CPUID_8000_0022_EAX] = {0x80000022, 0, CPUID_EAX},
- };
- 
- /*
-@@ -107,6 +112,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
- 		return KVM_X86_FEATURE_SGX_EDECCSSA;
- 	else if (x86_feature == X86_FEATURE_CONSTANT_TSC)
- 		return KVM_X86_FEATURE_CONSTANT_TSC;
-+	else if (x86_feature == X86_FEATURE_PERFMON_V2)
-+		return KVM_X86_FEATURE_PERFMON_V2;
- 
- 	return x86_feature;
- }
+Will
 
-base-commit: 5f3f3cc1279cd5cd52d301b97844bd3ce40c8020
--- 
-
+[1] https://lore.kernel.org/r/20230120175931.GA22417@willie-the-truck
