@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F336767966E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4979B679677
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbjAXLRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S233431AbjAXLTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbjAXLRR (ORCPT
+        with ESMTP id S232166AbjAXLTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:17:17 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF169CC1A
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:17:15 -0800 (PST)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 30OBGdod017722;
-        Tue, 24 Jan 2023 20:16:39 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Tue, 24 Jan 2023 20:16:39 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 30OBGdJr017719
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 24 Jan 2023 20:16:39 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a41a1cec-d1b0-16b2-171b-213e27fe96ca@I-love.SAKURA.ne.jp>
-Date:   Tue, 24 Jan 2023 20:16:37 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [perf] lockdep warning between cpu_add_remove_lock and
- &dev->mutex.
+        Tue, 24 Jan 2023 06:19:43 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CC63A94;
+        Tue, 24 Jan 2023 03:19:42 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OA2tQo006352;
+        Tue, 24 Jan 2023 11:19:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=8Ll9shPCzbAV7uqNWiIZwnqBMi5NAj5aLjDWPEt4hRs=;
+ b=jqZm0S5Coj347wHXVzOE5ARgBrvEqgJUravw1/SFq97G83cIyhpb5Fw+hwUViOcfpxOZ
+ QPHp1YuI2kUNGOPWo4gCS9mGRYY+7sIc/iOVJ/uDqF9Htt/RPCdEO8dCS3ui1uKYSpKc
+ nYDIuHCSwqFza1s/GNclBRYF/owhThkLJqCVgGKWYCWVEPd+Dt6YAkxAa1RaCnSxVT8F
+ R+AXDYvRGKxKRLSRw+RJQ0vB52mY5LH2gCSp/BhGF5gxmc1QsIM6FT/Jcg7cCa8DFzwi
+ BJyLXDWizF3U7u2TmiK0CJkSWbXRtHbToS7p0cvbRCo3Rp946P0gTKaUNNlXEWgxBZPK gg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3naaknnev3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 11:19:29 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NKRjOD031150;
+        Tue, 24 Jan 2023 11:19:28 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6anf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 11:19:27 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OBJOvG21561980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 11:19:24 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 59C9A20043;
+        Tue, 24 Jan 2023 11:19:24 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7954220040;
+        Tue, 24 Jan 2023 11:19:23 +0000 (GMT)
+Received: from [9.171.71.154] (unknown [9.171.71.154])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 11:19:23 +0000 (GMT)
+Message-ID: <0fae8ad5-8dcd-3864-a532-4760f3f2a95c@linux.ibm.com>
+Date:   Tue, 24 Jan 2023 12:19:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: manual merge of the kvms390 tree with the s390 tree
 Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org
-References: <b7bc63c8-bb28-d21d-7c3f-97e4e79a9292@I-love.SAKURA.ne.jp>
- <20230124095424.4448-1-hdanton@sina.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230124095424.4448-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230123121245.526d262b@canb.auug.org.au>
+ <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UKjX9A6s3yqam4giVaJKmsE8VOcNPU_6
+X-Proofpoint-GUID: UKjX9A6s3yqam4giVaJKmsE8VOcNPU_6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 spamscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240101
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/01/24 18:54, Hillf Danton wrote:
-> Given device locked in the probe path, bind device to driver without lock held.
-> Just to see whatever deadlock two steps ahead.
+hAm 23.01.23 um 20:02 schrieb Anthony Krowiak:
 > 
->  void device_initial_probe(struct device *dev)
->  {
-> +	/* invoked with device locked */
->  	__device_attach(dev, true);
->  }
-
-Applying your diff with below diff resulted in flood of lockdep warnings
-saying that device_initial_probe() is invoked without device locked.
-
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -1058,6 +1058,7 @@ EXPORT_SYMBOL_GPL(device_attach);
- void device_initial_probe(struct device *dev)
- {
-         /* invoked with device locked */
-+        device_lock_assert(dev);
-         __device_attach(dev, true);
- }
-
-----------
-[    0.476081][    T1] PCI: Using configuration type 1 for base access
-[    0.476375][    T1] ------------[ cut here ]------------
-[    0.477185][    T1] WARNING: CPU: 0 PID: 1 at include/linux/device.h:851 device_initial_probe+0x37/0x50
-[    0.478046][    T1] Modules linked in:
-[    0.479046][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc5+ #13
-[    0.480046][    T1] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-[    0.481046][    T1] RIP: 0010:device_initial_probe+0x37/0x50
-[    0.481268][    T1] Code: fb 85 c0 75 10 48 89 df be 01 00 00 00 e8 21 f4 ff ff 5b 5d c3 48 8d bf e8 00 00 00 be ff ff ff ff e8 cd 6d 2b 00 85 c0 75 db <0f> 0b be 01 00 00 00 48 89 df e8 fa f3 ff ff 5b 5d c3 0f 1f 80 00
-[    0.483046][    T1] RSP: 0000:ffffaa0540017d48 EFLAGS: 00010246
-[    0.484220][    T1] RAX: 0000000000000000 RBX: ffffa2e4f6e1a928 RCX: 0000000000000001
-[    0.485233][    T1] RDX: 0000000000000001 RSI: ffffffffbde45e07 RDI: ffffffffbdea29ee
-[    0.486065][    T1] RBP: ffffaa0540017d50 R08: 0000000000000001 R09: 0000000000000000
-[    0.487056][    T1] R10: b7eeca500c46dbc8 R11: 0000000000000000 R12: ffffffffbe43ff40
-[    0.488046][    T1] R13: ffffa2e4f6e1a928 R14: 0000000000000000 R15: ffffa2e4f6e1a928
-[    0.489053][    T1] FS:  0000000000000000(0000) GS:ffffa2e4f6e00000(0000) knlGS:0000000000000000
-[    0.489663][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    0.490226][    T1] CR2: ffffa2e3e8202000 CR3: 0000000127011001 CR4: 0000000000370ef0
-[    0.491046][    T1] Call Trace:
-[    0.491208][    T1]  <TASK>
-[    0.492084][    T1]  bus_probe_device+0x9b/0xb0
-[    0.492317][    T1]  device_add+0x3e1/0x900
-[    0.493046][    T1]  ? __init_waitqueue_head+0x4a/0x70
-[    0.493276][    T1]  ? rdinit_setup+0x27/0x27
-[    0.494174][    T1]  device_register+0x15/0x20
-[    0.494327][    T1]  register_cpu+0xda/0x120
-[    0.495146][    T1]  arch_register_cpu+0x48/0x110
-[    0.495288][    T1]  topology_init+0x35/0x3e
-[    0.496110][    T1]  ? enable_cpu0_hotplug+0x10/0x10
-[    0.496283][    T1]  do_one_initcall+0x58/0x300
-[    0.497153][    T1]  ? rdinit_setup+0x27/0x27
-[    0.498058][    T1]  ? rcu_read_lock_sched_held+0x4a/0x70
-[    0.498255][    T1]  kernel_init_freeable+0x181/0x1d2
-[    0.499046][    T1]  ? rest_init+0x190/0x190
-[    0.499249][    T1]  kernel_init+0x15/0x120
-[    0.500046][    T1]  ret_from_fork+0x1f/0x30
-[    0.500258][    T1]  </TASK>
-[    0.501059][    T1] irq event stamp: 101019
-[    0.501161][    T1] hardirqs last  enabled at (101029): [<ffffffffbd0d9953>] __up_console_sem+0x53/0x60
-[    0.502054][    T1] hardirqs last disabled at (101046): [<ffffffffbd0d9938>] __up_console_sem+0x38/0x60
-[    0.503063][    T1] softirqs last  enabled at (101044): [<ffffffffbd8d524b>] __do_softirq+0x30b/0x46f
-[    0.504061][    T1] softirqs last disabled at (101039): [<ffffffffbd06e859>] irq_exit_rcu+0xb9/0xf0
-[    0.505076][    T1] ---[ end trace 0000000000000000 ]---
-[    0.506065][   T11] Callback from call_rcu_tasks() invoked.
-----------
+> On 1/22/23 8:12 PM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the kvms390 tree got a conflict in:
+>>
+>>    drivers/s390/crypto/vfio_ap_ops.c
+>>
+>> between commit:
+>>
+>>    0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for queue reset")
+>>
+>> from the s390 tree and commit:
+>>
+>>    bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for queue reset")
+>>
+>> from the kvms390 tree.
+>>
+>> They seem to do the same thing, so I used the version of this file from
+>> the s390 tree as it's commit is much newer and has other changes to this
+>> file i.e. I effectively dropped the kvms390 tree commit.
+> 
+> 
+> That's odd, the patch series posted to the kernel mailing lists did not have both of those patches. I think the problem may have occurred because there was an earlier version of the patch in question that was used to debug a problem in our CI. That patch should have been reverted prior to installing the latest version.
 
 
+Yes, that patch was part of the kvms390 tree and it was old. I removed it. Sorry for the left-over
+The one in the s390 tree is the correct one:
+
+https://lore.kernel.org/all/20230118203111.529766-3-akrowiak@linux.ibm.com/
+is now
+https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=for-next&id=0daf9878a7990058e74025493820bce0f67654c4
+
+this should be ok now?
+
+Christian
