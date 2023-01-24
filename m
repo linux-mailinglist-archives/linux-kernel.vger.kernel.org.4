@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B36F67948E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C08679493
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbjAXJw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S233665AbjAXJxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbjAXJwz (ORCPT
+        with ESMTP id S233224AbjAXJxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:52:55 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106A5468D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:52:48 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id k4so15883358vsc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:52:48 -0800 (PST)
+        Tue, 24 Jan 2023 04:53:43 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3F21BDE
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:53:40 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id v13so17635332eda.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:53:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8BB+Mr1YyupdL/5z3B/lkYmn99GXR1QXWMQn3D/xn4=;
-        b=iWZvxL5ps2NPyyh2UuYMy8zM59kuLd7mqLCJc9Z3GGMNkaMHevffve3dzn2Ab/gO5K
-         /JgKsux/mPVYIbnKGHAzRcU+JW/CSwoRFc+jcealKFZgBm9WZfy9sOk1AK1Qk+PEm1JL
-         QQxpIGHKzbp3k+tWxUp4T/YR7fK30h39d1MNKD4Wfj8CpbZU7sGSsRe3q5YJN+r2C0r6
-         9Nd1koBNEdmQUjXm+QkBW/qf7C57O3AnKDWZYEBJtfDqdV2nsTKo971jzjgAcX/Hnb+X
-         a9EnLhNhdIv+pREjn4I0iPh9h3+JAE0aKemr1+O2g361TSjQAgksnWKAsy0iXxh/72zU
-         nCvA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a1g8H/5EnuQai7vsKQsMU+CVyFb5uB83EziQawtgMDQ=;
+        b=HsW4hd0EVtalcgoAB9hWy6LlmDh3lURTTRSpesp5SDsjNGmCbR+cEONIcIpoizPWf/
+         FRxM8H1Sgf44koNfbNGoc7ZCEkE1m4kuN2rRO7tgFYY0WRn78enCKCskBxQYfpDZb6du
+         nV9cuRLr/grGZgcPi2IEwsknwJ5NbZLkPRYAu/nRbSVmQQlsge192hGtxUk6/Kp/sxq0
+         nhbJWUikw/OD+X1PnZqgxQ/rsmurjPmAxXLltDm2gbXtlxdwcH/bV6gTkOfhyWtkcfGx
+         rdZQr0oMIOeRZkTcS26l2J+dPFL/kUtdjw/hw/XrsEM3Azn2TBRTQJl48eMWog1hN26I
+         lb1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a8BB+Mr1YyupdL/5z3B/lkYmn99GXR1QXWMQn3D/xn4=;
-        b=vi/+7BGk6z8rA5at2OwcLTjgtPVs5Yzxd6V4Kw0qehUbm3p5PMAlsOthakR2jbU0qV
-         lVHyHVbID28VysGH7DzYS7kLIWXwfJBBEpuvTtOjxSStTn0cU1TnAKEYGfjbtbVBTKos
-         fMaESA8y8qGj4giIgQ62yJ+UPt/5v00k7/Vm1igqDKeDimS7qRoHx2D4BfWFdTPQO9yg
-         I6Ucs8ZUT+vhVQWRLntfF7oaZX/gA+Osb9QGJL/AnsYEkVldX1fZQ38zPXHPq82O7eTb
-         Hin2+F2d4r5UURP/seiBiCj6uTaPwYuQYFBPtUqnbJLNSpB+lMPivuH5OzV+0vLEhAqp
-         ERhQ==
-X-Gm-Message-State: AFqh2koRtUt3BDCfy2zyUqIRAkPEnZOh519Y0DfCWbiyVwX2l2Eerz62
-        uXMXwCNYJadScbFIa3zHwM1Jhcwp46tpI53iFVPsGK+Tf5UEOZXw
-X-Google-Smtp-Source: AMrXdXs1Dt3Y8mDPY1t3AKO/K/9NNQwbFr4c9mRLc8barvrc1wy2swCK1MeUTrQfCXWOwHrdPPMpW/WBscKT0RCrhxQ=
-X-Received: by 2002:a67:b102:0:b0:3d3:dd2d:88d1 with SMTP id
- w2-20020a67b102000000b003d3dd2d88d1mr3487254vsl.83.1674553966972; Tue, 24 Jan
- 2023 01:52:46 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a1g8H/5EnuQai7vsKQsMU+CVyFb5uB83EziQawtgMDQ=;
+        b=Hw/zrZxBPR2UGm1y8uf359dsIpDdUZHKT9yXBI1wSixuiZ3eDV/bJCk8J1tiU8B+aw
+         HuL0QefPrhcs8+Yo0sRT9RJfP7dUmDB6CgwEM3QF4OmbYHqLn4MUJZR/mMMSYI4SvwWU
+         NT0rYlZU1Ced3tbaAWs6B77k67xhgYQYkLZZzqW9NVTqZzs7qPDaAfovWvc5lKatxj2h
+         fuO9nZOfb+ieS4s59chKvULt8l5JwRFKflMJuPl00qMuwBhU1hDYwTTh+u+mrwVGhkzm
+         C+VVRN2x6VqLJR67h+K0eD+FaMjgChQmMhjHDRWWy+O4zvlGTsZiIz2g0904fdRCzZjk
+         bnDw==
+X-Gm-Message-State: AFqh2kp/OKSKjz6wzAU9Mgbv4QvQd/umL5HbiRVsmf86A+OPbknVPI8m
+        DhqtSzN7jLBbHtJ53bFYteoE0g==
+X-Google-Smtp-Source: AMrXdXszMWKFzeKzx2qqlPjinJPLCfT/0Vnzgr9rLpPiGyJVEZ6b9td/Jy3JQyUhQ1r09CegVatXpA==
+X-Received: by 2002:a05:6402:cf:b0:45c:835c:1ecc with SMTP id i15-20020a05640200cf00b0045c835c1eccmr39299686edu.26.1674554019357;
+        Tue, 24 Jan 2023 01:53:39 -0800 (PST)
+Received: from [192.168.1.101] (abyl109.neoplus.adsl.tpnet.pl. [83.9.31.109])
+        by smtp.gmail.com with ESMTPSA id j15-20020aa7de8f000000b0049622a61f8fsm840057edv.30.2023.01.24.01.53.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 01:53:39 -0800 (PST)
+Message-ID: <d73f0eec-6e02-e72f-79d7-2c56245f7651@linaro.org>
+Date:   Tue, 24 Jan 2023 10:53:35 +0100
 MIME-Version: 1.0
-References: <20230123094918.977276664@linuxfoundation.org>
-In-Reply-To: <20230123094918.977276664@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 Jan 2023 15:22:35 +0530
-Message-ID: <CA+G9fYuH9vUTHjtByq184N2dNuquT1Z02JDRh2GYFR96weZcFA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/7] clk: qcom: Add Global Clock Controller driver for
+ IPQ9574
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, tdas@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-3-quic_devipriy@quicinc.com>
+ <de346d71-1fe7-e357-d220-d4468e4bb933@linaro.org>
+ <afd2e5c8-fa5a-ac1f-4ede-4ab1f91c0d0d@quicinc.com>
+ <9bdf757d-1fa0-106f-eb77-7f2a8593213f@linaro.org>
+ <2852fc37-284f-6534-f163-45b37b153db1@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <2852fc37-284f-6534-f163-45b37b153db1@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,195 +93,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 at 15:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.90 release.
-> There are 117 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.90-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
 
-Results from Linaro=E2=80=99s test farm.
-Regressions found on arm64 for both 5.15.90-rc2 and 5.10.165-rc2.
+On 24.01.2023 08:27, Devi Priya wrote:
+> 
+> 
+> On 1/13/2023 7:39 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 13.01.2023 14:21, Devi Priya wrote:
+>>>
+>>>
+>>> On 1/10/2023 6:07 PM, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 10.01.2023 13:13, devi priya wrote:
+>>>>> Add Global Clock Controller (GCC) driver for ipq9574 based devices
+>>>>>
+>>>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>>> ---
+>> [...]
+>>
+>>>>> +static struct clk_branch gcc_blsp1_qup6_i2c_apps_clk = {
+>>>>> +    .halt_reg = 0x07024,
+>>>>> +    .clkr = {
+>>>>> +        .enable_reg = 0x07024,
+>>>>> +        .enable_mask = BIT(0),
+>>>>> +        .hw.init = &(struct clk_init_data) {
+>>>>> +            .name = "gcc_blsp1_qup6_i2c_apps_clk",
+>>>>> +            .parent_hws = (const struct clk_hw *[]) {
+>>>>> +                    &blsp1_qup6_i2c_apps_clk_src.clkr.hw },
+>>>>> +            .num_parents = 1,
+>>>>> +            .flags = CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
+>>>> Sounds very much like a hack..
+>>> Got it, will remove the clock entry as it is not being used in linux
+>> I'm not sure removing it is the best option, somebody might have a
+>> funky board where they use this particular QUP for I2C for whatever
+>> reason and then the clock would have to be re-added..
+> Sure, Understood
+> This clock is used by the RPM component to communicate with PMIC and we
+> would add the critical flag here
+Okay, so this SoC is intended to ship with some RPM PMICs and
+*always* with an I2C companion that's required for some basic
+functionality, correct?
 
-* qemu-arm64-mte, kselftest-arm64
-  - arm64_check_buffer_fill
-  - arm64_check_child_memory
-  - arm64_check_ksm_options
-  - arm64_check_mmap_options
-  - arm64_check_tags_inclusion
+Otherwise, if it's just for wifi/multimedia/etc (like PM8008ij
+on some newer devices), you should not make it critical and
+simply rely on Linux keeping it alive like so:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+consumer takes a regulator
+the regulator does not go to sleep because it's consumed
+the PMIC is active because a regulator on it is being used
+the I2C bus is active because its child PMIC is used
+the I2C clocks are alive because there's an active user
 
-We are in a process to bisecting this problem and there are updates coming
-from kselftest rootfs.
-
-Test logs,
-# selftests: arm64: check_buffer_fill
-# 1..20
-# ok 1 Check buffer correctness by byte with sync err mode and mmap memory
-# ok 2 Check buffer correctness by byte with async err mode and mmap memory
-# ok 3 Check buffer correctness by byte with sync err mode and
-mmap/mprotect memory
-# ok 4 Check buffer correctness by byte with async err mode and
-mmap/mprotect memory
-# not ok 5 Check buffer write underflow by byte with sync mode and mmap mem=
-ory
-# not ok 6 Check buffer write underflow by byte with async mode and mmap me=
-mory
-# ok 7 Check buffer write underflow by byte with tag check fault
-ignore and mmap memory
-# ok 8 Check buffer write underflow by byte with sync mode and mmap memory
-# ok 9 Check buffer write underflow by byte with async mode and mmap memory
-# ok 10 Check buffer write underflow by byte with tag check fault
-ignore and mmap memory
-# not ok 11 Check buffer write overflow by byte with sync mode and mmap mem=
-ory
-# not ok 12 Check buffer write overflow by byte with async mode and mmap me=
-mory
-# ok 13 Check buffer write overflow by byte with tag fault ignore mode
-and mmap memory
-# not ok 14 Check buffer write correctness by block with sync mode and
-mmap memory
-# not ok 15 Check buffer write correctness by block with async mode
-and mmap memory
-# ok 16 Check buffer write correctness by block with tag fault ignore
-and mmap memory
-# ok 17 Check initial tags with private mapping, sync error mode and mmap m=
-emory
-# ok 18 Check initial tags with private mapping, sync error mode and
-mmap/mprotect memory
-# ok 19 Check initial tags with shared mapping, sync error mode and mmap me=
-mory
-# ok 20 Check initial tags with shared mapping, sync error mode and
-mmap/mprotect memory
-# # Totals: pass:14 fail:6 xfail:0 xpass:0 skip:0 error:0
-not ok 34 selftests: arm64: check_buffer_fill # exit=3D1
-
-
-# selftests: arm64: check_child_memory
-# 1..12
-# not ok 1 Check child anonymous memory with private mapping, precise
-mode and mmap memory
-# not ok 2 Check child anonymous memory with shared mapping, precise
-mode and mmap memory
-# not ok 3 Check child anonymous memory with private mapping,
-imprecise mode and mmap memory
-# not ok 4 Check child anonymous memory with shared mapping, imprecise
-mode and mmap memory
-# not ok 5 Check child anonymous memory with private mapping, precise
-mode and mmap/mprotect memory
-# not ok 6 Check child anonymous memory with shared mapping, precise
-mode and mmap/mprotect memory
-# not ok 7 Check child file memory with private mapping, precise mode
-and mmap memory
-# not ok 8 Check child file memory with shared mapping, precise mode
-and mmap memory
-# not ok 9 Check child file memory with private mapping, imprecise
-mode and mmap memory
-# not ok 10 Check child file memory with shared mapping, imprecise
-mode and mmap memory
-# not ok 11 Check child file memory with private mapping, precise mode
-and mmap/mprotect memory
-# not ok 12 Check child file memory with shared mapping, precise mode
-and mmap/mprotect memory
-# # Totals: pass:0 fail:12 xfail:0 xpass:0 skip:0 error:0
-not ok 35 selftests: arm64: check_child_memory # exit=3D1
-
-# selftests: arm64: check_ksm_options
-# 1..4
-# # Invalid MTE synchronous exception caught!
-not ok 37 selftests: arm64: check_ksm_options # exit=3D1
-
-
-# selftests: arm64: check_mmap_options
-# 1..22
-# ok 1 Check anonymous memory with private mapping, sync error mode,
-mmap memory and tag check off
-# ok 2 Check file memory with private mapping, sync error mode,
-mmap/mprotect memory and tag check off
-# ok 3 Check anonymous memory with private mapping, no error mode,
-mmap memory and tag check off
-# ok 4 Check file memory with private mapping, no error mode,
-mmap/mprotect memory and tag check off
-# not ok 5 Check anonymous memory with private mapping, sync error
-mode, mmap memory and tag check on
-# not ok 6 Check anonymous memory with private mapping, sync error
-mode, mmap/mprotect memory and tag check on
-# not ok 7 Check anonymous memory with shared mapping, sync error
-mode, mmap memory and tag check on
-# not ok 8 Check anonymous memory with shared mapping, sync error
-mode, mmap/mprotect memory and tag check on
-# not ok 9 Check anonymous memory with private mapping, async error
-mode, mmap memory and tag check on
-# not ok 10 Check anonymous memory with private mapping, async error
-mode, mmap/mprotect memory and tag check on
-# not ok 11 Check anonymous memory with shared mapping, async error
-mode, mmap memory and tag check on
-# not ok 12 Check anonymous memory with shared mapping, async error
-mode, mmap/mprotect memory and tag check on
-# not ok 13 Check file memory with private mapping, sync error mode,
-mmap memory and tag check on
-# not ok 14 Check file memory with private mapping, sync error mode,
-mmap/mprotect memory and tag check on
-# not ok 15 Check file memory with shared mapping, sync error mode,
-mmap memory and tag check on
-# not ok 16 Check file memory with shared mapping, sync error mode,
-mmap/mprotect memory and tag check on
-# not ok 17 Check file memory with private mapping, async error mode,
-mmap memory and tag check on
-# not ok 18 Check file memory with private mapping, async error mode,
-mmap/mprotect memory and tag check on
-# not ok 19 Check file memory with shared mapping, async error mode,
-mmap memory and tag check on
-# not ok 20 Check file memory with shared mapping, async error mode,
-mmap/mprotect memory and tag check on
-# not ok 21 Check clear PROT_MTE flags with private mapping, sync
-error mode and mmap memory
-# not ok 22 Check clear PROT_MTE flags with private mapping and sync
-error mode and mmap/mprotect memory
-# # Totals: pass:4 fail:18 xfail:0 xpass:0 skip:0 error:0
-not ok 38 selftests: arm64: check_mmap_options # exit=3D1
-
-
-# selftests: arm64: check_tags_inclusion
-# 1..4
-# # No valid fault recorded for 0x500ffffb8b27000 in mode 1
-# not ok 1 Check an included tag value with sync mode
-# # No valid fault recorded for 0x400ffffb8b27000 in mode 1
-# not ok 2 Check different included tags value with sync mode
-# ok 3 Check none included tags value with sync mode
-# # No valid fault recorded for 0xa00ffffb8b27000 in mode 1
-# not ok 4 Check all included tags value with sync mode
-# # Totals: pass:1 fail:3 xfail:0 xpass:0 skip:0 error:0
-not ok 40 selftests: arm64: check_tags_inclusion # exit=3D1
-
-Test logs,
-https://lkft.validation.linaro.org/scheduler/job/6087664#L4865
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.162-951-g9096aabfe9e0/testrun/14329777/suite/kselftest-arm64/test/arm64_ch=
-eck_tags_inclusion/log
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.162-951-g9096aabfe9e0/testrun/14329777/suite/kselftest-arm64/tests/
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.87-219-g60931c95bb6d/testrun/14329656/suite/kselftest-arm64/tests/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Konrad
+> 
+>> Thanks for addressing all of the review comments so thoroughly!
+>>
+>> Konrad
+> 
+> Best Regards,
+> Devi Priya
