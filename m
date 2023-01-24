@@ -2,175 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E1867973A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBBF679750
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbjAXMFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S233319AbjAXMJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjAXMFc (ORCPT
+        with ESMTP id S232381AbjAXMJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:05:32 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDFF29E14
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:05:29 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id q8so11248197wmo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:05:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ic8eN3I6cwzBtdtpBaU56bD/9LZvawdWvPnRT+wjLI4=;
-        b=rWmlzRYnGQGrT/p1+Upzo6brYfnNA3TV77vb/6F5OKaWkJ9j5epg1eVnH4Kj50zAtO
-         4fDeGuV7JGcek1cUKifShvKVNs7w/xq9Xc3Z1pVuOYq1tUhh3u8pGTghoeL/4mbMFrrz
-         Jy2rWieEKKFGi4dPfDI26D0gaQA+sKz3HJdN4bWvBpTDzfsuMCa/li9GSxAYIC8b8qZm
-         ZWp6io6b5QR6pJM5S2uNlOaXqTD+nyfRP16m+ffoWGn9Nuo0xJEvGra6J/rEnVFcquFo
-         G++tDTnkY1aQ1Byzy1cfPsCBtC4M7haq2GX2FH2G5woiU8jzS0voGKXKd9b1G6lnc68a
-         6bqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ic8eN3I6cwzBtdtpBaU56bD/9LZvawdWvPnRT+wjLI4=;
-        b=DZSTczCWD9fvKZisi2G/tUqiVOUXWx/yRm1NyB3dQ/fIvY0Vsi2I9tqoBTE2+F0x9C
-         Mf9v7PXHHHH16m0jP31RfTIg+sLGPQPUlP07axrVBCn1rUrLXncd+NevllMsBP1ik21Y
-         XCMT2Yv9cGyHz/QHy0ImU/7lj2aTUmhNWAQpOuiyjiuTQGR1bZcdBGLtQsLLrik8Ef51
-         e5NsxhjQiuqBzTVCc33ySgElv5nZGLiPS7AJ+OWJi+vPzOVmqM7mS5v/mWYxTYnvmUWO
-         aqILPOTpAwz5XW6xjYzaTbRr3Y2GbCaO9fHdRP2itO7ztH4j8lx7WIn01UbP50Xw9T4q
-         xvtw==
-X-Gm-Message-State: AFqh2ko2Mx/48EkUHw1JBtsmCc2pxO4GOSAFG1tc46v8/JHLZ6spUlje
-        lVsS7ELVWaIBjTuds0xAREG6+w==
-X-Google-Smtp-Source: AMrXdXtDWLE9/Mow9jmUwl0uKzwwn4gUuscIRtfACEWMupiXSbKnJKzbMHEgbV+4SIedSnZ3LK2PeQ==
-X-Received: by 2002:a05:600c:21c4:b0:3da:fcf1:d4cc with SMTP id x4-20020a05600c21c400b003dafcf1d4ccmr27434734wmj.30.1674561928413;
-        Tue, 24 Jan 2023 04:05:28 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w8-20020a05600c2a0800b003d995a704fdsm1749926wme.33.2023.01.24.04.05.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 04:05:28 -0800 (PST)
-Message-ID: <d8fb3c45-435d-f080-6ba4-e9e4595f3638@linaro.org>
-Date:   Tue, 24 Jan 2023 13:05:26 +0100
+        Tue, 24 Jan 2023 07:09:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DAD2330C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:09:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A399B8117B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C380AC433D2;
+        Tue, 24 Jan 2023 12:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674562159;
+        bh=xe566WnBUK91cLXhbLFUcuJ0dYHv1Hz6QseOUQ+OQc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ub0WnhQoXGSCa0JzYkItDwmhZGG03zhWsbTgQvFKchw/EkQaFh7T2Q8xxvedLJjpl
+         bjokgal61ocp5FKogWw5bCcagr2GuaB5XyJzw9a+z/urA9d42ZibajHHO08ACHFrLd
+         Lqww+3qOmIi4o0yTQn6wlVwMkvnKtf7vNoNzIPunkYpa/7OEJ2twYRNYp4Kgul9KXE
+         JhaQl/3IxZ1sC46oFvLYcd2F0QB9xul+G/7kWiAWw91cEC5m5oK0Pjth80z6tY7yIn
+         GWhp4wEDAFKYRo7ZcciNtqgaAFam5MXBMFfX4wBRciB/xkuNvvlp3FsD+Gle8/yzh8
+         YWBzTuLbAP93A==
+Date:   Tue, 24 Jan 2023 12:09:15 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] arch: Enable function alignment for arm64
+Message-ID: <20230124120913.GA26449@willie-the-truck>
+References: <20221208053649.540891-1-almasrymina@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] hwmon: (pmbus/tda38640) Add driver for Infineon TDA38640
- Voltage Regulator
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230124110111.3965317-1-Naresh.Solanki@9elements.com>
- <b4b11836-5a4b-a2b7-18e2-89ca26f19817@linaro.org>
- <05947e9f-0667-4565-b481-ca5635da4174@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <05947e9f-0667-4565-b481-ca5635da4174@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208053649.540891-1-almasrymina@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 12:45, Naresh Solanki wrote:
-> Hi
+On Wed, Dec 07, 2022 at 09:36:48PM -0800, Mina Almasry wrote:
+> We recently ran into a double-digit percentage hackbench regression
+> when backporting commit 12df140f0bdf ("mm,hugetlb: take hugetlb_lock
+> before decrementing h->resv_huge_pages") to an older kernel. This was
+> surprising since hackbench does use hugetlb pages at all and the
+> modified code is not invoked. After some debugging we found that the
+> regression can be fixed by back-porting commit d49a0626216b ("arch:
+> Introduce CONFIG_FUNCTION_ALIGNMENT") and enabling function alignment
+> for arm64. I suggest enabling it by default for arm64 if possible.
 > 
-> On 24-01-2023 04:40 pm, Krzysztof Kozlowski wrote:
->> On 24/01/2023 12:01, Naresh Solanki wrote:
->>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>
->>> Add the pmbus driver for the Infineon TDA38640 voltage regulator.
->>>
->>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>> ---
->>>   .../devicetree/bindings/trivial-devices.yaml  |  2 +
->>
->> Split bindings from driver code.
-> Sure
->>
->>>   drivers/hwmon/pmbus/Kconfig                   | 16 ++++
->>>   drivers/hwmon/pmbus/Makefile                  |  1 +
->>>   drivers/hwmon/pmbus/tda38640.c                | 78 +++++++++++++++++++
->>>   4 files changed, 97 insertions(+)
->>>   create mode 100644 drivers/hwmon/pmbus/tda38640.c
->>>
->>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
->>> index f5c0a6283e61..a28b02036489 100644
->>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
->>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
->>> @@ -141,6 +141,8 @@ properties:
->>>             - infineon,slb9645tt
->>>               # Infineon SLB9673 I2C TPM 2.0
->>>             - infineon,slb9673
->>> +            # Infineon TDA38640 Voltage Regulator
->>> +          - infineon,tda38640
->>>               # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
->>>             - infineon,tlv493d-a1b6
->>>               # Infineon Multi-phase Digital VR Controller xdpe11280
->>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->>> index 30448e049486..9f4bbb9c487a 100644
->>> --- a/drivers/hwmon/pmbus/Kconfig
->>> +++ b/drivers/hwmon/pmbus/Kconfig
->>> @@ -395,6 +395,22 @@ config SENSORS_STPDDC60
->>>   	  This driver can also be built as a module. If so, the module will
->>>   	  be called stpddc60.
->>>   
->>> +config SENSORS_TDA38640
->>> +	tristate "Infineon TDA38640"
->>> +	help
->>> +	  If you say yes here you get hardware monitoring support for Infineon
->>> +	  TDA38640.
->>> +
->>> +	  This driver can also be built as a module. If so, the module will
->>> +	  be called tda38640.
->>> +
->>> +config SENSORS_TDA38640_REGULATOR
->>> +	bool "Regulator support for TDA38640 and compatibles"
->>> +	depends on SENSORS_TDA38640 && REGULATOR
->>> +	help
->>> +	  If you say yes here you get regulator support for Infineon
->>> +	  TDA38640 as regulator.
->>
->> Drop entire option, why is it needed?
-> You mean regulator option ?
-> This is how other pmbus regulator devices have provided option.
+> Tested by examing function alignment on a compiled object file
+> before/after:
+> 
+> After this patch:
+> 
+> $ ~/is-aligned.sh mm/hugetlb.o 16
+> file=mm/hugetlb.o, alignment=16
+> total number of functions: 146
+> total number of unaligned: 0
+> 
+> Before this patch:
+> 
+> $ ~/is-aligned.sh mm/hugetlb.o 16
+> file=mm/hugetlb.o, alignment=16
+> total number of functions: 146
+> total number of unaligned: 94
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> ---
+>  arch/arm64/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index cf6d1cd8b6dc..bcc9e1578937 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -235,6 +235,7 @@ config ARM64
+>  	select TRACE_IRQFLAGS_SUPPORT
+>  	select TRACE_IRQFLAGS_NMI_SUPPORT
+>  	select HAVE_SOFTIRQ_ON_OWN_STACK
+> +	select FUNCTION_ALIGNMENT_16B
+>  	help
+>  	  ARM 64-bit (AArch64) Linux support.
 
-Hmmm... I wonder why this is of any use.
+This increases the size of .text for a defconfig build by ~2%, so I think it
+would be nice to have some real numbers for the performance uplift. Are you
+able to elaborate beyond "double-digit percentage hackbench regression"?
 
->>
->>> +
->>>   config SENSORS_TPS40422
->>>   	tristate "TI TPS40422"
->>>   	help
+In general, however, I'm supportive of the patch (and it seems that x86
+does the same thing) so:
 
-(...)
+Acked-by: Will Deacon <will@kernel.org>
 
->>
->>> +static const struct of_device_id tda38640_of_match[] = {
->>> +	{ .compatible = "infineon,tda38640"},
->>> +	{ },
->>> +};
->>> +MODULE_DEVICE_TABLE(of, tda38640_of_match);
->>
->> Where is it used? You miss the user.
-> I'm not sure if I get your question right.
-> This chip is used in sbp1 board to power CPU rails.
-
-No, where is the data structure used (except module autoloading)?
-
-Best regards,
-Krzysztof
-
+Will
