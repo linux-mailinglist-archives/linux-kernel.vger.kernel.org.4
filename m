@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E122867A163
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FD267A16B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 19:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234052AbjAXSiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 13:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S233764AbjAXSjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 13:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbjAXSiK (ORCPT
+        with ESMTP id S233756AbjAXSiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 13:38:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A932BF13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 10:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674585444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uZwECejmisQ0fjshTfnhZV5crtPOU/wzqGiZf40ig2g=;
-        b=iU0soMOG8SuQWIw9va7AloUB3f7+SjbV5RAuXA+XQKDNcKzAyr2C9rDi11jpb7u5HaA/SS
-        7AVzfDS0+4WK/ZV/GvLFc62qQmOjpVyP4bNe0IFuaTh7N5LT1YpiN1w/K44mGos7a6HRbI
-        prPBrU2jrzSUWSf5EkmhlHoRrrbDqmc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-170-jhcozZ53NgWu-gSrQeZ6cQ-1; Tue, 24 Jan 2023 13:37:20 -0500
-X-MC-Unique: jhcozZ53NgWu-gSrQeZ6cQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 24 Jan 2023 13:38:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BAE460AE;
+        Tue, 24 Jan 2023 10:38:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A816802D1A;
-        Tue, 24 Jan 2023 18:37:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EFFE753A0;
-        Tue, 24 Jan 2023 18:37:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y9AOYXpU1cRAHfQz@infradead.org>
-References: <Y9AOYXpU1cRAHfQz@infradead.org> <Y8/xApRVtqK7IlYT@infradead.org> <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-8-dhowells@redhat.com> <874829.1674571671@warthog.procyon.org.uk> <875433.1674572633@warthog.procyon.org.uk> <Y9AK+yW7mZ2SNMcj@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7F8A60BA7;
+        Tue, 24 Jan 2023 18:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB102C433D2;
+        Tue, 24 Jan 2023 18:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674585516;
+        bh=TsH9ZYVr7F77egUw3aUTU+8IVwlO2olc5hJ5RHnht/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f/0mF177Cuz36iVBj/t9EF83p69DWu1SGGMlE/aXElJWFNPBcK+L6GaHVpowvl926
+         aMzvGkDi2cn5hoi7C0uTecLyVS9JZ7aUAGLVtBuCeg/br+ZzQYlFD2TPdJQltNWihh
+         SQzJpQsF96lzr46o2wb9HYDs58BOTpGCBaoFnuufQONuYTnf+7RBTqXyPsUKqSBGkp
+         kGwdCGkfT0TmLOjlQn4e1hgQeFPS6BGl8KNe5AZbg8qWS6bq681LXZodoAs5b8Q8Ug
+         Sjp3BIanMKmO+2nfWv2rAO2fVPSN6eJfxVCOXexBluaWbj4ltlI/QQwvB6VtN1JdTi
+         x2IyXhG5WC7Bw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5D3BD405BE; Tue, 24 Jan 2023 15:38:33 -0300 (-03)
+Date:   Tue, 24 Jan 2023 15:38:33 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [PATCH v2] perf buildid: Avoid copy of uninitialized memory
+Message-ID: <Y9AlqSH4kBVddKqg@kernel.org>
+References: <20230120185828.43231-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1291657.1674585437.1@warthog.procyon.org.uk>
-Date:   Tue, 24 Jan 2023 18:37:17 +0000
-Message-ID: <1291658.1674585437@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120185828.43231-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+Em Fri, Jan 20, 2023 at 10:58:28AM -0800, Ian Rogers escreveu:
+> build_id__init only copies the buildid data up to size leaving the
+> rest of the data array uninitialized. Copying the full array during
+> synthesis means the written event contains uninitialized
+> memory. Ensure the size is less that the buffer size and only copy the
+> bytes that were initialized. This was detected by the Clang/LLVM
+> memory sanitizer.
+> 
+> Suggested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> 
+> v2. Avoids the potential for copying too much as suggested by Arnaldo.
 
-> +	WARN_ON_ONCE(bio_flagged(bio, BIO_PAGE_REFFED));
+Thanks, applied.
 
-It's still set by fs/direct-io.c.
+- Arnaldo
 
-David
+> ---
+>  tools/perf/util/synthetic-events.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+> index 3ab6a92b1a6d..9ab9308ee80c 100644
+> --- a/tools/perf/util/synthetic-events.c
+> +++ b/tools/perf/util/synthetic-events.c
+> @@ -2219,8 +2219,8 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
+>  
+>  	len = pos->long_name_len + 1;
+>  	len = PERF_ALIGN(len, NAME_ALIGN);
+> -	memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
+> -	ev.build_id.size = pos->bid.size;
+> +	ev.build_id.size = min(pos->bid.size, sizeof(pos->bid.data));
+> +	memcpy(&ev.build_id.build_id, pos->bid.data, ev.build_id.size);
+>  	ev.build_id.header.type = PERF_RECORD_HEADER_BUILD_ID;
+>  	ev.build_id.header.misc = misc | PERF_RECORD_MISC_BUILD_ID_SIZE;
+>  	ev.build_id.pid = machine->pid;
+> -- 
+> 2.39.0.246.g2a6d74b583-goog
+> 
 
+-- 
+
+- Arnaldo
