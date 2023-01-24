@@ -2,120 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BBF6794E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430096794FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbjAXKNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S233077AbjAXKQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXKNV (ORCPT
+        with ESMTP id S232815AbjAXKQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:13:21 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6994222E4;
-        Tue, 24 Jan 2023 02:13:19 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30OACjLK088019;
-        Tue, 24 Jan 2023 04:12:45 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674555165;
-        bh=y98f6JcfN3LVqyfn9v+xxR4SH8jrP9djJmUQfnsRA+I=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vIO7JTDHunTiaXAQlODfNliKQgBNy2A0nZV0gDriJb+DF3O5vloTrdDd2ZGhGtEYt
-         MyWvysPDEdrGHumeDN/i1XMdMymDyUQ7RGnhi3d72kZ6bbX//e08Otx5ypLURvvt89
-         XoOCG1blH8mNbbc1CVk16p5ND+lmT/bW56CCzlHE=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30OACjTo070565
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Jan 2023 04:12:45 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 24
- Jan 2023 04:12:45 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 24 Jan 2023 04:12:45 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30OACiY0018496;
-        Tue, 24 Jan 2023 04:12:45 -0600
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Guo Ren <guoren@kernel.org>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Linux RISC-V List <linux-riscv@lists.infradead.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
-        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v2 4/4] drm: panel-lvds: Introduce dual-link panels
-Date:   Tue, 24 Jan 2023 15:42:38 +0530
-Message-ID: <20230124101238.4542-5-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230124101238.4542-1-a-bhatia1@ti.com>
-References: <20230124101238.4542-1-a-bhatia1@ti.com>
+        Tue, 24 Jan 2023 05:16:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720FE22A16
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674555328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NFgKaLWubEk/cRokgGdvBW4gpMpmZbK+meQJanVkKO8=;
+        b=Uh5Igb4WRitkY7lAkMqFHRnS9HRBU63cZJ/8cfpQrOc3amso49QleCGhbpol89o/x3f2xg
+        ep849bUx5BEyMsIodAoHYMjivyACKUexGeHoeTEai6nY/Nor033wRz41GHMTGDvJUd6xBb
+        BN0J9MYJX50MKCzLrfRrGk8FIp5ajzA=
+Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
+ [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-296-IJTWha2LNEaO_GTYd7cy-g-1; Tue, 24 Jan 2023 05:15:26 -0500
+X-MC-Unique: IJTWha2LNEaO_GTYd7cy-g-1
+Received: by mail-vs1-f70.google.com with SMTP id bm10-20020a056102510a00b003d0c2bdc78aso3498113vsb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:15:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NFgKaLWubEk/cRokgGdvBW4gpMpmZbK+meQJanVkKO8=;
+        b=3OHRYbNxZRLnPbz3xEVx1Sni7vrKkeguF1st5XwlPNuMzy/aQXGL7RT3omh0AREFc4
+         TQzebKUpbSQPp1Ud7FmibW76NCNsCiYcK9243zCytxBZgK6J+OgwgHO5t3ql8kWe0V40
+         KMjSg6WrRnpzZiUaZS0OhWVkojdHaurlup8LmenQVePyqxqVV/ETMKK3N16BycJWwYYV
+         Xd2BKsGjikXbFJ64uapLvbunJccS/pk4P2Yb7t4P+8HdCwzcS2qJlriea8a2c+fE1555
+         BTWBxkiHYre8a029hhl2AvnfH+SrgTisFg0fToOkwutM+ObGa7EMsKoMhxou4uhZgiE3
+         Hddw==
+X-Gm-Message-State: AFqh2kpAe1B0TESnBLOIF0FB8qw/KWwDk/ciyXSZo16rBPYI2I1rVVjJ
+        +jS9Q49pbXzeT7Uj9qTya/jXI3ZbwBRxYZX9v67HwE9ej8paQBpJtrSUTqWjy/B4uow+N9Eq7GL
+        FJI21lCg9f9577JYyFg5V/AfH
+X-Received: by 2002:a05:6102:3e08:b0:3d0:d383:72b6 with SMTP id j8-20020a0561023e0800b003d0d38372b6mr16531972vsv.11.1674555326241;
+        Tue, 24 Jan 2023 02:15:26 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXufWDfGyzlwj9ku95BLubbEIcCLMhu58PdSNVkjhU4LwXOgwCiaQKrtaMKVEBK2ZmpgsHg/Ag==
+X-Received: by 2002:a05:6102:3e08:b0:3d0:d383:72b6 with SMTP id j8-20020a0561023e0800b003d0d38372b6mr16531967vsv.11.1674555325974;
+        Tue, 24 Jan 2023 02:15:25 -0800 (PST)
+Received: from redhat.com ([45.144.113.7])
+        by smtp.gmail.com with ESMTPSA id i1-20020ab02481000000b004199ab0d752sm112004uan.16.2023.01.24.02.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 02:15:24 -0800 (PST)
+Date:   Tue, 24 Jan 2023 05:15:17 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Laurent Vivier <lvivier@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        Eli Cohen <elic@nvidia.com>, Cindy Lu <lulu@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Parav Pandit <parav@nvidia.com>
+Subject: Re: [PATCH v2 1/1] virtio_net: notify MAC address change on device
+ initialization
+Message-ID: <20230124024711-mutt-send-email-mst@kernel.org>
+References: <20230123120022.2364889-1-lvivier@redhat.com>
+ <20230123120022.2364889-2-lvivier@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123120022.2364889-2-lvivier@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new compatible, "panel-dual-lvds".
+On Mon, Jan 23, 2023 at 01:00:22PM +0100, Laurent Vivier wrote:
+> In virtnet_probe(), if the device doesn't provide a MAC address the
+> driver assigns a random one.
+> As we modify the MAC address we need to notify the device to allow it
+> to update all the related information.
+> 
+> The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
+> assign a MAC address by default. The virtio_net device uses a random
+> MAC address (we can see it with "ip link"), but we can't ping a net
+> namespace from another one using the virtio-vdpa device because the
+> new MAC address has not been provided to the hardware.
 
-Dual-link LVDS interfaces have 2 links, with even pixels traveling on
-one link, and odd pixels on the other. These panels are also generic in
-nature, with no documented constraints, much like their single-link
-counterparts, "panel-lvds".
+And then what exactly happens? Does hardware drop the outgoing
+or the incoming packets? Pls include in the commit log.
 
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
----
- drivers/gpu/drm/panel/panel-lvds.c | 1 +
- 1 file changed, 1 insertion(+)
+> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+> ---
+>  drivers/net/virtio_net.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 7723b2a49d8e..4bdc8286678b 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3800,6 +3800,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  		eth_hw_addr_set(dev, addr);
+>  	} else {
+>  		eth_hw_addr_random(dev);
+> +		dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
+> +			 dev->dev_addr);
+>  	}
+>  
+>  	/* Set up our device-specific information */
+> @@ -3956,6 +3958,18 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	pr_debug("virtnet: registered device %s with %d RX and TX vq's\n",
+>  		 dev->name, max_queue_pairs);
+>  
+> +	/* a random MAC address has been assigned, notify the device */
+> +	if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
+> +	    virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_MAC_ADDR)) {
 
-diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
-index de8758c30e6e..bf6f84af0730 100644
---- a/drivers/gpu/drm/panel/panel-lvds.c
-+++ b/drivers/gpu/drm/panel/panel-lvds.c
-@@ -241,6 +241,7 @@ static int panel_lvds_remove(struct platform_device *pdev)
- 
- static const struct of_device_id panel_lvds_of_table[] = {
- 	{ .compatible = "panel-lvds", },
-+	{ .compatible = "panel-dual-lvds", },
- 	{ /* Sentinel */ },
- };
- 
--- 
-2.39.0
+Maybe add a comment explaining that we don't fail probe if
+VIRTIO_NET_F_CTRL_MAC_ADDR is not there because
+many devices work fine without getting MAC explicitly.
+
+> +		struct scatterlist sg;
+> +
+> +		sg_init_one(&sg, dev->dev_addr, dev->addr_len);
+> +		if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MAC,
+> +					  VIRTIO_NET_CTRL_MAC_ADDR_SET, &sg)) {
+> +			dev_warn(&vdev->dev, "Failed to update MAC address.\n");
+
+Here, I'm not sure we want to proceed. Is it useful sometimes?
+I note that we deny with virtnet_set_mac_address.
+
+> +		}
+> +	}
+> +
+>  	return 0;
+
+
+
+Also, some code duplication with virtnet_set_mac_address here.
+
+Also:
+	When using the legacy interface, \field{mac} is driver-writable
+	which provided a way for drivers to update the MAC without
+	negotiating VIRTIO_NET_F_CTRL_MAC_ADDR.
+
+How about factoring out code in virtnet_set_mac_address
+and reusing that?
+
+
+This will also handle corner cases such as VIRTIO_NET_F_STANDBY
+which are not currently addressed.
+
+
+>  free_unregister_netdev:
+> -- 
+> 2.39.0
 
