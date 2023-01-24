@@ -2,79 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2741967A5F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A7067A5F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbjAXWhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S233962AbjAXWip convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 Jan 2023 17:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbjAXWhE (ORCPT
+        with ESMTP id S234090AbjAXWil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:37:04 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 23087658C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:36:32 -0800 (PST)
-Received: (qmail 187252 invoked by uid 1000); 24 Jan 2023 17:35:33 -0500
-Date:   Tue, 24 Jan 2023 17:35:33 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
-References: <Y88/5ib7zYl67mcE@rowland.harvard.edu>
- <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8+8fH52iqQABYs2@andrea>
- <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
- <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
- <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
- <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 24 Jan 2023 17:38:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF0230B12;
+        Tue, 24 Jan 2023 14:38:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E0E61351;
+        Tue, 24 Jan 2023 22:38:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66F7C433EF;
+        Tue, 24 Jan 2023 22:38:01 +0000 (UTC)
+Date:   Tue, 24 Jan 2023 17:38:00 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Donglin Peng <dolinux.peng@gmail.com>
+Cc:     mhiramat@kernel.org, xiehuan09@gmail.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6] tracing/probe: add a char type to show the character
+ value of traced arguments
+Message-ID: <20230124173800.639a8165@gandalf.local.home>
+In-Reply-To: <20221219110613.367098-1-dolinux.peng@gmail.com>
+References: <20221219110613.367098-1-dolinux.peng@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 02:15:24PM -0800, Paul E. McKenney wrote:
-> > Ah, looking at the model now. Indeed it's forbidden, because in order to say
-> > that something is in co, there must not be a (resulting) cycle of co and
-> > barriers. But you'd get that here.� In the axiomatic model, this corresponds
-> > to saying Power's "prop | co" is acyclic. The same isn't true in LKMM. So
-> > that's probably why.
+
+Looking back at emails that happened when I was off ;-)
+
+Masami, what's you thoughts about this patch?
+
+-- Steve
+
+
+On Mon, 19 Dec 2022 03:06:13 -0800
+Donglin Peng <dolinux.peng@gmail.com> wrote:
+
+> There are scenes that we want to show the character value of traced
+> arguments other than a decimal or hexadecimal or string value for debug
+> convinience. I add a new type named 'char' to do it and a new test case
+> file named 'kprobe_args_char.tc' to do selftest for char type.
 > 
-> Which means that the RCU and SRCU implementations need to make (admittedly
-> small) guarantees that cannot be expressed in LKMM.  Which is in fact
-> what I was remembering, so I feel better now.
+> For example:
 > 
-> Not sure about the rest of you, though.  ;-)
+> The to be traced function is 'void demo_func(char type, char *name);', we
+> can add a kprobe event as follows to show argument values as we want:
+> 
+> echo  'p:myprobe demo_func $arg1:char +0($arg2):char[5]' > kprobe_events
+> 
+> we will get the following trace log:
+> 
+> ... myprobe: (demo_func+0x0/0x29) arg1='A' arg2={'b','p','f','1',''}
+> 
+> Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+> Changes in v6:
+>  - change "\'%c\'" to "'%c'" in trace_probe.c
+> 
+> Changes in v5:
+>  - wrap the output character with single quotes
+>  - add a test case named kprobe_args_char.tc to do selftest
+> 
+> Changes in v4:
+>  - update the example in the commit log
+> 
+> Changes in v3:
+>  - update readme_msg
+> 
+> Changes in v2:
+>  - fix build warnings reported by kernel test robot
+>  - modify commit log
+> ---
+>  Documentation/trace/kprobetrace.rst           |  3 +-
+>  kernel/trace/trace.c                          |  2 +-
+>  kernel/trace/trace_probe.c                    |  2 +
+>  kernel/trace/trace_probe.h                    |  1 +
+>  .../ftrace/test.d/kprobe/kprobe_args_char.tc  | 47 +++++++++++++++++++
+>  5 files changed, 53 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> 
+> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+> index 4274cc6a2f94..007972a3c5c4 100644
+> --- a/Documentation/trace/kprobetrace.rst
+> +++ b/Documentation/trace/kprobetrace.rst
+> @@ -58,7 +58,7 @@ Synopsis of kprobe_events
+>    NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+>    FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+>  		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
+> -		  (x8/x16/x32/x64), "string", "ustring" and bitfield
+> +		  (x8/x16/x32/x64), "char", "string", "ustring" and bitfield
+>  		  are supported.
+>  
+>    (\*1) only for the probe on function entry (offs == 0).
+> @@ -80,6 +80,7 @@ E.g. 'x16[4]' means an array of x16 (2bytes hex) with 4 elements.
+>  Note that the array can be applied to memory type fetchargs, you can not
+>  apply it to registers/stack-entries etc. (for example, '$stack1:x8[8]' is
+>  wrong, but '+8($stack):x8[8]' is OK.)
+> +Char type can be used to show the character value of traced arguments.
+>  String type is a special type, which fetches a "null-terminated" string from
+>  kernel space. This means it will fail and store NULL if the string container
+>  has been paged out. "ustring" type is an alternative of string for user-space.
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 6d7ef130f57e..c602081e64c8 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -5615,7 +5615,7 @@ static const char readme_msg[] =
+>  	"\t           $stack<index>, $stack, $retval, $comm,\n"
+>  #endif
+>  	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
+> -	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
+> +	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, char, string, symbol,\n"
+>  	"\t           b<bit-width>@<bit-offset>/<container-size>, ustring,\n"
+>  	"\t           <type>\\[<array-size>\\]\n"
+>  #ifdef CONFIG_HIST_TRIGGERS
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index bb2f95d7175c..794a21455396 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -50,6 +50,7 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x8,  u8,  "0x%x")
+>  DEFINE_BASIC_PRINT_TYPE_FUNC(x16, u16, "0x%x")
+>  DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
+>  DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
+> +DEFINE_BASIC_PRINT_TYPE_FUNC(char, u8, "'%c'")
+>  
+>  int PRINT_TYPE_FUNC_NAME(symbol)(struct trace_seq *s, void *data, void *ent)
+>  {
+> @@ -93,6 +94,7 @@ static const struct fetch_type probe_fetch_types[] = {
+>  	ASSIGN_FETCH_TYPE_ALIAS(x16, u16, u16, 0),
+>  	ASSIGN_FETCH_TYPE_ALIAS(x32, u32, u32, 0),
+>  	ASSIGN_FETCH_TYPE_ALIAS(x64, u64, u64, 0),
+> +	ASSIGN_FETCH_TYPE_ALIAS(char, u8, u8,  0),
+>  	ASSIGN_FETCH_TYPE_ALIAS(symbol, ADDR_FETCH_TYPE, ADDR_FETCH_TYPE, 0),
+>  
+>  	ASSIGN_FETCH_TYPE_END
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index de38f1c03776..8c86aaa8b0c9 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -164,6 +164,7 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(x16);
+>  DECLARE_BASIC_PRINT_TYPE_FUNC(x32);
+>  DECLARE_BASIC_PRINT_TYPE_FUNC(x64);
+>  
+> +DECLARE_BASIC_PRINT_TYPE_FUNC(char);
+>  DECLARE_BASIC_PRINT_TYPE_FUNC(string);
+>  DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
+>  
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> new file mode 100644
+> index 000000000000..285b4770efad
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
+> @@ -0,0 +1,47 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: Kprobe event char type argument
+> +# requires: kprobe_events
+> +
+> +case `uname -m` in
+> +x86_64)
+> +  ARG1=%di
+> +;;
+> +i[3456]86)
+> +  ARG1=%ax
+> +;;
+> +aarch64)
+> +  ARG1=%x0
+> +;;
+> +arm*)
+> +  ARG1=%r0
+> +;;
+> +ppc64*)
+> +  ARG1=%r3
+> +;;
+> +ppc*)
+> +  ARG1=%r3
+> +;;
+> +s390*)
+> +  ARG1=%r2
+> +;;
+> +mips*)
+> +  ARG1=%r4
+> +;;
+> +*)
+> +  echo "Please implement other architecture here"
+> +  exit_untested
+> +esac
+> +
+> +: "Test get argument (1)"
+> +echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char" > kprobe_events
+> +echo 1 > events/kprobes/testprobe/enable
+> +echo "p:test $FUNCTION_FORK" >> kprobe_events
+> +grep -qe "testprobe.* arg1='t'" trace
+> +
+> +echo 0 > events/kprobes/testprobe/enable
+> +: "Test get argument (2)"
+> +echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
+> +echo 1 > events/kprobes/testprobe/enable
+> +echo "p:test $FUNCTION_FORK" >> kprobe_events
+> +grep -qe "testprobe.* arg1='t' arg2={'t','e','s','t'}" trace
 
-Can you be more explicit?  Exactly what guarantees does the kernel 
-implementation make that can't be expressed in LKMM?
-
-And are these anything the memory model needs to worry about?
-
-Alan
