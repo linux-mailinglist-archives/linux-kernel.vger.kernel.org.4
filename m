@@ -2,206 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA348679BCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2A8679BC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbjAXO2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S234851AbjAXO1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:27:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbjAXO23 (ORCPT
+        with ESMTP id S234891AbjAXO1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:28:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9628147420
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:27:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674570453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZyAxobF1qNVquK9cF8yBjkUFIH4Q3hiUITFtn4KIDno=;
-        b=QPA+dw+ekTmjXMrwZVBTZtpb2HHu/kyanInRPFqyPM9GzteWfLnmM1SmF8NXijiqPzAB6I
-        ZOVKaZiuILS6mM5Ucwt4tOZoA74y0DpdnG+X/DoXqWQUS2mCgs72Ycos7UYJP31uN6y8Wb
-        AOjDZqyIcary6cuTudPCrCd3I6WIQOc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-133-xAWhu3_5PXS2ffZtnIgwzw-1; Tue, 24 Jan 2023 09:27:32 -0500
-X-MC-Unique: xAWhu3_5PXS2ffZtnIgwzw-1
-Received: by mail-wr1-f71.google.com with SMTP id k18-20020adfb352000000b002bdd0a7a2b5so2636017wrd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:27:32 -0800 (PST)
+        Tue, 24 Jan 2023 09:27:43 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A8846D53
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:27:37 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12951799wma.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:27:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ih/T3+fE5KUNeucJG+54LWbOG3GZygM+d+54jjzk9hE=;
+        b=FPnGGmxkm6sxBclrNmB5yhxrik2jqrYeqam8kwEWXT9oiUeZOdKyCdOFTUt0bpXqx3
+         68c6vtSpAx5L2d7Pmr1q+ayfjPQUkeWB6E4lIx1JtwrZ1k8Fus2cuHoud3LbvfOVO3SP
+         o7sBIZDhr1LdFwD5d+FXG3BLTUNIKe03Nh44niOHwJFQ18R6sVGEoJI8xk12EcW4JGLO
+         mgh7dps3sIS2AtQMFoTtewTiSIsnCe/XPDxQE7qKK4P5KIQt0kVvuC6ZRtw5frgpuyxG
+         Y+3sMlEtfKommoGkiszSlc/2vgQYxtDRKp6+9RZ181c3DTi/M0BJRnJF9Adli/waEHFa
+         E42Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZyAxobF1qNVquK9cF8yBjkUFIH4Q3hiUITFtn4KIDno=;
-        b=55923pyKCrF3QMQQDMUzkIwZ/qZw0ubTlS0xyRLF9G/iOo0kMFhIsTZwUgL3ly/Ik3
-         2MlaRuuBLN0eXE6ZuU2lsOvubX77Gj4bwjsISfK038vnjLEJEVx4Ym8+mJqXYDbN2SPv
-         V3HJfV27GQGT55McZuYqJ4biqJrfTE41DatmI1ifEyb84dCM/XiMhAB4Yz6ON1BmwT6k
-         C20G55JdexSR3Hmteu6qSyktFpIV3O7UKkHjhLHmtYhbQ08n46Tdz9VE4l3zIKPh+HFE
-         67ZZAaqk4fCgAV0D+2PAGn2sLXBTgFIATbjXvsvPY3iGA5y91pRVXE48SnRlP3/uPbDX
-         wSvw==
-X-Gm-Message-State: AO0yUKX7pGx9SiM0aQKsOB+GzA/N4Up8dSHlU70Vb7UBkDliI9So02TO
-        LYS6+hmJFVozF7LUfU6+HBwNGg9Q9wbrSMjVXGdmdq3/5ippISoo5E2OmMAs89YYMalPDFvhm6h
-        4xhndIhrPviyI/tqfWNuO0UZ+
-X-Received: by 2002:adf:fe41:0:b0:2bf:b193:a7da with SMTP id m1-20020adffe41000000b002bfb193a7damr1733733wrs.62.1674570451412;
-        Tue, 24 Jan 2023 06:27:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set/EicOHCs/Yau1zOAae6LMmUT+31XWXn0cg9ISoVZqXbXS3/76TT+KTgqLPzXmxMOy4yagRUA==
-X-Received: by 2002:adf:fe41:0:b0:2bf:b193:a7da with SMTP id m1-20020adffe41000000b002bfb193a7damr1733712wrs.62.1674570451100;
-        Tue, 24 Jan 2023 06:27:31 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
-        by smtp.gmail.com with ESMTPSA id h17-20020a5d4311000000b002bdfcd8c77csm1964874wrq.101.2023.01.24.06.27.29
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ih/T3+fE5KUNeucJG+54LWbOG3GZygM+d+54jjzk9hE=;
+        b=ZJQVFv9Ae5CP+MqhwPpNH4R/Ml1Nr5nZ8jtKnjureWQh7pA3NW12eDucArk5p9nD+4
+         fR5+Yo55o2B7Ue0CtTojN5BB3mfUECNNXzcsWAEH37/5m+4REhwEkSRucL8/KqeQsr0F
+         zwAruZMChlpxkrk9S0iD2HcyDNw2kd7n5IIuUOX9RAi05AJVeIHvsAJDxC+6RcTNdGiR
+         CVWSIevQQhb8UIo/r1pLCdnzzJDOZ633i/4A68zhA88n/Erl4UtYI9BXvJ0QsjyBo6HU
+         pDO82QE5BkWEc+GEqv67NRd8NGvaTCF+XEI1IkWNmlzGQqxznRSv95Mvmeri7zXAHz8Z
+         hK2w==
+X-Gm-Message-State: AFqh2kpsI+eWb78JHAbv5MntBbk4d5D5gmwrxdp4F1+UQQ7nqzR6YahI
+        3fhD1jPjAEA8lZPCIvFS5ADzKaj9RgShh8Y5
+X-Google-Smtp-Source: AMrXdXucT9VgZdYEYX8b4F6onwRJuVez8e638q9+QZ0SzAoR2soR2zqDhz7sCxfvzsqnOKV1E7DMcA==
+X-Received: by 2002:a05:600c:5409:b0:3da:f66a:e866 with SMTP id he9-20020a05600c540900b003daf66ae866mr28100113wmb.10.1674570456290;
+        Tue, 24 Jan 2023 06:27:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bg24-20020a05600c3c9800b003d9ed40a512sm18815472wmb.45.2023.01.24.06.27.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 06:27:30 -0800 (PST)
-Message-ID: <1b1eb3d8-c6b4-b264-1baa-1b3eb088173d@redhat.com>
-Date:   Tue, 24 Jan 2023 15:27:29 +0100
+        Tue, 24 Jan 2023 06:27:35 -0800 (PST)
+Message-ID: <3b4bd60c-84f3-f545-80ce-8ebe974557eb@linaro.org>
+Date:   Tue, 24 Jan 2023 15:27:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v8 02/10] iov_iter: Add a function to extract a page list
- from an iterator
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Add Xiaomi Mi Pad 5 Pro
+ (xiaomi-elish)
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org
-References: <20230123173007.325544-1-dhowells@redhat.com>
- <20230123173007.325544-3-dhowells@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230123173007.325544-3-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230124135318.10023-1-lujianhua000@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124135318.10023-1-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.01.23 18:29, David Howells wrote:
-> Add a function, iov_iter_extract_pages(), to extract a list of pages from
-> an iterator.  The pages may be returned with a pin added or nothing,
-> depending on the type of iterator.
+On 24/01/2023 14:53, Jianhua Lu wrote:
+> Add a compatible for Xiaomi Mi Pad 5 Pro.
 > 
-> Add a second function, iov_iter_extract_mode(), to determine how the
-> cleanup should be done.
-> 
-> There are two cases:
-> 
->   (1) ITER_IOVEC or ITER_UBUF iterator.
-> 
->       Extracted pages will have pins (FOLL_PIN) obtained on them so that a
->       concurrent fork() will forcibly copy the page so that DMA is done
->       to/from the parent's buffer and is unavailable to/unaffected by the
->       child process.
-> 
->       iov_iter_extract_mode() will return FOLL_PIN for this case.  The
->       caller should use something like folio_put_unpin() to dispose of the
->       page.
-> 
->   (2) Any other sort of iterator.
-> 
->       No refs or pins are obtained on the page, the assumption is made that
->       the caller will manage page retention.
-> 
->       iov_iter_extract_mode() will return 0.  The pages don't need
->       additional disposal.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: John Hubbard <jhubbard@nvidia.com>
-> cc: David Hildenbrand <david@redhat.com>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-mm@kvack.org
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 > ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Notes:
->      ver #8)
->       - It seems that all DIO is supposed to be done under FOLL_PIN now, and not
->         FOLL_GET, so switch to only using pin_user_pages() for user-backed
->         iters.
->       - Wrap an argument in brackets in the iov_iter_extract_mode() macro.
->       - Drop the extract_flags argument to iov_iter_extract_mode() for now
->         [hch].
->      
->      ver #7)
->       - Switch to passing in iter-specific flags rather than FOLL_* flags.
->       - Drop the direction flags for now.
->       - Use ITER_ALLOW_P2PDMA to request FOLL_PCI_P2PDMA.
->       - Disallow use of ITER_ALLOW_P2PDMA with non-user-backed iter.
->       - Add support for extraction from KVEC-type iters.
->       - Use iov_iter_advance() rather than open-coding it.
->       - Make BVEC- and KVEC-type skip over initial empty vectors.
->      
->      ver #6)
->       - Add back the function to indicate the cleanup mode.
->       - Drop the cleanup_mode return arg to iov_iter_extract_pages().
->       - Pass FOLL_SOURCE/DEST_BUF in gup_flags.  Check this against the iter
->         data_source.
->      
->      ver #4)
->       - Use ITER_SOURCE/DEST instead of WRITE/READ.
->       - Allow additional FOLL_* flags, such as FOLL_PCI_P2PDMA to be passed in.
->      
->      ver #3)
->       - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
->         to get/pin_user_pages_fast()[1].
-> 
->   include/linux/uio.h |  22 +++
->   lib/iov_iter.c      | 320 ++++++++++++++++++++++++++++++++++++++++++++
->   2 files changed, 342 insertions(+)
-> 
-> diff --git a/include/linux/uio.h b/include/linux/uio.h
-> index 46d5080314c6..a8165335f8da 100644
-> --- a/include/linux/uio.h
-> +++ b/include/linux/uio.h
-> @@ -363,4 +363,26 @@ static inline void iov_iter_ubuf(struct iov_iter *i, unsigned int direction,
->   /* Flags for iov_iter_get/extract_pages*() */
->   #define ITER_ALLOW_P2PDMA	0x01	/* Allow P2PDMA on the extracted pages */
->   
-> +ssize_t iov_iter_extract_pages(struct iov_iter *i, struct page ***pages,
-> +			       size_t maxsize, unsigned int maxpages,
-> +			       unsigned int extract_flags, size_t *offset0);
-> +
-> +/**
-> + * iov_iter_extract_mode - Indicate how pages from the iterator will be retained
-> + * @iter: The iterator
-> + *
-> + * Examine the iterator and indicate by returning FOLL_PIN or 0 as to how, if
-> + * at all, pages extracted from the iterator will be retained by the extraction
-> + * function.
-> + *
-> + * FOLL_PIN indicates that the pages will have a pin placed in them that the
-> + * caller must unpin.  This is must be done for DMA/async DIO to force fork()
-> + * to forcibly copy a page for the child (the parent must retain the original
-> + * page).
-> + *
-> + * 0 indicates that no measures are taken and that it's up to the caller to
-> + * retain the pages.
-> + */
-> +#define iov_iter_extract_mode(iter) (user_backed_iter(iter) ? FOLL_PIN : 0)
-> +
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 22553637c519..c5fe81fba5b1 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -873,6 +873,7 @@ properties:
+>                - qcom,qrb5165-rb5
+>                - qcom,sm8250-hdk
+>                - qcom,sm8250-mtp
+> +              - xiaomi,elish
+>                - sony,pdx203-generic
+>                - sony,pdx206-generic
 
-Does it make sense to move that to the patch where it is needed? (do we 
-need it at all anymore?)
+Not a correct order.
 
--- 
-Thanks,
+>            - const: qcom,sm8250
 
-David / dhildenb
+Best regards,
+Krzysztof
 
