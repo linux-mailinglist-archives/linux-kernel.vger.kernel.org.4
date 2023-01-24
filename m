@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66802679A8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C181679AA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbjAXNur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 08:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
+        id S234334AbjAXNyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 08:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbjAXNuG (ORCPT
+        with ESMTP id S234079AbjAXNxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:50:06 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE95C86B5;
-        Tue, 24 Jan 2023 05:47:45 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id g10so11688113qvo.6;
-        Tue, 24 Jan 2023 05:47:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vKu+X7MRgR2FTg0QgTNWRxmz7w2KtY/oNZEYxWU8Zuc=;
-        b=TC6vcZFbRjvPPXm0r3VDaPyypkO+e+kXra1+nayA/TBUL2OKMhxYRD3J/iIseyUiL2
-         Fom0ZX1DpKnEwq6o8H6DxwgXcQKVfbncOTrsOSj7v9vOHlJMil/OiV5zUCvID7xwjJuL
-         DEXAoghUR7CkRwnQuF+DXIfVgJ5fZTkpNyWWEWHhTI4keMZ0bW7x0Ig9o5h/x2DmptMB
-         ImOevEbidmmi6RrbMK/7sM/S4YINCPrDE5B2Q7NSbeVGMiRkM2sAi+fy0aR06jlkPnyR
-         IfNPJPLxufakSdpWCIRFQjwc7M5ehjQazB08oHpPJdd6vZ4Ek3OKduMWEnwy6UKkLhSW
-         spkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vKu+X7MRgR2FTg0QgTNWRxmz7w2KtY/oNZEYxWU8Zuc=;
-        b=fv28khJej1+0Ga4PSi1KfYwPah9dRZO/pXjaut2AyBwRbJg73f6kxNa51i/IvcWM2+
-         i/DBVqw3T9olhDziBYQSJBbqTos2NSeJR4iKoYv+IgUUIF2CgSKwnHOrC5JrcEJS47/C
-         ziWq8zYgBXAwSIVn6iNtwiPHpSKOETb/Ogsq+guwWv+bNxebUmc2hA/BP/OTwZt+JyOu
-         imYe77E5z9nUuxGxfwMmRAyyzY5hFHOFtvf93XYLlia38iU47nEU069puwu18epKHyTt
-         4NX5QlP0QmGhRhQJcr6i8m4CdQpCGj1V6ndK6pJtoI6/3MwgX7b0i7uhRFRO1KhrNnAi
-         c7EQ==
-X-Gm-Message-State: AFqh2kol/M9ozXhlU8cU+oRWsJpGUVI2uND4CcyBPsRLMGWJPujKCaSz
-        GeBHpMmGS/PgkerTZEOD3fC8U51Gve4M3UpZNprIQPBL23k=
-X-Google-Smtp-Source: AMrXdXvBkKxmqFCzpta9OqKuhEEMrodZBp4eN+q2UfwktUSEPkm+N1o86LPXAAmWqur8U5kWO/QwBXvFFaKbKlgJazA=
-X-Received: by 2002:a0c:b208:0:b0:534:3c7d:97fc with SMTP id
- x8-20020a0cb208000000b005343c7d97fcmr1682251qvd.11.1674567997483; Tue, 24 Jan
- 2023 05:46:37 -0800 (PST)
+        Tue, 24 Jan 2023 08:53:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49B748A1D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674568200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ETrfxyrVdU7X1rX1QL9lvr6n2bGLp1QRnmU9FMajeiU=;
+        b=B1PDOh9HCzImLPffXWtmONJJ3pTTcKvRkKqEswHWPNyhJJ/1D6cYue2jiC/yho7okCRJAF
+        wFcrreEyU710Pd0MZDD0cs/p1u/mkW04H7j7p8FVQ3KUNw1mHbPn6zdwGX69n+wNmrsA32
+        ByMNUkHnGSd0Ry98sIVi2UPgMN7BRMs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-YMTlk8RlN1GqCVMCLPBtqg-1; Tue, 24 Jan 2023 08:46:26 -0500
+X-MC-Unique: YMTlk8RlN1GqCVMCLPBtqg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D36318030CC;
+        Tue, 24 Jan 2023 13:46:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E5D71121330;
+        Tue, 24 Jan 2023 13:46:24 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y8/ZekMEAfi8VeFl@nvidia.com>
+References: <Y8/ZekMEAfi8VeFl@nvidia.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-11-dhowells@redhat.com> <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com> <84721e8d-d40e-617c-b75e-ead51c3e1edf@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     dhowells@redhat.com, John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
 MIME-Version: 1.0
-References: <20221007153323.1326-1-henning.schild@siemens.com>
- <Y8mv8PzL1UsP9gNh@google.com> <20230123214859.725cd1c3@md1za8fc.ad001.siemens.net>
- <CAHp75VfSHgdikX5=Qba62BwWofVf7gHhS2hq2OuBwHFz9riCWQ@mail.gmail.com> <20230124143514.1abf933f@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20230124143514.1abf933f@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 24 Jan 2023 15:46:01 +0200
-Message-ID: <CAHp75Vf5MAsiYKdmF2oQ2rNDjKUVW9nk5FjPhUcD3b-4r_u6yg@mail.gmail.com>
-Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <852116.1674567983.1@warthog.procyon.org.uk>
+Date:   Tue, 24 Jan 2023 13:46:23 +0000
+Message-ID: <852117.1674567983@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,27 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 3:35 PM Henning Schild
-<henning.schild@siemens.com> wrote:
-> Am Tue, 24 Jan 2023 11:46:34 +0200
-> schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-...
+> Yeah, I already wrote a similar patch, using the 1<< notation, 
+> splitting the internal/external, and rebasing on the move to
+> mm_types.. I can certainly drop that patch if we'd rather do this.
 
-> I would like to keep the number of files and CONFIG switches low, with
-> a focus on the config switches. Every new CONFIG=y/m has to be
-> requested in countless distros. So far i only dealt with debian where
-> ubuntu might follow, did not check others with recent enough kernels ...
-> like fedora if they have the SIMATIC stuff turned on or need to be
-> asked to do so.
+Note that I've already given Andrew a patch to move FOLL_* to mm_types.h.
 
-If you put the proper defaults, you can get good results without
-torturing distro configurations.
+I'm happy to go with your patch on top of that if you can just renumber
+FOLL_PIN to 0 and FOLL_GET to 1.
 
-See how 8250 has been splitting over the time, we have +~5 new Kconfig
-options and their defaults are to keep the current behaviour without
-the user needing to do anything in their configurations.
+David
 
--- 
-With Best Regards,
-Andy Shevchenko
