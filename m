@@ -2,113 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F8167A42D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD31367A3B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbjAXUpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S229619AbjAXURG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbjAXUp0 (ORCPT
+        with ESMTP id S230221AbjAXURE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:45:26 -0500
-X-Greylist: delayed 1811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 12:45:21 PST
-Received: from bosmailout10.eigbox.net (bosmailout10.eigbox.net [66.96.184.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E2A4FAC2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:45:21 -0800 (PST)
-Received: from [10.20.15.6] (helo=bosmailscan06.eigbox.net)
-        by bosmailout10.eigbox.net with esmtp (Exim)
-        id 1pKPhF-0002wy-2J
-        for linux-kernel@vger.kernel.org; Tue, 24 Jan 2023 15:15:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=bestfzyhs.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=X2ynI9Fsuf73Q/abz5DQqXyVbIcRJ5o0sL15Wzf8gr0=; b=GATVM0Lj5wWEsSwRE8AvmsOVH/
-        uVmIbkZk0KpFCGT0jrt08jvIJRMUzS+7gwpNNFM+dwUZAJz2boppPM2BmiAxjD0mSPSU8CoauKRdx
-        c0DH0q21FZMc2tVuOKgltY/E5vBapNweZ+NCttKx+eKYDOdTjwOnrTWdX9iOOmJ6h5DB7bhIaG1BR
-        zxXccdV8j2JhDiGssB8fLiex9fRD3Zz2XtUZw2TpzKCpMABmvAgPqu63D2sxlqqVPc+4BDa9W1/zp
-        MgSy5PmkPNjgHtsFsS6wGx/BpHnN6UUyNcyb8t5VZsMn2sDupxPq2+jtWhrQt7L8ZqLfURxg0sze8
-        quafhTkg==;
-Received: from [10.115.3.33] (helo=bosimpout13)
-        by bosmailscan06.eigbox.net with esmtp (Exim)
-        id 1pKPhE-0001PU-75; Tue, 24 Jan 2023 15:15:08 -0500
-Received: from boswebmail02.eigbox.net ([10.20.16.2])
-        by bosimpout13 with 
-        id CkF12901702gDNJ01kF7ki; Tue, 24 Jan 2023 15:15:08 -0500
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail02.eigbox.net with esmtp (Exim)
-        id 1pKPgh-0006I1-Fg; Tue, 24 Jan 2023 15:14:35 -0500
-Received: from [197.239.108.34]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Tue, 24 Jan 2023 15:14:35 -0500
+        Tue, 24 Jan 2023 15:17:04 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207D683EE
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:17:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id j5so2598766pjn.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:17:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tnps9xVOfH3PPgr1zmMdnLEIT0DDz3WfUqZSEXwwr/o=;
+        b=PpouaE7EQFpmqsL1Ig1tmZQ2vY/kUcmPs518HqRUfERC1WUr9/VrTyAAqx2b19/IOe
+         jeLrXDTuNSo1K3fPhFzl4ObsptGiZxNHj82Dcp63npD6NRe3sAUdEj+1lLAeuYlQCAUx
+         cdszV8gVi4Cd1dOGzsiwwF1ghOcyqkuJkVpWJ49/BYlbVqqmksdMMJcXno4VLpizhL0c
+         6h8DZKy4euhH0OexghXa01BXsfj6tGkgSNxS6k2jx3rzmU+JRzUtVoCACWJiSXI4tb8x
+         Ro+bEzJfRx3k7MVWkTqVolNK5Edh8LOoN+l6VU4mSfPWn/qVvDNQwEdVW5MOya5+oQUV
+         AAlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tnps9xVOfH3PPgr1zmMdnLEIT0DDz3WfUqZSEXwwr/o=;
+        b=8I+Ixc5aBCTsA53IJzW7J3sm41yxNj8qLzqrW1XTXbqM4Ok83QU16th8/HwChy+rQV
+         r6wSgl1zptJ8K8CqgD70e8a5VG1SNkv/DzbPfSie4N55Vgiqc6hzyuzuh+MaQJyCa9YG
+         /rKgsIYzNkqgjlrerOABi8QaVq/Cz30o3OPvX+05HHN8shsfKnrPwfy1oqD//v+I707B
+         v8E2wLTB8tv73t613DupRP+sfi+3NMSHSUn1SvO9HXaeF838lWnteGLASb6qjd3HTRsU
+         qxp5mmZx/iBbsdDtFai7IQaWhAaqOwVGNaz2A1BpPdMnTMvhMvqd8kmX22HrQMSfhZrr
+         fukQ==
+X-Gm-Message-State: AO0yUKUsgtGjB20TLcpl5YC0E3ath1WC6hzREj1g6B1yUCipUrgf2/Vg
+        ffmmP/LNAJIC9XAnvvvUTh1x81eIlbfOlB66jEw=
+X-Google-Smtp-Source: AK7set9y7Vwacso7iTYoyGLt9NtJsrhqIV/kv0DQvGcm/i9oxewbjuP0k3okxbtp//izfppyEAaZqg==
+X-Received: by 2002:a17:903:2644:b0:189:b910:c6d2 with SMTP id je4-20020a170903264400b00189b910c6d2mr272488plb.1.1674591423366;
+        Tue, 24 Jan 2023 12:17:03 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b00192aa53a7d5sm2104936plg.8.2023.01.24.12.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 12:17:02 -0800 (PST)
+Date:   Tue, 24 Jan 2023 20:16:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/8] KVM: x86/pmu: Rewrite reprogram_counters() to
+ improve performance
+Message-ID: <Y9A8u3AqvUWc7pwL@google.com>
+References: <20221111102645.82001-1-likexu@tencent.com>
+ <20221111102645.82001-4-likexu@tencent.com>
 MIME-Version: 1.0
-Date:   Tue, 24 Jan 2023 12:14:35 -0800
-From:   Mrs Lorence Gonzalez <mrs.lorencez@bestfzyhs.com>
-To:     undisclosed-recipients:;
-Subject: Hello
-Reply-To: mrslorencegonzalez@gmail.com
-Mail-Reply-To: mrslorencegonzalez@gmail.com
-Message-ID: <6f6c1c16bc3f9e9ccefc2006514c5519@bestfzyhs.com>
-X-Sender: mrs.lorencez@bestfzyhs.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: mrs.lorencez@bestfzyhs.com
-Sender:  Mrs Lorence Gonzalez <mrs.lorencez@bestfzyhs.com>
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FROM_FMBLA_NEWDOM,
-        HEADER_FROM_DIFFERENT_DOMAINS,ODD_FREEM_REPTO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_MR_MRS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111102645.82001-4-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [66.96.184.10 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5589]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [66.96.184.10 listed in wl.mailspike.net]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  2.4 ODD_FREEM_REPTO Has unusual reply-to header
-        *  0.0 T_HK_NAME_MR_MRS No description available.
-        *  1.0 FROM_FMBLA_NEWDOM From domain was registered in last 7 days
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 11, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> A valid pmc is always tested before using pmu->reprogram_pmi. Eliminate
+> this part of the redundancy by setting the counter's bitmask directly,
+> and in addition, trigger KVM_REQ_PMU only once to save more cpu cycles.
 
+It's a little silly, but can you split this into two patches?  First optimize the
+helper, then expose it in pmu.h.  The optimization stands on its own, whereas the
+code movement is justified only by the incoming AMD PMU v2 support.
 
-Hello,
-
-Am a dying woman here in the hospital, i was diagnose as a Cancer
-patient over  2 Years ago. I am A business woman how dealing with Gold
-Exportation. I Am from Us California
-I have a charitable and unfulfilled project that am about to handover
-to you, if you are interested please reply
-
-Hope to hear from you.
-Regard
-
-mrslorencegonzalez@gmail.com
-
-Mrs.lorence Gonzalez
-
-
-
-
-
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/pmu.h           | 11 +++++++++++
+>  arch/x86/kvm/vmx/pmu_intel.c | 12 ------------
+>  2 files changed, 11 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index 2b5376ba66ea..be552c8217a0 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -189,6 +189,17 @@ static inline void kvm_pmu_request_counter_reprogam(struct kvm_pmc *pmc)
+>  	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+>  }
+>  
+> +static inline void reprogram_counters(struct kvm_pmu *pmu, u64 diff)
+> +{
+> +	int bit;
+> +
+> +	if (diff) {
+> +		for_each_set_bit(bit, (unsigned long *)&diff, X86_PMC_IDX_MAX)
+> +			__set_bit(bit, pmu->reprogram_pmi);
+> +		kvm_make_request(KVM_REQ_PMU, pmu_to_vcpu(pmu));
+> +	}
+> +}
+> +
+>  void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu);
+>  void kvm_pmu_handle_event(struct kvm_vcpu *vcpu);
+>  int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned pmc, u64 *data);
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 2f7cd388859c..db704eea2d7c 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -68,18 +68,6 @@ static struct kvm_pmc *intel_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
+>  	}
+>  }
+>  
+> -static void reprogram_counters(struct kvm_pmu *pmu, u64 diff)
+> -{
+> -	int bit;
+> -	struct kvm_pmc *pmc;
+> -
+> -	for_each_set_bit(bit, (unsigned long *)&diff, X86_PMC_IDX_MAX) {
+> -		pmc = intel_pmc_idx_to_pmc(pmu, bit);
+> -		if (pmc)
+> -			kvm_pmu_request_counter_reprogam(pmc);
+> -	}
+> -}
+> -
+>  static bool intel_hw_event_available(struct kvm_pmc *pmc)
+>  {
+>  	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+> -- 
+> 2.38.1
+> 
