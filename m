@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4946678E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D174678E06
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjAXCLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S232132AbjAXCLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAXCLV (ORCPT
+        with ESMTP id S229956AbjAXCLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:11:21 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE61A972;
-        Mon, 23 Jan 2023 18:11:20 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id s3so10237361pfd.12;
-        Mon, 23 Jan 2023 18:11:20 -0800 (PST)
+        Mon, 23 Jan 2023 21:11:22 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EFB1BAC5;
+        Mon, 23 Jan 2023 18:11:21 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso12709963pjf.1;
+        Mon, 23 Jan 2023 18:11:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCGlc7mWURATKW4pBp/mMbnvAjkNxvQ5RvlFZ+5SXrA=;
-        b=Q2OJ7E/ovDJZRJ1/WrC7I1yuDO3Hb6jh2iai0Os4K2WdyHqq0h1cH5JrkPYY0LyrTY
-         7pubiTyoZItmkh0TVFAVAGmXnvHqYco6E/bJ9SAJWFGJV+UzGBvkYmb/zpo5/BffZziZ
-         JaUWdDXTBbvbtQ1aNpDtvOl58OyifVwiKon0KX67c66ujtxL6CwZEzUbjnw8bOnoGm74
-         8k3YxA5iHDZF2LERPK0k7Ti8XPJH2AN7w1s1gLDWa+ggmjT+8d+vp02GVoi90UC4ndJK
-         Op15iN5zK7IgomVvrth+xB+TALm5s/EdbhomubldZ9LTG+Ta/mwoayP7RSJmJgZfUz5E
-         2wOA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cRcWpKR8j+Ur7LPi1tUnqjlAf0HkEcdLuumL6I9JC7o=;
+        b=I2ybDYgQDja4idScpPWc9//gSPFmJsAY2maNHzanJ6eznD3iqfVg1VF06dyNDCorqW
+         rGSYaEdeCCxMn+KvWOTWHVqKSdpyhDlM+i19X77qZMx6oo9YEk+jlQeapJ2YOmYgV3NS
+         nUnHF/bvPHK4C4BCeQM5EINi3NBER8BP6ifA7NpvCWAknTPr9fXR2UAGbIjyUTZdCdTs
+         pPIrUtiFutaLCBj/isOcA5BUwrbGNzVv2yKsKHMRdajVN4i4sLNhHgfzv4LgvJXLzw/q
+         re+dbBTwLzNe8RnItPN3HYax1sp2EvKk8UgR6w1snBjXFuhC35jtXsPkc4ejwxL//SFQ
+         MZwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SCGlc7mWURATKW4pBp/mMbnvAjkNxvQ5RvlFZ+5SXrA=;
-        b=HdoAp+Bsx8vX5e7L8B2/r9SndAnGIMZ1YvqooPkKTaZa1SEE4H9C1Y0bAy1VIzG6X/
-         SugfrlWNJRSxcO1yxnYrPlofjqZ6Y+EwoMQSIwIz2SOL43ymQYJUMlqaU1gY1yEmpIAD
-         78ezb0om4i33vKsEP9WTWnfT/hXWr35aIKIVyaNxb+xYHQlvA3qEAJLX8aH/4TAY6ExT
-         2ewr2saCJ62t2CR4RotMzMkzQel2Njx5kr1NCmKgiQkZPAUVX9iObdAOA5S5h9PoVOLy
-         gm5+zD+b2yUMbXi5vjGyKi9y0AgE11adv0UB7mpsQI+de0VKro+QZUA//ORBwPtvtwwq
-         uNaw==
-X-Gm-Message-State: AFqh2koL26myySOIutpFUDCbfD6r+NxQ9XeuOVCjvjU0fj7y9gOq4EEV
-        21JOxHY+CnPGg7mqG6zVx2k=
-X-Google-Smtp-Source: AMrXdXssaRcK8VwNrNmgxgUxK3PVNJ9Gzeiag04Vn7nr3eYgvMh+HvBnpxQv18Cho9tj1oOKoXLqNQ==
-X-Received: by 2002:a62:e406:0:b0:581:7430:aba with SMTP id r6-20020a62e406000000b0058174300abamr28478685pfh.10.1674526279369;
-        Mon, 23 Jan 2023 18:11:19 -0800 (PST)
-Received: from localhost (fwdproxy-prn-020.fbsv.net. [2a03:2880:ff:14::face:b00c])
-        by smtp.gmail.com with ESMTPSA id z67-20020a626546000000b0058bacd6c4e8sm254143pfb.207.2023.01.23.18.11.18
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cRcWpKR8j+Ur7LPi1tUnqjlAf0HkEcdLuumL6I9JC7o=;
+        b=dwVGNNi8+s3UNp23Oh9e4X81bebSjCEh1kUsN5Zf5sipHQapoBy1e2w1xOuJaGxYjZ
+         BSfRk7u0+JDWP0HWA8TRomAFAI58s78DLUuFW/krxUiZHbYWXfpcpxzsIANap/GoVreY
+         QKCWY+YcRGQUPw3kEj9aH48msvckX8SSxhHmlS1kJa/IztascexGJGCp8lJHf9Xv5pla
+         7sNUd/3xQthiNU5/3ecmozEVHlBMehD2XsI6FYWsDGP1njCKZTk/bO5D4ZtbY+4Hufyu
+         4qKZhn9Hpaq6+r/vwT631gTztaD1B6oKKIqKh0iLLriayUooF4nhuwe2IR3t8SP22VrG
+         9M/Q==
+X-Gm-Message-State: AFqh2kpiMcR4oJWHKUbCLn8VUiB6gvd/2QXmBKKCUq4KY7RkzOjstjuv
+        HEs5SMxvI/WKw5zzJzgv4uw=
+X-Google-Smtp-Source: AMrXdXt/aCCUSGn4NbrAdFByJdNJtJPiPYrQi1+7PjBZ758At2+9kLZpMtfDAUaLIh+9snd1qzJ/Hw==
+X-Received: by 2002:a17:902:cf4b:b0:189:76ef:e112 with SMTP id e11-20020a170902cf4b00b0018976efe112mr30322497plg.41.1674526280522;
+        Mon, 23 Jan 2023 18:11:20 -0800 (PST)
+Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id b6-20020a6567c6000000b0047899d0d62csm218144pgs.52.2023.01.23.18.11.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 18:11:18 -0800 (PST)
+        Mon, 23 Jan 2023 18:11:20 -0800 (PST)
 From:   Nhat Pham <nphamcs@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, bfoster@redhat.com,
         willy@infradead.org, linux-api@vger.kernel.org,
         kernel-team@meta.com
-Subject: [PATCH v7 0/3] cachestat: a new syscall for page cache state of files
-Date:   Mon, 23 Jan 2023 18:11:15 -0800
-Message-Id: <20230124021118.154078-1-nphamcs@gmail.com>
+Subject: [PATCH v7 1/3] workingset: refactor LRU refault to expose refault recency check
+Date:   Mon, 23 Jan 2023 18:11:16 -0800
+Message-Id: <20230124021118.154078-2-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230124021118.154078-1-nphamcs@gmail.com>
+References: <20230124021118.154078-1-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,128 +74,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changelog:
-v7:
-  * Fix and use lru_gen_test_recent (suggested by Brian Foster)
-    (patch 2)
-  * Small formatting and organizational fixes
-v6:
-  * Add a missing fdput() (suggested by Brian Foster) (patch 2)
-  * Replace cstat_size with cstat_version (suggested by Brian Foster)
-    (patch 2)
-  * Add conditional resched to the xas walk. (suggested by Hillf Danton) 
-    (patch 2)
-v5:
-  * Separate first patch into its own series.
-    (suggested by Andrew Morton)
-  * Expose filemap_cachestat() to non-syscall usage
-    (patch 2) (suggested by Brian Foster).
-  * Fix some build errors from last version.
-    (patch 2)
-  * Explain eviction and recent eviction in the draft man page and
-    documentation (suggested by Andrew Morton).
-    (patch 2)
-v4:
-  * Refactor cachestat and move it to mm/filemap.c (patch 3)
-    (suggested by Brian Foster)
-  * Remove redundant checks (!folio, access_ok)
-    (patch 3) (suggested by Matthew Wilcox and Al Viro)
-  * Fix a bug in handling multipages folio.
-    (patch 3) (suggested by Matthew Wilcox)
-  * Add a selftest for shmem files, which can be used to test huge
-    pages (patch 4) (suggested by Johannes Weiner)
-v3:
-  * Fix some minor formatting issues and build errors.
-  * Add the new syscall entry to missing architecture syscall tables.
-    (patch 3).
-  * Add flags argument for the syscall. (patch 3).
-  * Clean up the recency refactoring (patch 2) (suggested by Yu Zhao)
-  * Add the new Kconfig (CONFIG_CACHESTAT) to disable the syscall.
-    (patch 3) (suggested by Josh Triplett)
-v2:
-  * len == 0 means query to EOF. len < 0 is invalid.
-    (patch 3) (suggested by Brian Foster)
-  * Make cachestat extensible by adding the `cstat_size` argument in the
-    syscall (patch 3)
+In preparation for computing recently evicted pages in cachestat,
+refactor workingset_refault and lru_gen_refault to expose a helper
+function that would test if an evicted page is recently evicted.
 
-There is currently no good way to query the page cache state of large
-file sets and directory trees. There is mincore(), but it scales poorly:
-the kernel writes out a lot of bitmap data that userspace has to
-aggregate, when the user really doesn not care about per-page information
-in that case. The user also needs to mmap and unmap each file as it goes
-along, which can be quite slow as well.
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ include/linux/swap.h |   1 +
+ mm/workingset.c      | 142 +++++++++++++++++++++++++++++--------------
+ 2 files changed, 97 insertions(+), 46 deletions(-)
 
-This series of patches introduces a new system call, cachestat, that
-summarizes the page cache statistics (number of cached pages, dirty
-pages, pages marked for writeback, evicted pages etc.) of a file, in a
-specified range of bytes. It also include a selftest suite that tests some
-typical usage
-
-This interface is inspired by past discussion and concerns with fincore,
-which has a similar design (and as a result, issues) as mincore.
-Relevant links:
-
-https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
-https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
-
-For comparison with mincore, I ran both syscalls on a 2TB sparse file:
-
-Using mincore:
-real    0m37.510s
-user    0m2.934s
-sys     0m34.558s
-
-Using cachestat:
-real    0m0.009s
-user    0m0.000s
-sys     0m0.009s
-
-This series should be applied on top of:
-
-workingset: fix confusion around eviction vs refault container
-https://lkml.org/lkml/2023/1/4/1066
-
-This series consist of 3 patches:
-
-Nhat Pham (3):
-  workingset: refactor LRU refault to expose refault recency check
-  cachestat: implement cachestat syscall
-  selftests: Add selftests for cachestat
-
- MAINTAINERS                                   |   7 +
- arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
- arch/arm/tools/syscall.tbl                    |   1 +
- arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
- arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
- arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
- arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
- arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
- arch/s390/kernel/syscalls/syscall.tbl         |   1 +
- arch/sh/kernel/syscalls/syscall.tbl           |   1 +
- arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
- arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
- arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
- arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
- include/linux/fs.h                            |   3 +
- include/linux/swap.h                          |   1 +
- include/linux/syscalls.h                      |   4 +
- include/uapi/asm-generic/unistd.h             |   5 +-
- include/uapi/linux/mman.h                     |   9 +
- init/Kconfig                                  |  10 +
- kernel/sys_ni.c                               |   1 +
- mm/filemap.c                                  | 154 +++++++++++
- mm/workingset.c                               | 142 ++++++----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/cachestat/.gitignore  |   2 +
- tools/testing/selftests/cachestat/Makefile    |   8 +
- .../selftests/cachestat/test_cachestat.c      | 260 ++++++++++++++++++
- 27 files changed, 573 insertions(+), 47 deletions(-)
- create mode 100644 tools/testing/selftests/cachestat/.gitignore
- create mode 100644 tools/testing/selftests/cachestat/Makefile
- create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
-
-
-base-commit: 1440f576022887004f719883acb094e7e0dd4944
-prerequisite-patch-id: 171a43d333e1b267ce14188a5beaea2f313787fb
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index a18cf4b7c724..dae6f6f955eb 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -361,6 +361,7 @@ static inline void folio_set_swap_entry(struct folio *folio, swp_entry_t entry)
+ }
+ 
+ /* linux/mm/workingset.c */
++bool workingset_test_recent(void *shadow, bool file, bool *workingset);
+ void workingset_age_nonresident(struct lruvec *lruvec, unsigned long nr_pages);
+ void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg);
+ void workingset_refault(struct folio *folio, void *shadow);
+diff --git a/mm/workingset.c b/mm/workingset.c
+index 79585d55c45d..2f2d94867366 100644
+--- a/mm/workingset.c
++++ b/mm/workingset.c
+@@ -244,6 +244,30 @@ static void *lru_gen_eviction(struct folio *folio)
+ 	return pack_shadow(mem_cgroup_id(memcg), pgdat, token, refs);
+ }
+ 
++/*
++ * Test if the folio is recently evicted.
++ *
++ * As a side effect, also populates the references with
++ * values unpacked from the shadow of the evicted folio.
++ */
++static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
++		struct pglist_data **pgdat, unsigned long *token, bool *workingset)
++{
++	struct mem_cgroup *eviction_memcg;
++	struct lruvec *lruvec;
++	struct lru_gen_struct *lrugen;
++	unsigned long min_seq;
++
++	unpack_shadow(shadow, memcgid, pgdat, token, workingset);
++	eviction_memcg = mem_cgroup_from_id(*memcgid);
++
++	lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
++	lrugen = &lruvec->lrugen;
++
++	min_seq = READ_ONCE(lrugen->min_seq[file]);
++	return (*token >> LRU_REFS_WIDTH) == (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH));
++}
++
+ static void lru_gen_refault(struct folio *folio, void *shadow)
+ {
+ 	int hist, tier, refs;
+@@ -258,23 +282,22 @@ static void lru_gen_refault(struct folio *folio, void *shadow)
+ 	int type = folio_is_file_lru(folio);
+ 	int delta = folio_nr_pages(folio);
+ 
+-	unpack_shadow(shadow, &memcg_id, &pgdat, &token, &workingset);
+-
+-	if (pgdat != folio_pgdat(folio))
+-		return;
+-
+ 	rcu_read_lock();
+ 
++	if (!lru_gen_test_recent(shadow, type, &memcg_id, &pgdat, &token,
++			&workingset))
++		goto unlock;
++
+ 	memcg = folio_memcg_rcu(folio);
+ 	if (memcg_id != mem_cgroup_id(memcg))
+ 		goto unlock;
+ 
++	if (pgdat != folio_pgdat(folio))
++		return;
++
+ 	lruvec = mem_cgroup_lruvec(memcg, pgdat);
+ 	lrugen = &lruvec->lrugen;
+-
+ 	min_seq = READ_ONCE(lrugen->min_seq[type]);
+-	if ((token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)))
+-		goto unlock;
+ 
+ 	hist = lru_hist_from_seq(min_seq);
+ 	/* see the comment in folio_lru_refs() */
+@@ -306,6 +329,12 @@ static void *lru_gen_eviction(struct folio *folio)
+ 	return NULL;
+ }
+ 
++static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
++		struct pglist_data **pgdat, unsigned long *token, bool *workingset)
++{
++	return false;
++}
++
+ static void lru_gen_refault(struct folio *folio, void *shadow)
+ {
+ }
+@@ -373,40 +402,31 @@ void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg)
+ 				folio_test_workingset(folio));
+ }
+ 
+-/**
+- * workingset_refault - Evaluate the refault of a previously evicted folio.
+- * @folio: The freshly allocated replacement folio.
+- * @shadow: Shadow entry of the evicted folio.
++/*
++ * Test if the folio is recently evicted by checking if
++ * refault distance of shadow exceeds workingset size.
+  *
+- * Calculates and evaluates the refault distance of the previously
+- * evicted folio in the context of the node and the memcg whose memory
+- * pressure caused the eviction.
++ * As a side effect, populate workingset with the value
++ * unpacked from shadow.
+  */
+-void workingset_refault(struct folio *folio, void *shadow)
++bool workingset_test_recent(void *shadow, bool file, bool *workingset)
+ {
+-	bool file = folio_is_file_lru(folio);
+ 	struct mem_cgroup *eviction_memcg;
+ 	struct lruvec *eviction_lruvec;
+ 	unsigned long refault_distance;
+ 	unsigned long workingset_size;
+-	struct pglist_data *pgdat;
+-	struct mem_cgroup *memcg;
+-	unsigned long eviction;
+-	struct lruvec *lruvec;
+ 	unsigned long refault;
+-	bool workingset;
+ 	int memcgid;
+-	long nr;
++	struct pglist_data *pgdat;
++	unsigned long eviction;
+ 
+-	if (lru_gen_enabled()) {
+-		lru_gen_refault(folio, shadow);
+-		return;
+-	}
++	if (lru_gen_enabled())
++		lru_gen_test_recent(shadow, file, &memcgid, &pgdat, &eviction,
++			workingset);
+ 
+-	unpack_shadow(shadow, &memcgid, &pgdat, &eviction, &workingset);
++	unpack_shadow(shadow, &memcgid, &pgdat, &eviction, workingset);
+ 	eviction <<= bucket_order;
+ 
+-	rcu_read_lock();
+ 	/*
+ 	 * Look up the memcg associated with the stored ID. It might
+ 	 * have been deleted since the folio's eviction.
+@@ -425,7 +445,8 @@ void workingset_refault(struct folio *folio, void *shadow)
+ 	 */
+ 	eviction_memcg = mem_cgroup_from_id(memcgid);
+ 	if (!mem_cgroup_disabled() && !eviction_memcg)
+-		goto out;
++		return false;
++
+ 	eviction_lruvec = mem_cgroup_lruvec(eviction_memcg, pgdat);
+ 	refault = atomic_long_read(&eviction_lruvec->nonresident_age);
+ 
+@@ -447,21 +468,6 @@ void workingset_refault(struct folio *folio, void *shadow)
+ 	 */
+ 	refault_distance = (refault - eviction) & EVICTION_MASK;
+ 
+-	/*
+-	 * The activation decision for this folio is made at the level
+-	 * where the eviction occurred, as that is where the LRU order
+-	 * during folio reclaim is being determined.
+-	 *
+-	 * However, the cgroup that will own the folio is the one that
+-	 * is actually experiencing the refault event.
+-	 */
+-	nr = folio_nr_pages(folio);
+-	memcg = folio_memcg(folio);
+-	pgdat = folio_pgdat(folio);
+-	lruvec = mem_cgroup_lruvec(memcg, pgdat);
+-
+-	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
+-
+ 	mem_cgroup_flush_stats_delayed();
+ 	/*
+ 	 * Compare the distance to the existing workingset size. We
+@@ -483,7 +489,51 @@ void workingset_refault(struct folio *folio, void *shadow)
+ 						     NR_INACTIVE_ANON);
+ 		}
+ 	}
+-	if (refault_distance > workingset_size)
++
++	return refault_distance <= workingset_size;
++}
++
++/**
++ * workingset_refault - Evaluate the refault of a previously evicted folio.
++ * @folio: The freshly allocated replacement folio.
++ * @shadow: Shadow entry of the evicted folio.
++ *
++ * Calculates and evaluates the refault distance of the previously
++ * evicted folio in the context of the node and the memcg whose memory
++ * pressure caused the eviction.
++ */
++void workingset_refault(struct folio *folio, void *shadow)
++{
++	bool file = folio_is_file_lru(folio);
++	struct pglist_data *pgdat;
++	struct mem_cgroup *memcg;
++	struct lruvec *lruvec;
++	bool workingset;
++	long nr;
++
++	if (lru_gen_enabled()) {
++		lru_gen_refault(folio, shadow);
++		return;
++	}
++
++	rcu_read_lock();
++
++	/*
++	 * The activation decision for this folio is made at the level
++	 * where the eviction occurred, as that is where the LRU order
++	 * during folio reclaim is being determined.
++	 *
++	 * However, the cgroup that will own the folio is the one that
++	 * is actually experiencing the refault event.
++	 */
++	nr = folio_nr_pages(folio);
++	memcg = folio_memcg(folio);
++	pgdat = folio_pgdat(folio);
++	lruvec = mem_cgroup_lruvec(memcg, pgdat);
++
++	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
++
++	if (!workingset_test_recent(shadow, file, &workingset))
+ 		goto out;
+ 
+ 	folio_set_active(folio);
 -- 
 2.30.2
