@@ -2,148 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3892967A2A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B3567A2A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbjAXTZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S233776AbjAXT0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjAXTZk (ORCPT
+        with ESMTP id S233308AbjAXT0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:25:40 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2040.outbound.protection.outlook.com [40.107.96.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD026474DD;
-        Tue, 24 Jan 2023 11:25:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fphmW1u/6kSdcAL4iRMfkk65dZPTExP3yyUDbUtSNoYN85SQt2GSVMIa7nl7pX1lMAhmv0M9YsV7pGU3jjVZv5rEHLl4JpdplaUJkw/4ImWFBm2ImDUSaRaCAtFBjyLFzFZsRg9SYfanzMc6PjFeV68aXmaBMupIbbhUGIslVKfkRn60IPJPihGLxsVh++E0ZXnres/eOWGus68l+JM5UdD/LT68aMJzJROpIhRl7oblZppZjzDQeWZStinkvpfpVDLcwSFThEEgc88oibgjaHAz6SsXUEnDy60wikUVfTlxffVUeew0pj/OdQrQrCje0cJHIpviTQ6tGlhRiyfQ/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SM1OkKfp25+Qv1Y70mZQXwoUC2f8XN84N8AGzsTjEtQ=;
- b=HvZuAG3GwSN2BM+ZILWLx2nOU331MOaWEE+vBzYx8TOgMAJ+TrPzjiydYpaVTkNb6PMbBG1U/HqNI3klhdqTpvJBHsbTeCDBurw10nlX7Kx+qUqVqJ0RvnXx/1PsB9U7ALpBRUJ+voD1MW37vX+8eFU6M23jeSeb56GMrD3oXGBhwgCnbzo14HUQplTgOVy6ATEy0QxBY9l/XMEL4E3Yxoyfzl95qbZ2GAskNWdgwN7REM+sqhcs/CQKG4QpnmTukGsG+J8FfXPo9UAaBP6fQtu6jF+jz/VIZZ6tnnacrdzyctCuQnSus2iXhIIGO77zNtWdIOt1JSnLIlirEwhKVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SM1OkKfp25+Qv1Y70mZQXwoUC2f8XN84N8AGzsTjEtQ=;
- b=WGeHzQ928CNrIPvOgpkNlbipeGAO1Oy2tLax8QfBHs3/qUiehQagr0s/n96+VOH/SRUNoG+Vto5YiR10cuu6nkMvMYdpO/ZCJwNmhN98tpUErkgyfqwpQ7LyoJQgiPh78uU6s94XUPyItAw9I6kJmQXfqOo8Y7rmYf82M7XmlUNjt3iQZ5NUKzag0at/P5WUXMnQJiVwKdSd7dB7VtJeTh2H6Pu5RHNdf1hJyLxxRE9JzuX+SVX5pETj01GQkyz+Yfhf1duAxb2PPh3fHfS/N36DSU9ENdOC6omOqXRLcueRHe3KRQyGQEoRxL2iy6d3CxONkdXCYS0gzP8N5KTLvA==
-Received: from BN1PR10CA0011.namprd10.prod.outlook.com (2603:10b6:408:e0::16)
- by BY5PR12MB5509.namprd12.prod.outlook.com (2603:10b6:a03:1d7::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 19:25:31 +0000
-Received: from BL02EPF00010207.namprd05.prod.outlook.com
- (2603:10b6:408:e0:cafe::ee) by BN1PR10CA0011.outlook.office365.com
- (2603:10b6:408:e0::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
- Transport; Tue, 24 Jan 2023 19:25:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF00010207.mail.protection.outlook.com (10.167.241.197) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.11 via Frontend Transport; Tue, 24 Jan 2023 19:25:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
- 2023 11:25:17 -0800
-Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
- 2023 11:25:16 -0800
-Message-ID: <dac764eb-ef21-4ec5-bcd8-102ca4d49f20@nvidia.com>
-Date:   Tue, 24 Jan 2023 11:25:16 -0800
+        Tue, 24 Jan 2023 14:26:50 -0500
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82A4474DD;
+        Tue, 24 Jan 2023 11:26:45 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id qx13so41736240ejb.13;
+        Tue, 24 Jan 2023 11:26:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WOWslbwf3k9B8XZFRmzHiqK02xWFY5DyqxsxPQnAw0c=;
+        b=xW6ElFCT99c3Lvt6QoJKjZ4A0kcJoCIqTyuk5ablGrD1Zg7UlPJcv3zjyBQmr+sekl
+         MqfZC98HgyJkNcK0aWaDmd1Hq5cH4v0ioLYo3k24gMDnsWEVtjw55MiznG+2N5U+H6t9
+         IGFdgir7YDvcWHuDvIomINCUBR+yxAYolRtBcFtXBUA0TXyR0um03RarOM4JYM1UmYw6
+         qyaz+YRIGUjNU/HQaSpU4Teo0RCy17AycaNsmkR68xxhXaP4J7Gx+f1hUWhaZb5pJVZD
+         OxSrI8sDS+T+UUW93gTa1H04mHepvcKf5zg2qYOTd52Xl+AlmSkeAGN3C0JbUKoy02Rl
+         ov4g==
+X-Gm-Message-State: AFqh2koDg9D+IHMFr8eaj+nn/3SWn51eX70MuQb4cBZ9woKGEfJK+Hjw
+        98/OykIC1BXlRUR5HFCN0maaO5acAv4KYNYbObQ=
+X-Google-Smtp-Source: AMrXdXvMbcgPriO0PSlQSJI2+IgKj3AIolQx3WvVPxkJQApk56LuAH67n6oDSevEZFlHyhbH7L5yLbGSlsKPPaCkHo0=
+X-Received: by 2002:a17:906:b041:b0:857:6395:3e2c with SMTP id
+ bj1-20020a170906b04100b0085763953e2cmr3758010ejb.208.1674588404381; Tue, 24
+ Jan 2023 11:26:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 3/8] iomap: Don't get an reference on ZERO_PAGE for
- direct I/O block zeroing
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230124170108.1070389-1-dhowells@redhat.com>
- <20230124170108.1070389-4-dhowells@redhat.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20230124170108.1070389-4-dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00010207:EE_|BY5PR12MB5509:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a6216e5-7198-4e03-fdc9-08dafe40c1fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ELE6y1oH/cIdjNl1skh6RYJgOBwPfv0IPjKak1fq/DTr0BQjrffzZP8wF7mcgDvyCcFYvKDeACC7ZOgEhRLdIqhFVXARGrOaCff5BFF8SWkaR9Q6tm8H3jBzhWu3KR2QyU5kS1BUELwf9P2hcmmDrlGDUp/W/EQPMDI/ShHUGYkcop4p3PY68kuACmr0qvvXX0xdzzJkDYQE36j9EbZAQcWKKEd3iIuoVJl4TrUNv6TcsHG7X/6ouwoHqNAaM4uL5HqFuvrJpSzISh+eRQLvIGETzInUcHeNa1CDYe2kZtUpFUSRaMNXEuYnTbvautCgiUYaRydqNBbhqqmmWhsuxylJ0U+AgWL7Fadh/xzr4oBauA86rPvLcFbPaZ/xANHJ71Z9t7C8JJGu1f8QhR8aLPgPCIGjn4GKvTCXXzwK7rmxQrABEpUFbo+SQawmQhYyCyUSIv5iJqAxRTMmeUPdGdU3C8Df+xOSp4sMjh6x3mGlYYehhaz5gGqohxaZCFbEKrT8APpKA3s4btLL8gBJ07/W2qp/lSgScleNLZIvpb9m9UJjzYH4YgMnEEU4ny/XKqvJQUN4I5+ZYlVWigohA71AUhNhdo677oQcI42bMYK1faYjjtFjmazyOagNmkk+eYdaz6DFf2eTS6P6dqMU1ZG3W2+GRFAYO90m+/xuUf87LDcJkBPzFJNrqcMyVYakoHJhNxjsx6exvaLdZwpkqdToA5PX47ebz6begNnZhgY=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199018)(40470700004)(46966006)(36840700001)(36860700001)(83380400001)(5660300002)(41300700001)(7416002)(86362001)(356005)(7636003)(4744005)(82740400003)(2906002)(4326008)(82310400005)(8936002)(316002)(40460700003)(16526019)(40480700001)(26005)(53546011)(16576012)(8676002)(186003)(47076005)(336012)(426003)(54906003)(2616005)(478600001)(110136005)(36756003)(31686004)(70586007)(31696002)(70206006)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 19:25:31.0546
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a6216e5-7198-4e03-fdc9-08dafe40c1fe
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010207.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5509
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674030722.git.viresh.kumar@linaro.org> <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+ <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com>
+ <20230119051625.bd4dtnriw6jys6nt@vireshk-i7> <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Jan 2023 20:26:33 +0100
+Message-ID: <CAJZ5v0h0G+01ni6GK3eTMVarTCEazp_qPJSFpBzUZ7LhwHW=ww@mail.gmail.com>
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 09:01, David Howells wrote:
-> ZERO_PAGE can't go away, no need to hold an extra reference.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> ---
->   fs/iomap/direct-io.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+On Thu, Jan 19, 2023 at 9:09 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Jan 19, 2023 at 6:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 18-01-23, 20:58, Rafael J. Wysocki wrote:
+> > > On Wed, Jan 18, 2023 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > >
+> > > > put_device() shouldn't be called before a prior call to
+> > > > device_register(). __thermal_cooling_device_register() doesn't follow
+> > > > that properly and needs fixing. Also
+> > > > thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> > > > on few error paths.
+> > > >
+> > > > Fix all this by placing the calls at the right place.
+> > > >
+> > > > Based on initial work done by Caleb Connolly.
+> > > >
+> > > > Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> > > > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> > > > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> > > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > >
+> > > OK, so I think that this patch is needed for 6.2 and the other two may
+> > > be queued up for later (they do depend on this one, though, of
+> > > course).  Is my understanding correct?
+> >
+> > Right.
+>
+> OK, applied as 6.2-rc material and I'll get to the other two when this goes in.
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
-> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
-> index 9804714b1751..47db4ead1e74 100644
-> --- a/fs/iomap/direct-io.c
-> +++ b/fs/iomap/direct-io.c
-> @@ -202,7 +202,7 @@ static void iomap_dio_zero(const struct iomap_iter *iter, struct iomap_dio *dio,
->   	bio->bi_private = dio;
->   	bio->bi_end_io = iomap_dio_bio_end_io;
->   
-> -	get_page(page);
-> +	bio_set_flag(bio, BIO_NO_PAGE_REF);
->   	__bio_add_page(bio, page, len, 0);
->   	iomap_dio_submit_bio(iter, dio, bio, pos);
->   }
-> 
-
+Patches [2-3/3] from this series have been applied as 6.3 material now, thanks!
