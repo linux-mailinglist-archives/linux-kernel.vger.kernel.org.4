@@ -2,208 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CAC67A57C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFF667A586
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbjAXWPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S235214AbjAXWRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbjAXWP2 (ORCPT
+        with ESMTP id S233643AbjAXWRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:15:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D12CEC50
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:15:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E851AB816AD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7EDC433D2;
-        Tue, 24 Jan 2023 22:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674598524;
-        bh=BtYx9xvLhys/0OqlUuW88DW4J11v7lVFN5im9YpN2rI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=NEKv0BVyFfDSdd2XtmGY67fos2tdYZcl35cAUwwuLU4kTadLEhMHwxOqW4L6Uy3Qg
-         QdwPT48Yv/Ct4KLBUETrWnAmTS8NyXokPomhl76upPe/mdsBrzrs2OM76CfBCEDnNx
-         HVpyqIuhEM1Jv7UbYxA7+WFVTcc9S7nGI8ilAmx3E6Vr2H8ukT06j3lySK2AR6OpxL
-         e3Q2f9V85hqu0hPKovybCv5+VKlMGpuT5xjEQc0Q/jo5srgA9HwMQAMTAEtZfSMBpt
-         ikFK1sCrw8prWKZwWUN7il7FbzsrPr1Hj4Sw0xOWiEWDI/m1ce8B5+iSrAq0wt3164
-         /kaUO+0ww2SFA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 10C9D5C1183; Tue, 24 Jan 2023 14:15:24 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:15:24 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230123201659.GA3754540@paulmck-ThinkPad-P17-Gen-1>
- <Y88/5ib7zYl67mcE@rowland.harvard.edu>
- <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8+8fH52iqQABYs2@andrea>
- <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
- <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
- <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
+        Tue, 24 Jan 2023 17:17:16 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0EEEC50;
+        Tue, 24 Jan 2023 14:17:14 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id g13so25808216lfv.7;
+        Tue, 24 Jan 2023 14:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mhJX74SyXpEe21VKvtmYRp6Q7Ngr55XoXxrS6GHTUaM=;
+        b=lIOkQn3uy7/I/z2v8Q85L0rLBL7SX9DrJ6x65AriCaUZU12w6lgUwTBkK9bJzvqsbV
+         AGimKEMkNWeNnOND/KABFJLrBc8vXvJ3gqpf+vIRKGOA31TqNm+YVIGpsXKYPx8jgce3
+         2ILeWIph/JftA1Yj53Sq1jDrCHnyp4E6ua4ibXfT3nMhNt9vW7/ouWyn3wgZiGJAPOCU
+         B0LAhuEYvIUp/8lluMUpB0iSfxvIbNcR+tD+q69FIabOyc1m8n7KQnJC5Qj84AbRi3fv
+         bZ+sAwmoB7z60IocecZ6Y9UWh/bV5WXO+rcK7a+EUWW3bwdpDEYgf3rbMGN11Ap1Nywv
+         xEWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mhJX74SyXpEe21VKvtmYRp6Q7Ngr55XoXxrS6GHTUaM=;
+        b=e3Jz8gFwQlrG0xZ9Gp9IC6nE/IZgKdy9pfV7angGzNagGYgbslIUfLPssX0t4G76cD
+         9sn3rGXOzBgKL1YhLDH8tOLSmmMpynD3grXXdpKgCfapuuYj4qARGqsI3g2nhuvPXAvW
+         +p28KOox72oj9jsbsLwCuYznGBhVvzRKEYWyN3CFmn1UDNophaykEvjCHlgN2MMJwKaC
+         QyjEHemMePj7tXOVfIQqWLmoyBKviv6z33irNczgwwePsT/UqiSDihKTJKKv7o2xHn6I
+         2o4o+BkOep8j8tGwvn5Cwi7RQ566Hv2rZT94ZPCH8lvGByWyfSnIEoCz62PAQ21p4qB8
+         Xrfg==
+X-Gm-Message-State: AFqh2krEwZn9JM0MbP3DGk3fKUHYwVZKs4j3GwjI7XV9N9rfZtr4l1DA
+        G4Thjdz2OE95rCov/oto+4B6sFm3ecVDeEMThDo=
+X-Google-Smtp-Source: AMrXdXvh8qx1S3WVzfwHHfZuCvapRPm6sYF0vH2DvRk+gdpioHeoX/MqsquNKQupOjAQ08YfWwH8Fjy+DHTSajvohcw=
+X-Received: by 2002:ac2:4bd3:0:b0:4cc:789a:dac8 with SMTP id
+ o19-20020ac24bd3000000b004cc789adac8mr3098851lfq.198.1674598633139; Tue, 24
+ Jan 2023 14:17:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124174714.2775680-1-neeraj.sanjaykale@nxp.com> <20230124174714.2775680-2-neeraj.sanjaykale@nxp.com>
+In-Reply-To: <20230124174714.2775680-2-neeraj.sanjaykale@nxp.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Tue, 24 Jan 2023 14:17:01 -0800
+Message-ID: <CABBYNZJ3CVO4fxN55YQ_d+Z2kvxR5H31cEG_CPxmVXfcsSGWeg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] serdev: Add method to assert break
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 08:30:08PM +0100, Jonas Oberhauser wrote:
-> On 1/24/2023 6:26 PM, Paul E. McKenney wrote:
-> > On Tue, Jan 24, 2023 at 05:39:53PM +0100, Jonas Oberhauser wrote:
-> > > 
-> > > On 1/24/2023 5:22 PM, Paul E. McKenney wrote:
-> > > > I clearly recall some
-> > > > store-based lack of ordering after a grace period from some years back,
-> > > > and am thus far failing to reproduce it.
-> > > > 
-> > > > And here is another attempt that herd7 actually does allow.
-> > > > 
-> > > > So what did I mess up this time?  ;-)
-> > > > 
-> > > > 							Thanx, Paul
-> > > > 
-> > > > ------------------------------------------------------------------------
-> > > > 
-> > > > C C-srcu-observed-4
-> > > > 
-> > > > (*
-> > > >    * Result: Sometimes
-> > > >    *
-> > > >    * The Linux-kernel implementation is suspected to forbid this.
-> > > >    *)
-> > > > 
-> > > > {}
-> > > > 
-> > > > P0(int *x, int *y, int *z, struct srcu_struct *s)
-> > > > {
-> > > > 	int r1;
-> > > > 
-> > > > 	r1 = srcu_read_lock(s);
-> > > > 	WRITE_ONCE(*y, 2);
-> > > > 	WRITE_ONCE(*x, 1);
-> > > > 	srcu_read_unlock(s, r1);
-> > > > }
-> > > > 
-> > > > P1(int *x, int *y, int *z, struct srcu_struct *s)
-> > > > {
-> > > > 	int r1;
-> > > > 
-> > > > 	WRITE_ONCE(*y, 1);
-> > > > 	synchronize_srcu(s);
-> > > > 	WRITE_ONCE(*z, 2);
-> > > > }
-> > > > 
-> > > > P2(int *x, int *y, int *z, struct srcu_struct *s)
-> > > > {
-> > > > 	WRITE_ONCE(*z, 1);
-> > > > 	smp_store_release(x, 2);
-> > > > }
-> > > > 
-> > > > exists (x=1 /\ y=1 /\ z=1)
-> > > I think even if you implement the unlock as mb() followed by some store that
-> > > is read by the gp between mb()s, this would still be allowed.
-> > The implementation of synchronize_srcu() has quite a few smp_mb()
-> > invocations.
-> > 
-> > But exactly how are you modeling this?  As in what additional accesses
-> > and memory barriers are you placing in which locations?
-> 
-> Along these lines:
-> 
-> P0(int *x, int *y, int *z, int *magic_location)
-> {
-> 	int r1;
-> 
-> 
-> 	WRITE_ONCE(*y, 2);
-> 	WRITE_ONCE(*x, 1);
-> 
->         smp_mb();
-> 	WRITE_ONCE(*magic_location, 1);
-> 
-> }
-> 
-> P1(int *x, int *y, int *z, int *magic_location)
-> {
-> 	int r1;
-> 
-> 	WRITE_ONCE(*y, 1);
-> 
->         smp_mb();
->         while (! READ_ONCE(*magic_location))
-> 		;
-> 	smp_mb();
-> 	WRITE_ONCE(*z, 2);
-> }
-> 
-> 
-> P2(int *x, int *y, int *z, struct srcu_struct *s)
-> {
-> 	WRITE_ONCE(*z, 1);
-> 	smp_store_release(x, 2);
-> }
-> 
-> 
-> 
-> Note that you can add as many additional smp_mb() and other accesses as you
-> want around the original srcu call sites. I don't see how they could
-> influence the absence of a cycle.
-> 
-> (Also, to make it work with herd it seems you need to replace the loop with
-> a single read and state in the exists clause that it happens to read a 1.)
+Hi Neeraj,
 
-I agree that LKMM would allow such a litmus test.
+On Tue, Jan 24, 2023 at 9:48 AM Neeraj Sanjay Kale
+<neeraj.sanjaykale@nxp.com> wrote:
+>
+> Adds serdev_device_break_ctl() and an implementation for ttyport.
+>
+> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> ---
+>  drivers/tty/serdev/core.c           | 11 +++++++++++
+>  drivers/tty/serdev/serdev-ttyport.c | 12 ++++++++++++
+>  include/linux/serdev.h              |  6 ++++++
+>  3 files changed, 29 insertions(+)
+>
+> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+> index 0180e1e4e75d..26321ad7e71d 100644
+> --- a/drivers/tty/serdev/core.c
+> +++ b/drivers/tty/serdev/core.c
+> @@ -405,6 +405,17 @@ int serdev_device_set_tiocm(struct serdev_device *serdev, int set, int clear)
+>  }
+>  EXPORT_SYMBOL_GPL(serdev_device_set_tiocm);
+>
+> +int serdev_device_break_ctl(struct serdev_device *serdev, int break_state)
+> +{
+> +       struct serdev_controller *ctrl = serdev->ctrl;
+> +
+> +       if (!ctrl || !ctrl->ops->break_ctl)
+> +               return -ENOTSUPP;
+> +
+> +       return ctrl->ops->break_ctl(ctrl, break_state);
+> +}
+> +EXPORT_SYMBOL_GPL(serdev_device_break_ctl);
+> +
+>  static int serdev_drv_probe(struct device *dev)
+>  {
+>         const struct serdev_device_driver *sdrv = to_serdev_device_driver(dev->driver);
+> diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
+> index d367803e2044..847b1f71ab73 100644
+> --- a/drivers/tty/serdev/serdev-ttyport.c
+> +++ b/drivers/tty/serdev/serdev-ttyport.c
+> @@ -247,6 +247,17 @@ static int ttyport_set_tiocm(struct serdev_controller *ctrl, unsigned int set, u
+>         return tty->ops->tiocmset(tty, set, clear);
+>  }
+>
+> +static int ttyport_break_ctl(struct serdev_controller *ctrl, unsigned int break_state)
+> +{
+> +       struct serport *serport = serdev_controller_get_drvdata(ctrl);
+> +       struct tty_struct *tty = serport->tty;
+> +
+> +       if (!tty->ops->break_ctl)
+> +               return -ENOTSUPP;
+> +
+> +       return tty->ops->break_ctl(tty, break_state);
+> +}
+> +
+>  static const struct serdev_controller_ops ctrl_ops = {
+>         .write_buf = ttyport_write_buf,
+>         .write_flush = ttyport_write_flush,
+> @@ -259,6 +270,7 @@ static const struct serdev_controller_ops ctrl_ops = {
+>         .wait_until_sent = ttyport_wait_until_sent,
+>         .get_tiocm = ttyport_get_tiocm,
+>         .set_tiocm = ttyport_set_tiocm,
+> +       .break_ctl = ttyport_break_ctl,
+>  };
+>
+>  struct device *serdev_tty_port_register(struct tty_port *port,
+> diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+> index 66f624fc618c..01b5b8f308cb 100644
+> --- a/include/linux/serdev.h
+> +++ b/include/linux/serdev.h
+> @@ -92,6 +92,7 @@ struct serdev_controller_ops {
+>         void (*wait_until_sent)(struct serdev_controller *, long);
+>         int (*get_tiocm)(struct serdev_controller *);
+>         int (*set_tiocm)(struct serdev_controller *, unsigned int, unsigned int);
+> +       int (*break_ctl)(struct serdev_controller *, unsigned int);
 
-> > > I have already forgotten the specifics, but I think the power model allows
-> > > certain stores never propagating somewhere?
-> > PowerPC would forbid the 3.2W case, where each process used an
-> > smp_store_release() as its sole ordering (no smp_mb() calls at all).
-> > 
-> > [...]
-> > 
-> > This propagation is modulated by the memory barriers, though.
-> 
-> Ah, looking at the model now. Indeed it's forbidden, because in order to say
-> that something is in co, there must not be a (resulting) cycle of co and
-> barriers. But you'd get that here.  In the axiomatic model, this corresponds
-> to saying Power's "prop | co" is acyclic. The same isn't true in LKMM. So
-> that's probably why.
+Looks like these callbacks don't have any documentation, not sure if
+that is because the operation itself is self explanatory, anyway I
+hope someone can review this from serdev before it can be merged into
+bluetooth-next.
 
-Which means that the RCU and SRCU implementations need to make (admittedly
-small) guarantees that cannot be expressed in LKMM.  Which is in fact
-what I was remembering, so I feel better now.
+>  };
+>
+>  /**
+> @@ -202,6 +203,7 @@ int serdev_device_write_buf(struct serdev_device *, const unsigned char *, size_
+>  void serdev_device_wait_until_sent(struct serdev_device *, long);
+>  int serdev_device_get_tiocm(struct serdev_device *);
+>  int serdev_device_set_tiocm(struct serdev_device *, int, int);
+> +int serdev_device_break_ctl(struct serdev_device *, int);
+>  void serdev_device_write_wakeup(struct serdev_device *);
+>  int serdev_device_write(struct serdev_device *, const unsigned char *, size_t, long);
+>  void serdev_device_write_flush(struct serdev_device *);
+> @@ -255,6 +257,10 @@ static inline int serdev_device_set_tiocm(struct serdev_device *serdev, int set,
+>  {
+>         return -ENOTSUPP;
+>  }
+> +static inline int serdev_device_break_ctl(struct serdev_device *serdev, int break_state)
+> +{
+> +       return -ENOTSUPP;
+> +}
+>  static inline int serdev_device_write(struct serdev_device *sdev, const unsigned char *buf,
+>                                       size_t count, unsigned long timeout)
+>  {
+> --
+> 2.34.1
+>
 
-Not sure about the rest of you, though.  ;-)
 
-							Thanx, Paul
+-- 
+Luiz Augusto von Dentz
