@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A80678D1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1F8678D1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjAXBFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:05:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S231737AbjAXBGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjAXBFv (ORCPT
+        with ESMTP id S229569AbjAXBGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:05:51 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E0330B1C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:05:51 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id g16so970077ilr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s93ZKJi/eyAuvTHK5GSRYNYk2jtuLDZoKO9TCFwwVLQ=;
-        b=Fg+kpPe+pheuW1fV4nyazNl4T2zPM0uBxI/8MU8sMc0Tq0v9TuEyQ1l6KUxXZW+pr8
-         KLY2Xmir95LDiU57+//hr4EfiuEZeVpIYsRKRwV6VNQ8Dw8YAXhlbHXZ+sCj4qe1GKeJ
-         6AdmbRXMVrR3NidbR9kVTigJY1KrhSaRuFKBo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s93ZKJi/eyAuvTHK5GSRYNYk2jtuLDZoKO9TCFwwVLQ=;
-        b=6xC4KtgJJ+MoQo6uXnA7EpuWRb+H31PMOJjNOU1ubHKK7rYxssGlXKj9tk7yxO7JJC
-         qNXuc153tbJX+BVigXkU57scioCR7IFgVNmtyDwc7I1hI0oFUGucN+9Q0KYd1d8r6uuQ
-         wqKNA81BVwQwUUspG2NwD810LpRfU1qaihe8CA3NwN1CH+HiSesQpRiOO6wgUZg3trHR
-         IawYIszo0G6HAVziDDkEyK8Bsey7PzivduuGUBKXZc55c7miet7wAOHnNxC2b1R2Mle9
-         kSpSRJ8Dzdi2hl4wQT305Rht8EU3MZ4EJsT50OI0pVJKLRbd06sINNfqdJrczesAtav3
-         CWQQ==
-X-Gm-Message-State: AO0yUKXEcyf0dBOB6Q35Yxd8NlRHPnNliDvvr8yMWYgFCTba6kyHj4en
-        YYYAHdbRDXtrKIQkzym4FhRnpg==
-X-Google-Smtp-Source: AK7set/40nqpQdiITXp6tF4Med5qx27LNaaTtVfCmd0pU4hd5Ibomho1jstcrmf9F/fBrhsUMyudrA==
-X-Received: by 2002:a05:6e02:1184:b0:30f:a889:2145 with SMTP id y4-20020a056e02118400b0030fa8892145mr207150ili.2.1674522350241;
-        Mon, 23 Jan 2023 17:05:50 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id ce21-20020a0566381a9500b003a484df1652sm223150jab.55.2023.01.23.17.05.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 17:05:49 -0800 (PST)
-Message-ID: <6570e849-aedd-245f-163c-208a9bdfaf9d@linuxfoundation.org>
-Date:   Mon, 23 Jan 2023 18:05:48 -0700
+        Mon, 23 Jan 2023 20:06:11 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B413756F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 17:06:07 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 41855824E0;
+        Tue, 24 Jan 2023 01:06:04 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674522367;
+        bh=+N1TAk23R+sr7LDX9WLDQgAOiTO+vJ3bImLnwUgTUeA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pwoZhDhW/49qboqynwnJnYR1KdUkJPAUf4nbLubG1xMHkqJCBEguS64iaXETgWnym
+         qEOomS1Zqcc5KuuGVoPGaS6JHkuOsaXk5wNmeqLZwL4Silrnq68M11w0wVcRD0ixLs
+         fD25DBd3OdvupB+C2Uc48x+Y5Skme1D7k6yG6cnzTEzjVq+cVcxFElTbXKGj2XfxOw
+         SlJ7dosP+q7vrLq8Xd/bbvW1dKOZ7+ANVS/tFPb0Pg9m+lJn1g89+mnJkD8q3eyQxW
+         Jl5JDTQDJ/8ssG1z6sPSqoNVSiim1sOAoFmyjdRQi9KRea+cTYjJ1hzRY1Ttx/0FE6
+         2zazauHQD8psQ==
+Date:   Tue, 24 Jan 2023 08:06:00 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH RFC] tools/nolibc: Add gitignore to avoid git complaints
+ about sysroot
+Message-ID: <Y88u+KnrxjrC+NBe@biznet-home.integral.gnuweeb.org>
+References: <20230124004707.GA318943@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 000/117] 5.15.90-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230123094918.977276664@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230123094918.977276664@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124004707.GA318943@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 02:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.90 release.
-> There are 117 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 Jan 2023 09:48:53 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.90-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, Jan 23, 2023 at 04:47:07PM -0800, Paul E. McKenney wrote:
+> Testing of nolibc can produce a tools/include/nolibc/sysroot file, which
+> is not known to git.  Because it is automatically generated, there is no
+> reason for it to be known to git.  Therefore, add a .gitignore to remove
+> it from git's field of view.
 
-Compiled and booted on my test system. No dmesg regressions.
+Yeah, I hit the same "git status" complaint and have a pending patch
+for that too:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+https://github.com/ammarfaizi2/linux-block/commit/89bfe86a03c173863de12.patch
 
-thanks,
--- Shuah
+^ I'll drop this one.
+
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Willy Tarreau <w@1wt.eu>
+> Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> 
+> diff --git a/tools/include/nolibc/.gitignore b/tools/include/nolibc/.gitignore
+> new file mode 100644
+> index 0000000000000..dea22eaaed2ba
+> --- /dev/null
+> +++ b/tools/include/nolibc/.gitignore
+> @@ -0,0 +1 @@
+> +sysroot
+
+Small nit about the naming, not so much important, but the common
+pattern for directory has a trailing slash. So, I would write
+"sysroot/".
+
+".gitignore" and "tools/testing/selftests/.gitignore" do that too :-)
+
+Reviewed-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+
+Thanks!
+
+-- 
+Ammar Faizi
+
