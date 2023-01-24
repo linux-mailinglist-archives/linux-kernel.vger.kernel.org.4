@@ -2,133 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9EF679AA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39483679AF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbjAXNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 08:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S234482AbjAXOBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234704AbjAXNx3 (ORCPT
+        with ESMTP id S234488AbjAXOBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:53:29 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116E64943C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:51:24 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso12859499wmc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:51:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GRHFm87xhd5kwGJXeGjCaI1s3MvLoDnYqaOChsF1PF4=;
-        b=pcMpDVisDmB6BmL5C0d/5YIhuoNLTKnu81ssrjpVi0NxvZeV70feTYjhtHR4OR/Yyj
-         AwPFghZLg62VGxxiOUpfY7NS1BPAt/GRPfoOKIRmx9ShUf23BuRt5P1BeJyVtxvdxcH6
-         jxC2OAt0Vm7SvRJ3wiPKXkFfza17Jao1XQOTCyW1zV+ZVsTzyFPxCasrr7dmtJ8RpXPG
-         J/knhYjAVj6EnNl8p+OYpANuWLsuF4BA07CAE3yMxmRXyKF8Gby4YOuu33Z4W4tuhm4o
-         BAhKUwIe5/QnVmRVOaM17TTW5hPKXw0lDZuxZ6iaRVBaV+DuBhLIuAduTNIo14KKpXAq
-         Wp8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GRHFm87xhd5kwGJXeGjCaI1s3MvLoDnYqaOChsF1PF4=;
-        b=x/+uH1hNAJ6MNj3LS7lEX5Pk3KiJpWWQiTR7AuZPJBMI3PSqZjXzmag298CByVGLbA
-         lb9sKuqB4qts0isY/QzYok2tSOOA3+n6bNHH8R31qbusANWfAPWmJvKKlmLG51DGb76Y
-         MEo+C+/GUfkc7CbdWlGOpM+SheHVG1ddkN6ST2km2OOzDbuSaUFnUOPs8giMeSuSMHbL
-         Cg6etA6keUGeTTrJItTcwsuh8STwy2DzZq1g3zRADE/hEjck5Guf5wI9svrXQV1kXzUv
-         wh5X5+vfALPd+bs7DgczzRlUVz+Be3/rZiix5UGRBq+GUN05EwIPVOCPt3qy1PCJRyTF
-         N9Hw==
-X-Gm-Message-State: AFqh2kqzpdj4GX6YjkbAtuZ37CGo5ArFI+PElGG4RJHWi8Xtez8Bc4G/
-        4w+HehW4zf4QMJlbK/iFaGOqeA==
-X-Google-Smtp-Source: AMrXdXspSwahLg1rfkDFtbVlcIe2CrdGVsZjEtpwfCh/Em01sMTR36gIlCx8fYTo8dsT5IjWqMeYXg==
-X-Received: by 2002:a05:600c:5114:b0:3db:254e:59a9 with SMTP id o20-20020a05600c511400b003db254e59a9mr19030478wms.15.1674568238494;
-        Tue, 24 Jan 2023 05:50:38 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id j4-20020a05600c42c400b003db1ca20170sm1972507wme.37.2023.01.24.05.50.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 05:50:38 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE)
-Subject: [PATCH 3/3] thermal/drivers/imx: USe get_crit_temp() API instead of manual check
-Date:   Tue, 24 Jan 2023 14:50:23 +0100
-Message-Id: <20230124135024.366486-3-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230124135024.366486-1-daniel.lezcano@linaro.org>
-References: <20230124135024.366486-1-daniel.lezcano@linaro.org>
+        Tue, 24 Jan 2023 09:01:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C4DE470B5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:01:14 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 142C04B3;
+        Tue, 24 Jan 2023 05:51:31 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A732A3F71E;
+        Tue, 24 Jan 2023 05:50:47 -0800 (PST)
+Date:   Tue, 24 Jan 2023 13:50:45 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        kernel test robot <lkp@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH -next] cacheinfo: Correctly handle new
+ acpi_get_cache_info() prototype
+Message-ID: <20230124135045.ntl2nhf2oehdc7mu@bogus>
+References: <20230124123450.321852-1-pierre.gondois@arm.com>
+ <Y8/dmlR7p5rIbRLF@wendy>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8/dmlR7p5rIbRLF@wendy>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal framework is reworked to use a generic trip point
-description. That will consolidate the code and will allow to fix a
-mishandling of the trip points crossed events.
+On Tue, Jan 24, 2023 at 01:31:06PM +0000, Conor Dooley wrote:
+> Hey!
+> 
+> On Tue, Jan 24, 2023 at 01:34:46PM +0100, Pierre Gondois wrote:
+> > commit bd500361a937 ("ACPI: PPTT: Update acpi_find_last_cache_level()
+> > to acpi_get_cache_info()")
+> > updates the function acpi_get_cache_info().
+> > 
+> > If CONFIG_ACPI_PPTT is not defined, acpi_get_cache_info() doesn't
+> > update its *levels and *split_levels parameters and returns 0.
+> > This can lead to a faulty behaviour.
+> > 
+> > Make acpi_get_cache_info() return an error code if CONFIG_ACPI_PPTT
+> > is not defined. Initialize levels and split_levels before passing
+> > their address to acpi_get_cache_info().
+> > 
+> > Also, in init_cache_level():
+> 
+> Hmm...
+> 
+> > - commit e75d18cecbb3 ("arm64: cacheinfo: Fix incorrect
+> >   assignment of signed error value to unsigned fw_level")
+> >   checks the fw_level value in init_cache_level() in case
+> >   the value is negative. Remove this check as the error code
+> >   is not returned through fw_level anymore.
+> > - if no PPTT is present or CONFIG_ACPI_PPTT is not defined,
+> >   it is still possible to use the cache information from clidr_el1.
+> >   Instead of aborting if acpi_get_cache_info() returns an error
+> >   code, just continue.
+> 
+> To be honest, these feel like entirely separate things that should be
+> in different patches. You've got:
+> - Dan's smatch fixes
+> - a redundant check being removed
+> - a behaviour change for if acpi_get_cache_info() returns an error
+>
 
-In order self-encapsulate the thermal framework and prevent assumption
-about the indexes we remove the trip id usage in the back end drivers.
+I am not too fussy about it, but for sure it would be cleaner for sure.
 
-As the i.MX driver is using the thermal trip generic structure, we can
-rely on the thermal framework to get the critical temperature instead
-of using the harcoded IMX_TRIP_CRITICAL index.
+> > Reported-by: Dan Carpenter <error27@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+>
+> How about Link: to the LKP/Dan's report?
+> Link: https://lore.kernel.org/all/Y86iruJPuwNN7rZw@kili/
+>
+> I did a quick check but didn't don't see the LKP report...
+>
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/imx_thermal.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Yes, LKP dropped all the cc when reported, even I saw after merging the
+changes. I think this is the one:
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index c115a696e83f..10ebf42f4915 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -337,7 +337,7 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip_id,
- {
- 	struct imx_thermal_data *data = tz->devdata;
- 	struct thermal_trip trip;
--	int ret;
-+	int crit_temp, ret;
- 
- 	ret = pm_runtime_resume_and_get(data->dev);
- 	if (ret < 0)
-@@ -347,12 +347,16 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip_id,
- 	if (ret)
- 		return ret;
- 
-+	if (temp < 0)
-+		return -EINVAL;
-+
- 	/* do not allow changing critical threshold */
- 	if (trip.type == THERMAL_TRIP_CRITICAL)
- 		return -EPERM;
--	
-+
- 	/* do not allow passive to be set higher than critical */
--	if (temp < 0 || temp > trips[IMX_TRIP_CRITICAL].temperature)
-+	ret = thermal_zone_get_crit_temp(tz, &crit_temp);
-+	if (!ret && (crit_temp < temp))
- 		return -EINVAL;
- 
- 	imx_set_alarm_temp(data, temp);
+https://lore.kernel.org/all/202301052307.JYt1GWaJ-lkp@intel.com/
+
+> Also a Fixes: tag too, no?
+>
+
++1, if you split make sure you tag fixes to the right one(mainly one
+that changes return from acpi_get_cache_info())
+
+> Thanks,
+> Conor.
+
+
+
 -- 
-2.34.1
-
+Regards,
+Sudeep
