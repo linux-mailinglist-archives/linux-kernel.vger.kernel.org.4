@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A2A679C71
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3A9679C75
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbjAXOtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S235083AbjAXOtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbjAXOsi (ORCPT
+        with ESMTP id S235018AbjAXOsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:48:38 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4188645BFD;
-        Tue, 24 Jan 2023 06:48:35 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        Tue, 24 Jan 2023 09:48:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AAE1116B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:48:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674571680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VYbFvv6zMY5pTgiOjnD+IVJs3VYJUB3SOoUU0R9ljWs=;
+        b=DjICk4A9EtyJGhzYgQlVz4qPiGP/RK2Mma8LKtDT7ZKau8zYljX4jOqoek1vhzgCUGUj1z
+        XrXhgEUk31ZfxtChLN6VVN7dmecWOZUZms1KbB7es/iVnaeiRls5iORJTWz+SMIQrmopZq
+        rZO8zbVyf6eQ2bActzUfsUV70F0NONs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-rg6x1-L_NzmpzSCfvim6pQ-1; Tue, 24 Jan 2023 09:47:54 -0500
+X-MC-Unique: rg6x1-L_NzmpzSCfvim6pQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id DAD2E8563B;
-        Tue, 24 Jan 2023 15:48:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1674571713;
-        bh=Y5gd2EDZ3Kk/gz4KuqyqTDq9f2L0geBvWTECbmKRxN0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VuZHofmifGRfHdEG7Cdxz2Mu0ebPR7yzH4o9dCwFx27waZvyKcKpiQXSllJeBJH2Z
-         ammntn4sLK8BdzUnAsfiGa6Zhe3IPqqu0qSleVMA3vwe2aWVn7EYCeT6eCHu4lx0/t
-         oKSb68hlsCr20gfOc83UwatA4QWY3NYKbAWWVHcLnhM2rnF/gs4TMi3HE05ReDGWSY
-         lMkzVrI+Gv4hPSfmiIlvmX2cUbi3DUW9Qftk+yaL6UFiL2w8qmXvbl5zorAe5AXW8U
-         k4x+DHSkFtd3dmtPLovLfoji+XbbElt8Z5eR+e2YLIOh47GbMZmOqD1OGmTMib/CjG
-         uRVXjw6Z2Rwjg==
-Message-ID: <25ff9e4d-0a9f-59fc-902a-5b68cf7200b9@denx.de>
-Date:   Tue, 24 Jan 2023 15:47:42 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 54D06857D0D;
+        Tue, 24 Jan 2023 14:47:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E52D32026D4B;
+        Tue, 24 Jan 2023 14:47:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com>
+References: <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-8-dhowells@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] drm: lcdif: Add i.MX93 LCDIF support
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Liu Ying <victor.liu@nxp.com>
-Cc:     s.hauer@pengutronix.de, robh+dt@kernel.org, linux-imx@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        kernel@pengutronix.de
-References: <20230123072358.1060670-1-victor.liu@nxp.com>
- <ace76615-533a-9295-8271-95262859d287@denx.de>
- <7ac57bc28da40df054c81fd74f69207af66ad97b.camel@nxp.com>
- <13189854.uLZWGnKmhe@steina-w>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <13189854.uLZWGnKmhe@steina-w>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <874828.1674571671.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 24 Jan 2023 14:47:51 +0000
+Message-ID: <874829.1674571671@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 12:15, Alexander Stein wrote:
-> Hi,
+David Hildenbrand <david@redhat.com> wrote:
 
-Hi,
+> > +static inline void bio_set_cleanup_mode(struct bio *bio, struct iov_i=
+ter *iter)
+> > +{
+> > +	unsigned int cleanup_mode =3D iov_iter_extract_mode(iter);
+> > +
+> > +	if (cleanup_mode & FOLL_GET)
+> > +		bio_set_flag(bio, BIO_PAGE_REFFED);
+> > +	if (cleanup_mode & FOLL_PIN)
+> > +		bio_set_flag(bio, BIO_PAGE_PINNED);
+> =
 
-> Am Dienstag, 24. Januar 2023, 08:59:39 CET schrieb Liu Ying:
->> On Mon, 2023-01-23 at 16:57 +0100, Marek Vasut wrote:
->>> On 1/23/23 08:23, Liu Ying wrote:
->>>> The LCDIF embedded in i.MX93 SoC is essentially the same to those
->>>> in i.MX8mp SoC.  However, i.MX93 LCDIF may connect with MIPI DSI
->>>> controller through LCDIF cross line pattern(controlled by mediamix
->>>> blk-ctrl) or connect with LVDS display bridge(LDB) directly or a
->>>> parallel display(also through mediamix blk-ctrl), so add multiple
->>>> encoders(with DRM_MODE_ENCODER_NONE encoder type) support in the
->>>> LCDIF DRM driver and find a bridge to attach the relevant encoder's
->>>> chain when needed.  While at it, derive lcdif_crtc_state structure
->>>> from drm_crtc_state structure to introduce bus_format and bus_flags
->>>> states so that the next downstream bridges may use consistent bus
->>>> format and bus flags.
->>>
->>> Would it be possible to split this patch into preparatory clean up
->>> and
->>> i.MX93 addition ? It seems like the patch is doing two things
->>> according
->>> to the commit message.
->>
->> IMHO, all the patch does is for i.MX93 addition, not for clean up.
->> Note that the single LCDIF embedded in i.MX93 SoC may connect with MIPI
->> DSI/LVDS/parallel related bridges to drive triple displays
->> _simultaneously_ in theory, while the three LCDIF instances embedded in
->> i.MX8mp SoC connect with MIPI DSI/LVDS/HDMI displays respectively(one
->> LCDIF maps to one display).  The multiple encoders addition and the new
->> checks for consistent bus format and bus flags are only for i.MX93
->> LCDIF, not for i.MX8mp LCDIF.  Also, I think the multiple encoders
->> addition and the new checks should be done together - if the new checks
->> come first, then the new checks do not make sense(no multiple displays
->> driven by LCDIF);
-> 
-> You are right on this one, but on the other hand there are lot of preparing
-> patches already. Even if it is useless by itself, having the bus format & flag
-> checks in a separate patch, it is easier to review, IMHO.
+> Can FOLL_GET ever happen?
 
-I agree on the ease of review.
+Yes - unless patches 8 and 9 are merged.  I had them as one, but Christoph
+split them up.
 
-[...]
+David
+
