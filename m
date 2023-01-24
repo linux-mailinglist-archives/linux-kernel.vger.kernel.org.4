@@ -2,99 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B3567A2A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E8F67A2AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 20:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbjAXT0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 14:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S234180AbjAXT2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 14:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbjAXT0u (ORCPT
+        with ESMTP id S233955AbjAXT2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:26:50 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82A4474DD;
-        Tue, 24 Jan 2023 11:26:45 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id qx13so41736240ejb.13;
-        Tue, 24 Jan 2023 11:26:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WOWslbwf3k9B8XZFRmzHiqK02xWFY5DyqxsxPQnAw0c=;
-        b=xW6ElFCT99c3Lvt6QoJKjZ4A0kcJoCIqTyuk5ablGrD1Zg7UlPJcv3zjyBQmr+sekl
-         MqfZC98HgyJkNcK0aWaDmd1Hq5cH4v0ioLYo3k24gMDnsWEVtjw55MiznG+2N5U+H6t9
-         IGFdgir7YDvcWHuDvIomINCUBR+yxAYolRtBcFtXBUA0TXyR0um03RarOM4JYM1UmYw6
-         qyaz+YRIGUjNU/HQaSpU4Teo0RCy17AycaNsmkR68xxhXaP4J7Gx+f1hUWhaZb5pJVZD
-         OxSrI8sDS+T+UUW93gTa1H04mHepvcKf5zg2qYOTd52Xl+AlmSkeAGN3C0JbUKoy02Rl
-         ov4g==
-X-Gm-Message-State: AFqh2koDg9D+IHMFr8eaj+nn/3SWn51eX70MuQb4cBZ9woKGEfJK+Hjw
-        98/OykIC1BXlRUR5HFCN0maaO5acAv4KYNYbObQ=
-X-Google-Smtp-Source: AMrXdXvMbcgPriO0PSlQSJI2+IgKj3AIolQx3WvVPxkJQApk56LuAH67n6oDSevEZFlHyhbH7L5yLbGSlsKPPaCkHo0=
-X-Received: by 2002:a17:906:b041:b0:857:6395:3e2c with SMTP id
- bj1-20020a170906b04100b0085763953e2cmr3758010ejb.208.1674588404381; Tue, 24
- Jan 2023 11:26:44 -0800 (PST)
+        Tue, 24 Jan 2023 14:28:40 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2703945F65;
+        Tue, 24 Jan 2023 11:28:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HoNQ1TK2GDjk/D/06xsUI/nG6r5OigQfwu/SzyHXxAlw1fHqMvqq/UVS77oprcbQMzdp3F5by49iBKPs0QpWP9+Pbt2iK95gziNl+o0aQ5jsTNmzNTeuxMpuAaAkZ1L3MXZoqIhklLgAJ49v8b4dTiPXo3k+UWBfBCRXKi9Cfy+UWxhUWYpXIFx37cF1dRvS84dJvq8a19NJBhaTq8sLoTDjH4WwG2g1PtMKX0EkLdHg+PGWvRJHD0TW7ddb3aJovWAvtrthHvS10g+LmXqCQCT36vYdHhWcB4JzBFklecWtaEK/Tsq+oLWS5O2OubJUo++nCcX/bLMawLD4HAaIZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VdbzPjSOKgf7mZZ32s51VqhHi9KnjucsuS8IMKFPygo=;
+ b=LnTu2BcA81ujG4xZmKNKt8lIoOyMGL8DJnRmoPKycHowooBOpuo4tCfj7Bv0gU0oRlmcnNghzmOuGlqmXFfyvIpmyrPM5hgmjqfpgHaeL5733Iyagc3ODlitFbkjWc53bvcomjpDjf8hzgaN5hqeHnRCZsQZ+i3K75T9srA3rcBaFbzISAemgEaL8aDX77M8m1QR0xs9Bl/A6nFjnuhPTELGAwR7f22PAvgL8QSkCwiBUKRjRPntHQiDaT3clPEzXl2G+i2RkTH46fNcTnfeEfXKLTPtarh0VFhqBhN1O3sm14qR71i1XmqWmGeSI8PilFi+HNYuZzPJcXkmUOGC7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VdbzPjSOKgf7mZZ32s51VqhHi9KnjucsuS8IMKFPygo=;
+ b=cx9AgpuMePnqtGBpBw3H6LLad9PuzQ83fGc5gC0JTWkc5sAMblXJ7b2wggzX+61DIN+u2gzfRXF7342xOOJKK5DBNceI1jeAu3Mdh5b/UHjgH00KG5OHNUlZxbxgcCBcd185aOaIQPLanxpgrbZql+2/fus/dt3byf+B1sdsIQ375HXdOc/BEBKu2PHn/brPXUQRfGbmev7vC7HmQi0xh6POnVlONW09WHUZRC1NrCbU/y9TJjeiWCBG5jFyn8PTgM7YTtF30Ue/DgyvnmXeow/86ia7D/qUR3F+gmjR1hO6DTehjbfeKg2msvVs63DIFdsULycHtnpKtRXrrU3Cgg==
+Received: from MW4PR03CA0120.namprd03.prod.outlook.com (2603:10b6:303:b7::35)
+ by BN9PR12MB5162.namprd12.prod.outlook.com (2603:10b6:408:11b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
+ 2023 19:28:37 +0000
+Received: from CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::40) by MW4PR03CA0120.outlook.office365.com
+ (2603:10b6:303:b7::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
+ Transport; Tue, 24 Jan 2023 19:28:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT028.mail.protection.outlook.com (10.13.175.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6023.16 via Frontend Transport; Tue, 24 Jan 2023 19:28:36 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 11:28:26 -0800
+Received: from [10.110.48.28] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 11:28:25 -0800
+Message-ID: <ad671496-2461-0b25-48c8-bf474fffe41d@nvidia.com>
+Date:   Tue, 24 Jan 2023 11:28:25 -0800
 MIME-Version: 1.0
-References: <cover.1674030722.git.viresh.kumar@linaro.org> <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
- <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com>
- <20230119051625.bd4dtnriw6jys6nt@vireshk-i7> <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Jan 2023 20:26:33 +0100
-Message-ID: <CAJZ5v0h0G+01ni6GK3eTMVarTCEazp_qPJSFpBzUZ7LhwHW=ww@mail.gmail.com>
-Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
- device_register() fails
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 4/8] block: Fix bio_flagged() so that gcc can better
+ optimise it
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        "Jan Kara" <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>
+References: <20230124170108.1070389-1-dhowells@redhat.com>
+ <20230124170108.1070389-5-dhowells@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230124170108.1070389-5-dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT028:EE_|BN9PR12MB5162:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9244c820-1dc5-453f-dd5f-08dafe4130ae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cmhIDRaIOi+D43rBNiyFzPww+x3FJyRwtpn9Ech2f1/jl+ZKtjIkmXJP9zIF6ZxcFjwZjrSLPuSFZ66CV5SJWA1bfIbWzLM7p+jCMNR9Lmf0GV6RkrhnnFqYr/+D6UDWgnP6YBQHiECQXJ7DA0b6HWqb3d57Dg6itEbjcKbz+NgJJ1kxaeEuBFDh2tivLquPkfADYbVT1wj3Xmeglup0DM+/L0LnDNYKA+vUGW7VeIZAWPODz5XnvPOoXfbA7puMkBl23IfDqqVMHTkytP8H4eu3rxp2VDXbTLCkBgdjObNLtfa/kGLNrNqTtkOLMLM/eYgwmK4kcO3dmEYUhrDppA3i70S8s0ngeU6/KZ3qi4RiWU4JUEipxPDBekmGEYr0lytWCMJ4nI6f4YegbYoayRYRdfFMR60mybW0X5EGU5Xy5OHIr2csIImRZyfOCZW+389VkE9vDr0sToKAMFztFQhSyTgB8NGvtuSB9ettQNww6ZQDje29rcRCBcQ+Z2+UG2yVgZt3VHXJE/CV9/R78DGZPWNGIFTz/ue10ynmG6ThFB+qYoBIrafxREw7OXe5svuPUzMoiUbxPyqhQKrLOXCGB/Wp5AVHeBisTDXt25rIBp/Vw2otAEVNgqHpuHSQQuHSwb/sTWL3ll3aXe7hXE5HRlyFszK9aTVWUgTz8VZl1Zhb6GNvPptfBc9ejV+Fi4pL8IdPuDOTnH6oN4oEx7r/YJ0DHzdN27ozEKY1u+mamoAoIOmVrXGhmPsN6ACcntP8izWmDHq4BXICFgCmaSM7GdbFZeeuDIcMDYTIT3uWIHHeROiSd1Q/6sDejkqI
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199018)(40470700004)(36840700001)(46966006)(7636003)(70586007)(82740400003)(40480700001)(40460700003)(36756003)(356005)(31696002)(966005)(110136005)(16576012)(478600001)(336012)(83380400001)(316002)(70206006)(8676002)(4326008)(2616005)(426003)(47076005)(54906003)(31686004)(2906002)(53546011)(86362001)(8936002)(36860700001)(186003)(41300700001)(26005)(5660300002)(7416002)(16526019)(82310400005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 19:28:36.8348
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9244c820-1dc5-453f-dd5f-08dafe4130ae
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5162
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 9:09 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Jan 19, 2023 at 6:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 18-01-23, 20:58, Rafael J. Wysocki wrote:
-> > > On Wed, Jan 18, 2023 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > >
-> > > > put_device() shouldn't be called before a prior call to
-> > > > device_register(). __thermal_cooling_device_register() doesn't follow
-> > > > that properly and needs fixing. Also
-> > > > thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
-> > > > on few error paths.
-> > > >
-> > > > Fix all this by placing the calls at the right place.
-> > > >
-> > > > Based on initial work done by Caleb Connolly.
-> > > >
-> > > > Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
-> > > > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
-> > > > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
-> > > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > >
-> > > OK, so I think that this patch is needed for 6.2 and the other two may
-> > > be queued up for later (they do depend on this one, though, of
-> > > course).  Is my understanding correct?
-> >
-> > Right.
->
-> OK, applied as 6.2-rc material and I'll get to the other two when this goes in.
+On 1/24/23 09:01, David Howells wrote:
+> Fix bio_flagged() so that multiple instances of it, such as:
+> 
+> 	if (bio_flagged(bio, BIO_PAGE_REFFED) ||
+> 	    bio_flagged(bio, BIO_PAGE_PINNED))
+> 
+> can be combined by the gcc optimiser into a single test in assembly
+> (arguably, this is a compiler optimisation issue[1]).
+> 
+> The missed optimisation stems from bio_flagged() comparing the result of
+> the bitwise-AND to zero.  This results in an out-of-line bio_release_page()
+> being compiled to something like:
+> 
+>     <+0>:     mov    0x14(%rdi),%eax
+>     <+3>:     test   $0x1,%al
+>     <+5>:     jne    0xffffffff816dac53 <bio_release_pages+11>
+>     <+7>:     test   $0x2,%al
+>     <+9>:     je     0xffffffff816dac5c <bio_release_pages+20>
+>     <+11>:    movzbl %sil,%esi
+>     <+15>:    jmp    0xffffffff816daba1 <__bio_release_pages>
+>     <+20>:    jmp    0xffffffff81d0b800 <__x86_return_thunk>
+> 
+> However, the test is superfluous as the return type is bool.  Removing it
+> results in:
+> 
+>     <+0>:     testb  $0x3,0x14(%rdi)
+>     <+4>:     je     0xffffffff816e4af4 <bio_release_pages+15>
+>     <+6>:     movzbl %sil,%esi
+>     <+10>:    jmp    0xffffffff816dab7c <__bio_release_pages>
+>     <+15>:    jmp    0xffffffff81d0b7c0 <__x86_return_thunk>
+> 
+> instead.
+> 
+> Also, the MOVZBL instruction looks unnecessary[2] - I think it's just
+> 're-booling' the mark_dirty parameter.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: linux-block@vger.kernel.org
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108370 [1]
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108371 [2]
+> Link: https://lore.kernel.org/r/167391056756.2311931.356007731815807265.stgit@warthog.procyon.org.uk/ # v6
+> ---
+>   include/linux/bio.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/bio.h b/include/linux/bio.h
+> index c1da63f6c808..10366b8bdb13 100644
+> --- a/include/linux/bio.h
+> +++ b/include/linux/bio.h
+> @@ -227,7 +227,7 @@ static inline void bio_cnt_set(struct bio *bio, unsigned int count)
+>   
+>   static inline bool bio_flagged(struct bio *bio, unsigned int bit)
+>   {
+> -	return (bio->bi_flags & (1U << bit)) != 0;
+> +	return bio->bi_flags & (1U << bit);
+>   }
+>   
+>   static inline void bio_set_flag(struct bio *bio, unsigned int bit)
+> 
 
-Patches [2-3/3] from this series have been applied as 6.3 material now, thanks!
+I don't know how you noticed that this was even a problem! Neatly
+fixed.
+
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
