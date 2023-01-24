@@ -2,87 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C8A6796C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F663679699
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbjAXLhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 06:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S233966AbjAXL3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbjAXLhP (ORCPT
+        with ESMTP id S233925AbjAXL26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 06:37:15 -0500
-X-Greylist: delayed 627 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 03:37:13 PST
-Received: from outside13.canonet.ne.jp (outside13.canonet.ne.jp [210.134.168.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF6F26182
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 03:37:13 -0800 (PST)
-Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
-        by outside13.canonet.ne.jp (Postfix) with ESMTP id 0E4EC1E035F;
-        Tue, 24 Jan 2023 20:26:45 +0900 (JST)
-Received: from echeck13.canonet.ne.jp ([172.21.160.123])
-        by csp3 with ESMTP
-        id KHRspFs8UxJr5KHRspL1wa; Tue, 24 Jan 2023 20:26:45 +0900
-Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id B24731C0269;
-        Tue, 24 Jan 2023 20:26:44 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
-        by echeck13.canonet.ne.jp (Postfix) with ESMTP id 9E3521C0262;
-        Tue, 24 Jan 2023 20:26:44 +0900 (JST)
-Received: from satutoku.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id 0BEBE15F962;
-        Tue, 24 Jan 2023 20:26:44 +0900 (JST)
+        Tue, 24 Jan 2023 06:28:58 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04897B74D;
+        Tue, 24 Jan 2023 03:28:56 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 916DF1EC05DD;
+        Tue, 24 Jan 2023 12:28:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1674559735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=T/Ams73IS9pldjpzsGFlcABahyaCKghXFaudjYvUOgE=;
+        b=cXgUcsNUfF6P+SjHqCuNAxT84nV5oe/5u+2t5INvDnnNWPn5Q7ARhf+Pb18qGAYifk/0XE
+        znw6/Rvere9W8D/xW7u0qTYsyGIh9gTN2wzuWOs3VJGRsaN3RkElclAwOslWbw+F1vS1ie
+        wf0z59faKNsNTHDm1/yA9bE+rnqkrFU=
+Date:   Tue, 24 Jan 2023 12:28:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Moger, Babu" <babu.moger@amd.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "Hunter, Adrian" <adrian.hunter@intel.com>,
+        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
+        "peternewman@google.com" <peternewman@google.com>
+Subject: Re: [PATCH v11 04/13] x86/cpufeatures: Add Bandwidth Monitoring
+ Event Configuration feature flag
+Message-ID: <Y8/A8yYcU0QXVRGG@zn.tnic>
+References: <20230109164405.569714-1-babu.moger@amd.com>
+ <20230109164405.569714-5-babu.moger@amd.com>
+ <Y7xjxUj+KnOEJssZ@zn.tnic>
+ <5afd0a7c-3fbe-dfea-f1b4-2fc35fbb4f13@amd.com>
+ <Y7yCCNANVBnOOmxM@zn.tnic>
+ <SJ1PR11MB608321F26D729A082BFC6FAEFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <Y7yJq2lV262EPCQT@zn.tnic>
+ <SJ1PR11MB60839FFE6A7769A1E15818DDFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Message-ID: <20230124112644.00000AEE.0656@satutoku.jp>
-Date:   Tue, 24 Jan 2023 20:26:44 +0900
-From:   "Chaoxiang Genghis" <2fkensa@satutoku.jp>
-To:     <gengh@cc.cc>
-Reply-To: <c-genghis0@yandex.com>
-Subject: Good day..., 
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: UAE
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674559604;VERSION=7944;MC=3999643498;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,UNRESOLVED_TEMPLATE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [210.134.168.80 listed in bl.score.senderscore.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [c-genghis0[at]yandex.com]
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB60839FFE6A7769A1E15818DDFCFE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 09, 2023 at 09:50:20PM +0000, Luck, Tony wrote:
+> But that allows for the flimsiest of reasons to used to justify making a
+> flag visible.
 
-Good day..., 
+How's that for starters?
 
-How are you doing today, I hope this email finds you in good health. You have not responded to my previous emails to you regarding Mr. Husson.
+c: The naming override can be "", which means it will not appear in /proc/cpuinfo.
+----------------------------------------------------------------------------------
 
-Kindly acknowledge my proposal and let me know what your decisions are, if you are taking the offer.
+The feature shall be omitted from /proc/cpuinfo if there is no valid use case
+for userspace to query this flag and cannot rely on other means for detecting
+feature support. For example, toolchains do use CPUID directly instead of
+relying on the kernel providing that info.
 
-Get back to me as soon as you can for further details.
+If unsure, that flag can always be omitted initially and, once a valid use case
+presents itself, be shown later. Not the other way around.
 
-Best regards,
-Mr. Chaoxiang Genghis.
+Another example is X86_FEATURE_ALWAYS, defined in cpufeatures.h. That flag is an
+internal kernel feature used in the alternative runtime patching functionality.
+So, its name is overridden with "". Its flag will not appear in /proc/cpuinfo
+because it absolutely does not make any sense to appear there.
 
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
