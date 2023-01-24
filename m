@@ -2,147 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8D16797A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093826797A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbjAXMTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S232593AbjAXMTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 07:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbjAXMTb (ORCPT
+        with ESMTP id S233762AbjAXMT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:19:31 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA6637F02;
-        Tue, 24 Jan 2023 04:19:30 -0800 (PST)
+        Tue, 24 Jan 2023 07:19:29 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD51457D5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:19:23 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id k10-20020a17090a590a00b0022ba875a1a4so11370344pji.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 04:19:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1674562770; x=1706098770;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=crltBwfloSo7xnyTSz7Z0uQPe7RMWKQQnz7Q2pXv6UI=;
-  b=cJeSFbOzYz3p+neORcnu8Kud5i7n7aw8qnorST6OEQP5jTqO4KhItDaa
-   toNY2PKkcMQnSdzRYcwy+k121kWZ7T1Hap99KuLp/2iNowMchkNoJ1k1m
-   /DR4CIzgmEYNDuwPRcku/Rpl0hlzBh+EyFqyZrdp5xGY3WXWcSHBrFql0
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2023 04:19:29 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 04:19:29 -0800
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 24 Jan 2023 04:19:27 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH] firmware: qcom_scm: modify qcom_scm_set_download_mode()
-Date:   Tue, 24 Jan 2023 17:49:15 +0530
-Message-ID: <1674562755-5378-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A/7Qu8+3n1M8/9GOtQ5EA0GbOvgIBu69H4oMSLKB4RU=;
+        b=gFLiV5tfkgWilYvilc2OjqCiE4ojC5DbptZJ+Z3A23EwAvNvB8V/zwRslyMfz98GQ0
+         dCO8BqEEO8/Va3C11xmtci/elCMFrz4GqUqLk/znJwK00v1q6CIxnvtDALHrwsOYmLP9
+         YCZpQ/6wjV+K614rz5LhfvOABnrvvALvbYzXrvcHYZLOmfXFWUKW7cCO5G9JuBQvRK7I
+         we/+a9kIzzeymeuIj5BUR22uiGzfDff6JYa3s6zHMcLa03yLP+izkwL7tbCje4QoQ+Uh
+         GYlC5P5Z5yh4Ph9Xm1GUXnh70l57Wpo3k7WJIStAokegORE1OAV00cQ/IOdqYIzJ+V65
+         mmOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A/7Qu8+3n1M8/9GOtQ5EA0GbOvgIBu69H4oMSLKB4RU=;
+        b=RiS29tnYl6BKt6kj8zbEqpAt0TDf9Tuey6BUM4vVjrD2rZE2Zb8ODR871Uew5LcMO/
+         7mLGKCtI+KAEXv+RRE56YUSycVqx+qxeRClqekZHU3kPsLFCo1U+YmsJR8EphtDwUK2w
+         3wYb78c/hx9DflRTGa+4RX7ni/0bl8qOLjxd8iYVyy9s/DYK5tyFgBWbidWr2lr5jxoz
+         WdY5KaXAgeqk9Zbq9Z+N6Ljv+tlQxrMudW9sYUmid/Q/7aoZwlAEInKxxG+L/5Nctb++
+         eofibAO7r+tAqt564H7vkV8wBxwksch+/yga2FbXE/Ud0G+00mKm6q+I7Fkj2XyNfRmm
+         sugA==
+X-Gm-Message-State: AFqh2kop4P68LkqjQxuRK5N+IenNDbkhQKDcO5KlwKGuBj8PvyZhpFiU
+        fFIwGFSfr1zManfcwr+su+UL+w==
+X-Google-Smtp-Source: AMrXdXtufDumWV+8RAXQ8wsMW2TlQHdMz5dV3ooJEie5JhRJKuPT+qDq47usLgM+OvGgRlC85uh10Q==
+X-Received: by 2002:a17:90a:1a41:b0:22b:b82a:f3a6 with SMTP id 1-20020a17090a1a4100b0022bb82af3a6mr14479079pjl.33.1674562763389;
+        Tue, 24 Jan 2023 04:19:23 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id t8-20020a17090a1c8800b0020aacde1964sm8182776pjt.32.2023.01.24.04.19.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 04:19:22 -0800 (PST)
+Message-ID: <3993c666-7038-76f8-9216-3db23ca0bffb@9elements.com>
+Date:   Tue, 24 Jan 2023 17:49:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] hwmon: (pmbus/tda38640) Add driver for Infineon TDA38640
+ Voltage Regulator
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230124110111.3965317-1-Naresh.Solanki@9elements.com>
+ <b4b11836-5a4b-a2b7-18e2-89ca26f19817@linaro.org>
+ <05947e9f-0667-4565-b481-ca5635da4174@9elements.com>
+ <d8fb3c45-435d-f080-6ba4-e9e4595f3638@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <d8fb3c45-435d-f080-6ba4-e9e4595f3638@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify qcom_scm_set_download_mode() such that it can support
-multiple modes. There is no functional change with this change.
+Hi
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
- drivers/firmware/qcom_scm.c | 17 ++++++++---------
- include/linux/qcom_scm.h    |  5 +++++
- 2 files changed, 13 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index cdbfe54..712bb03 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -400,22 +400,22 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
- }
- EXPORT_SYMBOL(qcom_scm_set_remote_state);
- 
--static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
-+static int __qcom_scm_set_dload_mode(struct device *dev, enum qcom_download_mode mode)
- {
- 	struct qcom_scm_desc desc = {
- 		.svc = QCOM_SCM_SVC_BOOT,
- 		.cmd = QCOM_SCM_BOOT_SET_DLOAD_MODE,
- 		.arginfo = QCOM_SCM_ARGS(2),
--		.args[0] = QCOM_SCM_BOOT_SET_DLOAD_MODE,
-+		.args[0] = mode,
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
-+	desc.args[1] = mode;
- 
- 	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
- }
- 
--static void qcom_scm_set_download_mode(bool enable)
-+static void qcom_scm_set_download_mode(enum qcom_download_mode mode)
- {
- 	bool avail;
- 	int ret = 0;
-@@ -424,10 +424,9 @@ static void qcom_scm_set_download_mode(bool enable)
- 					     QCOM_SCM_SVC_BOOT,
- 					     QCOM_SCM_BOOT_SET_DLOAD_MODE);
- 	if (avail) {
--		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
-+		ret = __qcom_scm_set_dload_mode(__scm->dev, mode);
- 	} else if (__scm->dload_mode_addr) {
--		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
--				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
-+		ret = qcom_scm_io_writel(__scm->dload_mode_addr, mode);
- 	} else {
- 		dev_err(__scm->dev,
- 			"No available mechanism for setting download mode\n");
-@@ -1410,7 +1409,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
- 	 * disabled below by a clean shutdown/reboot.
- 	 */
- 	if (download_mode)
--		qcom_scm_set_download_mode(true);
-+		qcom_scm_set_download_mode(QCOM_DOWNLOAD_FULLDUMP);
- 
- 	return 0;
- }
-@@ -1419,7 +1418,7 @@ static void qcom_scm_shutdown(struct platform_device *pdev)
- {
- 	/* Clean shutdown, disable download mode to allow normal restart */
- 	if (download_mode)
--		qcom_scm_set_download_mode(false);
-+		qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
- }
- 
- static const struct of_device_id qcom_scm_dt_match[] = {
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index f833564..f9bc84e 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -14,6 +14,11 @@
- #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
- #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
- 
-+enum qcom_download_mode {
-+	QCOM_DOWNLOAD_NODUMP    = 0x00,
-+	QCOM_DOWNLOAD_FULLDUMP  = 0x10,
-+};
-+
- struct qcom_scm_hdcp_req {
- 	u32 addr;
- 	u32 val;
--- 
-2.7.4
-
+On 24-01-2023 05:35 pm, Krzysztof Kozlowski wrote:
+> On 24/01/2023 12:45, Naresh Solanki wrote:
+>> Hi
+>>
+>> On 24-01-2023 04:40 pm, Krzysztof Kozlowski wrote:
+>>> On 24/01/2023 12:01, Naresh Solanki wrote:
+>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>>
+>>>> Add the pmbus driver for the Infineon TDA38640 voltage regulator.
+>>>>
+>>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> ---
+>>>>    .../devicetree/bindings/trivial-devices.yaml  |  2 +
+>>>
+>>> Split bindings from driver code.
+>> Sure
+>>>
+>>>>    drivers/hwmon/pmbus/Kconfig                   | 16 ++++
+>>>>    drivers/hwmon/pmbus/Makefile                  |  1 +
+>>>>    drivers/hwmon/pmbus/tda38640.c                | 78 +++++++++++++++++++
+>>>>    4 files changed, 97 insertions(+)
+>>>>    create mode 100644 drivers/hwmon/pmbus/tda38640.c
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+>>>> index f5c0a6283e61..a28b02036489 100644
+>>>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+>>>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+>>>> @@ -141,6 +141,8 @@ properties:
+>>>>              - infineon,slb9645tt
+>>>>                # Infineon SLB9673 I2C TPM 2.0
+>>>>              - infineon,slb9673
+>>>> +            # Infineon TDA38640 Voltage Regulator
+>>>> +          - infineon,tda38640
+>>>>                # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+>>>>              - infineon,tlv493d-a1b6
+>>>>                # Infineon Multi-phase Digital VR Controller xdpe11280
+>>>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+>>>> index 30448e049486..9f4bbb9c487a 100644
+>>>> --- a/drivers/hwmon/pmbus/Kconfig
+>>>> +++ b/drivers/hwmon/pmbus/Kconfig
+>>>> @@ -395,6 +395,22 @@ config SENSORS_STPDDC60
+>>>>    	  This driver can also be built as a module. If so, the module will
+>>>>    	  be called stpddc60.
+>>>>    
+>>>> +config SENSORS_TDA38640
+>>>> +	tristate "Infineon TDA38640"
+>>>> +	help
+>>>> +	  If you say yes here you get hardware monitoring support for Infineon
+>>>> +	  TDA38640.
+>>>> +
+>>>> +	  This driver can also be built as a module. If so, the module will
+>>>> +	  be called tda38640.
+>>>> +
+>>>> +config SENSORS_TDA38640_REGULATOR
+>>>> +	bool "Regulator support for TDA38640 and compatibles"
+>>>> +	depends on SENSORS_TDA38640 && REGULATOR
+>>>> +	help
+>>>> +	  If you say yes here you get regulator support for Infineon
+>>>> +	  TDA38640 as regulator.
+>>>
+>>> Drop entire option, why is it needed?
+>> You mean regulator option ?
+>> This is how other pmbus regulator devices have provided option.
+> 
+> Hmmm... I wonder why this is of any use.
+ From what I can think of. Chip also provide pin to control regulator 
+enable. If that is used in the design then the regulator option may not 
+be needed.
+> 
+>>>
+>>>> +
+>>>>    config SENSORS_TPS40422
+>>>>    	tristate "TI TPS40422"
+>>>>    	help
+> 
+> (...)
+Yes this doesn't has regulator support in driver.
+> 
+>>>
+>>>> +static const struct of_device_id tda38640_of_match[] = {
+>>>> +	{ .compatible = "infineon,tda38640"},
+>>>> +	{ },
+>>>> +};
+>>>> +MODULE_DEVICE_TABLE(of, tda38640_of_match);
+>>>
+>>> Where is it used? You miss the user.
+>> I'm not sure if I get your question right.
+>> This chip is used in sbp1 board to power CPU rails.
+> 
+> No, where is the data structure used (except module autoloading)?
+My use case is loading the driver base on DT. Not sure of other uses.
+> 
+> Best regards,
+> Krzysztof
+> 
+Best Regards,
+Naresh
