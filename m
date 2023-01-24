@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165C267A698
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF1C67A69E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 00:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbjAXXDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 18:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S233791AbjAXXDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 18:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbjAXXDC (ORCPT
+        with ESMTP id S233603AbjAXXDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 18:03:02 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E114E4AA6D;
-        Tue, 24 Jan 2023 15:03:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 24 Jan 2023 18:03:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5EE49548;
+        Tue, 24 Jan 2023 15:03:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1jDb2MCmz4xZb;
-        Wed, 25 Jan 2023 10:02:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674601375;
-        bh=C/sQI+DCClzKo+mlylX2P7kgiOImuOJ93LV9JzJ2IW0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DFupiJxQkE7eL+G/s445JQOt3WZ0YM8y6KAHK4sQr6InNt5QYFgNIfw1uFBls5FfK
-         oL9hOMvd8D71Ur1dZdi+rP+wkw1n5NdG8deQsT84QI9OGpNEJlFZP3BDQWGO1Fj7zE
-         c4sbDJu8yQb/OXG7HoX94t2w3sYWikgkCov5DVsPuHQSljItKbPc7axK3JFz8P8IO9
-         R7QOzDfkRGXsYsa6H0uejDBI7/ss6mkLqAf/enPcjzqgt43m8/JqVtqtdWeypngoYb
-         kzrI2IkL2ALpk3SHIv+6VrJbAl3p0yirDPoHfz9Oj7iZCcIeFTNj+9jrY/UTGz0bVR
-         2wJL2gcUU+KIw==
-Date:   Wed, 25 Jan 2023 10:02:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the thermal tree
-Message-ID: <20230125100254.7eb4aeaa@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F9A7B81717;
+        Tue, 24 Jan 2023 23:03:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AC5C433EF;
+        Tue, 24 Jan 2023 23:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674601423;
+        bh=FInAJGM6hitQqEWREbqfiZT6RW4VKmJRYiGIyELSJQc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VDav27OxxZTsAQgsUUqCRxbi02UJHTXeQ4BNvRR2EVcVurslbfZQ1hQbAIbZQ0Dfe
+         d2YSKzxKcs/H8PX8n256ShJsj1Yt/HpEuQvjdnXNW7LxK4qClB/5cWjD9N85pUzOHq
+         f9gUdwmJmO9TH4Nu6ulKdR7s5iitURCwPLteuRHaK6g42tTBOlrwyVzrc/b54PXQrm
+         FbSFiUK1nyUKX9eWCnkged8yubqQAufRoj0a6bqC3EvH/1rfsEWHb0Tb9HTxrVTird
+         q9ZhjkXbmN7rMAWQP3zs8stWUwCCsCvl/nEQ1sr2UBHleUHB7lQ7F6o7uEEzUcCbTU
+         KQ4JYbXPqsgEQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] Docs: Add missing SPDX license identifiers of
+Date:   Tue, 24 Jan 2023 23:03:40 +0000
+Message-Id: <20230124230340.113608-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87a627ftuf.fsf@meer.lwn.net>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/n7Xz=2Ccana0DeiPEUXYz0C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/n7Xz=2Ccana0DeiPEUXYz0C
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 24 Jan 2023 15:31:04 -0700 Jonathan Corbet <corbet@lwn.net> wrote:
 
-Hi all,
+> SeongJae Park <sj@kernel.org> writes:
+> 
+> > Some subsystem documents are missing SPDX license identifiers on index
+> > files.  This patchset adds those.
+> >
+> > Changes from v1
+> > (https://lore.kernel.org/lkml/20230114194741.115855-2-sj@kernel.org/)
+> > - Separate from index file content changes
+> > - Separate patch for each subsystem doc (Alex Deucher)
+> > - Use MIT license for gpu (Alex Deucher)
+> >
+> > SeongJae Park (8):
+> >   Docs/crypto/index: Add missing SPDX License Identifier
+> >   Docs/driver-api/index: Add missing SPDX License Identifier
+> >   Docs/gpu/index: Add missing SPDX License Identifier
+> >   Docs/hwmon/index: Add missing SPDX License Identifier
+> >   Docs/input/index: Add missing SPDX License Identifier
+> >   Docs/mm/index: Add missing SPDX License Identifier
+> >   Docs/scheduler/index: Add missing SPDX License Identifier
+> >   Docs/sound/index: Add missing SPDX License Identifier
+> 
+> So I've applied patches 2 (since I wrote the initial file) and 8 (with
+> Takashi's ack).  The others are also fine, I think, but I hesitate to
+> apply license texts to files without knowing that they match the
+> author's intent.  I hate to say it, but I think the best approach is to
+> send each of the remaining patches to the appropriate maintainers for
+> the subsystem involved.
 
-After merging the thermal tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+That makes 100% sense, thank you, Jon!
 
-ERROR: modpost: "thermal_acpi_trip_crit" [drivers/thermal/intel/int340x_the=
-rmal/int340x_thermal_zone.ko] undefined!
-ERROR: modpost: "thermal_acpi_trip_psv" [drivers/thermal/intel/int340x_ther=
-mal/int340x_thermal_zone.ko] undefined!
-ERROR: modpost: "thermal_acpi_trip_act" [drivers/thermal/intel/int340x_ther=
-mal/int340x_thermal_zone.ko] undefined!
-ERROR: modpost: "thermal_acpi_trip_gtsh" [drivers/thermal/intel/int340x_the=
-rmal/int340x_thermal_zone.ko] undefined!
 
-Caused by commit
+Thanks,
+SJ
 
-  0d568e144ead ("thermal/drivers/intel: Use generic trip points int340x")
-
-and me choosing commit
-
-  7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
-
-from the pm tree over commit
-
-  4bb6439371e9 ("thermal/acpi: Add ACPI trip point routines")
-
-from the thermal tree in the merge fix up.
-
-I have just reverted commit 0d568e144ead for today until this can be
-sorted out.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/n7Xz=2Ccana0DeiPEUXYz0C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPQY54ACgkQAVBC80lX
-0GwY5ggAipXtclAbA+nWFK3vZmC3FnhlFlu3IvquGdGtE8734Tj0XjrisB1UcFih
-1WedYiVDPYTYtmGowBHzYsp7KZn7nSmyPKr1udPSyUkP9R16IJxd3YQW0Y6PVZa7
-3psUKNs/AtXX+eaMicIVYckmvNjDPEX8Ix4HjoYuwlsTd/u1yHQD41T+8GppZa9g
-19CmSvyvBqQAIGoaDbOlA5X42gGYWDoGTB403QZAYmasuC3UAGg0llMaxSvOnrA0
-pY4ejCIefqO2/VhAJ871j4VB7YudwLdA755Msgz8HI4GnjwwOctpxxokdDj7GzDz
-i0AjNZf4m7uQtp155IZZHAnsNnPsug==
-=Kabu
------END PGP SIGNATURE-----
-
---Sig_/n7Xz=2Ccana0DeiPEUXYz0C--
+> 
+> Thanks,
+> 
+> jon
