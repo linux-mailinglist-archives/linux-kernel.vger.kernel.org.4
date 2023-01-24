@@ -2,160 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC657679266
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 08:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C05679278
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 09:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjAXH4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 02:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S232022AbjAXIBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 03:01:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjAXH4n (ORCPT
+        with ESMTP id S232620AbjAXIBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 02:56:43 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C6B44A9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:56:42 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id p24so13934107plw.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 23:56:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IehvW+ytjBjOfr0jydrmbHO2zJBLkzx2YGJHGnzqhIs=;
-        b=ieHxGjYP8uzW4ht7awbJlp0w57w+d3HLN/c5Rpqv9ec8UY15FIC9zl4hbfuNFqvMXS
-         +1DHL18xYK4z4sNc5GOQ3vTQk1rY8vSyc4NfPpbQycd6rXjX5DOPYAXZCHpjN/kIvo3a
-         VcxuW7hNdsqrJXKqx9WmBg4iCQvJQBQRz+OIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IehvW+ytjBjOfr0jydrmbHO2zJBLkzx2YGJHGnzqhIs=;
-        b=q5CIfBp825W+oA3xbZSzbnXyflTajwp5BoVv5zdANTYif74FPRmCuapqtKyOrqBcjz
-         gU6PGacc8bkWmt3Pi6zf/c1VVwlN7FQNP0axs+4e1tpfR5fsktxJxUq8Vaq6Ctj+yHjX
-         EHSp1nlZONQ2vsjYJ0bh6SG6gnpfzsKbWIJN92XQ3ZfsIrOLmwKVCL5CQoW6NM2vmaiP
-         hVK15+oazyqrK88ygetqeWHPbjI868SO6xnGyxCCFt6B+9G4jxIUmMrtQdS3vI9sW9Fh
-         MT9AIghwckeGQOEKa9Lcih31DM7yroOq0KVdSdojbWmPreU2oi/7zNw8dz12TnZO+fjw
-         ukvA==
-X-Gm-Message-State: AO0yUKU7VXxZpaxx8JNjYkHd4QJVmI16GEUE+J0NOKCJfu/yYv+BXlDO
-        beYiXktexp/AwBTRB2yrKY+MmLSUOTE2yIAMO9o=
-X-Google-Smtp-Source: AK7set8ZncBvg0s//J6Daa/MO2C9pY4Ac7/ua4mDRMZHFDHgfdR6jtnM16WToqPBhBhXS7U/oPT2tA==
-X-Received: by 2002:a17:902:d4cc:b0:196:11ae:95f1 with SMTP id o12-20020a170902d4cc00b0019611ae95f1mr2252872plg.24.1674547001696;
-        Mon, 23 Jan 2023 23:56:41 -0800 (PST)
-Received: from localhost ([2401:fa00:9:14:92d9:f31f:cbe8:b7e7])
-        by smtp.gmail.com with UTF8SMTPSA id w23-20020a1709027b9700b00189743ed3b6sm1003340pll.64.2023.01.23.23.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 23:56:41 -0800 (PST)
-From:   Victor Ding <victording@chromium.org>
-To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Cc:     heikki.krogerus@linux.intel.com, lee.jones@linaro.org,
-        groeck@chromium.org, enric.balletbo@collabora.com,
-        tzungbi@kernel.org, sebastian.reichel@collabora.com,
-        gregkh@linuxfoundation.org, gustavoars@kernel.org,
-        bleung@chromium.org, dustin@howett.net, dnojiri@chromium.org,
-        tinghan.shen@mediatek.com, pmalani@chromium.org,
-        Victor Ding <victording@chromium.org>
-Subject: [PATCH v3] platform/chrome: cros_ec_typec: allow deferred probe of switch handles
-Date:   Tue, 24 Jan 2023 07:56:32 +0000
-Message-Id: <20230124075555.v3.1.I6c0a089123fdf143f94ef4cca8677639031856cf@changeid>
-X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 03:01:00 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4291130292
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 00:00:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674547182; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SGeRpqUb/UpVpw5MIvNg/ttxmx+6Pu+9GzMy2XQfGXWrE0Ru6MZAyb7KxdSMFUWKcY/43++6qWYpVN9yN2xd1/QXO6ZDxpL8wiwJEErLkle2VSC9Hqt3nhUN8QdGxk8u7bkGP9ZWD+A1m8oLYruHLYdXnQGQx5V3+1iirAqzUdA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674547182; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=/fyEdHbRGpDWfMEi9dn8qZpRjYXX/Uzc+C+RYtUDkZU=; 
+        b=Yv3K8uJnzyr4axYNc2IKs6qiDgi5Xr73tmAPP142f03UdkJhx2igZWQoLbtDhJipLLFQTGz4PKKJ6s9aRmYSNaZVb43Rit99uCigtSxXDrwTDbN3E6QiU8RCmBpCCenvBGAqe86DKDB47S6PoPjlc1s16E5STKFzZ1FianiQ0cc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674547182;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=/fyEdHbRGpDWfMEi9dn8qZpRjYXX/Uzc+C+RYtUDkZU=;
+        b=URNYEPcx5AjbBGkQupZzLgmTsXmhut5q3OXcQVl+bc0ACsjaRefNgmEIVk0G1pTO
+        ttaBDRPc1U9xi3DGMMxBOO8LyAViJVw+U0ogS0NRkGrjNSuQkzZv7Fh1zrQGIP7mgDw
+        WTqwDU0UgjzzwbrgqG1N2UWb9moMLzlbzEzSU+aY=
+Received: from lchen-xiaoxin.linux.beauty (122.96.40.54 [122.96.40.54]) by mx.zohomail.com
+        with SMTPS id 1674547180315174.69971912538972; Mon, 23 Jan 2023 23:59:40 -0800 (PST)
+Date:   Tue, 24 Jan 2023 15:58:53 +0800
+Message-ID: <871qnkicsi.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Li Chen" <lchen@ambarella.com>,
+        Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        "Lubomir Rintel" <lkundrak@v3.sk>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Sven Peter" <sven@svenpeter.dev>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        "Brian Norris" <briannorris@chromium.org>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 06/15] soc: add Ambarella driver
+In-Reply-To: <85b86d06-c63c-4481-a3dd-16b72572a5ee@app.fastmail.com>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-7-lchen@ambarella.com>
+        <85b86d06-c63c-4481-a3dd-16b72572a5ee@app.fastmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`fwnode_typec_{retimer,mux,switch}_get()` could return `-EPROBE_DEFER`,
-which is called from `cros_typec_get_switch_handles`. When this happens,
-it does not indicate absence of switches; instead, it only hints that
-probing of switches should occur at a later time.
 
-Progagate `-EPROBE_DEFER` to upper layer logic so that they can re-try
-probing switches as a better time.
+Hi Arnd,
 
-Signed-off-by: Victor Ding <victording@chromium.org>
----
+On Mon, 23 Jan 2023 16:29:06 +0800,
+Arnd Bergmann wrote:
+>
+> On Mon, Jan 23, 2023, at 08:32, Li Chen wrote:
+> > This driver add soc_id support for Ambarella,
+> > which is stored inside "cpuid" AXI address mapping.
+> >
+> > Also provide sys_config(POC, aka power on configuration)
+> > for other drivers.
+> >
+> > Signed-off-by: Li Chen <lchen@ambarella.com>
+>
+> The soc_id support looks ok
+>
+> > Change-Id: I4869a3497366ac7779e792835f8e0309239036a8
+>
+> Please drop these lines in the submission, the IDs are
+> not reachable outside of your own git, so we don't want
+> these to show up in the public history.
 
-Changes in v3:
-- Reverted unnecessary change.
+Sorry, I forgot to remove this.
 
-Changes in v2:
-- Coverted switch-block to nested if-blocks.
+> > +static struct ambarella_soc_id {
+> > +	unsigned int id;
+> > +	const char *name;
+> > +	const char *family;
+> > +} soc_ids[] = {
+> > +	{ 0x00483245, "s6lm",  "10nm", },
+> > +};
+>
+> I would suggest something more descriptive in the "family"
+> field to let users know they are on an Ambarella SoC.
+>
+> Maybe just "Ambarella 10nm".
 
- drivers/platform/chrome/cros_ec_typec.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+There is a "pr_info("Ambarella SoC %s detected\n", soc_dev_attr->soc_id);" in this file,
+I think this should be enough, right?
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 59de4ce01fab..de480ab10488 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -145,27 +145,33 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- 					 struct fwnode_handle *fwnode,
- 					 struct device *dev)
- {
-+	int ret = 0;
-+
- 	port->mux = fwnode_typec_mux_get(fwnode, NULL);
- 	if (IS_ERR(port->mux)) {
--		dev_dbg(dev, "Mux handle not found.\n");
-+		ret = PTR_ERR(port->mux);
-+		dev_dbg(dev, "Mux handle not found: %d.\n", ret);
- 		goto mux_err;
- 	}
- 
- 	port->retimer = fwnode_typec_retimer_get(fwnode);
- 	if (IS_ERR(port->retimer)) {
--		dev_dbg(dev, "Retimer handle not found.\n");
-+		ret = PTR_ERR(port->retimer);
-+		dev_dbg(dev, "Retimer handle not found: %d.\n", ret);
- 		goto retimer_sw_err;
- 	}
- 
- 	port->ori_sw = fwnode_typec_switch_get(fwnode);
- 	if (IS_ERR(port->ori_sw)) {
--		dev_dbg(dev, "Orientation switch handle not found.\n");
-+		ret = PTR_ERR(port->ori_sw);
-+		dev_dbg(dev, "Orientation switch handle not found: %d\n", ret);
- 		goto ori_sw_err;
- 	}
- 
- 	port->role_sw = fwnode_usb_role_switch_get(fwnode);
- 	if (IS_ERR(port->role_sw)) {
--		dev_dbg(dev, "USB role switch handle not found.\n");
-+		ret = PTR_ERR(port->role_sw);
-+		dev_dbg(dev, "USB role switch handle not found: %d\n", ret);
- 		goto role_sw_err;
- 	}
- 
-@@ -181,7 +187,7 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- 	typec_mux_put(port->mux);
- 	port->mux = NULL;
- mux_err:
--	return -ENODEV;
-+	return ret;
- }
- 
- static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
-@@ -423,9 +429,11 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 		}
- 
- 		ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
--		if (ret)
--			dev_dbg(dev, "No switch control for port %d\n",
--				port_num);
-+		if (ret) {
-+			dev_dbg(dev, "No switch control for port %d, err: %d\n", port_num, ret);
-+			if (ret == -EPROBE_DEFER)
-+				goto unregister_ports;
-+		}
- 
- 		ret = cros_typec_register_port_altmodes(typec, port_num);
- 		if (ret) {
--- 
-2.39.1.405.gd4c25cc71f-goog
+> > +static int __init ambarella_socinfo_init(void)
+> > +{
+> > +	struct soc_device_attribute *soc_dev_attr;
+> > +	struct soc_device *soc_dev;
+> > +	struct device_node *np;
+> > +	struct regmap *cpuid_regmap;
+> > +	unsigned int soc_id;
+> > +
+> > +	cpuid_regmap = syscon_regmap_lookup_by_compatible("ambarella,cpuid");
+> > +	if (IS_ERR(cpuid_regmap))
+> > +		return PTR_ERR(cpuid_regmap);
+>
+> Is there anything else in this syscon node? If the block
+> of registers only contains the identification bits, you
+> could just make this file a platform_driver that binds to
+> the node instead of using a syscon.
+>
+> If there are other unrelated registers in there, the compatible
+> string should probably be changed to better describe the
+> entire area based on the name in the datasheet.
 
+Yeah, this block is only used for identification bits. In datasheet,
+it is also named "CPU ID".
+
+Other than cpuid_regmap, this driver also looks for "model" name as soc machine name:
+of_property_read_string(np, "model", &soc_dev_attr->machine);
+
+So I think it is not a good idea to conver it to into a platform driver.
+
+As for "syscon", I think it is still very helpful to get regmap easily. Generally speaking,
+I prefer regmap over void*, because it has debugfs support, so I can get its value more easily.
+
+> > +static unsigned int ambsys_config;
+> > +
+> > +unsigned int ambarella_sys_config(void)
+> > +{
+> > +	return ambsys_config;
+> > +}
+> > +EXPORT_SYMBOL(ambarella_sys_config);
+>
+> Which drivers use this bit? Can they be changed to
+> use soc_device_match() instead to avoid the export?
+
+sys_config is used by our nand and sd drivers. I also don't want to export,
+but struct soc_device_attribute/soc_device don't have private data to store it,
+I think there is no better way.
+
+> > +static int __init ambarella_soc_init(void)
+> > +{
+> > +	struct regmap *rct_regmap;
+> > +	int ret;
+> > +
+> > +	rct_regmap = syscon_regmap_lookup_by_compatible("ambarella,rct");
+> > +	if (IS_ERR(rct_regmap)) {
+> > +		pr_err("failed to get ambarella rct regmap\n");
+> > +		return PTR_ERR(rct_regmap);
+> > +	}
+> ...
+> > +arch_initcall(ambarella_soc_init);
+>
+> It is not an error to use a chip from another manufacturer,
+> please drop the pr_err() and return success here.
+
+Ok, good to know, thanks. But we don't have other manufacturers at least for now,
+and rct_regmap is need to be updated here, like sys_config and soft reboot. So I think
+this rct regmap is still needed.
+
+> > +#ifndef __SOC_AMBARELLA_MISC_H__
+> > +#define __SOC_AMBARELLA_MISC_H__
+> > +
+> > +extern unsigned int ambarella_sys_config(void);
+> > +extern struct proc_dir_entry *ambarella_proc_dir(void);
+> > +
+>
+> The ambarella_proc_dir looks like a stale entry that should be
+> removed. Ideally you should not need a private header at all.
+
+Oops, my bad. I will remove proc dir in v2.
+
+Regards,
+Li
