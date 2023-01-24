@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD7167A62D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9E567A631
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjAXWyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S233589AbjAXW4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjAXWyv (ORCPT
+        with ESMTP id S229715AbjAXW4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:54:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F6E43900
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 14:54:51 -0800 (PST)
+        Tue, 24 Jan 2023 17:56:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4D446719;
+        Tue, 24 Jan 2023 14:56:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8683E61383
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D6EC433EF;
-        Tue, 24 Jan 2023 22:54:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E111C6137B;
+        Tue, 24 Jan 2023 22:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A66C433D2;
+        Tue, 24 Jan 2023 22:56:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674600889;
-        bh=o4uL/Ie7bBAxgdc1EkRlmNDXqSGXOokKDmYGb35nUg8=;
+        s=k20201202; t=1674600989;
+        bh=QV13JY8PQ02u2BMhjhQlrKhEEqji7+JXyt4jC9lmAi4=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=O8+r9I2VRP4AnVr7kVaNG24QvG7zm4oYirm5+NrXMALDF1pCPBJSZSJtAPk+9l/Mz
-         /1dev6jbRPQHKAOGxW/M3t9GJ+fGDv9wx/0XHWqBh6FPmGOaY8J2OPEC7B9I8Z0pZr
-         wOwSSalBSqiThviI1uuRww7C+1rTWPL+XazPeXoji4Q/4zwoDm2pKZVl+97C0sm2IR
-         3d7gh9gcNEnJPOgtVY9TgyPi6M8vCnDo1q1WwDnZ1w6kksFpTuqos1mJvzoend8II3
-         nGTZ2VtaoCe116sgSviOVAsokc4gaQEO6O2704jJa92r/MKX36PhidSkIcAfHFchJw
-         /rl+zRTSH95hg==
+        b=amCuBSxHqvdOp5yoiB3GBkjxiiNCu5ecC6u35xwIisrjcDw8ExXFj7vwxC3MfDQXR
+         Z55BS15arBgzGS4g0TZpIkkHHVwmsf5l5BbWee/q0hEHqVxTRMrThW09KOC/ykc9vY
+         a8ZMmfPlvDUyEMiBUmOZ8eNdt51rVbNW9zdY/y+1GIQOrIrUkkbakASed+nuvRExOd
+         K9BnfiIti9mtziphP990an/Ku2mOw36Eyw4W3taMUzZ92Nzpy5JrnVXcopW3Dc8TXN
+         k8zcb7YQ9lJ9cN2Pp1uDnyb9CQ6OqPBm+EWYBfmeWivcekzkeENxXBLS3/Jo4ikLB7
+         Dw0qbqVtQ6fmQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7C3865C1183; Tue, 24 Jan 2023 14:54:49 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:54:49 -0800
+        id E1D1C5C1183; Tue, 24 Jan 2023 14:56:28 -0800 (PST)
+Date:   Tue, 24 Jan 2023 14:56:28 -0800
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        rcu <rcu@vger.kernel.org>, stable@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 RESEND] tick/nohz: Fix cpu_is_hotpluggable() by
+ checking with nohz subsystem
+Message-ID: <20230124225628.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20230124040611.GD2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8+8fH52iqQABYs2@andrea>
- <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
- <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
- <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
- <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
+References: <20230124173126.3492345-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
+In-Reply-To: <20230124173126.3492345-1-joel@joelfernandes.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -78,39 +65,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 05:35:33PM -0500, Alan Stern wrote:
-> On Tue, Jan 24, 2023 at 02:15:24PM -0800, Paul E. McKenney wrote:
-> > > Ah, looking at the model now. Indeed it's forbidden, because in order to say
-> > > that something is in co, there must not be a (resulting) cycle of co and
-> > > barriers. But you'd get that here.  In the axiomatic model, this corresponds
-> > > to saying Power's "prop | co" is acyclic. The same isn't true in LKMM. So
-> > > that's probably why.
-> > 
-> > Which means that the RCU and SRCU implementations need to make (admittedly
-> > small) guarantees that cannot be expressed in LKMM.  Which is in fact
-> > what I was remembering, so I feel better now.
-> > 
-> > Not sure about the rest of you, though.  ;-)
+On Tue, Jan 24, 2023 at 05:31:26PM +0000, Joel Fernandes (Google) wrote:
+> For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
+> However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
+> torture tests that do offlining to end up trying to offline this CPU causing
+> test failures. Such failure happens on all architectures.
 > 
-> Can you be more explicit?  Exactly what guarantees does the kernel 
-> implementation make that can't be expressed in LKMM?
+> Fix it by asking the opinion of the nohz subsystem on whether the CPU can
+> be hotplugged.
+> 
+> [ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(). ]
+> 
+> For drivers/base/ portion:
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: rcu <rcu@vger.kernel.org>
+> Cc: stable@vger.kernel.org
+> Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest of the kernel")
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-I doubt that I will be able to articulate it very well, but here goes.
+Queued for further review and testing, thank you both!
 
-Within the Linux kernel, the rule for a given RCU "domain" is that if
-an event follows a grace period in pretty much any sense of the word,
-then that event sees the effects of all events in all read-side critical
-sections that began prior to the start of that grace period.
-
-Here the senses of the word "follow" include combinations of rf, fr,
-and co, combined with the various acyclic and irreflexive relations
-defined in LKMM.
-
-> And are these anything the memory model needs to worry about?
-
-Given that several people, yourself included, are starting to use LKMM
-to analyze the Linux-kernel RCU implementations, maybe it does.
-
-Me, I am happy either way.
+It might be a few hours until it becomes publicly visible, but it will
+get there.
 
 							Thanx, Paul
+
+> ---
+> Sorry, resending with CC to stable.
+> 
+>  drivers/base/cpu.c       |  3 ++-
+>  include/linux/tick.h     |  2 ++
+>  kernel/time/tick-sched.c | 11 ++++++++---
+>  3 files changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index 55405ebf23ab..450dca235a2f 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -487,7 +487,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
+>  bool cpu_is_hotpluggable(unsigned int cpu)
+>  {
+>  	struct device *dev = get_cpu_device(cpu);
+> -	return dev && container_of(dev, struct cpu, dev)->hotpluggable;
+> +	return dev && container_of(dev, struct cpu, dev)->hotpluggable
+> +		&& tick_nohz_cpu_hotpluggable(cpu);
+>  }
+>  EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+>  
+> diff --git a/include/linux/tick.h b/include/linux/tick.h
+> index bfd571f18cfd..9459fef5b857 100644
+> --- a/include/linux/tick.h
+> +++ b/include/linux/tick.h
+> @@ -216,6 +216,7 @@ extern void tick_nohz_dep_set_signal(struct task_struct *tsk,
+>  				     enum tick_dep_bits bit);
+>  extern void tick_nohz_dep_clear_signal(struct signal_struct *signal,
+>  				       enum tick_dep_bits bit);
+> +extern bool tick_nohz_cpu_hotpluggable(unsigned int cpu);
+>  
+>  /*
+>   * The below are tick_nohz_[set,clear]_dep() wrappers that optimize off-cases
+> @@ -280,6 +281,7 @@ static inline void tick_nohz_full_add_cpus_to(struct cpumask *mask) { }
+>  
+>  static inline void tick_nohz_dep_set_cpu(int cpu, enum tick_dep_bits bit) { }
+>  static inline void tick_nohz_dep_clear_cpu(int cpu, enum tick_dep_bits bit) { }
+> +static inline bool tick_nohz_cpu_hotpluggable(unsigned int cpu) { return true; }
+>  
+>  static inline void tick_dep_set(enum tick_dep_bits bit) { }
+>  static inline void tick_dep_clear(enum tick_dep_bits bit) { }
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index 9c6f661fb436..63e3e8ebcd64 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -510,7 +510,7 @@ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
+>  	tick_nohz_full_running = true;
+>  }
+>  
+> -static int tick_nohz_cpu_down(unsigned int cpu)
+> +bool tick_nohz_cpu_hotpluggable(unsigned int cpu)
+>  {
+>  	/*
+>  	 * The tick_do_timer_cpu CPU handles housekeeping duty (unbound
+> @@ -518,8 +518,13 @@ static int tick_nohz_cpu_down(unsigned int cpu)
+>  	 * CPUs. It must remain online when nohz full is enabled.
+>  	 */
+>  	if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
+> -		return -EBUSY;
+> -	return 0;
+> +		return false;
+> +	return true;
+> +}
+> +
+> +static int tick_nohz_cpu_down(unsigned int cpu)
+> +{
+> +	return tick_nohz_cpu_hotpluggable(cpu) ? 0 : -EBUSY;
+>  }
+>  
+>  void __init tick_nohz_init(void)
+> -- 
+> 2.39.1.405.gd4c25cc71f-goog
+> 
