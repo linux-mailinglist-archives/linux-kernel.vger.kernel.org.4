@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E916967A4D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCA667A4DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 22:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbjAXVTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 16:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S234923AbjAXVUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 16:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbjAXVTZ (ORCPT
+        with ESMTP id S234954AbjAXVUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 16:19:25 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502024671F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:19:14 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id q15so14368264qtn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:19:14 -0800 (PST)
+        Tue, 24 Jan 2023 16:20:08 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9577CA8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:20:02 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso15331363pjf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 13:20:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=K8tBkVDcR3cIjvCGSV7pCzotu/GYoRW4uPdPyTobpUU=;
-        b=q/9e3e2NeK80DecsM1DxuwcETnH6bT2rG52Bz4kbxpn9ZUDkALoLB/GXpmZoTETo3u
-         ZXWm/Y/fmSX/kQyrHvV20YZQMs6JQ6Sv9WnFxs0h8Vb/wNoXLt9n+bjCzB7Tu7QAtLZu
-         CphXsH2+n8rm0whA1MrKA/9G7ZIUvx5OyeW2yY1CL8d+ZudMrtoaVSPZgjTh6cjycO3K
-         CpQ+tnxejzvBgLmnrJjgTB2YCsA64fDR0qKx9NbotZOJrwSu4OEI+75HS8Q1t8Lip+h9
-         xx5k9FZo0LIWwoLSrE8fk5zFe2yJYpbldsvt0WmLZ7b3jbz6ggh+xGtIyvyT19rsgUiS
-         r3ZQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OBxYXf9XQKgQ+wbszOVA6b3m7kHIkaxtHTOSxwRTgZI=;
+        b=WTNrPifpA1xZC9rsK9aKpgWZhNP9vDDNuhSBHRGYbNZGqym2iqnnzc/etpIYKjSied
+         3IWGHZGxPvNGBP0IOl/e9vy5pH6s7+wX0y0ZAFEFozZb2s4TZckzqxUgY44qfiFddtS4
+         CIVDKk2KTUuepqvFp5DRQ7G3OOVEx+vS6MMrgA0V28ZZ1CWmCVPidIq3DNbj4Qs215qw
+         JrY8nhxugqzaaWaXJMbjiqnco1BsOVtZD5cD028B4PNXwd6GPG9tAQTFGmCcw0wIhjSH
+         MuCAyVqaoF7+MVSAr2ejQPglXtipsJe9YRDSH3PJ2UYdG9q+ZDT9+91REQDBHAlZDR1C
+         FsCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K8tBkVDcR3cIjvCGSV7pCzotu/GYoRW4uPdPyTobpUU=;
-        b=WA/5FI96cAqzxsl/o6q0YEHQSMv4QrTd62SfiLA4BdPo9j1QU4jXiNNqKq55HU8m0O
-         K5N14HTiKX9RhtBurEoa7hznLZytVaSfM0X9uhn+eQCyL9RBJ6ich96mgPhtuO5d30AR
-         udP0xREUK3pGINsiqTUAknLfkAUEktiA3gG3mWBZM4jGb5kBIEmiHJ/EWE08n2inXifw
-         nTiD4QNUPnZozwDsV3DtFFYp42OD2D+W6MIgTNhI3WXIiSe88i2FlSlJidpn1+D7Y/Op
-         PoWvwSNjXJ7uBZt5OL/z2HgW3e/3Nmb6/Wgz2lLi5RXerqki6BbJTZpsVD8mvUU6Vc/b
-         dI+g==
-X-Gm-Message-State: AFqh2ko9S5Uv7lml9Vg+Z4avxDoDR6mJDAjopJ4YyHhUiiddlxxk2m8I
-        SIrjaOAIjJdcKbeybS0pXomm+A==
-X-Google-Smtp-Source: AMrXdXvVfqjmstskpsb+7KNHHK7XTOLpCh5jIf1Zf8VZzT8oMkYcJQXg4wGwRvhcYM63kTu9+3C+7Q==
-X-Received: by 2002:ac8:6792:0:b0:3a8:1793:76d6 with SMTP id b18-20020ac86792000000b003a8179376d6mr40904443qtp.68.1674595153462;
-        Tue, 24 Jan 2023 13:19:13 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id i7-20020ac84887000000b003b6a17e1996sm1965508qtq.83.2023.01.24.13.19.11
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OBxYXf9XQKgQ+wbszOVA6b3m7kHIkaxtHTOSxwRTgZI=;
+        b=LRF765nrNBgzTvP8xhh9wVdHOKS7FzQssItqF8KDuhr90V8lPKT4n92IX2s6N3pvzX
+         1N7o1ubbOT78eb7xa7kGYDgBauhErQLsE1DzFjjswBFJPAXbiQSTJP7hyy+cCnP/MEkm
+         AWUjIQxUyd8Iu/HtEVMIc628sgvsdNmUAtD3uS+9ZIkHA0TlVpPy07wNWHOrXc8sgnJP
+         RDqjM8wrzWT3WC9vXd0pMh25sy1pQvAg8MzZdGnTFl7rEjhgVDhFYTnUu1OxUBTn9F1l
+         CBx5tqSK+rh7cCYit0Z8XQCcFZmfup4RmGYs/Imv1YxT2geBJjmi1KzInmgokIN+XTY+
+         beHA==
+X-Gm-Message-State: AO0yUKVURZTubC87chK+c/KSVdjBHuQDLCBqfOnZKG52WlRo2Y1jxR8W
+        qh3aQwp/23H24NxpfofdCpUXAQ==
+X-Google-Smtp-Source: AK7set9wh5O2XAdu9rmI1KvS2VWwgf5eHBuZHh/IwPFhtV3HwjOBCkugj/VEbmqZb2xkQGz6PpitVA==
+X-Received: by 2002:a05:6a20:8f1a:b0:b8:c646:b0e2 with SMTP id b26-20020a056a208f1a00b000b8c646b0e2mr442277pzk.3.1674595202115;
+        Tue, 24 Jan 2023 13:20:02 -0800 (PST)
+Received: from google.com ([2620:15c:2d:3:b15:b561:51fb:73c3])
+        by smtp.gmail.com with ESMTPSA id c32-20020a17090a492300b002265ddfc13esm8868770pjh.29.2023.01.24.13.20.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 13:19:12 -0800 (PST)
-Message-ID: <40a7e1171d7777128c0728a28a029e6f3643145a.camel@ndufresne.ca>
-Subject: Re: [PATCH v2 1/2] media: meson: vdec: implement 10bit bitstream
- handling
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     neil.armstrong@linaro.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Benjamin Roszak <benjamin545@gmail.com>
-Date:   Tue, 24 Jan 2023 16:19:11 -0500
-In-Reply-To: <95132025-8f0f-8179-40b7-8bf83458886a@linaro.org>
-References: <20230124034058.3407235-1-christianshewitt@gmail.com>
-         <20230124034058.3407235-2-christianshewitt@gmail.com>
-         <6ff68c4bea9d48980853e9af9db1fc0bf13976ae.camel@ndufresne.ca>
-         <07933226-fbab-fa78-6b96-38e365577605@linaro.org>
-         <478d5a7569b7879aa3410a5b3049d745867df780.camel@ndufresne.ca>
-         <95132025-8f0f-8179-40b7-8bf83458886a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Tue, 24 Jan 2023 13:20:01 -0800 (PST)
+Date:   Tue, 24 Jan 2023 13:19:57 -0800
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team@android.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] Fixes for kmemleak tracking with CMA regions
+Message-ID: <Y9BLfUz5GY69zmjn@google.com>
+References: <20230109221624.592315-1-isaacmanjarres@google.com>
+ <Y8gpfgEXtialPVLk@arm.com>
+ <Y8neaPB2y689WKOf@google.com>
+ <Y8/96eIu47UfqsWO@arm.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8/96eIu47UfqsWO@arm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+On Tue, Jan 24, 2023 at 03:48:57PM +0000, Catalin Marinas wrote:
+> Thanks for digging this out. This patch shouldn't have ended up upstream
+> (commit 972fa3a7c17c "mm: kmemleak: alloc gray object for reserved
+> region with direct map"). I thought both Calvin Zhang and I agreed that
+> it's not the correct approach (not even sure there was a real problem to
+> fix).
+> 
+> Do you still get the any faults with the above commit reverted? I'd
+> prefer this if it works rather than adding unnecessary
+> kmemleak_alloc/free callbacks that pretty much cancel each-other.
+Yes, I still see the same problem after reverting that commit. The problem
+still persists because there are CMA areas that are allocated through
+memblock_phys_alloc_range(), which invokes kmemleak_alloc_phys(). The
+allocation call stack is along the lines of:
 
-Le mardi 24 janvier 2023 =C3=A0 17:51 +0100, neil.armstrong@linaro.org a =
-=C3=A9crit=C2=A0:
-> We hoped we could use the same modifier as DRM, but it seems this is now =
-out of scope.
->=20
-> Neil
+kmemleak_alloc_phys()
+memblock_alloc_range_nid()
+memblock_phys_alloc_range()
+__reserved_mem_alloc_size()
+fdt_init_reserved_mem()
 
-Its not out of scope, its just not being worked on. There is no infra to su=
-pport
-an extra 64bit modifier in V4L2 atm, or to use DRM formats in general. Folk=
-s
-form Qualcomm or Mediatek didn't want to do it, so they worked around by ad=
-ding
-their strictly needed subset of compressed formats. If you don't want this,=
- then
-fine, but I'm not aware of someone actively working on that today.
+I also followed up on my suggestion about adding a flags parameter to
+the memblock allocation functions to be able to use
+MEMBLOCK_ALLOC_NOLEAKTRACE in this particular scenario, but that would
+involve changing many call-sites, which doesn't make much sense given
+that there are only 4 call-sites that actually use this flag.
 
-I was just curious if there was anything other then NV12 (something 10bit) =
-on
-the secondary buffer case, that was my initial question here ;-D.
+Maybe adding a new memblock allocation function that allows this flag to
+be passed as just a flag can be used to avoid creating these kmemleak
+objects for CMA allocations?
 
-Nicolas
-
+--Isaac
