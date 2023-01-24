@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D21D67952E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6036F679530
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbjAXK3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S233520AbjAXK3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjAXK3f (ORCPT
+        with ESMTP id S229538AbjAXK3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:29:35 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB90D3F2AD;
-        Tue, 24 Jan 2023 02:29:33 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 24 Jan 2023 05:29:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89636402FD;
+        Tue, 24 Jan 2023 02:29:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 80BC721A1A;
-        Tue, 24 Jan 2023 10:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674556172; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MLnaHPg0lfs1dnTmMfHc1r7guqRG5LzksqQFwaLpDzQ=;
-        b=mIiJuq3CDQzuKHiOkGgeqtxnFWEvHm/PtewFED0mXeFmMIembhuuVVlWTd1lHkgCUjLCPS
-        y+VsoEu0mhqd2ph1m48lAdBcx2lYGPFC+wbi6MqdUjGakZwEfzifEnpEQcYqhydnP5AtY2
-        JeIRUmB1NqJmpETNKVrmbbcfB6iodao=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674556172;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MLnaHPg0lfs1dnTmMfHc1r7guqRG5LzksqQFwaLpDzQ=;
-        b=7BTH3OyJbyXk8y4Xu0KOlsQgd4h/Dt6lXPi2h/YYuyveKjcJDfmFECgWG2qgB4qo37Vyjz
-        Lr/nEFTReUPl2/DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69E15139FB;
-        Tue, 24 Jan 2023 10:29:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hPvUGQyzz2OAdQAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 24 Jan 2023 10:29:32 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 0863AA06B5; Tue, 24 Jan 2023 11:29:32 +0100 (CET)
-Date:   Tue, 24 Jan 2023 11:29:31 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, David Howells <dhowells@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D67BA60B29;
+        Tue, 24 Jan 2023 10:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A4CC433D2;
+        Tue, 24 Jan 2023 10:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674556180;
+        bh=EzT56XQJOL6STtbWMJM7SuwaIPlurSVkp9kmAZZvnMk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b7Ik92Z3A522198ucGebLAKbV4YXT+qeqhqzWwMk1gM7EC3VFp6bKAjOXsDcc8DkH
+         dKmc9wgFdRQTIvVMTZI+mHOvYr3ekZmrqvRFFSUtEMk+VJcxo3R0AS74OeyhJvn5r9
+         wJ6lmkLfBz+duc+ckwcxHWD7+Yt3wU0snoJ3ANTnXW44uEy5SjdPncznt73JXOh1DE
+         aNnk3nEHLyUO82KBhrERoxi+ZX8KU2x/o6kWR6xA5kowNMAQGl28I8Zn2Us+6rhv3g
+         SfHGbMHItipSJrI9NjnNE5xrJztIltWWFz+qKKFBesNDFHrfNv14R+ms7/7ub2TgZI
+         KlJCFi8mq5WKA==
+Date:   Tue, 24 Jan 2023 10:29:35 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Henning Schild <henning.schild@siemens.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/8] iov_iter: Improve page extraction (ref, pin or
- just list)
-Message-ID: <20230124102931.g7e33syuhfo7s36h@quack3>
-References: <20230120175556.3556978-1-dhowells@redhat.com>
- <Y862ZL5umO30Vu/D@casper.infradead.org>
- <20230123164218.qaqqg3ggbymtlwjx@quack3>
- <Y87E5HAo7ZoHyrbE@casper.infradead.org>
+Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+Message-ID: <Y8+zD6AxuJVy5b7Y@google.com>
+References: <20221007153323.1326-1-henning.schild@siemens.com>
+ <Y8mv8PzL1UsP9gNh@google.com>
+ <20230123214859.725cd1c3@md1za8fc.ad001.siemens.net>
+ <CAHp75VfSHgdikX5=Qba62BwWofVf7gHhS2hq2OuBwHFz9riCWQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y87E5HAo7ZoHyrbE@casper.infradead.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VfSHgdikX5=Qba62BwWofVf7gHhS2hq2OuBwHFz9riCWQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 23-01-23 17:33:24, Matthew Wilcox wrote:
-> On Mon, Jan 23, 2023 at 05:42:18PM +0100, Jan Kara wrote:
-> > On Mon 23-01-23 16:31:32, Matthew Wilcox wrote:
-> > > On Fri, Jan 20, 2023 at 05:55:48PM +0000, David Howells wrote:
-> > > >  (3) Make the bio struct carry a pair of flags to indicate the cleanup
-> > > >      mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (equivalent to
-> > > >      FOLL_GET) and BIO_PAGE_PINNED (equivalent to BIO_PAGE_PINNED) is
-> > > >      added.
-> > > 
-> > > I think there's a simpler solution than all of this.
-> > > 
-> > > As I understand the fundamental problem here, the question is
-> > > when to copy a page on fork.  We have the optimisation of COW, but
-> > > O_DIRECT/RDMA/... breaks it.  So all this page pinning is to indicate
-> > > to the fork code "You can't do COW to this page".
-> > > 
-> > > Why do we want to track that information on a per-page basis?  Wouldn't it
-> > > be easier to have a VM_NOCOW flag in vma->vm_flags?  Set it the first
-> > > time somebody does an O_DIRECT read or RDMA pin.  That's it.  Pages in
-> > > that VMA will now never be COWed, regardless of their refcount/mapcount.
-> > > And the whole "did we pin or get this page" problem goes away.  Along
-> > > with folio->pincount.
-> > 
-> > Well, but anon COW code is not the only (planned) consumer of the pincount.
-> > Filesystems also need to know whether a (shared pagecache) page is pinned
-> > and can thus be modified behind their backs. And for that VMA tracking
-> > isn't really an option.
+On Tue, 24 Jan 2023, Andy Shevchenko wrote:
+
+> On Mon, Jan 23, 2023 at 10:49 PM Henning Schild
+> <henning.schild@siemens.com> wrote:
+> > Am Thu, 19 Jan 2023 21:02:40 +0000
+> > schrieb Lee Jones <lee@kernel.org>:
+> > > On Fri, 07 Oct 2022, Henning Schild wrote:
 > 
-> Bleh, I'd forgotten about that problem.  We really do need to keep
-> track of which pages are under I/O for this case, because we need to
-> tell the filesystem that they are now available for writeback.
+> > > > If we register a "leds-gpio" platform device for GPIO pins that do
+> > > > not exist we get a -EPROBE_DEFER and the probe will be tried again
+> > > > later. If there is no driver to provide that pin we will poll
+> > > > forever and also create a lot of log messages.
+> > > >
+> > > > So check if that GPIO driver is configured, if so it will come up
+> > > > eventually. If not, we exit our probe function early and do not even
+> > > > bother registering the "leds-gpio". This method was chosen over
+> > > > "Kconfig depends" since this way we can add support for more
+> > > > devices and GPIO backends more easily without "depends":ing on all
+> > > > GPIO backends.
+> > > >
+> > > > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version
+> > > > of Siemens driver") Reviewed-by: Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> Signed-off-by: Henning Schild
+> > > > <henning.schild@siemens.com> ---
+> > > >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > >
+> > > FYI: I'm going to try my best not to take another one like this.
+> >
+> > understood!
+> >
+> > > Please try to improve the whole situation for you next submission.
+> >
+> > When i have to touch this again, which i will, i will propose either
+> > "depend on all possible GPIO drivers" or introduce "#ifdef CONFIG"s.
+> > Caring most about big configs as seen in distros like debian, even for
+> > embedded systems ... i think i would prefer the first option, as it
+> > will also be easier to maintain.
+> >
+> > I do not see the whole infinite loop story on my plate, but if that got
+> > fixed i would follow up taking the fix into account.
+
+I still don't really know what you mean by this.  Probe deferring should
+not work this way.  Do you know why the loop is infinite on your
+platform?  What keeps triggering the re-probe?  Are you continually
+binding and unbinding drivers, forever?  Also, what is printing out the
+failure?  Maybe it should be silent?
+
+> AFAICS another possible (not sure if it's preferable) solution is to
+> split this driver to subdrivers and each of them will be dependent on
+> the corresponding pin control in Kconfig. It will satisfy both of your
+> requirements, right? Something like
 > 
-> That said, I don't know that we need to keep track of it in the
-> pages themselves.  Can't we have something similar to rmap which
-> keeps track of a range of pinned pages, and have it taken care of
-> at a higher level (ie unpin the pages in the dio_iodone_t rather
-> than in the BIO completion handler)?
+> simatic-leds-core.c
+> simatic-leds-127e.c (config ..._127E depends on PINCTRL_BROXTON)
 
-We could but bear in mind that there are more places than just (the two)
-direct IO paths. There are many GUP users that can be operating on mmapped
-pagecache and that can modify page data. Also note that e.g. direct IO is
-rather performance sensitive so any CPU overhead that is added to that path
-gets noticed. That was actually the reason why we keep pinned pages on the
-LRU - John tried to remove them while pinning but the overhead was not
-acceptable.
+In theory, yes it would.  You could also introduce a core driver to
+contain all of the shared code.  Duplication would also be a travesty.
 
-Finally, since we need to handle pinning for anon pages as well, just
-(ab)using the page refcount looks like the least painful solution.
-
-> I'm not even sure why pinned pagecache pages remain on the LRU.
-> They should probably go onto the unevictable list with the mlocked
-> pages, then on unpin get marked dirty and placed on the active list.
-> There's no point in writing back a pinned page since it can be
-> written to at any instant without any part of the kernel knowing.
-
-True but as John said sometimes we need to writeout even pinned page - e.g.
-on fsync(2). For some RDMA users which keep pages pinned for days or
-months, this is actually crutial...
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Lee Jones [李琼斯]
