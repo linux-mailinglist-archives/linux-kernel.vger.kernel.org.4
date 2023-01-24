@@ -2,151 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC646794F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AAA6794D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 11:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbjAXKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 05:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S233735AbjAXKMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 05:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbjAXKNo (ORCPT
+        with ESMTP id S229930AbjAXKMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 05:13:44 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301B841B6B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:13:36 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id b7so13360960wrt.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 02:13:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S8taYkiDRhxwSj2khSrYXtScgLWDxF1GD5X3Ip5sSGs=;
-        b=LLp84wiadrhwgCkt5Iy//WkgeSBuROH6t0YeHNNNAtMvdohLlAiDAEDkQPNjfHsmOa
-         SnQ0Hqj7fFh3RIR5ryXAvuJ0MXz2o3AGYojvwuFBQduvyX/fuU/CEGjXqQfOeXvm+B2N
-         38hUhIMVdjhF5Nde8peUn0fcZMHn89MyndOYvmVILwVapZkIIxp9Y/31L8hlcaXu1c3D
-         FVnhP2FqR8jz8PfwwArxgb2uEFfXPo+3gwiHeIxg6C4RfRd9K8uhnGtl99WC50CBqpI2
-         fUKxyd6/aSmt4uHQl5nWmHv218zWtiUOPfENRl1AQNL9E5m3KmwTPCG21C6QBzfoRdtL
-         t/wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S8taYkiDRhxwSj2khSrYXtScgLWDxF1GD5X3Ip5sSGs=;
-        b=JayVTtkHBs/1BkSGswBc9xR5/v2Hj3z6PMMdTvoI1ov6EIaKmGeRGTZElmHQvRtYfx
-         gXlRJuuGoM3ekhJTUlgLltLJxHAJTw7u5Thq1lBdMTc33T1jZmuFf8QEVZtS42eRcEpe
-         Cbr4lcUz5xvaf6T7WwgSv5jLSeEbNSEXWcIEYHpBwJEnCCyAGDRdUTrYAV8CmGpoPSi7
-         ur4eDVMkCI350m+diUb6Ce+4ngzTQ4FUTh5+GBSebSDTL+UEEujbbmcWz7YvLmPnTssc
-         v5ekWfytppartENVpOhObD6TJD+Zf8wSbbMMKFVb8PWu/ZdSwqLCfvtMyUoSrQK2gCou
-         kB8A==
-X-Gm-Message-State: AO0yUKUU1DFvv8b/LoK1NcUd6ITH4E5UYvteoYxfvvjyKB/hFDgY82gL
-        qNggVskkEnAO8CZ8cGkqlVnRUQ==
-X-Google-Smtp-Source: AK7set+aTxPF4ny5RRAONgayCfTl2kwcaYwdQh9zSQY+aRfErh7XOu1AKwZIhC13TWp5Gcty+g3RPQ==
-X-Received: by 2002:adf:fa09:0:b0:2bf:ac2c:4489 with SMTP id m9-20020adffa09000000b002bfac2c4489mr2351847wrr.54.1674555214568;
-        Tue, 24 Jan 2023 02:13:34 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id r1-20020a0560001b8100b002bfae16ee2fsm1452595wru.111.2023.01.24.02.13.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 02:13:34 -0800 (PST)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Qi Duan <qi.duan@amlogic.com>
-Subject: [PATCH v2 net] net: mdio-mux-meson-g12a: force internal PHY off on mux switch
-Date:   Tue, 24 Jan 2023 11:11:57 +0100
-Message-Id: <20230124101157.232234-1-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 24 Jan 2023 05:12:17 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ABE6EAF;
+        Tue, 24 Jan 2023 02:12:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B421ECE19CE;
+        Tue, 24 Jan 2023 10:12:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393B9C433D2;
+        Tue, 24 Jan 2023 10:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674555132;
+        bh=Hikckpna3DVXXZPGZ4BuFVYPSnZbNR3v/om5urasXP8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jvS8tFYynVdhY+yLg/Uo8uGL7xBxvivN7Dj+2pb5uR00svQO750DkL7jkIcs8kxEz
+         /qr1QDFUHdIIuaYYn0MsgtVe/07se6catfUuNh7FLGIMb2tR/viH5ROJRNF6vLRI3Y
+         mftyt3O+8jzURwwcJ+k4EizDX6UfnTBrg57Ym+V6lbxWYZEvvMDbxtTXTKp6LQ9Kac
+         HMhWxO3evQAAYoHX73patO6mAOVKmp5Oi94nlj4NDZcL9LJPqPJCPSy4H/vanOOL1q
+         pmV19yMGDJjwF8HID2HvxUyd0qIMLC99Q4IylZm9gZvl8vRUIMlWayW55xN4G1A+Jd
+         +eX5NfNWoxZNw==
+Date:   Tue, 24 Jan 2023 11:12:07 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH] fs: Use CHECK_DATA_CORRUPTION() when kernel bugs are
+ detected
+Message-ID: <20230124101207.ofqr6qv2yla24jyd@wittgenstein>
+References: <20230116191425.458864-1-jannh@google.com>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230116191425.458864-1-jannh@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Force the internal PHY off then on when switching to the internal path.
-This fixes problems where the PHY ID is not properly set.
+On Mon, Jan 16, 2023 at 08:14:25PM +0100, Jann Horn wrote:
+> Currently, filp_close() and generic_shutdown_super() use printk() to log
+> messages when bugs are detected. This is problematic because infrastructure
+> like syzkaller has no idea that this message indicates a bug.
+> In addition, some people explicitly want their kernels to BUG() when kernel
+> data corruption has been detected (CONFIG_BUG_ON_DATA_CORRUPTION).
+> And finally, when generic_shutdown_super() detects remaining inodes on a
+> system without CONFIG_BUG_ON_DATA_CORRUPTION, it would be nice if later
+> accesses to a busy inode would at least crash somewhat cleanly rather than
+> walking through freed memory.
+> 
+> To address all three, use CHECK_DATA_CORRUPTION() when kernel bugs are
+> detected.
+> 
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
 
-Fixes: 7090425104db ("net: phy: add amlogic g12a mdio mux support")
-Suggested-by: Qi Duan <qi.duan@amlogic.com>
-Co-developed-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
-
-Changes since v1:
- - Fix variable position for reverse Xmas tree requirement.
-
-The initial discussion about this change can be found here:
-https://lore.kernel.org/all/1j4jslwen5.fsf@starbuckisacylon.baylibre.com/
-
- drivers/net/mdio/mdio-mux-meson-g12a.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/mdio/mdio-mux-meson-g12a.c b/drivers/net/mdio/mdio-mux-meson-g12a.c
-index 4a2e94faf57e..c4542ecf5623 100644
---- a/drivers/net/mdio/mdio-mux-meson-g12a.c
-+++ b/drivers/net/mdio/mdio-mux-meson-g12a.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/delay.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/device.h>
-@@ -150,6 +151,7 @@ static const struct clk_ops g12a_ephy_pll_ops = {
- 
- static int g12a_enable_internal_mdio(struct g12a_mdio_mux *priv)
- {
-+	u32 value;
- 	int ret;
- 
- 	/* Enable the phy clock */
-@@ -163,18 +165,25 @@ static int g12a_enable_internal_mdio(struct g12a_mdio_mux *priv)
- 
- 	/* Initialize ephy control */
- 	writel(EPHY_G12A_ID, priv->regs + ETH_PHY_CNTL0);
--	writel(FIELD_PREP(PHY_CNTL1_ST_MODE, 3) |
--	       FIELD_PREP(PHY_CNTL1_ST_PHYADD, EPHY_DFLT_ADD) |
--	       FIELD_PREP(PHY_CNTL1_MII_MODE, EPHY_MODE_RMII) |
--	       PHY_CNTL1_CLK_EN |
--	       PHY_CNTL1_CLKFREQ |
--	       PHY_CNTL1_PHY_ENB,
--	       priv->regs + ETH_PHY_CNTL1);
-+
-+	/* Make sure we get a 0 -> 1 transition on the enable bit */
-+	value = FIELD_PREP(PHY_CNTL1_ST_MODE, 3) |
-+		FIELD_PREP(PHY_CNTL1_ST_PHYADD, EPHY_DFLT_ADD) |
-+		FIELD_PREP(PHY_CNTL1_MII_MODE, EPHY_MODE_RMII) |
-+		PHY_CNTL1_CLK_EN |
-+		PHY_CNTL1_CLKFREQ;
-+	writel(value, priv->regs + ETH_PHY_CNTL1);
- 	writel(PHY_CNTL2_USE_INTERNAL |
- 	       PHY_CNTL2_SMI_SRC_MAC |
- 	       PHY_CNTL2_RX_CLK_EPHY,
- 	       priv->regs + ETH_PHY_CNTL2);
- 
-+	value |= PHY_CNTL1_PHY_ENB;
-+	writel(value, priv->regs + ETH_PHY_CNTL1);
-+
-+	/* The phy needs a bit of time to power up */
-+	mdelay(10);
-+
- 	return 0;
- }
- 
--- 
-2.39.0
-
+Looks good,
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
