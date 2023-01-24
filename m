@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AAC679C95
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CB8679C93
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235006AbjAXOwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S235034AbjAXOwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbjAXOws (ORCPT
+        with ESMTP id S235094AbjAXOw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:52:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DD14ABDD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674571895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zItE6ZaXDxNGCcmbJiQNR0G3jwGnmRx9/O3O4PSlyO4=;
-        b=XuD7yGCOS7h7TLO/83Y4TEGhj/PpV7pr1zS5IzdlEfnv0WK4GM++qzAavs2Q+kgOfZ6hoJ
-        ySZs74D9Qfd6JQ6kxOx9QDo9jx+g3HdmsgEBHi4vS6crSEMMuWRpUMcj+Z4P1YaZVjVh2s
-        NgkMK971hhFM/qopdloCxPXiIKC0/kY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-MOn-FsRJNjCy3jQKWUazfw-1; Tue, 24 Jan 2023 09:51:32 -0500
-X-MC-Unique: MOn-FsRJNjCy3jQKWUazfw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC3AF1C0040C;
-        Tue, 24 Jan 2023 14:51:31 +0000 (UTC)
-Received: from p1.luc.com (ovpn-194-196.brq.redhat.com [10.40.194.196])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E907FC15BA0;
-        Tue, 24 Jan 2023 14:51:29 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-Subject: [PATCH net-next] docs: networking: Fix bridge documentation URL
-Date:   Tue, 24 Jan 2023 15:51:26 +0100
-Message-Id: <20230124145127.189221-1-ivecera@redhat.com>
+        Tue, 24 Jan 2023 09:52:26 -0500
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6DC4AA48;
+        Tue, 24 Jan 2023 06:52:13 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id kt14so39706667ejc.3;
+        Tue, 24 Jan 2023 06:52:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aMUbBr/rdScwYBHhL+3zrpC7GVtT6nThOwqhrKrOV9c=;
+        b=oklV27N6i6T2fnMzbbvb02E6+pDFkimhPwKOytleJjwrCnJrS9YwnYJ6dRyA0e5h16
+         nphw6j4/zcElfFCi2I+b3cZbiJQUpfXafls8CLKGRRTHGkNbjci0JFBcI/f6qcOYEDZm
+         mvxkzo45Sx7KVgINQeEJanbKRyZJWsxWGhqIUkv7QZzeCl4/ehzsVzHU2i9ZmFC2Vpjy
+         9WFOifM3mr4yX2pAqKXxPslEOXK7h9JSfy4mkIgsErBlC8XYKiE0V9c67Jb56UP5Cg7e
+         60J65fIQQgwuuS75Gqtrs2AkFo48CbG4cs0cCmnJmdz/O7uK+W8scRjcaWKzkYvDHV4m
+         2/6Q==
+X-Gm-Message-State: AFqh2krAZqbtKiFOqWVz47313ZJo4PVcxRehnSAo4+Tj7MJ/Lu/8DQlf
+        4YDe8F8slRDy2mX+GAHdvDo4vCuA8bxFZYTTku30eZQu
+X-Google-Smtp-Source: AMrXdXt8C1p5I0HUh53TVWpDmTW9Mv4ZDA/3rs6Z88yAbfrZowYe+m5AzMjdfxdNirjg21RS4EOPnucMitIK3TXRS8Q=
+X-Received: by 2002:a17:906:4e9a:b0:84d:4dc6:1c08 with SMTP id
+ v26-20020a1709064e9a00b0084d4dc61c08mr4700163eju.421.1674571932458; Tue, 24
+ Jan 2023 06:52:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <5916342.lOV4Wx5bFT@kreacher> <2882611.e9J7NaK4W3@kreacher>
+ <3234230.44csPzL39Z@kreacher> <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
+ <CAJZ5v0gK_O-9_tPEVbmBbf+2vxVA2_C5tPGOo_qghyw86pohoA@mail.gmail.com> <ca878d5a177b68eaf5f698e0afda5c0b1718a53f.camel@linux.intel.com>
+In-Reply-To: <ca878d5a177b68eaf5f698e0afda5c0b1718a53f.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Jan 2023 15:52:01 +0100
+Message-ID: <CAJZ5v0hSPh4u9W9XSQ=i2FdA64-343p-JtB9khn5YWDH5_LTmQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2 drivers
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current documentation URL [1] is no longer valid.
+On Mon, Jan 23, 2023 at 10:35 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Mon, 2023-01-23 at 20:54 +0100, Rafael J. Wysocki wrote:
+> > On Mon, Jan 23, 2023 at 8:26 PM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > > On Mon, 2023-01-23 at 19:52 +0100, Rafael J. Wysocki wrote:
+> > > > On Monday, January 23, 2023 7:45:30 PM CET Rafael J. Wysocki
+> > > > wrote:
+> > > > > On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki
+> > > > > wrote:
+> > > > > > Hi All,
+> > > > > >
+> > > > > > This is a new version of the series from Daniel posted as:
+> > > > > >
+> > > > > > https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
+> > > > > >
+> > > > > > The first patch has been reworked (see
+> > > > > > https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/
+> > > > > > )
+> > > > > > and the other two have been rebased on top of it.
+> > > > > >
+> > > > > > I have retained the R-by tags from Rui, because the changes
+> > > > > > in
+> > > > > > patches [2-3/3] are
+> > > > > > not essential, but I think that this new set needs to be
+> > > > > > tested
+> > > > > > again.
+> > > > > >
+> > > > > > Srinivas, can you test it please?
+> > > > >
+> > > > > Something's wrong, sorry.
+> > > > >
+> > > > > I get some invalid trip temperatures with this set.
+> > > >
+> > > > Sorry, scratch this, I got confused by THERMAL_TEMP_INVALID
+> > > > showing
+> > > > up in
+> > > > sysfs, but it did show up before too.
+> > > >
+> > > > Please test!
+> > > >
+> > >
+> > > >
+> > >
+> > > >
+> > > It will be easy if you have some test branch to avoid dependecies
+> > > on
+> > > other patches.
+> >
+> > Please see the thermal-intel-test branch in linux-pm.git.  It's this
+> > series on top of the core thermal stuff + ARM drivers.
+> Tested on one system. Works fine.
 
-[1] https://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
+Thanks!
 
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- Documentation/networking/bridge.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/networking/bridge.rst b/Documentation/networking/bridge.rst
-index 4aef9cddde2f..c859f3c1636e 100644
---- a/Documentation/networking/bridge.rst
-+++ b/Documentation/networking/bridge.rst
-@@ -8,7 +8,7 @@ In order to use the Ethernet bridging functionality, you'll need the
- userspace tools.
- 
- Documentation for Linux bridging is on:
--   http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
-+   https://wiki.linuxfoundation.org/networking/bridge
- 
- The bridge-utilities are maintained at:
-    git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git
--- 
-2.38.2
-
+I'll add a T-by from you to the series (which will be moved to the
+thermal-intel branch).
