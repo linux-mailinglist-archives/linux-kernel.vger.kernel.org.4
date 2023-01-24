@@ -2,184 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFF667A586
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734DA67A590
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 23:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbjAXWRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 17:17:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S234433AbjAXWTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 17:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbjAXWRQ (ORCPT
+        with ESMTP id S229779AbjAXWTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:17:16 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0EEEC50;
-        Tue, 24 Jan 2023 14:17:14 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id g13so25808216lfv.7;
-        Tue, 24 Jan 2023 14:17:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mhJX74SyXpEe21VKvtmYRp6Q7Ngr55XoXxrS6GHTUaM=;
-        b=lIOkQn3uy7/I/z2v8Q85L0rLBL7SX9DrJ6x65AriCaUZU12w6lgUwTBkK9bJzvqsbV
-         AGimKEMkNWeNnOND/KABFJLrBc8vXvJ3gqpf+vIRKGOA31TqNm+YVIGpsXKYPx8jgce3
-         2ILeWIph/JftA1Yj53Sq1jDrCHnyp4E6ua4ibXfT3nMhNt9vW7/ouWyn3wgZiGJAPOCU
-         B0LAhuEYvIUp/8lluMUpB0iSfxvIbNcR+tD+q69FIabOyc1m8n7KQnJC5Qj84AbRi3fv
-         bZ+sAwmoB7z60IocecZ6Y9UWh/bV5WXO+rcK7a+EUWW3bwdpDEYgf3rbMGN11Ap1Nywv
-         xEWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mhJX74SyXpEe21VKvtmYRp6Q7Ngr55XoXxrS6GHTUaM=;
-        b=e3Jz8gFwQlrG0xZ9Gp9IC6nE/IZgKdy9pfV7angGzNagGYgbslIUfLPssX0t4G76cD
-         9sn3rGXOzBgKL1YhLDH8tOLSmmMpynD3grXXdpKgCfapuuYj4qARGqsI3g2nhuvPXAvW
-         +p28KOox72oj9jsbsLwCuYznGBhVvzRKEYWyN3CFmn1UDNophaykEvjCHlgN2MMJwKaC
-         QyjEHemMePj7tXOVfIQqWLmoyBKviv6z33irNczgwwePsT/UqiSDihKTJKKv7o2xHn6I
-         2o4o+BkOep8j8tGwvn5Cwi7RQ566Hv2rZT94ZPCH8lvGByWyfSnIEoCz62PAQ21p4qB8
-         Xrfg==
-X-Gm-Message-State: AFqh2krEwZn9JM0MbP3DGk3fKUHYwVZKs4j3GwjI7XV9N9rfZtr4l1DA
-        G4Thjdz2OE95rCov/oto+4B6sFm3ecVDeEMThDo=
-X-Google-Smtp-Source: AMrXdXvh8qx1S3WVzfwHHfZuCvapRPm6sYF0vH2DvRk+gdpioHeoX/MqsquNKQupOjAQ08YfWwH8Fjy+DHTSajvohcw=
-X-Received: by 2002:ac2:4bd3:0:b0:4cc:789a:dac8 with SMTP id
- o19-20020ac24bd3000000b004cc789adac8mr3098851lfq.198.1674598633139; Tue, 24
- Jan 2023 14:17:13 -0800 (PST)
+        Tue, 24 Jan 2023 17:19:15 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03073E0B3;
+        Tue, 24 Jan 2023 14:19:13 -0800 (PST)
+Message-ID: <3d448210-e9d2-b0ee-e009-535bb0bb760d@ansari.sh>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
+        t=1674598751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K+v7CuIhOoILRppgHxxh5e1k2L4tbU2G1qFmuWYmc0o=;
+        b=CQ8g72/Wf+xIuT5nOyeQfhWCNcSF/isB0ieb/e5+Q/+bR1GXUaj5KYvoVTqC5yZqAP8wEt
+        cFD2I+uiPnRE7yqxGmG7kYtZ7PFY646XRm2ePLhEoOUFxxDSqiYFM1iINlIC4bQ62AVKGK
+        mTAkqoNStMMUcaVFHbv2+2gBy7un5iY=
+Date:   Tue, 24 Jan 2023 22:19:09 +0000
 MIME-Version: 1.0
-References: <20230124174714.2775680-1-neeraj.sanjaykale@nxp.com> <20230124174714.2775680-2-neeraj.sanjaykale@nxp.com>
-In-Reply-To: <20230124174714.2775680-2-neeraj.sanjaykale@nxp.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 24 Jan 2023 14:17:01 -0800
-Message-ID: <CABBYNZJ3CVO4fxN55YQ_d+Z2kvxR5H31cEG_CPxmVXfcsSGWeg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] serdev: Add method to assert break
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 2/2] dt-bindings: display: simple-framebuffer: Document
+ physical width and height properties
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
+        janne@jannau.net, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>, devicetree@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <20230121153544.467126-1-rayyan@ansari.sh>
+ <20230121153544.467126-3-rayyan@ansari.sh>
+ <CAL_JsqL+G=Cxkc2j_NowznpqNAnixrU+-6SdccFbpMaP6OYSqQ@mail.gmail.com>
+ <cdf32cb0-4529-6bbd-fdda-ae641d141ee5@ansari.sh>
+ <20230123175339.GA2019900-robh@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Rayyan Ansari <rayyan@ansari.sh>
+In-Reply-To: <20230123175339.GA2019900-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neeraj,
+On 23/01/2023 17:53, Rob Herring wrote:
+> On Sun, Jan 22, 2023 at 05:25:38PM +0000, Rayyan Ansari wrote:
+>> On 22/01/2023 15:36, Rob Herring wrote:
+>>> On Sat, Jan 21, 2023 at 9:36 AM Rayyan Ansari <rayyan@ansari.sh> wrote:
+>>>>
+>>>
+>>> Why do you need this change?
+>>>
+>>> The 'simple-framebuffer' contains data on how the bootloader
+>>> configured the display. The bootloader doesn't configure the display
+>>> size, so this information doesn't belong here. The information should
+>>> already be in the panel node, so also no point in duplicating it here.
+>>>
+>>>> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
+>>>> ---
+>>>>    .../devicetree/bindings/display/simple-framebuffer.yaml   | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>
+>> Hi Rob,
+>>
+>> There is the usecase that Hans has mentioned, but I have also mentioned
+>> another usecase previously.
+>>
+>> Adding the width-mm and height-mm properties allows user interfaces such as
+>> Phosh (https://puri.sm/posts/phosh-overview/) to scale correctly to the
+>> screen. In my case, a panel node is not available and the aforementioned
+>> interface is in fact running on the SimpleDRM driver (which binds to the
+>> simple-framebuffer device).
+> 
+> Why is the panel node not available? Why not add it? Presumably it is
+> not there because you aren't (yet) using the simple-panel driver (and
+> others that would need). But presumably you will eventually as I'd
+> imagine turning the screen off and back on might be a desired feature.
 
-On Tue, Jan 24, 2023 at 9:48 AM Neeraj Sanjay Kale
-<neeraj.sanjaykale@nxp.com> wrote:
->
-> Adds serdev_device_break_ctl() and an implementation for ttyport.
->
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> ---
->  drivers/tty/serdev/core.c           | 11 +++++++++++
->  drivers/tty/serdev/serdev-ttyport.c | 12 ++++++++++++
->  include/linux/serdev.h              |  6 ++++++
->  3 files changed, 29 insertions(+)
->
-> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-> index 0180e1e4e75d..26321ad7e71d 100644
-> --- a/drivers/tty/serdev/core.c
-> +++ b/drivers/tty/serdev/core.c
-> @@ -405,6 +405,17 @@ int serdev_device_set_tiocm(struct serdev_device *serdev, int set, int clear)
->  }
->  EXPORT_SYMBOL_GPL(serdev_device_set_tiocm);
->
-> +int serdev_device_break_ctl(struct serdev_device *serdev, int break_state)
-> +{
-> +       struct serdev_controller *ctrl = serdev->ctrl;
-> +
-> +       if (!ctrl || !ctrl->ops->break_ctl)
-> +               return -ENOTSUPP;
-> +
-> +       return ctrl->ops->break_ctl(ctrl, break_state);
-> +}
-> +EXPORT_SYMBOL_GPL(serdev_device_break_ctl);
-> +
->  static int serdev_drv_probe(struct device *dev)
->  {
->         const struct serdev_device_driver *sdrv = to_serdev_device_driver(dev->driver);
-> diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-> index d367803e2044..847b1f71ab73 100644
-> --- a/drivers/tty/serdev/serdev-ttyport.c
-> +++ b/drivers/tty/serdev/serdev-ttyport.c
-> @@ -247,6 +247,17 @@ static int ttyport_set_tiocm(struct serdev_controller *ctrl, unsigned int set, u
->         return tty->ops->tiocmset(tty, set, clear);
->  }
->
-> +static int ttyport_break_ctl(struct serdev_controller *ctrl, unsigned int break_state)
-> +{
-> +       struct serport *serport = serdev_controller_get_drvdata(ctrl);
-> +       struct tty_struct *tty = serport->tty;
-> +
-> +       if (!tty->ops->break_ctl)
-> +               return -ENOTSUPP;
-> +
-> +       return tty->ops->break_ctl(tty, break_state);
-> +}
-> +
->  static const struct serdev_controller_ops ctrl_ops = {
->         .write_buf = ttyport_write_buf,
->         .write_flush = ttyport_write_flush,
-> @@ -259,6 +270,7 @@ static const struct serdev_controller_ops ctrl_ops = {
->         .wait_until_sent = ttyport_wait_until_sent,
->         .get_tiocm = ttyport_get_tiocm,
->         .set_tiocm = ttyport_set_tiocm,
-> +       .break_ctl = ttyport_break_ctl,
->  };
->
->  struct device *serdev_tty_port_register(struct tty_port *port,
-> diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-> index 66f624fc618c..01b5b8f308cb 100644
-> --- a/include/linux/serdev.h
-> +++ b/include/linux/serdev.h
-> @@ -92,6 +92,7 @@ struct serdev_controller_ops {
->         void (*wait_until_sent)(struct serdev_controller *, long);
->         int (*get_tiocm)(struct serdev_controller *);
->         int (*set_tiocm)(struct serdev_controller *, unsigned int, unsigned int);
-> +       int (*break_ctl)(struct serdev_controller *, unsigned int);
+It requires more than using the simple-panel driver: first the SoC side 
+display hardware needs to be brought up, then a panel driver that 
+implements the proper DCS initialisation sequence needs to be written 
+(which is currently not fully known).
 
-Looks like these callbacks don't have any documentation, not sure if
-that is because the operation itself is self explanatory, anyway I
-hope someone can review this from serdev before it can be merged into
-bluetooth-next.
+> 
+> So why add a temporary DT property that's tied to your *current* kernel? > The DT should not be tightly coupled to the kernel.
 
->  };
->
->  /**
-> @@ -202,6 +203,7 @@ int serdev_device_write_buf(struct serdev_device *, const unsigned char *, size_
->  void serdev_device_wait_until_sent(struct serdev_device *, long);
->  int serdev_device_get_tiocm(struct serdev_device *);
->  int serdev_device_set_tiocm(struct serdev_device *, int, int);
-> +int serdev_device_break_ctl(struct serdev_device *, int);
->  void serdev_device_write_wakeup(struct serdev_device *);
->  int serdev_device_write(struct serdev_device *, const unsigned char *, size_t, long);
->  void serdev_device_write_flush(struct serdev_device *);
-> @@ -255,6 +257,10 @@ static inline int serdev_device_set_tiocm(struct serdev_device *serdev, int set,
->  {
->         return -ENOTSUPP;
->  }
-> +static inline int serdev_device_break_ctl(struct serdev_device *serdev, int break_state)
-> +{
-> +       return -ENOTSUPP;
-> +}
->  static inline int serdev_device_write(struct serdev_device *sdev, const unsigned char *buf,
->                                       size_t count, unsigned long timeout)
->  {
-> --
-> 2.34.1
->
+I'm not sure what you mean by it being "tightly coupled" to the kernel.
 
+> 
+> Rob
 
 -- 
-Luiz Augusto von Dentz
+Rayyan Ansari
+https://ansari.sh
+
