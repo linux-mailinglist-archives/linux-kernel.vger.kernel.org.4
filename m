@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F763679CBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188DC679CD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 16:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbjAXO7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S234236AbjAXPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 10:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbjAXO7G (ORCPT
+        with ESMTP id S235212AbjAXPAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:59:06 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9596211C;
-        Tue, 24 Jan 2023 06:59:04 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P1VK26lYJz9v7Hb;
-        Tue, 24 Jan 2023 22:51:02 +0800 (CST)
-Received: from [10.221.98.77] (unknown [10.221.98.77])
-        by APP1 (Coremail) with SMTP id LxC2BwD3gAwT8s9jVBrDAA--.44223S2;
-        Tue, 24 Jan 2023 15:58:40 +0100 (CET)
-Message-ID: <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
-Date:   Tue, 24 Jan 2023 15:57:55 +0100
+        Tue, 24 Jan 2023 10:00:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0540F211C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674572374;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aQxbsi78Hz1Qd5wzRG4R5ZnR0IhxcARdPOHrwXDM8L8=;
+        b=Zx0r6OB9uqIpKISU90LiQwPOw1ZFFnfARH+xiH1QHUyjOHeqrwGgcRFtIREffK3nv24/Q8
+        iajkIOCG3OMZUcCcK60JPtAJ12HAbf8/yt2DzQL54ksGWtpKpkK/0juU5RkiSXtmWxZZHR
+        N/cKbu58wSkMTGCZQMd4W/SjJG/LzNk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-446-A1rUvzD4NZW2fCJOm8U1kA-1; Tue, 24 Jan 2023 09:59:29 -0500
+X-MC-Unique: A1rUvzD4NZW2fCJOm8U1kA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD6CF1C0040F;
+        Tue, 24 Jan 2023 14:59:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 52C032166B34;
+        Tue, 24 Jan 2023 14:59:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y8/rx6PQ4z9Tk8qQ@nvidia.com>
+References: <Y8/rx6PQ4z9Tk8qQ@nvidia.com> <Y8/hhvfDtVcsgQd6@nvidia.com> <Y8/ZekMEAfi8VeFl@nvidia.com> <20230123173007.325544-1-dhowells@redhat.com> <20230123173007.325544-11-dhowells@redhat.com> <31f7d71d-0eb9-2250-78c0-2e8f31023c66@nvidia.com> <84721e8d-d40e-617c-b75e-ead51c3e1edf@nvidia.com> <852117.1674567983@warthog.procyon.org.uk> <852914.1674568628@warthog.procyon.org.uk> <859142.1674569510@warthog.procyon.org.uk> <864109.1674570473@warthog.procyon.org.uk>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     dhowells@redhat.com, John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 10/10] mm: Renumber FOLL_PIN and FOLL_GET down
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Arjan van de Ven <arjan@linux.intel.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, akpm@osdl.org, tglx@linutronix.de,
-        joel@joelfernandes.org, stern@rowland.harvard.edu,
-        diogo.behrens@huawei.com, jonas.oberhauser@huawei.com,
-        linux-kernel@vger.kernel.org,
-        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
-        stable@vger.kernel.org
-References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
- <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
- <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
- <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-In-Reply-To: <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwD3gAwT8s9jVBrDAA--.44223S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxury5uF4UXw4UXw13GryrCrg_yoWrXrWDpF
-        WrKayktFyDJrs2qr1IqF4xW34Fy39YkFy3Xw1UGryxAas0gF1fAr43C3y3Wryjqr1kt3yY
-        vr45Z3429F1DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <875205.1674572365.1@warthog.procyon.org.uk>
+Date:   Tue, 24 Jan 2023 14:59:25 +0000
+Message-ID: <875206.1674572365@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/2023 5:40 PM, Paul E. McKenney wrote:
-> On Sun, Jan 22, 2023 at 04:24:21PM +0100, Hernan Ponce de Leon wrote:
->> On 1/20/2023 4:54 PM, Paul E. McKenney wrote:
->>> On Fri, Jan 20, 2023 at 06:58:20AM -0800, Arjan van de Ven wrote:
->>>> On 1/20/2023 5:55 AM, Hernan Ponce de Leon wrote:
->>>>> From: Hernan Ponce de Leon <hernanl.leon@huawei.com>
->>>>>
->>>>
->>>>>     kernel/locking/rtmutex.c | 2 +-
->>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
->>>>> index 010cf4e6d0b8..7ed9472edd48 100644
->>>>> --- a/kernel/locking/rtmutex.c
->>>>> +++ b/kernel/locking/rtmutex.c
->>>>> @@ -235,7 +235,7 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
->>>>>     	unsigned long owner, *p = (unsigned long *) &lock->owner;
->>>>>     	do {
->>>>> -		owner = *p;
->>>>> +		owner = READ_ONCE(*p);
->>>>>     	} while (cmpxchg_relaxed(p, owner,
->>>>
->>>>
->>>> I don't see how this makes any difference at all.
->>>> *p can be read a dozen times and it's fine; cmpxchg has barrier semantics for compilers afaics
->>>
->>> Doing so does suppress a KCSAN warning.  You could also use data_race()
->>> if it turns out that the volatile semantics would prevent a valuable
->>> compiler optimization.
->>
->> I think the import question is "is this a harmful data race (and needs to be
->> fixed as proposed by the patch) or a harmless one (and we should use
->> data_race() to silence tools)?".
->>
->> In https://lkml.org/lkml/2023/1/22/160 I describe how this data race can
->> affect important ordering guarantees for the rest of the code. For this
->> reason I consider it a harmful one. If this is not the case, I would
->> appreciate some feedback or pointer to resources about what races care to
->> avoid spamming the mailing list in the future.
-> 
-> In the case, the value read is passed into cmpxchg_relaxed(), which
-> checks the value against memory.  In this case, as Arjan noted, the only
-> compiler-and-silicon difference between data_race() and READ_ONCE()
-> is that use of data_race() might allow the compiler to do things like
-> tear the load, thus forcing the occasional spurious cmpxchg_relaxed()
-> failure.  In contrast, LKMM (by design) throws up its hands when it sees
-> a data race.  Something about not being eager to track the idiosyncrasies
-> of many compiler versions.
-> 
-> My approach in my own code is to use *_ONCE() unless it causes a visible
-> performance regression or if it confuses KCSAN.  An example of the latter
-> can be debug code, in which case use of data_race() avoids suppressing
-> KCSAN warnings (and also false positives, depending).
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-I understand that *_ONCE() might avoid some compiler optimization and 
-reduce performance in the general case. However, if I understand your 
-first paragraph correctly, in this particular case data_race() could 
-allow the CAS to fail more often, resulting in more spinning iterations 
-and degraded performance. Am I right?
+> What is the 3rd state?
 
-> 
-> Except that your other email seems to also be arguing that additional
-> ordering is required.  So is https://lkml.org/lkml/2023/1/20/702 really
-> sufficient just by itself, or is additional ordering required?
+Consider a network filesystem message generated for a direct I/O that the
+network filesystem does zerocopy on.  You may have an sk_buff that has
+fragments from one or more of three different sources:
 
-I do not claim that we need to mark the read to add the ordering that is 
-needed for correctness (mutual exclusion). What I claim in this patch is 
-that there is a data race, and since it can affect ordering constrains 
-in subtle ways, I consider it harmful and thus I want to fix it.
+ (1) Fragments consisting of specifically allocated pages, such as the
+     IP/UDP/TCP headers that have refs taken on them.
 
-What I explain in the other email is that if we fix the data race, 
-either the fence or the acquire store might be relaxed (because marking 
-the read gives us some extra ordering guarantees). If the race is not 
-fixed, both the fence and the acquire are needed according to LKMM. The 
-situation is different wrt hardware models. In that case the tool cannot 
-find any violation even if we don't fix the race and we relax the store 
-/ remove the fence.
+ (2) Fragments consisting of zerocopy kernel buffers that has neither refs nor
+     pins belonging to the sk_buff.
 
-Hernan
+     iov_iter_extract_pages() will not take pins when extracting from, say, an
+     XARRAY-type or KVEC-type iterator.  iov_iter_extract_mode() will return
+     0.
+
+ (3) Fragments consisting of zerocopy user buffers that have pins taken on
+     them belonging to the sk_buff.
+
+     iov_iter_extract_pages() will take pins when extracting from, say, a
+     UBUF-type or IOVEC-type iterator.  iov_iter_extract_mode() will return
+     FOLL_PIN (at the moment).
+
+So you have three states: Ref'd, pinned and no-retention.
+
+David
 
