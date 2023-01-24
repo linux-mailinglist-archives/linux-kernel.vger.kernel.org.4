@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5C567973C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 13:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E525679715
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 12:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbjAXMF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 07:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S232978AbjAXLwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 06:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjAXMFw (ORCPT
+        with ESMTP id S232312AbjAXLwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 07:05:52 -0500
-X-Greylist: delayed 843 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 04:05:50 PST
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 347022333A;
-        Tue, 24 Jan 2023 04:05:50 -0800 (PST)
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 30OBp2L3017928;
-        Tue, 24 Jan 2023 05:51:02 -0600
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 30OBp0bo017927;
-        Tue, 24 Jan 2023 05:51:00 -0600
-Date:   Tue, 24 Jan 2023 05:51:00 -0600
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     William Roberts <bill.c.roberts@gmail.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
-Message-ID: <20230124115100.GA17771@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com> <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com> <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com> <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <Y8tcEtr8Kl3p4qtA@kernel.org> <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Tue, 24 Jan 2023 05:51:02 -0600 (CST)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 06:52:44 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41753B674;
+        Tue, 24 Jan 2023 03:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674561162; x=1706097162;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=9ADtunrMiGDym6aA0HaN4WKyLjJTVN31V1SPJHANX9Q=;
+  b=H1ZvT5Sd6chkesGW60BUEUGD4KFRp9cBbMENhjVr3TMlHncYCe3zGKzu
+   pSIqcRqvyGRyBG9QyUF3IbAMmsg8pQ97sPgBeaqJTabLDXMUJFUQisRON
+   gVoBdOAFF/98b36mpTUhqLU7yrbTl0IyMgsz4ACg07U2mB+kHVZEIVKIS
+   1lx5OyIrWTx4RIO2tLf2s8dp7z4BflL6LwE4gXI6Um3RKau1gSkHjfXQE
+   jMqhEVkdvsi03fsC+8ny4frtns9hQ3dqonGw+rflxWslnqCKy5kX/OcM1
+   4Uarr3PGIxsLwQDf9HSCUQJvDb6OXVbDIOJCndT6tk6OWur+S4Y+H4Q2J
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="323972049"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="323972049"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 03:52:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="694306863"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="694306863"
+Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
+  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2023 03:52:38 -0800
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, darwi@linutronix.de,
+        elena.reshetova@intel.com, kirill.shutemov@linux.intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        stable@vger.kernel.org, alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH 1/2] PCI/MSI: Cache the MSIX table size
+In-Reply-To: <Y8z7FPcuDXDBi+1U@unreal>
+References: <20230119170633.40944-1-alexander.shishkin@linux.intel.com>
+ <20230119170633.40944-2-alexander.shishkin@linux.intel.com>
+ <Y8z7FPcuDXDBi+1U@unreal>
+Date:   Tue, 24 Jan 2023 13:52:37 +0200
+Message-ID: <87v8kwp2t6.fsf@ubik.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:48:25AM -0600, William Roberts wrote:
+Leon Romanovsky <leon@kernel.org> writes:
 
-Good morning, I hope the week is going well for everyone.
+> On Thu, Jan 19, 2023 at 07:06:32PM +0200, Alexander Shishkin wrote:
+>> A malicious device can change its MSIX table size between the table
+>> ioremap() and subsequent accesses, resulting in a kernel page fault in
+>> pci_write_msg_msix().
+>> 
+>> To avoid this, cache the table size observed at the moment of table
+>> ioremap() and use the cached value. This, however, does not help drivers
+>> that peek at the PCIE_MSIX_FLAGS register directly.
+>> 
+>> Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Cc: stable@vger.kernel.org
+>> ---
+>>  drivers/pci/msi/api.c | 7 ++++++-
+>>  drivers/pci/msi/msi.c | 2 +-
+>>  include/linux/pci.h   | 1 +
+>>  3 files changed, 8 insertions(+), 2 deletions(-)
+>
+> I'm not security expert here, but not sure that this protects from anything.
+> 1. Kernel relies on working and not-malicious HW. There are gazillion ways
+> to cause crashes other than changing MSI-X.
 
-> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > <bill.c.roberts@gmail.com> wrote:
-> > > >
-> > > > > What's the use case of using the creation data and ticket in this
-> > > > > context? Who gets the creationData and the ticket?
-> > > > > Could a user supplied outsideInfo work? IIRC I saw some patches
-> > > > > flying around where the sessions will get encrypted and presumably
-> > > > > correctly as well. This would allow the transfer of that
-> > > > > outsideInfo, like the NV Index PCR value to be included and
-> > > > > integrity protected by the session HMAC.
-> > > >
-> > > > The goal is to ensure that the key was generated by the kernel. In
-> > > > the absence of the creation data, an attacker could generate a
-> > > > hibernation image using their own key and trick the kernel into
-> > > > resuming arbitrary code. We don't have any way to pass secret data
-> > > > from the hibernate kernel to the resume kernel, so I don't think
-> > > > there's any easy way to do it with outsideinfo.
-> > >
-> > > Can we go back again to why you can't use locality?  It's exactly
-> > > designed for this since locality is part of creation data.  Currently
-> > > everything only uses locality 0, so it's impossible for anyone on Linux
-> > > to produce a key with anything other than 0 in the creation data for
-> > > locality.  However, the dynamic launch people are proposing that the
-> > > Kernel should use Locality 2 for all its operations, which would allow
-> > > you to distinguish a key created by the kernel from one created by a
-> > > user by locality.
-> > >
-> > > I think the previous objection was that not all TPMs implement
-> > > locality, but then not all laptops have TPMs either, so if you ever
-> > > come across one which has a TPM but no locality, it's in a very similar
-> > > security boat to one which has no TPM.
-> >
-> > Kernel could try to use locality 2 and use locality 0 as fallback.
+This particular bug was preventing our fuzzing from going deeper into
+the code and reaching some more of the aforementioned gazillion bugs.
 
-> I don't think that would work for Matthew, they need something
-> reliable to indicate key provenance.
+> 2. Device can report large table size, kernel will cache it and
+> malicious device will reduce it back. It is not handled and will cause
+> to kernel crash too.
 
-Indeed, I was going to mention that.  Falling back means that the
-security guarantee is lost, perhaps silently and lost on the owner of
-the system, if they are not paying attention to things like the boot
-logs.
+How would that happen? If the device decides to have fewer vectors,
+they'll all still fit in the ioremapped MSIX table. The worst thing that
+can happen is 0xffffffff reads from the mmio space, which a device can
+do anyway. But that shouldn't trigger a page fault or otherwise
+crash. Or am I missing something?
 
-One of the persistent challenges with these hardware security
-technologies is that they need to be ubiquitous to be useful,
-something that has historically plagued all of these technologies.
-
-> I was informed that all 5 localities should be supported starting
-> with Gen 7 Kaby Lake launched in 2016. Don't know if this is still
-> "too new".
-
-It will be necessary, and important, to differentiate between
-'supported' and 'available'.
-
-Historically, security features have been SKU'ified, in other words,
-made available only on specific SKU's, even when the platform writ
-large has the necessary support.  These SKU's are designed to be
-directed at various verticals or OEM's who are perceived to be willing
-to pay more for enhanced security.
-
-I've had conversations on whether or not hardware technologies would
-be available and the conversation usually ends with the equivalent of:
-"Show us the business case for supporting this."
-
-Which translates, roughly, into how much money are we going to make if
-we offer this.
-
-Unfortunately, without being ubiquitous, as you note for a long period
-of time, there is no development interest, which in turn translates
-into no market 'pull'.  A rather troublesome dilemma for security
-innovation.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
+Thanks,
+--
+Alex
