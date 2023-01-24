@@ -2,112 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D15678CE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B046B678CEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 01:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjAXAfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 19:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S231506AbjAXAkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 19:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjAXAfv (ORCPT
+        with ESMTP id S229589AbjAXAko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:35:51 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AB0E3A1;
-        Mon, 23 Jan 2023 16:35:50 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 0DA8B12D5;
-        Tue, 24 Jan 2023 01:35:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1674520549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t0QJrzM/nos+48dBriFtlRQxmABdt2ZEF0ScwZ5Vbs0=;
-        b=ndtJ1iSIARIvIWBd0cmm/w/WB3Hldz0MrlyhnReyeEm+9J+0i6qZuk5+9fM7XsXdpHijm9
-        7OqX7Nmi1ZHUf2S8Cn7Ve259lvO/sMwTg2z53lJnvUvjwmKXo2jy7FIPGGfmRvS1F4n6+7
-        f8Q/w3i4Xckrc/RAMgBLB+cj4F7YRJCLZwpA6lZHQNoDSKdBiSFOMDpjxkPDuixory2n7B
-        fkpKo2CtxcXiOh9CqibhWzFmQveR6V6m3+/TwjKk4GhjHBFKdEE69aTn3n9UpqJ+tXSICR
-        Kow5VEUFQLB8X3ZmbH2uHItcznfrDXADxVW5ewxN1e+sjlbgCRY6vrzqSNel9g==
+        Mon, 23 Jan 2023 19:40:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E7F1557B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 16:40:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674520843; x=1706056843;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v17R3QyYZCP4T22EmjJYvFeZBPZM3Q8P3+3lMWzi8To=;
+  b=gTLhFSZTdzua/9K0wb82hu5jgcjJTa6PfJIB0XIQ+scbdYiNbdPJRzEN
+   dXZP/dUSIlIpJscN8KK82UIsUxYBgcBLI5jPDxHAxocdBOFE5ko5SWbFF
+   I0m3IB942OgZiXKxQeBmDvB/69X9UUeOWpxoHugf9zmrf5pLuj0fqj6as
+   +D7upHgo9ajvJKvxIwUAHwtbcNnhfb0uweLpXzMIag/gzPBOgO/FHfHAs
+   6PwJyysgXBrLg+NZnPx/03CxQKBL+1u4i1KLFqcb8X8JEPNE1MqDn7JGP
+   wMCkDEpNYxOa1VdIEWRiFcZyJHlapFxZ4vGM54U4cqi8tbT15NVoR272t
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="326234810"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="326234810"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 16:40:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="692428776"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="692428776"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jan 2023 16:40:29 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pK7MS-0005zE-2E;
+        Tue, 24 Jan 2023 00:40:28 +0000
+Date:   Tue, 24 Jan 2023 08:39:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     George Prekas <george@enfabrica.net>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christoph Lameter <cl@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        George Prekas <george@enfabrica.net>
+Subject: Re: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
+Message-ID: <202301240827.j2GJi7v5-lkp@intel.com>
+References: <20230123170419.7292-2-george@enfabrica.net>
 MIME-Version: 1.0
-Date:   Tue, 24 Jan 2023 01:35:48 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] net: phy: C45-over-C22 access
-In-Reply-To: <Y87og1SIe1OsoLfU@lunn.ch>
-References: <20230120224011.796097-1-michael@walle.cc>
- <Y87L5r8uzINALLw4@lunn.ch> <Y87WR/T395hKmgKm@shell.armlinux.org.uk>
- <Y87og1SIe1OsoLfU@lunn.ch>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <05e044a5f308ad81919d28a5b2dfdd42@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123170419.7292-2-george@enfabrica.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->       - const: ethernet-phy-ieee802.3-c45
->         description: PHYs that implement IEEE802.3 clause 45
-> 
-> But it is not clear what that actually means. Does it mean it has c45
-> registers, or does it mean it supports C45 bus transactions?
+Hi George,
 
-PHYs which support C45 access but don't have C45 registers aren't
-a thing I presume - or doesn't make any sense, right?
+Thank you for the patch! Yet something to improve:
 
-PHYs which have C45 registers but don't support C45 access exists.
-e.g. the EEE registers of C22 PHYs. But they are C22 PHYs.
+[auto build test ERROR on vbabka-slab/for-next]
+[also build test ERROR on linus/master v6.2-rc5 next-20230123]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So I'd say if you have compatible = "ethernet-phy-ieee802.3-c45",
-it is a PHY with C45 registers _and_ which are accessible by
-C45 transactions. But they might or might not support C22 access.
-But I think thats pretty irrelevant because you always do C45 if
-you can. You cannot do C45 if:
-  (1) the mdio bus doesn't support C45
-  (2) you have a broken C22 phy on the mdio bus
+url:    https://github.com/intel-lab-lkp/linux/commits/George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
+patch link:    https://lore.kernel.org/r/20230123170419.7292-2-george%40enfabrica.net
+patch subject: [PATCH 1/9] mm: kmemleak: properly disable task stack scanning
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20230124/202301240827.j2GJi7v5-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f0d9df4305849ecea4402bc614cadb0dd357da77
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review George-Prekas/mm-kmemleak-properly-disable-task-stack-scanning/20230124-010911
+        git checkout f0d9df4305849ecea4402bc614cadb0dd357da77
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-In both cases, if the PHY doesn't support C22-over-C45 you are
-screwed. Therefore, if you have either (1) or (2) we should always
-fall back to C22-over-C45.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> If we have that compatible, we could probe first using C45 and if that
-> fails, or is not supported by the bus master, probe using C45 over
-> C22. That seems safe. For Michael use case, the results of
-> mdiobus_prevent_c45_scan(bus) needs keeping as a property of bus, so
-> we know not to perform the C45 scan, and go direct to C45 over C22.
+All errors (new ones prefixed by >>):
 
-So you are talking about DT, in which case there is no auto probing.
-See phy_mask in the dt code. Only PHYs in the device tree are probed.
-(unless of course there is no reg property.. then there is some
-obscure auto scanning). So if you want a C45 PHY you'd have to
-have that compatible in any case.
+   kernel/fork.c: In function 'alloc_thread_stack_node':
+>> kernel/fork.c:320:9: error: implicit declaration of function 'kmemleak_mark_stack'; did you mean 'kmemleak_no_scan'? [-Werror=implicit-function-declaration]
+     320 |         kmemleak_mark_stack(stack);
+         |         ^~~~~~~~~~~~~~~~~~~
+         |         kmemleak_no_scan
+   kernel/fork.c: At top level:
+   kernel/fork.c:865:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
+     865 | void __init __weak arch_task_cache_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Btw. I still don't know how you can get a C45 PHY instance without
-a device tree, except if there is a C45 only bus or the PHY doesn't
-respond on C22 ids. Maybe I'm missing something here..
 
--michael
+vim +320 kernel/fork.c
+
+   274	
+   275	static int alloc_thread_stack_node(struct task_struct *tsk, int node)
+   276	{
+   277		struct vm_struct *vm;
+   278		void *stack;
+   279		int i;
+   280	
+   281		for (i = 0; i < NR_CACHED_STACKS; i++) {
+   282			struct vm_struct *s;
+   283	
+   284			s = this_cpu_xchg(cached_stacks[i], NULL);
+   285	
+   286			if (!s)
+   287				continue;
+   288	
+   289			/* Reset stack metadata. */
+   290			kasan_unpoison_range(s->addr, THREAD_SIZE);
+   291	
+   292			stack = kasan_reset_tag(s->addr);
+   293	
+   294			/* Clear stale pointers from reused stack. */
+   295			memset(stack, 0, THREAD_SIZE);
+   296	
+   297			if (memcg_charge_kernel_stack(s)) {
+   298				vfree(s->addr);
+   299				return -ENOMEM;
+   300			}
+   301	
+   302			tsk->stack_vm_area = s;
+   303			tsk->stack = stack;
+   304			return 0;
+   305		}
+   306	
+   307		/*
+   308		 * Allocated stacks are cached and later reused by new threads,
+   309		 * so memcg accounting is performed manually on assigning/releasing
+   310		 * stacks to tasks. Drop __GFP_ACCOUNT.
+   311		 */
+   312		stack = __vmalloc_node_range(THREAD_SIZE, THREAD_ALIGN,
+   313					     VMALLOC_START, VMALLOC_END,
+   314					     THREADINFO_GFP & ~__GFP_ACCOUNT,
+   315					     PAGE_KERNEL,
+   316					     0, node, __builtin_return_address(0));
+   317		if (!stack)
+   318			return -ENOMEM;
+   319	
+ > 320		kmemleak_mark_stack(stack);
+   321	
+   322		vm = find_vm_area(stack);
+   323		if (memcg_charge_kernel_stack(vm)) {
+   324			vfree(stack);
+   325			return -ENOMEM;
+   326		}
+   327		/*
+   328		 * We can't call find_vm_area() in interrupt context, and
+   329		 * free_thread_stack() can be called in interrupt context,
+   330		 * so cache the vm_struct.
+   331		 */
+   332		tsk->stack_vm_area = vm;
+   333		stack = kasan_reset_tag(stack);
+   334		tsk->stack = stack;
+   335		return 0;
+   336	}
+   337	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
