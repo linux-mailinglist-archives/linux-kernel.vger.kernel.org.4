@@ -2,164 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36005679E1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C185C679E20
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbjAXQAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S232966AbjAXQAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjAXQAA (ORCPT
+        with ESMTP id S233407AbjAXQA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:00:00 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D759ABA;
-        Tue, 24 Jan 2023 07:59:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=juCJLe5fQe7IUPsxrS2Q5VEfB7fzhzTlztUbkeZYfl76MedmA9CRW+WwlWVJbAOscD17nhr0DEX02Z8LdFNbuPYBDI8QsoBXA2RAvbySMmw2Icvt/xsSFKhW44F4jcsfDbmUd6CcU1PkvqN+IfS7WZdAdqejZYexKgnc0Rn/NkHdASLUqfZ6UmDIPmnIUAPwhaqfiR6399JhQmc91GaRu0qXSrR5RQz3aLcpm6wvPYPyqHaYWkkc28z7TxMGUNnyyS7heGKmz1LxTVShTt6XIKOUGgzpTHtBnxBfJ9tW6CeC21JuooIkttun1114ozDQtMu2ezl693yNhS4ubc9lnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HYFd9SN8uyt7sDJWr1Z6HvxkKuUrSIfTeO5zURDGchM=;
- b=lZG9KgZLB6ghVGjHMYj7axap06mMlca8JRNWqy41EEShG+GcwFgIHfgMsF+YfLrfy/LLk788GaJFQAPm/lpkrkGFlFir5ie9UWM68eea/sbx+mYyaRDa2EY3YvRlgm+TGWMPrbfB9BoqSaIV1ttZiE+drlQNs8MHgGbMZA4xWuPQfFqBxeiSxat6Ciob+UX/EgckNLNW344dtWeTdTlQiFu/TH9HH+UovU60F361LK0nEsvP9m+miwhhDknSO7fabH4KGX0UwMhCkcak+TFWiwbujRRp+si3IMu0g0062kGTZamxyFGke0LjbBxcaSagizHZX3ZOkDatvMjKzHsa6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HYFd9SN8uyt7sDJWr1Z6HvxkKuUrSIfTeO5zURDGchM=;
- b=S4XFGy6Iwau0WKgXzkqaY6ZnHQcWXsRnlH4HH6/8mhdGcFx91n570xVdPOXiopeGOe92N7+z8FKe2aerGp2FOJ6C/E+U5c1j17CNUe+HgDjZCasU9AjXwJjrl6bIYu8jx3nCMLinZuwToUo3j+Norki0PFS+k4tLMdLBKvsIlpM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
- by SA1PR17MB5106.namprd17.prod.outlook.com (2603:10b6:806:1b5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 15:59:57 +0000
-Received: from BN6PR17MB3121.namprd17.prod.outlook.com
- ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
- ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
- 15:59:57 +0000
-Date:   Tue, 24 Jan 2023 10:59:46 -0500
-From:   Gregory Price <gregory.price@memverge.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, avagin@gmail.com
-Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
- for sud configuration
-Message-ID: <Y9AAcuomaVM2JRCA@memverge.com>
-References: <20230123032942.18263-1-gregory.price@memverge.com>
- <20230123032942.18263-4-gregory.price@memverge.com>
- <20230123154101.GA6268@redhat.com>
- <Y87OEdDXwZG8pmmE@memverge.com>
- <20230123195228.GD6268@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123195228.GD6268@redhat.com>
-X-ClientProxiedBy: BY3PR05CA0052.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::27) To BN6PR17MB3121.namprd17.prod.outlook.com
- (2603:10b6:405:7c::19)
+        Tue, 24 Jan 2023 11:00:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00F26A41;
+        Tue, 24 Jan 2023 08:00:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A23EB8129F;
+        Tue, 24 Jan 2023 16:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0052CC433A1;
+        Tue, 24 Jan 2023 16:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674576025;
+        bh=E4rebzxiuL9N/C2gmFGLTuzUkrJE5V2YWs40own6YyY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iKvklFst7vZ9IZe4gHIoyd7FDz+BCboBsjFrffOXRyIk7UR33Y+deYe7w9Dt4//N3
+         ZKbX5nAKbhNfgN7SuQ9DLI62Rtg2E/2/6QuSwq+DJlEFvp4NUnewk/RVpuRHCI59qI
+         DA0JndLucnyWGW8PmwHoAlKr93KQNSo7EoOZThp75drTwp8ePo0LySticjPL51/kmm
+         zkmKeOS7kbCU7Z6pz7x+tirTDk7iH10/45A7WtQBAmCWGzefDG5xleY0Ub3GS6FY1C
+         A53uYCj4yVKj+qAoSe1bJAMb3gmsPuMS8UwVjSVXYp+z64VH0siWjGlf3aMSRnbicg
+         tJQsPjBifbH+Q==
+Received: by mail-vs1-f41.google.com with SMTP id i188so16890821vsi.8;
+        Tue, 24 Jan 2023 08:00:24 -0800 (PST)
+X-Gm-Message-State: AFqh2kpfbsnKJ/DpqUDeSr12jY1b2rJlE46MhGPFNvNFOCjhgN0Rr56r
+        OLtOQX/E8EsWtyEwSb17ALugKfkyAXOhST1ZjA==
+X-Google-Smtp-Source: AMrXdXu8POmPTc3kTbupXN8+asQxNlXMX0VKe5umLqj8CtgRiM7NIZ+CsUSwyInEoiakaRCb274kzhdbeY7AXH9Saw0=
+X-Received: by 2002:a67:ef8a:0:b0:3d0:b955:e0af with SMTP id
+ r10-20020a67ef8a000000b003d0b955e0afmr4108270vsp.26.1674576023792; Tue, 24
+ Jan 2023 08:00:23 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|SA1PR17MB5106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b5c9749-da80-4c63-1148-08dafe2409ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rbjWVF3sZCW9rgIj7RTwCFlBzX2mGpDIACid58ne9XXCsLkKPbwGEgHZ+zil34g2TFrkpauZQYUAlCpgP+0YvtLnBrZJ48Qmc2oRbaJADIKA44WGe4GUergXR3ENtLFlgeJsPaXcblvEB4l7wpRRjpAIPTTxDQ0Wvo1YdCNve0/8N3pmCK4TD5DVbM0FyhIiBXKAxyQBUYH0jgdjwDo6GpRKQBd/O2aklo+ka/gJAVmE3GsRx5Fnr27iqMGgtFjz9B91ZFnkLmdVGCXtBU1GP37zlY+RtU3PpqZkhzJcd3gRbtzbFqwr81Z9c8UmPMNmHQ5Sv+nhDJLYQEl4lxIOG83sePaHPeH+URWCvuSjNctjukwVzwGdPp5B6pITpoPC0KU3RijDIGmEBr4Ez0c6PVAPOcbQkFbrzJwd8tRAKF90ciDSGwmgexhCT7x7LkUWU7HCg69xskLw1Ec+Wz6tehB0r7C2YvAM3a1p2JGtfDtCD3QvSO7zmoPqAxK98MGLpRS+Y4Qm00j08SYPaafCWf2PLsZcC7vK2h9DR/JrVUhFvJQUe1kA97yHssxFEdocz1C0K1k5c9kbAS6YNbxIW0+VYIUV0gaqki3leIUgiwFAAorNWN5COsUfZpUvQAdYTlX8SWI4PFEROXBBLdE4sA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(376002)(366004)(39840400004)(396003)(451199015)(36756003)(41300700001)(86362001)(7416002)(8936002)(5660300002)(4326008)(44832011)(2906002)(38100700002)(83380400001)(478600001)(6486002)(66946007)(6512007)(6916009)(26005)(6506007)(8676002)(186003)(316002)(6666004)(2616005)(66476007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wo0z7Rc2krAkqAQgfClILT9QFEv9mYrw0j2WsWDbe5ZojbnwBYoVHeEbMqON?=
- =?us-ascii?Q?n6SKpAhSKrk+VSnqk6dkVhyWUgu8XxE6ophAk3u31cQDWiamD52mnOgOoODe?=
- =?us-ascii?Q?tNpK51pepudTe+mC1TMXjRNl5ofilR39t50nKGUgLYEdvROMo6t/YnLsUnql?=
- =?us-ascii?Q?qnHeoHMGFA5OXcC9VG6F6oPIZPJaNde8KplxfgQAYFAQhXH8YSLV0w73OSCl?=
- =?us-ascii?Q?x1pj0C8If25atXCwsrvvRcEbk9JfMntF/qSSlzKjH3aMSh37nXAkWz4j4Bgr?=
- =?us-ascii?Q?kHq6Vf91yrLFgP5MpNr5Zjj5dr18nbsprIwwyYNFXNl845Fso+/w5oW1js5z?=
- =?us-ascii?Q?kUlk6XzJGTuCb6USGsbESS7+VVA/1C/pD0ABsNC2wP4up6036xB4vmFRCYlz?=
- =?us-ascii?Q?lA9E/dE68Utcg8E6bn/IBYErUTJgMyjR32uwbFCECggU40vJKx+gHIzdS5Vz?=
- =?us-ascii?Q?HUR3X4/dHi9tof2WsAV/GzIwnEkJmZdC8UjPBpW1KZpVZxtjUaOFlz5bcULK?=
- =?us-ascii?Q?AUwMuzO1J0r/xfVmNM1zq0nOwycSASsnl7F8fRLVeAxlkr3JRD60vwJI1Ghr?=
- =?us-ascii?Q?nrUxGP+OLFflH3QDIDYyLP28kGPuY0STbECJ5kAVlzvQG6w0LhEPWAL1D+ie?=
- =?us-ascii?Q?CJPZveR6bfZiwP6PZh70b6FZ9/fxV2f05Wv9950WDj5fyAFe4CfxQ3EB5CCO?=
- =?us-ascii?Q?qncTmr5Wule3fs10aDzHA9J8fQ9oObxEPahUdcn8SVyZqd4lMt4v2cFPjGr9?=
- =?us-ascii?Q?V5k2DTmHcmABtaFcRr4JYy74CIO3/RCCqNjVp0BJiYpi+20Ej2nQbmT8ZGWI?=
- =?us-ascii?Q?0QkwlyrH9C7JELS1jtV+1LxQAP59PdTPku+3iYzB2dvvwZIS+h7qOmocfu2L?=
- =?us-ascii?Q?weo5X3QZAAebH5lFsuwwRRWvorLTgbnsWTz42t63FOb2it9BA6QI8Gmwfr8h?=
- =?us-ascii?Q?tuXqA88Vlmm55aY+eZt7z7mF8b2ntkuloI2xlQp80yheJ95+zkUD53EQQ8u+?=
- =?us-ascii?Q?29Lrq54RDBsu15AGiY8q6qBVFty1gfUOOMgkz/c5DYLsZvTTmTCdMypH69fu?=
- =?us-ascii?Q?nyorEh7OqDMKZgE1C75zZacxBCbNd4C3GBSJxkvxzpRtefTQqTfMvLoKPE33?=
- =?us-ascii?Q?TKeVB2RtNjiwADAiJAh68dc1cLESm9LuWsDMnVZGsj8IY+/DecnmDhFRumNH?=
- =?us-ascii?Q?hp4LyPOIWi65E476eQsrFo3im2VPFB4pjGXkNpylTtqw7zXhOpndP7yS9KHd?=
- =?us-ascii?Q?N6GD38sjh2ifPAQ++clBQx6kovJ7o24Qz6uwnT+RFxaMBVTLLDmE2UWkZmYC?=
- =?us-ascii?Q?YhhRtwLxkmLMNniZNejX5/O+tjgmmmnZRvP87RjTSW1cCjvLE5WlxG0JSa9O?=
- =?us-ascii?Q?CgGfWu25HZSren6t0QaEhFgf9UfomOTm+0kUsi+ztqpzzCDk5NJlcvqKSnMl?=
- =?us-ascii?Q?QnJWSAWXF7NQe+0HuNcncUre1iUUbjB0UaEpUpBJ1Fkf+mTM/abHusqIiAmQ?=
- =?us-ascii?Q?zXYHgA8/zZTycGcevsaVF5SoMbXqUZTOp31bCBK6eD5hNe8/tWDVcR9sPsWT?=
- =?us-ascii?Q?VZSBFS2ZSZ2bwrbHKE87KqffV8Ui6yfLoMv+W7WlCOkJa//zlc+T6bKOx/MW?=
- =?us-ascii?Q?Yg=3D=3D?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b5c9749-da80-4c63-1148-08dafe2409ef
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 15:59:56.8567
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wIkMSvEKE0e9qbnXuJN9n9EYLsNn2+4lzS8W+31LqMEv1egP3eb/RlnHi1SlPOV89WLZxCmc/PDu3lFRdfSlf2Sfs1yotA25h73gTasnvNw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR17MB5106
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
+ <20230117175657.GA3275060-robh@kernel.org> <20230118180811.GB3322341@hu-bjorande-lv.qualcomm.com>
+ <20230119161132.GA1880784-robh@kernel.org> <20230119173954.GB3899167@hu-bjorande-lv.qualcomm.com>
+In-Reply-To: <20230119173954.GB3899167@hu-bjorande-lv.qualcomm.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 24 Jan 2023 10:00:12 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+4t09XDkF0dbh+aOyTz80SY18EpRBdoGpLqQBuCPQ5=Q@mail.gmail.com>
+Message-ID: <CAL_Jsq+4t09XDkF0dbh+aOyTz80SY18EpRBdoGpLqQBuCPQ5=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 08:52:29PM +0100, Oleg Nesterov wrote:
-> On 01/23, Gregory Price wrote:
-> >
-> > So i think dropping 2/3 in the list is good.  If you concur i'll do
-> > that.
-> 
-> Well I obviously think that 2/3 should be dropped ;)
-> 
-> As for 1/3 and 3/3, feel free to add my reviewed-by.
-> 
-> Oleg.
+On Thu, Jan 19, 2023 at 11:40 AM Bjorn Andersson
+<quic_bjorande@quicinc.com> wrote:
 >
+> On Thu, Jan 19, 2023 at 10:11:32AM -0600, Rob Herring wrote:
+> > On Wed, Jan 18, 2023 at 10:08:11AM -0800, Bjorn Andersson wrote:
+> > > On Tue, Jan 17, 2023 at 11:56:57AM -0600, Rob Herring wrote:
+> > > > On Thu, Jan 12, 2023 at 08:11:14PM -0800, Bjorn Andersson wrote:
+> > > > > From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > > >
+> > > > > Introduce a binding for GPIO-based mux hardware used for connecting,
+> > > > > disconnecting and switching orientation of the SBU lines in USB Type-C
+> > > > > applications.
+> > > > >
+> > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > > > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > > > > ---
+> >
+> >
+> > > > > +    tcpm {
+> > > > > +        connector {
+> > > > > +            compatible = "usb-c-connector";
+> > > > > +
+> > > > > +            ports {
+> > > > > +                #address-cells = <1>;
+> > > > > +                #size-cells = <0>;
+> > > > > +
+> > > > > +                port@0 {
+> > > > > +                    reg = <0>;
+> > > > > +                    tcpm_hs_out: endpoint {
+> > > > > +                        remote-endpoint = <&usb_hs_phy_in>;
+> > > > > +                    };
+> > > > > +                };
+> > > > > +
+> > > > > +                port@1 {
+> > > > > +                    reg = <1>;
+> > > > > +                    tcpm_ss_out: endpoint {
+> > > > > +                        remote-endpoint = <&usb_ss_phy_in>;
+> > > > > +                    };
+> > > > > +                };
+> > > > > +
+> > > > > +                port@2 {
+> > > > > +                    reg = <2>;
+> > > > > +                    tcpm_sbu_out: endpoint {
+> > > > > +                        remote-endpoint = <&sbu_mux_in>;
+> > > > > +                    };
+> > > > > +                };
+> > > > > +            };
+> > > > > +        };
+> > > > > +    };
+> > > > > +
+> > > > > +    sbu-mux {
+> > > > > +        compatible = "pericom,pi3usb102", "gpio-sbu-mux";
+> > > > > +
+> > > > > +        enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
+> > > > > +        select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
+> > > > > +
+> > > > > +        mode-switch;
+> > > > > +        orientation-switch;
+> > > > > +
+> > > > > +        port {
+> > > > > +            sbu_mux_in: endpoint {
+> > > > > +                remote-endpoint = <&tcpm_sbu_out>;
+> > > > > +            };
+> > > >
+> > > > Don't you need a connection to whatever drives SBU? Maybe your case is
+> > > > fixed because the phy does the DP/USB muxing? But the binding needs to
+> > > > support the worst case which I guess would be all the muxing/switching
+> > > > is done by separate board level components.
+> > > >
+> > >
+> > > Perhaps I'm misunderstanding your request, but I think this is the worst
+> > > case you're talking about.
+> > >
+> > > &usb_ss_phy_in is a reference to the PHY, which does switching/muxing of
+> > > the SuperSpeed lanes in the connector, but the PHY provides no control
+> > > over the SBU signals.
+> > >
+> > > So this sbu-mux is a separate component between the SBU-pads on the SoC
+> > > and the usb-c-connector, referenced through he &sbu_mux_in reference.
+> > >
+> > >
+> > > So upon e.g. a orientation switch, the typec_switch_set() call the tcpm
+> > > implementation will request orientation switching from port@1 and port@2
+> > > (no orientation-switch on port@0/HS pins).
+> >
+> > 'port@2' is supposed to define the connection to what controls SBU. The
+> > mux here switches the signals, but it doesn't control them.
+>
+> The SBU signals are driven by the SS PHY, on behalf of the DisplayPort
+> controller. These signals are  turned on/off as a result of the TCPM
+> indicating the HPD state to the DisplayPort controller.
+>
+> There's a such not really a direct representation today of the entity
+> that drives the SBU lines. It happens to be a sub-block in
+> &usb_ss_phy_in, but I don't envision that we need/want any signaling
+> between the TCPM and the SBU-"driver".
+>
+>
+> I see that I missed that in the example above, your suggestion on how to
+> model that relationship (TCPM - DP controller) was to add an additional
+> endpoint in port@1. So that's the current design (but neither ports nor
+> endpoints are significant from an implementation point of view).
+>
+> > The mux should sit in the middle, but the graph terminates at the mux.
+> > You don't have a connection presumably because you know what the
+> > connection.
+>
+> But do you suggest that the graph should reference the entity that
+> drives the SBU signals?
 
-I'm actually going to walk my agreement back.
+Yes, that was the original intent.
 
-After one more review, the need for the proc/status entry is not to
-decide whether to dump SUD settings, but for use in deciding whether to
-set the SUSPEND_SYSCALL_DISPATCH option from patch 1/3.
+> What about the discrete mux?
 
-For SECCOMP, CRIU's `compel` does the following:
+You mean the mux in this binding, right? That should be in the middle:
 
-1. ptrace attach / halt
-2. examine proc/status for seccomp usage
-3. if seccomp in use, set PTRACE_O_SUSPEND_SECCOMP
-4. proceed with further operations
+DPaux --> SBUmux --> connector
 
-The same pattern would be used for syscall dispatch.
+Maybe the SS phy is in there too.
 
-Technically I think setting the flag unconditionally would be safe, but
-it would lead to unclear system state (i.e. did i actually suspend
-something? was the process actually using it?)
+>
+> > Perhaps because there is only 1 connector and controller.
+> >
+>
+> There is one SBU mux, one DP controller and one SS PHY per
+> usb-c-connector.
+>
+> > Suppose you have 2 connectors and 2 controllers which drive SBU
+> > signals. Also assume that the SBU signals are completely independent
+> > from what's driving the altmode SS signals. How would you describe that?
+> >
+>
+> This is the setup we have on e.g. SC8280XP CRD; where the TCPM has two
+> usb-c-connectors defined, each with their graph referencing the SS PHY,
+> DP controller and respective sbu-mux.
+>
+> There's an incomplete example of this published at [1] (where the SS phy
+> isn't represented yet - and hence there's no control over the SS lanes,
+> nor is the HS lanes connected to the dwc3 for role switching).
+>
+> Perhaps I'm misunderstanding your concerns though?
 
-To me it seems better to leave it explicit and keep the second commit.
+That looks like you can assume who drives SBU based on the DP
+controller. Probably a safe assumption for DP (that DP-aux is part of
+the DP controller), but I was more worried about if you can't assume
+that relationship. Take HDMI for example where the DDC signals can
+come from anywhere. They could be part of the HDMI bridge, a general
+purpose I2C bus off the SoC, or bitbanged GPIOs. Though from what I've
+read, HDMI Altmode is dead. I don't know if the need to describe the
+SBU connection would apply to anything else.
 
-Thoughts?
+I guess this all boils down to whether the SBU mux should have a 2nd
+optional port as the input for what drives it.
 
-(cc: @avagin if you happen to have any input on this particular pattern)
-
-~Gregory
+Rob
