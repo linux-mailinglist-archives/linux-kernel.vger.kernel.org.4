@@ -2,183 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD1967A3FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3898067A3FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbjAXUdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S234010AbjAXUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjAXUdH (ORCPT
+        with ESMTP id S229482AbjAXUdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:33:07 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932346A5;
-        Tue, 24 Jan 2023 12:33:02 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id w11so4316171edv.0;
-        Tue, 24 Jan 2023 12:33:02 -0800 (PST)
+        Tue, 24 Jan 2023 15:33:55 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EA11BFA
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:33:53 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id b1so15189395ybn.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:33:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DngxDzOqd5iZTbA1Ft94FNQ9sK4bK2cIoSkRG8LUmCk=;
+        b=btRsAR68Fwm1UJAA7++KT0wkLA3BTp8hC8IrJVugQsDQO1wEy5eAnIzhUg7T9U6pA5
+         BIlm3U8wBbSW3PuteXUrr6GC2RfslcDiCqKWjeOUNLl2N6X6abc0v3ltuC19p6gigzUm
+         AXftV57WxiC+GEZ2jxPzIMX/D54XZmBEr5W0rb/BNVZKQgFo/eYhLvQv8W9BxZIx0Jvv
+         +ng4U+05k+1zF1QwWmZPOCblwx3bUD1gz4YguLjWxS2AzXpOTzDs0vNEHj3lBbatw7Vu
+         nsni2J/jCC91Y2T4vthg3dkFwLlG9hu1FXv1D6lbaSUh0u8jmh224htbZGD1WNi7OEuY
+         1KfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hLMuamyiEkVxFlo4bpu/j50H3Gmc39mnq5ps46HJInM=;
-        b=B7Uf301KQdUEU4wLXYWeo5Xt/tHFq/mYNwm8GQ7en0DSI5/MUUiytmvGUlVfGzMFpN
-         FYHZWvlvt5pNHy9+FhlcXHyn7Y0lYBGZbL7zasVE78Dbg52QO7aaaXf+CSP1g0jUYOcy
-         lh7Lq0XJ+Ak+gLi91cn9329gdcn4qqoOemxMO/CZumzFHq3jP0SB/8lH8kA+OS1LMhDz
-         SViJAUPkJQ0mZYC3oBWHpImb2H8jd/ZzFY8WYRCI6Evr+jeq5NwLVDZcPZWvNYnW5btD
-         47Op6xdE0mntdiA+CDDdUldEaDqD9fc2tsTXaS7HwGgM5f/kHsRWUWtODlkIVpAJlHrJ
-         Q+7g==
-X-Gm-Message-State: AFqh2ko2bnT5YOrfM0c2djfIph+RLFzr06YeM/GJVAY4MTYtgxdxhzTI
-        U0z4EBPym9uN8a7dAKkESzYzNwD3ohndOz4cyKA=
-X-Google-Smtp-Source: AMrXdXsi9Z4o6NR9nxS+XvbV4TvF/2sYLkf+RWnW0dEd8aSqKvrYiEcKljqXfFK0PjovolbaZHJ9xkgq3p1zbIIwfwY=
-X-Received: by 2002:a05:6402:1002:b0:49a:1676:4280 with SMTP id
- c2-20020a056402100200b0049a16764280mr3625796edu.16.1674592380903; Tue, 24 Jan
- 2023 12:33:00 -0800 (PST)
+        bh=DngxDzOqd5iZTbA1Ft94FNQ9sK4bK2cIoSkRG8LUmCk=;
+        b=l2VZ7CFdofjr0AwEXnVbn6h+BLD91pO2VKHPndDPA6X365pX+4/ZodpD8+IzweBOfb
+         F1kgryuWdPnjmU2EIpYh3MsxRNPnGwd/fBIsB/7tVqpQEqIUkd8PKyCp9fgI48/Ouo7b
+         zCZivpZZT3tb3ZyzYhCvFzrH5PvOqesHoCzhfgki7F+XPM0MPbsznko1Sark63bfO9xm
+         Fph+2AgTPrjm9yWHLdlyaX3sGS/qCyUfLQOS1Oh6vMkxecaHenrcOX3ZwrHyRB3gqhYj
+         feHfsrLYW9XGQ8rrNLffjUAKiIVp8KEdzvDI5yyp57tsYtfVkxuRym0w0XauvL1CXK8x
+         CJWw==
+X-Gm-Message-State: AFqh2kreMTPki3uAzNTQS5kRvKxK3ggqjhh+LinfnRdq7hnts513ieGc
+        qnkHen6BLuP+vVFDbbzgrkIfLuz69muECJuZc8Mo
+X-Google-Smtp-Source: AMrXdXtGX6w6jF3OAhp70U4LifNDrg+emcKHezRWA2k0usTuFoIr0RxuWlTs4qh1YxzOLwOd507U92WbPJkOoHSrX1Q=
+X-Received: by 2002:a25:1882:0:b0:807:4bf9:f4ec with SMTP id
+ 124-20020a251882000000b008074bf9f4ecmr1229222yby.313.1674592432967; Tue, 24
+ Jan 2023 12:33:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Jan 2023 21:32:49 +0100
-Message-ID: <CAJZ5v0hBy2Jgezhuamz+++_EVfrO2gyuaC8vXvRMHvE5MjxtXw@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: int340x: Protect trip temperature from
- dynamic update
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+References: <20230123182728.825519-1-kan.liang@linux.intel.com>
+ <20230123182728.825519-2-kan.liang@linux.intel.com> <CANDhNCpWwxXM8DD9h4zOW+bygshkOg9TWO9Z7wJO_B7bDtgEHw@mail.gmail.com>
+ <9c17d6be-e532-84e1-4d35-77b9bd3051dc@linux.intel.com> <CANDhNCp_0Os+e0A0LZ7yKw16mWai9MAPMPYL0p1NkcVxifh88w@mail.gmail.com>
+ <1fb59dfa-1ab9-51ad-98c6-89431aa56918@linux.intel.com>
+In-Reply-To: <1fb59dfa-1ab9-51ad-98c6-89431aa56918@linux.intel.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 24 Jan 2023 12:33:41 -0800
+Message-ID: <CANDhNCodq8iyRY-md-nRkAPYS5p3iTCgDqZXvWAA108TctQASg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] timekeeping: NMI safe converter from a given time to monotonic
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, tglx@linutronix.de,
+        sboyd@kernel.org, linux-kernel@vger.kernel.org, eranian@google.com,
+        namhyung@kernel.org, ak@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 6:26 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Tue, Jan 24, 2023 at 12:13 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> On 2023-01-24 1:43 p.m., John Stultz wrote:
+> > On Tue, Jan 24, 2023 at 7:09 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> >> On 2023-01-24 2:01 a.m., John Stultz wrote:
+> >>> On Mon, Jan 23, 2023 at 10:27 AM <kan.liang@linux.intel.com> wrote:
+> >>>> +               /*
+> >>>> +                * Check whether the given timestamp is on the current
+> >>>> +                * timekeeping interval.
+> >>>> +                */
+> >>>> +               now = tk_clock_read(tkr);
+> >>>> +               interval_start = tkr->cycle_last;
+> >>>> +               if (!cycle_between(interval_start, cycles, now))
+> >>>> +                       return -EOPNOTSUPP;
+> >>>
+> >>> So. I've not fully thought this out, but it seems like it would be
+> >>> quite likely that you'd run into the case where the cycle_last value
+> >>> is updated and your earlier TSC timestamp isn't valid for the current
+> >>> interval. The get_device_system_crosststamp() logic has a big chunk of
+> >>> complex code to try to handle this case by interpolating the cycle
+> >>> value back in time. How well does just failing in this case work out?
+> >>>
+> >>
+> >> For the case, perf fallback to the time captured in the NMI handler, via
+> >> ktime_get_mono_fast_ns().
+> >
+> > This feels like *very* subtle behavior. Maybe I'm misunderstanding,
+> > but the goal seems to be to have more accurate timestamps on the hw
+> > events, and using the captured tsc timestamp avoids the measuring
+> > latency reading the time again. But if every timekeeping update
+> > interval (~tick) you transparently get a delayed value due to the
+> > fallback, it makes it hard to understand which timestamps are better
+> > or worse. The latency between two reads may be real or it may be just
+> > bad luck. This doesn't intuitively seem like a great benefit over more
+> > consistent latency of just using the ktime_get_mono_fast()
+> > timestamping.
 >
-> Trip temperatures are read using ACPI methods and stored in the memory
-> during zone initializtion and when the firmware sends a notification for
-> change. This trip temperature is returned when the thermal core calls via
-> callback get_trip_temp().
+> Your understand is correct. We want a more accurate timestamp for the
+> analysis work.
 >
-> But it is possible that while updating the memory copy of the trips when
-> the firmware sends a notification for change, thermal core is reading the
-> trip temperature via the callback get_trip_temp(). This may return invalid
-> trip temperature.
->
-> To address this add a mutex to protect the invalid temperature reads in
-> the callback get_trip_temp() and int340x_thermal_read_trips().
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: stable@vger.kernel.org # 5.0+
-> ---
-> v2:
-> - rebased on linux-next
+> As my understanding, the timekeeping update should not be very often. If
 
-So I've rebased it back onto 6.2-rc5 and pushed the result into the
-thermal-intel-fixes branch.  Please see if it looks good to you and
-let me know.
+"Often" depends on your your timescale.
 
-I'd prefer to push it for 6.2-rc.
+> I read the code correctly, it should happen only when adjusting NTP or
+> suspending/resuming. If so, I think the drawback should not impact the
+> normal analysis work. I will call out the drwabacks in the comments
+> where the function is used.
 
-> - Add ret variable and remove return as suugested by Rafael
+So the adjustments are done at tick time depending on the current NTP
+"error" (basically what the kernel tracks as the delta from its sense
+of what NTP has told us).
 
-Thanks!
+Not just at the time when ntp makes an adjustment.
 
->  .../int340x_thermal/int340x_thermal_zone.c     | 18 +++++++++++++++---
->  .../int340x_thermal/int340x_thermal_zone.h     |  1 +
->  2 files changed, 16 insertions(+), 3 deletions(-)
+So the window for it to happen is every timekeeping update (which is ~HZ).
+
+
+> >> The TSC in PEBS is captured by HW when the sample was generated. There
+> >> should be a small delta compared with the time captured in the NMI
+> >> handler. But I think the delta should be acceptable as a backup solution
+> >> for the most analysis cases. Also, I don't think the case (the
+> >> cycle_last value is updated during the monitoring) should occur very
+> >> often either. So I drop the history support to simplify the function.
+> >
+> > So the reads and this function are *always* used in NMI context?   Has
+> > this been stressed with things like SMIs to see how it does if
+> > interrupted in those cases?
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> index 228f44260b27..5fda1e67b793 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> @@ -41,7 +41,9 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
->                                          int trip, int *temp)
->  {
->         struct int34x_thermal_zone *d = zone->devdata;
-> -       int i;
-> +       int i, ret = 0;
-> +
-> +       mutex_lock(&d->trip_mutex);
+> Yes, it's *always* and only used in NMI context.
+
+Thanks, that is helpful to clarify.
+
+> > My worry is that (as I bored everyone earlier), the
+> > ktime_get_*_fast_ns() interfaces already have some sharp edges and
+> > need a fair amount of thought as to when they should be used. This is
+> > sort of compounding that adding an interface that has further special
+> > cases where it can fail, making it difficult to fully understand and
+> > easier to accidentally misuse.
+> >
+> > My other concern is that interfaces always get stretched and used
+> > beyond anything they were initially planned for (see the
+> > ktime_get_*fast_ns() interfaces here as an example! :), and in this
+> > case the logic seems to have lots of implicit dependencies on the
+> > facts of your specific use case, so it seems a bit fragile should
+> > folks on other architectures with other constraints try to use it.
+> >
+> > So I just want to push a bit to think how you might be able to
+> > extend/generalize the existing get_system_crosststamp for your
+> > purposes, or alternatively find a way to simplify the logic's behavior
+> > so its less tied to specific constraints ("this works most of the time
+> > from NMI, but otherwise no promises").  Or at least some better
+> > documentation around the code, its uses and its constraints? ( "NMI
+> > safe" is not the same as "Only safe to use from NMI" :)
 >
->         if (trip < d->aux_trip_nr)
->                 *temp = d->aux_trips[trip];
-> @@ -60,10 +62,12 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
->                         }
->                 }
->                 if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
-> -                       return -EINVAL;
-> +                       ret = -EINVAL;
->         }
->
-> -       return 0;
-> +       mutex_unlock(&d->trip_mutex);
-> +
-> +       return ret;
->  }
->
->  static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
-> @@ -165,6 +169,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
->         int trip_cnt = int34x_zone->aux_trip_nr;
->         int i;
->
-> +       mutex_lock(&int34x_zone->trip_mutex);
-> +
->         int34x_zone->crt_trip_id = -1;
->         if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
->                                              &int34x_zone->crt_temp))
-> @@ -192,6 +198,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
->                 int34x_zone->act_trips[i].valid = true;
->         }
->
-> +       mutex_unlock(&int34x_zone->trip_mutex);
-> +
->         return trip_cnt;
->  }
->  EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
-> @@ -215,6 +223,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->         if (!int34x_thermal_zone)
->                 return ERR_PTR(-ENOMEM);
->
-> +       mutex_init(&int34x_thermal_zone->trip_mutex);
-> +
->         int34x_thermal_zone->adev = adev;
->
->         int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
-> @@ -277,6 +287,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->  err_trip_alloc:
->         kfree(int34x_thermal_zone->ops);
->  err_ops_alloc:
-> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
->         kfree(int34x_thermal_zone);
->         return ERR_PTR(ret);
->  }
-> @@ -289,6 +300,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
->         acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
->         kfree(int34x_thermal_zone->aux_trips);
->         kfree(int34x_thermal_zone->ops);
-> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
->         kfree(int34x_thermal_zone);
->  }
->  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
-> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> index e28ab1ba5e06..6610a9cc441b 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> @@ -32,6 +32,7 @@ struct int34x_thermal_zone {
->         struct thermal_zone_device_ops *ops;
->         void *priv_data;
->         struct acpi_lpat_conversion_table *lpat_table;
-> +       struct mutex trip_mutex;
->  };
->
->  struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
-> --
-> 2.31.1
->
+> Since our usage is fixed (only in NMI), I prefer the latter. I think
+> extending/generalizing the existing function only makes the function
+> extremely complex and low efficient. The new function should have the
+> same constraints as the existing ktime_get_mono_fast_ns(). Since perf
+> can live with the ktime_get_mono_fast_ns(), there should be no problem
+> with the new function for the constraints. I will add more comments to
+> clarify the usage and constraints to avoid the abuse of the new function.
+
+I agree the existing function is complex, so adding more complexity
+isn't ideal, but potentially breaking it up or reworking it might be
+better. Having two similar but different implementations is also a
+complexity. So I just want to make sure this is well considered.  But
+clearer documentation as a first step will help.
+
+Thanks
+-john
