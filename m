@@ -2,145 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9121678E42
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05647678E46
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjAXCbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S232119AbjAXCcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAXCbh (ORCPT
+        with ESMTP id S229603AbjAXCcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:31:37 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7D59EF0;
-        Mon, 23 Jan 2023 18:31:32 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 2FDF282EF0;
-        Tue, 24 Jan 2023 02:31:25 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674527492;
-        bh=IW8oyeE4wu7owMW/4DM/ie2HFK4Drs3s2h6ZsTjIYy0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AE1p2m2+ZBx54M+Ncmx4HVGgVeCo9bIR+b/BZXnehiQrGCthkOydJj2Ocu8KuZbGj
-         ReXquTvKq5ECYdEGHqpyQM53W3kvSszOgdT7XGz5UDIKSKCjPlqNycXzMmQ4RpGiXp
-         ab9/+neJJFX8dz9thbgW5EDgSKkfZHEMK3TDYdUFEu6qGw2WG+NQ5O62GuoqPriHVX
-         ucWMlRpmqZA9x8kQUWKjsguEF4oZrpdMEltNBGW/7hCurZiky9M0fTxf4VpyCwKoK2
-         432ZOM/DjbQnIxVuuKbocvlw+6qTUqlD8A0cs028vx6DpR6O8omPTTB+/sUuz+qbL6
-         263dXJA7ZxU1Q==
-Date:   Tue, 24 Jan 2023 09:31:22 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86 Mailing List <x86@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xin Li <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
- a FRED system
-Message-ID: <Y89C+h4Fz4tvjbx5@biznet-home.integral.gnuweeb.org>
-References: <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
- <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
- <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
- <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
- <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
- <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
- <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
- <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
- <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+        Mon, 23 Jan 2023 21:32:17 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE3B46D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 18:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OzPDZ4GQurQ3Wi5M3nuD8SPGO947lucDtaqwO/v+ugk=; b=RIRW6FzX1L2Ilb64mAF0WuK3ZC
+        IBKJEySwbhjJJTDy7YouhVBaxSKPoQa37sOqk72zNmcLnk3SLsnWsOYmk+k230wp3vUpUNUt8tFwM
+        IVaNu+mhaCne7fWB7xV5LybzEeLVpWLfqa9G5BABDRyV/JhG1zhgqT98+wrRQJA+29bf52YO7s0Io
+        p0cS3Lf8PwxSQj0V9z7cOM2SF5sbB5gJ3M38hD5vQZwTIA2NHq+30Ocr7GslJdzE2tP/iaKQN8Ize
+        9UVfUzqtmiZEGM5IAqHrO8HCFrjev+UIC0G+y9rShQ5AMJyxpHd0rUoolIWSws82CeBfh2WiJYIu5
+        cDWOa1yQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pK96Z-004hsI-Bs; Tue, 24 Jan 2023 02:32:11 +0000
+Date:   Tue, 24 Jan 2023 02:32:11 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, david@redhat.com, osalvador@suse.de
+Subject: Re: [PATCH 1/2] mm/memory_hotplug: remove head page reference in
+ do_migrate_range
+Message-ID: <Y89DK23hYiLtgGNk@casper.infradead.org>
+References: <20230123202347.317065-1-sidhartha.kumar@oracle.com>
+ <Y87wJ6ERhdujjo6P@casper.infradead.org>
+ <5c40ed66-1e51-78fa-193c-0eb0db814b01@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5c40ed66-1e51-78fa-193c-0eb0db814b01@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 05:40:23PM -0800, H. Peter Anvin wrote:
-> On 1/23/23 16:26, Ammar Faizi wrote:
-> > +
-> > +static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
-> > +		       unsigned long arg3, unsigned long arg4,
-> > +		       unsigned long arg5, unsigned long arg6)
-> > +{
-> > +	register unsigned long r11 asm("%r11");
-> > +	register unsigned long r10 asm("%r10");
-> > +	register unsigned long r8 asm("%r8");
-> > +	register unsigned long r9 asm("%r9");
-> > +	unsigned long rcx, rbx;
-> > +
-> > +	r11 = r11_sentinel;
-> > +	rcx = rcx_sentinel;
-> > +	r10 = arg4;
-> > +	r8 = arg5;
-> > +	r9 = arg6;
-> > +
-> > +	asm volatile (
-> > +		"movq	-8(%%rsp), %%r12\n\t"	/* Don't clobber redzone. */
-> > +		"pushq	%[rflags_sentinel]\n\t"
-> > +		"popf\n\t"
-> > +		"movq	%%r12, -8(%%rsp)\n\t"
-> > +		"leaq	1f(%%rip), %[rbx]\n\t"
-> > +		"syscall\n"
-> > +		"1:"
-> > +
-> > +		: "+a" (nr_syscall),
-> > +		  "+r" (r11),
-> > +		  "+c" (rcx),
-> > +		  [rbx] "=b" (rbx)
-> > +
-> > +		: [rflags_sentinel] "g" (rflags_sentinel),
-> > +		  "D" (arg1),	/* %rdi */
-> > +		  "S" (arg2),	/* %rsi */
-> > +		  "d" (arg3),	/* %rdx */
-> > +		  "r" (r10),
-> > +		  "r" (r8),
-> > +		  "r" (r9)
-> > +
-> > +		: "r12", "memory"
-> > +	);
-> > +
-> > +	/*
-> > +	 * Test that:
-> > +	 *
-> > +	 * - "syscall" in a FRED system doesn't clobber %rcx and %r11.
-> > +	 * - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
-> > +	 *
-> > +	 */
-> > +	assert(check_regs_result(r11, rcx, rbx) != REGS_ERROR);
-> > +	return nr_syscall;
-> > +}
-> > +
+On Mon, Jan 23, 2023 at 01:08:49PM -0800, Sidhartha Kumar wrote:
+> On 1/23/23 12:37 PM, Matthew Wilcox wrote:
+> > On Mon, Jan 23, 2023 at 12:23:46PM -0800, Sidhartha Kumar wrote:
+> > > @@ -1637,14 +1637,13 @@ do_migrate_range(unsigned long start_pfn, unsigned long end_pfn)
+> > >   			continue;
+> > >   		page = pfn_to_page(pfn);
+> > >   		folio = page_folio(page);
+> > > -		head = &folio->page;
+> > > -		if (PageHuge(page)) {
+> > > -			pfn = page_to_pfn(head) + compound_nr(head) - 1;
+> > > +		if (folio_test_hugetlb(folio)) {
+> > > +			pfn = folio_pfn(folio) + folio_nr_pages(folio) - 1;
+> > >   			isolate_hugetlb(folio, &source);
+> > >   			continue;
+> > > -		} else if (PageTransHuge(page))
+> > > -			pfn = page_to_pfn(head) + thp_nr_pages(page) - 1;
+> > > +		} else if (folio_test_transhuge(folio))
+> > > +			pfn = folio_pfn(folio) + thp_nr_pages(page) - 1;
+> > 
+> > I'm pretty sure those two lines should be...
+> > 
+> > 		} else if (folio_test_large(folio) > 			pfn = folio_pfn(folio) + folio_nr_pages(folio) - 1;
+> > 
+> > But, erm ... we're doing this before we have a refcount on the page,
+> > right?  So this is unsafe because the page might change which folio
+> > it is in.  And the folio we found earlier might become a tail page
+> > of a different folio.  (As the comment below explains, HWPoison pages
+> > won't, so it's not unsafe for them).
+> > 
 > 
-> So as per Andrew's comment, add:
+> Thanks for the explanation of why this is unsafe. Would it be worth to put
+> this code block inside the
 > 
-> register void * rsp asm("%rsp");
+> 		if (!get_page_unless_zero(page))
+> 			continue;
 > 
-> ...
+> 		put_page(page);
 > 
-> "+r" (rsp)	/* clobber the redzone */
-> 
-> ... as the right way to avoid redzone problems.
+> block found lower? My motivation for this series is the HPageMigratable call
+> in patch 2 is the last user of the huge page flag test macros so a
+> conversion would allow for the removal of the macro. I thought I could also
+> remove the head page references found in this function, but if that would
+> cause too much churn in a complicated sub-system it can be dropped.
 
-Fixed in v2.
+I think we just have to be very careful when working without a page ref.
 
--- 
-Ammar Faizi
+Now, specifically to the matter of converting HPageMigratable(), I think
+that's fine.  Your folio_test_hugetlb_##flname macro does not have a
+VM_BUG_ON_PGFLAGS(PageTail(page), page) in it, unlike folio_flags().
+So it looks like even if your folio becomes a tail page in the middle
+of scan_movable_pages(), you won't hit a BUG().
 
+Now, should we go further?  Possibly.  But I'm more concerned that we
+haven't really figured out which functions should be checking this.
+Maybe we should drop the BUG entirely and rely more on the type system
+(and people not casting) to prevent errors.
+
+We could go a lot further with the type system and define a new type for
+"might be a folio but we don't have a refcount on it".  But we don't
+do a lot of work with unreferenced folios, so I'm not inclined to go to
+all that effort.
+
+Perhaps we want a folio_maybe_X() series of functions that don't warn
+if the folio has morphed into not-a-folio.  I don't know.
