@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811F767910E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11966679110
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 07:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbjAXGf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 01:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S233375AbjAXGfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 01:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbjAXGfX (ORCPT
+        with ESMTP id S233315AbjAXGff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 01:35:23 -0500
+        Tue, 24 Jan 2023 01:35:35 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B28279B6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 22:34:50 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4faa8f4bfb9so141556847b3.17
-        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 22:34:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBCA3E08A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 22:34:58 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-506368dc06dso23169997b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 Jan 2023 22:34:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Kvjb5X1h2VzWLUjIy8rTxuML+8PHOioJJBC7wSAtho=;
-        b=qPpngUnNkN9eRvADe5pjpWCAKJqJUYQoMBs4XnxUf0QPT/2KcGJXzsW66GFcd8Kvf7
-         s/mFkLn3RhZXDz7lUIoQhTMkB+P8WSAEzYIMfR7mqjIXVquhbpg3OKuzmB+wG5AFM9V+
-         Vf3x20ZwldBIjU8LEVd6FHALgage0x5vs04lfUu6nfrvOITIj2zf/5EbRYL9+pU7OpaT
-         VnmlhsUTlkeLpwOCLocPiHkGZZ0p3TGoziaXg1bqrKBwa1ObnvYH4Ibn3sc0Dj5QpOnY
-         vGPp/fuOfH6su6yGp/KyqbNMZd0vbEIYvVzBRUe19PIZTSTyIw9Qa7ooqUtGXsUvUwWd
-         ca1g==
+        bh=9CQf7qwf816ywxYe0MGvN2DXuLUyDOCX6uxlx6OMLsg=;
+        b=E/aDkM7K/lA4FaRlkpePHCMT3UVODvM17F6GurRPNTGwzR4OIm/m3KHjNuJWMKh8Du
+         shSVKsu9+W4MoZRyUeStedTnW1kfbIwvd15RkKq28atlPKIhjdpYnvGoaDsvUS5yL0+5
+         WM0WNKkEab2aKJpq07OjmYwyxbkFWrmTRvfkMmW9qztdWsDFxsxIVPOIOgZnjPyk9bVE
+         Gjee1xhFG2B18924+GoEvcEEh1mcGkiW1eiaZZNDqwlNxpKKxtqofR6tpSfzTjfzPt92
+         QHNfUKeKHmiH2OkS72MKotSYJydW6zVrQF07xDsX/nn7fEQ+QB/D9IT4iQZJZUyfVIcb
+         mo6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Kvjb5X1h2VzWLUjIy8rTxuML+8PHOioJJBC7wSAtho=;
-        b=1XD1o9x7kSoz9IRZlSvqvfQr2ROMjxBRmhytTtj6z20PhHP4oe/DnVCr+btqeTylQ2
-         b6eZJGOo1xIKUnz4q6P+zT8gCDZljoI38i50oEmfcnselW4O90igww3wSnYkrr+7M6vh
-         7BXfmllXPIr7fZDU7m0M9TQi/T0smyHLzlWJvVEm6UbXz/WIHy22DewVK+2SRjmq1ZDu
-         CZVTKKqv7MN46xbcJdZpHLmUxFaCb7YRKDsk7GDBy5E9Y/AayBPnllWzZd54ohgbZZSx
-         YtYxEpJeOhjhyPT7IxbIyA53Liw990PYULQ5D5UMfgW2b84pitClwpyFajDf+g8+Z9/V
-         Scww==
-X-Gm-Message-State: AFqh2kpoN5tDwffS2ELQ1CTWnG0ZlKHOvqMmrOi0jF1PKPKL1xJcG5u5
-        qfEv/J8y0U4MHL443w6ZttPOw6b7Dulx
-X-Google-Smtp-Source: AMrXdXu8Hdw03Cl/0MBfcAMifFHxdWGsOTSmnOCBpxhNARoVw0lmDwVWVPWbpQkjUc0DBRfcFCw2bsvIm8jz
+        bh=9CQf7qwf816ywxYe0MGvN2DXuLUyDOCX6uxlx6OMLsg=;
+        b=7jciumhsKLsPTbe8oSN5Hv9C6smzvWNQ00dscNLnZZl1nPDa/uq9DWSE4ftsy3vsWY
+         wDHX9PgLy7s73JvBBCd3MqnpcuHT/BAdD41ME/zibzoMnLAjXg1b7yqBkX3hbJS9MxwW
+         4xb/qF1w6dtYfNSydFX5aeC++0cWaJTnlFijULH7fFv9B2usiAA9iCK2i81govrdSVQQ
+         zhraLk1jLxLNUI4Nnb3vvpX/oMBiOadwvzsjRX4sN28UyE6/zBrznFs26NQf5zH2iDwL
+         GXm9kD88O+seYLR0TJg8O6Erdn3/2MuiSjuIm7LlVk5FmRU0yK/nANRiZF4g98NYO28Z
+         Hxqw==
+X-Gm-Message-State: AFqh2kpN76jzeG7+m9r9g1mjsTI9U8qsYH5Np8I6GsHsGiYRUHOlOg7a
+        34Mhkd7PMQTOF9X3+dvKf03criWWx6eV
+X-Google-Smtp-Source: AMrXdXtzoentlV7UmGLWsQR0SkxQ5u2HBNb4nnRJgT9cvccOfzAGu8MysRvoSaTaE2B0Dti7zL52DJHCOUj3
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:460d:1b4a:acb8:ae9a])
- (user=irogers job=sendgmr) by 2002:a25:a408:0:b0:800:28d4:6936 with SMTP id
- f8-20020a25a408000000b0080028d46936mr1650103ybi.431.1674542089146; Mon, 23
- Jan 2023 22:34:49 -0800 (PST)
-Date:   Mon, 23 Jan 2023 22:33:19 -0800
+ (user=irogers job=sendgmr) by 2002:a25:d4d3:0:b0:7d1:f411:4f5a with SMTP id
+ m202-20020a25d4d3000000b007d1f4114f5amr3000373ybf.599.1674542096878; Mon, 23
+ Jan 2023 22:34:56 -0800 (PST)
+Date:   Mon, 23 Jan 2023 22:33:20 -0800
 In-Reply-To: <20230124063320.668917-1-irogers@google.com>
-Message-Id: <20230124063320.668917-11-irogers@google.com>
+Message-Id: <20230124063320.668917-12-irogers@google.com>
 Mime-Version: 1.0
 References: <20230124063320.668917-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Subject: [PATCH v3 10/11] perf jevents: Generate metrics and events as
- separate tables
+Subject: [PATCH v3 11/11] perf jevents: Add model list option
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -87,7 +86,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,551 +94,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn a perf json event into an event, metric or both. This reduces the
-number of events needed to scan to find an event or metric. As events
-no longer need the relatively seldom used metric fields, 4 bytes is
-saved per event. This reduces the big C string's size by 335kb (14.8%)
-on x86.
-
-Note, for the test PMU architecture pme_test_soc_cpu is renamed
-pmu_events__test_soc_cpu for consistency with the event vs metric
-naming convention.
+This allows the set of generated jevents events and metrics be limited
+to a subset of the model names. Appropriate if trying to minimize the
+binary size where only a set of models are possible. On ARM64 the
+--model selects the implementor rather than model.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.py | 244 +++++++++++++++++++++++--------
- tools/perf/tests/pmu-events.c    |   3 +-
- 2 files changed, 189 insertions(+), 58 deletions(-)
+ tools/perf/pmu-events/Build      | 3 ++-
+ tools/perf/pmu-events/jevents.py | 7 +++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
+index 15b9e8fdbffa..a14de24ecb69 100644
+--- a/tools/perf/pmu-events/Build
++++ b/tools/perf/pmu-events/Build
+@@ -10,6 +10,7 @@ JEVENTS_PY	=  pmu-events/jevents.py
+ ifeq ($(JEVENTS_ARCH),)
+ JEVENTS_ARCH=$(SRCARCH)
+ endif
++JEVENTS_MODEL ?= all
+ 
+ #
+ # Locate/process JSON files in pmu-events/arch/
+@@ -23,5 +24,5 @@ $(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
+ else
+ $(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY) pmu-events/metric.py
+ 	$(call rule_mkdir)
+-	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) pmu-events/arch $@
++	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVENTS_MODEL) pmu-events/arch $@
+ endif
 diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index d83cc94af51f..627ee817f57f 100755
+index 627ee817f57f..764720858950 100755
 --- a/tools/perf/pmu-events/jevents.py
 +++ b/tools/perf/pmu-events/jevents.py
-@@ -13,28 +13,40 @@ import collections
- 
- # Global command line arguments.
- _args = None
-+# List of regular event tables.
-+_event_tables = []
- # List of event tables generated from "/sys" directories.
- _sys_event_tables = []
-+# List of regular metric tables.
-+_metric_tables = []
-+# List of metric tables generated from "/sys" directories.
-+_sys_metric_tables = []
-+# Mapping between sys event table names and sys metric table names.
-+_sys_event_table_to_metric_table_mapping = {}
- # Map from an event name to an architecture standard
- # JsonEvent. Architecture standard events are in json files in the top
- # f'{_args.starting_dir}/{_args.arch}' directory.
- _arch_std_events = {}
- # Events to write out when the table is closed
- _pending_events = []
--# Name of table to be written out
-+# Name of events table to be written out
- _pending_events_tblname = None
-+# Metrics to write out when the table is closed
-+_pending_metrics = []
-+# Name of metrics table to be written out
-+_pending_metrics_tblname = None
- # Global BigCString shared by all structures.
- _bcs = None
- # Order specific JsonEvent attributes will be visited.
- _json_event_attributes = [
-     # cmp_sevent related attributes.
--    'name', 'pmu', 'topic', 'desc', 'metric_name', 'metric_group',
-+    'name', 'pmu', 'topic', 'desc',
-     # Seems useful, put it early.
-     'event',
-     # Short things in alphabetical order.
-     'aggr_mode', 'compat', 'deprecated', 'perpkg', 'unit',
-     # Longer things (the last won't be iterated over during decompress).
--    'metric_constraint', 'metric_expr', 'long_desc'
-+    'long_desc'
- ]
- 
- # Attributes that are in pmu_metric rather than pmu_event.
-@@ -52,14 +64,16 @@ def removesuffix(s: str, suffix: str) -> str:
-   return s[0:-len(suffix)] if s.endswith(suffix) else s
- 
- 
--def file_name_to_table_name(parents: Sequence[str], dirname: str) -> str:
-+def file_name_to_table_name(prefix: str, parents: Sequence[str],
-+                            dirname: str) -> str:
-   """Generate a C table name from directory names."""
--  tblname = 'pme'
-+  tblname = prefix
-   for p in parents:
-     tblname += '_' + p
-   tblname += '_' + dirname
-   return tblname.replace('-', '_')
- 
-+
- def c_len(s: str) -> int:
-   """Return the length of s a C string
- 
-@@ -277,7 +291,7 @@ class JsonEvent:
-     self.metric_constraint = jd.get('MetricConstraint')
-     self.metric_expr = None
-     if 'MetricExpr' in jd:
--       self.metric_expr = metric.ParsePerfJson(jd['MetricExpr']).Simplify()
-+      self.metric_expr = metric.ParsePerfJson(jd['MetricExpr']).Simplify()
- 
-     arch_std = jd.get('ArchStdEvent')
-     if precise and self.desc and '(Precise Event)' not in self.desc:
-@@ -326,23 +340,24 @@ class JsonEvent:
-         s += f'\t{attr} = {value},\n'
-     return s + '}'
- 
--  def build_c_string(self) -> str:
-+  def build_c_string(self, metric: bool) -> str:
-     s = ''
--    for attr in _json_event_attributes:
-+    for attr in _json_metric_attributes if metric else _json_event_attributes:
-       x = getattr(self, attr)
--      if x and attr == 'metric_expr':
-+      if metric and x and attr == 'metric_expr':
-         # Convert parsed metric expressions into a string. Slashes
-         # must be doubled in the file.
-         x = x.ToPerfJson().replace('\\', '\\\\')
-       s += f'{x}\\000' if x else '\\000'
-     return s
- 
--  def to_c_string(self) -> str:
-+  def to_c_string(self, metric: bool) -> str:
-     """Representation of the event as a C struct initializer."""
- 
--    s = self.build_c_string()
-+    s = self.build_c_string(metric)
-     return f'{{ { _bcs.offsets[s] } }}, /* {s} */\n'
- 
-+
- @lru_cache(maxsize=None)
- def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
-   """Read json events from the specified file."""
-@@ -381,7 +396,10 @@ def preprocess_arch_std_files(archpath: str) -> None:
- def add_events_table_entries(item: os.DirEntry, topic: str) -> None:
-   """Add contents of file to _pending_events table."""
-   for e in read_json_events(item.path, topic):
--    _pending_events.append(e)
-+    if e.name:
-+      _pending_events.append(e)
-+    if e.metric_name:
-+      _pending_metrics.append(e)
- 
- 
- def print_pending_events() -> None:
-@@ -401,15 +419,54 @@ def print_pending_events() -> None:
-     return
- 
-   global _pending_events_tblname
-+  if _pending_events_tblname.endswith('_sys'):
-+    global _sys_event_tables
-+    _sys_event_tables.append(_pending_events_tblname)
-+  else:
-+    global event_tables
-+    _event_tables.append(_pending_events_tblname)
-+
-   _args.output_file.write(
-       f'static const struct compact_pmu_event {_pending_events_tblname}[] = {{\n')
- 
-   for event in sorted(_pending_events, key=event_cmp_key):
--    _args.output_file.write(event.to_c_string())
-+    _args.output_file.write(event.to_c_string(metric=False))
-   _pending_events = []
- 
-   _args.output_file.write('};\n\n')
- 
-+def print_pending_metrics() -> None:
-+  """Optionally close metrics table."""
-+
-+  def metric_cmp_key(j: JsonEvent) -> Tuple[bool, str, str]:
-+    def fix_none(s: Optional[str]) -> str:
-+      if s is None:
-+        return ''
-+      return s
-+
-+    return (j.desc is not None, fix_none(j.pmu), fix_none(j.metric_name))
-+
-+  global _pending_metrics
-+  if not _pending_metrics:
-+    return
-+
-+  global _pending_metrics_tblname
-+  if _pending_metrics_tblname.endswith('_sys'):
-+    global _sys_metric_tables
-+    _sys_metric_tables.append(_pending_metrics_tblname)
-+  else:
-+    global metric_tables
-+    _metric_tables.append(_pending_metrics_tblname)
-+
-+  _args.output_file.write(
-+      f'static const struct compact_pmu_event {_pending_metrics_tblname}[] = {{\n')
-+
-+  for metric in sorted(_pending_metrics, key=metric_cmp_key):
-+    _args.output_file.write(metric.to_c_string(metric=True))
-+  _pending_metrics = []
-+
-+  _args.output_file.write('};\n\n')
-+
- def get_topic(topic: str) -> str:
-   if topic.endswith('metrics.json'):
-     return 'metrics'
-@@ -432,12 +489,13 @@ def preprocess_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
- 
-   topic = get_topic(item.name)
-   for event in read_json_events(item.path, topic):
--    _bcs.add(event.build_c_string())
-+    if event.name:
-+      _bcs.add(event.build_c_string(metric=False))
-+    if event.metric_name:
-+      _bcs.add(event.build_c_string(metric=True))
- 
- def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
-   """Process a JSON file during the main walk."""
--  global _sys_event_tables
--
-   def is_leaf_dir(path: str) -> bool:
+@@ -888,12 +888,19 @@ def main() -> None:
+           action: Callable[[Sequence[str], os.DirEntry], None]) -> None:
+     """Replicate the directory/file walking behavior of C's file tree walk."""
      for item in os.scandir(path):
++      if (len(parents) == 0 and item.is_dir() and _args.model != 'all' and
++          'test' not in item.name and item.name not in _args.model.split(',')):
++        continue
+       action(parents, item)
        if item.is_dir():
-@@ -447,12 +505,15 @@ def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
-   # model directory, reset topic
-   if item.is_dir() and is_leaf_dir(item.path):
-     print_pending_events()
-+    print_pending_metrics()
+         ftw(item.path, parents + [item.name], action)
  
--    tblname = file_name_to_table_name(parents, item.name)
--    if item.name == 'sys':
--      _sys_event_tables.append(tblname)
-     global _pending_events_tblname
--    _pending_events_tblname = tblname
-+    _pending_events_tblname = file_name_to_table_name('pmu_events_', parents, item.name)
-+    global _pending_metrics_tblname
-+    _pending_metrics_tblname = file_name_to_table_name('pmu_metrics_', parents, item.name)
-+
-+    if item.name == 'sys':
-+      _sys_event_table_to_metric_table_mapping[_pending_events_tblname] = _pending_metrics_tblname
-     return
- 
-   # base dir or too deep
-@@ -477,6 +538,12 @@ struct pmu_events_table {
-         size_t length;
- };
- 
-+/* Struct used to make the PMU metric table implementation opaque to callers. */
-+struct pmu_metrics_table {
-+        const struct compact_pmu_event *entries;
-+        size_t length;
-+};
-+
- /*
-  * Map a CPU to its table of PMU events. The CPU is identified by the
-  * cpuid field, which is an arch-specific identifier for the CPU.
-@@ -488,7 +555,8 @@ struct pmu_events_table {
- struct pmu_events_map {
-         const char *arch;
-         const char *cpuid;
--        struct pmu_events_table table;
-+        struct pmu_events_table event_table;
-+        struct pmu_metrics_table metric_table;
- };
- 
- /*
-@@ -502,9 +570,13 @@ const struct pmu_events_map pmu_events_map[] = {
-       _args.output_file.write("""{
- \t.arch = "testarch",
- \t.cpuid = "testcpu",
--\t.table = {
--\t.entries = pme_test_soc_cpu,
--\t.length = ARRAY_SIZE(pme_test_soc_cpu),
-+\t.event_table = {
-+\t\t.entries = pmu_events__test_soc_cpu,
-+\t\t.length = ARRAY_SIZE(pmu_events__test_soc_cpu),
-+\t},
-+\t.metric_table = {
-+\t\t.entries = pmu_metrics__test_soc_cpu,
-+\t\t.length = ARRAY_SIZE(pmu_metrics__test_soc_cpu),
- \t}
- },
- """)
-@@ -515,14 +587,29 @@ const struct pmu_events_map pmu_events_map[] = {
-         for row in table:
-           # Skip the first row or any row beginning with #.
-           if not first and len(row) > 0 and not row[0].startswith('#'):
--            tblname = file_name_to_table_name([], row[2].replace('/', '_'))
-+            event_tblname = file_name_to_table_name('pmu_events_', [], row[2].replace('/', '_'))
-+            if event_tblname in _event_tables:
-+              event_size = f'ARRAY_SIZE({event_tblname})'
-+            else:
-+              event_tblname = 'NULL'
-+              event_size = '0'
-+            metric_tblname = file_name_to_table_name('pmu_metrics_', [], row[2].replace('/', '_'))
-+            if metric_tblname in _metric_tables:
-+              metric_size = f'ARRAY_SIZE({metric_tblname})'
-+            else:
-+              metric_tblname = 'NULL'
-+              metric_size = '0'
-             cpuid = row[0].replace('\\', '\\\\')
-             _args.output_file.write(f"""{{
- \t.arch = "{arch}",
- \t.cpuid = "{cpuid}",
--\t.table = {{
--\t\t.entries = {tblname},
--\t\t.length = ARRAY_SIZE({tblname})
-+\t.event_table = {{
-+\t\t.entries = {event_tblname},
-+\t\t.length = {event_size}
-+\t}},
-+\t.metric_table = {{
-+\t\t.entries = {metric_tblname},
-+\t\t.length = {metric_size}
- \t}}
- }},
- """)
-@@ -531,7 +618,8 @@ const struct pmu_events_map pmu_events_map[] = {
-   _args.output_file.write("""{
- \t.arch = 0,
- \t.cpuid = 0,
--\t.table = { 0, 0 },
-+\t.event_table = { 0, 0 },
-+\t.metric_table = { 0, 0 },
- }
- };
- """)
-@@ -542,14 +630,36 @@ def print_system_mapping_table() -> None:
-   _args.output_file.write("""
- struct pmu_sys_events {
- \tconst char *name;
--\tstruct pmu_events_table table;
-+\tstruct pmu_events_table event_table;
-+\tstruct pmu_metrics_table metric_table;
- };
- 
- static const struct pmu_sys_events pmu_sys_event_tables[] = {
- """)
-+  printed_metric_tables = []
-   for tblname in _sys_event_tables:
-     _args.output_file.write(f"""\t{{
--\t\t.table = {{
-+\t\t.event_table = {{
-+\t\t\t.entries = {tblname},
-+\t\t\t.length = ARRAY_SIZE({tblname})
-+\t\t}},""")
-+    metric_tblname = _sys_event_table_to_metric_table_mapping[tblname]
-+    if metric_tblname in _sys_metric_tables:
-+      _args.output_file.write(f"""
-+\t\t.metric_table = {{
-+\t\t\t.entries = {metric_tblname},
-+\t\t\t.length = ARRAY_SIZE({metric_tblname})
-+\t\t}},""")
-+      printed_metric_tables.append(metric_tblname)
-+    _args.output_file.write(f"""
-+\t\t.name = \"{tblname}\",
-+\t}},
-+""")
-+  for tblname in _sys_metric_tables:
-+    if tblname in printed_metric_tables:
-+      continue
-+    _args.output_file.write(f"""\t{{
-+\t\t.metric_table = {{
- \t\t\t.entries = {tblname},
- \t\t\t.length = ARRAY_SIZE({tblname})
- \t\t}},
-@@ -557,7 +667,8 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
- \t}},
- """)
-   _args.output_file.write("""\t{
--\t\t.table = { 0, 0 }
-+\t\t.event_table = { 0, 0 },
-+\t\t.metric_table = { 0, 0 },
- \t},
- };
- 
-@@ -566,10 +677,7 @@ static void decompress_event(int offset, struct pmu_event *pe)
- \tconst char *p = &big_c_string[offset];
- """)
-   for attr in _json_event_attributes:
--    if attr in _json_metric_attributes and 'metric_' in attr:
--      _args.output_file.write(f'\n\t/* Skip {attr} */\n')
--    else:
--      _args.output_file.write(f"""
-+    _args.output_file.write(f"""
- \tpe->{attr} = (*p == '\\0' ? NULL : p);
- """)
-     if attr == _json_event_attributes[-1]:
-@@ -581,14 +689,11 @@ static void decompress_metric(int offset, struct pmu_metric *pm)
- {
- \tconst char *p = &big_c_string[offset];
- """)
--  for attr in _json_event_attributes:
--    if attr in _json_metric_attributes:
--      _args.output_file.write(f"""
-+  for attr in _json_metric_attributes:
-+    _args.output_file.write(f"""
- \tpm->{attr} = (*p == '\\0' ? NULL : p);
- """)
--    else:
--      _args.output_file.write(f'\n\t/* Skip {attr} */\n')
--    if attr == _json_event_attributes[-1]:
-+    if attr == _json_metric_attributes[-1]:
-       continue
-     _args.output_file.write('\twhile (*p++);')
-   _args.output_file.write("""}
-@@ -611,12 +716,10 @@ int pmu_events_table_for_each_event(const struct pmu_events_table *table,
-         return 0;
- }
- 
--int pmu_metrics_table_for_each_metric(const struct pmu_metrics_table *mtable,
-+int pmu_metrics_table_for_each_metric(const struct pmu_metrics_table *table,
-                                      pmu_metric_iter_fn fn,
-                                      void *data)
- {
--        const struct pmu_events_table *table = (const struct pmu_events_table *)mtable;
--
-         for (size_t i = 0; i < table->length; i++) {
-                 struct pmu_metric pm;
-                 int ret;
-@@ -624,7 +727,7 @@ int pmu_metrics_table_for_each_metric(const struct pmu_metrics_table *mtable,
-                 decompress_metric(table->entries[i].offset, &pm);
-                 if (!pm.metric_expr)
-                         continue;
--                ret = fn(&pm, mtable, data);
-+                ret = fn(&pm, table, data);
-                 if (ret)
-                         return ret;
-         }
-@@ -650,7 +753,7 @@ const struct pmu_events_table *perf_pmu__find_events_table(struct perf_pmu *pmu)
-                         break;
- 
-                 if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
--                        table = &map->table;
-+                        table = &map->event_table;
-                         break;
-                 }
-         }
-@@ -660,7 +763,29 @@ const struct pmu_events_table *perf_pmu__find_events_table(struct perf_pmu *pmu)
- 
- const struct pmu_metrics_table *perf_pmu__find_metrics_table(struct perf_pmu *pmu)
- {
--        return (struct pmu_metrics_table *)perf_pmu__find_events_table(pmu);
-+        const struct pmu_metrics_table *table = NULL;
-+        char *cpuid = perf_pmu__getcpuid(pmu);
-+        int i;
-+
-+        /* on some platforms which uses cpus map, cpuid can be NULL for
-+         * PMUs other than CORE PMUs.
-+         */
-+        if (!cpuid)
-+                return NULL;
-+
-+        i = 0;
-+        for (;;) {
-+                const struct pmu_events_map *map = &pmu_events_map[i++];
-+                if (!map->arch)
-+                        break;
-+
-+                if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
-+                        table = &map->metric_table;
-+                        break;
-+                }
-+        }
-+        free(cpuid);
-+        return table;
- }
- 
- const struct pmu_events_table *find_core_events_table(const char *arch, const char *cpuid)
-@@ -669,14 +794,20 @@ const struct pmu_events_table *find_core_events_table(const char *arch, const ch
-              tables->arch;
-              tables++) {
-                 if (!strcmp(tables->arch, arch) && !strcmp_cpuid_str(tables->cpuid, cpuid))
--                        return &tables->table;
-+                        return &tables->event_table;
-         }
-         return NULL;
- }
- 
- const struct pmu_metrics_table *find_core_metrics_table(const char *arch, const char *cpuid)
- {
--       return (struct pmu_metrics_table *)find_core_events_table(arch, cpuid);
-+        for (const struct pmu_events_map *tables = &pmu_events_map[0];
-+             tables->arch;
-+             tables++) {
-+                if (!strcmp(tables->arch, arch) && !strcmp_cpuid_str(tables->cpuid, cpuid))
-+                        return &tables->metric_table;
-+        }
-+        return NULL;
- }
- 
- int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data)
-@@ -684,7 +815,7 @@ int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data)
-         for (const struct pmu_events_map *tables = &pmu_events_map[0];
-              tables->arch;
-              tables++) {
--                int ret = pmu_events_table_for_each_event(&tables->table, fn, data);
-+                int ret = pmu_events_table_for_each_event(&tables->event_table, fn, data);
- 
-                 if (ret)
-                         return ret;
-@@ -697,8 +828,7 @@ int pmu_for_each_core_metric(pmu_metric_iter_fn fn, void *data)
-         for (const struct pmu_events_map *tables = &pmu_events_map[0];
-              tables->arch;
-              tables++) {
--                int ret = pmu_metrics_table_for_each_metric(
--                                (struct pmu_metrics_table *)&tables->table, fn, data);
-+                int ret = pmu_metrics_table_for_each_metric(&tables->metric_table, fn, data);
- 
-                 if (ret)
-                         return ret;
-@@ -712,7 +842,7 @@ const struct pmu_events_table *find_sys_events_table(const char *name)
-              tables->name;
-              tables++) {
-                 if (!strcmp(tables->name, name))
--                        return &tables->table;
-+                        return &tables->event_table;
-         }
-         return NULL;
- }
-@@ -722,7 +852,7 @@ int pmu_for_each_sys_event(pmu_event_iter_fn fn, void *data)
-         for (const struct pmu_sys_events *tables = &pmu_sys_event_tables[0];
-              tables->name;
-              tables++) {
--                int ret = pmu_events_table_for_each_event(&tables->table, fn, data);
-+                int ret = pmu_events_table_for_each_event(&tables->event_table, fn, data);
- 
-                 if (ret)
-                         return ret;
-@@ -735,8 +865,7 @@ int pmu_for_each_sys_metric(pmu_metric_iter_fn fn, void *data)
-         for (const struct pmu_sys_events *tables = &pmu_sys_event_tables[0];
-              tables->name;
-              tables++) {
--                int ret = pmu_metrics_table_for_each_metric(
--                                (struct pmu_metrics_table *)&tables->table, fn, data);
-+                int ret = pmu_metrics_table_for_each_metric(&tables->metric_table, fn, data);
- 
-                 if (ret)
-                         return ret;
-@@ -811,6 +940,7 @@ struct compact_pmu_event {
-     arch_path = f'{_args.starting_dir}/{arch}'
-     ftw(arch_path, [], process_one_file)
-     print_pending_events()
-+    print_pending_metrics()
- 
-   print_mapping_table(archs)
-   print_system_mapping_table()
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index 9f2e385e0991..962c3c0d53ba 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -469,7 +469,8 @@ static int test__pmu_event_table_sys_callback(const struct pmu_event *pe,
- static int test__pmu_event_table(struct test_suite *test __maybe_unused,
- 				 int subtest __maybe_unused)
- {
--	const struct pmu_events_table *sys_event_table = find_sys_events_table("pme_test_soc_sys");
-+	const struct pmu_events_table *sys_event_table =
-+		find_sys_events_table("pmu_events__test_soc_sys");
- 	const struct pmu_events_table *table = find_core_events_table("testarch", "testcpu");
- 	int map_events = 0, expected_events, err;
- 
+   ap = argparse.ArgumentParser()
+   ap.add_argument('arch', help='Architecture name like x86')
++  ap.add_argument('model', help='''Select a model such as skylake to
++reduce the code size.  Normally set to "all". For architectures like
++ARM64 with an implementor/model, this selects the implementor.''',
++                  default='all')
+   ap.add_argument(
+       'starting_dir',
+       type=dir_path,
 -- 
 2.39.0.246.g2a6d74b583-goog
 
