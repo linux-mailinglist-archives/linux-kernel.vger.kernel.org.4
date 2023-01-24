@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E49A67A42A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E1167A428
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 21:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbjAXUpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 15:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S234248AbjAXUpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 15:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjAXUpQ (ORCPT
+        with ESMTP id S233663AbjAXUpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 15:45:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EAE4FAD3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 12:45:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 24 Jan 2023 15:45:15 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B5F4FACD;
+        Tue, 24 Jan 2023 12:45:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCAD7B816B7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 20:45:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2931EC4339B;
-        Tue, 24 Jan 2023 20:45:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674593105;
-        bh=x9mSUklrAV+WI1SjDDeOL740XIVyg2KNk0EDeh71PmU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ktoPCjIar8FYAQBbdT94SfsFIp3xI7s/Hl+QX+pc1n52yYONEeoI2Jq4lkKx3luT4
-         9PS1aOACTPW0IUjkI6z33CJfiO0N7XZr5iI1BkZin8Fl07RHhzF//9nXas48qsrRUU
-         TywccEiI2ial3G0J3ypgUZi7Jcb82M9SeOasF3Gw=
-Date:   Tue, 24 Jan 2023 12:45:04 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     andrey.konovalov@linux.dev
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [PATCH mm] kasan: reset page tags properly with sampling
-Message-Id: <20230124124504.2b21f0fde58af208a4f4e290@linux-foundation.org>
-In-Reply-To: <24ea20c1b19c2b4b56cf9f5b354915f8dbccfc77.1674592496.git.andreyknvl@google.com>
-References: <24ea20c1b19c2b4b56cf9f5b354915f8dbccfc77.1674592496.git.andreyknvl@google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1f9Y53yMz4xN4;
+        Wed, 25 Jan 2023 07:45:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674593106;
+        bh=kQfNoknmbtg5TQDqgUCCia6KVTQBV3rP34byr167yqw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=E498AHzI2LQj88dgUcCnv7ytpyMpZ4WJ5I5GNHhe1b/mdt27tM4RDWCJdNk1DENqx
+         rrl9zI3WdqVFMBlpjeQWC7H6ORNDNwg8AUSVBB5Xe136EsydmmIOEuIV/1Z7dYsvZs
+         Nnfzi6YMJFZxiw6Hb5ISU7Gc4sbke5Oe9EcZqbkZElpUYLxRWvItPjFoUYabudncXZ
+         QFsC/NrDEI/8qHTawI+lEboYaByNDOXYuHfhx0B+OS5A+zcAzuaL130vETYGOuxLEC
+         FCIWSeSj0TdLhueGaliy8exfV877Aqhvo/UY4D5vQpQTZIwBbdGUpRaENkdS75+pzp
+         Vbtf6Sf1YsgyQ==
+Date:   Wed, 25 Jan 2023 07:45:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the drm tree
+Message-ID: <20230125074504.22f45b57@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 21:35:26 +0100 andrey.konovalov@linux.dev wrote:
+--Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> The implementation of page_alloc poisoning sampling assumed that
-> tag_clear_highpage resets page tags for __GFP_ZEROTAGS allocations.
-> However, this is no longer the case since commit 70c248aca9e7
-> ("mm: kasan: Skip unpoisoning of user pages").
-> 
-> This leads to kernel crashes when MTE-enabled userspace mappings are
-> used with Hardware Tag-Based KASAN enabled.
-> 
-> Reset page tags for __GFP_ZEROTAGS allocations in post_alloc_hook().
-> 
-> Also clarify and fix related comments.
+Hi all,
 
-I assume this is a fix against 44383cef54c0 ("kasan: allow sampling
-page_alloc allocations for HW_TAGS") which is presently in mm-stable,
-yes?
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
+  0c8a6e9ea232 ("drm/i915: re-disable RC6p on Sandy Bridge")
+  14ec40a88210 ("drm/i915/selftests: Unwind hugepages to drop wakeref on er=
+ror")
+  3db9d590557d ("drm/i915/gt: Reset twice")
+  4f0755c2faf7 ("drm/i915: Reserve enough fence slot for i915_vma_unbind_as=
+ync")
+  bed4b455cf53 ("drm/i915: Fix potential context UAFs")
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPQQ1AACgkQAVBC80lX
+0Gy9lgf/XWEZEboTgdxPtWWEBxOLOvFk04gz8xU7M8lACJ0eNAO4MEp2632pPe9/
+Jdyet1G90ajflCVlHPfcqagrCSWjm6xK+UesRp6CIbbOdVpAZ/recP29WL9PIL6A
+YaOR6ckQYnmDtXo7eNMUXUO0MaFcRe8oLBa7fb+rKlLMk4fnBV7c3z1ZwGvJsyBK
+eJBd5nr94HZNQi3CcD1+w2ohy/1V+W6f3IS1uH9MwSnOOPBad00YThNLcxAXqyk4
+dkFvWb/jJpBMCKHhbaHjCMrja5xMw1gkMEtIZiUwKHEkjhTf3VaSI/yii9DxxjdI
+0LrUwqIWLhpjJZ2sJ5YQYmLEPx40iw==
+=tq1E
+-----END PGP SIGNATURE-----
+
+--Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV--
