@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AF6679E28
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF91679E2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbjAXQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S232839AbjAXQGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233279AbjAXQDw (ORCPT
+        with ESMTP id S234010AbjAXQGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:03:52 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 326ED470B6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:03:50 -0800 (PST)
-Received: (qmail 170309 invoked by uid 1000); 24 Jan 2023 11:03:49 -0500
-Date:   Tue, 24 Jan 2023 11:03:49 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
-Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y9ABZQ81oXTmggcY@rowland.harvard.edu>
-References: <20230117193159.22816-1-jonas.oberhauser@huaweicloud.com>
- <Y8hN7vs/w8LhMasT@rowland.harvard.edu>
- <c22ec058-b058-0b6e-718b-348ff5cb5004@huaweicloud.com>
- <Y8i1QNjnZwim5uMq@rowland.harvard.edu>
- <1180fe22-5e1d-ec8b-8012-b6578b1ca7c0@huaweicloud.com>
- <Y87tHNcvb5E+t3da@rowland.harvard.edu>
- <6f8575f3-f8b9-7738-24f0-5e390b50ac40@huaweicloud.com>
+        Tue, 24 Jan 2023 11:06:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BCD46D79
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674576329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3EL7POKx8Wvv5sOQhkGmRPJq/3pYFCs6vacmuLV9dJ8=;
+        b=IL+Fg1t4NfGUQh5LrVYpb1OjOMAK3b0XOr3QekwQrfWV0HLthW143PXo8TvyHToYy1JzCl
+        EZGStoiC38CVd1IJVrmsegRitRp8/j85vX01GESz9T7rRl/lLZhOj/EizDSjBPEsEovWRW
+        gR4kygEPnyGPfZAPylWKZrj49Xp6XYc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-424--JgdwinYNOScQyZrbrSZOg-1; Tue, 24 Jan 2023 11:05:22 -0500
+X-MC-Unique: -JgdwinYNOScQyZrbrSZOg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1829C8067FC;
+        Tue, 24 Jan 2023 16:05:02 +0000 (UTC)
+Received: from [10.22.10.191] (unknown [10.22.10.191])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C3AA2026D4B;
+        Tue, 24 Jan 2023 16:04:59 +0000 (UTC)
+Message-ID: <ae90e931-df19-9d60-610c-57dc34494d8e@redhat.com>
+Date:   Tue, 24 Jan 2023 11:04:58 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6f8575f3-f8b9-7738-24f0-5e390b50ac40@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+        paulmck@kernel.org, Arjan van de Ven <arjan@linux.intel.com>,
+        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com,
+        akpm@osdl.org, tglx@linutronix.de, joel@joelfernandes.org,
+        stern@rowland.harvard.edu, diogo.behrens@huawei.com,
+        jonas.oberhauser@huawei.com, linux-kernel@vger.kernel.org,
+        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
+        stable@vger.kernel.org
+References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
+ <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
+ <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
+ <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
+ <d1e28124-b7a7-ae19-87ec-b1dcd3701b61@redhat.com>
+ <Y8/+2YBRD4rFySjh@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y8/+2YBRD4rFySjh@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 01:54:14PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/23/2023 9:25 PM, Alan Stern wrote:
-> > On Mon, Jan 23, 2023 at 07:25:48PM +0100, Jonas Oberhauser wrote:
-> > > Alright, after some synchronization in the other parts of this thread I am
-> > > beginning to prepare the next iteration of the patch.
-> > > 
-> > > On 1/19/2023 4:13 AM, Alan Stern wrote:
-> > > > On Wed, Jan 18, 2023 at 10:38:11PM +0100, Jonas Oberhauser wrote:
-> > > > > On 1/18/2023 8:52 PM, Alan Stern wrote:
-> > > > > > On Tue, Jan 17, 2023 at 08:31:59PM +0100, Jonas Oberhauser wrote:
-> > > > > > > -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
-> > > > > > > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
-> > > > > > > -		fencerel(After-unlock-lock) ; [M])
-> > > > > > > +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
-> > > > > > Shouldn't the po case of (co | po) remain intact here?
-> > > > > You can leave it here, but it is already covered by two other parts: the
-> > > > > ordering given through ppo/hb is covered by the po-unlock-lock-po & int in
-> > > > > ppo, and the ordering given through pb is covered by its inclusion in
-> > > > > strong-order.
-> > > > What about the ordering given through
-> > > > A-cumul(strong-fence)/cumul-fence/prop/hb?  I suppose that might be
-> > > > superseded by pb as well, but it seems odd not to have it in hb.
-> > > How should we resolve this?
-> > > My current favorite (compromise :D) solution would be to
-> > > 1. still eliminate both po and co cases from first definition of
-> > > strong-fence which is used in ppo,
-> > > 2. define a relation equal to the strong-order in this patch (with po|rf)
-> > Wouldn't it need to have po|co?  Consider:
-> > 
-> > 	Wx=1	Rx=1		Ry=1		Rz=1
-> > 		lock(s)		lock(s)		lock(s)
-> > 		unlock(s)	unlock(s)	unlock(s)
-> > 		Wy=1		Wz=1		smp_mb__after_unlock_lock
-> > 						Rx=0
-> > 
-> > With the co term this is forbidden.  With only the rf term it is
-> > allowed, because po-unlock-lock-po isn't A-cumulative.
-> No, but unlock() is ( https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/tree/tools/memory-model/lock.cat?h=dev.2023.01.19a#n67
-> ). So you get
 
-So it is.  I had forgotten about that.  The model is getting too 
-complicated to fit entirely in my mind...
+On 1/24/23 10:52, Peter Zijlstra wrote:
+> On Tue, Jan 24, 2023 at 10:42:24AM -0500, Waiman Long wrote:
+>
+>> I would suggest to do it as suggested by PeterZ. Instead of set_bit(),
+>> however, it is probably better to use atomic_long_or() like
+>>
+>> atomic_long_or_relaxed(RT_MUTEX_HAS_WAITERS, (atomic_long_t *)&lock->owner)
+> That function doesn't exist, atomic_long_or() is implicitly relaxed for
+> not returning a value.
+>
+You are right. atomic_long_or() doesn't have variants like some others.
 
->   Rx=0 ->overwrite Wx=1  ->rfe Rx1 ->po-rel  T1:unlock(s) ->rfe T2:lock(s)
-> ->po-unlock-lock-po;after ... fence;po Rx=0
-> which is
->   Rx=0          ->prop ;                           po-unlock-lock-po;after
-> ... fence;po Rx=0
-> 
-> Are you ok going forward like this then?
+Cheers,
+Longman
 
-I guess so, provided we mention somewhere in the code or documentation 
-that this relation extends beyond a single rf.
-
-Alan
