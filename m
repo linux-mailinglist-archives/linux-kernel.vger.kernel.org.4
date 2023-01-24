@@ -2,126 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F56C67A005
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C421767A009
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 18:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbjAXRUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 12:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S234771AbjAXRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 12:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234771AbjAXRU0 (ORCPT
+        with ESMTP id S233704AbjAXRVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:20:26 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AE14A20D;
-        Tue, 24 Jan 2023 09:20:24 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id D2E1760011;
-        Tue, 24 Jan 2023 17:20:21 +0000 (UTC)
-Message-ID: <a75e34efce22ab1de8f0a2e247294a441e710193.camel@hadess.net>
-Subject: Re: [PATCH 2/3] HID: logitech-hidpp: Don't restart communication if
- not necessary
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Date:   Tue, 24 Jan 2023 18:20:21 +0100
-In-Reply-To: <20221220092207.428640-2-hadess@hadess.net>
-References: <20221220092207.428640-1-hadess@hadess.net>
-         <20221220092207.428640-2-hadess@hadess.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 24 Jan 2023 12:21:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667134A20D;
+        Tue, 24 Jan 2023 09:21:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 164B3B81603;
+        Tue, 24 Jan 2023 17:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD47C433D2;
+        Tue, 24 Jan 2023 17:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674580900;
+        bh=5u0HAqsMO32meB1+2hDlQk/3mQeAC0aecbaZTWGuo+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QjXkTZ0idK5z1Ix6m1yf2oBxsdcJq94aU7EsrAkDisp/SxGulfBdNMOHDckBQCvRz
+         W6llnTDs0JyFfXUOfVaSTrQzHB06mjALwb4j+Phm8EDITPUQVpWD5IHsXkZkuoBPtv
+         RURIQy6zUHAvCnxo+xVec0gIbsGD27+BhiB5s6a+NXA37TUYzDYw69k0Ue/1GNZ5pA
+         e7XeoQuYn4y8JHNQWOTkXCt0qA/tsceHAidqLU0n+M/uxducs+tOJXNBbPy0iCuj6y
+         N0r2//PY2LaeDxixTQGxip8Sr7ZhPU0erQFPtHhNXN68HP/JMuxcj/3DvEDYW4dGN9
+         YTPE1btkwci6w==
+Date:   Tue, 24 Jan 2023 11:21:39 -0600
+From:   Seth Forshee <sforshee@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] vhost: check for pending livepatches from vhost
+ worker kthreads
+Message-ID: <Y9ATo5FukOhphwqT@do-x1extreme>
+References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+ <20230120-vhost-klp-switching-v1-2-7c2b65519c43@kernel.org>
+ <Y8/ohzRGcOiqsh69@alley>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8/ohzRGcOiqsh69@alley>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTEyLTIwIGF0IDEwOjIyICswMTAwLCBCYXN0aWVuIE5vY2VyYSB3cm90ZToK
-PiBEb24ndCBzdG9wIGFuZCByZXN0YXJ0IGNvbW11bmljYXRpb24gd2l0aCB0aGUgZGV2aWNlIHVu
-bGVzcyB3ZSBuZWVkCj4gdG8KPiBtb2RpZnkgdGhlIGNvbm5lY3QgZmxhZ3MgdXNlZCBiZWNhdXNl
-IG9mIGEgZGV2aWNlIHF1aXJrLgoKRklXVywgQW5kcmVhcyBCZXJnbWVpZXIgdG9sZCBtZSBvZmYt
-bGlzdCB0aGF0IHRoaXMgZml4ZWQgdGhlaXIgcHJvYmxlbQp3aXRoIHRoZSBMaXRyYSBHbG93IG5v
-dCBjb25uZWN0aW5nIHByb3Blcmx5LgoKV291bGQgYmUgZ3JlYXQgdG8gaGF2ZSByZXZpZXdzIG9u
-IHRoaXMgYW5kIG15IG90aGVyIEhJRCsrIHBhdGNoZXMuCgpDaGVlcnMKCj4gLS0tCj4gwqBkcml2
-ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAuYyB8IDMxICsrKysrKysrKysrKysrKysrKystLS0t
-LS0tLS0tLQo+IC0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAxOSBpbnNlcnRpb25zKCspLCAxMiBkZWxl
-dGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBw
-LmMgYi9kcml2ZXJzL2hpZC9oaWQtCj4gbG9naXRlY2gtaGlkcHAuYwo+IGluZGV4IDdmOTE4NzIw
-MTkxMy4uYjRlNGE4Yzc5Yzc1IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvaGlkL2hpZC1sb2dpdGVj
-aC1oaWRwcC5jCj4gKysrIGIvZHJpdmVycy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBwLmMKPiBAQCAt
-NDMxMCw2ICs0MzEwLDcgQEAgc3RhdGljIGludCBoaWRwcF9wcm9iZShzdHJ1Y3QgaGlkX2Rldmlj
-ZSAqaGRldiwKPiBjb25zdCBzdHJ1Y3QgaGlkX2RldmljZV9pZCAqaWQpCj4gwqDCoMKgwqDCoMKg
-wqDCoGJvb2wgY29ubmVjdGVkOwo+IMKgwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgY29ubmVj
-dF9tYXNrID0gSElEX0NPTk5FQ1RfREVGQVVMVDsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGhp
-ZHBwX2ZmX3ByaXZhdGVfZGF0YSBkYXRhOwo+ICvCoMKgwqDCoMKgwqDCoGJvb2wgd2lsbF9yZXN0
-YXJ0ID0gZmFsc2U7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgLyogcmVwb3J0X2ZpeHVwIG5lZWRz
-IGRydmRhdGEgdG8gYmUgc2V0IGJlZm9yZSB3ZSBjYWxsCj4gaGlkX3BhcnNlICovCj4gwqDCoMKg
-wqDCoMKgwqDCoGhpZHBwID0gZGV2bV9remFsbG9jKCZoZGV2LT5kZXYsIHNpemVvZigqaGlkcHAp
-LCBHRlBfS0VSTkVMKTsKPiBAQCAtNDM2MCw2ICs0MzYxLDkgQEAgc3RhdGljIGludCBoaWRwcF9w
-cm9iZShzdHJ1Y3QgaGlkX2RldmljZSAqaGRldiwKPiBjb25zdCBzdHJ1Y3QgaGlkX2RldmljZV9p
-ZCAqaWQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-cmV0dXJuIHJldDsKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gK8KgwqDCoMKgwqDCoMKgaWYg
-KGhpZHBwLT5xdWlya3MgJiBISURQUF9RVUlSS19ERUxBWUVEX0lOSVQpCj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHdpbGxfcmVzdGFydCA9IHRydWU7Cj4gKwo+IMKgwqDCoMKgwqDC
-oMKgwqBJTklUX1dPUksoJmhpZHBwLT53b3JrLCBkZWxheWVkX3dvcmtfY2IpOwo+IMKgwqDCoMKg
-wqDCoMKgwqBtdXRleF9pbml0KCZoaWRwcC0+c2VuZF9tdXRleCk7Cj4gwqDCoMKgwqDCoMKgwqDC
-oGluaXRfd2FpdHF1ZXVlX2hlYWQoJmhpZHBwLT53YWl0KTsKPiBAQCAtNDM3NCw3ICs0Mzc4LDcg
-QEAgc3RhdGljIGludCBoaWRwcF9wcm9iZShzdHJ1Y3QgaGlkX2RldmljZSAqaGRldiwKPiBjb25z
-dCBzdHJ1Y3QgaGlkX2RldmljZV9pZCAqaWQpCj4gwqDCoMKgwqDCoMKgwqDCoCAqIFBsYWluIFVT
-QiBjb25uZWN0aW9ucyBuZWVkIHRvIGFjdHVhbGx5IGNhbGwgc3RhcnQgYW5kIG9wZW4KPiDCoMKg
-wqDCoMKgwqDCoMKgICogb24gdGhlIHRyYW5zcG9ydCBkcml2ZXIgdG8gYWxsb3cgaW5jb21pbmcg
-ZGF0YS4KPiDCoMKgwqDCoMKgwqDCoMKgICovCj4gLcKgwqDCoMKgwqDCoMKgcmV0ID0gaGlkX2h3
-X3N0YXJ0KGhkZXYsIDApOwo+ICvCoMKgwqDCoMKgwqDCoHJldCA9IGhpZF9od19zdGFydChoZGV2
-LCB3aWxsX3Jlc3RhcnQgPyAwIDogY29ubmVjdF9tYXNrKTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYg
-KHJldCkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaGlkX2VycihoZGV2LCAi
-aHcgc3RhcnQgZmFpbGVkXG4iKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdv
-dG8gaGlkX2h3X3N0YXJ0X2ZhaWw7Cj4gQEAgLTQ0MTEsNiArNDQxNSw3IEBAIHN0YXRpYyBpbnQg
-aGlkcHBfcHJvYmUoc3RydWN0IGhpZF9kZXZpY2UgKmhkZXYsCj4gY29uc3Qgc3RydWN0IGhpZF9k
-ZXZpY2VfaWQgKmlkKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGhpZHBwLT53aXJlbGVzc19mZWF0dXJlX2luZGV4ID0gMDsKPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoGVsc2UgaWYgKHJldCkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIGhpZF9od19pbml0X2ZhaWw7Cj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IDA7Cj4gwqDCoMKgwqDCoMKgwqDCoH0KPiDC
-oAo+IMKgwqDCoMKgwqDCoMKgwqBpZiAoY29ubmVjdGVkICYmIChoaWRwcC0+cXVpcmtzICYgSElE
-UFBfUVVJUktfQ0xBU1NfV1RQKSkgewo+IEBAIC00NDI1LDE5ICs0NDMwLDIxIEBAIHN0YXRpYyBp
-bnQgaGlkcHBfcHJvYmUoc3RydWN0IGhpZF9kZXZpY2UKPiAqaGRldiwgY29uc3Qgc3RydWN0IGhp
-ZF9kZXZpY2VfaWQgKmlkKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGhpZHBwX2Nvbm5lY3RfZXZl
-bnQoaGlkcHApOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgLyogUmVzZXQgdGhlIEhJRCBub2RlIHN0
-YXRlICovCj4gLcKgwqDCoMKgwqDCoMKgaGlkX2RldmljZV9pb19zdG9wKGhkZXYpOwo+IC3CoMKg
-wqDCoMKgwqDCoGhpZF9od19jbG9zZShoZGV2KTsKPiAtwqDCoMKgwqDCoMKgwqBoaWRfaHdfc3Rv
-cChoZGV2KTsKPiArwqDCoMKgwqDCoMKgwqBpZiAod2lsbF9yZXN0YXJ0KSB7Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoC8qIFJlc2V0IHRoZSBISUQgbm9kZSBzdGF0ZSAqLwo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBoaWRfZGV2aWNlX2lvX3N0b3AoaGRldik7Cj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGhpZF9od19jbG9zZShoZGV2KTsKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaGlkX2h3X3N0b3AoaGRldik7Cj4gwqAKPiAtwqDC
-oMKgwqDCoMKgwqBpZiAoaGlkcHAtPnF1aXJrcyAmIEhJRFBQX1FVSVJLX05PX0hJRElOUFVUKQo+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb25uZWN0X21hc2sgJj0gfkhJRF9DT05O
-RUNUX0hJRElOUFVUOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoaGlkcHAt
-PnF1aXJrcyAmIEhJRFBQX1FVSVJLX05PX0hJRElOUFVUKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29ubmVjdF9tYXNrICY9IH5ISURfQ09OTkVDVF9I
-SURJTlBVVDsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoC8qIE5vdyBleHBvcnQgdGhlIGFjdHVhbCBp
-bnB1dHMgYW5kIGhpZHJhdyBub2RlcyB0byB0aGUgd29ybGQKPiAqLwo+IC3CoMKgwqDCoMKgwqDC
-oHJldCA9IGhpZF9od19zdGFydChoZGV2LCBjb25uZWN0X21hc2spOwo+IC3CoMKgwqDCoMKgwqDC
-oGlmIChyZXQpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaGlkX2VycihoZGV2
-LCAiJXM6aGlkX2h3X3N0YXJ0IHJldHVybmVkIGVycm9yXG4iLAo+IF9fZnVuY19fKTsKPiAtwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBoaWRfaHdfc3RhcnRfZmFpbDsKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLyogTm93IGV4cG9ydCB0aGUgYWN0dWFsIGlucHV0
-cyBhbmQgaGlkcmF3IG5vZGVzIHRvCj4gdGhlIHdvcmxkICovCj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoHJldCA9IGhpZF9od19zdGFydChoZGV2LCBjb25uZWN0X21hc2spOwo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0KSB7Cj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBoaWRfZXJyKGhkZXYsICIlczpoaWRfaHdf
-c3RhcnQgcmV0dXJuZWQKPiBlcnJvclxuIiwgX19mdW5jX18pOwo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBoaWRfaHdfc3RhcnRfZmFpbDsKPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAK
-PiDCoMKgwqDCoMKgwqDCoMKgaWYgKGhpZHBwLT5xdWlya3MgJiBISURQUF9RVUlSS19DTEFTU19H
-OTIwKSB7Cgo=
+On Tue, Jan 24, 2023 at 03:17:43PM +0100, Petr Mladek wrote:
+> On Fri 2023-01-20 16:12:22, Seth Forshee (DigitalOcean) wrote:
+> > Livepatch relies on stack checking of sleeping tasks to switch kthreads,
+> > so a busy kthread can block a livepatch transition indefinitely. We've
+> > seen this happen fairly often with busy vhost kthreads.
+> 
+> To be precise, it would be "indefinitely" only when the kthread never
+> sleeps.
+> 
+> But yes. I believe that the problem is real. It might be almost
+> impossible to livepatch some busy kthreads, especially when they
+> have a dedicated CPU.
+> 
+> 
+> > Add a check to call klp_switch_current() from vhost_worker() when a
+> > livepatch is pending. In testing this allowed vhost kthreads to switch
+> > immediately when they had previously blocked livepatch transitions for
+> > long periods of time.
+> > 
+> > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+> > ---
+> >  drivers/vhost/vhost.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > index cbe72bfd2f1f..d8624f1f2d64 100644
+> > --- a/drivers/vhost/vhost.c
+> > +++ b/drivers/vhost/vhost.c
+> > @@ -366,6 +367,9 @@ static int vhost_worker(void *data)
+> >  			if (need_resched())
+> >  				schedule();
+> >  		}
+> > +
+> > +		if (unlikely(klp_patch_pending(current)))
+> > +			klp_switch_current();
+> 
+> I suggest to use the following intead:
+> 
+> 		if (unlikely(klp_patch_pending(current)))
+> 			klp_update_patch_state(current);
+> 
+> We already use this in do_idle(). The reason is basically the same.
+> It is almost impossible to livepatch the idle task when a CPU is
+> very idle.
+> 
+> klp_update_patch_state(current) does not check the stack.
+> It switches the task immediately.
+> 
+> It should be safe because the kthread never leaves vhost_worker().
+> It means that the same kthread could never re-enter this function
+> and use the new code.
 
+My knowledge of livepatching internals is fairly limited, so I'll accept
+it if you say that it's safe to do it this way. But let me ask about one
+scenario.
+
+Let's say that a livepatch is loaded which replaces vhost_worker(). New
+vhost worker threads are started which use the replacement function. Now
+if the patch is disabled, these new worker threads would be switched
+despite still running the code from the patch module, correct? Could the
+module then be unloaded, freeing the memory containing the code these
+kthreads are executing?
+
+Thanks,
+Seth
