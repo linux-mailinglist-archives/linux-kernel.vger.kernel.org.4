@@ -2,157 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85236679F52
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39921679F56
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 17:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbjAXQ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 11:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S234258AbjAXQ7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 11:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbjAXQ6q (ORCPT
+        with ESMTP id S233259AbjAXQ7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:58:46 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFF44608B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:58:44 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso11426435wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 08:58:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cdb0oFoKxHwQ03DA8if5wSz8FjXcnpPwR7oP9X0TASQ=;
-        b=e8rC3DOOpCpm/yKC3hjmG17ey445cYVbF6eMJloArv1j8eFrG4EnYNXPXSi4csB9X7
-         5C8Ctf1eenyJHDLmzALfwZ2yurMC34RkHpb3joU2q+rKiiGP6kti9EURgnjGYiZVe/96
-         XYvFHzv2LcwE5cYqB05xVQkWhdGVu4ncoc2O0jUDiLGQMPJIDzTPWPn34lx8xqhu9aYE
-         D9pdao+/haCpENeGXtk1r4fXTVYTYEdiyl9ShHYyy/MvnA60DIbQW90lizwLRmhx68qK
-         rMwllXHOG+2AVSwe3ctLIKQ2kKD50g+eL5CIanjtaKNaSWtd4X7x/KQ8EnDOjq5iTEly
-         qrTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cdb0oFoKxHwQ03DA8if5wSz8FjXcnpPwR7oP9X0TASQ=;
-        b=Zas7QbZlji59RiqFEbBUEDCO6aHw8dRxMwX+X0x3yHzRBwlwJC0IlBNbqpFCBRODmu
-         UFXinLrJaGkc5j3iPSc7N5qeISd2/K6Bujp97UtFAILbqElnNazUARj5Qe6cuFzO7h4N
-         3lyxtGB2tFgfCIhkxmDApT8Yyvd/0kXBA7EDsywzFWVBnGOxOOHhYd0TsJiW/rzH379q
-         p9RrLFbPCgh9Nd34b7PNwR3/5/RJoKA0dh1xoQqr/rqVGI8i1CUAHWyaBBi1Bu8kC74s
-         A7+WWYmaAs+0xERNieprdHp+s+VbOrQY499SK4KW4u/5QX4fq5mUsify4qPbbxzMyWpA
-         knxQ==
-X-Gm-Message-State: AFqh2kriLNYajAun3JpuOWGYiw1HdDbg7oBPQm0iZHIhXYtCjFp6Nl51
-        GpD1UqrnuNokgFwxIkZaSzuffg==
-X-Google-Smtp-Source: AMrXdXurcLhwij0yWeyiNpXqw2jGF3m1ReYrcuLOxgg4DHgZkk4BU95yF+abWjpf+ct5ZmUd7pYsjg==
-X-Received: by 2002:a7b:ce15:0:b0:3da:2932:b61a with SMTP id m21-20020a7bce15000000b003da2932b61amr28492673wmc.18.1674579522994;
-        Tue, 24 Jan 2023 08:58:42 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o24-20020a05600c511800b003d9de0c39fasm19046290wms.36.2023.01.24.08.58.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 08:58:42 -0800 (PST)
-Message-ID: <50ecd96d-47e4-5140-faeb-d590f0656175@linaro.org>
-Date:   Tue, 24 Jan 2023 17:58:41 +0100
+        Tue, 24 Jan 2023 11:59:22 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA1145BC1;
+        Tue, 24 Jan 2023 08:59:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=q20iUbFBo/EcilBlEOdYiKbbeE+E9KmIcH2y2ndCPzk=; b=LyEZb98S6B9XMIA36VIxeHHP10
+        CgK2aWuT4/E+GXo1cKuqntP1JpAv1b9g34KBlFRM2yvTpFsyYkjcBFEQED6r7RqnBEGZItbuiOTjB
+        CULh2BtVvwMGEYtPLK2d4sPM+0dGz1hxSG3dC7vm60GOVvXfvnebeUJelkYqEl94Ifcam5USBN+9G
+        LAejGHvl9T+qx/6TR8r3lbuW9Jmkpj1t7tYEadZRYpqmbxSvY1MaeJZeuOYp1vKJq2a+uYurbo0w7
+        /tDZGOdLxq15qt8QRHRtIP2Dp4REGGz+Mhw4Ok5Ad2EwwumdBlXwVJXHZfOkejeV4WZ9LJ10ol5KG
+        A5t+q5OQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKMdd-004kcJ-Tw; Tue, 24 Jan 2023 16:59:13 +0000
+Date:   Tue, 24 Jan 2023 08:59:13 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v8 07/10] block: Switch to pinning pages.
+Message-ID: <Y9AOYXpU1cRAHfQz@infradead.org>
+References: <Y8/xApRVtqK7IlYT@infradead.org>
+ <2431ffa0-4a37-56a2-17fa-74a5f681bcb8@redhat.com>
+ <20230123173007.325544-1-dhowells@redhat.com>
+ <20230123173007.325544-8-dhowells@redhat.com>
+ <874829.1674571671@warthog.procyon.org.uk>
+ <875433.1674572633@warthog.procyon.org.uk>
+ <Y9AK+yW7mZ2SNMcj@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 1/5 v7] dt-bindings: input: pwm-beeper: Convert txt
- bindings to yaml
-Content-Language: en-US
-To:     Manuel Traut <manuel.traut@mt.com>, linux-kernel@vger.kernel.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org
-References: <Y9AJ07zT1lpBLhPk@mt.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y9AJ07zT1lpBLhPk@mt.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9AK+yW7mZ2SNMcj@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 17:39, Manuel Traut wrote:
-> Converts txt binding to new YAML format.
-> 
-> Signed-off-by: Manuel Traut <manuel.traut@mt.com>
-> ---
->  .../devicetree/bindings/input/pwm-beeper.txt  | 24 ----------
->  .../devicetree/bindings/input/pwm-beeper.yaml | 48 +++++++++++++++++++
->  2 files changed, 48 insertions(+), 24 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/input/pwm-beeper.txt
->  create mode 100644 Documentation/devicetree/bindings/input/pwm-beeper.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/input/pwm-beeper.txt b/Documentation/devicetree/bindings/input/pwm-beeper.txt
-> deleted file mode 100644
-> index 8fc0e48c20db..000000000000
-> --- a/Documentation/devicetree/bindings/input/pwm-beeper.txt
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -* PWM beeper device tree bindings
-> -
-> -Registers a PWM device as beeper.
-> -
-> -Required properties:
-> -- compatible: should be "pwm-beeper"
-> -- pwms: phandle to the physical PWM device
-> -
-> -Optional properties:
-> -- amp-supply: phandle to a regulator that acts as an amplifier for the beeper
-> -- beeper-hz:  bell frequency in Hz
-> -
-> -Example:
-> -
-> -beeper_amp: amplifier {
-> -	compatible = "fixed-regulator";
-> -	gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>;
-> -};
-> -
-> -beeper {
-> -	compatible = "pwm-beeper";
-> -	pwms = <&pwm0>;
-> -	amp-supply = <&beeper_amp>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/input/pwm-beeper.yaml b/Documentation/devicetree/bindings/input/pwm-beeper.yaml
-> new file mode 100644
-> index 000000000000..24a40f0f77c1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/pwm-beeper.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2Does not look like you tested the bindings. Please run `make dt_binding_check` (see Documentation/devicetree/bindings/writing-schema.rst for instructions).
-> +---
-> +$id: "http://devicetree.org/schemas/input/pwm-beeper.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: PWM beeper device tree bindings
+This is the incremental patch.  Doesn't do the FOLL_PIN to bool
+conversion for the extra helper yet, and needs to be folded into the
+original patches still.
 
-Drop: device tree bindings
 
-> +
-> +maintainers:
-> +	- Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> +
-> +description: Registers a PWM device as beeper.
-> +
-> +properties:
-> +	compatible:
-> +	const: pwm-beeper
-
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-
-Start from scratch from example-schema. There are so many mistakes here
-it should be seriously rework.
-
-Best regards,
-Krzysztof
-
+diff --git a/block/bio.c b/block/bio.c
+index 6dc54bf3ed27d4..bd8433f3644fd7 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -1170,14 +1170,20 @@ bool bio_add_folio(struct bio *bio, struct folio *folio, size_t len,
+ 
+ void __bio_release_pages(struct bio *bio, bool mark_dirty)
+ {
+-	unsigned int gup_flags = bio_to_gup_flags(bio);
++	bool pinned = bio_flagged(bio, BIO_PAGE_PINNED);
++	bool reffed = bio_flagged(bio, BIO_PAGE_REFFED);
+ 	struct bvec_iter_all iter_all;
+ 	struct bio_vec *bvec;
+ 
+ 	bio_for_each_segment_all(bvec, bio, iter_all) {
+ 		if (mark_dirty && !PageCompound(bvec->bv_page))
+ 			set_page_dirty_lock(bvec->bv_page);
+-		page_put_unpin(bvec->bv_page, gup_flags);
++
++		if (pinned)
++			unpin_user_page(bvec->bv_page);
++		/* this can go away once direct-io.c is converted: */
++		else if (reffed)
++			put_page(bvec->bv_page);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(__bio_release_pages);
+diff --git a/block/blk.h b/block/blk.h
+index 294044d696e09f..a16d4425d2751c 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -430,27 +430,19 @@ int bio_add_hw_page(struct request_queue *q, struct bio *bio,
+  */
+ static inline void bio_set_cleanup_mode(struct bio *bio, struct iov_iter *iter)
+ {
+-	unsigned int cleanup_mode = iov_iter_extract_mode(iter);
+-
+-	if (cleanup_mode & FOLL_GET)
+-		bio_set_flag(bio, BIO_PAGE_REFFED);
+-	if (cleanup_mode & FOLL_PIN)
++	if (iov_iter_extract_mode(iter) & FOLL_PIN)
+ 		bio_set_flag(bio, BIO_PAGE_PINNED);
+ }
+ 
+-static inline unsigned int bio_to_gup_flags(struct bio *bio)
+-{
+-	return (bio_flagged(bio, BIO_PAGE_REFFED) ? FOLL_GET : 0) |
+-		(bio_flagged(bio, BIO_PAGE_PINNED) ? FOLL_PIN : 0);
+-}
+-
+ /*
+  * Clean up a page appropriately, where the page may be pinned, may have a
+  * ref taken on it or neither.
+  */
+ static inline void bio_release_page(struct bio *bio, struct page *page)
+ {
+-	page_put_unpin(page, bio_to_gup_flags(bio));
++	WARN_ON_ONCE(bio_flagged(bio, BIO_PAGE_REFFED));
++	if (bio_flagged(bio, BIO_PAGE_PINNED))
++		unpin_user_page(page);
+ }
+ 
+ struct request_queue *blk_alloc_queue(int node_id);
