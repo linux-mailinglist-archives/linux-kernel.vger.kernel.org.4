@@ -2,365 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845F0679916
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3010B67991F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 14:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbjAXNRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 08:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S233801AbjAXNT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 08:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234082AbjAXNRm (ORCPT
+        with ESMTP id S233490AbjAXNTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 08:17:42 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9EC40BDA
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:17:27 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r2so13833922wrv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:17:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xPtScS6BY2oQMQfZghRsu5KobsKH5DtWf/rH2GOOn2E=;
-        b=W4lKDHBsNTAbBP+sCaS3NnLnfNX0w7IFxvJzjy1O9YprvEICvju4Gm0nsIt3YvhJib
-         rtn8xAn8YHyPQkyP1/LXYQG+JQ8fyVKzY3X0c/GfuhL2KOdcAUUnmdUobWDRAbuzhfD2
-         0isiHPLSm4DPlSA3JydEkUhMSe4SUMMt1pyukjgaLtuh+Q8O3EzdyylJeKTQqEjhGffc
-         qC3N8cT++V4WQysalxniy0cQtAxwfduPUmFJjvfLAAzyQLtK2CC91xqRGl7/YNrNeD9y
-         2TaRElWEv/HFUY/78xNo8HJ2tYcxqr2lzmRw1IFx3zo0KPUT7nCXDidKZDVud1A8sY6P
-         un3w==
+        Tue, 24 Jan 2023 08:19:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9074489
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:18:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674566284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U8FL2hCl9BWMQrve4jEgUposmmxHpM9LrhFavxYOcgQ=;
+        b=akm3EDRpnIHov9f1e2HfePF2oh2WcbfHEq0HL8ik16RggXywix3lhLoxPAkPwzm4xNhvGw
+        vL5qpnNS6ax6+r8DoUTiNIK2xVOiyqhL558J0HY9PpLdkvq++vYCk6Bo1vl7iClvh2kKhn
+        zLKXj65JLPyOZk45p5UsgnjJcPkzax4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-557-IBZZ78gHN8SlHKIjC2MZ-A-1; Tue, 24 Jan 2023 08:18:01 -0500
+X-MC-Unique: IBZZ78gHN8SlHKIjC2MZ-A-1
+Received: by mail-wm1-f71.google.com with SMTP id fl5-20020a05600c0b8500b003db12112fdeso9192084wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 05:18:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xPtScS6BY2oQMQfZghRsu5KobsKH5DtWf/rH2GOOn2E=;
-        b=4WzICS9AlsNa1Bk5wQt9SnH9JgwV4qXg2kj/9Sm/ABuIS1wUZXwPmwEplW0IIHw/O0
-         1ZnDg7hY/17G1Sjo8LpbJF92C/mH1FjGKqUhavBJ80lIoxNZc8DI1hANQdbgirYOgLwB
-         xtq97h/tCHyV6bYZuH9YtrhHu4bym8LyFPYfGPW6MRb1FkRcRmScMVD6EBeWytA6k+42
-         sHpo0ulc0CCy5px3I3TcEGN82NFqIocATYaAafFhQ/tq2+hj8eR1p6rDGWmwFwrNhMjQ
-         RZgSbOgFzIPISNTtf3wWdK3irYae2JIDyzAzPimD51E8i55UVhlHpr921LC9jI+t5NzJ
-         jBhg==
-X-Gm-Message-State: AFqh2kowwLDZy2PTD19M+zcxaS/FrtamXx5OqPgOxBHBtzsjGx4tpvlu
-        6ntrxosxaF7+AjDqzyfQ7gJwBw==
-X-Google-Smtp-Source: AMrXdXsqFzBNFFRsfEKNgsDGLdcohtkUIEtjlnmBj53xs2rQu+gfm/nVnqvxc5b40qAwmuYSCz7WUw==
-X-Received: by 2002:a5d:6f15:0:b0:2b9:28ef:24c9 with SMTP id ay21-20020a5d6f15000000b002b928ef24c9mr28610014wrb.39.1674566246341;
-        Tue, 24 Jan 2023 05:17:26 -0800 (PST)
-Received: from t480-bl003.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
-        by smtp.gmail.com with ESMTPSA id a5-20020adfeec5000000b002bfb5ebf8cfsm49427wrp.21.2023.01.24.05.17.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 05:17:26 -0800 (PST)
-From:   bchihi@baylibre.com
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: [PATCH v11 6/6] arm64/dts/mt8195: Add temperature mitigation threshold
-Date:   Tue, 24 Jan 2023 14:17:17 +0100
-Message-Id: <20230124131717.128660-7-bchihi@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230124131717.128660-1-bchihi@baylibre.com>
-References: <20230124131717.128660-1-bchihi@baylibre.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U8FL2hCl9BWMQrve4jEgUposmmxHpM9LrhFavxYOcgQ=;
+        b=W6YlSYRK8hFvmWgusKByOXG8DEXzoJInKXLiTi0vptQETTnhikI1pRARkp6mJapwo9
+         74NIMHsd5mvU2X7BLfvF2v/aAdpppuPJ09+/WlEAkF65J+vAJ7maBLMGM+IC/XttZeeQ
+         VfAOqpiaZr0kSu8IkxL0axvmlylpcUC6oWMaPAVQo04TvNTYjDl+nKE8GUR2N97x04Yk
+         pIPuW+THqNZIhXGUbHkR3wXceE3kvBWjOGBH+aT4QVhzVymqoSHxkf938X8mCmQPrWts
+         oFWyvN1aQCUuDe+img4//hkQLjHWSSVJnAZAHhiHHlGErvRV8Hj5E0qQHMTw8Q2WyV5x
+         Dmgw==
+X-Gm-Message-State: AFqh2koU0ly0ienfLdglZO0A5nXzMBpvdAFglCUTTot5BUm2E8Fxvj7c
+        4OGYHzMGgEo2zMt8K6roklfeutyXpYqJw15gM1xCW6cY+SS0qTJuntlwJfi+ROtY/lzQ3VYkvqT
+        jdoeV6pm6R5qx0VQiO51Hcc69
+X-Received: by 2002:a05:600c:35d5:b0:3db:fc4:d018 with SMTP id r21-20020a05600c35d500b003db0fc4d018mr25273872wmq.40.1674566280753;
+        Tue, 24 Jan 2023 05:18:00 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsXTM8iTQEaYS8uGn/qwNJ8FB0rJLsepjJozYAsBeZMjmKElS3iKMDkFvVcz+xTltH0ta5v8w==
+X-Received: by 2002:a05:600c:35d5:b0:3db:fc4:d018 with SMTP id r21-20020a05600c35d500b003db0fc4d018mr25273849wmq.40.1674566280391;
+        Tue, 24 Jan 2023 05:18:00 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id e6-20020a05600c2b4600b003da2932bde0sm2393864wmf.23.2023.01.24.05.17.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 05:17:59 -0800 (PST)
+Message-ID: <de1ed6a6-6f74-2664-dad4-3467efd83483@redhat.com>
+Date:   Tue, 24 Jan 2023 14:17:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] maple_tree: Remove GFP_ZERO from kmem_cache_alloc() and
+ kmem_cache_alloc_bulk()
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230105160427.2988454-1-Liam.Howlett@oracle.com>
+ <Y7fNo4IElYXCyPmd@kernel.org> <20230106183559.mpdywid4szzpghlk@revolver>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230106183559.mpdywid4szzpghlk@revolver>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+On 06.01.23 19:36, Liam Howlett wrote:
+> * Mike Rapoport <rppt@kernel.org> [230106 02:28]:
+>> On Thu, Jan 05, 2023 at 04:05:34PM +0000, Liam Howlett wrote:
+>>> Preallocations are common in the VMA code to avoid allocating under
+>>> certain locking conditions.  The preallocations must also cover the
+>>> worst-case scenario.  Removing the GFP_ZERO flag from the
+>>> kmem_cache_alloc() (and bulk variant) calls will reduce the amount of
+>>> time spent zeroing memory that may not be used.  Only zero out the
+>>> necessary area to keep track of the allocations in the maple state.
+>>> Zero the entire node prior to using it in the tree.
+>>>
+>>> This required internal changes to node counting on allocation, so the
+>>> test code is also updated.
+>>>
+>>> This restores some micro-benchmark performance:
+>>> up to +9% in mmtests mmap1 by my testing
+>>> +10% to +20% in mmap, mmapaddr, mmapmany tests reported by Red Hat
+>>>
+>>> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2149636
+>>> Reported-by: Jirka Hladky <jhladky@redhat.com>
+>>> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>> Signed-off-by: Liam Howlett <Liam.Howlett@oracle.com>
+>>> ---
+>>>   lib/maple_tree.c                 | 80 +++++++++++++++++---------------
+>>>   tools/testing/radix-tree/maple.c | 18 +++----
+>>>   2 files changed, 52 insertions(+), 46 deletions(-)
+>>>
+>>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+>>> index 26e2045d3cda..82a8121fe49b 100644
+>>> --- a/lib/maple_tree.c
+>>> +++ b/lib/maple_tree.c
+>>> @@ -149,13 +149,12 @@ struct maple_subtree_state {
+>>>   /* Functions */
+>>>   static inline struct maple_node *mt_alloc_one(gfp_t gfp)
+>>>   {
+>>> -	return kmem_cache_alloc(maple_node_cache, gfp | __GFP_ZERO);
+>>> +	return kmem_cache_alloc(maple_node_cache, gfp);
+>>>   }
+>>>   
+>>>   static inline int mt_alloc_bulk(gfp_t gfp, size_t size, void **nodes)
+>>>   {
+>>> -	return kmem_cache_alloc_bulk(maple_node_cache, gfp | __GFP_ZERO, size,
+>>> -				     nodes);
+>>> +	return kmem_cache_alloc_bulk(maple_node_cache, gfp, size, nodes);
+>>>   }
+>>>   
+>>>   static inline void mt_free_bulk(size_t size, void __rcu **nodes)
+>>> @@ -1127,9 +1126,10 @@ static inline struct maple_node *mas_pop_node(struct ma_state *mas)
+>>>   {
+>>>   	struct maple_alloc *ret, *node = mas->alloc;
+>>>   	unsigned long total = mas_allocated(mas);
+>>> +	unsigned int req = mas_alloc_req(mas);
+>>>   
+>>>   	/* nothing or a request pending. */
+>>> -	if (unlikely(!total))
+>>> +	if (WARN_ON(!total))
+>>
+>> Hmm, isn't WARN_ON() here too much?
+> 
+> I don't think so.  If we get to the point of asking for a node while we
+> don't have any to give, then it's too late.  It means we (I) have
+> calculated the necessary nodes incorrectly and we won't have enough
+> memory to fit things into the tree.  It should never happen.
 
-The mt8195 SoC has several hotspots around the CPUs. Specify the
-targeted temperature threshold when to apply the mitigation and define
-the associated cooling devices.
+Either way, the suggestion is to use WARN_ON_ONCE() instead of WARN_ON().
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 169 ++++++++++++++++++++---
- 1 file changed, 153 insertions(+), 16 deletions(-)
+... now documented in Documentation/process/coding-style.rst
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 636676f4ba25..9544ae91379a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -14,6 +14,7 @@
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
- #include <dt-bindings/power/mt8195-power.h>
- #include <dt-bindings/reset/mt8195-resets.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include <dt-bindings/thermal/mediatek-lvts.h>
- 
- / {
-@@ -2413,107 +2414,243 @@ dp_tx: dp-tx@1c600000 {
- 
- 	thermal_zones: thermal-zones {
- 		cpu0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
-+
- 			trips {
-+				cpu0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu0_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU1>;
-+
- 			trips {
-+				cpu1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu1_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu2-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU2>;
-+
- 			trips {
-+				cpu2_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu2_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu2_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu3-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU3>;
-+
- 			trips {
-+				cpu3_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu3_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu3_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu4-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU0>;
-+
- 			trips {
-+				cpu4_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu4_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu4_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu5-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU1>;
-+
- 			trips {
-+				cpu5_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu5_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu5_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu6-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU2>;
-+
- 			trips {
-+				cpu6_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu6_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu6_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu7-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU3>;
-+
- 			trips {
-+				cpu7_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu7_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu7_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 	};
- };
 -- 
-2.34.1
+Thanks,
+
+David / dhildenb
 
