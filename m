@@ -2,149 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928FD678DF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4946678E05
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 03:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjAXCJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 21:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S231509AbjAXCLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 21:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjAXCJG (ORCPT
+        with ESMTP id S229603AbjAXCLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:09:06 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC306301B6;
-        Mon, 23 Jan 2023 18:09:01 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso8298779pjp.3;
-        Mon, 23 Jan 2023 18:09:01 -0800 (PST)
+        Mon, 23 Jan 2023 21:11:21 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE61A972;
+        Mon, 23 Jan 2023 18:11:20 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id s3so10237361pfd.12;
+        Mon, 23 Jan 2023 18:11:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cDOI66t0q/oP7E/pKikemgOCe2s0l8GcG5GBgKQtNXE=;
-        b=fLS/Ec7hGZGwOF2csyyx7asmruxOhiKoolimG+J143sZaS3Dd9SI4B9Y+jRI/smyYM
-         7FTlvkrIihPwyL7KIhzRT5OmgwHmi0Ol2iPA72h6Ac6DsOK1n/8kUnfY/qv8dbaNArwt
-         K1LO71u0KJukhXLFhDqCcDJwxbkCfiCGzz1tJMsxGcxkZuw3dzWO97kbGLpt6gaPPWZY
-         IRrhV3aMPdfIa8kKQ4ii62OGb3odO2SvVHrnM5xrTO2zdYFb2LZ3H1FsdkinNkyqZesb
-         lDxkTRPtaLQidsvcONDyXXRDLab+zGkI36MC73q5SudTjGFm8sOUj90aitBwQfeeZR/q
-         F7ZA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SCGlc7mWURATKW4pBp/mMbnvAjkNxvQ5RvlFZ+5SXrA=;
+        b=Q2OJ7E/ovDJZRJ1/WrC7I1yuDO3Hb6jh2iai0Os4K2WdyHqq0h1cH5JrkPYY0LyrTY
+         7pubiTyoZItmkh0TVFAVAGmXnvHqYco6E/bJ9SAJWFGJV+UzGBvkYmb/zpo5/BffZziZ
+         JaUWdDXTBbvbtQ1aNpDtvOl58OyifVwiKon0KX67c66ujtxL6CwZEzUbjnw8bOnoGm74
+         8k3YxA5iHDZF2LERPK0k7Ti8XPJH2AN7w1s1gLDWa+ggmjT+8d+vp02GVoi90UC4ndJK
+         Op15iN5zK7IgomVvrth+xB+TALm5s/EdbhomubldZ9LTG+Ta/mwoayP7RSJmJgZfUz5E
+         2wOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cDOI66t0q/oP7E/pKikemgOCe2s0l8GcG5GBgKQtNXE=;
-        b=FZ7XNzT61TIPkr3duHalZfDLBc1Kk+DK6bF6+ZEFmTsqb+Ebj/GzFrQh91n1jLxf+d
-         CqtrAdjDlYSjachc7FfdDYtwYijSnSIcAMkexuVm+UUFJsCcpW244XxgXkn5V65pkzSC
-         yDjWs8S4LutQ9f8KFVuuXs6FZbcEl/Cmuslzye6HQUpqglWUYEx7gVcDroFbCqu28UoE
-         lxcv2mZmK+M6SLFsCATxeimhFxEzyEr/+MriwWfoFnMna2w+iSCbhvLitY3wdmg21/e0
-         j3xbhuWXwyowikN2jpONemyJd0qZ96WbSPNC+semWhfnqO90/+L4L63uULDL4rP3XIZS
-         anfQ==
-X-Gm-Message-State: AFqh2ko5qUW6TsBv1mh/tED2uU5gU2F92TGtTnOskOLu/WmdGPcD8lKk
-        2Qmg9EIJkIwZlVuWeMSjJT0=
-X-Google-Smtp-Source: AMrXdXvg/EPy6kakIOxMYkNEGMjnT9H8lLzdCwftb8iaw8taUrONL/r/vPS4ux4xrk13uYltzaEQhA==
-X-Received: by 2002:a17:902:7881:b0:192:bb38:c412 with SMTP id q1-20020a170902788100b00192bb38c412mr26040498pll.44.1674526141197;
-        Mon, 23 Jan 2023 18:09:01 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-19.three.co.id. [180.214.232.19])
-        by smtp.gmail.com with ESMTPSA id y7-20020a170902d64700b001929568afe9sm346624plh.306.2023.01.23.18.08.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 18:09:00 -0800 (PST)
-Message-ID: <679a3bed-e3fc-832e-8e5a-e6bca638ad26@gmail.com>
-Date:   Tue, 24 Jan 2023 09:08:49 +0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SCGlc7mWURATKW4pBp/mMbnvAjkNxvQ5RvlFZ+5SXrA=;
+        b=HdoAp+Bsx8vX5e7L8B2/r9SndAnGIMZ1YvqooPkKTaZa1SEE4H9C1Y0bAy1VIzG6X/
+         SugfrlWNJRSxcO1yxnYrPlofjqZ6Y+EwoMQSIwIz2SOL43ymQYJUMlqaU1gY1yEmpIAD
+         78ezb0om4i33vKsEP9WTWnfT/hXWr35aIKIVyaNxb+xYHQlvA3qEAJLX8aH/4TAY6ExT
+         2ewr2saCJ62t2CR4RotMzMkzQel2Njx5kr1NCmKgiQkZPAUVX9iObdAOA5S5h9PoVOLy
+         gm5+zD+b2yUMbXi5vjGyKi9y0AgE11adv0UB7mpsQI+de0VKro+QZUA//ORBwPtvtwwq
+         uNaw==
+X-Gm-Message-State: AFqh2koL26myySOIutpFUDCbfD6r+NxQ9XeuOVCjvjU0fj7y9gOq4EEV
+        21JOxHY+CnPGg7mqG6zVx2k=
+X-Google-Smtp-Source: AMrXdXssaRcK8VwNrNmgxgUxK3PVNJ9Gzeiag04Vn7nr3eYgvMh+HvBnpxQv18Cho9tj1oOKoXLqNQ==
+X-Received: by 2002:a62:e406:0:b0:581:7430:aba with SMTP id r6-20020a62e406000000b0058174300abamr28478685pfh.10.1674526279369;
+        Mon, 23 Jan 2023 18:11:19 -0800 (PST)
+Received: from localhost (fwdproxy-prn-020.fbsv.net. [2a03:2880:ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id z67-20020a626546000000b0058bacd6c4e8sm254143pfb.207.2023.01.23.18.11.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 18:11:18 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH v7 0/3] cachestat: a new syscall for page cache state of files
+Date:   Mon, 23 Jan 2023 18:11:15 -0800
+Message-Id: <20230124021118.154078-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 00/15] Ambarella S6LM SoC bring-up
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Li Chen <lchen@ambarella.com>
-Cc:     =?UTF-8?Q?Andreas_B=c3=b6hler?= <dev@aboehler.at>,
-        Brian Norris <briannorris@chromium.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Li Chen <lchen@ambarella.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
-        <linux-mtd@lists.infradead.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Rickard x Andersson <rickaran@axis.com>,
-        Rob Herring <robh@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <a69a5ffc-0820-4adc-9ac4-f827ebf66cf0@app.fastmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <a69a5ffc-0820-4adc-9ac4-f827ebf66cf0@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 15:39, Arnd Bergmann wrote:
-> I seem to only have part of the series, please add both me and
-> the linux-arm-kernel mailing list to each part of the initial
-> submission.
-> 
-> It's possible that some patches were already Cc'd to
-> linux-arm-kernel but did not make it through because the Cc list
-> was too long (it has to fit within 1024 characters for many lists).
-> I think you too the Cc list from get_maintainers.pl, but when
-> sending new drivers this does not work well because it picks
-> up everyone that recently touched the Makefile/Kconfig.
+Changelog:
+v7:
+  * Fix and use lru_gen_test_recent (suggested by Brian Foster)
+    (patch 2)
+  * Small formatting and organizational fixes
+v6:
+  * Add a missing fdput() (suggested by Brian Foster) (patch 2)
+  * Replace cstat_size with cstat_version (suggested by Brian Foster)
+    (patch 2)
+  * Add conditional resched to the xas walk. (suggested by Hillf Danton) 
+    (patch 2)
+v5:
+  * Separate first patch into its own series.
+    (suggested by Andrew Morton)
+  * Expose filemap_cachestat() to non-syscall usage
+    (patch 2) (suggested by Brian Foster).
+  * Fix some build errors from last version.
+    (patch 2)
+  * Explain eviction and recent eviction in the draft man page and
+    documentation (suggested by Andrew Morton).
+    (patch 2)
+v4:
+  * Refactor cachestat and move it to mm/filemap.c (patch 3)
+    (suggested by Brian Foster)
+  * Remove redundant checks (!folio, access_ok)
+    (patch 3) (suggested by Matthew Wilcox and Al Viro)
+  * Fix a bug in handling multipages folio.
+    (patch 3) (suggested by Matthew Wilcox)
+  * Add a selftest for shmem files, which can be used to test huge
+    pages (patch 4) (suggested by Johannes Weiner)
+v3:
+  * Fix some minor formatting issues and build errors.
+  * Add the new syscall entry to missing architecture syscall tables.
+    (patch 3).
+  * Add flags argument for the syscall. (patch 3).
+  * Clean up the recency refactoring (patch 2) (suggested by Yu Zhao)
+  * Add the new Kconfig (CONFIG_CACHESTAT) to disable the syscall.
+    (patch 3) (suggested by Josh Triplett)
+v2:
+  * len == 0 means query to EOF. len < 0 is invalid.
+    (patch 3) (suggested by Brian Foster)
+  * Make cachestat extensible by adding the `cstat_size` argument in the
+    syscall (patch 3)
 
-Hi Arnd,
+There is currently no good way to query the page cache state of large
+file sets and directory trees. There is mincore(), but it scales poorly:
+the kernel writes out a lot of bitmap data that userspace has to
+aggregate, when the user really doesn not care about per-page information
+in that case. The user also needs to mmap and unmap each file as it goes
+along, which can be quite slow as well.
 
-It is possible (and common) that people who recently touched these
-files, when given new drivers patches, aren't interested in reviewing
-them for many reasons.
+This series of patches introduces a new system call, cachestat, that
+summarizes the page cache statistics (number of cached pages, dirty
+pages, pages marked for writeback, evicted pages etc.) of a file, in a
+specified range of bytes. It also include a selftest suite that tests some
+typical usage
 
-In that case, you may want to see Alison's trick posted on kernel
-outreachy list [1]. In summary, pass `--no-gitfallback` (don't give
-addresses of recent commit authors) and `--norolestats` (only name and
-email are printed; MLs don't get open list:-generated names). Also,
-another trick that I use is to condense the list by passing
-`--separator , ` so that it can be easily copy-pasted to
-git-send-email(1).
+This interface is inspired by past discussion and concerns with fincore,
+which has a similar design (and as a result, issues) as mincore.
+Relevant links:
 
-Thanks.
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
 
-[1]: https://lore.kernel.org/outreachy/20211015171331.GA431883@alison-desk/
+For comparison with mincore, I ran both syscalls on a 2TB sparse file:
 
+Using mincore:
+real    0m37.510s
+user    0m2.934s
+sys     0m34.558s
+
+Using cachestat:
+real    0m0.009s
+user    0m0.000s
+sys     0m0.009s
+
+This series should be applied on top of:
+
+workingset: fix confusion around eviction vs refault container
+https://lkml.org/lkml/2023/1/4/1066
+
+This series consist of 3 patches:
+
+Nhat Pham (3):
+  workingset: refactor LRU refault to expose refault recency check
+  cachestat: implement cachestat syscall
+  selftests: Add selftests for cachestat
+
+ MAINTAINERS                                   |   7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ include/linux/fs.h                            |   3 +
+ include/linux/swap.h                          |   1 +
+ include/linux/syscalls.h                      |   4 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/mman.h                     |   9 +
+ init/Kconfig                                  |  10 +
+ kernel/sys_ni.c                               |   1 +
+ mm/filemap.c                                  | 154 +++++++++++
+ mm/workingset.c                               | 142 ++++++----
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/cachestat/.gitignore  |   2 +
+ tools/testing/selftests/cachestat/Makefile    |   8 +
+ .../selftests/cachestat/test_cachestat.c      | 260 ++++++++++++++++++
+ 27 files changed, 573 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/cachestat/.gitignore
+ create mode 100644 tools/testing/selftests/cachestat/Makefile
+ create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
+
+
+base-commit: 1440f576022887004f719883acb094e7e0dd4944
+prerequisite-patch-id: 171a43d333e1b267ce14188a5beaea2f313787fb
 -- 
-An old man doll... just what I always wanted! - Clara
-
+2.30.2
