@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3EA6793C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4921C6793CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 10:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbjAXJQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 04:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S233423AbjAXJQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 04:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbjAXJQN (ORCPT
+        with ESMTP id S233404AbjAXJQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 04:16:13 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1C3244B5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:16:10 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id q8so10882978wmo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:16:10 -0800 (PST)
+        Tue, 24 Jan 2023 04:16:16 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18022B2A7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:16:14 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id k16so10898460wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 01:16:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UzZ68G+EqUxB4ReB2DFPbvUfCZJuRkKJfwx6QbLkd9s=;
-        b=qNLZBMKp8jlCOQ6VKoGcz89327mXO1daazZJmZx/ApU597Tmv2aOx1yJ/P2hFuY+WR
-         G8c4X1Ja7OmMvMvuTHgs0ofb3Oz7677dr7zhph17CTZZe8ZmSkN5hUFbp6VMp4D4q+zt
-         3dRDBMyhC57ofxBd1bmOI21HP1e/+J5pMLmMg5mvgOvsniS+bb40e+fWYpBw6W8nWpzv
-         26xvebR5JbrPN0jFLk/DY2MTnlxQtv7WEqkm2LbpTJwh6kq8CEc6S71SDj6qqyaMUfTl
-         NDY30jEE0zySKmWS1q+CjCIpx01C0lAOMzOLu0Dzsdw4GD5oW3vneq44bX0/szF7+Bl9
-         WTZA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UxnGtIs+CoSyW5044hODkJ4+MUCbjhxjSL5Kp9ZnQxs=;
+        b=YnllctxnH3lzgD+EkXJ5CBe2SM5+FtZnnqa8+mqthMSc3elP9JPGPtvV/flyiga+PS
+         b1pRCxEhdDtKFeFVfI/LZkbUBcw0YboNJpAs/8/+8o1wdFB24iCTnrx6UNegp0WP4qMg
+         QQMKC8yO+nslnWeq+qYPQ14csU2OLowneTeO0KSofM0UZc/h3IlunhdF7iul/AJ38HV+
+         u1ymLwMmzKbmsahGx6cdNLzBM6OxVPGx3f1pgenpiZQHX8/Z81RdYPtImrfshukt6BGD
+         xLgMMKXK2WuzeAAW/EjGokg7YujOukYKFUh0sZMIOxwilq0pufNSBEA5I4dzyUxXBkY5
+         R6Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UzZ68G+EqUxB4ReB2DFPbvUfCZJuRkKJfwx6QbLkd9s=;
-        b=PW4s6RFP8hgFJjPQJkQaTzFT2u+oEi295+B+Mmw1Sor9Zew5TeXN8SLP511BEfOmiH
-         UyLZzsz7TCn0yWEWCKMDaxxt/gTKZg3UXqnE6Pn2y9yT2vRLASYitjfPBWCi8/s/9vhp
-         Zh5+r5b3det/DlIMKKzbKoqwziEgbl0s3x/tgsOaSMYvJBu+4D4561FZqNo7/FTFj3T7
-         3dqK41IC5yto0hrot0AJXiTD3GbHjUUsxQBk8pNrtNigDXJYdpaVoTOUMmhVKW8v42Kw
-         l6ok5kHI/ZG+kz864oaNEf1b6Ro+DoyDIhWGc+TwsNixh6ul6s+9CuEnH+aqGf3Z0Dzk
-         zoFg==
-X-Gm-Message-State: AFqh2kofU4W/KzGLdnX5EXvx83Ekz4nGUgh0guBTLXUPBKBN0ahM7uNe
-        y0CTaoOaC3PoG1sB061Rn4q1Rg==
-X-Google-Smtp-Source: AMrXdXsKFwbW1DrSBlwbOeumT8HcjGuNecHBwhrXcJJzSlSBKZ+BDJR+H1Po1PDNqEw25ivpfYz9PQ==
-X-Received: by 2002:a05:600c:198a:b0:3db:114:a6a0 with SMTP id t10-20020a05600c198a00b003db0114a6a0mr27455259wmq.21.1674551768883;
-        Tue, 24 Jan 2023 01:16:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UxnGtIs+CoSyW5044hODkJ4+MUCbjhxjSL5Kp9ZnQxs=;
+        b=VWt8evmAnX8j9QZB+9opPth11EmLRVacD7qTPD8WlBECbZSTHyfB3ZEawsQOHbrs2Q
+         xMEclAJUd1j9eRr8z34cXiV5NoMh01degQSXLmaBFu3UDtl0IWphBpzrKrLuUfQKumqw
+         WerTgDgp3WHyt2FCi7X+TclxvHGro8mjfpW3C5vtd7WBpsu8HhNeTYIkLFCilQ9DVQ1z
+         398AUnglZjmme+BzotAscYit2g33McJP5zQFUBK6/Qw9BNiVhv47KscqMqfoO5RySQKK
+         CvhLZPPybsj0wlUWW0YSHwzwK1EGNXXQUKyIvD8dLLHlhHA0pMMxSW5ImyEyz9GHFXgb
+         9MMg==
+X-Gm-Message-State: AFqh2krvTPjgd9zYdpIdYPF94B5YM4vlmFB0y+zrC+ModxmWDDjBvlat
+        JpYNelNq4KhqKNsMcE2ukkIjrA==
+X-Google-Smtp-Source: AMrXdXsuRP+oeoKqVLFWERXFxb8dM8qDl5/yxaY3j45oPHvjVh/Q6SrnrjtQEH+hcMQmOmf+j9YRWw==
+X-Received: by 2002:a05:600c:434b:b0:3d9:cc40:a8dc with SMTP id r11-20020a05600c434b00b003d9cc40a8dcmr25619205wme.27.1674551773221;
+        Tue, 24 Jan 2023 01:16:13 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003c71358a42dsm17882131wms.18.2023.01.24.01.16.05
+        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003c71358a42dsm17882131wms.18.2023.01.24.01.16.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 01:16:07 -0800 (PST)
+        Tue, 24 Jan 2023 01:16:12 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -82,10 +83,12 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 00/12] dt-bindings: serial: cleanup and improvements
-Date:   Tue, 24 Jan 2023 10:15:50 +0100
-Message-Id: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 01/12] dt-bindings: serial: amlogic,meson-uart: allow other serial properties
+Date:   Tue, 24 Jan 2023 10:15:51 +0100
+Message-Id: <20230124091602.44027-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
+References: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -98,53 +101,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Reference common serial properties bindings to allow typical serial
+properties:
+
+  meson-axg-jethome-jethub-j100.dtb: serial@23000: 'bluetooth', 'uart-has-rtscts' do not match any of the regexes: 'pinctrl-[0-9]+'
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+---
 
 Changes since v1:
-1. Drop "dt-bindings: serial: restrict possible child node names"
-   patch from this series, because it requires more discussion.
-   I don't know yet how to solve the errors.
-2. Add tags.
-v1: https://lore.kernel.org/linux-devicetree/20230123151302.368277-1-krzysztof.kozlowski@linaro.org/T/#t
+1. Add tag
+2. Use local path (not absolute to /schemas/serial/serial.yaml)
+---
+ .../devicetree/bindings/serial/amlogic,meson-uart.yaml       | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (12):
-  dt-bindings: serial: amlogic,meson-uart: allow other serial properties
-  dt-bindings: serial: 8250: correct Nuvoton NPCM850 compatible
-  dt-bindings: serial: pl011: allow ARM Primecell properties
-  dt-bindings: serial: correct ref to serial.yaml
-  dt-bindings: serial: cdsn,uart: add power-domains
-  dt-bindings: serial: 8250_omap: drop rs485 properties
-  dt-bindings: serial: fsl-imx-uart: drop common properties
-  dt-bindings: serial: fsl-lpuart: drop rs485 properties
-  dt-bindings: serial: fsl-lpuart: allow other serial properties
-  dt-bindings: serial: st,stm32-uart: drop common properties
-  dt-bindings: serial: drop unneeded quotes
-  dt-bindings: serial: example cleanup
-
- .../devicetree/bindings/serial/8250.yaml      |  9 ++++---
- .../devicetree/bindings/serial/8250_omap.yaml | 23 +++++++---------
- .../bindings/serial/amlogic,meson-uart.yaml   | 15 ++++++-----
- .../devicetree/bindings/serial/cdns,uart.yaml | 19 +++++++++++---
- .../bindings/serial/fsl,s32-linflexuart.yaml  |  2 +-
- .../bindings/serial/fsl-imx-uart.yaml         | 11 ++------
- .../bindings/serial/fsl-lpuart.yaml           |  6 ++---
- .../bindings/serial/fsl-mxs-auart.yaml        |  2 +-
- .../devicetree/bindings/serial/pl011.yaml     |  1 +
- .../bindings/serial/renesas,em-uart.yaml      | 10 +++----
- .../bindings/serial/renesas,hscif.yaml        | 26 +++++++++----------
- .../bindings/serial/renesas,sci.yaml          | 24 ++++++++---------
- .../bindings/serial/renesas,scif.yaml         | 24 ++++++++---------
- .../bindings/serial/renesas,scifa.yaml        | 22 ++++++++--------
- .../bindings/serial/renesas,scifb.yaml        | 12 ++++-----
- .../devicetree/bindings/serial/serial.yaml    | 18 ++++++-------
- .../bindings/serial/sifive-serial.yaml        |  6 ++---
- .../bindings/serial/st,stm32-uart.yaml        |  7 -----
- .../bindings/serial/xlnx,opb-uartlite.yaml    |  6 ++---
- 19 files changed, 120 insertions(+), 123 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+index 7822705ad16c..44cb3cf22bfb 100644
+--- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+@@ -19,6 +19,9 @@ description: |
+   is active since power-on and does not need any clock gating and is usable
+   as very early serial console.
+ 
++allOf:
++  - $ref: serial.yaml#
++
+ properties:
+   compatible:
+     oneOf:
+@@ -69,7 +72,7 @@ required:
+   - clocks
+   - clock-names
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.34.1
 
