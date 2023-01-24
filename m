@@ -2,210 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406A2679C7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8DA679C7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 15:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbjAXOtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 09:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S234968AbjAXOuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 09:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235077AbjAXOtM (ORCPT
+        with ESMTP id S234994AbjAXOuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:49:12 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016984ABDC
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:48:56 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id hw16so39567924ejc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 06:48:56 -0800 (PST)
+        Tue, 24 Jan 2023 09:50:14 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730A04B18D;
+        Tue, 24 Jan 2023 06:49:48 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id bk15so39573644ejb.9;
+        Tue, 24 Jan 2023 06:49:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jo1Yi/+DTb6H4LwCmDu+mCgzAi4RW77ZGtpcAUxfPiA=;
-        b=NUNiL3/r1VxF2E4vy/Jt7PTrKDCPDcv5rwz+aCpO005AQlPSXs67WUrucFx2vpAy1u
-         4L6ufwrBBjU5g3NEqo36bNgz2qMx312Px3YHk3mHf3+/lGulUkyzXhzmHGvS8ujlcCAE
-         tA07O6QoUDlk7WZE7TbfuFEjF2/6LmIMStlGKqxYelJD8Lai60PmuNnQLvyQagDFgNBI
-         nIcTtw6rpwVa2lSX252zT2iJrgwRt1wdpGuSMmJjdwEVB5BmhJJLGkmI+Cz/TnR/8FAd
-         pNpGIeHigf8IxtBhcYaszL6PwN+tZOB8pyAXHKF7BBxk+n8PFzgqvkrb6m5guRA/PNag
-         LKRg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jZNhfuLiIKppnrm+67M7BDZaXXkVNd2xGPd+4mpUj2E=;
+        b=KZUi+29NsyUymM97gRmKL0eZYXQvnGmkiKTtqqCdQlgKey1GXIlEKMIS7VBV6nYSTw
+         sU8mDPqhbl/VUn5H6NXV09tKLS8MbxQgtRB4RBwqjriUdBK7motl4xsxAN2AWmvl+5SP
+         dfEMUOQK6xZTuhuTPzYxgIFiBjpfaj5JGF4L0SO+/FmlNB4cwhJ4OJ9FmX1vHmgv107R
+         dThE1lsjR0YXnl29b3tf28YyEWeUuBxzs5RNv+wnElitYlhhI+3SjlTbsnMQQxrODirj
+         eTXAmDbuvbKifgq8QshK9FmP2bibGYk0HPQwhk2Krs8rNqY9Q2tb6kPOps4HSAi2V/2e
+         06sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jo1Yi/+DTb6H4LwCmDu+mCgzAi4RW77ZGtpcAUxfPiA=;
-        b=3rTBn9gHeOXzDzaOrr6wgg01ixvX78lx+OjgLL+j0LzmHntFtSVEl07SW84n1jB7Ju
-         kRuh0U5yonJuI3KhsPa7Abnbuz+lNbJa5L5X2wE97Hiu7e4BoX/U/a9wBNnNHOb1gcWT
-         0em7Pbo0QK4E6UEutCIoYtyf1i7zUDZbpRX0pxyX/MpACPO3jQwsSqSmGC7JTOhYre6n
-         NodRoJvDrgH1Da/YksdRr+IXahhY4lUg5O3nVQTB5IenTMeMWRzHt76HYFTkYg/dIgwn
-         vj77s5XDOksEW+KKMjXdXnvYOTH9KF4kRZZoW3LnZEyobZRYxHs2/puRchMtZbNambma
-         vGHA==
-X-Gm-Message-State: AFqh2kpqTfka3okBqC9eHlXFgHcqQ4JKiTGVgviUI+lixzIrw4V7tvH8
-        u8tJ0Di1VFfg+V7o45w8+M/JBg==
-X-Google-Smtp-Source: AMrXdXuMprR6KdKez4AqxipAisbHwu1sq61yo+BMPZvwXgY9t578q+ZN6NWI3g7hAJCcEdLeuWXUNg==
-X-Received: by 2002:a17:907:6745:b0:86c:f7ac:71f7 with SMTP id qm5-20020a170907674500b0086cf7ac71f7mr30558635ejc.8.1674571735346;
-        Tue, 24 Jan 2023 06:48:55 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id b8-20020aa7c908000000b00482e0c55e2bsm728104edt.93.2023.01.24.06.48.54
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jZNhfuLiIKppnrm+67M7BDZaXXkVNd2xGPd+4mpUj2E=;
+        b=LviQ2LbduuIe2lDjmfWrYiSUuq8Uchq48zWRQtKoa395odFyN01QIxh650phSWDcgq
+         XdWMdfHGgrhjEXjECe8xYfW/0dGz3CBddvPQSl0lxRyQDfA+7mCjU9KpnphTMk/A1PiI
+         P1Fd0dzU4iMhZMZdboznlOZRQt1iDQftYDo91+GDuO78eSUAtveKAhIMAayQAfMI97m2
+         fIwnFRgyv+NcRnVvD6bFm9cjWcNvqhfVDcu4womdpMJac6UXB63V+W3r2GfVORnmmgLn
+         C6uQ99WD4fQNhRqVgHWIOUB0ZdLC9yjhYsfqG/ZYf7PqEuc5ODgcJq9ZoWsZP/oPO6pF
+         IV9g==
+X-Gm-Message-State: AFqh2kqeGxB9n3H+f1FzfOjhPfSq4M1Mn1wLNtV0oEUNcAw/hyxHcYI+
+        5vozA2IAh0BqLlB4k6JgIBg=
+X-Google-Smtp-Source: AMrXdXtUO3WJ2VXA1mMLyZ3kY95FmdC+A4aDlYqkeZ8PUrJb3A78FiMt8Bt5c0f+SpaUu8P+zTTIQA==
+X-Received: by 2002:a17:907:d043:b0:870:2cc7:e8df with SMTP id vb3-20020a170907d04300b008702cc7e8dfmr27265339ejc.8.1674571784895;
+        Tue, 24 Jan 2023 06:49:44 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id op18-20020a170906bcf200b0084d494b24dcsm978261ejb.161.2023.01.24.06.49.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 06:48:54 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Tue, 24 Jan 2023 06:49:44 -0800 (PST)
+Date:   Tue, 24 Jan 2023 17:49:41 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] hwmon: (pmbus/tda38640) Add driver for Infineon TDA38640 Voltage Regulator
-Date:   Tue, 24 Jan 2023 15:48:46 +0100
-Message-Id: <20230124144847.423129-2-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230124144847.423129-1-Naresh.Solanki@9elements.com>
-References: <20230124144847.423129-1-Naresh.Solanki@9elements.com>
+Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
+Message-ID: <20230124144941.42zpgj2p53nvfz36@mobilestation>
+References: <20230122001116.jbhttuaed7zuls26@mobilestation>
+ <20230123164339.GA892847@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123164339.GA892847@bhelgaas>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Mon, Jan 23, 2023 at 10:43:39AM -0600, Bjorn Helgaas wrote:
+> On Sun, Jan 22, 2023 at 03:11:16AM +0300, Serge Semin wrote:
+> > On Fri, Jan 20, 2023 at 04:50:36PM -0600, Bjorn Helgaas wrote:
+> > > On Fri, Jan 13, 2023 at 08:14:06PM +0300, Serge Semin wrote:
+> > > > Since the DW PCIe RP/EP driver is about to be updated to register the DW
+> > > > eDMA-based DMA-engine the drivers build modes must be synchronized.
+> > > > Currently the DW PCIe RP/EP driver is always built as a builtin module.
+> > > > Meanwhile the DW eDMA driver can be built as a loadable module. Thus in
+> > > > the later case the kernel with DW PCIe controllers support will fail to be
+> > > > linked due to lacking the DW eDMA probe/remove symbols. At the same time
+> > > > forcibly selecting the DW eDMA driver from the DW PCIe RP/EP kconfig will
+> > > > effectively eliminate the tristate type of the former driver fixing it to
+> > > > just the builtin kernel module.
+> > > > 
+> > > > Seeing the DW eDMA engine isn't that often met built into the DW PCIe
+> > > > Root-ports and End-points let's convert the DW eDMA driver config to being
+> > > > more flexible instead of just forcibly selecting the DW eDMA kconfig. In
+> > > > order to do that first the DW eDMA PCIe driver config should be converted
+> > > > to being depended from the DW eDMA core config instead of selecting the
+> > > > one. Second the DW eDMA probe and remove symbols should be referenced only
+> > > > if they are reachable by the caller. Thus the user will be able to build
+> > > > the DW eDMA core driver with any type, meanwhile the dependent code will
+> > > > be either restricted to the same build type (e.g. DW eDMA PCIe driver if
+> > > > DW eDMA driver is built as a loadable module) or just won't be able to use
+> > > > the eDMA engine registration/de-registration functionality (e.g. DW PCIe
+> > > > RP/EP driver if DW eDMA driver is built as a loadable module).
+> > > 
+> > > I'm trying to write the merge commit log, and I understand the linking
+> > > issue, but I'm having a hard time figuring out what the user-visible
+> > > scenarios are here.
+> > > 
+> > > I assume there's something that works when CONFIG_PCIE_DW=y and
+> > > CONFIG_DW_EDMA_PCIE=y but does *not* work when CONFIG_PCIE_DW=y and
+> > > CONFIG_DW_EDMA_PCIE=m?
+> > 
+> > No. The DW eDMA code availability (in other words the CONFIG_DW_EDMA
+> > config value) determines whether the corresponding driver (DW PCIe
+> > RP/EP or DW eDMA PCI) is capable to perform the eDMA engine probe
+> > procedure. Additionally both drivers has the opposite dependency from
+> > the DW eDMA code.
+> > |                |     DW PCIe RP/EP    |     DW eDMA PCIe     |
+> > | CONFIG_DW_EDMA +----------------------+----------------------+
+> > |                | Probe eDMA | KConfig | Probe eDMA | Kconfig |
+> > +----------------+------------+---------+------------+---------+
+> > |        y       |     YES    |   y,n   |     YES    |  y,m,n  |
+> > |        m       |     NO     |   y,n   |     YES    |    m,n  |
+> > |        n       |     NO     |   y,n   |     NO     |      n  |
+> > +--------------------------------------------------------------+
+> > 
+> > Basically it means the DW PCIe RP/EP driver will be able to probe the
+> > DW eDMA engine only if the corresponding driver is built into the
+> > kernel. At the same time the DW PCIe RP/EP driver doesn't depend on
+> > the DW eDMA core module config state. The DW eDMA PCIe driver in
+> > opposite depends on the DW eDMA code config state, but will always be
+> > able to probe the DW eDMA engine as long as the corresponding code is
+> > loaded as either a part of the kernel or as a loadable module.
+> > 
+> > > If both scenarios worked the same, I would think the existing
+> > > dw_edma_pcie_probe() would be enough, and you wouldn't need to call
+> > > dw_pcie_edma_detect() from dw_pcie_host_init() and dw_pcie_ep_init().
+> > 
+> > No. These methods have been implemented for the absolutely different
+> > drivers.
+> > dw_edma_pcie_probe() is called for an end-point PCIe-device found on a
+> > PCIe-bus.
+> > dw_pcie_host_init()/dw_pcie_ep_init() and dw_pcie_edma_detect() are
+> > called for a platform-device representing a DW PCIe RP/EP controller.
+> > In other words dw_pcie_edma_detect() and dw_edma_pcie_probe() are in
+> > no means interchangeable.
+> 
 
-Add the pmbus driver for the Infineon TDA38640 voltage regulator.
+> The question is what the user-visible difference between
+> CONFIG_DW_EDMA_PCIE=y and CONFIG_DW_EDMA_PCIE=m is. 
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/Kconfig    | 16 ++++++++
- drivers/hwmon/pmbus/Makefile   |  1 +
- drivers/hwmon/pmbus/tda38640.c | 73 ++++++++++++++++++++++++++++++++++
- 3 files changed, 90 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/tda38640.c
+There will be no difference between them after this commit is applied
+from the DW eDMA core driver point of view. CONFIG_DW_EDMA_PCIE now
+depends on the CONFIG_DW_EDMA config state (see it's surrounded by
+if/endif in the Kconfig file). Without this patch the
+CONFIG_DW_EDMA_PCIE config determines the CONFIG_DW_EDMA config state
+by forcibly selecting the one. Using the similar approach for the
+CONFIG_PCIE_DW driver I found less attractive because it would have
+effectively converted the CONFIG_DW_EDMA config tristate to boolean.
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 30448e049486..9f4bbb9c487a 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -395,6 +395,22 @@ config SENSORS_STPDDC60
- 	  This driver can also be built as a module. If so, the module will
- 	  be called stpddc60.
- 
-+config SENSORS_TDA38640
-+	tristate "Infineon TDA38640"
-+	help
-+	  If you say yes here you get hardware monitoring support for Infineon
-+	  TDA38640.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called tda38640.
-+
-+config SENSORS_TDA38640_REGULATOR
-+	bool "Regulator support for TDA38640 and compatibles"
-+	depends on SENSORS_TDA38640 && REGULATOR
-+	help
-+	  If you say yes here you get regulator support for Infineon
-+	  TDA38640 as regulator.
-+
- config SENSORS_TPS40422
- 	tristate "TI TPS40422"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index d9d2fa4bd6f7..3ae019916267 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
-+obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
- obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
-diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
-new file mode 100644
-index 000000000000..6099a3cc568e
---- /dev/null
-+++ b/drivers/hwmon/pmbus/tda38640.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon TDA38640
-+ *
-+ * Copyright (c) 2023 9elements GmbH
-+ *
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/regulator/driver.h>
-+#include "pmbus.h"
-+
-+static const struct regulator_desc __maybe_unused tda38640_reg_desc[] = {
-+	PMBUS_REGULATOR("vout", 0),
-+};
-+
-+static struct pmbus_driver_info tda38640_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+	    | PMBUS_HAVE_IIN
-+	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
-+#if IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR)
-+	.num_regulators = 1,
-+	.reg_desc = tda38640_reg_desc,
-+#endif
-+};
-+
-+static int tda38640_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &tda38640_info);
-+}
-+
-+static const struct i2c_device_id tda38640_id[] = {
-+	{"tda38640", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, tda38640_id);
-+
-+static const struct of_device_id __maybe_unused tda38640_of_match[] = {
-+	{ .compatible = "infineon,tda38640"},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, tda38640_of_match);
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver tda38640_driver = {
-+	.driver = {
-+		   .name = "tda38640",
-+		   },
-+	.probe_new = tda38640_probe,
-+	.id_table = tda38640_id,
-+};
-+
-+module_i2c_driver(tda38640_driver);
-+
-+MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-+MODULE_DESCRIPTION("PMBus driver for Infineon TDA38640");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
--- 
-2.38.1
+That's why instead I decided to convert the CONFIG_DW_EDMA config to
+being independent from any other config value. (See the table in the
+my previous email message.)
 
+> If there were no
+> difference, dw_pcie_host_init() would not need to call
+> dw_pcie_edma_detect().
+
+Even if CONFIG_DW_EDMA (not CONFIG_DW_EDMA_PCIE) is set to m or n I
+would have still recommended to call dw_pcie_edma_detect() because the
+method performs the DW eDMA engine auto-detection independently from the DW
+eDMA driver availability. As a result the system log will have a
+number of eDMA detected channels if the engine was really found. It's
+up to the system administrator to make sure that the eDMA driver is
+properly built/loaded then for the engine to be actually available in
+the kernel/system.
+
+> 
+> Can you give me a one- or two-sentence merge commit comment that
+> explains why we want to merge this?  "Relax driver config settings"
+> doesn't tell us that.
+
+"Convert the DW eDMA kconfig to being independently selected by the
+user in order to preserve the module build options flexibility and fix
+the "undefined reference to" error on DW PCIe driver build."
+
+-Serge(y)
+
+> 
+> Bjorn
