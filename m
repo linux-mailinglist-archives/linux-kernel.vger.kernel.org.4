@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA71678DC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6252678DC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 Jan 2023 02:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbjAXByi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 Jan 2023 20:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S232154AbjAXByk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 Jan 2023 20:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjAXByh (ORCPT
+        with ESMTP id S229627AbjAXByi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:54:37 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC0B39BA4;
-        Mon, 23 Jan 2023 17:54:32 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30O04nU9028979;
-        Tue, 24 Jan 2023 01:54:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=dfizsfM8jJJKR9949j/l1gTJGtzuhanNSFzhEF7EEsg=;
- b=Z33RI++HApJxa5pG6vbbRIEyZnroeBYBVa0Kzyr97A2A/NDW5aacDdA22Cp1jt/ppFLp
- a8Q/9pg2nPJ8OAJW3DE4tVb07o1L7mcyD35itc+aEe+1hjg8AdXe1XtOFENdiLuzm2N6
- KQ50r8M3wxVkUHH9bWSiuGpFE7FVgQUOd5jT7YWR0lUefv7daTy0BTafamdBbw6qur1g
- dF4boBXvemN9Knc8Z+crCA1S3re+q9wlphaSKyKgpk33ZPiWmCsFb/0fQBW8Xb6NXZF1
- ce7+hvGvR2PplYusaLkSaRGjsxlf8ygcBCt0XOtF9MnVai+2QOUXsJY5XIoSQfwjg/EE /w== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n86n0vd00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Jan 2023 01:54:24 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30O1q2Ae023294;
-        Tue, 24 Jan 2023 01:54:23 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g4mgrm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Jan 2023 01:54:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YKv+2EfgSMpMJgreX3BBZuSx+tHdCHlS8ZnKC4doeOGhdh86YJ3WmsY4Hf6FfyJnY/Yx04DwMPreSq1IV/WlOr9tMm/Y4y3jlBOMdp9IVrTFLaivz3gpFToik13rv6tFVDjy4dBPaX3nYJtnezpdlkSShHyUVJazf7wrPiP058uTiFZ08Dz3TxazVLiORWvSqRusA1dTCii3DvYUkt0CIjd6SnwJrkaaJOgzdqqBv9oivKAaiFrgGxCWH+v7YtH1Thmq3brwSAO7W3zOX1T0GDUSkRWJScXR+jW3xsYtpjgIhlae4hTmG62AOeOsMHRFb9PTVPr1Bazz79A/8ocgUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dfizsfM8jJJKR9949j/l1gTJGtzuhanNSFzhEF7EEsg=;
- b=mIphtOtuVlalweJ92/8G4a6vrDsfdTrp8ZO8kTvmAft/W22Z2e6WNkHZzKxRmUQlIMTW+FaTgXnHBA2x6NZsM7mMbwa8YZZE6x4PPsPBNVHDyKUYy2ev7L+SqnWqJ12qCsGFrUEzQf3g5koCDgQx4UupKC6fq7SHO3qNL8BUfkGhVSY5CddB/s/wA2vfgJOU7ywhkESYVFfC5zg/AeJhrQC1YJDy89AlX0KOdBb4k9zMRdmy/tnu1NOhQUQN5F60ukzLAmpsMXq14jSv7vFP2twSB4ppiWRxAj5n23Y02L6HAtyunGfVuI8li9Rv2KKqqvnrcGdsWIhlAzLFN4SDsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 23 Jan 2023 20:54:38 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D1E39BA3;
+        Mon, 23 Jan 2023 17:54:31 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id n24-20020a0568301e9800b006865671a9d5so8422067otr.6;
+        Mon, 23 Jan 2023 17:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dfizsfM8jJJKR9949j/l1gTJGtzuhanNSFzhEF7EEsg=;
- b=VISnjLuxxGGYi+GFMDgNOGlyaCqZH1jgqlDxrGeWKCNnoKgDB+dtVaO4o2DnHNHBPSJKO8+yxkdBTvHeNGdImDRdOQly2PMo7pPPUmDvVy5RSJ/NrI2jOD3feVUUVH4Zo9j39nKNKpIG9dw/QgOO6uj2M8+haK4Goy1bnVfoanY=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by CH2PR10MB4280.namprd10.prod.outlook.com (2603:10b6:610:aa::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.16; Tue, 24 Jan
- 2023 01:54:16 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::c7e9:609f:7151:f4a6]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::c7e9:609f:7151:f4a6%8]) with mapi id 15.20.6043.016; Tue, 24 Jan 2023
- 01:54:16 +0000
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        target-devel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: elx: libefc_sli: use "/*" for non-kernel-doc comment
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1bkmon1e0.fsf@ca-mkp.ca.oracle.com>
-References: <20230117070151.29339-1-rdunlap@infradead.org>
-Date:   Mon, 23 Jan 2023 20:54:10 -0500
-In-Reply-To: <20230117070151.29339-1-rdunlap@infradead.org> (Randy Dunlap's
-        message of "Mon, 16 Jan 2023 23:01:51 -0800")
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR06CA0003.namprd06.prod.outlook.com
- (2603:10b6:5:120::16) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1SIlV76DVxeq/C35+t24zRKgN1DEZm4VgHWvTfe7RPk=;
+        b=l7NNGsr1JQuzUnc25Wtd9Awtmf42my7g2nvhiZ0bzAIgkjx6lp88NC5FHN7pPgY82k
+         G542R43Ae3PgKGJh1Cs5N3kgZrdwccgTwEquohn8UL+0w2Mm8KZoVhQLSiSAi+Ixjrix
+         Rjpo/AGoTe7VNNmIEOM8ujjMoLam1cMsaId4YrJ8TmzGR3PYNCO/lmyQgrKrtEnBIOpi
+         e6jWB0NLfojhUcOftYFok+T6clN0RR1YMmvzXpJlItmt6SMUsvBThcYtLLjkmGyD/1UG
+         6NUXH77gXICtHggfPzx/oCL65F+AdQkxevZSNAEDgXzCv2ifhndexxbmSk7RtPeqEn8T
+         e5xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1SIlV76DVxeq/C35+t24zRKgN1DEZm4VgHWvTfe7RPk=;
+        b=bEedwFrNbgY5o0Ol8yMOPqAcRJkhMpNEIll8tsYchpsYEXBbgtXaoQNPucFqaktPWi
+         O+fKJuxyV/6qnTxMuAnWjU6EpkDz28apZMfiulD5KKErGjkVZr/o21INQDV+ldv9SvqH
+         +bKTvI4aGP1+FCoO365x/mIwfSLG0RE1FUelxi63QZlmPIhO6ogLYcrelx2FscdIdSGy
+         femZEfTVOLpOxBp4buuA0t8yZv9SX0QI7i5u2bYjqiRVFEV7JxL0lJUMAr4mrPvPZCvV
+         XSBb9yLWFviRHKem2wD5U4RIgCxr5I/abJfSRq8HS6LDgxXAGkyg1jOE+Pmxb3+97jgO
+         I7kg==
+X-Gm-Message-State: AFqh2kqOzV3j+j+odKnhYPQ7GT8lj8+Nn2/N86iQWyGM7RsKR5/vYMBC
+        jUdTb84CYOjkPRU/G6Rg5Zc=
+X-Google-Smtp-Source: AMrXdXv0I+2WnACwWrMr9nYYPOZnq5pzy3Uspbg1ghHol1K/v8O+Swkxm8uHb0X/rKx0GxMcZRtRrA==
+X-Received: by 2002:a05:6830:18e6:b0:67f:e4ff:2996 with SMTP id d6-20020a05683018e600b0067fe4ff2996mr11221961otf.12.1674525271116;
+        Mon, 23 Jan 2023 17:54:31 -0800 (PST)
+Received: from localhost ([2804:30c:b10:f300:3241:5b01:98c4:5294])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05683004cd00b00686543d0f04sm393165otd.21.2023.01.23.17.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 17:54:30 -0800 (PST)
+Date:   Mon, 23 Jan 2023 22:54:23 -0300
+From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lucas Stankus <lucas.p.stankus@gmail.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Renato Lui Geh <renatogeh@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Nishant Malpani <nish.malpani25@gmail.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dragos Bogdan <dragos.bogdan@analog.com>,
+        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stefan Popa <stefan.popa@analog.com>,
+        Robert Yang <decatf@gmail.com>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Philippe Reynes <tremyfr@yahoo.fr>,
+        Alexandru Lazar <alazar@startmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Harald Geyer <harald@ccbib.org>,
+        Eugene Zaikonnikov <ez@norophonic.com>,
+        Phil Reid <preid@electromag.com.au>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sankar Velliangiri <navin@linumiz.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        chrome-platform@lists.linux.dev
+Subject: Re: [PATCH 1/5] dt-bindings: iio: drop unneeded quotes
+Message-ID: <Y886T3/2Gu0k7XQN@marsc.168.1.7>
+References: <20230118184413.395820-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|CH2PR10MB4280:EE_
-X-MS-Office365-Filtering-Correlation-Id: 969df111-1ea8-4345-0adb-08dafdade622
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mN5h+3rukyRNokClyNAv49i4frOJPLZEQjytNnapPtsJKyTXTgtKaUQcEfoO7OLcdYmxJEi71tuFAiM+aGzB9/0zqF/2RVPYUIHORY/93cwPvmN5iuPIT6uLPU9NntRfJfKfZhRInrcXwk75y2YisrGR42fsGpPoI+G/vot9C9mdsafO5jfSAKS6qbAECFkdxM1KUq3HnJrgyDGx9OlkTKrl3qZ7lq3C2KDAe5ms4GQPqHqpAs4cycJZ6I3S+vN+m/ikUZO2V9gjYnL3Ny48RsIy8ObajRVG+IYXCkIERM/qzG0A0VeeJ2okzRqH2n0eHn6fmA0m9r/BpshEjuAZZhVTOea6liuyHj/I2vap/ADck3ItG+hEG+4v5lWPBnTXUhwxsDbNrrqn2dGZqsJcUXs88GYZJAgWeoJTgcYME2aVkZfWCdg7Jht9EEyhUinqgnDTfiNgRJogYWX/vxkq3MhU2ICOx4ZjcEmCF0K8WpghBIqfA3I6T8HKuO+ZH+SIWOspT2Av++fK2eauPB7W9kbNObfjHe2FM5F077IshXuKF+8MMPwIdl+qTLVQiU3duXxRL4WGkWv5JiyjnEmtdvZUTheQ5uiH57XQ/CnvAjQoHdievqwszXIUPc4SlyoFpZv8FRzLAP736ys6P2mMwQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199015)(83380400001)(38100700002)(36916002)(41300700001)(86362001)(4744005)(2906002)(8936002)(5660300002)(4326008)(26005)(6512007)(6916009)(6506007)(8676002)(186003)(6666004)(107886003)(66556008)(66476007)(316002)(54906003)(66946007)(478600001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WvFGK2jXojEmQ9R4EK5TgEqNULPeV2QFKqa19fmsC7NdisPuiSaCTxEPaksk?=
- =?us-ascii?Q?+a2APtGIYMLaYWwyWTbG88QPd8V5fxOxGpOvzMo0MYjkHpmTG+jFMLeYu4cf?=
- =?us-ascii?Q?3OHTewDTyVyitbZkNOHrI9LPXNZxUcOrmvQbQJ6kUmjxT3gh2jgWx4TY08WL?=
- =?us-ascii?Q?sV7d/aIDyJG9WbisqHa97pIM19U8AriCmOU7uL5QWi4/NadHiRp6XnSIYLRd?=
- =?us-ascii?Q?Ff19owJLm++aXvRSZodKLhDGStefotFqmGIuvBbO8QOGZzJTdH2lIl8fu2N6?=
- =?us-ascii?Q?a3+yk/XBvQECkqNrNmS5IquRV6Iut63pPXAuRrTY6tD/FWZCup/+WCJKkA8X?=
- =?us-ascii?Q?sJQJv8OlHSG5hzEpDOenincww2x40sopGaNcPdYEEdMrUfeAP4z80QEkf71l?=
- =?us-ascii?Q?VZYZR3uvZ9KnQoQQ8kpZDSd22fGZGJKGOf09w3MAWLfs7VPLkeUQJAVCIULV?=
- =?us-ascii?Q?zcS3oiE7XwCQ6eceWHGAJWzKphaqLZopYHQXCan9ElFv4jK8V6u4N8+I/XlW?=
- =?us-ascii?Q?T1bIw48e/WCLeJvNNK44KcfwHvsbHvITYgz6klH5+/9q2iIxr+e3uPRlXYDb?=
- =?us-ascii?Q?hfbb0q2Zp7SPUfY3VcId2uzPIZa/nnSqFCF4nwVdCoSoN5TwAONrSuoroiVO?=
- =?us-ascii?Q?NehqFh3nzWOojuJu5AnTy+r23BS9eV2eDY32SN4YZyVzxaaxoOrZxuWtRov1?=
- =?us-ascii?Q?Z0/cFhkxYyp+ScpBHgwrJy8slrq83S39mBUnvOBtxPQAQNp0SaLE3SwNRnoP?=
- =?us-ascii?Q?4oIFzFjDUd3PSUyJ0//ikDZQbhLBsOzER8gA7R5/W777t2bFPtKsnsN76MVD?=
- =?us-ascii?Q?N0jrbQSANWDIZW8XUa9RktU+zLlF8ZxDPRACZB8Y/bm7v5LGReARjhiVBEyO?=
- =?us-ascii?Q?x9eOtI75TVvEAWYbg61s3Jz6Qmsos+vC81Z+Lhq81B3jvtEzw7Jl0UrHH2GA?=
- =?us-ascii?Q?9wuKR1Yg6EdIwYtIqftFff+6ymUA4KbxEVsHz/7QxBsl7URgdgoGbY1ca6VQ?=
- =?us-ascii?Q?hnoxPOvl2I96vMjYgNkH+fUWrqOIsCjY/QzQk303krjgXOJs2/4dOZ7zEbVd?=
- =?us-ascii?Q?eJf5Bk/gvxD3OLRX++sYO+VMOpH4aZb7rI01mLbRrQngBRj6StCQ5AX0ZcbS?=
- =?us-ascii?Q?rqEs/7BqEWApLsmfe3XvKEDZEzRl1VEmGoC8aNTdDtt8HE512kLauOjQsscD?=
- =?us-ascii?Q?URfFU2YYG/9P4y6wCeaHqBnTpvHq7cwa1/ZZgC31LHJKt2jrjAgyScWljdFq?=
- =?us-ascii?Q?1ZCxJViowsW/R1KmMS6rZskea77BCMklw4x9q3MMU1SXRMuTjekxMMuX9b6C?=
- =?us-ascii?Q?YJyZ31q8UB0ajFAo7BqM3cgOT2FTYCkdltmtevm0R4H/qtMtcWKqTDJSvkVH?=
- =?us-ascii?Q?r5D0LX57HS5uoCixXxGVS5ZsFbomwoctUIfLk+ucjOCxifTEpTSSaHQ+TasB?=
- =?us-ascii?Q?RId6dp4aUskQLus4281wAM7WTf+VOvGUpXYRHsd1KV89MN3UimRnstZUJ9bp?=
- =?us-ascii?Q?LBlE32s4vrnKp+nYtWfP7oMFDRj3fMGlBwIyTzrkI2OZJTucDgAJVHVUaLky?=
- =?us-ascii?Q?TGuIgDZPMI1aLRbY2u65YueIPql4h/QwHw9rck1Rovh2gJdi1ryhdyWrY9S7?=
- =?us-ascii?Q?xw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: xSrBDq3r5skJ/WzteDDRyE87pXyMP6puNpF04HI/w69VqXolEM/3Xgn/G6dBYg+mOoWOmJio3KlTlstTpA6fbxD+mIoDfTahAq97y7rO2Exie2YUrI+StZooWXD4YYmDUUezIO++TjEUJPJovHoqmeYy/XQhZscUs3CdMFL4MGMuLFEoXF1Dnz7kw0+Rq+bFvlTWJx5gsL6rRp+bpW3/0BGW3BWdfXxtJwOdXfG+dIIqoMGP8o2LT8h0rufrxyxOuW/nXMM2P45xUdKeqU3y0ZuzL2FUa4JNkeia6l70M2jZGXl5+7Xgp0J23W7g0tLFSyzAMMutaZtawpYwfrX5qt6k0g8CCP088P7CPOP7XnVLYTmDgryUDU7loxddrB/Yaw8iuoJ5KAF/AbAcRFGjLrgUQbdBgWc5Lt8W790CfR5Hg5A0AzNBmV4dtZ2nQWRtq6Sq3phoMQD0R+hZDh/rWJqCkT0OoMgLL7LPJBQiOfv1PWBfpIYGJ2A9696ZNttHze2wLpFJHVbR9ZBD7lfnvNTrEUvQVBkGjEtt0YQkWhbJFIiBDaUN1r0BkGaxx74TvXTASc5B2o6tIOKqiHfP5ZMcpvj7BudHx5TTBUgzNt+smfpzhBZVUgDdWU+Z4CRZaWf9UYk7jfDd8y10Ii2fV9EVzA3UewAS6MPc+r2YoBMnnSQXJ2HyaQsWZANWpuje+SLmZ9JdiVz1SETMCvNiDwdiozRk3t504DiYQmh1nY+VIAoQphz8uXrmTeXtV/iBdr8ftBxmZCoBZVu7SJ2dSvPmYeIkl5grNjz5ZJKU+PKj9+L7ccD3Tk6ZeXzqrCMezjiSAOLXZ4LQ94sF5m37Rp61P3GlqeZeXEZFmuiGobiPAWFLS2mofso6JrXOkJAW
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 969df111-1ea8-4345-0adb-08dafdade622
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 01:54:16.0086
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: um2EokwMy8Z6SLr1pi73kAIA0rmb7fMGHzhC+oGYf61JksuiVHfJ2dJ6eMnWmkgBF1MHpfmz9So3ggXS7PXlXbQ/h76+1591Qsd1OE+2954=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4280
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=840 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301240013
-X-Proofpoint-GUID: BVdmKufaxrwm4k7YdcIN4IWyAz70BjAU
-X-Proofpoint-ORIG-GUID: BVdmKufaxrwm4k7YdcIN4IWyAz70BjAU
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118184413.395820-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -151,15 +124,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/18, Krzysztof Kozlowski wrote:
+> Cleanup by removing unneeded quotes from refs and redundant blank lines.
+> No functional impact except adjusting to preferred coding style.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/iio/accel/memsensing,msa311.yaml  | 5 ++---
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml | 2 +-
+>  Documentation/devicetree/bindings/iio/adc/adi,ad7292.yaml | 2 +-
+>  .../devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml    | 2 +-
+>  Documentation/devicetree/bindings/iio/adc/avia-hx711.yaml | 4 ++--
+>  .../devicetree/bindings/iio/adc/ingenic,adc.yaml          | 4 ++--
+>  .../devicetree/bindings/iio/adc/microchip,mcp3911.yaml    | 4 ++--
+>  .../devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml    | 2 +-
+>  .../devicetree/bindings/iio/adc/samsung,exynos-adc.yaml   | 2 +-
+>  .../devicetree/bindings/iio/adc/st,stm32-adc.yaml         | 8 ++++----
+>  .../devicetree/bindings/iio/adc/ti,ads131e08.yaml         | 2 +-
+>  Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml | 2 +-
+>  .../devicetree/bindings/iio/dac/lltc,ltc1660.yaml         | 4 ++--
+>  .../devicetree/bindings/iio/dac/lltc,ltc2632.yaml         | 4 ++--
+>  .../devicetree/bindings/iio/dac/st,stm32-dac.yaml         | 4 ++--
+>  Documentation/devicetree/bindings/iio/imu/st,lsm6dsx.yaml | 2 +-
+>  .../devicetree/bindings/iio/temperature/ti,tmp117.yaml    | 6 +++---
+>  17 files changed, 29 insertions(+), 30 deletions(-)
+> 
 
-Randy,
-
-> Don't use "/**" to begin non-kernel-doc comments.
-> Prevent a kernel-doc warning:
->
-> drivers/scsi/elx/libefc_sli/sli4.c:13: warning: cannot understand function prototype: 'struct sli4_asic_entry_t sli4_asic_table[] = '
-
-Applied to 6.3/scsi-staging, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+For adi,ad7292.yaml
+Acked-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
