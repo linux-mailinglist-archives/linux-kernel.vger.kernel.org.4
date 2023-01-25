@@ -2,218 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F66B67BD8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA8367BD8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236652AbjAYVAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S236660AbjAYVCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbjAYVAq (ORCPT
+        with ESMTP id S236602AbjAYVCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:00:46 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223E822782
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:00:45 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id hw16so50980105ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:00:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a4A2t83h8jjrBIRvtMkxz3aCgx9lH7x3/nySXGL2eBc=;
-        b=uf3zPHKCvZ1HIJaR3DFsKg8+ClcZ6bZRIoQE2h+ZOaEY8FLGs6HmDpkhqiV1BY003I
-         mFy2mYLOFfvrVrPiooPwonrbeCdsW4GRBaE1nf1G3Z5F39YCkOfoWGHEabOnzfvqu7qs
-         YFucK6Vc5b8lFuZpc82VpFs1CqNUOOBp7moYk6NT4IapthQiouc9fN3a7Bb6lHmudhL1
-         +SA7ehXq6VOOxvZAZfGQ5IW225M6kV2RksOzuXBXkXLGhBvUIofJLxWhzq0IfgkjsCWH
-         NU6YR9ZJDfO5q+RBikbS1WsChb2q58p0sZ2KTbtfVXdArrQzuIUUz52i9IQGzv2+gjPx
-         yMyw==
+        Wed, 25 Jan 2023 16:02:18 -0500
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CCD222E7;
+        Wed, 25 Jan 2023 13:02:17 -0800 (PST)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-15f97c478a8so58868fac.13;
+        Wed, 25 Jan 2023 13:02:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a4A2t83h8jjrBIRvtMkxz3aCgx9lH7x3/nySXGL2eBc=;
-        b=pmghVriC2zxe/sgTjXPW94boEXR0jaaDO+c++v3Ihs100HiFnnvVTKlueGFSS1JJ6g
-         uunhbUvQGh64INjSTtciDxLDH50NnOLYQG1CPgbkZtdFgzFVU9PtNtPhJbJtlLwa2IIm
-         AuajFU9ZEU5GBAp49t38R9PumjubtiiI36JHXOwbQJqO0JOnZHurzuteEYMz3ncXeXFK
-         X+EnFaEx7JeZecjOHRvmSerdTLMrERgcypVLnxo4j/8lEBXqYdMZrP9NK0hmmL/2I6QF
-         bX8ey4/+6R4YKs1MCfX2iwrrbIJtCXMRte0skvUFyuaLFmyGvYECc5S9FnfiSm0z7CEW
-         T8DQ==
-X-Gm-Message-State: AFqh2krAQZ7y9w9RDurJNK2crzvJXwcvF3vxf5bo0OnwwUlzyGOYWw3w
-        YywDr7LDVxtDw/WQDb13kwuRtFaR4ujTqp7hC1F6Yw==
-X-Google-Smtp-Source: AMrXdXsh30gqbmIZsBku7l4s0c30MZS9igda+Hlkp1tSA+B8JpH10Fio1eT3NdrtgKhxI7jeSHM8XqGBGeguzQCMfuE=
-X-Received: by 2002:a17:906:9399:b0:871:7a08:9d6e with SMTP id
- l25-20020a170906939900b008717a089d6emr3741626ejx.234.1674680443582; Wed, 25
- Jan 2023 13:00:43 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qy9hdSdytx4WlUpLP7AkbgycuXVsEcln1aautfJdWs8=;
+        b=l4gTx7EVOxd+X9EB9oMpAnPj7JMfUJ4ijU1blUOZB18BRj0Biu1O909p2cG0O0UWIQ
+         LqDLo6pPivzhStyzyIzVCBRj2mQ+1EIIq6nvvCMHIdQi+jlPNR9zNFmB/lOj+G6bQuZt
+         xV7Y1mTfyHiKw4nFbYPJgvi2jdFBoUQP8+yjobMEtTHdDYkplP1tkleFAfaQr5VpmREE
+         TQaibMeWlr1w1wTokiS3uPogTtAbP/iqN5PbYYRVy2vRSYVEqy2b7AGZ5lM4STt0Zw84
+         RcOYAWzqfCNnp6FVPQDVpyDFUGLyTIkjBIleAMXeYd3JzHMsk54sV7hZxJI9Joom73it
+         MfNw==
+X-Gm-Message-State: AFqh2ko55gsXh6RU6mAkTPjTRxW1pEYNFMU6Y+UdTYB+bc6eiYQJbSl+
+        rMZ4MGnWzniWR4mlqIutBQ==
+X-Google-Smtp-Source: AK7set982YuB9zviVDeEJ8iQft1DYsVnb0qtXC/RPUZ4pZC3ngkO0EG1QPjG0FKrtdt1kl6Lz/QPxg==
+X-Received: by 2002:a05:6870:4722:b0:163:18f6:e5a8 with SMTP id b34-20020a056870472200b0016318f6e5a8mr4192613oaq.42.1674680537120;
+        Wed, 25 Jan 2023 13:02:17 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m24-20020a056870059800b001446a45bb49sm2355759oap.23.2023.01.25.13.02.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 13:02:16 -0800 (PST)
+Received: (nullmailer pid 2890158 invoked by uid 1000);
+        Wed, 25 Jan 2023 21:02:15 -0000
+Date:   Wed, 25 Jan 2023 15:02:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Frank Rowand <frowand.list@gmail.com>, linux-mm@kvack.org,
+        Saravana Kannan <saravanak@google.com>, stable@vge.kernel.org,
+        Calvin Zhang <calvinzhang.cool@gmail.com>,
+        kernel-team@android.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] Revert "mm: kmemleak: alloc gray object for reserved
+ region with direct map"
+Message-ID: <20230125210215.GA2879887-robh@kernel.org>
+References: <20230124230254.295589-1-isaacmanjarres@google.com>
 MIME-Version: 1.0
-References: <20230124105643.1737250-1-etienne.carriere@linaro.org> <20230125202215.GA2811928-robh@kernel.org>
-In-Reply-To: <20230125202215.GA2811928-robh@kernel.org>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Wed, 25 Jan 2023 22:00:32 +0100
-Message-ID: <CAN5uoS9tVyRQP1-2-Umxc33APGW=EFdidbgNVq_H6wVUXauHEg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: arm: optee: add interrupt controller properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pascal Paillet <p.paillet@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124230254.295589-1-isaacmanjarres@google.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 21:22, Rob Herring <robh@kernel.org> wrote:
->
-> +Sudeep
->
-> On Tue, Jan 24, 2023 at 11:56:41AM +0100, Etienne Carriere wrote:
-> > Adds an optional interrupt controller property to optee firmware node
-> > in the DT bindings. Optee driver may embeds an irqchip exposing
-> > interrupts notified by the TEE world. Optee registers up to 1 interrupt
-> > controller and identifies each line with a line number from 0 to
-> > UINT16_MAX.
-> >
-> > In the example, the platform SCMI device uses optee interrupt irq 5
-> > as async signal to trigger processing of an async incoming SCMI message,
-> > in the scope of a CPU DVFS control. A platform can have several SCMI
-> > channels driven this way. Optee irqs also permits small embedded devices
-> > to share e.g. a gpio expander, a group of wakeup sources, etc... between
-> > OP-TEE world (for sensitive services) and Linux world (for non-sensitive
-> > services). The physical controller is driven from the TEE which exposes
-> > some controls to Linux kernel.
-> >
-> > Cc: Jens Wiklander <jens.wiklander@linaro.org>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Sumit Garg <sumit.garg@linaro.org>
-> >
-> > Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
-> > Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > ---
-> > Changes since v1:
-> > - Added a description to #interrupt-cells property.
-> > - Changed of example. Linux wakeup event was subject to discussion and
-> >   i don't know much about input events in Linux. So move to SCMI.
-> >   In the example, an SCMI server in OP-TEE world raises optee irq 5
-> >   so that Linux scmi optee channel &scmi_cpu_dvfs pushed in the incoming
-> >   SCMI message in the scmi device for liekly later processing in threaded
-> >   context. The example includes all parties: optee, scmi, sram, gic.
-> > - Obviously rephrased the commit message.
-> > - Added Cc: tags
-> > ---
-> >  .../arm/firmware/linaro,optee-tz.yaml         | 67 +++++++++++++++++++
-> >  1 file changed, 67 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> > index d4dc0749f9fd..9c00c27f8b2c 100644
-> > --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> > @@ -40,6 +40,14 @@ properties:
-> >        HVC #0, register assignments
-> >        register assignments are specified in drivers/tee/optee/optee_smc.h
-> >
-> > +  interrupt-controller: true
-> > +
-> > +  "#interrupt-cells":
-> > +    const: 1
-> > +    description: |
-> > +      OP-TEE exposes irq for irp chip controllers from OP-TEE world. Each
-> > +      irq is assigned a single line number identifier used as first argument.
-> > +
-> >  required:
-> >    - compatible
-> >    - method
-> > @@ -64,3 +72,62 @@ examples:
-> >              method = "hvc";
-> >          };
-> >      };
-> > +
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    firmware  {
-> > +        optee: optee {
-> > +            compatible = "linaro,optee-tz";
-> > +            method = "smc";
-> > +            interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
-> > +            interrupt-controller;
-> > +            #interrupt-cells = <1>;
-> > +        };
-> > +
-> > +        scmi {
-> > +            compatible = "linaro,scmi-optee";
-> > +            linaro,optee-channel-id = <0>;
-> > +            interrupt-parent = <&gic>;
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> > +
-> > +            scmi_cpu_dvfs: protocol@13 {
-> > +                reg = <0x13>;
-> > +                linaro,optee-channel-id = <1>;
-> > +                shmem = <&scmi_shm_tx>, <&scmi_shm_rx>;
-> > +                interrupts-extended = <&optee 5>;
-> > +                interrupt-names = "a2p";
->
-> These properties aren't documented. Soon there will be a warning[1].
+On Tue, Jan 24, 2023 at 03:02:54PM -0800, Isaac J. Manjarres wrote:
+> This reverts commit 972fa3a7c17c9d60212e32ecc0205dc585b1e769.
+> 
+> Kmemleak operates by periodically scanning memory regions for pointers
+> to allocated memory blocks to determine if they are leaked or not.
+> However, reserved memory regions can be used for DMA transactions
+> between a device and a CPU, and thus, wouldn't contain pointers to
+> allocated memory blocks, making them inappropriate for kmemleak to
+> scan. Thus, revert this commit.
 
-They are.
-https://github.com/torvalds/linux/blob/v6.1/Documentation/devicetree/bindings/firmware/arm%2Cscmi.yaml#L45-L53
+Both commits talk about the same type of memory as CMA is used for DMA. 
+Neither commit tells me what are the implications of kmemleak scanning 
+or not scanning the region? Are there false positives?
 
-In arm,scmi.yaml, interrupts optional property stands for interrupts
-and interrupts-extended, no?
-
-
->
-> > +                #clock-cells = <1>;
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +    gic: interrupt-controller@a0021000 {
-> > +        compatible = "arm,cortex-a7-gic";
-> > +        reg = <0xa0021000 0x1000>, <0xa0022000 0x2000>;
-> > +        interrupt-controller;
-> > +        #interrupt-cells = <3>;
-> > +    };
-> > +
-> > +    soc {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <1>;
-> > +
-> > +        sram@2ffff000 {
-> > +            compatible = "mmio-sram";
-> > +            reg = <0x2ffff000 0x1000>;
-> > +            #address-cells = <1>;
-> > +            #size-cells = <1>;
-> > +            ranges = <0 0x2ffff000 0x1000>;
-> > +
-> > +            scmi_shm_tx: scmi-sram@0 {
-> > +                compatible = "arm,scmi-shmem";
-> > +                reg = <0 0x80>;
-> > +            };
-> > +
-> > +            scmi_shm_rx: scmi-sram@100 {
-> > +                compatible = "arm,scmi-shmem";
-> > +                reg = <0x100 0x80>;
-> > +            };
->
-> There's no need to show providers in examples (unless the example is for
-> the provider).
-
-Ok, i'll simplify the example
-
-Thanks,
-Etienne
-
->
-> Rob
+> Cc: stable@vger.kernel.org # 5.17+
+> Cc: Calvin Zhang <calvinzhang.cool@gmail.com>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> ---
+>  drivers/of/fdt.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
