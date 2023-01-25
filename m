@@ -2,145 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD85167B3C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D50267B3CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235429AbjAYN7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
+        id S235584AbjAYOEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbjAYN73 (ORCPT
+        with ESMTP id S235544AbjAYOEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:59:29 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57E646167;
-        Wed, 25 Jan 2023 05:59:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AnBejNmxhmaKoDMZQNOPVEZbHsVwfu3zfmeGhruGuny7VgeUKT/6EW0PBbINyuspLMD0eGscFYzQBp6cPwvRXTQRsiXZCi/AfNYQWS+hu9FsQ6uOhwACVrmQQ0Lr7fn90amu5eg6sC/j9/Wd1GByG/Y2owQXUyVoqhQe8aKeYtPntE32y0xyJi3R0UAC5PWFo+Bkmr9Az8+hpLRbAABlKU4Gei9rrS5QR5pfvnkauTHQQOqYMerVPlV246Fv1z0cRh+bX8ydUNYJeLr5qRJ6S7S2mWIFSA4ptzuaxSThXJovTmy1YD9Td2VspGxWgXt35N7C/+2F3pSxJbO71QnbXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G0C92cg69NYaHSmZk+tOYWVfykMcPe+MU6akvrHPjmA=;
- b=X6xMaYeSCpZqSalGGqY31B65V3m3gngNOOnFNdM9rEdSGEFfB9bQXPFMdPmAeFA/M9r34mlunFkXjIkVcIi6WdgPexyFWEERteck4u/LRhRbxatxkWAEhlVGUVm8sb10Mhm5OxUpENcFbngCWIrb87+d1xqBgsasqbFAnAMM/aDEPjBjfEgf+MW3cnDWI+kRqMxIan3MMiwWfP6ETRB5ykl+c7A9NojDPXLz80N7iRHh99ze7wpDysqCtJe70ixcxTMKuZwPEsbI3VRltqraHU9eylXtX8AvbcwP+y9S5H3FfX8naL9zOORJFMTdWuuQtLC4gHYvO5ZnYvyFigZWIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G0C92cg69NYaHSmZk+tOYWVfykMcPe+MU6akvrHPjmA=;
- b=iuZ4jafiUdM7SZXP8h3dZvHc+TeAG9QYn2CjcaDYWrjYbjIIxwTteJ9m85rCOsgucbFe5KiwmEg9xPtBTR3RoASB0iS1lmZSo+5QLjdce/Qpd1GJSk8v1yJEzPryUbDQgHnS272AdH5XYDxRfqGtuwfohmOMSVgxYFtk4NrtxxlYeMjw3v/5LBMkwWFrX87gG7eZpWYDNo9joeD/4AmGdUKySJfNbdgu7XE9XnhMYRvLfvhQHCF4PWppa0onPyNCD7hnrVL0sDBjv+SMdLR80ct1ctdusR13zn+hngOxkMC4R7xrJAsujpzeREsWHpiSyhwmPGX3lXZ1+EniLNosSg==
-Received: from DM6PR21CA0014.namprd21.prod.outlook.com (2603:10b6:5:174::24)
- by IA1PR12MB6018.namprd12.prod.outlook.com (2603:10b6:208:3d6::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 13:59:26 +0000
-Received: from DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:174:cafe::d7) by DM6PR21CA0014.outlook.office365.com
- (2603:10b6:5:174::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.3 via Frontend
- Transport; Wed, 25 Jan 2023 13:59:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT039.mail.protection.outlook.com (10.13.172.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6023.16 via Frontend Transport; Wed, 25 Jan 2023 13:59:26 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 05:59:20 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 05:59:20 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Wed, 25 Jan 2023 05:59:19 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 4.14 00/25] 4.14.304-rc1 review
-In-Reply-To: <20230122150217.788215473@linuxfoundation.org>
-References: <20230122150217.788215473@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 25 Jan 2023 09:04:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D732C656
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:03:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674655406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ncu/m+5+/WI/1e3GSfSo6VdQKJavRU4pao1vU93BlHw=;
+        b=ASdeiyC5dQGfefeGpjyx68VeoT1lscEtHhJCvdSy2XhrPeD6NBfdbPBRRGLKJr0lmYyr9W
+        VSsMOUad6lX3UvBsY/oELV9+AKBcnwqIrotkq3w98K8f6UUtBSmuTlOiJqPsGSrB/tVEKX
+        9xmUXeMnIt/r/xOcU6yahz/LIQl7Da0=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-661-KRqkqCN6NTyNz9oRPfE5ZQ-1; Wed, 25 Jan 2023 09:03:25 -0500
+X-MC-Unique: KRqkqCN6NTyNz9oRPfE5ZQ-1
+Received: by mail-ed1-f71.google.com with SMTP id b6-20020a056402278600b0049e41edf3cfso12873866ede.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:03:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ncu/m+5+/WI/1e3GSfSo6VdQKJavRU4pao1vU93BlHw=;
+        b=LhoYt90trY+8xAzHExoltIQrmVI4G1bf+QIEOAzakiP+8FNBSgTRlwW3CkxKOES4GI
+         30U725xLxREnws0FdqqvDljCQz07GwyuGVHOecJV8MsPQ7ZZ/d0ktpHBghzZG5pjYoWO
+         z0GwNjZfA+DPch4pz8TRXBrO89n4GP4VjS701DvdUN0Bgg2CBVZK21m6eM+6oXfopRrE
+         mj19+EGV641Zxza1CC8iwumxYDVnbGN+QxadUSKjjK9z7h/nkqsGy36ngAVbEUKTohMv
+         QiUqIUX8iR+dHIA7Wc4Tttv54cDZjt1//6/ETiSUn+FDvIM9ffPyQ5LJWaB/+0bRvyPT
+         mGaQ==
+X-Gm-Message-State: AFqh2koqNcVN5Zqas1l9JAtKJAccFvXvxFB+O7e9Zb36f0f2Q3YXYfaB
+        g3JtJL9G9A2QdELXn/Hp90GiuFEqAuEmwz1LsdZe2fZt5RJ/WLdgyW8rx8KKpLyFEBsPaj9qZhM
+        /mLgbI269o6HZc4O2TT7WxXQ6
+X-Received: by 2002:a17:907:8b0a:b0:877:5c3e:706 with SMTP id sz10-20020a1709078b0a00b008775c3e0706mr31811573ejc.73.1674655402445;
+        Wed, 25 Jan 2023 06:03:22 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvUCNcE7exKGBNTzRlyuPWTkp0ghZlVVEFfENUI7ck1uWhBq7Q6OM8ofgDDHy/1rAF7l/yHUA==
+X-Received: by 2002:a17:907:8b0a:b0:877:5c3e:706 with SMTP id sz10-20020a1709078b0a00b008775c3e0706mr31811559ejc.73.1674655402220;
+        Wed, 25 Jan 2023 06:03:22 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id un4-20020a170907cb8400b008775b8a5a5fsm2389452ejc.198.2023.01.25.06.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 06:03:21 -0800 (PST)
+Message-ID: <ad6673bd-1500-eb9e-f5be-95e63bb8ff64@redhat.com>
+Date:   Wed, 25 Jan 2023 15:03:20 +0100
 MIME-Version: 1.0
-Message-ID: <7b8da7ec-9016-4918-ac8e-53bd3385c457@rnnvmail202.nvidia.com>
-Date:   Wed, 25 Jan 2023 05:59:19 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT039:EE_|IA1PR12MB6018:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39341fd1-ed0e-4214-579d-08dafedc5eef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4vWh2TS/gX4XvMKUfoeDqx1TmkRYmbpMkuHyuEEEkivdZAb4bejYOVw8H28572wbxEacO+RHxZusvL0l0NAF2FT/B9z5Ee5PlMTu05ZShCC54RhXhiWRW3sQhwKuGX8vXsh1r4XOByvy4PdErXoZIh32f8b1Q9yy+LkxG4nnXsAyzm1qpXH2i/j7G44H7zwi2FgqWC+57OTy2A2/tLOZkLzo7IG+QdSbkqPwmEhDmD9+M8kol7yCg9k0TJ5Nh/71oTuJHoL7mZOG7VWSbQZGGGnQ8DRq719ZqpZj97aoU7VNuXqVcUMIgHotkdWA6NGWuNtmQtyPcUrinLCFxUAe4nE/o01sTuMbb1qJ7X98Vor+vONhavZxBwQmM/SR9FYGPUDOamIhxUgr3y+hVFey1GhXabAOaJbRvNx0DjMJDaYWiejSoT0oUqEiDYYqQHD+AuQyH+K2uIjk9NNz+fTaaiudJwcgFZMJn53ocYlph3I3l4jCxoXfqHOkG1PYVBxUJtFJsl15lmSzLOVl6boNs0qmb66nyAs+KZpfV5uFuV270ruSy9sbh1x5UhBON5N2AJwUtXa3EfylpItfye88N1uRRaksy42epCrnBQHCfx3W7zXQ/2nPiLNzuCNft6rvpUwPuJ+seQGLznaXmBD8X00tB/7ID9HMKIRzV1s+jDzgz16dQ2Jo9P9hOdefWg/37KQ12/FIfcr5SEzjA/izaDMfwfJUtLRBuBmjvZSP8wUyamm6ep9RqENH+1k0VwgCwiaD17vi8gI+G7dWyRB8s7LCWK0cdKKZIhFDOLNBjoY=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(136003)(346002)(451199018)(36840700001)(40470700004)(46966006)(336012)(54906003)(316002)(4326008)(426003)(8676002)(70206006)(47076005)(70586007)(6916009)(5660300002)(7416002)(41300700001)(2906002)(356005)(31686004)(26005)(966005)(478600001)(186003)(36860700001)(7636003)(40460700003)(31696002)(8936002)(82310400005)(40480700001)(86362001)(82740400003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 13:59:26.3788
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39341fd1-ed0e-4214-579d-08dafedc5eef
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6018
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] x86: KVM: Add common feature flag for AMD's PSFD
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230124194519.2893234-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230124194519.2893234-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 Jan 2023 16:04:00 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.304 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 1/24/23 20:45, Sean Christopherson wrote:
+> Use a common X86_FEATURE_* flag for AMD's PSFD, and suppress it from
+> /proc/cpuinfo via the standard method of an empty string instead of
+> hacking in a one-off "private" #define in KVM.  The request that led to
+> KVM defining its own flag was really just that the feature not show up
+> in /proc/cpuinfo, and additional patches+discussions in the interim have
+> clarified that defining flags in cpufeatures.h purely so that KVM can
+> advertise features to userspace is ok so long as the kernel already uses
+> a word to track the associated CPUID leaf.
 > 
-> Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> Anything received after that time might be too late.
+> No functional change intended.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.304-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-> and the diffstat can be found below.
+> Link: https://lore.kernel.org/all/d1b1e0da-29f0-c443-6c86-9549bbe1c79d@redhat.como
+> Link: https://lore.kernel.org/all/YxGZH7aOXQF7Pu5q@nazgul.tnic
+> Link: https://lore.kernel.org/all/Y3O7UYWfOLfJkwM%2F@zn.tnic
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/include/asm/cpufeatures.h | 1 +
+>   arch/x86/kvm/cpuid.c               | 8 +-------
+>   2 files changed, 2 insertions(+), 7 deletions(-)
+
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 61012476d66e..2acaebc7bb76 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -330,6 +330,7 @@
+>   #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
+>   #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
+>   #define X86_FEATURE_CPPC		(13*32+27) /* Collaborative Processor Performance Control */
+> +#define X86_FEATURE_AMD_PSFD            (13*32+28) /* "" Predictive Store Forwarding Disable */
+>   #define X86_FEATURE_BTC_NO		(13*32+29) /* "" Not vulnerable to Branch Type Confusion */
+>   #define X86_FEATURE_BRS			(13*32+31) /* Branch Sampling available */
+>   
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 2a9f1e200dbc..fb2b0e3ecce1 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -59,12 +59,6 @@ u32 xstate_required_size(u64 xstate_bv, bool compacted)
+>   	return ret;
+>   }
+>   
+> -/*
+> - * This one is tied to SSB in the user API, and not
+> - * visible in /proc/cpuinfo.
+> - */
+> -#define KVM_X86_FEATURE_AMD_PSFD	(13*32+28) /* Predictive Store Forwarding Disable */
+> -
+>   #define F feature_bit
+>   
+>   /* Scattered Flag - For features that are scattered by cpufeatures.h. */
+> @@ -710,7 +704,7 @@ void kvm_set_cpu_caps(void)
+>   		F(CLZERO) | F(XSAVEERPTR) |
+>   		F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
+>   		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON) |
+> -		__feature_bit(KVM_X86_FEATURE_AMD_PSFD)
+> +		F(AMD_PSFD)
+>   	);
+>   
+>   	/*
 > 
-> thanks,
-> 
-> greg k-h
+> base-commit: 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
 
-All tests passing for Tegra ...
 
-Test results for stable-v4.14:
-    8 builds:	8 pass, 0 fail
-    16 boots:	16 pass, 0 fail
-    32 tests:	32 pass, 0 fail
-
-Linux version:	4.14.304-rc1-ged199ef62346
-Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
-                tegra210-p2371-2180, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
