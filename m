@@ -2,215 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C839A67B5AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F7E67B5AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235994AbjAYPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S235967AbjAYPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbjAYPPH (ORCPT
+        with ESMTP id S235701AbjAYPQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:15:07 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C3010F7;
-        Wed, 25 Jan 2023 07:15:05 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 22FC76E0;
-        Wed, 25 Jan 2023 16:15:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674659703;
-        bh=oKIvNBSf+5K0GFSSvkPWB0oPeYQqncCxVXyxT2yZVm4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bTyc7tvDmDf9v55+eHo5pdZdMLOvI0ZwgpfSeLP5T5cW2Hb71Lp90TjS6JJF/GV93
-         e6CfQnNQjPLTXKQxesQ9Qe+BF5JudUIQ751Oq375AoCkOzOkkuukRfK0tH6W75Mg1B
-         q1/8xHrH1Wy1cbREdyifR2491mtIyICqhDkwnkGg=
-Message-ID: <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
-Date:   Wed, 25 Jan 2023 17:14:59 +0200
+        Wed, 25 Jan 2023 10:16:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3F30E6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:16:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93946B819F3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:16:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96ECC433D2;
+        Wed, 25 Jan 2023 15:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674659765;
+        bh=Zt0hwcWMjhLMy3JdqkGQgWhC1Ciy6pFM0efPSsej1wA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fh4BElSULrGSmv8v/ouQFNF/uQNYjb0bTNz7xEJ+cwUNF8UwMCuWqh3z/JvEttukb
+         vkLwr2XezWDp0O7ObAd2yoMv0p9gVHxVTpGPl2IRvUQZa9U/Cc+wBGwZmIWIOiqZEk
+         wxjRkuAe4RDfQx4GbkL+L51ApceJ/kxxeT5wVHmo=
+Date:   Wed, 25 Jan 2023 16:16:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9FHsvVoPbgMR2s3@kroah.com>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E7PNmSTP5w2zuw@kroah.com>
+ <Y9FDZPV7qENtNNyk@work-vm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
- <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
- <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
- <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
- <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
- <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
- <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
- <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9FDZPV7qENtNNyk@work-vm>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 16:49, Andy Shevchenko wrote:
-> On Wed, Jan 25, 2023 at 03:33:35PM +0200, Tomi Valkeinen wrote:
->> On 25/01/2023 14:10, Andy Shevchenko wrote:
->>> On Wed, Jan 25, 2023 at 01:15:34PM +0200, Tomi Valkeinen wrote:
->>>> On 20/01/2023 18:47, Andy Shevchenko wrote:
+On Wed, Jan 25, 2023 at 02:57:40PM +0000, Dr. David Alan Gilbert wrote:
+> * Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+> > On Wed, Jan 25, 2023 at 01:42:53PM +0000, Dr. David Alan Gilbert wrote:
+> > > * Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+> > > > On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+> > > > > Hi Greg, 
+> > > > > 
+> > > > > You mentioned couple of times (last time in this recent thread:
+> > > > > https://lore.kernel.org/all/Y80WtujnO7kfduAZ@kroah.com/) that we ought to start
+> > > > > discussing the updated threat model for kernel, so this email is a start in this direction. 
+> > > > 
+> > > > Any specific reason you didn't cc: the linux-hardening mailing list?
+> > > > This seems to be in their area as well, right?
+> > > > 
+> > > > > As we have shared before in various lkml threads/conference presentations
+> > > > > ([1], [2], [3] and many others), for the Confidential Computing guest kernel, we have a 
+> > > > > change in the threat model where guest kernel doesn’t anymore trust the hypervisor. 
+> > > > 
+> > > > That is, frankly, a very funny threat model.  How realistic is it really
+> > > > given all of the other ways that a hypervisor can mess with a guest?
+> > > 
+> > > It's what a lot of people would like; in the early attempts it was easy
+> > > to defeat, but in TDX and SEV-SNP the hypervisor has a lot less that it
+> > > can mess with - remember that not just the memory is encrypted, so is
+> > > the register state, and the guest gets to see changes to mapping and a
+> > > lot of control over interrupt injection etc.
+> > 
+> > And due to the fact that SEV and TDX really do not work, how is anyone
+> > expecting any of this to work?  As one heckler on IRC recently put it,
+> > if you squint hard enough, you can kind of ignore the real-world issues
+> > here, so perhaps this should all be called "squint-puting" in order to
+> > feel like you have a "confidential" system?  :)
 > 
-> ...
+> I agree the original SEV was that weak; I've not seen anyone give a good
+> argument against SNP or TDX.
+
+Argument that it doesn't work?  I thought that ship sailed a long time
+ago but I could be wrong as I don't really pay attention to that stuff
+as it's just vaporware :)
+
+> > > > So what do you actually trust here?  The CPU?  A device?  Nothing?
+> > > 
+> > > We trust the actual physical CPU, provided that it can prove that it's a
+> > > real CPU with the CoCo hardware enabled.
+> > 
+> > Great, so why not have hardware attestation also for your devices you
+> > wish to talk to?  Why not use that as well?  Then you don't have to
+> > worry about anything in the guest.
 > 
->>>>>>>> +	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
->>>>>>>> +	if (ret) {
->>>>>>>> +		if (ret != -EINVAL) {
->>>>>>>> +			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
->>>>>>>> +				nport, ret);
->>>>>>>> +			return ret;
->>>>>>>> +		}
->>>>>
->>>>> This seems like trying to handle special cases, if you want it to be optional,
->>>>> why not ignoring all errors?
->>>>
->>>> I don't follow. Why would we ignore all errors even if the property is
->>>> optional? If there's a failure in reading the property, or checking if it
->>>> exists or not, surely that's an actual error to be handled, not to be
->>>> ignored?
->>>
->>> What the problem to ignore them?
->>
->> Well, probably nothing will explode if we just ignore them. But... Why would
->> we ignore them?
->>
->>> But if you are really pedantic about it, perhaps the proper way is to add
->>>
->>> fwnode_property_*_optional()
->>>
->>> APIs to the set where you take default and return 0 in case default had been
->>> used for the absent property.
->>
->> Perhaps, but I don't have a default value here.
+> There were some talks at Plumbers where PCIe is working on adding that;
+> it's not there yet though.  I think that's PCIe 'Integrity and Data
+> Encryption' (IDE - sigh), and PCIe 'Security Prtocol and Data Model' -
+> SPDM.   I don't know much of the detail of those, just that they're far
+> enough off that people aren't depending on them yet.
+
+Then work with those groups to implement that in an industry-wide way
+and then take advantage of it by adding support for it to Linux!  Don't
+try to reinvent the same thing in a totally different way please.
+
+> > > Both the SNP and TDX hardware
+> > > can perform an attestation signed by the CPU to prove to someone
+> > > external that the guest is running on a real trusted CPU.
+> > 
+> > And again, do the same thing for the other hardware devices and all is
+> > good.  To not do that is to just guess and wave hands.  You know this :)
 > 
-> It's impossible. You have one. 0 is also can be default.
+> That wouldn't help you necessarily for virtual devices - where the
+> hypervisor implements the device (like a virtual NIC).
 
-No, I either have the value ("eq-level"), or it's undefined, not used, 
-doesn't exist. There's no default eq-level.
+Then create a new bus for that if you don't trust the virtio bus today.
 
->> In any case, I'm not quite sure what you are arguing here. Is it just that
->> you don't think the error check is necessary and should be dropped?
+> > > > I hate the term "hardening".  Please just say it for what it really is,
+> > > > "fixing bugs to handle broken hardware".  We've done that for years when
+> > > > dealing with PCI and USB and even CPUs doing things that they shouldn't
+> > > > be doing.  How is this any different in the end?
+> > > > 
+> > > > So what you also are saying here now is "we do not trust any PCI
+> > > > devices", so please just say that (why do you trust USB devices?)  If
+> > > > that is something that you all think that Linux should support, then
+> > > > let's go from there.
+> > > 
+> > > I don't think generally all PCI device drivers guard against all the
+> > > nasty things that a broken implementation of their hardware can do.
+> > 
+> > I know that all PCI drivers can NOT do that today as that was never
+> > anything that Linux was designed for.
 > 
-> Yes, I do not see the value of these complex error checking.
-> Dropping that makes it KISS. I.o.w. why do we care about errors
-> if the property is optional? Make it mandatory otherwise.
+> Agreed; which again is why I only really worry about the subset of
+> devices I'd want in a CoCo VM.
 
-If the call fails, there's an error somewhere. Maybe the user tried to 
-define eq-level, but something is wrong. Isn't it better to catch that 
-error, rather than ignoring it, leaving the user wonder why things don't 
-work as he expects?
+Everyone wants a subset, different from other's subset, which means you
+need them all.  Sorry.
 
->>>>>>>> +	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
->>>>>>>> +		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n", nport,
->>>>>>>> +			eq_level);
->>>>>
->>>>> This part is a validation of DT again, but we discussed above this.
->>>>>
->>>>>>>> +	} else {
->>>>>>>> +		rxport->eq.manual_eq = true;
->>>>>>>> +		rxport->eq.manual.eq_level = eq_level;
->>>>>>>> +	}
->>>
->>> ...
->>>
->>>>>>>> +struct ds90ub9xx_platform_data {
->>>>>>>> +	u32 port;
->>>>>>>> +	struct i2c_atr *atr;
->>>>>>>> +	unsigned long bc_rate;
->>>>>>>
->>>>>>> Not sure why we need this to be public except, probably, atr...
->>>>>>
->>>>>> The port and atr are used by the serializers, for atr. The bc_rate is used
->>>>>> by the serializers to figure out the clocking (they may use the FPD-Link's
->>>>>> frequency internally).
->>>>>
->>>>> The plain numbers can be passed as device properties. That's why the question
->>>>> about platform data. Platform data in general is discouraged to be used in a
->>>>> new code.
->>>>
->>>> Device properties, as in, coming from DT?
->>>
->>>   From anywhere.
->>>
->>>> The port could be in the DT, but
->>>> the others are not hardware properties.
->>>
->>> Why do we need them? For example, bc_rate.
->>
->> The atr pointer is needed so that the serializers (ub913, ub953) can add
->> their i2c adapter to the deserializer's i2c-atr. The port is also needed for
->> that.
->>
->> The bc rate (back-channel rate) is the FPD-Link back-channel rate which the
->> serializers use for various functionalities. At the moment only the ub953
->> uses it for calculating an output clock rate.
->>
->> The bc-rate could be implemented using the clock framework, even if it's not
->> quite a plain clock. I had that code at some point, but it felt a bit off
->> and as we needed the pdata for the ATR, I added the bc-rate there.
+> > > The USB devices are probably a bit better, because they actually worry
+> > > about people walking up with a nasty HID device;  I'm skeptical that
+> > > a kernel would survive a purposely broken USB controller.
+> > 
+> > I agree with you there, USB drivers are only starting to be fuzzed at
+> > the descriptor level, that's all.  Which is why they too can be put into
+> > the "untrusted" area until you trust them.
+> > 
+> > > I'm not sure the request here isn't really to make sure *all* PCI devices
+> > > are safe; just the ones we care about in a CoCo guest (e.g. the virtual devices) -
+> > > and potentially ones that people will want to pass-through (which
+> > > generally needs a lot more work to make safe).
+> > > (I've not looked at these Intel tools to see what they cover)
+> > 
+> > Why not just create a whole new bus path for these "trusted" devices to
+> > attach to and do that instead of tyring to emulate a protocol that was
+> > explicitly designed NOT to this model at all?  Why are you trying to
+> > shoehorn something here and not just designing it properly from the
+> > beginning?
 > 
-> And I don't see why it is not a property of the device.
-
-It with a "property of the device" you mean a hardware property, it's 
-not because we don't know it, it can be changed at runtime. It's not 
-supposed to change after probing the serializer, but up to that point it 
-can change.
-
->>>> Yes, I don't like using platform data. We need some way to pass information
->>>> between the drivers.
->>>
->>> Device properties allow that and targeting to remove the legacy platform data
->>> in zillions of the drivers.
->>
->> Do you have any pointers to guide me into the right direction? I couldn't
->> find anything with some grepping and googling.
->>
->> If you mean "device properties" as in ACPI, and so similar to DT properties,
->> aren't those hardware properties? Only the port here is about the hardware.
+> I'd be kind of OK with that for the virtual devices; but:
 > 
-> About hardware, or PCB, or as quirks for missing DT/ACPI/any FW properties,
-> like clock rates.
-> 
-> The Linux kernel layer for that is called software nodes. The rough
-> approximation to see where and how it's being used can be achieved
-> by grepping for specific macros:
-> 
-> 	git grep -lw PROPERTY_ENTRY_.*
-> 
-> E.g. arch/arm/mach-tegra/board-paz00.c tegra_paz00_wifikill_init()
-> implementation.
+>   a) I think you'd start reinventing PCIe with enumeration etc
 
-Thanks, I'll have a look. But I presume we can only pass "plain" values, 
-so it won't work for the ATR pointer anyway.
+Great, then work with the PCI group as talked about above to solve it
+properly and not do whack-a-mole like seems to be happening so far.
 
-  Tomi
+>   b) We do want those pass through NICs etc that are PCIe
+>     - as long as you use normal guest crypto stuff then the host
+>     can be just as nasty as it likes with the data they present.
 
+Great, work with the PCI spec for verified devices.
+
+>   c) The world has enough bus protocols, and people understand the
+>    basics of PCI(e) - we really don't need another one.
+
+Great, work with the PCI spec people please.
+
+> > > Having said that, how happy are you with Thunderbolt PCI devices being
+> > > plugged into your laptop or into the hotplug NVMe slot on a server?
+> > 
+> > We have protection for that, and have had it for many years.  Same for
+> > USB devices.  This isn't new, perhaps you all have not noticed those
+> > features be added and taken advantage of already by many Linux distros
+> > and system images (i.e. ChromeOS and embedded systems?)
+> 
+> What protection?  I know we have an IOMMU, and that stops the device
+> stamping all over RAM by itself - but I think Intel's worries are more
+> subtle, things where the device starts playing with what PCI devices
+> are expected to do to try and trigger untested kernel paths.  I don't
+> think there's protection against that.
+> I know we can lock by PCI/USB vendor/device ID - but those can be made
+> up trivially; protection like that is meaningless.
+
+Then combine it with device attestation and you have a solved solution,
+don't ignore others working on this please.
+
+> > > We're now in the position we were with random USB devices years ago.
+> > 
+> > Nope, we are not, again, we already handle random PCI devices being
+> > plugged in.  It's up to userspace to make the policy decision if it
+> > should be trusted or not before the kernel has access to it.
+> > 
+> > So a meta-comment, why not just use that today?  If your guest OS can
+> > not authenticate the PCI device passed to it, don't allow the kernel to
+> > bind to it.  If it can be authenticated, wonderful, bind away!  You can
+> > do this today with no kernel changes needed.
+> 
+> Because:
+>    a) there's no good way to authenticate a PCI device yet
+>      - any nasty device can claim to have a given PCI ID.
+>    b) Even if you could, there's no man-in-the-middle protection yet.
+
+Where is the "man" here in the middle of?
+
+And any PCI attestation should handle that, if not, work with them to
+solve that please.
+
+Thunderbolt has authenticated device support today, and so does PCI, and
+USB has had it for a decade or so.  Use the in-kernel implementation
+that we already have or again, show us where it is lacking and we will
+be glad to take patches to cover the holes (as we did last year when
+ChromeOS implemented support for it in their userspace.)
+
+> > > Also we would want to make sure that any config data that the hypervisor
+> > > can pass to the guest is validated.
+> > 
+> > Define "validated" please.
+> 
+> Lets say you get something like a ACPI table or qemu fw.cfg table
+> giving details of your devices; if the hypervisor builds those in a
+> nasty way what happens?
+
+You tell me, as we trust ACPI tables today, and if we can not, again
+then you need to change the model of what Linux does.  Why isn't the
+BIOS authentication path working properly for ACPI tables already today?
+I thought that was a long-solved problem with UEFI (if not, I'm sure the
+UEFI people would be interested.)
+
+Anyway, I'll wait until I see real patches as this thread seems to be
+totally vague and ignores our current best-practices for pluggable
+devices for some odd reason.
+
+thanks,
+
+greg k-h
