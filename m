@@ -2,66 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E197467BA84
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCCC67BAA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235722AbjAYTQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S229505AbjAYTWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbjAYTQN (ORCPT
+        with ESMTP id S235892AbjAYTWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:16:13 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66EC1F4BC
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:16:12 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id ss4so50242105ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:16:12 -0800 (PST)
+        Wed, 25 Jan 2023 14:22:11 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E651259E4D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:22:08 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id 188so24325596ybi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BpHOzPSp0+2DVR/IBcmdeeYd61gBn1vynCwibN+pOkE=;
-        b=cQIGVXdlZr5h+z0gvRmUwKcGYka6xYqdS+WGzhpAJT3CvI3E7xt44LpyFEfKMzz1lF
-         vYaxf2dK5jLgitazYDJZVD3O3vBBvUW7ZLUe5dHKuzQLdJy74ArtqjZD9hPlzxRoGNG3
-         /bew91YduRwZNbWH92+zOG8DJJzcXqe/Ip3ZJ1/AUsXJ53Tu43JPupQ3Xsv8jpFKMk5V
-         nHSL6mUsw7I/hr4mxEA5pLhBKfpHDNLFilq1yUTelK4bfE9mFQcA3WoY6A1DIZ6+q/mR
-         zKSRadM5sp5YbHdEPDarGDtaCZ8FB3PE79xUMR+oj0rCuo1atPeenTQyNUSvQuxM61sF
-         dnqg==
+        bh=azRxZ4iz/UmvW0JqPrqtZcKNmaFt9MhDUKzgc4KSKbs=;
+        b=idbJO946IIJ5xclJl8K3ScrKphDS9TF1tg1AgsB8MPco32Ta3+qR61NnmqeUtsnx6v
+         goCUeETP5lzAzmASwAR43MDdzy2mxaLRi4K6yZE3Q+T5C1FUbuWCmQDSDtqKn5s2e6iw
+         g3L5+Ey8VBu5ZDVtB0a1Axssd66xmU+yYweeF+hE6jQwYilC1xMJq5jCj+NjIEVUsfL4
+         tw7nY9DM/DzPYd8vrkO+1JZY6FVSYBMjhRJz+WIxF8k5j1BI+Qpdb88Is7APtmnyodC7
+         tcl2VYHmnzhTEoT5QVoxpB++zHDpcXCuz10aLB8wrCQNw685txpV1MvZDG3GANSg7b1j
+         9Xwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BpHOzPSp0+2DVR/IBcmdeeYd61gBn1vynCwibN+pOkE=;
-        b=qEPJQ2bsMdYNErVtr4NgBvD2U92ekCj8f2MzwYO6WqzZf2ZMqOToD6Syk4oDwuq7PH
-         Db5Axh+MK62b/5ez9VlQOos7CutuVb7T4PYbN3PDPSTrBxdcCouKVlxBrGKSQIZ/oR0d
-         BzTaVMrZCLhBzkLpjV1oZfuIfp2sRUbDDMlffdrtC1p0jTZHXO+a+0Dzy13K8XCHhwtX
-         IuipEcZ3Jq4jfNc6RyNWfe9+aoAMV1yMYdtzTijjKPidUX+NDq+KQ9CuwVyr9OdQwLoS
-         WBh04sFFxISPsmYGp07Q07OsTgG7juxAF27QzN7K/5cxfhTS7hMFbdxOmDmPT6S8WA06
-         eY+A==
-X-Gm-Message-State: AFqh2koclAuXMIdOo3kqgt+G95EY/ApThQKhfEikvWz2onCtyp9uUrKP
-        tu7u+9dGH8dzr4GFVhDbfTopjQ+3T4PNoH9kPL+v1Q==
-X-Google-Smtp-Source: AMrXdXsQXSEjRXyJwHDDL6MhuMFTJ4G2vBKWsi2XwmtB50ZOdY40wNWBTow7hyW4IHJ2RZBeJUEIrT0kjuyLvMjYSjc=
-X-Received: by 2002:a17:906:7754:b0:86f:2cc2:7028 with SMTP id
- o20-20020a170906775400b0086f2cc27028mr3333891ejn.133.1674674171046; Wed, 25
- Jan 2023 11:16:11 -0800 (PST)
+        bh=azRxZ4iz/UmvW0JqPrqtZcKNmaFt9MhDUKzgc4KSKbs=;
+        b=xxHguFuIhR5j4RdkcLtzhkDQ08W+R9BTRq6dt+P+39BjKObe/ffdjfe3+7tyvLfpQp
+         KogLqgK0Ey3/Vlf76r12gUa9bPnGvfbVJ0wGAzVBP8k417/pIIiDKuYYAQAub/AQeeMM
+         l5WiLr2roQVADCp59R53ZDmIeC7fpufl60+7ADegOP8iaX2dcz1jnTI0v0aiqsByP8gz
+         wHaYCsMkw/4wjaiu5nS6bpnc6ebrWqCj2pxJTtephk/8tIIfPzuUDITu6rSd5wDcM1eB
+         zmPXV/q49K/fnC0dLr6mdklssosqFxolCxhRsWoG/LYfxU+icxBXfFkMDxWx8fL9tVT+
+         u1Mw==
+X-Gm-Message-State: AO0yUKW09fcN0q8+MvYBCJbg7sDYErmCeZbyu94zMNBz2NR/Tm37Fo+W
+        qQY/UbAraw299SOTacRC4lsk3wjltdUE34RUH+G76A==
+X-Google-Smtp-Source: AK7set9Keebho/efVX9+GO9rxFk2PCEOZWbQBvt6Ld/Tpsz3uuvCSMXu6oGPdxC/ITtQ87qnzhMkMAEzeywlAhveKx4=
+X-Received: by 2002:a25:c247:0:b0:80b:6201:bee7 with SMTP id
+ s68-20020a25c247000000b0080b6201bee7mr946541ybf.340.1674674527537; Wed, 25
+ Jan 2023 11:22:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125015738.912924-1-zokeefe@google.com> <CAHbLzkoF+gbgopWBSP0Xe0+g-DLF_n-NQ_7gvg+0EEGpv8Q7Tw@mail.gmail.com>
-In-Reply-To: <CAHbLzkoF+gbgopWBSP0Xe0+g-DLF_n-NQ_7gvg+0EEGpv8Q7Tw@mail.gmail.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Wed, 25 Jan 2023 11:15:34 -0800
-Message-ID: <CAAa6QmRL1H0VEhE0oA87=jyi4hL3v_T+XO7izfCtArnXcBP4DQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm/MADV_COLLAPSE: set EAGAIN on unexpected page refcount
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>
+References: <20230125083851.27759-1-surenb@google.com> <20230125083851.27759-2-surenb@google.com>
+ <Y9Dx0cPXF2yoLwww@hirez.programming.kicks-ass.net> <CAJuCfpEcVCZaCGzc-Wim25eaV5e6YG1YJAAdKwZ6JHViB0z8aw@mail.gmail.com>
+ <Y9F28J9njAtwifuL@casper.infradead.org>
+In-Reply-To: <Y9F28J9njAtwifuL@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 25 Jan 2023 11:21:56 -0800
+Message-ID: <CAJuCfpHO7g-5GZep0e7r=dFTBhVHpN3R_pHMGOqetgrKyYzMFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] mm: introduce vma->vm_flags modifier functions
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, ldufour@linux.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +138,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:06 AM Yang Shi <shy828301@gmail.com> wrote:
+On Wed, Jan 25, 2023 at 10:37 AM Matthew Wilcox <willy@infradead.org> wrote:
 >
-> On Tue, Jan 24, 2023 at 5:58 PM Zach O'Keefe <zokeefe@google.com> wrote:
+> On Wed, Jan 25, 2023 at 08:49:50AM -0800, Suren Baghdasaryan wrote:
+> > On Wed, Jan 25, 2023 at 1:10 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > +     /*
+> > > > +      * Flags, see mm.h.
+> > > > +      * WARNING! Do not modify directly.
+> > > > +      * Use {init|reset|set|clear|mod}_vm_flags() functions instead.
+> > > > +      */
+> > > > +     unsigned long vm_flags;
+> > >
+> > > We have __private and ACCESS_PRIVATE() to help with enforcing this.
 > >
-> > During collapse, in a few places we check to see if a given small page
-> > has any unaccounted references.  If the refcount on the page doesn't
-> > match our expectations, it must be there is an unknown user concurrently
-> > interested in the page, and so it's not safe to move the contents
-> > elsewhere. However, the unaccounted pins are likely an ephemeral state.
-> >
-> > In such a situation, make MADV_COLLAPSE set EAGAIN errno, indicating that
-> > collapse may succeed on retry.
+> > Thanks for pointing this out, Peter! I guess for that I'll need to
+> > convert all read accesses and provide get_vm_flags() too? That will
+> > cause some additional churt (a quick search shows 801 hits over 248
+> > files) but maybe it's worth it? I think Michal suggested that too in
+> > another patch. Should I do that while we are at it?
 >
-> The page may be DMA pinned (for example, pin_user_pages()), it is not
-> worth retrying for such pages. But it may also not be worth optimizing
-> for this case at this point.
+> Here's a trick I saw somewhere in the VFS:
 >
-> So the patch looks good to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
+>         union {
+>                 const vm_flags_t vm_flags;
+>                 vm_flags_t __private __vm_flags;
+>         };
+>
+> Now it can be read by anybody but written only by those using
+> ACCESS_PRIVATE.
 
-Thanks as always, Yang, and good point about DMA pinning. As you
-mentioned, I don't know if it's worth considering that too much right
-now, as it's unlikely these two uses (MADV_COLLAPSE and DMA pining)
-would be used together. We can revisit if necessary later if it's an
-issue, but for now, I think it's a win that MADV_COLLAPSE (+ a bounded
-userspace retry loop based off erno) is more likely to succeed.
+Huh, this is quite nice! I think it does not save us from the cases
+when vma->vm_flags is passed by a reference and modified indirectly,
+like in ksm_madvise()? Though maybe such usecases are so rare (I found
+only 2 cases) that we can ignore this?
