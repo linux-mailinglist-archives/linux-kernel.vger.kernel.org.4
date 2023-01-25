@@ -2,102 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560D867BD75
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A799467BD85
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236630AbjAYUzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S236644AbjAYU6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236621AbjAYUzU (ORCPT
+        with ESMTP id S235993AbjAYU6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:55:20 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843E948A39
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:55:19 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id i185so21064545vsc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:55:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GW5QetboOjp/W1DGCPKlZRb9/ODQzueiI/Kp5ewpL8w=;
-        b=q1Y43sVBV67a+pTMXgzYdcgrIM1+jDEVyQDrYIY2VqgPCBA4gLIrVelM5WvsaRU6FT
-         apqIDYl5nTydWmXdWFsHHzEmnUi9ucbdv/eGaDFY+/ikPxP7rpgjg23TSKdKRNG75RfF
-         hOJWv6YDiJCYWInMiKfmSvisKfQHceB412aHHLyIH4laJZDnAhdUA/gwrmMFaTmYP4wI
-         JasXHanhpujv7dWFati3LIBFZ6AJQSVfl11oMManr2Pa9YA9E34Bt+wQcOsCwX3M2nO1
-         aPfT/BNnaT1wPwl1xWgGhrkDfqq/B+t3Phb8hSkCfWokWCUfGMVgTTrWzsij4Z4mDYa4
-         4IoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GW5QetboOjp/W1DGCPKlZRb9/ODQzueiI/Kp5ewpL8w=;
-        b=3UJDn9RhzhL+QT4h4hBucJFzxBrxDYgbwXAmpwwpZDlMRsq42ikWFfe0axL86/LIGA
-         GIKUVzdU48QBD21czaX4I3PlEOHEdJ2EPsGRwqVES8d4HNAYtrNMrQ4NOJMc1kruX6Gf
-         Br4r9guu9lrwHY5ERRHsAZum8VOhS4tOi++xJ4/d1DlHArrgPLAEEXLLOu++xhJTM3AQ
-         n/tBWSzTxlXLT6GJ7IpiYfnLq9hAVDrl4OOm8GK+sYkymgqFwSGtaCkf5DyNyGr7+9Fd
-         Tl8kX3f6+3ifF1xjYnhHWQOQhhrwz7WH3xbZp0b/mXGu/U/crAa+rzkcmOdZxWuv71fQ
-         LKqQ==
-X-Gm-Message-State: AFqh2ko0NfWR+e/ngRY0MxAQ5omWMFkxJhVcRDnQXf18MZt8UpJlx4ld
-        tOEnRPtTMDszO5odOR2h88w49HJwJWjeHsyHGoKBWQ==
-X-Google-Smtp-Source: AMrXdXviSBQt/EVgkIYc2P8tOGvMYorzKUR4KlpF038mvQhGE7AGWByUE0GqDBCYz0ZD4Keh/l4cAHpGGwW9DuqqjQA=
-X-Received: by 2002:a67:f650:0:b0:3d3:db6b:e761 with SMTP id
- u16-20020a67f650000000b003d3db6be761mr4768562vso.46.1674680118522; Wed, 25
- Jan 2023 12:55:18 -0800 (PST)
+        Wed, 25 Jan 2023 15:58:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976EE14495;
+        Wed, 25 Jan 2023 12:58:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39F0E6162C;
+        Wed, 25 Jan 2023 20:58:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF2CC4339B;
+        Wed, 25 Jan 2023 20:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674680293;
+        bh=FM0mzRE+5UDJn4OWAUXa4Ds0/l1i4bq6FY3oRh66wGI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=h2YjxE9+bsLf/Lr6eDWW8fqxOMsW4g/i1hLjis9npB98Ql3i6flf7l4Q6ctpnyGfF
+         hgUuCruLjm3A0yCekTne+ITQlyIm+Dtw1iFzJyCRX+KZ68EMEiP/yHv67w+d5k/ovr
+         Jc6DPVucwpwfRCyu5Ck1Ja+zMnxccZukiLRfKZKF8fBBGIIteBzyIIBv69mQqULTa2
+         nnhVmtUdFzfEShzpEhT2NLfl4boRBvFP2rj6f7lyHRmBfhPmcHcV5U3OFTg/5FGS4p
+         4rJUM2s6z/8UjBqLRvpgpOSeCgnB6j+5i7aaMwHD0rOdUE9tbHV8hjwP+gDGEu3FLf
+         c0B7FK0WJKg3g==
+Message-ID: <06d53a3fa48080d902476b71308e69bd.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
-In-Reply-To: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 25 Jan 2023 13:54:42 -0700
-Message-ID: <CAOUHufashDpjnj=XxaR3jsAxPT6tOuv+Uv9ZuJ_8=vLS_HrDWw@mail.gmail.com>
-Subject: Re: [PATCH v2] nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAGE_SIZE
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     nvdimm@lists.linux.dev, stable@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, Jeff Moyer <jmoyer@redhat.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230121192540.9177-2-rayyan@ansari.sh>
+References: <20230121192540.9177-1-rayyan@ansari.sh> <20230121192540.9177-2-rayyan@ansari.sh>
+Subject: Re: [PATCH v4 1/3] clk: qcom: smd: Add XO RPM clocks for MSM8226/MSM8974
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Rayyan Ansari <rayyan@ansari.sh>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+To:     Rayyan Ansari <rayyan@ansari.sh>, linux-arm-msm@vger.kernel.org
+Date:   Wed, 25 Jan 2023 12:58:11 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 1:23 PM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
->
-> ...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-> potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
-> doubles the amount of capacity stolen from user addressable capacity for
-> everyone, regardless of whether they are using the debug option. Revert
-> that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-> allow for debug scenarios to proceed with creating debug sized page maps
-> with a compile option to support debug scenarios.
->
-> Note that this only applies to cases where the page map is permanent,
-> i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
-> create-namespace" terms). For the "--map=mem" case, since the allocation
-> is ephemeral for the lifespan of the namespace, there are no explicit
-> restriction. However, the implicit restriction, of having enough
-> available "System RAM" to store the page map for the typically large
-> pmem, still applies.
->
-> Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-> Cc: <stable@vger.kernel.org>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Marco Elver <elver@google.com>
-> Reported-by: Jeff Moyer <jmoyer@redhat.com>
+Quoting Rayyan Ansari (2023-01-21 11:25:38)
+> Add the XO and XO_A clocks to the MSM8974 clock list, which is also
+> used on MSM8226.
 
-Thanks -- that BUILD_BUG_ON() has been a nuisance for some of my debug configs.
-
-Acked-by: Yu Zhao <yuzhao@google.com>
+Why was this missing for so long? Does this break suspend? Why are you
+adding it now?
