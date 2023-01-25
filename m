@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A956367B69F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444C667B6A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbjAYQK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S235542AbjAYQLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbjAYQKV (ORCPT
+        with ESMTP id S231438AbjAYQLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:10:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDEE269D;
-        Wed, 25 Jan 2023 08:10:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A6FFB81AC7;
-        Wed, 25 Jan 2023 16:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B4F9FC4339B;
-        Wed, 25 Jan 2023 16:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674663017;
-        bh=9nVgA44bWgMKV5OW6zijYVeOEm7u43KjiZYBbydbJuU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CQsCyizpHP20tT4kdl4E42YiQp982+Gq48LivJXNqPLML4XPqjRiRg4oynOa0sMmO
-         bvwouH3BXsm9FxkpIGCChGLxP4s1BUwaPsa7Y3DLTuBs19FC3TU6IrMykGk7R0nCmX
-         ADswAS9DAWvDk+43eiYzeowOoFr3MUT3xGhHypdgziBavOKBYHh/kTgQmaqrlV+ps6
-         Un8m1ME2cVQNrfvjhgCZioyHyCQgsndD0RGVUQruQIyXEBYp5swjrqjy7/8Gd3KDFL
-         TEQ3fZkTiPZ5olytJp5wCNRZPNUP1plNP+dgsOctnJ0P68+CejRwg8R7nlLyuZ85C1
-         UfxfivliBM9fw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9961AF83ED0;
-        Wed, 25 Jan 2023 16:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 25 Jan 2023 11:11:36 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A481269D;
+        Wed, 25 Jan 2023 08:11:35 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PBQ8lv019573;
+        Wed, 25 Jan 2023 08:11:32 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=64PsPJS+9HFkKPYYL53jRXNfo5jOnlTkQq+pcqdFRq8=;
+ b=A4BjRpNpo2eLUepW0VzkTzvQZVT8lnTmSUCzXOzMu1g8kdbpaeKIRwPANCYickUxiFQ2
+ bUMQiMnpNAmgPDOcjWDKi8/fmph/3kGc39NwwMJKeX1BZcCX8Fo1ez7P94pSs2lFy9Qb
+ RdLjdOhYoZXIDm9KIAKlc67pH1XY3HI999Y69hLOY/91efDcV2vBWvwLrBwN8VXM86Y/
+ PI5Xq6VwhRG8VT7cWJpsgu95M8drM2RZkzDpdPeHMxC3eJqDWx55wgVSp/zurL9ayPiU
+ 2gVaMvbPMGx1dquWNWul65QVLkU5xp/opEYJgtwZbS2OYZQxYmK6qy/FwmG8VHj3Vbw+ gw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3nb0hp9npx-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 08:11:32 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 25 Jan
+ 2023 08:11:28 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Wed, 25 Jan 2023 08:11:28 -0800
+Received: from cavium-DT10.. (unknown [10.28.34.39])
+        by maili.marvell.com (Postfix) with ESMTP id 57D4B3F7053;
+        Wed, 25 Jan 2023 08:11:25 -0800 (PST)
+From:   Tomasz Duszynski <tduszynski@marvell.com>
+To:     Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "open list:VFIO PLATFORM DRIVER" <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     <jerinj@marvell.com>, Tomasz Duszynski <tduszynski@marvell.com>
+Subject: [PATCH] vfio: platform: ignore missing reset if disabled at module init
+Date:   Wed, 25 Jan 2023 17:11:15 +0100
+Message-ID: <20230125161115.1356233-1-tduszynski@marvell.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/7] Enable cpumasks to be used as kptrs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167466301762.32537.3494037602376161495.git-patchwork-notify@kernel.org>
-Date:   Wed, 25 Jan 2023 16:10:17 +0000
-References: <20230125143816.721952-1-void@manifault.com>
-In-Reply-To: <20230125143816.721952-1-void@manifault.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com, tj@kernel.org,
-        memxor@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 6yQ2Ja2x8Kpoe_AwZgwhMo405DZkW_dm
+X-Proofpoint-GUID: 6yQ2Ja2x8Kpoe_AwZgwhMo405DZkW_dm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_10,2023-01-25_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+If reset requirement was relaxed via module parameter errors caused by
+missing reset should not be propagated down to the vfio core.
+Otherwise initialization will fail.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Signed-off-by: Tomasz Duszynski <tduszynski@marvell.com>
+Fixes: 5f6c7e0831a1 ("vfio/platform: Use the new device life cycle helpers")
+---
+ drivers/vfio/platform/vfio_platform_common.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On Wed, 25 Jan 2023 08:38:09 -0600 you wrote:
-> This is part 3 of https://lore.kernel.org/all/20230119235833.2948341-1-void@manifault.com/
-> 
-> Part 2: https://lore.kernel.org/bpf/20230120192523.3650503-1-void@manifault.com/
-> 
-> This series is based off of commit b613d335a743 ("bpf: Allow trusted
-> args to walk struct when checking BTF IDs").
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3,1/7] bpf: Disallow NULLable pointers for trusted kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/caf713c338bd
-  - [bpf-next,v3,2/7] bpf: Enable cpumasks to be queried and used as kptrs
-    https://git.kernel.org/bpf/bpf-next/c/516f4d3397c9
-  - [bpf-next,v3,3/7] selftests/bpf: Add nested trust selftests suite
-    https://git.kernel.org/bpf/bpf-next/c/a6541f4d2804
-  - [bpf-next,v3,4/7] selftests/bpf: Add selftest suite for cpumask kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/7b6abcfa15cd
-  - [bpf-next,v3,5/7] bpf/docs: Document cpumask kfuncs in a new file
-    https://git.kernel.org/bpf/bpf-next/c/bdbda395845e
-  - [bpf-next,v3,6/7] bpf/docs: Document how nested trusted fields may be defined
-    https://git.kernel.org/bpf/bpf-next/c/d94cbde2183f
-  - [bpf-next,v3,7/7] bpf/docs: Document the nocast aliasing behavior of ___init
-    https://git.kernel.org/bpf/bpf-next/c/027bdec89364
-
-You are awesome, thank you!
+diff --git a/drivers/vfio/platform/vfio_platform_common.c b/drivers/vfio/platform/vfio_platform_common.c
+index 1a0a238ffa35..c09ffab6fbe6 100644
+--- a/drivers/vfio/platform/vfio_platform_common.c
++++ b/drivers/vfio/platform/vfio_platform_common.c
+@@ -653,7 +653,8 @@ int vfio_platform_init_common(struct vfio_platform_device *vdev)
+ 	if (ret && vdev->reset_required)
+ 		dev_err(dev, "No reset function found for device %s\n",
+ 			vdev->name);
+-	return ret;
++
++	return vdev->reset_required ? ret : 0;
+ }
+ EXPORT_SYMBOL_GPL(vfio_platform_init_common);
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
