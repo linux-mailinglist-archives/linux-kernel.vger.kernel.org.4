@@ -2,669 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D8E67B4D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A71667B50F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbjAYOgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 09:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S235752AbjAYOqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbjAYOgK (ORCPT
+        with ESMTP id S235846AbjAYOpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:36:10 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94E2568A2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:35:40 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id kt14so48213513ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:35:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tOiRWymI4rd5WlsVYIaIq9NoZeWymaeFEkgKA/Uo35w=;
-        b=YayUVbnlxoaVRKYH90E4Pp6J/ospChaNFYmXvVklwZkydkwFE8AhRwOx7ep9skBU+t
-         HII1j71ESkai6nYl14m4JWkpGawmy7obefyz5JO0tQ4Jq4tyRF36iEoyXrGbMyqkkBm3
-         fvh9s7TPzNCllVBrxerh/fHn+8sHVLcuGKJTd/6k2fS9xKQ3L894d51bGinlUXskepDj
-         /lw0vca8RxfccearHt0cZHABnlvUKayoOH2ZPCjjb9+stM5aMK7OE3UDoNFfKtaTqw4J
-         TIwGmg2iC6jGA5AVCeYEipM8zfSQt6H4H/1H3jx7FVxkc4sAopTtxmPXztzcPYc9/8vC
-         4kCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tOiRWymI4rd5WlsVYIaIq9NoZeWymaeFEkgKA/Uo35w=;
-        b=qCWWJKO4k8KDXptJQhq7k2n3IU9Ca5TsxwQaRn874Wy5fzMBEIXp5PY1tmH3w3Lsju
-         +Q/2qr6PglXhiwCOBRqOfz8dE3bNAzQ5YgCDs91hVqQ41o1HOh0MtZtfBsiq5q2wgrIZ
-         5hC84Lu9Xv6ZdrA6JdLreDIaWe923ZhSXg9duyyspZNHKDVsEe4CaumvBm8p6+vsGX35
-         cd2m4Pq34s5teMjdpfc74DC+ksiaHXUj4LoRAXYYXkCGZb7GWYGInTPAF9uy6XT76cTF
-         k0sPu5MBXp0+SK2oSnpUFKTz8QgAS8v30q5ALTsmJeEwk3ScQqYySp0F6s+girmdmYAX
-         K5yw==
-X-Gm-Message-State: AFqh2kozh2n2lPbtlnLHMh3RnZGGKYz139fJGOxwRTo1yOVlDyzu0RdQ
-        l/GO6Tu2rb6wXVGllIaTF04iQw==
-X-Google-Smtp-Source: AMrXdXt5XZXcE5DsziGClu9GaRZMa9sl+Qa1tF6z/83wXeE5WbUxrmk2cDszz/r7rv3vCcUGkI2Gsg==
-X-Received: by 2002:a17:906:fb09:b0:859:aca8:fe4d with SMTP id lz9-20020a170906fb0900b00859aca8fe4dmr30524138ejb.46.1674657316956;
-        Wed, 25 Jan 2023 06:35:16 -0800 (PST)
-Received: from c64.fritz.box ([81.221.122.240])
-        by smtp.gmail.com with ESMTPSA id gx2-20020a1709068a4200b0082000f8d871sm2437789ejc.152.2023.01.25.06.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 06:35:16 -0800 (PST)
-From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-To:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
-        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
-        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
-        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
-        allen-kh.cheng@mediatek.com, sean.wang@mediatek.com,
-        zhiyong.tao@mediatek.com
-Subject: [PATCH v9 9/9] arm64: dts: mediatek: Initial mt8365-evk support
-Date:   Wed, 25 Jan 2023 15:35:03 +0100
-Message-Id: <20230125143503.1015424-10-bero@baylibre.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230125143503.1015424-1-bero@baylibre.com>
-References: <20230125143503.1015424-1-bero@baylibre.com>
+        Wed, 25 Jan 2023 09:45:53 -0500
+Received: from h7.fbrelay.privateemail.com (h7.fbrelay.privateemail.com [162.0.218.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A80246BC;
+        Wed, 25 Jan 2023 06:45:40 -0800 (PST)
+Received: from MTA-13-3.privateemail.com (mta-13-1.privateemail.com [198.54.122.107])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by h7.fbrelay.privateemail.com (Postfix) with ESMTPS id A076A6043A;
+        Wed, 25 Jan 2023 09:37:20 -0500 (EST)
+Received: from mta-13.privateemail.com (localhost [127.0.0.1])
+        by mta-13.privateemail.com (Postfix) with ESMTP id 7B14018000AD;
+        Wed, 25 Jan 2023 09:36:49 -0500 (EST)
+Received: from pappasbrent.com (rrcs-24-173-168-34.se.biz.rr.com [24.173.168.34])
+        by mta-13.privateemail.com (Postfix) with ESMTPA id D950B18000A5;
+        Wed, 25 Jan 2023 09:36:39 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1674657409;
+        bh=PbvZ1odo1oP/yBqbXfOr0eqNv09YjB8du1ZosZ2PEho=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V1nwQXuWITg+Cio0nlnrTLzC+3/vvLkblscPhaiUP8QPgYEUk1ecvU4tVlfgWjQg6
+         X5SMEfL4IIKen53Nn6XBDkvYG172efPdees0D0on6S7XnEkZ0DW3/6zL34TjXdu4HL
+         ZIURAtAplvjGGRFuKSwsdiZ0oRQscJ9pQbom0YIPLUaQxwoL2HhSI1nZCX7R+pXe1E
+         1MHGzAn3qulPwvtnKfO9IJDGZanQHe5H/OM9OpqMyZc2nX7f1+oEPBMlnJzjQA0KZq
+         4+06rG+lxFTdIiJM+wNnTA9vnF97mf+M1pxuCJpX0mm70TP3IS1AwOD4KqfqmyKvyr
+         eai5npi4tZsWA==
+Date:   Wed, 25 Jan 2023 09:36:36 -0500
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+        tian.shu.qiu@intel.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mdeia: ipu3: ipu33-mmu: Replace macro IPU3_ADDR2PTE()
+ with a function
+Message-ID: <Y9E+dGgQXFUQnIb8@pappasbrent.com>
+References: <20230124135554.13787-1-bpappas@pappasbrent.com>
+ <Y8/uTYK7qmYD5MSA@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8/uTYK7qmYD5MSA@kadam>
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+Hi Dan,
 
-This adds minimal support for the Mediatek 8365 SOC and the EVK reference
-board, allowing the board to boot to initramfs with serial port I/O.
+> When you say "Linux coding style standards" what exactly does that mean?
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-[bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups, add CPU cache layout, add systimer, fix GIC]
-Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/Makefile       |   1 +
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 168 +++++++++
- arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 377 ++++++++++++++++++++
- 3 files changed, 546 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+I am specifically referring to this line of
+Documentation/process/coding-style.rst, from the section "Macros, Enums,
+and RTL":
 
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 813e735c5b96d..d78523c5a7dd6 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -47,4 +47,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r2.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r3.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-new file mode 100644
-index 0000000000000..4683704ea2355
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-@@ -0,0 +1,168 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021-2022 BayLibre, SAS.
-+ * Authors:
-+ * Fabien Parent <fparent@baylibre.com>
-+ * Bernhard Rosenkränzer <bero@baylibre.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
-+#include "mt8365.dtsi"
-+
-+/ {
-+	model = "MediaTek MT8365 Open Platform EVK";
-+	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:921600n8";
-+	};
-+
-+	firmware {
-+		optee {
-+			compatible = "linaro,optee-tz";
-+			method = "smc";
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&gpio_keys>;
-+
-+		key-volume-up {
-+			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
-+			label = "volume_up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			wakeup-source;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0 0x40000000 0 0xc0000000>;
-+	};
-+
-+	usb_otg_vbus: regulator-0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "otg_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		/* 128 KiB reserved for ARM Trusted Firmware (BL31) */
-+		bl31_secmon_reserved: secmon@43000000 {
-+			no-map;
-+			reg = <0 0x43000000 0 0x20000>;
-+		};
-+
-+		/* 12 MiB reserved for OP-TEE (BL32)
-+		 * +-----------------------+ 0x43e0_0000
-+		 * |      SHMEM 2MiB       |
-+		 * +-----------------------+ 0x43c0_0000
-+		 * |        | TA_RAM  8MiB |
-+		 * + TZDRAM +--------------+ 0x4340_0000
-+		 * |        | TEE_RAM 2MiB |
-+		 * +-----------------------+ 0x4320_0000
-+		 */
-+		optee_reserved: optee@43200000 {
-+			no-map;
-+			reg = <0 0x43200000 0 0x00c00000>;
-+		};
-+	};
-+};
-+
-+&pio {
-+	gpio_keys: gpio-keys-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
-+			bias-pull-up;
-+			input-enable;
-+		};
-+	};
-+
-+	uart0_pins: uart0-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_35_URXD0__FUNC_URXD0>,
-+				 <MT8365_PIN_36_UTXD0__FUNC_UTXD0>;
-+		};
-+	};
-+
-+	uart1_pins: uart1-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_37_URXD1__FUNC_URXD1>,
-+				 <MT8365_PIN_38_UTXD1__FUNC_UTXD1>;
-+		};
-+	};
-+
-+	uart2_pins: uart2-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_39_URXD2__FUNC_URXD2>,
-+				 <MT8365_PIN_40_UTXD2__FUNC_UTXD2>;
-+		};
-+	};
-+
-+	usb_pins: usb-pins {
-+		id-pins {
-+			pinmux = <MT8365_PIN_17_GPIO17__FUNC_GPIO17>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+
-+		usb0-vbus-pins {
-+			pinmux = <MT8365_PIN_16_GPIO16__FUNC_USB_DRVVBUS>;
-+			output-high;
-+		};
-+
-+		usb1-vbus-pins {
-+			pinmux = <MT8365_PIN_18_GPIO18__FUNC_GPIO18>;
-+			output-high;
-+		};
-+	};
-+
-+	pwm_pins: pwm-pins {
-+		pins {
-+			pinmux = <MT8365_PIN_19_DISP_PWM__FUNC_PWM_A>,
-+				 <MT8365_PIN_116_I2S_BCK__FUNC_PWM_C>;
-+		};
-+	};
-+};
-+
-+&pwm {
-+	pinctrl-0 = <&pwm_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	pinctrl-0 = <&uart0_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	pinctrl-0 = <&uart1_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	pinctrl-0 = <&uart2_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-new file mode 100644
-index 0000000000000..15ac4c1f09661
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -0,0 +1,377 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * (C) 2018 MediaTek Inc.
-+ * Copyright (C) 2022 BayLibre SAS
-+ * Fabien Parent <fparent@baylibre.com>
-+ * Bernhard Rosenkränzer <bero@baylibre.com>
-+ */
-+#include <dt-bindings/clock/mediatek,mt8365-clk.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/phy/phy.h>
-+
-+/ {
-+	compatible = "mediatek,mt8365";
-+	interrupt-parent = <&sysirq>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x0>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>;
-+			next-level-cache = <&l2>;
-+		};
-+
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x1>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>;
-+			next-level-cache = <&l2>;
-+		};
-+
-+		cpu2: cpu@2 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x2>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>;
-+			next-level-cache = <&l2>;
-+		};
-+
-+		cpu3: cpu@3 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x3>;
-+			#cooling-cells = <2>;
-+			enable-method = "psci";
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>;
-+			next-level-cache = <&l2>;
-+		};
-+
-+		l2: l2-cache {
-+			compatible = "cache";
-+			cache-level = <2>;
-+			cache-size = <0x80000>;
-+			cache-line-size = <64>;
-+			cache-sets = <512>;
-+			cache-unified;
-+		};
-+	};
-+
-+	clk26m: oscillator {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <26000000>;
-+		clock-output-names = "clk26m";
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	soc {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		compatible = "simple-bus";
-+		ranges;
-+
-+		gic: interrupt-controller@c000000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&gic>;
-+			interrupt-controller;
-+			reg = <0 0x0c000000 0 0x10000>, /* GICD */
-+			      <0 0x0c080000 0 0x80000>, /* GICR */
-+			      <0 0x0c400000 0 0x2000>,  /* GICC */
-+			      <0 0x0c410000 0 0x1000>,  /* GICH */
-+			      <0 0x0c420000 0 0x2000>;  /* GICV */
-+
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		topckgen: syscon@10000000 {
-+			compatible = "mediatek,mt8365-topckgen", "syscon";
-+			reg = <0 0x10000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		infracfg: syscon@10001000 {
-+			compatible = "mediatek,mt8365-infracfg", "syscon";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		pericfg: syscon@10003000 {
-+			compatible = "mediatek,mt8365-pericfg", "syscon";
-+			reg = <0 0x10003000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		syscfg_pctl: syscfg-pctl@10005000 {
-+			compatible = "mediatek,mt8365-syscfg", "syscon";
-+			reg = <0 0x10005000 0 0x1000>;
-+		};
-+
-+		pio: pinctrl@1000b000 {
-+			compatible = "mediatek,mt8365-pinctrl";
-+			reg = <0 0x1000b000 0 0x1000>;
-+			mediatek,pctl-regmap = <&syscfg_pctl>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+			interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		apmixedsys: syscon@1000c000 {
-+			compatible = "mediatek,mt8365-apmixedsys", "syscon";
-+			reg = <0 0x1000c000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		keypad: keypad@10010000 {
-+			compatible = "mediatek,mt6779-keypad";
-+			reg = <0 0x10010000 0 0x1000>;
-+			wakeup-source;
-+			interrupts = <GIC_SPI 124 IRQ_TYPE_EDGE_FALLING>;
-+			clocks = <&clk26m>;
-+			clock-names = "kpd";
-+			status = "disabled";
-+		};
-+
-+		mcucfg: syscon@10200000 {
-+			compatible = "mediatek,mt8365-mcucfg", "syscon";
-+			reg = <0 0x10200000 0 0x2000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		sysirq: interrupt-controller@10200a80 {
-+			compatible = "mediatek,mt8365-sysirq", "mediatek,mt6577-sysirq";
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&gic>;
-+			reg = <0 0x10200a80 0 0x20>;
-+		};
-+
-+		infracfg_nao: infracfg@1020e000 {
-+			compatible = "mediatek,mt8365-infracfg", "syscon";
-+			reg = <0 0x1020e000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		rng: rng@1020f000 {
-+			compatible = "mediatek,mt8365-rng", "mediatek,mt7623-rng";
-+			reg = <0 0x1020f000 0 0x100>;
-+			clocks = <&infracfg CLK_IFR_TRNG>;
-+			clock-names = "rng";
-+		};
-+
-+		apdma: dma-controller@11000280 {
-+			compatible = "mediatek,mt8365-uart-dma", "mediatek,mt6577-uart-dma";
-+			reg = <0 0x11000280 0 0x80>,
-+			      <0 0x11000300 0 0x80>,
-+			      <0 0x11000380 0 0x80>,
-+			      <0 0x11000400 0 0x80>,
-+			      <0 0x11000580 0 0x80>,
-+			      <0 0x11000600 0 0x80>;
-+			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 46 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 47 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 48 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-+				     <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
-+			dma-requests = <6>;
-+			clocks = <&infracfg CLK_IFR_AP_DMA>;
-+			clock-names = "apdma";
-+			#dma-cells = <1>;
-+		};
-+
-+		uart0: serial@11002000 {
-+			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
-+			reg = <0 0x11002000 0 0x1000>;
-+			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&clk26m>, <&infracfg CLK_IFR_UART0>;
-+			clock-names = "baud", "bus";
-+			dmas = <&apdma 0>, <&apdma 1>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
-+
-+		uart1: serial@11003000 {
-+			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
-+			reg = <0 0x11003000 0 0x1000>;
-+			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&clk26m>, <&infracfg CLK_IFR_UART1>;
-+			clock-names = "baud", "bus";
-+			dmas = <&apdma 2>, <&apdma 3>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
-+
-+		uart2: serial@11004000 {
-+			compatible = "mediatek,mt8365-uart", "mediatek,mt6577-uart";
-+			reg = <0 0x11004000 0 0x1000>;
-+			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&clk26m>, <&infracfg CLK_IFR_UART2>;
-+			clock-names = "baud", "bus";
-+			dmas = <&apdma 4>, <&apdma 5>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
-+
-+		pwm: pwm@11006000 {
-+			compatible = "mediatek,mt8365-pwm";
-+			reg = <0 0x11006000 0 0x1000>;
-+			#pwm-cells = <2>;
-+			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&infracfg CLK_IFR_PWM_HCLK>,
-+				 <&infracfg CLK_IFR_PWM>,
-+				 <&infracfg CLK_IFR_PWM1>,
-+				 <&infracfg CLK_IFR_PWM2>,
-+				 <&infracfg CLK_IFR_PWM3>;
-+			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
-+		};
-+
-+		spi: spi@1100a000 {
-+			compatible = "mediatek,mt8365-spi", "mediatek,mt7622-spi";
-+			reg = <0 0x1100a000 0 0x100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL2_D4>,
-+				 <&topckgen CLK_TOP_SPI_SEL>,
-+				 <&infracfg CLK_IFR_SPI0>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		ssusb: usb@11201000 {
-+			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
-+			reg = <0 0x11201000 0 0x2e00>, <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_LOW>;
-+			phys = <&u2port0 PHY_TYPE_USB2>,
-+			       <&u2port1 PHY_TYPE_USB2>;
-+			clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-+				 <&infracfg CLK_IFR_SSUSB_REF>,
-+				 <&infracfg CLK_IFR_SSUSB_SYS>,
-+				 <&infracfg CLK_IFR_ICUSB>;
-+			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck";
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			status = "disabled";
-+
-+			usb_host: usb@11200000 {
-+				compatible = "mediatek,mt8365-xhci", "mediatek,mtk-xhci";
-+				reg = <0 0x11200000 0 0x1000>;
-+				reg-names = "mac";
-+				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_LOW>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-+					 <&infracfg CLK_IFR_SSUSB_REF>,
-+					 <&infracfg CLK_IFR_SSUSB_SYS>,
-+					 <&infracfg CLK_IFR_ICUSB>,
-+					 <&infracfg CLK_IFR_SSUSB_XHCI>;
-+				clock-names = "sys_ck", "ref_ck", "mcu_ck",
-+					      "dma_ck", "xhci_ck";
-+				status = "disabled";
-+			};
-+		};
-+
-+		u3phy: t-phy@11cc0000 {
-+			compatible = "mediatek,mt8365-tphy", "mediatek,generic-tphy-v2";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x11cc0000 0x9000>;
-+
-+			u2port0: usb-phy@0 {
-+				reg = <0x0 0x400>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-+					 <&topckgen CLK_TOP_USB20_48M_EN>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+
-+			u2port1: usb-phy@1000 {
-+				reg = <0x1000 0x400>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-+					 <&topckgen CLK_TOP_USB20_48M_EN>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	system_clk: dummy13m {
-+		compatible = "fixed-clock";
-+		clock-frequency = <13000000>;
-+		#clock-cells = <0>;
-+	};
-+
-+	systimer: timer@10017000 {
-+		compatible = "mediatek,mt8365-systimer", "mediatek,mt6795-systimer";
-+		reg = <0 0x10017000 0 0x10>;
-+		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&system_clk>;
-+		clock-names = "clk13m";
-+	};
-+};
--- 
-2.39.1
+> Generally, inline functions are preferable to macros resembling
+> functions.
+
+This is the first reason I chose this specific macro.
+IPU3_ADD2PTE() would behave the same as a function, so based on my
+reading of coding-style.rst, I thought it would be appropriate to
+proprose turning it into a function.
+
+Full disclosure, I am university student, and my current research
+project is on creating a static analysis framework for finding macros
+that can be easily turned into functions.
+I want this project to have an impact on widely-used code,
+and so I have been using this framework to find such macros in Linux.
+That is why I have recently been submitting patches to turn macros into
+functions.
+So the second reason I chose this macro was because my framework
+identifies it as transformable.
+
+> This code is in the middle of a big section full of macros.  Why did you
+> pick this particular macro?  Now it doesn't mirror the IPU3_PTE2ADDR()
+> so this patch hurts readability.
+
+The reason why I did not try to turn the macro IPU3_PTE2ADDR() into a
+function is that it is never invoked, and my framework does not identify
+uninvoked macros as transformable.
+
+There are more macros in drivers/staging that I think could be turned
+into functions, and I would like to continue submitting patches to do
+so.
+However, if you would rather I change the way I am doing this,
+or that I stop submitting these sorts of patches altogether,
+please let me know.
+
+Thank you,
+Brent
 
