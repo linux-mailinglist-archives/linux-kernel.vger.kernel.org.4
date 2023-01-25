@@ -2,319 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0889B67ADCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C62E67ADCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbjAYJ2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S235245AbjAYJ2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbjAYJ17 (ORCPT
+        with ESMTP id S235234AbjAYJ2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:27:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60C0470A4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674638830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gBtAUTCWfw4ajbScdY9ziQC/mtBYAVVDyx4SSrAQ6CM=;
-        b=ZX0hSaSquxfbqBf42kDm1+kaMIfCZHzzWbh0yW+rLSMNJ+OTwEGNKBqD9RfvTtqvl9HWkc
-        j2ik6pfeK0PR9+DMdc6GiKFiJRJ+E6XK94e3/lKGw2EwqYCK6i/naF3ZsnB+GXTGOS31Pq
-        M0ACMhcaJVdPFnQsrkl2SWWEDKWven0=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-609-ynh0X_fWMP6mrDpBxe4mpw-1; Wed, 25 Jan 2023 04:27:09 -0500
-X-MC-Unique: ynh0X_fWMP6mrDpBxe4mpw-1
-Received: by mail-wr1-f72.google.com with SMTP id i28-20020adfa51c000000b002ba26dfcd08so3044118wrb.18
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:27:08 -0800 (PST)
+        Wed, 25 Jan 2023 04:28:03 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD918AB4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:28:02 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id i17so8530035ila.9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3vAoXdS/YoRTyt2xMAeJZRk1CWXWTFAex8XSq5QFxAI=;
+        b=S24ranaz74YGGuc1OAnh94VOLMsmXsIZLcj8+scBUXH89LJHLuMjrTWBh0p6/v76tY
+         88SOxVz5O1VxFq7CGGLduJHWVWXrsan3v+wmnVqudCskHR25NDnATl7XEhIxO/RYKqbj
+         sJBRUFAQPX4CXb95M6G1bYcGuC9qC9i6xYDeoz5vETxL3Kpjv+eJ1nPzsTItAunGMclx
+         6jhubgP+0FlGVJZzPWwy+1GRmjTyErdxqdkNfgoZvb07znINfh+aAjSi4ARRr8FOF7C/
+         xseyzU0u4Thzb5GLUPFr741oGMQbebvwzcem/HaogSUNTnFOM119SyBF+of2dzbWbZQV
+         EiaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gBtAUTCWfw4ajbScdY9ziQC/mtBYAVVDyx4SSrAQ6CM=;
-        b=EW7Orh8iQIfck1GdzkCsvz9S7ytA4Z9sbBVLRvJD14wY/w7qCWUmSgkKyuEPYCGES9
-         k4ZGPhHaaOdlexidetuBt0pofcc1/bZi9va2EWEduoaghEfuAsO1I2hc7e5HVnusQOiy
-         7BUUXCF+oZSAvQYlieqRb8k9d1fTpF7Q5u+PICCZ8C/+u/0SgCLlmY5JMy7/yysqOMcI
-         vmGPbXreEdX0QDima6Jqqz+sXGV6ob2Q7WCJ9zfQ7ar1w+FmYP8hY1pKNWHgGg9GLEp7
-         GOKwz6aiEWo+ccEz25dHdx86A7H8CNOZ/eD7/Jhwmzz6CyE4irQr2QKa0CaD6HnkQzSj
-         4zLw==
-X-Gm-Message-State: AFqh2kq21gX7/9uslwMS2GX5xJ5m2uTFBb4VfA5KfPYRl7vLqkARvQ2w
-        2NHFueBUSLjouKJXP/dx3/lDMT8PniLttKXRYROws92JWrk/g9tAwVwHTsRsMr7Kvl1mmO993sB
-        MsG/7+WshH69F+fy/MW8iA3fY
-X-Received: by 2002:a05:600c:1d8e:b0:3d1:ebdf:d586 with SMTP id p14-20020a05600c1d8e00b003d1ebdfd586mr30109238wms.29.1674638827471;
-        Wed, 25 Jan 2023 01:27:07 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt3I5ugL1L1S0w6an2fdSANTczn3IPM30D9smTkSjnVGxpx9rTFmh3kLNk4pToJoqtfXEhpIg==
-X-Received: by 2002:a05:600c:1d8e:b0:3d1:ebdf:d586 with SMTP id p14-20020a05600c1d8e00b003d1ebdfd586mr30109212wms.29.1674638827056;
-        Wed, 25 Jan 2023 01:27:07 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:4c00:486:38e2:8ff8:a135? (p200300cbc7054c00048638e28ff8a135.dip0.t-ipconnect.de. [2003:cb:c705:4c00:486:38e2:8ff8:a135])
-        by smtp.gmail.com with ESMTPSA id o17-20020a05600c511100b003dc0d5b4fa6sm5924346wms.3.2023.01.25.01.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 01:27:06 -0800 (PST)
-Message-ID: <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
-Date:   Wed, 25 Jan 2023 10:27:04 +0100
+        bh=3vAoXdS/YoRTyt2xMAeJZRk1CWXWTFAex8XSq5QFxAI=;
+        b=Nq0TAzRAIenihDkL56WtU3hZr+vkvD/6VogZo3A9CdUnMzcZ6wbdialDsOiV4KEE7x
+         N/6gb0PP6VRiIx6t0NQaeu9LwTA+3yoH36oD11dCxaccaacLgnUS50PBeI+KzaJF3kDs
+         QFxDhG0BhhhoDH1Xs9+0tJHaP5v2sdKFQWOPL7BBEqa08+3bu3Yp8VUzv06n3XNHMTYa
+         vYmcrCtJCrBffV5DcKTNVb/NweIb5mgz8ZLYjoKs3sLvPL1xC2n4Uuub2Vn+SY4MMnpd
+         6ANlNO78w3lnggs+hrXZRqFg8UqveY2NXxyiU7ch/eVZOIBr42Tl80Esyg0Y9WG+h51K
+         cmsQ==
+X-Gm-Message-State: AO0yUKWnlpziP24J0Ms+iTHHS+hQAd6RNfmKFuO7Spg6lPXdFyjAslC5
+        YVDqafgAWpUMg0dGp4gTZEdnpIHmhtse6kFuYQ2Y0A==
+X-Google-Smtp-Source: AK7set/bcEtGvKWUjj5g+XyVKGurJsF1MsHuI4LRXED0wzXVTUEYgHVVK6kVIc67YzuuYSiM20spifAd3Cryc3TTTtw=
+X-Received: by 2002:a92:ca8d:0:b0:310:98bd:dbf0 with SMTP id
+ t13-20020a92ca8d000000b0031098bddbf0mr583597ilo.128.1674638881876; Wed, 25
+ Jan 2023 01:28:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-19-rick.p.edgecombe@intel.com>
- <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
- <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
- <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
- <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
-In-Reply-To: <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117163543.1049025-1-jannh@google.com> <CACT4Y+aQUeoWnWmbDG3O2_P75f=2u=VDRA1PjuTtbJsp5Xw2VA@mail.gmail.com>
+In-Reply-To: <CACT4Y+aQUeoWnWmbDG3O2_P75f=2u=VDRA1PjuTtbJsp5Xw2VA@mail.gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 25 Jan 2023 10:27:25 +0100
+Message-ID: <CAG48ez32X1WKryh5ueQ0=Mn=PMKc6zunOYsMHhwMMMxKKaMfqA@mail.gmail.com>
+Subject: Re: [PATCH] fork, vmalloc: KASAN-poison backing pages of vmapped stacks
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.01.23 19:14, Edgecombe, Rick P wrote:
-> On Tue, 2023-01-24 at 17:24 +0100, David Hildenbrand wrote:
->> On 23.01.23 21:47, Edgecombe, Rick P wrote:
->>> On Mon, 2023-01-23 at 10:50 +0100, David Hildenbrand wrote:
->>>> On 19.01.23 22:22, Rick Edgecombe wrote:
->>>>> The x86 Control-flow Enforcement Technology (CET) feature
->>>>> includes
->>>>> a new
->>>>> type of memory called shadow stack. This shadow stack memory
->>>>> has
->>>>> some
->>>>> unusual properties, which requires some core mm changes to
->>>>> function
->>>>> properly.
->>>>>
->>>>> Since shadow stack memory can be changed from userspace, is
->>>>> both
->>>>> VM_SHADOW_STACK and VM_WRITE. But it should not be made
->>>>> conventionally
->>>>> writable (i.e. pte_mkwrite()). So some code that calls
->>>>> pte_mkwrite() needs
->>>>> to be adjusted.
->>>>>
->>>>> One such case is when memory is made writable without an actual
->>>>> write
->>>>> fault. This happens in some mprotect operations, and also
->>>>> prot_numa
->>>>> faults.
->>>>> In both cases code checks whether it should be made
->>>>> (conventionally)
->>>>> writable by calling vma_wants_manual_pte_write_upgrade().
->>>>>
->>>>> One way to fix this would be have code actually check if memory
->>>>> is
->>>>> also
->>>>> VM_SHADOW_STACK and in that case call pte_mkwrite_shstk(). But
->>>>> since
->>>>> most memory won't be shadow stack, just have simpler logic and
->>>>> skip
->>>>> this
->>>>> optimization by changing vma_wants_manual_pte_write_upgrade()
->>>>> to
->>>>> not
->>>>> return true for VM_SHADOW_STACK_MEMORY. This will simply handle
->>>>> all
->>>>> cases of this type.
->>>>>
->>>>> Cc: David Hildenbrand <david@redhat.com>
->>>>> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
->>>>> Tested-by: John Allen <john.allen@amd.com>
->>>>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->>>>> Reviewed-by: Kirill A. Shutemov <
->>>>> kirill.shutemov@linux.intel.com>
->>>>> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
->>>>> ---
->>>>
->>>> Instead of having these x86-shadow stack details all over the MM
->>>> space,
->>>> was the option explored to handle this more in arch specific
->>>> code?
->>>>
->>>> IIUC, one way to get it working would be
->>>>
->>>> 1) Have a SW "shadowstack" PTE flag.
->>>> 2) Have an "SW-dirty" PTE flag, to store "dirty=1" when
->>>> "write=0".
->>>
->>> I don't think that idea came up. So vma->vm_page_prot would have
->>> the SW
->>> shadow stack flag for VM_SHADOW_STACK, and pte_mkwrite() could do
->>> Write=0,Dirty=1 part. It seems like it should work.
->>>
->>
->> Right, if we include it in vma->vm_page_prot, we'd immediately let
->> mk_pte() just handle that.
->>
->> Otherwise, we'd have to refactor e.g., mk_pte() to consume a vma
->> instead
->> of the vma->vm_page_prot. Let's see if we can avoid that for now.
->>
->>>>
->>>> pte_mkwrite(), pte_write(), pte_dirty ... can then make decisions
->>>> based
->>>> on the "shadowstack" PTE flag and hide all these details from
->>>> core-
->>>> mm.
->>>>
->>>> When mapping a shadowstack page (new page, migration, swapin,
->>>> ...),
->>>> which can be obtained by looking at the VMA flags, the first
->>>> thing
->>>> you'd
->>>> do is set the "shadowstack" PTE flag.
->>>
->>> I guess the downside is that it uses an extra software bit. But the
->>> other positive is that it's less error prone, so that someone
->>> writing
->>> core-mm code won't introduce a change that makes shadow stack VMAs
->>> Write=1 if they don't know to also check for VM_SHADOW_STACK.
->>
->> Right. And I think this mimics the what I would have expected HW to
->> provide: a dedicated HW bit, not somehow mangling this into semantics
->> of
->> existing bits.
-> 
-> Yea.
-> 
->>
->> Roughly speaking: if we abstract it that way and get all of the "how
->> to
->> set it writable now?" out of core-MM, it not only is cleaner and
->> less
->> error prone, it might even allow other architectures that implement
->> something comparable (e.g., using a dedicated HW bit) to actually
->> reuse
->> some of that work. Otherwise most of that "shstk" is really just x86
->> specific ...
->>
->> I guess the only cases we have to special case would be page pinning
->> code where pte_write() would indicate that the PTE is writable (well,
->> it
->> is, just not by "ordinary CPU instruction" context directly): but you
->> do
->> that already, so ... :)
->>
->> Sorry for stumbling over that this late, I only started looking into
->> this when you CCed me on that one patch.
-> 
-> Sorry for not calling more attention to it earlier. Appreciate your
-> comments.
-> 
-> Previously versions of this series had changed some of these
-> pte_mkwrite() calls to maybe_mkwrite(), which of course takes a vma.
-> This way an x86 implementation could use the VM_SHADOW_STACK vma flag
-> to decide between pte_mkwrite() and pte_mkwrite_shstk(). The feedback
-> was that in some of these code paths "maybe" isn't really an option, it
-> *needs* to make it writable. Even though the logic was the same, the
-> name of the function made it look wrong.
-> 
-> But another option could be to change pte_mkwrite() to take a vma. This
-> would save using another software bit on x86, but instead requires a
-> small change to each arch's pte_mkwrite().
+On Wed, Jan 18, 2023 at 8:36 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> On Tue, 17 Jan 2023 at 17:35, Jann Horn <jannh@google.com> wrote:
+> >
+> > KASAN (except in HW_TAGS mode) tracks memory state based on virtual
+> > addresses. The mappings of kernel stack pages in the linear mapping are
+> > currently marked as fully accessible.
+>
+> Hi Jann,
+>
+> To confirm my understanding, this is not just KASAN (except in HW_TAGS
+> mode), but also CONFIG_VMAP_STACK is required, right?
 
-I played with that idea shortly as well, but discarded it. I was not 
-able to convince myself that it wouldn't be required to pass in the VMA 
-as well for things like pte_dirty(), pte_mkdirty(), pte_write(), ... 
-which would end up fairly ugly (or even impossible in thing slike GUP-fast).
+Yes.
 
-For example, I wonder how we'd be handling stuff like do_numa_page() 
-cleanly correctly, where we use pte_modify() + pte_mkwrite(), and either 
-call might set the PTE writable and maintain dirty bit ...
+> > Since stack corruption issues can cause some very gnarly errors, let's be
+> > extra careful and tell KASAN to forbid accesses to stack memory through the
+> > linear mapping.
+> >
+> > Signed-off-by: Jann Horn <jannh@google.com>
+> > ---
+> > I wrote this after seeing
+> > https://lore.kernel.org/all/Y8W5rjKdZ9erIF14@casper.infradead.org/
+> > and wondering about possible ways that this kind of stack corruption
+> > could be sneaking past KASAN.
+> > That's proooobably not the explanation, but still...
+>
+> I think catching any silent corruptions is still very useful. Besides
+> confusing reports, sometimes they lead to an explosion of random
+> reports all over the kernel.
+>
+> >  include/linux/vmalloc.h |  6 ++++++
+> >  kernel/fork.c           | 10 ++++++++++
+> >  mm/vmalloc.c            | 24 ++++++++++++++++++++++++
+> >  3 files changed, 40 insertions(+)
+> >
+> > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> > index 096d48aa3437..bfb50178e5e3 100644
+> > --- a/include/linux/vmalloc.h
+> > +++ b/include/linux/vmalloc.h
+> > @@ -297,4 +297,10 @@ bool vmalloc_dump_obj(void *object);
+> >  static inline bool vmalloc_dump_obj(void *object) { return false; }
+> >  #endif
+> >
+> > +#if defined(CONFIG_MMU) && (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS))
+> > +void vmalloc_poison_backing_pages(const void *addr);
+> > +#else
+> > +static inline void vmalloc_poison_backing_pages(const void *addr) {}
+> > +#endif
+>
+> I think this should be in kasan headers and prefixed with kasan_.
+> There are also kmsan/kcsan that may poison memory and hw poisoning
+> (MADV_HWPOISON), so it's a somewhat overloaded term on its own.
+>
+> Can/should this be extended to all vmalloc-ed memory? Or some of it
+> can be accessed via both addresses?
 
-Having that said, maybe it could work with only a single saved-dirty bit 
-and passing in the VMA for pte_mkwrite() only.
+I think anything that does vmalloc_to_page() has a high chance of
+doing accesses via both addresses, in particular anything involving
+DMA.
 
-pte_wrprotect() would detect "writable=0,dirty=1" and move the dirty bit 
-to the soft-dirty bit instead, resulting in 
-"writable=0,dirty=0,saved-dirty=1",
+Oooh, actually, there is some CIFS code that does vmalloc_to_page()
+and talks about stack memory... I'll report that over on the other
+thread re CIFS weirdness.
 
-pte_dirty() would return dirty==1||saved-dirty==1.
+> Also, should we mprotect it instead while it's allocated as the stack?
+> If it works, it looks like a reasonable improvement for
+> CONFIG_VMAP_STACK in general. Would also catch non-instrumented
+> accesses.
 
-pte_mkdirty() would set either set dirty=1 or saved-dirty=1, depending 
-on the writable bit.
-
-pte_mkclean() would clean both bits.
-
-pte_write() would detect "writable == 1 || (writable==0 && dirty==1)"
-
-pte_mkwrite() would act according to the VMA, and in addition, merge the 
-saved-dirty bit into the dirty bit.
-
-pte_modify() and mk_pte() .... would require more thought ...
-
-
-Further, ptep_modify_prot_commit() might have to be adjusted to properly 
-flush in all relevant cases IIRC.
-
-> 
-> x86's pte_mkwrite() would then be pretty close to maybe_mkwrite(), but
-> maybe it could additionally warn if the vma is not writable. It also
-> seems more aligned with your changes to stop taking hints from PTE bits
-> and just look at the VMA? (I'm thinking about the dropping of the dirty
-> check in GUP and dropping pte_saved_write())
-
-The soft-shstk bit wouldn't be a hint, it would be logically changing 
-the "type" of the PTE such that any other PTE functions can do the right 
-thing without having to consume the VMA.
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Well, we could also put it under CONFIG_DEBUG_PAGEALLOC and then use
+the debug_pagealloc_map_pages() / debug_pagealloc_unmap_pages()
+facilities to remove the page table entries. But I don't know if
+anyone actually runs fuzzing with CONFIG_DEBUG_PAGEALLOC.
