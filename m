@@ -2,83 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECED67C038
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2110567C03C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236120AbjAYWyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 17:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S236087AbjAYWze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 17:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234493AbjAYWym (ORCPT
+        with ESMTP id S235965AbjAYWzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:54:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4674458AE;
-        Wed, 25 Jan 2023 14:54:40 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PMfeJW012746;
-        Wed, 25 Jan 2023 22:54:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=QwlJo+ZY/eY+rklSkxDhRuRP/i9uG3s2ks085YAnBfQ=;
- b=HUKi1d+a4x/DbiT9p4Ur+qAcgP1mMQvTl4QW81cp/ky7T5Q5iah8vzerRbfDrbcFTDdz
- blp/Sap4n/jbXNS6+EXpy06yn2Eo01msfCUIF8UJTkcAz5BqQhCw0pwWfgy2lrWL9qCv
- QRvqS8l0hrjIe4zDW3H0LPX2ZdPGp3btf4u0drnwM2xlRypSZrH3+Vs0+KjFda1H9tws
- CBvgdRDoRuEFdMo5/F4Sq0UgX2t0xjFEa+ndsWWPUvnClH2kN0RAFTWccvoM/Gt95L7i
- ogy+hDPTaes0J7XdzdZ7JqN9213K+YetZ1l8IF14grJu1FJDBkmhgCYVoGIuEDkUhUkT uw== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac21d340-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 22:54:26 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKiUQ2003095;
-        Wed, 25 Jan 2023 22:54:24 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7acav-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 22:54:24 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PMsNYp27918916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 22:54:23 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 497E358066;
-        Wed, 25 Jan 2023 22:54:23 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7534758065;
-        Wed, 25 Jan 2023 22:54:21 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.150.21])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 22:54:21 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, rostedt@goodmis.org, alistair@popple.id.au,
-        joel@jms.id.au, jk@ozlabs.org, andrew@aj.id.au,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, eajames@linux.ibm.com
-Subject: [PATCH v2 2/2] fsi: Add IBM I2C Responder virtual FSI master
-Date:   Wed, 25 Jan 2023 16:54:16 -0600
-Message-Id: <20230125225416.4074040-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230125225416.4074040-1-eajames@linux.ibm.com>
-References: <20230125225416.4074040-1-eajames@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HLvZkAnHh_ZjV0PMnKuxU1p2Q2Zr8XRK
-X-Proofpoint-ORIG-GUID: HLvZkAnHh_ZjV0PMnKuxU1p2Q2Zr8XRK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250200
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 25 Jan 2023 17:55:32 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6157560CB9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:55:08 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x188-20020a2531c5000000b00716de19d76bso21319889ybx.19
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=a5aTHflhvU5hl+JkwekB7RlOlr/hp8opqL15QvEvo54=;
+        b=bzJkDFDODwQ4aHczZ5Q29/ItRyxdl5BzMlhkXInDNq7XoQP+rKcbY8Wv9t1t+PrziN
+         8JWaVl5mT8IpHx6sqr1EPTFJ6XrLcuJ5bixw3ZyBldPnxVYau+fueN5JGSFpnOceecKW
+         jPAomFh/8HDxILl5PnriMP5ukvKu1O0UwmYIOC8UmT9sdBYSQpRU4isozBpJIu5snXC4
+         lvpNVIWVQKaFREvzzdISZtw8/DFZThhJr557P+IGkJCT5nBiDSr7X+zOZR20Wh7kDoax
+         k7/TTaHn7yrb5nwTBU/ypUW/0Go7z2gsIYfEBoKNuAmyTKGt0BhlihmjOyL6OSryp9Pd
+         YIaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a5aTHflhvU5hl+JkwekB7RlOlr/hp8opqL15QvEvo54=;
+        b=hoJHuEyUvpUmB0bEvEJMrlR+IXh9VgG/STdBzIvzemR76XqfmTMthokRXf+iSpzTaz
+         7Cn2me+NomPhexySE7BbTrSHUITzPumuRI7uUo+2uWKMASh7R3QqdwQiWJhMJSY/G8mK
+         CZLUx4XQys9flWu84TzeuYB9VeeP67+fXWaqnIMvDbctbB6g5fDsdO568qWtlV7R7zOy
+         xJyjWmPo7uJjGjc/yutZ6s35urog4yusy4TZa9t9Vy6K7I+5tJ8zfFlxoruQOz9C0nZk
+         VIrLywutJd8H9wDT15C7UuHLMxdlSDTGvdgUp/N/7dXyRGGBsilGYYDNT1QwVc89rarL
+         Lk8A==
+X-Gm-Message-State: AFqh2kp2YYVw+Ztvrjo0nzthznsLsbRhdbxl5ni/7f1t4U0PLWEyjD2o
+        YEHCRYYSIFQ28He/38Qt5IEfoMQWWw==
+X-Google-Smtp-Source: AMrXdXtI9b5ejz77UAIM3baiDxU99jcZXtO//dFoZkyOApxz9CPrvwKmllDiZa1jLWm274hcqNB+nVXRAA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a81:124c:0:b0:502:bcca:867c with SMTP id
+ 73-20020a81124c000000b00502bcca867cmr2657198yws.484.1674687307523; Wed, 25
+ Jan 2023 14:55:07 -0800 (PST)
+Date:   Wed, 25 Jan 2023 22:54:49 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230125225449.351154-1-rmoar@google.com>
+Subject: [PATCH v3] lib/hashtable_test.c: add test for the hashtable structure
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,385 +67,408 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C Responder (I2CR) is an I2C device that translates I2C commands
-to CFAM or SCOM operations, effectively implementing an FSI master and
-bus.
+Add a KUnit test for the kernel hashtable implementation in
+include/linux/hashtable.h.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Note that this version does not yet test each of the rcu
+alternative versions of functions.
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 ---
- drivers/fsi/Kconfig                    |   9 +
- drivers/fsi/Makefile                   |   1 +
- drivers/fsi/fsi-master-i2cr.c          | 225 +++++++++++++++++++++++++
- include/trace/events/fsi_master_i2cr.h |  96 +++++++++++
- 4 files changed, 331 insertions(+)
- create mode 100644 drivers/fsi/fsi-master-i2cr.c
- create mode 100644 include/trace/events/fsi_master_i2cr.h
 
-diff --git a/drivers/fsi/Kconfig b/drivers/fsi/Kconfig
-index e6668a869913..999be82720c5 100644
---- a/drivers/fsi/Kconfig
-+++ b/drivers/fsi/Kconfig
-@@ -62,6 +62,15 @@ config FSI_MASTER_ASPEED
+Changes since v2:
+- Remove extraneous hash_init() calls when using DEFINE_HASHTABLE.
+- Change up the size of the hashtables in different tests.
+- Change formatting to group lines regarding the same hashtable_test_entry.
+- Use KUNIT_ASSERT_LEQ() and KUNIT_ASSERT_GEQ() instead of a few if
+  statements.
+
+Changes since v1:
+- Change Kconfig.debug message to be more succinct.
+- Directly increment current element's visited field rather than looking up
+  corresponding element.
+- Use KUNIT_ASSERT_... statements to check the keys are within range rather
+  than using if statements.
+- Change hash_for_each_possible test to check buckets using a hash_for_each
+  method instead of calculating the bucket number using hash_min.
+
+Note: The check patch script is outputting open brace errors on lines
+152, 185, 239 of lib/hashtable_test.c. However, I think these errors are
+a mistake as the format of the braces on those lines is consistent
+with the Linux Kernel style guide. As David Gow commented on the
+last version, "This is a known issue with checkpatch and function
+names with "for_each" in them. It was discussed here, and we
+ultimately decided just to ignore the warnings:
+https://lore.kernel.org/all/CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com/."
+
+ lib/Kconfig.debug    |  13 ++
+ lib/Makefile         |   1 +
+ lib/hashtable_test.c | 317 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 331 insertions(+)
+ create mode 100644 lib/hashtable_test.c
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 881c3f84e88a..69b1452a3eeb 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2496,6 +2496,19 @@ config LIST_KUNIT_TEST
  
- 	 Enable it for your BMC kernel in an OpenPower or IBM Power system.
+ 	  If unsure, say N.
  
-+config FSI_MASTER_I2CR
-+	tristate "IBM I2C Responder virtual FSI master"
-+	depends on I2C
++config HASHTABLE_KUNIT_TEST
++	tristate "KUnit Test for Kernel Hashtable structures" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
 +	help
-+	  This option enables a virtual FSI master in order to access a CFAM
-+	  behind an IBM I2C Responder (I2CR) chip. The I2CR is an I2C device
-+	  that translates I2C commands to CFAM or SCOM operations, effectively
-+	  implementing an FSI master and bus.
++	  This builds the hashtable KUnit test suite.
++	  It tests the basic functionality of the API defined in
++	  include/linux/hashtable.h. For more information on KUnit and
++	  unit tests in general please refer to the KUnit documentation
++	  in Documentation/dev-tools/kunit/.
 +
- config FSI_SCOM
- 	tristate "SCOM FSI client device driver"
- 	help
-diff --git a/drivers/fsi/Makefile b/drivers/fsi/Makefile
-index da218a1ad8e1..34dbaa1c452e 100644
---- a/drivers/fsi/Makefile
-+++ b/drivers/fsi/Makefile
-@@ -4,6 +4,7 @@ obj-$(CONFIG_FSI) += fsi-core.o
- obj-$(CONFIG_FSI_MASTER_HUB) += fsi-master-hub.o
- obj-$(CONFIG_FSI_MASTER_ASPEED) += fsi-master-aspeed.o
- obj-$(CONFIG_FSI_MASTER_GPIO) += fsi-master-gpio.o
-+obj-$(CONFIG_FSI_MASTER_I2CR) += fsi-master-i2cr.o
- obj-$(CONFIG_FSI_MASTER_AST_CF) += fsi-master-ast-cf.o
- obj-$(CONFIG_FSI_SCOM) += fsi-scom.o
- obj-$(CONFIG_FSI_SBEFIFO) += fsi-sbefifo.o
-diff --git a/drivers/fsi/fsi-master-i2cr.c b/drivers/fsi/fsi-master-i2cr.c
++	  If unsure, say N.
++
+ config LINEAR_RANGES_TEST
+ 	tristate "KUnit test for linear_ranges"
+ 	depends on KUNIT
+diff --git a/lib/Makefile b/lib/Makefile
+index 4d9461bfea42..5f8efbe8e97f 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -369,6 +369,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
+ CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
++obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
+ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
+diff --git a/lib/hashtable_test.c b/lib/hashtable_test.c
 new file mode 100644
-index 000000000000..0eadc9b26063
+index 000000000000..1d1b3288dee2
 --- /dev/null
-+++ b/drivers/fsi/fsi-master-i2cr.c
-@@ -0,0 +1,225 @@
++++ b/lib/hashtable_test.c
+@@ -0,0 +1,317 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) IBM Corporation 2023 */
++/*
++ * KUnit test for the Kernel Hashtable structures.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: Rae Moar <rmoar@google.com>
++ */
++#include <kunit/test.h>
 +
-+#include <linux/device.h>
-+#include <linux/fsi.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mutex.h>
++#include <linux/hashtable.h>
 +
-+#include "fsi-master.h"
-+
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/fsi_master_i2cr.h>
-+
-+#define I2CR_ADDRESS_CFAM(a)	((a) >> 2)
-+#define I2CR_STATUS		0x30001
-+#define  I2CR_STATUS_ERR	 BIT_ULL(61)
-+#define I2CR_ERROR		0x30002
-+
-+struct fsi_master_i2cr {
-+	struct fsi_master master;
-+	struct mutex lock;	/* protect HW access */
-+	struct i2c_client *client;
++struct hashtable_test_entry {
++	int key;
++	int data;
++	struct hlist_node node;
++	int visited;
 +};
 +
-+static bool i2cr_check_parity(u32 v, bool parity)
++static void hashtable_test_hash_init(struct kunit *test)
 +{
-+	u32 i;
++	/* Test the different ways of initialising a hashtable. */
++	DEFINE_HASHTABLE(hash1, 2);
++	DECLARE_HASHTABLE(hash2, 3);
 +
-+	for (i = 0; i < 32; ++i) {
-+		if (v & (1 << i))
-+			parity = !parity;
++	/* When using DECLARE_HASHTABLE, must use hash_init to
++	 * initialize the hashtable.
++	 */
++	hash_init(hash2);
++
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash1));
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash2));
++}
++
++static void hashtable_test_hash_empty(struct kunit *test)
++{
++	struct hashtable_test_entry a;
++	DEFINE_HASHTABLE(hash, 1);
++
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
++
++	a.key = 1;
++	a.data = 13;
++	hash_add(hash, &a.node, a.key);
++
++	/* Hashtable should no longer be empty. */
++	KUNIT_EXPECT_FALSE(test, hash_empty(hash));
++}
++
++static void hashtable_test_hash_hashed(struct kunit *test)
++{
++	struct hashtable_test_entry a, b;
++	DEFINE_HASHTABLE(hash, 4);
++
++	a.key = 1;
++	a.data = 13;
++	hash_add(hash, &a.node, a.key);
++	b.key = 1;
++	b.data = 2;
++	hash_add(hash, &b.node, b.key);
++
++	KUNIT_EXPECT_TRUE(test, hash_hashed(&a.node));
++	KUNIT_EXPECT_TRUE(test, hash_hashed(&b.node));
++}
++
++static void hashtable_test_hash_add(struct kunit *test)
++{
++	struct hashtable_test_entry a, b, *x;
++	int bkt;
++	DEFINE_HASHTABLE(hash, 3);
++
++	a.key = 1;
++	a.data = 13;
++	a.visited = 0;
++	hash_add(hash, &a.node, a.key);
++	b.key = 2;
++	b.data = 10;
++	b.visited = 0;
++	hash_add(hash, &b.node, b.key);
++
++	hash_for_each(hash, bkt, x, node) {
++		x->visited++;
++		if (x->key == a.key)
++			KUNIT_EXPECT_EQ(test, x->data, 13);
++		else if (x->key == b.key)
++			KUNIT_EXPECT_EQ(test, x->data, 10);
++		else
++			KUNIT_FAIL(test, "Unexpected key in hashtable.");
 +	}
 +
-+	return parity;
++	/* Both entries should have been visited exactly once. */
++	KUNIT_EXPECT_EQ(test, a.visited, 1);
++	KUNIT_EXPECT_EQ(test, b.visited, 1);
 +}
 +
-+static __be32 i2cr_get_command(u32 address, bool parity)
++static void hashtable_test_hash_del(struct kunit *test)
 +{
-+	__be32 command;
++	struct hashtable_test_entry a, b, *x;
++	DEFINE_HASHTABLE(hash, 6);
 +
-+	address <<= 1;
++	a.key = 1;
++	a.data = 13;
++	hash_add(hash, &a.node, a.key);
++	b.key = 2;
++	b.data = 10;
++	b.visited = 0;
++	hash_add(hash, &b.node, b.key);
 +
-+	if (i2cr_check_parity(address, parity))
-+		address |= 1;
-+
-+	command = cpu_to_be32(address);
-+	trace_i2cr_command((__force uint32_t)command);
-+
-+	return command;
-+}
-+
-+static int i2cr_transfer(struct i2c_client *client, u32 address, __be64 *data)
-+{
-+	struct i2c_msg msgs[2];
-+	__be32 command;
-+	int ret;
-+
-+	command = i2cr_get_command(address, true);
-+	msgs[0].addr = client->addr;
-+	msgs[0].flags = 0;
-+	msgs[0].len = sizeof(command);
-+	msgs[0].buf = (__u8 *)&command;
-+	msgs[1].addr = client->addr;
-+	msgs[1].flags = I2C_M_RD;
-+	msgs[1].len = sizeof(*data);
-+	msgs[1].buf = (__u8 *)data;
-+
-+	ret = i2c_transfer(client->adapter, msgs, 2);
-+	if (ret == 2)
-+		return 0;
-+
-+	trace_i2cr_i2c_error(ret);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return -EIO;
-+}
-+
-+static int i2cr_check_status(struct i2c_client *client)
-+{
-+	__be64 status_be = 0;
-+	u64 status;
-+	int ret;
-+
-+	ret = i2cr_transfer(client, I2CR_STATUS, &status_be);
-+	if (ret)
-+		return ret;
-+
-+	status = be64_to_cpu(status_be);
-+	if (status & I2CR_STATUS_ERR) {
-+		__be64 error_be = 0;
-+		u64 error;
-+
-+		i2cr_transfer(client, I2CR_ERROR, &error_be);
-+		error = be64_to_cpu(error_be);
-+		trace_i2cr_status_error(status, error);
-+		dev_err(&client->dev, "status:%016llx error:%016llx\n", status, error);
-+		return -EREMOTEIO;
++	hash_del(&b.node);
++	hash_for_each_possible(hash, x, node, b.key) {
++		x->visited++;
++		KUNIT_EXPECT_NE(test, x->key, b.key);
 +	}
 +
-+	trace_i2cr_status(status);
-+	return 0;
++	/* The deleted entry should not have been visited. */
++	KUNIT_EXPECT_EQ(test, b.visited, 0);
++
++	hash_del(&a.node);
++
++	/* The hashtable should be empty. */
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
 +}
 +
-+static int i2cr_read(struct fsi_master *master, int link, uint8_t id, uint32_t addr, void *val,
-+		     size_t size)
++static void hashtable_test_hash_for_each(struct kunit *test)
 +{
-+	struct fsi_master_i2cr *i2cr = container_of(master, struct fsi_master_i2cr, master);
-+	__be64 data = 0;
-+	int ret;
++	struct hashtable_test_entry entries[3];
++	struct hashtable_test_entry *x;
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 3);
 +
-+	if (link || id || (addr & 0xffff0000) || !(size == 1 || size == 2 || size == 4))
-+		return -EINVAL;
++	/* Add three entries to the hashtable. */
++	for (i = 0; i < 3; i++) {
++		entries[i].key = i;
++		entries[i].data = i + 10;
++		entries[i].visited = 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
 +
-+	mutex_lock(&i2cr->lock);
++	count = 0;
++	hash_for_each(hash, bkt, x, node) {
++		x->visited += 1;
++		KUNIT_ASSERT_GE_MSG(test, x->key, 0, "Unexpected key in hashtable.");
++		KUNIT_ASSERT_LT_MSG(test, x->key, 3, "Unexpected key in hashtable.");
++		count++;
++	}
 +
-+	ret = i2cr_transfer(i2cr->client, I2CR_ADDRESS_CFAM(addr), &data);
-+	if (ret)
-+		goto unlock;
-+
-+	ret = i2cr_check_status(i2cr->client);
-+	if (ret)
-+		goto unlock;
-+
-+	trace_i2cr_read(addr, size, (__force uint32_t)data);
-+	memcpy(val, &data, size);
-+
-+unlock:
-+	mutex_unlock(&i2cr->lock);
-+	return ret;
++	/* Should have visited each entry exactly once. */
++	KUNIT_EXPECT_EQ(test, count, 3);
++	for (j = 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
 +}
 +
-+static int i2cr_write(struct fsi_master *master, int link, uint8_t id, uint32_t addr,
-+		      const void *val, size_t size)
++static void hashtable_test_hash_for_each_safe(struct kunit *test)
 +{
-+	struct fsi_master_i2cr *i2cr = container_of(master, struct fsi_master_i2cr, master);
-+	struct {
-+		__be32 command;
-+		u32 val;
-+		u32 rsvd;
-+	} __packed data = { 0, 0, 0 };
-+	int ret;
++	struct hashtable_test_entry entries[3];
++	struct hashtable_test_entry *x;
++	struct hlist_node *tmp;
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 3);
 +
-+	if (link || id || (addr & 0xffff0000) || !(size == 1 || size == 2 || size == 4))
-+		return -EINVAL;
++	/* Add three entries to the hashtable. */
++	for (i = 0; i < 3; i++) {
++		entries[i].key = i;
++		entries[i].data = i + 10;
++		entries[i].visited = 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
 +
-+	memcpy(&data.val, val, size);
-+	data.command = i2cr_get_command(I2CR_ADDRESS_CFAM(addr),
-+					i2cr_check_parity(data.val, true));
++	count = 0;
++	hash_for_each_safe(hash, bkt, tmp, x, node) {
++		x->visited += 1;
++		KUNIT_ASSERT_GE_MSG(test, x->key, 0, "Unexpected key in hashtable.");
++		KUNIT_ASSERT_LT_MSG(test, x->key, 3, "Unexpected key in hashtable.");
++		count++;
 +
-+	mutex_lock(&i2cr->lock);
++		/* Delete entry during loop. */
++		hash_del(&x->node);
++	}
 +
-+	ret = i2c_master_send(i2cr->client, (const char *)&data, sizeof(data));
-+	if (ret == sizeof(data)) {
-+		ret = i2cr_check_status(i2cr->client);
-+		if (!ret)
-+			trace_i2cr_write(addr, size, data.val);
++	/* Should have visited each entry exactly once. */
++	KUNIT_EXPECT_EQ(test, count, 3);
++	for (j = 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++}
++
++static void hashtable_test_hash_for_each_possible(struct kunit *test)
++{
++	struct hashtable_test_entry entries[4];
++	struct hashtable_test_entry *x, *y;
++	int buckets[2];
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 5);
++
++	/* Add three entries with key = 0 to the hashtable. */
++	for (i = 0; i < 3; i++) {
++		entries[i].key = 0;
++		entries[i].data = i;
++		entries[i].visited = 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
++
++	/* Add an entry with key = 1. */
++	entries[3].key = 1;
++	entries[3].data = 3;
++	entries[3].visited = 0;
++	hash_add(hash, &entries[3].node, entries[3].key);
++
++	count = 0;
++	hash_for_each_possible(hash, x, node, 0) {
++		x->visited += 1;
++		KUNIT_ASSERT_GE_MSG(test, x->data, 0, "Unexpected data in hashtable.");
++		KUNIT_ASSERT_LT_MSG(test, x->data, 4, "Unexpected data in hashtable.");
++		count++;
++	}
++
++	/* Should have visited each entry with key = 0 exactly once. */
++	for (j = 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++
++	/* Save the buckets for the different keys. */
++	hash_for_each(hash, bkt, y, node) {
++		KUNIT_ASSERT_GE_MSG(test, y->key, 0, "Unexpected key in hashtable.");
++		KUNIT_ASSERT_LE_MSG(test, y->key, 1, "Unexpected key in hashtable.");
++		buckets[y->key] = bkt;
++	}
++
++	/* If entry with key = 1 is in the same bucket as the entries with
++	 * key = 0, check it was visited. Otherwise ensure that only three
++	 * entries were visited.
++	 */
++	if (buckets[0] == buckets[1]) {
++		KUNIT_EXPECT_EQ(test, count, 4);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
 +	} else {
-+		trace_i2cr_i2c_error(ret);
++		KUNIT_EXPECT_EQ(test, count, 3);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 0);
++	}
++}
 +
-+		if (ret >= 0)
-+			ret = -EIO;
++static void hashtable_test_hash_for_each_possible_safe(struct kunit *test)
++{
++	struct hashtable_test_entry entries[4];
++	struct hashtable_test_entry *x, *y;
++	struct hlist_node *tmp;
++	int buckets[2];
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 5);
++
++	/* Add three entries with key = 0 to the hashtable. */
++	for (i = 0; i < 3; i++) {
++		entries[i].key = 0;
++		entries[i].data = i;
++		entries[i].visited = 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
 +	}
 +
-+	mutex_unlock(&i2cr->lock);
-+	return ret;
++	/* Add an entry with key = 1. */
++	entries[3].key = 1;
++	entries[3].data = 3;
++	entries[3].visited = 0;
++	hash_add(hash, &entries[3].node, entries[3].key);
++
++	count = 0;
++	hash_for_each_possible_safe(hash, x, tmp, node, 0) {
++		x->visited += 1;
++		KUNIT_ASSERT_GE_MSG(test, x->data, 0, "Unexpected data in hashtable.");
++		KUNIT_ASSERT_LT_MSG(test, x->data, 4, "Unexpected data in hashtable.");
++		count++;
++
++		/* Delete entry during loop. */
++		hash_del(&x->node);
++	}
++
++	/* Should have visited each entry with key = 0 exactly once. */
++	for (j = 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++
++	/* Save the buckets for the different keys. */
++	hash_for_each(hash, bkt, y, node) {
++		KUNIT_ASSERT_GE_MSG(test, y->key, 0, "Unexpected key in hashtable.");
++		KUNIT_ASSERT_LE_MSG(test, y->key, 1, "Unexpected key in hashtable.");
++		buckets[y->key] = bkt;
++	}
++
++	/* If entry with key = 1 is in the same bucket as the entries with
++	 * key = 0, check it was visited. Otherwise ensure that only three
++	 * entries were visited.
++	 */
++	if (buckets[0] == buckets[1]) {
++		KUNIT_EXPECT_EQ(test, count, 4);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
++	} else {
++		KUNIT_EXPECT_EQ(test, count, 3);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 0);
++	}
 +}
 +
-+static int i2cr_probe(struct i2c_client *client)
-+{
-+	struct fsi_master_i2cr *i2cr;
-+	int ret;
-+
-+	i2cr = devm_kzalloc(&client->dev, sizeof(*i2cr), GFP_KERNEL);
-+	if (!i2cr)
-+		return -ENOMEM;
-+
-+	i2cr->master.dev.parent = &client->dev;
-+	i2cr->master.dev.of_node = of_node_get(dev_of_node(&client->dev));
-+
-+	i2cr->master.n_links = 1;
-+	i2cr->master.read = i2cr_read;
-+	i2cr->master.write = i2cr_write;
-+
-+	mutex_init(&i2cr->lock);
-+	i2cr->client = client;
-+
-+	ret = fsi_master_register(&i2cr->master);
-+	if (ret)
-+		return ret;
-+
-+	i2c_set_clientdata(client, i2cr);
-+	return 0;
-+}
-+
-+static void i2cr_remove(struct i2c_client *client)
-+{
-+	struct fsi_master_i2cr *i2cr = i2c_get_clientdata(client);
-+
-+	fsi_master_unregister(&i2cr->master);
-+}
-+
-+static const struct of_device_id i2cr_i2c_ids[] = {
-+	{ .compatible = "ibm,i2cr-fsi-master", },
-+	{ }
++static struct kunit_case hashtable_test_cases[] = {
++	KUNIT_CASE(hashtable_test_hash_init),
++	KUNIT_CASE(hashtable_test_hash_empty),
++	KUNIT_CASE(hashtable_test_hash_hashed),
++	KUNIT_CASE(hashtable_test_hash_add),
++	KUNIT_CASE(hashtable_test_hash_del),
++	KUNIT_CASE(hashtable_test_hash_for_each),
++	KUNIT_CASE(hashtable_test_hash_for_each_safe),
++	KUNIT_CASE(hashtable_test_hash_for_each_possible),
++	KUNIT_CASE(hashtable_test_hash_for_each_possible_safe),
++	{},
 +};
-+MODULE_DEVICE_TABLE(of, i2cr_i2c_ids);
 +
-+static struct i2c_driver i2cr_driver = {
-+	.probe_new = i2cr_probe,
-+	.remove = i2cr_remove,
-+	.driver = {
-+		.name = "fsi-master-i2cr",
-+		.of_match_table = i2cr_i2c_ids,
-+	},
++static struct kunit_suite hashtable_test_module = {
++	.name = "hashtable",
++	.test_cases = hashtable_test_cases,
 +};
 +
-+module_i2c_driver(i2cr_driver)
++kunit_test_suites(&hashtable_test_module);
 +
-+MODULE_AUTHOR("Eddie James <eajames@linux.ibm.com>");
-+MODULE_DESCRIPTION("IBM I2C Responder virtual FSI master driver");
 +MODULE_LICENSE("GPL");
-diff --git a/include/trace/events/fsi_master_i2cr.h b/include/trace/events/fsi_master_i2cr.h
-new file mode 100644
-index 000000000000..7b53c6a35bc7
---- /dev/null
-+++ b/include/trace/events/fsi_master_i2cr.h
-@@ -0,0 +1,96 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM fsi_master_i2cr
-+
-+#if !defined(_TRACE_FSI_MASTER_I2CR_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_FSI_MASTER_I2CR_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(i2cr_command,
-+	TP_PROTO(uint32_t command),
-+	TP_ARGS(command),
-+	TP_STRUCT__entry(
-+		__field(uint32_t,	command)
-+	),
-+	TP_fast_assign(
-+		__entry->command = command;
-+	),
-+	TP_printk("command:%08x", __entry->command)
-+);
-+
-+TRACE_EVENT(i2cr_i2c_error,
-+	TP_PROTO(int rc),
-+	TP_ARGS(rc),
-+	TP_STRUCT__entry(
-+		__field(int,	rc)
-+	),
-+	TP_fast_assign(
-+		__entry->rc = rc;
-+	),
-+	TP_printk("rc:%d", __entry->rc)
-+);
-+
-+TRACE_EVENT(i2cr_read,
-+	TP_PROTO(uint32_t addr, size_t size, uint64_t result),
-+	TP_ARGS(addr, size, result),
-+	TP_STRUCT__entry(
-+		__field(uint32_t,	addr)
-+		__field(size_t,		size)
-+		__field(uint64_t,	result)
-+	),
-+	TP_fast_assign(
-+		__entry->addr = addr;
-+		__entry->size = size;
-+		__entry->result = result;
-+	),
-+	TP_printk("addr:%08x size:%zu result:%016llx", __entry->addr, __entry->size,
-+		  __entry->result)
-+);
-+
-+TRACE_EVENT(i2cr_status,
-+	TP_PROTO(uint64_t status),
-+	TP_ARGS(status),
-+	TP_STRUCT__entry(
-+		__field(uint32_t,	status)
-+	),
-+	TP_fast_assign(
-+		__entry->status = status >> 32;
-+	),
-+	TP_printk("status:%08x", __entry->status)
-+);
-+
-+TRACE_EVENT(i2cr_status_error,
-+	TP_PROTO(uint64_t status, uint64_t error),
-+	TP_ARGS(status, error),
-+	TP_STRUCT__entry(
-+		__field(uint64_t,	error)
-+		__field(uint32_t,	status)
-+	),
-+	TP_fast_assign(
-+		__entry->error = error;
-+		__entry->status = status >> 32;
-+	),
-+	TP_printk("status:%08x error:%016llx", __entry->status, __entry->error)
-+);
-+
-+TRACE_EVENT(i2cr_write,
-+	TP_PROTO(uint32_t addr, uint32_t val, size_t size),
-+	TP_ARGS(addr, val, size),
-+	TP_STRUCT__entry(
-+		__field(uint32_t,	addr)
-+		__field(uint32_t,	val)
-+		__field(size_t,		size)
-+	),
-+	TP_fast_assign(
-+		__entry->addr = addr;
-+		__entry->val = val;
-+		__entry->size = size;
-+	),
-+	TP_printk("addr:%08x val:%08x size:%zu", __entry->addr, __entry->val, __entry->size)
-+);
-+
-+#endif
-+
-+#include <trace/define_trace.h>
+
+base-commit: 5835ffc27381c2d32c3f0d7b575cb3397555ab47
 -- 
-2.31.1
+2.39.1.456.gfc5497dd1b-goog
 
