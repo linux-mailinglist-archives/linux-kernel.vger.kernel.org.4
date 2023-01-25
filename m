@@ -2,93 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED8967BC89
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECFA67BC8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbjAYU1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        id S236255AbjAYU2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbjAYU1v (ORCPT
+        with ESMTP id S235678AbjAYU2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:27:51 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B47DB2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:27:46 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so3340133pjq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:27:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qs3vFGx5vjVLb7bTaBqnezUzhWCYDXhW7fyeczk+6xY=;
-        b=KqVH0Xk6iVGexG1WZB4xkuFSRHFqib1It4e/xDjyv0qLlogElM6GONXc2aaNDoD5++
-         CXBrJ8hHi77JNNoPFrdOSizzsGP1hS2TGimuT2Hqwe/wF4gl88xs6ua+gZivMyd4mZbg
-         Jq58DX1Hs32FXKAEcOe7FiDqyGz6Fmeg8snSg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qs3vFGx5vjVLb7bTaBqnezUzhWCYDXhW7fyeczk+6xY=;
-        b=ndaa0IgeKsKQ5bQ3UXIDZeRsjbbZxLLLg2yQNuBqCb4pfg5pQF7pdapqXKaMquspQ7
-         +MaBzEwtCi8xfwZQg4rBuDTzyAm7Ooa6ouQOia1S+JCx7DOM0e+5m7jovLsmy7Xeypb0
-         7rdD23dmIcMikjuon0O4yXaDuGWi5OmsiCULvoRDPL/pvT25QKqQvE/fed7eMdIXEHwe
-         6NjeSF/6XCeKcOPZMNRN9MBA00tNt32MNO0h5jmvNKwOiTn6QsLsaYCcjFU9qy1B9Afo
-         2egDXWssNhOHykLAk0yHQHtgJ5gD37u4TsY45SFCNsFWq631j0LCayhrnr8bCqvRVI+x
-         AC1A==
-X-Gm-Message-State: AFqh2koMj6wdoeMDU4llHPsejDsPGzc/WHSvKANQwHTsJNCMj9yI5f00
-        ffuQiCDKYjFdux2swdqgfzanQQ==
-X-Google-Smtp-Source: AMrXdXvhIoganfGBKjMxOiJxe35+/ixuy01Fvm5LFKL9CFzcoC4B+HTAInNsHepgE5z+G/tLG7VNUQ==
-X-Received: by 2002:a17:902:c401:b0:194:dc73:5cf8 with SMTP id k1-20020a170902c40100b00194dc735cf8mr33051142plk.39.1674678466359;
-        Wed, 25 Jan 2023 12:27:46 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902c3cc00b00194b3a7853esm4052877plj.181.2023.01.25.12.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:27:45 -0800 (PST)
-Date:   Wed, 25 Jan 2023 12:27:44 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] nvmem: u-boot-env: replace zero-length array with
- flexible-array member
-Message-ID: <202301251227.3A6AAC1B@keescook>
-References: <Y7zB+s2AC6O+CRR+@work>
- <494915c85c52e66aa83fce49556ccf3e@milecki.pl>
+        Wed, 25 Jan 2023 15:28:47 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F0918B1E;
+        Wed, 25 Jan 2023 12:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674678526; x=1706214526;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NHhfbEA3+ALiNjZfOCrhagTrZL43nqVOc3EIo2NrQz4=;
+  b=SU4htNjbtf30zndJObs/uVTo1SHIVkio20+sX5afGeBPpRkCdaNEZ7Vd
+   rBve3eUICA8z0KcsQinFvcEKcLKvqkkWp948fBhOJqzigxDO/IUn3Hbq6
+   LSU5QeXGEC/lHHmAT/4n12ynpO+nCBjoCpl8P1n+6Z7A9OUGAxcErx8lf
+   cs817ZZbPW8PSXM01ntJnJ0J7KdqNx+1RpizHuKpMBTq35/j3IzVLvMvF
+   EBdi45jtfiW5kx6YuKJDyW4rmeib7MrX8jFUktUgimtLYaXXsIlyKy2p2
+   iSKkHgcUc2WKju3KkuUehYUvakcShoLw9J/5su0HZ4uUqDB2hTAhio9f8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="310247043"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="310247043"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:28:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="726022748"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="726022748"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Jan 2023 12:28:44 -0800
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     seanjc@google.com, ak@linux.intel.com, pengfei.xu@intel.com,
+        Kan Liang <kan.liang@linux.intel.com>, stable@vger.kernel.org
+Subject: [PATCH] perf/x86/intel: Fix guest vPMU warning on hybrid CPUs
+Date:   Wed, 25 Jan 2023 12:28:35 -0800
+Message-Id: <20230125202835.924016-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <494915c85c52e66aa83fce49556ccf3e@milecki.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 07:41:02AM +0100, Rafał Miłecki wrote:
-> On 2023-01-10 02:40, Gustavo A. R. Silva wrote:
-> > Zero-length arrays are deprecated[1] and we are moving towards
-> > adopting C99 flexible-array members instead. So, replace zero-length
-> > array declaration in struct u_boot_env_image_broadcom with flex-array
-> > member.
-> > 
-> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> > routines on memcpy() and help us make progress towards globally
-> > enabling -fstrict-flex-arrays=3 [2].
-> 
-> I also handled this issue in my
-> [PATCH V2 4/6] nvmem: u-boot-env: convert to layout driver
-> https://lore.kernel.org/linux-arm-kernel/20230111073102.8147-4-zajec5@gmail.com/
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Ah-ha, thanks! Looks good. :)
+The below error can be observed in a Linux guest, when the hypervisor
+is on a hybrid machine.
 
+[    0.118214] unchecked MSR access error: WRMSR to 0x38f (tried to
+write 0x00011000f0000003f) at rIP: 0xffffffff83082124
+(native_write_msr+0x4/0x30)
+[    0.118949] Call Trace:
+[    0.119092]  <TASK>
+[    0.119215]  ? __intel_pmu_enable_all.constprop.0+0x88/0xe0
+[    0.119533]  intel_pmu_enable_all+0x15/0x20
+[    0.119778]  x86_pmu_enable+0x17c/0x320
+
+The current perf wrongly assumes that the perf metrics feature is always
+enabled on p-core. It unconditionally enables the feature to workaround
+the unreliable enumeration of the PERF_CAPABILITIES MSR. The assumption
+is safe to bare metal. However, KVM doesn't support the perf metrics
+feature yet. Setting the corresponding bit triggers MSR access error
+in a guest.
+
+Only unconditionally enable the core specific PMU feature for bare metal
+on ADL and RPL, which includes the perf metrics on p-core and
+PEBS-via-PT on e-core.
+For the future platforms, perf doesn't need to hardcode the PMU feature.
+The per-core PMU features can be enumerated by the enhanced
+PERF_CAPABILITIES MSR and CPUID leaf 0x23. There is no such issue.
+
+Fixes: f83d2f91d259 ("perf/x86/intel: Add Alder Lake Hybrid support")
+Link: https://lore.kernel.org/lkml/e161b7c0-f0be-23c8-9a25-002260c2a085@linux.intel.com/
+Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+
+
+Based on my limit knowledge regarding KVM and guest, I use the
+HYPERVISOR bit to tell whether it's a guest. But I'm not sure whether
+it's reliable. Please let me know if there is a better way. Thanks.
+
+
+ arch/x86/events/intel/core.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index bbb7846d3c1e..8d08929a7250 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -6459,8 +6459,17 @@ __init int intel_pmu_init(void)
+ 					__EVENT_CONSTRAINT(0, (1ULL << pmu->num_counters) - 1,
+ 							   0, pmu->num_counters, 0, 0);
+ 		pmu->intel_cap.capabilities = x86_pmu.intel_cap.capabilities;
+-		pmu->intel_cap.perf_metrics = 1;
+-		pmu->intel_cap.pebs_output_pt_available = 0;
++		/*
++		 * The capability bits are not reliable on ADL and RPL.
++		 * For bare metal, it's safe to assume that some features
++		 * are always enabled, e.g., the perf metrics on p-core,
++		 * but we cannot do the same assumption for a hypervisor.
++		 * Only update the core specific PMU feature for bare metal.
++		 */
++		if (!boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
++			pmu->intel_cap.perf_metrics = 1;
++			pmu->intel_cap.pebs_output_pt_available = 0;
++		}
+ 
+ 		memcpy(pmu->hw_cache_event_ids, spr_hw_cache_event_ids, sizeof(pmu->hw_cache_event_ids));
+ 		memcpy(pmu->hw_cache_extra_regs, spr_hw_cache_extra_regs, sizeof(pmu->hw_cache_extra_regs));
+@@ -6480,8 +6489,10 @@ __init int intel_pmu_init(void)
+ 					__EVENT_CONSTRAINT(0, (1ULL << pmu->num_counters) - 1,
+ 							   0, pmu->num_counters, 0, 0);
+ 		pmu->intel_cap.capabilities = x86_pmu.intel_cap.capabilities;
+-		pmu->intel_cap.perf_metrics = 0;
+-		pmu->intel_cap.pebs_output_pt_available = 1;
++		if (!boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
++			pmu->intel_cap.perf_metrics = 0;
++			pmu->intel_cap.pebs_output_pt_available = 1;
++		}
+ 
+ 		memcpy(pmu->hw_cache_event_ids, glp_hw_cache_event_ids, sizeof(pmu->hw_cache_event_ids));
+ 		memcpy(pmu->hw_cache_extra_regs, tnt_hw_cache_extra_regs, sizeof(pmu->hw_cache_extra_regs));
 -- 
-Kees Cook
+2.35.1
+
