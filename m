@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B97067B830
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1418967B828
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236167AbjAYROP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
+        id S236026AbjAYRN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235528AbjAYRNy (ORCPT
+        with ESMTP id S235195AbjAYRNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:13:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD289C677
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:13:43 -0800 (PST)
+        Wed, 25 Jan 2023 12:13:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA5210CE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:13:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60E3DB81B46
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:13:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA28C433A1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B920361591
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DE2C433AA;
         Wed, 25 Jan 2023 17:13:41 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pKjL9-004NrL-0q;
+        id 1pKjL9-004Nrt-1V;
         Wed, 25 Jan 2023 12:13:39 -0500
-Message-ID: <20230125171339.079529885@goodmis.org>
+Message-ID: <20230125171339.278637143@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 25 Jan 2023 12:12:56 -0500
+Date:   Wed, 25 Jan 2023 12:12:57 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [for-next][PATCH 04/12] tracing: Add NULL checks for buffer in ring_buffer_free_read_page()
+        Tom Zanussi <zanussi@kernel.org>,
+        Ross Zwisler <zwisler@google.com>,
+        Ching-lin Yu <chinglinyu@google.com>
+Subject: [for-next][PATCH 05/12] tracing: Simplify calculating entry size using struct_size()
 References: <20230125171252.431857411@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,56 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-In a previous commit 7433632c9ff6, buffer, buffer->buffers and
-buffer->buffers[cpu] in ring_buffer_wake_waiters() can be NULL,
-and thus the related checks are added.
+When tracing a dynamic string field for a synthetic event, the offset
+calculation for where to write the next event can use struct_size() to
+find what the current size of the structure is.
 
-However, in the same call stack, these variables are also used in
-ring_buffer_free_read_page():
+This simplifies the code and makes it less error prone.
 
-tracing_buffers_release()
-  ring_buffer_wake_waiters(iter->array_buffer->buffer)
-    cpu_buffer = buffer->buffers[cpu] -> Add checks by previous commit
-  ring_buffer_free_read_page(iter->array_buffer->buffer)
-    cpu_buffer = buffer->buffers[cpu] -> No check
+Link: https://lkml.kernel.org/r/20230117152235.698632147@goodmis.org
 
-Thus, to avod possible null-pointer derefernces, the related checks
-should be added.
-
-These results are reported by a static tool designed by myself.
-
-Link: https://lkml.kernel.org/r/20230113125501.760324-1-baijiaju1990@gmail.com
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Cc: Ross Zwisler <zwisler@google.com>
+Cc: Ching-lin Yu <chinglinyu@google.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/ring_buffer.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ kernel/trace/trace_events_synth.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index c366a0a9ddba..45d4a23d6044 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -5626,11 +5626,16 @@ EXPORT_SYMBOL_GPL(ring_buffer_alloc_read_page);
-  */
- void ring_buffer_free_read_page(struct trace_buffer *buffer, int cpu, void *data)
- {
--	struct ring_buffer_per_cpu *cpu_buffer = buffer->buffers[cpu];
-+	struct ring_buffer_per_cpu *cpu_buffer;
- 	struct buffer_data_page *bpage = data;
- 	struct page *page = virt_to_page(bpage);
- 	unsigned long flags;
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index 67592eed0be8..9f79cd689b79 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -416,8 +416,7 @@ static unsigned int trace_string(struct synth_trace_event *entry,
+ 	if (is_dynamic) {
+ 		u32 data_offset;
  
-+	if (!buffer || !buffer->buffers || !buffer->buffers[cpu])
-+		return;
-+
-+	cpu_buffer = buffer->buffers[cpu];
-+
- 	/* If the page is still in use someplace else, we can't reuse it */
- 	if (page_ref_count(page) > 1)
- 		goto out;
+-		data_offset = offsetof(typeof(*entry), fields);
+-		data_offset += event->n_u64 * sizeof(u64);
++		data_offset = struct_size(entry, fields, event->n_u64);
+ 		data_offset += data_size;
+ 
+ 		len = kern_fetch_store_strlen((unsigned long)str_val);
 -- 
 2.39.0
