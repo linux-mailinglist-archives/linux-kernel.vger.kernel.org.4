@@ -2,129 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DE967B303
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A043B67B308
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbjAYNK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:10:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S235578AbjAYNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235511AbjAYNK4 (ORCPT
+        with ESMTP id S235574AbjAYNLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:10:56 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1466F49011
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:10:43 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P23sb6DFNz9xrpW
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:02:43 +0800 (CST)
-Received: from [10.48.135.9] (unknown [10.48.135.9])
-        by APP1 (Coremail) with SMTP id LxC2BwAXnQgyKtFjLS_HAA--.15611S2;
-        Wed, 25 Jan 2023 14:10:21 +0100 (CET)
-Message-ID: <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
-Date:   Wed, 25 Jan 2023 14:10:08 +0100
+        Wed, 25 Jan 2023 08:11:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0E256EE5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674652238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S4aCTlmusSBeoV7pRyVwlsoOpJeNAMFzR7Diw02ed+A=;
+        b=Mb4Xgylj3hISKdF1DjKlLVBOX+IjbCTxLkGWbJBAn0WkcRtkhDQRsBqMMcMzAxZj0mhOiL
+        c18NVypXcsO1Mg4UHN/WWANemTqrjK7JKqXQNT7xWa0njwg5hl11aMuWO7PCMYCei/Av7O
+        9ukuxDSL6qpaWX5T9FHW/3QT29mBR9E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-120-HUe-KsSpMvCcXG6thL8mgA-1; Wed, 25 Jan 2023 08:10:36 -0500
+X-MC-Unique: HUe-KsSpMvCcXG6thL8mgA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB5E53828886;
+        Wed, 25 Jan 2023 13:10:35 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 741BD2026D4B;
+        Wed, 25 Jan 2023 13:10:35 +0000 (UTC)
+From:   Giuseppe Scrivano <gscrivan@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+References: <cover.1674227308.git.alexl@redhat.com>
+        <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+        <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+        <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+        <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+        <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+        <20230125041835.GD937597@dread.disaster.area>
+        <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+        <87wn5ac2z6.fsf@redhat.com>
+        <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
+        <87o7qmbxv4.fsf@redhat.com>
+        <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+Date:   Wed, 25 Jan 2023 14:10:33 +0100
+In-Reply-To: <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+        (Amir Goldstein's message of "Wed, 25 Jan 2023 14:46:59 +0200")
+Message-ID: <87fsbybvzq.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
- <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
- <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
- <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
- <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
- <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAXnQgyKtFjLS_HAA--.15611S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZryfWF1fZF1UZw13WFykXwb_yoW8ZF15pF
-        W8KFsFka1Dtr40grnxZr1xWFy5ta95XFs8KrnYgwnxAwn0gF9rKw4fGw43CFyFqrZay3Wj
-        va1Yqa4Duas8ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IUbG2NtUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Amir Goldstein <amir73il@gmail.com> writes:
 
-
-On 1/25/2023 3:20 AM, Paul E. McKenney wrote:
-> On Tue, Jan 24, 2023 at 08:54:56PM -0500, Alan Stern wrote:
->> On Tue, Jan 24, 2023 at 02:54:49PM -0800, Paul E. McKenney wrote:
->>> On Tue, Jan 24, 2023 at 05:35:33PM -0500, Alan Stern wrote:
->>>> Can you be more explicit?  Exactly what guarantees does the kernel
->>>> implementation make that can't be expressed in LKMM?
->>> I doubt that I will be able to articulate it very well, but here goes.
->>>
->>> Within the Linux kernel, the rule for a given RCU "domain" is that if
->>> an event follows a grace period in pretty much any sense of the word,
->>> then that event sees the effects of all events in all read-side critical
->>> sections that began prior to the start of that grace period.
->>>
->>> Here the senses of the word "follow" include combinations of rf, fr,
->>> and co, combined with the various acyclic and irreflexive relations
->>> defined in LKMM.
->> The LKMM says pretty much the same thing.  In fact, it says the event
->> sees the effects of all events po-before the unlock of (not just inside)
->> any read-side critical section that began prior to the start of the
->> grace period.
+>> >
+>> > Based on Alexander's explanation about the differences between overlayfs
+>> > lookup vs. composefs lookup of a regular "metacopy" file, I just need to
+>> > point out that the same optimization (lazy lookup of the lower data
+>> > file on open)
+>> > can be done in overlayfs as well.
+>> > (*) currently, overlayfs needs to lookup the lower file also for st_blocks.
+>> >
+>> > I am not saying that it should be done or that Miklos will agree to make
+>> > this change in overlayfs, but that seems to be the major difference.
+>> > getxattr may have some extra cost depending on in-inode xattr format
+>> > of erofs, but specifically, the metacopy getxattr can be avoided if this
+>> > is a special overlayfs RO mount that is marked as EVERYTHING IS
+>> > METACOPY.
+>> >
+>> > I don't expect you guys to now try to hack overlayfs and explore
+>> > this path to completion.
+>> > My expectation is that this information will be clearly visible to anyone
+>> > reviewing future submission, e.g.:
+>> >
+>> > - This is the comparison we ran...
+>> > - This is the reason that composefs gives better results...
+>> > - It MAY be possible to optimize erofs/overlayfs to get to similar results,
+>> >   but we did not try to do that
+>> >
+>> > It is especially important IMO to get the ACK of both Gao and Miklos
+>> > on your analysis, because remember than when this thread started,
+>> > you did not know about the metacopy option and your main argument
+>> > was saving the time it takes to create the overlayfs layer files in the
+>> > filesystem, because you were missing some technical background on overlayfs.
 >>
->>>> And are these anything the memory model needs to worry about?
->>> Given that several people, yourself included, are starting to use LKMM
->>> to analyze the Linux-kernel RCU implementations, maybe it does.
->>>
->>> Me, I am happy either way.
->> Judging from your description, I don't think we have anything to worry
->> about.
-> Sounds good, and let's proceed on that assumption then.  We can always
-> revisit later if need be.
+>> we knew about metacopy, which we already use in our tools to create
+>> mapped image copies when idmapped mounts are not available, and also
+>> knew about the other new features in overlayfs.  For example, the
+>> "volatile" feature which was mentioned in your
+>> Overlayfs-containers-lpc-2020 talk, was only submitted upstream after
+>> begging Miklos and Vivek for months.  I had a PoC that I used and tested
+>> locally and asked for their help to get it integrated at the file
+>> system layer, using seccomp for the same purpose would have been more
+>> complex and prone to errors when dealing with external bind mounts
+>> containing persistent data.
+>>
+>> The only missing bit, at least from my side, was to consider an image
+>> that contains only overlay metadata as something we could distribute.
+>>
 >
-> 							Thanx, Paul
+> I'm glad that I was able to point this out to you, because now the comparison
+> between the overlayfs and composefs options is more fair.
+>
+>> I previously mentioned my wish of using it from a user namespace, the
+>> goal seems more challenging with EROFS or any other block devices.  I
+>> don't know about the difficulty of getting overlay metacopy working in a
+>> user namespace, even though it would be helpful for other use cases as
+>> well.
+>>
+>
+> There is no restriction of metacopy in user namespace.
+> overlayfs needs to be mounted with -o userxattr and the overlay
+> xattrs needs to use user.overlay. prefix.
 
-FWIW, I currently don't see a need for either RCU nor "base" LKMM to 
-have this kind of guarantee.
-But I'm curious for why it doesn't exist in LKMM -- is it because of 
-Alpha or some other issues that make it hard to guarantee (like a 
-compiler merging two threads and optimizing or something?), or is it 
-simply that it seemed like a complicated guarantee with no discernible 
-upside, or something else?
+if I specify both userxattr and metacopy=on then the mount ends up in
+the following check:
 
-Best wishes, jonas
+if (config->userxattr) {
+	[...]
+	if (config->metacopy && metacopy_opt) {
+		pr_err("conflicting options: userxattr,metacopy=on\n");
+		return -EINVAL;
+	}
+}
+
+to me it looks like it was done on purpose to prevent metacopy from a
+user namespace, but I don't know the reason for sure.
+
+> w.r.t. the implied claim that composefs on-disk format is simple enough
+> so it could be made robust enough to avoid exploits, I will remain
+> silent and let others speak up, but I advise you to take cover,
+> because this is an explosive topic ;)
+>
+> Thanks,
+> Amir.
 
