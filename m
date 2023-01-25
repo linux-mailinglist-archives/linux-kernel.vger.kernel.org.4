@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8960A67A8A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF54567A8AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjAYCQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 21:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        id S231482AbjAYCUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjAYCQ5 (ORCPT
+        with ESMTP id S229528AbjAYCUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 21:16:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3AA4391A;
-        Tue, 24 Jan 2023 18:16:54 -0800 (PST)
+        Tue, 24 Jan 2023 21:20:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED4B10AAB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 18:20:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93039B81719;
-        Wed, 25 Jan 2023 02:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4866C4339B;
-        Wed, 25 Jan 2023 02:16:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A962613CA
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E819CC433D2;
+        Wed, 25 Jan 2023 02:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674613012;
-        bh=gRbl4mXmrNt9ibqLwpG8D2TXF8q2oLpZtPdJWLe7ZGA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W+fvTo8OY+CLoDoL5YlJ7lPksr6GfqoCFm92o68QXy9/hxeWP1iMZSOBPHhIIq2eB
-         7GRjjhFm/QS+6qWxflAoJU9aTSi7uW1jfHWd5HkEUMDgEJyzJfEEoBdfZlmBEbIE1g
-         vGI/DCxsP0Yo349mdmcV/lH6xEHOFB6XbTRBKzlXuBstiQ35U1Y57sW7K5K0kqQs+A
-         N4QU83AGiGky+sKv/1rRxEElCemY35RJNlJ9TZ88kjNrMOVicsfNijRTbmOsbhxp1q
-         NSi67p9PAUAAMbcSqmba1T5McYn9oktIGdCUBiPcBb4iNNhB84KNf9CvbWk3FAu2+p
-         g/1D8Gm8Hcqjg==
-Date:   Tue, 24 Jan 2023 18:16:50 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-Subject: Re: [PATCH] net: dsa: mt7530: fix tristate and help description
-Message-ID: <20230124181650.6f2c28c0@kernel.org>
-In-Reply-To: <20230123170853.400977-1-arinc.unal@arinc9.com>
-References: <20230123170853.400977-1-arinc.unal@arinc9.com>
+        s=k20201202; t=1674613220;
+        bh=SoCAwJmBB4a2CPMDqnQA3neIrz5nUwDQFsM8itQBG3I=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=U1Ny6h8j1qyiGrm0NyvXJbWFPJUNrV11kl8ms49ysd637ho09Ma5IK7nhuUC7jhA7
+         jLn7p6JZ5QGGFWiLwsoqr6QlQcPFHWVugVkQll1ihM9FrKjelkENDzjJTrBvUT4gSG
+         qmcg2L+QSA7Jcrs7hAKZv2hckc4dpXIvxOVxsoqVrobohxkM3qnPiGCBU8Csl+L7ml
+         eK8KlDCbtKH548zlkuve6z9XBUdKEmB6BFkkmcJoZrQudoI6gx8oCMPGf5owTvHU/x
+         QfuPou64cAH5Zrz9FuBeSbONHYwEss7hRO85mhOgZ3Bxu/WPasgcJNwds5rjLosq3m
+         BThDhPRJSYT5w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 977C55C1052; Tue, 24 Jan 2023 18:20:19 -0800 (PST)
+Date:   Tue, 24 Jan 2023 18:20:19 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
+ <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
+ <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
+ <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
+ <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
+ <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,13 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 20:08:53 +0300 Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> Fix description for tristate and help sections which include inaccurate
-> information.
->=20
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+On Tue, Jan 24, 2023 at 08:54:56PM -0500, Alan Stern wrote:
+> On Tue, Jan 24, 2023 at 02:54:49PM -0800, Paul E. McKenney wrote:
+> > On Tue, Jan 24, 2023 at 05:35:33PM -0500, Alan Stern wrote:
+> > > Can you be more explicit?  Exactly what guarantees does the kernel 
+> > > implementation make that can't be expressed in LKMM?
+> > 
+> > I doubt that I will be able to articulate it very well, but here goes.
+> > 
+> > Within the Linux kernel, the rule for a given RCU "domain" is that if
+> > an event follows a grace period in pretty much any sense of the word,
+> > then that event sees the effects of all events in all read-side critical
+> > sections that began prior to the start of that grace period.
+> > 
+> > Here the senses of the word "follow" include combinations of rf, fr,
+> > and co, combined with the various acyclic and irreflexive relations
+> > defined in LKMM.
+> 
+> The LKMM says pretty much the same thing.  In fact, it says the event 
+> sees the effects of all events po-before the unlock of (not just inside) 
+> any read-side critical section that began prior to the start of the 
+> grace period.
+> 
+> > > And are these anything the memory model needs to worry about?
+> > 
+> > Given that several people, yourself included, are starting to use LKMM
+> > to analyze the Linux-kernel RCU implementations, maybe it does.
+> > 
+> > Me, I am happy either way.
+> 
+> Judging from your description, I don't think we have anything to worry 
+> about.
 
-The patch didn't make it to patchwork or lore for some reason :(
-Could you repost? And when you do - add the tree name in the subject?
-If the chips you're listing are supported in Linus's tree then=20
-[PATCH net] ?
+Sounds good, and let's proceed on that assumption then.  We can always
+revisit later if need be.
+
+							Thanx, Paul
