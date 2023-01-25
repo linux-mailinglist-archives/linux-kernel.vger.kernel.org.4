@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AD167B737
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B19867B73A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbjAYQtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S235939AbjAYQtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235827AbjAYQsd (ORCPT
+        with ESMTP id S235910AbjAYQsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:48:33 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72BD5649A;
-        Wed, 25 Jan 2023 08:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674665279; bh=x1M00s3nylMDwIZ7lF9TN/rhz5zBDvXezZz2/ptVsrw=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=ncCiL+NLt2yXHEsyKL0oUKIDLLmfqXfW5qAExkDI3ocZ3H29EB+sMwIwo7gZ6w8WE
-         T/pQy7s4NyKOETIgkDTMOVbGcyW3bB9Qdav4L9dBpxmcWYeQlT9YETdz6+daaa5IFH
-         VJw3+hwE7nOy/zwNpufLYmbsbd5gStqeJghnIhss=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed, 25 Jan 2023 17:47:59 +0100 (CET)
-X-EA-Auth: bWlBuAmXX6htWB4hJvq9dVY4kmQmdlMsBiRKY6XjvCC5Q1E5JmjYqzVM9mv65YUIBkPtwggm7fCtXXjosCMH+7HhHYyQ8R83
-Date:   Wed, 25 Jan 2023 22:17:54 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH] scsi: qla2xxx: Use a variable instead of repeated
- computations
-Message-ID: <Y9FdOu4Y3KS5eVUf@ubun2204.myguest.virtualbox.org>
+        Wed, 25 Jan 2023 11:48:43 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE296A56
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:48:19 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id n24-20020a0568301e9800b006865671a9d5so11456309otr.6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:48:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vq3LFQzKpZKBu49mGyCeTfi9HlhBCQSg5nBGLL0OypI=;
+        b=PdtocwtdB8FDvLU7tUXjJ+15U60AZmpxJVdEEWY4mMw+TzW4SDdaRmai8a4Jg4sxLI
+         Lwe2olqot8VczzHQsTvNOPHr+qwz9v5SXFz4zQoP4UibuaXU198h+2Emg7l91qhVxtB+
+         v1N4joqVqWTVHKVgaxbbPIBgHiingnGOZdJEGO54u6qs9iGFCIh6CUvi/Vn6qwJqJQug
+         qoqFiiVmHFRKosHCPjhm2In3muQfZeWloJ6AIR3Hipp5Rm79oHc2kswfbcHNMuIS8PWb
+         24ddY5+5jwAeJgf74J3RQ7dgSSguYK1BBjbAdXpaugu+J3hlbVKYovgl1g/n4PfWy5I+
+         EFsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vq3LFQzKpZKBu49mGyCeTfi9HlhBCQSg5nBGLL0OypI=;
+        b=xW2B2ToRdfGj42ZCWOhtb8dm5AfWtghFB2PIxaDF8luHLWXSFblT61wifqXJtyauat
+         mUkjo2TE+L1Pzronc3NM8q4NQ+dP7x85SPL8RIkzKGr9MDBwT6eA4pwum1vv/AoQP8Vk
+         Cy+QZgOunlWGQ5HFlgFV83HSPkUEagAK5pSiT/lNOrhsZzmr7SadbLU9YL/RZXHMiOGq
+         dZSMu7idBKntnGayfwtIL9w0Rz39VhxQ2JWPFW+UXFtDY4yOj52O0nmFCMcwaY5lI2eT
+         YNMitUU/UyOY2mBrCtgyC8VHpVJOC7qnz/0ZNACI0HGupPcD6BfG2e1gwsccgMn0A7/p
+         a++w==
+X-Gm-Message-State: AFqh2krbP7m5Z4iqIN8MfIvUGK3mPgJCONrrcgLaMiNdhAWtZRMVbALp
+        YDeVoBsBegjWrMcAxIsHDAnuLIvmq1mqpHBNSaKwPBCoh+ht8Iax54k=
+X-Google-Smtp-Source: AMrXdXtbgubewTmPxtFwsv2qHy+cXHIkihgATKvfFQzPBDZm7LPVyGSSuCJPV6EntjJunWDoW3ri+a4V+yJTVgdwfR0=
+X-Received: by 2002:a9d:3e2:0:b0:684:e1a4:1df9 with SMTP id
+ f89-20020a9d03e2000000b00684e1a41df9mr2141435otf.8.1674665290314; Wed, 25 Jan
+ 2023 08:48:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027092036.2698180-1-pbonzini@redhat.com> <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+ <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com>
+In-Reply-To: <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 25 Jan 2023 08:47:59 -0800
+Message-ID: <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a variable to upfront compute memory size to be allocated, instead
-of repeatedly computing it at different instructions.  The reduced
-length of lines also allows to tidy up the code.
-Issue identified using the array_size_dup Coccinelle semantic patch.
+On Wed, Jan 25, 2023 at 6:17 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 1/25/23 00:16, Jim Mattson wrote:
+> > This is a userspace ABI change that breaks existing hypervisors.
+> > Please don't do this. Userspace ABIs are supposed to be inviolate.
+>
+> What exactly is broken?
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/qla2xxx/tcm_qla2xxx.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+KVM_GET_SUPPORTED_CPUID no longer returns the host topology in leaf 0xB.
 
-diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-index 8fa0056b56dd..5213d107879d 100644
---- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-+++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-@@ -1552,6 +1552,7 @@ static const struct qla_tgt_func_tmpl tcm_qla2xxx_template = {
- static int tcm_qla2xxx_init_lport(struct tcm_qla2xxx_lport *lport)
- {
- 	int rc;
-+	size_t mem_sz;
- 
- 	rc = btree_init32(&lport->lport_fcport_map);
- 	if (rc) {
-@@ -1559,17 +1560,15 @@ static int tcm_qla2xxx_init_lport(struct tcm_qla2xxx_lport *lport)
- 		return rc;
- 	}
- 
--	lport->lport_loopid_map =
--		vzalloc(array_size(65536,
--				   sizeof(struct tcm_qla2xxx_fc_loopid)));
-+	mem_sz = array_size(65536, sizeof(struct tcm_qla2xxx_fc_loopid));
-+
-+	lport->lport_loopid_map = vzalloc(mem_sz);
- 	if (!lport->lport_loopid_map) {
--		pr_err("Unable to allocate lport->lport_loopid_map of %zu bytes\n",
--		    sizeof(struct tcm_qla2xxx_fc_loopid) * 65536);
-+		pr_err("Unable to allocate lport->lport_loopid_map of %zu bytes\n", mem_sz);
- 		btree_destroy32(&lport->lport_fcport_map);
- 		return -ENOMEM;
- 	}
--	pr_debug("qla2xxx: Allocated lport_loopid_map of %zu bytes\n",
--	       sizeof(struct tcm_qla2xxx_fc_loopid) * 65536);
-+	pr_debug("qla2xxx: Allocated lport_loopid_map of %zu bytes\n", mem_sz);
- 	return 0;
- }
- 
--- 
-2.34.1
+> Part of the definition of the API is that you can take
+> KVM_GET_SUPPORTED_CPUID and pass it to KVM_SET_CPUID2 for all vCPUs.
+> Returning host topology information for a random host vCPU definitely
+> violates the contract.
 
+You are attempting to rewrite history. Leaf 0xB was added to
+KVM_GET_SUPPORTED_CPUID in commit 0771671749b5 ("KVM: Enhance guest
+cpuid management"), and the only documentation of the
+KVM_GET_SUPPORTED_CPUID ioctl at that time was in the commit message:
 
+     - KVM_GET_SUPPORTED_CPUID: get all cpuid entries the host (and kvm)
+       supports
 
+There is nothing in the commit message or the official documentation
+at the time that the ioctl was added that says anything about passing
+the result to KVM_SET_CPUID2 for all vCPUs. Operationally, it is quite
+clear from the committed code that the intention was to return the
+host topology information for the current logical processor.
+
+Any future changes to either the operational behavior or the
+documented behavior of the ABI surely demand a version bump.
