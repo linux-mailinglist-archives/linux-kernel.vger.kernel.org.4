@@ -2,144 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECFA67BC8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF9367BC8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbjAYU2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S236394AbjAYU3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbjAYU2r (ORCPT
+        with ESMTP id S235678AbjAYU3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:28:47 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F0918B1E;
-        Wed, 25 Jan 2023 12:28:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674678526; x=1706214526;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NHhfbEA3+ALiNjZfOCrhagTrZL43nqVOc3EIo2NrQz4=;
-  b=SU4htNjbtf30zndJObs/uVTo1SHIVkio20+sX5afGeBPpRkCdaNEZ7Vd
-   rBve3eUICA8z0KcsQinFvcEKcLKvqkkWp948fBhOJqzigxDO/IUn3Hbq6
-   LSU5QeXGEC/lHHmAT/4n12ynpO+nCBjoCpl8P1n+6Z7A9OUGAxcErx8lf
-   cs817ZZbPW8PSXM01ntJnJ0J7KdqNx+1RpizHuKpMBTq35/j3IzVLvMvF
-   EBdi45jtfiW5kx6YuKJDyW4rmeib7MrX8jFUktUgimtLYaXXsIlyKy2p2
-   iSKkHgcUc2WKju3KkuUehYUvakcShoLw9J/5su0HZ4uUqDB2hTAhio9f8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="310247043"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="310247043"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:28:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="726022748"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="726022748"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Jan 2023 12:28:44 -0800
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     seanjc@google.com, ak@linux.intel.com, pengfei.xu@intel.com,
-        Kan Liang <kan.liang@linux.intel.com>, stable@vger.kernel.org
-Subject: [PATCH] perf/x86/intel: Fix guest vPMU warning on hybrid CPUs
-Date:   Wed, 25 Jan 2023 12:28:35 -0800
-Message-Id: <20230125202835.924016-1-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 25 Jan 2023 15:29:21 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5BD18B1E;
+        Wed, 25 Jan 2023 12:29:20 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id 187so20975526vsv.10;
+        Wed, 25 Jan 2023 12:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x0eJXQiCeafQhb678t9JAzCgvZC4fwwPxaAWFvK3rXg=;
+        b=EwBK25ItUcy1PDOp6CVPNMrqCAsQ2wvL1ys9J8ZStkhoeV16dWpB7y1eQheBoVZmgb
+         uL8VOUJqhUzpeQRNupXrNkfzVw1Wh1L2zDE7vmGXsSMKBl4D+aNMQXLX2yR9aYELvY1i
+         ls8njRBMasI9lPJ0YNMf4mKZujARiSrWNAR1EFx2e3/2nRJSVaA5kwOg8vSC2H5TxuAS
+         Gxe/JAr3bGcBpQUAfvYtJ4aoRsyux0huJc3Ac0eoT/zOE6lMWJXQvx8AW/JLiduUDDAz
+         TU4x6NCcsKz9C8bBthKWwQ9lXAYXRzKp2NfGEQkwXDJQrgehdayiUfJA6tSE89Tp7yhv
+         TOjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x0eJXQiCeafQhb678t9JAzCgvZC4fwwPxaAWFvK3rXg=;
+        b=A8Vg4Eayuj2rmRCERg7bOUv6SYZL1pudtlXVLGNkW2BTAJ6KMyEMPWlBwp2oenUQSs
+         sv3JMdDwdSGb1dIKogVkR87wdohSHyQKNb9l0taikY7+F84gwvKqBaL0FCJtV/S996WO
+         dxYgsWXoQDdYOJHRw6s+VF2tLXC0ZX3I4BrpAY1IeuUf88cTdc/VtLTdlbqjnYdCKXx6
+         jG901hCMGyQl6FhDZsou9FxO1zhUwNQFIFVgB5hDQi02CpNPRovet5/pZJ04M60d+qgp
+         dIE5oEVFFZqTTGKyil0BFpcwon9cCdUVX1WT6hzsPkvzudY9e6JYhZIUmjSK2HzHEG63
+         yMwA==
+X-Gm-Message-State: AO0yUKWUeT2DbqFDD+yok+y8wjJwgR2WZyrgCXQ+mn41XW39f67nsrEh
+        db4BY/GAaOA4BCxqgM7UxmrQbzNYQ4cLZCmwvwEyNSZF
+X-Google-Smtp-Source: AK7set9SxKMVPC39i/EQHeHs3eIcn8MDkk+ayHfGxcsyXGEq6M4Y55n47XPsp3L4Aaw07umz2w8Y4jSsxHqtMty65wA=
+X-Received: by 2002:a67:e0d8:0:b0:3ea:a853:97c4 with SMTP id
+ m24-20020a67e0d8000000b003eaa85397c4mr13699vsl.36.1674678559903; Wed, 25 Jan
+ 2023 12:29:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <20230125041835.GD937597@dread.disaster.area> <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+ <87wn5ac2z6.fsf@redhat.com> <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
+ <87o7qmbxv4.fsf@redhat.com> <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+ <87fsbybvzq.fsf@redhat.com> <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
+ <87wn5a9z4m.fsf@redhat.com> <CAOQ4uxi7GHVkaqxsQV6ninD9fhvMAPk1xFRM2aMRFXQZUV-s3Q@mail.gmail.com>
+In-Reply-To: <CAOQ4uxi7GHVkaqxsQV6ninD9fhvMAPk1xFRM2aMRFXQZUV-s3Q@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 25 Jan 2023 22:29:08 +0200
+Message-ID: <CAOQ4uxiZ4iB82F4i2zMPcyCB8EBFGObdAoBEcar0KE7sA5BoNA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Wed, Jan 25, 2023 at 10:23 PM Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> On Wed, Jan 25, 2023 at 9:45 PM Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+> >
+> > Amir Goldstein <amir73il@gmail.com> writes:
+> >
+> > >> >> I previously mentioned my wish of using it from a user namespace, the
+> > >> >> goal seems more challenging with EROFS or any other block devices.  I
+> > >> >> don't know about the difficulty of getting overlay metacopy working in a
+> > >> >> user namespace, even though it would be helpful for other use cases as
+> > >> >> well.
+> > >> >>
+> > >> >
+> > >> > There is no restriction of metacopy in user namespace.
+> > >> > overlayfs needs to be mounted with -o userxattr and the overlay
+> > >> > xattrs needs to use user.overlay. prefix.
+> > >>
+> > >> if I specify both userxattr and metacopy=on then the mount ends up in
+> > >> the following check:
+> > >>
+> > >> if (config->userxattr) {
+> > >>         [...]
+> > >>         if (config->metacopy && metacopy_opt) {
+> > >>                 pr_err("conflicting options: userxattr,metacopy=on\n");
+> > >>                 return -EINVAL;
+> > >>         }
+> > >> }
+> > >>
+> > >
+> > > Right, my bad.
+> > >
+> > >> to me it looks like it was done on purpose to prevent metacopy from a
+> > >> user namespace, but I don't know the reason for sure.
+> > >>
+> > >
+> > > With hand crafted metacopy, an unpriv user can chmod
+> > > any files to anything by layering another file with different
+> > > mode on top of it....
+> >
+> > I might be missing something obvious about metacopy, so please correct
+> > me if I am wrong, but I don't see how it is any different than just
+> > copying the file and chowning it.  Of course, as long as overlay uses
+> > the same security model so that a file that wasn't originally possible
+> > to access must be still blocked, even if referenced through metacopy.
+> >
+>
+> You're right.
+> The reason for mutual exclusion maybe related to the
+> comment in ovl_check_metacopy_xattr() about EACCES.
+> Need to check with Vivek or Miklos.
+>
+> But get this - you do not need metacopy=on to follow lower inode.
+> It should work without metacopy=on.
+> metacopy=on only instructs overlayfs whether to copy up data
+> or only metadata when changing metadata of lower object, so it is
+> not relevant for readonly mount.
+>
 
-The below error can be observed in a Linux guest, when the hypervisor
-is on a hybrid machine.
+However, you do need redirect=follow and that one is only mutually
+exclusive with userxattr.
+Again, need to ask Miklos whether that could be relaxed under
+some conditions.
 
-[    0.118214] unchecked MSR access error: WRMSR to 0x38f (tried to
-write 0x00011000f0000003f) at rIP: 0xffffffff83082124
-(native_write_msr+0x4/0x30)
-[    0.118949] Call Trace:
-[    0.119092]  <TASK>
-[    0.119215]  ? __intel_pmu_enable_all.constprop.0+0x88/0xe0
-[    0.119533]  intel_pmu_enable_all+0x15/0x20
-[    0.119778]  x86_pmu_enable+0x17c/0x320
-
-The current perf wrongly assumes that the perf metrics feature is always
-enabled on p-core. It unconditionally enables the feature to workaround
-the unreliable enumeration of the PERF_CAPABILITIES MSR. The assumption
-is safe to bare metal. However, KVM doesn't support the perf metrics
-feature yet. Setting the corresponding bit triggers MSR access error
-in a guest.
-
-Only unconditionally enable the core specific PMU feature for bare metal
-on ADL and RPL, which includes the perf metrics on p-core and
-PEBS-via-PT on e-core.
-For the future platforms, perf doesn't need to hardcode the PMU feature.
-The per-core PMU features can be enumerated by the enhanced
-PERF_CAPABILITIES MSR and CPUID leaf 0x23. There is no such issue.
-
-Fixes: f83d2f91d259 ("perf/x86/intel: Add Alder Lake Hybrid support")
-Link: https://lore.kernel.org/lkml/e161b7c0-f0be-23c8-9a25-002260c2a085@linux.intel.com/
-Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: stable@vger.kernel.org
----
-
-
-Based on my limit knowledge regarding KVM and guest, I use the
-HYPERVISOR bit to tell whether it's a guest. But I'm not sure whether
-it's reliable. Please let me know if there is a better way. Thanks.
-
-
- arch/x86/events/intel/core.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index bbb7846d3c1e..8d08929a7250 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -6459,8 +6459,17 @@ __init int intel_pmu_init(void)
- 					__EVENT_CONSTRAINT(0, (1ULL << pmu->num_counters) - 1,
- 							   0, pmu->num_counters, 0, 0);
- 		pmu->intel_cap.capabilities = x86_pmu.intel_cap.capabilities;
--		pmu->intel_cap.perf_metrics = 1;
--		pmu->intel_cap.pebs_output_pt_available = 0;
-+		/*
-+		 * The capability bits are not reliable on ADL and RPL.
-+		 * For bare metal, it's safe to assume that some features
-+		 * are always enabled, e.g., the perf metrics on p-core,
-+		 * but we cannot do the same assumption for a hypervisor.
-+		 * Only update the core specific PMU feature for bare metal.
-+		 */
-+		if (!boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
-+			pmu->intel_cap.perf_metrics = 1;
-+			pmu->intel_cap.pebs_output_pt_available = 0;
-+		}
- 
- 		memcpy(pmu->hw_cache_event_ids, spr_hw_cache_event_ids, sizeof(pmu->hw_cache_event_ids));
- 		memcpy(pmu->hw_cache_extra_regs, spr_hw_cache_extra_regs, sizeof(pmu->hw_cache_extra_regs));
-@@ -6480,8 +6489,10 @@ __init int intel_pmu_init(void)
- 					__EVENT_CONSTRAINT(0, (1ULL << pmu->num_counters) - 1,
- 							   0, pmu->num_counters, 0, 0);
- 		pmu->intel_cap.capabilities = x86_pmu.intel_cap.capabilities;
--		pmu->intel_cap.perf_metrics = 0;
--		pmu->intel_cap.pebs_output_pt_available = 1;
-+		if (!boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
-+			pmu->intel_cap.perf_metrics = 0;
-+			pmu->intel_cap.pebs_output_pt_available = 1;
-+		}
- 
- 		memcpy(pmu->hw_cache_event_ids, glp_hw_cache_event_ids, sizeof(pmu->hw_cache_event_ids));
- 		memcpy(pmu->hw_cache_extra_regs, tnt_hw_cache_extra_regs, sizeof(pmu->hw_cache_extra_regs));
--- 
-2.35.1
-
+Thanks,
+Amir.
