@@ -2,271 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7BB67BB38
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 179CA67BB7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236053AbjAYTw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S235733AbjAYT5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235889AbjAYTwX (ORCPT
+        with ESMTP id S235836AbjAYT5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:52:23 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CF15924A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:51:20 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id hw16so50534063ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:51:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PGQtNMCtF/zFqyjg+RVNx/g2xphXepovgWysJqLnw9w=;
-        b=eJR9aQkXDReiK2529mb60Vo419A5Bu6Z3u7WpIl4js2WhPZGIQFSy/H4+p4NVIXaJc
-         r7Wbb01tc97SVywSGhQ06K8PuXb1eFANcGB8N/1W5TTdeS7VMXfrSvxFtptvIY24zvpK
-         UJ7aqQyuF3PM4yk6FlpHbu+TZSzo8e4rfvZ4fMHZQ8z0Vk9JpnOm9/Kj+XbuQ0Q0I80K
-         HtDArDVy6VCc8K7Fbbt5DA+7BHe+/eyH7VEkdLOELJcleXkz5SwhrXM9MpW1gONi1uH8
-         el4p6hcH8QcBiHyEjnjDmJakvDDlTxv8p3l+e/wf/mZ6C/p9JacVIvhmZSJfdZNRvVfj
-         /zcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PGQtNMCtF/zFqyjg+RVNx/g2xphXepovgWysJqLnw9w=;
-        b=rRbGOo6NAabjRLllUJqgLiY+wlj4V7avzD/k6bGE8rogzaSF0zRx5K8wt3/oflfVJy
-         fzLXZTM6WOr35NT7XL1reghkintNzr7pR6og2KRcxfv3N0ASjEa7mrJrpqu67rCr7YdQ
-         RXwa12/z9nsJqITh+XfMGCiQccPxwxdnDdDpGaInNa3eOnpEwz/1Wmpti2bgGVqtEylm
-         KHzYmjeL/q9t9xmE5eNAVmbDpPI6Ovdp5FMpAN2t1L/eMPl8KC8N/rXVygh8DlhWsG0/
-         FH9Y8IM2l05AfkSG0bsnh8lPwm/qHpEybLMxSoIWOCtVtCPKQTGZAzvBews5T8N6c/Qe
-         +ygg==
-X-Gm-Message-State: AFqh2kqcplQZYiJIQmeBiC0wM1dkdqhghrtZ5MZTQTLU/JD1OAOHlyV6
-        tbQNc7oiz0FGrBC9UXtu4SEIMg==
-X-Google-Smtp-Source: AMrXdXssGcS4R2vhME25W3esQjynCNwS4O80o7quVAzjlK/GgMiNikFP6qZ66Nporluvp40QSYCzOg==
-X-Received: by 2002:a17:906:2582:b0:877:573d:e91c with SMTP id m2-20020a170906258200b00877573de91cmr29810674ejb.63.1674676280502;
-        Wed, 25 Jan 2023 11:51:20 -0800 (PST)
-Received: from blmsp.fritz.box ([2001:4091:a247:815f:ef74:e427:628a:752c])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170906454f00b00872c0bccab2sm2778830ejq.35.2023.01.25.11.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 11:51:20 -0800 (PST)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v2 18/18] can: m_can: Implement transmit submission coalescing
-Date:   Wed, 25 Jan 2023 20:50:59 +0100
-Message-Id: <20230125195059.630377-19-msp@baylibre.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230125195059.630377-1-msp@baylibre.com>
-References: <20230125195059.630377-1-msp@baylibre.com>
+        Wed, 25 Jan 2023 14:57:00 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B530298EF
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:56:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E25A121CD7;
+        Wed, 25 Jan 2023 19:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674676578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0k6N5kE57VZVpq+fQtdtp8c94mweCUDz7pBZZ4tonHA=;
+        b=UHW9RuYEXRBi8OPXL3b8MT8caa9jQf7FKYlLxE9Rc6ucbIsly/YkqCLHESRcRlxG5DNa5E
+        CiuaZ+sJW8CeZEZUgT5jf80dWOhGg17H4pm3AtsfY6IkmvvsAx/RbObXHDHu1moABSLDOT
+        RXXWjFbHd0zfQMpxS4qj5y4qXdwEBAI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674676578;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0k6N5kE57VZVpq+fQtdtp8c94mweCUDz7pBZZ4tonHA=;
+        b=gQ4MBHWKgLDAT7A56WFDOH9YMgBcyeCxVFFvcjTLfqW/CSU95E4orj77XXEGLBupsC3/xA
+        SNiapv5D7No/efBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 992C31339E;
+        Wed, 25 Jan 2023 19:56:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7tRlJGKJ0WN6dAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 25 Jan 2023 19:56:18 +0000
+Message-ID: <82ad8c89-9d6a-ffa8-e2ad-7b53ac27cafb@suse.de>
+Date:   Wed, 25 Jan 2023 20:56:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drm/ssd130x: Init display before the SSD130X_DISPLAY_ON
+ command
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org
+References: <20230125184230.3343206-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230125184230.3343206-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------sNf0DUNwwdHy7oxjUmXOZkda"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-m_can supports submitting mulitple transmits with one register write.
-This is an interesting option to reduce the number of SPI transfers for
-peripheral chips.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------sNf0DUNwwdHy7oxjUmXOZkda
+Content-Type: multipart/mixed; boundary="------------Z3tK6Z4kby7W05R2Xt4Vf69v";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
+Message-ID: <82ad8c89-9d6a-ffa8-e2ad-7b53ac27cafb@suse.de>
+Subject: Re: [PATCH] drm/ssd130x: Init display before the SSD130X_DISPLAY_ON
+ command
+References: <20230125184230.3343206-1-javierm@redhat.com>
+In-Reply-To: <20230125184230.3343206-1-javierm@redhat.com>
 
-The m_can_tx_op is extended with a bool that signals if it is the last
-transmission and the submit should be executed immediately.
+--------------Z3tK6Z4kby7W05R2Xt4Vf69v
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The worker then writes the skb to the FIFO and submits it only if the
-submit bool is set. If it isn't set, the worker will write the next skb
-which is waiting in the workqueue to the FIFO, etc.
+DQoNCkFtIDI1LjAxLjIzIHVtIDE5OjQyIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
+bGFzOg0KPiBDb21taXQgNjIyMTEzYjlmMTFmICgiZHJtL3NzZDEzMHg6IFJlcGxhY2Ugc2lt
+cGxlIGRpc3BsYXkgaGVscGVycyB3aXRoIHRoZQ0KPiBhdG9taWMgaGVscGVycyIpIGNoYW5n
+ZWQgdGhlIGRyaXZlciB0byBqdXN0IHVzZSB0aGUgYXRvbWljIGhlbHBlcnMgaW5zdGVhZA0K
+PiBvZiB0aGUgc2ltcGxlIEtNUyBhYnN0cmFjdGlvbiBsYXllci4NCj4gDQo+IEJ1dCB0aGUg
+Y29tbWl0IGFsc28gbWFkZSBhIHN1YnRsZSBjaGFuZ2Ugb24gdGhlIGRpc3BsYXkgcG93ZXIg
+c2VxdWVuY2UgYW5kDQo+IGluaXRpYWxpemF0aW9uIG9yZGVyLCBieSBtb3ZpbmcgdGhlIHNz
+ZDEzMHhfcG93ZXJfb24oKSBjYWxsIHRvIHRoZSBlbmNvZGVyDQo+IC5hdG9taWNfZW5hYmxl
+IGhhbmRsZXIgYW5kIHRoZSBzc2QxMzB4X2luaXQoKSBjYWxsIHRvIENSVEMgLnJlc2V0IGhh
+bmRsZXIuDQo+IA0KPiBCZWZvcmUgdGhpcyBjaGFuZ2UsIGJvdGggc3NkMTMweF9wb3dlcl9v
+bigpIGFuZCBzc2QxMzB4X2luaXQoKSB3ZXJlIGNhbGxlZA0KPiBpbiB0aGUgc2ltcGxlIGRp
+c3BsYXkgcGlwZWxpbmUgLmVuYWJsZSBoYW5kbGVyLCBzbyB0aGUgZGlzcGxheSB3YXMgYWxy
+ZWFkeQ0KPiBpbml0aWFsaXplZCBieSB0aGUgdGltZSB0aGUgU1NEMTMwWF9ESVNQTEFZX09O
+IGNvbW1hbmQgd2FzIHNlbnQuDQo+IA0KPiBGb3Igc29tZSByZWFzb25zLCBpdCBvbmx5IG1h
+ZGUgdGhlIHNzZDEzMHggU1BJIGRyaXZlciB0byBmYWlsIGJ1dCB0aGUgSTJDDQo+IHdhcyBz
+dGlsbCB3b3JraW5nLiBUaGF0IGlzIHRoZSByZWFzb24gd2h5IHRoZSBidWcgd2FzIG5vdCBu
+b3RpY2VkIGJlZm9yZS4NCj4gDQo+IFRvIHJldmVydCB0byB0aGUgb2xkIGRyaXZlciBiZWhh
+dmlvciwgbW92ZSB0aGUgc3NkMTMweF9pbml0KCkgY2FsbCB0byB0aGUNCj4gZW5jb2RlciAu
+YXRvbWljX2VuYWJsZSBhcyB3ZWxsLiBCZXNpZGVzIGZpeGluZyB0aGUgcGFuZWwgbm90IGJl
+aW5nIHR1cm5lZA0KPiBvbiB3aGVuIHVzaW5nIFNQSSwgaXQgYWxzbyBnZXRzIHJpZCBvZiB0
+aGUgY3VzdG9tIENSVEMgLnJlc2V0IGNhbGxiYWNrLg0KPiANCj4gRml4ZXM6IDYyMjExM2I5
+ZjExZiAoImRybS9zc2QxMzB4OiBSZXBsYWNlIHNpbXBsZSBkaXNwbGF5IGhlbHBlcnMgd2l0
+aCB0aGUgYXRvbWljIGhlbHBlcnMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGlu
+ZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
+cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiANCj4gICBk
+cml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgfCAxOCArKysrKysrLS0tLS0tLS0t
+LS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMo
+LSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4
+LmMgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gaW5kZXggYjE2MzMw
+YThiNjI0Li44Y2JmNWFhNjZlMTkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9z
+b2xvbW9uL3NzZDEzMHguYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2Qx
+MzB4LmMNCj4gQEAgLTY2MywxOCArNjYzLDggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBkcm1f
+Y3J0Y19oZWxwZXJfZnVuY3Mgc3NkMTMweF9jcnRjX2hlbHBlcl9mdW5jcyA9IHsNCj4gICAJ
+LmF0b21pY19jaGVjayA9IGRybV9jcnRjX2hlbHBlcl9hdG9taWNfY2hlY2ssDQo+ICAgfTsN
+Cj4gICANCj4gLXN0YXRpYyB2b2lkIHNzZDEzMHhfY3J0Y19yZXNldChzdHJ1Y3QgZHJtX2Ny
+dGMgKmNydGMpDQo+IC17DQo+IC0Jc3RydWN0IGRybV9kZXZpY2UgKmRybSA9IGNydGMtPmRl
+djsNCj4gLQlzdHJ1Y3Qgc3NkMTMweF9kZXZpY2UgKnNzZDEzMHggPSBkcm1fdG9fc3NkMTMw
+eChkcm0pOw0KPiAtDQo+IC0Jc3NkMTMweF9pbml0KHNzZDEzMHgpOw0KPiAtDQo+IC0JZHJt
+X2F0b21pY19oZWxwZXJfY3J0Y19yZXNldChjcnRjKTsNCj4gLX0NCj4gLQ0KPiAgIHN0YXRp
+YyBjb25zdCBzdHJ1Y3QgZHJtX2NydGNfZnVuY3Mgc3NkMTMweF9jcnRjX2Z1bmNzID0gew0K
+PiAtCS5yZXNldCA9IHNzZDEzMHhfY3J0Y19yZXNldCwNCj4gKwkucmVzZXQgPSBkcm1fYXRv
+bWljX2hlbHBlcl9jcnRjX3Jlc2V0LA0KPiAgIAkuZGVzdHJveSA9IGRybV9jcnRjX2NsZWFu
+dXAsDQo+ICAgCS5zZXRfY29uZmlnID0gZHJtX2F0b21pY19oZWxwZXJfc2V0X2NvbmZpZywN
+Cj4gICAJLnBhZ2VfZmxpcCA9IGRybV9hdG9taWNfaGVscGVyX3BhZ2VfZmxpcCwNCj4gQEAg
+LTY5Myw2ICs2ODMsMTIgQEAgc3RhdGljIHZvaWQgc3NkMTMweF9lbmNvZGVyX2hlbHBlcl9h
+dG9taWNfZW5hYmxlKHN0cnVjdCBkcm1fZW5jb2RlciAqZW5jb2RlciwNCj4gICAJaWYgKHJl
+dCkNCj4gICAJCXJldHVybjsNCj4gICANCj4gKwlyZXQgPSBzc2QxMzB4X2luaXQoc3NkMTMw
+eCk7DQo+ICsJaWYgKHJldCkgew0KPiArCQlzc2QxMzB4X3Bvd2VyX29mZihzc2QxMzB4KTsN
+Cj4gKwkJcmV0dXJuOw0KPiArCX0NCj4gKw0KPiAgIAlzc2QxMzB4X3dyaXRlX2NtZChzc2Qx
+MzB4LCAxLCBTU0QxMzBYX0RJU1BMQVlfT04pOw0KPiAgIA0KPiAgIAliYWNrbGlnaHRfZW5h
+YmxlKHNzZDEzMHgtPmJsX2Rldik7DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
+aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
+R21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2
+ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
+--------------Z3tK6Z4kby7W05R2Xt4Vf69v--
 
-Notes:
-    Notes:
-    - I ran into lost messages in the receive FIFO when using this
-      implementation. I guess this only shows up with my test setup in
-      loopback mode and maybe not enough CPU power.
-    - I put this behind the tx-frames ethtool coalescing option as we do
-      wait before submitting packages but it is something different than the
-      tx-frames-irq option. I am not sure if this is the correct option,
-      please let me know.
+--------------sNf0DUNwwdHy7oxjUmXOZkda
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
- drivers/net/can/m_can/m_can.c | 55 ++++++++++++++++++++++++++++++++---
- drivers/net/can/m_can/m_can.h |  6 ++++
- 2 files changed, 57 insertions(+), 4 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index c6a09369d1aa..99bfcfec3775 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1504,6 +1504,9 @@ static int m_can_start(struct net_device *dev)
- 	if (ret)
- 		return ret;
- 
-+	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(cdev->net, 0),
-+				       cdev->tx_max_coalesced_frames);
-+
- 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
- 	m_can_enable_all_interrupts(cdev);
-@@ -1813,8 +1816,13 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 		 */
- 		can_put_echo_skb(skb, dev, putidx, frame_len);
- 
--		/* Enable TX FIFO element to start transfer  */
--		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
-+		if (cdev->is_peripheral) {
-+			/* Delay enabling TX FIFO element */
-+			cdev->tx_peripheral_submit |= BIT(putidx);
-+		} else {
-+			/* Enable TX FIFO element to start transfer  */
-+			m_can_write(cdev, M_CAN_TXBAR, BIT(putidx));
-+		}
- 		cdev->tx_fifo_putidx = (++cdev->tx_fifo_putidx >= cdev->can.echo_skb_max ?
- 					0 : cdev->tx_fifo_putidx);
- 	}
-@@ -1827,6 +1835,17 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 	return NETDEV_TX_BUSY;
- }
- 
-+static void m_can_tx_submit(struct m_can_classdev *cdev)
-+{
-+	if (cdev->version == 30)
-+		return;
-+	if (!cdev->is_peripheral)
-+		return;
-+
-+	m_can_write(cdev, M_CAN_TXBAR, cdev->tx_peripheral_submit);
-+	cdev->tx_peripheral_submit = 0;
-+}
-+
- static void m_can_tx_work_queue(struct work_struct *ws)
- {
- 	struct m_can_tx_op *op = container_of(ws, struct m_can_tx_op, work);
-@@ -1835,11 +1854,15 @@ static void m_can_tx_work_queue(struct work_struct *ws)
- 
- 	op->skb = NULL;
- 	m_can_tx_handler(cdev, skb);
-+	if (op->submit)
-+		m_can_tx_submit(cdev);
- }
- 
--static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
-+static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb,
-+			       bool submit)
- {
- 	cdev->tx_ops[cdev->next_tx_op].skb = skb;
-+	cdev->tx_ops[cdev->next_tx_op].submit = submit;
- 	queue_work(cdev->tx_wq, &cdev->tx_ops[cdev->next_tx_op].work);
- 
- 	++cdev->next_tx_op;
-@@ -1851,6 +1874,7 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
- 					       struct sk_buff *skb)
- {
- 	netdev_tx_t err;
-+	bool submit;
- 
- 	if (cdev->can.state == CAN_STATE_BUS_OFF) {
- 		m_can_clean(cdev->net);
-@@ -1861,7 +1885,15 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
- 	if (err != NETDEV_TX_OK)
- 		return err;
- 
--	m_can_tx_queue_skb(cdev, skb);
-+	++cdev->nr_txs_without_submit;
-+	if (cdev->nr_txs_without_submit >= cdev->tx_max_coalesced_frames ||
-+	    !netdev_xmit_more()) {
-+		cdev->nr_txs_without_submit = 0;
-+		submit = true;
-+	} else {
-+		submit = false;
-+	}
-+	m_can_tx_queue_skb(cdev, skb, submit);
- 
- 	return NETDEV_TX_OK;
- }
-@@ -1993,6 +2025,7 @@ static int m_can_get_coalesce(struct net_device *dev,
- 
- 	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
- 	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
-+	ec->tx_max_coalesced_frames = cdev->tx_max_coalesced_frames;
- 	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
- 	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
- 
-@@ -2037,6 +2070,18 @@ static int m_can_set_coalesce(struct net_device *dev,
- 		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
- 		return -EINVAL;
- 	}
-+	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXE].num) {
-+		netdev_err(dev, "tx-frames (%u) greater than the TX event FIFO (%u)\n",
-+			   ec->tx_max_coalesced_frames,
-+			   cdev->mcfg[MRAM_TXE].num);
-+		return -EINVAL;
-+	}
-+	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXB].num) {
-+		netdev_err(dev, "tx-frames (%u) greater than the TX FIFO (%u)\n",
-+			   ec->tx_max_coalesced_frames,
-+			   cdev->mcfg[MRAM_TXB].num);
-+		return -EINVAL;
-+	}
- 	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
- 	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
- 		netdev_err(dev, "rx-usecs-irq (%u) needs to be equal to tx-usecs-irq (%u) if both are enabled\n",
-@@ -2047,6 +2092,7 @@ static int m_can_set_coalesce(struct net_device *dev,
- 
- 	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
- 	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-+	cdev->tx_max_coalesced_frames = ec->tx_max_coalesced_frames;
- 	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
- 	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
- 
-@@ -2064,6 +2110,7 @@ static const struct ethtool_ops m_can_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
- 		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
- 		ETHTOOL_COALESCE_TX_USECS_IRQ |
-+		ETHTOOL_COALESCE_TX_MAX_FRAMES |
- 		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
- 	.get_ts_info = ethtool_op_get_ts_info,
- 	.get_coalesce = m_can_get_coalesce,
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index bfef2c89e239..e209de81b5a4 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -74,6 +74,7 @@ struct m_can_tx_op {
- 	struct m_can_classdev *cdev;
- 	struct work_struct work;
- 	struct sk_buff *skb;
-+	bool submit;
- };
- 
- struct m_can_classdev {
-@@ -103,6 +104,7 @@ struct m_can_classdev {
- 	u32 active_interrupts;
- 	u32 rx_max_coalesced_frames_irq;
- 	u32 rx_coalesce_usecs_irq;
-+	u32 tx_max_coalesced_frames;
- 	u32 tx_max_coalesced_frames_irq;
- 	u32 tx_coalesce_usecs_irq;
- 
-@@ -117,6 +119,10 @@ struct m_can_classdev {
- 	int tx_fifo_size;
- 	int next_tx_op;
- 
-+	int nr_txs_without_submit;
-+	/* bitfield of fifo elements that will be submitted together */
-+	u32 tx_peripheral_submit;
-+
- 	struct mram_cfg mcfg[MRAM_CFG_NUM];
- };
- 
--- 
-2.39.0
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPRiWIFAwAAAAAACgkQlh/E3EQov+C7
+CxAAiiI4/gJIcoiJgRDtIrFnPOmqPKEnXk9pIG5Q4s+y9soTfsSTrY91eDcsmaU95RXOFocTb2b3
+lenDoKkbuZ1f4lGO9WA6Ef6tpeZSiCqXsK64Z9VvYl2eq54RA7amOK5dMqqM0jFHaszUIi71ZoTw
+T3+7eWRRQ0oc3dnFRutjuN1cQqyrdYTMmRhuNvJewOWx0FC4QM4blDq4mWcJEYcx9b98gumALKPh
+jx9IsXLvEoTcMlNdNgT9RHPaOL0W8HVtmZ+TL4uXer9LV3duCMg5ZPFu5Xizzrn01xC9vVIMfNb4
+HQozKE4nHB6r+W/3yGMsBf6WmdwMs87XK8suRDnpw1Lmjn4T51uVHuaqDWO2ZNi8nlG5mGvQTQz0
+fAo/v4eyx1gIn7t/ZYOHmFz9rRga2QNYAmYSJOf5Y+VswBf0M2mclO5RGuUHlgcUlL2lKSCA66/W
+cuD3kXW4MldHDSxaMpWami/g4mNCvXTmSRnY0fOBvq9LcvwbgJ+EvV+KmE7UIwY0XYCGdA9OEynD
+2xzlLUykIjwP9jMwSIPiHUQliK2Ps6XKPuF7vY49aMaLzEYwCoC7lkj9yjNpihJfnA+VPRzp42SI
+Rircf9u5974M3q2rK99S5DpZyyXBUSYaLFqXwEWyeSOzPpBQDzqRNdqivp1+ZjANJSshq05YGaWS
+IQ4=
+=WpXs
+-----END PGP SIGNATURE-----
 
+--------------sNf0DUNwwdHy7oxjUmXOZkda--
