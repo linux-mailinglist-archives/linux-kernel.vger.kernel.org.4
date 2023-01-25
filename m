@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7584C67B82D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B66867B829
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236132AbjAYROI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S235769AbjAYRNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235356AbjAYRNx (ORCPT
+        with ESMTP id S235172AbjAYRNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:13:53 -0500
+        Wed, 25 Jan 2023 12:13:52 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66109976C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E92565BE
         for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:13:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3FC16158C
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD24461586
         for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:13:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6698CC433AC;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92397C43443;
         Wed, 25 Jan 2023 17:13:41 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pKjLA-004Nuh-1a;
+        id 1pKjLA-004NvF-2F;
         Wed, 25 Jan 2023 12:13:40 -0500
-Message-ID: <20230125171340.301718233@goodmis.org>
+Message-ID: <20230125171340.510349637@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 25 Jan 2023 12:13:02 -0500
+Date:   Wed, 25 Jan 2023 12:13:03 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Ching-lin Yu <chinglinyu@google.com>
-Subject: [for-next][PATCH 10/12] tracing/histogram: Add simple tests for stacktrace usage of synthetic
- events
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [for-next][PATCH 11/12] perf/tracing: Use stage6 of tracing to not duplicate macros
 References: <20230125171252.431857411@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,83 +52,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Update the selftests to include a test of passing a stacktrace between the
-events of a synthetic event.
+The perf events are created by the same macro magic as tracefs trace
+events are. But to hook into perf, it has its own code. It duplicates many
+of the same macros as the tracefs macros and this is an issue because it
+misses bug fixes as well as any new enhancements that come with the other
+trace macros.
 
-Link: https://lkml.kernel.org/r/20230117152236.475439286@goodmis.org
+As the trace macros have been put into their own staging files, have perf
+take advantage of this and use the tracefs stage 6 macros that the "fast
+assign" portion of the trace event macro uses.
 
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: Ross Zwisler <zwisler@google.com>
-Cc: Ching-lin Yu <chinglinyu@google.com>
+Link: https://lkml.kernel.org/r/20230124202515.716458410@goodmis.org
+Link: https://lore.kernel.org/lkml/1671181385-5719-1-git-send-email-quic_linyyuan@quicinc.com/
+
+Cc: Frederic Weisbecker <fweisbec@gmail.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reported-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace.c                          |  2 +-
- .../trigger-synthetic-event-stack.tc          | 24 +++++++++++++++++++
- .../trigger-synthetic-event-syntax.tc         |  6 +++++
- 3 files changed, 31 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
+ include/trace/perf.h                         | 46 +-------------------
+ include/trace/stages/stage6_event_callback.h |  3 ++
+ 2 files changed, 4 insertions(+), 45 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 78ed5f1baa8c..b90eecd27dfc 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5757,7 +5757,7 @@ static const char readme_msg[] =
- #ifdef CONFIG_SYNTH_EVENTS
- 	"  events/synthetic_events\t- Create/append/remove/show synthetic events\n"
- 	"\t  Write into this file to define/undefine new synthetic events.\n"
--	"\t     example: echo 'myevent u64 lat; char name[]' >> synthetic_events\n"
-+	"\t     example: echo 'myevent u64 lat; char name[]; long[] stack' >> synthetic_events\n"
- #endif
- #endif
- ;
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
-new file mode 100644
-index 000000000000..755dbe94ccf4
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-stack.tc
-@@ -0,0 +1,24 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event trigger - test inter-event histogram trigger trace action with dynamic string param
-+# requires: set_event synthetic_events events/sched/sched_process_exec/hist "long[]' >> synthetic_events":README
-+
-+fail() { #msg
-+    echo $1
-+    exit_fail
-+}
-+
-+echo "Test create synthetic event with stack"
-+
-+
-+echo 's:wake_lat pid_t pid; u64 delta; unsigned long[] stack;' > dynamic_events
-+echo 'hist:keys=next_pid:ts=common_timestamp.usecs,st=stacktrace  if prev_state == 1||prev_state == 2' >> events/sched/sched_switch/trigger
-+echo 'hist:keys=prev_pid:delta=common_timestamp.usecs-$ts,s=$st:onmax($delta).trace(wake_lat,prev_pid,$delta,$s)' >> events/sched/sched_switch/trigger
-+echo 1 > events/synthetic/wake_lat/enable
-+sleep 1
-+
-+if ! grep -q "=>.*sched" trace; then
-+    fail "Failed to create synthetic event with stack"
-+fi
-+
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-syntax.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-syntax.tc
-index 2968cdc7df30..366f1f3ad906 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-syntax.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-syntax.tc
-@@ -70,6 +70,12 @@ grep "myevent[[:space:]]unsigned long var" synthetic_events
- echo "myevent char var[10]" > synthetic_events
- grep "myevent[[:space:]]char\[10\] var" synthetic_events
+diff --git a/include/trace/perf.h b/include/trace/perf.h
+index 8f3bf1e17707..2c11181c82e0 100644
+--- a/include/trace/perf.h
++++ b/include/trace/perf.h
+@@ -4,51 +4,7 @@
  
-+if grep -q 'long\[\]' README; then
-+  # test stacktrace type
-+  echo "myevent unsigned long[] var" > synthetic_events
-+  grep "myevent[[:space:]]unsigned long\[\] var" synthetic_events
-+fi
-+
- do_reset
+ #ifdef CONFIG_PERF_EVENTS
  
- exit 0
+-#undef __entry
+-#define __entry entry
+-
+-#undef __get_dynamic_array
+-#define __get_dynamic_array(field)	\
+-		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
+-
+-#undef __get_dynamic_array_len
+-#define __get_dynamic_array_len(field)	\
+-		((__entry->__data_loc_##field >> 16) & 0xffff)
+-
+-#undef __get_str
+-#define __get_str(field) ((char *)__get_dynamic_array(field))
+-
+-#undef __get_bitmask
+-#define __get_bitmask(field) (char *)__get_dynamic_array(field)
+-
+-#undef __get_cpumask
+-#define __get_cpumask(field) (char *)__get_dynamic_array(field)
+-
+-#undef __get_sockaddr
+-#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
+-
+-#undef __get_rel_dynamic_array
+-#define __get_rel_dynamic_array(field)	\
+-		((void *)__entry +					\
+-		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+-		 sizeof(__entry->__rel_loc_##field) +			\
+-		 (__entry->__rel_loc_##field & 0xffff))
+-
+-#undef __get_rel_dynamic_array_len
+-#define __get_rel_dynamic_array_len(field)	\
+-		((__entry->__rel_loc_##field >> 16) & 0xffff)
+-
+-#undef __get_rel_str
+-#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
+-
+-#undef __get_rel_bitmask
+-#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
+-
+-#undef __get_rel_cpumask
+-#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
+-
+-#undef __get_rel_sockaddr
+-#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
++#include "stages/stage6_event_callback.h"
+ 
+ #undef __perf_count
+ #define __perf_count(c)	(__count = (c))
+diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+index 49c32394b53f..919b1a4da980 100644
+--- a/include/trace/stages/stage6_event_callback.h
++++ b/include/trace/stages/stage6_event_callback.h
+@@ -2,6 +2,9 @@
+ 
+ /* Stage 6 definitions for creating trace events */
+ 
++/* Reuse some of the stage 3 macros */
++#include "stage3_trace_output.h"
++
+ #undef __entry
+ #define __entry entry
+ 
 -- 
 2.39.0
