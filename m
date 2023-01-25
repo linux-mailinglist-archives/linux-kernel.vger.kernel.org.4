@@ -2,141 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3F867C01F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEF467C02E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235915AbjAYWoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 17:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S229834AbjAYWws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 17:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbjAYWox (ORCPT
+        with ESMTP id S229499AbjAYWwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:44:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2067636446
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:44:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674686644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KLbKwODJaOigvAcLcDeGQGOJa4mEOCY0SOM+5pGAPuQ=;
-        b=TmTu09OdQurQQjycM3pwNLQnQQBhQHSd5VqQ24jtSPApT53yncsBJRir564DFCIxuBQGw0
-        7bWe+1aKGpRGCaeUim9wVLTfa50xfmIT5PTMOv941H4oEX5CBYBZs9g8EL9Gqx6xximI+m
-        u889hDY5RWMKqaxvsqjAKThSRyJpUhI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-362-hNLK7brKNEa2JpF5CrrfWA-1; Wed, 25 Jan 2023 17:44:02 -0500
-X-MC-Unique: hNLK7brKNEa2JpF5CrrfWA-1
-Received: by mail-ed1-f71.google.com with SMTP id t17-20020a056402525100b0049e0d2dd9b1so183133edd.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:44:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KLbKwODJaOigvAcLcDeGQGOJa4mEOCY0SOM+5pGAPuQ=;
-        b=gRbIsyKixIUZx5E7WVM0vgS15cJbeRdW0XI40pvbUX/rnQYIglXadPiOZwsLx/FSWy
-         aU5xxR5n+NKyFV6iP5fOma6yCVUMPYy0y9sbKvOI4FzAaW5509DQIMj+4zXXPS4L1vPv
-         d4Qyff0kyxkjGBSYDLCHKki784saNnLqlvryLxLAGDZHbeEnI5fE+4gpzXGX9iW7KX8n
-         CnQu1q/Xm0BrzuGQfA9IIWygPYcbbQri0mEl5BoKhqvJ7ztZdgYMA1uxGSia4+MfZuHG
-         EeUCDi0bYhuU5KIopmYW2Zl5NVxWX2aVMrCMtbvBokP1a+iPCI7PzcY757ej/t3dNDJc
-         Qdgg==
-X-Gm-Message-State: AFqh2koPHqpoX21P7dPeqOPEgbO3zzdSMq5FTnsEGg5mZd1F8DZWd/cj
-        tMfokY/+JpYquB0F13MVYzP/mMYwmTZv6OQrlrbv185TzQCVlIsGOZQur71mIB4faTI/M18NVpS
-        LmFOAncj7Tx1qXCMplDnjf64Z
-X-Received: by 2002:a17:906:b78b:b0:877:60aa:7081 with SMTP id dt11-20020a170906b78b00b0087760aa7081mr30468525ejb.22.1674686641559;
-        Wed, 25 Jan 2023 14:44:01 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsF9rG7NEbV4kTmoPrQ6fv3l2ffKJPwc0x73+fD4Ik30Ilpoo75g1U/Oil1SDEclFHq7VBmgA==
-X-Received: by 2002:a17:906:b78b:b0:877:60aa:7081 with SMTP id dt11-20020a170906b78b00b0087760aa7081mr30468514ejb.22.1674686641261;
-        Wed, 25 Jan 2023 14:44:01 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id e4-20020a17090681c400b008785b27b36fsm140778ejx.138.2023.01.25.14.44.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 14:44:00 -0800 (PST)
-Message-ID: <dec8c012-885a-6ed8-534e-4a5f0a435025@redhat.com>
-Date:   Wed, 25 Jan 2023 23:43:59 +0100
+        Wed, 25 Jan 2023 17:52:46 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E2E6FEE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:52:43 -0800 (PST)
+Received: (qmail 231182 invoked by uid 1000); 25 Jan 2023 17:52:42 -0500
+Date:   Wed, 25 Jan 2023 17:52:42 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
+Message-ID: <Y9Gyuj+2UFefUdJS@rowland.harvard.edu>
+References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
+ <Y9GPI/g23YWx+0Ce@rowland.harvard.edu>
+ <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
+ <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, stable@vger.kernel.org
-References: <20221027092036.2698180-1-pbonzini@redhat.com>
- <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
- <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com>
- <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
- <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com>
- <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from
- KVM_GET_SUPPORTED_CPUID
-In-Reply-To: <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 23:09, Jim Mattson wrote:
-> The topology leaves returned by KVM_GET_SUPPORTED_CPUID *for over a
-> decade* have been passed through unmodified from the host. They have
-> never made sense for KVM_SET_CPUID2, with the unlikely exception of a
-> whole-host VM.
+On Wed, Jan 25, 2023 at 10:04:29PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/25/2023 9:21 PM, Alan Stern wrote:
+> >   (* Validate nesting *)
+> >   flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
+> >   flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
+> > +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
+> 
+> Have you considered adding
+> flag ~empty (srcu-rscs ; srcu-rscs^-1) \ id as mixed-srcu-cookie
 
-True, unfortunately people have not read the nonexistent documentation 
-and they are:
+I had not considered it.  You'd have to do something pretty bizarre if 
+you wanted to trigger this warning, though.  Like:
 
-1) rarely adjusting correctly all of 0xB, 0x1F and 0x8000001E;
+	r1 = srcu_read_lock(s);
+	r2 = srcu_read_lock(s);
+	srcu_read_unlock(s, r1 + r2);
 
-2) never bounding CPUID[EAX=0].EAX to a known CPUID leaf, resulting for 
-example in inconsistencies between 0xB and 0x1F.
+> Although I think one has to be intentionally trying to trick herd
+> to be violating this. If herd could produce different cookies, this would be
+> easy to detect just by the different-values flag you already have.
 
-*But* (2) should not be needed unless you care about maintaining 
-homogeneous CPUID within a VM migration pool.  For something like 
-kvmtool, having to do (2) would be a workaround for the bug that this 
-patch fixes.
+Unless you did: srcu_read_unlock(s, r1 + r2 * 0).  :-)
 
-> Our VMM populates the topology of the guest CPUID table on its own, as
-> any VMM must. However, it uses the host topology (which
-> KVM_GET_SUPPORTED_CPUID has been providing pass-through *for over a
-> decade*) to see if the requested guest topology is possible.
+> >   (* Check for use of synchronize_srcu() inside an RCU critical section *)
+> >   flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+> > @@ -80,11 +73,11 @@ flag ~empty different-values(srcu-rscs)
+> >   (* Compute marked and plain memory accesses *)
+> >   let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
+> > -		LKR | LKW | UL | LF | RL | RU
+> > +		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
+> 
+> Good catch! But why wasn't this necessary before? Is it only necessary now
+> because the accesses became loads and stores (maybe to avoid data races?)
 
-Ok, thanks; this is useful to know.
+Exactly.  Before this those events weren't memory accesses at all.
 
-> Changing a long-established ABI in a way that breaks userspace
-> applications is a bad practice. I didn't think we, as a community, did
-> that. I didn't realize that we were only catering to open source
-> implementations here.
+> >   // SRCU
+> > -srcu_read_lock(X)  __srcu{srcu-lock}(X)
+> > -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
+> > +srcu_read_lock(X) __load{srcu-lock}(*X)
+> > +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
+> > +srcu_down_read(X) __load{srcu-lock}(*X)
+> > +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
+> 
+> How do you feel about introducing Srcu-up and Srcu-down with this patch?
 
-We aren't.  But the open source implementations provide some guidance as 
-to how the API is being used in the wild, and what the pitfalls are.
+Why invent new classes for them?  They are literally the same operation 
+as Srcu-lock and Srcu-unlock; the only difference is how the kernel's 
+lockdep checker treats them.
 
-You wrote it yourself: any VMM must either populate the topology on its 
-own, or possibly fill it with zeros.  Returning a value that is 
-extremely unlikely to be used is worse in pretty much every way (apart 
-from not breaking your VMM, of course).
+> > +(* There should be no ordinary R or W accesses to spinlocks or SRCU structs *)
+> > +let ALL-LOCKS = LKR | LKW | UL | LF | RU | Srcu-lock | Srcu-unlock | Sync-srcu
+> > +flag ~empty [M \ IW \ ALL-LOCKS] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
+> 
+> Since this was pointed out by Boqun, would it be appropriate to mention him
+> in the patch somehow?
 
-With a total of six known users (QEMU, crosvm, kvmtool, firecracker, 
-rust-vmm, and the Google VMM), KVM is damned if it reverts the patch and 
-damned if it doesn't.  There is a tension between fixing the one VMM 
-that was using KVM_GET_SUPPORTED_CPUID correctly and now breaks loudly, 
-and fixing 3-4 that were silently broken and are now fixed.  I will 
-probably send a patch to crosvm, though.
+True.  After we settle everything else, I'll add something to that 
+effect.
 
-The VMM being _proprietary_ doesn't really matter, however it does 
-matter to me that it is not _public_: it is only used within Google, and 
-the breakage is neither hard to fix in the VMM nor hard to temporarily 
-avoid by reverting the patch in the Google kernel.
-
-Paolo
-
+Alan
