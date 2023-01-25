@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911A967AA13
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 06:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E653A67AA16
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 06:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbjAYFtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 00:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S234276AbjAYFuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 00:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbjAYFtC (ORCPT
+        with ESMTP id S232753AbjAYFuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 00:49:02 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2787B7EDD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 21:49:01 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d9so16906734pll.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 21:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2clZK09JqH0mZYrKAloUknV6sK19Xq1RB4pFi5pvbzg=;
-        b=lJagTaVpLa/x/1F9OUFLXUG3brlAAz7I7HAD4j6qmxM0TfDu9z7IsujQpX0Xygwe/7
-         mdk+2mH0SXm1XzB9CfA6gtulFA27UowLX0D9wMsfujnxhvERNr7sqkQvUocz5ye4o8lG
-         5q2TE6BTglP8/3bDhP4v5Wh+8OAwhmm56Fg4lCUH5MlvWZdocpVwPkMH0BZkcmALIExx
-         A2Vu+D+4HgsscZBqBay1/2rWqylQ9N+RmfEIQ1vqn8y89sR59/PlQdt+VaadG0PU/xHc
-         nioKwfiOx2CVBdq8sFkakFM4eey9DspAejLnXPoUPqQe7YXp9nM4bXgUnj/+kHidPC27
-         n/4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2clZK09JqH0mZYrKAloUknV6sK19Xq1RB4pFi5pvbzg=;
-        b=IeFPdUXTdwZRV5iOt4UZ7+XekmEcGPrQNxmwfiXXlVle1zp6MoHY2viDgqUPknu6uf
-         tyGOnbC49Nrnyxvg+zzvm3vyITtA7jsP/minppJj80ZUUjnDxsTYbN5YrAoL40dQuAud
-         /9ovqU6VZCoELrFUMM3crluPEEZpoIn2iXBGXNTp1PRw3/SXYTpTGqDcw01NDUSndLJl
-         czJqvY/fl+cHMpzJSaL2oSOkS4cJo0Mq0Tfb0R2Oj6doGvpL/TYVKOsmVPtKw7g1y5gV
-         2s9Dp3p5JYJ0hc13kJy/jeJ1x9OqSp/NIH8w6Ouj0MoHgRbwjQJ/tjBbSwlYj8SBDMAr
-         FARA==
-X-Gm-Message-State: AFqh2kq0beQJIlLZWOR5TN3PMV/YfhYQEtIL21f3iMAnH0c+9PWgyzzT
-        mHNXCi5a6YEJj6mJeMyDYRyuwA==
-X-Google-Smtp-Source: AMrXdXuCxWM5IJmuHLPIH8llgP98HDUza7zHbZk/CV/fN5JGBRlzjAAE9jvy0Nv6Uz/k+Pqdjvbhbw==
-X-Received: by 2002:a17:902:bb89:b0:194:9b5e:a0a5 with SMTP id m9-20020a170902bb8900b001949b5ea0a5mr32269763pls.43.1674625740608;
-        Tue, 24 Jan 2023 21:49:00 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b00196048cc113sm2639954plw.126.2023.01.24.21.48.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 21:49:00 -0800 (PST)
-In-Reply-To: <20230116064342.2092136-1-liaochang1@huawei.com>
-References: <20230116064342.2092136-1-liaochang1@huawei.com>
-Subject: Re: [PATCH] riscv/kprobe: Fix instruction simulation of JALR
-Message-Id: <167462569110.21287.11897342152923707674.b4-ty@rivosinc.com>
-Date:   Tue, 24 Jan 2023 21:48:11 -0800
-MIME-Version: 1.0
+        Wed, 25 Jan 2023 00:50:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE25F7EDD
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 21:50:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F671B8189B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 06A3DC433D2;
+        Wed, 25 Jan 2023 05:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674625817;
+        bh=kE+DFWqR6+E2Trkr1Q/Hb+ZWWUvxp5eQEotCvRr3K7k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=r/joxOp1DUbQQJsrp1kNI43xlGu1i6GEfFwAS679TOLEqe/Ro0O0HOjV5Aabr9B3B
+         T3s6zZM/BkoiwOFg0z/RZoSUVUA26x4F+wur/gJzhwvpwzBveQ1llQzIf7MXhqz1h3
+         0jvvLNPbqZbi9HY8Bz/seBW3BKhtZegO+v3p5kReBlWnsPUg86McEHvFr6wTGNpcgv
+         +1kqxs2ojo+rX//AZPxKcQkMx0I57wer1Gqu3mv3Vw1thM33Qsid9QI52Z578pTRq9
+         toOiUxrrar4ITr1PHPPLrbG95dUjiSTrqdUO1EVW5HXdkyo5eoteZ5Gfyy0ePzUHn4
+         hjRVrTDkERfbA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E178CE52507;
+        Wed, 25 Jan 2023 05:50:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-e660e
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        chenlifu@huawei.com, bjorn@kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        penberg@kernel.org, mhiramat@kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>, me@packi.ch,
-        guoren@kernel.org, Liao Chang <liaochang1@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] riscv/kprobe: Fix instruction simulation of JALR
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167462581691.3015.5045414056306333462.git-patchwork-notify@kernel.org>
+Date:   Wed, 25 Jan 2023 05:50:16 +0000
+References: <20230116064342.2092136-1-liaochang1@huawei.com>
+In-Reply-To: <20230116064342.2092136-1-liaochang1@huawei.com>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, mhiramat@kernel.org,
+        guoren@kernel.org, me@packi.ch, penberg@kernel.org,
+        linux-kernel@vger.kernel.org, bjorn@kernel.org, chenlifu@huawei.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023 14:43:42 +0800, Liao Chang wrote:
+Hello:
+
+This patch was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Mon, 16 Jan 2023 14:43:42 +0800 you wrote:
 > Set kprobe at 'jalr 1140(ra)' of vfs_write results in the following
 > crash:
 > 
@@ -104,13 +92,13 @@ On Mon, 16 Jan 2023 14:43:42 +0800, Liao Chang wrote:
 > 
 > [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - riscv/kprobe: Fix instruction simulation of JALR
+    https://git.kernel.org/riscv/c/ca0254998be4
 
-(with Guo's suggested cleanup)
-
-[1/1] riscv/kprobe: Fix instruction simulation of JALR
-      https://git.kernel.org/palmer/c/ca0254998be4
-
-Best regards,
+You are awesome, thank you!
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
