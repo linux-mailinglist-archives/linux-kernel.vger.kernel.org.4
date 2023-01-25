@@ -2,54 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC1767BA21
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC3467BA2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbjAYTDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        id S235952AbjAYTFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjAYTDl (ORCPT
+        with ESMTP id S235772AbjAYTFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:03:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C5FDBCB;
-        Wed, 25 Jan 2023 11:03:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94BBC6155F;
-        Wed, 25 Jan 2023 19:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF3CC433EF;
-        Wed, 25 Jan 2023 19:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674673418;
-        bh=XeT3qSPMBwmHYZ4zvlYQg6u5mZJtG0QjkOeNOOP32w4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I3XZcPQfHwnAYUCtYNTwNlpXKTZnXyv7Q0IfVNLD+wYLAMooFQQBKesHIfGyRcIQx
-         trjuWggsnElsdzUdzrBCegOmeCsLwny9v6QHEeeWVO/21G8k9vx4sgxLYri3/QRT2l
-         i0bzshvQIZmJinOGyGOnUk4Nb9ikFMt1QIaeUYUoWzhskId0DONSp2iRB3gG8e0+4b
-         gq45KZrH+P4GHeCRQ8I6zGDvEIhqg0EkNl4rJUJf9i9PVYpxHcCwscZvBmbdNR02Kt
-         HHM5Hx/hOfcYAqVqrK8sCQYs0yOgC541MxtQjufjMjlQL8IFct8LR18DjsAav9I+/7
-         BCm3LT4abGHvA==
-Date:   Wed, 25 Jan 2023 11:03:36 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v11 2/2] livepatch,x86: Clear relocation targets on a
- module removal
-Message-ID: <20230125190336.utdb3tvyuy74vnap@treble>
-References: <20230125185401.279042-1-song@kernel.org>
- <20230125185401.279042-2-song@kernel.org>
+        Wed, 25 Jan 2023 14:05:11 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB3B9EF1;
+        Wed, 25 Jan 2023 11:05:10 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PGpDTp011299;
+        Wed, 25 Jan 2023 19:04:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=kzMdcKmjNLrz56j89BndJFFhT3EyGY2qMYeM/0J+fpg=;
+ b=H8uYCPk3Fp8QOZn0vrgVtTFvUPf9ETeLjYZ6j4TOSfSOVp+SrXBboK/r/mhG+7WJGF53
+ EvJFLzoNnmqi9Z8um3z/O8kLNMdnxHUBeQO/zkTLKuhkCgziyt+QdcSd5Cw/n5hlBTc3
+ 80e7QOWZ19fVKEoHMPegmlgvmujJQwWytbemLBOf3YvpmdEUl3IO/Xla0iub3usanQ+t
+ ItK4ANSlyOfnVgDserNRUN0Zd6M+cRmGhAKjSnSKoL0G+WsC0yhJGYWtpUoBkHwGKOhL
+ uupVQYM3R6r2cO//Ra2jjU09f69U0vgVpEQc0vPpeqbeyHLDnV9Aw7nYL6VMzh9NgQW1 0A== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nb0qrs7y7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 19:04:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PJ4ujB026229
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 19:04:56 GMT
+Received: from [10.110.33.211] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
+ 2023 11:04:54 -0800
+Message-ID: <dbe19739-6275-9e1d-86a3-20ecb559a9d1@quicinc.com>
+Date:   Wed, 25 Jan 2023 11:04:54 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230125185401.279042-2-song@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: Add DSC hardware blocks to register snapshot
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        "Rob Clark" <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230125091315.133283-1-marijn.suijten@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230125091315.133283-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IszkHaAz9o7x6MtxCNLV1PVP66aA_IET
+X-Proofpoint-ORIG-GUID: IszkHaAz9o7x6MtxCNLV1PVP66aA_IET
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_12,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 clxscore=1011 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250169
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,42 +94,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:54:01AM -0800, Song Liu wrote:
-> Josh reported a bug:
-> 
->   When the object to be patched is a module, and that module is
->   rmmod'ed and reloaded, it fails to load with:
-> 
->   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> 
->   The livepatch module has a relocation which references a symbol
->   in the _previous_ loading of nfsd. When apply_relocate_add()
->   tries to replace the old relocation with a new one, it sees that
->   the previous one is nonzero and it errors out.
-> 
-> He also proposed three different solutions. We could remove the error
-> check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> ("x86/module: Detect and skip invalid relocations"). However the check
-> is useful for detecting corrupted modules.
-> 
-> We could also deny the patched modules to be removed. If it proved to be
-> a major drawback for users, we could still implement a different
-> approach. The solution would also complicate the existing code a lot.
-> 
-> We thus decided to reverse the relocation patching (clear all relocation
-> targets on x86_64). The solution is not
-> universal and is too much arch-specific, but it may prove to be simpler
-> in the end.
-> 
-> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Originally-by: Miroslav Benes <mbenes@suse.cz>
-> Signed-off-by: Song Liu <song@kernel.org>
-> Acked-by: Miroslav Benes <mbenes@suse.cz>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
--- 
-Josh
+On 1/25/2023 1:13 AM, Marijn Suijten wrote:
+> Add missing DSC hardware block register ranges to the snapshot utility
+> to include them in dmesg (on MSM_DISP_SNAPSHOT_DUMP_IN_CONSOLE) and the
+> kms debugfs file.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+Huge ack from me,
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index ad08fb7e7105..44648da310f2 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -930,6 +930,11 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
+>   		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
+>   				dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
+>   
+> +	/* dump DSC sub-blocks HW regs info */
+> +	for (i = 0; i < cat->dsc_count; i++)
+> +		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
+> +				dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
+> +
+>   	msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len,
+>   			dpu_kms->mmio + cat->mdp[0].base, "top");
+>   
