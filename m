@@ -2,144 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544B267A92B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB65967A92D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbjAYDXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 22:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S234274AbjAYDYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 22:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbjAYDXg (ORCPT
+        with ESMTP id S229754AbjAYDYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:23:36 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C47453E46;
-        Tue, 24 Jan 2023 19:23:34 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 35F9582EFE;
-        Wed, 25 Jan 2023 03:23:27 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674617014;
-        bh=+igoN+rHShBbBVQziueSRlHHD9337IKQlbDL49HPO/o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ThFoUO88oEcevcXt4Xh3vGtMbfwhSj8NpXUEheC431Za8lp8Gd8ploZ0zjVw3jZiZ
-         bKMFNCSYmIspky6mvF5WA591K4kAU1z70Q0LDxhc0jH3VuV8Iq4kpphKGZq3ockCAR
-         IkEkFtBKV+z7eF30IOozaS4doamko2r137OapVNPU0eKuNaCcnjGtsH3K7lwvC8MBB
-         Ko72DIFD8tHzUgZTheNpfCGI8ktJ30US3/HfHxnp7XyH+b08r47BjXOcjSG6vOhUoj
-         CTqZc3G3ajHC5rXNeH/JWN6IOpYxsiwr8/ZKpWbZz1ecrIhdro6nDD5YP0rjK09a9N
-         cQCptmAaCjphg==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v4 2/2] selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
-Date:   Wed, 25 Jan 2023 10:22:40 +0700
-Message-Id: <20230125032240.728463-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230125032240.728463-1-ammarfaizi2@gnuweeb.org>
-References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125032240.728463-1-ammarfaizi2@gnuweeb.org>
+        Tue, 24 Jan 2023 22:24:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095E0521D9;
+        Tue, 24 Jan 2023 19:24:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98A58B80E86;
+        Wed, 25 Jan 2023 03:24:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93D0C433D2;
+        Wed, 25 Jan 2023 03:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674617079;
+        bh=+n3J9w9O2587dakBFNHT9EMbV+TmVacJsDTzzUdYS58=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IwJ680KedhOQcxVTzXwv6j2pQ2LJfdsECGKBfOsKHoY5PaOcTlrm4j5KgxqBCNhpf
+         QiECopDHmi4YfnLuG8oAZ5nfu1JMn33Ji2zYrY7UOwgoTEKqIYSRkibitMXIownEyB
+         m0IZwQdb0kdpidaEDwYnD/F0aF6GJ66aC5glmsQmiHtvs0kVL5yEG18BgOm7Ni3U/z
+         MUubJ0VEzIOlD3nGE1CpYgEBlJovrQmXxqRaPnyYjnO9oCR3hI2G8Yda4udm19lG6T
+         3ZjfSPlECn7xlw2DvLiV2cmiJ6Hb+vWxjkDYSXfodTymYyIfXvRxexs9R1fSUWkVVY
+         e1ljWJoBBhahw==
+Date:   Tue, 24 Jan 2023 19:24:37 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        pabeni@redhat.com, edumazet@google.com, a@unstable.cc,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ip/ip6_gre: Fix changing addr gen mode not
+ generating IPv6 link local address
+Message-ID: <20230124192437.6d33cc06@kernel.org>
+In-Reply-To: <20230124032105.79487-4-Thomas.Winter@alliedtelesis.co.nz>
+References: <20230124032105.79487-1-Thomas.Winter@alliedtelesis.co.nz>
+        <20230124032105.79487-4-Thomas.Winter@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Tue, 24 Jan 2023 16:21:04 +1300 Thomas Winter wrote:
+> Commit e5dd729460ca changed the code path so that GRE tunnels
+> generate an IPv6 address based on the tunnel source address.
+> It also changed the code path so GRE tunnels don't call addrconf_addr_gen
+> in addrconf_dev_config which is called by addrconf_sysctl_addr_gen_mode
+> when the IN6_ADDR_GEN_MODE is changed.
+> 
+> This patch aims to fix this issue by moving the code in addrconf_notify
+> which calls the addr gen for GRE and SIT into a separate function
+> and calling it in the places that expect the IPv6 address to be
+> generated.
+> 
+> The previous addrconf_dev_config is renamed to addrconf_eth_config
+> since it only expected eth type interfaces and follows the
+> addrconf_gre/sit_config format.
 
-Test that:
+The commit message reads like a description of the code changes, 
+not the problem statement + extra context it should be.
 
-  - REGS_SAVED: "syscall" in a FRED system doesn't clobber %rcx and
-    %r11.
+Please start with a solid description of what the problem you're seeing
+is, without referring to the implementation / code at all.
 
-  - REGS_SYSRET: "syscall" in a non-FRED system sets %rcx=%rip and
-    %r11=%rflags.
+You should also mention why changing the code flow for LOOPBACK is safe
+as it's not visible in the patch itself. And I think the subject should
+be more broad than just GRE, since you also fix SIT.
 
-Test them out with trivial system calls like __NR_getppid and friends
-which are extremely likely to return with SYSRET on an IDT system.
+Similar comments to a smaller extent for the second patch.
 
-Goals of this test:
-
-  - Ensure that the syscall behavior is consistent. It should be either
-    always REGS_SAVED or always REGS_SYSRET. Not a mix of them.
-
-  - Ensure that the kernel doesn't leak its internal data when
-    returning to userspace.
-
-Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
-Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- tools/testing/selftests/x86/sysret_rip.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 86a31bbac9a85a88..5b8576147c92dbbd 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -271,8 +271,24 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
- }
- 
-+/*
-+ * Ensure that various system calls are consistent.
-+ * We should not get a mix of REGS_SAVED and REGS_SYSRET.
-+ */
-+static void test_syscall_rcx_r11_consistent(void)
-+{
-+	do_syscall(__NR_getpid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_gettid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
-+}
-+
- int main()
- {
-+	int i;
-+
-+	for (i = 0; i < 32; i++)
-+		test_syscall_rcx_r11_consistent();
-+
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
- 	 * detect whether SYSRET is appropriate.  If it incorrectly
-@@ -280,7 +296,7 @@ int main()
- 	 * it'll crash on Intel CPUs.
- 	 */
- 	sethandler(SIGUSR1, sigusr1, 0);
--	for (int i = 47; i < 64; i++)
-+	for (i = 47; i < 64; i++)
- 		test_sigreturn_to(1UL<<i);
- 
- 	clearhandler(SIGUSR1);
-@@ -291,7 +307,7 @@ int main()
- 	test_syscall_fallthrough_to((1UL << 47) - 2*PAGE_SIZE);
- 
- 	/* These are the interesting cases. */
--	for (int i = 47; i < 64; i++) {
-+	for (i = 47; i < 64; i++) {
- 		test_syscall_fallthrough_to((1UL<<i) - PAGE_SIZE);
- 		test_syscall_fallthrough_to(1UL<<i);
- 	}
--- 
-Ammar Faizi
-
+When you repost please make a fresh thread.
