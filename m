@@ -2,175 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A7367C0D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A7867C0D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbjAYXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 18:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S235621AbjAYXdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjAYXdL (ORCPT
+        with ESMTP id S229454AbjAYXds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:33:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5334D2915D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:33:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D85616D9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:33:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49593C433D2;
-        Wed, 25 Jan 2023 23:33:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674689589;
-        bh=ER0BCPLzg7nKd1C0QfOGjv1kjQ4/6/8I1wR5Rm+DgiY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=sZ7vEGq8yIZjynbxFA+dJKctIBHpdccAlZzd1RhC+j4pz9bDWbuvhAitBVjtYEZL3
-         5R4NNi3MdZihShQEtfBD04CHX5O5CG2Fq0++tPnXqA96Nrkk47mRhhBH6uBvpOlZVi
-         Ajt7YxLK8xaN/6IjwNMg0X5mqhez4P4gz4mifnlL4HvWfO4tpUEIcTdu0eub+DhfOk
-         DDc3DMJHSt+b0Abaf537pQN7wAiaVbAe2LtHRG8PYMIpJGbkbooTb9gdKv45sH6+hs
-         G9PdAXcC7kCe7uCByJ6qk4RVfblCxdk2GTT0AkfHw1R9NeVWPJ+w18VrREfsTFWpUW
-         vSQ0DT9Bvp8zw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CB8005C0865; Wed, 25 Jan 2023 15:33:08 -0800 (PST)
-Date:   Wed, 25 Jan 2023 15:33:08 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
- <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
- <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
- <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
- <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
- <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
- <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 25 Jan 2023 18:33:48 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3382940B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:33:45 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id kt14so863835ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:33:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=alCMOK5cE2QJ8BpFheg8uTDRx7xWYhGAEAsl76U70GU=;
+        b=iwdxpbrD4xN0U5LygfOmg1YW8nrnc7w4b9dd96+FCvOM0/fr/yoyfu+s24nITIritQ
+         +sAxqwlHkVrESQmjBcitpOD+YXtmwEdS5cQ9ZuQA6eEZIsPgPLrHUzw1c5L5AIhF6gFp
+         PWibNgHpYXqwiI279sEdwnQwsuSYalCcMLJjIh743aDHHAdm8lJSJDyEGcpmUzrwP2DF
+         fE6PFIVKsjSCkLxbP+GysF51fRLeL0l370Skwqg320NOvAgfQPQm0/EhNJMqe6ZiWtnM
+         dyl1zYAqNPFjzbdqaLnfzkBmrjrbkcjRJA54n3X7zMMdmkhsuUo0k0PaTzRp4krxPfkv
+         Mqyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=alCMOK5cE2QJ8BpFheg8uTDRx7xWYhGAEAsl76U70GU=;
+        b=njXXDCUibNytSthebISUW5/Mq/fzF8AI4m+7WDZ2Vklr4tB7XBuV3dx6/Qr/6kPzsv
+         B87h1XsB58XsE1m0sFVMQOWzbXebeD5yayGstwHdj8MDsJonVztDZXcATuHutB62/wZH
+         ycrZz3nWeENoP4Li8bZdiQtwvhIlGow9+ax0xqspXiGBaNoiePP7j6wnWrPbkaubtEI2
+         PwuSmQjUt1au5WYKG9buA8aiRmz6+CTiRtRfOtMe+UiKvq6i1QBdr/0rq/6prSpKEjQR
+         3WZuJqGLyrZ/loRRBLMdREv8vruViAOsw4yfo7AcjcWl5vSmtj4QLV8FkUFupoBu51H3
+         oQ9A==
+X-Gm-Message-State: AFqh2koNtKrw6wrsnfiaxqM7lLGwVoLP2FKfxuzs+ABAMcNg1KPPoFXj
+        57uoapjCjcE7NS8TYZxfYWAy+Q==
+X-Google-Smtp-Source: AMrXdXvQtpO2go/Tg1RVocWt7FbIn7SqDzmAG1aqkYdbY4lVv5X/yly6tqxJLVRtU9IcjqvxdrWNCQ==
+X-Received: by 2002:a17:907:104d:b0:86e:d851:3a0a with SMTP id oy13-20020a170907104d00b0086ed8513a0amr44241035ejb.51.1674689624508;
+        Wed, 25 Jan 2023 15:33:44 -0800 (PST)
+Received: from [192.168.1.101] (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709067c0600b00871ac327db6sm2989960ejo.45.2023.01.25.15.33.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 15:33:44 -0800 (PST)
+Message-ID: <b24dbfb4-8b02-bb30-d859-a313a4aaa363@linaro.org>
+Date:   Thu, 26 Jan 2023 00:33:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v4 1/3] clk: qcom: smd: Add XO RPM clocks for
+ MSM8226/MSM8974
+To:     Stephen Boyd <sboyd@kernel.org>, Rayyan Ansari <rayyan@ansari.sh>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+References: <20230121192540.9177-1-rayyan@ansari.sh>
+ <20230121192540.9177-2-rayyan@ansari.sh>
+ <06d53a3fa48080d902476b71308e69bd.sboyd@kernel.org>
+ <4c531c68-b74f-2f90-e8f6-98a4b0316cd4@ansari.sh>
+ <a7058fb92642a1661995d7d3ca6411bd.sboyd@kernel.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <a7058fb92642a1661995d7d3ca6411bd.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 01:38:32PM -0800, Paul E. McKenney wrote:
-> On Wed, Jan 25, 2023 at 03:46:14PM -0500, Alan Stern wrote:
-> > On Wed, Jan 25, 2023 at 11:46:51AM -0800, Paul E. McKenney wrote:
-> > > On Wed, Jan 25, 2023 at 02:08:59PM -0500, Alan Stern wrote:
-> > > > Why do you want the implementation to forbid it?  The pattern of the 
-> > > > litmus test resembles 3+3W, and you don't care whether the kernel allows 
-> > > > that pattern.  Do you?
-> > > 
-> > > Jonas asked a similar question, so I am answering you both here.
-> > > 
-> > > With (say) a release-WRITE_ONCE() chain implementing N+2W for some
-> > > N, it is reasonably well known that you don't get ordering, hardware
-> > > support otwithstanding.  After all, none of the Linux kernel, C, and C++
-> > > memory models make that guarantee.  In addition, the non-RCU barriers
-> > > and accesses that you can use to create N+2W have been in very wide use
-> > > for a very long time.
-> > > 
-> > > Although RCU has been in use for almost as long as those non-RCU barriers,
-> > > it has not been in wide use for anywhere near that long.  So I cannot
-> > > be so confident in ruling out some N+2W use case for RCU.
-> > > 
-> > > Such a use case could play out as follows:
-> > > 
-> > > 1.	They try LKMM on it, see that LKMM allows it, and therefore find
-> > > 	something else that works just as well.  This is fine.
-> > > 
-> > > 2.	They try LKMM on it, see that LKMM allows it, but cannot find
-> > > 	something else that works just as well.  They complain to us,
-> > > 	and we either show them how to get the same results some other
-> > > 	way or adjust LKMM (and perhaps the implementations) accordingly.
-> > > 	These are also fine.
-> > > 
-> > > 3.	They don't try LKMM on it, see that it works when they test it,
-> > > 	and they send it upstream.  The use case is entangled deeply
-> > > 	enough in other code that no one spots it on review.  The Linux
-> > > 	kernel unconditionally prohibits the cycle.  This too is fine.
-> > > 
-> > > 4.	They don't try LKMM on it, see that it works when they test it,
-> > > 	and they send it upstream.  The use case is entangled deeply
-> > > 	enough in other code that no one spots it on review.  Because RCU
-> > > 	grace periods incur tens of microseconds of latency at a minimum,
-> > > 	all tests (almost) always pass, just due to delays and unrelated
-> > > 	accesses and memory barriers.  Even in kernels built with some
-> > > 	future SRCU equivalent of CONFIG_RCU_STRICT_GRACE_PERIOD=y.
-> > > 	But the Linux kernel allows the cycle when there is a new moon
-> > > 	on Tuesday during a triple solar eclipse of Jupiter, a condition
-> > > 	that is eventually met, and at the worst possible time and place.
-> > > 
-> > > 	This is absolutely the opposite of fine.
-> > > 
-> > > I don't want to deal with #4.  So this is an RCU-maintainer use case
-> > > that I would like to avoid.  ;-)
-> > 
-> > Since it is well known that the non-RCU barriers in the Linux kernel, C, 
-> > and C++ do not enforce ordering in n+nW, and seeing as how your litmus 
-> > test relies on an smp_store_release() at one point, I think it's 
-> > reasonable to assume people won't expect it to provide ordering.
-> 
-> The presence of that grace period, which is well known to have super-heavy
-> ordering properties, will likely reduce the number of people whose
-> expectations are aligned with LKMM.  :-/
-> 
-> Plus it is not easy to create something that meets the LKMM grace-period
-> requirements without also making it provide this additional ordering on
-> real systems.
-> 
-> > Ah, but what about a litmus test that relies solely on RCU?
-> > 
-> > rcu_read_lock	Wy=2		rcu_read_lock	Wv=2
-> > Wx=2		synchronize_rcu	Wu=2		synchronize_rcu
-> > Wy=1		Wu=1		Wv=1		Wx=1
-> > rcu_read_unlock			rcu_read_unlock
-> > 
-> > exists (x=2 /\ y=2 /\ u=2 /\ v=2)
-> > 
-> > Luckily, this _is_ forbidden by the LKMM.  So I think you're okay.
-> 
-> Some times I get lucky!  ;-)
-> 
-> The reader-free counterpart of your test is also forbidden, which is no
-> surprise given that smp_mb() also suffices.
 
-Ah, and returning to the earlier question as to whether srcu_read_unlock()
-can use release semantics instead of smp_mb(), at the very least, this
-portion of the synchronize_srcu() function's header comment must change:
 
-	On systems with more than one CPU, when synchronize_srcu()
-	returns, each CPU is guaranteed to have executed a full
-	memory barrier since the end of its last corresponding SRCU
-	read-side critical section whose beginning preceded the call
-	to synchronize_srcu().
+On 26.01.2023 00:00, Stephen Boyd wrote:
+> Quoting Rayyan Ansari (2023-01-25 14:25:08)
+>> On 25/01/2023 20:58, Stephen Boyd wrote:
+>>> Quoting Rayyan Ansari (2023-01-21 11:25:38)
+>>>> Add the XO and XO_A clocks to the MSM8974 clock list, which is also
+>>>> used on MSM8226.
+>>>
+>>> Why was this missing for so long? Does this break suspend? Why are you
+>>> adding it now?
+>>
+>> I am adding it because of a recommendation from a maintainer on an older 
+>> patch version.
+>> See 
+>> https://lore.kernel.org/linux-arm-msm/20230119023337.h6a7f56lizhv4tcy@builder.lan/#t
+> 
+> So nobody has tested this on msm8974? Can you add this information to
+> the commit text?
 
-I don't know of any SRCU code that relies on this, but it would be good to
-check.	There used to (and might still) be RCU code relying on this, which
-is why this sentence was added to the header comment in the first place.
 
-							Thanx, Paul
+And can it be tested on msm8974?
++ Luca
+
+^ could you, please?
+
+Konrad
