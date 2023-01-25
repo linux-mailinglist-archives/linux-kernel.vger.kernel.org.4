@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C40767B6F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A5C67B6FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbjAYQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S235361AbjAYQdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjAYQcb (ORCPT
+        with ESMTP id S234668AbjAYQdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:32:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F4D30288
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:31:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674664305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xLugWnik0ztUqVAzoBicaI4WZWrDoKphY1QbQVR7BFA=;
-        b=i9zB3GWIn3FOApDUPOZrlIda2QjBp6nNSTS+R6REfwI/tWMS0oF3Aq8fvljhbhla5JptlM
-        6Ts0Gww3VGf0O0HSbpwwGB93LGdiZb2GDINZIGCiX3h/MFHltMk4GVPPSQsfJEl8o4qLeb
-        rsZD72/wiXWDmng7g93a2FHngunEzzA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-27-tHcdFkSoOt-vzigHzZiRhQ-1; Wed, 25 Jan 2023 11:31:43 -0500
-X-MC-Unique: tHcdFkSoOt-vzigHzZiRhQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF99210395C8;
-        Wed, 25 Jan 2023 16:31:42 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-195-63.brq.redhat.com [10.40.195.63])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 1011C40C945A;
-        Wed, 25 Jan 2023 16:31:40 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 25 Jan 2023 17:31:40 +0100 (CET)
-Date:   Wed, 25 Jan 2023 17:31:37 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
- current thread
-Message-ID: <20230125163137.GC13746@redhat.com>
-References: <20221216171807.760147-1-dvyukov@google.com>
- <20230112112411.813356-1-dvyukov@google.com>
- <20230125124304.GA13746@redhat.com>
- <20230125151717.GB13746@redhat.com>
- <CACT4Y+YKy_4mBLYomr49+fTm31Y6Q_kXhJz8O-_RTjMe=B-6eg@mail.gmail.com>
+        Wed, 25 Jan 2023 11:33:39 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65162BED9;
+        Wed, 25 Jan 2023 08:33:38 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id a25so16393850qto.10;
+        Wed, 25 Jan 2023 08:33:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e4hEkk6Ac/01YXV4woTuVpkpHvraviXdnxqXSyWsbnA=;
+        b=6ZQQMyf+S5r/SKxUbGSuJ/2WUofO6oQB25HcnENvaQqLs31GUZNXvaqJXZ23NFMOi8
+         G/2AcFte0S9sI7wRS8ZEMGPOqVE6I7dKB3yvLJKJgK/yr9bTp/f3RV1bZeanK8ZvoTe6
+         +hXtHlvDTTefB+BtSjkeHTRYL80I5AcxwIX0GcKn4J6XEB5PX3IRRX0snedgIFx4rLlh
+         /PgqBXullybBSiWJ10IL5aakjZt+9pu+PMMBYs9ZDPnU1nYZCbOQ+dFoo1UH9HCstN11
+         NfjynC4mLywyUnwUOxaGBnSpYgqSICpMDsJEs3awYjes6yKbg+gNAMGS/rSHgo24MhMo
+         mc3Q==
+X-Gm-Message-State: AO0yUKW2CLlzFxPXCKMEDtpv7FaLMz9GuGaF7yxyp542bFY6wfWR7mcH
+        5JzCNgZ8QQk8TIRn8bQGy7E=
+X-Google-Smtp-Source: AK7set8bh1KKtmfa6hRyXt2gjdAOr0VA1f+uTU2XsbY+kGf79mmf29Wz3YKhVpJ9zkuJUaUtrl+oAA==
+X-Received: by 2002:ac8:5f89:0:b0:3b6:3a8f:ecbc with SMTP id j9-20020ac85f89000000b003b63a8fecbcmr4755693qta.66.1674664417719;
+        Wed, 25 Jan 2023 08:33:37 -0800 (PST)
+Received: from maniforge ([2620:10d:c091:480::1:113e])
+        by smtp.gmail.com with ESMTPSA id b4-20020ac86bc4000000b003b62fcd6d50sm3588110qtt.28.2023.01.25.08.33.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 08:33:37 -0800 (PST)
+Date:   Wed, 25 Jan 2023 10:33:34 -0600
+From:   David Vernet <void@manifault.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>, Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH bpf-next v3 4/4] bpf/selftests: Verify struct_ops prog
+ sleepable behavior
+Message-ID: <Y9FZ3ucyvd8UiSO4@maniforge>
+References: <20230125050359.339273-1-void@manifault.com>
+ <20230125050359.339273-5-void@manifault.com>
+ <CAADnVQJ18MRB+z5feD-hu8zdV2s=rhTW--RWW06NWp-kQaBhag@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+YKy_4mBLYomr49+fTm31Y6Q_kXhJz8O-_RTjMe=B-6eg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAADnVQJ18MRB+z5feD-hu8zdV2s=rhTW--RWW06NWp-kQaBhag@mail.gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/25, Dmitry Vyukov wrote:
->
-> > diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-> > index 5dead89308b7..e38b53a0f814 100644
-> > --- a/kernel/time/posix-timers.c
-> > +++ b/kernel/time/posix-timers.c
-> > @@ -336,6 +336,7 @@ void posixtimer_rearm(struct kernel_siginfo *info)
-> >  int posix_timer_event(struct k_itimer *timr, int si_private)
-> >  {
-> >         enum pid_type type;
-> > +       struct pid *pid;
-> >         int ret;
-> >         /*
-> >          * FIXME: if ->sigq is queued we can race with
-> > @@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
-> >          */
-> >         timr->sigq->info.si_sys_private = si_private;
+On Wed, Jan 25, 2023 at 08:06:11AM -0800, Alexei Starovoitov wrote:
+> On Tue, Jan 24, 2023 at 9:04 PM David Vernet <void@manifault.com> wrote:
 > >
-> > -       type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
-> > -       ret = send_sigqueue(timr->sigq, timr->it_pid, type);
-> > +       type = (timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_PID : PIDTYPE_TGID;
-> > +       pid = (type == PIDTYPE_PID) ? timr->it_pid : task_pid(current);
-> > +       ret = send_sigqueue(timr->sigq, pid, type);
-> >         /* If we failed to send the signal the timer stops. */
-> >         return ret > 0;
-> >  }
->
-> Hi Oleg,
->
-> This is indeed much simpler!
->
-> Do I understand correctly that:
-> 1. I would need to use SIGEV_SIGNAL (without SIGEV_THREAD_ID)
+> > In a set of prior changes, we added the ability for struct_ops programs
+> > to be sleepable. This patch enhances the dummy_st_ops selftest suite to
+> > validate this behavior by adding a new sleepable struct_ops entry to
+> > dummy_st_ops.
+> >
+> > Signed-off-by: David Vernet <void@manifault.com>
+> > ---
+> >  include/linux/bpf.h                           |  1 +
+> >  net/bpf/bpf_dummy_struct_ops.c                | 18 +++++++
+> >  .../selftests/bpf/prog_tests/dummy_st_ops.c   | 54 ++++++++++++++-----
+> >  .../selftests/bpf/progs/dummy_st_ops_fail.c   | 27 ++++++++++
+> >  ...{dummy_st_ops.c => dummy_st_ops_success.c} | 19 +++----
+> >  5 files changed, 94 insertions(+), 25 deletions(-)
+> >  create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops_fail.c
+> >  rename tools/testing/selftests/bpf/progs/{dummy_st_ops.c => dummy_st_ops_success.c} (72%)
+> 
+> It fails on s390:
+> dummy_st_ops_success/dummy_multiple_args:FAIL
+> 
+> Please add to DENYLIST as part of this patch.
 
-Yes,
+Sorry, this was just a dumb replace-all mistake on my part -- accidentally
+changed the name of the testsuite to dummy_st_ops_success when changing the
+name of the BPF prog in prog_tests/dummy_st_ops. It's already in the DENYLIST.
+This should fix it:
 
-> 2. The signal is still queued into process shared_pending
+diff --git a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+index 135514fad83a..f43fcb13d2c4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
++++ b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+@@ -144,7 +144,7 @@ static void test_dummy_sleepable(void)
+        dummy_st_ops_success__destroy(skel);
+ }
 
-Yes. But just in case, please note that if this signal is not realtime
-(sigev_signo < SIGRTMIN) and it is already queued, it will be dropped.
-And I do not know if this can work for you.
-
-However this is what we already have with SIGEV_SIGNAL w/o SIGEV_THREAD_ID,
-and the same is true for SIGEV_THREAD_ID if the signal is already pending in
-target_task->pending.
-
-> 3. If the current task has not blocked the signal (it shouldn't), then
-> it won't kick any other task
-
-Yes,
-
-> 4. The current task will likely deliver the signal right on the timer
-> interrupt return to userspace
-> ?
-
-Yes.
-
-But! I just noticed send_sigqueue() does pid_task(pid, type), so the patch
-above needs another change
+-void test_dummy_st_ops_success(void)
++void test_dummy_st_ops(void)
+ {
+        if (test__start_subtest("dummy_st_ops_attach"))
+                test_dummy_st_ops_attach();
 
 
-	--- a/kernel/signal.c
-	+++ b/kernel/signal.c
-	@@ -1970,7 +1970,8 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
-	 
-		ret = -1;
-		rcu_read_lock();
-	-	t = pid_task(pid, type);
-	+	// comment to explain why don't we use "type"
-	+	t = pid_task(pid, PIDTYPE_PID);
-		if (!t || !likely(lock_task_sighand(t, &flags)))
-			goto ret;
-	 
-
-
-> This changes the existing behavior (the "average bear" may be surprised :))
-> https://elixir.bootlin.com/linux/v6.2-rc5/source/kernel/signal.c#L1007
-
-this comment looks a bit misleading, s/main thread/target thread/
-
-> But currnently it's also queued into shared_pending and any thread
-> could get the signal anyway. So I think this should be fine.
-
-Yes.
-
-> On the positive side: it should improve performance. Delivering to the
-> currently running task is better on all fronts (no kicking,
-> rescheduling, IPIs, better locality), right?
-
-Well, iiuc this was the goal of your patch ? ;)
-
-Oleg.
-
+Will send out the v4 with that fix shortly.
