@@ -2,90 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D86867B701
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A3D67B709
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbjAYQgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S235449AbjAYQjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235263AbjAYQgf (ORCPT
+        with ESMTP id S235045AbjAYQjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:36:35 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13EB42E0FA;
-        Wed, 25 Jan 2023 08:36:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83DD84B3;
-        Wed, 25 Jan 2023 08:37:15 -0800 (PST)
-Received: from bogus (unknown [10.57.77.84])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C30ED3F5A1;
-        Wed, 25 Jan 2023 08:36:30 -0800 (PST)
-Date:   Wed, 25 Jan 2023 16:36:28 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] arch_topology: Build cacheinfo from primary CPU
-Message-ID: <20230125163628.4yjwh3ja5vxnirun@bogus>
-References: <20230104183033.755668-1-pierre.gondois@arm.com>
- <20230104183033.755668-7-pierre.gondois@arm.com>
- <CAMuHMdUjgxgOXf5He1x=PLn7MQTjZgFQUHj8JrwbyweT4uOALQ@mail.gmail.com>
- <20230124140420.4srnufcvamvff77v@bogus>
- <Y8/tl999NQwbPL/R@wendy>
- <20230124144839.2szjjv256j3pdaif@bogus>
- <20230124145541.2xwtr7ro2bjnsjd7@bogus>
- <20230125145423.pid3hsstswzuez73@bogus>
- <CAMuHMdWZ+_kdMp+0VfYAJZRHBWiyobQQJwEM_kHN6yeVVGxSvg@mail.gmail.com>
+        Wed, 25 Jan 2023 11:39:08 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D5D61A5;
+        Wed, 25 Jan 2023 08:39:07 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PEtdYr004745;
+        Wed, 25 Jan 2023 16:38:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0ChATrYgcfVnq2ClzhGONhr89tnKCzl70FzK8Pg20BM=;
+ b=e0/79e0jA8L10hDoEVKfMt8gkwQhGNNSw/Ye/tuim4XbbMJ/9Ggl4/Q308n2ckwTDq8q
+ PSMBpBJ+2hTtm4vtYMUnHj6aXgKpL+H9rhohozT0FocDYnsI8UdSJil1IdNZHAGkQDHO
+ n/06XcjiLQx3W2zyR0uLzeKORS2GzyhXQGurEe9bqk7pnz1S0MMhzxVgO6bpzSLsBTEi
+ 3wV6wFHydqr2f1T5b12bb+5wV5bxXbV/fxRl3Hh/fSFXJ9OeTDfe/K6iP5wH/lyAmTCB
+ r5QDMTKKomX9rb9AQtr8J/NQanJjanI2sZkbaPdMyTuewLgtRTu1FX2fm55ba8JSqe3v /A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3najkha952-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 16:38:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PGcpVQ002212
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 16:38:51 GMT
+Received: from [10.50.40.254] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
+ 2023 08:38:42 -0800
+Message-ID: <d9b3390a-f207-4c5c-8613-0566c2435f6c@quicinc.com>
+Date:   Wed, 25 Jan 2023 22:08:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 01/10] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <robimarko@gmail.com>, <quic_gurus@quicinc.com>,
+        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
+ <20230125104520.89684-2-quic_kathirav@quicinc.com>
+ <50ec54ba-3468-3448-3fab-f28e97549ad2@linaro.org>
+ <0b28f4a3-c445-7473-501b-39cbcfdb9889@quicinc.com>
+ <d6512673-a232-c8e5-45f7-e903fc1a01a7@linaro.org>
+Content-Language: en-US
+From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+In-Reply-To: <d6512673-a232-c8e5-45f7-e903fc1a01a7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdWZ+_kdMp+0VfYAJZRHBWiyobQQJwEM_kHN6yeVVGxSvg@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iFOss_yTPbpiDPY2u0W_fozjyZmtcGv3
+X-Proofpoint-GUID: iFOss_yTPbpiDPY2u0W_fozjyZmtcGv3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_10,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=827 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250147
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 04:28:04PM +0100, Geert Uytterhoeven wrote:
-> Hi Sudeep,
->
-> On Wed, Jan 25, 2023 at 3:54 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > On Tue, Jan 24, 2023 at 02:55:41PM +0000, Sudeep Holla wrote:
-> > > Geert, can you please try with the patch Conor pointed out and see if
-> > > that helps to fix the allocation failures[1]
-> > >
-> >
-> > Sorry for the nag, but did you get the chance to test -next with [1]
-> > and see if it fixes the cacheinfo memory failure you were observing ?
->
-> > [1] https://lore.kernel.org/all/20230103035316.3841303-1-leyfoon.tan@starfivetech.com/
->
-> After applying that patch, the issue is gone.
-> Thanks, sending my Tb!
->
 
-Thanks for testing and sorry for wrong information in my PR. I had mixed
-up things and assumed it was tested. I usually leave it in -next for a week
-before sending PR but rushed things once I was back from the holidays, won't
-repeat hopefully 🤞.
+On 1/25/2023 9:50 PM, Krzysztof Kozlowski wrote:
+> On 25/01/2023 16:49, Kathiravan Thirumoorthy wrote:
+>>>> @@ -0,0 +1,134 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5332-pinctrl.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Qualcomm IPQ5332 TLMM pin controller
+>>>> +
+>>>> +maintainers:
+>>>> +  - Bjorn Andersson <andersson@kernel.org>
+>>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> +
+>>>> +description: |
+>>>> +  Top Level Mode Multiplexer pin controller in Qualcomm IPQ5332 SoC.
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: qcom,ipq5332-tlmm
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  interrupts: true
+>>> missing maxItems
+>>>
+>>> Rebase your patches on latest next and use the latest bindings and
+>>> drivers as starting point.
+>>
+>> Changes are based on v6.2-rc1.  I see the maxItems changes in
+>> linux-next. Will update this in V2.
+> Your patches cannot be based on v6.2-rc1. They won't even apply. You
+> miss entire development of last month.
 
---
-Regards,
-Sudeep
+
+Hmmm, Will use linux-next/master as base hereafter.
+
+
+>>
+>>>> +  interrupt-controller: true
+>>>> +  "#interrupt-cells": true
+>>>> +  gpio-controller: true
+>>>> +  "#gpio-cells": true
+>>>> +  gpio-ranges: true
+>>>> +  wakeup-parent: true
+>>>> +
+>>>> +  gpio-reserved-ranges:
+>>>> +    minItems: 1
+>>>> +    maxItems: 27
+>>>> +
+>>>> +  gpio-line-names:
+>>>> +    maxItems: 53
+>>> You have 54 GPIOs.
+>>
+>> Sorry, GPIO ranges are from 0-52, will update it in all places in V2.
+> Ah, then the gpio pattern needs a fix.
+
+
+Yup, will take care of that as well in V2.
+
+
+>
+>
+> Best regards,
+> Krzysztof
+>
