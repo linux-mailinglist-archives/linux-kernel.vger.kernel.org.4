@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9BB67ABDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB5D67ABDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbjAYIfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S235218AbjAYIfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbjAYIfF (ORCPT
+        with ESMTP id S235217AbjAYIfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:35:05 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9D5EC41
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:34:59 -0800 (PST)
+        Wed, 25 Jan 2023 03:35:16 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499A518F3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:35:10 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C5A4A21F3F;
-        Wed, 25 Jan 2023 08:34:57 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D04D20285;
+        Wed, 25 Jan 2023 08:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674635697; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1674635709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4pD6a1vgMmjem91hgO9Kz33HyqN716ma2eR4HQMVYA0=;
-        b=OxrVfJWC87cy+y6BoUA/nMDRFcdVUAHuPxKe+V4fT7rqYCzcT7TX0tg32/CrpG7LNKtu6G
-        WQkGXES8vt/8dy5RObel4J3N60PfGw+6+1LtfOOM53OhKLzQ1ZYR7IZhx2SacMPD7AJQai
-        JKwwwd+oxzMy2Tnl48r5wyx6G1DQtWM=
+        bh=lQ0jctwPTNkmDUNtF4vMSoW4Azggy1ZZvdqA5S1CogE=;
+        b=iVxYPi2CWtJKh815Zk4gpov2AgwL6D9/JiAfIFUF8lHwYMj63V5elLRpBqTazoiiWLXK+R
+        zvRdLaEpAwNWmSPEr+jYOjRnP0IZ3SZ/FJ3+HZOucdtX3zRdMCskJxMbMjRJ4ZLqNHRt0Q
+        3bNSWF4tiZohKsz2FR4nyGGyznD0rNs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674635697;
+        s=susede2_ed25519; t=1674635709;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4pD6a1vgMmjem91hgO9Kz33HyqN716ma2eR4HQMVYA0=;
-        b=i+41ZHk6O15m/Kk0tgmWrLw3GWqlb8dqX8pvSW8RBZxRluy6pLrnr/kkZUlHcc/VWAJ2q5
-        2cpWirR+IF6uJOAQ==
+        bh=lQ0jctwPTNkmDUNtF4vMSoW4Azggy1ZZvdqA5S1CogE=;
+        b=4EEvO/QoFJw3Kv0I+VjCHiLk4be0pxaOkp2TJoCqiBa21YP1Mkx1HoZKe07hRHGMF5oqpM
+        ORDicHkAjcDazVAw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F3921339E;
-        Wed, 25 Jan 2023 08:34:57 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 254D01339E;
+        Wed, 25 Jan 2023 08:35:09 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Uvf9JbHp0GN0ewAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 25 Jan 2023 08:34:57 +0000
-Date:   Wed, 25 Jan 2023 09:34:56 +0100
-Message-ID: <871qnjdnbj.wl-tiwai@suse.de>
+        id d7DvB73p0GOVewAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 25 Jan 2023 08:35:09 +0000
+Date:   Wed, 25 Jan 2023 09:35:08 +0100
+Message-ID: <87zga7c8qr.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Dawei Li <set_pte_at@outlook.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+Cc:     johannes@sipsolutions.net, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ALSA: ac97: make remove callback of ac97 driver void returned
-In-Reply-To: <TYCP286MB2323A5AB1B2578EF4FA15DA7CAFB9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB2323A5AB1B2578EF4FA15DA7CAFB9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH v2] ALSA: aoa: make remove callback of soundbus driver void returned
+In-Reply-To: <TYCP286MB23234FED40A3AE6797DEBAB7CAFB9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+References: <TYCP286MB23234FED40A3AE6797DEBAB7CAFB9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,7 +69,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 06 Jan 2023 16:13:49 +0100,
+On Fri, 06 Jan 2023 16:17:46 +0100,
 Dawei Li wrote:
 > 
 > Since commit fc7a6209d571 ("bus: Make remove callback return void")
@@ -76,8 +77,8 @@ Dawei Li wrote:
 > for any bus based driver implementing remove callbalk to return
 > non-void to its caller.
 > 
-> As such, change the remove function for ac97 based drivers to return
-> void.
+> As such, change the remove function for soundbus based drivers to
+> return void.
 > 
 > Signed-off-by: Dawei Li <set_pte_at@outlook.com>
 
