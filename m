@@ -2,148 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB7D67B2CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C68A67B2DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjAYMzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        id S235554AbjAYNBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYMzL (ORCPT
+        with ESMTP id S235222AbjAYNBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:55:11 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42B311152;
-        Wed, 25 Jan 2023 04:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674651310; x=1706187310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MDLw4SI9AuliqMuFsm+CU5yI64+eZZfEdC5qdusTYOc=;
-  b=FlpnBgZvzyK2b4n2P4pwOU5xC5OSYIi973TNz2i1qz06/OXuHWQYqTSR
-   MCe62wszMz7sHC5zGgUSJqgCZXocXbGXD7CgVs2jhg9ZkGVNHE3tNvgx2
-   GSexcAwQPs/G5OKhqaKeTTKjX9ZExLZYqWrJc6lrRzCnIszT5CIo5UJ8U
-   Km0rSu7ngnCQa3BO62b6WIyuhe1+qmHH/QfRX0zRD1f+FSl6ffaqbKsZT
-   nBXTmyth0KbggafANjNIicezDa7ZBXCWXGVpuGU2wKWdRSs/UeuzuqAWI
-   Qab5HfAv7uVj8x5KH2RUNGzMp5RmyLdMbleZyQtW9I16NHc7ap4xU6UhJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306209620"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="306209620"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 04:55:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="751180484"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="751180484"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2023 04:55:07 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKfIx-0007JE-0c;
-        Wed, 25 Jan 2023 12:55:07 +0000
-Date:   Wed, 25 Jan 2023 20:54:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zach O'Keefe <zokeefe@google.com>, linux-mm@kvack.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Hugh Dickins <hughd@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Zach O'Keefe <zokeefe@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
-Message-ID: <202301252033.HoFIRXm4-lkp@intel.com>
-References: <20230125015738.912924-2-zokeefe@google.com>
+        Wed, 25 Jan 2023 08:01:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C30846730;
+        Wed, 25 Jan 2023 05:01:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1995121A38;
+        Wed, 25 Jan 2023 13:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674651688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZHPUEmgHN9HHsele0Ce3YewvjVaFUupPCQ2N9ydCuzU=;
+        b=r+QImpXSov56FLm1H+hELmnDF3ba33PDw9X+GNnrXwjl2eQ+ZuX3YhWChiKOdofziQIIEm
+        lXbb2vLp56dhnNJ7EOBz3awHc1j72nCdmCZWUEIjOJydKML1zstPO/PSZz0O5XA4flp7vX
+        J2LJKE4EyuI1Ln1V1xiBggPmq3RuK7Y=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF07E1339E;
+        Wed, 25 Jan 2023 13:01:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uoscOCco0WNBGAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 13:01:27 +0000
+Date:   Wed, 25 Jan 2023 14:01:27 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, CGEL <cgel.zte@gmail.com>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [RESEND RFC PATCH v1 00/20] mm: process/cgroup ksm support
+Message-ID: <Y9EoJ0jlXMeuJzuY@dhcp22.suse.cz>
+References: <20230123173748.1734238-1-shr@devkernel.io>
+ <5844ee9f-1992-a62a-2141-3b694a1e1915@redhat.com>
+ <qvqwbkmnj014.fsf@dev0134.prn3.facebook.com>
+ <a391e98c-88af-886c-0426-c41c9980afa1@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125015738.912924-2-zokeefe@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a391e98c-88af-886c-0426-c41c9980afa1@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zach,
+On Tue 24-01-23 19:01:49, David Hildenbrand wrote:
+> [...]
+> 
+> > > I'm going to point out the security aspect, and that e.g., Windows used to
+> > > enable it system-wide before getting taught by security experts otherwise.
+> > > Details on KSM and security aspects can be found in that thread.
+> > > 
+> > If I'm not mistaken the security aspect exists today. When KSM is
+> > enabled with madvise this is the same.
+> 
+> Yes, and we mostly only use it for virtual machines -- and to be precise,
+> guest memory only -- where it has to be enabled explicitly on a well
+> documented basis ...
+> 
+> Impossible for an admin to force it on other parts of the hypervisor process
+> that might be more security sensitive. Or on other arbitrary applications,
+> for now.
+> 
+> > 
+> > > Long story short: one has to be very careful with that and only enable it for
+> > > very carefully selected worklads. Letting a workload opt-in on a VMA level is
+> > > most probably safer than an admin blindly turning this on for random processes
+> > > ... >>
+> [...]
+> 
+> > > 
+> > > [1] https://lore.kernel.org/all/20220517092701.1662641-1-xu.xin16@zte.com.cn/
+> > > [2] https://lore.kernel.org/all/20220609055658.703472-1-xu.xin16@zte.com.cn/
+> > > 
+> > My understanding is that there were problems with the patch and how it
+> > exposed KSM. The other objection was the enable-all configuration
+> > option.
+> 
+> I don't remember all the discussions, but one concern was how to handle
+> processes that deliberately want to disable it on some parts of memory.
+> 
+> Anyhow, I cc'ed the relevant parties already.
 
-Thank you for the patch! Yet something to improve:
+Thanks! I do not remember all the details from the past discussion
+except it was /proc and later global setting. Neither really were great
+choices. We have discussed pidfd_madvise and prctl IIRC. For the latter
+there was no real argument about when it is desirable to apply merging
+on all existing vmas (e.g. is it really desirable on stack/brk or malloc
+arenas or would user need to opt out for those).
 
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zach-O-Keefe/mm-MADV_COLLAPSE-catch-none-huge-bad-pmd-lookups/20230125-095954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230125015738.912924-2-zokeefe%40google.com
-patch subject: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
-config: x86_64-randconfig-r025-20230123 (https://download.01.org/0day-ci/archive/20230125/202301252033.HoFIRXm4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6001eb9a8f1687a1d0b72831d991886106cac37b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zach-O-Keefe/mm-MADV_COLLAPSE-catch-none-huge-bad-pmd-lookups/20230125-095954
-        git checkout 6001eb9a8f1687a1d0b72831d991886106cac37b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> mm/khugepaged.c:972:17: error: passing 'pmd_t **' to parameter of incompatible type 'pmd_t'
-           if (pmd_devmap(pmd))
-                          ^~~
-   arch/x86/include/asm/pgtable.h:254:36: note: passing argument to parameter 'pmd' here
-   static inline int pmd_devmap(pmd_t pmd)
-                                      ^
-   1 error generated.
-
-
-vim +972 mm/khugepaged.c
-
-   945	
-   946	/*
-   947	 * See pmd_trans_unstable() for how the result may change out from
-   948	 * underneath us, even if we hold mmap_lock in read.
-   949	 */
-   950	static int find_pmd_or_thp_or_none(struct mm_struct *mm,
-   951					   unsigned long address,
-   952					   pmd_t **pmd)
-   953	{
-   954		pmd_t pmde;
-   955	
-   956		*pmd = mm_find_pmd(mm, address);
-   957		if (!*pmd)
-   958			return SCAN_PMD_NULL;
-   959	
-   960		pmde = pmdp_get_lockless(*pmd);
-   961	
-   962	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-   963		/* See comments in pmd_none_or_trans_huge_or_clear_bad() */
-   964		barrier();
-   965	#endif
-   966		if (pmd_none(pmde))
-   967			return SCAN_PMD_NONE;
-   968		if (!pmd_present(pmde))
-   969			return SCAN_PMD_NULL;
-   970		if (pmd_trans_huge(pmde))
-   971			return SCAN_PMD_MAPPED;
- > 972		if (pmd_devmap(pmd))
-   973			return SCAN_PMD_NULL;
-   974		if (pmd_bad(pmde))
-   975			return SCAN_PMD_NULL;
-   976		return SCAN_SUCCEED;
-   977	}
-   978	
-
+I have read through your cover letter and it talks about the interface
+but it doesn't really talk about usecases and how they are supposed to
+use this feature - except the prctl based flag gets inherited. So could
+you elaborate some more about those usecases please?
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Michal Hocko
+SUSE Labs
