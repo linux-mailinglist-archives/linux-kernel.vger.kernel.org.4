@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB02467B670
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D29F67B672
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbjAYP4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S235759AbjAYP4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235283AbjAYP4I (ORCPT
+        with ESMTP id S235897AbjAYP4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:56:08 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D994A10AB4;
-        Wed, 25 Jan 2023 07:56:06 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id w11so6944394edv.0;
-        Wed, 25 Jan 2023 07:56:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fzcelv9hExj0f2F+i5zGp2yUjab3yaJdo+KwahsiJf0=;
-        b=nE90rl6fqAh0jCIH7Gl0AQ0V9jAsrWH1dAAnE8tualF10WBRgjTq9SGZySM3YXKZcV
-         bu1dhTOjsVlLchc6+T38L1tBOAU1k9Jp2fAxreOzHEH9BDYJU6THRdA3b4ksRzFwD22f
-         p0JqXDNBePZJFj0OenNUwLrZQDZTVRRuc5OrBIhIY5ec+BqzLZ36hBoBH4f2qHqVESYy
-         IWW2JDsVRA0CP8Ur1FYGWYiq8PPQqatWyXUloFVR8IEME8L2Rj238p3adSkruE/VIDRf
-         4ptc4p0Ac0iLQ29cRsd39P78TFO+Xtvtp+dHJnb3JrRX3X2ZXbhMo4B3Fmi171xeefx7
-         9y7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fzcelv9hExj0f2F+i5zGp2yUjab3yaJdo+KwahsiJf0=;
-        b=TtbrFCAcP6EI5ecm6opJH80EA89rNw3MqUfBO5X8oZKMVhbwWTBPVWWEjWRwC+y15C
-         zPjKyo3pS/R0gDZV9+GlePba5wP7+qf5BUP7Ol0ZXC2KMj8h7CLv7US3GCb2frkYJUuI
-         kIbWa2HAoaYmO7gKByJGjAq3XC3iaw4jHQubUoAnSWU9oM9Uv7bSPJM6/iljuTamN0qy
-         kacIlkyTmwbPqyRDD+BIIxG/9cXi4wPK2b+pA60XsDPjCnnfqeZKBLf7FxN3vfubkCOo
-         BHsvVJ7VQ7zH9hGbUXT3syf+uGaOclId9nMdGzY9fKXJEqKcyEdKOjsMEbFN6wWTBwnZ
-         pDUA==
-X-Gm-Message-State: AFqh2kqNQKTl06zEofzIFUQzB2L946AYZbOAl491grqKdS3HYnL4AuAR
-        tXvXcbHYyU2DaRqV0dC3+5o=
-X-Google-Smtp-Source: AMrXdXtoYyqZ+njNVap5kgN/FJzaguYKOrdxMh6aymJ13hY+1s0Wex7oODclJQoRFhk0ETLcTM1cNw==
-X-Received: by 2002:aa7:cac2:0:b0:497:948b:e8 with SMTP id l2-20020aa7cac2000000b00497948b00e8mr30451221edt.6.1674662165281;
-        Wed, 25 Jan 2023 07:56:05 -0800 (PST)
-Received: from f.. (cst-prg-88-122.cust.vodafone.cz. [46.135.88.122])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056402517800b0049e249c0e56sm2539287ede.56.2023.01.25.07.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 07:56:04 -0800 (PST)
-From:   Mateusz Guzik <mjguzik@gmail.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     serge@hallyn.com, torvalds@linux-foundation.org,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Mateusz Guzik <mjguzik@gmail.com>
-Subject: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-Date:   Wed, 25 Jan 2023 16:55:57 +0100
-Message-Id: <20230125155557.37816-2-mjguzik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230125155557.37816-1-mjguzik@gmail.com>
-References: <20230125155557.37816-1-mjguzik@gmail.com>
+        Wed, 25 Jan 2023 10:56:35 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0B39F193FF
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:56:27 -0800 (PST)
+Received: (qmail 214449 invoked by uid 1000); 25 Jan 2023 10:56:27 -0500
+Date:   Wed, 25 Jan 2023 10:56:27 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
+        quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9FRK+AWped17QfU@rowland.harvard.edu>
+References: <Y8xRe1Gr6LNjKD4S@rowland.harvard.edu>
+ <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
+ <Y87D0ekKCHFLjzeP@rowland.harvard.edu>
+ <8908438d-da93-b843-f0e0-831ba7070c86@huaweicloud.com>
+ <Y873uBB5rAW8tjdd@rowland.harvard.edu>
+ <1a189694-57b4-81d0-625a-64dd069b1953@huaweicloud.com>
+ <Y9AR4Gr10SyCKovo@rowland.harvard.edu>
+ <40447973-6f6b-86f7-1147-d8f20a943767@huaweicloud.com>
+ <Y9CamIsCmFkPYrwl@rowland.harvard.edu>
+ <61447f05-7875-f0ce-3b51-c3f4428b85d4@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61447f05-7875-f0ce-3b51-c3f4428b85d4@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,109 +51,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-access(2) remains commonly used, for example on exec:
-access("/etc/ld.so.preload", R_OK)
+On Wed, Jan 25, 2023 at 02:06:01PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/25/2023 3:57 AM, Alan Stern wrote:
+> > Starting from first principles, it's apparent that each of these types
+> > of propagation fences is associated with two relations: one involving
+> > propagation order and a companion relation involving execution order.
+> > 
+> > Here's what I mean.  For the sake of discussion let's define several
+> > classes of fences:
+> > 
+> > 	efences are those which constrain execution order;
+> > 
+> > 	pfences are those which constrain propagation order;
+> > 
+> > 	sfences are those which strongly constrain propagation order.
+> > 
+> > Each class includes the following ones.  (And if you like, you can
+> > insert afences between pfences and sfences -- they would be the
+> > A-cumulative fences.)
+> > 
+> > Now, the memory model builds up successively more inclusive notions of
+> > execution order.  This process starts with execution of instructions in
+> > the same CPU not involving fences.  Thus we have the ppo relations:
+> > dependencies and a few oddball things like ((overwrite ; rfe) & int) or
+> > ([UL] ; po ; [LKR]).
+> > 
+> > Next, the efences also restrict single-CPU execution order.  These
+> > fences only need to have one associated relation since they don't
+> > specifically involve propagation.  Adding rfe to the list gives us
+> > inter-CPU ordering.
+> > 
+> > Then associated with pfences we have the relation you've been talking
+> > about:
+> > 
+> > 	W propagates to each CPU before W' does.
+> > 
+> > This is (cumul-fence ; [W]).  Perhaps a better name for it would be
+> > wprop.  Given this relation, we obtain a companion relation that
+> > restricts execution order:
+> > 
+> > 	((overwrite & ext) ; wprop+ ; rfe) & int.
+> > 
+> > (Note that the overall form is the same for afences as for pfences.)
+> > Adding this companion relation into the mix gives us essentially hb.
+> > 
+> > For sfences the associated relation expresses:
+> > 
+> > 	W propagates to every CPU before Y executes.
+> > 
+> > This is basically (wprop* ; rfe? ; sfence) (using the fact that all
+> > sfences are A-cumulative) -- or if you prefer, (wprop* ; cumul-sfence).
+> > We can call this sprop.  Then the companion relation restricting
+> > execution order is:
+> > 
+> > 	(overwrite & ext) ; sprop
+> > 
+> > For RCU, the associated relation expressing t2(A) < t1(B) is rcu-order
+> > and the companion relation is rcu-fence.
+> Do we put rcu-order under sprop as well? Otherwise you need
+> 
+>     (overwrite & ext)? ; rcu-fence
+> 
+> to express the full companion relation.
 
-or when running gcc: strace -c gcc empty.c
-% time     seconds  usecs/call     calls    errors syscall
------- ----------- ----------- --------- --------- ----------------
-  0.00    0.000000           0        42        26 access
+My mistake; what I meant was something a little smaller than rb.  That 
+is,
 
-It falls down to do_faccessat without the AT_EACCESS flag, which in turn
-results in allocation of new creds in order to modify fsuid/fsgid and
-caps. This is a very expensive process single-threaded and most notably
-multi-threaded, with numerous structures getting refed and unrefed on
-imminent new cred destruction.
+	(overwrite & ext) ; wprop* ; rfe? ; rcu-fence
 
-Turns out for typical consumers the resulting creds would be identical
-and this can be checked upfront, avoiding the hard work.
+In other words, a relation expressing that rcu-fence acts as a strong 
+fence.  But also something expressing that rcu-fence acts as an efence? 
+-- I guess this is covered if the (overwrite & ext) part above is made 
+optional, although that feels a little artificial.
 
-An access benchmark plugged into will-it-scale running on Cascade Lake
-shows:
-test	proc	before	after
-access1	1	1310582	2908735	 (+121%)  # distinct files
-access1	24	4716491	63822173 (+1353%) # distinct files
-access2	24	2378041	5370335	 (+125%)  # same file
+I don't think we will be able to include rcu-fence in sprop, because we 
+will need to use sprop in the definition of rcu-fence.
 
-The above benchmarks are not integrated into will-it-scale, but can be
-found in a pull request:
-https://github.com/antonblanchard/will-it-scale/pull/36/files
+Oh yes, one other piece of terminology I forgot to mention.  The things 
+you referred to before as "ordering operations" could instead be called 
+"extended fences".  What do you think?
 
-Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
+> > Putting all those execution-order relations together gives us xb, the
+> > executes-before relation.  Then the only axiom we need for all of this
+> > that xb is acyclic.
+> > 
+> > Of course, I have left out a lot of details.  Still, how does that sound
+> > as a scheme for rationalizing the memory model?
+> 
+> It seems like we're on the same page!
+> It would be an honor for me to fill in the details and propose a patch, if
+> you're interested.
 
-v3:
-- add a comment warning about changing access_override_creds
-v2:
-- fix current->cred usage warn reported by the kernel test robot
-Link: https://lore.kernel.org/all/202301150709.9EC6UKBT-lkp@intel.com/
----
- fs/open.c | 38 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+An invasive, multi-faceted change like this has to be broken down into 
+multiple patches, each doing only one thing and each easily verified as 
+not changing the meaning of the code.  Feel free to go ahead and work 
+out a proposal.
 
-diff --git a/fs/open.c b/fs/open.c
-index 82c1a28b3308..2afed058250c 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -367,7 +367,37 @@ COMPAT_SYSCALL_DEFINE6(fallocate, int, fd, int, mode, compat_arg_u64_dual(offset
-  * access() needs to use the real uid/gid, not the effective uid/gid.
-  * We do this by temporarily clearing all FS-related capabilities and
-  * switching the fsuid/fsgid around to the real ones.
-+ *
-+ * Creating new credentials is expensive, so we try to skip doing it,
-+ * which we can if the result would match what we already got.
-  */
-+static bool access_need_override_creds(int flags)
-+{
-+	const struct cred *cred;
-+
-+	if (flags & AT_EACCESS)
-+		return false;
-+
-+	cred = current_cred();
-+	if (!uid_eq(cred->fsuid, cred->uid) ||
-+	    !gid_eq(cred->fsgid, cred->gid))
-+		return true;
-+
-+	if (!issecure(SECURE_NO_SETUID_FIXUP)) {
-+		kuid_t root_uid = make_kuid(cred->user_ns, 0);
-+		if (!uid_eq(cred->uid, root_uid)) {
-+			if (!cap_isclear(cred->cap_effective))
-+				return true;
-+		} else {
-+			if (!cap_isidentical(cred->cap_effective,
-+			    cred->cap_permitted))
-+				return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
- static const struct cred *access_override_creds(void)
- {
- 	const struct cred *old_cred;
-@@ -377,6 +407,12 @@ static const struct cred *access_override_creds(void)
- 	if (!override_cred)
- 		return NULL;
- 
-+	/*
-+	 * XXX access_need_override_creds performs checks in hopes of skipping
-+	 * this work. Make sure it stays in sync if making any changes in this
-+	 * routine.
-+	 */
-+
- 	override_cred->fsuid = override_cred->uid;
- 	override_cred->fsgid = override_cred->gid;
- 
-@@ -436,7 +472,7 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
- 	if (flags & AT_EMPTY_PATH)
- 		lookup_flags |= LOOKUP_EMPTY;
- 
--	if (!(flags & AT_EACCESS)) {
-+	if (access_need_override_creds(flags)) {
- 		old_cred = access_override_creds();
- 		if (!old_cred)
- 			return -ENOMEM;
--- 
-2.39.0
-
+Alan
