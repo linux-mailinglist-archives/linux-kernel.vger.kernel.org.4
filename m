@@ -2,238 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF6C67BD50
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB3467BD51
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236090AbjAYUqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
+        id S236648AbjAYUr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236604AbjAYUqF (ORCPT
+        with ESMTP id S236627AbjAYUrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:46:05 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F8D5DC3C
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:45:58 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id m15so26670ilq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJZAdhZu9Kc85spjoXNYXOlKgf8rIiOctQJ+s3Nz2ig=;
-        b=i8il3nE9OWdDb6H7w7iJfr8m/h+OjScnmTUlxZmt0IwIdDRytGc51rEEhL19tzZuaq
-         kAKlm2K1JGv6uVpx7zqydljUVLqldOScg3OBrd8hdsjOqM7SWf8Y4Wx14FpoG+JvUWK4
-         rGhqupA1ApmKs6sQpprsV15cMrw/y6wRnIBJIEOUeFylNMcjpfV3nbUkvyFnNm9u9zJ6
-         cDbhi0aV0ES7aHm8xv+hVh0CtJEmuJFzFtsZQuA4AYIrVSAnSfy81/Ueb3lbfvQnTqfT
-         gre9ZvDGP3LytsibcxLFtu8kYm2G0gNZBonbhaZT0xdxWBaRkt0EaMdSeW1sIIWmcpbC
-         wkkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YJZAdhZu9Kc85spjoXNYXOlKgf8rIiOctQJ+s3Nz2ig=;
-        b=6RqM3zwvGx7umIWNIcqzZpGDHc+d4ExxSVgjolp4ONswCPlU6qahN93+R7nl01YmrB
-         O04JUk7bf/CVujkO+erVOtdE6j/GMW/hzhdc6CQ3KwR2U/O6PDxhETelESYI4D76cKPs
-         ozMQ5B62W+0eJ91T3bEbe2TxTpYGSVouh3WODPsKvlQ4nyFzn3CQB6Ofo+NODXamAHe6
-         bAMb04m4WoYiRYoz/Fw/xuQqS52slpVtPpWiIkUvXIlj1QzGoqaYP3dIBSrjd3mg2MSA
-         MayU3EnH9xrm2UKWneunc43FUyjamnSbumbxw+EZ+jJCsgmYsXcSHMV2JvFsIgTqrNuY
-         eftg==
-X-Gm-Message-State: AFqh2koPxgxg/mAQJuztLOb073Y+FtquPPj+DAiYGtEsrlkXHhC6ckbS
-        d5NiUv9k7NF4XW6BsBCEKht/DQ==
-X-Google-Smtp-Source: AMrXdXtkkcBpeGWBz3wEZJm7ZK18N6ZrvtxMBYtkIoUTDsU5u9E+7eq4IHTqEfrZYIcJdwGAP7MsSA==
-X-Received: by 2002:a05:6e02:12e8:b0:305:ef92:6480 with SMTP id l8-20020a056e0212e800b00305ef926480mr27927418iln.27.1674679558220;
-        Wed, 25 Jan 2023 12:45:58 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id w14-20020a02968e000000b00389c2fe0f9dsm1960696jai.85.2023.01.25.12.45.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:45:57 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 8/8] net: ipa: add IPA v5.0 packet status support
-Date:   Wed, 25 Jan 2023 14:45:45 -0600
-Message-Id: <20230125204545.3788155-9-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230125204545.3788155-1-elder@linaro.org>
-References: <20230125204545.3788155-1-elder@linaro.org>
+        Wed, 25 Jan 2023 15:47:13 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 470044EC1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:46:41 -0800 (PST)
+Received: (qmail 226353 invoked by uid 1000); 25 Jan 2023 15:46:14 -0500
+Date:   Wed, 25 Jan 2023 15:46:14 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
+References: <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
+ <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
+ <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+ <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
+ <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
+ <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
+ <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update ipa_status_extract() to support IPA v5.0 and beyond.  Because
-the format of the IPA packet status depends on the version, pass an
-IPA pointer to the function.
+On Wed, Jan 25, 2023 at 11:46:51AM -0800, Paul E. McKenney wrote:
+> On Wed, Jan 25, 2023 at 02:08:59PM -0500, Alan Stern wrote:
+> > Why do you want the implementation to forbid it?  The pattern of the 
+> > litmus test resembles 3+3W, and you don't care whether the kernel allows 
+> > that pattern.  Do you?
+> 
+> Jonas asked a similar question, so I am answering you both here.
+> 
+> With (say) a release-WRITE_ONCE() chain implementing N+2W for some
+> N, it is reasonably well known that you don't get ordering, hardware
+> support otwithstanding.  After all, none of the Linux kernel, C, and C++
+> memory models make that guarantee.  In addition, the non-RCU barriers
+> and accesses that you can use to create N+2W have been in very wide use
+> for a very long time.
+> 
+> Although RCU has been in use for almost as long as those non-RCU barriers,
+> it has not been in wide use for anywhere near that long.  So I cannot
+> be so confident in ruling out some N+2W use case for RCU.
+> 
+> Such a use case could play out as follows:
+> 
+> 1.	They try LKMM on it, see that LKMM allows it, and therefore find
+> 	something else that works just as well.  This is fine.
+> 
+> 2.	They try LKMM on it, see that LKMM allows it, but cannot find
+> 	something else that works just as well.  They complain to us,
+> 	and we either show them how to get the same results some other
+> 	way or adjust LKMM (and perhaps the implementations) accordingly.
+> 	These are also fine.
+> 
+> 3.	They don't try LKMM on it, see that it works when they test it,
+> 	and they send it upstream.  The use case is entangled deeply
+> 	enough in other code that no one spots it on review.  The Linux
+> 	kernel unconditionally prohibits the cycle.  This too is fine.
+> 
+> 4.	They don't try LKMM on it, see that it works when they test it,
+> 	and they send it upstream.  The use case is entangled deeply
+> 	enough in other code that no one spots it on review.  Because RCU
+> 	grace periods incur tens of microseconds of latency at a minimum,
+> 	all tests (almost) always pass, just due to delays and unrelated
+> 	accesses and memory barriers.  Even in kernels built with some
+> 	future SRCU equivalent of CONFIG_RCU_STRICT_GRACE_PERIOD=y.
+> 	But the Linux kernel allows the cycle when there is a new moon
+> 	on Tuesday during a triple solar eclipse of Jupiter, a condition
+> 	that is eventually met, and at the worst possible time and place.
+> 
+> 	This is absolutely the opposite of fine.
+> 
+> I don't want to deal with #4.  So this is an RCU-maintainer use case
+> that I would like to avoid.  ;-)
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_endpoint.c | 52 +++++++++++++++++++++++-----------
- 1 file changed, 36 insertions(+), 16 deletions(-)
+Since it is well known that the non-RCU barriers in the Linux kernel, C, 
+and C++ do not enforce ordering in n+nW, and seeing as how your litmus 
+test relies on an smp_store_release() at one point, I think it's 
+reasonable to assume people won't expect it to provide ordering.
 
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index 3f6c3e2b6ec95..ce7f2d6e447ed 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -122,8 +122,10 @@ enum ipa_status_field_id {
- #define IPA_STATUS_SIZE			sizeof(__le32[4])
- 
- /* IPA status structure decoder; looks up field values for a structure */
--static u32 ipa_status_extract(const void *data, enum ipa_status_field_id field)
-+static u32 ipa_status_extract(struct ipa *ipa, const void *data,
-+			      enum ipa_status_field_id field)
- {
-+	enum ipa_version version = ipa->version;
- 	const __le32 *word = data;
- 
- 	switch (field) {
-@@ -136,10 +138,15 @@ static u32 ipa_status_extract(const void *data, enum ipa_status_field_id field)
- 	case STATUS_LENGTH:
- 		return le32_get_bits(word[1], GENMASK(15, 0));
- 	case STATUS_SRC_ENDPOINT:
--		return le32_get_bits(word[1], GENMASK(20, 16));
--	/* Status word 1, bits 21-23 are reserved */
-+		if (version < IPA_VERSION_5_0)
-+			return le32_get_bits(word[1], GENMASK(20, 16));
-+		return le32_get_bits(word[1], GENMASK(23, 16));
-+	/* Status word 1, bits 21-23 are reserved (not IPA v5.0+) */
-+	/* Status word 1, bits 24-26 are reserved (IPA v5.0+) */
- 	case STATUS_DST_ENDPOINT:
--		return le32_get_bits(word[1], GENMASK(28, 24));
-+		if (version < IPA_VERSION_5_0)
-+			return le32_get_bits(word[1], GENMASK(28, 24));
-+		return le32_get_bits(word[7], GENMASK(23, 16));
- 	/* Status word 1, bits 29-31 are reserved */
- 	case STATUS_METADATA:
- 		return le32_to_cpu(word[2]);
-@@ -153,14 +160,23 @@ static u32 ipa_status_extract(const void *data, enum ipa_status_field_id field)
- 		return le32_get_bits(word[3], GENMASK(3, 3));
- 	case STATUS_FILTER_RULE_INDEX:
- 		return le32_get_bits(word[3], GENMASK(13, 4));
-+	/* ROUTER_TABLE is in word 3, bits 14-21 (IPA v5.0+) */
- 	case STATUS_ROUTER_LOCAL:
--		return le32_get_bits(word[3], GENMASK(14, 14));
-+		if (version < IPA_VERSION_5_0)
-+			return le32_get_bits(word[3], GENMASK(14, 14));
-+		return le32_get_bits(word[1], GENMASK(27, 27));
- 	case STATUS_ROUTER_HASH:
--		return le32_get_bits(word[3], GENMASK(15, 15));
-+		if (version < IPA_VERSION_5_0)
-+			return le32_get_bits(word[3], GENMASK(15, 15));
-+		return le32_get_bits(word[1], GENMASK(28, 28));
- 	case STATUS_UCP:
--		return le32_get_bits(word[3], GENMASK(16, 16));
-+		if (version < IPA_VERSION_5_0)
-+			return le32_get_bits(word[3], GENMASK(16, 16));
-+		return le32_get_bits(word[7], GENMASK(31, 31));
- 	case STATUS_ROUTER_TABLE:
--		return le32_get_bits(word[3], GENMASK(21, 17));
-+		if (version < IPA_VERSION_5_0)
-+			return le32_get_bits(word[3], GENMASK(21, 17));
-+		return le32_get_bits(word[3], GENMASK(21, 14));
- 	case STATUS_ROUTER_RULE_INDEX:
- 		return le32_get_bits(word[3], GENMASK(31, 22));
- 	case STATUS_NAT_HIT:
-@@ -186,7 +202,8 @@ static u32 ipa_status_extract(const void *data, enum ipa_status_field_id field)
- 		return le32_get_bits(word[7], GENMASK(11, 11));
- 	case STATUS_FRAG_RULE_INDEX:
- 		return le32_get_bits(word[7], GENMASK(15, 12));
--	/* Status word 7, bits 16-31 are reserved */
-+	/* Status word 7, bits 16-30 are reserved */
-+	/* Status word 7, bit 31 is reserved (not IPA v5.0+) */
- 	default:
- 		WARN(true, "%s: bad field_id %u\n", __func__, field);
- 		return 0;
-@@ -1444,14 +1461,15 @@ static bool ipa_status_format_packet(enum ipa_status_opcode opcode)
- static bool
- ipa_endpoint_status_skip(struct ipa_endpoint *endpoint, const void *data)
- {
-+	struct ipa *ipa = endpoint->ipa;
- 	enum ipa_status_opcode opcode;
- 	u32 endpoint_id;
- 
--	opcode = ipa_status_extract(data, STATUS_OPCODE);
-+	opcode = ipa_status_extract(ipa, data, STATUS_OPCODE);
- 	if (!ipa_status_format_packet(opcode))
- 		return true;
- 
--	endpoint_id = ipa_status_extract(data, STATUS_DST_ENDPOINT);
-+	endpoint_id = ipa_status_extract(ipa, data, STATUS_DST_ENDPOINT);
- 	if (endpoint_id != endpoint->endpoint_id)
- 		return true;
- 
-@@ -1466,7 +1484,7 @@ ipa_endpoint_status_tag_valid(struct ipa_endpoint *endpoint, const void *data)
- 	struct ipa *ipa = endpoint->ipa;
- 	u32 endpoint_id;
- 
--	status_mask = ipa_status_extract(data, STATUS_MASK);
-+	status_mask = ipa_status_extract(ipa, data, STATUS_MASK);
- 	if (!status_mask)
- 		return false;	/* No valid tag */
- 
-@@ -1475,7 +1493,7 @@ ipa_endpoint_status_tag_valid(struct ipa_endpoint *endpoint, const void *data)
- 	 * If the packet came from the AP->command TX endpoint we know
- 	 * this packet was sent as part of the pipeline clear process.
- 	 */
--	endpoint_id = ipa_status_extract(data, STATUS_SRC_ENDPOINT);
-+	endpoint_id = ipa_status_extract(ipa, data, STATUS_SRC_ENDPOINT);
- 	command_endpoint = ipa->name_map[IPA_ENDPOINT_AP_COMMAND_TX];
- 	if (endpoint_id == command_endpoint->endpoint_id) {
- 		complete(&ipa->completion);
-@@ -1493,6 +1511,7 @@ static bool
- ipa_endpoint_status_drop(struct ipa_endpoint *endpoint, const void *data)
- {
- 	enum ipa_status_exception exception;
-+	struct ipa *ipa = endpoint->ipa;
- 	u32 rule;
- 
- 	/* If the status indicates a tagged transfer, we'll drop the packet */
-@@ -1500,12 +1519,12 @@ ipa_endpoint_status_drop(struct ipa_endpoint *endpoint, const void *data)
- 		return true;
- 
- 	/* Deaggregation exceptions we drop; all other types we consume */
--	exception = ipa_status_extract(data, STATUS_EXCEPTION);
-+	exception = ipa_status_extract(ipa, data, STATUS_EXCEPTION);
- 	if (exception)
- 		return exception == IPA_STATUS_EXCEPTION_DEAGGR;
- 
- 	/* Drop the packet if it fails to match a routing rule; otherwise no */
--	rule = ipa_status_extract(data, STATUS_ROUTER_RULE_INDEX);
-+	rule = ipa_status_extract(ipa, data, STATUS_ROUTER_RULE_INDEX);
- 
- 	return rule == IPA_STATUS_RULE_MISS;
- }
-@@ -1516,6 +1535,7 @@ static void ipa_endpoint_status_parse(struct ipa_endpoint *endpoint,
- 	u32 buffer_size = endpoint->config.rx.buffer_size;
- 	void *data = page_address(page) + NET_SKB_PAD;
- 	u32 unused = buffer_size - total_len;
-+	struct ipa *ipa = endpoint->ipa;
- 	u32 resid = total_len;
- 
- 	while (resid) {
-@@ -1531,7 +1551,7 @@ static void ipa_endpoint_status_parse(struct ipa_endpoint *endpoint,
- 		}
- 
- 		/* Skip over status packets that lack packet data */
--		length = ipa_status_extract(data, STATUS_LENGTH);
-+		length = ipa_status_extract(ipa, data, STATUS_LENGTH);
- 		if (!length || ipa_endpoint_status_skip(endpoint, data)) {
- 			data += IPA_STATUS_SIZE;
- 			resid -= IPA_STATUS_SIZE;
--- 
-2.34.1
+Ah, but what about a litmus test that relies solely on RCU?
 
+rcu_read_lock	Wy=2		rcu_read_lock	Wv=2
+Wx=2		synchronize_rcu	Wu=2		synchronize_rcu
+Wy=1		Wu=1		Wv=1		Wx=1
+rcu_read_unlock			rcu_read_unlock
+
+exists (x=2 /\ y=2 /\ u=2 /\ v=2)
+
+Luckily, this _is_ forbidden by the LKMM.  So I think you're okay.
+
+Alan
