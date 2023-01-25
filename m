@@ -2,163 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7FC67B1AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF5767B1AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbjAYLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S235614AbjAYLlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjAYLkt (ORCPT
+        with ESMTP id S230146AbjAYLlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:40:49 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A71BB
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:40:47 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id ss4so46729881ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:40:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9CONn1V7Ye0B52Z8jaNfjazx4lKqTqS2Pz1n8BRitY=;
-        b=glVFMNjSO3M/lJkAc38ryLFpJX/PuxEQkkajt8a8RsWGcjR8b0wC4FIAHEqN+saZRU
-         29/3wnp6WOHjMxZgsD3Dsd04QuzB/iBeyDHvgh8hLSt3sJbiVLfq5QQRMViMQjkfnuXy
-         7fnNMqWzBhDEGEDuKuz5a2Fc11hnRancjlfkzMpttm3Prl/KmYmN9ZHL9QJHechR44US
-         89Uy9V1IgfRLqpZmyiUSpJM6L7lFa6H2esZgfi5Uzm5BVrgpfRHqINY3OBwquk9cBBrL
-         lfDD+cmFKD6j8G7diOV21inLVr5BH0fQgv47esxBZaSZv5ODsKGDocUZ5XzvaFAxBi0e
-         N9HQ==
+        Wed, 25 Jan 2023 06:41:23 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB948E;
+        Wed, 25 Jan 2023 03:41:22 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id j9so15659431qtv.4;
+        Wed, 25 Jan 2023 03:41:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M9CONn1V7Ye0B52Z8jaNfjazx4lKqTqS2Pz1n8BRitY=;
-        b=TtUNE4I+G25SVlc+stmD6GDru724wgDugxUPvDsZcoXihG+pxLjwQj1Cgrgx9CX7Vk
-         DgI8hAybJXm8xgEHPX6hjXdzjF9u7QxWD6XDvjjgTiC+oLQf8TXlXwY3onmjS5NP0KGU
-         Mec/GbGbIbW96+ano3dCskxJLlW3irioFEtk8YJcq2pHAHcYq4oPFew/33u2MVXQxGXH
-         rlVGQCx+Mr7RmM0JElAFB/YcCHWyudjluZDgxUD1ZGhvl8g+M1P2B7TrinrXguFnBzDd
-         9MYkFr/4IBe4wVN4JP+aT7iDaGvRptqidgJSYgSXkIX2AdUiFSUsSpT2C4BBEP4F+IBB
-         0baQ==
-X-Gm-Message-State: AFqh2koRUBiRKCtl5j1RjXK7BVY9f+Iu225u9XTStVwLXORpGN7Kez6x
-        B8Qw2HLrPScLxIUQPGAH/kqNzml2V1pGEGIG
-X-Google-Smtp-Source: AMrXdXuOtX/o0noIZONw0GP3yL+7WMkkHddkrvvKpIG3R3OivXD5kAxRBtnLfDYjR/dvWr01000UcQ==
-X-Received: by 2002:a17:906:6313:b0:7c1:6151:34c0 with SMTP id sk19-20020a170906631300b007c1615134c0mr35279437ejc.6.1674646846419;
-        Wed, 25 Jan 2023 03:40:46 -0800 (PST)
-Received: from localhost ([93.99.189.36])
-        by smtp.gmail.com with ESMTPSA id p7-20020a1709060e8700b0086f4b8f9e42sm2287363ejf.65.2023.01.25.03.40.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 03:40:45 -0800 (PST)
-Date:   Wed, 25 Jan 2023 12:40:44 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
-Message-ID: <20230125114044.qcr2canalvljevcu@orel>
-References: <20230125081214.1576313-1-alexghiti@rivosinc.com>
- <20230125081214.1576313-2-alexghiti@rivosinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N0Lw6g01TroemQ7j6adGGcs3s/PeT68xQ37YefaRRX8=;
+        b=JXnwLXomTaDDuCQdyQIXrrD8dfRfQ7x2t4LR2b0W/LF3xGrn1aPfixeiKvM0v8146T
+         V/tjqYJn+AATEwZCwg9P/L3hK+Lnh2a9QeKrYP0IOLBhAmsU907yMeaR14EXxHDfcNgr
+         GzWLnE+SD7XRM0Gdn0HFsdQG4V3/WEK5v4QdJa7cIT0j9JtG4WS42c90rPmJ4oXfPqTW
+         3mocrUN/tJK+OcEgPuv/ItyV+HkPnUsStPAOHmAZX5N5xv7DDkfZeuSwKCsUZ/yzEQET
+         65QPtQY6kgF/eQyfl2TewPPRSWHodBQ2Gt+4rgukmMXH/qTgP/81vOg4kPGS32d81Mcm
+         vBqw==
+X-Gm-Message-State: AFqh2kovHZ19s7aSzi3nZcyWnT9mLMJ3v2XhBQ2EPZaH4MOx5Mh0J0ZN
+        b8qvd+W/6OqzfAr5dgWLEj2dNuvKQRUbwQ==
+X-Google-Smtp-Source: AMrXdXtJhmmnrEt7JiqVZeSmCadPFrF3/R+BVI+zjTLULL+v2baBDPzd061hEYp7n+8cgeBWCqV1HA==
+X-Received: by 2002:ac8:58c3:0:b0:3b6:2c85:6fe8 with SMTP id u3-20020ac858c3000000b003b62c856fe8mr57146161qta.53.1674646881380;
+        Wed, 25 Jan 2023 03:41:21 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05622a175300b0039cc944ebdasm3228914qtk.54.2023.01.25.03.41.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 03:41:20 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id t16so17949516ybk.2;
+        Wed, 25 Jan 2023 03:41:20 -0800 (PST)
+X-Received: by 2002:a25:37d4:0:b0:80b:8602:f3fe with SMTP id
+ e203-20020a2537d4000000b0080b8602f3femr556918yba.36.1674646880330; Wed, 25
+ Jan 2023 03:41:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125081214.1576313-2-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230102222708.274369-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230102222708.274369-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 25 Jan 2023 12:41:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU5Aj_BNSOOOCTiqi3oLWV7qNv6-pbEo6ytf88DJB8taA@mail.gmail.com>
+Message-ID: <CAMuHMdU5Aj_BNSOOOCTiqi3oLWV7qNv6-pbEo6ytf88DJB8taA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: dts: renesas: rzfive-smarc-som: Drop PHY interrupt
+ support for ETH{0,1}
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 09:12:13AM +0100, Alexandre Ghiti wrote:
-> Use directly phys_ram_base instead, riscv_pfn_base is just the pfn of
-> the address contained in phys_ram_base.
-> 
-> Even if there is no functional change intended in this patch, actually
-> setting phys_ram_base that early changes the behaviour of
-> kernel_mapping_pa_to_va during the early boot: phys_ram_base used to be
-> zero before this patch and now it is set to the physical start address of
-> the kernel. But it does not break the conversion of a kernel physical
-> address into a virtual address since kernel_mapping_pa_to_va should only
-> be used on kernel physical addresses, i.e. addresses greater than the
-> physical start address of the kernel.
-
-afaict, only CONFIG_XIP_KERNEL kernels use phys_ram_base prior to
-setup_bootmem() and, for them, this change only redundantly sets
-phys_ram_base to the same thing, so I believe this is a no functional
-change patch.
-
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  arch/riscv/include/asm/page.h | 3 +--
->  arch/riscv/mm/init.c          | 6 +-----
->  2 files changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index 9f432c1b5289..728eee53152a 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -91,8 +91,7 @@ typedef struct page *pgtable_t;
->  #endif
->  
->  #ifdef CONFIG_MMU
-> -extern unsigned long riscv_pfn_base;
-> -#define ARCH_PFN_OFFSET		(riscv_pfn_base)
-> +#define ARCH_PFN_OFFSET		(PFN_DOWN(phys_ram_base))
->  #else
->  #define ARCH_PFN_OFFSET		(PAGE_OFFSET >> PAGE_SHIFT)
->  #endif /* CONFIG_MMU */
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 478d6763a01a..225a7d2b65cc 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -271,9 +271,6 @@ static void __init setup_bootmem(void)
->  #ifdef CONFIG_MMU
->  struct pt_alloc_ops pt_ops __initdata;
->  
-> -unsigned long riscv_pfn_base __ro_after_init;
-> -EXPORT_SYMBOL(riscv_pfn_base);
-> -
->  pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->  pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->  static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
-> @@ -285,7 +282,6 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
->  
->  #ifdef CONFIG_XIP_KERNEL
->  #define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
-> -#define riscv_pfn_base         (*(unsigned long  *)XIP_FIXUP(&riscv_pfn_base))
->  #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
->  #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
->  #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
-> @@ -985,7 +981,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->  	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
->  	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
->  
-> -	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
-> +	phys_ram_base = kernel_map.phys_addr;
-
-nit: I'd put this in the #else part of the #ifdef CONFIG_XIP_KERNEL above
-to have some consistency with that #ifdef arm and also avoid the redundant
-assignment of phys_ram_base for CONFIG_XIP_KERNEL.
-
->  
->  	/*
->  	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
-> -- 
-> 2.37.2
+On Mon, Jan 2, 2023 at 11:27 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
+> IRQC support for RZ/Five is still missing so drop the interrupts and
+> interrupt-parent properties from the PHY nodes of ETH{0,1}.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi All,
+>
+> This patch is to avoid build issues due to patch series [0]. This patch
+> applies on top of [1]
+>
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230102221815.273719-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> [1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221229230300.104524-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-Otherwise,
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.3.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Gr{oetje,eeting}s,
 
-Thanks,
-drew
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
