@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A25D67B87A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEF967B882
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbjAYR04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S235594AbjAYR1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjAYR0z (ORCPT
+        with ESMTP id S235483AbjAYR1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:26:55 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809A9F;
-        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z11so22631000ede.1;
-        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
-        b=Dv8hdB3DMUVXMukiXrX8R5uayffhTytfjOgnhlH736EMc/WIsAQMKzQ57MnRHeWfFV
-         F5n3xRt1KakybWkK45QuYajlkvzPLPosyqXR5rIt0hlMzci8GZPbFFEF3CHAYx8vP+FI
-         dODp8tKCEe1ugqJMoxMcZ0nPXGlCRpjb0siys1HlQlai19Q0sgK5VCnv39XzIfMpOX36
-         aG0myJGc/o/HGOD2kuxfpc40mLNnhjIFyVhT5+bTcY7BZ32M3VR2MkVBxdkJJ5FSy3GR
-         bqnyabPa0HRsK863qhLq+U5WF328x620ZEXXVWii0q+Spxo+bzpjNxZFYnv/PHETxY1g
-         8pew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
-        b=O/I/HOnqVuWBC8RMrYaEc8YiiPzTGEWxPjbwiHwnowiJ6iMI79XGskVEYoA7LuDxyn
-         rSRv6f9uqLOQiyXOd5dAGG22XCfoEpsU/YGAyWEc9OJKutosQIfE31FriniO9lzn+S1K
-         +fwglx/2p7IL/a9yLClcHSrgR98Pqo2P1LgbChk1jwAmrva7uBuMEljLvnVAm32B06Uw
-         QeXXgouj4idQM6YBn86mLHWOpg3ejYgmN8Gyh59hhimCMtdKKTtT/RgBZEU4KemfAoeq
-         4EMHUFYlq41R42OVyjBPasXKs4hpjJyrdqxZZuXKSqF75mKEdRulWSlDKNja/gzV41eF
-         Vn5Q==
-X-Gm-Message-State: AFqh2kr/xjknTdK3IMGS2klFpQ6LAB+HlHeFxZpS5HVPJGshBTm9z5kc
-        RC6W2mp6Wo9Uba2fXDUkmuoI1memruE=
-X-Google-Smtp-Source: AMrXdXsUvLlARBjMXRXjQMdoUzGjSjgvrKOPoFY18DBSj653Pol8v+oWAZdyD2Rlk/XeWRH8j+FQVg==
-X-Received: by 2002:a50:ff08:0:b0:49b:7416:e3ff with SMTP id a8-20020a50ff08000000b0049b7416e3ffmr34024896edu.5.1674667611597;
-        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
-Received: from jo-einhundert ([2a02:908:13d6:2180:36e8:f43a:77c6:b1a2])
-        by smtp.gmail.com with ESMTPSA id lf14-20020a170907174e00b007c1633cea13sm2688052ejc.12.2023.01.25.09.26.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
-Date:   Wed, 25 Jan 2023 18:26:49 +0100
-From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] usb: gadget: add doc to struct usb_composite_dev
-Message-ID: <Y9FmWVF+J08V4RbP@jo-einhundert>
+        Wed, 25 Jan 2023 12:27:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA9935AB
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:27:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1A0F6159E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:27:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34310C433EF;
+        Wed, 25 Jan 2023 17:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674667671;
+        bh=X24O50MJPUisyFOFQtTGCX/DnZX/g6rd3OU490ntEI4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=oBa/Cd8yrDu7NOJUhHYv9tHNN92fYmTdcciDIWGSx01QYZpXkbEK3SvibpTEg/uR2
+         WDAqP/7+cXw7GJqc1zIt2OqkEx7lyxnFwWi76D6MyxdHI06P5GQr3IyqDTV8GSTcwj
+         QvC5i5GSQX+ybtpnpX39UffbMY7bGjAl4sd/XyeO0xYTuH9/gckblbakzLSwSKjDyX
+         d9NTc9TBdD8t/1qCvy2gIxWuuyW3NFOixNpgcIrh/Ojjg62nuPh4leoOnKzfA6vyQ4
+         GP2Q7XXTh+usHfXtqGHIRIXPN9+l8fdR57OWuCtR46rkkEHpcE+9Bf+NC+3AtFgaKI
+         mRUaoDX809kCw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C8E235C03B9; Wed, 25 Jan 2023 09:27:50 -0800 (PST)
+Date:   Wed, 25 Jan 2023 09:27:50 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools/memory-model Flag suspicious use of srcu cookies
+Message-ID: <20230125172750.GA1522225@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230124143951.23372-1-jonas.oberhauser@huaweicloud.com>
+ <Y9ATHMm/iVG8goln@rowland.harvard.edu>
+ <20230124191535.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+ <87b8e8ba-a53d-c3e5-1478-9e6cc2b78fee@huaweicloud.com>
+ <20230124221915.GW2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230124221915.GW2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added documentation to the new struct members:
-* bcd_webusb_version
-* b_webusb_vendor_code
-* landing_page
-* use_webusb
-to avoid warnings in the build of htmldocs
+On Tue, Jan 24, 2023 at 02:19:15PM -0800, Paul E. McKenney wrote:
+> On Tue, Jan 24, 2023 at 08:36:53PM +0100, Jonas Oberhauser wrote:
+> > 
+> > 
+> > On 1/24/2023 8:15 PM, Paul E. McKenney wrote:
+> > > On Tue, Jan 24, 2023 at 12:19:24PM -0500, Alan Stern wrote:
+> > > > On Tue, Jan 24, 2023 at 03:39:51PM +0100, Jonas Oberhauser wrote:
+> > > > > The herd model of LKMM deviates from actual implementations in the
+> > > > > range of cookies that might be returned by srcu_lock() and similar
+> > > > > functions.  As a consequence, code that relies on srcu_lock()
+> > > > > returning specific values might pass on the herd model but fail in
+> > > > > the real world.
+> > > > > 
+> > > > > This patch flags any code that looks at the value of a cookie
+> > > > > without passing it on to an srcu_unlock().  This indicates that the
+> > > > > cookie value might be being used in ways that can lead herd to
+> > > > > produce incorrect results, as in the following (contrived) case:
+> > > > > 
+> > > > > P0(struct srcu_struct *ss)
+> > > > > {
+> > > > > 	int r = srcu_read_lock(ss);
+> > > > > 	if (r==0)
+> > > > > 		srcu_read_unlock(ss, r);
+> > > > > }
+> > > > > 
+> > > > > Without this patch, the code passes herd7 without any warnings.
+> > > > > 
+> > > > > With this patch, this code is flagged with illegal-srcu-cookie-ctrl,
+> > > > > indicating that a cookie is used to compute a control condition.
+> > > > > Such scenarios potentially lead to other branches of the code that
+> > > > > are possible in real usage not being evaluated by herd7.  In this
+> > > > > example, this affects the branch where r!=0, which would lead to
+> > > > > an unmatched read side critical section and thus to hangs of
+> > > > > synchronize_srcu() calls.
+> > > > > 
+> > > > > Besides use of cookies in control conditions, the patch also flags
+> > > > > use in address computation and any time a cookie is inspected but
+> > > > > not later passed to srcu_read_unlock().
+> > > > > 
+> > > > > Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> > > > > ---
+> > > > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > > Thank you both!
+> > > 
+> > > I wordsmithed the commit log as follows, but then realized that this
+> > > depends on Alan's earlier patch.
+> > 
+> > Yeah, I don't know if I did this correctly. I based it on the
+> > lkmm-srcu.2023.01.20a branch.
+> > Let me know if I should have done this differently.
+> 
+> You got it right.
+> 
+> > Looking through your changes to learn for future submissions:
+> > 
+> > > [...]
+> > > 
+> > > This patch flags any code that looks at the value of a cookie
+> > > without passing it on to an srcu_unlock().
+> > 
+> > You missed this one : )
+> 
+> No I didn't!  I missed *two*!  ;-)
+> 
+> Though that comment could be Srcu-unlock, I suppose.  But making it
+> srcu_read_unlock() seems more straightforward.  Update below!
 
-Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
----
- include/linux/usb/composite.h | 4 ++++
- 1 file changed, 4 insertions(+)
+And I also added this to the lkmm-srcu.2023.01.20a branch just for
+experimental purposes.
 
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 91d22c3ed458..7ef8cea67f50 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
-  * @qw_sign: qwSignature part of the OS string
-  * @b_vendor_code: bMS_VendorCode part of the OS string
-  * @use_os_string: false by default, interested gadgets set it
-+ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
-+ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
-+ * @landing_page: empty by default, landing page to announce in WebUSB
-+ * @use_webusb:: false by default, interested gadgets set it
-  * @os_desc_config: the configuration to be used with OS descriptors
-  * @setup_pending: true when setup request is queued but not completed
-  * @os_desc_pending: true when os_desc request is queued but not completed
--- 
-2.37.2
-
+							Thanx, Paul
